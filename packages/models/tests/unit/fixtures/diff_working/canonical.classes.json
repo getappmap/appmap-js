@@ -1,0 +1,6 @@
+[
+  "app/models/App::Search",
+  "app/models/DAO::ToModel",
+  "app/models/Exceptions::RecordNotFound",
+  "app/models/User::Show"
+]

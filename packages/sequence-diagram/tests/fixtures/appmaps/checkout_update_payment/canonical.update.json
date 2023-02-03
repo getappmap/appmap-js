@@ -2,6 +2,7 @@
   {
     "kind": "http_server_request",
     "route": "PATCH /checkout/update/{state}",
+    "status_code": 302,
     "children": [
       {
         "kind": "function",
@@ -4024,7 +4025,8 @@
                   },
                   {
                     "kind": "http_client_request",
-                    "route": "POST https://api.stripe.com/v1/customers"
+                    "route": "POST https://api.stripe.com/v1/customers",
+                    "status_code": 200
                   },
                   {
                     "kind": "function",

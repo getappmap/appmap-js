@@ -1,0 +1,3 @@
+[
+  "WITH \"key_data_stats\" AS (SELECT DISTINCT http_server_request.http_server_request ->> ?::text AS \"request_method\", http_server_request.http_server_request ->> ?::text AS \"path_info\" FROM \"users_orgs\", \"scenarios\", LATERAL jsonb_to_recordset(COALESCE(scenarios.events_http_server_requests, ?::jsonb)) http_server_request(id integer, http_server_request jsonb) WHERE ((\"scenarios\".\"org_id\" = \"users_orgs\".\"org_id\") AND (\"user_id\" = ?))) SELECT count(*) AS \"num_distinct\" FROM \"key_data_stats\" LIMIT ?"
+]

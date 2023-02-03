@@ -1,0 +1,161 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "POST /api/appmaps",
+    "status_code": 201,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "http.session"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "security.authentication"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "security.api_key.touch"
+                    ],
+                    "children": [
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "update"
+                            ],
+                            "tables": [
+                              "api_keys"
+                            ],
+                            "columns": [
+                              "id",
+                              "last_used"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [
+                  "insert"
+                ],
+                "tables": [
+                  "scenario_data"
+                ],
+                "columns": [
+                  "data",
+                  "sha_256"
+                ],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [
+                  "insert"
+                ],
+                "tables": [
+                  "scenarios"
+                ],
+                "columns": [
+                  "link_sharing",
+                  "org_id",
+                  "sha_256",
+                  "true"
+                ],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "format.json"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "format.json"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "format.json"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "format.json"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "format.json"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

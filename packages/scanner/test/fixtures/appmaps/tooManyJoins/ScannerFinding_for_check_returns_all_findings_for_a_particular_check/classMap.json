@@ -1,0 +1,109 @@
+[
+  {
+    "name": "json",
+    "type": "package",
+    "children": [
+      {
+        "name": "JSON",
+        "type": "class",
+        "children": [
+          {
+            "name": "Ext",
+            "type": "class",
+            "children": [
+              {
+                "name": "Parser",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "parse",
+                    "type": "function",
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ],
+                    "static": false,
+                    "location": "JSON::Ext::Parser#parse"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "logger",
+    "type": "package",
+    "children": [
+      {
+        "name": "Logger",
+        "type": "class",
+        "children": [
+          {
+            "name": "LogDevice",
+            "type": "class",
+            "children": [
+              {
+                "name": "write",
+                "type": "function",
+                "labels": [
+                  "log"
+                ],
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/3.0.0/logger/log_device.rb:31"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app",
+    "type": "package",
+    "children": [
+      {
+        "name": "models",
+        "type": "package",
+        "children": [
+          {
+            "name": "ScannerFinding",
+            "type": "class",
+            "children": [
+              {
+                "name": "for_check",
+                "type": "function",
+                "static": true,
+                "location": "app/models/scanner_finding.rb:152"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "SAVEPOINT autopoint_1"
+      },
+      {
+        "type": "query",
+        "name": "RELEASE SAVEPOINT autopoint_1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"pg_attribute\".\"attname\" AS \"name\", CAST(\"pg_attribute\".\"atttypid\" AS integer) AS \"oid\", CAST(\"basetype\".\"oid\" AS integer) AS \"base_oid\", format_type(\"basetype\".\"oid\", \"pg_type\".\"typtypmod\") AS \"db_base_type\", format_type(\"pg_type\".\"oid\", \"pg_attribute\".\"atttypmod\") AS \"db_type\", pg_get_expr(\"pg_attrdef\".\"adbin\", \"pg_class\".\"oid\") AS \"default\", NOT \"pg_attribute\".\"attnotnull\" AS \"allow_null\", COALESCE((\"pg_attribute\".\"attnum\" = ANY(\"pg_index\".\"indkey\")), false) AS \"primary_key\", \"pg_attribute\".\"attidentity\", (\"pg_attribute\".\"attgenerated\" != '') AS \"generated\" FROM \"pg_class\" INNER JOIN \"pg_attribute\" ON (\"pg_attribute\".\"attrelid\" = \"pg_class\".\"oid\") INNER JOIN \"pg_type\" ON (\"pg_type\".\"oid\" = \"pg_attribute\".\"atttypid\") LEFT OUTER JOIN \"pg_type\" AS \"basetype\" ON (\"basetype\".\"oid\" = \"pg_type\".\"typbasetype\") LEFT OUTER JOIN \"pg_attrdef\" ON ((\"pg_attrdef\".\"adrelid\" = \"pg_class\".\"oid\") AND (\"pg_attrdef\".\"adnum\" = \"pg_attribute\".\"attnum\")) LEFT OUTER JOIN \"pg_index\" ON ((\"pg_index\".\"indrelid\" = \"pg_class\".\"oid\") AND (\"pg_index\".\"indisprimary\" IS TRUE)) WHERE ((\"pg_attribute\".\"attisdropped\" IS FALSE) AND (\"pg_attribute\".\"attnum\" > 0) AND (\"pg_class\".\"oid\" = CAST(CAST('\"finding_occurrences_v\"' AS regclass) AS oid))) ORDER BY \"pg_attribute\".\"attnum\""
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"scanner_checks\".\"description\", \"refs\", \"scanner_check_id\", \"identity_hash\", \"status\", \"message\", \"impact_category\" FROM \"finding_occurrences_v\" LEFT JOIN \"scanner_checks\" ON ((\"scanner_checks\".\"check_id\" = \"finding_occurrences_v\".\"scanner_check_id\") AND (\"scanner_checks\".\"job_id\" = \"finding_occurrences_v\".\"scanner_job_id\")) WHERE ((\"scanner_job_id\" = 7) AND (\"scanner_check_id\" = 'n-plus-one-query'))"
+      }
+    ]
+  }
+]

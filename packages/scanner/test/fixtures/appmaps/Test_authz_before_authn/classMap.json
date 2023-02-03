@@ -1,0 +1,334 @@
+[
+  {
+    "name": "activesupport",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActiveSupport",
+        "type": "class",
+        "children": [
+          {
+            "name": "Callbacks",
+            "type": "class",
+            "children": [
+              {
+                "name": "CallbackSequence",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "invoke_before",
+                    "type": "function",
+                    "labels": [
+                      "mvc.before_action"
+                    ],
+                    "static": false,
+                    "location": "/home/db/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-6.0.3.3/lib/active_support/callbacks.rb:512"
+                  },
+                  {
+                    "name": "invoke_after",
+                    "type": "function",
+                    "labels": [
+                      "mvc.after_action"
+                    ],
+                    "static": false,
+                    "location": "/home/db/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-6.0.3.3/lib/active_support/callbacks.rb:516"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "actionpack",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActionController",
+        "type": "class",
+        "children": [
+          {
+            "name": "Instrumentation",
+            "type": "class",
+            "children": [
+              {
+                "name": "process_action",
+                "type": "function",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "static": false,
+                "location": "/home/db/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-6.0.3.3/lib/action_controller/metal/instrumentation.rb:19"
+              },
+              {
+                "name": "redirect_to",
+                "type": "function",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "static": false,
+                "location": "/home/db/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-6.0.3.3/lib/action_controller/metal/instrumentation.rb:62"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "ActionDispatch",
+        "type": "class",
+        "children": [
+          {
+            "name": "Request",
+            "type": "class",
+            "children": [
+              {
+                "name": "Session",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "[]",
+                    "type": "function",
+                    "labels": [
+                      "http.session.read"
+                    ],
+                    "static": false,
+                    "location": "/home/db/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-6.0.3.3/lib/action_dispatch/request/session.rb:91"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Cookies",
+            "type": "class",
+            "children": [
+              {
+                "name": "CookieJar",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "update",
+                    "type": "function",
+                    "labels": [
+                      "http.session.write"
+                    ],
+                    "static": false,
+                    "location": "/home/db/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-6.0.3.3/lib/action_dispatch/middleware/cookies.rb:333"
+                  },
+                  {
+                    "name": "[]",
+                    "type": "function",
+                    "labels": [
+                      "http.session.read"
+                    ],
+                    "static": false,
+                    "location": "/home/db/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-6.0.3.3/lib/action_dispatch/middleware/cookies.rb:317"
+                  },
+                  {
+                    "name": "[]=",
+                    "type": "function",
+                    "labels": [
+                      "http.session.write"
+                    ],
+                    "static": false,
+                    "location": "/home/db/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-6.0.3.3/lib/action_dispatch/middleware/cookies.rb:373"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/controllers",
+    "type": "package",
+    "children": [
+      {
+        "name": "MicropostsController",
+        "type": "class",
+        "children": [
+          {
+            "name": "correct_user",
+            "type": "function",
+            "labels": [
+              "security.authorization"
+            ],
+            "static": false,
+            "location": "app/controllers/microposts_controller.rb:32"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/helpers",
+    "type": "package",
+    "children": [
+      {
+        "name": "SessionsHelper",
+        "type": "class",
+        "children": [
+          {
+            "name": "logged_in?",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/sessions_helper.rb:39"
+          },
+          {
+            "name": "current_user",
+            "type": "function",
+            "labels": [
+              "security.authentication"
+            ],
+            "static": false,
+            "location": "app/helpers/sessions_helper.rb:20"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/models",
+    "type": "package",
+    "children": [
+      {
+        "name": "User",
+        "type": "class",
+        "children": [
+          {
+            "name": "session_token",
+            "type": "function",
+            "static": false,
+            "location": "app/models/user.rb:43"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "json",
+    "type": "package",
+    "children": [
+      {
+        "name": "JSON",
+        "type": "class",
+        "children": [
+          {
+            "name": "Ext",
+            "type": "class",
+            "children": [
+              {
+                "name": "Generator",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "State",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "generate",
+                        "type": "function",
+                        "labels": [
+                          "format.json.generate"
+                        ],
+                        "static": false,
+                        "location": "JSON::Ext::Generator::State#generate"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Parser",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "parse",
+                    "type": "function",
+                    "labels": [
+                      "format.json.parse"
+                    ],
+                    "static": false,
+                    "location": "JSON::Ext::Parser#parse"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "openssl",
+    "type": "package",
+    "children": [
+      {
+        "name": "OpenSSL",
+        "type": "class",
+        "children": [
+          {
+            "name": "Cipher",
+            "type": "class",
+            "children": [
+              {
+                "name": "encrypt",
+                "type": "function",
+                "labels": [
+                  "crypto.encrypt"
+                ],
+                "static": false,
+                "location": "OpenSSL::Cipher#encrypt"
+              },
+              {
+                "name": "decrypt",
+                "type": "function",
+                "labels": [
+                  "crypto.decrypt"
+                ],
+                "static": false,
+                "location": "OpenSSL::Cipher#decrypt"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "http",
+    "name": "HTTP server requests",
+    "children": [
+      {
+        "type": "route",
+        "name": "DELETE /microposts/{id}"
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? AND \"microposts\".\"id\" = ? ORDER BY \"microposts\".\"created_at\" DESC LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT COUNT(*) FROM \"microposts\""
+      },
+      {
+        "type": "query",
+        "name": "rollback transaction"
+      }
+    ]
+  }
+]

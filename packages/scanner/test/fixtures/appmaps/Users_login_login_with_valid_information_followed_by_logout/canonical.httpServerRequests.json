@@ -1,0 +1,22 @@
+[
+  {
+    "route": "DELETE /logout",
+    "parameters": "(controller,action)",
+    "status": 302
+  },
+  {
+    "route": "GET /login",
+    "parameters": "(controller,action)",
+    "status": 200
+  },
+  {
+    "route": "GET /users/{id}",
+    "parameters": "(controller,action,id)",
+    "status": 200
+  },
+  {
+    "route": "POST /login",
+    "parameters": "(session,controller,action)",
+    "status": 302
+  }
+]

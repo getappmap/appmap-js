@@ -1,0 +1,910 @@
+[
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `Addresses` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `fullName` VARCHAR(255), `mobileNum` INTEGER, `zipCode` VARCHAR(255), `streetAddress` VARCHAR(255), `city` VARCHAR(255), `state` VARCHAR(255), `country` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);",
+    "callee": "Database->PRAGMA INDEX_LIST(`Addresses`)"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `BasketItems` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `quantity` INTEGER, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `BasketId` INTEGER REFERENCES `Baskets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, `ProductId` INTEGER REFERENCES `Products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, UNIQUE (`BasketId`, `ProductId`));",
+    "callee": "Database->PRAGMA INDEX_LIST(`BasketItems`)"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `Baskets` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `coupon` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);",
+    "callee": "Database->PRAGMA INDEX_LIST(`Baskets`)"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `Captchas` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `captchaId` INTEGER, `captcha` VARCHAR(255), `answer` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL);",
+    "callee": "Database->PRAGMA INDEX_LIST(`Captchas`)"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `Cards` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `fullName` VARCHAR(255), `cardNum` INTEGER, `expMonth` INTEGER, `expYear` INTEGER, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);",
+    "callee": "Database->PRAGMA INDEX_LIST(`Cards`)"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `Challenges` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `key` VARCHAR(255), `name` VARCHAR(255), `category` VARCHAR(255), `tags` VARCHAR(255), `description` VARCHAR(255), `difficulty` INTEGER, `hint` VARCHAR(255), `hintUrl` VARCHAR(255), `mitigationUrl` VARCHAR(255), `solved` TINYINT(1), `disabledEnv` VARCHAR(255), `tutorialOrder` NUMBER, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL);",
+    "callee": "Database->PRAGMA INDEX_LIST(`Challenges`)"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `Complaints` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `message` VARCHAR(255), `file` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);",
+    "callee": "Database->PRAGMA INDEX_LIST(`Complaints`)"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `Deliveries` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` VARCHAR(255), `price` FLOAT, `deluxePrice` FLOAT, `eta` FLOAT, `icon` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL);",
+    "callee": "Database->PRAGMA INDEX_LIST(`Deliveries`)"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `Feedbacks` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `comment` VARCHAR(255), `rating` INTEGER NOT NULL, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);",
+    "callee": "Database->PRAGMA INDEX_LIST(`Feedbacks`)"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `ImageCaptchas` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `image` VARCHAR(255), `answer` VARCHAR(255), `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL);",
+    "callee": "Database->PRAGMA INDEX_LIST(`ImageCaptchas`)"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `Memories` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `caption` VARCHAR(255), `imagePath` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);",
+    "callee": "Database->PRAGMA INDEX_LIST(`Memories`)"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `PrivacyRequests` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE, `deletionRequested` TINYINT(1) DEFAULT 0, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL);",
+    "callee": "Database->PRAGMA INDEX_LIST(`PrivacyRequests`)"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `Products` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` VARCHAR(255), `description` VARCHAR(255), `price` DECIMAL, `deluxePrice` DECIMAL, `image` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `deletedAt` DATETIME);",
+    "callee": "Database->PRAGMA INDEX_LIST(`Products`)"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `Quantities` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `quantity` INTEGER, `limitPerUser` INTEGER DEFAULT NULL, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `ProductId` INTEGER REFERENCES `Products` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);",
+    "callee": "Database->PRAGMA INDEX_LIST(`Quantities`)"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `Recycles` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `quantity` INTEGER(4), `isPickup` TINYINT(1) DEFAULT 0, `date` DATETIME, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, `AddressId` INTEGER REFERENCES `Addresses` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);",
+    "callee": "Database->PRAGMA INDEX_LIST(`Recycles`)"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `SecurityAnswers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `answer` VARCHAR(255), `UserId` INTEGER UNIQUE REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `SecurityQuestionId` INTEGER REFERENCES `SecurityQuestions` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);",
+    "callee": "Database->PRAGMA INDEX_LIST(`SecurityAnswers`)"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `SecurityQuestions` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `question` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL);",
+    "callee": "Database->PRAGMA INDEX_LIST(`SecurityQuestions`)"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `Users` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `username` VARCHAR(255) DEFAULT '', `email` VARCHAR(255) UNIQUE, `password` VARCHAR(255), `role` VARCHAR(255) DEFAULT 'customer', `deluxeToken` VARCHAR(255) DEFAULT '', `lastLoginIp` VARCHAR(255) DEFAULT '0.0.0.0', `profileImage` VARCHAR(255) DEFAULT '/assets/public/images/uploads/default.svg', `totpSecret` VARCHAR(255) DEFAULT '', `isActive` TINYINT(1) DEFAULT 1, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `deletedAt` DATETIME);",
+    "callee": "Database->PRAGMA INDEX_INFO(`sqlite_autoindex_BasketItems_1`)"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `Users` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `username` VARCHAR(255) DEFAULT '', `email` VARCHAR(255) UNIQUE, `password` VARCHAR(255), `role` VARCHAR(255) DEFAULT 'customer', `deluxeToken` VARCHAR(255) DEFAULT '', `lastLoginIp` VARCHAR(255) DEFAULT '0.0.0.0', `profileImage` VARCHAR(255) DEFAULT '/assets/public/images/uploads/default.svg', `totpSecret` VARCHAR(255) DEFAULT '', `isActive` TINYINT(1) DEFAULT 1, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `deletedAt` DATETIME);",
+    "callee": "Database->PRAGMA INDEX_INFO(`sqlite_autoindex_SecurityAnswers_1`)"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `Users` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `username` VARCHAR(255) DEFAULT '', `email` VARCHAR(255) UNIQUE, `password` VARCHAR(255), `role` VARCHAR(255) DEFAULT 'customer', `deluxeToken` VARCHAR(255) DEFAULT '', `lastLoginIp` VARCHAR(255) DEFAULT '0.0.0.0', `profileImage` VARCHAR(255) DEFAULT '/assets/public/images/uploads/default.svg', `totpSecret` VARCHAR(255) DEFAULT '', `isActive` TINYINT(1) DEFAULT 1, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `deletedAt` DATETIME);",
+    "callee": "Database->PRAGMA INDEX_INFO(`sqlite_autoindex_Users_1`)"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `Users` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `username` VARCHAR(255) DEFAULT '', `email` VARCHAR(255) UNIQUE, `password` VARCHAR(255), `role` VARCHAR(255) DEFAULT 'customer', `deluxeToken` VARCHAR(255) DEFAULT '', `lastLoginIp` VARCHAR(255) DEFAULT '0.0.0.0', `profileImage` VARCHAR(255) DEFAULT '/assets/public/images/uploads/default.svg', `totpSecret` VARCHAR(255) DEFAULT '', `isActive` TINYINT(1) DEFAULT 1, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `deletedAt` DATETIME);",
+    "callee": "Database->PRAGMA INDEX_LIST(`Users`)"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `Users` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `username` VARCHAR(255) DEFAULT '', `email` VARCHAR(255) UNIQUE, `password` VARCHAR(255), `role` VARCHAR(255) DEFAULT 'customer', `deluxeToken` VARCHAR(255) DEFAULT '', `lastLoginIp` VARCHAR(255) DEFAULT '0.0.0.0', `profileImage` VARCHAR(255) DEFAULT '/assets/public/images/uploads/default.svg', `totpSecret` VARCHAR(255) DEFAULT '', `isActive` TINYINT(1) DEFAULT 1, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `deletedAt` DATETIME);",
+    "callee": "Database->SELECT sum(`balance`) AS `sum` FROM `Wallets` AS `Wallet`;"
+  },
+  {
+    "caller": "Database->CREATE TABLE IF NOT EXISTS `Wallets` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `balance` INTEGER DEFAULT 0, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);",
+    "callee": "Database->PRAGMA INDEX_LIST(`Wallets`)"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Addresses`;",
+    "callee": "Database->CREATE TABLE IF NOT EXISTS `Users` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `username` VARCHAR(255) DEFAULT '', `email` VARCHAR(255) UNIQUE, `password` VARCHAR(255), `role` VARCHAR(255) DEFAULT 'customer', `deluxeToken` VARCHAR(255) DEFAULT '', `lastLoginIp` VARCHAR(255) DEFAULT '0.0.0.0', `profileImage` VARCHAR(255) DEFAULT '/assets/public/images/uploads/default.svg', `totpSecret` VARCHAR(255) DEFAULT '', `isActive` TINYINT(1) DEFAULT 1, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `deletedAt` DATETIME);"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Addresses`;",
+    "callee": "Database->DROP TABLE IF EXISTS `Baskets`;"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `BasketItems`;",
+    "callee": "Database->CREATE TABLE IF NOT EXISTS `Products` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` VARCHAR(255), `description` VARCHAR(255), `price` DECIMAL, `deluxePrice` DECIMAL, `image` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `deletedAt` DATETIME);"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `BasketItems`;",
+    "callee": "Database->DROP TABLE IF EXISTS `Captchas`;"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Baskets`;",
+    "callee": "Database->CREATE TABLE IF NOT EXISTS `Addresses` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `fullName` VARCHAR(255), `mobileNum` INTEGER, `zipCode` VARCHAR(255), `streetAddress` VARCHAR(255), `city` VARCHAR(255), `state` VARCHAR(255), `country` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Baskets`;",
+    "callee": "Database->DROP TABLE IF EXISTS `Products`;"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Captchas`;",
+    "callee": "Database->CREATE TABLE IF NOT EXISTS `BasketItems` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `quantity` INTEGER, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `BasketId` INTEGER REFERENCES `Baskets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, `ProductId` INTEGER REFERENCES `Products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, UNIQUE (`BasketId`, `ProductId`));"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Captchas`;",
+    "callee": "Database->DROP TABLE IF EXISTS `Cards`;"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Cards`;",
+    "callee": "Database->CREATE TABLE IF NOT EXISTS `Captchas` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `captchaId` INTEGER, `captcha` VARCHAR(255), `answer` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL);"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Cards`;",
+    "callee": "Database->DROP TABLE IF EXISTS `Challenges`;"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Challenges`;",
+    "callee": "Database->CREATE TABLE IF NOT EXISTS `Cards` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `fullName` VARCHAR(255), `cardNum` INTEGER, `expMonth` INTEGER, `expYear` INTEGER, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Challenges`;",
+    "callee": "Database->DROP TABLE IF EXISTS `Complaints`;"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Complaints`;",
+    "callee": "Database->CREATE TABLE IF NOT EXISTS `Challenges` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `key` VARCHAR(255), `name` VARCHAR(255), `category` VARCHAR(255), `tags` VARCHAR(255), `description` VARCHAR(255), `difficulty` INTEGER, `hint` VARCHAR(255), `hintUrl` VARCHAR(255), `mitigationUrl` VARCHAR(255), `solved` TINYINT(1), `disabledEnv` VARCHAR(255), `tutorialOrder` NUMBER, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL);"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Complaints`;",
+    "callee": "Database->DROP TABLE IF EXISTS `Deliveries`;"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Deliveries`;",
+    "callee": "Database->CREATE TABLE IF NOT EXISTS `Complaints` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `message` VARCHAR(255), `file` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Deliveries`;",
+    "callee": "Database->DROP TABLE IF EXISTS `Feedbacks`;"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Feedbacks`;",
+    "callee": "Database->CREATE TABLE IF NOT EXISTS `Deliveries` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` VARCHAR(255), `price` FLOAT, `deluxePrice` FLOAT, `eta` FLOAT, `icon` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL);"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Feedbacks`;",
+    "callee": "Database->DROP TABLE IF EXISTS `ImageCaptchas`;"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `ImageCaptchas`;",
+    "callee": "Database->CREATE TABLE IF NOT EXISTS `Feedbacks` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `comment` VARCHAR(255), `rating` INTEGER NOT NULL, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `ImageCaptchas`;",
+    "callee": "Database->DROP TABLE IF EXISTS `Memories`;"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Memories`;",
+    "callee": "Database->CREATE TABLE IF NOT EXISTS `ImageCaptchas` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `image` VARCHAR(255), `answer` VARCHAR(255), `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL);"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Memories`;",
+    "callee": "Database->DROP TABLE IF EXISTS `PrivacyRequests`;"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `PrivacyRequests`;",
+    "callee": "Database->CREATE TABLE IF NOT EXISTS `Memories` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `caption` VARCHAR(255), `imagePath` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `PrivacyRequests`;",
+    "callee": "Database->DROP TABLE IF EXISTS `Quantities`;"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Products`;",
+    "callee": "Database->CREATE TABLE IF NOT EXISTS `Baskets` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `coupon` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Products`;",
+    "callee": "Database->DROP TABLE IF EXISTS `BasketItems`;"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Quantities`;",
+    "callee": "Database->CREATE TABLE IF NOT EXISTS `PrivacyRequests` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE, `deletionRequested` TINYINT(1) DEFAULT 0, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL);"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Quantities`;",
+    "callee": "Database->DROP TABLE IF EXISTS `Recycles`;"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Recycles`;",
+    "callee": "Database->CREATE TABLE IF NOT EXISTS `Quantities` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `quantity` INTEGER, `limitPerUser` INTEGER DEFAULT NULL, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `ProductId` INTEGER REFERENCES `Products` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Recycles`;",
+    "callee": "Database->DROP TABLE IF EXISTS `SecurityQuestions`;"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `SecurityAnswers`;",
+    "callee": "Database->CREATE TABLE IF NOT EXISTS `SecurityQuestions` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `question` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL);"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `SecurityAnswers`;",
+    "callee": "Database->DROP TABLE IF EXISTS `Wallets`;"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `SecurityAnswers`;",
+    "callee": "build/lib"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `SecurityQuestions`;",
+    "callee": "Database->CREATE TABLE IF NOT EXISTS `Recycles` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `quantity` INTEGER(4), `isPickup` TINYINT(1) DEFAULT 0, `date` DATETIME, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, `AddressId` INTEGER REFERENCES `Addresses` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `SecurityQuestions`;",
+    "callee": "Database->DROP TABLE IF EXISTS `SecurityAnswers`;"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Users`;",
+    "callee": "Database->DROP TABLE IF EXISTS `Addresses`;"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Wallets`;",
+    "callee": "Database->CREATE TABLE IF NOT EXISTS `SecurityAnswers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `answer` VARCHAR(255), `UserId` INTEGER UNIQUE REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `SecurityQuestionId` INTEGER REFERENCES `SecurityQuestions` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Wallets`;",
+    "callee": "Database->PRAGMA FOREIGN_KEYS=ON"
+  },
+  {
+    "caller": "Database->DROP TABLE IF EXISTS `Wallets`;",
+    "callee": "Database->PRAGMA KEY='password'"
+  },
+  {
+    "caller": "Database->INSERT INTO `Addresses` (`id`,`fullName`,`mobileNum`,`zipCode`,`streetAddress`,`city`,`state`,`country`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10);",
+    "callee": "Database->INSERT INTO `Feedbacks` (`id`,`comment`,`rating`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4,$5);"
+  },
+  {
+    "caller": "Database->INSERT INTO `Addresses` (`id`,`fullName`,`mobileNum`,`zipCode`,`streetAddress`,`city`,`state`,`country`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10);",
+    "callee": "Database->INSERT INTO `SecurityAnswers` (`id`,`answer`,`UserId`,`createdAt`,`updatedAt`,`SecurityQuestionId`) VALUES (NULL,$1,$2,$3,$4,$5);"
+  },
+  {
+    "caller": "Database->INSERT INTO `Addresses` (`id`,`fullName`,`mobileNum`,`zipCode`,`streetAddress`,`city`,`state`,`country`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10);",
+    "callee": "Database->INSERT INTO `Users` (`id`,`username`,`email`,`password`,`role`,`deluxeToken`,`lastLoginIp`,`profileImage`,`totpSecret`,`isActive`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11);"
+  },
+  {
+    "caller": "Database->INSERT INTO `BasketItems` (`id`,`quantity`,`createdAt`,`updatedAt`,`BasketId`,`ProductId`) VALUES (NULL,$1,$2,$3,$4,$5);",
+    "callee": "build/data"
+  },
+  {
+    "caller": "Database->INSERT INTO `Baskets` (`id`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3);",
+    "callee": "build/data"
+  },
+  {
+    "caller": "Database->INSERT INTO `Cards` (`id`,`fullName`,`cardNum`,`expMonth`,`expYear`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7);",
+    "callee": "build/data"
+  },
+  {
+    "caller": "Database->INSERT INTO `Challenges` (`id`,`key`,`name`,`category`,`description`,`difficulty`,`hint`,`hintUrl`,`mitigationUrl`,`solved`,`disabledEnv`,`tutorialOrder`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13);",
+    "callee": "Database->INSERT INTO `Challenges` (`id`,`key`,`name`,`category`,`tags`,`description`,`difficulty`,`hint`,`hintUrl`,`mitigationUrl`,`solved`,`disabledEnv`,`tutorialOrder`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14);"
+  },
+  {
+    "caller": "Database->INSERT INTO `Challenges` (`id`,`key`,`name`,`category`,`tags`,`description`,`difficulty`,`hint`,`hintUrl`,`mitigationUrl`,`solved`,`disabledEnv`,`tutorialOrder`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14);",
+    "callee": "Database->INSERT INTO `Challenges` (`id`,`key`,`name`,`category`,`description`,`difficulty`,`hint`,`hintUrl`,`mitigationUrl`,`solved`,`disabledEnv`,`tutorialOrder`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13);"
+  },
+  {
+    "caller": "Database->INSERT INTO `Challenges` (`id`,`key`,`name`,`category`,`tags`,`description`,`difficulty`,`hint`,`hintUrl`,`mitigationUrl`,`solved`,`disabledEnv`,`tutorialOrder`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14);",
+    "callee": "Database->INSERT INTO `Challenges` (`id`,`key`,`name`,`category`,`tags`,`description`,`difficulty`,`hint`,`solved`,`disabledEnv`,`tutorialOrder`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12);"
+  },
+  {
+    "caller": "Database->INSERT INTO `Challenges` (`id`,`key`,`name`,`category`,`tags`,`description`,`difficulty`,`hint`,`solved`,`disabledEnv`,`tutorialOrder`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12);",
+    "callee": "build/data"
+  },
+  {
+    "caller": "Database->INSERT INTO `Complaints` (`id`,`message`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4);",
+    "callee": "build/data"
+  },
+  {
+    "caller": "Database->INSERT INTO `Deliveries` (`id`,`name`,`price`,`deluxePrice`,`eta`,`icon`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7);",
+    "callee": "build/data"
+  },
+  {
+    "caller": "Database->INSERT INTO `Feedbacks` (`id`,`comment`,`rating`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4,$5);",
+    "callee": "Database->INSERT INTO `SecurityAnswers` (`id`,`answer`,`UserId`,`createdAt`,`updatedAt`,`SecurityQuestionId`) VALUES (NULL,$1,$2,$3,$4,$5);"
+  },
+  {
+    "caller": "Database->INSERT INTO `Feedbacks` (`id`,`comment`,`rating`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4,$5);",
+    "callee": "build/data"
+  },
+  {
+    "caller": "Database->INSERT INTO `Memories` (`id`,`caption`,`imagePath`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4,$5);",
+    "callee": "build/data"
+  },
+  {
+    "caller": "Database->INSERT INTO `Products` (`id`,`name`,`description`,`price`,`deluxePrice`,`image`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7);",
+    "callee": "Database->INSERT INTO `Products` (`id`,`name`,`description`,`price`,`deluxePrice`,`image`,`createdAt`,`updatedAt`,`deletedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8);"
+  },
+  {
+    "caller": "Database->INSERT INTO `Products` (`id`,`name`,`description`,`price`,`deluxePrice`,`image`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7);",
+    "callee": "build/data"
+  },
+  {
+    "caller": "Database->INSERT INTO `Products` (`id`,`name`,`description`,`price`,`deluxePrice`,`image`,`createdAt`,`updatedAt`,`deletedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8);",
+    "callee": "Database->INSERT INTO `Products` (`id`,`name`,`description`,`price`,`deluxePrice`,`image`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7);"
+  },
+  {
+    "caller": "Database->INSERT INTO `Quantities` (`id`,`quantity`,`limitPerUser`,`createdAt`,`updatedAt`,`ProductId`) VALUES (NULL,$1,$2,$3,$4,$5);",
+    "callee": "build/data"
+  },
+  {
+    "caller": "Database->INSERT INTO `Recycles` (`id`,`quantity`,`isPickup`,`date`,`createdAt`,`updatedAt`,`UserId`,`AddressId`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7);",
+    "callee": "Database->INSERT INTO `Complaints` (`id`,`message`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4);"
+  },
+  {
+    "caller": "Database->INSERT INTO `Recycles` (`id`,`quantity`,`isPickup`,`date`,`createdAt`,`updatedAt`,`UserId`,`AddressId`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7);",
+    "callee": "build/data"
+  },
+  {
+    "caller": "Database->INSERT INTO `SecurityAnswers` (`id`,`answer`,`UserId`,`createdAt`,`updatedAt`,`SecurityQuestionId`) VALUES (NULL,$1,$2,$3,$4,$5);",
+    "callee": "Database->INSERT INTO `Memories` (`id`,`caption`,`imagePath`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4,$5);"
+  },
+  {
+    "caller": "Database->INSERT INTO `SecurityAnswers` (`id`,`answer`,`UserId`,`createdAt`,`updatedAt`,`SecurityQuestionId`) VALUES (NULL,$1,$2,$3,$4,$5);",
+    "callee": "Database->INSERT INTO `Users` (`id`,`username`,`email`,`password`,`role`,`deluxeToken`,`lastLoginIp`,`profileImage`,`totpSecret`,`isActive`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11);"
+  },
+  {
+    "caller": "Database->INSERT INTO `SecurityQuestions` (`id`,`question`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3);",
+    "callee": "Database->CREATE TABLE IF NOT EXISTS `Wallets` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `balance` INTEGER DEFAULT 0, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);"
+  },
+  {
+    "caller": "Database->INSERT INTO `Users` (`id`,`username`,`email`,`password`,`role`,`deluxeToken`,`lastLoginIp`,`profileImage`,`totpSecret`,`isActive`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11);",
+    "callee": "build/data"
+  },
+  {
+    "caller": "Database->INSERT INTO `Wallets` (`id`,`balance`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4);",
+    "callee": "build/data"
+  },
+  {
+    "caller": "Database->PRAGMA INDEX_LIST(`Addresses`)",
+    "callee": "Database->DROP TABLE IF EXISTS `Addresses`;"
+  },
+  {
+    "caller": "Database->PRAGMA INDEX_LIST(`BasketItems`)",
+    "callee": "Database->DROP TABLE IF EXISTS `BasketItems`;"
+  },
+  {
+    "caller": "Database->PRAGMA INDEX_LIST(`Baskets`)",
+    "callee": "Database->DROP TABLE IF EXISTS `Baskets`;"
+  },
+  {
+    "caller": "Database->PRAGMA INDEX_LIST(`Captchas`)",
+    "callee": "Database->DROP TABLE IF EXISTS `Captchas`;"
+  },
+  {
+    "caller": "Database->PRAGMA INDEX_LIST(`Cards`)",
+    "callee": "Database->DROP TABLE IF EXISTS `Cards`;"
+  },
+  {
+    "caller": "Database->PRAGMA INDEX_LIST(`Challenges`)",
+    "callee": "Database->DROP TABLE IF EXISTS `Challenges`;"
+  },
+  {
+    "caller": "Database->PRAGMA INDEX_LIST(`Complaints`)",
+    "callee": "Database->DROP TABLE IF EXISTS `Complaints`;"
+  },
+  {
+    "caller": "Database->PRAGMA INDEX_LIST(`Deliveries`)",
+    "callee": "Database->DROP TABLE IF EXISTS `Deliveries`;"
+  },
+  {
+    "caller": "Database->PRAGMA INDEX_LIST(`Feedbacks`)",
+    "callee": "Database->DROP TABLE IF EXISTS `Feedbacks`;"
+  },
+  {
+    "caller": "Database->PRAGMA INDEX_LIST(`ImageCaptchas`)",
+    "callee": "Database->DROP TABLE IF EXISTS `ImageCaptchas`;"
+  },
+  {
+    "caller": "Database->PRAGMA INDEX_LIST(`Memories`)",
+    "callee": "Database->DROP TABLE IF EXISTS `Memories`;"
+  },
+  {
+    "caller": "Database->PRAGMA INDEX_LIST(`PrivacyRequests`)",
+    "callee": "Database->DROP TABLE IF EXISTS `PrivacyRequests`;"
+  },
+  {
+    "caller": "Database->PRAGMA INDEX_LIST(`Products`)",
+    "callee": "Database->DROP TABLE IF EXISTS `Products`;"
+  },
+  {
+    "caller": "Database->PRAGMA INDEX_LIST(`Quantities`)",
+    "callee": "Database->DROP TABLE IF EXISTS `Quantities`;"
+  },
+  {
+    "caller": "Database->PRAGMA INDEX_LIST(`Recycles`)",
+    "callee": "Database->DROP TABLE IF EXISTS `Recycles`;"
+  },
+  {
+    "caller": "Database->PRAGMA INDEX_LIST(`SecurityAnswers`)",
+    "callee": "Database->DROP TABLE IF EXISTS `SecurityAnswers`;"
+  },
+  {
+    "caller": "Database->PRAGMA INDEX_LIST(`SecurityQuestions`)",
+    "callee": "Database->DROP TABLE IF EXISTS `SecurityQuestions`;"
+  },
+  {
+    "caller": "Database->PRAGMA INDEX_LIST(`Users`)",
+    "callee": "Database->DROP TABLE IF EXISTS `Users`;"
+  },
+  {
+    "caller": "Database->PRAGMA INDEX_LIST(`Wallets`)",
+    "callee": "Database->DROP TABLE IF EXISTS `Wallets`;"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Challenges`)",
+    "callee": "HTTP server requests->GET /main-es2018.js"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Challenges`)",
+    "callee": "build/routes"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "Database->PRAGMA table_info(`Users`)"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "Database->SELECT * FROM Users WHERE email = 'foo' AND password = '37b51d194a7513e45b56f6524f2d51f2' AND deletedAt IS NULL"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /api/Challenges/"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /api/Quantitys/"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /apple-touch-icon-precomposed.png"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /apple-touch-icon.png"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /assets/public/images/JuiceShop_Logo.png"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /assets/public/images/products/20th.jpeg"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /assets/public/images/products/apple_juice.jpg"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /assets/public/images/products/apple_pressings.jpg"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /assets/public/images/products/artwork2.jpg"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /assets/public/images/products/banana_juice.jpg"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /assets/public/images/products/carrot_juice.jpeg"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /assets/public/images/products/eggfruit_juice.jpg"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /assets/public/images/products/fruit_press.jpg"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /assets/public/images/products/green_smoothie.jpg"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /assets/public/images/products/lemon_juice.jpg"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /assets/public/images/products/melon_bike.jpeg"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /assets/public/images/products/permafrost.jpg"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /font-mfizz.svg"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /rest/admin/application-configuration"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /rest/admin/application-version"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /rest/languages"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->GET /rest/user/whoami"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "HTTP server requests->POST /rest/user/login"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Complaints`)",
+    "callee": "build/routes"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Feedbacks`)",
+    "callee": "Database->PRAGMA table_info(`Complaints`)"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Feedbacks`)",
+    "callee": "build/routes"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Products`)",
+    "callee": "build/routes"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Quantities`)",
+    "callee": "HTTP server requests->GET /MaterialIcons-Regular.woff2"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Quantities`)",
+    "callee": "HTTP server requests->GET /assets/i18n/en.json"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Quantities`)",
+    "callee": "HTTP server requests->GET /assets/public/favicon_js.ico"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Quantities`)",
+    "callee": "HTTP server requests->GET /polyfills-es2018.js"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Quantities`)",
+    "callee": "HTTP server requests->GET /runtime-es2018.js"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Quantities`)",
+    "callee": "build/routes"
+  },
+  {
+    "caller": "Database->PRAGMA table_info(`Users`)",
+    "callee": "Database->SELECT sql FROM sqlite_master"
+  },
+  {
+    "caller": "Database->SELECT * FROM Products WHERE ((name LIKE '%%' OR description LIKE '%%') AND deletedAt IS NULL) ORDER BY name",
+    "callee": "HTTP server requests->GET /vendor-es2018.js"
+  },
+  {
+    "caller": "Database->SELECT * FROM Products WHERE ((name LIKE '%%' OR description LIKE '%%') AND deletedAt IS NULL) ORDER BY name",
+    "callee": "build/routes"
+  },
+  {
+    "caller": "Database->SELECT * FROM Users WHERE email = 'foo' AND password = '37b51d194a7513e45b56f6524f2d51f2' AND deletedAt IS NULL",
+    "callee": "build/data"
+  },
+  {
+    "caller": "Database->SELECT * FROM Users WHERE email = 'foo' AND password = '37b51d194a7513e45b56f6524f2d51f2' AND deletedAt IS NULL",
+    "callee": "build/lib"
+  },
+  {
+    "caller": "Database->SELECT * FROM Users WHERE email = 'foo' AND password = '37b51d194a7513e45b56f6524f2d51f2' AND deletedAt IS NULL",
+    "callee": "build/server.js"
+  },
+  {
+    "caller": "Database->SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE ((`Feedback`.`comment` LIKE '%sanitize-html%' AND `Feedback`.`comment` LIKE '%1.4.2%') OR (`Feedback`.`comment` LIKE '%express-jwt%' AND `Feedback`.`comment` LIKE '%0.1.3%'));",
+    "callee": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE ((`Complaint`.`message` LIKE '%sanitize-html%' AND `Complaint`.`message` LIKE '%1.4.2%') OR (`Complaint`.`message` LIKE '%express-jwt%' AND `Complaint`.`message` LIKE '%0.1.3%'));"
+  },
+  {
+    "caller": "Database->SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE (`Feedback`.`comment` LIKE '%eslint-scope/issues/39%' OR `Feedback`.`comment` LIKE '%npm:eslint-scope:20180712%');",
+    "callee": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%eslint-scope/issues/39%' OR `Complaint`.`message` LIKE '%npm:eslint-scope:20180712%');"
+  },
+  {
+    "caller": "Database->SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE (`Feedback`.`comment` LIKE '%hueteroneel%' AND `Feedback`.`comment` LIKE '%eurogium edule%');",
+    "callee": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%hueteroneel%' AND `Complaint`.`message` LIKE '%eurogium edule%');"
+  },
+  {
+    "caller": "Database->SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE (`Feedback`.`comment` LIKE '%hueteroneel%' AND `Feedback`.`comment` LIKE '%eurogium edule%');",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`rating` = 5;"
+  },
+  {
+    "caller": "Database->SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE (`Feedback`.`comment` LIKE '%z85%' OR `Feedback`.`comment` LIKE '%base85%' OR `Feedback`.`comment` LIKE '%hashids%' OR `Feedback`.`comment` LIKE '%md5%' OR `Feedback`.`comment` LIKE '%base64%');",
+    "callee": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%z85%' OR `Complaint`.`message` LIKE '%base85%' OR `Complaint`.`message` LIKE '%hashids%' OR `Complaint`.`message` LIKE '%md5%' OR `Complaint`.`message` LIKE '%base64%');"
+  },
+  {
+    "caller": "Database->SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`comment` LIKE '%anuglar2-qrcode%';",
+    "callee": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE `Complaint`.`message` LIKE '%anuglar2-qrcode%';"
+  },
+  {
+    "caller": "Database->SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`comment` LIKE '%epilogue-js%';",
+    "callee": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE `Complaint`.`message` LIKE '%epilogue-js%';"
+  },
+  {
+    "caller": "Database->SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`comment` LIKE '%pickle rick%';",
+    "callee": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE `Complaint`.`message` LIKE '%pickle rick%';"
+  },
+  {
+    "caller": "Database->SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`rating` = 5;",
+    "callee": "Database->SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE ((`Feedback`.`comment` LIKE '%sanitize-html%' AND `Feedback`.`comment` LIKE '%1.4.2%') OR (`Feedback`.`comment` LIKE '%express-jwt%' AND `Feedback`.`comment` LIKE '%0.1.3%'));"
+  },
+  {
+    "caller": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE ((`Complaint`.`message` LIKE '%sanitize-html%' AND `Complaint`.`message` LIKE '%1.4.2%') OR (`Complaint`.`message` LIKE '%express-jwt%' AND `Complaint`.`message` LIKE '%0.1.3%'));",
+    "callee": "Database->SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE (`Feedback`.`comment` LIKE '%z85%' OR `Feedback`.`comment` LIKE '%base85%' OR `Feedback`.`comment` LIKE '%hashids%' OR `Feedback`.`comment` LIKE '%md5%' OR `Feedback`.`comment` LIKE '%base64%');"
+  },
+  {
+    "caller": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%eslint-scope/issues/39%' OR `Complaint`.`message` LIKE '%npm:eslint-scope:20180712%');",
+    "callee": "Database->SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE (`Feedback`.`comment` LIKE '%hueteroneel%' AND `Feedback`.`comment` LIKE '%eurogium edule%');"
+  },
+  {
+    "caller": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%eslint-scope/issues/39%' OR `Complaint`.`message` LIKE '%npm:eslint-scope:20180712%');",
+    "callee": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%hueteroneel%' AND `Complaint`.`message` LIKE '%eurogium edule%');"
+  },
+  {
+    "caller": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%eslint-scope/issues/39%' OR `Complaint`.`message` LIKE '%npm:eslint-scope:20180712%');",
+    "callee": "Database->SELECT `id`, `username`, `email`, `password`, `role`, `deluxeToken`, `lastLoginIp`, `profileImage`, `totpSecret`, `isActive`, `createdAt`, `updatedAt`, `deletedAt` FROM `Users` AS `User` WHERE (`User`.`deletedAt` IS NULL);"
+  },
+  {
+    "caller": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%eslint-scope/issues/39%' OR `Complaint`.`message` LIKE '%npm:eslint-scope:20180712%');",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`rating` = 5;"
+  },
+  {
+    "caller": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%eslint-scope/issues/39%' OR `Complaint`.`message` LIKE '%npm:eslint-scope:20180712%');",
+    "callee": "Database->SELECT sum(`balance`) AS `sum` FROM `Wallets` AS `Wallet`;"
+  },
+  {
+    "caller": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%hueteroneel%' AND `Complaint`.`message` LIKE '%eurogium edule%');",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Challenges` AS `Challenge` WHERE `Challenge`.`name` = 'Score Board';"
+  },
+  {
+    "caller": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%hueteroneel%' AND `Complaint`.`message` LIKE '%eurogium edule%');",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`rating` = 5;"
+  },
+  {
+    "caller": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%hueteroneel%' AND `Complaint`.`message` LIKE '%eurogium edule%');",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Quantities` AS `Quantity`;"
+  },
+  {
+    "caller": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%hueteroneel%' AND `Complaint`.`message` LIKE '%eurogium edule%');",
+    "callee": "Database->SELECT sum(`balance`) AS `sum` FROM `Wallets` AS `Wallet`;"
+  },
+  {
+    "caller": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%z85%' OR `Complaint`.`message` LIKE '%base85%' OR `Complaint`.`message` LIKE '%hashids%' OR `Complaint`.`message` LIKE '%md5%' OR `Complaint`.`message` LIKE '%base64%');",
+    "callee": "Database->SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`comment` LIKE '%epilogue-js%';"
+  },
+  {
+    "caller": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE `Complaint`.`message` LIKE '%anuglar2-qrcode%';",
+    "callee": "Database->SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`comment` LIKE '%pickle rick%';"
+  },
+  {
+    "caller": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE `Complaint`.`message` LIKE '%epilogue-js%';",
+    "callee": "Database->SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`comment` LIKE '%anuglar2-qrcode%';"
+  },
+  {
+    "caller": "Database->SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE `Complaint`.`message` LIKE '%pickle rick%';",
+    "callee": "Database->SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE (`Feedback`.`comment` LIKE '%eslint-scope/issues/39%' OR `Feedback`.`comment` LIKE '%npm:eslint-scope:20180712%');"
+  },
+  {
+    "caller": "Database->SELECT `id`, `name`, `description`, `price`, `deluxePrice`, `image`, `createdAt`, `updatedAt`, `deletedAt` FROM `Products` AS `Product` WHERE (`Product`.`deletedAt` IS NULL AND `Product`.`id` = 9);",
+    "callee": "Database->SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`rating` = 5;"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Challenges` AS `Challenge` WHERE `Challenge`.`name` = 'Score Board';",
+    "callee": "Database->SELECT `id`, `key`, `name`, `category`, `tags`, `description`, `difficulty`, `hint`, `hintUrl`, `mitigationUrl`, `solved`, `disabledEnv`, `tutorialOrder`, `createdAt`, `updatedAt` FROM `Challenges` AS `Challenge` WHERE `Challenge`.`name` = 'Score Board' LIMIT 0, 100;"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Challenges` AS `Challenge` WHERE `Challenge`.`name` = 'Score Board';",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`rating` = 5;"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Complaints` AS `Complaint` WHERE ((`Complaint`.`message` LIKE '%sanitize-html%' AND `Complaint`.`message` LIKE '%1.4.2%') OR (`Complaint`.`message` LIKE '%express-jwt%' AND `Complaint`.`message` LIKE '%0.1.3%'));",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE (`Feedback`.`comment` LIKE '%z85%' OR `Feedback`.`comment` LIKE '%base85%' OR `Feedback`.`comment` LIKE '%hashids%' OR `Feedback`.`comment` LIKE '%md5%' OR `Feedback`.`comment` LIKE '%base64%');"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%eslint-scope/issues/39%' OR `Complaint`.`message` LIKE '%npm:eslint-scope:20180712%');",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE (`Feedback`.`comment` LIKE '%hueteroneel%' AND `Feedback`.`comment` LIKE '%eurogium edule%');"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%hueteroneel%' AND `Complaint`.`message` LIKE '%eurogium edule%');",
+    "callee": "Database->SELECT `id`, `name`, `description`, `price`, `deluxePrice`, `image`, `createdAt`, `updatedAt`, `deletedAt` FROM `Products` AS `Product` WHERE (`Product`.`deletedAt` IS NULL AND `Product`.`id` = 9);"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%z85%' OR `Complaint`.`message` LIKE '%base85%' OR `Complaint`.`message` LIKE '%hashids%' OR `Complaint`.`message` LIKE '%md5%' OR `Complaint`.`message` LIKE '%base64%');",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`comment` LIKE '%epilogue-js%';"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Complaints` AS `Complaint` WHERE `Complaint`.`message` LIKE '%anuglar2-qrcode%';",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`comment` LIKE '%pickle rick%';"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Complaints` AS `Complaint` WHERE `Complaint`.`message` LIKE '%epilogue-js%';",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`comment` LIKE '%anuglar2-qrcode%';"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Complaints` AS `Complaint` WHERE `Complaint`.`message` LIKE '%pickle rick%';",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE (`Feedback`.`comment` LIKE '%eslint-scope/issues/39%' OR `Feedback`.`comment` LIKE '%npm:eslint-scope:20180712%');"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE ((`Feedback`.`comment` LIKE '%sanitize-html%' AND `Feedback`.`comment` LIKE '%1.4.2%') OR (`Feedback`.`comment` LIKE '%express-jwt%' AND `Feedback`.`comment` LIKE '%0.1.3%'));",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Complaints` AS `Complaint` WHERE ((`Complaint`.`message` LIKE '%sanitize-html%' AND `Complaint`.`message` LIKE '%1.4.2%') OR (`Complaint`.`message` LIKE '%express-jwt%' AND `Complaint`.`message` LIKE '%0.1.3%'));"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE ((`Feedback`.`comment` LIKE '%sanitize-html%' AND `Feedback`.`comment` LIKE '%1.4.2%') OR (`Feedback`.`comment` LIKE '%express-jwt%' AND `Feedback`.`comment` LIKE '%0.1.3%'));",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE (`Feedback`.`comment` LIKE '%z85%' OR `Feedback`.`comment` LIKE '%base85%' OR `Feedback`.`comment` LIKE '%hashids%' OR `Feedback`.`comment` LIKE '%md5%' OR `Feedback`.`comment` LIKE '%base64%');"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE (`Feedback`.`comment` LIKE '%eslint-scope/issues/39%' OR `Feedback`.`comment` LIKE '%npm:eslint-scope:20180712%');",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%eslint-scope/issues/39%' OR `Complaint`.`message` LIKE '%npm:eslint-scope:20180712%');"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE (`Feedback`.`comment` LIKE '%hueteroneel%' AND `Feedback`.`comment` LIKE '%eurogium edule%');",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%hueteroneel%' AND `Complaint`.`message` LIKE '%eurogium edule%');"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE (`Feedback`.`comment` LIKE '%z85%' OR `Feedback`.`comment` LIKE '%base85%' OR `Feedback`.`comment` LIKE '%hashids%' OR `Feedback`.`comment` LIKE '%md5%' OR `Feedback`.`comment` LIKE '%base64%');",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%z85%' OR `Complaint`.`message` LIKE '%base85%' OR `Complaint`.`message` LIKE '%hashids%' OR `Complaint`.`message` LIKE '%md5%' OR `Complaint`.`message` LIKE '%base64%');"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`comment` LIKE '%anuglar2-qrcode%';",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Complaints` AS `Complaint` WHERE `Complaint`.`message` LIKE '%anuglar2-qrcode%';"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`comment` LIKE '%epilogue-js%';",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Complaints` AS `Complaint` WHERE `Complaint`.`message` LIKE '%epilogue-js%';"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`comment` LIKE '%pickle rick%';",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Complaints` AS `Complaint` WHERE `Complaint`.`message` LIKE '%pickle rick%';"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`rating` = 5;",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE ((`Feedback`.`comment` LIKE '%sanitize-html%' AND `Feedback`.`comment` LIKE '%1.4.2%') OR (`Feedback`.`comment` LIKE '%express-jwt%' AND `Feedback`.`comment` LIKE '%0.1.3%'));"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback`;",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Complaints` AS `Complaint`;"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback`;",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`rating` = 5;"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Quantities` AS `Quantity`;",
+    "callee": "Database->SELECT `id`, `quantity`, `limitPerUser`, `createdAt`, `updatedAt`, `ProductId` FROM `Quantities` AS `Quantity` LIMIT 0, 100;"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Quantities` AS `Quantity`;",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`rating` = 5;"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Users` AS `User` WHERE (`User`.`deletedAt` IS NULL AND `User`.`role` = 'customer');",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Users` AS `User` WHERE (`User`.`deletedAt` IS NULL AND `User`.`role` = 'deluxe');"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Users` AS `User` WHERE (`User`.`deletedAt` IS NULL AND `User`.`role` = 'deluxe');",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Users` AS `User` WHERE (`User`.`deletedAt` IS NULL);"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Users` AS `User` WHERE (`User`.`deletedAt` IS NULL);",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Complaints` AS `Complaint`;"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Users` AS `User` WHERE (`User`.`deletedAt` IS NULL);",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`rating` = 5;"
+  },
+  {
+    "caller": "Database->SELECT count(*) AS `count` FROM `Users` AS `User` WHERE (`User`.`deletedAt` IS NULL);",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback`;"
+  },
+  {
+    "caller": "Database->SELECT sql FROM sqlite_master",
+    "callee": "HTTP server requests->GET /rest/products/search"
+  },
+  {
+    "caller": "Database->SELECT sum(`balance`) AS `sum` FROM `Wallets` AS `Wallet`;",
+    "callee": "Database->SELECT count(*) AS `count` FROM `Users` AS `User` WHERE (`User`.`deletedAt` IS NULL AND `User`.`role` = 'customer');"
+  },
+  {
+    "caller": "Database->UPDATE `Users` SET `deletedAt`=$1 WHERE `deletedAt` IS NULL AND `id` = $2",
+    "callee": "Database->INSERT INTO `SecurityAnswers` (`id`,`answer`,`UserId`,`createdAt`,`updatedAt`,`SecurityQuestionId`) VALUES (NULL,$1,$2,$3,$4,$5);"
+  },
+  {
+    "caller": "HTTP server requests->GET /api/Challenges/",
+    "callee": "Database->PRAGMA table_info(`Challenges`)"
+  },
+  {
+    "caller": "HTTP server requests->GET /api/Quantitys/",
+    "callee": "Database->PRAGMA table_info(`Quantities`)"
+  },
+  {
+    "caller": "HTTP server requests->GET /rest/products/search",
+    "callee": "Database->SELECT * FROM Products WHERE ((name LIKE '%%' OR description LIKE '%%') AND deletedAt IS NULL) ORDER BY name"
+  },
+  {
+    "caller": "HTTP server requests->POST /rest/user/login",
+    "callee": "build/routes"
+  },
+  {
+    "caller": "build/data",
+    "callee": "Database->INSERT INTO `Addresses` (`id`,`fullName`,`mobileNum`,`zipCode`,`streetAddress`,`city`,`state`,`country`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10);"
+  },
+  {
+    "caller": "build/data",
+    "callee": "Database->INSERT INTO `BasketItems` (`id`,`quantity`,`createdAt`,`updatedAt`,`BasketId`,`ProductId`) VALUES (NULL,$1,$2,$3,$4,$5);"
+  },
+  {
+    "caller": "build/data",
+    "callee": "Database->INSERT INTO `Baskets` (`id`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3);"
+  },
+  {
+    "caller": "build/data",
+    "callee": "Database->INSERT INTO `Cards` (`id`,`fullName`,`cardNum`,`expMonth`,`expYear`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7);"
+  },
+  {
+    "caller": "build/data",
+    "callee": "Database->INSERT INTO `Challenges` (`id`,`key`,`name`,`category`,`tags`,`description`,`difficulty`,`hint`,`hintUrl`,`mitigationUrl`,`solved`,`disabledEnv`,`tutorialOrder`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14);"
+  },
+  {
+    "caller": "build/data",
+    "callee": "Database->INSERT INTO `Deliveries` (`id`,`name`,`price`,`deluxePrice`,`eta`,`icon`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7);"
+  },
+  {
+    "caller": "build/data",
+    "callee": "Database->INSERT INTO `Feedbacks` (`id`,`comment`,`rating`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4,$5);"
+  },
+  {
+    "caller": "build/data",
+    "callee": "Database->INSERT INTO `Memories` (`id`,`caption`,`imagePath`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4,$5);"
+  },
+  {
+    "caller": "build/data",
+    "callee": "Database->INSERT INTO `Products` (`id`,`name`,`description`,`price`,`deluxePrice`,`image`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7);"
+  },
+  {
+    "caller": "build/data",
+    "callee": "Database->INSERT INTO `Quantities` (`id`,`quantity`,`limitPerUser`,`createdAt`,`updatedAt`,`ProductId`) VALUES (NULL,$1,$2,$3,$4,$5);"
+  },
+  {
+    "caller": "build/data",
+    "callee": "Database->INSERT INTO `Recycles` (`id`,`quantity`,`isPickup`,`date`,`createdAt`,`updatedAt`,`UserId`,`AddressId`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7);"
+  },
+  {
+    "caller": "build/data",
+    "callee": "Database->INSERT INTO `SecurityAnswers` (`id`,`answer`,`UserId`,`createdAt`,`updatedAt`,`SecurityQuestionId`) VALUES (NULL,$1,$2,$3,$4,$5);"
+  },
+  {
+    "caller": "build/data",
+    "callee": "Database->INSERT INTO `SecurityQuestions` (`id`,`question`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3);"
+  },
+  {
+    "caller": "build/data",
+    "callee": "Database->INSERT INTO `Wallets` (`id`,`balance`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4);"
+  },
+  {
+    "caller": "build/data",
+    "callee": "Database->UPDATE `Users` SET `deletedAt`=$1 WHERE `deletedAt` IS NULL AND `id` = $2"
+  },
+  {
+    "caller": "build/routes",
+    "callee": "Database->PRAGMA table_info(`Feedbacks`)"
+  },
+  {
+    "caller": "build/routes",
+    "callee": "Database->PRAGMA table_info(`Products`)"
+  },
+  {
+    "caller": "build/server.js",
+    "callee": "HTTP server requests->GET /"
+  },
+  {
+    "caller": "build/server.js",
+    "callee": "HTTP server requests->GET /styles.css"
+  }
+]

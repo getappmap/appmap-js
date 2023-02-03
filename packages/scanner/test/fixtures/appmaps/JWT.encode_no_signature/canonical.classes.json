@@ -1,0 +1,5 @@
+[
+  "json/JSON::Ext::Generator::State",
+  "jwt/JWT",
+  "jwt/JWT::Signature"
+]

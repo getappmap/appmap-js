@@ -1,0 +1,426 @@
+[
+  {
+    "caller": "HTTP server requests->GET /account_activations/{id}/edit",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "HTTP server requests->GET /signup",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "HTTP server requests->GET /users/{id}",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "HTTP server requests->POST /login",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "HTTP server requests->POST /users",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/controllers/AccountActivationsController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/controllers/SessionsController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/controllers/UsersController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/views/app_views_users_new_html_erb"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/views/app_views_users_show_html_erb"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "Database->SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "Database->SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/controllers/AccountActivationsController",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "app/controllers/AccountActivationsController",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/controllers/AccountActivationsController",
+    "callee": "activerecord/ActiveRecord"
+  },
+  {
+    "caller": "app/controllers/AccountActivationsController",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/controllers/AccountActivationsController",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "app/controllers/AccountActivationsController",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "app/controllers/SessionsController",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "app/controllers/SessionsController",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/controllers/SessionsController",
+    "callee": "activerecord/ActiveRecord"
+  },
+  {
+    "caller": "app/controllers/SessionsController",
+    "callee": "bcrypt/BCrypt"
+  },
+  {
+    "caller": "app/controllers/SessionsController",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "app/controllers/UsersController",
+    "callee": "Database->INSERT INTO \"users\" (\"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activation_digest\") VALUES (?, ?, ?, ?, ?, ?)"
+  },
+  {
+    "caller": "app/controllers/UsersController",
+    "callee": "Database->RELEASE SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/controllers/UsersController",
+    "callee": "Database->SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/controllers/UsersController",
+    "callee": "Database->SELECT 1 AS one FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/controllers/UsersController",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "app/controllers/UsersController",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/controllers/UsersController",
+    "callee": "activerecord/ActiveRecord"
+  },
+  {
+    "caller": "app/controllers/UsersController",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "app/controllers/UsersController",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "app/controllers/UsersController",
+    "callee": "ruby/Module"
+  },
+  {
+    "caller": "app/controllers/UsersController",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "app/helpers/SessionsHelper",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/helpers/SessionsHelper",
+    "callee": "activerecord/ActiveRecord"
+  },
+  {
+    "caller": "app/mailers/UserMailer",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/mailers/UserMailer",
+    "callee": "app/views/app_views_layouts_mailer_html_erb"
+  },
+  {
+    "caller": "app/mailers/UserMailer",
+    "callee": "app/views/app_views_layouts_mailer_text_erb"
+  },
+  {
+    "caller": "app/mailers/UserMailer",
+    "callee": "ruby/Module"
+  },
+  {
+    "caller": "app/mailers/UserMailer",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "Database->RELEASE SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "Database->SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "Database->UPDATE \"users\" SET \"updated_at\" = ?, \"activated\" = ? WHERE \"users\".\"id\" = ?"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "Database->UPDATE \"users\" SET \"updated_at\" = ?, \"activated_at\" = ? WHERE \"users\".\"id\" = ?"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "app/mailers/UserMailer"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "bcrypt/BCrypt"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "ruby/Module"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "app/views/app_views_layouts__footer_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_layouts__footer_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_layouts__header_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_layouts__header_html_erb",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/views/app_views_layouts__header_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_layouts__shim_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_layouts__shim_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_layouts_mailer_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_layouts_mailer_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_layouts_mailer_text_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_layouts_mailer_text_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_shared__error_messages_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_shared__error_messages_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_shared__stats_html_erb",
+    "callee": "Database->SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"followed_id\" WHERE \"relationships\".\"follower_id\" = ?"
+  },
+  {
+    "caller": "app/views/app_views_shared__stats_html_erb",
+    "callee": "Database->SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"follower_id\" WHERE \"relationships\".\"followed_id\" = ?"
+  },
+  {
+    "caller": "app/views/app_views_shared__stats_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_shared__stats_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_shared__stats_html_erb",
+    "callee": "ruby/Module"
+  },
+  {
+    "caller": "app/views/app_views_shared__stats_html_erb",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "app/views/app_views_users__follow_form_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_users__follow_form_html_erb",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/views/app_views_users__follow_form_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_users_new_html_erb",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/views/app_views_users_new_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_users_new_html_erb",
+    "callee": "app/helpers/ApplicationHelper"
+  },
+  {
+    "caller": "app/views/app_views_users_new_html_erb",
+    "callee": "app/views/app_views_layouts__footer_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_new_html_erb",
+    "callee": "app/views/app_views_layouts__header_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_new_html_erb",
+    "callee": "app/views/app_views_layouts__shim_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_new_html_erb",
+    "callee": "app/views/app_views_shared__error_messages_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_new_html_erb",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/views/app_views_users_new_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_users_new_html_erb",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "Database->SELECT 1 AS one FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/helpers/ApplicationHelper"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/helpers/UsersHelper"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/views/app_views_layouts__footer_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/views/app_views_layouts__header_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/views/app_views_layouts__shim_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/views/app_views_shared__stats_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/views/app_views_users__follow_form_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "bcrypt/BCrypt",
+    "callee": "ruby/String"
+  }
+]

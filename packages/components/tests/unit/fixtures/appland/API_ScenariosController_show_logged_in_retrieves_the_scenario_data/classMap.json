@@ -1,0 +1,319 @@
+[
+  {
+    "name": "app/models",
+    "type": "package",
+    "children": [
+      {
+        "name": "ApiKey",
+        "type": "class",
+        "children": [
+          {
+            "name": "issue",
+            "type": "function",
+            "static": true,
+            "location": "app/models/api_key.rb:28"
+          },
+          {
+            "name": "encode",
+            "type": "function",
+            "static": true,
+            "location": "app/models/api_key.rb:20"
+          },
+          {
+            "name": "authenticate",
+            "type": "function",
+            "labels": ["provider.authentication"],
+            "static": true,
+            "location": "app/models/api_key.rb:52"
+          },
+          {
+            "name": "decode",
+            "type": "function",
+            "static": true,
+            "location": "app/models/api_key.rb:24"
+          },
+          {
+            "name": "touch",
+            "type": "function",
+            "static": true,
+            "location": "app/models/api_key.rb:11"
+          }
+        ]
+      },
+      {
+        "name": "Scenario",
+        "type": "class",
+        "children": [
+          {
+            "name": "SearchActions",
+            "type": "class",
+            "children": [
+              {
+                "name": "find!",
+                "type": "function",
+                "static": false,
+                "location": "app/models/scenario.rb:128"
+              },
+              {
+                "name": "find",
+                "type": "function",
+                "static": false,
+                "location": "app/models/scenario.rb:132"
+              }
+            ]
+          },
+          {
+            "name": "find",
+            "type": "function",
+            "static": true,
+            "location": "app/models/scenario.rb:235"
+          },
+          {
+            "name": "Show",
+            "type": "class",
+            "children": [
+              {
+                "name": "app",
+                "type": "function",
+                "static": false,
+                "location": "app/models/scenario.rb:402"
+              },
+              {
+                "name": "last_modified_date",
+                "type": "function",
+                "static": false,
+                "location": "app/models/scenario.rb:430"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Search",
+        "type": "class",
+        "children": [
+          {
+            "name": "filter",
+            "type": "function",
+            "static": false,
+            "location": "app/models/search.rb:33"
+          }
+        ]
+      },
+      {
+        "name": "User",
+        "type": "class",
+        "children": [
+          {
+            "name": "Show",
+            "type": "class",
+            "children": [
+              {
+                "name": "admin?",
+                "type": "function",
+                "static": false,
+                "location": "app/models/user.rb:106"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "DAO",
+        "type": "class",
+        "children": [
+          {
+            "name": "PublicResource",
+            "type": "class",
+            "children": [
+              {
+                "name": "coerce",
+                "type": "function",
+                "static": true,
+                "location": "app/models/dao/public_resource.rb:18"
+              },
+              {
+                "name": "scope",
+                "type": "function",
+                "static": true,
+                "location": "app/models/dao/public_resource.rb:26"
+              }
+            ]
+          },
+          {
+            "name": "SequelUtil",
+            "type": "class",
+            "children": [
+              {
+                "name": "build_where_clause",
+                "type": "function",
+                "static": true,
+                "location": "app/models/dao/sequel_util.rb:6"
+              }
+            ]
+          },
+          {
+            "name": "ToModel",
+            "type": "class",
+            "children": [
+              {
+                "name": "to_model",
+                "type": "function",
+                "static": false,
+                "location": "app/models/dao/to_model.rb:5"
+              }
+            ]
+          },
+          {
+            "name": "Scenario",
+            "type": "class",
+            "children": [
+              {
+                "name": "processed?",
+                "type": "function",
+                "static": false,
+                "location": "app/models/dao/scenario.rb:208"
+              },
+              {
+                "name": "to_hash",
+                "type": "function",
+                "static": false,
+                "location": "app/models/dao/scenario.rb:164"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/controllers",
+    "type": "package",
+    "children": [
+      {
+        "name": "API",
+        "type": "class",
+        "children": [
+          {
+            "name": "ScenariosController",
+            "type": "class",
+            "children": [
+              {
+                "name": "show",
+                "type": "function",
+                "static": false,
+                "location": "app/controllers/api/scenarios_controller.rb:17"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "json",
+    "type": "package",
+    "children": [
+      {
+        "name": "JSON",
+        "type": "class",
+        "children": [
+          {
+            "name": "Ext",
+            "type": "class",
+            "children": [
+              {
+                "name": "Parser",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "parse",
+                    "type": "function",
+                    "labels": ["serialization", "json"],
+                    "static": false,
+                    "location": "JSON::Ext::Parser#parse"
+                  }
+                ]
+              },
+              {
+                "name": "Generator",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "State",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "generate",
+                        "type": "function",
+                        "labels": ["serialization", "json"],
+                        "static": false,
+                        "location": "JSON::Ext::Generator::State#generate"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "INSERT INTO \"api_keys\" (\"login\") VALUES ('alice') RETURNING *"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"api_keys\" WHERE (\"login\" = 'alice')"
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"api_keys\" SET \"last_used\" = '2021-02-01 15:53:43.194564+0000' WHERE (\"id\" = 2)"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"users\" WHERE (\"users\".\"login\" = 'alice') LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"users\" WHERE \"id\" = 1000001"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"id\" FROM \"scenarios\" WHERE (((\"scenarios\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = 1000001) AND (\"orgs\".\"id\" IS NOT NULL)))) OR (\"scenarios\".\"mapset_id\" IN (SELECT \"mapsets\".\"id\" FROM \"mapsets\" WHERE ((\"mapsets\".\"app_id\" IN (SELECT \"apps\".\"id\" FROM \"apps\" WHERE (((\"apps\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = 1000001) AND (\"orgs\".\"id\" IS NOT NULL)))) OR (\"public\" IS TRUE)) AND (\"apps\".\"id\" IS NOT NULL)))) AND (\"mapsets\".\"id\" IS NOT NULL)))) OR (\"link_sharing\" IS TRUE)) AND (\"uuid\" = '724151a3-cc7b-4ef3-ac6b-5380fe59217c')) LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"scenarios\" WHERE \"id\" = 100002"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"mapsets\" WHERE \"id\" = 100001"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"apps\" WHERE \"id\" = 100001"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"updated_at\" FROM \"scenarios\" WHERE (\"id\" = 100002) LIMIT 1"
+      }
+    ]
+  },
+  {
+    "type": "http",
+    "name": "HTTP server requests",
+    "children": [
+      {
+        "type": "route",
+        "name": "GET /api/scenarios/:id(.:format)"
+      }
+    ]
+  }
+]

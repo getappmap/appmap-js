@@ -1,0 +1,7 @@
+[
+  {
+    "route": "GET /:organization_id/:id(.:format)",
+    "parameters": "(mapset,controller,action,organization_id,id)",
+    "status": 200
+  }
+]

@@ -1,0 +1,14 @@
+[
+  "deserialize.safe",
+  "format.json.parse",
+  "http.session.read",
+  "http.session.write",
+  "log",
+  "mvc.after_action",
+  "mvc.before_action",
+  "mvc.controller",
+  "mvc.template",
+  "mvc.template.resolver",
+  "public",
+  "security.authentication"
+]

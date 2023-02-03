@@ -1,0 +1,52 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "DELETE /api/api_keys(.:format)",
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["provider.authentication"],
+        "children": [
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["update"],
+                "tables": ["api_keys"],
+                "columns": ["id", "last_used"],
+                "joinCount": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["delete"],
+            "tables": ["api_keys"],
+            "columns": ["id"],
+            "joinCount": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "DELETE /api/api_keys(.:format)",
+    "status_code": 401,
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["provider.authentication"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      }
+    ]
+  }
+]

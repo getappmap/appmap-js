@@ -1,0 +1,20 @@
+[
+  {
+    "kind": "sql",
+    "sql": {
+      "analyzed_query": {
+        "actions": ["select"],
+        "tables": ["key_data_stats", "scenarios", "users_orgs"],
+        "columns": [
+          "*",
+          "http_server_request.http_server_request",
+          "scenarios.events_http_server_requests",
+          "scenarios.org_id",
+          "user_id",
+          "users_orgs.org_id"
+        ],
+        "joinCount": 2
+      }
+    }
+  }
+]

@@ -1,0 +1,463 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "GET /{organization_id}/{id}/scenarios_list",
+    "parameter_names": ["mapset", "page_size", "controller", "action", "organization_id", "id"],
+    "status_code": 404,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": ["mvc.controller"],
+        "children": [
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "function": "app/controllers/AnonymousAccess#allow_anonymous_access",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": ["http.session"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": ["http.session"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "normalized_query": "SAVEPOINT autopoint_1"
+            },
+            "analyzed_query": {
+              "actions": [],
+              "tables": [],
+              "columns": [],
+              "joinCount": 0
+            }
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "function": "app/controllers/CurrentUser#check_current_user",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/controllers/AnonymousAccess#anonymous_access?",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/controllers/CurrentUser#current_user",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/controllers/CurrentUser#lookup_session_user",
+                        "labels": ["security.authentication"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": ["http.session"]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/controllers/CurrentUser#ensure_eula_accepted",
+                "labels": []
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/WithAuthentication#with_authentication",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "app/controllers/WithAuthentication#with_anonymous_user",
+                "labels": ["public"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                    "labels": ["mvc.before_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/models/Configuration.find",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": ["http.session"]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "json/JSON::Ext::Parser#parse",
+                            "labels": ["format.json"]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "app/models/Configuration#attributes=",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/models/Configuration#attributes",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/models/Configuration#attributes",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/controllers/CurrentUser#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/controllers/CurrentUser#lookup_session_user",
+                            "labels": ["security.authentication"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": ["http.session"]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/models/App::Search#find!",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/models/App::Search#find_by_slug!",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "app/models/App::Search#find_by_org_scope!",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "app/models/Search#filter",
+                                    "labels": [],
+                                    "children": [
+                                      {
+                                        "kind": "function",
+                                        "function": "app/models/DAO::PublicResource.coerce",
+                                        "labels": []
+                                      },
+                                      {
+                                        "kind": "function",
+                                        "function": "app/models/DAO::PublicResource.scope",
+                                        "labels": [],
+                                        "children": [
+                                          {
+                                            "kind": "function",
+                                            "function": "app/models/DAO::SequelUtil.build_where_clause",
+                                            "labels": []
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "kind": "sql",
+                                    "sql": {
+                                      "normalized_query": "SELECT \"apps\".* FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") WHERE ((\"public\" IS ?) AND (\"apps\".\"slug\" = ?) AND (\"orgs\".\"slug\" = ?)) LIMIT ?"
+                                    },
+                                    "analyzed_query": {
+                                      "actions": ["select"],
+                                      "tables": ["apps", "orgs"],
+                                      "columns": [
+                                        "apps.*",
+                                        "apps.org_id",
+                                        "apps.slug",
+                                        "orgs.id",
+                                        "orgs.slug",
+                                        "public",
+                                        "true"
+                                      ],
+                                      "joinCount": 1
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "app/models/App::Search#find_by_user_scope!",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "app/models/Search#filter",
+                                    "labels": [],
+                                    "children": [
+                                      {
+                                        "kind": "function",
+                                        "function": "app/models/DAO::PublicResource.coerce",
+                                        "labels": []
+                                      },
+                                      {
+                                        "kind": "function",
+                                        "function": "app/models/DAO::PublicResource.scope",
+                                        "labels": [],
+                                        "children": [
+                                          {
+                                            "kind": "function",
+                                            "function": "app/models/DAO::SequelUtil.build_where_clause",
+                                            "labels": []
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "kind": "sql",
+                                    "sql": {
+                                      "normalized_query": "SELECT \"apps\".* FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") INNER JOIN \"users\" ON (\"users\".\"id\" = \"orgs\".\"owner_id\") WHERE ((\"public\" IS ?) AND (\"apps\".\"slug\" = ?) AND (\"users\".\"login\" = ?)) LIMIT ?"
+                                    },
+                                    "analyzed_query": {
+                                      "actions": ["select"],
+                                      "tables": ["apps", "orgs", "users"],
+                                      "columns": [
+                                        "apps.*",
+                                        "apps.org_id",
+                                        "apps.slug",
+                                        "orgs.id",
+                                        "orgs.owner_id",
+                                        "public",
+                                        "true",
+                                        "users.id",
+                                        "users.login"
+                                      ],
+                                      "joinCount": 2
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "app/models/Exceptions::RecordNotFound.build_message",
+                                "labels": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "normalized_query": "ROLLBACK TO SAVEPOINT autopoint_1"
+            },
+            "analyzed_query": {
+              "actions": [],
+              "tables": [],
+              "columns": [],
+              "joinCount": 0
+            }
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/ApplicationController#render_404",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "inline_template.render",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/views/app_views_errors_not_found_html_haml.render",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "inline_template.render",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/views/app_views_layouts__standard_head_html_haml.render",
+                            "labels": ["mvc.template"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionview/ActionView::Resolver#find_all",
+                                "labels": ["mvc.template.resolver"]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "inline_template.render",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "app/views/app_views_layouts__css_head_html_haml.render",
+                                    "labels": ["mvc.template"],
+                                    "children": [
+                                      {
+                                        "kind": "function",
+                                        "function": "actionview/ActionView::Resolver#find_all",
+                                        "labels": ["mvc.template.resolver"]
+                                      },
+                                      {
+                                        "kind": "function",
+                                        "function": "json/JSON::Ext::Parser#parse",
+                                        "labels": ["format.json"]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "inline_template.render",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "app/views/app_views_layouts__js_head_html_haml.render",
+                                    "labels": ["mvc.template"],
+                                    "children": [
+                                      {
+                                        "kind": "function",
+                                        "function": "actionview/ActionView::Resolver#find_all",
+                                        "labels": ["mvc.template.resolver"]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "inline_template.render",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/views/app_views_partials__header_html_haml.render",
+                            "labels": ["mvc.template"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionview/ActionView::Resolver#find_all",
+                                "labels": ["mvc.template.resolver"]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "app/helpers/ConfigurationHelper#content_for_feature_flag",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "app/helpers/ConfigurationHelper#feature_flag?",
+                                    "labels": [],
+                                    "children": [
+                                      {
+                                        "kind": "function",
+                                        "function": "app/models/Configuration#attributes",
+                                        "labels": []
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "inline_template.render",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "app/views/app_views_partials__flash_html_haml.render",
+                                    "labels": ["mvc.template"],
+                                    "children": [
+                                      {
+                                        "kind": "function",
+                                        "function": "actionview/ActionView::Resolver#find_all",
+                                        "labels": ["mvc.template.resolver"]
+                                      },
+                                      {
+                                        "kind": "function",
+                                        "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                        "labels": ["http.session"]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "json/JSON::Ext::Parser#parse",
+                        "labels": ["format.json"]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

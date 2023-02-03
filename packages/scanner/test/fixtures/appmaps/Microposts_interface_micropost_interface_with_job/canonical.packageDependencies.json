@@ -1,0 +1,138 @@
+[
+  {
+    "caller": "HTTP server requests",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "actionview"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "app/views"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "json"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "openssl"
+  },
+  {
+    "caller": "activejob",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "Database"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "activejob"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "json"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "yaml"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "Database"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "app/models"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "app/views"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "Database"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "app/models"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "json"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "openssl"
+  },
+  {
+    "caller": "app/models",
+    "callee": "Database"
+  },
+  {
+    "caller": "app/models",
+    "callee": "activejob"
+  },
+  {
+    "caller": "app/models",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "app/views",
+    "callee": "Database"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionview"
+  },
+  {
+    "caller": "app/views",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "app/views",
+    "callee": "app/models"
+  },
+  {
+    "caller": "app/views",
+    "callee": "json"
+  }
+]

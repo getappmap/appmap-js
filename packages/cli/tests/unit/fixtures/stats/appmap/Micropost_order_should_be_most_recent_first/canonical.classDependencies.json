@@ -1,0 +1,18 @@
+[
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "Database->SELECT \"microposts\".* FROM \"microposts\" ORDER BY \"microposts\".\"created_at\" DESC LIMIT ?"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "Database->SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "Database->SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "logger/Logger"
+  }
+]

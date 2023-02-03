@@ -1,0 +1,87 @@
+{
+  "app": "jwt-rb",
+  "language": {
+    "name": "ruby",
+    "engine": "ruby",
+    "version": "3.0.1"
+  },
+  "client": {
+    "name": "appmap",
+    "url": "https://github.com/getappmap/appmap-ruby",
+    "version": "0.83.6-dev"
+  },
+  "fingerprints": [
+    {
+      "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+      "canonicalization_algorithm": "classDependencies",
+      "digest": "bbc7b110f56965e15530a6b6194665f4c6e8ed1eab2084eba14e0488dc225e1d",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+      "canonicalization_algorithm": "classes",
+      "digest": "8d94e8e08dab0068dffa3c431eebf722ac1493018346308dffe5a5b477fec023",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+      "canonicalization_algorithm": "httpClientRequests",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+      "canonicalization_algorithm": "httpServerRequests",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+      "canonicalization_algorithm": "info",
+      "digest": "6184fff7d6e974cc70c9b8337d1c160e2a494c28aa4489fd017dca07dac2c06b",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+      "canonicalization_algorithm": "labels",
+      "digest": "1e0ffb08cabb1787d466c39c589bcff932041742620fac103382e2f7d1f7b93d",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+      "canonicalization_algorithm": "packageDependencies",
+      "digest": "14e259b8f5c00aa85daec483c2165983c8ee9a1595ff354cc8585f66e59e7808",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+      "canonicalization_algorithm": "packages",
+      "digest": "bc3abbde5a235187ff15d8c90da074b21063b92e17733f1f7c6ad252db22674f",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+      "canonicalization_algorithm": "sqlNormalized",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+      "canonicalization_algorithm": "sqlTables",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+      "canonicalization_algorithm": "trace",
+      "digest": "6d15391d39a33fe9a6abda6453b279648ccd83e715ab76739306a239e37db3a7",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+      "canonicalization_algorithm": "update",
+      "digest": "6184fff7d6e974cc70c9b8337d1c160e2a494c28aa4489fd017dca07dac2c06b",
+      "fingerprint_algorithm": "sha256"
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "app": "sample_app_6th_ed",
+  "language": {
+    "name": "ruby",
+    "engine": "ruby",
+    "version": "2.7.3"
+  },
+  "client": {
+    "name": "appmap",
+    "url": "https://github.com/getappmap/appmap-ruby",
+    "version": "0.64.0"
+  },
+  "frameworks": [
+    {
+      "name": "rails",
+      "version": "6.0.3.7"
+    },
+    {
+      "name": "minitest",
+      "version": "5.11.3"
+    }
+  ],
+  "git": {
+    "repository": "git@github.com:land-of-apps/sample_app_6th_ed.git",
+    "branch": "appmap-e2e-scanner",
+    "commit": "5e3285cd6c04fef8f5149c383d4f1ff85141faed",
+    "status": [
+      "M Gemfile",
+      "M Gemfile.lock",
+      "M app/helpers/users_helper.rb",
+      "AM test/helpers/users_helper_test.rb",
+      "M test/test_helper.rb"
+    ],
+    "git_last_annotated_tag": null,
+    "git_last_tag": null,
+    "git_commits_since_last_annotated_tag": null,
+    "git_commits_since_last_tag": null
+  },
+  "name": "Microposts_interface micropost interface",
+  "source_location": "/Users/torchello/www/appland/sample-apps/sample_app_6th_ed/test/integration/microposts_interface_test.rb:9",
+  "recorder": {
+    "name": "minitest"
+  },
+  "test_status": "succeeded",
+  "fingerprints": [
+    {
+      "appmap_digest": "578640f177862efa295fdc5619aff078e3af5b0270f7ea04484c39621f540c2b",
+      "canonicalization_algorithm": "classDependencies",
+      "digest": "380f56af5594f236d321eba5a3c963376d7e42b6a0299d9694a4902123fbaab1",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "578640f177862efa295fdc5619aff078e3af5b0270f7ea04484c39621f540c2b",
+      "canonicalization_algorithm": "classes",
+      "digest": "75ca65ec420935658c85f774120d1e9ade7fb2d0fa4e48a5ec2e2c1ceee2dbdf",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "578640f177862efa295fdc5619aff078e3af5b0270f7ea04484c39621f540c2b",
+      "canonicalization_algorithm": "httpClientRequests",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "578640f177862efa295fdc5619aff078e3af5b0270f7ea04484c39621f540c2b",
+      "canonicalization_algorithm": "httpServerRequests",
+      "digest": "130dcd5a9a108f9c77ae6452d94116ad97fd0f1abe8725aa113d271041d2ff80",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "578640f177862efa295fdc5619aff078e3af5b0270f7ea04484c39621f540c2b",
+      "canonicalization_algorithm": "info",
+      "digest": "7ca90779ad502df6836418d639151a0f66618070888edb5c7201fa6b86271aa4",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "578640f177862efa295fdc5619aff078e3af5b0270f7ea04484c39621f540c2b",
+      "canonicalization_algorithm": "labels",
+      "digest": "d09a82e172c5a388fac428e582268459e5c1dd2345bb32db17cdbb935e2d8563",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "578640f177862efa295fdc5619aff078e3af5b0270f7ea04484c39621f540c2b",
+      "canonicalization_algorithm": "packageDependencies",
+      "digest": "a8a4ce14d48981e6145afb1b46c260b92c5e029c12b5ac5b624d2756fc0dad71",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "578640f177862efa295fdc5619aff078e3af5b0270f7ea04484c39621f540c2b",
+      "canonicalization_algorithm": "packages",
+      "digest": "2f0e7d4ef947c3921477d06796f6fa48e4ad8e9218f299513d9cdd98aefb4bfc",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "578640f177862efa295fdc5619aff078e3af5b0270f7ea04484c39621f540c2b",
+      "canonicalization_algorithm": "sqlNormalized",
+      "digest": "dd1466bb3c0564bb7a32248915ee1551b2d63f5e2417ed94baefc85e6e313d8a",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "578640f177862efa295fdc5619aff078e3af5b0270f7ea04484c39621f540c2b",
+      "canonicalization_algorithm": "sqlTables",
+      "digest": "6d7af0c0fcbce6d6a69a1cda08f7885d3ee7fbf9499d209fb0b60ff5bbc916e1",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "578640f177862efa295fdc5619aff078e3af5b0270f7ea04484c39621f540c2b",
+      "canonicalization_algorithm": "trace",
+      "digest": "5fb9981acde86d5b5397ba1be08e64c775a5e96c78f9d75a3520ebf30fa9e4ee",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "578640f177862efa295fdc5619aff078e3af5b0270f7ea04484c39621f540c2b",
+      "canonicalization_algorithm": "update",
+      "digest": "1e782628286754b178656c12cb56672af81d20a48147bd8706032a23d20b392c",
+      "fingerprint_algorithm": "sha256"
+    }
+  ]
+}

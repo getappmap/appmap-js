@@ -1,0 +1,1141 @@
+[
+  {
+    "name": "activesupport",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActiveSupport",
+        "type": "class",
+        "children": [
+          {
+            "name": "Callbacks",
+            "type": "class",
+            "children": [
+              {
+                "name": "CallbackSequence",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "invoke_before",
+                    "type": "function",
+                    "labels": [
+                      "mvc.before_action"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-7.0.2.2/lib/active_support/callbacks.rb:594"
+                  },
+                  {
+                    "name": "invoke_after",
+                    "type": "function",
+                    "labels": [
+                      "mvc.after_action"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-7.0.2.2/lib/active_support/callbacks.rb:598"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "logger",
+    "type": "package",
+    "children": [
+      {
+        "name": "Logger",
+        "type": "class",
+        "children": [
+          {
+            "name": "LogDevice",
+            "type": "class",
+            "children": [
+              {
+                "name": "write",
+                "type": "function",
+                "labels": [
+                  "log"
+                ],
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb:31"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "lib",
+    "type": "package",
+    "children": [
+      {
+        "name": "devise",
+        "type": "package",
+        "children": [
+          {
+            "name": "models",
+            "type": "package",
+            "children": [
+              {
+                "name": "Devise",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "Models",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "DatabaseAuthenticatable",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "password=",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/database_authenticatable.rb:65"
+                          },
+                          {
+                            "name": "password_digest",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/database_authenticatable.rb:204"
+                          },
+                          {
+                            "name": "send_email_changed_notification?",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/database_authenticatable.rb:209"
+                          },
+                          {
+                            "name": "send_password_change_notification?",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/database_authenticatable.rb:219"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Authenticatable",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "downcase_keys",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/authenticatable.rb:210"
+                          },
+                          {
+                            "name": "apply_to_attribute_or_variable",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/authenticatable.rb:218"
+                          },
+                          {
+                            "name": "strip_whitespace",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/authenticatable.rb:214"
+                          },
+                          {
+                            "name": "send_devise_notification",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/authenticatable.rb:200"
+                          },
+                          {
+                            "name": "devise_mailer",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/authenticatable.rb:133"
+                          },
+                          {
+                            "name": "ClassMethods",
+                            "type": "class",
+                            "children": [
+                              {
+                                "name": "find_first_by_auth_conditions",
+                                "type": "function",
+                                "static": true,
+                                "location": "lib/devise/models/authenticatable.rb:279"
+                              },
+                              {
+                                "name": "devise_parameter_filter",
+                                "type": "function",
+                                "static": true,
+                                "location": "lib/devise/models/authenticatable.rb:308"
+                              },
+                              {
+                                "name": "params_authenticatable?",
+                                "type": "function",
+                                "static": true,
+                                "location": "lib/devise/models/authenticatable.rb:246"
+                              },
+                              {
+                                "name": "http_authenticatable?",
+                                "type": "function",
+                                "static": true,
+                                "location": "lib/devise/models/authenticatable.rb:251"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Validatable",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "email_required?",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/validatable.rb:64"
+                          },
+                          {
+                            "name": "password_required?",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/validatable.rb:60"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Confirmable",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "confirmation_required?",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/confirmable.rb:187"
+                          },
+                          {
+                            "name": "confirmed?",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/confirmable.rb:106"
+                          },
+                          {
+                            "name": "generate_confirmation_token",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/confirmable.rb:248"
+                          },
+                          {
+                            "name": "send_confirmation_notification?",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/confirmable.rb:305"
+                          },
+                          {
+                            "name": "skip_reconfirmation_in_callback!",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/confirmable.rb:175"
+                          },
+                          {
+                            "name": "send_on_create_confirmation_instructions",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/confirmable.rb:182"
+                          },
+                          {
+                            "name": "send_confirmation_instructions",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/confirmable.rb:115"
+                          },
+                          {
+                            "name": "pending_reconfirmation?",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/confirmable.rb:110"
+                          },
+                          {
+                            "name": "postpone_email_change?",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/confirmable.rb:280"
+                          },
+                          {
+                            "name": "send_email_changed_notification?",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/confirmable.rb:311"
+                          },
+                          {
+                            "name": "reconfirmation_required?",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/confirmable.rb:301"
+                          },
+                          {
+                            "name": "ClassMethods",
+                            "type": "class",
+                            "children": [
+                              {
+                                "name": "confirm_by_token",
+                                "type": "function",
+                                "static": true,
+                                "location": "lib/devise/models/confirmable.rb:350"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "confirm",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/confirmable.rb:79"
+                          },
+                          {
+                            "name": "pending_any_confirmation",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/confirmable.rb:237"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Recoverable",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "clear_reset_password_token?",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/models/recoverable.rb:103"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Lockable",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "ClassMethods",
+                            "type": "class",
+                            "children": [
+                              {
+                                "name": "unlock_strategy_enabled?",
+                                "type": "function",
+                                "static": true,
+                                "location": "lib/devise/models/lockable.rb:200"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Devise",
+            "type": "class",
+            "children": [
+              {
+                "name": "Encryptor",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "digest",
+                    "type": "function",
+                    "static": true,
+                    "location": "lib/devise/encryptor.rb:7"
+                  }
+                ]
+              },
+              {
+                "name": "Models",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "DatabaseAuthenticatable",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "ClassMethods",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "pepper",
+                            "type": "function",
+                            "static": true,
+                            "location": "lib/devise/models.rb:37"
+                          },
+                          {
+                            "name": "stretches",
+                            "type": "function",
+                            "static": true,
+                            "location": "lib/devise/models.rb:37"
+                          },
+                          {
+                            "name": "send_email_changed_notification",
+                            "type": "function",
+                            "static": true,
+                            "location": "lib/devise/models.rb:37"
+                          },
+                          {
+                            "name": "send_password_change_notification",
+                            "type": "function",
+                            "static": true,
+                            "location": "lib/devise/models.rb:37"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Authenticatable",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "ClassMethods",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "case_insensitive_keys",
+                            "type": "function",
+                            "static": true,
+                            "location": "lib/devise/models.rb:37"
+                          },
+                          {
+                            "name": "strip_whitespace_keys",
+                            "type": "function",
+                            "static": true,
+                            "location": "lib/devise/models.rb:37"
+                          },
+                          {
+                            "name": "authentication_keys",
+                            "type": "function",
+                            "static": true,
+                            "location": "lib/devise/models.rb:37"
+                          },
+                          {
+                            "name": "params_authenticatable",
+                            "type": "function",
+                            "static": true,
+                            "location": "lib/devise/models.rb:37"
+                          },
+                          {
+                            "name": "http_authenticatable",
+                            "type": "function",
+                            "static": true,
+                            "location": "lib/devise/models.rb:37"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Confirmable",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "ClassMethods",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "reconfirmable",
+                            "type": "function",
+                            "static": true,
+                            "location": "lib/devise/models.rb:37"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Lockable",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "ClassMethods",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "unlock_strategy",
+                            "type": "function",
+                            "static": true,
+                            "location": "lib/devise/models.rb:37"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Omniauthable",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "ClassMethods",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "omniauth_providers",
+                            "type": "function",
+                            "static": true,
+                            "location": "lib/devise/models.rb:37"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Rememberable",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "ClassMethods",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "rememberable_options",
+                            "type": "function",
+                            "static": true,
+                            "location": "lib/devise/models.rb:37"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Mapping",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "find_scope!",
+                    "type": "function",
+                    "static": true,
+                    "location": "lib/devise/mapping.rb:35"
+                  },
+                  {
+                    "name": "to",
+                    "type": "function",
+                    "static": false,
+                    "location": "lib/devise/mapping.rb:82"
+                  },
+                  {
+                    "name": "modules",
+                    "type": "function",
+                    "static": false,
+                    "location": "lib/devise/mapping.rb:77"
+                  }
+                ]
+              },
+              {
+                "name": "ParameterFilter",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "filter",
+                    "type": "function",
+                    "static": false,
+                    "location": "lib/devise/parameter_filter.rb:10"
+                  },
+                  {
+                    "name": "stringify_params",
+                    "type": "function",
+                    "static": false,
+                    "location": "lib/devise/parameter_filter.rb:31"
+                  },
+                  {
+                    "name": "filtered_hash_by_method_for_given_keys",
+                    "type": "function",
+                    "static": false,
+                    "location": "lib/devise/parameter_filter.rb:19"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "mailers",
+            "type": "package",
+            "children": [
+              {
+                "name": "Devise",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "Mailers",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "Helpers",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "devise_mail",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/mailers/helpers.rb:17"
+                          },
+                          {
+                            "name": "initialize_from_record",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/mailers/helpers.rb:22"
+                          },
+                          {
+                            "name": "devise_mapping",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/mailers/helpers.rb:27"
+                          },
+                          {
+                            "name": "headers_for",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/mailers/helpers.rb:31"
+                          },
+                          {
+                            "name": "subject_for",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/mailers/helpers.rb:87"
+                          },
+                          {
+                            "name": "mailer_sender",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/mailers/helpers.rb:53"
+                          },
+                          {
+                            "name": "mailer_reply_to",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/mailers/helpers.rb:45"
+                          },
+                          {
+                            "name": "template_paths",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/mailers/helpers.rb:64"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "controllers",
+            "type": "package",
+            "children": [
+              {
+                "name": "Devise",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "Controllers",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "ScopedViews",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "ClassMethods",
+                            "type": "class",
+                            "children": [
+                              {
+                                "name": "scoped_views?",
+                                "type": "function",
+                                "static": true,
+                                "location": "lib/devise/controllers/scoped_views.rb:9"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Helpers",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "devise_controller?",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/controllers/helpers.rb:151"
+                          },
+                          {
+                            "name": "warden",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/controllers/helpers.rb:142"
+                          },
+                          {
+                            "name": "ClassMethods",
+                            "type": "class",
+                            "children": [
+                              {
+                                "name": "log_process_action",
+                                "type": "function",
+                                "static": true,
+                                "location": "lib/devise/controllers/helpers.rb:82"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "omniauth",
+            "type": "package",
+            "children": [
+              {
+                "name": "Devise",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "OmniAuth",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "UrlHelpers",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "omniauth_authorize_path",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/omniauth/url_helpers.rb:6"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "strategies",
+            "type": "package",
+            "children": [
+              {
+                "name": "Devise",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "Strategies",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "Rememberable",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "valid?",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/strategies/rememberable.rb:13"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Base",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "mapping",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/strategies/base.rb:13"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Authenticatable",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "valid?",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/strategies/authenticatable.rb:17"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "rails",
+            "type": "package",
+            "children": [
+              {
+                "name": "Warden",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "Mixins",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "Common",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "cookies",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/rails/warden_compat.rb:12"
+                          },
+                          {
+                            "name": "request",
+                            "type": "function",
+                            "static": false,
+                            "location": "lib/devise/rails/warden_compat.rb:4"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Devise",
+        "type": "class",
+        "children": [
+          {
+            "name": "mailer",
+            "type": "function",
+            "static": true,
+            "location": "lib/devise.rb:342"
+          },
+          {
+            "name": "Getter",
+            "type": "class",
+            "children": [
+              {
+                "name": "get",
+                "type": "function",
+                "static": false,
+                "location": "lib/devise.rb:315"
+              }
+            ]
+          },
+          {
+            "name": "available_router_name",
+            "type": "function",
+            "static": true,
+            "location": "lib/devise.rb:333"
+          },
+          {
+            "name": "omniauth_providers",
+            "type": "function",
+            "static": true,
+            "location": "lib/devise.rb:337"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "devise",
+    "type": "package",
+    "children": [
+      {
+        "name": "Devise",
+        "type": "class",
+        "children": [
+          {
+            "name": "friendly_token",
+            "type": "function",
+            "labels": [
+              "secret"
+            ],
+            "static": true,
+            "location": "lib/devise.rb:500"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "actionview",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActionView",
+        "type": "class",
+        "children": [
+          {
+            "name": "Resolver",
+            "type": "class",
+            "children": [
+              {
+                "name": "find_all",
+                "type": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ],
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-7.0.2.2/lib/action_view/template/resolver.rb:62"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/views",
+    "type": "package",
+    "children": [
+      {
+        "name": "app_views_devise_confirmations_new_html_erb",
+        "type": "class",
+        "children": [
+          {
+            "name": "render",
+            "type": "function",
+            "labels": [
+              "mvc.template"
+            ],
+            "static": true,
+            "location": "app/views/devise/confirmations/new.html.erb"
+          }
+        ]
+      },
+      {
+        "name": "app_views_devise_shared__error_messages_html_erb",
+        "type": "class",
+        "children": [
+          {
+            "name": "render",
+            "type": "function",
+            "labels": [
+              "mvc.template"
+            ],
+            "static": true,
+            "location": "app/views/devise/shared/_error_messages.html.erb"
+          }
+        ]
+      },
+      {
+        "name": "app_views_devise_shared__links_html_erb",
+        "type": "class",
+        "children": [
+          {
+            "name": "render",
+            "type": "function",
+            "labels": [
+              "mvc.template"
+            ],
+            "static": true,
+            "location": "app/views/devise/shared/_links.html.erb"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ruby",
+    "type": "package",
+    "children": [
+      {
+        "name": "String",
+        "type": "class",
+        "children": [
+          {
+            "name": "unpack",
+            "type": "function",
+            "labels": [
+              "string.unpack"
+            ],
+            "static": false,
+            "location": "<internal:pack>:256"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "omniauth",
+    "type": "package",
+    "children": [
+      {
+        "name": "OmniAuth",
+        "type": "class",
+        "children": [
+          {
+            "name": "Strategy",
+            "type": "class",
+            "children": [
+              {
+                "name": "call!",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/omniauth-2.0.4/lib/omniauth/strategy.rb:177"
+              }
+            ]
+          },
+          {
+            "name": "Utils",
+            "type": "class",
+            "children": [
+              {
+                "name": "camelize",
+                "type": "function",
+                "static": true,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/omniauth-2.0.4/lib/omniauth.rb:168"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "activerecord",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActiveRecord",
+        "type": "class",
+        "children": [
+          {
+            "name": "Relation",
+            "type": "class",
+            "children": [
+              {
+                "name": "records",
+                "type": "function",
+                "labels": [
+                  "dao.materialize"
+                ],
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-7.0.2.2/lib/active_record/relation.rb:249"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "actionpack",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActionDispatch",
+        "type": "class",
+        "children": [
+          {
+            "name": "Request",
+            "type": "class",
+            "children": [
+              {
+                "name": "Session",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "[]",
+                    "type": "function",
+                    "labels": [
+                      "http.session.read"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-7.0.2.2/lib/action_dispatch/request/session.rb:110"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Cookies",
+            "type": "class",
+            "children": [
+              {
+                "name": "CookieJar",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "update",
+                    "type": "function",
+                    "labels": [
+                      "http.session.write"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-7.0.2.2/lib/action_dispatch/middleware/cookies.rb:349"
+                  },
+                  {
+                    "name": "[]",
+                    "type": "function",
+                    "labels": [
+                      "http.session.read"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-7.0.2.2/lib/action_dispatch/middleware/cookies.rb:333"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "openssl",
+    "type": "package",
+    "children": [
+      {
+        "name": "OpenSSL",
+        "type": "class",
+        "children": [
+          {
+            "name": "PKCS5",
+            "type": "class",
+            "children": [
+              {
+                "name": "pbkdf2_hmac",
+                "type": "function",
+                "labels": [
+                  "crypto.pkcs5"
+                ],
+                "static": true,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/openssl/pkcs5.rb:13"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "class",
+    "name": "inline_template",
+    "children": [
+      {
+        "type": "function",
+        "name": "render",
+        "static": true
+      }
+    ]
+  }
+]

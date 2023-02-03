@@ -1,0 +1,13 @@
+[
+  "INSERT INTO \"users\" (\"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activation_digest\") VALUES (?, ?, ?, ?, ?, ?)",
+  "RELEASE SAVEPOINT active_record_1",
+  "SAVEPOINT active_record_1",
+  "SELECT ? AS one FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? LIMIT ?",
+  "SELECT ? AS one FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?",
+  "SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"followed_id\" WHERE \"relationships\".\"follower_id\" = ?",
+  "SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"follower_id\" WHERE \"relationships\".\"followed_id\" = ?",
+  "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?",
+  "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?",
+  "UPDATE \"users\" SET \"updated_at\" = ?, \"activated\" = ? WHERE \"users\".\"id\" = ?",
+  "UPDATE \"users\" SET \"updated_at\" = ?, \"activated_at\" = ? WHERE \"users\".\"id\" = ?"
+]

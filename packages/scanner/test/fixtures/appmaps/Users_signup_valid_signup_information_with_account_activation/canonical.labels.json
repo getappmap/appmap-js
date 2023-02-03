@@ -1,0 +1,20 @@
+[
+  "crypto.decrypt",
+  "crypto.secure_compare",
+  "dao.materialize",
+  "format.json.parse",
+  "http.session.read",
+  "http.session.write",
+  "log",
+  "mvc.after_action",
+  "mvc.before_action",
+  "mvc.controller",
+  "mvc.template",
+  "mvc.template.resolver",
+  "public",
+  "secret",
+  "secret.generator",
+  "security.authentication",
+  "sql.materialize",
+  "string.equals"
+]

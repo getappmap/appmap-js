@@ -1,0 +1,16 @@
+[
+  "actionpack",
+  "activesupport",
+  "app/controllers/api",
+  "app/controllers/concerns",
+  "app/models",
+  "app/models/app",
+  "app/models/concerns",
+  "app/models/dao",
+  "app/models/exceptions",
+  "app/models/mapset",
+  "app/models/user",
+  "json",
+  "logger",
+  "ruby"
+]

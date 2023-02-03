@@ -1,0 +1,486 @@
+[
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "log"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "log"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "log"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.before_action"
+    ],
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "secret"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.after_action"
+    ],
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.template.resolver"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.template.resolver"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.template.resolver"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.template.resolver"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.template.resolver"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.template.resolver"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "log"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "log"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "log"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "log"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "log"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "log"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "string.unpack"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "log"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "log"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "log"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "dao.materialize"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.template"
+    ],
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.template.resolver"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.template.resolver"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.template.resolver"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.template.resolver"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.template.resolver"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.template.resolver"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.template.resolver"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.template.resolver"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.template.resolver"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "log"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "log"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.template"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.template"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "log"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "http.session.write"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "crypto.pkcs5"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "crypto.pkcs5"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "crypto.pkcs5"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "crypto.pkcs5"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "log"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "log"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "mvc.after_action"
+    ]
+  }
+]

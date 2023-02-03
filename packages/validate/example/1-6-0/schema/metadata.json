@@ -1,0 +1,108 @@
+{
+  "app": "solidus",
+  "git": {
+    "branch": "appland",
+    "commit": "620695333ac6621e408f21ef86fc34ef766a674f",
+    "repository": "https://github.com/land-of-apps/solidus.git"
+  },
+  "name": "Cancel items when all items are not cancelable does not display the link to cancel items",
+  "client": {
+    "url": "https://github.com/getappmap/appmap-ruby",
+    "name": "appmap",
+    "version": "0.37.2"
+  },
+  "feature": "Cancel items when all items are not cancelable",
+  "language": {
+    "name": "ruby",
+    "engine": "ruby",
+    "version": "2.6.5"
+  },
+  "recorder": {
+    "name": "rspec"
+  },
+  "frameworks": [
+    {
+      "name": "rails",
+      "version": "6.0.3.4"
+    },
+    {
+      "name": "rspec",
+      "version": "3.10.0"
+    }
+  ],
+  "feature_group": "Cancel items",
+  "fingerprints": [
+    {
+      "appmap_digest": "f795e5460f6d7c5f954dcffffe361a9fe3c4855b1ed2903401aa9a6a89ea5fab",
+      "canonicalization_algorithm": "classDependencies",
+      "digest": "fc662daddebab5ece6239bb558ef99e84dd1b0eff52582d42344ee37deb21711",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "f795e5460f6d7c5f954dcffffe361a9fe3c4855b1ed2903401aa9a6a89ea5fab",
+      "canonicalization_algorithm": "classes",
+      "digest": "574b72ab4ef77b0e0f6ef7bbebf94b561e4b91705ff015f7ad7d4b3f1a752091",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "f795e5460f6d7c5f954dcffffe361a9fe3c4855b1ed2903401aa9a6a89ea5fab",
+      "canonicalization_algorithm": "httpClientRequests",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "f795e5460f6d7c5f954dcffffe361a9fe3c4855b1ed2903401aa9a6a89ea5fab",
+      "canonicalization_algorithm": "httpServerRequests",
+      "digest": "6b588bf1e6ed5eed8e5d082f265a2b59a67f8d22e0f8e8556e8d9292135c3d5c",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "f795e5460f6d7c5f954dcffffe361a9fe3c4855b1ed2903401aa9a6a89ea5fab",
+      "canonicalization_algorithm": "info",
+      "digest": "707d9d43376784fc5ab2c4ddadbee5ef455f36bdfd777d436cab1a4ecbaedbe2",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "f795e5460f6d7c5f954dcffffe361a9fe3c4855b1ed2903401aa9a6a89ea5fab",
+      "canonicalization_algorithm": "labels",
+      "digest": "7cacc4134df39c297b9e0bf2b39cab4ad953461415a007fd8bfc5e932e7313fa",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "f795e5460f6d7c5f954dcffffe361a9fe3c4855b1ed2903401aa9a6a89ea5fab",
+      "canonicalization_algorithm": "packageDependencies",
+      "digest": "64d583d7c39f966c20ed5502c347f97a0dda7dfc423604088c48958aef8314cb",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "f795e5460f6d7c5f954dcffffe361a9fe3c4855b1ed2903401aa9a6a89ea5fab",
+      "canonicalization_algorithm": "packages",
+      "digest": "63844409d9a9a22057ea1b01efe19e93574e1854e0bf4f9f5dc2f5d97f590a45",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "f795e5460f6d7c5f954dcffffe361a9fe3c4855b1ed2903401aa9a6a89ea5fab",
+      "canonicalization_algorithm": "sqlNormalized",
+      "digest": "3617d3ffe1372004dd83f611e1ea08d1224a605936e1ad9713132877c3a2125b",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "f795e5460f6d7c5f954dcffffe361a9fe3c4855b1ed2903401aa9a6a89ea5fab",
+      "canonicalization_algorithm": "sqlTables",
+      "digest": "79fcf049e2fb88df407f413213cfa279b099ce4fe71df11b55914be7fb1a8788",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "f795e5460f6d7c5f954dcffffe361a9fe3c4855b1ed2903401aa9a6a89ea5fab",
+      "canonicalization_algorithm": "trace",
+      "digest": "be284367658acf6fa8691e819308ca75c404b074ae99ca294c9d8f67d56a6d98",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "f795e5460f6d7c5f954dcffffe361a9fe3c4855b1ed2903401aa9a6a89ea5fab",
+      "canonicalization_algorithm": "update",
+      "digest": "25c02681b27d453b6202a85ed385a5e1f8d0e6f71e3917c6c82d7eab1482a3fa",
+      "fingerprint_algorithm": "sha256"
+    }
+  ]
+}

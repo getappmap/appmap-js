@@ -1,1 +1,321 @@
-{"version":"1.7.0","metadata":{"app":"scanner/ruby-fixture","language":{"name":"ruby","engine":"ruby","version":"3.0.1"},"client":{"name":"appmap","url":"https://github.com/applandinc/appmap-ruby","version":"0.83.4"},"git":{"repository":"git@github.com:applandinc/appmap-js.git","branch":"feat/hash-participating-events","commit":"7e82f8a0b13a1d0927aad73be4ee126d2d4695dc","status":["D ../circular_dependency/.ruby-version","D ../circular_dependency/Gemfile","D ../circular_dependency/Gemfile.lock","D ../circular_dependency/appmap.yml","D ../circular_dependency/lib/command/command.rb","D ../circular_dependency/lib/pkg_a/a.rb","D ../circular_dependency/lib/pkg_b/b.rb","D ../circular_dependency/test/command_test.rb","D ../circular_dependency/tmp/appmap/minitest/Command_command.appmap.json","M ../../../scanner/circularDependency.spec.ts","?? ../../../../../cli/src/cmds/sequenceDiagram/","?? ../../../../doc/rules/unauthenticated-encryption.md","?? ../../../../src/rules/unauthenticated-encryption/","?? ./","?? ../../../scanner/unauthenticatedEncryption.spec.ts"],"git_last_annotated_tag":"@appland/appmap-v2.3.4","git_last_tag":"@appland/appmap-v3.32.0","git_commits_since_last_annotated_tag":0,"git_commits_since_last_tag":0},"name":"Circular cycle","source_location":"test/circular_test.rb:6","frameworks":[{"name":"minitest","version":"5.16.2"}],"recorder":{"name":"minitest"},"test_status":"succeeded"},"classMap":[{"name":"lib/circular","type":"package","children":[{"name":"Circular","type":"class","children":[{"name":"Command","type":"class","children":[{"name":"invoke","type":"function","location":"lib/circular/command.rb:6","static":true,"labels":["command"],"comment":"# @label command\n"}]}]},{"name":"pkg_a","type":"package","children":[{"name":"PkgA","type":"class","children":[{"name":"A","type":"class","children":[{"name":"invoke","type":"function","location":"lib/circular/pkg_a/a.rb:5","static":false},{"name":"cycle","type":"function","location":"lib/circular/pkg_a/a.rb:9","static":false}]}]}]},{"name":"pkg_b","type":"package","children":[{"name":"PkgB","type":"class","children":[{"name":"B","type":"class","children":[{"name":"invoke","type":"function","location":"lib/circular/pkg_b/b.rb:5","static":false}]}]}]}]}],"events":[{"id":1,"event":"call","thread_id":2360,"defined_class":"Circular::Command","method_id":"invoke","path":"lib/circular/command.rb","lineno":6,"static":true,"parameters":[],"receiver":{"class":"Class","object_id":2340,"value":"Circular::Command"}},{"id":2,"event":"call","thread_id":2360,"defined_class":"PkgA::A","method_id":"invoke","path":"lib/circular/pkg_a/a.rb","lineno":5,"static":false,"parameters":[],"receiver":{"class":"PkgA::A","object_id":2380,"value":"#<PkgA::A:0x00007fbe7a8351e0>"}},{"id":3,"event":"call","thread_id":2360,"defined_class":"PkgB::B","method_id":"invoke","path":"lib/circular/pkg_b/b.rb","lineno":5,"static":false,"parameters":[],"receiver":{"class":"PkgB::B","object_id":2400,"value":"#<PkgB::B:0x00007fbe7a834420>"}},{"id":4,"event":"call","thread_id":2360,"defined_class":"PkgA::A","method_id":"cycle","path":"lib/circular/pkg_a/a.rb","lineno":9,"static":false,"parameters":[],"receiver":{"class":"PkgA::A","object_id":2420,"value":"#<PkgA::A:0x00007fbe7a82e840>"}},{"id":5,"event":"return","thread_id":2360,"parent_id":4,"elapsed":1.00000761449337e-06,"return_value":{"class":"String","value":"cycle encountered","object_id":2440}},{"id":6,"event":"return","thread_id":2360,"parent_id":3,"elapsed":7.30000901967287e-05,"return_value":{"class":"String","value":"cycle encountered","object_id":2440}},{"id":7,"event":"return","thread_id":2360,"parent_id":2,"elapsed":0.00013400008901953697,"return_value":{"class":"String","value":"cycle encountered","object_id":2440}},{"id":8,"event":"return","thread_id":2360,"parent_id":1,"elapsed":0.00020899996161460876,"return_value":{"class":"String","value":"cycle encountered","object_id":2440}}]}
+{
+  "events": [
+    {
+      "id": 1,
+      "event": "call",
+      "thread_id": 2360,
+      "defined_class": "Circular::Command",
+      "method_id": "invoke",
+      "path": "lib/circular/command.rb",
+      "lineno": 6,
+      "static": true,
+      "receiver": {
+        "class": "Class",
+        "object_id": 2340,
+        "value": "Circular::Command"
+      }
+    },
+    {
+      "id": 2,
+      "event": "call",
+      "thread_id": 2360,
+      "defined_class": "PkgA::A",
+      "method_id": "invoke",
+      "path": "lib/circular/pkg_a/a.rb",
+      "lineno": 5,
+      "static": false,
+      "receiver": {
+        "class": "PkgA::A",
+        "object_id": 2380,
+        "value": "#<PkgA::A:0x00007fbe7a8351e0>"
+      }
+    },
+    {
+      "id": 3,
+      "event": "call",
+      "thread_id": 2360,
+      "defined_class": "PkgB::B",
+      "method_id": "invoke",
+      "path": "lib/circular/pkg_b/b.rb",
+      "lineno": 5,
+      "static": false,
+      "receiver": {
+        "class": "PkgB::B",
+        "object_id": 2400,
+        "value": "#<PkgB::B:0x00007fbe7a834420>"
+      }
+    },
+    {
+      "id": 4,
+      "event": "call",
+      "thread_id": 2360,
+      "defined_class": "PkgA::A",
+      "method_id": "cycle",
+      "path": "lib/circular/pkg_a/a.rb",
+      "lineno": 9,
+      "static": false,
+      "receiver": {
+        "class": "PkgA::A",
+        "object_id": 2420,
+        "value": "#<PkgA::A:0x00007fbe7a82e840>"
+      }
+    },
+    {
+      "id": 5,
+      "event": "return",
+      "thread_id": 2360,
+      "parent_id": 4,
+      "elapsed": 0.00000100000761449337,
+      "return_value": {
+        "class": "String",
+        "value": "cycle encountered",
+        "object_id": 2440
+      }
+    },
+    {
+      "id": 6,
+      "event": "return",
+      "thread_id": 2360,
+      "parent_id": 3,
+      "elapsed": 0.0000730000901967287,
+      "return_value": {
+        "class": "String",
+        "value": "cycle encountered",
+        "object_id": 2440
+      }
+    },
+    {
+      "id": 7,
+      "event": "return",
+      "thread_id": 2360,
+      "parent_id": 2,
+      "elapsed": 0.00013400008901953697,
+      "return_value": {
+        "class": "String",
+        "value": "cycle encountered",
+        "object_id": 2440
+      }
+    },
+    {
+      "id": 8,
+      "event": "return",
+      "thread_id": 2360,
+      "parent_id": 1,
+      "elapsed": 0.00020899996161460876,
+      "return_value": {
+        "class": "String",
+        "value": "cycle encountered",
+        "object_id": 2440
+      }
+    }
+  ],
+  "version": "1.7.0",
+  "metadata": {
+    "app": "scanner/ruby-fixture",
+    "language": {
+      "name": "ruby",
+      "engine": "ruby",
+      "version": "3.0.1"
+    },
+    "client": {
+      "name": "appmap",
+      "url": "https://github.com/applandinc/appmap-ruby",
+      "version": "0.83.4"
+    },
+    "git": {
+      "repository": "git@github.com:applandinc/appmap-js.git",
+      "branch": "feat/hash-participating-events",
+      "commit": "7e82f8a0b13a1d0927aad73be4ee126d2d4695dc",
+      "status": [
+        "D ../circular_dependency/.ruby-version",
+        "D ../circular_dependency/Gemfile",
+        "D ../circular_dependency/Gemfile.lock",
+        "D ../circular_dependency/appmap.yml",
+        "D ../circular_dependency/lib/command/command.rb",
+        "D ../circular_dependency/lib/pkg_a/a.rb",
+        "D ../circular_dependency/lib/pkg_b/b.rb",
+        "D ../circular_dependency/test/command_test.rb",
+        "D ../circular_dependency/tmp/appmap/minitest/Command_command.appmap.json",
+        "M ../../../scanner/circularDependency.spec.ts",
+        "?? ../../../../../cli/src/cmds/sequenceDiagram/",
+        "?? ../../../../doc/rules/unauthenticated-encryption.md",
+        "?? ../../../../src/rules/unauthenticated-encryption/",
+        "?? ./",
+        "?? ../../../scanner/unauthenticatedEncryption.spec.ts"
+      ],
+      "git_last_annotated_tag": "@appland/appmap-v2.3.4",
+      "git_last_tag": "@appland/appmap-v3.32.0",
+      "git_commits_since_last_annotated_tag": 0,
+      "git_commits_since_last_tag": 0
+    },
+    "name": "Circular cycle",
+    "source_location": "test/circular_test.rb:6",
+    "frameworks": [
+      {
+        "name": "minitest",
+        "version": "5.16.2"
+      }
+    ],
+    "recorder": {
+      "name": "minitest"
+    },
+    "test_status": "succeeded",
+    "fingerprints": [
+      {
+        "appmap_digest": "7c775f5653b4290952808d35c968796f5f86358ef39b77cc1b98780a226513af",
+        "canonicalization_algorithm": "classDependencies",
+        "digest": "10f3d29d1554ab9aead431b65a841215a46db1d73b5055a67c90e254c6d254d4",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7c775f5653b4290952808d35c968796f5f86358ef39b77cc1b98780a226513af",
+        "canonicalization_algorithm": "classes",
+        "digest": "9b30b9fadf341b53bc0a9b3405fdec09c246a02fbeb0ab146961890183cce0c5",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7c775f5653b4290952808d35c968796f5f86358ef39b77cc1b98780a226513af",
+        "canonicalization_algorithm": "httpClientRequests",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7c775f5653b4290952808d35c968796f5f86358ef39b77cc1b98780a226513af",
+        "canonicalization_algorithm": "httpServerRequests",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7c775f5653b4290952808d35c968796f5f86358ef39b77cc1b98780a226513af",
+        "canonicalization_algorithm": "info",
+        "digest": "45ee85421f0927a6b5b39b90b3d3f24ce010d175cc014f8adf2a3daaeeb737d0",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7c775f5653b4290952808d35c968796f5f86358ef39b77cc1b98780a226513af",
+        "canonicalization_algorithm": "labels",
+        "digest": "27be253754285a47009fabee1ed0ec47ba356a7bb82791818dc0cdba3b2c743b",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7c775f5653b4290952808d35c968796f5f86358ef39b77cc1b98780a226513af",
+        "canonicalization_algorithm": "packageDependencies",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7c775f5653b4290952808d35c968796f5f86358ef39b77cc1b98780a226513af",
+        "canonicalization_algorithm": "packages",
+        "digest": "63280e4e0c2b5097b19d3c3503a0a94cf5e5364525eda76e43f03b385d93985f",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7c775f5653b4290952808d35c968796f5f86358ef39b77cc1b98780a226513af",
+        "canonicalization_algorithm": "sqlNormalized",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7c775f5653b4290952808d35c968796f5f86358ef39b77cc1b98780a226513af",
+        "canonicalization_algorithm": "sqlTables",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7c775f5653b4290952808d35c968796f5f86358ef39b77cc1b98780a226513af",
+        "canonicalization_algorithm": "trace",
+        "digest": "6997c675886b3b6c45f62e3ac39a787dde0429aeafed481faa0738d1f273eee6",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "7c775f5653b4290952808d35c968796f5f86358ef39b77cc1b98780a226513af",
+        "canonicalization_algorithm": "update",
+        "digest": "45ee85421f0927a6b5b39b90b3d3f24ce010d175cc014f8adf2a3daaeeb737d0",
+        "fingerprint_algorithm": "sha256"
+      }
+    ]
+  },
+  "classMap": [
+    {
+      "name": "lib/circular",
+      "type": "package",
+      "children": [
+        {
+          "name": "Circular",
+          "type": "class",
+          "children": [
+            {
+              "name": "Command",
+              "type": "class",
+              "children": [
+                {
+                  "name": "invoke",
+                  "type": "function",
+                  "labels": [
+                    "command"
+                  ],
+                  "static": true,
+                  "location": "lib/circular/command.rb:6"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "pkg_a",
+          "type": "package",
+          "children": [
+            {
+              "name": "PkgA",
+              "type": "class",
+              "children": [
+                {
+                  "name": "A",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "invoke",
+                      "type": "function",
+                      "static": false,
+                      "location": "lib/circular/pkg_a/a.rb:5"
+                    },
+                    {
+                      "name": "cycle",
+                      "type": "function",
+                      "static": false,
+                      "location": "lib/circular/pkg_a/a.rb:9"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "pkg_b",
+          "type": "package",
+          "children": [
+            {
+              "name": "PkgB",
+              "type": "class",
+              "children": [
+                {
+                  "name": "B",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "invoke",
+                      "type": "function",
+                      "static": false,
+                      "location": "lib/circular/pkg_b/b.rb:5"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

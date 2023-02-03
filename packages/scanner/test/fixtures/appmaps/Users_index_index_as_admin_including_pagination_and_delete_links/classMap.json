@@ -1,0 +1,1222 @@
+[
+  {
+    "name": "activerecord",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActiveRecord",
+        "type": "class",
+        "children": [
+          {
+            "name": "TestFixtures",
+            "type": "class",
+            "children": [
+              {
+                "name": "before_setup",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/test_fixtures.rb:7"
+              },
+              {
+                "name": "after_teardown",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/test_fixtures.rb:12"
+              }
+            ]
+          },
+          {
+            "name": "LogSubscriber",
+            "type": "class",
+            "children": [
+              {
+                "name": "sql",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/log_subscriber.rb:22"
+              },
+              {
+                "name": "reset_runtime",
+                "type": "function",
+                "static": true,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/log_subscriber.rb:17"
+              }
+            ]
+          },
+          {
+            "name": "ConnectionHandling",
+            "type": "class",
+            "children": [
+              {
+                "name": "connection",
+                "type": "function",
+                "static": true,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/connection_handling.rb:188"
+              },
+              {
+                "name": "connected?",
+                "type": "function",
+                "static": true,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/connection_handling.rb:225"
+              }
+            ]
+          },
+          {
+            "name": "FixtureSet",
+            "type": "class",
+            "children": [
+              {
+                "name": "[]",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/fixtures.rb:636"
+              }
+            ]
+          },
+          {
+            "name": "Relation",
+            "type": "class",
+            "children": [
+              {
+                "name": "records",
+                "type": "function",
+                "labels": [
+                  "dao.materialize"
+                ],
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/relation.rb:249"
+              }
+            ]
+          },
+          {
+            "name": "Querying",
+            "type": "class",
+            "children": [
+              {
+                "name": "find_by_sql",
+                "type": "function",
+                "static": true,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/querying.rb:45"
+              },
+              {
+                "name": "limit",
+                "type": "function",
+                "static": true,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/querying.rb:21"
+              },
+              {
+                "name": "count",
+                "type": "function",
+                "static": true,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/querying.rb:21"
+              }
+            ]
+          },
+          {
+            "name": "QueryCache",
+            "type": "class",
+            "children": [
+              {
+                "name": "run",
+                "type": "function",
+                "static": true,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/query_cache.rb:28"
+              },
+              {
+                "name": "complete",
+                "type": "function",
+                "static": true,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/query_cache.rb:38"
+              }
+            ]
+          },
+          {
+            "name": "Core",
+            "type": "class",
+            "children": [
+              {
+                "name": "ClassMethods",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "find_by",
+                    "type": "function",
+                    "static": true,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/core.rb:182"
+                  },
+                  {
+                    "name": "arel_table",
+                    "type": "function",
+                    "static": true,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/core.rb:266"
+                  },
+                  {
+                    "name": "find",
+                    "type": "function",
+                    "static": true,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/core.rb:157"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "AttributeMethods",
+            "type": "class",
+            "children": [
+              {
+                "name": "Query",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "query_attribute",
+                    "type": "function",
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/attribute_methods/query.rb:12"
+                  }
+                ]
+              },
+              {
+                "name": "PrimaryKey",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "id",
+                    "type": "function",
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/attribute_methods/primary_key.rb:18"
+                  }
+                ]
+              },
+              {
+                "name": "Dirty",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "changed_attribute_names_to_save",
+                    "type": "function",
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/attribute_methods/dirty.rb:144"
+                  }
+                ]
+              },
+              {
+                "name": "TimeZoneConversion",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "TimeZoneConverter",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "deserialize",
+                        "type": "function",
+                        "static": false,
+                        "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/attribute_methods/time_zone_conversion.rb:7"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Read",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "_read_attribute",
+                    "type": "function",
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/attribute_methods/read.rb:37"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Persistence",
+            "type": "class",
+            "children": [
+              {
+                "name": "update_attribute",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/persistence.rb:605"
+              },
+              {
+                "name": "new_record?",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/persistence.rb:426"
+              },
+              {
+                "name": "destroy!",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/persistence.rb:550"
+              },
+              {
+                "name": "persisted?",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/persistence.rb:439"
+              }
+            ]
+          },
+          {
+            "name": "ModelSchema",
+            "type": "class",
+            "children": [
+              {
+                "name": "ClassMethods",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "column_names",
+                    "type": "function",
+                    "static": true,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/model_schema.rb:403"
+                  },
+                  {
+                    "name": "symbol_column_to_string",
+                    "type": "function",
+                    "static": true,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/model_schema.rb:407"
+                  },
+                  {
+                    "name": "ignored_columns",
+                    "type": "function",
+                    "static": true,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/model_schema.rb:280"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Type",
+            "type": "class",
+            "children": [
+              {
+                "name": "Internal",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "Timezone",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "is_utc?",
+                        "type": "function",
+                        "static": false,
+                        "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/type/internal/timezone.rb:7"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "ConnectionAdapters",
+            "type": "class",
+            "children": [
+              {
+                "name": "TransactionManager",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "commit_transaction",
+                    "type": "function",
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/connection_adapters/abstract/transaction.rb:254"
+                  },
+                  {
+                    "name": "enable_lazy_transactions!",
+                    "type": "function",
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/connection_adapters/abstract/transaction.rb:231"
+                  }
+                ]
+              },
+              {
+                "name": "StatementPool",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "[]=",
+                    "type": "function",
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/connection_adapters/statement_pool.rb:31"
+                  }
+                ]
+              },
+              {
+                "name": "SQLite3",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "DatabaseStatements",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "exec_query",
+                        "type": "function",
+                        "static": false,
+                        "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/connection_adapters/sqlite3/database_statements.rb:30"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Quoting",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "quote_table_name",
+                        "type": "function",
+                        "static": false,
+                        "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/connection_adapters/sqlite3/quoting.rb:15"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "SavepointTransaction",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "commit",
+                    "type": "function",
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/connection_adapters/abstract/transaction.rb:166"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Integration",
+            "type": "class",
+            "children": [
+              {
+                "name": "to_param",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/integration.rb:57"
+              }
+            ]
+          },
+          {
+            "name": "Railties",
+            "type": "class",
+            "children": [
+              {
+                "name": "CollectionCacheAssociationLoading",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "setup",
+                    "type": "function",
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/railties/collection_cache_association_loading.rb:6"
+                  },
+                  {
+                    "name": "collection_with_template",
+                    "type": "function",
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/railties/collection_cache_association_loading.rb:28"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Associations",
+            "type": "class",
+            "children": [
+              {
+                "name": "association",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/associations.rb:230"
+              }
+            ]
+          },
+          {
+            "name": "Transactions",
+            "type": "class",
+            "children": [
+              {
+                "name": "before_committed!",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/transactions.rb:325"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "User",
+        "type": "class",
+        "children": [
+          {
+            "name": "autosave_associated_records_for_microposts",
+            "type": "function",
+            "static": false,
+            "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.3.7/lib/active_record/autosave_association.rb:152"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "sqlite3",
+    "type": "package",
+    "children": [
+      {
+        "name": "SQLite3",
+        "type": "class",
+        "children": [
+          {
+            "name": "Database",
+            "type": "class",
+            "children": [
+              {
+                "name": "transaction",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/sqlite3-1.4.2/lib/sqlite3/database.rb:627"
+              },
+              {
+                "name": "execute",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/sqlite3-1.4.2/lib/sqlite3/database.rb:178"
+              },
+              {
+                "name": "prepare",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/sqlite3-1.4.2/lib/sqlite3/database.rb:146"
+              },
+              {
+                "name": "quote",
+                "type": "function",
+                "static": true,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/sqlite3-1.4.2/lib/sqlite3/database.rb:47"
+              },
+              {
+                "name": "rollback",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/sqlite3-1.4.2/lib/sqlite3/database.rb:658"
+              }
+            ]
+          },
+          {
+            "name": "Statement",
+            "type": "class",
+            "children": [
+              {
+                "name": "columns",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/sqlite3-1.4.2/lib/sqlite3/statement.rb:101"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "string",
+    "type": "package",
+    "children": [
+      {
+        "name": "String",
+        "type": "class",
+        "children": [
+          {
+            "name": "==",
+            "type": "function",
+            "labels": [
+              "string.equals"
+            ],
+            "static": false,
+            "location": "String#=="
+          }
+        ]
+      },
+      {
+        "name": "Module",
+        "type": "class",
+        "children": [
+          {
+            "name": "==",
+            "type": "function",
+            "labels": [
+              "string.equals"
+            ],
+            "static": true,
+            "location": "Module.=="
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "logger",
+    "type": "package",
+    "children": [
+      {
+        "name": "Logger",
+        "type": "class",
+        "children": [
+          {
+            "name": "LogDevice",
+            "type": "class",
+            "children": [
+              {
+                "name": "write",
+                "type": "function",
+                "labels": [
+                  "log"
+                ],
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb:31"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "activesupport",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActiveSupport",
+        "type": "class",
+        "children": [
+          {
+            "name": "Callbacks",
+            "type": "class",
+            "children": [
+              {
+                "name": "CallbackSequence",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "invoke_before",
+                    "type": "function",
+                    "labels": [
+                      "mvc.before_action"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.3.7/lib/active_support/callbacks.rb:512"
+                  },
+                  {
+                    "name": "invoke_after",
+                    "type": "function",
+                    "labels": [
+                      "mvc.after_action"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.3.7/lib/active_support/callbacks.rb:516"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "actionpack",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActionController",
+        "type": "class",
+        "children": [
+          {
+            "name": "Instrumentation",
+            "type": "class",
+            "children": [
+              {
+                "name": "process_action",
+                "type": "function",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.3.7/lib/action_controller/metal/instrumentation.rb:19"
+              },
+              {
+                "name": "redirect_to",
+                "type": "function",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.3.7/lib/action_controller/metal/instrumentation.rb:62"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "ActionDispatch",
+        "type": "class",
+        "children": [
+          {
+            "name": "Request",
+            "type": "class",
+            "children": [
+              {
+                "name": "Session",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "[]",
+                    "type": "function",
+                    "labels": [
+                      "http.session.read"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.3.7/lib/action_dispatch/request/session.rb:91"
+                  },
+                  {
+                    "name": "destroy",
+                    "type": "function",
+                    "labels": [
+                      "http.session.write"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.3.7/lib/action_dispatch/request/session.rb:79"
+                  },
+                  {
+                    "name": "clear",
+                    "type": "function",
+                    "labels": [
+                      "http.session.write"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.3.7/lib/action_dispatch/request/session.rb:137"
+                  },
+                  {
+                    "name": "[]=",
+                    "type": "function",
+                    "labels": [
+                      "http.session.write"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.3.7/lib/action_dispatch/request/session.rb:131"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Cookies",
+            "type": "class",
+            "children": [
+              {
+                "name": "CookieJar",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "update",
+                    "type": "function",
+                    "labels": [
+                      "http.session.write"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.3.7/lib/action_dispatch/middleware/cookies.rb:333"
+                  },
+                  {
+                    "name": "[]",
+                    "type": "function",
+                    "labels": [
+                      "http.session.read"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.3.7/lib/action_dispatch/middleware/cookies.rb:317"
+                  },
+                  {
+                    "name": "[]=",
+                    "type": "function",
+                    "labels": [
+                      "http.session.write"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.3.7/lib/action_dispatch/middleware/cookies.rb:373"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/controllers",
+    "type": "package",
+    "children": [
+      {
+        "name": "SessionsController",
+        "type": "class",
+        "children": [
+          {
+            "name": "create",
+            "type": "function",
+            "labels": [
+              "public"
+            ],
+            "static": false,
+            "location": "app/controllers/sessions_controller.rb:9"
+          }
+        ]
+      },
+      {
+        "name": "UsersController",
+        "type": "class",
+        "children": [
+          {
+            "name": "index",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/users_controller.rb:7"
+          },
+          {
+            "name": "destroy",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/users_controller.rb:49"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/helpers",
+    "type": "package",
+    "children": [
+      {
+        "name": "SessionsHelper",
+        "type": "class",
+        "children": [
+          {
+            "name": "log_in",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/sessions_helper.rb:4"
+          },
+          {
+            "name": "remember",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/sessions_helper.rb:9"
+          },
+          {
+            "name": "logged_in?",
+            "type": "function",
+            "labels": [
+              "security.authentication"
+            ],
+            "static": false,
+            "location": "app/helpers/sessions_helper.rb:35"
+          },
+          {
+            "name": "current_user",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/sessions_helper.rb:16"
+          },
+          {
+            "name": "current_user?",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/sessions_helper.rb:29"
+          }
+        ]
+      },
+      {
+        "name": "LoggedInHelper",
+        "type": "class",
+        "children": [
+          {
+            "name": "logged_in_user",
+            "type": "function",
+            "labels": [
+              "security.require_login"
+            ],
+            "static": false,
+            "location": "app/helpers/logged_in_helper.rb:10"
+          }
+        ]
+      },
+      {
+        "name": "UsersHelper",
+        "type": "class",
+        "children": [
+          {
+            "name": "gravatar_for",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/users_helper.rb:4"
+          }
+        ]
+      },
+      {
+        "name": "ApplicationHelper",
+        "type": "class",
+        "children": [
+          {
+            "name": "full_title",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/application_helper.rb:4"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/models",
+    "type": "package",
+    "children": [
+      {
+        "name": "User",
+        "type": "class",
+        "children": [
+          {
+            "name": "remember",
+            "type": "function",
+            "static": false,
+            "location": "app/models/user.rb:36"
+          },
+          {
+            "name": "new_token",
+            "type": "function",
+            "labels": [
+              "secret",
+              "secret.generator"
+            ],
+            "static": true,
+            "location": "app/models/user.rb:31"
+          },
+          {
+            "name": "digest",
+            "type": "function",
+            "static": true,
+            "location": "app/models/user.rb:23"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "json",
+    "type": "package",
+    "children": [
+      {
+        "name": "JSON",
+        "type": "class",
+        "children": [
+          {
+            "name": "Ext",
+            "type": "class",
+            "children": [
+              {
+                "name": "Generator",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "State",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "generate",
+                        "type": "function",
+                        "labels": [
+                          "format.json.generate"
+                        ],
+                        "static": false,
+                        "location": "JSON::Ext::Generator::State#generate"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Parser",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "parse",
+                    "type": "function",
+                    "labels": [
+                      "format.json.parse"
+                    ],
+                    "static": false,
+                    "location": "JSON::Ext::Parser#parse"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "openssl",
+    "type": "package",
+    "children": [
+      {
+        "name": "OpenSSL",
+        "type": "class",
+        "children": [
+          {
+            "name": "Cipher",
+            "type": "class",
+            "children": [
+              {
+                "name": "encrypt",
+                "type": "function",
+                "labels": [
+                  "crypto.encrypt"
+                ],
+                "static": false,
+                "location": "OpenSSL::Cipher#encrypt"
+              },
+              {
+                "name": "decrypt",
+                "type": "function",
+                "labels": [
+                  "crypto.decrypt"
+                ],
+                "static": false,
+                "location": "OpenSSL::Cipher#decrypt"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "actionview",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActionView",
+        "type": "class",
+        "children": [
+          {
+            "name": "Resolver",
+            "type": "class",
+            "children": [
+              {
+                "name": "find_all",
+                "type": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ],
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.3.7/lib/action_view/template/resolver.rb:116"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/views",
+    "type": "package",
+    "children": [
+      {
+        "name": "app_views_users_index_html_erb",
+        "type": "class",
+        "children": [
+          {
+            "name": "render",
+            "type": "function",
+            "labels": [
+              "mvc.template"
+            ],
+            "static": true,
+            "location": "app/views/users/index.html.erb"
+          }
+        ]
+      },
+      {
+        "name": "app_views_users__user_html_erb",
+        "type": "class",
+        "children": [
+          {
+            "name": "render",
+            "type": "function",
+            "labels": [
+              "mvc.template"
+            ],
+            "static": true,
+            "location": "app/views/users/_user.html.erb"
+          }
+        ]
+      },
+      {
+        "name": "app_views_layouts__shim_html_erb",
+        "type": "class",
+        "children": [
+          {
+            "name": "render",
+            "type": "function",
+            "labels": [
+              "mvc.template"
+            ],
+            "static": true,
+            "location": "app/views/layouts/_shim.html.erb"
+          }
+        ]
+      },
+      {
+        "name": "app_views_layouts__header_html_erb",
+        "type": "class",
+        "children": [
+          {
+            "name": "render",
+            "type": "function",
+            "labels": [
+              "mvc.template"
+            ],
+            "static": true,
+            "location": "app/views/layouts/_header.html.erb"
+          }
+        ]
+      },
+      {
+        "name": "app_views_layouts__footer_html_erb",
+        "type": "class",
+        "children": [
+          {
+            "name": "render",
+            "type": "function",
+            "labels": [
+              "mvc.template"
+            ],
+            "static": true,
+            "location": "app/views/layouts/_footer.html.erb"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "begin transaction"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT name FROM sqlite_master WHERE name <> 'sqlite_sequence' AND name = 'schema_migrations' AND type IN ('table')"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SAVEPOINT active_record_1"
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"users\" SET \"remember_digest\" = ?, \"updated_at\" = ? WHERE \"users\".\"id\" = ?"
+      },
+      {
+        "type": "query",
+        "name": "RELEASE SAVEPOINT active_record_1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT COUNT(*) FROM \"users\""
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"users\".* FROM \"users\" LIMIT ? OFFSET ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA table_info(\"active_storage_attachments\")"
+      },
+      {
+        "type": "query",
+        "name": "SELECT sql FROM\n  (SELECT * FROM sqlite_master UNION ALL\n   SELECT * FROM sqlite_temp_master)\nWHERE type = 'table' AND name = 'active_storage_attachments'\n"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "DELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"relationships\".* FROM \"relationships\" WHERE \"relationships\".\"follower_id\" = ?"
+      },
+      {
+        "type": "query",
+        "name": "DELETE FROM \"relationships\" WHERE \"relationships\".\"id\" = ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"relationships\".* FROM \"relationships\" WHERE \"relationships\".\"followed_id\" = ?"
+      },
+      {
+        "type": "query",
+        "name": "DELETE FROM \"users\" WHERE \"users\".\"id\" = ?"
+      },
+      {
+        "type": "query",
+        "name": "rollback transaction"
+      }
+    ]
+  },
+  {
+    "type": "http",
+    "name": "HTTP server requests",
+    "children": [
+      {
+        "type": "route",
+        "name": "POST /login"
+      },
+      {
+        "type": "route",
+        "name": "GET /users"
+      },
+      {
+        "type": "route",
+        "name": "DELETE /users/{id}"
+      }
+    ]
+  }
+]

@@ -1,0 +1,198 @@
+[
+  {
+    "caller": "HTTP server requests",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "Database"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "app"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "json"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "logger"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "openssl"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "ruby"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "solidus_core"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "solidus_starter_frontend"
+  },
+  {
+    "caller": "activemerchant",
+    "callee": "api.stripe.com"
+  },
+  {
+    "caller": "activerecord",
+    "callee": "Database"
+  },
+  {
+    "caller": "activerecord",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "activerecord",
+    "callee": "app"
+  },
+  {
+    "caller": "activerecord",
+    "callee": "logger"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "Database"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "activemerchant"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "activerecord"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "app"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "cancancan"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "json"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "logger"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "ruby"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "solidus_core"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "solidus_paypal_commerce_platform"
+  },
+  {
+    "caller": "app",
+    "callee": "activerecord"
+  },
+  {
+    "caller": "cancancan",
+    "callee": "solidus_core"
+  },
+  {
+    "caller": "solidus_core",
+    "callee": "Database"
+  },
+  {
+    "caller": "solidus_core",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "solidus_core",
+    "callee": "activerecord"
+  },
+  {
+    "caller": "solidus_core",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "solidus_core",
+    "callee": "app"
+  },
+  {
+    "caller": "solidus_core",
+    "callee": "json"
+  },
+  {
+    "caller": "solidus_core",
+    "callee": "logger"
+  },
+  {
+    "caller": "solidus_core",
+    "callee": "ruby"
+  },
+  {
+    "caller": "solidus_paypal_commerce_platform",
+    "callee": "solidus_core"
+  },
+  {
+    "caller": "solidus_starter_frontend",
+    "callee": "Database"
+  },
+  {
+    "caller": "solidus_starter_frontend",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "solidus_starter_frontend",
+    "callee": "activerecord"
+  },
+  {
+    "caller": "solidus_starter_frontend",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "solidus_starter_frontend",
+    "callee": "app"
+  },
+  {
+    "caller": "solidus_starter_frontend",
+    "callee": "logger"
+  },
+  {
+    "caller": "solidus_starter_frontend",
+    "callee": "solidus_core"
+  },
+  {
+    "caller": "solidus_starter_frontend",
+    "callee": "solidus_stripe"
+  },
+  {
+    "caller": "solidus_stripe",
+    "callee": "Database"
+  },
+  {
+    "caller": "solidus_stripe",
+    "callee": "activerecord"
+  },
+  {
+    "caller": "solidus_stripe",
+    "callee": "app"
+  },
+  {
+    "caller": "solidus_stripe",
+    "callee": "solidus_core"
+  }
+]

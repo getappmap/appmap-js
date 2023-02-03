@@ -1,0 +1,16 @@
+[
+  "actionpack/ActionController::Instrumentation",
+  "actionpack/ActionDispatch::Cookies::CookieJar",
+  "actionpack/ActionDispatch::Request::Session",
+  "activesupport/ActiveSupport::Callbacks::CallbackSequence",
+  "app/controllers/API::AppmapsController",
+  "app/controllers/AnonymousAccess",
+  "app/models/ApiKey",
+  "app/models/DAO::Scenario",
+  "app/models/DAO::ToModel",
+  "app/models/DAO::User",
+  "app/models/Exceptions::Forbidden",
+  "app/models/User::Show",
+  "json/JSON::Ext::Generator::State",
+  "json/JSON::Ext::Parser"
+]

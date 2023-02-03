@@ -1,0 +1,206 @@
+[
+  {
+    "caller": "HTTP server requests->GET /password_resets/new",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "HTTP server requests->GET /password_resets/{id}/edit",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "HTTP server requests->PATCH /password_resets/{id}",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "HTTP server requests->POST /password_resets",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/views"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "Database->SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "Database->SELECT 1 AS one FROM \"users\" WHERE \"users\".\"email\" = ? AND \"users\".\"id\" != ? LIMIT ?"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "Database->SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "app/models"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "Database->RELEASE SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "Database->ROLLBACK TO SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "Database->SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "Database->UPDATE \"users\" SET \"password_digest\" = ?, \"updated_at\" = ? WHERE \"users\".\"id\" = ?"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "app/models"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/mailers",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/mailers",
+    "callee": "app/views"
+  },
+  {
+    "caller": "app/models",
+    "callee": "Database->RELEASE SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/models",
+    "callee": "Database->SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/models",
+    "callee": "Database->UPDATE \"users\" SET \"reset_digest\" = ?, \"updated_at\" = ? WHERE \"users\".\"id\" = ?"
+  },
+  {
+    "caller": "app/models",
+    "callee": "Database->UPDATE \"users\" SET \"updated_at\" = ?, \"reset_sent_at\" = ? WHERE \"users\".\"id\" = ?"
+  },
+  {
+    "caller": "app/models",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "app/models",
+    "callee": "app/mailers"
+  },
+  {
+    "caller": "app/models",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/models",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "app/models",
+    "callee": "psych/Psych"
+  },
+  {
+    "caller": "app/models",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "app/views",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/views",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views",
+    "callee": "sprockets/Sprockets"
+  },
+  {
+    "caller": "psych/Psych",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "sprockets/Sprockets",
+    "callee": "ruby/ActiveSupport"
+  }
+]

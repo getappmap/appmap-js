@@ -1,0 +1,38 @@
+[
+  {
+    "caller": "HTTP server requests",
+    "callee": "Database"
+  },
+  {
+    "caller": "HTTP server requests",
+    "callee": "active_support"
+  },
+  {
+    "caller": "HTTP server requests",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "HTTP server requests",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "HTTP server requests",
+    "callee": "json"
+  },
+  {
+    "caller": "HTTP server requests",
+    "callee": "lib"
+  },
+  {
+    "caller": "HTTP server requests",
+    "callee": "openssl"
+  },
+  {
+    "caller": "active_support",
+    "callee": "openssl"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "Database"
+  }
+]

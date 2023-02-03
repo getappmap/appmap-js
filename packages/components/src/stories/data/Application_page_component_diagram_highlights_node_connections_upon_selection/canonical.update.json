@@ -1,0 +1,174 @@
+[
+  {
+    "kind": "function",
+    "labels": ["format.json"]
+  },
+  {
+    "kind": "http_client_request",
+    "route": "POST http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/elements",
+    "status_code": 200
+  },
+  {
+    "kind": "function",
+    "labels": ["format.json"]
+  },
+  {
+    "kind": "function",
+    "labels": ["format.json"],
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["format.json"]
+      }
+    ]
+  },
+  {
+    "kind": "http_client_request",
+    "route": "POST http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/execute/sync",
+    "status_code": 200
+  },
+  {
+    "kind": "function",
+    "labels": ["format.json"]
+  },
+  {
+    "kind": "function",
+    "labels": ["format.json"]
+  },
+  {
+    "kind": "http_client_request",
+    "route": "POST http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/element/847acf4e-c8d6-4b0b-82c4-2ac930f3a018/elements",
+    "status_code": 200
+  },
+  {
+    "kind": "function",
+    "labels": ["format.json"]
+  },
+  {
+    "kind": "function",
+    "labels": ["format.json"]
+  },
+  {
+    "kind": "http_client_request",
+    "route": "POST http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/element/847acf4e-c8d6-4b0b-82c4-2ac930f3a018/elements",
+    "status_code": 200
+  },
+  {
+    "kind": "function",
+    "labels": ["format.json"]
+  },
+  {
+    "kind": "function",
+    "labels": ["format.json"]
+  },
+  {
+    "kind": "http_client_request",
+    "route": "POST http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/element/847acf4e-c8d6-4b0b-82c4-2ac930f3a018/elements",
+    "status_code": 200
+  },
+  {
+    "kind": "function",
+    "labels": ["format.json"]
+  },
+  {
+    "kind": "function",
+    "labels": ["format.json"],
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["format.json"]
+      }
+    ]
+  },
+  {
+    "kind": "http_client_request",
+    "route": "POST http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/execute/sync",
+    "status_code": 200
+  },
+  {
+    "kind": "function",
+    "labels": ["format.json"]
+  },
+  {
+    "kind": "http_client_request",
+    "route": "POST http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/element/51bf7824-28dc-48a3-927f-6aeeed37c43f/click",
+    "status_code": 200
+  },
+  {
+    "kind": "function",
+    "labels": ["format.json"]
+  },
+  {
+    "kind": "function",
+    "labels": ["format.json"]
+  },
+  {
+    "kind": "http_client_request",
+    "route": "POST http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/element/847acf4e-c8d6-4b0b-82c4-2ac930f3a018/elements",
+    "status_code": 200
+  },
+  {
+    "kind": "function",
+    "labels": ["format.json"]
+  },
+  {
+    "kind": "function",
+    "labels": ["format.json"],
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["format.json"]
+      }
+    ]
+  },
+  {
+    "kind": "http_client_request",
+    "route": "POST http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/execute/sync",
+    "status_code": 200
+  },
+  {
+    "kind": "function",
+    "labels": ["format.json"]
+  },
+  {
+    "kind": "function",
+    "labels": ["format.json"]
+  },
+  {
+    "kind": "http_client_request",
+    "route": "POST http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/element/847acf4e-c8d6-4b0b-82c4-2ac930f3a018/elements",
+    "status_code": 200
+  },
+  {
+    "kind": "function",
+    "labels": ["format.json"]
+  },
+  {
+    "kind": "function",
+    "labels": ["format.json"],
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["format.json"]
+      }
+    ]
+  },
+  {
+    "kind": "http_client_request",
+    "route": "POST http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/execute/sync",
+    "status_code": 200
+  },
+  {
+    "kind": "function",
+    "labels": ["format.json"]
+  },
+  {
+    "kind": "http_client_request",
+    "route": "GET http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/url",
+    "status_code": 200
+  },
+  {
+    "kind": "function",
+    "labels": ["format.json"]
+  }
+]

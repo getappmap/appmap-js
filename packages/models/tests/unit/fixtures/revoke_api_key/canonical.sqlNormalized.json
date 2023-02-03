@@ -1,0 +1,8 @@
+[
+  "DELETE FROM \"api_keys\" WHERE \"id\" = ?",
+  "SELECT * FROM \"api_keys\" WHERE (\"login\" = ?)",
+  "SELECT * FROM \"users\" WHERE (\"users\".\"login\" = ?) LIMIT ?",
+  "SELECT \"attname\", (CASE \"pg_type\".\"typbasetype\" WHEN ? THEN \"atttypid\" ELSE \"pg_type\".\"typbasetype\" END) AS \"atttypid\" FROM \"pg_attribute\" INNER JOIN \"pg_type\" ON (\"pg_type\".\"oid\" = \"pg_attribute\".\"atttypid\") WHERE ((\"attrelid\" = ?) AND (\"attnum\" > ?) AND NOT \"attisdropped\") ORDER BY \"attnum\"",
+  "SELECT \"pg_type\".\"oid\", \"typrelid\", \"typarray\" FROM \"pg_type\" WHERE ((\"typtype\" = ?) AND (\"typname\" = ?)) LIMIT ?",
+  "UPDATE \"api_keys\" SET \"last_used\" = ? WHERE (\"id\" = ?)"
+]

@@ -1,0 +1,401 @@
+[
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Generator::State#generate",
+    "labels": ["serialization", "json"]
+  },
+  {
+    "kind": "function",
+    "function": "net/http/Net::HTTP#request",
+    "labels": ["http", "io"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "net/http/Net::HTTP#request",
+        "labels": ["http", "io"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Parser#parse",
+    "labels": ["serialization", "json"]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Generator::State#generate",
+    "labels": ["serialization", "json"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "json/JSON::Ext::Generator::State#generate",
+        "labels": ["serialization", "json"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "net/http/Net::HTTP#request",
+    "labels": ["http", "io"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "net/http/Net::HTTP#request",
+        "labels": ["http", "io"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Parser#parse",
+    "labels": ["serialization", "json"]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Generator::State#generate",
+    "labels": ["serialization", "json"]
+  },
+  {
+    "kind": "function",
+    "function": "net/http/Net::HTTP#request",
+    "labels": ["http", "io"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "net/http/Net::HTTP#request",
+        "labels": ["http", "io"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Parser#parse",
+    "labels": ["serialization", "json"]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Generator::State#generate",
+    "labels": ["serialization", "json"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "json/JSON::Ext::Generator::State#generate",
+        "labels": ["serialization", "json"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "net/http/Net::HTTP#request",
+    "labels": ["http", "io"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "net/http/Net::HTTP#request",
+        "labels": ["http", "io"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Parser#parse",
+    "labels": ["serialization", "json"]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Generator::State#generate",
+    "labels": ["serialization", "json"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "json/JSON::Ext::Generator::State#generate",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "function": "json/JSON::Ext::Generator::State#generate",
+        "labels": ["serialization", "json"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "net/http/Net::HTTP#request",
+    "labels": ["http", "io"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "net/http/Net::HTTP#request",
+        "labels": ["http", "io"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Parser#parse",
+    "labels": ["serialization", "json"]
+  },
+  {
+    "kind": "function",
+    "function": "net/http/Net::HTTP#request",
+    "labels": ["http", "io"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "net/http/Net::HTTP#request",
+        "labels": ["http", "io"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Parser#parse",
+    "labels": ["serialization", "json"]
+  },
+  {
+    "kind": "function",
+    "function": "net/http/Net::HTTP#request",
+    "labels": ["http", "io"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "net/http/Net::HTTP#request",
+        "labels": ["http", "io"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Parser#parse",
+    "labels": ["serialization", "json"]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Generator::State#generate",
+    "labels": ["serialization", "json"]
+  },
+  {
+    "kind": "function",
+    "function": "net/http/Net::HTTP#request",
+    "labels": ["http", "io"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "net/http/Net::HTTP#request",
+        "labels": ["http", "io"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Parser#parse",
+    "labels": ["serialization", "json"]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Generator::State#generate",
+    "labels": ["serialization", "json"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "json/JSON::Ext::Generator::State#generate",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "function": "json/JSON::Ext::Generator::State#generate",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "function": "json/JSON::Ext::Generator::State#generate",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "function": "json/JSON::Ext::Generator::State#generate",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "function": "json/JSON::Ext::Generator::State#generate",
+        "labels": ["serialization", "json"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "net/http/Net::HTTP#request",
+    "labels": ["http", "io"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "net/http/Net::HTTP#request",
+        "labels": ["http", "io"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Parser#parse",
+    "labels": ["serialization", "json"]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Generator::State#generate",
+    "labels": ["serialization", "json"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "json/JSON::Ext::Generator::State#generate",
+        "labels": ["serialization", "json"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "net/http/Net::HTTP#request",
+    "labels": ["http", "io"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "net/http/Net::HTTP#request",
+        "labels": ["http", "io"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Parser#parse",
+    "labels": ["serialization", "json"]
+  },
+  {
+    "kind": "function",
+    "function": "net/http/Net::HTTP#request",
+    "labels": ["http", "io"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "net/http/Net::HTTP#request",
+        "labels": ["http", "io"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Parser#parse",
+    "labels": ["serialization", "json"]
+  },
+  {
+    "kind": "function",
+    "function": "net/http/Net::HTTP#request",
+    "labels": ["http", "io"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "net/http/Net::HTTP#request",
+        "labels": ["http", "io"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Parser#parse",
+    "labels": ["serialization", "json"]
+  },
+  {
+    "kind": "function",
+    "function": "net/http/Net::HTTP#request",
+    "labels": ["http", "io"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "net/http/Net::HTTP#request",
+        "labels": ["http", "io"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Parser#parse",
+    "labels": ["serialization", "json"]
+  },
+  {
+    "kind": "function",
+    "function": "net/http/Net::HTTP#request",
+    "labels": ["http", "io"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "net/http/Net::HTTP#request",
+        "labels": ["http", "io"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Parser#parse",
+    "labels": ["serialization", "json"]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Generator::State#generate",
+    "labels": ["serialization", "json"]
+  },
+  {
+    "kind": "function",
+    "function": "net/http/Net::HTTP#request",
+    "labels": ["http", "io"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "net/http/Net::HTTP#request",
+        "labels": ["http", "io"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Parser#parse",
+    "labels": ["serialization", "json"]
+  },
+  {
+    "kind": "function",
+    "function": "net/http/Net::HTTP#request",
+    "labels": ["http", "io"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "net/http/Net::HTTP#request",
+        "labels": ["http", "io"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Parser#parse",
+    "labels": ["serialization", "json"]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Generator::State#generate",
+    "labels": ["serialization", "json"]
+  },
+  {
+    "kind": "function",
+    "function": "net/http/Net::HTTP#request",
+    "labels": ["http", "io"],
+    "children": [
+      {
+        "kind": "function",
+        "function": "net/http/Net::HTTP#request",
+        "labels": ["http", "io"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "json/JSON::Ext::Parser#parse",
+    "labels": ["serialization", "json"]
+  }
+]

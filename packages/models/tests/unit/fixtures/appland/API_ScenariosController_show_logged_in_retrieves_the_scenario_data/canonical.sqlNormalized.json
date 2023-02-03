@@ -1,0 +1,11 @@
+[
+  "SELECT * FROM \"api_keys\" WHERE (\"login\" = ?)",
+  "SELECT * FROM \"apps\" WHERE \"id\" = ?",
+  "SELECT * FROM \"mapsets\" WHERE \"id\" = ?",
+  "SELECT * FROM \"scenarios\" WHERE \"id\" = ?",
+  "SELECT * FROM \"users\" WHERE (\"users\".\"login\" = ?) LIMIT ?",
+  "SELECT * FROM \"users\" WHERE \"id\" = ?",
+  "SELECT \"id\" FROM \"scenarios\" WHERE (((\"scenarios\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = ?) AND (\"orgs\".\"id\" IS NOT ?)))) OR (\"scenarios\".\"mapset_id\" IN (SELECT \"mapsets\".\"id\" FROM \"mapsets\" WHERE ((\"mapsets\".\"app_id\" IN (SELECT \"apps\".\"id\" FROM \"apps\" WHERE (((\"apps\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = ?) AND (\"orgs\".\"id\" IS NOT ?)))) OR (\"public\" IS ?)) AND (\"apps\".\"id\" IS NOT ?)))) AND (\"mapsets\".\"id\" IS NOT ?)))) OR (\"link_sharing\" IS ?)) AND (\"uuid\" = ?)) LIMIT ?",
+  "SELECT \"updated_at\" FROM \"scenarios\" WHERE (\"id\" = ?) LIMIT ?",
+  "UPDATE \"api_keys\" SET \"last_used\" = ? WHERE (\"id\" = ?)"
+]

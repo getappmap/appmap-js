@@ -1,0 +1,81 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "DELETE /microposts/{id}",
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.decrypt"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "security.authorization"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "security.authentication"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.controller"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "security.authentication"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

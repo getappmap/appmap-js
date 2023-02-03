@@ -1,0 +1,464 @@
+[
+  {
+    "name": "app/controllers",
+    "type": "package",
+    "children": [
+      {
+        "name": "CurrentUser",
+        "type": "class",
+        "children": [
+          {
+            "name": "allow_anonymous_access",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/current_user.rb:12"
+          },
+          {
+            "name": "check_current_user",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/current_user.rb:23"
+          },
+          {
+            "name": "anonymous_access?",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/current_user.rb:16"
+          },
+          {
+            "name": "current_user",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/current_user.rb:57"
+          },
+          {
+            "name": "lookup_session_user",
+            "type": "function",
+            "labels": ["provider.authentication"],
+            "static": false,
+            "location": "app/controllers/concerns/current_user.rb:62"
+          },
+          {
+            "name": "with_authentication",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/current_user.rb:32"
+          }
+        ]
+      },
+      {
+        "name": "ComponentDiagram",
+        "type": "class",
+        "children": [
+          {
+            "name": "component_diagram",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/component_diagram.rb:25"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "openssl",
+    "type": "package",
+    "children": [
+      {
+        "name": "OpenSSL",
+        "type": "class",
+        "children": [
+          {
+            "name": "Cipher",
+            "type": "class",
+            "children": [
+              {
+                "name": "decrypt",
+                "type": "function",
+                "labels": ["security", "crypto"],
+                "static": false,
+                "location": "OpenSSL::Cipher#decrypt"
+              },
+              {
+                "name": "final",
+                "type": "function",
+                "labels": ["security", "crypto"],
+                "static": false,
+                "location": "OpenSSL::Cipher#final"
+              },
+              {
+                "name": "encrypt",
+                "type": "function",
+                "labels": ["security", "crypto"],
+                "static": false,
+                "location": "OpenSSL::Cipher#encrypt"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "json",
+    "type": "package",
+    "children": [
+      {
+        "name": "JSON",
+        "type": "class",
+        "children": [
+          {
+            "name": "Ext",
+            "type": "class",
+            "children": [
+              {
+                "name": "Parser",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "parse",
+                    "type": "function",
+                    "labels": ["serialization", "json"],
+                    "static": false,
+                    "location": "JSON::Ext::Parser#parse"
+                  }
+                ]
+              },
+              {
+                "name": "Generator",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "State",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "generate",
+                        "type": "function",
+                        "labels": ["serialization", "json"],
+                        "static": false,
+                        "location": "JSON::Ext::Generator::State#generate"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/models",
+    "type": "package",
+    "children": [
+      {
+        "name": "User",
+        "type": "class",
+        "children": [
+          {
+            "name": "find_by_id!",
+            "type": "function",
+            "static": true,
+            "location": "app/models/user.rb:31"
+          },
+          {
+            "name": "Show",
+            "type": "class",
+            "children": [
+              {
+                "name": "accept_eula?",
+                "type": "function",
+                "static": false,
+                "location": "app/models/user.rb:110"
+              },
+              {
+                "name": "admin?",
+                "type": "function",
+                "static": false,
+                "location": "app/models/user.rb:106"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Configuration",
+        "type": "class",
+        "children": [
+          {
+            "name": "find",
+            "type": "function",
+            "static": true,
+            "location": "app/models/configuration.rb:8"
+          },
+          {
+            "name": "attributes=",
+            "type": "function",
+            "static": false,
+            "location": "app/models/configuration.rb:34"
+          },
+          {
+            "name": "attributes",
+            "type": "function",
+            "static": false,
+            "location": "app/models/configuration.rb:22"
+          }
+        ]
+      },
+      {
+        "name": "App",
+        "type": "class",
+        "children": [
+          {
+            "name": "Search",
+            "type": "class",
+            "children": [
+              {
+                "name": "find!",
+                "type": "function",
+                "static": false,
+                "location": "app/models/app.rb:43"
+              },
+              {
+                "name": "find_by_slug!",
+                "type": "function",
+                "static": false,
+                "location": "app/models/app.rb:62"
+              },
+              {
+                "name": "find_by_org_scope!",
+                "type": "function",
+                "static": false,
+                "location": "app/models/app.rb:71"
+              }
+            ]
+          },
+          {
+            "name": "Show",
+            "type": "class",
+            "children": [
+              {
+                "name": "mapsets",
+                "type": "function",
+                "static": false,
+                "location": "app/models/app.rb:239"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Search",
+        "type": "class",
+        "children": [
+          {
+            "name": "filter",
+            "type": "function",
+            "static": false,
+            "location": "app/models/search.rb:33"
+          }
+        ]
+      },
+      {
+        "name": "Mapset",
+        "type": "class",
+        "children": [
+          {
+            "name": "ordered_list",
+            "type": "function",
+            "static": true,
+            "location": "app/models/mapset.rb:22"
+          },
+          {
+            "name": "find_in_app!",
+            "type": "function",
+            "static": true,
+            "location": "app/models/mapset.rb:13"
+          },
+          {
+            "name": "Show",
+            "type": "class",
+            "children": [
+              {
+                "name": "with_cache",
+                "type": "function",
+                "static": false,
+                "location": "app/models/mapset.rb:220"
+              },
+              {
+                "name": "component_diagram",
+                "type": "function",
+                "static": false,
+                "location": "app/models/mapset.rb:268"
+              }
+            ]
+          },
+          {
+            "name": "MapsetCacheModule",
+            "type": "class",
+            "children": [
+              {
+                "name": "included",
+                "type": "function",
+                "static": true,
+                "location": "app/models/mapset.rb:99"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "DAO",
+        "type": "class",
+        "children": [
+          {
+            "name": "App",
+            "type": "class",
+            "children": [
+              {
+                "name": "ordered_mapset_dataset",
+                "type": "function",
+                "static": false,
+                "location": "app/models/dao/app.rb:19"
+              }
+            ]
+          },
+          {
+            "name": "Scenario",
+            "type": "class",
+            "children": [
+              {
+                "name": "distinct_invocation_graph_dataset",
+                "type": "function",
+                "static": true,
+                "location": "app/models/dao/scenario.rb:68"
+              },
+              {
+                "name": "first_source_control_dataset",
+                "type": "function",
+                "static": true,
+                "location": "app/models/dao/scenario.rb:79"
+              },
+              {
+                "name": "class_locations_dataset",
+                "type": "function",
+                "static": true,
+                "location": "app/models/dao/scenario.rb:90"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Scenario",
+        "type": "class",
+        "children": [
+          {
+            "name": "SearchActions",
+            "type": "class",
+            "children": [
+              {
+                "name": "search",
+                "type": "function",
+                "static": true,
+                "location": "app/models/scenario.rb:30"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "lib/appland",
+    "type": "package",
+    "children": [
+      {
+        "name": "Diagram",
+        "type": "class",
+        "children": [
+          {
+            "name": "ComponentDiagram",
+            "type": "class",
+            "children": [
+              {
+                "name": "from_invocation_graph",
+                "type": "function",
+                "static": true,
+                "location": "lib/appland/diagram/component_diagram.rb:10"
+              },
+              {
+                "name": "add_graph",
+                "type": "function",
+                "static": false,
+                "location": "lib/appland/diagram/component_diagram.rb:54"
+              },
+              {
+                "name": "set_class_locations",
+                "type": "function",
+                "static": false,
+                "location": "lib/appland/diagram/component_diagram.rb:45"
+              },
+              {
+                "name": "to_json",
+                "type": "function",
+                "static": false,
+                "location": "lib/appland/diagram/component_diagram.rb:90"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "http",
+    "name": "HTTP server requests",
+    "children": [
+      {
+        "type": "route",
+        "name": "GET /:organization_id/:id/component_diagram(.:format)"
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"users\" WHERE (\"id\" = 14) LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"apps\".* FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") WHERE ((\"apps\".\"slug\" = 'appland') AND (\"orgs\".\"slug\" = 'default')) LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT *, \"mapsets\".\"name\", \"mapsets\".\"branch\", \"mapsets\".\"commit\", \"mapsets\".\"environment\", \"mapsets\".\"version\", (SELECT \"login\" FROM \"users\" WHERE (\"id\" = \"user_id\")), (SELECT count(*) AS \"scenario_count\" FROM \"scenarios\" WHERE (\"mapset_id\" = \"mapsets\".\"id\")) FROM \"mapsets_preference_ordered\" AS \"mapsets\" WHERE (\"mapsets\".\"app_id\" = 31)"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"mapsets\" WHERE \"id\" = 14"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"scenarios\".\"id\", \"scenarios\".\"uuid\", metadata->>'name' AS \"name\", metadata->>'feature_group' AS \"feature_group\", metadata->>'feature' AS \"feature\", \"scenarios\".\"event_field_counts\", \"scenarios\".\"mapset_id\", \"mapsets\".\"app_id\", \"scenarios\".\"created_at\" FROM \"scenarios\" INNER JOIN \"mapsets\" ON (\"mapsets\".\"id\" = \"scenarios\".\"mapset_id\") WHERE (\"scenarios\".\"mapset_id\" = 14) ORDER BY \"scenarios\".\"created_at\" DESC"
+      },
+      {
+        "type": "query",
+        "name": "SELECT DISTINCT \"caller\", \"callee\" FROM \"scenarios\", lateral jsonb_to_recordset(class_invocation_graph) as graph(caller q_class, callee q_class) WHERE (\"id\" IN (7, 8))"
+      },
+      {
+        "type": "query",
+        "name": "SELECT scenarios.metadata->'git'->>'repository' AS \"repository_url\", scenarios.metadata->'git'->>'commit' AS \"commit\" FROM \"scenarios\" WHERE ((scenarios.metadata->'git'->>'repository' IS NOT NULL) AND (scenarios.metadata->'git'->>'commit' IS NOT NULL) AND (\"id\" IN (7, 8))) LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT jsonb_object_agg(compute_code_objects_by_location(data->'classMap')) AS \"code_objects_by_location\" FROM \"scenarios\" WHERE (\"id\" IN (7, 8)) LIMIT 1"
+      }
+    ]
+  }
+]

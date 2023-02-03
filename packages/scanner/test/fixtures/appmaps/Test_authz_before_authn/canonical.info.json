@@ -1,0 +1,146 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "DELETE /microposts/{id}",
+    "parameter_names": [
+      "controller",
+      "action",
+      "id"
+    ],
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.decrypt"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "security.authorization"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "security.authentication"
+                    ],
+                    "children": [
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "users"
+                            ],
+                            "columns": [
+                              "users.*",
+                              "users.id"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "microposts"
+                        ],
+                        "columns": [
+                          "microposts.*",
+                          "microposts.created_at",
+                          "microposts.id",
+                          "microposts.user_id"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.controller"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "security.authentication"
+            ],
+            "children": [
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [
+                      "select"
+                    ],
+                    "tables": [
+                      "users"
+                    ],
+                    "columns": [
+                      "users.*",
+                      "users.id"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

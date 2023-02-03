@@ -1,0 +1,37 @@
+[
+  {
+    "route": "GET /password_resets/new",
+    "parameters": "(controller,action)",
+    "status": 200
+  },
+  {
+    "route": "GET /password_resets/{id}/edit",
+    "parameters": "(email,controller,action,id)",
+    "status": 200
+  },
+  {
+    "route": "GET /password_resets/{id}/edit",
+    "parameters": "(email,controller,action,id)",
+    "status": 302
+  },
+  {
+    "route": "PATCH /password_resets/{id}",
+    "parameters": "(email,user,controller,action,id)",
+    "status": 200
+  },
+  {
+    "route": "PATCH /password_resets/{id}",
+    "parameters": "(email,user,controller,action,id)",
+    "status": 500
+  },
+  {
+    "route": "POST /password_resets",
+    "parameters": "(password_reset,controller,action)",
+    "status": 200
+  },
+  {
+    "route": "POST /password_resets",
+    "parameters": "(password_reset,controller,action)",
+    "status": 302
+  }
+]

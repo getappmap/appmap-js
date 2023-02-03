@@ -1,0 +1,17 @@
+[
+  {
+    "route": "GET https://api.stripe.com/v1/customers",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "POST https://api.stripe.com/v1/charges",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "POST https://api.stripe.com/v1/customers/cus_JnA0JVDwH8BjTl",
+    "parameters": "()",
+    "status": 200
+  }
+]

@@ -1,0 +1,66 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "GET /api/scenarios/:id(.:format)",
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["provider.authentication"],
+        "children": [
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["update"],
+                "tables": ["api_keys"],
+                "columns": ["id", "last_used"],
+                "joinCount": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      }
+    ]
+  }
+]

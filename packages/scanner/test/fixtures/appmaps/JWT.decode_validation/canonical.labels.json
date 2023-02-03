@@ -1,0 +1,7 @@
+[
+  "deserialize.safe",
+  "format.json.parse",
+  "jwt.decode",
+  "jwt.signature.verify",
+  "string.unpack"
+]

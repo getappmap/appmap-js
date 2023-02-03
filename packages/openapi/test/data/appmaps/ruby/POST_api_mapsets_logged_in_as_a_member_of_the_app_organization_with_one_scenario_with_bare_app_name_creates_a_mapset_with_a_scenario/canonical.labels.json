@@ -1,0 +1,14 @@
+[
+  "format.json.generate",
+  "http.session.read",
+  "http.session.write",
+  "log",
+  "mvc.after_action",
+  "mvc.before_action",
+  "mvc.controller",
+  "mvc.render",
+  "security.api_key.touch",
+  "security.authentication",
+  "serialize",
+  "string.unpack"
+]

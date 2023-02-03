@@ -1,0 +1,15 @@
+[
+  "actionpack",
+  "actionview",
+  "activesupport",
+  "app/controllers",
+  "app/helpers",
+  "app/models",
+  "app/services",
+  "app/views",
+  "json",
+  "sidekiq",
+  "stripe",
+  "vcr",
+  "wicked_pdf"
+]

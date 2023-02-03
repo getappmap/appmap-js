@@ -1,0 +1,148 @@
+[
+  {
+    "name": "app/models",
+    "type": "package",
+    "children": [
+      {
+        "name": "ApiKey",
+        "type": "class",
+        "children": [
+          {
+            "name": "issue",
+            "type": "function",
+            "static": true,
+            "location": "app/models/api_key.rb:28"
+          },
+          {
+            "name": "encode",
+            "type": "function",
+            "static": true,
+            "location": "app/models/api_key.rb:20"
+          },
+          {
+            "name": "authenticate",
+            "type": "function",
+            "labels": ["provider.authentication"],
+            "static": true,
+            "location": "app/models/api_key.rb:52"
+          },
+          {
+            "name": "decode",
+            "type": "function",
+            "static": true,
+            "location": "app/models/api_key.rb:24"
+          },
+          {
+            "name": "touch",
+            "type": "function",
+            "static": true,
+            "location": "app/models/api_key.rb:11"
+          },
+          {
+            "name": "revoke",
+            "type": "function",
+            "static": true,
+            "location": "app/models/api_key.rb:40"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/controllers",
+    "type": "package",
+    "children": [
+      {
+        "name": "API",
+        "type": "class",
+        "children": [
+          {
+            "name": "APIKeysController",
+            "type": "class",
+            "children": [
+              {
+                "name": "destroy",
+                "type": "function",
+                "static": false,
+                "location": "app/controllers/api/api_keys_controller.rb:15"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "json",
+    "type": "package",
+    "children": [
+      {
+        "name": "JSON",
+        "type": "class",
+        "children": [
+          {
+            "name": "Ext",
+            "type": "class",
+            "children": [
+              {
+                "name": "Generator",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "State",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "generate",
+                        "type": "function",
+                        "labels": ["serialization", "json"],
+                        "static": false,
+                        "location": "JSON::Ext::Generator::State#generate"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "INSERT INTO \"api_keys\" (\"login\", \"description\") VALUES ('admin', 'example api key') RETURNING *"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"api_keys\" WHERE (\"login\" = 'admin')"
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"api_keys\" SET \"last_used\" = '2021-02-01 15:52:48.011849+0000' WHERE (\"id\" = 3)"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"users\" WHERE (\"users\".\"login\" = 'admin') LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "DELETE FROM \"api_keys\" WHERE \"id\" = 3"
+      }
+    ]
+  },
+  {
+    "type": "http",
+    "name": "HTTP server requests",
+    "children": [
+      {
+        "type": "route",
+        "name": "DELETE /api/api_keys(.:format)"
+      }
+    ]
+  }
+]

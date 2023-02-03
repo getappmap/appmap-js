@@ -1,0 +1,190 @@
+[
+  {
+    "caller": "HTTP server requests->GET /users/{id}",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/controllers/UsersController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/views/app_views_users_show_html_erb"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/controllers/UsersController",
+    "callee": "Database->SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/helpers/SessionsHelper",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/views/app_views_layouts__footer_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_layouts__footer_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_layouts__header_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_layouts__header_html_erb",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/views/app_views_layouts__header_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_layouts__shim_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_layouts__shim_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_microposts__micropost_html_erb",
+    "callee": "Database->SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/views/app_views_microposts__micropost_html_erb",
+    "callee": "Database->SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC LIMIT ? OFFSET ?"
+  },
+  {
+    "caller": "app/views/app_views_microposts__micropost_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_microposts__micropost_html_erb",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/views/app_views_microposts__micropost_html_erb",
+    "callee": "app/helpers/UsersHelper"
+  },
+  {
+    "caller": "app/views/app_views_microposts__micropost_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_microposts__micropost_html_erb",
+    "callee": "ruby/Module"
+  },
+  {
+    "caller": "app/views/app_views_shared__stats_html_erb",
+    "callee": "Database->SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"followed_id\" WHERE \"relationships\".\"follower_id\" = ?"
+  },
+  {
+    "caller": "app/views/app_views_shared__stats_html_erb",
+    "callee": "Database->SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"follower_id\" WHERE \"relationships\".\"followed_id\" = ?"
+  },
+  {
+    "caller": "app/views/app_views_shared__stats_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_shared__stats_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_shared__stats_html_erb",
+    "callee": "ruby/Module"
+  },
+  {
+    "caller": "app/views/app_views_shared__stats_html_erb",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "Database->SELECT 1 AS one FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "Database->SELECT COUNT(*) FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ?"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/helpers/ApplicationHelper"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/helpers/UsersHelper"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/views/app_views_layouts__footer_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/views/app_views_layouts__header_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/views/app_views_layouts__shim_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/views/app_views_microposts__micropost_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/views/app_views_shared__stats_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "ruby/Module"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "ruby/String"
+  }
+]

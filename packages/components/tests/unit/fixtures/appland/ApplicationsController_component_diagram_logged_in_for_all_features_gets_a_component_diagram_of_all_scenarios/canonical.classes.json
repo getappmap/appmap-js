@@ -1,0 +1,20 @@
+[
+  "app/controllers/ComponentDiagram",
+  "app/controllers/CurrentUser",
+  "app/models/App::Search",
+  "app/models/App::Show",
+  "app/models/Configuration",
+  "app/models/DAO::App",
+  "app/models/DAO::Scenario",
+  "app/models/Mapset",
+  "app/models/Mapset::MapsetCacheModule",
+  "app/models/Mapset::Show",
+  "app/models/Scenario::SearchActions",
+  "app/models/Search",
+  "app/models/User",
+  "app/models/User::Show",
+  "json/JSON::Ext::Generator::State",
+  "json/JSON::Ext::Parser",
+  "lib/appland/Diagram::ComponentDiagram",
+  "openssl/OpenSSL::Cipher"
+]

@@ -1,0 +1,4015 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "GET /login",
+    "parameter_names": [
+      "controller",
+      "action"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "Class#write",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/SessionsController#new",
+            "labels": [
+              "public"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "actionview/ActionView::Resolver#find_all",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/views/app_views_sessions_new_html_erb.render",
+            "labels": [
+              "mvc.template"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "Class#write",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "Class#write",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/ApplicationHelper#full_title",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "Class#write",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "json/JSON::Ext::Parser#parse",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__shim_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#write",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__header_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#logged_in?",
+                    "labels": [
+                      "security.authentication"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#write",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__footer_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#write",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "Class#write",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "POST /login",
+    "parameter_names": [
+      "session",
+      "controller",
+      "action"
+    ],
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "Class#write",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "Class#write",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/SessionsController#create",
+            "labels": [
+              "public",
+              "security.login"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "Class#write",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.*",
+                    "users.email"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#destroy",
+                "labels": [
+                  "http.session.write"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Request::Session#clear",
+                    "labels": [
+                      "http.session.write",
+                      "http.session.clear"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/SessionsHelper#log_in",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Request::Session#[]=",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/SessionsHelper#forget",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/models/User#forget",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                        "labels": [
+                          "mvc.before_action"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                        "labels": [
+                          "mvc.before_action"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                        "labels": [
+                          "mvc.before_action"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                        "labels": [
+                          "mvc.after_action"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                        "labels": [
+                          "mvc.after_action"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                        "labels": [
+                          "mvc.after_action"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#delete",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#delete",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionController::Instrumentation#redirect_to",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "Class#write",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "Class#write",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /users/{id}",
+    "parameter_names": [
+      "controller",
+      "action",
+      "id"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "Class#write",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "Class#write",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "openssl/OpenSSL::Cipher#decrypt",
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/UsersController#show",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "Class#write",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.*",
+                    "users.id"
+                  ],
+                  "joinCount": 0
+                }
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "actionview/ActionView::Resolver#find_all",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/views/app_views_users_show_html_erb.render",
+            "labels": [
+              "mvc.template"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "Class#write",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/UsersHelper#gravatar_for",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_shared__stats_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#write",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"followed_id\" WHERE \"relationships\".\"follower_id\" = ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "relationships",
+                        "users"
+                      ],
+                      "columns": [
+                        "*",
+                        "relationships.followed_id",
+                        "relationships.follower_id",
+                        "users.id"
+                      ],
+                      "joinCount": 1
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#write",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"follower_id\" WHERE \"relationships\".\"followed_id\" = ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "relationships",
+                        "users"
+                      ],
+                      "columns": [
+                        "*",
+                        "relationships.followed_id",
+                        "relationships.follower_id",
+                        "users.id"
+                      ],
+                      "joinCount": 1
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#write",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/SessionsHelper#logged_in?",
+                "labels": [
+                  "security.authentication"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionpack/ActionDispatch::Request::Session#[]",
+                        "labels": [
+                          "http.session.read"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "Class#write",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "logger/Logger::LogDevice#write",
+                            "labels": [
+                              "log"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+                        },
+                        "analyzed_query": {
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "users"
+                          ],
+                          "columns": [
+                            "users.*",
+                            "users.id"
+                          ],
+                          "joinCount": 0
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_users__follow_form_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#write",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "Class#write",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT ? AS one FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? LIMIT ?"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "microposts"
+                  ],
+                  "columns": [
+                    "microposts.user_id"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "Class#write",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT COUNT(*) FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ?"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "microposts"
+                  ],
+                  "columns": [
+                    "*",
+                    "microposts.user_id"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_microposts__micropost_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC LIMIT ? OFFSET ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "microposts"
+                              ],
+                              "columns": [
+                                "microposts.*",
+                                "microposts.created_at",
+                                "microposts.user_id"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/UsersHelper#gravatar_for",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#records",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "Class#write",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "active_storage_attachments"
+                              ],
+                              "columns": [
+                                "active_storage_attachments.*",
+                                "active_storage_attachments.name",
+                                "active_storage_attachments.record_id",
+                                "active_storage_attachments.record_type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#write",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "Class#write",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT COUNT(*) FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ?"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "microposts"
+                  ],
+                  "columns": [
+                    "*",
+                    "microposts.user_id"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "Class#write",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/ApplicationHelper#full_title",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "Class#write",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "json/JSON::Ext::Parser#parse",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__shim_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#write",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__header_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#logged_in?",
+                    "labels": [
+                      "security.authentication"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionpack/ActionDispatch::Request::Session#[]",
+                        "labels": [
+                          "http.session.read"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionpack/ActionDispatch::Request::Session#[]",
+                        "labels": [
+                          "http.session.read"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#write",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__footer_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "Class#write",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "Class#write",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "DELETE /logout",
+    "parameter_names": [
+      "controller",
+      "action"
+    ],
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "Class#write",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "openssl/OpenSSL::Cipher#decrypt",
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/SessionsController#destroy",
+            "labels": [
+              "security.logout"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "app/helpers/SessionsHelper#logged_in?",
+                "labels": [
+                  "security.authentication"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionpack/ActionDispatch::Request::Session#[]",
+                        "labels": [
+                          "http.session.read"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "Class#write",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "logger/Logger::LogDevice#write",
+                            "labels": [
+                              "log"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+                        },
+                        "analyzed_query": {
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "users"
+                          ],
+                          "columns": [
+                            "users.*",
+                            "users.id"
+                          ],
+                          "joinCount": 0
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/SessionsHelper#log_out",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionpack/ActionDispatch::Request::Session#[]",
+                        "labels": [
+                          "http.session.read"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#forget",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/models/User#forget",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                            "labels": [
+                              "mvc.before_action"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                            "labels": [
+                              "mvc.before_action"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                            "labels": [
+                              "mvc.before_action"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                            "labels": [
+                              "mvc.after_action"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                            "labels": [
+                              "mvc.after_action"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                            "labels": [
+                              "mvc.after_action"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "actionpack/ActionDispatch::Cookies::CookieJar#delete",
+                        "labels": [
+                          "http.session.write"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "actionpack/ActionDispatch::Cookies::CookieJar#delete",
+                        "labels": [
+                          "http.session.write"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionController::Instrumentation#redirect_to",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "Class#write",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "Class#write",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

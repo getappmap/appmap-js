@@ -1,0 +1,20 @@
+[
+  "actionpack",
+  "actionview",
+  "activerecord",
+  "activesupport",
+  "app/views",
+  "devise",
+  "lib",
+  "lib/devise",
+  "lib/devise/controllers",
+  "lib/devise/mailers",
+  "lib/devise/models",
+  "lib/devise/omniauth",
+  "lib/devise/rails",
+  "lib/devise/strategies",
+  "logger",
+  "omniauth",
+  "openssl",
+  "ruby"
+]

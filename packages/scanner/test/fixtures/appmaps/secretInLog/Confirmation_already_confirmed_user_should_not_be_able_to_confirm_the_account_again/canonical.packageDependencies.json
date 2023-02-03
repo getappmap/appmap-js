@@ -1,0 +1,86 @@
+[
+  {
+    "caller": "actionpack",
+    "callee": "openssl"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "lib"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionview"
+  },
+  {
+    "caller": "app/views",
+    "callee": "lib"
+  },
+  {
+    "caller": "app/views",
+    "callee": "logger"
+  },
+  {
+    "caller": "app/views",
+    "callee": "omniauth"
+  },
+  {
+    "caller": "inline_template",
+    "callee": "actionview"
+  },
+  {
+    "caller": "inline_template",
+    "callee": "lib"
+  },
+  {
+    "caller": "inline_template",
+    "callee": "logger"
+  },
+  {
+    "caller": "lib",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "lib",
+    "callee": "actionview"
+  },
+  {
+    "caller": "lib",
+    "callee": "activerecord"
+  },
+  {
+    "caller": "lib",
+    "callee": "devise"
+  },
+  {
+    "caller": "lib",
+    "callee": "inline_template"
+  },
+  {
+    "caller": "lib",
+    "callee": "logger"
+  },
+  {
+    "caller": "lib",
+    "callee": "openssl"
+  },
+  {
+    "caller": "omniauth",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "omniauth",
+    "callee": "app/views"
+  },
+  {
+    "caller": "omniauth",
+    "callee": "lib"
+  },
+  {
+    "caller": "omniauth",
+    "callee": "logger"
+  }
+]

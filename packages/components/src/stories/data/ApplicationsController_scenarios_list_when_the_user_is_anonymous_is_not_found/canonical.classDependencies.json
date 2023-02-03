@@ -1,0 +1,170 @@
+[
+  {
+    "caller": "HTTP server requests->GET /{organization_id}/{id}/scenarios_list",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "Database->ROLLBACK TO SAVEPOINT autopoint_1"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "Database->SAVEPOINT autopoint_1"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/controllers/ApplicationController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/controllers/WithAuthentication"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "app/controllers/AnonymousAccess"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "app/controllers/CurrentUser"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "app/models/App"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "app/models/Configuration"
+  },
+  {
+    "caller": "app/controllers/ApplicationController",
+    "callee": "inline_template.render"
+  },
+  {
+    "caller": "app/controllers/CurrentUser",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/controllers/CurrentUser",
+    "callee": "app/controllers/AnonymousAccess"
+  },
+  {
+    "caller": "app/controllers/WithAuthentication",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "app/helpers/ConfigurationHelper",
+    "callee": "app/models/Configuration"
+  },
+  {
+    "caller": "app/models/App",
+    "callee": "Database->SELECT \"apps\".* FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") INNER JOIN \"users\" ON (\"users\".\"id\" = \"orgs\".\"owner_id\") WHERE ((\"public\" IS TRUE) AND (\"apps\".\"slug\" = 'appland') AND (\"users\".\"login\" = 'default')) LIMIT 1"
+  },
+  {
+    "caller": "app/models/App",
+    "callee": "Database->SELECT \"apps\".* FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") WHERE ((\"public\" IS TRUE) AND (\"apps\".\"slug\" = 'appland') AND (\"orgs\".\"slug\" = 'default')) LIMIT 1"
+  },
+  {
+    "caller": "app/models/App",
+    "callee": "app/models/Exceptions"
+  },
+  {
+    "caller": "app/models/App",
+    "callee": "app/models/Search"
+  },
+  {
+    "caller": "app/models/Configuration",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/models/Configuration",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/models/Search",
+    "callee": "app/models/DAO"
+  },
+  {
+    "caller": "app/views/app_views_errors_not_found_html_haml",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_errors_not_found_html_haml",
+    "callee": "inline_template.render"
+  },
+  {
+    "caller": "app/views/app_views_errors_not_found_html_haml",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/views/app_views_layouts__css_head_html_haml",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_layouts__css_head_html_haml",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/views/app_views_layouts__js_head_html_haml",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_layouts__standard_head_html_haml",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_layouts__standard_head_html_haml",
+    "callee": "inline_template.render"
+  },
+  {
+    "caller": "app/views/app_views_partials__flash_html_haml",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/views/app_views_partials__flash_html_haml",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_partials__header_html_haml",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_partials__header_html_haml",
+    "callee": "app/helpers/ConfigurationHelper"
+  },
+  {
+    "caller": "app/views/app_views_partials__header_html_haml",
+    "callee": "inline_template.render"
+  },
+  {
+    "caller": "inline_template.render",
+    "callee": "app/views/app_views_errors_not_found_html_haml"
+  },
+  {
+    "caller": "inline_template.render",
+    "callee": "app/views/app_views_layouts__css_head_html_haml"
+  },
+  {
+    "caller": "inline_template.render",
+    "callee": "app/views/app_views_layouts__js_head_html_haml"
+  },
+  {
+    "caller": "inline_template.render",
+    "callee": "app/views/app_views_layouts__standard_head_html_haml"
+  },
+  {
+    "caller": "inline_template.render",
+    "callee": "app/views/app_views_partials__flash_html_haml"
+  },
+  {
+    "caller": "inline_template.render",
+    "callee": "app/views/app_views_partials__header_html_haml"
+  }
+]

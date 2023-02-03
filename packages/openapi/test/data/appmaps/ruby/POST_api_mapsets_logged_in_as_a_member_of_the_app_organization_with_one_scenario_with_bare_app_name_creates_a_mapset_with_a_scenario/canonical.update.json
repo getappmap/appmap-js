@@ -1,0 +1,310 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "POST /api/mapsets",
+    "status_code": 201,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "security.authentication"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.unpack"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "security.api_key.touch"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "update"
+                            ],
+                            "tables": [
+                              "api_keys"
+                            ],
+                            "columns": [
+                              "id",
+                              "last_used"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [
+                      "insert"
+                    ],
+                    "tables": [
+                      "apps"
+                    ],
+                    "columns": [
+                      "name",
+                      "org_id",
+                      "slug"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [
+                  "insert"
+                ],
+                "tables": [
+                  "mapsets"
+                ],
+                "columns": [
+                  "app_id",
+                  "user_id"
+                ],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [
+                  "update"
+                ],
+                "tables": [
+                  "scenarios"
+                ],
+                "columns": [
+                  "id",
+                  "mapset_id"
+                ],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.render"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "serialize"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,7 @@
+[
+  {
+    "route": "DELETE /microposts/{id}",
+    "parameters": "(controller,action,id)",
+    "status": 302
+  }
+]

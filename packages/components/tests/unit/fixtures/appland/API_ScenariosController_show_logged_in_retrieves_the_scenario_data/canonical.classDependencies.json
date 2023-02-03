@@ -1,0 +1,78 @@
+[
+  {
+    "caller": "HTTP server requests->GET /api/scenarios/:id(.:format)",
+    "callee": "app/controllers/API"
+  },
+  {
+    "caller": "HTTP server requests->GET /api/scenarios/:id(.:format)",
+    "callee": "app/models/ApiKey"
+  },
+  {
+    "caller": "HTTP server requests->GET /api/scenarios/:id(.:format)",
+    "callee": "app/models/Scenario"
+  },
+  {
+    "caller": "app/controllers/API",
+    "callee": "Database->SELECT * FROM \"scenarios\" WHERE \"id\" = 100002"
+  },
+  {
+    "caller": "app/controllers/API",
+    "callee": "app/models/DAO"
+  },
+  {
+    "caller": "app/controllers/API",
+    "callee": "app/models/Scenario"
+  },
+  {
+    "caller": "app/controllers/API",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/models/ApiKey",
+    "callee": "Database->SELECT * FROM \"api_keys\" WHERE (\"login\" = 'alice')"
+  },
+  {
+    "caller": "app/models/ApiKey",
+    "callee": "Database->SELECT * FROM \"users\" WHERE (\"users\".\"login\" = 'alice') LIMIT 1"
+  },
+  {
+    "caller": "app/models/ApiKey",
+    "callee": "Database->UPDATE \"api_keys\" SET \"last_used\" = '2021-02-01 15:53:43.194564+0000' WHERE (\"id\" = 2)"
+  },
+  {
+    "caller": "app/models/DAO",
+    "callee": "Database->SELECT * FROM \"users\" WHERE \"id\" = 1000001"
+  },
+  {
+    "caller": "app/models/Scenario",
+    "callee": "Database->SELECT * FROM \"apps\" WHERE \"id\" = 100001"
+  },
+  {
+    "caller": "app/models/Scenario",
+    "callee": "Database->SELECT * FROM \"mapsets\" WHERE \"id\" = 100001"
+  },
+  {
+    "caller": "app/models/Scenario",
+    "callee": "Database->SELECT \"id\" FROM \"scenarios\" WHERE (((\"scenarios\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = 1000001) AND (\"orgs\".\"id\" IS NOT NULL)))) OR (\"scenarios\".\"mapset_id\" IN (SELECT \"mapsets\".\"id\" FROM \"mapsets\" WHERE ((\"mapsets\".\"app_id\" IN (SELECT \"apps\".\"id\" FROM \"apps\" WHERE (((\"apps\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = 1000001) AND (\"orgs\".\"id\" IS NOT NULL)))) OR (\"public\" IS TRUE)) AND (\"apps\".\"id\" IS NOT NULL)))) AND (\"mapsets\".\"id\" IS NOT NULL)))) OR (\"link_sharing\" IS TRUE)) AND (\"uuid\" = '724151a3-cc7b-4ef3-ac6b-5380fe59217c')) LIMIT 1"
+  },
+  {
+    "caller": "app/models/Scenario",
+    "callee": "Database->SELECT \"updated_at\" FROM \"scenarios\" WHERE (\"id\" = 100002) LIMIT 1"
+  },
+  {
+    "caller": "app/models/Scenario",
+    "callee": "app/models/DAO"
+  },
+  {
+    "caller": "app/models/Scenario",
+    "callee": "app/models/Search"
+  },
+  {
+    "caller": "app/models/Search",
+    "callee": "app/models/DAO"
+  },
+  {
+    "caller": "app/models/Search",
+    "callee": "app/models/User"
+  }
+]

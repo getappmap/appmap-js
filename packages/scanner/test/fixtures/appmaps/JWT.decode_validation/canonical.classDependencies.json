@@ -1,0 +1,10 @@
+[
+  {
+    "caller": "jwt/JWT",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "jwt/JWT",
+    "callee": "ruby/String"
+  }
+]

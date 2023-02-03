@@ -1,0 +1,76 @@
+{
+  "fingerprints": [
+    {
+      "appmap_digest": "88c1d731c649b04b8b8cc567b15889263f84f5e556dd265e5b0dd5576d6d13a4",
+      "canonicalization_algorithm": "classDependencies",
+      "digest": "e7171764da83d1cecaf9d74b3394328d54d818faaf7046079ee579bc8d9bd73e",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "88c1d731c649b04b8b8cc567b15889263f84f5e556dd265e5b0dd5576d6d13a4",
+      "canonicalization_algorithm": "classes",
+      "digest": "d0b1298b3e582cd5eff62b6c598c668b7f3e4e2a515b57331c93a35b12b5a4c8",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "88c1d731c649b04b8b8cc567b15889263f84f5e556dd265e5b0dd5576d6d13a4",
+      "canonicalization_algorithm": "httpClientRequests",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "88c1d731c649b04b8b8cc567b15889263f84f5e556dd265e5b0dd5576d6d13a4",
+      "canonicalization_algorithm": "httpServerRequests",
+      "digest": "1c7130056d61a5de64a979d952747cca6eab0a0d904e1b2f86299509d5018bb2",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "88c1d731c649b04b8b8cc567b15889263f84f5e556dd265e5b0dd5576d6d13a4",
+      "canonicalization_algorithm": "info",
+      "digest": "7b0d0e084bea687ace8ac85c51d3cab90d8c47efe802bdd605773cfad4231d5b",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "88c1d731c649b04b8b8cc567b15889263f84f5e556dd265e5b0dd5576d6d13a4",
+      "canonicalization_algorithm": "labels",
+      "digest": "4ce672054577dd6c02cad959730138bfdb9853dceb3d7f83258cfb5075debf94",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "88c1d731c649b04b8b8cc567b15889263f84f5e556dd265e5b0dd5576d6d13a4",
+      "canonicalization_algorithm": "packageDependencies",
+      "digest": "5a37c06299d9429aee4b93d7e75e21a3add604bdd98693d888a80713ef6d916f",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "88c1d731c649b04b8b8cc567b15889263f84f5e556dd265e5b0dd5576d6d13a4",
+      "canonicalization_algorithm": "packages",
+      "digest": "30a9f7ee612618cb4149b24a0f0cc8632583a5aa753924891d3deb4d194a1e8c",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "88c1d731c649b04b8b8cc567b15889263f84f5e556dd265e5b0dd5576d6d13a4",
+      "canonicalization_algorithm": "sqlNormalized",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "88c1d731c649b04b8b8cc567b15889263f84f5e556dd265e5b0dd5576d6d13a4",
+      "canonicalization_algorithm": "sqlTables",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "88c1d731c649b04b8b8cc567b15889263f84f5e556dd265e5b0dd5576d6d13a4",
+      "canonicalization_algorithm": "trace",
+      "digest": "be18356c17a11da6cfe7c7c6b5d745770bdc7b7ecf508f75ea9371e32aedf509",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "88c1d731c649b04b8b8cc567b15889263f84f5e556dd265e5b0dd5576d6d13a4",
+      "canonicalization_algorithm": "update",
+      "digest": "eec14ad69b17a5f3a2aa0e3e05ecfe9a4784f3a52d8a9f751bdaf7d5906715ed",
+      "fingerprint_algorithm": "sha256"
+    }
+  ]
+}

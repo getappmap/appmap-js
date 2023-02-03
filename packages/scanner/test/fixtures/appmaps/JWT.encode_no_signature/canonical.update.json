@@ -1,0 +1,28 @@
+[
+  {
+    "kind": "function",
+    "labels": [
+      "jwt.encode"
+    ],
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "serialize"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialize"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "jwt.signature.sign"
+        ]
+      }
+    ]
+  }
+]

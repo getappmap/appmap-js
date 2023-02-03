@@ -113,15 +113,20 @@
             placement="left"
             text-align="right"
           >
-            <button class="control-button appmap-upload" @click="uploadAppmap" title="">
+            <button class="control-button appmap-action-icon" @click="uploadAppmap" title="">
               <UploadIcon class="control-button__icon" />
               <span>Share</span>
             </button>
           </v-popper>
 
-          <template v-if="showDownload">
-            <v-download-sequence-diagram></v-download-sequence-diagram>
-          </template>
+          <v-popper
+            class="hover-text-popper"
+            text="Export this diagram in SVG format"
+            placement="left"
+            text-align="right"
+          >
+            <v-export-sequence-diagram v-if="showExport"></v-export-sequence-diagram>
+          </v-popper>
 
           <v-popper-menu :isHighlight="filtersChanged">
             <template v-slot:icon>
@@ -317,7 +322,7 @@ import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramSequence from '../components/DiagramSequence.vue';
 import VDiagramTrace from '../components/DiagramTrace.vue';
-import VDownloadSequenceDiagram from '@/components/sequence/DownloadSequenceDiagram.vue';
+import VExportSequenceDiagram from '@/components/sequence/ExportSequenceDiagram.vue';
 import VFiltersForm from '../components/FiltersForm.vue';
 import VInstructions from '../components/Instructions.vue';
 import VNotification from '../components/Notification.vue';
@@ -368,7 +373,7 @@ export default {
     VDiagramComponent,
     VDiagramSequence,
     VDiagramTrace,
-    VDownloadSequenceDiagram,
+    VExportSequenceDiagram,
     VFiltersForm,
     VInstructions,
     VNotification,
@@ -423,7 +428,7 @@ export default {
       },
       traceFilterValue: '',
       currentTraceFilterIndex: 0,
-      showDownloadButton: false,
+      showExportButton: false,
       showShareModal: false,
       shareURL: undefined,
     };
@@ -754,7 +759,7 @@ export default {
       return this.currentView === VIEW_FLOW;
     },
 
-    showDownload() {
+    showExport() {
       return this.isViewingSequence;
     },
 
@@ -1558,7 +1563,7 @@ code {
       .hover-text-popper {
         display: inline-block;
 
-        .appmap-upload {
+        .appmap-action-icon {
           background-color: $dark-purple;
           border-radius: 0.5rem;
           color: $white;

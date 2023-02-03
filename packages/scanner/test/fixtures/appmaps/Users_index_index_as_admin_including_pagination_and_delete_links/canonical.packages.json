@@ -1,0 +1,15 @@
+[
+  "actionpack",
+  "actionview",
+  "activerecord",
+  "activesupport",
+  "app/controllers",
+  "app/helpers",
+  "app/models",
+  "app/views",
+  "json",
+  "logger",
+  "openssl",
+  "sqlite3",
+  "string"
+]

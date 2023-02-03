@@ -1,0 +1,1292 @@
+[
+  {
+    "name": "misago",
+    "type": "package",
+    "children": [
+      {
+        "name": "users",
+        "type": "package",
+        "children": [
+          {
+            "name": "admin",
+            "type": "package",
+            "children": [
+              {
+                "name": "tests",
+                "type": "package",
+                "children": [
+                  {
+                    "name": "test_users_mass_actions",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "test_activating_multiple_users_sends_email_notifications_to_them",
+                        "type": "function",
+                        "static": true,
+                        "location": "misago/users/admin/tests/test_users_mass_actions.py:48"
+                      },
+                      {
+                        "name": "get_multiple_users_ids",
+                        "type": "function",
+                        "static": true,
+                        "location": "misago/users/admin/tests/test_users_mass_actions.py:24"
+                      },
+                      {
+                        "name": "create_multiple_users",
+                        "type": "function",
+                        "static": true,
+                        "location": "misago/users/admin/tests/test_users_mass_actions.py:17"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "views",
+                "type": "package",
+                "children": [
+                  {
+                    "name": "users",
+                    "type": "package",
+                    "children": [
+                      {
+                        "name": "UsersList",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "get_queryset",
+                            "type": "function",
+                            "static": false,
+                            "location": "misago/users/admin/views/users.py:92"
+                          },
+                          {
+                            "name": "action_activate",
+                            "type": "function",
+                            "static": false,
+                            "location": "misago/users/admin/views/users.py:99"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "test",
+            "type": "class",
+            "children": [
+              {
+                "name": "create_test_user",
+                "type": "function",
+                "static": true,
+                "location": "misago/users/test.py:60"
+              }
+            ]
+          },
+          {
+            "name": "models",
+            "type": "package",
+            "children": [
+              {
+                "name": "user",
+                "type": "package",
+                "children": [
+                  {
+                    "name": "UserManager",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "create_user",
+                        "type": "function",
+                        "static": false,
+                        "location": "misago/users/models/user.py:61"
+                      },
+                      {
+                        "name": "_create_user",
+                        "type": "function",
+                        "static": false,
+                        "location": "misago/users/models/user.py:26"
+                      },
+                      {
+                        "name": "_assert_user_has_authenticated_role",
+                        "type": "function",
+                        "static": false,
+                        "location": "misago/users/models/user.py:54"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "User",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "set_username",
+                        "type": "function",
+                        "static": false,
+                        "location": "misago/users/models/user.py:333"
+                      },
+                      {
+                        "name": "set_email",
+                        "type": "function",
+                        "static": false,
+                        "location": "misago/users/models/user.py:360"
+                      },
+                      {
+                        "name": "update_acl_key",
+                        "type": "function",
+                        "static": false,
+                        "location": "misago/users/models/user.py:385"
+                      },
+                      {
+                        "name": "get_roles",
+                        "type": "function",
+                        "static": false,
+                        "location": "misago/users/models/user.py:367"
+                      },
+                      {
+                        "name": "get_username",
+                        "type": "function",
+                        "static": false,
+                        "location": "misago/users/models/user.py:320"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "rank",
+                "type": "package",
+                "children": [
+                  {
+                    "name": "RankManager",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "get_default",
+                        "type": "function",
+                        "static": false,
+                        "location": "misago/users/models/rank.py:9"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "online",
+                "type": "package",
+                "children": [
+                  {
+                    "name": "Online",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "save",
+                        "type": "function",
+                        "static": false,
+                        "location": "misago/users/models/online.py:15"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "utils",
+            "type": "class",
+            "children": [
+              {
+                "name": "hash_email",
+                "type": "function",
+                "static": true,
+                "location": "misago/users/utils.py:4"
+              }
+            ]
+          },
+          {
+            "name": "middleware",
+            "type": "package",
+            "children": [
+              {
+                "name": "RealIPMiddleware",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "process_request",
+                    "type": "function",
+                    "static": false,
+                    "location": "misago/users/middleware.py:10"
+                  }
+                ]
+              },
+              {
+                "name": "UserMiddleware",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "process_request",
+                    "type": "function",
+                    "static": false,
+                    "location": "misago/users/middleware.py:19"
+                  }
+                ]
+              },
+              {
+                "name": "OnlineTrackerMiddleware",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "process_request",
+                    "type": "function",
+                    "static": false,
+                    "location": "misago/users/middleware.py:31"
+                  },
+                  {
+                    "name": "process_response",
+                    "type": "function",
+                    "static": false,
+                    "location": "misago/users/middleware.py:40"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "authbackends",
+            "type": "package",
+            "children": [
+              {
+                "name": "MisagoBackend",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "get_user",
+                    "type": "function",
+                    "static": false,
+                    "location": "misago/users/authbackends.py:27"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "permissions",
+            "type": "package",
+            "children": [
+              {
+                "name": "account",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "build_acl",
+                    "type": "function",
+                    "static": true,
+                    "location": "misago/users/permissions/account.py:42"
+                  }
+                ]
+              },
+              {
+                "name": "profiles",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "build_acl",
+                    "type": "function",
+                    "static": true,
+                    "location": "misago/users/permissions/profiles.py:64"
+                  }
+                ]
+              },
+              {
+                "name": "moderation",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "build_acl",
+                    "type": "function",
+                    "static": true,
+                    "location": "misago/users/permissions/moderation.py:60"
+                  }
+                ]
+              },
+              {
+                "name": "delete",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "build_acl",
+                    "type": "function",
+                    "static": true,
+                    "location": "misago/users/permissions/delete.py:44"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "online",
+            "type": "package",
+            "children": [
+              {
+                "name": "tracker",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "update_tracker",
+                    "type": "function",
+                    "static": true,
+                    "location": "misago/users/online/tracker.py:18"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "core",
+        "type": "package",
+        "children": [
+          {
+            "name": "slugify",
+            "type": "class",
+            "children": [
+              {
+                "name": "default",
+                "type": "function",
+                "static": true,
+                "location": "misago/core/slugify.py:5"
+              }
+            ]
+          },
+          {
+            "name": "middleware",
+            "type": "package",
+            "children": [
+              {
+                "name": "FrontendContextMiddleware",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "process_request",
+                    "type": "function",
+                    "static": false,
+                    "location": "misago/core/middleware.py:17"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "mail",
+            "type": "class",
+            "children": [
+              {
+                "name": "mail_users",
+                "type": "function",
+                "static": true,
+                "location": "misago/core/mail.py:43"
+              },
+              {
+                "name": "build_mail",
+                "type": "function",
+                "static": true,
+                "location": "misago/core/mail.py:9"
+              },
+              {
+                "name": "send_messages",
+                "type": "function",
+                "static": true,
+                "location": "misago/core/mail.py:53"
+              }
+            ]
+          },
+          {
+            "name": "utils",
+            "type": "class",
+            "children": [
+              {
+                "name": "get_host_from_address",
+                "type": "function",
+                "static": true,
+                "location": "misago/core/utils.py:158"
+              }
+            ]
+          },
+          {
+            "name": "templatetags",
+            "type": "package",
+            "children": [
+              {
+                "name": "misago_capture",
+                "type": "package",
+                "children": [
+                  {
+                    "name": "CaptureNode",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "render",
+                        "type": "function",
+                        "static": false,
+                        "location": "misago/core/templatetags/misago_capture.py:44"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "test",
+        "type": "package",
+        "children": [
+          {
+            "name": "MisagoClient",
+            "type": "class",
+            "children": [
+              {
+                "name": "post",
+                "type": "function",
+                "static": false,
+                "location": "misago/test.py:62"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "cache",
+        "type": "package",
+        "children": [
+          {
+            "name": "versions",
+            "type": "class",
+            "children": [
+              {
+                "name": "get_cache_versions",
+                "type": "function",
+                "static": true,
+                "location": "misago/cache/versions.py:5"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "acl",
+        "type": "package",
+        "children": [
+          {
+            "name": "useracl",
+            "type": "class",
+            "children": [
+              {
+                "name": "get_user_acl",
+                "type": "function",
+                "static": true,
+                "location": "misago/acl/useracl.py:8"
+              }
+            ]
+          },
+          {
+            "name": "cache",
+            "type": "class",
+            "children": [
+              {
+                "name": "get_acl_cache",
+                "type": "function",
+                "static": true,
+                "location": "misago/acl/cache.py:7"
+              },
+              {
+                "name": "get_cache_key",
+                "type": "function",
+                "static": true,
+                "location": "misago/acl/cache.py:17"
+              },
+              {
+                "name": "set_acl_cache",
+                "type": "function",
+                "static": true,
+                "location": "misago/acl/cache.py:12"
+              }
+            ]
+          },
+          {
+            "name": "buildacl",
+            "type": "class",
+            "children": [
+              {
+                "name": "build_acl",
+                "type": "function",
+                "static": true,
+                "location": "misago/acl/buildacl.py:4"
+              }
+            ]
+          },
+          {
+            "name": "providers",
+            "type": "package",
+            "children": [
+              {
+                "name": "PermissionProviders",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "list",
+                    "type": "function",
+                    "static": false,
+                    "location": "misago/acl/providers.py:67"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "algebra",
+            "type": "class",
+            "children": [
+              {
+                "name": "sum_acls",
+                "type": "function",
+                "static": true,
+                "location": "misago/acl/algebra.py:10"
+              },
+              {
+                "name": "_roles_acls",
+                "type": "function",
+                "static": true,
+                "location": "misago/acl/algebra.py:1"
+              },
+              {
+                "name": "greater",
+                "type": "function",
+                "static": true,
+                "location": "misago/acl/algebra.py:43"
+              },
+              {
+                "name": "lower_non_zero",
+                "type": "function",
+                "static": true,
+                "location": "misago/acl/algebra.py:59"
+              },
+              {
+                "name": "lower",
+                "type": "function",
+                "static": true,
+                "location": "misago/acl/algebra.py:55"
+              },
+              {
+                "name": "greater_or_zero",
+                "type": "function",
+                "static": true,
+                "location": "misago/acl/algebra.py:47"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "categories",
+        "type": "package",
+        "children": [
+          {
+            "name": "permissions",
+            "type": "class",
+            "children": [
+              {
+                "name": "build_acl",
+                "type": "function",
+                "static": true,
+                "location": "misago/categories/permissions.py:24"
+              },
+              {
+                "name": "get_categories_roles",
+                "type": "function",
+                "static": true,
+                "location": "misago/categories/permissions.py:36"
+              },
+              {
+                "name": "build_category_acl",
+                "type": "function",
+                "static": true,
+                "location": "misago/categories/permissions.py:47"
+              }
+            ]
+          },
+          {
+            "name": "models",
+            "type": "package",
+            "children": [
+              {
+                "name": "CategoryManager",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "all_categories",
+                    "type": "function",
+                    "static": false,
+                    "location": "misago/categories/models.py:32"
+                  },
+                  {
+                    "name": "private_threads",
+                    "type": "function",
+                    "static": false,
+                    "location": "misago/categories/models.py:17"
+                  },
+                  {
+                    "name": "get_special",
+                    "type": "function",
+                    "static": false,
+                    "location": "misago/categories/models.py:23"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "threads",
+        "type": "package",
+        "children": [
+          {
+            "name": "threadtypes",
+            "type": "package",
+            "children": [
+              {
+                "name": "treesmap",
+                "type": "package",
+                "children": [
+                  {
+                    "name": "TreesMap",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "get_tree_id_for_root",
+                        "type": "function",
+                        "static": false,
+                        "location": "misago/threads/threadtypes/treesmap.py:49"
+                      },
+                      {
+                        "name": "get_type_for_tree_id",
+                        "type": "function",
+                        "static": false,
+                        "location": "misago/threads/threadtypes/treesmap.py:40"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "thread",
+                "type": "package",
+                "children": [
+                  {
+                    "name": "Thread",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "get_category_name",
+                        "type": "function",
+                        "static": false,
+                        "location": "misago/threads/threadtypes/thread.py:11"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "privatethread",
+                "type": "package",
+                "children": [
+                  {
+                    "name": "PrivateThread",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "get_category_name",
+                        "type": "function",
+                        "static": false,
+                        "location": "misago/threads/threadtypes/privatethread.py:11"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "permissions",
+            "type": "package",
+            "children": [
+              {
+                "name": "attachments",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "build_acl",
+                    "type": "function",
+                    "static": true,
+                    "location": "misago/threads/permissions/attachments.py:43"
+                  }
+                ]
+              },
+              {
+                "name": "polls",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "build_acl",
+                    "type": "function",
+                    "static": true,
+                    "location": "misago/threads/permissions/polls.py:67"
+                  }
+                ]
+              },
+              {
+                "name": "threads",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "build_acl",
+                    "type": "function",
+                    "static": true,
+                    "location": "misago/threads/permissions/threads.py:233"
+                  },
+                  {
+                    "name": "build_category_acl",
+                    "type": "function",
+                    "static": true,
+                    "location": "misago/threads/permissions/threads.py:271"
+                  }
+                ]
+              },
+              {
+                "name": "privatethreads",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "build_acl",
+                    "type": "function",
+                    "static": true,
+                    "location": "misago/threads/permissions/privatethreads.py:70"
+                  }
+                ]
+              },
+              {
+                "name": "bestanswers",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "build_acl",
+                    "type": "function",
+                    "static": true,
+                    "location": "misago/threads/permissions/bestanswers.py:60"
+                  },
+                  {
+                    "name": "build_category_acl",
+                    "type": "function",
+                    "static": true,
+                    "location": "misago/threads/permissions/bestanswers.py:85"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "middleware",
+            "type": "package",
+            "children": [
+              {
+                "name": "UnreadThreadsCountMiddleware",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "process_request",
+                    "type": "function",
+                    "static": false,
+                    "location": "misago/threads/middleware.py:9"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "search",
+        "type": "package",
+        "children": [
+          {
+            "name": "permissions",
+            "type": "class",
+            "children": [
+              {
+                "name": "build_acl",
+                "type": "function",
+                "static": true,
+                "location": "misago/search/permissions.py:20"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "admin",
+        "type": "package",
+        "children": [
+          {
+            "name": "middleware",
+            "type": "package",
+            "children": [
+              {
+                "name": "AdminAuthMiddleware",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "process_view",
+                    "type": "function",
+                    "static": false,
+                    "location": "misago/admin/middleware.py:14"
+                  },
+                  {
+                    "name": "check_admin_authorization",
+                    "type": "function",
+                    "static": false,
+                    "location": "misago/admin/middleware.py:19"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "views",
+            "type": "class",
+            "children": [
+              {
+                "name": "get_protected_namespace",
+                "type": "function",
+                "static": true,
+                "location": "misago/admin/views/__init__.py:13"
+              },
+              {
+                "name": "generic",
+                "type": "package",
+                "children": [
+                  {
+                    "name": "list",
+                    "type": "package",
+                    "children": [
+                      {
+                        "name": "ListView",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "dispatch",
+                            "type": "function",
+                            "static": false,
+                            "location": "misago/admin/views/generic/list.py:61"
+                          },
+                          {
+                            "name": "get_queryset",
+                            "type": "function",
+                            "static": false,
+                            "location": "misago/admin/views/generic/list.py:58"
+                          },
+                          {
+                            "name": "handle_mass_action",
+                            "type": "function",
+                            "static": false,
+                            "location": "misago/admin/views/generic/list.py:281"
+                          },
+                          {
+                            "name": "select_mass_action",
+                            "type": "function",
+                            "static": false,
+                            "location": "misago/admin/views/generic/list.py:303"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "mixin",
+                    "type": "package",
+                    "children": [
+                      {
+                        "name": "AdminBaseMixin",
+                        "type": "class",
+                        "children": [
+                          {
+                            "name": "get_model",
+                            "type": "function",
+                            "static": false,
+                            "location": "misago/admin/views/generic/mixin.py:18"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "auth",
+            "type": "class",
+            "children": [
+              {
+                "name": "is_admin_authorized",
+                "type": "function",
+                "static": true,
+                "location": "misago/admin/auth.py:14"
+              },
+              {
+                "name": "make_user_admin_token",
+                "type": "function",
+                "static": true,
+                "location": "misago/admin/auth.py:49"
+              },
+              {
+                "name": "update_admin_authorization",
+                "type": "function",
+                "static": true,
+                "location": "misago/admin/auth.py:40"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "conf",
+        "type": "package",
+        "children": [
+          {
+            "name": "cache",
+            "type": "class",
+            "children": [
+              {
+                "name": "get_settings_cache",
+                "type": "function",
+                "static": true,
+                "location": "misago/conf/cache.py:7"
+              },
+              {
+                "name": "get_cache_key",
+                "type": "function",
+                "static": true,
+                "location": "misago/conf/cache.py:17"
+              },
+              {
+                "name": "set_settings_cache",
+                "type": "function",
+                "static": true,
+                "location": "misago/conf/cache.py:12"
+              }
+            ]
+          },
+          {
+            "name": "dynamicsettings",
+            "type": "class",
+            "children": [
+              {
+                "name": "get_settings_from_db",
+                "type": "function",
+                "static": true,
+                "location": "misago/conf/dynamicsettings.py:53"
+              }
+            ]
+          },
+          {
+            "name": "hydrators",
+            "type": "class",
+            "children": [
+              {
+                "name": "hydrate_value",
+                "type": "function",
+                "static": true,
+                "location": "misago/conf/hydrators.py:49"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "SELECT \"misago_users_rank\".\"id\", \"misago_users_rank\".\"name\", \"misago_users_rank\".\"slug\", \"misago_users_rank\".\"description\", \"misago_users_rank\".\"title\", \"misago_users_rank\".\"css_class\", \"misago_users_rank\".\"is_default\", \"misago_users_rank\".\"is_tab\", \"misago_users_rank\".\"order\" FROM \"misago_users_rank\" WHERE \"misago_users_rank\".\"is_default\" = true"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"misago_users_user\" (\"password\", \"last_login\", \"is_superuser\", \"username\", \"slug\", \"email\", \"email_hash\", \"joined_on\", \"joined_from_ip\", \"is_hiding_presence\", \"rank_id\", \"title\", \"requires_activation\", \"is_staff\", \"acl_key\", \"is_active\", \"is_active_staff_message\", \"is_deleting_account\", \"avatar_tmp\", \"avatar_src\", \"avatar_crop\", \"avatars\", \"is_avatar_locked\", \"avatar_lock_user_message\", \"avatar_lock_staff_message\", \"signature\", \"signature_parsed\", \"signature_checksum\", \"is_signature_locked\", \"signature_lock_user_message\", \"signature_lock_staff_message\", \"followers\", \"following\", \"limits_private_thread_invites_to\", \"unread_private_threads\", \"sync_unread_private_threads\", \"subscribe_to_started_threads\", \"subscribe_to_replied_threads\", \"threads\", \"posts\", \"last_posted_on\", \"profile_fields\", \"agreements\", \"sso_id\") VALUES ('!FQRWXBt0vrpYIfAupkWgemhKBXfXwQ1MNSZzc8m8', '2021-11-18T04:36:14.259910+00:00'::timestamptz, false, 'User0', 'user0', 'user0@gmail.com', '92142d94467f32e4ee184fd6ad21b903', '2021-11-18T04:36:14.259910+00:00'::timestamptz, NULL, false, 2, NULL, 1, false, NULL, true, NULL, false, '', '', NULL, '[{\"size\": 400, \"url\": \"http://placekitten.com/400/400\"}, {\"size\": 200, \"url\": \"http://placekitten.com/200/200\"}, {\"size\": 100, \"url\": \"http://placekitten.com/100/100\"}]', false, NULL, NULL, NULL, NULL, NULL, false, NULL, NULL, 0, 0, 0, 0, false, 0, 0, 0, 0, NULL, ''::hstore, '{}'::integer[], NULL) RETURNING \"misago_users_user\".\"id\""
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_acl_role\".\"id\", \"misago_acl_role\".\"name\", \"misago_acl_role\".\"special_role\", \"misago_acl_role\".\"permissions\" FROM \"misago_acl_role\" WHERE \"misago_acl_role\".\"special_role\" = 'authenticated'"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_acl_role\".\"id\", \"misago_acl_role\".\"name\", \"misago_acl_role\".\"special_role\", \"misago_acl_role\".\"permissions\" FROM \"misago_acl_role\" INNER JOIN \"misago_users_user_roles\" ON (\"misago_acl_role\".\"id\" = \"misago_users_user_roles\".\"role_id\") WHERE \"misago_users_user_roles\".\"user_id\" = 2215"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_users_user_roles\".\"role_id\" FROM \"misago_users_user_roles\" WHERE (\"misago_users_user_roles\".\"role_id\" IN (1) AND \"misago_users_user_roles\".\"user_id\" = 2215)"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"misago_users_user_roles\" (\"user_id\", \"role_id\") VALUES (2215, 1) RETURNING \"misago_users_user_roles\".\"id\""
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_acl_role\".\"id\", \"misago_acl_role\".\"name\", \"misago_acl_role\".\"special_role\", \"misago_acl_role\".\"permissions\" FROM \"misago_acl_role\" INNER JOIN \"misago_users_rank_roles\" ON (\"misago_acl_role\".\"id\" = \"misago_users_rank_roles\".\"role_id\") WHERE \"misago_users_rank_roles\".\"rank_id\" = 2"
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"misago_users_user\" SET \"acl_key\" = '92a09fed2d57' WHERE \"misago_users_user\".\"id\" = 2215"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"misago_users_online\" (\"user_id\", \"last_click\") VALUES (2215, '2021-11-18T04:36:14.259910+00:00'::timestamptz)"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"misago_users_user\" (\"password\", \"last_login\", \"is_superuser\", \"username\", \"slug\", \"email\", \"email_hash\", \"joined_on\", \"joined_from_ip\", \"is_hiding_presence\", \"rank_id\", \"title\", \"requires_activation\", \"is_staff\", \"acl_key\", \"is_active\", \"is_active_staff_message\", \"is_deleting_account\", \"avatar_tmp\", \"avatar_src\", \"avatar_crop\", \"avatars\", \"is_avatar_locked\", \"avatar_lock_user_message\", \"avatar_lock_staff_message\", \"signature\", \"signature_parsed\", \"signature_checksum\", \"is_signature_locked\", \"signature_lock_user_message\", \"signature_lock_staff_message\", \"followers\", \"following\", \"limits_private_thread_invites_to\", \"unread_private_threads\", \"sync_unread_private_threads\", \"subscribe_to_started_threads\", \"subscribe_to_replied_threads\", \"threads\", \"posts\", \"last_posted_on\", \"profile_fields\", \"agreements\", \"sso_id\") VALUES ('!4bbodZey31rD4n3H49hYlmoPOcyxURPmnUcLxsXM', '2021-11-18T04:36:14.269940+00:00'::timestamptz, false, 'User1', 'user1', 'user1@gmail.com', '59029276955677351421b3ff6bf5ee4c', '2021-11-18T04:36:14.269940+00:00'::timestamptz, NULL, false, 2, NULL, 1, false, NULL, true, NULL, false, '', '', NULL, '[{\"size\": 400, \"url\": \"http://placekitten.com/400/400\"}, {\"size\": 200, \"url\": \"http://placekitten.com/200/200\"}, {\"size\": 100, \"url\": \"http://placekitten.com/100/100\"}]', false, NULL, NULL, NULL, NULL, NULL, false, NULL, NULL, 0, 0, 0, 0, false, 0, 0, 0, 0, NULL, ''::hstore, '{}'::integer[], NULL) RETURNING \"misago_users_user\".\"id\""
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_acl_role\".\"id\", \"misago_acl_role\".\"name\", \"misago_acl_role\".\"special_role\", \"misago_acl_role\".\"permissions\" FROM \"misago_acl_role\" INNER JOIN \"misago_users_user_roles\" ON (\"misago_acl_role\".\"id\" = \"misago_users_user_roles\".\"role_id\") WHERE \"misago_users_user_roles\".\"user_id\" = 2216"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_users_user_roles\".\"role_id\" FROM \"misago_users_user_roles\" WHERE (\"misago_users_user_roles\".\"role_id\" IN (1) AND \"misago_users_user_roles\".\"user_id\" = 2216)"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"misago_users_user_roles\" (\"user_id\", \"role_id\") VALUES (2216, 1) RETURNING \"misago_users_user_roles\".\"id\""
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"misago_users_user\" SET \"acl_key\" = '92a09fed2d57' WHERE \"misago_users_user\".\"id\" = 2216"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"misago_users_online\" (\"user_id\", \"last_click\") VALUES (2216, '2021-11-18T04:36:14.269940+00:00'::timestamptz)"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"misago_users_user\" (\"password\", \"last_login\", \"is_superuser\", \"username\", \"slug\", \"email\", \"email_hash\", \"joined_on\", \"joined_from_ip\", \"is_hiding_presence\", \"rank_id\", \"title\", \"requires_activation\", \"is_staff\", \"acl_key\", \"is_active\", \"is_active_staff_message\", \"is_deleting_account\", \"avatar_tmp\", \"avatar_src\", \"avatar_crop\", \"avatars\", \"is_avatar_locked\", \"avatar_lock_user_message\", \"avatar_lock_staff_message\", \"signature\", \"signature_parsed\", \"signature_checksum\", \"is_signature_locked\", \"signature_lock_user_message\", \"signature_lock_staff_message\", \"followers\", \"following\", \"limits_private_thread_invites_to\", \"unread_private_threads\", \"sync_unread_private_threads\", \"subscribe_to_started_threads\", \"subscribe_to_replied_threads\", \"threads\", \"posts\", \"last_posted_on\", \"profile_fields\", \"agreements\", \"sso_id\") VALUES ('!bgFhJzDuLwRgeC13lnlPVjHF6Zn59UOZZBTxngKM', '2021-11-18T04:36:14.279918+00:00'::timestamptz, false, 'User2', 'user2', 'user2@gmail.com', 'fa7c3fcb670a58aa3e90a391ea533c99', '2021-11-18T04:36:14.279918+00:00'::timestamptz, NULL, false, 2, NULL, 1, false, NULL, true, NULL, false, '', '', NULL, '[{\"size\": 400, \"url\": \"http://placekitten.com/400/400\"}, {\"size\": 200, \"url\": \"http://placekitten.com/200/200\"}, {\"size\": 100, \"url\": \"http://placekitten.com/100/100\"}]', false, NULL, NULL, NULL, NULL, NULL, false, NULL, NULL, 0, 0, 0, 0, false, 0, 0, 0, 0, NULL, ''::hstore, '{}'::integer[], NULL) RETURNING \"misago_users_user\".\"id\""
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_acl_role\".\"id\", \"misago_acl_role\".\"name\", \"misago_acl_role\".\"special_role\", \"misago_acl_role\".\"permissions\" FROM \"misago_acl_role\" INNER JOIN \"misago_users_user_roles\" ON (\"misago_acl_role\".\"id\" = \"misago_users_user_roles\".\"role_id\") WHERE \"misago_users_user_roles\".\"user_id\" = 2217"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_users_user_roles\".\"role_id\" FROM \"misago_users_user_roles\" WHERE (\"misago_users_user_roles\".\"role_id\" IN (1) AND \"misago_users_user_roles\".\"user_id\" = 2217)"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"misago_users_user_roles\" (\"user_id\", \"role_id\") VALUES (2217, 1) RETURNING \"misago_users_user_roles\".\"id\""
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"misago_users_user\" SET \"acl_key\" = '92a09fed2d57' WHERE \"misago_users_user\".\"id\" = 2217"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"misago_users_online\" (\"user_id\", \"last_click\") VALUES (2217, '2021-11-18T04:36:14.279918+00:00'::timestamptz)"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"misago_users_user\" (\"password\", \"last_login\", \"is_superuser\", \"username\", \"slug\", \"email\", \"email_hash\", \"joined_on\", \"joined_from_ip\", \"is_hiding_presence\", \"rank_id\", \"title\", \"requires_activation\", \"is_staff\", \"acl_key\", \"is_active\", \"is_active_staff_message\", \"is_deleting_account\", \"avatar_tmp\", \"avatar_src\", \"avatar_crop\", \"avatars\", \"is_avatar_locked\", \"avatar_lock_user_message\", \"avatar_lock_staff_message\", \"signature\", \"signature_parsed\", \"signature_checksum\", \"is_signature_locked\", \"signature_lock_user_message\", \"signature_lock_staff_message\", \"followers\", \"following\", \"limits_private_thread_invites_to\", \"unread_private_threads\", \"sync_unread_private_threads\", \"subscribe_to_started_threads\", \"subscribe_to_replied_threads\", \"threads\", \"posts\", \"last_posted_on\", \"profile_fields\", \"agreements\", \"sso_id\") VALUES ('!TQdafTGifRkZ2IyEbbFLnQqg60o7hU3LBe1Icq1M', '2021-11-18T04:36:14.289585+00:00'::timestamptz, false, 'User3', 'user3', 'user3@gmail.com', 'a3012064ea70afa9351e80e4a62b5dcb', '2021-11-18T04:36:14.289585+00:00'::timestamptz, NULL, false, 2, NULL, 1, false, NULL, true, NULL, false, '', '', NULL, '[{\"size\": 400, \"url\": \"http://placekitten.com/400/400\"}, {\"size\": 200, \"url\": \"http://placekitten.com/200/200\"}, {\"size\": 100, \"url\": \"http://placekitten.com/100/100\"}]', false, NULL, NULL, NULL, NULL, NULL, false, NULL, NULL, 0, 0, 0, 0, false, 0, 0, 0, 0, NULL, ''::hstore, '{}'::integer[], NULL) RETURNING \"misago_users_user\".\"id\""
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_acl_role\".\"id\", \"misago_acl_role\".\"name\", \"misago_acl_role\".\"special_role\", \"misago_acl_role\".\"permissions\" FROM \"misago_acl_role\" INNER JOIN \"misago_users_user_roles\" ON (\"misago_acl_role\".\"id\" = \"misago_users_user_roles\".\"role_id\") WHERE \"misago_users_user_roles\".\"user_id\" = 2218"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_users_user_roles\".\"role_id\" FROM \"misago_users_user_roles\" WHERE (\"misago_users_user_roles\".\"role_id\" IN (1) AND \"misago_users_user_roles\".\"user_id\" = 2218)"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"misago_users_user_roles\" (\"user_id\", \"role_id\") VALUES (2218, 1) RETURNING \"misago_users_user_roles\".\"id\""
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"misago_users_user\" SET \"acl_key\" = '92a09fed2d57' WHERE \"misago_users_user\".\"id\" = 2218"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"misago_users_online\" (\"user_id\", \"last_click\") VALUES (2218, '2021-11-18T04:36:14.289585+00:00'::timestamptz)"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"misago_users_user\" (\"password\", \"last_login\", \"is_superuser\", \"username\", \"slug\", \"email\", \"email_hash\", \"joined_on\", \"joined_from_ip\", \"is_hiding_presence\", \"rank_id\", \"title\", \"requires_activation\", \"is_staff\", \"acl_key\", \"is_active\", \"is_active_staff_message\", \"is_deleting_account\", \"avatar_tmp\", \"avatar_src\", \"avatar_crop\", \"avatars\", \"is_avatar_locked\", \"avatar_lock_user_message\", \"avatar_lock_staff_message\", \"signature\", \"signature_parsed\", \"signature_checksum\", \"is_signature_locked\", \"signature_lock_user_message\", \"signature_lock_staff_message\", \"followers\", \"following\", \"limits_private_thread_invites_to\", \"unread_private_threads\", \"sync_unread_private_threads\", \"subscribe_to_started_threads\", \"subscribe_to_replied_threads\", \"threads\", \"posts\", \"last_posted_on\", \"profile_fields\", \"agreements\", \"sso_id\") VALUES ('!Ft8C5cNWzRbUwLzfmeEnznGNWAO6BYrYfKcfUkRd', '2021-11-18T04:36:14.299157+00:00'::timestamptz, false, 'User4', 'user4', 'user4@gmail.com', 'de934b5a66b34c72636d2e34ad075e8d', '2021-11-18T04:36:14.299157+00:00'::timestamptz, NULL, false, 2, NULL, 1, false, NULL, true, NULL, false, '', '', NULL, '[{\"size\": 400, \"url\": \"http://placekitten.com/400/400\"}, {\"size\": 200, \"url\": \"http://placekitten.com/200/200\"}, {\"size\": 100, \"url\": \"http://placekitten.com/100/100\"}]', false, NULL, NULL, NULL, NULL, NULL, false, NULL, NULL, 0, 0, 0, 0, false, 0, 0, 0, 0, NULL, ''::hstore, '{}'::integer[], NULL) RETURNING \"misago_users_user\".\"id\""
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_acl_role\".\"id\", \"misago_acl_role\".\"name\", \"misago_acl_role\".\"special_role\", \"misago_acl_role\".\"permissions\" FROM \"misago_acl_role\" INNER JOIN \"misago_users_user_roles\" ON (\"misago_acl_role\".\"id\" = \"misago_users_user_roles\".\"role_id\") WHERE \"misago_users_user_roles\".\"user_id\" = 2219"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_users_user_roles\".\"role_id\" FROM \"misago_users_user_roles\" WHERE (\"misago_users_user_roles\".\"role_id\" IN (1) AND \"misago_users_user_roles\".\"user_id\" = 2219)"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"misago_users_user_roles\" (\"user_id\", \"role_id\") VALUES (2219, 1) RETURNING \"misago_users_user_roles\".\"id\""
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"misago_users_user\" SET \"acl_key\" = '92a09fed2d57' WHERE \"misago_users_user\".\"id\" = 2219"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"misago_users_online\" (\"user_id\", \"last_click\") VALUES (2219, '2021-11-18T04:36:14.299157+00:00'::timestamptz)"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_cache_cacheversion\".\"cache\", \"misago_cache_cacheversion\".\"version\" FROM \"misago_cache_cacheversion\""
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"django_session\".\"session_key\", \"django_session\".\"session_data\", \"django_session\".\"expire_date\" FROM \"django_session\" WHERE (\"django_session\".\"expire_date\" > '2021-11-18T04:36:14.310357+00:00'::timestamptz AND \"django_session\".\"session_key\" = 'ofkw0znvj5pgesc7zds74l232h4ipale')"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_users_user\".\"id\", \"misago_users_user\".\"password\", \"misago_users_user\".\"last_login\", \"misago_users_user\".\"is_superuser\", \"misago_users_user\".\"username\", \"misago_users_user\".\"slug\", \"misago_users_user\".\"email\", \"misago_users_user\".\"email_hash\", \"misago_users_user\".\"joined_on\", \"misago_users_user\".\"joined_from_ip\", \"misago_users_user\".\"is_hiding_presence\", \"misago_users_user\".\"rank_id\", \"misago_users_user\".\"title\", \"misago_users_user\".\"requires_activation\", \"misago_users_user\".\"is_staff\", \"misago_users_user\".\"acl_key\", \"misago_users_user\".\"is_active\", \"misago_users_user\".\"is_active_staff_message\", \"misago_users_user\".\"is_deleting_account\", \"misago_users_user\".\"avatar_tmp\", \"misago_users_user\".\"avatar_src\", \"misago_users_user\".\"avatar_crop\", \"misago_users_user\".\"avatars\", \"misago_users_user\".\"is_avatar_locked\", \"misago_users_user\".\"avatar_lock_user_message\", \"misago_users_user\".\"avatar_lock_staff_message\", \"misago_users_user\".\"signature\", \"misago_users_user\".\"signature_parsed\", \"misago_users_user\".\"signature_checksum\", \"misago_users_user\".\"is_signature_locked\", \"misago_users_user\".\"signature_lock_user_message\", \"misago_users_user\".\"signature_lock_staff_message\", \"misago_users_user\".\"followers\", \"misago_users_user\".\"following\", \"misago_users_user\".\"limits_private_thread_invites_to\", \"misago_users_user\".\"unread_private_threads\", \"misago_users_user\".\"sync_unread_private_threads\", \"misago_users_user\".\"subscribe_to_started_threads\", \"misago_users_user\".\"subscribe_to_replied_threads\", \"misago_users_user\".\"threads\", \"misago_users_user\".\"posts\", \"misago_users_user\".\"last_posted_on\", \"misago_users_user\".\"profile_fields\", \"misago_users_user\".\"agreements\", \"misago_users_user\".\"sso_id\", \"misago_users_rank\".\"id\", \"misago_users_rank\".\"name\", \"misago_users_rank\".\"slug\", \"misago_users_rank\".\"description\", \"misago_users_rank\".\"title\", \"misago_users_rank\".\"css_class\", \"misago_users_rank\".\"is_default\", \"misago_users_rank\".\"is_tab\", \"misago_users_rank\".\"order\", \"misago_users_online\".\"user_id\", \"misago_users_online\".\"last_click\", \"misago_users_bancache\".\"user_id\", \"misago_users_bancache\".\"ban_id\", \"misago_users_bancache\".\"cache_version\", \"misago_users_bancache\".\"user_message\", \"misago_users_bancache\".\"staff_message\", \"misago_users_bancache\".\"expires_on\" FROM \"misago_users_user\" LEFT OUTER JOIN \"misago_users_rank\" ON (\"misago_users_user\".\"rank_id\" = \"misago_users_rank\".\"id\") LEFT OUTER JOIN \"misago_users_online\" ON (\"misago_users_user\".\"id\" = \"misago_users_online\".\"user_id\") LEFT OUTER JOIN \"misago_users_bancache\" ON (\"misago_users_user\".\"id\" = \"misago_users_bancache\".\"user_id\") WHERE \"misago_users_user\".\"id\" = 2214"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_acl_role\".\"id\", \"misago_acl_role\".\"name\", \"misago_acl_role\".\"special_role\", \"misago_acl_role\".\"permissions\" FROM \"misago_acl_role\" INNER JOIN \"misago_users_user_roles\" ON (\"misago_acl_role\".\"id\" = \"misago_users_user_roles\".\"role_id\") WHERE \"misago_users_user_roles\".\"user_id\" = 2214"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_acl_role\".\"id\", \"misago_acl_role\".\"name\", \"misago_acl_role\".\"special_role\", \"misago_acl_role\".\"permissions\" FROM \"misago_acl_role\" INNER JOIN \"misago_users_rank_roles\" ON (\"misago_acl_role\".\"id\" = \"misago_users_rank_roles\".\"role_id\") WHERE \"misago_users_rank_roles\".\"rank_id\" = 1"
+      },
+      {
+        "type": "query",
+        "name": "DECLARE \"_django_curs_140273902098240_13795\" NO SCROLL CURSOR WITHOUT HOLD FOR SELECT \"misago_categories_rolecategoryacl\".\"id\", \"misago_categories_rolecategoryacl\".\"role_id\", \"misago_categories_rolecategoryacl\".\"category_id\", \"misago_categories_rolecategoryacl\".\"category_role_id\", \"misago_categories_categoryrole\".\"id\", \"misago_categories_categoryrole\".\"name\", \"misago_categories_categoryrole\".\"special_role\", \"misago_categories_categoryrole\".\"permissions\" FROM \"misago_categories_rolecategoryacl\" INNER JOIN \"misago_categories_categoryrole\" ON (\"misago_categories_rolecategoryacl\".\"category_role_id\" = \"misago_categories_categoryrole\".\"id\") WHERE \"misago_categories_rolecategoryacl\".\"role_id\" IN (1, 3, 6, 8, 9)"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_categories_category\".\"id\", \"misago_categories_category\".\"parent_id\", \"misago_categories_category\".\"special_role\", \"misago_categories_category\".\"name\", \"misago_categories_category\".\"slug\", \"misago_categories_category\".\"description\", \"misago_categories_category\".\"is_closed\", \"misago_categories_category\".\"threads\", \"misago_categories_category\".\"posts\", \"misago_categories_category\".\"last_post_on\", \"misago_categories_category\".\"last_thread_id\", \"misago_categories_category\".\"last_thread_title\", \"misago_categories_category\".\"last_thread_slug\", \"misago_categories_category\".\"last_poster_id\", \"misago_categories_category\".\"last_poster_name\", \"misago_categories_category\".\"last_poster_slug\", \"misago_categories_category\".\"require_threads_approval\", \"misago_categories_category\".\"require_replies_approval\", \"misago_categories_category\".\"require_edits_approval\", \"misago_categories_category\".\"prune_started_after\", \"misago_categories_category\".\"prune_replied_after\", \"misago_categories_category\".\"archive_pruned_in_id\", \"misago_categories_category\".\"css_class\", \"misago_categories_category\".\"lft\", \"misago_categories_category\".\"rght\", \"misago_categories_category\".\"tree_id\", \"misago_categories_category\".\"level\" FROM \"misago_categories_category\" WHERE (\"misago_categories_category\".\"tree_id\" = 1 AND \"misago_categories_category\".\"level\" > 0) ORDER BY \"misago_categories_category\".\"lft\" ASC  LIMIT 21"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_categories_category\".\"id\", \"misago_categories_category\".\"parent_id\", \"misago_categories_category\".\"special_role\", \"misago_categories_category\".\"name\", \"misago_categories_category\".\"slug\", \"misago_categories_category\".\"description\", \"misago_categories_category\".\"is_closed\", \"misago_categories_category\".\"threads\", \"misago_categories_category\".\"posts\", \"misago_categories_category\".\"last_post_on\", \"misago_categories_category\".\"last_thread_id\", \"misago_categories_category\".\"last_thread_title\", \"misago_categories_category\".\"last_thread_slug\", \"misago_categories_category\".\"last_poster_id\", \"misago_categories_category\".\"last_poster_name\", \"misago_categories_category\".\"last_poster_slug\", \"misago_categories_category\".\"require_threads_approval\", \"misago_categories_category\".\"require_replies_approval\", \"misago_categories_category\".\"require_edits_approval\", \"misago_categories_category\".\"prune_started_after\", \"misago_categories_category\".\"prune_replied_after\", \"misago_categories_category\".\"archive_pruned_in_id\", \"misago_categories_category\".\"css_class\", \"misago_categories_category\".\"lft\", \"misago_categories_category\".\"rght\", \"misago_categories_category\".\"tree_id\", \"misago_categories_category\".\"level\" FROM \"misago_categories_category\" WHERE (\"misago_categories_category\".\"tree_id\" = 1 AND \"misago_categories_category\".\"level\" > 0) ORDER BY \"misago_categories_category\".\"lft\" ASC"
+      },
+      {
+        "type": "query",
+        "name": "DECLARE \"_django_curs_140273902098240_13796\" NO SCROLL CURSOR WITHOUT HOLD FOR SELECT \"misago_categories_rolecategoryacl\".\"id\", \"misago_categories_rolecategoryacl\".\"role_id\", \"misago_categories_rolecategoryacl\".\"category_id\", \"misago_categories_rolecategoryacl\".\"category_role_id\", \"misago_categories_categoryrole\".\"id\", \"misago_categories_categoryrole\".\"name\", \"misago_categories_categoryrole\".\"special_role\", \"misago_categories_categoryrole\".\"permissions\" FROM \"misago_categories_rolecategoryacl\" INNER JOIN \"misago_categories_categoryrole\" ON (\"misago_categories_rolecategoryacl\".\"category_role_id\" = \"misago_categories_categoryrole\".\"id\") WHERE \"misago_categories_rolecategoryacl\".\"role_id\" IN (1, 3, 6, 8, 9)"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_categories_category\".\"id\", \"misago_categories_category\".\"parent_id\", \"misago_categories_category\".\"special_role\", \"misago_categories_category\".\"name\", \"misago_categories_category\".\"slug\", \"misago_categories_category\".\"description\", \"misago_categories_category\".\"is_closed\", \"misago_categories_category\".\"threads\", \"misago_categories_category\".\"posts\", \"misago_categories_category\".\"last_post_on\", \"misago_categories_category\".\"last_thread_id\", \"misago_categories_category\".\"last_thread_title\", \"misago_categories_category\".\"last_thread_slug\", \"misago_categories_category\".\"last_poster_id\", \"misago_categories_category\".\"last_poster_name\", \"misago_categories_category\".\"last_poster_slug\", \"misago_categories_category\".\"require_threads_approval\", \"misago_categories_category\".\"require_replies_approval\", \"misago_categories_category\".\"require_edits_approval\", \"misago_categories_category\".\"prune_started_after\", \"misago_categories_category\".\"prune_replied_after\", \"misago_categories_category\".\"archive_pruned_in_id\", \"misago_categories_category\".\"css_class\", \"misago_categories_category\".\"lft\", \"misago_categories_category\".\"rght\", \"misago_categories_category\".\"tree_id\", \"misago_categories_category\".\"level\" FROM \"misago_categories_category\" WHERE \"misago_categories_category\".\"tree_id\" = 1 ORDER BY \"misago_categories_category\".\"lft\" ASC  LIMIT 21"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_categories_category\".\"id\", \"misago_categories_category\".\"parent_id\", \"misago_categories_category\".\"special_role\", \"misago_categories_category\".\"name\", \"misago_categories_category\".\"slug\", \"misago_categories_category\".\"description\", \"misago_categories_category\".\"is_closed\", \"misago_categories_category\".\"threads\", \"misago_categories_category\".\"posts\", \"misago_categories_category\".\"last_post_on\", \"misago_categories_category\".\"last_thread_id\", \"misago_categories_category\".\"last_thread_title\", \"misago_categories_category\".\"last_thread_slug\", \"misago_categories_category\".\"last_poster_id\", \"misago_categories_category\".\"last_poster_name\", \"misago_categories_category\".\"last_poster_slug\", \"misago_categories_category\".\"require_threads_approval\", \"misago_categories_category\".\"require_replies_approval\", \"misago_categories_category\".\"require_edits_approval\", \"misago_categories_category\".\"prune_started_after\", \"misago_categories_category\".\"prune_replied_after\", \"misago_categories_category\".\"archive_pruned_in_id\", \"misago_categories_category\".\"css_class\", \"misago_categories_category\".\"lft\", \"misago_categories_category\".\"rght\", \"misago_categories_category\".\"tree_id\", \"misago_categories_category\".\"level\" FROM \"misago_categories_category\" WHERE \"misago_categories_category\".\"tree_id\" = 1 ORDER BY \"misago_categories_category\".\"lft\" ASC"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_categories_category\".\"id\", \"misago_categories_category\".\"parent_id\", \"misago_categories_category\".\"special_role\", \"misago_categories_category\".\"name\", \"misago_categories_category\".\"slug\", \"misago_categories_category\".\"description\", \"misago_categories_category\".\"is_closed\", \"misago_categories_category\".\"threads\", \"misago_categories_category\".\"posts\", \"misago_categories_category\".\"last_post_on\", \"misago_categories_category\".\"last_thread_id\", \"misago_categories_category\".\"last_thread_title\", \"misago_categories_category\".\"last_thread_slug\", \"misago_categories_category\".\"last_poster_id\", \"misago_categories_category\".\"last_poster_name\", \"misago_categories_category\".\"last_poster_slug\", \"misago_categories_category\".\"require_threads_approval\", \"misago_categories_category\".\"require_replies_approval\", \"misago_categories_category\".\"require_edits_approval\", \"misago_categories_category\".\"prune_started_after\", \"misago_categories_category\".\"prune_replied_after\", \"misago_categories_category\".\"archive_pruned_in_id\", \"misago_categories_category\".\"css_class\", \"misago_categories_category\".\"lft\", \"misago_categories_category\".\"rght\", \"misago_categories_category\".\"tree_id\", \"misago_categories_category\".\"level\" FROM \"misago_categories_category\" WHERE \"misago_categories_category\".\"special_role\" = 'private_threads'"
+      },
+      {
+        "type": "query",
+        "name": "DECLARE \"_django_curs_140273902098240_13797\" NO SCROLL CURSOR WITHOUT HOLD FOR SELECT \"misago_categories_rolecategoryacl\".\"id\", \"misago_categories_rolecategoryacl\".\"role_id\", \"misago_categories_rolecategoryacl\".\"category_id\", \"misago_categories_rolecategoryacl\".\"category_role_id\", \"misago_categories_categoryrole\".\"id\", \"misago_categories_categoryrole\".\"name\", \"misago_categories_categoryrole\".\"special_role\", \"misago_categories_categoryrole\".\"permissions\" FROM \"misago_categories_rolecategoryacl\" INNER JOIN \"misago_categories_categoryrole\" ON (\"misago_categories_rolecategoryacl\".\"category_role_id\" = \"misago_categories_categoryrole\".\"id\") WHERE \"misago_categories_rolecategoryacl\".\"role_id\" IN (1, 3, 6, 8, 9)"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_users_user\".\"id\", \"misago_users_user\".\"password\", \"misago_users_user\".\"last_login\", \"misago_users_user\".\"is_superuser\", \"misago_users_user\".\"username\", \"misago_users_user\".\"slug\", \"misago_users_user\".\"email\", \"misago_users_user\".\"email_hash\", \"misago_users_user\".\"joined_on\", \"misago_users_user\".\"joined_from_ip\", \"misago_users_user\".\"is_hiding_presence\", \"misago_users_user\".\"rank_id\", \"misago_users_user\".\"title\", \"misago_users_user\".\"requires_activation\", \"misago_users_user\".\"is_staff\", \"misago_users_user\".\"acl_key\", \"misago_users_user\".\"is_active\", \"misago_users_user\".\"is_active_staff_message\", \"misago_users_user\".\"is_deleting_account\", \"misago_users_user\".\"avatar_tmp\", \"misago_users_user\".\"avatar_src\", \"misago_users_user\".\"avatar_crop\", \"misago_users_user\".\"avatars\", \"misago_users_user\".\"is_avatar_locked\", \"misago_users_user\".\"avatar_lock_user_message\", \"misago_users_user\".\"avatar_lock_staff_message\", \"misago_users_user\".\"signature\", \"misago_users_user\".\"signature_parsed\", \"misago_users_user\".\"signature_checksum\", \"misago_users_user\".\"is_signature_locked\", \"misago_users_user\".\"signature_lock_user_message\", \"misago_users_user\".\"signature_lock_staff_message\", \"misago_users_user\".\"followers\", \"misago_users_user\".\"following\", \"misago_users_user\".\"limits_private_thread_invites_to\", \"misago_users_user\".\"unread_private_threads\", \"misago_users_user\".\"sync_unread_private_threads\", \"misago_users_user\".\"subscribe_to_started_threads\", \"misago_users_user\".\"subscribe_to_replied_threads\", \"misago_users_user\".\"threads\", \"misago_users_user\".\"posts\", \"misago_users_user\".\"last_posted_on\", \"misago_users_user\".\"profile_fields\", \"misago_users_user\".\"agreements\", \"misago_users_user\".\"sso_id\" FROM \"misago_users_user\"  LIMIT 21"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_users_user\".\"id\", \"misago_users_user\".\"password\", \"misago_users_user\".\"last_login\", \"misago_users_user\".\"is_superuser\", \"misago_users_user\".\"username\", \"misago_users_user\".\"slug\", \"misago_users_user\".\"email\", \"misago_users_user\".\"email_hash\", \"misago_users_user\".\"joined_on\", \"misago_users_user\".\"joined_from_ip\", \"misago_users_user\".\"is_hiding_presence\", \"misago_users_user\".\"rank_id\", \"misago_users_user\".\"title\", \"misago_users_user\".\"requires_activation\", \"misago_users_user\".\"is_staff\", \"misago_users_user\".\"acl_key\", \"misago_users_user\".\"is_active\", \"misago_users_user\".\"is_active_staff_message\", \"misago_users_user\".\"is_deleting_account\", \"misago_users_user\".\"avatar_tmp\", \"misago_users_user\".\"avatar_src\", \"misago_users_user\".\"avatar_crop\", \"misago_users_user\".\"avatars\", \"misago_users_user\".\"is_avatar_locked\", \"misago_users_user\".\"avatar_lock_user_message\", \"misago_users_user\".\"avatar_lock_staff_message\", \"misago_users_user\".\"signature\", \"misago_users_user\".\"signature_parsed\", \"misago_users_user\".\"signature_checksum\", \"misago_users_user\".\"is_signature_locked\", \"misago_users_user\".\"signature_lock_user_message\", \"misago_users_user\".\"signature_lock_staff_message\", \"misago_users_user\".\"followers\", \"misago_users_user\".\"following\", \"misago_users_user\".\"limits_private_thread_invites_to\", \"misago_users_user\".\"unread_private_threads\", \"misago_users_user\".\"sync_unread_private_threads\", \"misago_users_user\".\"subscribe_to_started_threads\", \"misago_users_user\".\"subscribe_to_replied_threads\", \"misago_users_user\".\"threads\", \"misago_users_user\".\"posts\", \"misago_users_user\".\"last_posted_on\", \"misago_users_user\".\"profile_fields\", \"misago_users_user\".\"agreements\", \"misago_users_user\".\"sso_id\", \"misago_users_rank\".\"id\", \"misago_users_rank\".\"name\", \"misago_users_rank\".\"slug\", \"misago_users_rank\".\"description\", \"misago_users_rank\".\"title\", \"misago_users_rank\".\"css_class\", \"misago_users_rank\".\"is_default\", \"misago_users_rank\".\"is_tab\", \"misago_users_rank\".\"order\" FROM \"misago_users_user\" LEFT OUTER JOIN \"misago_users_rank\" ON (\"misago_users_user\".\"rank_id\" = \"misago_users_rank\".\"id\")  LIMIT 21"
+      },
+      {
+        "type": "query",
+        "name": "SELECT (1) AS \"a\" FROM \"misago_users_user\" WHERE \"misago_users_user\".\"id\" IN (2215, 2216, 2217, 2218, 2219)  LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "SAVEPOINT \"s140273902098240_x9734\""
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"misago_users_user\".\"id\", \"misago_users_user\".\"password\", \"misago_users_user\".\"last_login\", \"misago_users_user\".\"is_superuser\", \"misago_users_user\".\"username\", \"misago_users_user\".\"slug\", \"misago_users_user\".\"email\", \"misago_users_user\".\"email_hash\", \"misago_users_user\".\"joined_on\", \"misago_users_user\".\"joined_from_ip\", \"misago_users_user\".\"is_hiding_presence\", \"misago_users_user\".\"rank_id\", \"misago_users_user\".\"title\", \"misago_users_user\".\"requires_activation\", \"misago_users_user\".\"is_staff\", \"misago_users_user\".\"acl_key\", \"misago_users_user\".\"is_active\", \"misago_users_user\".\"is_active_staff_message\", \"misago_users_user\".\"is_deleting_account\", \"misago_users_user\".\"avatar_tmp\", \"misago_users_user\".\"avatar_src\", \"misago_users_user\".\"avatar_crop\", \"misago_users_user\".\"avatars\", \"misago_users_user\".\"is_avatar_locked\", \"misago_users_user\".\"avatar_lock_user_message\", \"misago_users_user\".\"avatar_lock_staff_message\", \"misago_users_user\".\"signature\", \"misago_users_user\".\"signature_parsed\", \"misago_users_user\".\"signature_checksum\", \"misago_users_user\".\"is_signature_locked\", \"misago_users_user\".\"signature_lock_user_message\", \"misago_users_user\".\"signature_lock_staff_message\", \"misago_users_user\".\"followers\", \"misago_users_user\".\"following\", \"misago_users_user\".\"limits_private_thread_invites_to\", \"misago_users_user\".\"unread_private_threads\", \"misago_users_user\".\"sync_unread_private_threads\", \"misago_users_user\".\"subscribe_to_started_threads\", \"misago_users_user\".\"subscribe_to_replied_threads\", \"misago_users_user\".\"threads\", \"misago_users_user\".\"posts\", \"misago_users_user\".\"last_posted_on\", \"misago_users_user\".\"profile_fields\", \"misago_users_user\".\"agreements\", \"misago_users_user\".\"sso_id\", \"misago_users_rank\".\"id\", \"misago_users_rank\".\"name\", \"misago_users_rank\".\"slug\", \"misago_users_rank\".\"description\", \"misago_users_rank\".\"title\", \"misago_users_rank\".\"css_class\", \"misago_users_rank\".\"is_default\", \"misago_users_rank\".\"is_tab\", \"misago_users_rank\".\"order\" FROM \"misago_users_user\" LEFT OUTER JOIN \"misago_users_rank\" ON (\"misago_users_user\".\"rank_id\" = \"misago_users_rank\".\"id\") WHERE \"misago_users_user\".\"id\" IN (2215, 2216, 2217, 2218, 2219)"
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"misago_users_user\" SET \"requires_activation\" = 0 WHERE \"misago_users_user\".\"id\" IN (2219, 2218, 2217, 2216, 2215)"
+      },
+      {
+        "type": "query",
+        "name": "DECLARE \"_django_curs_140273902098240_13798\" NO SCROLL CURSOR WITHOUT HOLD FOR SELECT \"misago_conf_setting\".\"id\", \"misago_conf_setting\".\"setting\", \"misago_conf_setting\".\"python_type\", \"misago_conf_setting\".\"dry_value\", \"misago_conf_setting\".\"image\", \"misago_conf_setting\".\"image_size\", \"misago_conf_setting\".\"image_width\", \"misago_conf_setting\".\"image_height\", \"misago_conf_setting\".\"is_public\", \"misago_conf_setting\".\"is_lazy\" FROM \"misago_conf_setting\""
+      },
+      {
+        "type": "query",
+        "name": "RELEASE SAVEPOINT \"s140273902098240_x9734\""
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"misago_users_online\" SET \"last_click\" = '2021-11-18T04:36:14.379855+00:00'::timestamptz WHERE \"misago_users_online\".\"user_id\" = 2214"
+      },
+      {
+        "type": "query",
+        "name": "SAVEPOINT \"s140273902098240_x9735\""
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"django_session\" SET \"session_data\" = 'NTc1MmU5YjU5OTg2ZmEyOWJhMjNmMmZhZDc0NTE5MzA2YjNjZWZiMzp7Il9hdXRoX3VzZXJfaWQiOiIyMjE0IiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoibWlzYWdvLnVzZXJzLmF1dGhiYWNrZW5kcy5NaXNhZ29CYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiYzM2NWJlMGFiYmJlNTJkYTJlYzMzOThiOTFjNDQzZTkyYzgyNTVlOCIsIm1pc2Fnb19hZG1pbl9zZXNzaW9uX3Rva2VuIjoiMjk3MTYwZWMzNDUxYjQyMjBmMzlkNWUzNjFlZjhhODEiLCJtaXNhZ29fYWRtaW5fc2Vzc2lvbl91cGRhdGVkIjoxNjM3MjEwMTc0fQ==', \"expire_date\" = '2021-12-02T04:36:14.381083+00:00'::timestamptz WHERE \"django_session\".\"session_key\" = 'ofkw0znvj5pgesc7zds74l232h4ipale'"
+      },
+      {
+        "type": "query",
+        "name": "RELEASE SAVEPOINT \"s140273902098240_x9735\""
+      }
+    ]
+  },
+  {
+    "type": "http",
+    "name": "HTTP server requests",
+    "children": [
+      {
+        "type": "route",
+        "name": "POST /admincp/users/"
+      }
+    ]
+  },
+  {
+    "type": "class",
+    "name": "<templates>/MisagoTemplatesMisagoEmailsActivationBy_AdminTxt",
+    "children": [
+      {
+        "type": "function",
+        "name": "render",
+        "static": false
+      }
+    ]
+  },
+  {
+    "type": "class",
+    "name": "<templates>/MisagoTemplatesMisagoEmailsActivationBy_AdminHtml",
+    "children": [
+      {
+        "type": "function",
+        "name": "render",
+        "static": false
+      }
+    ]
+  }
+]

@@ -1,0 +1,122 @@
+[
+  {
+    "caller": "HTTP server requests->GET /:organization_id/:id/component_diagram(.:format)",
+    "callee": "app/controllers/CurrentUser"
+  },
+  {
+    "caller": "HTTP server requests->GET /:organization_id/:id/component_diagram(.:format)",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "HTTP server requests->GET /:organization_id/:id/component_diagram(.:format)",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "HTTP server requests->GET /:organization_id/:id/component_diagram(.:format)",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "app/controllers/ComponentDiagram",
+    "callee": "app/models/Mapset"
+  },
+  {
+    "caller": "app/controllers/ComponentDiagram",
+    "callee": "lib/appland/Diagram"
+  },
+  {
+    "caller": "app/controllers/CurrentUser",
+    "callee": "app/controllers/ComponentDiagram"
+  },
+  {
+    "caller": "app/controllers/CurrentUser",
+    "callee": "app/models/App"
+  },
+  {
+    "caller": "app/controllers/CurrentUser",
+    "callee": "app/models/Configuration"
+  },
+  {
+    "caller": "app/controllers/CurrentUser",
+    "callee": "app/models/Mapset"
+  },
+  {
+    "caller": "app/controllers/CurrentUser",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "app/models/App",
+    "callee": "Database->SELECT \"apps\".* FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") WHERE ((\"apps\".\"slug\" = 'appland') AND (\"orgs\".\"slug\" = 'default')) LIMIT 1"
+  },
+  {
+    "caller": "app/models/App",
+    "callee": "app/models/Mapset"
+  },
+  {
+    "caller": "app/models/App",
+    "callee": "app/models/Search"
+  },
+  {
+    "caller": "app/models/Configuration",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "Database->SELECT * FROM \"mapsets\" WHERE \"id\" = 14"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "Database->SELECT *, \"mapsets\".\"name\", \"mapsets\".\"branch\", \"mapsets\".\"commit\", \"mapsets\".\"environment\", \"mapsets\".\"version\", (SELECT \"login\" FROM \"users\" WHERE (\"id\" = \"user_id\")), (SELECT count(*) AS \"scenario_count\" FROM \"scenarios\" WHERE (\"mapset_id\" = \"mapsets\".\"id\")) FROM \"mapsets_preference_ordered\" AS \"mapsets\" WHERE (\"mapsets\".\"app_id\" = 31)"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "Database->SELECT DISTINCT \"caller\", \"callee\" FROM \"scenarios\", lateral jsonb_to_recordset(class_invocation_graph) as graph(caller q_class, callee q_class) WHERE (\"id\" IN (7, 8))"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "Database->SELECT jsonb_object_agg(compute_code_objects_by_location(data->'classMap')) AS \"code_objects_by_location\" FROM \"scenarios\" WHERE (\"id\" IN (7, 8)) LIMIT 1"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "Database->SELECT scenarios.metadata->'git'->>'repository' AS \"repository_url\", scenarios.metadata->'git'->>'commit' AS \"commit\" FROM \"scenarios\" WHERE ((scenarios.metadata->'git'->>'repository' IS NOT NULL) AND (scenarios.metadata->'git'->>'commit' IS NOT NULL) AND (\"id\" IN (7, 8))) LIMIT 1"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "app/models/App"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "app/models/DAO"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "app/models/Scenario"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "lib/appland/Diagram"
+  },
+  {
+    "caller": "app/models/Scenario",
+    "callee": "Database->SELECT \"scenarios\".\"id\", \"scenarios\".\"uuid\", metadata->>'name' AS \"name\", metadata->>'feature_group' AS \"feature_group\", metadata->>'feature' AS \"feature\", \"scenarios\".\"event_field_counts\", \"scenarios\".\"mapset_id\", \"mapsets\".\"app_id\", \"scenarios\".\"created_at\" FROM \"scenarios\" INNER JOIN \"mapsets\" ON (\"mapsets\".\"id\" = \"scenarios\".\"mapset_id\") WHERE (\"scenarios\".\"mapset_id\" = 14) ORDER BY \"scenarios\".\"created_at\" DESC"
+  },
+  {
+    "caller": "app/models/Scenario",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/models/Search",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "Database->SELECT * FROM \"users\" WHERE (\"id\" = 14) LIMIT 1"
+  },
+  {
+    "caller": "lib/appland/Diagram",
+    "callee": "json/JSON"
+  }
+]

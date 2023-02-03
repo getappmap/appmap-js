@@ -1,0 +1,116 @@
+{
+  "app": "bike_index",
+  "language": {
+    "name": "ruby",
+    "engine": "ruby",
+    "version": "2.7.3"
+  },
+  "client": {
+    "name": "appmap",
+    "url": "https://github.com/getappmap/appmap-ruby",
+    "version": "0.59.1"
+  },
+  "frameworks": [
+    {
+      "name": "rails",
+      "version": "5.2.5"
+    },
+    {
+      "name": "rspec",
+      "version": "3.9.3"
+    }
+  ],
+  "git": {
+    "repository": "git@github.com:land-of-apps/bike_index.git",
+    "branch": "appmap",
+    "commit": "44020baa94ca7287b4aa4f39b00bacea4573bab6",
+    "status": [
+      "?? .byebug_history",
+      "?? swagger/"
+    ],
+    "git_last_annotated_tag": null,
+    "git_last_tag": null,
+    "git_commits_since_last_annotated_tag": null,
+    "git_commits_since_last_tag": null
+  },
+  "name": "PaymentsController create no user email on file makes a onetime payment with no user, but associate with stripe",
+  "source_location": "spec/controllers/payments_controller_spec.rb",
+  "recorder": {
+    "name": "rspec"
+  },
+  "test_status": "succeeded",
+  "fingerprints": [
+    {
+      "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+      "canonicalization_algorithm": "classDependencies",
+      "digest": "9e24579656e1bf30f5e48fb786f5b03d107e95a86d3e4cd9cb65f535d0af578f",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+      "canonicalization_algorithm": "classes",
+      "digest": "b4a15dee0db8d25095fcedb01fcd803c9b9cbf37e7fa3f3b7c0e7fe994967a96",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+      "canonicalization_algorithm": "httpClientRequests",
+      "digest": "3d4da70b18cbdf878c57c3690d30524cf1c42e7720c4ff01c9053eeef0fdb326",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+      "canonicalization_algorithm": "httpServerRequests",
+      "digest": "944cfc0b005a6735fba49133780323ec7e77ef5e0a95749e322b1f9f520760fd",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+      "canonicalization_algorithm": "info",
+      "digest": "44a69ea0f06355d324a3b79a674b8eae09b95a300bd9145bf44a66c60ed01b3b",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+      "canonicalization_algorithm": "labels",
+      "digest": "81ce007095c70c0026f4b23a1c6c9442bea153f5d36de8eb32320d6420d2463f",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+      "canonicalization_algorithm": "packageDependencies",
+      "digest": "006b65f265916b5ec4b0f95787f5cbfc38a42a8f3012522fcb36a2a1d5c2927d",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+      "canonicalization_algorithm": "packages",
+      "digest": "d03204cda17134ed2775a16c8f1155dda76e1acaac6d6e81adf3428f3d0c617c",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+      "canonicalization_algorithm": "sqlNormalized",
+      "digest": "5aa9be7a7ce600dd712dd5fe0c55b7ea673e32410e4677523cc62322f53dd216",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+      "canonicalization_algorithm": "sqlTables",
+      "digest": "9014b23e91591b8ae7db17ed971bcafe83a72d621127f393431607bdbd55f1a3",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+      "canonicalization_algorithm": "trace",
+      "digest": "8a8248a54ae2df87c7710f54e66507477e6f4c498a1c24a45f0cf0d7ff83cb06",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "8a49854a6a3e96ec1489b063056ba16f94c7095cfcd40edc643f9c4d15af0163",
+      "canonicalization_algorithm": "update",
+      "digest": "cc81ca913740ca5578c4847f116161b5ad8bb6cdbdfcb38f83ba9808d0b982cb",
+      "fingerprint_algorithm": "sha256"
+    }
+  ]
+}

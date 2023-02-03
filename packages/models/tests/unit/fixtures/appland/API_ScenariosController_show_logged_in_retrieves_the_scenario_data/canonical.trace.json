@@ -1,0 +1,293 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "GET /api/scenarios/:id(.:format)",
+    "parameter_names": ["mode", "controller", "action", "id"],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "function": "app/models/ApiKey.authenticate",
+        "labels": ["provider.authentication"],
+        "children": [
+          {
+            "kind": "function",
+            "function": "app/models/ApiKey.decode",
+            "labels": []
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "normalized_query": "SELECT * FROM \"api_keys\" WHERE (\"login\" = ?)"
+            },
+            "analyzed_query": {
+              "actions": ["select"],
+              "tables": ["api_keys"],
+              "columns": ["*", "login"],
+              "joinCount": 0
+            }
+          },
+          {
+            "kind": "function",
+            "function": "app/models/ApiKey.touch",
+            "labels": [],
+            "children": [
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "UPDATE \"api_keys\" SET \"last_used\" = ? WHERE (\"id\" = ?)"
+                },
+                "analyzed_query": {
+                  "actions": ["update"],
+                  "tables": ["api_keys"],
+                  "columns": ["id", "last_used"],
+                  "joinCount": 0
+                }
+              }
+            ]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "normalized_query": "SELECT * FROM \"users\" WHERE (\"users\".\"login\" = ?) LIMIT ?"
+            },
+            "analyzed_query": {
+              "actions": ["select"],
+              "tables": ["users"],
+              "columns": ["*", "users.login"],
+              "joinCount": 0
+            }
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "app/models/Scenario::SearchActions#find!",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "app/models/Scenario::SearchActions#find",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "app/models/Search#filter",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/models/User::Show#admin?",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/models/DAO::PublicResource.coerce",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/models/DAO::PublicResource.scope",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "normalized_query": "SELECT * FROM \"users\" WHERE \"id\" = ?"
+                        },
+                        "analyzed_query": {
+                          "actions": ["select"],
+                          "tables": ["users"],
+                          "columns": ["*", "id"],
+                          "joinCount": 0
+                        }
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/models/DAO::SequelUtil.build_where_clause",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/models/DAO::SequelUtil.build_where_clause",
+                        "labels": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/models/Scenario.find",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT \"id\" FROM \"scenarios\" WHERE (((\"scenarios\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = ?) AND (\"orgs\".\"id\" IS NOT ?)))) OR (\"scenarios\".\"mapset_id\" IN (SELECT \"mapsets\".\"id\" FROM \"mapsets\" WHERE ((\"mapsets\".\"app_id\" IN (SELECT \"apps\".\"id\" FROM \"apps\" WHERE (((\"apps\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = ?) AND (\"orgs\".\"id\" IS NOT ?)))) OR (\"public\" IS ?)) AND (\"apps\".\"id\" IS NOT ?)))) AND (\"mapsets\".\"id\" IS NOT ?)))) OR (\"link_sharing\" IS ?)) AND (\"uuid\" = ?)) LIMIT ?"
+                    },
+                    "analyzed_query": {
+                      "actions": ["select"],
+                      "tables": ["apps", "mapsets", "orgs", "scenarios", "users_orgs"],
+                      "columns": [
+                        "apps.id",
+                        "apps.org_id",
+                        "id",
+                        "link_sharing",
+                        "mapsets.app_id",
+                        "mapsets.id",
+                        "orgs.id",
+                        "public",
+                        "scenarios.mapset_id",
+                        "scenarios.org_id",
+                        "true",
+                        "users_orgs.org_id",
+                        "users_orgs.user_id",
+                        "uuid"
+                      ],
+                      "joinCount": 2
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "app/controllers/API::ScenariosController#show",
+        "labels": [],
+        "children": [
+          {
+            "kind": "sql",
+            "sql": {
+              "normalized_query": "SELECT * FROM \"scenarios\" WHERE \"id\" = ?"
+            },
+            "analyzed_query": {
+              "actions": ["select"],
+              "tables": ["scenarios"],
+              "columns": ["*", "id"],
+              "joinCount": 0
+            }
+          },
+          {
+            "kind": "function",
+            "function": "json/JSON::Ext::Parser#parse",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "function",
+            "function": "json/JSON::Ext::Parser#parse",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "function",
+            "function": "json/JSON::Ext::Parser#parse",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "function",
+            "function": "json/JSON::Ext::Parser#parse",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "function",
+            "function": "json/JSON::Ext::Parser#parse",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "function",
+            "function": "json/JSON::Ext::Parser#parse",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "function",
+            "function": "json/JSON::Ext::Parser#parse",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "function",
+            "function": "json/JSON::Ext::Parser#parse",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "function",
+            "function": "json/JSON::Ext::Parser#parse",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "function",
+            "function": "app/models/Scenario::Show#app",
+            "labels": [],
+            "children": [
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT * FROM \"mapsets\" WHERE \"id\" = ?"
+                },
+                "analyzed_query": {
+                  "actions": ["select"],
+                  "tables": ["mapsets"],
+                  "columns": ["*", "id"],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT * FROM \"apps\" WHERE \"id\" = ?"
+                },
+                "analyzed_query": {
+                  "actions": ["select"],
+                  "tables": ["apps"],
+                  "columns": ["*", "id"],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "app/models/DAO::ToModel#to_model",
+                "labels": []
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/models/Scenario::Show#last_modified_date",
+            "labels": [],
+            "children": [
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT \"updated_at\" FROM \"scenarios\" WHERE (\"id\" = ?) LIMIT ?"
+                },
+                "analyzed_query": {
+                  "actions": ["select"],
+                  "tables": ["scenarios"],
+                  "columns": ["id", "updated_at"],
+                  "joinCount": 0
+                }
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/models/DAO::Scenario#processed?",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "app/models/DAO::Scenario#to_hash",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "json/JSON::Ext::Generator::State#generate",
+            "labels": ["serialization", "json"]
+          }
+        ]
+      }
+    ]
+  }
+]

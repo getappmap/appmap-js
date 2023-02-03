@@ -1,0 +1,1577 @@
+[
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "logger/Logger::LogDevice#write",
+    "labels": [
+      "log"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "logger/Logger::LogDevice#write",
+    "labels": [
+      "log"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "logger/Logger::LogDevice#write",
+    "labels": [
+      "log"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "lib/devise/models/Devise::Models::DatabaseAuthenticatable#password=",
+    "labels": [],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::DatabaseAuthenticatable#password_digest",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/devise/Devise::Encryptor.digest",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Models::DatabaseAuthenticatable::ClassMethods.pepper",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Models::DatabaseAuthenticatable::ClassMethods.pepper",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Models::DatabaseAuthenticatable::ClassMethods.stretches",
+                "labels": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+    "labels": [
+      "mvc.before_action"
+    ],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::Authenticatable#downcase_keys",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/devise/Devise::Models::Authenticatable::ClassMethods.case_insensitive_keys",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "lib/devise/models/Devise::Models::Authenticatable#apply_to_attribute_or_variable",
+            "labels": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::Authenticatable#strip_whitespace",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/devise/Devise::Models::Authenticatable::ClassMethods.strip_whitespace_keys",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "lib/devise/models/Devise::Models::Authenticatable#apply_to_attribute_or_variable",
+            "labels": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+    "labels": [
+      "mvc.before_action"
+    ],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::Validatable#email_required?",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::Validatable#password_required?",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::Validatable#password_required?",
+        "labels": []
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+    "labels": [
+      "mvc.before_action"
+    ],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::Confirmable#confirmation_required?",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/devise/models/Devise::Models::Confirmable#confirmed?",
+            "labels": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::Confirmable#generate_confirmation_token",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "devise/Devise.friendly_token",
+            "labels": [
+              "secret"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+    "labels": [
+      "mvc.after_action"
+    ],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::Confirmable#send_confirmation_notification?",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/devise/models/Devise::Models::Confirmable#confirmation_required?",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/devise/models/Devise::Models::Confirmable#confirmed?",
+                "labels": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::Confirmable#skip_reconfirmation_in_callback!",
+        "labels": []
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+    "labels": [
+      "mvc.after_action"
+    ],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::Confirmable#send_confirmation_notification?",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/devise/models/Devise::Models::Confirmable#confirmation_required?",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/devise/models/Devise::Models::Confirmable#confirmed?",
+                "labels": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::Confirmable#send_on_create_confirmation_instructions",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/devise/models/Devise::Models::Confirmable#send_confirmation_instructions",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/devise/models/Devise::Models::Confirmable#pending_reconfirmation?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/Devise::Models::Confirmable::ClassMethods.reconfirmable",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/models/Devise::Models::Authenticatable#send_devise_notification",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/models/Devise::Models::Authenticatable#devise_mailer",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Devise.mailer",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "lib/Devise::Getter#get",
+                            "labels": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/mailers/Devise::Mailers::Helpers#devise_mail",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/devise/mailers/Devise::Mailers::Helpers#initialize_from_record",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "lib/devise/Devise::Mapping.find_scope!",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "lib/devise/Devise::Mapping#to",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "lib/Devise::Getter#get",
+                                    "labels": []
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "lib/devise/mailers/Devise::Mailers::Helpers#devise_mapping",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "lib/devise/mailers/Devise::Mailers::Helpers#headers_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "lib/devise/mailers/Devise::Mailers::Helpers#subject_for",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "lib/devise/mailers/Devise::Mailers::Helpers#devise_mapping",
+                                "labels": []
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "lib/devise/mailers/Devise::Mailers::Helpers#devise_mapping",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "lib/devise/mailers/Devise::Mailers::Helpers#mailer_sender",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "lib/devise/mailers/Devise::Mailers::Helpers#devise_mapping",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "lib/devise/mailers/Devise::Mailers::Helpers#mailer_reply_to",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "lib/devise/mailers/Devise::Mailers::Helpers#mailer_sender",
+                                "labels": []
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "lib/devise/mailers/Devise::Mailers::Helpers#template_paths",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "lib/devise/controllers/Devise::Controllers::ScopedViews::ClassMethods.scoped_views?",
+                                "labels": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "inline_template.render",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionview/ActionView::Resolver#find_all",
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "actionview/ActionView::Resolver#find_all",
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "actionview/ActionView::Resolver#find_all",
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "actionview/ActionView::Resolver#find_all",
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "logger/Logger::LogDevice#write",
+                            "labels": [
+                              "log"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "lib/devise/Devise::Mapping.find_scope!",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "lib/devise/Devise::Mapping#to",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "lib/Devise::Getter#get",
+                                    "labels": []
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "lib/Devise.available_router_name",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "logger/Logger::LogDevice#write",
+                            "labels": [
+                              "log"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+    "labels": [
+      "mvc.before_action"
+    ],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::Authenticatable#downcase_keys",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/devise/Devise::Models::Authenticatable::ClassMethods.case_insensitive_keys",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "lib/devise/models/Devise::Models::Authenticatable#apply_to_attribute_or_variable",
+            "labels": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::Authenticatable#strip_whitespace",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/devise/Devise::Models::Authenticatable::ClassMethods.strip_whitespace_keys",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "lib/devise/models/Devise::Models::Authenticatable#apply_to_attribute_or_variable",
+            "labels": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+    "labels": [
+      "mvc.before_action"
+    ],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::Validatable#email_required?",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::Validatable#password_required?",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::Validatable#password_required?",
+        "labels": []
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+    "labels": [
+      "mvc.before_action"
+    ],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::Recoverable#clear_reset_password_token?",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/devise/Devise::Models::Authenticatable::ClassMethods.authentication_keys",
+            "labels": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::Confirmable#postpone_email_change?",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/devise/Devise::Models::Confirmable::ClassMethods.reconfirmable",
+            "labels": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+    "labels": [
+      "mvc.after_action"
+    ],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::Confirmable#send_email_changed_notification?",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/devise/Devise::Models::Confirmable::ClassMethods.reconfirmable",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "lib/devise/models/Devise::Models::DatabaseAuthenticatable#send_email_changed_notification?",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Models::DatabaseAuthenticatable::ClassMethods.send_email_changed_notification",
+                "labels": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::DatabaseAuthenticatable#send_password_change_notification?",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/devise/Devise::Models::DatabaseAuthenticatable::ClassMethods.send_password_change_notification",
+            "labels": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+    "labels": [
+      "mvc.after_action"
+    ],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::Confirmable#reconfirmation_required?",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/devise/Devise::Models::Confirmable::ClassMethods.reconfirmable",
+            "labels": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "logger/Logger::LogDevice#write",
+    "labels": [
+      "log"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "ruby/String#unpack",
+    "labels": [
+      "string.unpack"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "logger/Logger::LogDevice#write",
+    "labels": [
+      "log"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "omniauth/OmniAuth::Strategy#call!",
+    "labels": [],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/devise/controllers/Devise::Controllers::ScopedViews::ClassMethods.scoped_views?",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "logger/Logger::LogDevice#write",
+        "labels": [
+          "log"
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "logger/Logger::LogDevice#write",
+        "labels": [
+          "log"
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+        "labels": [
+          "mvc.before_action"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/devise/controllers/Devise::Controllers::Helpers#devise_controller?",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "lib/devise/controllers/Devise::Controllers::Helpers#devise_controller?",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "lib/devise/controllers/Devise::Controllers::Helpers#devise_controller?",
+            "labels": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "lib/devise/Devise::Mapping#to",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/Devise::Getter#get",
+            "labels": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "lib/devise/models/Devise::Models::Confirmable::ClassMethods.confirm_by_token",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/devise/models/Devise::Models::Authenticatable::ClassMethods.find_first_by_auth_conditions",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/devise/models/Devise::Models::Authenticatable::ClassMethods.devise_parameter_filter",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/Devise::Models::Authenticatable::ClassMethods.case_insensitive_keys",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/Devise::Models::Authenticatable::ClassMethods.strip_whitespace_keys",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::ParameterFilter#filter",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/Devise::ParameterFilter#stringify_params",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/Devise::ParameterFilter#filtered_hash_by_method_for_given_keys",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/Devise::ParameterFilter#filtered_hash_by_method_for_given_keys",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activerecord/ActiveRecord::Relation#records",
+                "labels": [
+                  "dao.materialize"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "lib/devise/models/Devise::Models::Confirmable#confirm",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/devise/models/Devise::Models::Confirmable#pending_any_confirmation",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/models/Devise::Models::Confirmable#confirmed?",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/models/Devise::Models::Confirmable#pending_reconfirmation?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/devise/Devise::Models::Confirmable::ClassMethods.reconfirmable",
+                        "labels": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "app/views/app_views_devise_confirmations_new_html_erb.render",
+        "labels": [
+          "mvc.template"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "actionview/ActionView::Resolver#find_all",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "actionview/ActionView::Resolver#find_all",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "actionview/ActionView::Resolver#find_all",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "actionview/ActionView::Resolver#find_all",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "actionview/ActionView::Resolver#find_all",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "actionview/ActionView::Resolver#find_all",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "actionview/ActionView::Resolver#find_all",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "actionview/ActionView::Resolver#find_all",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "actionview/ActionView::Resolver#find_all",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "lib/devise/Devise::Mapping.find_scope!",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "lib/Devise.available_router_name",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "app/views/app_views_devise_shared__error_messages_html_erb.render",
+            "labels": [
+              "mvc.template"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "lib/devise/models/Devise::Models::Confirmable#pending_reconfirmation?",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Models::Confirmable::ClassMethods.reconfirmable",
+                "labels": []
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/views/app_views_devise_shared__links_html_erb.render",
+            "labels": [
+              "mvc.template"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Mapping.find_scope!",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Mapping#modules",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Mapping.find_scope!",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Mapping#modules",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Mapping.find_scope!",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Mapping#modules",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Mapping#modules",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Mapping#to",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Devise::Getter#get",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/models/Devise::Models::Lockable::ClassMethods.unlock_strategy_enabled?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/Devise::Models::Lockable::ClassMethods.unlock_strategy",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/Devise::Models::Lockable::ClassMethods.unlock_strategy",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Mapping.find_scope!",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Mapping#modules",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Mapping#to",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Devise::Getter#get",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Models::Omniauthable::ClassMethods.omniauth_providers",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Devise.omniauth_providers",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "omniauth/OmniAuth::Utils.camelize",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/omniauth/Devise::OmniAuth::UrlHelpers#omniauth_authorize_path",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/Devise::Mapping.find_scope!",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "omniauth/OmniAuth::Utils.camelize",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/omniauth/Devise::OmniAuth::UrlHelpers#omniauth_authorize_path",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/Devise::Mapping.find_scope!",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "omniauth/OmniAuth::Utils.camelize",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/omniauth/Devise::OmniAuth::UrlHelpers#omniauth_authorize_path",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/Devise::Mapping.find_scope!",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "actionpack/ActionDispatch::Request::Session#[]",
+            "labels": [
+              "http.session.read"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                "labels": [
+                  "http.session.write"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "openssl/OpenSSL::PKCS5.pbkdf2_hmac",
+                "labels": [
+                  "crypto.pkcs5"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "openssl/OpenSSL::PKCS5.pbkdf2_hmac",
+                "labels": [
+                  "crypto.pkcs5"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "openssl/OpenSSL::PKCS5.pbkdf2_hmac",
+                "labels": [
+                  "crypto.pkcs5"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                "labels": [
+                  "http.session.read"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "lib/devise/controllers/Devise::Controllers::Helpers#warden",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "actionpack/ActionDispatch::Request::Session#[]",
+            "labels": [
+              "http.session.read"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "lib/devise/strategies/Devise::Strategies::Rememberable#valid?",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/devise/rails/Warden::Mixins::Common#cookies",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/rails/Warden::Mixins::Common#request",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "openssl/OpenSSL::PKCS5.pbkdf2_hmac",
+                "labels": [
+                  "crypto.pkcs5"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/strategies/Devise::Strategies::Base#mapping",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Mapping#to",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Devise::Getter#get",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Models::Rememberable::ClassMethods.rememberable_options",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                "labels": [
+                  "http.session.read"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "lib/devise/strategies/Devise::Strategies::Authenticatable#valid?",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/devise/strategies/Devise::Strategies::Base#mapping",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Mapping#to",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Devise::Getter#get",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/models/Devise::Models::Authenticatable::ClassMethods.params_authenticatable?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/Devise::Models::Authenticatable::ClassMethods.params_authenticatable",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/Devise::Models::Authenticatable::ClassMethods.params_authenticatable",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/strategies/Devise::Strategies::Base#mapping",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Mapping#to",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Devise::Getter#get",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/models/Devise::Models::Authenticatable::ClassMethods.http_authenticatable?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/Devise::Models::Authenticatable::ClassMethods.http_authenticatable",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/Devise::Models::Authenticatable::ClassMethods.http_authenticatable",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/rails/Warden::Mixins::Common#request",
+                "labels": []
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "lib/devise/controllers/Devise::Controllers::Helpers#warden",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "actionpack/ActionDispatch::Request::Session#[]",
+            "labels": [
+              "http.session.read"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "lib/devise/strategies/Devise::Strategies::Authenticatable#valid?",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/devise/strategies/Devise::Strategies::Base#mapping",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Mapping#to",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Devise::Getter#get",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/models/Devise::Models::Authenticatable::ClassMethods.params_authenticatable?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/Devise::Models::Authenticatable::ClassMethods.params_authenticatable",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/Devise::Models::Authenticatable::ClassMethods.params_authenticatable",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/strategies/Devise::Strategies::Base#mapping",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/Devise::Mapping#to",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Devise::Getter#get",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/models/Devise::Models::Authenticatable::ClassMethods.http_authenticatable?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/Devise::Models::Authenticatable::ClassMethods.http_authenticatable",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/devise/Devise::Models::Authenticatable::ClassMethods.http_authenticatable",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/devise/rails/Warden::Mixins::Common#request",
+                "labels": []
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+        "labels": [
+          "mvc.after_action"
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "lib/devise/controllers/Devise::Controllers::Helpers::ClassMethods.log_process_action",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "logger/Logger::LogDevice#write",
+        "labels": [
+          "log"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+    "labels": [
+      "mvc.after_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+    "labels": [
+      "mvc.before_action"
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+    "labels": [
+      "mvc.after_action"
+    ]
+  }
+]

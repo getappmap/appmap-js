@@ -1,0 +1,3252 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "GET /signup",
+    "parameter_names": [
+      "controller",
+      "action"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/UsersController#new",
+            "labels": [
+              "public"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "actionview/ActionView::Resolver#find_all",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/views/app_views_users_new_html_erb.render",
+            "labels": [
+              "mvc.template"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_shared__error_messages_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/ApplicationHelper#full_title",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "json/JSON::Ext::Parser#parse",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__shim_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__header_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#logged_in?",
+                    "labels": [
+                      "security.authentication"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__footer_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "ruby/String#==",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "POST /users",
+    "parameter_names": [
+      "user",
+      "controller",
+      "action"
+    ],
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/UsersController#create",
+            "labels": [
+              "public"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SAVEPOINT active_record_1"
+                },
+                "analyzed_query": {
+                  "actions": [],
+                  "tables": [],
+                  "columns": [],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT ? AS one FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.email"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/models/User.new_token",
+                "labels": [
+                  "secret",
+                  "secret.generator"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/models/User.digest",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "ruby/Module.==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/Module.==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/Module.==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/Module.==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "INSERT INTO \"users\" (\"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activation_digest\") VALUES (?, ?, ?, ?, ?, ?)"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "insert"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "activation_digest",
+                    "created_at",
+                    "email",
+                    "name",
+                    "password_digest",
+                    "updated_at"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "ruby/Module.==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/Module.==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "RELEASE SAVEPOINT active_record_1"
+                },
+                "analyzed_query": {
+                  "actions": [],
+                  "tables": [],
+                  "columns": [],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "app/models/User#send_activation_email",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/mailers/UserMailer#account_activation",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/views/app_views_layouts_mailer_html_erb.render",
+                        "labels": [
+                          "mvc.template"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionview/ActionView::Resolver#find_all",
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "logger/Logger::LogDevice#write",
+                            "labels": [
+                              "log"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "logger/Logger::LogDevice#write",
+                            "labels": [
+                              "log"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/views/app_views_layouts_mailer_text_erb.render",
+                        "labels": [
+                          "mvc.template"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionview/ActionView::Resolver#find_all",
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "logger/Logger::LogDevice#write",
+                            "labels": [
+                              "log"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "logger/Logger::LogDevice#write",
+                            "labels": [
+                              "log"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/String#==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/String#==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "ruby/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionController::Instrumentation#redirect_to",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "ruby/String#==",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "POST /login",
+    "parameter_names": [
+      "session",
+      "controller",
+      "action"
+    ],
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "openssl/OpenSSL::Cipher#decrypt",
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/SessionsController#create",
+            "labels": [
+              "public"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "activerecord/ActiveRecord::Querying.find_by_sql",
+                "labels": [
+                  "sql.materialize"
+                ],
+                "children": [
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "users"
+                      ],
+                      "columns": [
+                        "users.*",
+                        "users.email"
+                      ],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::Result#each",
+                    "labels": [
+                      "dao.materialize"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "bcrypt/BCrypt::Password#is_password?",
+                "labels": [
+                  "crypto.secure_compare"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionController::Instrumentation#redirect_to",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "ruby/String#==",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /account_activations/{id}/edit",
+    "parameter_names": [
+      "email",
+      "controller",
+      "action",
+      "id"
+    ],
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "openssl/OpenSSL::Cipher#decrypt",
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/AccountActivationsController#edit",
+            "labels": [
+              "public"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "activerecord/ActiveRecord::Querying.find_by_sql",
+                "labels": [
+                  "sql.materialize"
+                ],
+                "children": [
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "users"
+                      ],
+                      "columns": [
+                        "users.*",
+                        "users.email"
+                      ],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::Result#each",
+                    "labels": [
+                      "dao.materialize"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/models/User#authenticated?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "bcrypt/BCrypt::Password#is_password?",
+                    "labels": [
+                      "crypto.secure_compare"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "ruby/String#==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionController::Instrumentation#redirect_to",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "ruby/String#==",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /account_activations/{id}/edit",
+    "parameter_names": [
+      "email",
+      "controller",
+      "action",
+      "id"
+    ],
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "openssl/OpenSSL::Cipher#decrypt",
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/AccountActivationsController#edit",
+            "labels": [
+              "public"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "activerecord/ActiveRecord::Querying.find_by_sql",
+                "labels": [
+                  "sql.materialize"
+                ],
+                "children": [
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "users"
+                      ],
+                      "columns": [
+                        "users.*",
+                        "users.email"
+                      ],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::Result#each",
+                    "labels": [
+                      "dao.materialize"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionController::Instrumentation#redirect_to",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "ruby/String#==",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /account_activations/{id}/edit",
+    "parameter_names": [
+      "email",
+      "controller",
+      "action",
+      "id"
+    ],
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "openssl/OpenSSL::Cipher#decrypt",
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/AccountActivationsController#edit",
+            "labels": [
+              "public"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "activerecord/ActiveRecord::Querying.find_by_sql",
+                "labels": [
+                  "sql.materialize"
+                ],
+                "children": [
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "users"
+                      ],
+                      "columns": [
+                        "users.*",
+                        "users.email"
+                      ],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::Result#each",
+                    "labels": [
+                      "dao.materialize"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/models/User#authenticated?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "bcrypt/BCrypt::Password#is_password?",
+                    "labels": [
+                      "crypto.secure_compare"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "ruby/String#==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/models/User#activate",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                    "labels": [
+                      "mvc.before_action"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                    "labels": [
+                      "mvc.before_action"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SAVEPOINT active_record_1"
+                    },
+                    "analyzed_query": {
+                      "actions": [],
+                      "tables": [],
+                      "columns": [],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "UPDATE \"users\" SET \"updated_at\" = ?, \"activated\" = ? WHERE \"users\".\"id\" = ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "update"
+                      ],
+                      "tables": [
+                        "users"
+                      ],
+                      "columns": [
+                        "activated",
+                        "updated_at",
+                        "users.id"
+                      ],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                    "labels": [
+                      "mvc.after_action"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "RELEASE SAVEPOINT active_record_1"
+                    },
+                    "analyzed_query": {
+                      "actions": [],
+                      "tables": [],
+                      "columns": [],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                    "labels": [
+                      "mvc.before_action"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                    "labels": [
+                      "mvc.before_action"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SAVEPOINT active_record_1"
+                    },
+                    "analyzed_query": {
+                      "actions": [],
+                      "tables": [],
+                      "columns": [],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "UPDATE \"users\" SET \"updated_at\" = ?, \"activated_at\" = ? WHERE \"users\".\"id\" = ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "update"
+                      ],
+                      "tables": [
+                        "users"
+                      ],
+                      "columns": [
+                        "activated_at",
+                        "updated_at",
+                        "users.id"
+                      ],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                    "labels": [
+                      "mvc.after_action"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "RELEASE SAVEPOINT active_record_1"
+                    },
+                    "analyzed_query": {
+                      "actions": [],
+                      "tables": [],
+                      "columns": [],
+                      "joinCount": 0
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/SessionsHelper#log_in",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Request::Session#[]=",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionController::Instrumentation#redirect_to",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "ruby/String#==",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /users/{id}",
+    "parameter_names": [
+      "controller",
+      "action",
+      "id"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "openssl/OpenSSL::Cipher#decrypt",
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/UsersController#show",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "activerecord/ActiveRecord::Querying.find_by_sql",
+                "labels": [
+                  "sql.materialize"
+                ],
+                "children": [
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "users"
+                      ],
+                      "columns": [
+                        "users.*",
+                        "users.id"
+                      ],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::Result#each",
+                    "labels": [
+                      "dao.materialize"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "actionview/ActionView::Resolver#find_all",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/views/app_views_users_show_html_erb.render",
+            "labels": [
+              "mvc.template"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/UsersHelper#gravatar_for",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_shared__stats_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"followed_id\" WHERE \"relationships\".\"follower_id\" = ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "relationships",
+                        "users"
+                      ],
+                      "columns": [
+                        "*",
+                        "relationships.followed_id",
+                        "relationships.follower_id",
+                        "users.id"
+                      ],
+                      "joinCount": 1
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "ruby/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"follower_id\" WHERE \"relationships\".\"followed_id\" = ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "relationships",
+                        "users"
+                      ],
+                      "columns": [
+                        "*",
+                        "relationships.followed_id",
+                        "relationships.follower_id",
+                        "users.id"
+                      ],
+                      "joinCount": 1
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/SessionsHelper#logged_in?",
+                "labels": [
+                  "security.authentication"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionpack/ActionDispatch::Request::Session#[]",
+                        "labels": [
+                          "http.session.read"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Querying.find_by_sql",
+                        "labels": [
+                          "sql.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "users"
+                              ],
+                              "columns": [
+                                "users.*",
+                                "users.id"
+                              ],
+                              "joinCount": 0
+                            }
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::Result#each",
+                            "labels": [
+                              "dao.materialize"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_users__follow_form_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT ? AS one FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? LIMIT ?"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "microposts"
+                  ],
+                  "columns": [
+                    "microposts.user_id"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/ApplicationHelper#full_title",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "json/JSON::Ext::Parser#parse",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__shim_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__header_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#logged_in?",
+                    "labels": [
+                      "security.authentication"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionpack/ActionDispatch::Request::Session#[]",
+                        "labels": [
+                          "http.session.read"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionpack/ActionDispatch::Request::Session#[]",
+                        "labels": [
+                          "http.session.read"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__footer_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "ruby/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "ruby/String#==",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

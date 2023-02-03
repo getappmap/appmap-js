@@ -1,0 +1,41 @@
+[
+  {
+    "kind": "function",
+    "function": "jwt/JWT.decode",
+    "labels": [
+      "jwt.decode"
+    ],
+    "children": [
+      {
+        "kind": "function",
+        "function": "ruby/String#unpack1",
+        "labels": [
+          "string.unpack"
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "json/JSON::Ext::Parser#parse",
+        "labels": [
+          "format.json.parse",
+          "deserialize.safe"
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "ruby/String#unpack1",
+        "labels": [
+          "string.unpack"
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "json/JSON::Ext::Parser#parse",
+        "labels": [
+          "format.json.parse",
+          "deserialize.safe"
+        ]
+      }
+    ]
+  }
+]

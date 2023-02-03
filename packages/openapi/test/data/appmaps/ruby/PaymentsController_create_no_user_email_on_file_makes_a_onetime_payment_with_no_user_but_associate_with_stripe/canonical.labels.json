@@ -1,0 +1,9 @@
+[
+  "format.json.generate",
+  "http.session.read",
+  "mvc.after_action",
+  "mvc.before_action",
+  "mvc.controller",
+  "mvc.template",
+  "mvc.template.resolver"
+]

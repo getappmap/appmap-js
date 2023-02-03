@@ -1,0 +1,174 @@
+[
+  {
+    "caller": "HTTP server requests->POST /payments",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/controllers/ControllerHelpers"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/controllers/PaymentsController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "wicked_pdf/WickedPdf"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "app/controllers/ControllerHelpers"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "app/models/Payment"
+  },
+  {
+    "caller": "app/controllers/ControllerHelpers",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/controllers/ControllerHelpers",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "app/controllers/PaymentsController",
+    "callee": "Database->INSERT INTO \"payments\" (\"stripe_id\", \"first_payment_date\", \"amount_cents\", \"created_at\", \"updated_at\", \"email\", \"kind\") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING \"id\""
+  },
+  {
+    "caller": "app/controllers/PaymentsController",
+    "callee": "Database->RELEASE SAVEPOINT active_record_2"
+  },
+  {
+    "caller": "app/controllers/PaymentsController",
+    "callee": "Database->SAVEPOINT active_record_2"
+  },
+  {
+    "caller": "app/controllers/PaymentsController",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "app/controllers/PaymentsController",
+    "callee": "api.stripe.com->POST https://api.stripe.com/v1/charges"
+  },
+  {
+    "caller": "app/controllers/PaymentsController",
+    "callee": "api.stripe.com->POST https://api.stripe.com/v1/customers/cus_JnA0JVDwH8BjTl"
+  },
+  {
+    "caller": "app/controllers/PaymentsController",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "app/controllers/PaymentsController",
+    "callee": "app/services/ParamsNormalizer"
+  },
+  {
+    "caller": "app/controllers/PaymentsController",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/controllers/PaymentsController",
+    "callee": "stripe/Stripe"
+  },
+  {
+    "caller": "app/controllers/PaymentsController",
+    "callee": "vcr/VCR"
+  },
+  {
+    "caller": "app/helpers/HeaderTagHelper",
+    "callee": "app/controllers/ControllerHelpers"
+  },
+  {
+    "caller": "app/models/Payment",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "app/models/Payment",
+    "callee": "sidekiq/Sidekiq"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "Database->SELECT  \"users\".* FROM \"users\" WHERE \"users\".\"email\" = $1 LIMIT $2"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "app/models/UserEmail"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "app/services/EmailNormalizer"
+  },
+  {
+    "caller": "app/models/UserEmail",
+    "callee": "Database->SELECT  \"user_emails\".* FROM \"user_emails\" WHERE (confirmation_token IS NULL) AND \"user_emails\".\"email\" = $1 LIMIT $2"
+  },
+  {
+    "caller": "app/models/UserEmail",
+    "callee": "app/services/EmailNormalizer"
+  },
+  {
+    "caller": "app/views/app_views_layouts__revised_messages_html_haml",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_payments_create_html_haml",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_payments_create_html_haml",
+    "callee": "app/controllers/ControllerHelpers"
+  },
+  {
+    "caller": "app/views/app_views_payments_create_html_haml",
+    "callee": "app/helpers/HeaderTagHelper"
+  },
+  {
+    "caller": "app/views/app_views_payments_create_html_haml",
+    "callee": "app/models/Amountable"
+  },
+  {
+    "caller": "app/views/app_views_payments_create_html_haml",
+    "callee": "app/views/app_views_layouts__revised_messages_html_haml"
+  },
+  {
+    "caller": "inline_template.render",
+    "callee": "app/views/app_views_payments_create_html_haml"
+  },
+  {
+    "caller": "sidekiq/Sidekiq",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "stripe/Stripe",
+    "callee": "api.stripe.com->GET https://api.stripe.com/v1/customers"
+  },
+  {
+    "caller": "stripe/Stripe",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "stripe/Stripe",
+    "callee": "vcr/VCR"
+  },
+  {
+    "caller": "vcr/VCR",
+    "callee": "HTTP server requests->POST /payments"
+  },
+  {
+    "caller": "wicked_pdf/WickedPdf",
+    "callee": "inline_template.render"
+  }
+]

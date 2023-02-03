@@ -1,0 +1,4008 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "POST /login",
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["mvc.controller"],
+        "children": [
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["http.session.write"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["access.public", "security.login"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["http.session.write"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["http.session.write", "http.session.clear"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["string.unpack"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["string.unpack"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["http.session.write"]
+              },
+              {
+                "kind": "function",
+                "labels": ["secret"]
+              },
+              {
+                "kind": "function",
+                "labels": ["random.secure"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["update"],
+                    "tables": ["users"],
+                    "columns": ["remember_digest", "updated_at", "users.id"],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["serialize"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.encrypt"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_key"]
+              },
+              {
+                "kind": "function",
+                "labels": ["random.secure"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_iv"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_auth_data"]
+              },
+              {
+                "kind": "function",
+                "labels": ["serialize"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.final"]
+              },
+              {
+                "kind": "function",
+                "labels": ["http.session.write"]
+              },
+              {
+                "kind": "function",
+                "labels": ["http.session.write"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.controller"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /",
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["mvc.controller"],
+        "children": [
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["http.session.write"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.decrypt"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_key"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_iv"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_auth_tag"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_auth_data"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.final"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["access.public"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["security.authentication"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.template.resolver"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.render"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["mvc.template"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["security.authentication"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["mvc.template.resolver"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["mvc.template.resolver"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["deserialize.safe"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["deserialize.unsafe"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["format.json.parse", "deserialize.safe"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["security.authentication"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "POST /microposts",
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["mvc.controller"],
+        "children": [
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["http.session.write"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.decrypt"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_key"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_iv"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_auth_tag"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_auth_data"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.final"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["security.require_login"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["security.authentication"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.render"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["mvc.template"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["security.authentication"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["mvc.template.resolver"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["mvc.template.resolver"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["deserialize.safe"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["deserialize.unsafe"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["format.json.parse", "deserialize.safe"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["security.authentication"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "POST /microposts",
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["mvc.controller"],
+        "children": [
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["http.session.write"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.decrypt"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_key"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_iv"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_auth_tag"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_auth_data"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.final"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["security.require_login"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["security.authentication"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["deserialize.safe", "lang.eval.safe"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["lang.eval"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["deserialize.unsafe"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["format.yaml.parse"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["format.yaml.parse"]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["insert"],
+                "tables": ["microposts"],
+                "columns": ["content", "created_at", "updated_at", "user_id"],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["dao.materialize"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["string.unpack"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["serialize"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": ["insert"],
+                        "tables": ["active_storage_blobs"],
+                        "columns": [
+                          "byte_size",
+                          "checksum",
+                          "content_type",
+                          "created_at",
+                          "filename",
+                          "key",
+                          "metadata"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["serialize"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["insert"],
+                    "tables": ["active_storage_attachments"],
+                    "columns": ["blob_id", "created_at", "name", "record_id", "record_type"],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["update"],
+                    "tables": ["microposts"],
+                    "columns": ["microposts.id", "updated_at"],
+                    "joinCount": 0
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["log"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["job.create"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.controller"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["log"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /",
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["mvc.controller"],
+        "children": [
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["http.session.write"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.decrypt"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_key"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_iv"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_auth_tag"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_auth_data"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.final"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["access.public"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["security.authentication"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.template.resolver"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.render"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["mvc.template"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["security.authentication"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["mvc.template.resolver"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["mvc.template.resolver"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["serialize"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["serialize"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["serialize"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["serialize"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["deserialize.safe"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["deserialize.unsafe"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["format.json.parse", "deserialize.safe"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["security.authentication"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "DELETE /microposts/{id}",
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["mvc.controller"],
+        "children": [
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["http.session.write"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.decrypt"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_key"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_iv"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_auth_tag"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_auth_data"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.final"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["security.require_login"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["security.authentication"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["dao.materialize"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["dao.materialize"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["delete"],
+                    "tables": ["active_storage_attachments"],
+                    "columns": ["active_storage_attachments.id"],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["delete"],
+                "tables": ["microposts"],
+                "columns": ["microposts.id"],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["job.create"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.controller"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["log"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /users/{id}",
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["mvc.controller"],
+        "children": [
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["http.session.write"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.decrypt"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_key"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_iv"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_auth_tag"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_auth_data"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.final"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.template.resolver"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.render"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["mvc.template"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["security.authentication"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["mvc.template.resolver"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["dao.materialize"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["dao.materialize"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["dao.materialize"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["deserialize.safe"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["deserialize.unsafe"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["format.json.parse", "deserialize.safe"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["security.authentication"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          }
+        ]
+      }
+    ]
+  }
+]

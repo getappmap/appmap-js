@@ -1,0 +1,6 @@
+[
+  "deserialize.safe",
+  "format.json.parse",
+  "jwt.decode",
+  "string.unpack"
+]

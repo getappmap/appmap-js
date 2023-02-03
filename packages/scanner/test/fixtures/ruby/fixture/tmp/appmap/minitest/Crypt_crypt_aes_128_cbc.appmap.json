@@ -1,126 +1,7 @@
 {
-  "version": "1.7.0",
-  "metadata": {
-    "app": "scanner/ruby-fixture",
-    "language": { "name": "ruby", "engine": "ruby", "version": "3.0.1" },
-    "client": {
-      "name": "appmap",
-      "url": "https://github.com/applandinc/appmap-ruby",
-      "version": "0.83.4"
-    },
-    "git": {
-      "repository": "git@github.com:applandinc/appmap-js.git",
-      "branch": "feat/rule-unauthenticated-encryption",
-      "commit": "9f81b2cf8ad2313ee5751a41719edc321c6e9227",
-      "status": ["?? ../../../../../cli/src/cmds/sequenceDiagram/"],
-      "git_last_annotated_tag": "@appland/appmap-v2.3.4",
-      "git_last_tag": "@appland/scanner-v1.63.0",
-      "git_commits_since_last_annotated_tag": 0,
-      "git_commits_since_last_tag": 0
-    },
-    "name": "Crypt crypt aes 128 cbc",
-    "source_location": "test/crypt_test.rb:6",
-    "frameworks": [{ "name": "minitest", "version": "5.16.2" }],
-    "recorder": { "name": "minitest" },
-    "test_status": "succeeded"
-  },
-  "classMap": [
-    {
-      "name": "lib/crypt",
-      "type": "package",
-      "children": [
-        {
-          "name": "Crypt",
-          "type": "class",
-          "children": [
-            {
-              "name": "Command",
-              "type": "class",
-              "children": [
-                {
-                  "name": "encrypt_aes_128_cbc",
-                  "type": "function",
-                  "location": "lib/crypt/command.rb:4",
-                  "static": true,
-                  "labels": ["command"],
-                  "comment": "# @label command\n"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "openssl",
-      "type": "package",
-      "children": [
-        {
-          "name": "OpenSSL",
-          "type": "class",
-          "children": [
-            {
-              "name": "Cipher",
-              "type": "class",
-              "children": [
-                {
-                  "name": "encrypt",
-                  "type": "function",
-                  "location": "OpenSSL::Cipher#encrypt",
-                  "static": false,
-                  "labels": ["crypto.encrypt"]
-                },
-                {
-                  "name": "random_key",
-                  "type": "function",
-                  "location": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/3.0.0/openssl/cipher.rb:43",
-                  "static": false,
-                  "comment": "# call-seq:\n#   cipher.random_key -> key\n#\n# Generate a random key with OpenSSL::Random.random_bytes and sets it to\n# the cipher, and returns it.\n#\n# You must call #encrypt or #decrypt before calling this method.\n"
-                },
-                {
-                  "name": "key=",
-                  "type": "function",
-                  "location": "OpenSSL::Cipher#key=",
-                  "static": false,
-                  "labels": ["crypto.set_key"]
-                },
-                {
-                  "name": "random_iv",
-                  "type": "function",
-                  "location": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/3.0.0/openssl/cipher.rb:55",
-                  "static": false,
-                  "comment": "# call-seq:\n#   cipher.random_iv -> iv\n#\n# Generate a random IV with OpenSSL::Random.random_bytes and sets it to the\n# cipher, and returns it.\n#\n# You must call #encrypt or #decrypt before calling this method.\n"
-                },
-                {
-                  "name": "iv=",
-                  "type": "function",
-                  "location": "OpenSSL::Cipher#iv=",
-                  "static": false,
-                  "labels": ["crypto.set_iv"]
-                },
-                {
-                  "name": "update",
-                  "type": "function",
-                  "location": "OpenSSL::Cipher#update",
-                  "static": false
-                },
-                {
-                  "name": "final",
-                  "type": "function",
-                  "location": "OpenSSL::Cipher#final",
-                  "static": false,
-                  "labels": ["crypto.final"]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ],
   "events": [
     {
-      "id": 19,
+      "id": 1,
       "event": "call",
       "thread_id": 2320,
       "defined_class": "Crypt::Command",
@@ -128,11 +9,14 @@
       "path": "lib/crypt/command.rb",
       "lineno": 4,
       "static": true,
-      "parameters": [],
-      "receiver": { "class": "Class", "object_id": 2300, "value": "Crypt::Command" }
+      "receiver": {
+        "class": "Class",
+        "object_id": 2300,
+        "value": "Crypt::Command"
+      }
     },
     {
-      "id": 20,
+      "id": 2,
       "event": "call",
       "thread_id": 2320,
       "defined_class": "OpenSSL::Cipher",
@@ -153,15 +37,17 @@
         "class": "OpenSSL::Cipher",
         "object_id": 2560,
         "value": "#<OpenSSL::Cipher:0x00007f9aa7025938>",
-        "labels": ["crypto.algorithm.AES-128-CBC"]
+        "labels": [
+          "crypto.algorithm.AES-128-CBC"
+        ]
       }
     },
     {
-      "id": 21,
+      "id": 3,
       "event": "return",
       "thread_id": 2320,
-      "parent_id": 20,
-      "elapsed": 8.00006091594696e-6,
+      "parent_id": 2,
+      "elapsed": 0.00000800006091594696,
       "return_value": {
         "class": "OpenSSL::Cipher",
         "value": "#<OpenSSL::Cipher:0x00007f9aa7025938>",
@@ -169,7 +55,7 @@
       }
     },
     {
-      "id": 22,
+      "id": 4,
       "event": "call",
       "thread_id": 2320,
       "defined_class": "OpenSSL::Cipher",
@@ -177,7 +63,6 @@
       "path": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/3.0.0/openssl/cipher.rb",
       "lineno": 43,
       "static": false,
-      "parameters": [],
       "receiver": {
         "class": "OpenSSL::Cipher",
         "object_id": 2560,
@@ -185,7 +70,7 @@
       }
     },
     {
-      "id": 23,
+      "id": 5,
       "event": "call",
       "thread_id": 2320,
       "defined_class": "OpenSSL::Cipher",
@@ -208,11 +93,11 @@
       }
     },
     {
-      "id": 24,
+      "id": 6,
       "event": "return",
       "thread_id": 2320,
-      "parent_id": 23,
-      "elapsed": 3.00002284348011e-6,
+      "parent_id": 5,
+      "elapsed": 0.00000300002284348011,
       "return_value": {
         "class": "String",
         "value": "___Vl\u0014@\u0001\u000fD__\t>[ ",
@@ -220,11 +105,11 @@
       }
     },
     {
-      "id": 25,
+      "id": 7,
       "event": "return",
       "thread_id": 2320,
-      "parent_id": 22,
-      "elapsed": 9.700004011392593e-5,
+      "parent_id": 4,
+      "elapsed": 0.00009700004011392593,
       "return_value": {
         "class": "String",
         "value": "___Vl\u0014@\u0001\u000fD__\t>[ ",
@@ -232,7 +117,7 @@
       }
     },
     {
-      "id": 26,
+      "id": 8,
       "event": "call",
       "thread_id": 2320,
       "defined_class": "OpenSSL::Cipher",
@@ -240,7 +125,6 @@
       "path": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/3.0.0/openssl/cipher.rb",
       "lineno": 55,
       "static": false,
-      "parameters": [],
       "receiver": {
         "class": "OpenSSL::Cipher",
         "object_id": 2560,
@@ -248,7 +132,7 @@
       }
     },
     {
-      "id": 27,
+      "id": 9,
       "event": "call",
       "thread_id": 2320,
       "defined_class": "OpenSSL::Cipher",
@@ -271,23 +155,31 @@
       }
     },
     {
-      "id": 28,
+      "id": 10,
       "event": "return",
       "thread_id": 2320,
-      "parent_id": 27,
-      "elapsed": 2.00001522898674e-6,
-      "return_value": { "class": "String", "value": "___F__mD____>_\u0004_", "object_id": 2600 }
+      "parent_id": 9,
+      "elapsed": 0.00000200001522898674,
+      "return_value": {
+        "class": "String",
+        "value": "___F__mD____>_\u0004_",
+        "object_id": 2600
+      }
     },
     {
-      "id": 29,
+      "id": 11,
       "event": "return",
       "thread_id": 2320,
-      "parent_id": 26,
-      "elapsed": 8.199992589652538e-5,
-      "return_value": { "class": "String", "value": "___F__mD____>_\u0004_", "object_id": 2600 }
+      "parent_id": 8,
+      "elapsed": 0.00008199992589652538,
+      "return_value": {
+        "class": "String",
+        "value": "___F__mD____>_\u0004_",
+        "object_id": 2600
+      }
     },
     {
-      "id": 30,
+      "id": 12,
       "event": "call",
       "thread_id": 2320,
       "defined_class": "OpenSSL::Cipher",
@@ -311,22 +203,25 @@
       }
     },
     {
-      "id": 31,
+      "id": 13,
       "event": "return",
       "thread_id": 2320,
-      "parent_id": 30,
-      "elapsed": 1.200009137392044e-5,
-      "return_value": { "class": "String", "value": "_l_____\u0005L___I7_e", "object_id": 2640 }
+      "parent_id": 12,
+      "elapsed": 0.00001200009137392044,
+      "return_value": {
+        "class": "String",
+        "value": "_l_____\u0005L___I7_e",
+        "object_id": 2640
+      }
     },
     {
-      "id": 32,
+      "id": 14,
       "event": "call",
       "thread_id": 2320,
       "defined_class": "OpenSSL::Cipher",
       "method_id": "final",
       "path": "OpenSSL::Cipher#final",
       "static": false,
-      "parameters": [],
       "receiver": {
         "class": "OpenSSL::Cipher",
         "object_id": 2560,
@@ -334,11 +229,11 @@
       }
     },
     {
-      "id": 33,
+      "id": 15,
       "event": "return",
       "thread_id": 2320,
-      "parent_id": 32,
-      "elapsed": 1.3999873772263527e-5,
+      "parent_id": 14,
+      "elapsed": 0.000013999873772263527,
       "return_value": {
         "class": "String",
         "value": "\u0014__s_B\\3_ Y\u0014__fd",
@@ -346,16 +241,229 @@
       }
     },
     {
-      "id": 34,
+      "id": 16,
       "event": "return",
       "thread_id": 2320,
-      "parent_id": 19,
+      "parent_id": 1,
       "elapsed": 0.00044599990360438824,
       "return_value": {
         "class": "String",
         "value": "_l_____\u0005L___I7_e\u0014__s_B\\3_ Y\u0014__fd",
         "object_id": 2680
       }
+    }
+  ],
+  "version": "1.7.0",
+  "metadata": {
+    "app": "scanner/ruby-fixture",
+    "language": {
+      "name": "ruby",
+      "engine": "ruby",
+      "version": "3.0.1"
+    },
+    "client": {
+      "name": "appmap",
+      "url": "https://github.com/applandinc/appmap-ruby",
+      "version": "0.83.4"
+    },
+    "git": {
+      "repository": "git@github.com:applandinc/appmap-js.git",
+      "branch": "feat/rule-unauthenticated-encryption",
+      "commit": "9f81b2cf8ad2313ee5751a41719edc321c6e9227",
+      "status": [
+        "?? ../../../../../cli/src/cmds/sequenceDiagram/"
+      ],
+      "git_last_annotated_tag": "@appland/appmap-v2.3.4",
+      "git_last_tag": "@appland/scanner-v1.63.0",
+      "git_commits_since_last_annotated_tag": 0,
+      "git_commits_since_last_tag": 0
+    },
+    "name": "Crypt crypt aes 128 cbc",
+    "source_location": "test/crypt_test.rb:6",
+    "frameworks": [
+      {
+        "name": "minitest",
+        "version": "5.16.2"
+      }
+    ],
+    "recorder": {
+      "name": "minitest"
+    },
+    "test_status": "succeeded",
+    "fingerprints": [
+      {
+        "appmap_digest": "e4975cc0ee83c976d5fb7ddc6faf1d4bb4f242bee771d2b7d78e32083bf9aabf",
+        "canonicalization_algorithm": "classDependencies",
+        "digest": "5a31e9b642a1988165ae187b2e27da18255a748f0c7d862e457e380d2f467b82",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e4975cc0ee83c976d5fb7ddc6faf1d4bb4f242bee771d2b7d78e32083bf9aabf",
+        "canonicalization_algorithm": "classes",
+        "digest": "9c081fdef565850560ead4cf64afa9a543e875c535aec3534c32622853db6dd9",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e4975cc0ee83c976d5fb7ddc6faf1d4bb4f242bee771d2b7d78e32083bf9aabf",
+        "canonicalization_algorithm": "httpClientRequests",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e4975cc0ee83c976d5fb7ddc6faf1d4bb4f242bee771d2b7d78e32083bf9aabf",
+        "canonicalization_algorithm": "httpServerRequests",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e4975cc0ee83c976d5fb7ddc6faf1d4bb4f242bee771d2b7d78e32083bf9aabf",
+        "canonicalization_algorithm": "info",
+        "digest": "6f951fb7839524bd49e7396e678901877f021edd2c08d2b303993be64dd68355",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e4975cc0ee83c976d5fb7ddc6faf1d4bb4f242bee771d2b7d78e32083bf9aabf",
+        "canonicalization_algorithm": "labels",
+        "digest": "34a96f832d87b0e1c4c7d246365085baea7fc68836858cbf5b0f0ee4b50d9fff",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e4975cc0ee83c976d5fb7ddc6faf1d4bb4f242bee771d2b7d78e32083bf9aabf",
+        "canonicalization_algorithm": "packageDependencies",
+        "digest": "c1ce7f837a506f640684c7b1262618db4b12a42dfff84d944e594796175c601e",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e4975cc0ee83c976d5fb7ddc6faf1d4bb4f242bee771d2b7d78e32083bf9aabf",
+        "canonicalization_algorithm": "packages",
+        "digest": "94de9dad321ec164391be368620aff684adad4197ed9f99068a6e17912bc693e",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e4975cc0ee83c976d5fb7ddc6faf1d4bb4f242bee771d2b7d78e32083bf9aabf",
+        "canonicalization_algorithm": "sqlNormalized",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e4975cc0ee83c976d5fb7ddc6faf1d4bb4f242bee771d2b7d78e32083bf9aabf",
+        "canonicalization_algorithm": "sqlTables",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e4975cc0ee83c976d5fb7ddc6faf1d4bb4f242bee771d2b7d78e32083bf9aabf",
+        "canonicalization_algorithm": "trace",
+        "digest": "d4f204a4096565aefb7f26950c2175dfcd70ff4ae09fac99f140b9dc31853941",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e4975cc0ee83c976d5fb7ddc6faf1d4bb4f242bee771d2b7d78e32083bf9aabf",
+        "canonicalization_algorithm": "update",
+        "digest": "6f951fb7839524bd49e7396e678901877f021edd2c08d2b303993be64dd68355",
+        "fingerprint_algorithm": "sha256"
+      }
+    ]
+  },
+  "classMap": [
+    {
+      "name": "lib/crypt",
+      "type": "package",
+      "children": [
+        {
+          "name": "Crypt",
+          "type": "class",
+          "children": [
+            {
+              "name": "Command",
+              "type": "class",
+              "children": [
+                {
+                  "name": "encrypt_aes_128_cbc",
+                  "type": "function",
+                  "labels": [
+                    "command"
+                  ],
+                  "static": true,
+                  "location": "lib/crypt/command.rb:4"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "openssl",
+      "type": "package",
+      "children": [
+        {
+          "name": "OpenSSL",
+          "type": "class",
+          "children": [
+            {
+              "name": "Cipher",
+              "type": "class",
+              "children": [
+                {
+                  "name": "encrypt",
+                  "type": "function",
+                  "labels": [
+                    "crypto.encrypt"
+                  ],
+                  "static": false,
+                  "location": "OpenSSL::Cipher#encrypt"
+                },
+                {
+                  "name": "random_key",
+                  "type": "function",
+                  "static": false,
+                  "location": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/3.0.0/openssl/cipher.rb:43"
+                },
+                {
+                  "name": "key=",
+                  "type": "function",
+                  "labels": [
+                    "crypto.set_key"
+                  ],
+                  "static": false,
+                  "location": "OpenSSL::Cipher#key="
+                },
+                {
+                  "name": "random_iv",
+                  "type": "function",
+                  "static": false,
+                  "location": "/Users/kgilpin/.rbenv/versions/3.0.1/lib/ruby/3.0.0/openssl/cipher.rb:55"
+                },
+                {
+                  "name": "iv=",
+                  "type": "function",
+                  "labels": [
+                    "crypto.set_iv"
+                  ],
+                  "static": false,
+                  "location": "OpenSSL::Cipher#iv="
+                },
+                {
+                  "name": "update",
+                  "type": "function",
+                  "static": false,
+                  "location": "OpenSSL::Cipher#update"
+                },
+                {
+                  "name": "final",
+                  "type": "function",
+                  "labels": [
+                    "crypto.final"
+                  ],
+                  "static": false,
+                  "location": "OpenSSL::Cipher#final"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

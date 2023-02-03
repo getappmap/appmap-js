@@ -1,0 +1,15 @@
+[
+  "actionpack",
+  "actionview",
+  "activerecord",
+  "activesupport",
+  "app/controllers",
+  "app/controllers/concerns",
+  "app/helpers",
+  "app/models",
+  "app/views",
+  "json",
+  "lib/webpacker",
+  "logger",
+  "ruby"
+]

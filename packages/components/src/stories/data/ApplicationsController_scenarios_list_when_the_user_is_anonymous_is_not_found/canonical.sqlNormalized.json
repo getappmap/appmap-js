@@ -1,0 +1,6 @@
+[
+  "ROLLBACK TO SAVEPOINT autopoint_1",
+  "SAVEPOINT autopoint_1",
+  "SELECT \"apps\".* FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") INNER JOIN \"users\" ON (\"users\".\"id\" = \"orgs\".\"owner_id\") WHERE ((\"public\" IS ?) AND (\"apps\".\"slug\" = ?) AND (\"users\".\"login\" = ?)) LIMIT ?",
+  "SELECT \"apps\".* FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") WHERE ((\"public\" IS ?) AND (\"apps\".\"slug\" = ?) AND (\"orgs\".\"slug\" = ?)) LIMIT ?"
+]

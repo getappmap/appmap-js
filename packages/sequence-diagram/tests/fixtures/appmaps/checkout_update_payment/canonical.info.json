@@ -5688,7 +5688,8 @@
                   {
                     "kind": "http_client_request",
                     "route": "POST https://api.stripe.com/v1/customers",
-                    "parameter_names": null
+                    "parameter_names": null,
+                    "status_code": 200
                   },
                   {
                     "kind": "function",

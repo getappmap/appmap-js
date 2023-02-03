@@ -1,1 +1,361 @@
-{"version":"1.7.0","metadata":{"app":"jwt-rb","language":{"name":"ruby","engine":"ruby","version":"3.0.1"},"client":{"name":"appmap","url":"https://github.com/getappmap/appmap-ruby","version":"0.83.6-dev"}},"classMap":[{"name":"jwt","type":"package","children":[{"name":"JWT","type":"class","children":[{"name":"decode","type":"function","location":"/Users/dustin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/jwt-2.4.1/lib/jwt.rb:27","static":true,"labels":["jwt.decode"]}]}]},{"name":"ruby","type":"package","children":[{"name":"String","type":"class","children":[{"name":"unpack1","type":"function","location":"\u003cinternal:pack\u003e:280","static":false,"labels":["string.unpack"]}]}]},{"name":"json","type":"package","children":[{"name":"JSON","type":"class","children":[{"name":"Ext","type":"class","children":[{"name":"Parser","type":"class","children":[{"name":"parse","type":"function","location":"JSON::Ext::Parser#parse","static":false,"labels":["format.json.parse","deserialize.safe"]}]}]}]}]}],"events":[{"id":17,"event":"call","thread_id":2000,"defined_class":"JWT","method_id":"decode","path":"/Users/dustin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/jwt-2.4.1/lib/jwt.rb","lineno":27,"static":true,"parameters":[{"name":"jwt","class":"String","object_id":2460,"value":"eyJhbGciOiJIUzI1NiJ9.eyJrZXkiOiJ2YWx1ZSJ9.wMBVcXQrmq6eqCAzYfCdw8Gi42vmWhjYV272CzyHs44","kind":"req"},{"name":"key","class":"String","object_id":2280,"value":"test","kind":"opt"},{"name":"verify","class":"FalseClass","object_id":0,"value":"false","kind":"opt"},{"name":"options","class":"NilClass","object_id":8,"value":null,"kind":"opt"},{"name":"keyfinder","class":"NilClass","object_id":8,"value":null,"kind":"block"}],"receiver":{"class":"Module","object_id":1980,"value":"JWT"}},{"id":18,"event":"call","thread_id":2000,"defined_class":"String","method_id":"unpack1","path":"\u003cinternal:pack\u003e","lineno":280,"static":false,"parameters":[{"name":"fmt","class":"String","object_id":2480,"value":"m0","kind":"req"}],"receiver":{"class":"String","object_id":2500,"value":"eyJhbGciOiJIUzI1NiJ9"}},{"id":19,"event":"return","thread_id":2000,"parent_id":18,"elapsed":1.600012183189392e-05,"return_value":{"class":"String","value":"{\"alg\":\"HS256\"}","object_id":2520}},{"id":20,"event":"call","thread_id":2000,"defined_class":"JSON::Ext::Parser","method_id":"parse","path":"JSON::Ext::Parser#parse","static":false,"parameters":[],"receiver":{"class":"JSON::Ext::Parser","object_id":2540,"value":"#\u003cJSON::Ext::Parser:0x00007feb30949fd0\u003e"}},{"id":21,"event":"return","thread_id":2000,"parent_id":20,"elapsed":1.800060272216797e-05,"return_value":{"class":"Hash","value":"{alg=\u003eHS256}","object_id":2560,"size":1}},{"id":22,"event":"call","thread_id":2000,"defined_class":"String","method_id":"unpack1","path":"\u003cinternal:pack\u003e","lineno":280,"static":false,"parameters":[{"name":"fmt","class":"String","object_id":2480,"value":"m0","kind":"req"}],"receiver":{"class":"String","object_id":2580,"value":"eyJrZXkiOiJ2YWx1ZSJ9"}},{"id":23,"event":"return","thread_id":2000,"parent_id":22,"elapsed":4.000961780548096e-06,"return_value":{"class":"String","value":"{\"key\":\"value\"}","object_id":2600}},{"id":24,"event":"call","thread_id":2000,"defined_class":"JSON::Ext::Parser","method_id":"parse","path":"JSON::Ext::Parser#parse","static":false,"parameters":[],"receiver":{"class":"JSON::Ext::Parser","object_id":2620,"value":"#\u003cJSON::Ext::Parser:0x00007feb30943b80\u003e"}},{"id":25,"event":"return","thread_id":2000,"parent_id":24,"elapsed":5.999580025672913e-06,"return_value":{"class":"Hash","value":"{key=\u003evalue}","object_id":2640,"size":1}},{"id":26,"event":"return","thread_id":2000,"parent_id":17,"elapsed":0.000700000673532486,"return_value":{"class":"Array","value":"[{key=\u003evalue}, {alg=\u003eHS256}]","object_id":2660,"size":2}}]}
+{
+  "events": [
+    {
+      "id": 1,
+      "event": "call",
+      "thread_id": 2000,
+      "defined_class": "JWT",
+      "method_id": "decode",
+      "path": "/Users/dustin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/jwt-2.4.1/lib/jwt.rb",
+      "lineno": 27,
+      "static": true,
+      "parameters": [
+        {
+          "name": "jwt",
+          "class": "String",
+          "object_id": 2460,
+          "value": "eyJhbGciOiJIUzI1NiJ9.eyJrZXkiOiJ2YWx1ZSJ9.wMBVcXQrmq6eqCAzYfCdw8Gi42vmWhjYV272CzyHs44",
+          "kind": "req"
+        },
+        {
+          "name": "key",
+          "class": "String",
+          "object_id": 2280,
+          "value": "test",
+          "kind": "opt"
+        },
+        {
+          "name": "verify",
+          "class": "FalseClass",
+          "object_id": 0,
+          "value": "false",
+          "kind": "opt"
+        },
+        {
+          "name": "options",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "opt"
+        },
+        {
+          "name": "keyfinder",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "block"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 1980,
+        "value": "JWT"
+      }
+    },
+    {
+      "id": 2,
+      "event": "call",
+      "thread_id": 2000,
+      "defined_class": "String",
+      "method_id": "unpack1",
+      "path": "<internal:pack>",
+      "lineno": 280,
+      "static": false,
+      "parameters": [
+        {
+          "name": "fmt",
+          "class": "String",
+          "object_id": 2480,
+          "value": "m0",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "String",
+        "object_id": 2500,
+        "value": "eyJhbGciOiJIUzI1NiJ9"
+      }
+    },
+    {
+      "id": 3,
+      "event": "return",
+      "thread_id": 2000,
+      "parent_id": 2,
+      "elapsed": 0.00001600012183189392,
+      "return_value": {
+        "class": "String",
+        "value": "{\"alg\":\"HS256\"}",
+        "object_id": 2520
+      }
+    },
+    {
+      "id": 4,
+      "event": "call",
+      "thread_id": 2000,
+      "defined_class": "JSON::Ext::Parser",
+      "method_id": "parse",
+      "path": "JSON::Ext::Parser#parse",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "object_id": 2540,
+        "value": "#<JSON::Ext::Parser:0x00007feb30949fd0>"
+      }
+    },
+    {
+      "id": 5,
+      "event": "return",
+      "thread_id": 2000,
+      "parent_id": 4,
+      "elapsed": 0.00001800060272216797,
+      "return_value": {
+        "class": "Hash",
+        "value": "{alg=>HS256}",
+        "object_id": 2560,
+        "size": 1
+      }
+    },
+    {
+      "id": 6,
+      "event": "call",
+      "thread_id": 2000,
+      "defined_class": "String",
+      "method_id": "unpack1",
+      "path": "<internal:pack>",
+      "lineno": 280,
+      "static": false,
+      "parameters": [
+        {
+          "name": "fmt",
+          "class": "String",
+          "object_id": 2480,
+          "value": "m0",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "String",
+        "object_id": 2580,
+        "value": "eyJrZXkiOiJ2YWx1ZSJ9"
+      }
+    },
+    {
+      "id": 7,
+      "event": "return",
+      "thread_id": 2000,
+      "parent_id": 6,
+      "elapsed": 0.000004000961780548096,
+      "return_value": {
+        "class": "String",
+        "value": "{\"key\":\"value\"}",
+        "object_id": 2600
+      }
+    },
+    {
+      "id": 8,
+      "event": "call",
+      "thread_id": 2000,
+      "defined_class": "JSON::Ext::Parser",
+      "method_id": "parse",
+      "path": "JSON::Ext::Parser#parse",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "object_id": 2620,
+        "value": "#<JSON::Ext::Parser:0x00007feb30943b80>"
+      }
+    },
+    {
+      "id": 9,
+      "event": "return",
+      "thread_id": 2000,
+      "parent_id": 8,
+      "elapsed": 0.000005999580025672913,
+      "return_value": {
+        "class": "Hash",
+        "value": "{key=>value}",
+        "object_id": 2640,
+        "size": 1
+      }
+    },
+    {
+      "id": 10,
+      "event": "return",
+      "thread_id": 2000,
+      "parent_id": 1,
+      "elapsed": 0.000700000673532486,
+      "return_value": {
+        "class": "Array",
+        "value": "[{key=>value}, {alg=>HS256}]",
+        "object_id": 2660,
+        "size": 2
+      }
+    }
+  ],
+  "version": "1.7.0",
+  "metadata": {
+    "app": "jwt-rb",
+    "language": {
+      "name": "ruby",
+      "engine": "ruby",
+      "version": "3.0.1"
+    },
+    "client": {
+      "name": "appmap",
+      "url": "https://github.com/getappmap/appmap-ruby",
+      "version": "0.83.6-dev"
+    },
+    "fingerprints": [
+      {
+        "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+        "canonicalization_algorithm": "classDependencies",
+        "digest": "bbc7b110f56965e15530a6b6194665f4c6e8ed1eab2084eba14e0488dc225e1d",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+        "canonicalization_algorithm": "classes",
+        "digest": "8d94e8e08dab0068dffa3c431eebf722ac1493018346308dffe5a5b477fec023",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+        "canonicalization_algorithm": "httpClientRequests",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+        "canonicalization_algorithm": "httpServerRequests",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+        "canonicalization_algorithm": "info",
+        "digest": "6184fff7d6e974cc70c9b8337d1c160e2a494c28aa4489fd017dca07dac2c06b",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+        "canonicalization_algorithm": "labels",
+        "digest": "1e0ffb08cabb1787d466c39c589bcff932041742620fac103382e2f7d1f7b93d",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+        "canonicalization_algorithm": "packageDependencies",
+        "digest": "14e259b8f5c00aa85daec483c2165983c8ee9a1595ff354cc8585f66e59e7808",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+        "canonicalization_algorithm": "packages",
+        "digest": "bc3abbde5a235187ff15d8c90da074b21063b92e17733f1f7c6ad252db22674f",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+        "canonicalization_algorithm": "sqlNormalized",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+        "canonicalization_algorithm": "sqlTables",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+        "canonicalization_algorithm": "trace",
+        "digest": "6d15391d39a33fe9a6abda6453b279648ccd83e715ab76739306a239e37db3a7",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "4c1952e7382b31a10ca52ba5f1eb922cd6c1aae26523802e4be6dd59422ef103",
+        "canonicalization_algorithm": "update",
+        "digest": "6184fff7d6e974cc70c9b8337d1c160e2a494c28aa4489fd017dca07dac2c06b",
+        "fingerprint_algorithm": "sha256"
+      }
+    ]
+  },
+  "classMap": [
+    {
+      "name": "jwt",
+      "type": "package",
+      "children": [
+        {
+          "name": "JWT",
+          "type": "class",
+          "children": [
+            {
+              "name": "decode",
+              "type": "function",
+              "labels": [
+                "jwt.decode"
+              ],
+              "static": true,
+              "location": "/Users/dustin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/jwt-2.4.1/lib/jwt.rb:27"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ruby",
+      "type": "package",
+      "children": [
+        {
+          "name": "String",
+          "type": "class",
+          "children": [
+            {
+              "name": "unpack1",
+              "type": "function",
+              "labels": [
+                "string.unpack"
+              ],
+              "static": false,
+              "location": "<internal:pack>:280"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "json",
+      "type": "package",
+      "children": [
+        {
+          "name": "JSON",
+          "type": "class",
+          "children": [
+            {
+              "name": "Ext",
+              "type": "class",
+              "children": [
+                {
+                  "name": "Parser",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "parse",
+                      "type": "function",
+                      "labels": [
+                        "format.json.parse",
+                        "deserialize.safe"
+                      ],
+                      "static": false,
+                      "location": "JSON::Ext::Parser#parse"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

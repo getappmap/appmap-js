@@ -1,0 +1,126 @@
+[
+  {
+    "kind": "function",
+    "labels": [
+      "log"
+    ]
+  },
+  {
+    "kind": "sql",
+    "sql": {
+      "analyzed_query": {
+        "actions": [],
+        "tables": [],
+        "columns": [],
+        "joinCount": 0
+      }
+    }
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "log"
+    ]
+  },
+  {
+    "kind": "sql",
+    "sql": {
+      "analyzed_query": {
+        "actions": [
+          "select"
+        ],
+        "tables": [
+          "pg_attrdef",
+          "pg_attribute",
+          "pg_class",
+          "pg_index",
+          "pg_type"
+        ],
+        "columns": [
+          "basetype.oid",
+          "false",
+          "pg_attrdef.adbin",
+          "pg_attrdef.adnum",
+          "pg_attrdef.adrelid",
+          "pg_attribute.attgenerated",
+          "pg_attribute.attidentity",
+          "pg_attribute.attisdropped",
+          "pg_attribute.attname",
+          "pg_attribute.attnotnull",
+          "pg_attribute.attnum",
+          "pg_attribute.attrelid",
+          "pg_attribute.atttypid",
+          "pg_attribute.atttypmod",
+          "pg_class.oid",
+          "pg_index.indisprimary",
+          "pg_index.indkey",
+          "pg_index.indrelid",
+          "pg_type.oid",
+          "pg_type.typbasetype",
+          "pg_type.typtypmod",
+          "true"
+        ],
+        "joinCount": 5
+      }
+    }
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "log"
+    ]
+  },
+  {
+    "kind": "sql",
+    "sql": {
+      "analyzed_query": {
+        "actions": [],
+        "tables": [],
+        "columns": [],
+        "joinCount": 0
+      }
+    }
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "log"
+    ]
+  },
+  {
+    "kind": "sql",
+    "sql": {
+      "analyzed_query": {
+        "actions": [
+          "select"
+        ],
+        "tables": [
+          "finding_occurrences_v",
+          "scanner_checks"
+        ],
+        "columns": [
+          "finding_occurrences_v.scanner_check_id",
+          "finding_occurrences_v.scanner_job_id",
+          "identity_hash",
+          "impact_category",
+          "message",
+          "refs",
+          "scanner_check_id",
+          "scanner_checks.check_id",
+          "scanner_checks.description",
+          "scanner_checks.job_id",
+          "scanner_job_id",
+          "status"
+        ],
+        "joinCount": 1
+      }
+    }
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "format.json.parse",
+      "deserialize.safe"
+    ]
+  }
+]

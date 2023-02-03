@@ -34623,7 +34623,7 @@
       {
         "appmap_digest": "f95cb1e7673db60b150ef530f7116ee1d0d0a78ae659ac5bf2d140226e8970c4",
         "canonicalization_algorithm": "httpClientRequests",
-        "digest": "2ad243476cbf67ec741d003b500bdaed47463c8febf8815bca4953d6f4da3e1d",
+        "digest": "835062a9c76e4ced59a14153316b5c570006370899e53c720dd6f2cd5dfd347e",
         "fingerprint_algorithm": "sha256"
       },
       {
@@ -34635,7 +34635,7 @@
       {
         "appmap_digest": "f95cb1e7673db60b150ef530f7116ee1d0d0a78ae659ac5bf2d140226e8970c4",
         "canonicalization_algorithm": "info",
-        "digest": "d1584c04417cb53acdb95d94d769d282dce6e011bbbfb7f8ff6f30acfb6b4d56",
+        "digest": "b9e0ae665d149593e277a8108255a0533c84189bf1c7b4b9c7a1ff321112d397",
         "fingerprint_algorithm": "sha256"
       },
       {
@@ -34671,13 +34671,13 @@
       {
         "appmap_digest": "f95cb1e7673db60b150ef530f7116ee1d0d0a78ae659ac5bf2d140226e8970c4",
         "canonicalization_algorithm": "trace",
-        "digest": "d8e1d3adb4691b6f11771863d78c37957827929d5db53dff23edc001a430a78e",
+        "digest": "deb7a838bb1e63adf677dcf1a6dc9d3abd09dd6c56b2b3e0a40641c622c02210",
         "fingerprint_algorithm": "sha256"
       },
       {
         "appmap_digest": "f95cb1e7673db60b150ef530f7116ee1d0d0a78ae659ac5bf2d140226e8970c4",
         "canonicalization_algorithm": "update",
-        "digest": "745e4e34feb1f4ff3bb56ea86063bae53e7c166702b36a01d64fe8511b3e5f22",
+        "digest": "4b95ec30db3d6cf0dd2f11a207e4e6bf842bf85772bc5deae214f679b10bb2dc",
         "fingerprint_algorithm": "sha256"
       }
     ]

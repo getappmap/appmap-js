@@ -1,0 +1,17 @@
+[
+  "actionpack",
+  "actionview",
+  "activejob",
+  "activerecord",
+  "activesupport",
+  "app/controllers",
+  "app/helpers",
+  "app/models",
+  "app/views",
+  "json",
+  "logger",
+  "openssl",
+  "psych",
+  "ruby",
+  "sprockets"
+]

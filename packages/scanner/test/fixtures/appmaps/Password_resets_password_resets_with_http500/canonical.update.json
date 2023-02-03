@@ -1,0 +1,3780 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "GET /password_resets/new",
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "public"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.template"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "security.authentication"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "POST /password_resets",
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "public"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "security.authentication"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "POST /password_resets",
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.decrypt"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "public"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "secret",
+                  "secret.generator"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [
+                      "update"
+                    ],
+                    "tables": [
+                      "users"
+                    ],
+                    "columns": [
+                      "reset_digest",
+                      "updated_at",
+                      "users.id"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [
+                      "update"
+                    ],
+                    "tables": [
+                      "users"
+                    ],
+                    "columns": [
+                      "reset_sent_at",
+                      "updated_at",
+                      "users.id"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /password_resets/{id}/edit",
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.decrypt"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /password_resets/{id}/edit",
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.decrypt"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /password_resets/{id}/edit",
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.decrypt"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.secure_compare"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /password_resets/{id}/edit",
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.decrypt"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.secure_compare"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "public"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.template"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "security.authentication"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "PATCH /password_resets/{id}",
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.decrypt"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.secure_compare"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "public"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "security.authentication"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "PATCH /password_resets/{id}",
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.decrypt"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.secure_compare"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "public"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "security.authentication"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "PATCH /password_resets/{id}",
+    "status_code": 500,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.decrypt"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.secure_compare"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "public"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [
+                      "update"
+                    ],
+                    "tables": [
+                      "users"
+                    ],
+                    "columns": [
+                      "password_digest",
+                      "updated_at",
+                      "users.id"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

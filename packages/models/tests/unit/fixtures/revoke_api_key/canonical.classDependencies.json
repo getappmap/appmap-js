@@ -1,0 +1,50 @@
+[
+  {
+    "caller": "HTTP server requests->DELETE /api/api_keys",
+    "callee": "app/controllers/API"
+  },
+  {
+    "caller": "HTTP server requests->DELETE /api/api_keys",
+    "callee": "app/models/ApiKey"
+  },
+  {
+    "caller": "HTTP server requests->DELETE /api/api_keys",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/controllers/API",
+    "callee": "app/models/ApiKey"
+  },
+  {
+    "caller": "app/models/ApiKey",
+    "callee": "Database->DELETE FROM \"api_keys\" WHERE \"id\" = 9"
+  },
+  {
+    "caller": "app/models/ApiKey",
+    "callee": "Database->SELECT * FROM \"api_keys\" WHERE (\"login\" = 'admin')"
+  },
+  {
+    "caller": "app/models/ApiKey",
+    "callee": "Database->SELECT * FROM \"users\" WHERE (\"users\".\"login\" = 'admin') LIMIT 1"
+  },
+  {
+    "caller": "app/models/ApiKey",
+    "callee": "Database->SELECT \"attname\", (CASE \"pg_type\".\"typbasetype\" WHEN 0 THEN \"atttypid\" ELSE \"pg_type\".\"typbasetype\" END) AS \"atttypid\" FROM \"pg_attribute\" INNER JOIN \"pg_type\" ON (\"pg_type\".\"oid\" = \"pg_attribute\".\"atttypid\") WHERE ((\"attrelid\" = 223731) AND (\"attnum\" > 0) AND NOT \"attisdropped\") ORDER BY \"attnum\""
+  },
+  {
+    "caller": "app/models/ApiKey",
+    "callee": "Database->SELECT \"attname\", (CASE \"pg_type\".\"typbasetype\" WHEN 0 THEN \"atttypid\" ELSE \"pg_type\".\"typbasetype\" END) AS \"atttypid\" FROM \"pg_attribute\" INNER JOIN \"pg_type\" ON (\"pg_type\".\"oid\" = \"pg_attribute\".\"atttypid\") WHERE ((\"attrelid\" = 223734) AND (\"attnum\" > 0) AND NOT \"attisdropped\") ORDER BY \"attnum\""
+  },
+  {
+    "caller": "app/models/ApiKey",
+    "callee": "Database->SELECT \"pg_type\".\"oid\", \"typrelid\", \"typarray\" FROM \"pg_type\" WHERE ((\"typtype\" = 'c') AND (\"typname\" = 'fn_call')) LIMIT 1"
+  },
+  {
+    "caller": "app/models/ApiKey",
+    "callee": "Database->SELECT \"pg_type\".\"oid\", \"typrelid\", \"typarray\" FROM \"pg_type\" WHERE ((\"typtype\" = 'c') AND (\"typname\" = 'q_class')) LIMIT 1"
+  },
+  {
+    "caller": "app/models/ApiKey",
+    "callee": "Database->UPDATE \"api_keys\" SET \"last_used\" = '2021-01-12 18:48:00.281150+0000' WHERE (\"id\" = 9)"
+  }
+]

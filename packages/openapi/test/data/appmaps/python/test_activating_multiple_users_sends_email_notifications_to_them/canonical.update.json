@@ -1,0 +1,64 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "POST /admincp/users/",
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "update"
+            ],
+            "tables": [
+              "misago_users_user"
+            ],
+            "columns": [
+              "misago_users_user.id",
+              "requires_activation"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "update"
+            ],
+            "tables": [
+              "misago_users_online"
+            ],
+            "columns": [
+              "last_click",
+              "misago_users_online.user_id"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "update"
+            ],
+            "tables": [
+              "django_session"
+            ],
+            "columns": [
+              "django_session.session_key",
+              "expire_date",
+              "session_data"
+            ],
+            "joinCount": 0
+          }
+        }
+      }
+    ]
+  }
+]

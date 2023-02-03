@@ -1,0 +1,70 @@
+[
+  {
+    "caller": "HTTP server requests",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "app"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "logger"
+  },
+  {
+    "caller": "activerecord",
+    "callee": "Database"
+  },
+  {
+    "caller": "activerecord",
+    "callee": "logger"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "app"
+  },
+  {
+    "caller": "app",
+    "callee": "HTTP server requests"
+  },
+  {
+    "caller": "app",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app",
+    "callee": "actionview"
+  },
+  {
+    "caller": "app",
+    "callee": "activerecord"
+  },
+  {
+    "caller": "app",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "app",
+    "callee": "lib/webpacker"
+  },
+  {
+    "caller": "app",
+    "callee": "logger"
+  },
+  {
+    "caller": "app",
+    "callee": "ruby"
+  },
+  {
+    "caller": "lib/webpacker",
+    "callee": "json"
+  }
+]

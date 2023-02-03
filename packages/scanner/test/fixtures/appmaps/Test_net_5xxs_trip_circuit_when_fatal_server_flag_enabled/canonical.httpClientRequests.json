@@ -1,0 +1,12 @@
+[
+  {
+    "route": "GET http://semian:31050/500",
+    "parameters": "()",
+    "status": 500
+  },
+  {
+    "route": "GET http://toxiproxy:8474/proxies",
+    "parameters": "()",
+    "status": 200
+  }
+]

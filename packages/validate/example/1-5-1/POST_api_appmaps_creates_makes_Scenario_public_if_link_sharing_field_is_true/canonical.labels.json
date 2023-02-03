@@ -1,0 +1,9 @@
+[
+  "format.json",
+  "http.session",
+  "mvc.after_action",
+  "mvc.before_action",
+  "mvc.controller",
+  "security.api_key.touch",
+  "security.authentication"
+]

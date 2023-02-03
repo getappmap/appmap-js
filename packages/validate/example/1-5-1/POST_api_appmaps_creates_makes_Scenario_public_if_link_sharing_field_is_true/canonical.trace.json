@@ -1,0 +1,394 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "POST /api/appmaps",
+    "parameter_names": [
+      "data",
+      "link_sharing",
+      "controller",
+      "action",
+      "appmap"
+    ],
+    "status_code": 201,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "normalized_query": "SAVEPOINT autopoint_1"
+            },
+            "analyzed_query": {
+              "actions": [],
+              "tables": [],
+              "columns": [],
+              "joinCount": 0
+            }
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "app/controllers/AnonymousAccess#anonymous_access?",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "app/models/ApiKey.authenticate",
+                "labels": [
+                  "security.authentication"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/models/ApiKey.decode",
+                    "labels": []
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT * FROM \"api_keys\" WHERE (\"login\" = ?)"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "api_keys"
+                      ],
+                      "columns": [
+                        "*",
+                        "login"
+                      ],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/models/ApiKey.touch",
+                    "labels": [
+                      "security.api_key.touch"
+                    ],
+                    "children": [
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "normalized_query": "UPDATE \"api_keys\" SET \"last_used\" = ? WHERE (\"id\" = ?)"
+                        },
+                        "analyzed_query": {
+                          "actions": [
+                            "update"
+                          ],
+                          "tables": [
+                            "api_keys"
+                          ],
+                          "columns": [
+                            "id",
+                            "last_used"
+                          ],
+                          "joinCount": 0
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT * FROM \"users\" WHERE (\"users\".\"login\" = ?) LIMIT ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "users"
+                      ],
+                      "columns": [
+                        "*",
+                        "users.login"
+                      ],
+                      "joinCount": 0
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "json/JSON::Ext::Parser#parse",
+                "labels": [
+                  "format.json"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/models/User::Show#personal_org",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/models/DAO::User#personal_org",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "normalized_query": "SELECT * FROM \"orgs\" WHERE ((\"name\" IS ?) AND (\"slug\" IS ?) AND (\"owner_id\" = ?)) LIMIT ?"
+                        },
+                        "analyzed_query": {
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "orgs"
+                          ],
+                          "columns": [
+                            "*",
+                            "name",
+                            "owner_id",
+                            "slug"
+                          ],
+                          "joinCount": 0
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/models/DAO::ToModel#to_model",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/models/Exceptions::Forbidden.check_user_org_membership",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/models/User::Show#member_of?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "normalized_query": "SELECT * FROM \"users_orgs\" WHERE ((\"user_id\" = ?) AND (\"org_id\" = ?))"
+                        },
+                        "analyzed_query": {
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "users_orgs"
+                          ],
+                          "columns": [
+                            "*",
+                            "org_id",
+                            "user_id"
+                          ],
+                          "joinCount": 0
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/API::AppmapsController#create",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "app/models/DAO::Scenario#raw_data=",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "app/models/DAO::Scenario#validate",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/models/DAO::Scenario#raw_data",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/models/DAO::Scenario#raw_data",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/models/DAO::Scenario#raw_data",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/models/DAO::Scenario#before_save",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/models/DAO::Scenario#store_raw_data",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/models/DAO::Scenario#raw_data",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/models/DAO::Scenario#raw_data",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/models/DAO::Scenario#raw_data",
+                        "labels": []
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "normalized_query": "INSERT INTO \"scenario_data\" (\"data\") VALUES (?) ON CONFLICT (\"sha_256\") DO UPDATE SET \"sha_256\" = DEFAULT RETURNING \"sha_256\""
+                        },
+                        "analyzed_query": {
+                          "actions": [
+                            "insert"
+                          ],
+                          "tables": [
+                            "scenario_data"
+                          ],
+                          "columns": [
+                            "data",
+                            "sha_256"
+                          ],
+                          "joinCount": 0
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "INSERT INTO \"scenarios\" (\"org_id\", \"link_sharing\", \"sha_256\") VALUES (?, ?, ?) RETURNING *"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "insert"
+                  ],
+                  "tables": [
+                    "scenarios"
+                  ],
+                  "columns": [
+                    "link_sharing",
+                    "org_id",
+                    "sha_256",
+                    "true"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "json/JSON::Ext::Parser#parse",
+                "labels": [
+                  "format.json"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "json/JSON::Ext::Parser#parse",
+                "labels": [
+                  "format.json"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "json/JSON::Ext::Parser#parse",
+                "labels": [
+                  "format.json"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "json/JSON::Ext::Parser#parse",
+                "labels": [
+                  "format.json"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "json/JSON::Ext::Generator::State#generate",
+                "labels": [
+                  "format.json"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "normalized_query": "RELEASE SAVEPOINT autopoint_1"
+            },
+            "analyzed_query": {
+              "actions": [],
+              "tables": [],
+              "columns": [],
+              "joinCount": 0
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

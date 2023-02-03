@@ -1,0 +1,13 @@
+[
+  "active_support/ActiveSupport::SecurityUtils",
+  "app/controllers/Spree::Admin::OrdersController",
+  "app/controllers/Spree::Admin::RootController",
+  "app/helpers/Spree::Admin::BaseHelper",
+  "app/helpers/Spree::Admin::NavigationHelper",
+  "app/helpers/Spree::Admin::OrdersHelper",
+  "json/JSON::Ext::Generator::State",
+  "json/JSON::Ext::Parser",
+  "lib/Spree::BackendConfiguration",
+  "openssl/Digest::Instance",
+  "openssl/OpenSSL::Cipher"
+]

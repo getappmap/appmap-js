@@ -1,0 +1,7 @@
+[
+  {
+    "route": "GET /:organization_id/:id/component_diagram(.:format)",
+    "parameters": "(mapset,controller,action,organization_id,id)",
+    "status": 200
+  }
+]

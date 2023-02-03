@@ -1,0 +1,90 @@
+[
+  {
+    "caller": "HTTP server requests->POST /api/appmaps",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "Database->RELEASE SAVEPOINT autopoint_1"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "Database->SAVEPOINT autopoint_1"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/controllers/API"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "app/controllers/AnonymousAccess"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "app/models/ApiKey"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "app/models/Exceptions"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/controllers/API",
+    "callee": "Database->INSERT INTO \"scenarios\" (\"org_id\", \"link_sharing\", \"sha_256\") VALUES (31, true, '\\x44ea81a387d1b942a9d9dbe481b8c003ea4655e10210a46fc1a7b209d710aafe') RETURNING *"
+  },
+  {
+    "caller": "app/controllers/API",
+    "callee": "app/models/DAO"
+  },
+  {
+    "caller": "app/controllers/API",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/models/ApiKey",
+    "callee": "Database->SELECT * FROM \"api_keys\" WHERE (\"login\" = 'admin')"
+  },
+  {
+    "caller": "app/models/ApiKey",
+    "callee": "Database->SELECT * FROM \"users\" WHERE (\"users\".\"login\" = 'admin') LIMIT 1"
+  },
+  {
+    "caller": "app/models/ApiKey",
+    "callee": "Database->UPDATE \"api_keys\" SET \"last_used\" = '2021-06-10 15:15:22.697901+0000' WHERE (\"id\" = 4)"
+  },
+  {
+    "caller": "app/models/DAO",
+    "callee": "Database->INSERT INTO \"scenario_data\" (\"data\") VALUES ('{\"version\":\"1.2\",\"classMap\":[{\"name\":\"controllers\",\"location\":\"app/controllers\",\"type\":\"package\",\"children\":[{\"name\":\"SessionController\",\"location\":\"app/controllers/session_controller.rb:2\",\"type\":\"class\",\"children\":[{\"name\":\"create\",\"location\":\"app/controllers/session_controller.rb:4\",\"type\":\"function\"}]}]},{\"name\":\"models\",\"location\":\"app/models\",\"type\":\"package\",\"children\":[{\"name\":\"Session\",\"location\":\"app/models/session.rb:2\",\"type\":\"class\",\"children\":[{\"name\":\"initialize\",\"location\":\"app/models/session.rb:4\",\"type\":\"function\"},{\"name\":\"delete\",\"location\":\"app/models/session.rb:8\",\"type\":\"function\",\"static\":true}]}]}],\"metadata\":{\"name\":\"Example scenario\"},\"events\":[{\"id\":1,\"event\":\"call\",\"defined_class\":\"SessionController\",\"method_id\":\"create\",\"path\":\"app/controllers/session_controller.rb\",\"lineno\":4,\"receiver\":{\"class\":\"SessionController\",\"value\":\"#\\u003cSessionController:0x0000000000000000\\u003e\",\"object_id\":\"0\"},\"http_server_request\":{\"request_method\":\"POST\",\"normalized_path_info\":\"/sessions/new\",\"path_info\":\"/sessions/new\"},\"message\":[{\"name\":\"login\",\"class\":\"String\",\"object_id\":70252828231460,\"value\":\"alice\"}]},{\"id\":2,\"event\":\"call\",\"defined_class\":\"Session\",\"method_id\":\"initialize\",\"path\":\"app/models/session.rb\",\"lineno\":4,\"receiver\":{\"class\":\"Session\",\"value\":\"#\\u003cSession:0x0000000000000000\\u003e\",\"object_id\":\"1\"},\"sql_query\":{\"sql\":\"SELECT * FROM users WHERE login = ''alice''\"}},{\"id\":3,\"event\":\"return\",\"defined_class\":\"Session\",\"method_id\":\"initialize\",\"path\":\"app/models/session.rb\",\"lineno\":4,\"parent_id\":2},{\"id\":4,\"event\":\"return\",\"defined_class\":\"SessionController\",\"method_id\":\"create\",\"path\":\"app/controllers/session_controller.rb\",\"lineno\":4,\"parent_id\":1}]}') ON CONFLICT (\"sha_256\") DO UPDATE SET \"sha_256\" = DEFAULT RETURNING \"sha_256\""
+  },
+  {
+    "caller": "app/models/DAO",
+    "callee": "Database->SELECT * FROM \"orgs\" WHERE ((\"name\" IS NULL) AND (\"slug\" IS NULL) AND (\"owner_id\" = 17)) LIMIT 1"
+  },
+  {
+    "caller": "app/models/Exceptions",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "Database->SELECT * FROM \"users_orgs\" WHERE ((\"user_id\" = 17) AND (\"org_id\" = 31))"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "app/models/DAO"
+  }
+]

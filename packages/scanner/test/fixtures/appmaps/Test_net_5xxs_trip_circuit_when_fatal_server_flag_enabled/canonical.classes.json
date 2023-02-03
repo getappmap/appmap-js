@@ -1,0 +1,17 @@
+[
+  "json/JSON::Ext::Parser",
+  "lib/LRUHash",
+  "lib/Semian",
+  "lib/Semian::Adapter",
+  "lib/Semian::CircuitBreaker",
+  "lib/Semian::Instrumentable",
+  "lib/Semian::NetHTTP",
+  "lib/Semian::ProtectedResource",
+  "lib/Semian::Simple::Integer",
+  "lib/Semian::Simple::SlidingWindow",
+  "lib/Semian::Simple::State",
+  "lib/Semian::ThreadSafe::SlidingWindow",
+  "ruby/Semian::CircuitBreaker",
+  "toxiproxy/Toxiproxy",
+  "webrick/WEBrick::HTTPVersion"
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "route": "DELETE /api/api_keys(.:format)",
+    "parameters": "(controller,action)",
+    "status": 200
+  },
+  {
+    "route": "DELETE /api/api_keys(.:format)",
+    "parameters": "(controller,action)",
+    "status": 401
+  }
+]

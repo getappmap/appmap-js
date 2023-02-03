@@ -1,0 +1,1116 @@
+{
+  "configuration": {
+    "checks": [
+      {
+        "rule": "authz-before-authn"
+      },
+      {
+        "rule": "deprecated-crypto-algorithm"
+      },
+      {
+        "rule": "deserialization-of-untrusted-data"
+      },
+      {
+        "rule": "exec-of-untrusted-command"
+      },
+      {
+        "rule": "http-500"
+      },
+      {
+        "rule": "logout-without-session-reset"
+      },
+      {
+        "rule": "missing-content-type"
+      },
+      {
+        "rule": "n-plus-one-query"
+      },
+      {
+        "rule": "secret-in-log"
+      },
+      {
+        "rule": "too-many-joins"
+      },
+      {
+        "rule": "too-many-updates"
+      },
+      {
+        "rule": "unauthenticated-encryption"
+      },
+      {
+        "rule": "update-in-get-request"
+      }
+    ],
+    "timestampMs": 1675346609376.2805
+  },
+  "appMapMetadata": {
+    "/Users/danwarner/Documents/PROJECTS/appmap-js/packages/models/tests/unit/fixtures/checkout_update_payment.appmap.json": {
+      "name": "PATCH /checkout/update/payment (302) - 18:20:24.540",
+      "timestamp": 1665699624.540032,
+      "fingerprints": [
+        {
+          "appmap_digest": "f95cb1e7673db60b150ef530f7116ee1d0d0a78ae659ac5bf2d140226e8970c4",
+          "canonicalization_algorithm": "classDependencies",
+          "digest": "02ba740ed320be802fd5deac730088875508e9b232d29a2510239ef53dec3d3c",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "f95cb1e7673db60b150ef530f7116ee1d0d0a78ae659ac5bf2d140226e8970c4",
+          "canonicalization_algorithm": "classes",
+          "digest": "605746031cc1b9105682d581e17beac48b219f58ea24ebd0a58cd0cd9234f3d3",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "f95cb1e7673db60b150ef530f7116ee1d0d0a78ae659ac5bf2d140226e8970c4",
+          "canonicalization_algorithm": "httpClientRequests",
+          "digest": "835062a9c76e4ced59a14153316b5c570006370899e53c720dd6f2cd5dfd347e",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "f95cb1e7673db60b150ef530f7116ee1d0d0a78ae659ac5bf2d140226e8970c4",
+          "canonicalization_algorithm": "httpServerRequests",
+          "digest": "5d78a8b4c27174efcbbba26edfccc03f9121f3df6a278d3f0dc39c8542ee21d1",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "f95cb1e7673db60b150ef530f7116ee1d0d0a78ae659ac5bf2d140226e8970c4",
+          "canonicalization_algorithm": "info",
+          "digest": "b9e0ae665d149593e277a8108255a0533c84189bf1c7b4b9c7a1ff321112d397",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "f95cb1e7673db60b150ef530f7116ee1d0d0a78ae659ac5bf2d140226e8970c4",
+          "canonicalization_algorithm": "labels",
+          "digest": "97039a912c9850dfe021ac041f567f10f5a6e5b9c99e5a7362be4be9d0dd8bc6",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "f95cb1e7673db60b150ef530f7116ee1d0d0a78ae659ac5bf2d140226e8970c4",
+          "canonicalization_algorithm": "packageDependencies",
+          "digest": "6abe6a18ad4ce88eeb5e9410a8c606109496ed4e2374f49374183c1ed6de1591",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "f95cb1e7673db60b150ef530f7116ee1d0d0a78ae659ac5bf2d140226e8970c4",
+          "canonicalization_algorithm": "packages",
+          "digest": "2784210dbd312bb2741b7f6bf07cba78bc793d8c8bae4d51553cedbc3027e248",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "f95cb1e7673db60b150ef530f7116ee1d0d0a78ae659ac5bf2d140226e8970c4",
+          "canonicalization_algorithm": "sqlNormalized",
+          "digest": "64372584970b5900deda5ca4eb696afcc977c65bc9f60efba68809a69065b539",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "f95cb1e7673db60b150ef530f7116ee1d0d0a78ae659ac5bf2d140226e8970c4",
+          "canonicalization_algorithm": "sqlTables",
+          "digest": "6d9c88ab4ca6fdc41547a9a1f51f73b5ac9be367dcc122f907ce58c85bace304",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "f95cb1e7673db60b150ef530f7116ee1d0d0a78ae659ac5bf2d140226e8970c4",
+          "canonicalization_algorithm": "trace",
+          "digest": "deb7a838bb1e63adf677dcf1a6dc9d3abd09dd6c56b2b3e0a40641c622c02210",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "f95cb1e7673db60b150ef530f7116ee1d0d0a78ae659ac5bf2d140226e8970c4",
+          "canonicalization_algorithm": "update",
+          "digest": "4b95ec30db3d6cf0dd2f11a207e4e6bf842bf85772bc5deae214f679b10bb2dc",
+          "fingerprint_algorithm": "sha256"
+        }
+      ]
+    }
+  },
+  "findings": [
+    {
+      "appMapFile": "/Users/danwarner/Documents/PROJECTS/appmap-js/packages/models/tests/unit/fixtures/checkout_update_payment.appmap.json",
+      "checkId": "authz-before-authn",
+      "ruleId": "authz-before-authn",
+      "ruleTitle": "Authorization performed before authentication",
+      "event": {
+        "id": 464,
+        "event": "call",
+        "thread_id": 255600,
+        "defined_class": "CanCan::ControllerAdditions",
+        "method_id": "authorize!",
+        "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/cancancan-3.3.0/lib/cancan/controller_additions.rb",
+        "lineno": 337,
+        "static": false,
+        "parameters": [
+          {
+            "name": "args",
+            "class": "Array",
+            "object_id": 606820,
+            "value": "[:edit, #<Spree::Order:0x00007fd29879e3a8>, ciul1v8nbJ-5wERNU-TFLg]",
+            "kind": "rest",
+            "size": 3
+          }
+        ],
+        "receiver": {
+          "class": "Spree::CheckoutController",
+          "object_id": 602400,
+          "value": "#<Spree::CheckoutController:0x00007fd2992daaa0>"
+        }
+      },
+      "hash": "4b043068bdfa4f7082e9e009602c05a4ad347d78114111f83f5aaedcf482647a",
+      "hash_v2": "23335cc58bf97df51e46f774aa94457da3c42a6034a52f9fa96d1396a5fb6c60",
+      "stack": [
+        "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/cancancan-3.3.0/lib/cancan/controller_additions.rb:337",
+        "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-6.1.4.1/lib/active_support/callbacks.rb:511",
+        "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-6.1.4.1/lib/action_controller/metal/instrumentation.rb:19"
+      ],
+      "scope": {
+        "id": 11,
+        "event": "call",
+        "thread_id": 255600,
+        "http_server_request": {
+          "request_method": "PATCH",
+          "path_info": "/checkout/update/payment",
+          "normalized_path_info": "/checkout/update/{state}",
+          "headers": {
+            "Version": "HTTP/1.1",
+            "Host": "localhost:3000",
+            "Connection": "keep-alive",
+            "Cache-Control": "max-age=0",
+            "Sec-Ch-Ua": "\"Chromium\";v=\"106\", \"Google Chrome\";v=\"106\", \"Not;A=Brand\";v=\"99\"",
+            "Sec-Ch-Ua-Mobile": "?0",
+            "Sec-Ch-Ua-Platform": "\"macOS\"",
+            "Upgrade-Insecure-Requests": "1",
+            "Origin": "http://localhost:3000",
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+            "Sec-Fetch-Site": "same-origin",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-User": "?1",
+            "Sec-Fetch-Dest": "document",
+            "Referer": "http://localhost:3000/checkout/payment",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Cookie": "_ga=GA1.1.1213146986.1575654207; drift_aid=f88fbc14-72de-4d8b-9749-1b37213e461a; appland_session=ckVAbheovkQ%2FDqIyaeSowddE2A8iqM1mH5dWWEP0wMbSeu4KcH8zZX5kVESxzOk757ZH2ZeCiRJHkw80xY79ogZXz6MsoPwiTdLX6E6oeaiy1rX%2FFkAFlQRcRQzkYWGvIjjzT6a3oKX6xV31%2F4WFOqJQl37j9zh5qno%2BSkddeHKgIy%2B%2BTr3XHI1lswfcPusHo7KYI7rBaaZL9A3SqDM7V1g3XLrvMrBlD2Umm1dlypOMe9alsZdjbPsFuVvSbq4jLGpgm1d8hWRJBu%2B%2BcMiF8ZB4JO3d65B8FAwpskfDtx5xeJlGDuxEmiiOXreId6SPS1kMh7LIbFWH%2FZwYfVoYnLGbBF6gDyBTle4BZPjBlKeAoCTMHAueKlEvCGXOZkrR%2FQ9y5W%2FUn8jhAN6rDMlrDYcb3GWeGMWAyuEEzaAdeeWtRwq3q91QtlgNRIhYOnjEo8yhb2WNV%2BzuUwSYjBlj63qD0%2BsOnlolyz1U0NkVjDHJGBvvcyEnkwcEUPeJKXyoQJbm7g2AQ13Lwt8JZcF%2BEIgbuJUP93JqfzScc7v0607FdUL9KUKfjzzwYyK9Py8wJXWPg4ngE97plA2kW3%2F8CeATq7jVcNbEnLQHeGwMKQAumgddgvPuuUAJa1q0AeoDyNdt0FJG0NQSCLwAAuBdk2e%2FWefiNx2paNzv6A1TzWPtA5gO1D1MV8z%2BZ4EqPTVmH052Dnrw3SlL56Ff3BoZ7ruFYvBCLjnOakOmoc%2BIglXY7Wo0rMoWq8aM3w7ZMcFPgAc%2Bei97UmqVBU65xg%3D%3D--n3jMUrTiyCjcAN3H--XvdlRc3WUB0EAY0AOzFqhg%3D%3D; guest_token=eyJfcmFpbHMiOnsibWVzc2FnZSI6IkltTnBkV3d4ZGpodVlrb3ROWGRGVWs1VkxWUkdUR2NpIiwiZXhwIjpudWxsLCJwdXIiOiJjb29raWUuZ3Vlc3RfdG9rZW4ifX0%3D--3979062763b5e65681aa44b622d592c7e893bf5b; user_id=fkmpJAilptad%2FB%2F5ZqREVaKd27G7denb0olH2c1K%2F%2FGDbk%2FJ%2BrM5ZehgvWCag3Zk40FLFxmf5J5lM1Yqc44R--oqXHTKOKGdcpUlXd--NliHnMy7Ewz6rlLfbQliaA%3D%3D; remember_token=ViTgOh9-5v5633UsdSLSfA; _sample_app_session=KZ98LetIhezrqE1z6pC2mVdKULEYknyc5a6XOKhofHgwSM55HTWz7Aaf4TsPLk168Yv7u4U1OZcsF%2FsflwEX61kM3ppi4o94IOEYDiFsDfkC%2B2tVKEvdKF3DSJ88suqRCHUQkDu1nbYNWhV%2B5lfxKvUOXxzjP%2FhxO3bbnid4TO6mBBXyx9Fm%2BTCJi7JuDS7vCVE6KHdXBgx%2BATqvPWYSc5Ttmhc8W%2BwMnpwC2dX08d5gZwn1ugDC08HIvX7Kak8etcHikBd0%2B3jUPjjoBDFQJnrFS%2B6qCr3fBsbaleL7OqhEGjYgdEIx%2Fyk9Kw%3D%3D--55FD%2F33DdWThyP8x--x05gBElnMjGoP9J2Ybv%2Fvw%3D%3D; _ga_JV359KDXJW=GS1.1.1665699504.11.1.1665699615.0.0.0; _solidus_demo_session=x2jX427YXo0%2F6wnAxXC4cV1rm5xlO3JohZNrq2eVAojKLRhiq9imM2JYer8saI%2FGd3R4IFpJyUzgSXT9O97CaL%2B9wHNwznbIB0artRcunovClNWQJrLm%2FKh8MTqHy8Oe0KqqoDZcFPXKt1LplIiLga5a7ZrWI9woHEi0%2F6Dn7nh%2Ff6Ic7LiG2dFICGA5WXkzsDK7n4ynSLVZ1qLawobKGKUci92YQuQcsP87EuMfnhjA5733gQz0x4wHgfW%2B1Il7jBJjaT%2F%2B0g0cBbUEBqW5cAmtxgSba5jpyRd3JSD6s%2BLAc9QrzDsHgAH5TbQsJyPR8HP%2FOL8tFRHYp3XvvwdZbNRQU%2BD3Ztsa%2Bw%3D%3D--j2So2N1RCzidt4ps--8C45NQOkwJ7l2yifhbRPtg%3D%3D",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Content-Length": "2019"
+          }
+        },
+        "message": [
+          {
+            "name": "_method",
+            "class": "String",
+            "value": "patch",
+            "object_id": 620100
+          },
+          {
+            "name": "authenticity_token",
+            "class": "String",
+            "value": "JXB9LWHnuvz1DrHvBnmDG0mZlIV5oTwI4vjC3zw1xJEJWrOwHKiAiCd7NkfjWSN0FPJLA4zKhz7P42fXWAqrHw==",
+            "object_id": 602520
+          },
+          {
+            "name": "order",
+            "class": "ActiveSupport::HashWithIndifferentAccess",
+            "value": "{payments_attributes=>[{payment_method_id=>4}]}",
+            "object_id": 620120,
+            "properties": [
+              {
+                "name": "payments_attributes",
+                "class": "Array"
+              }
+            ]
+          },
+          {
+            "name": "payment_source",
+            "class": "ActiveSupport::HashWithIndifferentAccess",
+            "value": "{2=>{name=>Kevin , number=>[FILTERED], expiry=>, verification_value=>[FILTERED], address_attributes=>{name=>Kevin, company=>, address1=>10 Main St, address2=>, city=>Boston, country_id=>233, state_id=>3455, state_name=>, zipcode=>02493, phone=>5551212 (...1 more entries)}, cc_type=>}, 4=>{name=>Kevin , number=>[FILTERED], expiry=>12/34, verification_value=>[FILTERED], address_attributes=>{name=>Kevin, company=>, address1=>10 Main St, address2=>, city=>Boston, country_id=>233, state_id=>3455, state_name=>, zipcode=>02493, phone=>5551212 (...1 more entries)}, cc_type=>}}",
+            "object_id": 620140,
+            "properties": [
+              {
+                "name": "2",
+                "class": "ActiveSupport::HashWithIndifferentAccess"
+              },
+              {
+                "name": "4",
+                "class": "ActiveSupport::HashWithIndifferentAccess"
+              }
+            ]
+          },
+          {
+            "name": "controller",
+            "class": "String",
+            "value": "spree/checkout",
+            "object_id": 478420
+          },
+          {
+            "name": "action",
+            "class": "String",
+            "value": "update",
+            "object_id": 368720
+          },
+          {
+            "name": "state",
+            "class": "String",
+            "value": "payment",
+            "object_id": 605240
+          }
+        ]
+      },
+      "message": "CanCan::ControllerAdditions#authorize! provides authorization, but the request is not authenticated",
+      "relatedEvents": [
+        {
+          "id": 464,
+          "event": "call",
+          "thread_id": 255600,
+          "defined_class": "CanCan::ControllerAdditions",
+          "method_id": "authorize!",
+          "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/cancancan-3.3.0/lib/cancan/controller_additions.rb",
+          "lineno": 337,
+          "static": false,
+          "parameters": [
+            {
+              "name": "args",
+              "class": "Array",
+              "object_id": 606820,
+              "value": "[:edit, #<Spree::Order:0x00007fd29879e3a8>, ciul1v8nbJ-5wERNU-TFLg]",
+              "kind": "rest",
+              "size": 3
+            }
+          ],
+          "receiver": {
+            "class": "Spree::CheckoutController",
+            "object_id": 602400,
+            "value": "#<Spree::CheckoutController:0x00007fd2992daaa0>"
+          }
+        },
+        {
+          "id": 11,
+          "event": "call",
+          "thread_id": 255600,
+          "http_server_request": {
+            "request_method": "PATCH",
+            "path_info": "/checkout/update/payment",
+            "normalized_path_info": "/checkout/update/{state}",
+            "headers": {
+              "Version": "HTTP/1.1",
+              "Host": "localhost:3000",
+              "Connection": "keep-alive",
+              "Cache-Control": "max-age=0",
+              "Sec-Ch-Ua": "\"Chromium\";v=\"106\", \"Google Chrome\";v=\"106\", \"Not;A=Brand\";v=\"99\"",
+              "Sec-Ch-Ua-Mobile": "?0",
+              "Sec-Ch-Ua-Platform": "\"macOS\"",
+              "Upgrade-Insecure-Requests": "1",
+              "Origin": "http://localhost:3000",
+              "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36",
+              "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+              "Sec-Fetch-Site": "same-origin",
+              "Sec-Fetch-Mode": "navigate",
+              "Sec-Fetch-User": "?1",
+              "Sec-Fetch-Dest": "document",
+              "Referer": "http://localhost:3000/checkout/payment",
+              "Accept-Encoding": "gzip, deflate, br",
+              "Accept-Language": "en-US,en;q=0.9",
+              "Cookie": "_ga=GA1.1.1213146986.1575654207; drift_aid=f88fbc14-72de-4d8b-9749-1b37213e461a; appland_session=ckVAbheovkQ%2FDqIyaeSowddE2A8iqM1mH5dWWEP0wMbSeu4KcH8zZX5kVESxzOk757ZH2ZeCiRJHkw80xY79ogZXz6MsoPwiTdLX6E6oeaiy1rX%2FFkAFlQRcRQzkYWGvIjjzT6a3oKX6xV31%2F4WFOqJQl37j9zh5qno%2BSkddeHKgIy%2B%2BTr3XHI1lswfcPusHo7KYI7rBaaZL9A3SqDM7V1g3XLrvMrBlD2Umm1dlypOMe9alsZdjbPsFuVvSbq4jLGpgm1d8hWRJBu%2B%2BcMiF8ZB4JO3d65B8FAwpskfDtx5xeJlGDuxEmiiOXreId6SPS1kMh7LIbFWH%2FZwYfVoYnLGbBF6gDyBTle4BZPjBlKeAoCTMHAueKlEvCGXOZkrR%2FQ9y5W%2FUn8jhAN6rDMlrDYcb3GWeGMWAyuEEzaAdeeWtRwq3q91QtlgNRIhYOnjEo8yhb2WNV%2BzuUwSYjBlj63qD0%2BsOnlolyz1U0NkVjDHJGBvvcyEnkwcEUPeJKXyoQJbm7g2AQ13Lwt8JZcF%2BEIgbuJUP93JqfzScc7v0607FdUL9KUKfjzzwYyK9Py8wJXWPg4ngE97plA2kW3%2F8CeATq7jVcNbEnLQHeGwMKQAumgddgvPuuUAJa1q0AeoDyNdt0FJG0NQSCLwAAuBdk2e%2FWefiNx2paNzv6A1TzWPtA5gO1D1MV8z%2BZ4EqPTVmH052Dnrw3SlL56Ff3BoZ7ruFYvBCLjnOakOmoc%2BIglXY7Wo0rMoWq8aM3w7ZMcFPgAc%2Bei97UmqVBU65xg%3D%3D--n3jMUrTiyCjcAN3H--XvdlRc3WUB0EAY0AOzFqhg%3D%3D; guest_token=eyJfcmFpbHMiOnsibWVzc2FnZSI6IkltTnBkV3d4ZGpodVlrb3ROWGRGVWs1VkxWUkdUR2NpIiwiZXhwIjpudWxsLCJwdXIiOiJjb29raWUuZ3Vlc3RfdG9rZW4ifX0%3D--3979062763b5e65681aa44b622d592c7e893bf5b; user_id=fkmpJAilptad%2FB%2F5ZqREVaKd27G7denb0olH2c1K%2F%2FGDbk%2FJ%2BrM5ZehgvWCag3Zk40FLFxmf5J5lM1Yqc44R--oqXHTKOKGdcpUlXd--NliHnMy7Ewz6rlLfbQliaA%3D%3D; remember_token=ViTgOh9-5v5633UsdSLSfA; _sample_app_session=KZ98LetIhezrqE1z6pC2mVdKULEYknyc5a6XOKhofHgwSM55HTWz7Aaf4TsPLk168Yv7u4U1OZcsF%2FsflwEX61kM3ppi4o94IOEYDiFsDfkC%2B2tVKEvdKF3DSJ88suqRCHUQkDu1nbYNWhV%2B5lfxKvUOXxzjP%2FhxO3bbnid4TO6mBBXyx9Fm%2BTCJi7JuDS7vCVE6KHdXBgx%2BATqvPWYSc5Ttmhc8W%2BwMnpwC2dX08d5gZwn1ugDC08HIvX7Kak8etcHikBd0%2B3jUPjjoBDFQJnrFS%2B6qCr3fBsbaleL7OqhEGjYgdEIx%2Fyk9Kw%3D%3D--55FD%2F33DdWThyP8x--x05gBElnMjGoP9J2Ybv%2Fvw%3D%3D; _ga_JV359KDXJW=GS1.1.1665699504.11.1.1665699615.0.0.0; _solidus_demo_session=x2jX427YXo0%2F6wnAxXC4cV1rm5xlO3JohZNrq2eVAojKLRhiq9imM2JYer8saI%2FGd3R4IFpJyUzgSXT9O97CaL%2B9wHNwznbIB0artRcunovClNWQJrLm%2FKh8MTqHy8Oe0KqqoDZcFPXKt1LplIiLga5a7ZrWI9woHEi0%2F6Dn7nh%2Ff6Ic7LiG2dFICGA5WXkzsDK7n4ynSLVZ1qLawobKGKUci92YQuQcsP87EuMfnhjA5733gQz0x4wHgfW%2B1Il7jBJjaT%2F%2B0g0cBbUEBqW5cAmtxgSba5jpyRd3JSD6s%2BLAc9QrzDsHgAH5TbQsJyPR8HP%2FOL8tFRHYp3XvvwdZbNRQU%2BD3Ztsa%2Bw%3D%3D--j2So2N1RCzidt4ps--8C45NQOkwJ7l2yifhbRPtg%3D%3D",
+              "Content-Type": "application/x-www-form-urlencoded",
+              "Content-Length": "2019"
+            }
+          },
+          "message": [
+            {
+              "name": "_method",
+              "class": "String",
+              "value": "patch",
+              "object_id": 620100
+            },
+            {
+              "name": "authenticity_token",
+              "class": "String",
+              "value": "JXB9LWHnuvz1DrHvBnmDG0mZlIV5oTwI4vjC3zw1xJEJWrOwHKiAiCd7NkfjWSN0FPJLA4zKhz7P42fXWAqrHw==",
+              "object_id": 602520
+            },
+            {
+              "name": "order",
+              "class": "ActiveSupport::HashWithIndifferentAccess",
+              "value": "{payments_attributes=>[{payment_method_id=>4}]}",
+              "object_id": 620120,
+              "properties": [
+                {
+                  "name": "payments_attributes",
+                  "class": "Array"
+                }
+              ]
+            },
+            {
+              "name": "payment_source",
+              "class": "ActiveSupport::HashWithIndifferentAccess",
+              "value": "{2=>{name=>Kevin , number=>[FILTERED], expiry=>, verification_value=>[FILTERED], address_attributes=>{name=>Kevin, company=>, address1=>10 Main St, address2=>, city=>Boston, country_id=>233, state_id=>3455, state_name=>, zipcode=>02493, phone=>5551212 (...1 more entries)}, cc_type=>}, 4=>{name=>Kevin , number=>[FILTERED], expiry=>12/34, verification_value=>[FILTERED], address_attributes=>{name=>Kevin, company=>, address1=>10 Main St, address2=>, city=>Boston, country_id=>233, state_id=>3455, state_name=>, zipcode=>02493, phone=>5551212 (...1 more entries)}, cc_type=>}}",
+              "object_id": 620140,
+              "properties": [
+                {
+                  "name": "2",
+                  "class": "ActiveSupport::HashWithIndifferentAccess"
+                },
+                {
+                  "name": "4",
+                  "class": "ActiveSupport::HashWithIndifferentAccess"
+                }
+              ]
+            },
+            {
+              "name": "controller",
+              "class": "String",
+              "value": "spree/checkout",
+              "object_id": 478420
+            },
+            {
+              "name": "action",
+              "class": "String",
+              "value": "update",
+              "object_id": 368720
+            },
+            {
+              "name": "state",
+              "class": "String",
+              "value": "payment",
+              "object_id": 605240
+            }
+          ]
+        }
+      ],
+      "impactDomain": "Security",
+      "participatingEvents": {
+        "request": {
+          "id": 11,
+          "event": "call",
+          "thread_id": 255600,
+          "http_server_request": {
+            "request_method": "PATCH",
+            "path_info": "/checkout/update/payment",
+            "normalized_path_info": "/checkout/update/{state}",
+            "headers": {
+              "Version": "HTTP/1.1",
+              "Host": "localhost:3000",
+              "Connection": "keep-alive",
+              "Cache-Control": "max-age=0",
+              "Sec-Ch-Ua": "\"Chromium\";v=\"106\", \"Google Chrome\";v=\"106\", \"Not;A=Brand\";v=\"99\"",
+              "Sec-Ch-Ua-Mobile": "?0",
+              "Sec-Ch-Ua-Platform": "\"macOS\"",
+              "Upgrade-Insecure-Requests": "1",
+              "Origin": "http://localhost:3000",
+              "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36",
+              "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+              "Sec-Fetch-Site": "same-origin",
+              "Sec-Fetch-Mode": "navigate",
+              "Sec-Fetch-User": "?1",
+              "Sec-Fetch-Dest": "document",
+              "Referer": "http://localhost:3000/checkout/payment",
+              "Accept-Encoding": "gzip, deflate, br",
+              "Accept-Language": "en-US,en;q=0.9",
+              "Cookie": "_ga=GA1.1.1213146986.1575654207; drift_aid=f88fbc14-72de-4d8b-9749-1b37213e461a; appland_session=ckVAbheovkQ%2FDqIyaeSowddE2A8iqM1mH5dWWEP0wMbSeu4KcH8zZX5kVESxzOk757ZH2ZeCiRJHkw80xY79ogZXz6MsoPwiTdLX6E6oeaiy1rX%2FFkAFlQRcRQzkYWGvIjjzT6a3oKX6xV31%2F4WFOqJQl37j9zh5qno%2BSkddeHKgIy%2B%2BTr3XHI1lswfcPusHo7KYI7rBaaZL9A3SqDM7V1g3XLrvMrBlD2Umm1dlypOMe9alsZdjbPsFuVvSbq4jLGpgm1d8hWRJBu%2B%2BcMiF8ZB4JO3d65B8FAwpskfDtx5xeJlGDuxEmiiOXreId6SPS1kMh7LIbFWH%2FZwYfVoYnLGbBF6gDyBTle4BZPjBlKeAoCTMHAueKlEvCGXOZkrR%2FQ9y5W%2FUn8jhAN6rDMlrDYcb3GWeGMWAyuEEzaAdeeWtRwq3q91QtlgNRIhYOnjEo8yhb2WNV%2BzuUwSYjBlj63qD0%2BsOnlolyz1U0NkVjDHJGBvvcyEnkwcEUPeJKXyoQJbm7g2AQ13Lwt8JZcF%2BEIgbuJUP93JqfzScc7v0607FdUL9KUKfjzzwYyK9Py8wJXWPg4ngE97plA2kW3%2F8CeATq7jVcNbEnLQHeGwMKQAumgddgvPuuUAJa1q0AeoDyNdt0FJG0NQSCLwAAuBdk2e%2FWefiNx2paNzv6A1TzWPtA5gO1D1MV8z%2BZ4EqPTVmH052Dnrw3SlL56Ff3BoZ7ruFYvBCLjnOakOmoc%2BIglXY7Wo0rMoWq8aM3w7ZMcFPgAc%2Bei97UmqVBU65xg%3D%3D--n3jMUrTiyCjcAN3H--XvdlRc3WUB0EAY0AOzFqhg%3D%3D; guest_token=eyJfcmFpbHMiOnsibWVzc2FnZSI6IkltTnBkV3d4ZGpodVlrb3ROWGRGVWs1VkxWUkdUR2NpIiwiZXhwIjpudWxsLCJwdXIiOiJjb29raWUuZ3Vlc3RfdG9rZW4ifX0%3D--3979062763b5e65681aa44b622d592c7e893bf5b; user_id=fkmpJAilptad%2FB%2F5ZqREVaKd27G7denb0olH2c1K%2F%2FGDbk%2FJ%2BrM5ZehgvWCag3Zk40FLFxmf5J5lM1Yqc44R--oqXHTKOKGdcpUlXd--NliHnMy7Ewz6rlLfbQliaA%3D%3D; remember_token=ViTgOh9-5v5633UsdSLSfA; _sample_app_session=KZ98LetIhezrqE1z6pC2mVdKULEYknyc5a6XOKhofHgwSM55HTWz7Aaf4TsPLk168Yv7u4U1OZcsF%2FsflwEX61kM3ppi4o94IOEYDiFsDfkC%2B2tVKEvdKF3DSJ88suqRCHUQkDu1nbYNWhV%2B5lfxKvUOXxzjP%2FhxO3bbnid4TO6mBBXyx9Fm%2BTCJi7JuDS7vCVE6KHdXBgx%2BATqvPWYSc5Ttmhc8W%2BwMnpwC2dX08d5gZwn1ugDC08HIvX7Kak8etcHikBd0%2B3jUPjjoBDFQJnrFS%2B6qCr3fBsbaleL7OqhEGjYgdEIx%2Fyk9Kw%3D%3D--55FD%2F33DdWThyP8x--x05gBElnMjGoP9J2Ybv%2Fvw%3D%3D; _ga_JV359KDXJW=GS1.1.1665699504.11.1.1665699615.0.0.0; _solidus_demo_session=x2jX427YXo0%2F6wnAxXC4cV1rm5xlO3JohZNrq2eVAojKLRhiq9imM2JYer8saI%2FGd3R4IFpJyUzgSXT9O97CaL%2B9wHNwznbIB0artRcunovClNWQJrLm%2FKh8MTqHy8Oe0KqqoDZcFPXKt1LplIiLga5a7ZrWI9woHEi0%2F6Dn7nh%2Ff6Ic7LiG2dFICGA5WXkzsDK7n4ynSLVZ1qLawobKGKUci92YQuQcsP87EuMfnhjA5733gQz0x4wHgfW%2B1Il7jBJjaT%2F%2B0g0cBbUEBqW5cAmtxgSba5jpyRd3JSD6s%2BLAc9QrzDsHgAH5TbQsJyPR8HP%2FOL8tFRHYp3XvvwdZbNRQU%2BD3Ztsa%2Bw%3D%3D--j2So2N1RCzidt4ps--8C45NQOkwJ7l2yifhbRPtg%3D%3D",
+              "Content-Type": "application/x-www-form-urlencoded",
+              "Content-Length": "2019"
+            }
+          },
+          "message": [
+            {
+              "name": "_method",
+              "class": "String",
+              "value": "patch",
+              "object_id": 620100
+            },
+            {
+              "name": "authenticity_token",
+              "class": "String",
+              "value": "JXB9LWHnuvz1DrHvBnmDG0mZlIV5oTwI4vjC3zw1xJEJWrOwHKiAiCd7NkfjWSN0FPJLA4zKhz7P42fXWAqrHw==",
+              "object_id": 602520
+            },
+            {
+              "name": "order",
+              "class": "ActiveSupport::HashWithIndifferentAccess",
+              "value": "{payments_attributes=>[{payment_method_id=>4}]}",
+              "object_id": 620120,
+              "properties": [
+                {
+                  "name": "payments_attributes",
+                  "class": "Array"
+                }
+              ]
+            },
+            {
+              "name": "payment_source",
+              "class": "ActiveSupport::HashWithIndifferentAccess",
+              "value": "{2=>{name=>Kevin , number=>[FILTERED], expiry=>, verification_value=>[FILTERED], address_attributes=>{name=>Kevin, company=>, address1=>10 Main St, address2=>, city=>Boston, country_id=>233, state_id=>3455, state_name=>, zipcode=>02493, phone=>5551212 (...1 more entries)}, cc_type=>}, 4=>{name=>Kevin , number=>[FILTERED], expiry=>12/34, verification_value=>[FILTERED], address_attributes=>{name=>Kevin, company=>, address1=>10 Main St, address2=>, city=>Boston, country_id=>233, state_id=>3455, state_name=>, zipcode=>02493, phone=>5551212 (...1 more entries)}, cc_type=>}}",
+              "object_id": 620140,
+              "properties": [
+                {
+                  "name": "2",
+                  "class": "ActiveSupport::HashWithIndifferentAccess"
+                },
+                {
+                  "name": "4",
+                  "class": "ActiveSupport::HashWithIndifferentAccess"
+                }
+              ]
+            },
+            {
+              "name": "controller",
+              "class": "String",
+              "value": "spree/checkout",
+              "object_id": 478420
+            },
+            {
+              "name": "action",
+              "class": "String",
+              "value": "update",
+              "object_id": 368720
+            },
+            {
+              "name": "state",
+              "class": "String",
+              "value": "payment",
+              "object_id": 605240
+            }
+          ]
+        }
+      }
+    },
+    {
+      "appMapFile": "/Users/danwarner/Documents/PROJECTS/appmap-js/packages/models/tests/unit/fixtures/checkout_update_payment.appmap.json",
+      "checkId": "n-plus-one-query",
+      "ruleId": "n-plus-one-query",
+      "ruleTitle": "N plus 1 SQL query",
+      "event": {
+        "id": 1369,
+        "event": "call",
+        "thread_id": 255600,
+        "sql_query": {
+          "sql": "SELECT \"spree_sample_changes\".* FROM \"spree_sample_changes\" WHERE (\"spree_sample_changes\".\"sample_indicator_id\" = $1 OR \"spree_sample_changes\".\"sample_indicator_id\" IS NULL) AND \"spree_sample_changes\".\"changeable_type\" = $2 AND \"spree_sample_changes\".\"changeable_id\" = $3 LIMIT $4",
+          "database_type": "postgres"
+        }
+      },
+      "hash": "bf3794cf3646d5210e7eb6cab3fc7cfa653157eae0c8260a995c78bc89d5f98c",
+      "hash_v2": "09d16af510487c4462f8c1fee8d0e3ada43c2512b0bf4c45c58cbd00b280708f",
+      "stack": [
+        "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activerecord-6.1.4.1/lib/active_record/relation.rb:248",
+        "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-6.1.4.1/lib/active_support/callbacks.rb:515",
+        "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activerecord-6.1.4.1/lib/active_record/relation.rb:248",
+        "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-6.1.4.1/lib/active_support/callbacks.rb:515",
+        "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-6.1.4.1/lib/active_support/callbacks.rb:515",
+        "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/bundler/gems/solidus_starter_frontend-709e44e93dbe/app/controllers/spree/checkout_controller.rb:29",
+        "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-6.1.4.1/lib/action_controller/metal/instrumentation.rb:19"
+      ],
+      "scope": {
+        "id": 11,
+        "event": "call",
+        "thread_id": 255600,
+        "http_server_request": {
+          "request_method": "PATCH",
+          "path_info": "/checkout/update/payment",
+          "normalized_path_info": "/checkout/update/{state}",
+          "headers": {
+            "Version": "HTTP/1.1",
+            "Host": "localhost:3000",
+            "Connection": "keep-alive",
+            "Cache-Control": "max-age=0",
+            "Sec-Ch-Ua": "\"Chromium\";v=\"106\", \"Google Chrome\";v=\"106\", \"Not;A=Brand\";v=\"99\"",
+            "Sec-Ch-Ua-Mobile": "?0",
+            "Sec-Ch-Ua-Platform": "\"macOS\"",
+            "Upgrade-Insecure-Requests": "1",
+            "Origin": "http://localhost:3000",
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+            "Sec-Fetch-Site": "same-origin",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-User": "?1",
+            "Sec-Fetch-Dest": "document",
+            "Referer": "http://localhost:3000/checkout/payment",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Cookie": "_ga=GA1.1.1213146986.1575654207; drift_aid=f88fbc14-72de-4d8b-9749-1b37213e461a; appland_session=ckVAbheovkQ%2FDqIyaeSowddE2A8iqM1mH5dWWEP0wMbSeu4KcH8zZX5kVESxzOk757ZH2ZeCiRJHkw80xY79ogZXz6MsoPwiTdLX6E6oeaiy1rX%2FFkAFlQRcRQzkYWGvIjjzT6a3oKX6xV31%2F4WFOqJQl37j9zh5qno%2BSkddeHKgIy%2B%2BTr3XHI1lswfcPusHo7KYI7rBaaZL9A3SqDM7V1g3XLrvMrBlD2Umm1dlypOMe9alsZdjbPsFuVvSbq4jLGpgm1d8hWRJBu%2B%2BcMiF8ZB4JO3d65B8FAwpskfDtx5xeJlGDuxEmiiOXreId6SPS1kMh7LIbFWH%2FZwYfVoYnLGbBF6gDyBTle4BZPjBlKeAoCTMHAueKlEvCGXOZkrR%2FQ9y5W%2FUn8jhAN6rDMlrDYcb3GWeGMWAyuEEzaAdeeWtRwq3q91QtlgNRIhYOnjEo8yhb2WNV%2BzuUwSYjBlj63qD0%2BsOnlolyz1U0NkVjDHJGBvvcyEnkwcEUPeJKXyoQJbm7g2AQ13Lwt8JZcF%2BEIgbuJUP93JqfzScc7v0607FdUL9KUKfjzzwYyK9Py8wJXWPg4ngE97plA2kW3%2F8CeATq7jVcNbEnLQHeGwMKQAumgddgvPuuUAJa1q0AeoDyNdt0FJG0NQSCLwAAuBdk2e%2FWefiNx2paNzv6A1TzWPtA5gO1D1MV8z%2BZ4EqPTVmH052Dnrw3SlL56Ff3BoZ7ruFYvBCLjnOakOmoc%2BIglXY7Wo0rMoWq8aM3w7ZMcFPgAc%2Bei97UmqVBU65xg%3D%3D--n3jMUrTiyCjcAN3H--XvdlRc3WUB0EAY0AOzFqhg%3D%3D; guest_token=eyJfcmFpbHMiOnsibWVzc2FnZSI6IkltTnBkV3d4ZGpodVlrb3ROWGRGVWs1VkxWUkdUR2NpIiwiZXhwIjpudWxsLCJwdXIiOiJjb29raWUuZ3Vlc3RfdG9rZW4ifX0%3D--3979062763b5e65681aa44b622d592c7e893bf5b; user_id=fkmpJAilptad%2FB%2F5ZqREVaKd27G7denb0olH2c1K%2F%2FGDbk%2FJ%2BrM5ZehgvWCag3Zk40FLFxmf5J5lM1Yqc44R--oqXHTKOKGdcpUlXd--NliHnMy7Ewz6rlLfbQliaA%3D%3D; remember_token=ViTgOh9-5v5633UsdSLSfA; _sample_app_session=KZ98LetIhezrqE1z6pC2mVdKULEYknyc5a6XOKhofHgwSM55HTWz7Aaf4TsPLk168Yv7u4U1OZcsF%2FsflwEX61kM3ppi4o94IOEYDiFsDfkC%2B2tVKEvdKF3DSJ88suqRCHUQkDu1nbYNWhV%2B5lfxKvUOXxzjP%2FhxO3bbnid4TO6mBBXyx9Fm%2BTCJi7JuDS7vCVE6KHdXBgx%2BATqvPWYSc5Ttmhc8W%2BwMnpwC2dX08d5gZwn1ugDC08HIvX7Kak8etcHikBd0%2B3jUPjjoBDFQJnrFS%2B6qCr3fBsbaleL7OqhEGjYgdEIx%2Fyk9Kw%3D%3D--55FD%2F33DdWThyP8x--x05gBElnMjGoP9J2Ybv%2Fvw%3D%3D; _ga_JV359KDXJW=GS1.1.1665699504.11.1.1665699615.0.0.0; _solidus_demo_session=x2jX427YXo0%2F6wnAxXC4cV1rm5xlO3JohZNrq2eVAojKLRhiq9imM2JYer8saI%2FGd3R4IFpJyUzgSXT9O97CaL%2B9wHNwznbIB0artRcunovClNWQJrLm%2FKh8MTqHy8Oe0KqqoDZcFPXKt1LplIiLga5a7ZrWI9woHEi0%2F6Dn7nh%2Ff6Ic7LiG2dFICGA5WXkzsDK7n4ynSLVZ1qLawobKGKUci92YQuQcsP87EuMfnhjA5733gQz0x4wHgfW%2B1Il7jBJjaT%2F%2B0g0cBbUEBqW5cAmtxgSba5jpyRd3JSD6s%2BLAc9QrzDsHgAH5TbQsJyPR8HP%2FOL8tFRHYp3XvvwdZbNRQU%2BD3Ztsa%2Bw%3D%3D--j2So2N1RCzidt4ps--8C45NQOkwJ7l2yifhbRPtg%3D%3D",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Content-Length": "2019"
+          }
+        },
+        "message": [
+          {
+            "name": "_method",
+            "class": "String",
+            "value": "patch",
+            "object_id": 620100
+          },
+          {
+            "name": "authenticity_token",
+            "class": "String",
+            "value": "JXB9LWHnuvz1DrHvBnmDG0mZlIV5oTwI4vjC3zw1xJEJWrOwHKiAiCd7NkfjWSN0FPJLA4zKhz7P42fXWAqrHw==",
+            "object_id": 602520
+          },
+          {
+            "name": "order",
+            "class": "ActiveSupport::HashWithIndifferentAccess",
+            "value": "{payments_attributes=>[{payment_method_id=>4}]}",
+            "object_id": 620120,
+            "properties": [
+              {
+                "name": "payments_attributes",
+                "class": "Array"
+              }
+            ]
+          },
+          {
+            "name": "payment_source",
+            "class": "ActiveSupport::HashWithIndifferentAccess",
+            "value": "{2=>{name=>Kevin , number=>[FILTERED], expiry=>, verification_value=>[FILTERED], address_attributes=>{name=>Kevin, company=>, address1=>10 Main St, address2=>, city=>Boston, country_id=>233, state_id=>3455, state_name=>, zipcode=>02493, phone=>5551212 (...1 more entries)}, cc_type=>}, 4=>{name=>Kevin , number=>[FILTERED], expiry=>12/34, verification_value=>[FILTERED], address_attributes=>{name=>Kevin, company=>, address1=>10 Main St, address2=>, city=>Boston, country_id=>233, state_id=>3455, state_name=>, zipcode=>02493, phone=>5551212 (...1 more entries)}, cc_type=>}}",
+            "object_id": 620140,
+            "properties": [
+              {
+                "name": "2",
+                "class": "ActiveSupport::HashWithIndifferentAccess"
+              },
+              {
+                "name": "4",
+                "class": "ActiveSupport::HashWithIndifferentAccess"
+              }
+            ]
+          },
+          {
+            "name": "controller",
+            "class": "String",
+            "value": "spree/checkout",
+            "object_id": 478420
+          },
+          {
+            "name": "action",
+            "class": "String",
+            "value": "update",
+            "object_id": 368720
+          },
+          {
+            "name": "state",
+            "class": "String",
+            "value": "payment",
+            "object_id": 605240
+          }
+        ]
+      },
+      "message": "ActiveRecord::Relation#records[1348] contains 9 occurrences of SQL: SELECT \"spree_sample_changes\".* FROM \"spree_sample_changes\" WHERE (\"spree_sample_changes\".\"sample_indicator_id\" = $? OR \"spree_sample_changes\".\"sample_indicator_id\" IS ?) AND \"spree_sample_changes\".\"changeable_type\" = $? AND \"spree_sample_changes\".\"changeable_id\" = $? LIMIT $?",
+      "groupMessage": "SELECT \"spree_sample_changes\".* FROM \"spree_sample_changes\" WHERE (\"spree_sample_changes\".\"sample_indicator_id\" = $? OR \"spree_sample_changes\".\"sample_indicator_id\" IS ?) AND \"spree_sample_changes\".\"changeable_type\" = $? AND \"spree_sample_changes\".\"changeable_id\" = $? LIMIT $?",
+      "occurranceCount": 9,
+      "relatedEvents": [
+        {
+          "id": 1369,
+          "event": "call",
+          "thread_id": 255600,
+          "sql_query": {
+            "sql": "SELECT \"spree_sample_changes\".* FROM \"spree_sample_changes\" WHERE (\"spree_sample_changes\".\"sample_indicator_id\" = $1 OR \"spree_sample_changes\".\"sample_indicator_id\" IS NULL) AND \"spree_sample_changes\".\"changeable_type\" = $2 AND \"spree_sample_changes\".\"changeable_id\" = $3 LIMIT $4",
+            "database_type": "postgres"
+          }
+        },
+        {
+          "id": 1387,
+          "event": "call",
+          "thread_id": 255600,
+          "sql_query": {
+            "sql": "SELECT \"spree_sample_changes\".* FROM \"spree_sample_changes\" WHERE (\"spree_sample_changes\".\"sample_indicator_id\" = $1 OR \"spree_sample_changes\".\"sample_indicator_id\" IS NULL) AND \"spree_sample_changes\".\"changeable_type\" = $2 AND \"spree_sample_changes\".\"changeable_id\" = $3 LIMIT $4",
+            "database_type": "postgres"
+          }
+        },
+        {
+          "id": 1405,
+          "event": "call",
+          "thread_id": 255600,
+          "sql_query": {
+            "sql": "SELECT \"spree_sample_changes\".* FROM \"spree_sample_changes\" WHERE (\"spree_sample_changes\".\"sample_indicator_id\" = $1 OR \"spree_sample_changes\".\"sample_indicator_id\" IS NULL) AND \"spree_sample_changes\".\"changeable_type\" = $2 AND \"spree_sample_changes\".\"changeable_id\" = $3 LIMIT $4",
+            "database_type": "postgres"
+          }
+        },
+        {
+          "id": 1423,
+          "event": "call",
+          "thread_id": 255600,
+          "sql_query": {
+            "sql": "SELECT \"spree_sample_changes\".* FROM \"spree_sample_changes\" WHERE (\"spree_sample_changes\".\"sample_indicator_id\" = $1 OR \"spree_sample_changes\".\"sample_indicator_id\" IS NULL) AND \"spree_sample_changes\".\"changeable_type\" = $2 AND \"spree_sample_changes\".\"changeable_id\" = $3 LIMIT $4",
+            "database_type": "postgres"
+          }
+        },
+        {
+          "id": 1441,
+          "event": "call",
+          "thread_id": 255600,
+          "sql_query": {
+            "sql": "SELECT \"spree_sample_changes\".* FROM \"spree_sample_changes\" WHERE (\"spree_sample_changes\".\"sample_indicator_id\" = $1 OR \"spree_sample_changes\".\"sample_indicator_id\" IS NULL) AND \"spree_sample_changes\".\"changeable_type\" = $2 AND \"spree_sample_changes\".\"changeable_id\" = $3 LIMIT $4",
+            "database_type": "postgres"
+          }
+        },
+        {
+          "id": 1459,
+          "event": "call",
+          "thread_id": 255600,
+          "sql_query": {
+            "sql": "SELECT \"spree_sample_changes\".* FROM \"spree_sample_changes\" WHERE (\"spree_sample_changes\".\"sample_indicator_id\" = $1 OR \"spree_sample_changes\".\"sample_indicator_id\" IS NULL) AND \"spree_sample_changes\".\"changeable_type\" = $2 AND \"spree_sample_changes\".\"changeable_id\" = $3 LIMIT $4",
+            "database_type": "postgres"
+          }
+        },
+        {
+          "id": 1477,
+          "event": "call",
+          "thread_id": 255600,
+          "sql_query": {
+            "sql": "SELECT \"spree_sample_changes\".* FROM \"spree_sample_changes\" WHERE (\"spree_sample_changes\".\"sample_indicator_id\" = $1 OR \"spree_sample_changes\".\"sample_indicator_id\" IS NULL) AND \"spree_sample_changes\".\"changeable_type\" = $2 AND \"spree_sample_changes\".\"changeable_id\" = $3 LIMIT $4",
+            "database_type": "postgres"
+          }
+        },
+        {
+          "id": 1495,
+          "event": "call",
+          "thread_id": 255600,
+          "sql_query": {
+            "sql": "SELECT \"spree_sample_changes\".* FROM \"spree_sample_changes\" WHERE (\"spree_sample_changes\".\"sample_indicator_id\" = $1 OR \"spree_sample_changes\".\"sample_indicator_id\" IS NULL) AND \"spree_sample_changes\".\"changeable_type\" = $2 AND \"spree_sample_changes\".\"changeable_id\" = $3 LIMIT $4",
+            "database_type": "postgres"
+          }
+        },
+        {
+          "id": 1513,
+          "event": "call",
+          "thread_id": 255600,
+          "sql_query": {
+            "sql": "SELECT \"spree_sample_changes\".* FROM \"spree_sample_changes\" WHERE (\"spree_sample_changes\".\"sample_indicator_id\" = $1 OR \"spree_sample_changes\".\"sample_indicator_id\" IS NULL) AND \"spree_sample_changes\".\"changeable_type\" = $2 AND \"spree_sample_changes\".\"changeable_id\" = $3 LIMIT $4",
+            "database_type": "postgres"
+          }
+        },
+        {
+          "id": 1348,
+          "event": "call",
+          "thread_id": 255600,
+          "defined_class": "ActiveRecord::Relation",
+          "method_id": "records",
+          "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activerecord-6.1.4.1/lib/active_record/relation.rb",
+          "lineno": 248,
+          "static": false,
+          "receiver": {
+            "class": "ActiveRecord::AssociationRelation",
+            "object_id": 614440,
+            "value": "#<Spree::Payment::ActiveRecord_AssociationRelation:0x00007fd29915bf08>"
+          }
+        }
+      ],
+      "impactDomain": "Performance",
+      "participatingEvents": {
+        "commonAncestor": {
+          "id": 1348,
+          "event": "call",
+          "thread_id": 255600,
+          "defined_class": "ActiveRecord::Relation",
+          "method_id": "records",
+          "path": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activerecord-6.1.4.1/lib/active_record/relation.rb",
+          "lineno": 248,
+          "static": false,
+          "receiver": {
+            "class": "ActiveRecord::AssociationRelation",
+            "object_id": 614440,
+            "value": "#<Spree::Payment::ActiveRecord_AssociationRelation:0x00007fd29915bf08>"
+          }
+        }
+      }
+    }
+  ],
+  "checks": [
+    {
+      "rule": {
+        "id": "authz-before-authn",
+        "title": "Authorization performed before authentication",
+        "labels": ["security.authorization", "security.authentication"],
+        "scope": "http_server_request",
+        "impactDomain": "Security",
+        "enumerateScope": false,
+        "references": {
+          "CWE-863": "https://cwe.mitre.org/data/definitions/863.html"
+        },
+        "description": "Determines when authorization logic is applied to a user identity that has not been properly verified. Because the the user's identity has not been verified yet, the outcome of the authorization check cannot be trusted. A malicious user might be able to get themselves authorized as a different user than they really are - or they may not be logged in at all.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#authz-before-authn"
+      },
+      "id": "authz-before-authn",
+      "options": {},
+      "scope": "http_server_request",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Security"
+    },
+    {
+      "rule": {
+        "id": "deprecated-crypto-algorithm",
+        "title": "Deprecated cryptographic algorithm",
+        "description": "---\nrule: deprecated-crypto-algorithm\nname: Deprecated crypto algorithm\ntitle: Deprecated cryptographic algorithm\nreferences:\n  A02:2021: https://owasp.org/Top10/A02_2021-Cryptographic_Failures/\nimpactDomain: Security\nlabels:\n  - crypto.encrypt\n  - crypto.decrypt\n  - crypto.digest\nscope: root\n---\n\nEnsure that cryptographic operations do not use deprecated algorithms.\n",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#deprecated-crypto-algorithm",
+        "labels": ["crypto.encrypt", "crypto.decrypt", "crypto.digest"],
+        "scope": "root",
+        "enumerateScope": true,
+        "impactDomain": "Security",
+        "references": {
+          "A02:2021": "https://owasp.org/Top10/A02_2021-Cryptographic_Failures/"
+        }
+      },
+      "id": "deprecated-crypto-algorithm",
+      "options": {},
+      "scope": "root",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Security"
+    },
+    {
+      "rule": {
+        "id": "deserialization-of-untrusted-data",
+        "title": "Deserialization of untrusted data",
+        "labels": ["deserialize.unsafe", "deserialize.safe", "deserialize.sanitize"],
+        "impactDomain": "Security",
+        "enumerateScope": false,
+        "scope": "http_server_request",
+        "references": {
+          "CWE-502": "https://cwe.mitre.org/data/definitions/502.html",
+          "Ruby Security": "https://docs.ruby-lang.org/en/3.0/doc/security_rdoc.html"
+        },
+        "description": "Finds occurrances of deserialization in which the mechanism employed is known to be unsafe, and the data comes from an untrusted source and hasn't passed through a sanitization mechanism.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#deserialization-of-untrusted-data"
+      },
+      "id": "deserialization-of-untrusted-data",
+      "options": {},
+      "scope": "http_server_request",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Security"
+    },
+    {
+      "rule": {
+        "id": "exec-of-untrusted-command",
+        "title": "Execution of untrusted system command",
+        "labels": ["system.exec", "system.exec.safe", "system.exec.sanitize"],
+        "impactDomain": "Security",
+        "enumerateScope": false,
+        "references": {
+          "CWE-78": "https://cwe.mitre.org/data/definitions/78.html"
+        },
+        "description": "Find occurrances of system command execution in which the command string is not guaranteed to be safe.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#exec-of-untrusted-command"
+      },
+      "id": "exec-of-untrusted-command",
+      "options": {},
+      "scope": "command",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Security"
+    },
+    {
+      "rule": {
+        "id": "http-500",
+        "title": "HTTP 500 status code",
+        "description": "Identifies when an HTTP server request has returned a 500 status code. HTTP 500 status code generally indicate an unanticipated problem in the backend that is not handled in a predictable way. 500 status codes are also hard for client code to handle, because they don't indicate any particular problem or suggest a solution.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#http-500",
+        "labels": [],
+        "scope": "http_server_request",
+        "enumerateScope": false,
+        "impactDomain": "Stability",
+        "references": {
+          "CWE-392": "https://cwe.mitre.org/data/definitions/392.html"
+        }
+      },
+      "id": "http-500",
+      "options": {},
+      "scope": "http_server_request",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Stability"
+    },
+    {
+      "rule": {
+        "id": "logout-without-session-reset",
+        "title": "Logout without session reset",
+        "scope": "http_server_request",
+        "labels": ["http.session.clear", "security.logout"],
+        "impactDomain": "Security",
+        "enumerateScope": false,
+        "references": {
+          "CWE-488": "https://cwe.mitre.org/data/definitions/488.html",
+          "OWASP - Session fixation": "https://owasp.org/www-community/attacks/Session_fixation",
+          "Ruby on Rails - Session fixation countermeasures": "https://guides.rubyonrails.org/security.html#session-fixation-countermeasures"
+        },
+        "description": "Determines when a user has been logged out from the application, but the session hasn't been cleared. When the session isn't cleared after logout, the session is vulnerable to a [session fixation attack](https://owasp.org/www-community/attacks/Session_fixation).",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#logout-without-session-reset"
+      },
+      "id": "logout-without-session-reset",
+      "options": {},
+      "scope": "http_server_request",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Security"
+    },
+    {
+      "rule": {
+        "id": "missing-content-type",
+        "title": "HTTP server request without a Content-Type header",
+        "scope": "http_server_request",
+        "impactDomain": "Stability",
+        "enumerateScope": false,
+        "description": "Finds HTTP server requests that don't provide a `Content-Type` header in the response.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#missing-content-type"
+      },
+      "id": "missing-content-type",
+      "options": {},
+      "scope": "http_server_request",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Stability"
+    },
+    {
+      "rule": {
+        "id": "n-plus-one-query",
+        "title": "N plus 1 SQL query",
+        "scope": "command",
+        "impactDomain": "Performance",
+        "enumerateScope": false,
+        "references": {
+          "CWE-1073": "https://cwe.mitre.org/data/definitions/1073.html"
+        },
+        "description": "Finds occurrences of a query being repeated within a loop.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#n-plus-one-query"
+      },
+      "id": "n-plus-one-query",
+      "options": {
+        "warningLimit": 5,
+        "errorLimit": 10
+      },
+      "scope": "command",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Performance"
+    },
+    {
+      "rule": {
+        "id": "secret-in-log",
+        "title": "Secret in log",
+        "labels": ["secret", "log"],
+        "scope": "root",
+        "impactDomain": "Security",
+        "enumerateScope": true,
+        "references": {
+          "CWE-532": "https://cwe.mitre.org/data/definitions/532.html"
+        },
+        "description": "Identifies when a known or assumed secret is written to a log. Logs are often transported into other systems that are treated with lesser security - such as backups. Therefore, secrets written into log files are more likely to be leaked or discovered by cyber-attackers.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#secret-in-log"
+      },
+      "id": "secret-in-log",
+      "options": {},
+      "scope": "root",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Security"
+    },
+    {
+      "rule": {
+        "id": "too-many-joins",
+        "title": "Too many joins",
+        "description": "Verifies that the number of joins in SQL queries does not exceed a threshold.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#too-many-joins",
+        "labels": [],
+        "enumerateScope": false,
+        "impactDomain": "Performance",
+        "references": {
+          "CWE-1049": "https://cwe.mitre.org/data/definitions/1049.html"
+        }
+      },
+      "id": "too-many-joins",
+      "options": {
+        "warningLimit": 5,
+        "excludeTables": [
+          {
+            "match": {},
+            "ignoreCase": false
+          },
+          {
+            "equal": "information_schema",
+            "ignoreCase": false
+          }
+        ]
+      },
+      "scope": "command",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Performance"
+    },
+    {
+      "rule": {
+        "id": "too-many-updates",
+        "title": "Too many SQL and RPC updates performed in one command",
+        "scope": "command",
+        "enumerateScope": false,
+        "impactDomain": "Maintainability",
+        "references": {
+          "CWE-1048": "https://cwe.mitre.org/data/definitions/1048.html"
+        },
+        "description": "Verifies that the number of SQL and RPC updates performed by a command does not exceed a threshold.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#too-many-updates"
+      },
+      "id": "too-many-updates",
+      "options": {
+        "warningLimit": 20
+      },
+      "scope": "command",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Maintainability"
+    },
+    {
+      "rule": {
+        "id": "unauthenticated-encryption",
+        "title": "Unauthenticated encryption",
+        "description": "Ensures that encryption operations use authenticated encryption.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#unauthenticated-encryption",
+        "labels": ["crypto.encrypt", "crypto.set_auth_data"],
+        "enumerateScope": true,
+        "impactDomain": "Security",
+        "references": {
+          "A02:2021": "https://owasp.org/Top10/A02_2021-Cryptographic_Failures/"
+        }
+      },
+      "id": "unauthenticated-encryption",
+      "options": {},
+      "scope": "command",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Security"
+    },
+    {
+      "rule": {
+        "id": "update-in-get-request",
+        "title": "Data update performed in GET or HEAD request",
+        "scope": "http_server_request",
+        "enumerateScope": true,
+        "labels": ["audit"],
+        "impactDomain": "Maintainability",
+        "description": "Finds SQL updates that are performed in an HTTP server `GET` request.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#update-in-get-request"
+      },
+      "id": "update-in-get-request",
+      "options": {
+        "_queryInclude": [{}, {}],
+        "_queryExclude": []
+      },
+      "scope": "http_server_request",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Maintainability"
+    }
+  ],
+  "summary": {
+    "numAppMaps": 1,
+    "numChecks": 13,
+    "rules": [
+      "authz-before-authn",
+      "deprecated-crypto-algorithm",
+      "deserialization-of-untrusted-data",
+      "exec-of-untrusted-command",
+      "http-500",
+      "logout-without-session-reset",
+      "missing-content-type",
+      "n-plus-one-query",
+      "secret-in-log",
+      "too-many-joins",
+      "too-many-updates",
+      "unauthenticated-encryption",
+      "update-in-get-request"
+    ],
+    "ruleLabels": [
+      "audit",
+      "crypto.decrypt",
+      "crypto.digest",
+      "crypto.encrypt",
+      "crypto.set_auth_data",
+      "deserialize.safe",
+      "deserialize.sanitize",
+      "deserialize.unsafe",
+      "http.session.clear",
+      "log",
+      "secret",
+      "security.authentication",
+      "security.authorization",
+      "security.logout",
+      "system.exec",
+      "system.exec.safe",
+      "system.exec.sanitize"
+    ],
+    "numFindings": 2,
+    "appMapMetadata": {
+      "labels": [],
+      "apps": ["solidus-demo"],
+      "clients": [
+        {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.93.3"
+        }
+      ],
+      "frameworks": [
+        {
+          "name": "rails",
+          "version": "6.1.4.1"
+        }
+      ],
+      "git": [
+        {
+          "repository": "git@github.com:land-of-apps/solidus-demo.git",
+          "branch": "appmap",
+          "commit": "8eb58e567159655c4af488fd5c4e0ab337362276",
+          "status": [
+            "M Gemfile",
+            "M Gemfile.lock",
+            "M appmap.yml",
+            "M lib/tasks/sample_records.rake",
+            "?? .vscode/",
+            "?? solidus-demo.code-workspace"
+          ],
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
+        }
+      ],
+      "languages": [
+        {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "2.7.3"
+        }
+      ],
+      "recorders": [
+        {
+          "name": "rack",
+          "type": "requests"
+        }
+      ],
+      "testStatuses": [],
+      "exceptions": []
+    }
+  }
+}

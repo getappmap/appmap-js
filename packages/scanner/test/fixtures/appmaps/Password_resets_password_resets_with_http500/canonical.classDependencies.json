@@ -1,0 +1,350 @@
+[
+  {
+    "caller": "HTTP server requests->GET /password_resets/new",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "HTTP server requests->GET /password_resets/{id}/edit",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "HTTP server requests->PATCH /password_resets/{id}",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "HTTP server requests->POST /password_resets",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "/String"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/controllers/PasswordResetsController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/views/app_views_password_resets_edit_html_erb"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/views/app_views_password_resets_new_html_erb"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "/String"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "/String"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "Database->SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/controllers/PasswordResetsController",
+    "callee": "/Module"
+  },
+  {
+    "caller": "app/controllers/PasswordResetsController",
+    "callee": "/String"
+  },
+  {
+    "caller": "app/controllers/PasswordResetsController",
+    "callee": "Database->RELEASE SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/controllers/PasswordResetsController",
+    "callee": "Database->ROLLBACK TO SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/controllers/PasswordResetsController",
+    "callee": "Database->SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/controllers/PasswordResetsController",
+    "callee": "Database->SELECT 1 AS one FROM \"users\" WHERE \"users\".\"email\" = ? AND \"users\".\"id\" != ? LIMIT ?"
+  },
+  {
+    "caller": "app/controllers/PasswordResetsController",
+    "callee": "Database->SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/controllers/PasswordResetsController",
+    "callee": "Database->UPDATE \"users\" SET \"password_digest\" = ?, \"updated_at\" = ? WHERE \"users\".\"id\" = ?"
+  },
+  {
+    "caller": "app/controllers/PasswordResetsController",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "app/controllers/PasswordResetsController",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/controllers/PasswordResetsController",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "app/controllers/PasswordResetsController",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/controllers/PasswordResetsController",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "app/controllers/PasswordResetsController",
+    "callee": "app/views/app_views_password_resets_edit_html_erb"
+  },
+  {
+    "caller": "app/controllers/PasswordResetsController",
+    "callee": "app/views/app_views_password_resets_new_html_erb"
+  },
+  {
+    "caller": "app/helpers/SessionsHelper",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/mailers/UserMailer",
+    "callee": "/Module"
+  },
+  {
+    "caller": "app/mailers/UserMailer",
+    "callee": "/String"
+  },
+  {
+    "caller": "app/mailers/UserMailer",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/mailers/UserMailer",
+    "callee": "app/views/app_views_layouts_mailer_html_erb"
+  },
+  {
+    "caller": "app/mailers/UserMailer",
+    "callee": "app/views/app_views_layouts_mailer_text_erb"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "/Module"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "/String"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "Database->RELEASE SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "Database->SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "Database->UPDATE \"users\" SET \"reset_digest\" = ?, \"updated_at\" = ? WHERE \"users\".\"id\" = ?"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "Database->UPDATE \"users\" SET \"updated_at\" = ?, \"reset_sent_at\" = ? WHERE \"users\".\"id\" = ?"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "app/mailers/UserMailer"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "bcrypt/BCrypt"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_layouts__footer_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_layouts__footer_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_layouts__header_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_layouts__header_html_erb",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/views/app_views_layouts__header_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_layouts__shim_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_layouts__shim_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_layouts_mailer_html_erb",
+    "callee": "/String"
+  },
+  {
+    "caller": "app/views/app_views_layouts_mailer_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_layouts_mailer_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_layouts_mailer_text_erb",
+    "callee": "/String"
+  },
+  {
+    "caller": "app/views/app_views_layouts_mailer_text_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_layouts_mailer_text_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_password_resets_edit_html_erb",
+    "callee": "/String"
+  },
+  {
+    "caller": "app/views/app_views_password_resets_edit_html_erb",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/views/app_views_password_resets_edit_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_password_resets_edit_html_erb",
+    "callee": "app/helpers/ApplicationHelper"
+  },
+  {
+    "caller": "app/views/app_views_password_resets_edit_html_erb",
+    "callee": "app/views/app_views_layouts__footer_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_password_resets_edit_html_erb",
+    "callee": "app/views/app_views_layouts__header_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_password_resets_edit_html_erb",
+    "callee": "app/views/app_views_layouts__shim_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_password_resets_edit_html_erb",
+    "callee": "app/views/app_views_shared__error_messages_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_password_resets_edit_html_erb",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/views/app_views_password_resets_edit_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_password_resets_new_html_erb",
+    "callee": "/String"
+  },
+  {
+    "caller": "app/views/app_views_password_resets_new_html_erb",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/views/app_views_password_resets_new_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_password_resets_new_html_erb",
+    "callee": "app/helpers/ApplicationHelper"
+  },
+  {
+    "caller": "app/views/app_views_password_resets_new_html_erb",
+    "callee": "app/views/app_views_layouts__footer_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_password_resets_new_html_erb",
+    "callee": "app/views/app_views_layouts__header_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_password_resets_new_html_erb",
+    "callee": "app/views/app_views_layouts__shim_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_password_resets_new_html_erb",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/views/app_views_password_resets_new_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_shared__error_messages_html_erb",
+    "callee": "/String"
+  },
+  {
+    "caller": "app/views/app_views_shared__error_messages_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_shared__error_messages_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "bcrypt/BCrypt",
+    "callee": "/String"
+  }
+]

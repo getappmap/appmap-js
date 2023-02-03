@@ -1,0 +1,7 @@
+[
+  {
+    "route": "POST /api/mapsets",
+    "parameters": "(controller,action,mapset)",
+    "status": 201
+  }
+]

@@ -1,0 +1,1218 @@
+[
+  {
+    "name": "app",
+    "type": "package",
+    "children": [
+      {
+        "name": "models",
+        "type": "package",
+        "children": [
+          {
+            "name": "Org",
+            "type": "class",
+            "children": [
+              {
+                "name": "find!",
+                "type": "function",
+                "static": true,
+                "location": "app/models/org.rb:12"
+              },
+              {
+                "name": "find_org!",
+                "type": "function",
+                "static": true,
+                "location": "app/models/org.rb:72"
+              }
+            ]
+          },
+          {
+            "name": "Scenario",
+            "type": "class",
+            "children": [
+              {
+                "name": "build",
+                "type": "function",
+                "static": true,
+                "location": "app/models/scenario.rb:55"
+              }
+            ]
+          },
+          {
+            "name": "scenario",
+            "type": "package",
+            "children": [
+              {
+                "name": "Scenario",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "Build",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "save!",
+                        "type": "function",
+                        "labels": [
+                          "crud.create"
+                        ],
+                        "static": false,
+                        "location": "app/models/scenario/build.rb:68"
+                      },
+                      {
+                        "name": "build",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/scenario/build.rb:54"
+                      },
+                      {
+                        "name": "valid?",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/scenario/build.rb:48"
+                      },
+                      {
+                        "name": "validate",
+                        "type": "function",
+                        "labels": [
+                          "crud.validate"
+                        ],
+                        "static": false,
+                        "location": "app/models/scenario/build.rb:33"
+                      },
+                      {
+                        "name": "validate_data",
+                        "type": "function",
+                        "labels": [
+                          "crud.validate"
+                        ],
+                        "static": false,
+                        "location": "app/models/scenario/build.rb:41"
+                      },
+                      {
+                        "name": "apply_default_metadata",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/scenario/build.rb:83"
+                      },
+                      {
+                        "name": "normalize_events",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/scenario/build.rb:92"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "ScenarioData",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "scenario_data",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/scenario/scenario_data.rb:15"
+                      },
+                      {
+                        "name": "metadata",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/scenario/scenario_data.rb:5"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "SaveScenario",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "save_scenario",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/scenario/save_scenario.rb:11"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "normalize",
+            "type": "package",
+            "children": [
+              {
+                "name": "Normalize",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "Client",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "default_client",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/normalize/client.rb:13"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "HTTPServerRequest",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "normalize",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/normalize/http_server_request.rb:12"
+                      },
+                      {
+                        "name": "write_client_normalized_path_info",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/normalize/http_server_request.rb:67"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "SQL",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "normalize",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/normalize/sql.rb:11"
+                      },
+                      {
+                        "name": "normalize_sql",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/normalize/sql.rb:30"
+                      },
+                      {
+                        "name": "normalize_sql_default",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/normalize/sql.rb:37"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "dao",
+            "type": "package",
+            "children": [
+              {
+                "name": "DAO",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "Scenario",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "validate",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/dao/scenario.rb:149"
+                      },
+                      {
+                        "name": "raw_data",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/dao/scenario.rb:123"
+                      },
+                      {
+                        "name": "before_save",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/dao/scenario.rb:170"
+                      },
+                      {
+                        "name": "store_raw_data",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/dao/scenario.rb:155"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "User",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "personal_org",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/dao/user.rb:32"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "ToModel",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "to_model",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/dao/to_model.rb:5"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "PublicResource",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "coerce",
+                        "type": "function",
+                        "static": true,
+                        "location": "app/models/dao/public_resource.rb:18"
+                      },
+                      {
+                        "name": "scope",
+                        "type": "function",
+                        "static": true,
+                        "location": "app/models/dao/public_resource.rb:26"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "SequelUtil",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "build_where_clause",
+                        "type": "function",
+                        "static": true,
+                        "location": "app/models/dao/sequel_util.rb:6"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "App",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "validate",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/dao/app.rb:24"
+                      },
+                      {
+                        "name": "before_create",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/dao/app.rb:15"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Mapset",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "vacuum",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/dao/mapset.rb:24"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "ApiKey",
+            "type": "class",
+            "children": [
+              {
+                "name": "issue",
+                "type": "function",
+                "labels": [
+                  "security.api_key.issue"
+                ],
+                "static": true,
+                "location": "app/models/api_key.rb:30"
+              },
+              {
+                "name": "encode",
+                "type": "function",
+                "static": true,
+                "location": "app/models/api_key.rb:21"
+              },
+              {
+                "name": "authenticate",
+                "type": "function",
+                "labels": [
+                  "security.authentication"
+                ],
+                "static": true,
+                "location": "app/models/api_key.rb:56"
+              },
+              {
+                "name": "decode",
+                "type": "function",
+                "static": true,
+                "location": "app/models/api_key.rb:25"
+              },
+              {
+                "name": "touch",
+                "type": "function",
+                "labels": [
+                  "security.api_key.touch"
+                ],
+                "static": true,
+                "location": "app/models/api_key.rb:12"
+              }
+            ]
+          },
+          {
+            "name": "user",
+            "type": "package",
+            "children": [
+              {
+                "name": "User",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "Show",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "personal_org",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/user/show.rb:34"
+                      },
+                      {
+                        "name": "member_of?",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/user/show.rb:38"
+                      },
+                      {
+                        "name": "admin?",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/user/show.rb:50"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "exceptions",
+            "type": "package",
+            "children": [
+              {
+                "name": "Exceptions",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "Forbidden",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "check_user_org_membership",
+                        "type": "function",
+                        "static": true,
+                        "location": "app/models/exceptions/forbidden.rb:7"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "RecordNotFound",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "build_message",
+                        "type": "function",
+                        "static": true,
+                        "location": "app/models/exceptions/record_not_found.rb:16"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "app",
+            "type": "package",
+            "children": [
+              {
+                "name": "App",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "Search",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "find_by_name",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/app/search.rb:145"
+                      },
+                      {
+                        "name": "base_dataset",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/app/search.rb:158"
+                      },
+                      {
+                        "name": "exists?",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/app/search.rb:132"
+                      },
+                      {
+                        "name": "find_by_name!",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/app/search.rb:140"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Build",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "validate",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/app/build.rb:17"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Show",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "org",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/app/show.rb:23"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Search",
+            "type": "class",
+            "children": [
+              {
+                "name": "filter",
+                "type": "function",
+                "static": false,
+                "location": "app/models/search.rb:34"
+              }
+            ]
+          },
+          {
+            "name": "App",
+            "type": "class",
+            "children": [
+              {
+                "name": "build",
+                "type": "function",
+                "static": true,
+                "location": "app/models/app.rb:94"
+              }
+            ]
+          },
+          {
+            "name": "concerns",
+            "type": "package",
+            "children": [
+              {
+                "name": "Concerns",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "Builder",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "save!",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/concerns/builder.rb:21"
+                      },
+                      {
+                        "name": "valid?",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/concerns/builder.rb:15"
+                      },
+                      {
+                        "name": "validate",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/concerns/builder.rb:11"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Mapset",
+            "type": "class",
+            "children": [
+              {
+                "name": "build",
+                "type": "function",
+                "static": true,
+                "location": "app/models/mapset.rb:9"
+              }
+            ]
+          },
+          {
+            "name": "mapset",
+            "type": "package",
+            "children": [
+              {
+                "name": "Mapset",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "Build",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "save!",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/mapset/build.rb:64"
+                      },
+                      {
+                        "name": "valid?",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/mapset/build.rb:58"
+                      },
+                      {
+                        "name": "validate",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/mapset/build.rb:39"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Vacuum",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "perform",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/mapset/vacuum.rb:11"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "User",
+            "type": "class",
+            "children": [
+              {
+                "name": "find!",
+                "type": "function",
+                "static": true,
+                "location": "app/models/user.rb:25"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "controllers",
+        "type": "package",
+        "children": [
+          {
+            "name": "concerns",
+            "type": "package",
+            "children": [
+              {
+                "name": "MuteLogging",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "mute_logging",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/controllers/concerns/mute_logging.rb:4"
+                  }
+                ]
+              },
+              {
+                "name": "InTransaction",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "in_transaction",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/controllers/concerns/in_transaction.rb:8"
+                  }
+                ]
+              },
+              {
+                "name": "WithApiAuthentication",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "check_current_user",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/controllers/concerns/with_api_authentication.rb:16"
+                  },
+                  {
+                    "name": "current_user?",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/controllers/concerns/with_api_authentication.rb:6"
+                  },
+                  {
+                    "name": "current_user",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/controllers/concerns/with_api_authentication.rb:10"
+                  }
+                ]
+              },
+              {
+                "name": "AnonymousAccess",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "anonymous_access?",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/controllers/concerns/anonymous_access.rb:9"
+                  }
+                ]
+              },
+              {
+                "name": "CheckContentType",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "require_json",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/controllers/concerns/check_content_type.rb:4"
+                  }
+                ]
+              },
+              {
+                "name": "FindOrg",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "find_org",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/controllers/concerns/find_org.rb:4"
+                  },
+                  {
+                    "name": "org_name",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/controllers/concerns/find_org.rb:14"
+                  },
+                  {
+                    "name": "parse_org_name_from_app_name",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/controllers/concerns/find_org.rb:27"
+                  },
+                  {
+                    "name": "app_name_tokens",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/controllers/concerns/find_org.rb:21"
+                  }
+                ]
+              },
+              {
+                "name": "SearchScope",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "search_scope",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/controllers/concerns/search_scope.rb:4"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "api",
+            "type": "package",
+            "children": [
+              {
+                "name": "API",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "MapsetsController",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "find_or_create_app",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/controllers/api/mapsets_controller.rb:34"
+                      },
+                      {
+                        "name": "find_app",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/controllers/api/mapsets_controller.rb:38"
+                      },
+                      {
+                        "name": "app_name",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/controllers/api/mapsets_controller.rb:46"
+                      },
+                      {
+                        "name": "create_app",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/controllers/api/mapsets_controller.rb:42"
+                      },
+                      {
+                        "name": "create",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/controllers/api/mapsets_controller.rb:26"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "logger",
+    "type": "package",
+    "children": [
+      {
+        "name": "Logger",
+        "type": "class",
+        "children": [
+          {
+            "name": "LogDevice",
+            "type": "class",
+            "children": [
+              {
+                "name": "write",
+                "type": "function",
+                "labels": [
+                  "log"
+                ],
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb:31"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "lib/appland",
+    "type": "package",
+    "children": [
+      {
+        "name": "Appland",
+        "type": "class",
+        "children": [
+          {
+            "name": "Util",
+            "type": "class",
+            "children": [
+              {
+                "name": "version_match?",
+                "type": "function",
+                "static": true,
+                "location": "lib/appland/util.rb:8"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "json",
+    "type": "package",
+    "children": [
+      {
+        "name": "JSON",
+        "type": "class",
+        "children": [
+          {
+            "name": "Ext",
+            "type": "class",
+            "children": [
+              {
+                "name": "Generator",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "State",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "generate",
+                        "type": "function",
+                        "labels": [
+                          "format.json.generate",
+                          "serialize"
+                        ],
+                        "static": false,
+                        "location": "JSON::Ext::Generator::State#generate"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Parser",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "parse",
+                    "type": "function",
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ],
+                    "static": false,
+                    "location": "JSON::Ext::Parser#parse"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "activesupport",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActiveSupport",
+        "type": "class",
+        "children": [
+          {
+            "name": "Callbacks",
+            "type": "class",
+            "children": [
+              {
+                "name": "CallbackSequence",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "invoke_before",
+                    "type": "function",
+                    "labels": [
+                      "mvc.before_action"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.1.4.1/lib/active_support/callbacks.rb:511"
+                  },
+                  {
+                    "name": "invoke_after",
+                    "type": "function",
+                    "labels": [
+                      "mvc.after_action"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.1.4.1/lib/active_support/callbacks.rb:515"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ruby",
+    "type": "package",
+    "children": [
+      {
+        "name": "String",
+        "type": "class",
+        "children": [
+          {
+            "name": "unpack",
+            "type": "function",
+            "labels": [
+              "string.unpack"
+            ],
+            "static": false,
+            "location": "<internal:pack>:256"
+          },
+          {
+            "name": "unpack1",
+            "type": "function",
+            "labels": [
+              "string.unpack"
+            ],
+            "static": false,
+            "location": "<internal:pack>:280"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "actionpack",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActionController",
+        "type": "class",
+        "children": [
+          {
+            "name": "Instrumentation",
+            "type": "class",
+            "children": [
+              {
+                "name": "process_action",
+                "type": "function",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.1.4.1/lib/action_controller/metal/instrumentation.rb:19"
+              }
+            ]
+          },
+          {
+            "name": "Renderers",
+            "type": "class",
+            "children": [
+              {
+                "name": "render_to_body",
+                "type": "function",
+                "labels": [
+                  "mvc.render"
+                ],
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.1.4.1/lib/action_controller/metal/renderers.rb:141"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "ActionDispatch",
+        "type": "class",
+        "children": [
+          {
+            "name": "Request",
+            "type": "class",
+            "children": [
+              {
+                "name": "Session",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "[]",
+                    "type": "function",
+                    "labels": [
+                      "http.session.read"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.1.4.1/lib/action_dispatch/request/session.rb:91"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Cookies",
+            "type": "class",
+            "children": [
+              {
+                "name": "CookieJar",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "update",
+                    "type": "function",
+                    "labels": [
+                      "http.session.write"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.1.4.1/lib/action_dispatch/middleware/cookies.rb:345"
+                  },
+                  {
+                    "name": "[]",
+                    "type": "function",
+                    "labels": [
+                      "http.session.read"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.1.4.1/lib/action_dispatch/middleware/cookies.rb:329"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"orgs\" WHERE \"id\" = 8"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"data\" FROM \"scenario_data\" WHERE (\"sha_256\" IS NULL) LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "SAVEPOINT autopoint_1"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"scenarios\" (\"data\", \"org_id\", \"mapset_id\") VALUES ('{\"version\":\"1.2\",\"classMap\":[{\"name\":\"controllers\",\"location\":\"app/controllers\",\"type\":\"package\",\"children\":[{\"name\":\"SessionController\",\"location\":\"app/controllers/session_controller.rb:2\",\"type\":\"class\",\"children\":[{\"name\":\"create\",\"location\":\"app/controllers/session_controller.rb:4\",\"type\":\"function\",\"static\":false}]}]},{\"name\":\"models\",\"location\":\"app/models\",\"type\":\"package\",\"children\":[{\"name\":\"Session\",\"location\":\"app/models/session.rb:2\",\"type\":\"class\",\"children\":[{\"name\":\"initialize\",\"location\":\"app/models/session.rb:4\",\"type\":\"function\",\"static\":false},{\"name\":\"delete\",\"location\":\"app/models/session.rb:8\",\"type\":\"function\",\"static\":true}]}]}],\"metadata\":{\"name\":\"Example scenario\",\"language\":{\"name\":\"ruby\"},\"recorder\":{\"name\":\"rspec\"},\"client\":{\"name\":\"appmap\",\"url\":\"https://github.com/getappmap/appmap-ruby\",\"inferred\":true}},\"events\":[{\"id\":1,\"event\":\"call\",\"defined_class\":\"SessionController\",\"method_id\":\"create\",\"path\":\"app/controllers/session_controller.rb\",\"lineno\":4,\"receiver\":{\"class\":\"SessionController\",\"value\":\"#<SessionController:0x0000000000000000>\",\"object_id\":\"0\"},\"http_server_request\":{\"request_method\":\"POST\",\"normalized_path_info\":\"/sessions/new\",\"path_info\":\"/sessions/new\",\"client_normalized_path_info\":\"/sessions/new\"},\"message\":[{\"name\":\"login\",\"class\":\"String\",\"object_id\":70252828231460,\"value\":\"alice\"}]},{\"id\":2,\"event\":\"call\",\"defined_class\":\"Session\",\"method_id\":\"initialize\",\"path\":\"app/models/session.rb\",\"lineno\":4,\"receiver\":{\"class\":\"Session\",\"value\":\"#<Session:0x0000000000000000>\",\"object_id\":\"1\"},\"sql_query\":{\"sql\":\"SELECT * FROM users WHERE login = ''alice''\",\"normalized_sql\":\"SELECT * FROM users WHERE login = $1\",\"normalized\":true}},{\"id\":3,\"event\":\"return\",\"defined_class\":\"Session\",\"method_id\":\"initialize\",\"path\":\"app/models/session.rb\",\"lineno\":4,\"parent_id\":2},{\"id\":4,\"event\":\"return\",\"defined_class\":\"SessionController\",\"method_id\":\"create\",\"path\":\"app/controllers/session_controller.rb\",\"lineno\":4,\"parent_i..."
+      },
+      {
+        "type": "query",
+        "name": "RELEASE SAVEPOINT autopoint_1"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"api_keys\" (\"login\", \"description\") VALUES ('admin', 'example api key') RETURNING *"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"api_keys\" WHERE (\"login\" = 'admin')"
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"api_keys\" SET \"last_used\" = '2022-04-01 12:21:55.979408+0000' WHERE (\"id\" = 3)"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"users\" WHERE (\"users\".\"login\" = 'admin') LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"orgs\" WHERE ((\"name\" IS NULL) AND (\"slug\" IS NULL) AND (\"owner_id\" = 4)) LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"users_orgs\" WHERE ((\"user_id\" = 4) AND (\"org_id\" = 7))"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"users\" WHERE \"id\" = 4"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"apps\" WHERE (((\"apps\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = 4) AND (\"orgs\".\"id\" IS NOT NULL)))) OR (\"public\" IS TRUE)) AND (\"apps\".\"org_id\" = 7) AND (\"name\" = 'AppLand')) LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"orgs\" WHERE \"id\" = 7"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"apps\" WHERE ((\"slug\" = 'appland') AND (\"org_id\" = 7)) LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"apps\" WHERE ((\"apps\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = 4) AND (\"orgs\".\"id\" IS NOT NULL)))) AND (\"apps\".\"org_id\" = 7) AND (\"name\" = 'AppLand')) LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"apps\" (\"org_id\", \"name\", \"slug\") VALUES (7, 'AppLand', 'appland') RETURNING *"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"id\", \"org_id\" FROM \"scenarios\" WHERE (\"uuid\" IN ('4c6be98c-95a6-4a90-b358-ad5672a929dd'))"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"users_orgs\" WHERE ((\"user_id\" = 4) AND (\"org_id\" = 8))"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"mapsets\" (\"user_id\", \"app_id\") VALUES (4, 9) RETURNING *"
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"scenarios\" SET \"mapset_id\" = 4 WHERE (\"id\" IN (2))"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"mapsets\" WHERE \"id\" = 4"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"apps\" WHERE \"id\" = 9"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"users\" WHERE (\"login\" = 'admin') LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"scenarios\" WHERE (\"scenarios\".\"mapset_id\" = 4)"
+      }
+    ]
+  },
+  {
+    "type": "http",
+    "name": "HTTP server requests",
+    "children": [
+      {
+        "type": "route",
+        "name": "POST /api/mapsets"
+      }
+    ]
+  }
+]

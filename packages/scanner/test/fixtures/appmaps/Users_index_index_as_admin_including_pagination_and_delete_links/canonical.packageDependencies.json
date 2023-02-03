@@ -1,0 +1,178 @@
+[
+  {
+    "caller": "HTTP server requests",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "actionview"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "activerecord"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "app/views"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "json"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "logger"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "openssl"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "string"
+  },
+  {
+    "caller": "activerecord",
+    "callee": "Database"
+  },
+  {
+    "caller": "activerecord",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "activerecord",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "activerecord",
+    "callee": "logger"
+  },
+  {
+    "caller": "activerecord",
+    "callee": "sqlite3"
+  },
+  {
+    "caller": "activerecord",
+    "callee": "string"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "Database"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "activerecord"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "sqlite3"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "string"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "Database"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "activerecord"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "sqlite3"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "string"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "activerecord"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "app/models"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "json"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "openssl"
+  },
+  {
+    "caller": "app/models",
+    "callee": "activerecord"
+  },
+  {
+    "caller": "app/views",
+    "callee": "Database"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionview"
+  },
+  {
+    "caller": "app/views",
+    "callee": "activerecord"
+  },
+  {
+    "caller": "app/views",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "app/views",
+    "callee": "json"
+  },
+  {
+    "caller": "app/views",
+    "callee": "logger"
+  },
+  {
+    "caller": "app/views",
+    "callee": "sqlite3"
+  },
+  {
+    "caller": "app/views",
+    "callee": "string"
+  }
+]

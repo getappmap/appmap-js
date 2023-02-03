@@ -1,0 +1,82 @@
+[
+  {
+    "caller": "HTTP server requests",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "Database"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "app/models"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "inline_template"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "app/models"
+  },
+  {
+    "caller": "app/models",
+    "callee": "Database"
+  },
+  {
+    "caller": "app/models",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app/models",
+    "callee": "json"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionview"
+  },
+  {
+    "caller": "app/views",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "app/views",
+    "callee": "inline_template"
+  },
+  {
+    "caller": "app/views",
+    "callee": "json"
+  },
+  {
+    "caller": "inline_template",
+    "callee": "app/views"
+  }
+]

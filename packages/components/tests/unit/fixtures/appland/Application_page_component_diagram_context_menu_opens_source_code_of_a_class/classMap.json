@@ -1,0 +1,84 @@
+[
+  {
+    "name": "json",
+    "type": "package",
+    "children": [
+      {
+        "name": "JSON",
+        "type": "class",
+        "children": [
+          {
+            "name": "Ext",
+            "type": "class",
+            "children": [
+              {
+                "name": "Generator",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "State",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "generate",
+                        "type": "function",
+                        "labels": ["serialization", "json"],
+                        "static": false,
+                        "location": "JSON::Ext::Generator::State#generate"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Parser",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "parse",
+                    "type": "function",
+                    "labels": ["serialization", "json"],
+                    "static": false,
+                    "location": "JSON::Ext::Parser#parse"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "net/http",
+    "type": "package",
+    "children": [
+      {
+        "name": "Net",
+        "type": "class",
+        "children": [
+          {
+            "name": "HTTP",
+            "type": "class",
+            "children": [
+              {
+                "name": "request",
+                "type": "function",
+                "labels": ["http", "io"],
+                "static": false,
+                "location": "/Users/kgilpin/tmp/appland/vendor/bundle/ruby/2.6.0/bundler/gems/appmap-ruby-ca633f5ec35e/lib/appmap/hook/method.rb:50"
+              },
+              {
+                "name": "request",
+                "type": "function",
+                "labels": ["http", "io"],
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.6.6/lib/ruby/2.6.0/net/http.rb:1468"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

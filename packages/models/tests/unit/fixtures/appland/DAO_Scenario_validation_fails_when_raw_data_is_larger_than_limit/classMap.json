@@ -1,0 +1,38 @@
+[
+  {
+    "name": "app/models",
+    "type": "package",
+    "children": [
+      {
+        "name": "DAO",
+        "type": "class",
+        "children": [
+          {
+            "name": "Scenario",
+            "type": "class",
+            "children": [
+              {
+                "name": "raw_data=",
+                "type": "function",
+                "static": false,
+                "location": "app/models/dao/scenario.rb:160"
+              },
+              {
+                "name": "validate",
+                "type": "function",
+                "static": false,
+                "location": "app/models/dao/scenario.rb:182"
+              },
+              {
+                "name": "raw_data",
+                "type": "function",
+                "static": false,
+                "location": "app/models/dao/scenario.rb:156"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

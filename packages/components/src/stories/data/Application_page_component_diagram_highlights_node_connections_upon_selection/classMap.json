@@ -1,0 +1,78 @@
+[
+  {
+    "name": "json",
+    "type": "package",
+    "children": [
+      {
+        "name": "JSON",
+        "type": "class",
+        "children": [
+          {
+            "name": "Ext",
+            "type": "class",
+            "children": [
+              {
+                "name": "Generator",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "State",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "generate",
+                        "type": "function",
+                        "labels": ["format.json"],
+                        "static": false,
+                        "location": "JSON::Ext::Generator::State#generate"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Parser",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "parse",
+                    "type": "function",
+                    "labels": ["format.json"],
+                    "static": false,
+                    "location": "JSON::Ext::Parser#parse"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "external-service",
+    "name": "127.0.0.1:9515",
+    "children": [
+      {
+        "type": "external-route",
+        "name": "POST http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/elements"
+      },
+      {
+        "type": "external-route",
+        "name": "POST http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/execute/sync"
+      },
+      {
+        "type": "external-route",
+        "name": "POST http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/element/847acf4e-c8d6-4b0b-82c4-2ac930f3a018/elements"
+      },
+      {
+        "type": "external-route",
+        "name": "POST http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/element/51bf7824-28dc-48a3-927f-6aeeed37c43f/click"
+      },
+      {
+        "type": "external-route",
+        "name": "GET http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/url"
+      }
+    ]
+  }
+]

@@ -1,0 +1,7 @@
+[
+  {
+    "route": "GET /{organization_id}/{id}/scenarios_list",
+    "parameters": "(mapset,page_size,controller,action,organization_id,id)",
+    "status": 404
+  }
+]

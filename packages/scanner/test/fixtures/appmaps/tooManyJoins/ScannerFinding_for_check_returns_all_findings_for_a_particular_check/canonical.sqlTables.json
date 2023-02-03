@@ -1,0 +1,9 @@
+[
+  "finding_occurrences_v",
+  "pg_attrdef",
+  "pg_attribute",
+  "pg_class",
+  "pg_index",
+  "pg_type",
+  "scanner_checks"
+]

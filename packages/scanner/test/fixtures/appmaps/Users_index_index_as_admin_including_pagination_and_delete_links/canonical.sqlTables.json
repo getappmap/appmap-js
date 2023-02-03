@@ -1,0 +1,8 @@
+[
+  "active_storage_attachments",
+  "microposts",
+  "relationships",
+  "sqlite_master",
+  "sqlite_temp_master",
+  "users"
+]

@@ -1,0 +1,74 @@
+[
+  {
+    "caller": "Class",
+    "callee": "activerecord"
+  },
+  {
+    "caller": "Class",
+    "callee": "logger"
+  },
+  {
+    "caller": "HTTP server requests",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "Class"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "actionview"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "app"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "json"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "openssl"
+  },
+  {
+    "caller": "activerecord",
+    "callee": "Class"
+  },
+  {
+    "caller": "activerecord",
+    "callee": "Database"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app",
+    "callee": "Class"
+  },
+  {
+    "caller": "app",
+    "callee": "Database"
+  },
+  {
+    "caller": "app",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app",
+    "callee": "actionview"
+  },
+  {
+    "caller": "app",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "app",
+    "callee": "json"
+  }
+]

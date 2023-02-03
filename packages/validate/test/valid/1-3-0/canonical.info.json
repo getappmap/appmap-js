@@ -1,0 +1,1381 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "GET /admin",
+    "parameter_names": [
+      "controller",
+      "action"
+    ],
+    "status_code": 302
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /admin/orders",
+    "parameter_names": [
+      "controller",
+      "action"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_stores"
+            ],
+            "columns": [
+              "*"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_orders"
+            ],
+            "columns": [
+              "*",
+              "spree_orders.completed_at"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_orders"
+            ],
+            "columns": [
+              "spree_orders.completed_at"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_orders"
+            ],
+            "columns": [
+              "spree_orders.*",
+              "spree_orders.completed_at"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_users"
+            ],
+            "columns": [
+              "spree_users.*",
+              "spree_users.id"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /admin/orders",
+    "parameter_names": [
+      "controller",
+      "action"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_stores"
+            ],
+            "columns": [
+              "*"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_orders"
+            ],
+            "columns": [
+              "*",
+              "spree_orders.completed_at"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_orders"
+            ],
+            "columns": [
+              "spree_orders.completed_at"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_orders"
+            ],
+            "columns": [
+              "spree_orders.*",
+              "spree_orders.completed_at"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_users"
+            ],
+            "columns": [
+              "spree_users.*",
+              "spree_users.id"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /admin/orders/:id/edit",
+    "parameter_names": [
+      "controller",
+      "action",
+      "id"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "security",
+              "crypto"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "security",
+          "crypto"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_orders"
+            ],
+            "columns": [
+              "spree_orders.*",
+              "spree_orders.number"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_adjustments"
+            ],
+            "columns": [
+              "spree_adjustments.*",
+              "spree_adjustments.adjustable_id",
+              "spree_adjustments.adjustable_type",
+              "spree_adjustments.created_at"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_addresses"
+            ],
+            "columns": [
+              "spree_addresses.*",
+              "spree_addresses.id"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_users"
+            ],
+            "columns": [
+              "spree_users.*",
+              "spree_users.id"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_shipments"
+            ],
+            "columns": [
+              "*",
+              "spree_shipments.order_id"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_shipments"
+            ],
+            "columns": [
+              "*",
+              "spree_shipments.order_id",
+              "spree_shipments.state"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_inventory_units",
+              "spree_shipments"
+            ],
+            "columns": [
+              "spree_inventory_units.*",
+              "spree_inventory_units.pending",
+              "spree_inventory_units.shipment_id",
+              "spree_inventory_units.state",
+              "spree_shipments.id",
+              "spree_shipments.order_id"
+            ],
+            "joinCount": 1
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_payments"
+            ],
+            "columns": [
+              "spree_payments.order_id"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_payments"
+            ],
+            "columns": [
+              "*",
+              "avs_response",
+              "cvv_response_code",
+              "spree_payments.order_id",
+              "state"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_line_items"
+            ],
+            "columns": [
+              "spree_line_items.order_id"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_cartons",
+              "spree_inventory_units",
+              "spree_shipments"
+            ],
+            "columns": [
+              "spree_cartons.*",
+              "spree_cartons.id",
+              "spree_cartons.shipped_at",
+              "spree_inventory_units.carton_id",
+              "spree_inventory_units.shipment_id",
+              "spree_shipments.id",
+              "spree_shipments.order_id"
+            ],
+            "joinCount": 2
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_shipments"
+            ],
+            "columns": [
+              "spree_shipments.*",
+              "spree_shipments.created_at",
+              "spree_shipments.order_id"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_inventory_units"
+            ],
+            "columns": [
+              "spree_inventory_units.*",
+              "spree_inventory_units.carton_id",
+              "spree_inventory_units.shipment_id"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_line_items"
+            ],
+            "columns": [
+              "spree_line_items.*",
+              "spree_line_items.id"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_variants"
+            ],
+            "columns": [
+              "spree_variants.*",
+              "spree_variants.id"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_stock_locations"
+            ],
+            "columns": [
+              "spree_stock_locations.*",
+              "spree_stock_locations.id"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_assets"
+            ],
+            "columns": [
+              "spree_assets.*",
+              "spree_assets.position",
+              "spree_assets.type",
+              "spree_assets.viewable_id",
+              "spree_assets.viewable_type"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_products"
+            ],
+            "columns": [
+              "spree_products.*",
+              "spree_products.id"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_assets",
+              "spree_variants"
+            ],
+            "columns": [
+              "spree_assets.*",
+              "spree_assets.position",
+              "spree_assets.type",
+              "spree_assets.viewable_id",
+              "spree_assets.viewable_type",
+              "spree_variants.deleted_at",
+              "spree_variants.id",
+              "spree_variants.position",
+              "spree_variants.product_id"
+            ],
+            "joinCount": 1
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_option_values",
+              "spree_option_values_variants"
+            ],
+            "columns": [
+              "spree_option_values.id",
+              "spree_option_values_variants.option_value_id",
+              "spree_option_values_variants.variant_id"
+            ],
+            "joinCount": 1
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_orders"
+            ],
+            "columns": [
+              "spree_orders.*",
+              "spree_orders.id"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_adjustments",
+              "spree_line_items"
+            ],
+            "columns": [
+              "spree_adjustments.adjustable_id",
+              "spree_adjustments.adjustable_type",
+              "spree_adjustments.eligible",
+              "spree_line_items.id",
+              "spree_line_items.order_id"
+            ],
+            "joinCount": 1
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_adjustments",
+              "spree_line_items"
+            ],
+            "columns": [
+              "spree_adjustments.*",
+              "spree_adjustments.adjustable_id",
+              "spree_adjustments.adjustable_type",
+              "spree_adjustments.eligible",
+              "spree_line_items.created_at",
+              "spree_line_items.id",
+              "spree_line_items.order_id"
+            ],
+            "joinCount": 1
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_adjustments",
+              "spree_shipments"
+            ],
+            "columns": [
+              "spree_adjustments.adjustable_id",
+              "spree_adjustments.adjustable_type",
+              "spree_adjustments.eligible",
+              "spree_shipments.id",
+              "spree_shipments.order_id"
+            ],
+            "joinCount": 1
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_adjustments",
+              "spree_shipments"
+            ],
+            "columns": [
+              "spree_adjustments.*",
+              "spree_adjustments.adjustable_id",
+              "spree_adjustments.adjustable_type",
+              "spree_adjustments.eligible",
+              "spree_shipments.id",
+              "spree_shipments.order_id"
+            ],
+            "joinCount": 1
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_adjustments"
+            ],
+            "columns": [
+              "spree_adjustments.adjustable_id",
+              "spree_adjustments.adjustable_type",
+              "spree_adjustments.eligible"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_adjustments"
+            ],
+            "columns": [
+              "spree_adjustments.*",
+              "spree_adjustments.adjustable_id",
+              "spree_adjustments.adjustable_type",
+              "spree_adjustments.created_at",
+              "spree_adjustments.eligible"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_line_items"
+            ],
+            "columns": [
+              "spree_line_items.order_id"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_shipments"
+            ],
+            "columns": [
+              "spree_shipments.*",
+              "spree_shipments.order_id"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_inventory_units"
+            ],
+            "columns": [
+              "spree_inventory_units.*",
+              "spree_inventory_units.shipment_id"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": [
+              "select"
+            ],
+            "tables": [
+              "spree_stock_locations"
+            ],
+            "columns": [
+              "spree_stock_locations.*",
+              "spree_stock_locations.id"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "serialization",
+          "json"
+        ]
+      }
+    ]
+  }
+]

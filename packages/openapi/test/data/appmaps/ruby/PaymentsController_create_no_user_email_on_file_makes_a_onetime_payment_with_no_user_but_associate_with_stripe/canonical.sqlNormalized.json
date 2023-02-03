@@ -1,0 +1,7 @@
+[
+  "INSERT INTO \"payments\" (\"stripe_id\", \"first_payment_date\", \"amount_cents\", \"created_at\", \"updated_at\", \"email\", \"kind\") VALUES ($?, $?, $?, $?, $?, $?, $?) RETURNING \"id\"",
+  "RELEASE SAVEPOINT active_record_2",
+  "SAVEPOINT active_record_2",
+  "SELECT  \"user_emails\".* FROM \"user_emails\" WHERE (confirmation_token IS ?) AND \"user_emails\".\"email\" = $? LIMIT $?",
+  "SELECT  \"users\".* FROM \"users\" WHERE \"users\".\"email\" = $? LIMIT $?"
+]

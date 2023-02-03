@@ -1,0 +1,7 @@
+[
+  "actionpack",
+  "activesupport",
+  "app/controllers",
+  "app/models",
+  "json"
+]

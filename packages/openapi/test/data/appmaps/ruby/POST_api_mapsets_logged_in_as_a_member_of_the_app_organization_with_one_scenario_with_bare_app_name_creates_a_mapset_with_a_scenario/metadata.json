@@ -1,0 +1,126 @@
+{
+  "app": "appland/appmap-server",
+  "language": {
+    "name": "ruby",
+    "engine": "ruby",
+    "version": "3.0.2"
+  },
+  "client": {
+    "name": "appmap",
+    "url": "https://github.com/getappmap/appmap-ruby",
+    "version": "0.77.3"
+  },
+  "frameworks": [
+    {
+      "name": "rails",
+      "version": "6.1.4.1"
+    },
+    {
+      "name": "rspec",
+      "version": "3.10.1"
+    }
+  ],
+  "git": {
+    "repository": "git@github.com:getappmap/appmap-server.git",
+    "branch": "fix/update-appmap-libs",
+    "commit": "7b6848111b724bf6737adf84d783fcf897591659",
+    "status": [
+      "M Gemfile",
+      "M Gemfile.lock",
+      "M app/models/app.rb",
+      "M app/models/mapset.rb",
+      "M app/models/org.rb",
+      "M app/models/org_invitation.rb",
+      "M app/models/scanner_finding.rb",
+      "M app/models/scanner_job.rb",
+      "M app/models/scenario.rb",
+      "M spec/rails_helper.rb",
+      "M swagger/openapi_stable.yaml",
+      "?? queries.txt"
+    ],
+    "git_last_annotated_tag": null,
+    "git_last_tag": "v0.29.0",
+    "git_commits_since_last_annotated_tag": null,
+    "git_commits_since_last_tag": 0
+  },
+  "name": "POST api/mapsets logged in as a member of the app organization with one scenario with bare app name creates a mapset with a scenario",
+  "source_location": "spec/requests/api_mapsets_create_spec.rb",
+  "recorder": {
+    "name": "rspec"
+  },
+  "test_status": "succeeded",
+  "fingerprints": [
+    {
+      "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+      "canonicalization_algorithm": "classDependencies",
+      "digest": "23bd7e5f635cdf6f1edc835ed329b0f0dd639e6d1553a36038446fceb7439bdf",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+      "canonicalization_algorithm": "classes",
+      "digest": "975b7c91285ea9f90f73a1e39b4c549e72eae16225fb6643dbc3b78d554af9bc",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+      "canonicalization_algorithm": "httpClientRequests",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+      "canonicalization_algorithm": "httpServerRequests",
+      "digest": "68525d06a9c049eadfcce087ef841454178776aff97ad5b16c75481a9bd073d6",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+      "canonicalization_algorithm": "info",
+      "digest": "74ec4089b92de90fc64563640a34dcb5b08f5c623bfbd9a68b849fdc6d02bdb1",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+      "canonicalization_algorithm": "labels",
+      "digest": "45d56e4624087cf062e9d3a2af177ba42309d025c83a9ac7a4956568761acdb4",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+      "canonicalization_algorithm": "packageDependencies",
+      "digest": "27c3a4bebe6fe3162152c0a96fb574852723abeb34674bfade7ac9f5cad44f99",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+      "canonicalization_algorithm": "packages",
+      "digest": "58173dc0da43941f3a6b78589ec9f15369c8964cc51300dda76390fc2a2c0d03",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+      "canonicalization_algorithm": "sqlNormalized",
+      "digest": "eff23e188bb799be73f95771f3317f5fe63b6d8cc66020ffd821ff8b32ac0ac9",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+      "canonicalization_algorithm": "sqlTables",
+      "digest": "cab4ccc4c263313bdf48204dc643e68a4a78c2b8c63eb2089ab266bde060c35b",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+      "canonicalization_algorithm": "trace",
+      "digest": "169a5c702b7b94b1662a691108577e4daf5c1c021074e7ec413170fad36e2128",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+      "canonicalization_algorithm": "update",
+      "digest": "a5ae287def1ae9b8044bbdcf25e08edd83952fe94efe3eb88ca355c23dc733cf",
+      "fingerprint_algorithm": "sha256"
+    }
+  ]
+}

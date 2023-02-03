@@ -1,0 +1,29 @@
+[
+  {
+    "kind": "function",
+    "function": "app/models/DAO::Scenario#raw_data=",
+    "labels": []
+  },
+  {
+    "kind": "function",
+    "function": "app/models/DAO::Scenario#validate",
+    "labels": [],
+    "children": [
+      {
+        "kind": "function",
+        "function": "app/models/DAO::Scenario#raw_data",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "app/models/DAO::Scenario#raw_data",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "app/models/DAO::Scenario#raw_data",
+        "labels": []
+      }
+    ]
+  }
+]

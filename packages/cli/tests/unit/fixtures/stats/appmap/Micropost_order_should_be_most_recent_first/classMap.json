@@ -1,0 +1,116 @@
+[
+  {
+    "name": "activesupport",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActiveSupport",
+        "type": "class",
+        "children": [
+          {
+            "name": "Callbacks",
+            "type": "class",
+            "children": [
+              {
+                "name": "CallbackSequence",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "invoke_before",
+                    "type": "function",
+                    "labels": ["mvc.before_action"],
+                    "static": false,
+                    "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb:512"
+                  },
+                  {
+                    "name": "invoke_after",
+                    "type": "function",
+                    "labels": ["mvc.after_action"],
+                    "static": false,
+                    "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb:516"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "logger",
+    "type": "package",
+    "children": [
+      {
+        "name": "Logger",
+        "type": "class",
+        "children": [
+          {
+            "name": "LogDevice",
+            "type": "class",
+            "children": [
+              {
+                "name": "write",
+                "type": "function",
+                "labels": ["log"],
+                "static": false,
+                "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/3.0.0/logger/log_device.rb:31"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "activerecord",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActiveRecord",
+        "type": "class",
+        "children": [
+          {
+            "name": "Relation",
+            "type": "class",
+            "children": [
+              {
+                "name": "records",
+                "type": "function",
+                "labels": ["dao.materialize"],
+                "static": false,
+                "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activerecord-6.0.4.1/lib/active_record/relation.rb:249"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "begin transaction"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"id\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"microposts\".* FROM \"microposts\" ORDER BY \"microposts\".\"created_at\" DESC LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "rollback transaction"
+      }
+    ]
+  }
+]

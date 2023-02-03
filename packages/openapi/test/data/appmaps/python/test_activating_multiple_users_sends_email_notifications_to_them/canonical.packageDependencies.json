@@ -1,0 +1,34 @@
+[
+  {
+    "caller": "<templates>/MisagoTemplatesMisagoEmailsActivationBy_AdminHtml",
+    "callee": "misago"
+  },
+  {
+    "caller": "<templates>/MisagoTemplatesMisagoEmailsActivationBy_AdminTxt",
+    "callee": "misago"
+  },
+  {
+    "caller": "HTTP server requests",
+    "callee": "Database"
+  },
+  {
+    "caller": "HTTP server requests",
+    "callee": "misago"
+  },
+  {
+    "caller": "misago",
+    "callee": "<templates>/MisagoTemplatesMisagoEmailsActivationBy_AdminHtml"
+  },
+  {
+    "caller": "misago",
+    "callee": "<templates>/MisagoTemplatesMisagoEmailsActivationBy_AdminTxt"
+  },
+  {
+    "caller": "misago",
+    "callee": "Database"
+  },
+  {
+    "caller": "misago",
+    "callee": "HTTP server requests"
+  }
+]

@@ -1,1 +1,274 @@
-{"version":"1.4","metadata":{"app":"appland/AppLand","language":{"name":"ruby","engine":"ruby","version":"2.6.6"},"client":{"name":"appmap","url":"https://github.com/getappmap/appmap-ruby","version":"0.40.0"},"frameworks":[{"name":"rails","version":"5.2.4.2"},{"name":"rspec","version":"3.9.1"}],"git":{"repository":"git@github.com:getappmap/appland.git","branch":"apply-labels","commit":"5428f5df16a93d59a15d2559c626f6918d8f0523","status":["M app/controllers/api/scenarios_controller.rb","M app/controllers/sessions_controller.rb","M appmap.yml"],"git_last_annotated_tag":null,"git_last_tag":"v0.17.1","git_commits_since_last_annotated_tag":null,"git_commits_since_last_tag":0},"name":"Key data stats http_server_requests one unique on each of two scenarios belonging to different orgs indicates 1 http_server_requests for the user","feature":"Key data stats http_server_requests","feature_group":"Key data stats","labels":["stats"],"recorder":{"name":"rspec"}},"classMap":[{"name":"app/models","type":"package","children":[{"name":"KeyDataStats","type":"class","children":[{"name":"count","type":"function","location":"app/models/key_data_stats.rb:11","static":true}]},{"name":"DAO","type":"class","children":[{"name":"Scenario","type":"class","children":[{"name":"http_server_requests_dataset","type":"function","location":"app/models/dao/scenario.rb:119","static":true}]}]}]}],"events":[{"id":51535,"event":"call","thread_id":70323680821280,"defined_class":"KeyDataStats","method_id":"count","path":"app/models/key_data_stats.rb","lineno":11,"static":true,"parameters":[{"name":"owner_type","class":"Symbol","object_id":945948,"value":"user","kind":"req"},{"name":"owner_id","class":"Integer","object_id":31,"value":"15","kind":"req"},{"name":"key_data_type","class":"Symbol","object_id":12100508,"value":"http_server_request","kind":"req"}],"receiver":{"class":"Module","object_id":70323683984920,"value":"KeyDataStats"}},{"id":51536,"event":"call","thread_id":70323680821280,"defined_class":"DAO::Scenario","method_id":"http_server_requests_dataset","path":"app/models/dao/scenario.rb","lineno":119,"static":true,"parameters":[{"name":"additional_tables","class":"Array","object_id":70323683957700,"value":"[:users_orgs]","kind":"key"}],"receiver":{"class":"Class","object_id":70323694585900,"value":"DAO::Scenario"}},{"id":51537,"event":"return","thread_id":70323680821280,"parent_id":51536,"elapsed":5.5e-05,"return_value":{"class":"Sequel::Postgres::Dataset","value":"#<Sequel::Postgres::Dataset:0x00007feb046708f8>","object_id":70323683951740}},{"id":51538,"event":"call","thread_id":70323680821280,"sql_query":{"sql":"WITH \"key_data_stats\" AS (SELECT DISTINCT http_server_request.http_server_request ->> 'request_method'::text AS \"request_method\", http_server_request.http_server_request ->> 'normalized_path_info'::text AS \"path_info\" FROM \"users_orgs\", \"scenarios\", LATERAL jsonb_to_recordset(COALESCE(scenarios.events_http_server_requests, '[]'::jsonb)) http_server_request(id integer, http_server_request jsonb) WHERE ((\"scenarios\".\"org_id\" = \"users_orgs\".\"org_id\") AND (\"user_id\" = 15))) SELECT count(*) AS \"num_distinct\" FROM \"key_data_stats\" LIMIT 1","database_type":"postgres","server_version":120003}},{"id":51539,"event":"return","thread_id":70323680821280,"parent_id":51538,"elapsed":0.001209},{"id":51540,"event":"return","thread_id":70323680821280,"parent_id":51535,"elapsed":0.003824,"return_value":{"class":"KeyDataStats::KeyDataStatsCount","value":"#<struct KeyDataStats::KeyDataStatsCount owner_type=:user, owner_id=15, key_data_type=:http_server_r","object_id":70323775558180}}]}
+{
+  "events": [
+    {
+      "id": 1,
+      "event": "call",
+      "thread_id": 70323680821280,
+      "defined_class": "KeyDataStats",
+      "method_id": "count",
+      "path": "app/models/key_data_stats.rb",
+      "lineno": 11,
+      "static": true,
+      "parameters": [
+        {
+          "name": "owner_type",
+          "class": "Symbol",
+          "object_id": 945948,
+          "value": "user",
+          "kind": "req"
+        },
+        {
+          "name": "owner_id",
+          "class": "Integer",
+          "object_id": 31,
+          "value": "15",
+          "kind": "req"
+        },
+        {
+          "name": "key_data_type",
+          "class": "Symbol",
+          "object_id": 12100508,
+          "value": "http_server_request",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 70323683984920,
+        "value": "KeyDataStats"
+      }
+    },
+    {
+      "id": 2,
+      "event": "call",
+      "thread_id": 70323680821280,
+      "defined_class": "DAO::Scenario",
+      "method_id": "http_server_requests_dataset",
+      "path": "app/models/dao/scenario.rb",
+      "lineno": 119,
+      "static": true,
+      "parameters": [
+        {
+          "name": "additional_tables",
+          "class": "Array",
+          "object_id": 70323683957700,
+          "value": "[:users_orgs]",
+          "kind": "key"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 70323694585900,
+        "value": "DAO::Scenario"
+      }
+    },
+    {
+      "id": 3,
+      "event": "return",
+      "thread_id": 70323680821280,
+      "parent_id": 2,
+      "elapsed": 0.000055,
+      "return_value": {
+        "class": "Sequel::Postgres::Dataset",
+        "value": "#<Sequel::Postgres::Dataset:0x00007feb046708f8>",
+        "object_id": 70323683951740
+      }
+    },
+    {
+      "id": 4,
+      "event": "call",
+      "thread_id": 70323680821280,
+      "sql_query": {
+        "sql": "WITH \"key_data_stats\" AS (SELECT DISTINCT http_server_request.http_server_request ->> 'request_method'::text AS \"request_method\", http_server_request.http_server_request ->> 'normalized_path_info'::text AS \"path_info\" FROM \"users_orgs\", \"scenarios\", LATERAL jsonb_to_recordset(COALESCE(scenarios.events_http_server_requests, '[]'::jsonb)) http_server_request(id integer, http_server_request jsonb) WHERE ((\"scenarios\".\"org_id\" = \"users_orgs\".\"org_id\") AND (\"user_id\" = 15))) SELECT count(*) AS \"num_distinct\" FROM \"key_data_stats\" LIMIT 1",
+        "database_type": "postgres",
+        "server_version": 120003
+      }
+    },
+    {
+      "id": 5,
+      "event": "return",
+      "thread_id": 70323680821280,
+      "parent_id": 4,
+      "elapsed": 0.001209
+    },
+    {
+      "id": 6,
+      "event": "return",
+      "thread_id": 70323680821280,
+      "parent_id": 1,
+      "elapsed": 0.003824,
+      "return_value": {
+        "class": "KeyDataStats::KeyDataStatsCount",
+        "value": "#<struct KeyDataStats::KeyDataStatsCount owner_type=:user, owner_id=15, key_data_type=:http_server_r",
+        "object_id": 70323775558180
+      }
+    }
+  ],
+  "version": "1.4",
+  "metadata": {
+    "app": "appland/AppLand",
+    "language": {
+      "name": "ruby",
+      "engine": "ruby",
+      "version": "2.6.6"
+    },
+    "client": {
+      "name": "appmap",
+      "url": "https://github.com/getappmap/appmap-ruby",
+      "version": "0.40.0"
+    },
+    "frameworks": [
+      {
+        "name": "rails",
+        "version": "5.2.4.2"
+      },
+      {
+        "name": "rspec",
+        "version": "3.9.1"
+      }
+    ],
+    "git": {
+      "repository": "git@github.com:getappmap/appland.git",
+      "branch": "apply-labels",
+      "commit": "5428f5df16a93d59a15d2559c626f6918d8f0523",
+      "status": [
+        "M app/controllers/api/scenarios_controller.rb",
+        "M app/controllers/sessions_controller.rb",
+        "M appmap.yml"
+      ],
+      "git_last_annotated_tag": null,
+      "git_last_tag": "v0.17.1",
+      "git_commits_since_last_annotated_tag": null,
+      "git_commits_since_last_tag": 0
+    },
+    "name": "Key data stats http_server_requests one unique on each of two scenarios belonging to different orgs indicates 1 http_server_requests for the user",
+    "feature": "Key data stats http_server_requests",
+    "feature_group": "Key data stats",
+    "labels": ["stats"],
+    "recorder": {
+      "name": "rspec"
+    },
+    "fingerprints": [
+      {
+        "appmap_digest": "e986b1119e0731b55358a04e182174a82e8572263d1ef08269e4503bb343dfb1",
+        "canonicalization_algorithm": "classDependencies",
+        "digest": "636fb9d03f7cd729e2d1efe84609977132294b7b3a00824b2cb7370ffb0b9dba",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e986b1119e0731b55358a04e182174a82e8572263d1ef08269e4503bb343dfb1",
+        "canonicalization_algorithm": "classes",
+        "digest": "174e7d3db4622fb9b6f891cbf5743bc8900c0be6999476f2bb240c0f37cd5f70",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e986b1119e0731b55358a04e182174a82e8572263d1ef08269e4503bb343dfb1",
+        "canonicalization_algorithm": "httpClientRequests",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e986b1119e0731b55358a04e182174a82e8572263d1ef08269e4503bb343dfb1",
+        "canonicalization_algorithm": "httpServerRequests",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e986b1119e0731b55358a04e182174a82e8572263d1ef08269e4503bb343dfb1",
+        "canonicalization_algorithm": "info",
+        "digest": "18d36c9bb20adf784572d9e6124c42ee9a4394e53ce7fb4ffb10cf633cbd6ce4",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e986b1119e0731b55358a04e182174a82e8572263d1ef08269e4503bb343dfb1",
+        "canonicalization_algorithm": "labels",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e986b1119e0731b55358a04e182174a82e8572263d1ef08269e4503bb343dfb1",
+        "canonicalization_algorithm": "packageDependencies",
+        "digest": "d39c624ce950f29a446b222aa62526781f6d42636eb6c70e0ad02efdf93e9a9c",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e986b1119e0731b55358a04e182174a82e8572263d1ef08269e4503bb343dfb1",
+        "canonicalization_algorithm": "packages",
+        "digest": "e7929efc8ee23235cd20b33ce78d2b8e3b323bb2a655b5b4b98092fdefe78c16",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e986b1119e0731b55358a04e182174a82e8572263d1ef08269e4503bb343dfb1",
+        "canonicalization_algorithm": "sqlNormalized",
+        "digest": "3064f762425df477bf436eb37c472338aa4fc07868894a82a80b98ceaf00356a",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e986b1119e0731b55358a04e182174a82e8572263d1ef08269e4503bb343dfb1",
+        "canonicalization_algorithm": "sqlTables",
+        "digest": "7f060dd5e25d7383b2be652b93d2d31d9cdaa3e8d5d4305cdfb844c5de5b1aa7",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e986b1119e0731b55358a04e182174a82e8572263d1ef08269e4503bb343dfb1",
+        "canonicalization_algorithm": "trace",
+        "digest": "4ac1800af56cc7f9857e014c094cd970acdec634adc5a33423881d8167a9a2e4",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "e986b1119e0731b55358a04e182174a82e8572263d1ef08269e4503bb343dfb1",
+        "canonicalization_algorithm": "update",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      }
+    ]
+  },
+  "classMap": [
+    {
+      "name": "app/models",
+      "type": "package",
+      "children": [
+        {
+          "name": "KeyDataStats",
+          "type": "class",
+          "children": [
+            {
+              "name": "count",
+              "type": "function",
+              "static": true,
+              "location": "app/models/key_data_stats.rb:11"
+            }
+          ]
+        },
+        {
+          "name": "DAO",
+          "type": "class",
+          "children": [
+            {
+              "name": "Scenario",
+              "type": "class",
+              "children": [
+                {
+                  "name": "http_server_requests_dataset",
+                  "type": "function",
+                  "static": true,
+                  "location": "app/models/dao/scenario.rb:119"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "database",
+      "name": "Database",
+      "children": [
+        {
+          "type": "query",
+          "name": "WITH \"key_data_stats\" AS (SELECT DISTINCT http_server_request.http_server_request ->> 'request_method'::text AS \"request_method\", http_server_request.http_server_request ->> 'normalized_path_info'::text AS \"path_info\" FROM \"users_orgs\", \"scenarios\", LATERAL jsonb_to_recordset(COALESCE(scenarios.events_http_server_requests, '[]'::jsonb)) http_server_request(id integer, http_server_request jsonb) WHERE ((\"scenarios\".\"org_id\" = \"users_orgs\".\"org_id\") AND (\"user_id\" = 15))) SELECT count(*) AS \"num_distinct\" FROM \"key_data_stats\" LIMIT 1"
+        }
+      ]
+    }
+  ]
+}

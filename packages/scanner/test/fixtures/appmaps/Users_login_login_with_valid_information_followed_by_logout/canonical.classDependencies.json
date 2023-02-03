@@ -1,0 +1,154 @@
+[
+  {
+    "caller": "Class#records",
+    "callee": "activerecord/ActiveRecord"
+  },
+  {
+    "caller": "Class#write",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "HTTP server requests->DELETE /logout",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "HTTP server requests->GET /login",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "HTTP server requests->GET /users/{id}",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "HTTP server requests->POST /login",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "Class#write"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/views"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "Class#write"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "Database->SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "Database->SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC LIMIT ? OFFSET ?"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "Class#write"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "Database->SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "Database->SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "Class#write"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "Database->SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "app/models"
+  },
+  {
+    "caller": "app/models",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "app/views",
+    "callee": "Class#records"
+  },
+  {
+    "caller": "app/views",
+    "callee": "Class#write"
+  },
+  {
+    "caller": "app/views",
+    "callee": "Database->SELECT 1 AS one FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/views",
+    "callee": "Database->SELECT COUNT(*) FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ?"
+  },
+  {
+    "caller": "app/views",
+    "callee": "Database->SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"followed_id\" WHERE \"relationships\".\"follower_id\" = ?"
+  },
+  {
+    "caller": "app/views",
+    "callee": "Database->SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"follower_id\" WHERE \"relationships\".\"followed_id\" = ?"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "app/views",
+    "callee": "json/JSON"
+  }
+]

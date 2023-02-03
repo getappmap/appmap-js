@@ -1,0 +1,101 @@
+{
+  "language": {
+    "name": "python",
+    "engine": "CPython",
+    "version": "3.7.12"
+  },
+  "client": {
+    "name": "appmap",
+    "url": "https://github.com/applandinc/appmap-python"
+  },
+  "frameworks": [
+    {
+      "name": "Django",
+      "version": "2.2.12"
+    }
+  ],
+  "recording": {
+    "source_location": "misago/users/admin/tests/test_users_mass_actions.py:47"
+  },
+  "name": "activating multiple users sends email notifications to them",
+  "feature": "Activating multiple users sends email notifications to them",
+  "app": "misago",
+  "recorder": {
+    "name": "pytest"
+  },
+  "test_status": "succeeded",
+  "fingerprints": [
+    {
+      "appmap_digest": "b806b3c32c38a7f87196acf7e673ef412cb0defbdb13e06d8fcac18bbec718ff",
+      "canonicalization_algorithm": "classDependencies",
+      "digest": "22914e0b0cf6aaea57f26bb33df37c7ee5d9c5a7751be5334a05bc8009bc4f67",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "b806b3c32c38a7f87196acf7e673ef412cb0defbdb13e06d8fcac18bbec718ff",
+      "canonicalization_algorithm": "classes",
+      "digest": "45e74d36b4b4f9bbeb71f937b2f9be4fa97bf0984f868aec72f98d1237e0cbec",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "b806b3c32c38a7f87196acf7e673ef412cb0defbdb13e06d8fcac18bbec718ff",
+      "canonicalization_algorithm": "httpClientRequests",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "b806b3c32c38a7f87196acf7e673ef412cb0defbdb13e06d8fcac18bbec718ff",
+      "canonicalization_algorithm": "httpServerRequests",
+      "digest": "29d8a2a8de0cf8627c558ff290cf94fa4274c3db31bf46f1129d2774df61c91e",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "b806b3c32c38a7f87196acf7e673ef412cb0defbdb13e06d8fcac18bbec718ff",
+      "canonicalization_algorithm": "info",
+      "digest": "0cf744f7ef9da381deddcc6d060c1a0cf096aaf1a1f51775c3ee497df7a95733",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "b806b3c32c38a7f87196acf7e673ef412cb0defbdb13e06d8fcac18bbec718ff",
+      "canonicalization_algorithm": "labels",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "b806b3c32c38a7f87196acf7e673ef412cb0defbdb13e06d8fcac18bbec718ff",
+      "canonicalization_algorithm": "packageDependencies",
+      "digest": "410342526356d9ef28922b0046f3e62b9f2847e30d40c15240526fac7fd09ff3",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "b806b3c32c38a7f87196acf7e673ef412cb0defbdb13e06d8fcac18bbec718ff",
+      "canonicalization_algorithm": "packages",
+      "digest": "415b250cbd655e1f6341768254c4ab303685d88ce4930dc941f99d513bc901dd",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "b806b3c32c38a7f87196acf7e673ef412cb0defbdb13e06d8fcac18bbec718ff",
+      "canonicalization_algorithm": "sqlNormalized",
+      "digest": "45f4cef50955016d099b156bb469006fca3941459638a845435b5d8e74ed9b7c",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "b806b3c32c38a7f87196acf7e673ef412cb0defbdb13e06d8fcac18bbec718ff",
+      "canonicalization_algorithm": "sqlTables",
+      "digest": "73ca55cfc30bbd7d1f37abd1ef14959f377809a266083f6532bc0d75025b089b",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "b806b3c32c38a7f87196acf7e673ef412cb0defbdb13e06d8fcac18bbec718ff",
+      "canonicalization_algorithm": "trace",
+      "digest": "abd1900f1f2ab435fe700bac7cb35e046a2bbcb365b5bb1516e9896efd8b597d",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "b806b3c32c38a7f87196acf7e673ef412cb0defbdb13e06d8fcac18bbec718ff",
+      "canonicalization_algorithm": "update",
+      "digest": "f13c1abfbe2f3fd28e99f0091a259f20c546274965aff36fe4d0f079531aa434",
+      "fingerprint_algorithm": "sha256"
+    }
+  ]
+}

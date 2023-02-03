@@ -1,4 +1,471 @@
 {
+  "events": [
+    {
+      "id": 1,
+      "event": "call",
+      "thread_id": 70227132096580,
+      "defined_class": "DAO::User",
+      "method_id": "validate",
+      "path": "app/models/dao/user.rb",
+      "lineno": 20,
+      "static": false,
+      "receiver": {
+        "class": "DAO::User",
+        "object_id": 70227182344100,
+        "value": "#<DAO::User:0x00007fbe1483af48>"
+      }
+    },
+    {
+      "id": 2,
+      "event": "return",
+      "thread_id": 70227132096580,
+      "parent_id": 1,
+      "elapsed": 0.000021,
+      "return_value": {
+        "class": "Array",
+        "value": "[:login]",
+        "object_id": 70227182342760
+      }
+    },
+    {
+      "id": 3,
+      "event": "call",
+      "thread_id": 70227132096580,
+      "sql_query": {
+        "sql": "INSERT INTO \"users\" (\"login\") VALUES ('a6e7d0eb-5574-4e1b-800a-684bea0037e9') RETURNING *",
+        "database_type": "postgres",
+        "server_version": 120003
+      }
+    },
+    {
+      "id": 4,
+      "event": "return",
+      "thread_id": 70227132096580,
+      "parent_id": 3,
+      "elapsed": 0.001139
+    },
+    {
+      "id": 5,
+      "event": "call",
+      "thread_id": 70227132096580,
+      "defined_class": "DAO::ToModel",
+      "method_id": "to_model",
+      "path": "app/models/dao/to_model.rb",
+      "lineno": 5,
+      "static": false,
+      "receiver": {
+        "class": "DAO::User",
+        "object_id": 70227182344100,
+        "value": "#<DAO::User:0x00007fbe1483af48>"
+      }
+    },
+    {
+      "id": 6,
+      "event": "return",
+      "thread_id": 70227132096580,
+      "parent_id": 5,
+      "elapsed": 0.000013,
+      "return_value": {
+        "class": "User::Show",
+        "value": "#<User::Show:0x00007fbe1cfcbf20>",
+        "object_id": 70227253419920
+      }
+    },
+    {
+      "id": 7,
+      "event": "call",
+      "thread_id": 70227132096580,
+      "defined_class": "User::Show",
+      "method_id": "search_scope",
+      "path": "app/models/user.rb",
+      "lineno": 80,
+      "static": false,
+      "parameters": [
+        {
+          "name": "kind",
+          "class": "Class",
+          "object_id": 70227228205980,
+          "value": "App",
+          "kind": "req"
+        },
+        {
+          "name": "scope",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "key"
+        }
+      ],
+      "receiver": {
+        "class": "User::Show",
+        "object_id": 70227253419920,
+        "value": "#<User::Show:0x00007fbe1cfcbf20>"
+      }
+    },
+    {
+      "id": 8,
+      "event": "return",
+      "thread_id": 70227132096580,
+      "parent_id": 7,
+      "elapsed": 0.000011,
+      "return_value": {
+        "class": "App::Search",
+        "value": "#<App::Search:0x00007fbe1cfca5a8>",
+        "object_id": 70227253416660
+      }
+    },
+    {
+      "id": 9,
+      "event": "call",
+      "thread_id": 70227132096580,
+      "defined_class": "App::Search",
+      "method_id": "find!",
+      "path": "app/models/app.rb",
+      "lineno": 43,
+      "static": false,
+      "parameters": [
+        {
+          "name": "app",
+          "class": "Integer",
+          "object_id": 33,
+          "value": "16",
+          "kind": "req"
+        },
+        {
+          "name": "org_slug_or_user_login",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "App::Search",
+        "object_id": 70227253416660,
+        "value": "#<App::Search:0x00007fbe1cfca5a8>"
+      }
+    },
+    {
+      "id": 10,
+      "event": "call",
+      "thread_id": 70227132096580,
+      "defined_class": "App::Search",
+      "method_id": "find_by_id!",
+      "path": "app/models/app.rb",
+      "lineno": 51,
+      "static": false,
+      "parameters": [
+        {
+          "name": "id",
+          "class": "Integer",
+          "object_id": 33,
+          "value": "16",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "App::Search",
+        "object_id": 70227253416660,
+        "value": "#<App::Search:0x00007fbe1cfca5a8>"
+      }
+    },
+    {
+      "id": 11,
+      "event": "call",
+      "thread_id": 70227132096580,
+      "defined_class": "Search",
+      "method_id": "filter",
+      "path": "app/models/search.rb",
+      "lineno": 33,
+      "static": false,
+      "parameters": [
+        {
+          "name": "dataset",
+          "class": "Class",
+          "object_id": 70227227205160,
+          "value": "DAO::App",
+          "kind": "req"
+        },
+        {
+          "name": "table_name",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "key"
+        }
+      ],
+      "receiver": {
+        "class": "App::Search",
+        "object_id": 70227253416660,
+        "value": "#<App::Search:0x00007fbe1cfca5a8>"
+      }
+    },
+    {
+      "id": 12,
+      "event": "call",
+      "thread_id": 70227132096580,
+      "defined_class": "User::Show",
+      "method_id": "admin?",
+      "path": "app/models/user.rb",
+      "lineno": 106,
+      "static": false,
+      "receiver": {
+        "class": "User::Show",
+        "object_id": 70227253419920,
+        "value": "#<User::Show:0x00007fbe1cfcbf20>"
+      }
+    },
+    {
+      "id": 13,
+      "event": "return",
+      "thread_id": 70227132096580,
+      "parent_id": 12,
+      "elapsed": 0.000006
+    },
+    {
+      "id": 14,
+      "event": "call",
+      "thread_id": 70227132096580,
+      "defined_class": "DAO::PublicResource",
+      "method_id": "coerce",
+      "path": "app/models/dao/public_resource.rb",
+      "lineno": 18,
+      "static": true,
+      "parameters": [
+        {
+          "name": "dataset",
+          "class": "Class",
+          "object_id": 70227227205160,
+          "value": "DAO::App",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 70227166173580,
+        "value": "DAO::PublicResource"
+      }
+    },
+    {
+      "id": 15,
+      "event": "return",
+      "thread_id": 70227132096580,
+      "parent_id": 14,
+      "elapsed": 0.000005,
+      "return_value": {
+        "class": "Class",
+        "value": "DAO::App",
+        "object_id": 70227227205160
+      }
+    },
+    {
+      "id": 16,
+      "event": "call",
+      "thread_id": 70227132096580,
+      "defined_class": "DAO::PublicResource",
+      "method_id": "scope",
+      "path": "app/models/dao/public_resource.rb",
+      "lineno": 26,
+      "static": true,
+      "parameters": [
+        {
+          "name": "user",
+          "class": "User::Show",
+          "object_id": 70227253419920,
+          "value": "#<User::Show:0x00007fbe1cfcbf20>",
+          "kind": "req"
+        },
+        {
+          "name": "scope",
+          "class": "Integer",
+          "object_id": 3,
+          "value": "1",
+          "kind": "key"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 70227227205160,
+        "value": "DAO::App"
+      }
+    },
+    {
+      "id": 17,
+      "event": "call",
+      "thread_id": 70227132096580,
+      "sql_query": {
+        "sql": "SELECT * FROM \"users\" WHERE \"id\" = 10",
+        "database_type": "postgres",
+        "server_version": 120003
+      }
+    },
+    {
+      "id": 18,
+      "event": "return",
+      "thread_id": 70227132096580,
+      "parent_id": 17,
+      "elapsed": 0.001036
+    },
+    {
+      "id": 19,
+      "event": "call",
+      "thread_id": 70227132096580,
+      "defined_class": "DAO::SequelUtil",
+      "method_id": "build_where_clause",
+      "path": "app/models/dao/sequel_util.rb",
+      "lineno": 6,
+      "static": true,
+      "parameters": [
+        {
+          "name": "dataset",
+          "class": "Sequel::Postgres::Dataset",
+          "object_id": 70227227322280,
+          "value": "#<Sequel::Postgres::Dataset:0x00007fbe19e04f50>",
+          "kind": "req"
+        },
+        {
+          "name": "clauses",
+          "class": "Array",
+          "object_id": 70227011158080,
+          "value": "[{:org=>#<Sequel::Postgres::Dataset: \"SELECT \\\"orgs\\\".* FROM \\\"orgs\\\" INNER JOIN \\\"users_orgs\\\" ON (",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 70227166783160,
+        "value": "DAO::SequelUtil"
+      }
+    },
+    {
+      "id": 20,
+      "event": "return",
+      "thread_id": 70227132096580,
+      "parent_id": 19,
+      "elapsed": 0.000026,
+      "return_value": {
+        "class": "Sequel::Postgres::Dataset",
+        "value": "#<Sequel::Postgres::Dataset:0x00007fbe001c26c0>",
+        "object_id": 70227011179360
+      }
+    },
+    {
+      "id": 21,
+      "event": "return",
+      "thread_id": 70227132096580,
+      "parent_id": 16,
+      "elapsed": 0.004024,
+      "return_value": {
+        "class": "Sequel::Postgres::Dataset",
+        "value": "#<Sequel::Postgres::Dataset:0x00007fbe001c26c0>",
+        "object_id": 70227011179360
+      }
+    },
+    {
+      "id": 22,
+      "event": "return",
+      "thread_id": 70227132096580,
+      "parent_id": 11,
+      "elapsed": 0.00427,
+      "return_value": {
+        "class": "Sequel::Postgres::Dataset",
+        "value": "#<Sequel::Postgres::Dataset:0x00007fbe001c26c0>",
+        "object_id": 70227011179360
+      }
+    },
+    {
+      "id": 23,
+      "event": "call",
+      "thread_id": 70227132096580,
+      "sql_query": {
+        "sql": "SELECT \"apps\".* FROM \"apps\" WHERE ((\"apps\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = 10) AND (\"orgs\".\"id\" IS NOT NULL)))) AND (\"id\" = 16)) LIMIT 1",
+        "database_type": "postgres",
+        "server_version": 120003
+      }
+    },
+    {
+      "id": 24,
+      "event": "return",
+      "thread_id": 70227132096580,
+      "parent_id": 23,
+      "elapsed": 0.006183
+    },
+    {
+      "id": 25,
+      "event": "call",
+      "thread_id": 70227132096580,
+      "defined_class": "Exceptions::RecordNotFound",
+      "method_id": "build_message",
+      "path": "app/models/exceptions/record_not_found.rb",
+      "lineno": 16,
+      "static": true,
+      "parameters": [
+        {
+          "name": "kind",
+          "class": "String",
+          "object_id": 70227228208840,
+          "value": "App",
+          "kind": "req"
+        },
+        {
+          "name": "id",
+          "class": "Integer",
+          "object_id": 33,
+          "value": "16",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "Class",
+        "object_id": 70227226859720,
+        "value": "Exceptions::RecordNotFound"
+      }
+    },
+    {
+      "id": 26,
+      "event": "return",
+      "thread_id": 70227132096580,
+      "parent_id": 25,
+      "elapsed": 0.000008,
+      "return_value": {
+        "class": "String",
+        "value": "App 16 not found",
+        "object_id": 70227011929800
+      }
+    },
+    {
+      "id": 27,
+      "event": "return",
+      "thread_id": 70227132096580,
+      "parent_id": 10,
+      "elapsed": 0.013957,
+      "exceptions": [
+        {
+          "class": "Exceptions::RecordNotFound",
+          "message": "App 16 not found",
+          "object_id": 70227011933180,
+          "path": "/Users/dustin/dev/appland/appland/app/models/app.rb",
+          "lineno": 57
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "event": "return",
+      "thread_id": 70227132096580,
+      "parent_id": 9,
+      "elapsed": 0.014058,
+      "exceptions": [
+        {
+          "class": "Exceptions::RecordNotFound",
+          "message": "App 16 not found",
+          "object_id": 70227011933180,
+          "path": "/Users/dustin/dev/appland/appland/app/models/app.rb",
+          "lineno": 57
+        }
+      ]
+    }
+  ],
   "version": "1.4",
   "metadata": {
     "app": "appland/AppLand",
@@ -41,20 +508,74 @@
     "fingerprints": [
       {
         "appmap_digest": "51f4894ca79d07e2c55b72d26ac75c10e5b1471454f6c3f6c9fc61c6f666c4af",
-        "canonicalization_algorithm": "beta_v1_error",
+        "canonicalization_algorithm": "classDependencies",
+        "digest": "d9b7a59d8dcb89c3503a373af72d671670c1ed25f2213611f86d7daae467f759",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "51f4894ca79d07e2c55b72d26ac75c10e5b1471454f6c3f6c9fc61c6f666c4af",
+        "canonicalization_algorithm": "classes",
+        "digest": "76bf17196a0429bf444774cde05ea5d7ac93487438c7f5d5cc4473d149ad4bb0",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "51f4894ca79d07e2c55b72d26ac75c10e5b1471454f6c3f6c9fc61c6f666c4af",
+        "canonicalization_algorithm": "httpClientRequests",
         "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
         "appmap_digest": "51f4894ca79d07e2c55b72d26ac75c10e5b1471454f6c3f6c9fc61c6f666c4af",
-        "canonicalization_algorithm": "beta_v1_info",
-        "digest": "79ca946bbb331f784ef2667f6ae82ea55d320ce536bf71632ad27aeb94373ea2",
+        "canonicalization_algorithm": "httpServerRequests",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "fingerprint_algorithm": "sha256"
       },
       {
         "appmap_digest": "51f4894ca79d07e2c55b72d26ac75c10e5b1471454f6c3f6c9fc61c6f666c4af",
-        "canonicalization_algorithm": "beta_v1_debug",
-        "digest": "dcf5b2328e0ef282ef0434964b1aaa6600f08519b99f2453b8125f22d68b9a44",
+        "canonicalization_algorithm": "info",
+        "digest": "b37b349001b0313331b4b29a6cb65419bda644bce54a6340de5233e930b5a87c",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "51f4894ca79d07e2c55b72d26ac75c10e5b1471454f6c3f6c9fc61c6f666c4af",
+        "canonicalization_algorithm": "labels",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "51f4894ca79d07e2c55b72d26ac75c10e5b1471454f6c3f6c9fc61c6f666c4af",
+        "canonicalization_algorithm": "packageDependencies",
+        "digest": "d39c624ce950f29a446b222aa62526781f6d42636eb6c70e0ad02efdf93e9a9c",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "51f4894ca79d07e2c55b72d26ac75c10e5b1471454f6c3f6c9fc61c6f666c4af",
+        "canonicalization_algorithm": "packages",
+        "digest": "e7929efc8ee23235cd20b33ce78d2b8e3b323bb2a655b5b4b98092fdefe78c16",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "51f4894ca79d07e2c55b72d26ac75c10e5b1471454f6c3f6c9fc61c6f666c4af",
+        "canonicalization_algorithm": "sqlNormalized",
+        "digest": "beb1499e5f9eac48e71de695ae0d5760a679f603d14dc36c7251afcd2c75d7e8",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "51f4894ca79d07e2c55b72d26ac75c10e5b1471454f6c3f6c9fc61c6f666c4af",
+        "canonicalization_algorithm": "sqlTables",
+        "digest": "6ef661641b6c7717ed31c5d134a895e2ad27019a3375fb37db04c93893ef73b1",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "51f4894ca79d07e2c55b72d26ac75c10e5b1471454f6c3f6c9fc61c6f666c4af",
+        "canonicalization_algorithm": "trace",
+        "digest": "870632294029a78618289ab6230efbbac5ca5d384eafee4f1973cedde6b61cb0",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "51f4894ca79d07e2c55b72d26ac75c10e5b1471454f6c3f6c9fc61c6f666c4af",
+        "canonicalization_algorithm": "update",
+        "digest": "7556e592f4ac0be882fc06841c36f80789adc3099c3bee28098811e0f14b157e",
         "fingerprint_algorithm": "sha256"
       }
     ]
@@ -75,8 +596,8 @@
                 {
                   "name": "validate",
                   "type": "function",
-                  "location": "app/models/dao/user.rb:20",
-                  "static": false
+                  "static": false,
+                  "location": "app/models/dao/user.rb:20"
                 }
               ]
             },
@@ -87,8 +608,8 @@
                 {
                   "name": "to_model",
                   "type": "function",
-                  "location": "app/models/dao/to_model.rb:5",
-                  "static": false
+                  "static": false,
+                  "location": "app/models/dao/to_model.rb:5"
                 }
               ]
             },
@@ -99,14 +620,14 @@
                 {
                   "name": "coerce",
                   "type": "function",
-                  "location": "app/models/dao/public_resource.rb:18",
-                  "static": true
+                  "static": true,
+                  "location": "app/models/dao/public_resource.rb:18"
                 },
                 {
                   "name": "scope",
                   "type": "function",
-                  "location": "app/models/dao/public_resource.rb:26",
-                  "static": true
+                  "static": true,
+                  "location": "app/models/dao/public_resource.rb:26"
                 }
               ]
             },
@@ -117,8 +638,8 @@
                 {
                   "name": "build_where_clause",
                   "type": "function",
-                  "location": "app/models/dao/sequel_util.rb:6",
-                  "static": true
+                  "static": true,
+                  "location": "app/models/dao/sequel_util.rb:6"
                 }
               ]
             }
@@ -135,14 +656,14 @@
                 {
                   "name": "search_scope",
                   "type": "function",
-                  "location": "app/models/user.rb:80",
-                  "static": false
+                  "static": false,
+                  "location": "app/models/user.rb:80"
                 },
                 {
                   "name": "admin?",
                   "type": "function",
-                  "location": "app/models/user.rb:106",
-                  "static": false
+                  "static": false,
+                  "location": "app/models/user.rb:106"
                 }
               ]
             }
@@ -159,14 +680,14 @@
                 {
                   "name": "find!",
                   "type": "function",
-                  "location": "app/models/app.rb:43",
-                  "static": false
+                  "static": false,
+                  "location": "app/models/app.rb:43"
                 },
                 {
                   "name": "find_by_id!",
                   "type": "function",
-                  "location": "app/models/app.rb:51",
-                  "static": false
+                  "static": false,
+                  "location": "app/models/app.rb:51"
                 }
               ]
             }
@@ -179,8 +700,8 @@
             {
               "name": "filter",
               "type": "function",
-              "location": "app/models/search.rb:33",
-              "static": false
+              "static": false,
+              "location": "app/models/search.rb:33"
             }
           ]
         },
@@ -195,482 +716,30 @@
                 {
                   "name": "build_message",
                   "type": "function",
-                  "location": "app/models/exceptions/record_not_found.rb:16",
-                  "static": true
+                  "static": true,
+                  "location": "app/models/exceptions/record_not_found.rb:16"
                 }
               ]
             }
           ]
         }
       ]
-    }
-  ],
-  "events": [
-    {
-      "id": 42545,
-      "event": "call",
-      "thread_id": 70227132096580,
-      "defined_class": "DAO::User",
-      "method_id": "validate",
-      "path": "app/models/dao/user.rb",
-      "lineno": 20,
-      "static": false,
-      "parameters": [],
-      "receiver": {
-        "class": "DAO::User",
-        "object_id": 70227182344100,
-        "value": "#<DAO::User:0x00007fbe1483af48>"
-      }
     },
     {
-      "id": 42546,
-      "event": "return",
-      "thread_id": 70227132096580,
-      "parent_id": 42545,
-      "elapsed": 0.000021,
-      "return_value": {
-        "class": "Array",
-        "value": "[:login]",
-        "object_id": 70227182342760
-      }
-    },
-    {
-      "id": 42547,
-      "event": "call",
-      "thread_id": 70227132096580,
-      "sql_query": {
-        "sql": "INSERT INTO \"users\" (\"login\") VALUES ('a6e7d0eb-5574-4e1b-800a-684bea0037e9') RETURNING *",
-        "database_type": "postgres",
-        "server_version": 120003
-      }
-    },
-    {
-      "id": 42548,
-      "event": "return",
-      "thread_id": 70227132096580,
-      "parent_id": 42547,
-      "elapsed": 0.001139
-    },
-    {
-      "id": 42549,
-      "event": "call",
-      "thread_id": 70227132096580,
-      "defined_class": "DAO::ToModel",
-      "method_id": "to_model",
-      "path": "app/models/dao/to_model.rb",
-      "lineno": 5,
-      "static": false,
-      "parameters": [],
-      "receiver": {
-        "class": "DAO::User",
-        "object_id": 70227182344100,
-        "value": "#<DAO::User:0x00007fbe1483af48>"
-      }
-    },
-    {
-      "id": 42550,
-      "event": "return",
-      "thread_id": 70227132096580,
-      "parent_id": 42549,
-      "elapsed": 0.000013,
-      "return_value": {
-        "class": "User::Show",
-        "value": "#<User::Show:0x00007fbe1cfcbf20>",
-        "object_id": 70227253419920
-      }
-    },
-    {
-      "id": 42551,
-      "event": "call",
-      "thread_id": 70227132096580,
-      "defined_class": "User::Show",
-      "method_id": "search_scope",
-      "path": "app/models/user.rb",
-      "lineno": 80,
-      "static": false,
-      "parameters": [
+      "type": "database",
+      "name": "Database",
+      "children": [
         {
-          "name": "kind",
-          "class": "Class",
-          "object_id": 70227228205980,
-          "value": "App",
-          "kind": "req"
+          "type": "query",
+          "name": "INSERT INTO \"users\" (\"login\") VALUES ('a6e7d0eb-5574-4e1b-800a-684bea0037e9') RETURNING *"
         },
         {
-          "name": "scope",
-          "class": "NilClass",
-          "object_id": 8,
-          "value": null,
-          "kind": "key"
-        }
-      ],
-      "receiver": {
-        "class": "User::Show",
-        "object_id": 70227253419920,
-        "value": "#<User::Show:0x00007fbe1cfcbf20>"
-      }
-    },
-    {
-      "id": 42552,
-      "event": "return",
-      "thread_id": 70227132096580,
-      "parent_id": 42551,
-      "elapsed": 0.000011,
-      "return_value": {
-        "class": "App::Search",
-        "value": "#<App::Search:0x00007fbe1cfca5a8>",
-        "object_id": 70227253416660
-      }
-    },
-    {
-      "id": 42553,
-      "event": "call",
-      "thread_id": 70227132096580,
-      "defined_class": "App::Search",
-      "method_id": "find!",
-      "path": "app/models/app.rb",
-      "lineno": 43,
-      "static": false,
-      "parameters": [
-        {
-          "name": "app",
-          "class": "Integer",
-          "object_id": 33,
-          "value": "16",
-          "kind": "req"
+          "type": "query",
+          "name": "SELECT * FROM \"users\" WHERE \"id\" = 10"
         },
         {
-          "name": "org_slug_or_user_login",
-          "class": "NilClass",
-          "object_id": 8,
-          "value": null,
-          "kind": "opt"
-        }
-      ],
-      "receiver": {
-        "class": "App::Search",
-        "object_id": 70227253416660,
-        "value": "#<App::Search:0x00007fbe1cfca5a8>"
-      }
-    },
-    {
-      "id": 42554,
-      "event": "call",
-      "thread_id": 70227132096580,
-      "defined_class": "App::Search",
-      "method_id": "find_by_id!",
-      "path": "app/models/app.rb",
-      "lineno": 51,
-      "static": false,
-      "parameters": [
-        {
-          "name": "id",
-          "class": "Integer",
-          "object_id": 33,
-          "value": "16",
-          "kind": "req"
-        }
-      ],
-      "receiver": {
-        "class": "App::Search",
-        "object_id": 70227253416660,
-        "value": "#<App::Search:0x00007fbe1cfca5a8>"
-      }
-    },
-    {
-      "id": 42555,
-      "event": "call",
-      "thread_id": 70227132096580,
-      "defined_class": "Search",
-      "method_id": "filter",
-      "path": "app/models/search.rb",
-      "lineno": 33,
-      "static": false,
-      "parameters": [
-        {
-          "name": "dataset",
-          "class": "Class",
-          "object_id": 70227227205160,
-          "value": "DAO::App",
-          "kind": "req"
-        },
-        {
-          "name": "table_name",
-          "class": "NilClass",
-          "object_id": 8,
-          "value": null,
-          "kind": "key"
-        }
-      ],
-      "receiver": {
-        "class": "App::Search",
-        "object_id": 70227253416660,
-        "value": "#<App::Search:0x00007fbe1cfca5a8>"
-      }
-    },
-    {
-      "id": 42556,
-      "event": "call",
-      "thread_id": 70227132096580,
-      "defined_class": "User::Show",
-      "method_id": "admin?",
-      "path": "app/models/user.rb",
-      "lineno": 106,
-      "static": false,
-      "parameters": [],
-      "receiver": {
-        "class": "User::Show",
-        "object_id": 70227253419920,
-        "value": "#<User::Show:0x00007fbe1cfcbf20>"
-      }
-    },
-    {
-      "id": 42557,
-      "event": "return",
-      "thread_id": 70227132096580,
-      "parent_id": 42556,
-      "elapsed": 0.000006
-    },
-    {
-      "id": 42558,
-      "event": "call",
-      "thread_id": 70227132096580,
-      "defined_class": "DAO::PublicResource",
-      "method_id": "coerce",
-      "path": "app/models/dao/public_resource.rb",
-      "lineno": 18,
-      "static": true,
-      "parameters": [
-        {
-          "name": "dataset",
-          "class": "Class",
-          "object_id": 70227227205160,
-          "value": "DAO::App",
-          "kind": "req"
-        }
-      ],
-      "receiver": {
-        "class": "Module",
-        "object_id": 70227166173580,
-        "value": "DAO::PublicResource"
-      }
-    },
-    {
-      "id": 42559,
-      "event": "return",
-      "thread_id": 70227132096580,
-      "parent_id": 42558,
-      "elapsed": 0.000005,
-      "return_value": {
-        "class": "Class",
-        "value": "DAO::App",
-        "object_id": 70227227205160
-      }
-    },
-    {
-      "id": 42560,
-      "event": "call",
-      "thread_id": 70227132096580,
-      "defined_class": "DAO::PublicResource",
-      "method_id": "scope",
-      "path": "app/models/dao/public_resource.rb",
-      "lineno": 26,
-      "static": true,
-      "parameters": [
-        {
-          "name": "user",
-          "class": "User::Show",
-          "object_id": 70227253419920,
-          "value": "#<User::Show:0x00007fbe1cfcbf20>",
-          "kind": "req"
-        },
-        {
-          "name": "scope",
-          "class": "Integer",
-          "object_id": 3,
-          "value": "1",
-          "kind": "key"
-        }
-      ],
-      "receiver": {
-        "class": "Class",
-        "object_id": 70227227205160,
-        "value": "DAO::App"
-      }
-    },
-    {
-      "id": 42561,
-      "event": "call",
-      "thread_id": 70227132096580,
-      "sql_query": {
-        "sql": "SELECT * FROM \"users\" WHERE \"id\" = 10",
-        "database_type": "postgres",
-        "server_version": 120003
-      }
-    },
-    {
-      "id": 42562,
-      "event": "return",
-      "thread_id": 70227132096580,
-      "parent_id": 42561,
-      "elapsed": 0.001036
-    },
-    {
-      "id": 42563,
-      "event": "call",
-      "thread_id": 70227132096580,
-      "defined_class": "DAO::SequelUtil",
-      "method_id": "build_where_clause",
-      "path": "app/models/dao/sequel_util.rb",
-      "lineno": 6,
-      "static": true,
-      "parameters": [
-        {
-          "name": "dataset",
-          "class": "Sequel::Postgres::Dataset",
-          "object_id": 70227227322280,
-          "value": "#<Sequel::Postgres::Dataset:0x00007fbe19e04f50>",
-          "kind": "req"
-        },
-        {
-          "name": "clauses",
-          "class": "Array",
-          "object_id": 70227011158080,
-          "value": "[{:org=>#<Sequel::Postgres::Dataset: \"SELECT \\\"orgs\\\".* FROM \\\"orgs\\\" INNER JOIN \\\"users_orgs\\\" ON (",
-          "kind": "req"
-        }
-      ],
-      "receiver": {
-        "class": "Module",
-        "object_id": 70227166783160,
-        "value": "DAO::SequelUtil"
-      }
-    },
-    {
-      "id": 42564,
-      "event": "return",
-      "thread_id": 70227132096580,
-      "parent_id": 42563,
-      "elapsed": 0.000026,
-      "return_value": {
-        "class": "Sequel::Postgres::Dataset",
-        "value": "#<Sequel::Postgres::Dataset:0x00007fbe001c26c0>",
-        "object_id": 70227011179360
-      }
-    },
-    {
-      "id": 42565,
-      "event": "return",
-      "thread_id": 70227132096580,
-      "parent_id": 42560,
-      "elapsed": 0.004024,
-      "return_value": {
-        "class": "Sequel::Postgres::Dataset",
-        "value": "#<Sequel::Postgres::Dataset:0x00007fbe001c26c0>",
-        "object_id": 70227011179360
-      }
-    },
-    {
-      "id": 42566,
-      "event": "return",
-      "thread_id": 70227132096580,
-      "parent_id": 42555,
-      "elapsed": 0.00427,
-      "return_value": {
-        "class": "Sequel::Postgres::Dataset",
-        "value": "#<Sequel::Postgres::Dataset:0x00007fbe001c26c0>",
-        "object_id": 70227011179360
-      }
-    },
-    {
-      "id": 42567,
-      "event": "call",
-      "thread_id": 70227132096580,
-      "sql_query": {
-        "sql": "SELECT \"apps\".* FROM \"apps\" WHERE ((\"apps\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = 10) AND (\"orgs\".\"id\" IS NOT NULL)))) AND (\"id\" = 16)) LIMIT 1",
-        "database_type": "postgres",
-        "server_version": 120003
-      }
-    },
-    {
-      "id": 42568,
-      "event": "return",
-      "thread_id": 70227132096580,
-      "parent_id": 42567,
-      "elapsed": 0.006183
-    },
-    {
-      "id": 42569,
-      "event": "call",
-      "thread_id": 70227132096580,
-      "defined_class": "Exceptions::RecordNotFound",
-      "method_id": "build_message",
-      "path": "app/models/exceptions/record_not_found.rb",
-      "lineno": 16,
-      "static": true,
-      "parameters": [
-        {
-          "name": "kind",
-          "class": "String",
-          "object_id": 70227228208840,
-          "value": "App",
-          "kind": "req"
-        },
-        {
-          "name": "id",
-          "class": "Integer",
-          "object_id": 33,
-          "value": "16",
-          "kind": "req"
-        }
-      ],
-      "receiver": {
-        "class": "Class",
-        "object_id": 70227226859720,
-        "value": "Exceptions::RecordNotFound"
-      }
-    },
-    {
-      "id": 42570,
-      "event": "return",
-      "thread_id": 70227132096580,
-      "parent_id": 42569,
-      "elapsed": 0.000008,
-      "return_value": {
-        "class": "String",
-        "value": "App 16 not found",
-        "object_id": 70227011929800
-      }
-    },
-    {
-      "id": 42571,
-      "event": "return",
-      "thread_id": 70227132096580,
-      "parent_id": 42554,
-      "elapsed": 0.013957,
-      "exceptions": [
-        {
-          "class": "Exceptions::RecordNotFound",
-          "message": "App 16 not found",
-          "object_id": 70227011933180,
-          "path": "/Users/dustin/dev/appland/appland/app/models/app.rb",
-          "lineno": 57
-        }
-      ]
-    },
-    {
-      "id": 42572,
-      "event": "return",
-      "thread_id": 70227132096580,
-      "parent_id": 42553,
-      "elapsed": 0.014058,
-      "exceptions": [
-        {
-          "class": "Exceptions::RecordNotFound",
-          "message": "App 16 not found",
-          "object_id": 70227011933180,
-          "path": "/Users/dustin/dev/appland/appland/app/models/app.rb",
-          "lineno": 57
+          "type": "query",
+          "name": "SELECT \"apps\".* FROM \"apps\" WHERE ((\"apps\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = 10) AND (\"orgs\".\"id\" IS NOT NULL)))) AND (\"id\" = 16)) LIMIT 1"
         }
       ]
     }

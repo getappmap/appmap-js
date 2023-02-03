@@ -1,0 +1,17 @@
+[
+  {
+    "route": "DELETE /users/{id}",
+    "parameters": "(controller,action,id)",
+    "status": 302
+  },
+  {
+    "route": "GET /users",
+    "parameters": "(controller,action)",
+    "status": 200
+  },
+  {
+    "route": "POST /login",
+    "parameters": "(session,controller,action)",
+    "status": 302
+  }
+]

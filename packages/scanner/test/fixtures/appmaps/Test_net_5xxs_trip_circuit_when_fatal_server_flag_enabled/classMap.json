@@ -1,0 +1,490 @@
+[
+  {
+    "name": "lib",
+    "type": "package",
+    "children": [
+      {
+        "name": "Semian",
+        "type": "class",
+        "children": [
+          {
+            "name": "NetHTTP",
+            "type": "class",
+            "children": [
+              {
+                "name": "semian_configuration=",
+                "type": "function",
+                "static": true,
+                "location": "lib/semian/net_http.rb:50"
+              },
+              {
+                "name": "connect",
+                "type": "function",
+                "static": false,
+                "location": "lib/semian/net_http.rb:81"
+              },
+              {
+                "name": "disabled?",
+                "type": "function",
+                "static": false,
+                "location": "lib/semian/net_http.rb:77"
+              },
+              {
+                "name": "raw_semian_options",
+                "type": "function",
+                "static": false,
+                "location": "lib/semian/net_http.rb:66"
+              },
+              {
+                "name": "retrieve_semian_configuration",
+                "type": "function",
+                "static": true,
+                "location": "lib/semian/net_http.rb:55"
+              },
+              {
+                "name": "resource_exceptions",
+                "type": "function",
+                "static": false,
+                "location": "lib/semian/net_http.rb:73"
+              },
+              {
+                "name": "semian_identifier",
+                "type": "function",
+                "static": false,
+                "location": "lib/semian/net_http.rb:31"
+              },
+              {
+                "name": "transport_request",
+                "type": "function",
+                "static": false,
+                "location": "lib/semian/net_http.rb:86"
+              }
+            ]
+          },
+          {
+            "name": "[]",
+            "type": "function",
+            "static": true,
+            "location": "lib/semian.rb:183"
+          },
+          {
+            "name": "resources",
+            "type": "function",
+            "static": true,
+            "location": "lib/semian.rb:225"
+          },
+          {
+            "name": "CircuitBreaker",
+            "type": "class",
+            "children": [
+              {
+                "name": "reset",
+                "type": "function",
+                "static": false,
+                "location": "lib/semian/circuit_breaker.rb:69"
+              },
+              {
+                "name": "destroy",
+                "type": "function",
+                "static": false,
+                "location": "lib/semian/circuit_breaker.rb:75"
+              },
+              {
+                "name": "transition_to_half_open?",
+                "type": "function",
+                "static": false,
+                "location": "lib/semian/circuit_breaker.rb:45"
+              },
+              {
+                "name": "request_allowed?",
+                "type": "function",
+                "static": false,
+                "location": "lib/semian/circuit_breaker.rb:49"
+              },
+              {
+                "name": "mark_success",
+                "type": "function",
+                "static": false,
+                "location": "lib/semian/circuit_breaker.rb:63"
+              },
+              {
+                "name": "mark_failed",
+                "type": "function",
+                "static": false,
+                "location": "lib/semian/circuit_breaker.rb:53"
+              }
+            ]
+          },
+          {
+            "name": "Simple",
+            "type": "class",
+            "children": [
+              {
+                "name": "SlidingWindow",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "clear",
+                    "type": "function",
+                    "static": false,
+                    "location": "lib/semian/simple_sliding_window.rb:31"
+                  },
+                  {
+                    "name": "reject!",
+                    "type": "function",
+                    "static": false,
+                    "location": "lib/semian/simple_sliding_window.rb:20"
+                  },
+                  {
+                    "name": "<<",
+                    "type": "function",
+                    "static": false,
+                    "location": "lib/semian/simple_sliding_window.rb:24"
+                  }
+                ]
+              },
+              {
+                "name": "Integer",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "reset",
+                    "type": "function",
+                    "static": false,
+                    "location": "lib/semian/simple_integer.rb:16"
+                  },
+                  {
+                    "name": "destroy",
+                    "type": "function",
+                    "static": false,
+                    "location": "lib/semian/simple_integer.rb:20"
+                  }
+                ]
+              },
+              {
+                "name": "State",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "close!",
+                    "type": "function",
+                    "static": false,
+                    "location": "lib/semian/simple_state.rb:26"
+                  },
+                  {
+                    "name": "destroy",
+                    "type": "function",
+                    "static": false,
+                    "location": "lib/semian/simple_state.rb:38"
+                  },
+                  {
+                    "name": "reset",
+                    "type": "function",
+                    "static": false,
+                    "location": "lib/semian/simple_state.rb:34"
+                  },
+                  {
+                    "name": "open?",
+                    "type": "function",
+                    "static": false,
+                    "location": "lib/semian/simple_state.rb:10"
+                  },
+                  {
+                    "name": "closed?",
+                    "type": "function",
+                    "static": false,
+                    "location": "lib/semian/simple_state.rb:14"
+                  },
+                  {
+                    "name": "half_open?",
+                    "type": "function",
+                    "static": false,
+                    "location": "lib/semian/simple_state.rb:18"
+                  },
+                  {
+                    "name": "open!",
+                    "type": "function",
+                    "static": false,
+                    "location": "lib/semian/simple_state.rb:22"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Instrumentable",
+            "type": "class",
+            "children": [
+              {
+                "name": "notify",
+                "type": "function",
+                "static": true,
+                "location": "lib/semian/instrumentable.rb:18"
+              }
+            ]
+          },
+          {
+            "name": "destroy",
+            "type": "function",
+            "static": true,
+            "location": "lib/semian.rb:187"
+          },
+          {
+            "name": "ProtectedResource",
+            "type": "class",
+            "children": [
+              {
+                "name": "destroy",
+                "type": "function",
+                "static": false,
+                "location": "lib/semian/protected_resource.rb:19"
+              },
+              {
+                "name": "acquire",
+                "type": "function",
+                "static": false,
+                "location": "lib/semian/protected_resource.rb:24"
+              }
+            ]
+          },
+          {
+            "name": "Adapter",
+            "type": "class",
+            "children": [
+              {
+                "name": "semian_resource",
+                "type": "function",
+                "static": false,
+                "location": "lib/semian/adapter.rb:9"
+              }
+            ]
+          },
+          {
+            "name": "retrieve_or_register",
+            "type": "function",
+            "static": true,
+            "location": "lib/semian.rb:170"
+          },
+          {
+            "name": "consumers",
+            "type": "function",
+            "static": true,
+            "location": "lib/semian.rb:230"
+          },
+          {
+            "name": "register",
+            "type": "function",
+            "static": true,
+            "location": "lib/semian.rb:159"
+          },
+          {
+            "name": "thread_safe?",
+            "type": "function",
+            "static": true,
+            "location": "lib/semian.rb:239"
+          },
+          {
+            "name": "semaphores_enabled?",
+            "type": "function",
+            "static": true,
+            "location": "lib/semian/platform.rb:9"
+          },
+          {
+            "name": "disabled?",
+            "type": "function",
+            "static": true,
+            "location": "lib/semian/platform.rb:13"
+          },
+          {
+            "name": "sysv_semaphores_supported?",
+            "type": "function",
+            "static": true,
+            "location": "lib/semian/platform.rb:5"
+          },
+          {
+            "name": "ThreadSafe",
+            "type": "class",
+            "children": [
+              {
+                "name": "SlidingWindow",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "reject!",
+                    "type": "function",
+                    "static": false,
+                    "location": "lib/semian/simple_sliding_window.rb:59"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "LRUHash",
+        "type": "class",
+        "children": [
+          {
+            "name": "[]",
+            "type": "function",
+            "static": false,
+            "location": "lib/semian/lru_hash.rb:115"
+          },
+          {
+            "name": "get",
+            "type": "function",
+            "static": false,
+            "location": "lib/semian/lru_hash.rb:94"
+          },
+          {
+            "name": "delete",
+            "type": "function",
+            "static": false,
+            "location": "lib/semian/lru_hash.rb:105"
+          },
+          {
+            "name": "[]=",
+            "type": "function",
+            "static": false,
+            "location": "lib/semian/lru_hash.rb:111"
+          },
+          {
+            "name": "set",
+            "type": "function",
+            "static": false,
+            "location": "lib/semian/lru_hash.rb:80"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "toxiproxy",
+    "type": "package",
+    "children": [
+      {
+        "name": "Toxiproxy",
+        "type": "class",
+        "children": [
+          {
+            "name": "[]",
+            "type": "function",
+            "static": true,
+            "location": "vendor/bundle/ruby/2.7.0/gems/toxiproxy-1.0.3/lib/toxiproxy.rb:93"
+          },
+          {
+            "name": "assert_response",
+            "type": "function",
+            "static": true,
+            "location": "vendor/bundle/ruby/2.7.0/gems/toxiproxy-1.0.3/lib/toxiproxy.rb:248"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ruby",
+    "type": "package",
+    "children": [
+      {
+        "name": "Semian",
+        "type": "class",
+        "children": [
+          {
+            "name": "CircuitBreaker",
+            "type": "class",
+            "children": [
+              {
+                "name": "acquire",
+                "type": "function",
+                "labels": [
+                  "rpc.circuit_breaker"
+                ],
+                "static": false,
+                "location": "lib/semian/circuit_breaker.rb:25"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "json",
+    "type": "package",
+    "children": [
+      {
+        "name": "JSON",
+        "type": "class",
+        "children": [
+          {
+            "name": "Ext",
+            "type": "class",
+            "children": [
+              {
+                "name": "Parser",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "parse",
+                    "type": "function",
+                    "labels": [
+                      "format.json.parse"
+                    ],
+                    "static": false,
+                    "location": "JSON::Ext::Parser#parse"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "webrick",
+    "type": "package",
+    "children": [
+      {
+        "name": "WEBrick",
+        "type": "class",
+        "children": [
+          {
+            "name": "HTTPVersion",
+            "type": "class",
+            "children": [
+              {
+                "name": "convert",
+                "type": "function",
+                "static": true,
+                "location": "vendor/bundle/ruby/2.7.0/gems/webrick-1.7.0/lib/webrick/httpversion.rb:32"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "external-service",
+    "name": "toxiproxy:8474",
+    "children": [
+      {
+        "type": "external-route",
+        "name": "GET http://toxiproxy:8474/proxies"
+      }
+    ]
+  },
+  {
+    "type": "external-service",
+    "name": "semian:31050",
+    "children": [
+      {
+        "type": "external-route",
+        "name": "GET http://semian:31050/500"
+      }
+    ]
+  }
+]

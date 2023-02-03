@@ -1,0 +1,153 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "GET /{organization_id}/{id}/scenarios_list",
+    "status_code": 404,
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["mvc.controller"],
+        "children": [
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["http.session"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["http.session"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["security.authentication"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["http.session"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["public"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["http.session"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["format.json"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["security.authentication"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["http.session"]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.template"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["mvc.template.resolver"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.template.resolver"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.template"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["format.json"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.template"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template.resolver"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.template"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.template.resolver"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["http.session"]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

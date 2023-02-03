@@ -1,0 +1,21 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "GET /password_resets/{id}/edit",
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "string.unpack"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "deserialize.unsafe"
+        ]
+      }
+    ]
+  }
+]

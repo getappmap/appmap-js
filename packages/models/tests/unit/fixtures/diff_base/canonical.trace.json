@@ -1,0 +1,108 @@
+[
+  {
+    "kind": "function",
+    "function": "app/models/DAO::User#validate",
+    "labels": []
+  },
+  {
+    "kind": "sql",
+    "sql": {
+      "normalized_query": "INSERT INTO \"users\" (\"login\") VALUES (?) RETURNING *"
+    },
+    "analyzed_query": {
+      "actions": ["insert"],
+      "tables": ["users"],
+      "columns": ["login"],
+      "joinCount": 0
+    }
+  },
+  {
+    "kind": "function",
+    "function": "app/models/DAO::ToModel#to_model",
+    "labels": []
+  },
+  {
+    "kind": "function",
+    "function": "app/models/User::Show#search_scope",
+    "labels": []
+  },
+  {
+    "kind": "function",
+    "function": "app/models/App::Search#find!",
+    "labels": [],
+    "children": [
+      {
+        "kind": "function",
+        "function": "app/models/App::Search#find_by_id!",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "app/models/Search#filter",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "app/models/User::Show#admin?",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "app/models/DAO::PublicResource.coerce",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "app/models/DAO::PublicResource.scope",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT * FROM \"users\" WHERE \"id\" = ?"
+                    },
+                    "analyzed_query": {
+                      "actions": ["select"],
+                      "tables": ["users"],
+                      "columns": ["*", "id"],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/models/DAO::SequelUtil.build_where_clause",
+                    "labels": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "normalized_query": "SELECT \"apps\".* FROM \"apps\" WHERE ((\"apps\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = ?) AND (\"orgs\".\"id\" IS NOT ?)))) AND (\"id\" = ?)) LIMIT ?"
+            },
+            "analyzed_query": {
+              "actions": ["select"],
+              "tables": ["apps", "orgs", "users_orgs"],
+              "columns": [
+                "apps.*",
+                "apps.org_id",
+                "id",
+                "orgs.id",
+                "users_orgs.org_id",
+                "users_orgs.user_id"
+              ],
+              "joinCount": 1
+            }
+          },
+          {
+            "kind": "function",
+            "function": "app/models/Exceptions::RecordNotFound.build_message",
+            "labels": []
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1016,7 +1016,7 @@ context('VS Code Extension', () => {
     });
 
     it('clicking the Share button opens a modal', () => {
-      cy.get('.appmap-upload').click();
+      cy.get('.appmap-action-icon').click();
       cy.get('.share-appmap')
         .should('exist')
         .find('.url')

@@ -1,0 +1,130 @@
+[
+  {
+    "caller": "HTTP server requests",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "actionview"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "app/models"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "wicked_pdf"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "app/models"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "Database"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "api.stripe.com"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "app/models"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "app/services"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "json"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "stripe"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "vcr"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "app/models",
+    "callee": "Database"
+  },
+  {
+    "caller": "app/models",
+    "callee": "app/services"
+  },
+  {
+    "caller": "app/models",
+    "callee": "sidekiq"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionview"
+  },
+  {
+    "caller": "app/views",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "app/views",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "app/views",
+    "callee": "app/models"
+  },
+  {
+    "caller": "inline_template",
+    "callee": "app/views"
+  },
+  {
+    "caller": "sidekiq",
+    "callee": "json"
+  },
+  {
+    "caller": "stripe",
+    "callee": "api.stripe.com"
+  },
+  {
+    "caller": "stripe",
+    "callee": "json"
+  },
+  {
+    "caller": "stripe",
+    "callee": "vcr"
+  },
+  {
+    "caller": "vcr",
+    "callee": "HTTP server requests"
+  },
+  {
+    "caller": "wicked_pdf",
+    "callee": "inline_template"
+  }
+]

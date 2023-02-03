@@ -1,0 +1,63 @@
+[
+  {
+    "name": "ruby",
+    "type": "package",
+    "children": [
+      {
+        "name": "String",
+        "type": "class",
+        "children": [
+          {
+            "name": "unpack1",
+            "type": "function",
+            "labels": [
+              "string.unpack"
+            ],
+            "static": false,
+            "location": "<internal:pack>:280"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "psych",
+    "type": "package",
+    "children": [
+      {
+        "name": "Psych",
+        "type": "class",
+        "children": [
+          {
+            "name": "load",
+            "type": "function",
+            "labels": [
+              "deserialize.unsafe"
+            ],
+            "static": true,
+            "location": "/home/user/.rbenv/versions/3.0.2/lib/ruby/3.0.0/psych.rb:274"
+          },
+          {
+            "name": "safe_load",
+            "type": "function",
+            "labels": [
+              "deserialize.safe"
+            ],
+            "static": true,
+            "location": "/home/user/.rbenv/versions/3.0.2/lib/ruby/3.0.0/psych.rb:329"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "http",
+    "name": "HTTP server requests",
+    "children": [
+      {
+        "type": "route",
+        "name": "GET /password_resets/{id}/edit"
+      }
+    ]
+  }
+]

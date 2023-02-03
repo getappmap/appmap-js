@@ -1,0 +1,26 @@
+[
+  {
+    "caller": "Database",
+    "callee": "HTTP server requests"
+  },
+  {
+    "caller": "Database",
+    "callee": "build"
+  },
+  {
+    "caller": "HTTP server requests",
+    "callee": "Database"
+  },
+  {
+    "caller": "HTTP server requests",
+    "callee": "build"
+  },
+  {
+    "caller": "build",
+    "callee": "Database"
+  },
+  {
+    "caller": "build",
+    "callee": "HTTP server requests"
+  }
+]

@@ -1,0 +1,54 @@
+[
+  {
+    "caller": "HTTP server requests->DELETE /microposts/{id}",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "app/controllers/MicropostsController"
+  },
+  {
+    "caller": "app/controllers/MicropostsController",
+    "callee": "Database->SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? AND \"microposts\".\"id\" = ? ORDER BY \"microposts\".\"created_at\" DESC LIMIT ?"
+  },
+  {
+    "caller": "app/controllers/MicropostsController",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "app/controllers/MicropostsController",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/helpers/SessionsHelper",
+    "callee": "Database->SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/helpers/SessionsHelper",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/helpers/SessionsHelper",
+    "callee": "app/models/User"
+  }
+]

@@ -1,0 +1,5 @@
+[
+  "INSERT INTO \"users\" (\"login\") VALUES (?) RETURNING *",
+  "SELECT * FROM \"users\" WHERE \"id\" = ?",
+  "SELECT \"apps\".* FROM \"apps\" WHERE ((\"apps\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = ?) AND (\"orgs\".\"id\" IS NOT ?)))) AND (\"id\" = ?)) LIMIT ?"
+]

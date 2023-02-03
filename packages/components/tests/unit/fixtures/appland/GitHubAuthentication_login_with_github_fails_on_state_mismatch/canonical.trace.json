@@ -1,0 +1,7 @@
+[
+  {
+    "kind": "function",
+    "function": "app/controllers/GitHubAuthentication#login_with_github",
+    "labels": []
+  }
+]

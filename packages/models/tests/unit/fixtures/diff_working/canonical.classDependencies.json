@@ -1,0 +1,10 @@
+[
+  {
+    "caller": "app/models/App",
+    "callee": "Database->SELECT \"apps\".* FROM \"apps2\" WHERE ((\"apps\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = 9) AND (\"orgs\".\"id\" IS NOT NULL)))) AND (\"id\" = 8)) LIMIT 1"
+  },
+  {
+    "caller": "app/models/App",
+    "callee": "app/models/Exceptions"
+  }
+]

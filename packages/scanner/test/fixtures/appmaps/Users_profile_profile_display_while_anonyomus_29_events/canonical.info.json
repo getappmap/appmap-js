@@ -1,0 +1,1258 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "GET /users/{id}",
+    "parameter_names": [
+      "controller",
+      "action",
+      "id"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [
+                  "select"
+                ],
+                "tables": [
+                  "users"
+                ],
+                "columns": [
+                  "users.*",
+                  "users.id"
+                ],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.template"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "relationships",
+                          "users"
+                        ],
+                        "columns": [
+                          "*",
+                          "relationships.followed_id",
+                          "relationships.follower_id",
+                          "users.id"
+                        ],
+                        "joinCount": 1
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "relationships",
+                          "users"
+                        ],
+                        "columns": [
+                          "*",
+                          "relationships.followed_id",
+                          "relationships.follower_id",
+                          "users.id"
+                        ],
+                        "joinCount": 1
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "security.authentication"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [
+                      "select"
+                    ],
+                    "tables": [
+                      "microposts"
+                    ],
+                    "columns": [
+                      "microposts.user_id"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [
+                      "select"
+                    ],
+                    "tables": [
+                      "microposts"
+                    ],
+                    "columns": [
+                      "*",
+                      "microposts.user_id"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "microposts"
+                        ],
+                        "columns": [
+                          "microposts.*",
+                          "microposts.created_at",
+                          "microposts.user_id"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "active_storage_attachments"
+                        ],
+                        "columns": [
+                          "active_storage_attachments.*",
+                          "active_storage_attachments.name",
+                          "active_storage_attachments.record_id",
+                          "active_storage_attachments.record_type"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [
+                      "select"
+                    ],
+                    "tables": [
+                      "microposts"
+                    ],
+                    "columns": [
+                      "*",
+                      "microposts.user_id"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "security.authentication"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "string.equals"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

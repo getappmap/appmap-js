@@ -1,0 +1,7 @@
+[
+  {
+    "route": "POST /payments",
+    "parameters": "(is_payment,stripe_amount,stripe_email,stripe_token,controller,action)",
+    "status": 200
+  }
+]

@@ -1,1 +1,285 @@
-{"version":"1.7.0","metadata":{"app":"jwt-rb","language":{"name":"ruby","engine":"ruby","version":"3.0.1"},"client":{"name":"appmap","url":"https://github.com/getappmap/appmap-ruby","version":"0.83.6-dev"}},"classMap":[{"name":"jwt","type":"package","children":[{"name":"JWT","type":"class","children":[{"name":"encode","type":"function","location":"/Users/dustin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/jwt-2.4.1/lib/jwt.rb:20","static":true,"labels":["jwt.encode"]}]}]},{"name":"json","type":"package","children":[{"name":"JSON","type":"class","children":[{"name":"Ext","type":"class","children":[{"name":"Generator","type":"class","children":[{"name":"State","type":"class","children":[{"name":"generate","type":"function","location":"JSON::Ext::Generator::State#generate","static":false,"labels":["format.json.generate","serialize"]}]}]}]}]}]}],"events":[{"id":9,"event":"call","thread_id":2060,"defined_class":"JWT","method_id":"encode","path":"/Users/dustin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/jwt-2.4.1/lib/jwt.rb","lineno":20,"static":true,"parameters":[{"name":"payload","class":"Hash","object_id":2280,"value":"{:key=\u003evalue}","kind":"req","size":1},{"name":"key","class":"NilClass","object_id":8,"value":null,"kind":"req"},{"name":"algorithm","class":"String","object_id":2300,"value":"none","kind":"opt"},{"name":"header_fields","class":"NilClass","object_id":8,"value":null,"kind":"opt"}],"receiver":{"class":"Module","object_id":2040,"value":"JWT"}},{"id":10,"event":"call","thread_id":2060,"defined_class":"JSON::Ext::Generator::State","method_id":"generate","path":"JSON::Ext::Generator::State#generate","static":false,"parameters":[{"name":"arg","class":"Hash","object_id":2320,"value":"{alg=\u003enone}","kind":"req","size":1}],"receiver":{"class":"JSON::Ext::Generator::State","object_id":2340,"value":"#\u003cJSON::Ext::Generator::State:0x00007fc82bb138e8\u003e"}},{"id":11,"event":"return","thread_id":2060,"parent_id":10,"elapsed":9.000301361083984e-06,"return_value":{"class":"String","value":"{\"alg\":\"none\"}","object_id":2360}},{"id":12,"event":"call","thread_id":2060,"defined_class":"JSON::Ext::Generator::State","method_id":"generate","path":"JSON::Ext::Generator::State#generate","static":false,"parameters":[{"name":"arg","class":"Hash","object_id":2280,"value":"{:key=\u003evalue}","kind":"req","size":1}],"receiver":{"class":"JSON::Ext::Generator::State","object_id":2380,"value":"#\u003cJSON::Ext::Generator::State:0x00007fc82bb11f70\u003e"}},{"id":13,"event":"return","thread_id":2060,"parent_id":12,"elapsed":6.9998204708099365e-06,"return_value":{"class":"String","value":"{\"key\":\"value\"}","object_id":2400}},{"id":14,"event":"return","thread_id":2060,"parent_id":9,"elapsed":0.00030400045216083527,"return_value":{"class":"String","value":"eyJhbGciOiJub25lIn0.eyJrZXkiOiJ2YWx1ZSJ9.","object_id":2420}}]}
+{
+  "events": [
+    {
+      "id": 1,
+      "event": "call",
+      "thread_id": 2060,
+      "defined_class": "JWT",
+      "method_id": "encode",
+      "path": "/Users/dustin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/jwt-2.4.1/lib/jwt.rb",
+      "lineno": 20,
+      "static": true,
+      "parameters": [
+        {
+          "name": "payload",
+          "class": "Hash",
+          "object_id": 2280,
+          "value": "{:key=>value}",
+          "kind": "req",
+          "size": 1
+        },
+        {
+          "name": "key",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "req"
+        },
+        {
+          "name": "algorithm",
+          "class": "String",
+          "object_id": 2300,
+          "value": "none",
+          "kind": "opt"
+        },
+        {
+          "name": "header_fields",
+          "class": "NilClass",
+          "object_id": 8,
+          "value": null,
+          "kind": "opt"
+        }
+      ],
+      "receiver": {
+        "class": "Module",
+        "object_id": 2040,
+        "value": "JWT"
+      }
+    },
+    {
+      "id": 2,
+      "event": "call",
+      "thread_id": 2060,
+      "defined_class": "JSON::Ext::Generator::State",
+      "method_id": "generate",
+      "path": "JSON::Ext::Generator::State#generate",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Hash",
+          "object_id": 2320,
+          "value": "{alg=>none}",
+          "kind": "req",
+          "size": 1
+        }
+      ],
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "object_id": 2340,
+        "value": "#<JSON::Ext::Generator::State:0x00007fc82bb138e8>"
+      }
+    },
+    {
+      "id": 3,
+      "event": "return",
+      "thread_id": 2060,
+      "parent_id": 2,
+      "elapsed": 0.000009000301361083984,
+      "return_value": {
+        "class": "String",
+        "value": "{\"alg\":\"none\"}",
+        "object_id": 2360
+      }
+    },
+    {
+      "id": 4,
+      "event": "call",
+      "thread_id": 2060,
+      "defined_class": "JSON::Ext::Generator::State",
+      "method_id": "generate",
+      "path": "JSON::Ext::Generator::State#generate",
+      "static": false,
+      "parameters": [
+        {
+          "name": "arg",
+          "class": "Hash",
+          "object_id": 2280,
+          "value": "{:key=>value}",
+          "kind": "req",
+          "size": 1
+        }
+      ],
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "object_id": 2380,
+        "value": "#<JSON::Ext::Generator::State:0x00007fc82bb11f70>"
+      }
+    },
+    {
+      "id": 5,
+      "event": "return",
+      "thread_id": 2060,
+      "parent_id": 4,
+      "elapsed": 0.0000069998204708099365,
+      "return_value": {
+        "class": "String",
+        "value": "{\"key\":\"value\"}",
+        "object_id": 2400
+      }
+    },
+    {
+      "id": 6,
+      "event": "return",
+      "thread_id": 2060,
+      "parent_id": 1,
+      "elapsed": 0.00030400045216083527,
+      "return_value": {
+        "class": "String",
+        "value": "eyJhbGciOiJub25lIn0.eyJrZXkiOiJ2YWx1ZSJ9.",
+        "object_id": 2420
+      }
+    }
+  ],
+  "version": "1.7.0",
+  "metadata": {
+    "app": "jwt-rb",
+    "language": {
+      "name": "ruby",
+      "engine": "ruby",
+      "version": "3.0.1"
+    },
+    "client": {
+      "name": "appmap",
+      "url": "https://github.com/getappmap/appmap-ruby",
+      "version": "0.83.6-dev"
+    },
+    "fingerprints": [
+      {
+        "appmap_digest": "ed867988a8ebabe5c239ab068541c8726f10c9c4e67de82ffff4cc28916a8a2d",
+        "canonicalization_algorithm": "classDependencies",
+        "digest": "4942fd93a3cc621fc31dc42699ec23eb760f3bf48fa55bf29842d48058bed9da",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "ed867988a8ebabe5c239ab068541c8726f10c9c4e67de82ffff4cc28916a8a2d",
+        "canonicalization_algorithm": "classes",
+        "digest": "9c5453c8beb5130a6fe0a2d40cfdabb4fafdf8482b19437793826587efb3fad4",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "ed867988a8ebabe5c239ab068541c8726f10c9c4e67de82ffff4cc28916a8a2d",
+        "canonicalization_algorithm": "httpClientRequests",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "ed867988a8ebabe5c239ab068541c8726f10c9c4e67de82ffff4cc28916a8a2d",
+        "canonicalization_algorithm": "httpServerRequests",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "ed867988a8ebabe5c239ab068541c8726f10c9c4e67de82ffff4cc28916a8a2d",
+        "canonicalization_algorithm": "info",
+        "digest": "b0755ec964c667b6b28a1a3cb02d6837f3ea9ebb443e2db99bcea113bad20403",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "ed867988a8ebabe5c239ab068541c8726f10c9c4e67de82ffff4cc28916a8a2d",
+        "canonicalization_algorithm": "labels",
+        "digest": "1319feb1a73aecfacf1d8048200726ab446c162dd878e96a4db5da0f05cad778",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "ed867988a8ebabe5c239ab068541c8726f10c9c4e67de82ffff4cc28916a8a2d",
+        "canonicalization_algorithm": "packageDependencies",
+        "digest": "b52e0fb4acf1ec9dc8ce6f495e20cf3944a0298319d2ca4812890f7ae886c481",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "ed867988a8ebabe5c239ab068541c8726f10c9c4e67de82ffff4cc28916a8a2d",
+        "canonicalization_algorithm": "packages",
+        "digest": "c51d484e137d3e71464e8d0bf571d27d20f0767dfa088a1aafad9ea20bcc2363",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "ed867988a8ebabe5c239ab068541c8726f10c9c4e67de82ffff4cc28916a8a2d",
+        "canonicalization_algorithm": "sqlNormalized",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "ed867988a8ebabe5c239ab068541c8726f10c9c4e67de82ffff4cc28916a8a2d",
+        "canonicalization_algorithm": "sqlTables",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "ed867988a8ebabe5c239ab068541c8726f10c9c4e67de82ffff4cc28916a8a2d",
+        "canonicalization_algorithm": "trace",
+        "digest": "c0dff4fef4be07bf1238ea47e86d2764ebbb83384c2f18bee555362cf73c2202",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "ed867988a8ebabe5c239ab068541c8726f10c9c4e67de82ffff4cc28916a8a2d",
+        "canonicalization_algorithm": "update",
+        "digest": "b0755ec964c667b6b28a1a3cb02d6837f3ea9ebb443e2db99bcea113bad20403",
+        "fingerprint_algorithm": "sha256"
+      }
+    ]
+  },
+  "classMap": [
+    {
+      "name": "jwt",
+      "type": "package",
+      "children": [
+        {
+          "name": "JWT",
+          "type": "class",
+          "children": [
+            {
+              "name": "encode",
+              "type": "function",
+              "labels": [
+                "jwt.encode"
+              ],
+              "static": true,
+              "location": "/Users/dustin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/jwt-2.4.1/lib/jwt.rb:20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "json",
+      "type": "package",
+      "children": [
+        {
+          "name": "JSON",
+          "type": "class",
+          "children": [
+            {
+              "name": "Ext",
+              "type": "class",
+              "children": [
+                {
+                  "name": "Generator",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "State",
+                      "type": "class",
+                      "children": [
+                        {
+                          "name": "generate",
+                          "type": "function",
+                          "labels": [
+                            "format.json.generate",
+                            "serialize"
+                          ],
+                          "static": false,
+                          "location": "JSON::Ext::Generator::State#generate"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

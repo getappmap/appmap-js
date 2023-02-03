@@ -1,0 +1,48 @@
+[
+  {
+    "name": "app/models",
+    "type": "package",
+    "children": [
+      {
+        "name": "KeyDataStats",
+        "type": "class",
+        "children": [
+          {
+            "name": "count",
+            "type": "function",
+            "static": true,
+            "location": "app/models/key_data_stats.rb:11"
+          }
+        ]
+      },
+      {
+        "name": "DAO",
+        "type": "class",
+        "children": [
+          {
+            "name": "Scenario",
+            "type": "class",
+            "children": [
+              {
+                "name": "http_server_requests_dataset",
+                "type": "function",
+                "static": true,
+                "location": "app/models/dao/scenario.rb:119"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "WITH \"key_data_stats\" AS (SELECT DISTINCT http_server_request.http_server_request ->> 'request_method'::text AS \"request_method\", http_server_request.http_server_request ->> 'normalized_path_info'::text AS \"path_info\" FROM \"users_orgs\", \"scenarios\", LATERAL jsonb_to_recordset(COALESCE(scenarios.events_http_server_requests, '[]'::jsonb)) http_server_request(id integer, http_server_request jsonb) WHERE ((\"scenarios\".\"org_id\" = \"users_orgs\".\"org_id\") AND (\"user_id\" = 15))) SELECT count(*) AS \"num_distinct\" FROM \"key_data_stats\" LIMIT 1"
+      }
+    ]
+  }
+]

@@ -1,0 +1,166 @@
+[
+  {
+    "caller": "HTTP server requests",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "actionview"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "app/views"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "json"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "logger"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "openssl"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "ruby"
+  },
+  {
+    "caller": "actionview",
+    "callee": "ruby"
+  },
+  {
+    "caller": "activerecord",
+    "callee": "Database"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "activerecord"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "app/models"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "logger"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "ruby"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "Database"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "activerecord"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "app/models"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "app/views"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "ruby"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app/mailers",
+    "callee": "actionview"
+  },
+  {
+    "caller": "app/mailers",
+    "callee": "app/views"
+  },
+  {
+    "caller": "app/mailers",
+    "callee": "ruby"
+  },
+  {
+    "caller": "app/models",
+    "callee": "Database"
+  },
+  {
+    "caller": "app/models",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "app/models",
+    "callee": "app/mailers"
+  },
+  {
+    "caller": "app/models",
+    "callee": "bcrypt"
+  },
+  {
+    "caller": "app/models",
+    "callee": "logger"
+  },
+  {
+    "caller": "app/models",
+    "callee": "ruby"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionview"
+  },
+  {
+    "caller": "app/views",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "app/views",
+    "callee": "json"
+  },
+  {
+    "caller": "app/views",
+    "callee": "logger"
+  },
+  {
+    "caller": "app/views",
+    "callee": "ruby"
+  },
+  {
+    "caller": "bcrypt",
+    "callee": "ruby"
+  }
+]

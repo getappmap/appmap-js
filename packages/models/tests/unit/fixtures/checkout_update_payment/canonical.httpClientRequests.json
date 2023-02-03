@@ -1,0 +1,7 @@
+[
+  {
+    "route": "POST https://api.stripe.com/v1/customers",
+    "parameters": "()",
+    "status": 200
+  }
+]

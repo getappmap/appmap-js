@@ -1,0 +1,5 @@
+[
+  "ROLLBACK TO SAVEPOINT active_record_1",
+  "SAVEPOINT active_record_1",
+  "SELECT ? AS one FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+]

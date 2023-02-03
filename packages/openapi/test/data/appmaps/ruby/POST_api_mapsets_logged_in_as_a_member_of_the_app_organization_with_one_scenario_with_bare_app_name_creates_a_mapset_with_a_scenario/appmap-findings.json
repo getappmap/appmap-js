@@ -1,0 +1,570 @@
+{
+  "configuration": {
+    "checks": [
+      {
+        "rule": "authz-before-authn"
+      },
+      {
+        "rule": "deprecated-crypto-algorithm"
+      },
+      {
+        "rule": "deserialization-of-untrusted-data"
+      },
+      {
+        "rule": "exec-of-untrusted-command"
+      },
+      {
+        "rule": "http-500"
+      },
+      {
+        "rule": "logout-without-session-reset"
+      },
+      {
+        "rule": "missing-content-type"
+      },
+      {
+        "rule": "n-plus-one-query"
+      },
+      {
+        "rule": "secret-in-log"
+      },
+      {
+        "rule": "too-many-joins"
+      },
+      {
+        "rule": "too-many-updates"
+      },
+      {
+        "rule": "unauthenticated-encryption"
+      },
+      {
+        "rule": "update-in-get-request"
+      }
+    ],
+    "timestampMs": 1675346609376.2805
+  },
+  "appMapMetadata": {
+    "/Users/danwarner/Documents/PROJECTS/appmap-js/packages/openapi/test/data/appmaps/ruby/POST_api_mapsets_logged_in_as_a_member_of_the_app_organization_with_one_scenario_with_bare_app_name_creates_a_mapset_with_a_scenario.appmap.json": {
+      "name": "POST api/mapsets logged in as a member of the app organization with one scenario with bare app name creates a mapset with a scenario",
+      "source_location": "spec/requests/api_mapsets_create_spec.rb",
+      "test_status": "succeeded",
+      "fingerprints": [
+        {
+          "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+          "canonicalization_algorithm": "classDependencies",
+          "digest": "23bd7e5f635cdf6f1edc835ed329b0f0dd639e6d1553a36038446fceb7439bdf",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+          "canonicalization_algorithm": "classes",
+          "digest": "975b7c91285ea9f90f73a1e39b4c549e72eae16225fb6643dbc3b78d554af9bc",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+          "canonicalization_algorithm": "httpClientRequests",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+          "canonicalization_algorithm": "httpServerRequests",
+          "digest": "68525d06a9c049eadfcce087ef841454178776aff97ad5b16c75481a9bd073d6",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+          "canonicalization_algorithm": "info",
+          "digest": "74ec4089b92de90fc64563640a34dcb5b08f5c623bfbd9a68b849fdc6d02bdb1",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+          "canonicalization_algorithm": "labels",
+          "digest": "45d56e4624087cf062e9d3a2af177ba42309d025c83a9ac7a4956568761acdb4",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+          "canonicalization_algorithm": "packageDependencies",
+          "digest": "27c3a4bebe6fe3162152c0a96fb574852723abeb34674bfade7ac9f5cad44f99",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+          "canonicalization_algorithm": "packages",
+          "digest": "58173dc0da43941f3a6b78589ec9f15369c8964cc51300dda76390fc2a2c0d03",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+          "canonicalization_algorithm": "sqlNormalized",
+          "digest": "eff23e188bb799be73f95771f3317f5fe63b6d8cc66020ffd821ff8b32ac0ac9",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+          "canonicalization_algorithm": "sqlTables",
+          "digest": "cab4ccc4c263313bdf48204dc643e68a4a78c2b8c63eb2089ab266bde060c35b",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+          "canonicalization_algorithm": "trace",
+          "digest": "169a5c702b7b94b1662a691108577e4daf5c1c021074e7ec413170fad36e2128",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "4298aeebb0690fe015c7692b43c4dda04685217810bf760786e21a786fcfeee4",
+          "canonicalization_algorithm": "update",
+          "digest": "a5ae287def1ae9b8044bbdcf25e08edd83952fe94efe3eb88ca355c23dc733cf",
+          "fingerprint_algorithm": "sha256"
+        }
+      ]
+    }
+  },
+  "findings": [],
+  "checks": [
+    {
+      "rule": {
+        "id": "authz-before-authn",
+        "title": "Authorization performed before authentication",
+        "labels": [
+          "security.authorization",
+          "security.authentication"
+        ],
+        "scope": "http_server_request",
+        "impactDomain": "Security",
+        "enumerateScope": false,
+        "references": {
+          "CWE-863": "https://cwe.mitre.org/data/definitions/863.html"
+        },
+        "description": "Determines when authorization logic is applied to a user identity that has not been properly verified. Because the the user's identity has not been verified yet, the outcome of the authorization check cannot be trusted. A malicious user might be able to get themselves authorized as a different user than they really are - or they may not be logged in at all.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#authz-before-authn"
+      },
+      "id": "authz-before-authn",
+      "options": {},
+      "scope": "http_server_request",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Security"
+    },
+    {
+      "rule": {
+        "id": "deprecated-crypto-algorithm",
+        "title": "Deprecated cryptographic algorithm",
+        "description": "---\nrule: deprecated-crypto-algorithm\nname: Deprecated crypto algorithm\ntitle: Deprecated cryptographic algorithm\nreferences:\n  A02:2021: https://owasp.org/Top10/A02_2021-Cryptographic_Failures/\nimpactDomain: Security\nlabels:\n  - crypto.encrypt\n  - crypto.decrypt\n  - crypto.digest\nscope: root\n---\n\nEnsure that cryptographic operations do not use deprecated algorithms.\n",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#deprecated-crypto-algorithm",
+        "labels": [
+          "crypto.encrypt",
+          "crypto.decrypt",
+          "crypto.digest"
+        ],
+        "scope": "root",
+        "enumerateScope": true,
+        "impactDomain": "Security",
+        "references": {
+          "A02:2021": "https://owasp.org/Top10/A02_2021-Cryptographic_Failures/"
+        }
+      },
+      "id": "deprecated-crypto-algorithm",
+      "options": {},
+      "scope": "root",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Security"
+    },
+    {
+      "rule": {
+        "id": "deserialization-of-untrusted-data",
+        "title": "Deserialization of untrusted data",
+        "labels": [
+          "deserialize.unsafe",
+          "deserialize.safe",
+          "deserialize.sanitize"
+        ],
+        "impactDomain": "Security",
+        "enumerateScope": false,
+        "scope": "http_server_request",
+        "references": {
+          "CWE-502": "https://cwe.mitre.org/data/definitions/502.html",
+          "Ruby Security": "https://docs.ruby-lang.org/en/3.0/doc/security_rdoc.html"
+        },
+        "description": "Finds occurrances of deserialization in which the mechanism employed is known to be unsafe, and the data comes from an untrusted source and hasn't passed through a sanitization mechanism.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#deserialization-of-untrusted-data"
+      },
+      "id": "deserialization-of-untrusted-data",
+      "options": {},
+      "scope": "http_server_request",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Security"
+    },
+    {
+      "rule": {
+        "id": "exec-of-untrusted-command",
+        "title": "Execution of untrusted system command",
+        "labels": [
+          "system.exec",
+          "system.exec.safe",
+          "system.exec.sanitize"
+        ],
+        "impactDomain": "Security",
+        "enumerateScope": false,
+        "references": {
+          "CWE-78": "https://cwe.mitre.org/data/definitions/78.html"
+        },
+        "description": "Find occurrances of system command execution in which the command string is not guaranteed to be safe.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#exec-of-untrusted-command"
+      },
+      "id": "exec-of-untrusted-command",
+      "options": {},
+      "scope": "command",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Security"
+    },
+    {
+      "rule": {
+        "id": "http-500",
+        "title": "HTTP 500 status code",
+        "description": "Identifies when an HTTP server request has returned a 500 status code. HTTP 500 status code generally indicate an unanticipated problem in the backend that is not handled in a predictable way. 500 status codes are also hard for client code to handle, because they don't indicate any particular problem or suggest a solution.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#http-500",
+        "labels": [],
+        "scope": "http_server_request",
+        "enumerateScope": false,
+        "impactDomain": "Stability",
+        "references": {
+          "CWE-392": "https://cwe.mitre.org/data/definitions/392.html"
+        }
+      },
+      "id": "http-500",
+      "options": {},
+      "scope": "http_server_request",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Stability"
+    },
+    {
+      "rule": {
+        "id": "logout-without-session-reset",
+        "title": "Logout without session reset",
+        "scope": "http_server_request",
+        "labels": [
+          "http.session.clear",
+          "security.logout"
+        ],
+        "impactDomain": "Security",
+        "enumerateScope": false,
+        "references": {
+          "CWE-488": "https://cwe.mitre.org/data/definitions/488.html",
+          "OWASP - Session fixation": "https://owasp.org/www-community/attacks/Session_fixation",
+          "Ruby on Rails - Session fixation countermeasures": "https://guides.rubyonrails.org/security.html#session-fixation-countermeasures"
+        },
+        "description": "Determines when a user has been logged out from the application, but the session hasn't been cleared. When the session isn't cleared after logout, the session is vulnerable to a [session fixation attack](https://owasp.org/www-community/attacks/Session_fixation).",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#logout-without-session-reset"
+      },
+      "id": "logout-without-session-reset",
+      "options": {},
+      "scope": "http_server_request",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Security"
+    },
+    {
+      "rule": {
+        "id": "missing-content-type",
+        "title": "HTTP server request without a Content-Type header",
+        "scope": "http_server_request",
+        "impactDomain": "Stability",
+        "enumerateScope": false,
+        "description": "Finds HTTP server requests that don't provide a `Content-Type` header in the response.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#missing-content-type"
+      },
+      "id": "missing-content-type",
+      "options": {},
+      "scope": "http_server_request",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Stability"
+    },
+    {
+      "rule": {
+        "id": "n-plus-one-query",
+        "title": "N plus 1 SQL query",
+        "scope": "command",
+        "impactDomain": "Performance",
+        "enumerateScope": false,
+        "references": {
+          "CWE-1073": "https://cwe.mitre.org/data/definitions/1073.html"
+        },
+        "description": "Finds occurrences of a query being repeated within a loop.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#n-plus-one-query"
+      },
+      "id": "n-plus-one-query",
+      "options": {
+        "warningLimit": 5,
+        "errorLimit": 10
+      },
+      "scope": "command",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Performance"
+    },
+    {
+      "rule": {
+        "id": "secret-in-log",
+        "title": "Secret in log",
+        "labels": [
+          "secret",
+          "log"
+        ],
+        "scope": "root",
+        "impactDomain": "Security",
+        "enumerateScope": true,
+        "references": {
+          "CWE-532": "https://cwe.mitre.org/data/definitions/532.html"
+        },
+        "description": "Identifies when a known or assumed secret is written to a log. Logs are often transported into other systems that are treated with lesser security - such as backups. Therefore, secrets written into log files are more likely to be leaked or discovered by cyber-attackers.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#secret-in-log"
+      },
+      "id": "secret-in-log",
+      "options": {},
+      "scope": "root",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Security"
+    },
+    {
+      "rule": {
+        "id": "too-many-joins",
+        "title": "Too many joins",
+        "description": "Verifies that the number of joins in SQL queries does not exceed a threshold.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#too-many-joins",
+        "labels": [],
+        "enumerateScope": false,
+        "impactDomain": "Performance",
+        "references": {
+          "CWE-1049": "https://cwe.mitre.org/data/definitions/1049.html"
+        }
+      },
+      "id": "too-many-joins",
+      "options": {
+        "warningLimit": 5,
+        "excludeTables": [
+          {
+            "match": {},
+            "ignoreCase": false
+          },
+          {
+            "equal": "information_schema",
+            "ignoreCase": false
+          }
+        ]
+      },
+      "scope": "command",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Performance"
+    },
+    {
+      "rule": {
+        "id": "too-many-updates",
+        "title": "Too many SQL and RPC updates performed in one command",
+        "scope": "command",
+        "enumerateScope": false,
+        "impactDomain": "Maintainability",
+        "references": {
+          "CWE-1048": "https://cwe.mitre.org/data/definitions/1048.html"
+        },
+        "description": "Verifies that the number of SQL and RPC updates performed by a command does not exceed a threshold.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#too-many-updates"
+      },
+      "id": "too-many-updates",
+      "options": {
+        "warningLimit": 20
+      },
+      "scope": "command",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Maintainability"
+    },
+    {
+      "rule": {
+        "id": "unauthenticated-encryption",
+        "title": "Unauthenticated encryption",
+        "description": "Ensures that encryption operations use authenticated encryption.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#unauthenticated-encryption",
+        "labels": [
+          "crypto.encrypt",
+          "crypto.set_auth_data"
+        ],
+        "enumerateScope": true,
+        "impactDomain": "Security",
+        "references": {
+          "A02:2021": "https://owasp.org/Top10/A02_2021-Cryptographic_Failures/"
+        }
+      },
+      "id": "unauthenticated-encryption",
+      "options": {},
+      "scope": "command",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Security"
+    },
+    {
+      "rule": {
+        "id": "update-in-get-request",
+        "title": "Data update performed in GET or HEAD request",
+        "scope": "http_server_request",
+        "enumerateScope": true,
+        "labels": [
+          "audit"
+        ],
+        "impactDomain": "Maintainability",
+        "description": "Finds SQL updates that are performed in an HTTP server `GET` request.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#update-in-get-request"
+      },
+      "id": "update-in-get-request",
+      "options": {
+        "_queryInclude": [
+          {},
+          {}
+        ],
+        "_queryExclude": []
+      },
+      "scope": "http_server_request",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Maintainability"
+    }
+  ],
+  "summary": {
+    "numAppMaps": 1,
+    "numChecks": 13,
+    "rules": [
+      "authz-before-authn",
+      "deprecated-crypto-algorithm",
+      "deserialization-of-untrusted-data",
+      "exec-of-untrusted-command",
+      "http-500",
+      "logout-without-session-reset",
+      "missing-content-type",
+      "n-plus-one-query",
+      "secret-in-log",
+      "too-many-joins",
+      "too-many-updates",
+      "unauthenticated-encryption",
+      "update-in-get-request"
+    ],
+    "ruleLabels": [
+      "audit",
+      "crypto.decrypt",
+      "crypto.digest",
+      "crypto.encrypt",
+      "crypto.set_auth_data",
+      "deserialize.safe",
+      "deserialize.sanitize",
+      "deserialize.unsafe",
+      "http.session.clear",
+      "log",
+      "secret",
+      "security.authentication",
+      "security.authorization",
+      "security.logout",
+      "system.exec",
+      "system.exec.safe",
+      "system.exec.sanitize"
+    ],
+    "numFindings": 0,
+    "appMapMetadata": {
+      "labels": [],
+      "apps": [
+        "appland/appmap-server"
+      ],
+      "clients": [
+        {
+          "name": "appmap",
+          "url": "https://github.com/getappmap/appmap-ruby",
+          "version": "0.77.3"
+        }
+      ],
+      "frameworks": [
+        {
+          "name": "rails",
+          "version": "6.1.4.1"
+        },
+        {
+          "name": "rspec",
+          "version": "3.10.1"
+        }
+      ],
+      "git": [
+        {
+          "repository": "git@github.com:getappmap/appmap-server.git",
+          "branch": "fix/update-appmap-libs",
+          "commit": "7b6848111b724bf6737adf84d783fcf897591659",
+          "status": [
+            "M Gemfile",
+            "M Gemfile.lock",
+            "M app/models/app.rb",
+            "M app/models/mapset.rb",
+            "M app/models/org.rb",
+            "M app/models/org_invitation.rb",
+            "M app/models/scanner_finding.rb",
+            "M app/models/scanner_job.rb",
+            "M app/models/scenario.rb",
+            "M spec/rails_helper.rb",
+            "M swagger/openapi_stable.yaml",
+            "?? queries.txt"
+          ],
+          "git_last_annotated_tag": null,
+          "git_last_tag": "v0.29.0",
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": 0
+        }
+      ],
+      "languages": [
+        {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.0.2"
+        }
+      ],
+      "recorders": [
+        {
+          "name": "rspec"
+        }
+      ],
+      "testStatuses": [],
+      "exceptions": []
+    }
+  }
+}

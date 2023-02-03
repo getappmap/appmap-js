@@ -1,0 +1,14 @@
+[
+  {
+    "caller": "HTTP server requests->GET /password_resets/{id}/edit",
+    "callee": "app/models"
+  },
+  {
+    "caller": "HTTP server requests->GET /password_resets/{id}/edit",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "app/models",
+    "callee": "psych/Psych"
+  }
+]

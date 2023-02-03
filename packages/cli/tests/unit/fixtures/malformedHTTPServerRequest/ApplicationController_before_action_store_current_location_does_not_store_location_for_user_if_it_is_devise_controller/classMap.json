@@ -1,0 +1,445 @@
+[
+  {
+    "name": "actionpack",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActionDispatch",
+        "type": "class",
+        "children": [
+          {
+            "name": "Cookies",
+            "type": "class",
+            "children": [
+              {
+                "name": "CookieJar",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "update",
+                    "type": "function",
+                    "labels": ["http.session.write"],
+                    "static": false,
+                    "location": "vendor/bundle/ruby/3.0.0/gems/actionpack-6.1.6/lib/action_dispatch/middleware/cookies.rb:345"
+                  },
+                  {
+                    "name": "[]",
+                    "type": "function",
+                    "labels": ["http.session.read"],
+                    "static": false,
+                    "location": "vendor/bundle/ruby/3.0.0/gems/actionpack-6.1.6/lib/action_dispatch/middleware/cookies.rb:329"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "ActionController",
+        "type": "class",
+        "children": [
+          {
+            "name": "Instrumentation",
+            "type": "class",
+            "children": [
+              {
+                "name": "process_action",
+                "type": "function",
+                "labels": ["mvc.controller"],
+                "static": false,
+                "location": "vendor/bundle/ruby/3.0.0/gems/actionpack-6.1.6/lib/action_controller/metal/instrumentation.rb:19"
+              }
+            ]
+          },
+          {
+            "name": "Renderers",
+            "type": "class",
+            "children": [
+              {
+                "name": "render_to_body",
+                "type": "function",
+                "labels": ["mvc.render"],
+                "static": false,
+                "location": "vendor/bundle/ruby/3.0.0/gems/actionpack-6.1.6/lib/action_controller/metal/renderers.rb:141"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "logger",
+    "type": "package",
+    "children": [
+      {
+        "name": "Logger",
+        "type": "class",
+        "children": [
+          {
+            "name": "LogDevice",
+            "type": "class",
+            "children": [
+              {
+                "name": "write",
+                "type": "function",
+                "labels": ["log"],
+                "static": false,
+                "location": "/usr/local/lib/ruby/3.0.0/logger/log_device.rb:31"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "activesupport",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActiveSupport",
+        "type": "class",
+        "children": [
+          {
+            "name": "Callbacks",
+            "type": "class",
+            "children": [
+              {
+                "name": "CallbackSequence",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "invoke_before",
+                    "type": "function",
+                    "labels": ["mvc.before_action"],
+                    "static": false,
+                    "location": "vendor/bundle/ruby/3.0.0/gems/activesupport-6.1.6/lib/active_support/callbacks.rb:511"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app",
+    "type": "package",
+    "children": [
+      {
+        "name": "controllers",
+        "type": "package",
+        "children": [
+          {
+            "name": "concerns",
+            "type": "package",
+            "children": [
+              {
+                "name": "Localized",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "set_locale",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/controllers/concerns/localized.rb:10"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "ApplicationController",
+            "type": "class",
+            "children": [
+              {
+                "name": "current_session",
+                "type": "function",
+                "static": false,
+                "location": "app/controllers/application_controller.rb:131"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "views",
+        "type": "package",
+        "children": [
+          {
+            "name": "vendor_bundle_ruby_3_0_0_gems_devise_4_8_1_app_views_devise_sessions_new_html_erb",
+            "type": "class",
+            "children": [
+              {
+                "name": "render",
+                "type": "function",
+                "labels": ["mvc.template"],
+                "static": true,
+                "location": "vendor/bundle/ruby/3.0.0/gems/devise-4.8.1/app/views/devise/sessions/new.html.erb"
+              }
+            ]
+          },
+          {
+            "name": "vendor_bundle_ruby_3_0_0_gems_devise_4_8_1_app_views_devise_shared__links_html_erb",
+            "type": "class",
+            "children": [
+              {
+                "name": "render",
+                "type": "function",
+                "labels": ["mvc.template"],
+                "static": true,
+                "location": "vendor/bundle/ruby/3.0.0/gems/devise-4.8.1/app/views/devise/shared/_links.html.erb"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "helpers",
+        "type": "package",
+        "children": [
+          {
+            "name": "ApplicationHelper",
+            "type": "class",
+            "children": [
+              {
+                "name": "cdn_host?",
+                "type": "function",
+                "static": false,
+                "location": "app/helpers/application_helper.rb:186"
+              },
+              {
+                "name": "cdn_host",
+                "type": "function",
+                "static": false,
+                "location": "app/helpers/application_helper.rb:182"
+              },
+              {
+                "name": "storage_host?",
+                "type": "function",
+                "static": false,
+                "location": "app/helpers/application_helper.rb:194"
+              },
+              {
+                "name": "favicon_path",
+                "type": "function",
+                "static": false,
+                "location": "app/helpers/application_helper.rb:101"
+              },
+              {
+                "name": "title",
+                "type": "function",
+                "static": false,
+                "location": "app/helpers/application_helper.rb:106"
+              }
+            ]
+          },
+          {
+            "name": "InstanceHelper",
+            "type": "class",
+            "children": [
+              {
+                "name": "site_title",
+                "type": "function",
+                "static": false,
+                "location": "app/helpers/instance_helper.rb:4"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "models",
+        "type": "package",
+        "children": [
+          {
+            "name": "Setting",
+            "type": "class",
+            "children": [
+              {
+                "name": "[]",
+                "type": "function",
+                "static": true,
+                "location": "app/models/setting.rb:23"
+              },
+              {
+                "name": "default_settings",
+                "type": "function",
+                "static": true,
+                "location": "app/models/setting.rb:53"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "actionview",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActionView",
+        "type": "class",
+        "children": [
+          {
+            "name": "Resolver",
+            "type": "class",
+            "children": [
+              {
+                "name": "find_all",
+                "type": "function",
+                "labels": ["mvc.template.resolver"],
+                "static": false,
+                "location": "vendor/bundle/ruby/3.0.0/gems/actionview-6.1.6/lib/action_view/template/resolver.rb:151"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ruby",
+    "type": "package",
+    "children": [
+      {
+        "name": "Kernel",
+        "type": "class",
+        "children": [
+          {
+            "name": "eval",
+            "type": "function",
+            "labels": ["lang.eval"],
+            "static": false,
+            "location": "Kernel#eval"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "activerecord",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActiveRecord",
+        "type": "class",
+        "children": [
+          {
+            "name": "Relation",
+            "type": "class",
+            "children": [
+              {
+                "name": "records",
+                "type": "function",
+                "labels": ["dao.materialize"],
+                "static": false,
+                "location": "vendor/bundle/ruby/3.0.0/gems/activerecord-6.1.6/lib/active_record/relation.rb:248"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "lib/webpacker",
+    "type": "package",
+    "children": [
+      {
+        "name": "Webpacker",
+        "type": "class",
+        "children": [
+          {
+            "name": "HelperExtensions",
+            "type": "class",
+            "children": [
+              {
+                "name": "stylesheet_pack_tag",
+                "type": "function",
+                "static": false,
+                "location": "lib/webpacker/helper_extensions.rb:9"
+              }
+            ]
+          },
+          {
+            "name": "ManifestExtensions",
+            "type": "class",
+            "children": [
+              {
+                "name": "lookup",
+                "type": "function",
+                "static": false,
+                "location": "lib/webpacker/manifest_extensions.rb:4"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "json",
+    "type": "package",
+    "children": [
+      {
+        "name": "JSON",
+        "type": "class",
+        "children": [
+          {
+            "name": "Ext",
+            "type": "class",
+            "children": [
+              {
+                "name": "Generator",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "State",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "generate",
+                        "type": "function",
+                        "labels": ["format.json.generate", "serialize"],
+                        "static": false,
+                        "location": "JSON::Ext::Generator::State#generate"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "http",
+    "name": "HTTP server requests",
+    "children": [
+      {
+        "type": "route",
+        "name": "GET /*unmatched_route"
+      },
+      {
+        "type": "route"
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "SELECT \"settings\".* FROM \"settings\" WHERE (thing_type is NULL and thing_id is NULL) AND \"settings\".\"var\" = $1 ORDER BY \"settings\".\"id\" ASC LIMIT $2"
+      }
+    ]
+  }
+]

@@ -1,0 +1,5 @@
+[
+  "app/models/ScannerFinding",
+  "json/JSON::Ext::Parser",
+  "logger/Logger::LogDevice"
+]

@@ -1,0 +1,5172 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "GET /password_resets/new",
+    "parameter_names": [
+      "controller",
+      "action"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/PasswordResetsController#new",
+            "labels": [
+              "public"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "actionview/ActionView::Resolver#find_all",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/views/app_views_password_resets_new_html_erb.render",
+            "labels": [
+              "mvc.template"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/ApplicationHelper#full_title",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "json/JSON::Ext::Parser#parse",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__shim_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__header_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#logged_in?",
+                    "labels": [
+                      "security.authentication"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__footer_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "/String#==",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "POST /password_resets",
+    "parameter_names": [
+      "password_reset",
+      "controller",
+      "action"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/PasswordResetsController#create",
+            "labels": [
+              "public"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "/Module.==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.*",
+                    "users.email"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_password_resets_new_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/ApplicationHelper#full_title",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/views/app_views_layouts__shim_html_erb.render",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/views/app_views_layouts__header_html_erb.render",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#logged_in?",
+                        "labels": [
+                          "security.authentication"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/views/app_views_layouts__footer_html_erb.render",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "/String#==",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "POST /password_resets",
+    "parameter_names": [
+      "password_reset",
+      "controller",
+      "action"
+    ],
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "openssl/OpenSSL::Cipher#decrypt",
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/PasswordResetsController#create",
+            "labels": [
+              "public"
+            ],
+            "children": [
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.*",
+                    "users.email"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "app/models/User#create_reset_digest",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/models/User.new_token",
+                    "labels": [
+                      "secret",
+                      "secret.generator"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/models/User.digest",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                    "labels": [
+                      "mvc.before_action"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SAVEPOINT active_record_1"
+                    },
+                    "analyzed_query": {
+                      "actions": [],
+                      "tables": [],
+                      "columns": [],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "UPDATE \"users\" SET \"reset_digest\" = ?, \"updated_at\" = ? WHERE \"users\".\"id\" = ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "update"
+                      ],
+                      "tables": [
+                        "users"
+                      ],
+                      "columns": [
+                        "reset_digest",
+                        "updated_at",
+                        "users.id"
+                      ],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                    "labels": [
+                      "mvc.after_action"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "RELEASE SAVEPOINT active_record_1"
+                    },
+                    "analyzed_query": {
+                      "actions": [],
+                      "tables": [],
+                      "columns": [],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                    "labels": [
+                      "mvc.before_action"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                    "labels": [
+                      "mvc.before_action"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SAVEPOINT active_record_1"
+                    },
+                    "analyzed_query": {
+                      "actions": [],
+                      "tables": [],
+                      "columns": [],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "UPDATE \"users\" SET \"updated_at\" = ?, \"reset_sent_at\" = ? WHERE \"users\".\"id\" = ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "update"
+                      ],
+                      "tables": [
+                        "users"
+                      ],
+                      "columns": [
+                        "reset_sent_at",
+                        "updated_at",
+                        "users.id"
+                      ],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                    "labels": [
+                      "mvc.after_action"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "RELEASE SAVEPOINT active_record_1"
+                    },
+                    "analyzed_query": {
+                      "actions": [],
+                      "tables": [],
+                      "columns": [],
+                      "joinCount": 0
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/models/User#send_password_reset_email",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/mailers/UserMailer#password_reset",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/views/app_views_layouts_mailer_html_erb.render",
+                        "labels": [
+                          "mvc.template"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionview/ActionView::Resolver#find_all",
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "logger/Logger::LogDevice#write",
+                            "labels": [
+                              "log"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "/String#==",
+                            "labels": [
+                              "string.equals"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "logger/Logger::LogDevice#write",
+                            "labels": [
+                              "log"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "/String#==",
+                            "labels": [
+                              "string.equals"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/views/app_views_layouts_mailer_text_erb.render",
+                        "labels": [
+                          "mvc.template"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionview/ActionView::Resolver#find_all",
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "logger/Logger::LogDevice#write",
+                            "labels": [
+                              "log"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "/String#==",
+                            "labels": [
+                              "string.equals"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "logger/Logger::LogDevice#write",
+                            "labels": [
+                              "log"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "/String#==",
+                            "labels": [
+                              "string.equals"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/String#==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/String#==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionController::Instrumentation#redirect_to",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "/String#==",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /password_resets/{id}/edit",
+    "parameter_names": [
+      "email",
+      "controller",
+      "action",
+      "id"
+    ],
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "openssl/OpenSSL::Cipher#decrypt",
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.*",
+                    "users.email"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionController::Instrumentation#redirect_to",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "/String#==",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /password_resets/{id}/edit",
+    "parameter_names": [
+      "email",
+      "controller",
+      "action",
+      "id"
+    ],
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "openssl/OpenSSL::Cipher#decrypt",
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.*",
+                    "users.email"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionController::Instrumentation#redirect_to",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "/String#==",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /password_resets/{id}/edit",
+    "parameter_names": [
+      "email",
+      "controller",
+      "action",
+      "id"
+    ],
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "openssl/OpenSSL::Cipher#decrypt",
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.*",
+                    "users.email"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/models/User#authenticated?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "bcrypt/BCrypt::Password#is_password?",
+                    "labels": [
+                      "crypto.secure_compare"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "/String#==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionController::Instrumentation#redirect_to",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "/String#==",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /password_resets/{id}/edit",
+    "parameter_names": [
+      "email",
+      "controller",
+      "action",
+      "id"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "openssl/OpenSSL::Cipher#decrypt",
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.*",
+                    "users.email"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/models/User#authenticated?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "bcrypt/BCrypt::Password#is_password?",
+                    "labels": [
+                      "crypto.secure_compare"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "/String#==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/models/User#password_reset_expired?",
+                "labels": []
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/PasswordResetsController#edit",
+            "labels": [
+              "public"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "actionview/ActionView::Resolver#find_all",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/views/app_views_password_resets_edit_html_erb.render",
+            "labels": [
+              "mvc.template"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_shared__error_messages_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/ApplicationHelper#full_title",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "json/JSON::Ext::Parser#parse",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__shim_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__header_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#logged_in?",
+                    "labels": [
+                      "security.authentication"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__footer_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "/String#==",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "PATCH /password_resets/{id}",
+    "parameter_names": [
+      "email",
+      "user",
+      "controller",
+      "action",
+      "id"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "openssl/OpenSSL::Cipher#decrypt",
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.*",
+                    "users.email"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/models/User#authenticated?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "bcrypt/BCrypt::Password#is_password?",
+                    "labels": [
+                      "crypto.secure_compare"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "/String#==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/models/User#password_reset_expired?",
+                "labels": []
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/PasswordResetsController#update",
+            "labels": [
+              "public"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SAVEPOINT active_record_1"
+                },
+                "analyzed_query": {
+                  "actions": [],
+                  "tables": [],
+                  "columns": [],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT ? AS one FROM \"users\" WHERE \"users\".\"email\" = ? AND \"users\".\"id\" != ? LIMIT ?"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.email",
+                    "users.id"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "ROLLBACK TO SAVEPOINT active_record_1"
+                },
+                "analyzed_query": {
+                  "actions": [],
+                  "tables": [],
+                  "columns": [],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_password_resets_edit_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/views/app_views_shared__error_messages_html_erb.render",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/ApplicationHelper#full_title",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/views/app_views_layouts__shim_html_erb.render",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/views/app_views_layouts__header_html_erb.render",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#logged_in?",
+                        "labels": [
+                          "security.authentication"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Request::Session#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/views/app_views_layouts__footer_html_erb.render",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "/String#==",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "PATCH /password_resets/{id}",
+    "parameter_names": [
+      "email",
+      "user",
+      "controller",
+      "action",
+      "id"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "openssl/OpenSSL::Cipher#decrypt",
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.*",
+                    "users.email"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/models/User#authenticated?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "bcrypt/BCrypt::Password#is_password?",
+                    "labels": [
+                      "crypto.secure_compare"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "/String#==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/models/User#password_reset_expired?",
+                "labels": []
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/PasswordResetsController#update",
+            "labels": [
+              "public"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "app/views/app_views_password_resets_edit_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/views/app_views_shared__error_messages_html_erb.render",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/ApplicationHelper#full_title",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/views/app_views_layouts__shim_html_erb.render",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/views/app_views_layouts__header_html_erb.render",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#logged_in?",
+                        "labels": [
+                          "security.authentication"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Request::Session#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/views/app_views_layouts__footer_html_erb.render",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "/String#==",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "PATCH /password_resets/{id}",
+    "parameter_names": [
+      "email",
+      "user",
+      "controller",
+      "action",
+      "id"
+    ],
+    "status_code": 500,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "openssl/OpenSSL::Cipher#decrypt",
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.*",
+                    "users.email"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/models/User#authenticated?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "bcrypt/BCrypt::Password#is_password?",
+                    "labels": [
+                      "crypto.secure_compare"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "/String#==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/models/User#password_reset_expired?",
+                "labels": []
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/PasswordResetsController#update",
+            "labels": [
+              "public"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SAVEPOINT active_record_1"
+                },
+                "analyzed_query": {
+                  "actions": [],
+                  "tables": [],
+                  "columns": [],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT ? AS one FROM \"users\" WHERE \"users\".\"email\" = ? AND \"users\".\"id\" != ? LIMIT ?"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.email",
+                    "users.id"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/Module.==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/Module.==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "UPDATE \"users\" SET \"password_digest\" = ?, \"updated_at\" = ? WHERE \"users\".\"id\" = ?"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "update"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "password_digest",
+                    "updated_at",
+                    "users.id"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "/Module.==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/Module.==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/Module.==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "/Module.==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "RELEASE SAVEPOINT active_record_1"
+                },
+                "analyzed_query": {
+                  "actions": [],
+                  "tables": [],
+                  "columns": [],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#destroy",
+                "labels": [
+                  "http.session.write"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Request::Session#clear",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/SessionsHelper#log_in",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Request::Session#[]=",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionController::Instrumentation#redirect_to",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "/String#==",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,27 @@
+[
+  {
+    "route": "GET http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/url",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "POST http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/element/51bf7824-28dc-48a3-927f-6aeeed37c43f/click",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "POST http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/element/847acf4e-c8d6-4b0b-82c4-2ac930f3a018/elements",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "POST http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/elements",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "POST http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/execute/sync",
+    "parameters": "()",
+    "status": 200
+  }
+]

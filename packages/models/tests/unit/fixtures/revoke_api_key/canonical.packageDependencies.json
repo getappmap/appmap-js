@@ -1,0 +1,22 @@
+[
+  {
+    "caller": "HTTP server requests",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "HTTP server requests",
+    "callee": "app/models"
+  },
+  {
+    "caller": "HTTP server requests",
+    "callee": "json"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "app/models"
+  },
+  {
+    "caller": "app/models",
+    "callee": "Database"
+  }
+]

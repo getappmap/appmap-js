@@ -1,0 +1,172 @@
+[
+  {
+    "route": "GET /",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /MaterialIcons-Regular.woff2",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /api/Challenges/",
+    "parameters": "(name)",
+    "status": 200
+  },
+  {
+    "route": "GET /api/Quantitys/",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /apple-touch-icon-precomposed.png",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /apple-touch-icon.png",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /assets/i18n/en.json",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /assets/public/favicon_js.ico",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /assets/public/images/JuiceShop_Logo.png",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /assets/public/images/products/20th.jpeg",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /assets/public/images/products/apple_juice.jpg",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /assets/public/images/products/apple_pressings.jpg",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /assets/public/images/products/artwork2.jpg",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /assets/public/images/products/banana_juice.jpg",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /assets/public/images/products/carrot_juice.jpeg",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /assets/public/images/products/eggfruit_juice.jpg",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /assets/public/images/products/fruit_press.jpg",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /assets/public/images/products/green_smoothie.jpg",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /assets/public/images/products/lemon_juice.jpg",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /assets/public/images/products/melon_bike.jpeg",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /assets/public/images/products/permafrost.jpg",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /font-mfizz.svg",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /main-es2018.js",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /polyfills-es2018.js",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /rest/admin/application-configuration",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /rest/admin/application-configuration",
+    "parameters": "()",
+    "status": 304
+  },
+  {
+    "route": "GET /rest/admin/application-version",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /rest/languages",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /rest/products/search",
+    "parameters": "(q)",
+    "status": 200
+  },
+  {
+    "route": "GET /rest/user/whoami",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /runtime-es2018.js",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /styles.css",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "GET /vendor-es2018.js",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "POST /rest/user/login",
+    "parameters": "()",
+    "status": 401
+  }
+]

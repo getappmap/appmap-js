@@ -1,0 +1,512 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "GET /signup",
+    "parameter_names": [
+      "controller",
+      "action"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "public"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.template"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "security.authentication"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "POST /users",
+    "parameter_names": [
+      "user",
+      "controller",
+      "action"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "public"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [],
+                        "tables": [],
+                        "columns": [],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "users"
+                        ],
+                        "columns": [
+                          "users.email"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [],
+                    "tables": [],
+                    "columns": [],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "security.authentication"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,5 @@
+[
+  "app/models/User",
+  "psych/Psych",
+  "ruby/String"
+]

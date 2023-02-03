@@ -1,0 +1,63 @@
+[
+  {
+    "name": "jwt",
+    "type": "package",
+    "children": [
+      {
+        "name": "JWT",
+        "type": "class",
+        "children": [
+          {
+            "name": "encode",
+            "type": "function",
+            "labels": [
+              "jwt.encode"
+            ],
+            "static": true,
+            "location": "/Users/dustin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/jwt-2.4.1/lib/jwt.rb:20"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "json",
+    "type": "package",
+    "children": [
+      {
+        "name": "JSON",
+        "type": "class",
+        "children": [
+          {
+            "name": "Ext",
+            "type": "class",
+            "children": [
+              {
+                "name": "Generator",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "State",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "generate",
+                        "type": "function",
+                        "labels": [
+                          "format.json.generate",
+                          "serialize"
+                        ],
+                        "static": false,
+                        "location": "JSON::Ext::Generator::State#generate"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,70 @@
+[
+  {
+    "caller": "HTTP server requests",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "actionview"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "app/views"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "logger"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "ruby"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "Database"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app/views",
+    "callee": "Database"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionview"
+  },
+  {
+    "caller": "app/views",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "app/views",
+    "callee": "json"
+  },
+  {
+    "caller": "app/views",
+    "callee": "logger"
+  },
+  {
+    "caller": "app/views",
+    "callee": "ruby"
+  }
+]

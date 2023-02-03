@@ -1,0 +1,1144 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "POST /api/mapsets",
+    "parameter_names": [
+      "controller",
+      "action",
+      "mapset"
+    ],
+    "status_code": 201,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/concerns/InTransaction#in_transaction",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SAVEPOINT autopoint_1"
+                },
+                "analyzed_query": {
+                  "actions": [],
+                  "tables": [],
+                  "columns": [],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                "labels": [
+                  "mvc.before_action"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/controllers/concerns/WithApiAuthentication#check_current_user",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/controllers/concerns/AnonymousAccess#anonymous_access?",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/controllers/concerns/WithApiAuthentication#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/controllers/concerns/WithApiAuthentication#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "app/models/ApiKey.authenticate",
+                                "labels": [
+                                  "security.authentication"
+                                ],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "app/models/ApiKey.decode",
+                                    "labels": [],
+                                    "children": [
+                                      {
+                                        "kind": "function",
+                                        "function": "ruby/String#unpack1",
+                                        "labels": [
+                                          "string.unpack"
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "kind": "function",
+                                    "function": "logger/Logger::LogDevice#write",
+                                    "labels": [
+                                      "log"
+                                    ]
+                                  },
+                                  {
+                                    "kind": "sql",
+                                    "sql": {
+                                      "normalized_query": "SELECT * FROM \"api_keys\" WHERE (\"login\" = ?)"
+                                    },
+                                    "analyzed_query": {
+                                      "actions": [
+                                        "select"
+                                      ],
+                                      "tables": [
+                                        "api_keys"
+                                      ],
+                                      "columns": [
+                                        "*",
+                                        "login"
+                                      ],
+                                      "joinCount": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "function",
+                                    "function": "app/models/ApiKey.touch",
+                                    "labels": [
+                                      "security.api_key.touch"
+                                    ],
+                                    "children": [
+                                      {
+                                        "kind": "function",
+                                        "function": "logger/Logger::LogDevice#write",
+                                        "labels": [
+                                          "log"
+                                        ]
+                                      },
+                                      {
+                                        "kind": "sql",
+                                        "sql": {
+                                          "normalized_query": "UPDATE \"api_keys\" SET \"last_used\" = ? WHERE (\"id\" = ?)"
+                                        },
+                                        "analyzed_query": {
+                                          "actions": [
+                                            "update"
+                                          ],
+                                          "tables": [
+                                            "api_keys"
+                                          ],
+                                          "columns": [
+                                            "id",
+                                            "last_used"
+                                          ],
+                                          "joinCount": 0
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "kind": "function",
+                                    "function": "logger/Logger::LogDevice#write",
+                                    "labels": [
+                                      "log"
+                                    ]
+                                  },
+                                  {
+                                    "kind": "sql",
+                                    "sql": {
+                                      "normalized_query": "SELECT * FROM \"users\" WHERE (\"users\".\"login\" = ?) LIMIT ?"
+                                    },
+                                    "analyzed_query": {
+                                      "actions": [
+                                        "select"
+                                      ],
+                                      "tables": [
+                                        "users"
+                                      ],
+                                      "columns": [
+                                        "*",
+                                        "users.login"
+                                      ],
+                                      "joinCount": 0
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/controllers/concerns/CheckContentType#require_json",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/controllers/concerns/FindOrg#find_org",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/controllers/concerns/FindOrg#org_name",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/controllers/concerns/FindOrg#parse_org_name_from_app_name",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "app/controllers/concerns/FindOrg#app_name_tokens",
+                                "labels": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/models/user/User::Show#personal_org",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/models/dao/DAO::User#personal_org",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "normalized_query": "SELECT * FROM \"orgs\" WHERE ((\"name\" IS ?) AND (\"slug\" IS ?) AND (\"owner_id\" = ?)) LIMIT ?"
+                                },
+                                "analyzed_query": {
+                                  "actions": [
+                                    "select"
+                                  ],
+                                  "tables": [
+                                    "orgs"
+                                  ],
+                                  "columns": [
+                                    "*",
+                                    "name",
+                                    "owner_id",
+                                    "slug"
+                                  ],
+                                  "joinCount": 0
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "app/models/dao/DAO::ToModel#to_model",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/controllers/concerns/WithApiAuthentication#current_user",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/models/exceptions/Exceptions::Forbidden.check_user_org_membership",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/models/user/User::Show#member_of?",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "normalized_query": "SELECT * FROM \"users_orgs\" WHERE ((\"user_id\" = ?) AND (\"org_id\" = ?))"
+                                },
+                                "analyzed_query": {
+                                  "actions": [
+                                    "select"
+                                  ],
+                                  "tables": [
+                                    "users_orgs"
+                                  ],
+                                  "columns": [
+                                    "*",
+                                    "org_id",
+                                    "user_id"
+                                  ],
+                                  "joinCount": 0
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/controllers/api/API::MapsetsController#find_or_create_app",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/controllers/api/API::MapsetsController#find_app",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/controllers/concerns/SearchScope#search_scope",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "app/controllers/concerns/WithApiAuthentication#current_user",
+                                "labels": []
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "app/controllers/api/API::MapsetsController#app_name",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "app/controllers/concerns/FindOrg#app_name_tokens",
+                                "labels": []
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "app/models/app/App::Search#find_by_name",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "app/models/app/App::Search#base_dataset",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "app/models/Search#filter",
+                                    "labels": [],
+                                    "children": [
+                                      {
+                                        "kind": "function",
+                                        "function": "app/models/user/User::Show#admin?",
+                                        "labels": []
+                                      },
+                                      {
+                                        "kind": "function",
+                                        "function": "app/models/dao/DAO::PublicResource.coerce",
+                                        "labels": []
+                                      },
+                                      {
+                                        "kind": "function",
+                                        "function": "app/models/dao/DAO::PublicResource.scope",
+                                        "labels": [],
+                                        "children": [
+                                          {
+                                            "kind": "function",
+                                            "function": "logger/Logger::LogDevice#write",
+                                            "labels": [
+                                              "log"
+                                            ]
+                                          },
+                                          {
+                                            "kind": "sql",
+                                            "sql": {
+                                              "normalized_query": "SELECT * FROM \"users\" WHERE \"id\" = ?"
+                                            },
+                                            "analyzed_query": {
+                                              "actions": [
+                                                "select"
+                                              ],
+                                              "tables": [
+                                                "users"
+                                              ],
+                                              "columns": [
+                                                "*",
+                                                "id"
+                                              ],
+                                              "joinCount": 0
+                                            }
+                                          },
+                                          {
+                                            "kind": "function",
+                                            "function": "app/models/dao/DAO::SequelUtil.build_where_clause",
+                                            "labels": []
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "normalized_query": "SELECT * FROM \"apps\" WHERE (((\"apps\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = ?) AND (\"orgs\".\"id\" IS NOT ?)))) OR (\"public\" IS ?)) AND (\"apps\".\"org_id\" = ?) AND (\"name\" = ?)) LIMIT ?"
+                                },
+                                "analyzed_query": {
+                                  "actions": [
+                                    "select"
+                                  ],
+                                  "tables": [
+                                    "apps",
+                                    "orgs",
+                                    "users_orgs"
+                                  ],
+                                  "columns": [
+                                    "*",
+                                    "apps.org_id",
+                                    "name",
+                                    "orgs.id",
+                                    "public",
+                                    "true",
+                                    "users_orgs.org_id",
+                                    "users_orgs.user_id"
+                                  ],
+                                  "joinCount": 1
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/controllers/api/API::MapsetsController#create_app",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/controllers/concerns/WithApiAuthentication#current_user",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "app/controllers/api/API::MapsetsController#app_name",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "app/controllers/concerns/FindOrg#app_name_tokens",
+                                "labels": []
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "app/models/App.build",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "app/models/concerns/Concerns::Builder#save!",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "app/models/concerns/Concerns::Builder#valid?",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "app/models/app/App::Build#validate",
+                                    "labels": [],
+                                    "children": [
+                                      {
+                                        "kind": "function",
+                                        "function": "app/models/concerns/Concerns::Builder#validate",
+                                        "labels": [],
+                                        "children": [
+                                          {
+                                            "kind": "function",
+                                            "function": "app/models/dao/DAO::App#validate",
+                                            "labels": [],
+                                            "children": [
+                                              {
+                                                "kind": "function",
+                                                "function": "logger/Logger::LogDevice#write",
+                                                "labels": [
+                                                  "log"
+                                                ]
+                                              },
+                                              {
+                                                "kind": "sql",
+                                                "sql": {
+                                                  "normalized_query": "SELECT * FROM \"orgs\" WHERE \"id\" = ?"
+                                                },
+                                                "analyzed_query": {
+                                                  "actions": [
+                                                    "select"
+                                                  ],
+                                                  "tables": [
+                                                    "orgs"
+                                                  ],
+                                                  "columns": [
+                                                    "*",
+                                                    "id"
+                                                  ],
+                                                  "joinCount": 0
+                                                }
+                                              },
+                                              {
+                                                "kind": "function",
+                                                "function": "logger/Logger::LogDevice#write",
+                                                "labels": [
+                                                  "log"
+                                                ]
+                                              },
+                                              {
+                                                "kind": "sql",
+                                                "sql": {
+                                                  "normalized_query": "SELECT * FROM \"apps\" WHERE ((\"slug\" = ?) AND (\"org_id\" = ?)) LIMIT ?"
+                                                },
+                                                "analyzed_query": {
+                                                  "actions": [
+                                                    "select"
+                                                  ],
+                                                  "tables": [
+                                                    "apps"
+                                                  ],
+                                                  "columns": [
+                                                    "*",
+                                                    "org_id",
+                                                    "slug"
+                                                  ],
+                                                  "joinCount": 0
+                                                }
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "kind": "function",
+                                        "function": "app/models/dao/DAO::App#validate",
+                                        "labels": [],
+                                        "children": [
+                                          {
+                                            "kind": "function",
+                                            "function": "logger/Logger::LogDevice#write",
+                                            "labels": [
+                                              "log"
+                                            ]
+                                          },
+                                          {
+                                            "kind": "sql",
+                                            "sql": {
+                                              "normalized_query": "SELECT * FROM \"apps\" WHERE ((\"slug\" = ?) AND (\"org_id\" = ?)) LIMIT ?"
+                                            },
+                                            "analyzed_query": {
+                                              "actions": [
+                                                "select"
+                                              ],
+                                              "tables": [
+                                                "apps"
+                                              ],
+                                              "columns": [
+                                                "*",
+                                                "org_id",
+                                                "slug"
+                                              ],
+                                              "joinCount": 0
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "kind": "function",
+                                        "function": "app/models/user/User::Show#member_of?",
+                                        "labels": [],
+                                        "children": [
+                                          {
+                                            "kind": "function",
+                                            "function": "logger/Logger::LogDevice#write",
+                                            "labels": [
+                                              "log"
+                                            ]
+                                          },
+                                          {
+                                            "kind": "sql",
+                                            "sql": {
+                                              "normalized_query": "SELECT * FROM \"users_orgs\" WHERE ((\"user_id\" = ?) AND (\"org_id\" = ?))"
+                                            },
+                                            "analyzed_query": {
+                                              "actions": [
+                                                "select"
+                                              ],
+                                              "tables": [
+                                                "users_orgs"
+                                              ],
+                                              "columns": [
+                                                "*",
+                                                "org_id",
+                                                "user_id"
+                                              ],
+                                              "joinCount": 0
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "kind": "function",
+                                        "function": "app/models/app/App::Search#exists?",
+                                        "labels": [],
+                                        "children": [
+                                          {
+                                            "kind": "function",
+                                            "function": "app/models/app/App::Search#find_by_name!",
+                                            "labels": [],
+                                            "children": [
+                                              {
+                                                "kind": "function",
+                                                "function": "app/models/app/App::Search#find_by_name",
+                                                "labels": [],
+                                                "children": [
+                                                  {
+                                                    "kind": "function",
+                                                    "function": "app/models/app/App::Search#base_dataset",
+                                                    "labels": [],
+                                                    "children": [
+                                                      {
+                                                        "kind": "function",
+                                                        "function": "app/models/Search#filter",
+                                                        "labels": [],
+                                                        "children": [
+                                                          {
+                                                            "kind": "function",
+                                                            "function": "app/models/user/User::Show#admin?",
+                                                            "labels": []
+                                                          },
+                                                          {
+                                                            "kind": "function",
+                                                            "function": "app/models/dao/DAO::PublicResource.coerce",
+                                                            "labels": []
+                                                          },
+                                                          {
+                                                            "kind": "function",
+                                                            "function": "app/models/dao/DAO::PublicResource.scope",
+                                                            "labels": [],
+                                                            "children": [
+                                                              {
+                                                                "kind": "function",
+                                                                "function": "logger/Logger::LogDevice#write",
+                                                                "labels": [
+                                                                  "log"
+                                                                ]
+                                                              },
+                                                              {
+                                                                "kind": "sql",
+                                                                "sql": {
+                                                                  "normalized_query": "SELECT * FROM \"users\" WHERE \"id\" = ?"
+                                                                },
+                                                                "analyzed_query": {
+                                                                  "actions": [
+                                                                    "select"
+                                                                  ],
+                                                                  "tables": [
+                                                                    "users"
+                                                                  ],
+                                                                  "columns": [
+                                                                    "*",
+                                                                    "id"
+                                                                  ],
+                                                                  "joinCount": 0
+                                                                }
+                                                              },
+                                                              {
+                                                                "kind": "function",
+                                                                "function": "app/models/dao/DAO::SequelUtil.build_where_clause",
+                                                                "labels": []
+                                                              }
+                                                            ]
+                                                          }
+                                                        ]
+                                                      }
+                                                    ]
+                                                  },
+                                                  {
+                                                    "kind": "function",
+                                                    "function": "logger/Logger::LogDevice#write",
+                                                    "labels": [
+                                                      "log"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "kind": "sql",
+                                                    "sql": {
+                                                      "normalized_query": "SELECT * FROM \"apps\" WHERE ((\"apps\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = ?) AND (\"orgs\".\"id\" IS NOT ?)))) AND (\"apps\".\"org_id\" = ?) AND (\"name\" = ?)) LIMIT ?"
+                                                    },
+                                                    "analyzed_query": {
+                                                      "actions": [
+                                                        "select"
+                                                      ],
+                                                      "tables": [
+                                                        "apps",
+                                                        "orgs",
+                                                        "users_orgs"
+                                                      ],
+                                                      "columns": [
+                                                        "*",
+                                                        "apps.org_id",
+                                                        "name",
+                                                        "orgs.id",
+                                                        "users_orgs.org_id",
+                                                        "users_orgs.user_id"
+                                                      ],
+                                                      "joinCount": 1
+                                                    }
+                                                  },
+                                                  {
+                                                    "kind": "function",
+                                                    "function": "app/models/exceptions/Exceptions::RecordNotFound.build_message",
+                                                    "labels": []
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "app/models/dao/DAO::App#validate",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "logger/Logger::LogDevice#write",
+                                    "labels": [
+                                      "log"
+                                    ]
+                                  },
+                                  {
+                                    "kind": "sql",
+                                    "sql": {
+                                      "normalized_query": "SELECT * FROM \"apps\" WHERE ((\"slug\" = ?) AND (\"org_id\" = ?)) LIMIT ?"
+                                    },
+                                    "analyzed_query": {
+                                      "actions": [
+                                        "select"
+                                      ],
+                                      "tables": [
+                                        "apps"
+                                      ],
+                                      "columns": [
+                                        "*",
+                                        "org_id",
+                                        "slug"
+                                      ],
+                                      "joinCount": 0
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "app/models/dao/DAO::App#before_create",
+                                "labels": []
+                              },
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "normalized_query": "INSERT INTO \"apps\" (\"org_id\", \"name\", \"slug\") VALUES (?, ?, ?) RETURNING *"
+                                },
+                                "analyzed_query": {
+                                  "actions": [
+                                    "insert"
+                                  ],
+                                  "tables": [
+                                    "apps"
+                                  ],
+                                  "columns": [
+                                    "name",
+                                    "org_id",
+                                    "slug"
+                                  ],
+                                  "joinCount": 0
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/controllers/api/API::MapsetsController#create",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/controllers/concerns/WithApiAuthentication#current_user",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/models/Mapset.build",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "normalized_query": "SELECT \"id\", \"org_id\" FROM \"scenarios\" WHERE (\"uuid\" IN (?))"
+                        },
+                        "analyzed_query": {
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "scenarios"
+                          ],
+                          "columns": [
+                            "id",
+                            "org_id",
+                            "uuid"
+                          ],
+                          "joinCount": 0
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/models/mapset/Mapset::Build#save!",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/models/mapset/Mapset::Build#valid?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/models/mapset/Mapset::Build#validate",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "app/models/app/App::Show#org",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "app/models/dao/DAO::ToModel#to_model",
+                                    "labels": []
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "app/models/user/User::Show#member_of?",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "logger/Logger::LogDevice#write",
+                                    "labels": [
+                                      "log"
+                                    ]
+                                  },
+                                  {
+                                    "kind": "sql",
+                                    "sql": {
+                                      "normalized_query": "SELECT * FROM \"users_orgs\" WHERE ((\"user_id\" = ?) AND (\"org_id\" = ?))"
+                                    },
+                                    "analyzed_query": {
+                                      "actions": [
+                                        "select"
+                                      ],
+                                      "tables": [
+                                        "users_orgs"
+                                      ],
+                                      "columns": [
+                                        "*",
+                                        "org_id",
+                                        "user_id"
+                                      ],
+                                      "joinCount": 0
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "app/models/user/User::Show#member_of?",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "logger/Logger::LogDevice#write",
+                                    "labels": [
+                                      "log"
+                                    ]
+                                  },
+                                  {
+                                    "kind": "sql",
+                                    "sql": {
+                                      "normalized_query": "SELECT * FROM \"users_orgs\" WHERE ((\"user_id\" = ?) AND (\"org_id\" = ?))"
+                                    },
+                                    "analyzed_query": {
+                                      "actions": [
+                                        "select"
+                                      ],
+                                      "tables": [
+                                        "users_orgs"
+                                      ],
+                                      "columns": [
+                                        "*",
+                                        "org_id",
+                                        "user_id"
+                                      ],
+                                      "joinCount": 0
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "normalized_query": "INSERT INTO \"mapsets\" (\"user_id\", \"app_id\") VALUES (?, ?) RETURNING *"
+                        },
+                        "analyzed_query": {
+                          "actions": [
+                            "insert"
+                          ],
+                          "tables": [
+                            "mapsets"
+                          ],
+                          "columns": [
+                            "app_id",
+                            "user_id"
+                          ],
+                          "joinCount": 0
+                        }
+                      },
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "normalized_query": "UPDATE \"scenarios\" SET \"mapset_id\" = ? WHERE (\"id\" IN (?))"
+                        },
+                        "analyzed_query": {
+                          "actions": [
+                            "update"
+                          ],
+                          "tables": [
+                            "scenarios"
+                          ],
+                          "columns": [
+                            "id",
+                            "mapset_id"
+                          ],
+                          "joinCount": 0
+                        }
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/models/mapset/Mapset::Vacuum#perform",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/models/dao/DAO::Mapset#vacuum",
+                            "labels": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionController::Renderers#render_to_body",
+                    "labels": [
+                      "mvc.render"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "json/JSON::Ext::Generator::State#generate",
+                        "labels": [
+                          "format.json.generate",
+                          "serialize"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "RELEASE SAVEPOINT autopoint_1"
+                },
+                "analyzed_query": {
+                  "actions": [],
+                  "tables": [],
+                  "columns": [],
+                  "joinCount": 0
+                }
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

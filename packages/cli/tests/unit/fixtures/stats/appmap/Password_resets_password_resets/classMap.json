@@ -1,0 +1,871 @@
+[
+  {
+    "name": "actionpack",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActionDispatch",
+        "type": "class",
+        "children": [
+          {
+            "name": "Integration",
+            "type": "class",
+            "children": [
+              {
+                "name": "Runner",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "before_setup",
+                    "type": "function",
+                    "labels": ["deserialize.safe", "lang.eval.safe"],
+                    "static": false,
+                    "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/testing/integration.rb:320"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Request",
+            "type": "class",
+            "children": [
+              {
+                "name": "Session",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "[]",
+                    "type": "function",
+                    "labels": ["http.session.read"],
+                    "static": false,
+                    "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb:91"
+                  },
+                  {
+                    "name": "[]=",
+                    "type": "function",
+                    "labels": ["http.session.write"],
+                    "static": false,
+                    "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb:131"
+                  },
+                  {
+                    "name": "delete",
+                    "type": "function",
+                    "labels": ["http.session.write"],
+                    "static": false,
+                    "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb:165"
+                  },
+                  {
+                    "name": "destroy",
+                    "type": "function",
+                    "labels": ["http.session.write"],
+                    "static": false,
+                    "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb:79"
+                  },
+                  {
+                    "name": "clear",
+                    "type": "function",
+                    "labels": ["http.session.write", "http.session.clear"],
+                    "static": false,
+                    "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb:137"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Cookies",
+            "type": "class",
+            "children": [
+              {
+                "name": "CookieJar",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "update",
+                    "type": "function",
+                    "labels": ["http.session.write"],
+                    "static": false,
+                    "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/middleware/cookies.rb:333"
+                  },
+                  {
+                    "name": "[]",
+                    "type": "function",
+                    "labels": ["http.session.read"],
+                    "static": false,
+                    "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/middleware/cookies.rb:317"
+                  },
+                  {
+                    "name": "[]=",
+                    "type": "function",
+                    "labels": ["http.session.write"],
+                    "static": false,
+                    "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/middleware/cookies.rb:373"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "ActionController",
+        "type": "class",
+        "children": [
+          {
+            "name": "Instrumentation",
+            "type": "class",
+            "children": [
+              {
+                "name": "process_action",
+                "type": "function",
+                "labels": ["mvc.controller"],
+                "static": false,
+                "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19"
+              },
+              {
+                "name": "redirect_to",
+                "type": "function",
+                "labels": ["mvc.controller"],
+                "static": false,
+                "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:62"
+              }
+            ]
+          },
+          {
+            "name": "Renderers",
+            "type": "class",
+            "children": [
+              {
+                "name": "render_to_body",
+                "type": "function",
+                "labels": ["mvc.render"],
+                "static": false,
+                "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/renderers.rb:141"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "activesupport",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActiveSupport",
+        "type": "class",
+        "children": [
+          {
+            "name": "Callbacks",
+            "type": "class",
+            "children": [
+              {
+                "name": "CallbackSequence",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "invoke_before",
+                    "type": "function",
+                    "labels": ["mvc.before_action"],
+                    "static": false,
+                    "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb:512"
+                  },
+                  {
+                    "name": "invoke_after",
+                    "type": "function",
+                    "labels": ["mvc.after_action"],
+                    "static": false,
+                    "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb:516"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "MessageEncryptor",
+            "type": "class",
+            "children": [
+              {
+                "name": "encrypt_and_sign",
+                "type": "function",
+                "static": false,
+                "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/message_encryptor.rb:150"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "logger",
+    "type": "package",
+    "children": [
+      {
+        "name": "Logger",
+        "type": "class",
+        "children": [
+          {
+            "name": "LogDevice",
+            "type": "class",
+            "children": [
+              {
+                "name": "write",
+                "type": "function",
+                "labels": ["log"],
+                "static": false,
+                "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/3.0.0/logger/log_device.rb:31"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "activerecord",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActiveRecord",
+        "type": "class",
+        "children": [
+          {
+            "name": "Relation",
+            "type": "class",
+            "children": [
+              {
+                "name": "records",
+                "type": "function",
+                "labels": ["dao.materialize"],
+                "static": false,
+                "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activerecord-6.0.4.1/lib/active_record/relation.rb:249"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ruby",
+    "type": "package",
+    "children": [
+      {
+        "name": "String",
+        "type": "class",
+        "children": [
+          {
+            "name": "unpack",
+            "type": "function",
+            "labels": ["string.unpack"],
+            "static": false,
+            "location": "<internal:pack>:256"
+          },
+          {
+            "name": "unpack1",
+            "type": "function",
+            "labels": ["string.unpack"],
+            "static": false,
+            "location": "<internal:pack>:280"
+          }
+        ]
+      },
+      {
+        "name": "ActiveSupport",
+        "type": "class",
+        "children": [
+          {
+            "name": "MarshalWithAutoloading",
+            "type": "class",
+            "children": [
+              {
+                "name": "load",
+                "type": "function",
+                "labels": ["deserialize.unsafe"],
+                "static": true,
+                "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/core_ext/marshal.rb:5"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app",
+    "type": "package",
+    "children": [
+      {
+        "name": "controllers",
+        "type": "package",
+        "children": [
+          {
+            "name": "PasswordResetsController",
+            "type": "class",
+            "children": [
+              {
+                "name": "new",
+                "type": "function",
+                "labels": ["access.public"],
+                "static": false,
+                "location": "app/controllers/password_resets_controller.rb:7"
+              },
+              {
+                "name": "create",
+                "type": "function",
+                "labels": ["access.public"],
+                "static": false,
+                "location": "app/controllers/password_resets_controller.rb:11"
+              },
+              {
+                "name": "edit",
+                "type": "function",
+                "labels": ["access.public"],
+                "static": false,
+                "location": "app/controllers/password_resets_controller.rb:25"
+              },
+              {
+                "name": "update",
+                "type": "function",
+                "labels": ["access.public"],
+                "static": false,
+                "location": "app/controllers/password_resets_controller.rb:29"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "views",
+        "type": "package",
+        "children": [
+          {
+            "name": "app_views_password_resets_new_html_erb",
+            "type": "class",
+            "children": [
+              {
+                "name": "render",
+                "type": "function",
+                "labels": ["mvc.template"],
+                "static": true,
+                "location": "app/views/password_resets/new.html.erb"
+              }
+            ]
+          },
+          {
+            "name": "app_views_layouts__shim_html_erb",
+            "type": "class",
+            "children": [
+              {
+                "name": "render",
+                "type": "function",
+                "labels": ["mvc.template"],
+                "static": true,
+                "location": "app/views/layouts/_shim.html.erb"
+              }
+            ]
+          },
+          {
+            "name": "app_views_layouts__header_html_erb",
+            "type": "class",
+            "children": [
+              {
+                "name": "render",
+                "type": "function",
+                "labels": ["mvc.template"],
+                "static": true,
+                "location": "app/views/layouts/_header.html.erb"
+              }
+            ]
+          },
+          {
+            "name": "app_views_layouts__footer_html_erb",
+            "type": "class",
+            "children": [
+              {
+                "name": "render",
+                "type": "function",
+                "labels": ["mvc.template"],
+                "static": true,
+                "location": "app/views/layouts/_footer.html.erb"
+              }
+            ]
+          },
+          {
+            "name": "app_views_layouts_mailer_html_erb",
+            "type": "class",
+            "children": [
+              {
+                "name": "render",
+                "type": "function",
+                "labels": ["mvc.template"],
+                "static": true,
+                "location": "app/views/layouts/mailer.html.erb"
+              }
+            ]
+          },
+          {
+            "name": "app_views_layouts_mailer_text_erb",
+            "type": "class",
+            "children": [
+              {
+                "name": "render",
+                "type": "function",
+                "labels": ["mvc.template"],
+                "static": true,
+                "location": "app/views/layouts/mailer.text.erb"
+              }
+            ]
+          },
+          {
+            "name": "app_views_password_resets_edit_html_erb",
+            "type": "class",
+            "children": [
+              {
+                "name": "render",
+                "type": "function",
+                "labels": ["mvc.template"],
+                "static": true,
+                "location": "app/views/password_resets/edit.html.erb"
+              }
+            ]
+          },
+          {
+            "name": "app_views_shared__error_messages_html_erb",
+            "type": "class",
+            "children": [
+              {
+                "name": "render",
+                "type": "function",
+                "labels": ["mvc.template"],
+                "static": true,
+                "location": "app/views/shared/_error_messages.html.erb"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "helpers",
+        "type": "package",
+        "children": [
+          {
+            "name": "ApplicationHelper",
+            "type": "class",
+            "children": [
+              {
+                "name": "full_title",
+                "type": "function",
+                "static": false,
+                "location": "app/helpers/application_helper.rb:4"
+              }
+            ]
+          },
+          {
+            "name": "SessionsHelper",
+            "type": "class",
+            "children": [
+              {
+                "name": "logged_in?",
+                "type": "function",
+                "labels": ["security.authentication"],
+                "static": false,
+                "location": "app/helpers/sessions_helper.rb:35"
+              },
+              {
+                "name": "current_user",
+                "type": "function",
+                "static": false,
+                "location": "app/helpers/sessions_helper.rb:16"
+              },
+              {
+                "name": "log_in",
+                "type": "function",
+                "static": false,
+                "location": "app/helpers/sessions_helper.rb:4"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "models",
+        "type": "package",
+        "children": [
+          {
+            "name": "User",
+            "type": "class",
+            "children": [
+              {
+                "name": "create_reset_digest",
+                "type": "function",
+                "static": false,
+                "location": "app/models/user.rb:85"
+              },
+              {
+                "name": "new_reset_token",
+                "type": "function",
+                "labels": ["secret"],
+                "static": true,
+                "location": "app/models/user.rb:40"
+              },
+              {
+                "name": "digest",
+                "type": "function",
+                "static": true,
+                "location": "app/models/user.rb:23"
+              },
+              {
+                "name": "send_password_reset_email",
+                "type": "function",
+                "static": false,
+                "location": "app/models/user.rb:92"
+              },
+              {
+                "name": "authenticated?",
+                "type": "function",
+                "static": false,
+                "location": "app/models/user.rb:51"
+              },
+              {
+                "name": "password_reset_expired?",
+                "type": "function",
+                "static": false,
+                "location": "app/models/user.rb:97"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "mailers",
+        "type": "package",
+        "children": [
+          {
+            "name": "UserMailer",
+            "type": "class",
+            "children": [
+              {
+                "name": "password_reset",
+                "type": "function",
+                "static": false,
+                "location": "app/mailers/user_mailer.rb:8"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "actionview",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActionView",
+        "type": "class",
+        "children": [
+          {
+            "name": "Resolver",
+            "type": "class",
+            "children": [
+              {
+                "name": "find_all",
+                "type": "function",
+                "labels": ["mvc.template.resolver"],
+                "static": false,
+                "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb:116"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "sprockets",
+    "type": "package",
+    "children": [
+      {
+        "name": "Sprockets",
+        "type": "class",
+        "children": [
+          {
+            "name": "EncodingUtils",
+            "type": "class",
+            "children": [
+              {
+                "name": "unmarshaled_deflated",
+                "type": "function",
+                "labels": ["deserialize.safe"],
+                "static": true,
+                "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/sprockets-4.0.2/lib/sprockets/encoding_utils.rb:39"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "json",
+    "type": "package",
+    "children": [
+      {
+        "name": "JSON",
+        "type": "class",
+        "children": [
+          {
+            "name": "Ext",
+            "type": "class",
+            "children": [
+              {
+                "name": "Parser",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "parse",
+                    "type": "function",
+                    "labels": ["format.json.parse", "deserialize.safe"],
+                    "static": false,
+                    "location": "JSON::Ext::Parser#parse"
+                  }
+                ]
+              },
+              {
+                "name": "Generator",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "State",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "generate",
+                        "type": "function",
+                        "labels": ["format.json.generate", "serialize"],
+                        "static": false,
+                        "location": "JSON::Ext::Generator::State#generate"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "openssl",
+    "type": "package",
+    "children": [
+      {
+        "name": "OpenSSL",
+        "type": "class",
+        "children": [
+          {
+            "name": "Cipher",
+            "type": "class",
+            "children": [
+              {
+                "name": "encrypt",
+                "type": "function",
+                "labels": ["crypto.encrypt"],
+                "static": false,
+                "location": "OpenSSL::Cipher#encrypt"
+              },
+              {
+                "name": "key=",
+                "type": "function",
+                "labels": ["crypto.set_key"],
+                "static": false,
+                "location": "OpenSSL::Cipher#key="
+              },
+              {
+                "name": "random_iv",
+                "type": "function",
+                "static": false,
+                "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/3.0.0/openssl/cipher.rb:55"
+              },
+              {
+                "name": "iv=",
+                "type": "function",
+                "labels": ["crypto.set_iv"],
+                "static": false,
+                "location": "OpenSSL::Cipher#iv="
+              },
+              {
+                "name": "auth_data=",
+                "type": "function",
+                "labels": ["crypto.set_auth_data"],
+                "static": false,
+                "location": "OpenSSL::Cipher#auth_data="
+              },
+              {
+                "name": "update",
+                "type": "function",
+                "static": false,
+                "location": "OpenSSL::Cipher#update"
+              },
+              {
+                "name": "final",
+                "type": "function",
+                "labels": ["crypto.final"],
+                "static": false,
+                "location": "OpenSSL::Cipher#final"
+              },
+              {
+                "name": "decrypt",
+                "type": "function",
+                "labels": ["crypto.decrypt"],
+                "static": false,
+                "location": "OpenSSL::Cipher#decrypt"
+              },
+              {
+                "name": "auth_tag=",
+                "type": "function",
+                "labels": ["crypto.set_auth_tag"],
+                "static": false,
+                "location": "OpenSSL::Cipher#auth_tag="
+              }
+            ]
+          },
+          {
+            "name": "Random",
+            "type": "class",
+            "children": [
+              {
+                "name": "random_bytes",
+                "type": "function",
+                "labels": ["random.secure"],
+                "static": true,
+                "location": "OpenSSL::Random.random_bytes"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "psych",
+    "type": "package",
+    "children": [
+      {
+        "name": "Psych",
+        "type": "class",
+        "children": [
+          {
+            "name": "dump",
+            "type": "function",
+            "labels": ["format.yaml.generate", "serialize"],
+            "static": true,
+            "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/3.0.0/psych.rb:506"
+          },
+          {
+            "name": "load",
+            "type": "function",
+            "labels": ["deserialize.unsafe"],
+            "static": true,
+            "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/3.0.0/psych.rb:274"
+          },
+          {
+            "name": "parse",
+            "type": "function",
+            "labels": ["format.yaml.parse"],
+            "static": true,
+            "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/3.0.0/psych.rb:384"
+          },
+          {
+            "name": "parse_stream",
+            "type": "function",
+            "labels": ["format.yaml.parse"],
+            "static": true,
+            "location": "/home/test/.rbenv/versions/3.0.1/lib/ruby/3.0.0/psych.rb:448"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "begin transaction"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SAVEPOINT active_record_1"
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"users\" SET \"reset_digest\" = ?, \"updated_at\" = ? WHERE \"users\".\"id\" = ?"
+      },
+      {
+        "type": "query",
+        "name": "RELEASE SAVEPOINT active_record_1"
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"users\" SET \"updated_at\" = ?, \"reset_sent_at\" = ? WHERE \"users\".\"id\" = ?"
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"users\" SET \"updated_at\" = ?, \"activated\" = ? WHERE \"users\".\"id\" = ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT 1 AS one FROM \"users\" WHERE \"users\".\"email\" = ? AND \"users\".\"id\" != ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "ROLLBACK TO SAVEPOINT active_record_1"
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"users\" SET \"password_digest\" = ?, \"updated_at\" = ? WHERE \"users\".\"id\" = ?"
+      },
+      {
+        "type": "query",
+        "name": "rollback transaction"
+      }
+    ]
+  },
+  {
+    "type": "http",
+    "name": "HTTP server requests",
+    "children": [
+      {
+        "type": "route",
+        "name": "GET /password_resets/new"
+      },
+      {
+        "type": "route",
+        "name": "POST /password_resets"
+      },
+      {
+        "type": "route",
+        "name": "GET /password_resets/{id}/edit"
+      },
+      {
+        "type": "route",
+        "name": "PATCH /password_resets/{id}"
+      }
+    ]
+  }
+]

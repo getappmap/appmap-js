@@ -1,0 +1,42 @@
+[
+  {
+    "caller": "HTTP server requests->GET /organizations/new",
+    "callee": "Database->BEGIN"
+  },
+  {
+    "caller": "HTTP server requests->GET /organizations/new",
+    "callee": "Database->COMMIT"
+  },
+  {
+    "caller": "HTTP server requests->GET /organizations/new",
+    "callee": "app/controllers/OrganizationsController"
+  },
+  {
+    "caller": "HTTP server requests->GET /organizations/new",
+    "callee": "app/models/Configuration"
+  },
+  {
+    "caller": "HTTP server requests->GET /organizations/new",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "HTTP server requests->GET /organizations/new",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "HTTP server requests->GET /organizations/new",
+    "callee": "openssl/Digest"
+  },
+  {
+    "caller": "HTTP server requests->GET /organizations/new",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "app/models/Configuration",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "Database->SELECT * FROM \"users\" WHERE (\"id\" = 1) LIMIT 1"
+  }
+]

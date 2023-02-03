@@ -1,0 +1,34 @@
+[
+  {
+    "caller": "HTTP server requests->DELETE /api/api_keys(.:format)",
+    "callee": "app/controllers/API"
+  },
+  {
+    "caller": "HTTP server requests->DELETE /api/api_keys(.:format)",
+    "callee": "app/models/ApiKey"
+  },
+  {
+    "caller": "HTTP server requests->DELETE /api/api_keys(.:format)",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/controllers/API",
+    "callee": "app/models/ApiKey"
+  },
+  {
+    "caller": "app/models/ApiKey",
+    "callee": "Database->DELETE FROM \"api_keys\" WHERE \"id\" = 3"
+  },
+  {
+    "caller": "app/models/ApiKey",
+    "callee": "Database->SELECT * FROM \"api_keys\" WHERE (\"login\" = 'admin')"
+  },
+  {
+    "caller": "app/models/ApiKey",
+    "callee": "Database->SELECT * FROM \"users\" WHERE (\"users\".\"login\" = 'admin') LIMIT 1"
+  },
+  {
+    "caller": "app/models/ApiKey",
+    "callee": "Database->UPDATE \"api_keys\" SET \"last_used\" = '2021-02-01 15:52:48.011849+0000' WHERE (\"id\" = 3)"
+  }
+]

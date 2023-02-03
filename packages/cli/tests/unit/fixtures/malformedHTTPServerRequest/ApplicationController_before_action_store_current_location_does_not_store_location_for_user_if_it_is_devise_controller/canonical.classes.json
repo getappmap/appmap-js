@@ -1,0 +1,20 @@
+[
+  "actionpack/ActionController::Instrumentation",
+  "actionpack/ActionController::Renderers",
+  "actionpack/ActionDispatch::Cookies::CookieJar",
+  "actionview/ActionView::Resolver",
+  "activerecord/ActiveRecord::Relation",
+  "activesupport/ActiveSupport::Callbacks::CallbackSequence",
+  "app/controllers/ApplicationController",
+  "app/controllers/concerns/Localized",
+  "app/helpers/ApplicationHelper",
+  "app/helpers/InstanceHelper",
+  "app/models/Setting",
+  "app/views/vendor_bundle_ruby_3_0_0_gems_devise_4_8_1_app_views_devise_sessions_new_html_erb",
+  "app/views/vendor_bundle_ruby_3_0_0_gems_devise_4_8_1_app_views_devise_shared__links_html_erb",
+  "json/JSON::Ext::Generator::State",
+  "lib/webpacker/Webpacker::HelperExtensions",
+  "lib/webpacker/Webpacker::ManifestExtensions",
+  "logger/Logger::LogDevice",
+  "ruby/Kernel"
+]

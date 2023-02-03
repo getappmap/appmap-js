@@ -1,0 +1,12 @@
+[
+  "django_session",
+  "misago_acl_role",
+  "misago_cache_cacheversion",
+  "misago_categories_category",
+  "misago_users_bancache",
+  "misago_users_online",
+  "misago_users_rank",
+  "misago_users_rank_roles",
+  "misago_users_user",
+  "misago_users_user_roles"
+]

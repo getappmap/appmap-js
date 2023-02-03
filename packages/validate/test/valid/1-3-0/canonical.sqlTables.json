@@ -1,0 +1,18 @@
+[
+  "spree_addresses",
+  "spree_adjustments",
+  "spree_assets",
+  "spree_cartons",
+  "spree_inventory_units",
+  "spree_line_items",
+  "spree_option_values",
+  "spree_option_values_variants",
+  "spree_orders",
+  "spree_payments",
+  "spree_products",
+  "spree_shipments",
+  "spree_stock_locations",
+  "spree_stores",
+  "spree_users",
+  "spree_variants"
+]

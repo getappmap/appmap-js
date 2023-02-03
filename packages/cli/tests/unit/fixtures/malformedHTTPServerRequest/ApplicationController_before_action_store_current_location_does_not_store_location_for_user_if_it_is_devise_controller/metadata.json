@@ -1,0 +1,126 @@
+{
+  "app": "mastodon",
+  "language": {
+    "name": "ruby",
+    "engine": "ruby",
+    "version": "3.0.4"
+  },
+  "client": {
+    "name": "appmap",
+    "url": "https://github.com/applandinc/appmap-ruby",
+    "version": "0.93.5"
+  },
+  "frameworks": [
+    {
+      "name": "rails",
+      "version": "6.1.6"
+    },
+    {
+      "name": "rspec",
+      "version": "3.11.0"
+    }
+  ],
+  "git": {
+    "repository": "https://github.com/land-of-apps/mastodon.git",
+    "branch": "appmap",
+    "commit": "fbcbf7898f000d9d1a21d52e8a8d3ed4602aa7db",
+    "status": [
+      "M .devcontainer/devcontainer.json",
+      "M .devcontainer/docker-compose.yml",
+      "M Gemfile",
+      "M Gemfile.lock",
+      "M spec/rails_helper.rb",
+      "?? appmap.yml",
+      "?? sql_warning.txt"
+    ],
+    "git_last_annotated_tag": "0.1.2-11528-gfbcbf7898f000d9d1a21d52e8a8d3ed4602aa7db",
+    "git_last_tag": "v3.5.3",
+    "git_commits_since_last_annotated_tag": 0,
+    "git_commits_since_last_tag": 0
+  },
+  "name": "ApplicationController before_action :store_current_location does not store location for user if it is devise controller",
+  "source_location": "spec/controllers/application_controller_spec.rb",
+  "recorder": {
+    "name": "rspec",
+    "type": "tests"
+  },
+  "test_status": "failed",
+  "exception": {
+    "class": "ActionView::Template::Error",
+    "message": "Webpacker can't find common.css in /workspaces/mastodon/public/packs-test/manifest.json. Possible ca (...354 more characters)"
+  },
+  "fingerprints": [
+    {
+      "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
+      "canonicalization_algorithm": "classDependencies",
+      "digest": "75d257b5013c84d34b153a7571c8db17d30885ea16e9c561c069f60bef2fe5f3",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
+      "canonicalization_algorithm": "classes",
+      "digest": "cad2b6500182936c84bcff1f9552c80304b140558c37f7e0a9ba55173daee395",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
+      "canonicalization_algorithm": "httpClientRequests",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
+      "canonicalization_algorithm": "httpServerRequests",
+      "digest": "b074d1ae56f8a3fabf3b2cd8951811fcbd0cb99536436846c5bb0d5116e1fad6",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
+      "canonicalization_algorithm": "info",
+      "digest": "a2bdcc27959af82aa9dc453550bf53129763c5b3b3ddc7b5c218a31d69991dea",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
+      "canonicalization_algorithm": "labels",
+      "digest": "00d2566428f0831e48293a562162cfba4fb780f35492311316debc35e0991866",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
+      "canonicalization_algorithm": "packageDependencies",
+      "digest": "85ec7fbbf4606dd0d3405d00f5f3bf266cfb20b90fc6783c9ec061b3e118f0f9",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
+      "canonicalization_algorithm": "packages",
+      "digest": "8597947f23215e54dc8b619e417dd69ab0ca0269aead2a7c0ddc7d8053d481a9",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
+      "canonicalization_algorithm": "sqlNormalized",
+      "digest": "f62deac8d76569038c960cd593a18ae79c59de8343340e2523bd3d0aa69a28f7",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
+      "canonicalization_algorithm": "sqlTables",
+      "digest": "54beab09fa80b9b767ae4b263a7c8824fce3053920977f02426365eb49102bba",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
+      "canonicalization_algorithm": "trace",
+      "digest": "f0b8c17b4ec3209b0606a43cb4d2c18d0886955f20e18e57b61c8ae54b87b7c9",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "e29c60ea60c387493e384dbb998b6484a8c2323c6ad07f76b99faaae73085df9",
+      "canonicalization_algorithm": "update",
+      "digest": "fae28c28a42e677a7fb1291b84d9d73af83f952dc05a95c814747dafcaf98030",
+      "fingerprint_algorithm": "sha256"
+    }
+  ]
+}

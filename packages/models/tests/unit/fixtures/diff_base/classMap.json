@@ -1,0 +1,164 @@
+[
+  {
+    "name": "app/models",
+    "type": "package",
+    "children": [
+      {
+        "name": "DAO",
+        "type": "class",
+        "children": [
+          {
+            "name": "User",
+            "type": "class",
+            "children": [
+              {
+                "name": "validate",
+                "type": "function",
+                "static": false,
+                "location": "app/models/dao/user.rb:20"
+              }
+            ]
+          },
+          {
+            "name": "ToModel",
+            "type": "class",
+            "children": [
+              {
+                "name": "to_model",
+                "type": "function",
+                "static": false,
+                "location": "app/models/dao/to_model.rb:5"
+              }
+            ]
+          },
+          {
+            "name": "PublicResource",
+            "type": "class",
+            "children": [
+              {
+                "name": "coerce",
+                "type": "function",
+                "static": true,
+                "location": "app/models/dao/public_resource.rb:18"
+              },
+              {
+                "name": "scope",
+                "type": "function",
+                "static": true,
+                "location": "app/models/dao/public_resource.rb:26"
+              }
+            ]
+          },
+          {
+            "name": "SequelUtil",
+            "type": "class",
+            "children": [
+              {
+                "name": "build_where_clause",
+                "type": "function",
+                "static": true,
+                "location": "app/models/dao/sequel_util.rb:6"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "User",
+        "type": "class",
+        "children": [
+          {
+            "name": "Show",
+            "type": "class",
+            "children": [
+              {
+                "name": "search_scope",
+                "type": "function",
+                "static": false,
+                "location": "app/models/user.rb:80"
+              },
+              {
+                "name": "admin?",
+                "type": "function",
+                "static": false,
+                "location": "app/models/user.rb:106"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "App",
+        "type": "class",
+        "children": [
+          {
+            "name": "Search",
+            "type": "class",
+            "children": [
+              {
+                "name": "find!",
+                "type": "function",
+                "static": false,
+                "location": "app/models/app.rb:43"
+              },
+              {
+                "name": "find_by_id!",
+                "type": "function",
+                "static": false,
+                "location": "app/models/app.rb:51"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Search",
+        "type": "class",
+        "children": [
+          {
+            "name": "filter",
+            "type": "function",
+            "static": false,
+            "location": "app/models/search.rb:33"
+          }
+        ]
+      },
+      {
+        "name": "Exceptions",
+        "type": "class",
+        "children": [
+          {
+            "name": "RecordNotFound",
+            "type": "class",
+            "children": [
+              {
+                "name": "build_message",
+                "type": "function",
+                "static": true,
+                "location": "app/models/exceptions/record_not_found.rb:16"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "INSERT INTO \"users\" (\"login\") VALUES ('a6e7d0eb-5574-4e1b-800a-684bea0037e9') RETURNING *"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"users\" WHERE \"id\" = 10"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"apps\".* FROM \"apps\" WHERE ((\"apps\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = 10) AND (\"orgs\".\"id\" IS NOT NULL)))) AND (\"id\" = 16)) LIMIT 1"
+      }
+    ]
+  }
+]

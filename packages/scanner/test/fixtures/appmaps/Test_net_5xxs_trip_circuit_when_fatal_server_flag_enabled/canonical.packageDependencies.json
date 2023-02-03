@@ -1,0 +1,30 @@
+[
+  {
+    "caller": "lib",
+    "callee": "ruby"
+  },
+  {
+    "caller": "ruby",
+    "callee": "lib"
+  },
+  {
+    "caller": "semian:31050",
+    "callee": "lib"
+  },
+  {
+    "caller": "toxiproxy",
+    "callee": "json"
+  },
+  {
+    "caller": "toxiproxy",
+    "callee": "lib"
+  },
+  {
+    "caller": "toxiproxy",
+    "callee": "toxiproxy:8474"
+  },
+  {
+    "caller": "toxiproxy:8474",
+    "callee": "lib"
+  }
+]

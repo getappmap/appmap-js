@@ -1,0 +1,7 @@
+[
+  {
+    "route": "POST /admincp/users/",
+    "parameters": "(sort,direction,redirected,action,selected_items)",
+    "status": 302
+  }
+]

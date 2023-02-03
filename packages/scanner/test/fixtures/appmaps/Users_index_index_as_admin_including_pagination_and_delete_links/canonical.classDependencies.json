@@ -1,0 +1,370 @@
+[
+  {
+    "caller": "HTTP server requests->DELETE /users/{id}",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "HTTP server requests->GET /users",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "HTTP server requests->POST /login",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "activerecord/ActiveRecord"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/controllers/SessionsController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/controllers/UsersController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/views/app_views_users_index_html_erb"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "string/String"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "string/String"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "Database->DELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = ?"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "Database->RELEASE SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "Database->SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "Database->SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "Database->SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "Database->SELECT \"users\".* FROM \"users\" LIMIT ? OFFSET ?"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "Database->SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "Database->SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "Database->SELECT sql FROM\n  (SELECT * FROM sqlite_master UNION ALL\n   SELECT * FROM sqlite_temp_master)\nWHERE type = 'table' AND name = 'active_storage_attachments'\n"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "Database->UPDATE \"users\" SET \"remember_digest\" = ?, \"updated_at\" = ? WHERE \"users\".\"id\" = ?"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "app/helpers/UsersHelper"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "sqlite3/SQLite3"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "string/Module"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "string/String"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "Database->DELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = ?"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "Database->DELETE FROM \"relationships\" WHERE \"relationships\".\"id\" = ?"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "Database->PRAGMA table_info(\"active_storage_attachments\")"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "Database->SELECT \"relationships\".* FROM \"relationships\" WHERE \"relationships\".\"followed_id\" = ?"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "Database->SELECT \"relationships\".* FROM \"relationships\" WHERE \"relationships\".\"follower_id\" = ?"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "activerecord/ActiveRecord"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "activerecord/User"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "app/helpers/LoggedInHelper"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "sqlite3/SQLite3"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "string/Module"
+  },
+  {
+    "caller": "app/controllers/SessionsController",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "app/controllers/SessionsController",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/controllers/SessionsController",
+    "callee": "activerecord/ActiveRecord"
+  },
+  {
+    "caller": "app/controllers/SessionsController",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/controllers/SessionsController",
+    "callee": "string/String"
+  },
+  {
+    "caller": "app/controllers/UsersController",
+    "callee": "Database->DELETE FROM \"users\" WHERE \"users\".\"id\" = ?"
+  },
+  {
+    "caller": "app/controllers/UsersController",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "app/controllers/UsersController",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/controllers/UsersController",
+    "callee": "activerecord/ActiveRecord"
+  },
+  {
+    "caller": "app/controllers/UsersController",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "app/controllers/UsersController",
+    "callee": "sqlite3/SQLite3"
+  },
+  {
+    "caller": "app/controllers/UsersController",
+    "callee": "string/String"
+  },
+  {
+    "caller": "app/helpers/LoggedInHelper",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/helpers/SessionsHelper",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/helpers/SessionsHelper",
+    "callee": "activerecord/ActiveRecord"
+  },
+  {
+    "caller": "app/helpers/SessionsHelper",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "app/helpers/SessionsHelper",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/helpers/SessionsHelper",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "app/helpers/UsersHelper",
+    "callee": "activerecord/ActiveRecord"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "activerecord/ActiveRecord"
+  },
+  {
+    "caller": "app/views/app_views_layouts__footer_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_layouts__footer_html_erb",
+    "callee": "activerecord/ActiveRecord"
+  },
+  {
+    "caller": "app/views/app_views_layouts__footer_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_layouts__header_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_layouts__header_html_erb",
+    "callee": "activerecord/ActiveRecord"
+  },
+  {
+    "caller": "app/views/app_views_layouts__header_html_erb",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/views/app_views_layouts__header_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_layouts__shim_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_layouts__shim_html_erb",
+    "callee": "activerecord/ActiveRecord"
+  },
+  {
+    "caller": "app/views/app_views_layouts__shim_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_users__user_html_erb",
+    "callee": "Database->SELECT COUNT(*) FROM \"users\""
+  },
+  {
+    "caller": "app/views/app_views_users__user_html_erb",
+    "callee": "Database->SELECT \"users\".* FROM \"users\" LIMIT ? OFFSET ?"
+  },
+  {
+    "caller": "app/views/app_views_users__user_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_users__user_html_erb",
+    "callee": "activerecord/ActiveRecord"
+  },
+  {
+    "caller": "app/views/app_views_users__user_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_users_index_html_erb",
+    "callee": "Database->SELECT COUNT(*) FROM \"users\""
+  },
+  {
+    "caller": "app/views/app_views_users_index_html_erb",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/views/app_views_users_index_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_users_index_html_erb",
+    "callee": "activerecord/ActiveRecord"
+  },
+  {
+    "caller": "app/views/app_views_users_index_html_erb",
+    "callee": "app/helpers/ApplicationHelper"
+  },
+  {
+    "caller": "app/views/app_views_users_index_html_erb",
+    "callee": "app/views/app_views_layouts__footer_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_index_html_erb",
+    "callee": "app/views/app_views_layouts__header_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_index_html_erb",
+    "callee": "app/views/app_views_layouts__shim_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_index_html_erb",
+    "callee": "app/views/app_views_users__user_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_index_html_erb",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/views/app_views_users_index_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_users_index_html_erb",
+    "callee": "sqlite3/SQLite3"
+  },
+  {
+    "caller": "app/views/app_views_users_index_html_erb",
+    "callee": "string/Module"
+  },
+  {
+    "caller": "app/views/app_views_users_index_html_erb",
+    "callee": "string/String"
+  }
+]

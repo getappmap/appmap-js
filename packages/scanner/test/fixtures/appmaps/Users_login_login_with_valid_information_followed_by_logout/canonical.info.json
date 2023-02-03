@@ -1,0 +1,2048 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "GET /login",
+    "parameter_names": [
+      "controller",
+      "action"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "public"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.template"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "security.authentication"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "POST /login",
+    "parameter_names": [
+      "session",
+      "controller",
+      "action"
+    ],
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "public",
+              "security.login"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [
+                      "select"
+                    ],
+                    "tables": [
+                      "users"
+                    ],
+                    "columns": [
+                      "users.*",
+                      "users.email"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "http.session.write",
+                      "http.session.clear"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /users/{id}",
+    "parameter_names": [
+      "controller",
+      "action",
+      "id"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.decrypt"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [
+                  "select"
+                ],
+                "tables": [
+                  "users"
+                ],
+                "columns": [
+                  "users.*",
+                  "users.id"
+                ],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.template"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "relationships",
+                          "users"
+                        ],
+                        "columns": [
+                          "*",
+                          "relationships.followed_id",
+                          "relationships.follower_id",
+                          "users.id"
+                        ],
+                        "joinCount": 1
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "relationships",
+                          "users"
+                        ],
+                        "columns": [
+                          "*",
+                          "relationships.followed_id",
+                          "relationships.follower_id",
+                          "users.id"
+                        ],
+                        "joinCount": 1
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "security.authentication"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "users"
+                        ],
+                        "columns": [
+                          "users.*",
+                          "users.id"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [
+                      "select"
+                    ],
+                    "tables": [
+                      "microposts"
+                    ],
+                    "columns": [
+                      "microposts.user_id"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [
+                      "select"
+                    ],
+                    "tables": [
+                      "microposts"
+                    ],
+                    "columns": [
+                      "*",
+                      "microposts.user_id"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "microposts"
+                            ],
+                            "columns": [
+                              "microposts.*",
+                              "microposts.created_at",
+                              "microposts.user_id"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": [
+                          "log"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": [
+                              "select"
+                            ],
+                            "tables": [
+                              "active_storage_attachments"
+                            ],
+                            "columns": [
+                              "active_storage_attachments.*",
+                              "active_storage_attachments.name",
+                              "active_storage_attachments.record_id",
+                              "active_storage_attachments.record_type"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [
+                      "select"
+                    ],
+                    "tables": [
+                      "microposts"
+                    ],
+                    "columns": [
+                      "*",
+                      "microposts.user_id"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "security.authentication"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "DELETE /logout",
+    "parameter_names": [
+      "controller",
+      "action"
+    ],
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "crypto.decrypt"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "security.logout"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "security.authentication"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": [
+                          "select"
+                        ],
+                        "tables": [
+                          "users"
+                        ],
+                        "columns": [
+                          "users.*",
+                          "users.id"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "http.session.write"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

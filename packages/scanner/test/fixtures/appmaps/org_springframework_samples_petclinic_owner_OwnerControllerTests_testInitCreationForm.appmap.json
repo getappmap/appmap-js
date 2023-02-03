@@ -8,13 +8,13 @@
         "protocol": "HTTP/1.1",
         "request_method": "GET"
       },
-      "id": 1037,
+      "id": 1,
       "thread_id": 1
     },
     {
       "defined_class": "org.springframework.samples.petclinic.owner.OwnerController",
       "event": "call",
-      "id": 1043,
+      "id": 2,
       "lineno": 60,
       "method_id": "initCreationForm",
       "parameters": [
@@ -37,8 +37,8 @@
     },
     {
       "event": "return",
-      "id": 1044,
-      "parent_id": 1043,
+      "id": 3,
+      "parent_id": 2,
       "return_value": {
         "class": "java.lang.String",
         "object_id": 1351131989,
@@ -49,7 +49,7 @@
     {
       "defined_class": "org.springframework.samples.petclinic.owner.OwnerController",
       "event": "call",
-      "id": 1045,
+      "id": 4,
       "lineno": 55,
       "method_id": "setAllowedFields",
       "parameters": [
@@ -72,14 +72,14 @@
     },
     {
       "event": "return",
-      "id": 1046,
-      "parent_id": 1045,
+      "id": 5,
+      "parent_id": 4,
       "thread_id": 1
     },
     {
       "defined_class": "org.springframework.samples.petclinic.model.BaseEntity",
       "event": "call",
-      "id": 1047,
+      "id": 6,
       "lineno": 48,
       "method_id": "isNew",
       "path": "org/springframework/samples/petclinic/model/BaseEntity.java",
@@ -93,8 +93,8 @@
     },
     {
       "event": "return",
-      "id": 1048,
-      "parent_id": 1047,
+      "id": 7,
+      "parent_id": 6,
       "return_value": {
         "class": "java.lang.Boolean",
         "object_id": 1096995325,
@@ -110,14 +110,14 @@
           "Content-Type": "text/html;charset=UTF-8"
         }
       },
-      "id": 1049,
-      "parent_id": 1037,
+      "id": 8,
+      "parent_id": 1,
       "thread_id": 1
     },
     {
       "defined_class": "org.springframework.samples.petclinic.model.BaseEntity",
       "event": "call",
-      "id": 1050,
+      "id": 9,
       "lineno": 48,
       "method_id": "isNew",
       "path": "org/springframework/samples/petclinic/model/BaseEntity.java",
@@ -131,86 +131,14 @@
     },
     {
       "event": "return",
-      "id": 1051,
-      "parent_id": 1050,
+      "id": 10,
+      "parent_id": 9,
       "return_value": {
         "class": "java.lang.Boolean",
         "object_id": 1332876062,
         "value": "true"
       },
       "thread_id": 1
-    }
-  ],
-  "classMap": [
-    {
-      "children": [
-        {
-          "children": [
-            {
-              "children": [
-                {
-                  "children": [
-                    {
-                      "children": [
-                        {
-                          "children": [
-                            {
-                              "location": "org/springframework/samples/petclinic/owner/OwnerController.java:55",
-                              "name": "setAllowedFields",
-                              "static": false,
-                              "type": "function"
-                            },
-                            {
-                              "location": "org/springframework/samples/petclinic/owner/OwnerController.java:60",
-                              "name": "initCreationForm",
-                              "static": false,
-                              "type": "function"
-                            }
-                          ],
-                          "location": "org/springframework/samples/petclinic/owner/OwnerController.java",
-                          "name": "OwnerController",
-                          "static": false,
-                          "type": "class"
-                        }
-                      ],
-                      "name": "owner",
-                      "type": "package"
-                    },
-                    {
-                      "children": [
-                        {
-                          "children": [
-                            {
-                              "location": "org/springframework/samples/petclinic/model/BaseEntity.java:48",
-                              "name": "isNew",
-                              "static": false,
-                              "type": "function"
-                            }
-                          ],
-                          "location": "org/springframework/samples/petclinic/model/BaseEntity.java",
-                          "name": "BaseEntity",
-                          "static": false,
-                          "type": "class"
-                        }
-                      ],
-                      "name": "model",
-                      "type": "package"
-                    }
-                  ],
-                  "name": "petclinic",
-                  "type": "package"
-                }
-              ],
-              "name": "samples",
-              "type": "package"
-            }
-          ],
-          "name": "springframework",
-          "type": "package"
-        }
-      ],
-      "name": "org",
-      "type": "package"
     }
   ],
   "version": "1.2",
@@ -308,9 +236,87 @@
       {
         "appmap_digest": "5428a81b9f6a8835b48836633524a8fc63310d133eac843c0324a928b653ffe5",
         "canonicalization_algorithm": "update",
-        "digest": "bdaf8f883efc947b9fcafd223dd7c377f0fbd51042de503759cf33b93c503b72",
+        "digest": "69308ca941f88b34c2b2cde2b04cdc74c1091425018b2949b7da5dd21f4c01f7",
         "fingerprint_algorithm": "sha256"
       }
     ]
-  }
+  },
+  "classMap": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "name": "setAllowedFields",
+                              "type": "function",
+                              "static": false,
+                              "location": "org/springframework/samples/petclinic/owner/OwnerController.java:55"
+                            },
+                            {
+                              "name": "initCreationForm",
+                              "type": "function",
+                              "static": false,
+                              "location": "org/springframework/samples/petclinic/owner/OwnerController.java:60"
+                            }
+                          ],
+                          "name": "OwnerController",
+                          "type": "class"
+                        }
+                      ],
+                      "name": "owner",
+                      "type": "package"
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "name": "isNew",
+                              "type": "function",
+                              "static": false,
+                              "location": "org/springframework/samples/petclinic/model/BaseEntity.java:48"
+                            }
+                          ],
+                          "name": "BaseEntity",
+                          "type": "class"
+                        }
+                      ],
+                      "name": "model",
+                      "type": "package"
+                    }
+                  ],
+                  "name": "petclinic",
+                  "type": "package"
+                }
+              ],
+              "name": "samples",
+              "type": "package"
+            }
+          ],
+          "name": "springframework",
+          "type": "package"
+        }
+      ],
+      "name": "org",
+      "type": "package"
+    },
+    {
+      "type": "http",
+      "name": "HTTP server requests",
+      "children": [
+        {
+          "type": "route",
+          "name": "GET /owners/new"
+        }
+      ]
+    }
+  ]
 }

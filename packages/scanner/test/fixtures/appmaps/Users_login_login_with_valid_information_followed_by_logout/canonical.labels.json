@@ -1,0 +1,19 @@
+[
+  "crypto.decrypt",
+  "dao.materialize",
+  "deserialize",
+  "format.json.parse",
+  "http.session.clear",
+  "http.session.read",
+  "http.session.write",
+  "log",
+  "mvc.after_action",
+  "mvc.before_action",
+  "mvc.controller",
+  "mvc.template",
+  "mvc.template.resolver",
+  "public",
+  "security.authentication",
+  "security.login",
+  "security.logout"
+]

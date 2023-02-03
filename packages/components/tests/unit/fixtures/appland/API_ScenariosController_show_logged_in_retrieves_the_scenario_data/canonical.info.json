@@ -1,0 +1,170 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "GET /api/scenarios/:id(.:format)",
+    "parameter_names": ["mode", "controller", "action", "id"],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["provider.authentication"],
+        "children": [
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["select"],
+                "tables": ["api_keys"],
+                "columns": ["*", "login"],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["update"],
+                "tables": ["api_keys"],
+                "columns": ["id", "last_used"],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["select"],
+                "tables": ["users"],
+                "columns": ["*", "users.login"],
+                "joinCount": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["users"],
+            "columns": ["*", "id"],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["apps", "mapsets", "orgs", "scenarios", "users_orgs"],
+            "columns": [
+              "apps.id",
+              "apps.org_id",
+              "id",
+              "link_sharing",
+              "mapsets.app_id",
+              "mapsets.id",
+              "orgs.id",
+              "public",
+              "scenarios.mapset_id",
+              "scenarios.org_id",
+              "true",
+              "users_orgs.org_id",
+              "users_orgs.user_id",
+              "uuid"
+            ],
+            "joinCount": 2
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["scenarios"],
+            "columns": ["*", "id"],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["mapsets"],
+            "columns": ["*", "id"],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["apps"],
+            "columns": ["*", "id"],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["scenarios"],
+            "columns": ["id", "updated_at"],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      }
+    ]
+  }
+]

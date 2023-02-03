@@ -1,0 +1,852 @@
+{
+  "configuration": {
+    "checks": [
+      {
+        "rule": "authz-before-authn"
+      },
+      {
+        "rule": "deprecated-crypto-algorithm"
+      },
+      {
+        "rule": "deserialization-of-untrusted-data"
+      },
+      {
+        "rule": "exec-of-untrusted-command"
+      },
+      {
+        "rule": "http-500"
+      },
+      {
+        "rule": "logout-without-session-reset"
+      },
+      {
+        "rule": "missing-content-type"
+      },
+      {
+        "rule": "n-plus-one-query"
+      },
+      {
+        "rule": "secret-in-log"
+      },
+      {
+        "rule": "too-many-joins"
+      },
+      {
+        "rule": "too-many-updates"
+      },
+      {
+        "rule": "unauthenticated-encryption"
+      },
+      {
+        "rule": "update-in-get-request"
+      }
+    ],
+    "timestampMs": 1675346609376.2805
+  },
+  "appMapMetadata": {
+    "/Users/danwarner/Documents/PROJECTS/appmap-js/packages/cli/tests/unit/fixtures/stats/appmap/Password_resets_password_resets.appmap.json": {
+      "name": "Password_resets password resets",
+      "source_location": "/home/test/src/sample_app_6th_ed/test/integration/password_resets_test.rb:10",
+      "test_status": "succeeded",
+      "fingerprints": [
+        {
+          "appmap_digest": "40ef0c77728024a6b5e7cb6390a90afb7170cc7667b66517a4e4f6353e3ce860",
+          "canonicalization_algorithm": "classDependencies",
+          "digest": "9de9d06663e51860f6ba09d6ca46bd1e66cf06675651545f27f42bed666fe90d",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "40ef0c77728024a6b5e7cb6390a90afb7170cc7667b66517a4e4f6353e3ce860",
+          "canonicalization_algorithm": "classes",
+          "digest": "f7694aeccac0bcdbc97fa050b1da61f04dc66d03a484153e0edf5a2131a599ef",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "40ef0c77728024a6b5e7cb6390a90afb7170cc7667b66517a4e4f6353e3ce860",
+          "canonicalization_algorithm": "httpClientRequests",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "40ef0c77728024a6b5e7cb6390a90afb7170cc7667b66517a4e4f6353e3ce860",
+          "canonicalization_algorithm": "httpServerRequests",
+          "digest": "f917cb114cb3af72c9e7968717c0b8246b957cef3d0ae81cf70269b07efc8608",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "40ef0c77728024a6b5e7cb6390a90afb7170cc7667b66517a4e4f6353e3ce860",
+          "canonicalization_algorithm": "info",
+          "digest": "c2334fb40f925d877a01da66c6ab6c9f826e9a5550e264d975a31a4043b22c1a",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "40ef0c77728024a6b5e7cb6390a90afb7170cc7667b66517a4e4f6353e3ce860",
+          "canonicalization_algorithm": "labels",
+          "digest": "6d9b376ec00eca6143e43b190ae6f39476eead7f38bc1316e77a5a779f267302",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "40ef0c77728024a6b5e7cb6390a90afb7170cc7667b66517a4e4f6353e3ce860",
+          "canonicalization_algorithm": "packageDependencies",
+          "digest": "b5b3df0c1c005d3aa025413becf9f714e70ba0634fab21393d2b198dc4ad580f",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "40ef0c77728024a6b5e7cb6390a90afb7170cc7667b66517a4e4f6353e3ce860",
+          "canonicalization_algorithm": "packages",
+          "digest": "9ec9dd29a752612f356a32338e17023eb38f74e9cf0287ab9a4caab716eeb3ef",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "40ef0c77728024a6b5e7cb6390a90afb7170cc7667b66517a4e4f6353e3ce860",
+          "canonicalization_algorithm": "sqlNormalized",
+          "digest": "9f85f7d426a90aae8ed5c3c3ac459c3521a10de8fbc6e972cdeb9305a7159d7b",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "40ef0c77728024a6b5e7cb6390a90afb7170cc7667b66517a4e4f6353e3ce860",
+          "canonicalization_algorithm": "sqlTables",
+          "digest": "155dfea9984015042d2dbb19f93b1e983a068c6946247866d578c2a40dd9a909",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "40ef0c77728024a6b5e7cb6390a90afb7170cc7667b66517a4e4f6353e3ce860",
+          "canonicalization_algorithm": "trace",
+          "digest": "3840146127732c3019f6ded0de5a616a5f9024083f24db824c48c2c6e813946e",
+          "fingerprint_algorithm": "sha256"
+        },
+        {
+          "appmap_digest": "40ef0c77728024a6b5e7cb6390a90afb7170cc7667b66517a4e4f6353e3ce860",
+          "canonicalization_algorithm": "update",
+          "digest": "b15aab601afa569f713be680796f1dbeb4b2092749388b23d70a94d4e2120bff",
+          "fingerprint_algorithm": "sha256"
+        }
+      ]
+    }
+  },
+  "findings": [
+    {
+      "appMapFile": "/Users/danwarner/Documents/PROJECTS/appmap-js/packages/cli/tests/unit/fixtures/stats/appmap/Password_resets_password_resets.appmap.json",
+      "checkId": "deserialization-of-untrusted-data",
+      "ruleId": "deserialization-of-untrusted-data",
+      "ruleTitle": "Deserialization of untrusted data",
+      "event": {
+        "id": 727,
+        "event": "call",
+        "thread_id": 4640,
+        "defined_class": "Psych",
+        "method_id": "load",
+        "path": "/home/test/.rbenv/versions/3.0.1/lib/ruby/3.0.0/psych.rb",
+        "lineno": 274,
+        "static": true,
+        "parameters": [
+          {
+            "name": "yaml",
+            "class": "String",
+            "object_id": 212760,
+            "value": "---\noperation: reset\nsecret: !binary |-\n  JAemTJsdyua4cY0wnGp2SDWIAI3cPuAXWuVa9EZBXyEXjKyBnSFjcSNqML (...211 more characters)",
+            "kind": "req"
+          },
+          {
+            "name": "legacy_filename",
+            "class": "NilClass",
+            "object_id": 8,
+            "value": null,
+            "kind": "opt"
+          },
+          {
+            "name": "filename",
+            "class": "NilClass",
+            "object_id": 8,
+            "value": null,
+            "kind": "key"
+          },
+          {
+            "name": "fallback",
+            "class": "NilClass",
+            "object_id": 8,
+            "value": null,
+            "kind": "key"
+          },
+          {
+            "name": "symbolize_names",
+            "class": "NilClass",
+            "object_id": 8,
+            "value": null,
+            "kind": "key"
+          },
+          {
+            "name": "freeze",
+            "class": "NilClass",
+            "object_id": 8,
+            "value": null,
+            "kind": "key"
+          }
+        ],
+        "receiver": {
+          "class": "Module",
+          "object_id": 27820,
+          "value": "Psych"
+        }
+      },
+      "hash": "a96aed3fc7dc2515d9ea1475b500ffd4fded710d8fa20d080abe025045630812",
+      "hash_v2": "5029373729e1556d3596a2cd5696dfd928e5607f86cc2f1f81a937a1623e2f40",
+      "stack": [
+        "/home/test/.rbenv/versions/3.0.1/lib/ruby/3.0.0/psych.rb:274",
+        "app/models/user.rb:51",
+        "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb:512",
+        "/home/test/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19"
+      ],
+      "scope": {
+        "id": 681,
+        "event": "call",
+        "thread_id": 4640,
+        "http_server_request": {
+          "request_method": "GET",
+          "path_info": "/password_resets/LS0tCm9wZXJhdGlvbjogcmVzZXQKc2VjcmV0OiAhYmluYXJ5IHwtCiAgSkFlbVRKc2R5dWE0Y1kwd25HcDJTRFdJQUkzY1B1QVhXdVZhOUVaQlh5RVhqS3lCblNGamNTTnFNTDdCcVFJbWNjZFNsUnNYSVVIYStMVE5SVzhPSzI5Tlp6RGJ5SUpoTC9mU0NreDE0M3IzaU91eFQwamlBTWdXWjFKYUtGVlNjS3pPblB2K3NDcWV0RlpUZGJpaXFabjdaWC90bVQxVDJKMEtYWXFqTXh3cmdOVVllRisyd2JMa2ZXeVdTZ1JMME82cU9jeXpKbnFmcHVBeUgwV0pYVnAzOHF2U1lhTVNBQ2VReU10a2tnYU1kaE5vUHZtQkhQcWRSN0NMQjFUK3ZibkgzMUFIcHNBPQo=/edit",
+          "normalized_path_info": "/password_resets/{id}/edit",
+          "headers": {
+            "Host": "www.example.com",
+            "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
+            "Cookie": "_sample_app_session=sHoSpbJ2NdqnP9xuTDBw3o834vojsGwxy1RFCq6i0H8b5u0QfwUScKZppiRgbd%2F2F0HUyulct%2Fz%2BcsvUl%2BGoffCTWfFSxmeI95a%2F3163snh16S1sLtt0BXU9bzNx3QSgTsemC42pdBFGsUGgTvbuokzmwE2l2UQOl4aLAVC65KEsrqOb5VHjqOUtfN%2BuKds2igmHJubxzrCJd%2FFFfDQAKnwEb8wFdrIR1bzIc6TYH3qaOx%2B0HHj%2B%2Bojq%2BSpIG9lz8Q6MoWMy4pmRTIBrxi2GQDaHKjS%2FGhXk2%2BodUiEiKlji0YnHz4zuCvifw19%2BZXKuprfroTS4pVn%2FS2%2BqS1qA--UurBRqGeMJ7sEoHU--BKoy%2FK9J4rdhWsGcc9M5aw%3D%3D",
+            "Content-Length": "0"
+          }
+        },
+        "message": [
+          {
+            "name": "email",
+            "class": "String",
+            "value": "michael@example.com",
+            "object_id": 222260
+          },
+          {
+            "name": "controller",
+            "class": "String",
+            "value": "password_resets",
+            "object_id": 221920
+          },
+          {
+            "name": "action",
+            "class": "String",
+            "value": "edit",
+            "object_id": 92020
+          },
+          {
+            "name": "id",
+            "class": "String",
+            "value": "LS0tCm9wZXJhdGlvbjogcmVzZXQKc2VjcmV0OiAhYmluYXJ5IHwtCiAgSkFlbVRKc2R5dWE0Y1kwd25HcDJTRFdJQUkzY1B1QVhX (...316 more characters)",
+            "object_id": 212700
+          }
+        ]
+      },
+      "message": "deserializes untrusted data: ---\noperation: reset\nsecret: !binary |-\n  JAemTJsdyua4cY0wnGp2SDWIAI3cPuAXWuVa9EZBXyEXjKyBnSFjcSNqML (...211 more characters)",
+      "relatedEvents": [
+        {
+          "id": 727,
+          "event": "call",
+          "thread_id": 4640,
+          "defined_class": "Psych",
+          "method_id": "load",
+          "path": "/home/test/.rbenv/versions/3.0.1/lib/ruby/3.0.0/psych.rb",
+          "lineno": 274,
+          "static": true,
+          "parameters": [
+            {
+              "name": "yaml",
+              "class": "String",
+              "object_id": 212760,
+              "value": "---\noperation: reset\nsecret: !binary |-\n  JAemTJsdyua4cY0wnGp2SDWIAI3cPuAXWuVa9EZBXyEXjKyBnSFjcSNqML (...211 more characters)",
+              "kind": "req"
+            },
+            {
+              "name": "legacy_filename",
+              "class": "NilClass",
+              "object_id": 8,
+              "value": null,
+              "kind": "opt"
+            },
+            {
+              "name": "filename",
+              "class": "NilClass",
+              "object_id": 8,
+              "value": null,
+              "kind": "key"
+            },
+            {
+              "name": "fallback",
+              "class": "NilClass",
+              "object_id": 8,
+              "value": null,
+              "kind": "key"
+            },
+            {
+              "name": "symbolize_names",
+              "class": "NilClass",
+              "object_id": 8,
+              "value": null,
+              "kind": "key"
+            },
+            {
+              "name": "freeze",
+              "class": "NilClass",
+              "object_id": 8,
+              "value": null,
+              "kind": "key"
+            }
+          ],
+          "receiver": {
+            "class": "Module",
+            "object_id": 27820,
+            "value": "Psych"
+          }
+        },
+        {
+          "id": 725,
+          "event": "call",
+          "thread_id": 4640,
+          "defined_class": "String",
+          "method_id": "unpack1",
+          "path": "<internal:pack>",
+          "lineno": 280,
+          "static": false,
+          "parameters": [
+            {
+              "name": "fmt",
+              "class": "String",
+              "object_id": 60660,
+              "value": "m0",
+              "kind": "req"
+            }
+          ],
+          "receiver": {
+            "class": "String",
+            "object_id": 212740,
+            "value": "LS0tCm9wZXJhdGlvbjogcmVzZXQKc2VjcmV0OiAhYmluYXJ5IHwtCiAgSkFlbVRKc2R5dWE0Y1kwd25HcDJTRFdJQUkzY1B1QVhX (...316 more characters)"
+          }
+        },
+        {
+          "id": 681,
+          "event": "call",
+          "thread_id": 4640,
+          "http_server_request": {
+            "request_method": "GET",
+            "path_info": "/password_resets/LS0tCm9wZXJhdGlvbjogcmVzZXQKc2VjcmV0OiAhYmluYXJ5IHwtCiAgSkFlbVRKc2R5dWE0Y1kwd25HcDJTRFdJQUkzY1B1QVhXdVZhOUVaQlh5RVhqS3lCblNGamNTTnFNTDdCcVFJbWNjZFNsUnNYSVVIYStMVE5SVzhPSzI5Tlp6RGJ5SUpoTC9mU0NreDE0M3IzaU91eFQwamlBTWdXWjFKYUtGVlNjS3pPblB2K3NDcWV0RlpUZGJpaXFabjdaWC90bVQxVDJKMEtYWXFqTXh3cmdOVVllRisyd2JMa2ZXeVdTZ1JMME82cU9jeXpKbnFmcHVBeUgwV0pYVnAzOHF2U1lhTVNBQ2VReU10a2tnYU1kaE5vUHZtQkhQcWRSN0NMQjFUK3ZibkgzMUFIcHNBPQo=/edit",
+            "normalized_path_info": "/password_resets/{id}/edit",
+            "headers": {
+              "Host": "www.example.com",
+              "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
+              "Cookie": "_sample_app_session=sHoSpbJ2NdqnP9xuTDBw3o834vojsGwxy1RFCq6i0H8b5u0QfwUScKZppiRgbd%2F2F0HUyulct%2Fz%2BcsvUl%2BGoffCTWfFSxmeI95a%2F3163snh16S1sLtt0BXU9bzNx3QSgTsemC42pdBFGsUGgTvbuokzmwE2l2UQOl4aLAVC65KEsrqOb5VHjqOUtfN%2BuKds2igmHJubxzrCJd%2FFFfDQAKnwEb8wFdrIR1bzIc6TYH3qaOx%2B0HHj%2B%2Bojq%2BSpIG9lz8Q6MoWMy4pmRTIBrxi2GQDaHKjS%2FGhXk2%2BodUiEiKlji0YnHz4zuCvifw19%2BZXKuprfroTS4pVn%2FS2%2BqS1qA--UurBRqGeMJ7sEoHU--BKoy%2FK9J4rdhWsGcc9M5aw%3D%3D",
+              "Content-Length": "0"
+            }
+          },
+          "message": [
+            {
+              "name": "email",
+              "class": "String",
+              "value": "michael@example.com",
+              "object_id": 222260
+            },
+            {
+              "name": "controller",
+              "class": "String",
+              "value": "password_resets",
+              "object_id": 221920
+            },
+            {
+              "name": "action",
+              "class": "String",
+              "value": "edit",
+              "object_id": 92020
+            },
+            {
+              "name": "id",
+              "class": "String",
+              "value": "LS0tCm9wZXJhdGlvbjogcmVzZXQKc2VjcmV0OiAhYmluYXJ5IHwtCiAgSkFlbVRKc2R5dWE0Y1kwd25HcDJTRFdJQUkzY1B1QVhX (...316 more characters)",
+              "object_id": 212700
+            }
+          ]
+        }
+      ],
+      "impactDomain": "Security",
+      "participatingEvents": {
+        "origin[0][0]": {
+          "id": 725,
+          "event": "call",
+          "thread_id": 4640,
+          "defined_class": "String",
+          "method_id": "unpack1",
+          "path": "<internal:pack>",
+          "lineno": 280,
+          "static": false,
+          "parameters": [
+            {
+              "name": "fmt",
+              "class": "String",
+              "object_id": 60660,
+              "value": "m0",
+              "kind": "req"
+            }
+          ],
+          "receiver": {
+            "class": "String",
+            "object_id": 212740,
+            "value": "LS0tCm9wZXJhdGlvbjogcmVzZXQKc2VjcmV0OiAhYmluYXJ5IHwtCiAgSkFlbVRKc2R5dWE0Y1kwd25HcDJTRFdJQUkzY1B1QVhX (...316 more characters)"
+          }
+        },
+        "origin[0][1]": {
+          "id": 681,
+          "event": "call",
+          "thread_id": 4640,
+          "http_server_request": {
+            "request_method": "GET",
+            "path_info": "/password_resets/LS0tCm9wZXJhdGlvbjogcmVzZXQKc2VjcmV0OiAhYmluYXJ5IHwtCiAgSkFlbVRKc2R5dWE0Y1kwd25HcDJTRFdJQUkzY1B1QVhXdVZhOUVaQlh5RVhqS3lCblNGamNTTnFNTDdCcVFJbWNjZFNsUnNYSVVIYStMVE5SVzhPSzI5Tlp6RGJ5SUpoTC9mU0NreDE0M3IzaU91eFQwamlBTWdXWjFKYUtGVlNjS3pPblB2K3NDcWV0RlpUZGJpaXFabjdaWC90bVQxVDJKMEtYWXFqTXh3cmdOVVllRisyd2JMa2ZXeVdTZ1JMME82cU9jeXpKbnFmcHVBeUgwV0pYVnAzOHF2U1lhTVNBQ2VReU10a2tnYU1kaE5vUHZtQkhQcWRSN0NMQjFUK3ZibkgzMUFIcHNBPQo=/edit",
+            "normalized_path_info": "/password_resets/{id}/edit",
+            "headers": {
+              "Host": "www.example.com",
+              "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
+              "Cookie": "_sample_app_session=sHoSpbJ2NdqnP9xuTDBw3o834vojsGwxy1RFCq6i0H8b5u0QfwUScKZppiRgbd%2F2F0HUyulct%2Fz%2BcsvUl%2BGoffCTWfFSxmeI95a%2F3163snh16S1sLtt0BXU9bzNx3QSgTsemC42pdBFGsUGgTvbuokzmwE2l2UQOl4aLAVC65KEsrqOb5VHjqOUtfN%2BuKds2igmHJubxzrCJd%2FFFfDQAKnwEb8wFdrIR1bzIc6TYH3qaOx%2B0HHj%2B%2Bojq%2BSpIG9lz8Q6MoWMy4pmRTIBrxi2GQDaHKjS%2FGhXk2%2BodUiEiKlji0YnHz4zuCvifw19%2BZXKuprfroTS4pVn%2FS2%2BqS1qA--UurBRqGeMJ7sEoHU--BKoy%2FK9J4rdhWsGcc9M5aw%3D%3D",
+              "Content-Length": "0"
+            }
+          },
+          "message": [
+            {
+              "name": "email",
+              "class": "String",
+              "value": "michael@example.com",
+              "object_id": 222260
+            },
+            {
+              "name": "controller",
+              "class": "String",
+              "value": "password_resets",
+              "object_id": 221920
+            },
+            {
+              "name": "action",
+              "class": "String",
+              "value": "edit",
+              "object_id": 92020
+            },
+            {
+              "name": "id",
+              "class": "String",
+              "value": "LS0tCm9wZXJhdGlvbjogcmVzZXQKc2VjcmV0OiAhYmluYXJ5IHwtCiAgSkFlbVRKc2R5dWE0Y1kwd25HcDJTRFdJQUkzY1B1QVhX (...316 more characters)",
+              "object_id": 212700
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "checks": [
+    {
+      "rule": {
+        "id": "authz-before-authn",
+        "title": "Authorization performed before authentication",
+        "labels": ["security.authorization", "security.authentication"],
+        "scope": "http_server_request",
+        "impactDomain": "Security",
+        "enumerateScope": false,
+        "references": {
+          "CWE-863": "https://cwe.mitre.org/data/definitions/863.html"
+        },
+        "description": "Determines when authorization logic is applied to a user identity that has not been properly verified. Because the the user's identity has not been verified yet, the outcome of the authorization check cannot be trusted. A malicious user might be able to get themselves authorized as a different user than they really are - or they may not be logged in at all.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#authz-before-authn"
+      },
+      "id": "authz-before-authn",
+      "options": {},
+      "scope": "http_server_request",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Security"
+    },
+    {
+      "rule": {
+        "id": "deprecated-crypto-algorithm",
+        "title": "Deprecated cryptographic algorithm",
+        "description": "---\nrule: deprecated-crypto-algorithm\nname: Deprecated crypto algorithm\ntitle: Deprecated cryptographic algorithm\nreferences:\n  A02:2021: https://owasp.org/Top10/A02_2021-Cryptographic_Failures/\nimpactDomain: Security\nlabels:\n  - crypto.encrypt\n  - crypto.decrypt\n  - crypto.digest\nscope: root\n---\n\nEnsure that cryptographic operations do not use deprecated algorithms.\n",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#deprecated-crypto-algorithm",
+        "labels": ["crypto.encrypt", "crypto.decrypt", "crypto.digest"],
+        "scope": "root",
+        "enumerateScope": true,
+        "impactDomain": "Security",
+        "references": {
+          "A02:2021": "https://owasp.org/Top10/A02_2021-Cryptographic_Failures/"
+        }
+      },
+      "id": "deprecated-crypto-algorithm",
+      "options": {},
+      "scope": "root",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Security"
+    },
+    {
+      "rule": {
+        "id": "deserialization-of-untrusted-data",
+        "title": "Deserialization of untrusted data",
+        "labels": ["deserialize.unsafe", "deserialize.safe", "deserialize.sanitize"],
+        "impactDomain": "Security",
+        "enumerateScope": false,
+        "scope": "http_server_request",
+        "references": {
+          "CWE-502": "https://cwe.mitre.org/data/definitions/502.html",
+          "Ruby Security": "https://docs.ruby-lang.org/en/3.0/doc/security_rdoc.html"
+        },
+        "description": "Finds occurrances of deserialization in which the mechanism employed is known to be unsafe, and the data comes from an untrusted source and hasn't passed through a sanitization mechanism.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#deserialization-of-untrusted-data"
+      },
+      "id": "deserialization-of-untrusted-data",
+      "options": {},
+      "scope": "http_server_request",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Security"
+    },
+    {
+      "rule": {
+        "id": "exec-of-untrusted-command",
+        "title": "Execution of untrusted system command",
+        "labels": ["system.exec", "system.exec.safe", "system.exec.sanitize"],
+        "impactDomain": "Security",
+        "enumerateScope": false,
+        "references": {
+          "CWE-78": "https://cwe.mitre.org/data/definitions/78.html"
+        },
+        "description": "Find occurrances of system command execution in which the command string is not guaranteed to be safe.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#exec-of-untrusted-command"
+      },
+      "id": "exec-of-untrusted-command",
+      "options": {},
+      "scope": "command",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Security"
+    },
+    {
+      "rule": {
+        "id": "http-500",
+        "title": "HTTP 500 status code",
+        "description": "Identifies when an HTTP server request has returned a 500 status code. HTTP 500 status code generally indicate an unanticipated problem in the backend that is not handled in a predictable way. 500 status codes are also hard for client code to handle, because they don't indicate any particular problem or suggest a solution.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#http-500",
+        "labels": [],
+        "scope": "http_server_request",
+        "enumerateScope": false,
+        "impactDomain": "Stability",
+        "references": {
+          "CWE-392": "https://cwe.mitre.org/data/definitions/392.html"
+        }
+      },
+      "id": "http-500",
+      "options": {},
+      "scope": "http_server_request",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Stability"
+    },
+    {
+      "rule": {
+        "id": "logout-without-session-reset",
+        "title": "Logout without session reset",
+        "scope": "http_server_request",
+        "labels": ["http.session.clear", "security.logout"],
+        "impactDomain": "Security",
+        "enumerateScope": false,
+        "references": {
+          "CWE-488": "https://cwe.mitre.org/data/definitions/488.html",
+          "OWASP - Session fixation": "https://owasp.org/www-community/attacks/Session_fixation",
+          "Ruby on Rails - Session fixation countermeasures": "https://guides.rubyonrails.org/security.html#session-fixation-countermeasures"
+        },
+        "description": "Determines when a user has been logged out from the application, but the session hasn't been cleared. When the session isn't cleared after logout, the session is vulnerable to a [session fixation attack](https://owasp.org/www-community/attacks/Session_fixation).",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#logout-without-session-reset"
+      },
+      "id": "logout-without-session-reset",
+      "options": {},
+      "scope": "http_server_request",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Security"
+    },
+    {
+      "rule": {
+        "id": "missing-content-type",
+        "title": "HTTP server request without a Content-Type header",
+        "scope": "http_server_request",
+        "impactDomain": "Stability",
+        "enumerateScope": false,
+        "description": "Finds HTTP server requests that don't provide a `Content-Type` header in the response.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#missing-content-type"
+      },
+      "id": "missing-content-type",
+      "options": {},
+      "scope": "http_server_request",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Stability"
+    },
+    {
+      "rule": {
+        "id": "n-plus-one-query",
+        "title": "N plus 1 SQL query",
+        "scope": "command",
+        "impactDomain": "Performance",
+        "enumerateScope": false,
+        "references": {
+          "CWE-1073": "https://cwe.mitre.org/data/definitions/1073.html"
+        },
+        "description": "Finds occurrences of a query being repeated within a loop.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#n-plus-one-query"
+      },
+      "id": "n-plus-one-query",
+      "options": {
+        "warningLimit": 5,
+        "errorLimit": 10
+      },
+      "scope": "command",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Performance"
+    },
+    {
+      "rule": {
+        "id": "secret-in-log",
+        "title": "Secret in log",
+        "labels": ["secret", "log"],
+        "scope": "root",
+        "impactDomain": "Security",
+        "enumerateScope": true,
+        "references": {
+          "CWE-532": "https://cwe.mitre.org/data/definitions/532.html"
+        },
+        "description": "Identifies when a known or assumed secret is written to a log. Logs are often transported into other systems that are treated with lesser security - such as backups. Therefore, secrets written into log files are more likely to be leaked or discovered by cyber-attackers.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#secret-in-log"
+      },
+      "id": "secret-in-log",
+      "options": {},
+      "scope": "root",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Security"
+    },
+    {
+      "rule": {
+        "id": "too-many-joins",
+        "title": "Too many joins",
+        "description": "Verifies that the number of joins in SQL queries does not exceed a threshold.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#too-many-joins",
+        "labels": [],
+        "enumerateScope": false,
+        "impactDomain": "Performance",
+        "references": {
+          "CWE-1049": "https://cwe.mitre.org/data/definitions/1049.html"
+        }
+      },
+      "id": "too-many-joins",
+      "options": {
+        "warningLimit": 5,
+        "excludeTables": [
+          {
+            "match": {},
+            "ignoreCase": false
+          },
+          {
+            "equal": "information_schema",
+            "ignoreCase": false
+          }
+        ]
+      },
+      "scope": "command",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Performance"
+    },
+    {
+      "rule": {
+        "id": "too-many-updates",
+        "title": "Too many SQL and RPC updates performed in one command",
+        "scope": "command",
+        "enumerateScope": false,
+        "impactDomain": "Maintainability",
+        "references": {
+          "CWE-1048": "https://cwe.mitre.org/data/definitions/1048.html"
+        },
+        "description": "Verifies that the number of SQL and RPC updates performed by a command does not exceed a threshold.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#too-many-updates"
+      },
+      "id": "too-many-updates",
+      "options": {
+        "warningLimit": 20
+      },
+      "scope": "command",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Maintainability"
+    },
+    {
+      "rule": {
+        "id": "unauthenticated-encryption",
+        "title": "Unauthenticated encryption",
+        "description": "Ensures that encryption operations use authenticated encryption.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#unauthenticated-encryption",
+        "labels": ["crypto.encrypt", "crypto.set_auth_data"],
+        "enumerateScope": true,
+        "impactDomain": "Security",
+        "references": {
+          "A02:2021": "https://owasp.org/Top10/A02_2021-Cryptographic_Failures/"
+        }
+      },
+      "id": "unauthenticated-encryption",
+      "options": {},
+      "scope": "command",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Security"
+    },
+    {
+      "rule": {
+        "id": "update-in-get-request",
+        "title": "Data update performed in GET or HEAD request",
+        "scope": "http_server_request",
+        "enumerateScope": true,
+        "labels": ["audit"],
+        "impactDomain": "Maintainability",
+        "description": "Finds SQL updates that are performed in an HTTP server `GET` request.",
+        "url": "https://appland.com/docs/analysis/rules-reference.html#update-in-get-request"
+      },
+      "id": "update-in-get-request",
+      "options": {
+        "_queryInclude": [{}, {}],
+        "_queryExclude": []
+      },
+      "scope": "http_server_request",
+      "includeScope": [],
+      "excludeScope": [],
+      "includeEvent": [],
+      "excludeEvent": [],
+      "impactDomain": "Maintainability"
+    }
+  ],
+  "summary": {
+    "numAppMaps": 1,
+    "numChecks": 13,
+    "rules": [
+      "authz-before-authn",
+      "deprecated-crypto-algorithm",
+      "deserialization-of-untrusted-data",
+      "exec-of-untrusted-command",
+      "http-500",
+      "logout-without-session-reset",
+      "missing-content-type",
+      "n-plus-one-query",
+      "secret-in-log",
+      "too-many-joins",
+      "too-many-updates",
+      "unauthenticated-encryption",
+      "update-in-get-request"
+    ],
+    "ruleLabels": [
+      "audit",
+      "crypto.decrypt",
+      "crypto.digest",
+      "crypto.encrypt",
+      "crypto.set_auth_data",
+      "deserialize.safe",
+      "deserialize.sanitize",
+      "deserialize.unsafe",
+      "http.session.clear",
+      "log",
+      "secret",
+      "security.authentication",
+      "security.authorization",
+      "security.logout",
+      "system.exec",
+      "system.exec.safe",
+      "system.exec.sanitize"
+    ],
+    "numFindings": 1,
+    "appMapMetadata": {
+      "labels": [],
+      "apps": ["sample_app_6th_ed"],
+      "clients": [
+        {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.88.0"
+        }
+      ],
+      "frameworks": [
+        {
+          "name": "rails",
+          "version": "6.0.4.1"
+        },
+        {
+          "name": "minitest",
+          "version": "5.11.3"
+        }
+      ],
+      "git": [
+        {
+          "repository": "git@github.com:symwell/sample_app_6th_ed.git",
+          "branch": "sw/pin_yarn_version",
+          "commit": "d88b18bcfb875bd6b6c33cfb191016821fef5363",
+          "status": [
+            "M  .ruby-version",
+            "UD .yarnrc.yml",
+            "M Gemfile",
+            "M Gemfile.lock",
+            "M  app/assets/config/manifest.js",
+            "M  db/entity_relations.pdf",
+            "D tmp/.keep",
+            "M  yarn.lock",
+            "?? .idea/",
+            "?? a",
+            "?? appmap-findings.json",
+            "?? conv.sh"
+          ],
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
+        }
+      ],
+      "languages": [
+        {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.0.1"
+        }
+      ],
+      "recorders": [
+        {
+          "name": "minitest"
+        }
+      ],
+      "testStatuses": [],
+      "exceptions": []
+    }
+  }
+}

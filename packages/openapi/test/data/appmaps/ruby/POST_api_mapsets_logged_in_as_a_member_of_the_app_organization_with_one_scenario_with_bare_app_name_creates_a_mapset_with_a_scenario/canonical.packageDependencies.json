@@ -1,0 +1,50 @@
+[
+  {
+    "caller": "HTTP server requests",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "app"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "json"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "logger"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "app"
+  },
+  {
+    "caller": "app",
+    "callee": "Database"
+  },
+  {
+    "caller": "app",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "app",
+    "callee": "logger"
+  },
+  {
+    "caller": "app",
+    "callee": "ruby"
+  }
+]

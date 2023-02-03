@@ -1,0 +1,310 @@
+[
+  {
+    "caller": "HTTP server requests->GET /:organization_id/:id(.:format)",
+    "callee": "app/controllers/CurrentUser"
+  },
+  {
+    "caller": "HTTP server requests->GET /:organization_id/:id(.:format)",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "HTTP server requests->GET /:organization_id/:id(.:format)",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "HTTP server requests->GET /:organization_id/:id(.:format)",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "action_view/ActionView",
+    "callee": "app/controllers/CurrentUser"
+  },
+  {
+    "caller": "action_view/ActionView",
+    "callee": "app/helpers/ApplicationPathHelper"
+  },
+  {
+    "caller": "action_view/ActionView",
+    "callee": "app/helpers/ConfigurationHelper"
+  },
+  {
+    "caller": "action_view/ActionView",
+    "callee": "app/models/App"
+  },
+  {
+    "caller": "action_view/ActionView",
+    "callee": "app/models/Mapset"
+  },
+  {
+    "caller": "action_view/ActionView",
+    "callee": "app/models/WebResources"
+  },
+  {
+    "caller": "action_view/ActionView",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "action_view/ActionView",
+    "callee": "lib/appland/Diagram"
+  },
+  {
+    "caller": "action_view/ActionView",
+    "callee": "openssl/Digest"
+  },
+  {
+    "caller": "app/controllers/ApplicationsController",
+    "callee": "app/controllers/CurrentUser"
+  },
+  {
+    "caller": "app/controllers/ApplicationsController",
+    "callee": "app/models/App"
+  },
+  {
+    "caller": "app/controllers/ApplicationsController",
+    "callee": "app/models/Mapset"
+  },
+  {
+    "caller": "app/controllers/CurrentUser",
+    "callee": "action_view/ActionView"
+  },
+  {
+    "caller": "app/controllers/CurrentUser",
+    "callee": "app/controllers/ApplicationsController"
+  },
+  {
+    "caller": "app/controllers/CurrentUser",
+    "callee": "app/models/App"
+  },
+  {
+    "caller": "app/controllers/CurrentUser",
+    "callee": "app/models/Configuration"
+  },
+  {
+    "caller": "app/controllers/CurrentUser",
+    "callee": "app/models/Mapset"
+  },
+  {
+    "caller": "app/controllers/CurrentUser",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "app/helpers/ApplicationPathHelper",
+    "callee": "app/models/App"
+  },
+  {
+    "caller": "app/helpers/ConfigurationHelper",
+    "callee": "app/models/Configuration"
+  },
+  {
+    "caller": "app/models/App",
+    "callee": "Database->SELECT * FROM \"orgs\" WHERE \"id\" = 56"
+  },
+  {
+    "caller": "app/models/App",
+    "callee": "Database->SELECT * FROM \"users\" WHERE \"id\" = 16"
+  },
+  {
+    "caller": "app/models/App",
+    "callee": "Database->SELECT \"apps\".* FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") WHERE ((\"apps\".\"slug\" = 'appland') AND (\"orgs\".\"slug\" = 'default')) LIMIT 1"
+  },
+  {
+    "caller": "app/models/App",
+    "callee": "Database->SELECT \"apps\".\"id\", \"apps\".\"name\" AS \"name\", \"orgs\".\"slug\" AS \"org_slug\", \"orgs\".\"name\" AS \"org_name\", \"url\", \"apps\".\"created_at\", \"apps\".\"slug\", \"users\".\"login\" AS \"owner_login\" FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") INNER JOIN \"users\" ON (\"users\".\"id\" = \"orgs\".\"owner_id\") ORDER BY \"name\" OFFSET 0"
+  },
+  {
+    "caller": "app/models/App",
+    "callee": "app/models/DAO"
+  },
+  {
+    "caller": "app/models/App",
+    "callee": "app/models/Mapset"
+  },
+  {
+    "caller": "app/models/App",
+    "callee": "app/models/Org"
+  },
+  {
+    "caller": "app/models/App",
+    "callee": "app/models/Search"
+  },
+  {
+    "caller": "app/models/CodeObject",
+    "callee": "Database->WITH \"code_objects\" AS (SELECT DISTINCT \"type\", \"object_name\" FROM \"scenarios\" INNER JOIN \"scenario_code_objects\" ON (\"scenario_code_objects\".\"scenario_id\" = \"scenarios\".\"id\") WHERE (\"mapset_id\" = 21)) SELECT \"type\", count(\"object_name\") AS \"num_code_objects\" FROM \"code_objects\" GROUP BY \"type\""
+  },
+  {
+    "caller": "app/models/CodeObject",
+    "callee": "app/models/DAO"
+  },
+  {
+    "caller": "app/models/Configuration",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/models/DataModel",
+    "callee": "Database->WITH \"sql_queries\" AS (SELECT sql_query.sql_query ->> 'database_type'::text AS \"database_type\", COALESCE(sql_query.sql_query ->> 'normalized_sql', sql_query.sql_query ->> 'sql')::text AS \"sql\" FROM \"scenarios\", LATERAL jsonb_to_recordset(COALESCE(scenarios.events_sql_queries, '[]'::jsonb)) sql_query(id integer, sql_query jsonb) WHERE (\"mapset_id\" = 21)) SELECT DISTINCT \"sql\" FROM \"sql_queries\""
+  },
+  {
+    "caller": "app/models/DataModel",
+    "callee": "app/models/DAO"
+  },
+  {
+    "caller": "app/models/KeyDataStats",
+    "callee": "Database->WITH \"key_data_stats\" AS (SELECT DISTINCT http_server_request.http_server_request ->> 'request_method'::text AS \"request_method\", http_server_request.http_server_request ->> 'normalized_path_info'::text AS \"path_info\" FROM \"scenarios\", LATERAL jsonb_to_recordset(COALESCE(scenarios.events_http_server_requests, '[]'::jsonb)) http_server_request(id integer, http_server_request jsonb) WHERE (\"mapset_id\" = 21)) SELECT count(*) AS \"num_distinct\" FROM \"key_data_stats\" LIMIT 1"
+  },
+  {
+    "caller": "app/models/KeyDataStats",
+    "callee": "Database->WITH \"key_data_stats\" AS (SELECT DISTINCT sql_query.sql_query ->> 'database_type'::text AS \"database_type\", COALESCE(sql_query.sql_query ->> 'normalized_sql', sql_query.sql_query ->> 'sql')::text AS \"sql\" FROM \"scenarios\", LATERAL jsonb_to_recordset(COALESCE(scenarios.events_sql_queries, '[]'::jsonb)) sql_query(id integer, sql_query jsonb) WHERE (\"mapset_id\" = 21)) SELECT count(*) AS \"num_distinct\" FROM \"key_data_stats\" LIMIT 1"
+  },
+  {
+    "caller": "app/models/KeyDataStats",
+    "callee": "Database->WITH \"key_data_stats\" AS (WITH \"messages\" AS (SELECT array_agg(msg.name) AS \"message_fields\" FROM \"scenarios\", LATERAL jsonb_to_recordset(COALESCE(scenarios.events_messages, '[]'::jsonb)) message(id integer, message jsonb), LATERAL jsonb_to_recordset(message.message) msg(name text) WHERE (\"mapset_id\" = 21) GROUP BY \"message\".\"id\") SELECT DISTINCT \"message_fields\" FROM \"messages\") SELECT count(*) AS \"num_distinct\" FROM \"key_data_stats\" LIMIT 1"
+  },
+  {
+    "caller": "app/models/KeyDataStats",
+    "callee": "app/models/DAO"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "Database->INSERT INTO \"mapset_caches\" (\"mapset_id\", \"sha_256\") VALUES (21, '\\x74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b') RETURNING *"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "Database->SELECT * FROM \"apps\" WHERE \"id\" = 30"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "Database->SELECT * FROM \"mapset_caches\" WHERE (\"mapset_id\" = 21) LIMIT 1"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "Database->SELECT * FROM \"mapsets\" WHERE \"id\" = 21"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "Database->SELECT * FROM \"scenarios\" WHERE ((\"scenarios\".\"mapset_id\" = 21) AND (\"data\" IS NULL) AND ((\"scenarios\".\"sha_256\" NOT IN (SELECT \"scenario_processing_errors\".\"sha_256\" FROM \"scenario_processing_errors\" WHERE ((\"version\" = '0.17.1') AND (\"scenario_processing_errors\".\"sha_256\" IS NOT NULL)))) OR (\"scenarios\".\"sha_256\" IS NULL)))"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "Database->SELECT *, \"mapsets\".\"name\", \"mapsets\".\"branch\", \"mapsets\".\"commit\", \"mapsets\".\"environment\", \"mapsets\".\"version\", (SELECT \"login\" FROM \"users\" WHERE (\"id\" = \"user_id\")), (SELECT count(*) AS \"scenario_count\" FROM \"scenarios\" WHERE (\"mapset_id\" = \"mapsets\".\"id\")) FROM \"mapsets_preference_ordered\" AS \"mapsets\" WHERE (\"mapsets\".\"app_id\" = 30)"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "Database->SELECT DISTINCT \"caller\", \"callee\" FROM \"scenarios\", lateral jsonb_to_recordset(class_invocation_graph) as graph(caller q_class, callee q_class) WHERE (1 = 0)"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "Database->SELECT jsonb_object_agg(compute_code_objects_by_location(data->'classMap')) AS \"code_objects_by_location\" FROM \"scenarios\" WHERE (1 = 0) LIMIT 1"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "Database->SELECT mapset_digest(21) AS \"digest\" LIMIT 1"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "Database->SELECT scenarios.metadata->'git'->>'repository' AS \"repository_url\", scenarios.metadata->'git'->>'commit' AS \"commit\" FROM \"scenarios\" WHERE ((scenarios.metadata->'git'->>'repository' IS NOT NULL) AND (scenarios.metadata->'git'->>'commit' IS NOT NULL) AND (1 = 0)) LIMIT 1"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "Database->UPDATE \"mapset_caches\" SET \"code_object_counts\" = '{\"package\":0,\"class\":0,\"function\":0}'::jsonb WHERE (\"id\" = 5)"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "Database->UPDATE \"mapset_caches\" SET \"data_model\" = '{\"tables\":[],\"joins\":[]}'::jsonb WHERE (\"id\" = 5)"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "Database->UPDATE \"mapset_caches\" SET \"key_stats_counts\" = '{\"HTTP server requests\":0,\"SQL queries\":0,\"Messages\":0}'::jsonb WHERE (\"id\" = 5)"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "Database->UPDATE \"mapset_caches\" SET \"recording_method_counts\" = '[]'::jsonb WHERE (\"id\" = 5)"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "Database->UPDATE \"mapset_caches\" SET \"web_resources\" = '{\"resource_map\":{},\"model_names\":[]}'::jsonb WHERE (\"id\" = 5)"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "app/models/App"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "app/models/CodeObject"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "app/models/DAO"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "app/models/DataModel"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "app/models/KeyDataStats"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "app/models/RecordingMethod"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "app/models/Scenario"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "app/models/WebResources"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/models/Mapset",
+    "callee": "lib/appland/Diagram"
+  },
+  {
+    "caller": "app/models/RecordingMethod",
+    "callee": "Database->WITH \"recording_methods\" AS (SELECT scenarios.metadata->'recorder'->>'name' AS \"recording_method\" FROM \"scenarios\" WHERE ((scenarios.metadata->'recorder'->>'name' IS NOT NULL) AND (\"mapset_id\" = 21))) SELECT \"recording_method\", count(*) AS \"num_scenarios\" FROM \"recording_methods\" GROUP BY \"recording_method\""
+  },
+  {
+    "caller": "app/models/RecordingMethod",
+    "callee": "app/models/DAO"
+  },
+  {
+    "caller": "app/models/Scenario",
+    "callee": "Database->SELECT \"scenarios\".\"id\", \"scenarios\".\"uuid\", metadata->>'name' AS \"name\", metadata->>'feature_group' AS \"feature_group\", metadata->>'feature' AS \"feature\", \"scenarios\".\"event_field_counts\", \"scenarios\".\"mapset_id\", \"mapsets\".\"app_id\", \"scenarios\".\"created_at\" FROM \"scenarios\" INNER JOIN \"mapsets\" ON (\"mapsets\".\"id\" = \"scenarios\".\"mapset_id\") WHERE (\"scenarios\".\"mapset_id\" = 21) ORDER BY \"scenarios\".\"created_at\" DESC"
+  },
+  {
+    "caller": "app/models/Scenario",
+    "callee": "Database->SELECT \"scenarios\".\"id\", \"scenarios\".\"uuid\", metadata->>'name' AS \"name\", metadata->>'feature_group' AS \"feature_group\", metadata->>'feature' AS \"feature\", \"scenarios\".\"event_field_counts\", \"scenarios\".\"mapset_id\", \"mapsets\".\"app_id\", \"scenarios\".\"created_at\" FROM \"scenarios\" INNER JOIN \"mapsets\" ON (\"mapsets\".\"id\" = \"scenarios\".\"mapset_id\") WHERE (\"scenarios\".\"mapset_id\" = 21) ORDER BY metadata->>'name' LIMIT 10 OFFSET 0"
+  },
+  {
+    "caller": "app/models/Scenario",
+    "callee": "Database->SELECT \"scenarios\".\"id\", \"scenarios\".\"uuid\", metadata->>'name' AS \"name\", metadata->>'feature_group' AS \"feature_group\", metadata->>'feature' AS \"feature\", \"scenarios\".\"event_field_counts\", \"scenarios\".\"mapset_id\", \"mapsets\".\"app_id\", \"scenarios\".\"created_at\", \"metadata\" FROM \"scenarios\" INNER JOIN \"mapsets\" ON (\"mapsets\".\"id\" = \"scenarios\".\"mapset_id\") WHERE (\"scenarios\".\"mapset_id\" = 21) ORDER BY \"scenarios\".\"created_at\" DESC"
+  },
+  {
+    "caller": "app/models/Scenario",
+    "callee": "Database->SELECT count(*) AS \"v\" FROM \"scenarios\" INNER JOIN \"mapsets\" ON (\"mapsets\".\"id\" = \"scenarios\".\"mapset_id\") WHERE (\"scenarios\".\"mapset_id\" = 21) LIMIT 1"
+  },
+  {
+    "caller": "app/models/Search",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "Database->SELECT * FROM \"users\" WHERE (\"id\" = 16) LIMIT 1"
+  },
+  {
+    "caller": "app/models/WebResources",
+    "callee": "Database->SELECT * FROM \"mapsets\" WHERE (\"id\" = 21) LIMIT 1"
+  },
+  {
+    "caller": "app/models/WebResources",
+    "callee": "Database->SELECT metadata->>'name' AS \"name\", \"uuid\", \"events_http_server_requests\", \"events_http_server_responses\" FROM \"scenarios\" WHERE ((\"scenarios\".\"mapset_id\" = 21) AND ((\"events_http_server_requests\" IS NOT NULL) OR (\"events_http_server_responses\" IS NOT NULL)))"
+  },
+  {
+    "caller": "lib/appland/Diagram",
+    "callee": "json/JSON"
+  }
+]

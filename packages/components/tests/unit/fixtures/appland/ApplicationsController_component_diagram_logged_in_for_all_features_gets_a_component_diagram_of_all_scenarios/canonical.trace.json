@@ -1,0 +1,386 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "GET /:organization_id/:id/component_diagram(.:format)",
+    "parameter_names": ["mapset", "controller", "action", "organization_id", "id"],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "function": "app/controllers/CurrentUser#allow_anonymous_access",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "openssl/OpenSSL::Cipher#decrypt",
+        "labels": ["security", "crypto"]
+      },
+      {
+        "kind": "function",
+        "function": "openssl/OpenSSL::Cipher#final",
+        "labels": ["security", "crypto"]
+      },
+      {
+        "kind": "function",
+        "function": "json/JSON::Ext::Parser#parse",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "function": "json/JSON::Ext::Parser#parse",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "function": "app/controllers/CurrentUser#check_current_user",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "app/controllers/CurrentUser#anonymous_access?",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/CurrentUser#current_user",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "app/controllers/CurrentUser#lookup_session_user",
+                "labels": ["provider.authentication"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/models/User.find_by_id!",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "normalized_query": "SELECT * FROM \"users\" WHERE (\"id\" = ?) LIMIT ?"
+                        },
+                        "analyzed_query": {
+                          "actions": ["select"],
+                          "tables": ["users"],
+                          "columns": ["*", "id"],
+                          "joinCount": 0
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/CurrentUser#current_user",
+            "labels": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "app/models/User::Show#accept_eula?",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "app/controllers/CurrentUser#with_authentication",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "app/models/Configuration.find",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "json/JSON::Ext::Parser#parse",
+                "labels": ["serialization", "json"]
+              },
+              {
+                "kind": "function",
+                "function": "app/models/Configuration#attributes=",
+                "labels": []
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/models/Configuration#attributes",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/CurrentUser#current_user",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "app/models/App::Search#find!",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "app/models/App::Search#find_by_slug!",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/models/App::Search#find_by_org_scope!",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/models/Search#filter",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/models/User::Show#admin?",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "normalized_query": "SELECT \"apps\".* FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") WHERE ((\"apps\".\"slug\" = ?) AND (\"orgs\".\"slug\" = ?)) LIMIT ?"
+                        },
+                        "analyzed_query": {
+                          "actions": ["select"],
+                          "tables": ["apps", "orgs"],
+                          "columns": ["apps.*", "apps.org_id", "apps.slug", "orgs.id", "orgs.slug"],
+                          "joinCount": 1
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/models/App::Show#mapsets",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "app/models/Mapset.ordered_list",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/models/DAO::App#ordered_mapset_dataset",
+                    "labels": []
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT *, \"mapsets\".\"name\", \"mapsets\".\"branch\", \"mapsets\".\"commit\", \"mapsets\".\"environment\", \"mapsets\".\"version\", (SELECT \"login\" FROM \"users\" WHERE (\"id\" = \"user_id\")), (SELECT count(*) AS \"scenario_count\" FROM \"scenarios\" WHERE (\"mapset_id\" = \"mapsets\".\"id\")) FROM \"mapsets_preference_ordered\" AS \"mapsets\" WHERE (\"mapsets\".\"app_id\" = ?)"
+                    },
+                    "analyzed_query": {
+                      "actions": ["select"],
+                      "tables": ["mapsets_preference_ordered", "scenarios", "users"],
+                      "columns": [
+                        "*",
+                        "id",
+                        "login",
+                        "mapset_id",
+                        "mapsets.app_id",
+                        "mapsets.branch",
+                        "mapsets.commit",
+                        "mapsets.environment",
+                        "mapsets.id",
+                        "mapsets.name",
+                        "mapsets.version",
+                        "user_id"
+                      ],
+                      "joinCount": 0
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/models/Mapset.find_in_app!",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "app/models/App::Show#mapsets",
+                "labels": []
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT * FROM \"mapsets\" WHERE \"id\" = ?"
+                },
+                "analyzed_query": {
+                  "actions": ["select"],
+                  "tables": ["mapsets"],
+                  "columns": ["*", "id"],
+                  "joinCount": 0
+                }
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/ComponentDiagram#component_diagram",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "app/models/Mapset::Show#with_cache",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/models/Mapset::MapsetCacheModule.included",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/models/Mapset::Show#component_diagram",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/models/Scenario::SearchActions.search",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "normalized_query": "SELECT \"scenarios\".\"id\", \"scenarios\".\"uuid\", metadata->>? AS \"name\", metadata->>? AS \"feature_group\", metadata->>? AS \"feature\", \"scenarios\".\"event_field_counts\", \"scenarios\".\"mapset_id\", \"mapsets\".\"app_id\", \"scenarios\".\"created_at\" FROM \"scenarios\" INNER JOIN \"mapsets\" ON (\"mapsets\".\"id\" = \"scenarios\".\"mapset_id\") WHERE (\"scenarios\".\"mapset_id\" = ?) ORDER BY \"scenarios\".\"created_at\" DESC"
+                        },
+                        "analyzed_query": {
+                          "actions": ["select"],
+                          "tables": ["mapsets", "scenarios"],
+                          "columns": [
+                            "mapsets.app_id",
+                            "mapsets.id",
+                            "metadata",
+                            "scenarios.created_at",
+                            "scenarios.event_field_counts",
+                            "scenarios.id",
+                            "scenarios.mapset_id",
+                            "scenarios.uuid"
+                          ],
+                          "joinCount": 1
+                        }
+                      },
+                      {
+                        "kind": "function",
+                        "function": "json/JSON::Ext::Parser#parse",
+                        "labels": ["serialization", "json"]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "json/JSON::Ext::Parser#parse",
+                        "labels": ["serialization", "json"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/models/DAO::Scenario.distinct_invocation_graph_dataset",
+                    "labels": []
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT DISTINCT \"caller\", \"callee\" FROM \"scenarios\", lateral jsonb_to_recordset(class_invocation_graph) as graph(caller q_class, callee q_class) WHERE (\"id\" IN (?, ?))"
+                    },
+                    "analyzed_query": {
+                      "actions": ["select"],
+                      "tables": ["scenarios"],
+                      "columns": ["callee", "caller", "class_invocation_graph", "id"],
+                      "joinCount": 1
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/appland/Diagram::ComponentDiagram.from_invocation_graph",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/appland/Diagram::ComponentDiagram#add_graph",
+                        "labels": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/models/DAO::Scenario.first_source_control_dataset",
+                    "labels": []
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT scenarios.metadata->?->>? AS \"repository_url\", scenarios.metadata->?->>? AS \"commit\" FROM \"scenarios\" WHERE ((scenarios.metadata->?->>? IS NOT ?) AND (scenarios.metadata->?->>? IS NOT ?) AND (\"id\" IN (?, ?))) LIMIT ?"
+                    },
+                    "analyzed_query": {
+                      "actions": ["select"],
+                      "tables": ["scenarios"],
+                      "columns": ["id", "scenarios.metadata"],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/models/DAO::Scenario.class_locations_dataset",
+                    "labels": []
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT jsonb_object_agg(compute_code_objects_by_location(data->?)) AS \"code_objects_by_location\" FROM \"scenarios\" WHERE (\"id\" IN (?, ?)) LIMIT ?"
+                    },
+                    "analyzed_query": {
+                      "actions": ["select"],
+                      "tables": ["scenarios"],
+                      "columns": ["data", "id"],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": ["serialization", "json"]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/appland/Diagram::ComponentDiagram#set_class_locations",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/appland/Diagram::ComponentDiagram#to_json",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Generator::State#generate",
+                    "labels": ["serialization", "json"]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

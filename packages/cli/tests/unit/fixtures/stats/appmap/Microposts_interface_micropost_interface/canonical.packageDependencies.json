@@ -1,0 +1,134 @@
+[
+  {
+    "caller": "HTTP server requests",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "actionview"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "app"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "json"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "logger"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "openssl"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "ruby"
+  },
+  {
+    "caller": "activejob",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "activejob",
+    "callee": "logger"
+  },
+  {
+    "caller": "activerecord",
+    "callee": "Database"
+  },
+  {
+    "caller": "activerecord",
+    "callee": "logger"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "Database"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "activejob"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "activerecord"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "app"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "json"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "logger"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "openssl"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "psych"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "ruby"
+  },
+  {
+    "caller": "app",
+    "callee": "Database"
+  },
+  {
+    "caller": "app",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "app",
+    "callee": "actionview"
+  },
+  {
+    "caller": "app",
+    "callee": "activerecord"
+  },
+  {
+    "caller": "app",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "app",
+    "callee": "json"
+  },
+  {
+    "caller": "app",
+    "callee": "logger"
+  },
+  {
+    "caller": "app",
+    "callee": "openssl"
+  },
+  {
+    "caller": "app",
+    "callee": "ruby"
+  },
+  {
+    "caller": "app",
+    "callee": "sprockets"
+  },
+  {
+    "caller": "sprockets",
+    "callee": "ruby"
+  }
+]

@@ -1,0 +1,126 @@
+[
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "lib/devise"
+  },
+  {
+    "caller": "app/views/app_views_devise_confirmations_new_html_erb",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/views/app_views_devise_confirmations_new_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_devise_confirmations_new_html_erb",
+    "callee": "app/views/app_views_devise_shared__error_messages_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_devise_confirmations_new_html_erb",
+    "callee": "app/views/app_views_devise_shared__links_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_devise_confirmations_new_html_erb",
+    "callee": "lib/Devise"
+  },
+  {
+    "caller": "app/views/app_views_devise_confirmations_new_html_erb",
+    "callee": "lib/devise"
+  },
+  {
+    "caller": "app/views/app_views_devise_confirmations_new_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_devise_shared__error_messages_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_devise_shared__error_messages_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_devise_shared__links_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_devise_shared__links_html_erb",
+    "callee": "lib/devise"
+  },
+  {
+    "caller": "app/views/app_views_devise_shared__links_html_erb",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views/app_views_devise_shared__links_html_erb",
+    "callee": "omniauth/OmniAuth"
+  },
+  {
+    "caller": "inline_template.render",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "inline_template.render",
+    "callee": "lib/Devise"
+  },
+  {
+    "caller": "inline_template.render",
+    "callee": "lib/devise"
+  },
+  {
+    "caller": "inline_template.render",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "lib/devise",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "lib/devise",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "lib/devise",
+    "callee": "activerecord/ActiveRecord"
+  },
+  {
+    "caller": "lib/devise",
+    "callee": "devise/Devise"
+  },
+  {
+    "caller": "lib/devise",
+    "callee": "inline_template.render"
+  },
+  {
+    "caller": "lib/devise",
+    "callee": "lib/Devise"
+  },
+  {
+    "caller": "lib/devise",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "lib/devise",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "omniauth/OmniAuth",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "omniauth/OmniAuth",
+    "callee": "app/views/app_views_devise_confirmations_new_html_erb"
+  },
+  {
+    "caller": "omniauth/OmniAuth",
+    "callee": "lib/devise"
+  },
+  {
+    "caller": "omniauth/OmniAuth",
+    "callee": "logger/Logger"
+  }
+]

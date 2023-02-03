@@ -1,0 +1,25 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "GET /owners/new",
+    "parameter_names": null,
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "function": "org/springframework/samples/petclinic/owner/OwnerController#initCreationForm",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "org/springframework/samples/petclinic/owner/OwnerController#setAllowedFields",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "org/springframework/samples/petclinic/model/BaseEntity#isNew",
+        "labels": []
+      }
+    ]
+  }
+]

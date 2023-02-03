@@ -1,0 +1,100 @@
+[
+  {
+    "name": "app/models",
+    "type": "package",
+    "children": [
+      {
+        "name": "DAO",
+        "type": "class",
+        "children": [
+          {
+            "name": "ToModel",
+            "type": "class",
+            "children": [
+              {
+                "name": "to_model",
+                "type": "function",
+                "static": false,
+                "location": "app/models/dao/to_model.rb:5"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "User",
+        "type": "class",
+        "children": [
+          {
+            "name": "Show",
+            "type": "class",
+            "children": [
+              {
+                "name": "search_scope",
+                "type": "function",
+                "static": false,
+                "location": "app/models/user.rb:80"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "App",
+        "type": "class",
+        "children": [
+          {
+            "name": "Search",
+            "type": "class",
+            "children": [
+              {
+                "name": "find!",
+                "type": "function",
+                "static": false,
+                "location": "app/models/app.rb:43"
+              },
+              {
+                "name": "find_by_id!",
+                "type": "function",
+                "static": false,
+                "location": "app/models/app.rb:51"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Exceptions",
+        "type": "class",
+        "children": [
+          {
+            "name": "RecordNotFound",
+            "type": "class",
+            "children": [
+              {
+                "name": "build_message",
+                "type": "function",
+                "static": true,
+                "location": "app/models/exceptions/record_not_found.rb:16"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "INSERT INTO \"users\" (\"login\") VALUES ('10fca879-c0ed-4e5a-8bda-17d3121df614') RETURNING *"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"apps\".* FROM \"apps2\" WHERE ((\"apps\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = 9) AND (\"orgs\".\"id\" IS NOT NULL)))) AND (\"id\" = 8)) LIMIT 1"
+      }
+    ]
+  }
+]

@@ -1,0 +1,11 @@
+[
+  "crypto.decrypt",
+  "format.json.parse",
+  "http.session.read",
+  "http.session.write",
+  "mvc.after_action",
+  "mvc.before_action",
+  "mvc.controller",
+  "security.authentication",
+  "security.authorization"
+]

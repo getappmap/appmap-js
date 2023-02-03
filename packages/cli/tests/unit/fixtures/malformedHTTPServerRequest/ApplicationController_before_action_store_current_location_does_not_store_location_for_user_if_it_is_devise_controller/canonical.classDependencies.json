@@ -1,0 +1,90 @@
+[
+  {
+    "caller": "HTTP server requests->",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "HTTP server requests->GET /*unmatched_route",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/views"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "Database->SELECT \"settings\".* FROM \"settings\" WHERE (thing_type is NULL and thing_id is NULL) AND \"settings\".\"var\" = $1 ORDER BY \"settings\".\"id\" ASC LIMIT $2"
+  },
+  {
+    "caller": "activerecord/ActiveRecord",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "HTTP server requests->"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "app/models"
+  },
+  {
+    "caller": "app/models",
+    "callee": "activerecord/ActiveRecord"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "app/views",
+    "callee": "lib/webpacker/Webpacker"
+  },
+  {
+    "caller": "app/views",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views",
+    "callee": "ruby/Kernel"
+  },
+  {
+    "caller": "lib/webpacker/Webpacker",
+    "callee": "json/JSON"
+  }
+]

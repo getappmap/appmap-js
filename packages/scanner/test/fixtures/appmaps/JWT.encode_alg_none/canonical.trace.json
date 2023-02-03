@@ -1,0 +1,27 @@
+[
+  {
+    "kind": "function",
+    "function": "jwt/JWT.encode",
+    "labels": [
+      "jwt.encode"
+    ],
+    "children": [
+      {
+        "kind": "function",
+        "function": "json/JSON::Ext::Generator::State#generate",
+        "labels": [
+          "format.json.generate",
+          "serialize"
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "json/JSON::Ext::Generator::State#generate",
+        "labels": [
+          "format.json.generate",
+          "serialize"
+        ]
+      }
+    ]
+  }
+]

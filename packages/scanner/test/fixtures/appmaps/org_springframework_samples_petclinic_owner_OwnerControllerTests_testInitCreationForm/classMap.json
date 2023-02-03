@@ -1,0 +1,78 @@
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "name": "setAllowedFields",
+                            "type": "function",
+                            "static": false,
+                            "location": "org/springframework/samples/petclinic/owner/OwnerController.java:55"
+                          },
+                          {
+                            "name": "initCreationForm",
+                            "type": "function",
+                            "static": false,
+                            "location": "org/springframework/samples/petclinic/owner/OwnerController.java:60"
+                          }
+                        ],
+                        "name": "OwnerController",
+                        "type": "class"
+                      }
+                    ],
+                    "name": "owner",
+                    "type": "package"
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "name": "isNew",
+                            "type": "function",
+                            "static": false,
+                            "location": "org/springframework/samples/petclinic/model/BaseEntity.java:48"
+                          }
+                        ],
+                        "name": "BaseEntity",
+                        "type": "class"
+                      }
+                    ],
+                    "name": "model",
+                    "type": "package"
+                  }
+                ],
+                "name": "petclinic",
+                "type": "package"
+              }
+            ],
+            "name": "samples",
+            "type": "package"
+          }
+        ],
+        "name": "springframework",
+        "type": "package"
+      }
+    ],
+    "name": "org",
+    "type": "package"
+  },
+  {
+    "type": "http",
+    "name": "HTTP server requests",
+    "children": [
+      {
+        "type": "route",
+        "name": "GET /owners/new"
+      }
+    ]
+  }
+]

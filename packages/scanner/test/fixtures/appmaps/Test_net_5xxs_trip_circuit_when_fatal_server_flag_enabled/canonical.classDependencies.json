@@ -1,0 +1,34 @@
+[
+  {
+    "caller": "lib/Semian",
+    "callee": "lib/LRUHash"
+  },
+  {
+    "caller": "lib/Semian",
+    "callee": "ruby/Semian"
+  },
+  {
+    "caller": "ruby/Semian",
+    "callee": "lib/Semian"
+  },
+  {
+    "caller": "semian:31050->GET http://semian:31050/500",
+    "callee": "lib/Semian"
+  },
+  {
+    "caller": "toxiproxy/Toxiproxy",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "toxiproxy/Toxiproxy",
+    "callee": "lib/Semian"
+  },
+  {
+    "caller": "toxiproxy/Toxiproxy",
+    "callee": "toxiproxy:8474->GET http://toxiproxy:8474/proxies"
+  },
+  {
+    "caller": "toxiproxy:8474->GET http://toxiproxy:8474/proxies",
+    "callee": "lib/Semian"
+  }
+]

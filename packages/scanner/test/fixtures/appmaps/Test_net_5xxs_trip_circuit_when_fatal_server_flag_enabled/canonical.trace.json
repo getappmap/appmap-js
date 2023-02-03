@@ -1,0 +1,1418 @@
+[
+  {
+    "kind": "function",
+    "function": "lib/Semian::NetHTTP.semian_configuration=",
+    "labels": []
+  },
+  {
+    "kind": "function",
+    "function": "lib/Semian.[]",
+    "labels": [],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/Semian.resources",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "lib/LRUHash#[]",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/LRUHash#get",
+            "labels": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "lib/Semian.[]",
+    "labels": [],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/Semian.resources",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "lib/LRUHash#[]",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/LRUHash#get",
+            "labels": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "lib/Semian.[]",
+    "labels": [],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/Semian.resources",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "lib/LRUHash#[]",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/LRUHash#get",
+            "labels": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "lib/Semian::CircuitBreaker#reset",
+    "labels": [],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/Semian::Simple::SlidingWindow#clear",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "lib/Semian::Simple::Integer#reset",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "lib/Semian::Instrumentable.notify",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "lib/Semian::Simple::State#close!",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "lib/Semian::Simple::SlidingWindow#clear",
+        "labels": []
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "lib/Semian.destroy",
+    "labels": [],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/Semian.resources",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "lib/LRUHash#delete",
+        "labels": []
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "lib/Semian.destroy",
+    "labels": [],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/Semian.resources",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "lib/LRUHash#delete",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "lib/Semian::ProtectedResource#destroy",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/Semian::CircuitBreaker#destroy",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/Semian::Simple::SlidingWindow#clear",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian::Simple::Integer#destroy",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Simple::Integer#reset",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian::Simple::State#destroy",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Simple::State#reset",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::State#close!",
+                        "labels": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "toxiproxy/Toxiproxy.[]",
+    "labels": [],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/Semian::NetHTTP#connect",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/Semian::NetHTTP#disabled?",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/Semian::NetHTTP#raw_semian_options",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::NetHTTP.retrieve_semian_configuration",
+                    "labels": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "lib/Semian::Adapter#semian_resource",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/Semian::NetHTTP#resource_exceptions",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian::NetHTTP#semian_identifier",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::NetHTTP#raw_semian_options",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian.retrieve_or_register",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian.consumers",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian.consumers",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian.[]",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian.resources",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "lib/LRUHash#[]",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "lib/LRUHash#get",
+                            "labels": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "lib/Semian::ProtectedResource#acquire",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "ruby/Semian::CircuitBreaker#acquire",
+                "labels": [
+                  "rpc.circuit_breaker"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::CircuitBreaker#transition_to_half_open?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::State#open?",
+                        "labels": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::CircuitBreaker#request_allowed?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::State#closed?",
+                        "labels": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Simple::State#half_open?",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Instrumentable.notify",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::CircuitBreaker#mark_success",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::State#half_open?",
+                        "labels": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "http_client_request",
+        "route": "GET http://toxiproxy:8474/proxies",
+        "parameter_names": null,
+        "status_code": 200,
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/Semian::NetHTTP#transport_request",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/Semian::NetHTTP#disabled?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::NetHTTP#raw_semian_options",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian::Adapter#semian_resource",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian::ProtectedResource#acquire",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "ruby/Semian::CircuitBreaker#acquire",
+                    "labels": [
+                      "rpc.circuit_breaker"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::CircuitBreaker#transition_to_half_open?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "lib/Semian::Simple::State#open?",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::CircuitBreaker#request_allowed?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "lib/Semian::Simple::State#closed?",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::State#half_open?",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Instrumentable.notify",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::NetHTTP#raw_semian_options",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::CircuitBreaker#mark_success",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "lib/Semian::Simple::State#half_open?",
+                            "labels": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "toxiproxy/Toxiproxy.assert_response",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "json/JSON::Ext::Parser#parse",
+        "labels": [
+          "format.json.parse"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "lib/Semian::NetHTTP#raw_semian_options",
+    "labels": [],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/Semian::NetHTTP.retrieve_semian_configuration",
+        "labels": []
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "lib/Semian::NetHTTP#connect",
+    "labels": [],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/Semian::NetHTTP#disabled?",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/Semian::NetHTTP#raw_semian_options",
+            "labels": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "lib/Semian::Adapter#semian_resource",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/Semian::NetHTTP#raw_semian_options",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "lib/Semian::NetHTTP#resource_exceptions",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "lib/Semian::NetHTTP#semian_identifier",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/Semian::NetHTTP#raw_semian_options",
+                "labels": []
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "lib/Semian.retrieve_or_register",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/Semian.consumers",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian.consumers",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian.[]",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian.resources",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/LRUHash#[]",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/LRUHash#get",
+                        "labels": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian.register",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian.thread_safe?",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Simple::Integer#reset",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Simple::State#reset",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::State#close!",
+                        "labels": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::CircuitBreaker#reset",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::SlidingWindow#clear",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::Integer#reset",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Instrumentable.notify",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::State#close!",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::SlidingWindow#clear",
+                        "labels": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian.semaphores_enabled?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian.disabled?",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian.sysv_semaphores_supported?",
+                        "labels": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian.resources",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/LRUHash#[]=",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/LRUHash#set",
+                        "labels": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "lib/Semian::ProtectedResource#acquire",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "ruby/Semian::CircuitBreaker#acquire",
+            "labels": [
+              "rpc.circuit_breaker"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/Semian::CircuitBreaker#transition_to_half_open?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Simple::State#open?",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian::CircuitBreaker#request_allowed?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Simple::State#closed?",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian::Simple::State#half_open?",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian::Instrumentable.notify",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian::CircuitBreaker#mark_success",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Simple::State#half_open?",
+                    "labels": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "webrick/WEBrick::HTTPVersion.convert",
+    "labels": []
+  },
+  {
+    "kind": "http_client_request",
+    "route": "GET http://semian:31050/500",
+    "parameter_names": null,
+    "status_code": 500,
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/Semian::NetHTTP#transport_request",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/Semian::NetHTTP#disabled?",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/Semian::NetHTTP#raw_semian_options",
+                "labels": []
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "lib/Semian::Adapter#semian_resource",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "lib/Semian::ProtectedResource#acquire",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "ruby/Semian::CircuitBreaker#acquire",
+                "labels": [
+                  "rpc.circuit_breaker"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::CircuitBreaker#transition_to_half_open?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::State#open?",
+                        "labels": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::CircuitBreaker#request_allowed?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::State#closed?",
+                        "labels": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Simple::State#half_open?",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Instrumentable.notify",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::NetHTTP#raw_semian_options",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Adapter#semian_resource",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::CircuitBreaker#mark_failed",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::ThreadSafe::SlidingWindow#reject!",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "lib/Semian::Simple::SlidingWindow#reject!",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::SlidingWindow#<<",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::State#closed?",
+                        "labels": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::CircuitBreaker#mark_success",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::State#half_open?",
+                        "labels": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "lib/Semian::NetHTTP#connect",
+    "labels": [],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/Semian::NetHTTP#disabled?",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/Semian::NetHTTP#raw_semian_options",
+            "labels": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "lib/Semian::Adapter#semian_resource",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "lib/Semian::ProtectedResource#acquire",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "ruby/Semian::CircuitBreaker#acquire",
+            "labels": [
+              "rpc.circuit_breaker"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/Semian::CircuitBreaker#transition_to_half_open?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Simple::State#open?",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian::CircuitBreaker#request_allowed?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Simple::State#closed?",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian::Simple::State#half_open?",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian::Instrumentable.notify",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian::CircuitBreaker#mark_success",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Simple::State#half_open?",
+                    "labels": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_client_request",
+    "route": "GET http://semian:31050/500",
+    "parameter_names": null,
+    "status_code": 500,
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/Semian::NetHTTP#transport_request",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/Semian::NetHTTP#disabled?",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/Semian::NetHTTP#raw_semian_options",
+                "labels": []
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "lib/Semian::Adapter#semian_resource",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "lib/Semian::ProtectedResource#acquire",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "ruby/Semian::CircuitBreaker#acquire",
+                "labels": [
+                  "rpc.circuit_breaker"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::CircuitBreaker#transition_to_half_open?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::State#open?",
+                        "labels": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::CircuitBreaker#request_allowed?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::State#closed?",
+                        "labels": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Simple::State#half_open?",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Instrumentable.notify",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::NetHTTP#raw_semian_options",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Adapter#semian_resource",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::CircuitBreaker#mark_failed",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::ThreadSafe::SlidingWindow#reject!",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "lib/Semian::Simple::SlidingWindow#reject!",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::SlidingWindow#<<",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::State#closed?",
+                        "labels": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::CircuitBreaker#mark_success",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::State#half_open?",
+                        "labels": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "lib/Semian::NetHTTP#connect",
+    "labels": [],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/Semian::NetHTTP#disabled?",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/Semian::NetHTTP#raw_semian_options",
+            "labels": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "lib/Semian::Adapter#semian_resource",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "lib/Semian::ProtectedResource#acquire",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "ruby/Semian::CircuitBreaker#acquire",
+            "labels": [
+              "rpc.circuit_breaker"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/Semian::CircuitBreaker#transition_to_half_open?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Simple::State#open?",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian::CircuitBreaker#request_allowed?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Simple::State#closed?",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian::Simple::State#half_open?",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian::Instrumentable.notify",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian::CircuitBreaker#mark_success",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Simple::State#half_open?",
+                    "labels": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_client_request",
+    "route": "GET http://semian:31050/500",
+    "parameter_names": null,
+    "status_code": 500,
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/Semian::NetHTTP#transport_request",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/Semian::NetHTTP#disabled?",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/Semian::NetHTTP#raw_semian_options",
+                "labels": []
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "lib/Semian::Adapter#semian_resource",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "lib/Semian::ProtectedResource#acquire",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "ruby/Semian::CircuitBreaker#acquire",
+                "labels": [
+                  "rpc.circuit_breaker"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::CircuitBreaker#transition_to_half_open?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::State#open?",
+                        "labels": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::CircuitBreaker#request_allowed?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::State#closed?",
+                        "labels": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Simple::State#half_open?",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Instrumentable.notify",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::NetHTTP#raw_semian_options",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Adapter#semian_resource",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::CircuitBreaker#mark_failed",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::ThreadSafe::SlidingWindow#reject!",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "lib/Semian::Simple::SlidingWindow#reject!",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::SlidingWindow#<<",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::State#closed?",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Instrumentable.notify",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::State#open!",
+                        "labels": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::CircuitBreaker#mark_success",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::State#half_open?",
+                        "labels": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "lib/Semian::NetHTTP#connect",
+    "labels": [],
+    "children": [
+      {
+        "kind": "function",
+        "function": "lib/Semian::NetHTTP#disabled?",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/Semian::NetHTTP#raw_semian_options",
+            "labels": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "lib/Semian::Adapter#semian_resource",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "lib/Semian::ProtectedResource#acquire",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "ruby/Semian::CircuitBreaker#acquire",
+            "labels": [
+              "rpc.circuit_breaker"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "lib/Semian::CircuitBreaker#transition_to_half_open?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Simple::State#open?",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "lib/Semian::CircuitBreaker#request_allowed?",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Simple::State#closed?",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::Simple::State#half_open?",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "lib/Semian::CircuitBreaker#transition_to_half_open?",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "lib/Semian::Simple::State#open?",
+                        "labels": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "lib/Semian::Instrumentable.notify",
+            "labels": []
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "lib/Semian::Adapter#semian_resource",
+        "labels": []
+      },
+      {
+        "kind": "function",
+        "function": "lib/Semian::NetHTTP#semian_identifier",
+        "labels": [],
+        "children": [
+          {
+            "kind": "function",
+            "function": "lib/Semian::NetHTTP#raw_semian_options",
+            "labels": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "function": "lib/Semian::NetHTTP.semian_configuration=",
+    "labels": []
+  }
+]

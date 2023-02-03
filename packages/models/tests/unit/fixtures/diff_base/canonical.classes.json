@@ -1,0 +1,10 @@
+[
+  "app/models/App::Search",
+  "app/models/DAO::PublicResource",
+  "app/models/DAO::SequelUtil",
+  "app/models/DAO::ToModel",
+  "app/models/DAO::User",
+  "app/models/Exceptions::RecordNotFound",
+  "app/models/Search",
+  "app/models/User::Show"
+]

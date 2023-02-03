@@ -1,0 +1,6 @@
+[
+  "format.json.generate",
+  "jwt.encode",
+  "jwt.signature.sign",
+  "serialize"
+]

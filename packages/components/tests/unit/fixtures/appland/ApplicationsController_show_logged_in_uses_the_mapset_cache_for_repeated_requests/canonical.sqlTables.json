@@ -1,0 +1,16 @@
+[
+  "apps",
+  "code_objects",
+  "key_data_stats",
+  "mapset_caches",
+  "mapsets",
+  "mapsets_preference_ordered",
+  "messages",
+  "orgs",
+  "recording_methods",
+  "scenario_code_objects",
+  "scenario_processing_errors",
+  "scenarios",
+  "sql_queries",
+  "users"
+]

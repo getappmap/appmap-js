@@ -1,0 +1,12 @@
+[
+  {
+    "route": "GET /*unmatched_route",
+    "parameters": "(controller,action)",
+    "status": 200
+  },
+  {
+    "route": null,
+    "parameters": "(controller,action)",
+    "status": 200
+  }
+]

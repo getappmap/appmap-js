@@ -1,0 +1,78 @@
+[
+  {
+    "name": "jwt",
+    "type": "package",
+    "children": [
+      {
+        "name": "JWT",
+        "type": "class",
+        "children": [
+          {
+            "name": "decode",
+            "type": "function",
+            "labels": [
+              "jwt.decode"
+            ],
+            "static": true,
+            "location": "/Users/dustin/.rbenv/versions/3.0.1/lib/ruby/gems/3.0.0/gems/jwt-2.4.1/lib/jwt.rb:27"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ruby",
+    "type": "package",
+    "children": [
+      {
+        "name": "String",
+        "type": "class",
+        "children": [
+          {
+            "name": "unpack1",
+            "type": "function",
+            "labels": [
+              "string.unpack"
+            ],
+            "static": false,
+            "location": "<internal:pack>:280"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "json",
+    "type": "package",
+    "children": [
+      {
+        "name": "JSON",
+        "type": "class",
+        "children": [
+          {
+            "name": "Ext",
+            "type": "class",
+            "children": [
+              {
+                "name": "Parser",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "parse",
+                    "type": "function",
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ],
+                    "static": false,
+                    "location": "JSON::Ext::Parser#parse"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

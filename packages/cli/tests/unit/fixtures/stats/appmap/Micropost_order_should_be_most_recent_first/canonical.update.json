@@ -1,0 +1,68 @@
+[
+  {
+    "kind": "function",
+    "labels": ["mvc.before_action"]
+  },
+  {
+    "kind": "function",
+    "labels": ["mvc.after_action"]
+  },
+  {
+    "kind": "function",
+    "labels": ["log"]
+  },
+  {
+    "kind": "function",
+    "labels": ["log"]
+  },
+  {
+    "kind": "function",
+    "labels": ["log"]
+  },
+  {
+    "kind": "function",
+    "labels": ["log"]
+  },
+  {
+    "kind": "function",
+    "labels": ["dao.materialize"],
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["log"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": ["dao.materialize"],
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["log"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": ["dao.materialize"],
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["log"]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": ["log"]
+  },
+  {
+    "kind": "function",
+    "labels": ["mvc.before_action"]
+  },
+  {
+    "kind": "function",
+    "labels": ["mvc.after_action"]
+  }
+]

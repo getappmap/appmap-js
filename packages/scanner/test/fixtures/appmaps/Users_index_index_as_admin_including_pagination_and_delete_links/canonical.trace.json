@@ -1,0 +1,4464 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "POST /login",
+    "parameter_names": [
+      "session",
+      "controller",
+      "action"
+    ],
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "string/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/SessionsController#create",
+            "labels": [
+              "public"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "activerecord/ActiveRecord::Core::ClassMethods.find_by",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "sqlite3/SQLite3::Statement#columns",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                    "labels": []
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "users"
+                      ],
+                      "columns": [
+                        "users.*",
+                        "users.email"
+                      ],
+                      "joinCount": 0
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "string/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#destroy",
+                "labels": [
+                  "http.session.write"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Request::Session#clear",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/SessionsHelper#log_in",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Request::Session#[]=",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/SessionsHelper#remember",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/models/User#remember",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/models/User.new_token",
+                        "labels": [
+                          "secret",
+                          "secret.generator"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/models/User.digest",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Persistence#update_attribute",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                            "labels": [
+                              "mvc.before_action"
+                            ],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "activerecord/ActiveRecord::Persistence#new_record?",
+                                "labels": []
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                            "labels": [
+                              "mvc.before_action"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Dirty#changed_attribute_names_to_save",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "string/Module.==",
+                                "labels": [
+                                  "string.equals"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::ModelSchema::ClassMethods.column_names",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "sqlite3/SQLite3::Database#execute",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "string/String#==",
+                                "labels": [
+                                  "string.equals"
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "string/String#==",
+                                "labels": [
+                                  "string.equals"
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                            "labels": []
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SAVEPOINT active_record_1"
+                            },
+                            "analyzed_query": {
+                              "actions": [],
+                              "tables": [],
+                              "columns": [],
+                              "joinCount": 0
+                            }
+                          },
+                          {
+                            "kind": "function",
+                            "function": "string/Module.==",
+                            "labels": [
+                              "string.equals"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::Type::Internal::Timezone#is_utc?",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "sqlite3/SQLite3::Database#prepare",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                            "labels": []
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "UPDATE \"users\" SET \"remember_digest\" = ?, \"updated_at\" = ? WHERE \"users\".\"id\" = ?"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "update"
+                              ],
+                              "tables": [
+                                "users"
+                              ],
+                              "columns": [
+                                "remember_digest",
+                                "updated_at",
+                                "users.id"
+                              ],
+                              "joinCount": 0
+                            }
+                          },
+                          {
+                            "kind": "function",
+                            "function": "string/Module.==",
+                            "labels": [
+                              "string.equals"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::Type::Internal::Timezone#is_utc?",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "string/Module.==",
+                            "labels": [
+                              "string.equals"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::Type::Internal::Timezone#is_utc?",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "string/String#==",
+                            "labels": [
+                              "string.equals"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::TimeZoneConversion::TimeZoneConverter#deserialize",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "string/Module.==",
+                            "labels": [
+                              "string.equals"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::Type::Internal::Timezone#is_utc?",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                            "labels": [
+                              "mvc.after_action"
+                            ],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "activerecord/User#autosave_associated_records_for_microposts",
+                                "labels": []
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                            "labels": [
+                              "mvc.after_action"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::ConnectionAdapters::TransactionManager#commit_transaction",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "sqlite3/SQLite3::Database#execute",
+                                "labels": []
+                              },
+                              {
+                                "kind": "function",
+                                "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "string/String#==",
+                                    "labels": [
+                                      "string.equals"
+                                    ]
+                                  },
+                                  {
+                                    "kind": "function",
+                                    "function": "string/String#==",
+                                    "labels": [
+                                      "string.equals"
+                                    ]
+                                  },
+                                  {
+                                    "kind": "function",
+                                    "function": "logger/Logger::LogDevice#write",
+                                    "labels": [
+                                      "log"
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                                "labels": []
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "normalized_query": "RELEASE SAVEPOINT active_record_1"
+                                },
+                                "analyzed_query": {
+                                  "actions": [],
+                                  "tables": [],
+                                  "columns": [],
+                                  "joinCount": 0
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Generator::State#generate",
+                    "labels": [
+                      "format.json.generate"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "openssl/OpenSSL::Cipher#encrypt",
+                    "labels": [
+                      "crypto.encrypt"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Generator::State#generate",
+                    "labels": [
+                      "format.json.generate"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]=",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]=",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionController::Instrumentation#redirect_to",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::ModelSchema::ClassMethods.symbol_column_to_string",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "string/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "string/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "string/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "string/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "string/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "string/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "string/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "string/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "string/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "string/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "string/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "string/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::Integration#to_param",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "string/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activerecord/ActiveRecord::ConnectionHandling.connected?",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "string/String#==",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /users",
+    "parameter_names": [
+      "controller",
+      "action"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "string/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "openssl/OpenSSL::Cipher#decrypt",
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/LoggedInHelper#logged_in_user",
+                "labels": [
+                  "security.require_login"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#logged_in?",
+                    "labels": [
+                      "security.authentication"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::Core::ClassMethods.find_by",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "sqlite3/SQLite3::Statement#columns",
+                                "labels": []
+                              },
+                              {
+                                "kind": "function",
+                                "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "logger/Logger::LogDevice#write",
+                                    "labels": [
+                                      "log"
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                                "labels": []
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+                                },
+                                "analyzed_query": {
+                                  "actions": [
+                                    "select"
+                                  ],
+                                  "tables": [
+                                    "users"
+                                  ],
+                                  "columns": [
+                                    "users.*",
+                                    "users.id"
+                                  ],
+                                  "joinCount": 0
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/UsersController#index",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "activerecord/ActiveRecord::Querying.limit",
+                "labels": []
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "actionview/ActionView::Resolver#find_all",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activerecord/ActiveRecord::ConnectionHandling.connected?",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "app/views/app_views_users_index_html_erb.render",
+            "labels": [
+              "mvc.template"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activerecord/ActiveRecord::Core::ClassMethods.arel_table",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "string/Module.==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "sqlite3/SQLite3::Database#prepare",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "string/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "string/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                "labels": []
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SELECT COUNT(*) FROM \"users\""
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "select"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "*"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_users__user_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT \"users\".* FROM \"users\" LIMIT ? OFFSET ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "users"
+                      ],
+                      "columns": [
+                        "users.*"
+                      ],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT COUNT(*) FROM \"users\""
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "users"
+                      ],
+                      "columns": [
+                        "*"
+                      ],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::Railties::CollectionCacheAssociationLoading#setup",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "string/String#==",
+                            "labels": [
+                              "string.equals"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "string/Module.==",
+                            "labels": [
+                              "string.equals"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::Querying.find_by_sql",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "sqlite3/SQLite3::Statement#columns",
+                                "labels": []
+                              },
+                              {
+                                "kind": "function",
+                                "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "logger/Logger::LogDevice#write",
+                                    "labels": [
+                                      "log"
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                                "labels": []
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "normalized_query": "SELECT \"users\".* FROM \"users\" LIMIT ? OFFSET ?"
+                                },
+                                "analyzed_query": {
+                                  "actions": [
+                                    "select"
+                                  ],
+                                  "tables": [
+                                    "users"
+                                  ],
+                                  "columns": [
+                                    "users.*"
+                                  ],
+                                  "joinCount": 0
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::Railties::CollectionCacheAssociationLoading#collection_with_template",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "string/String#==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/UsersHelper#gravatar_for",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::Read#_read_attribute",
+                            "labels": []
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user?",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                            "labels": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/ApplicationHelper#full_title",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "json/JSON::Ext::Parser#parse",
+                "labels": [
+                  "format.json.parse"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__shim_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::Railties::CollectionCacheAssociationLoading#setup",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__header_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::Railties::CollectionCacheAssociationLoading#setup",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#logged_in?",
+                    "labels": [
+                      "security.authentication"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionpack/ActionDispatch::Request::Session#[]",
+                        "labels": [
+                          "http.session.read"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::ModelSchema::ClassMethods.symbol_column_to_string",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionpack/ActionDispatch::Request::Session#[]",
+                        "labels": [
+                          "http.session.read"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::Integration#to_param",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__footer_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::Railties::CollectionCacheAssociationLoading#setup",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activerecord/ActiveRecord::LogSubscriber.reset_runtime",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activerecord/ActiveRecord::ConnectionHandling.connected?",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "string/String#==",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "DELETE /users/{id}",
+    "parameter_names": [
+      "controller",
+      "action",
+      "id"
+    ],
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "string/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "openssl/OpenSSL::Cipher#decrypt",
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/LoggedInHelper#logged_in_user",
+                "labels": [
+                  "security.require_login"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#logged_in?",
+                    "labels": [
+                      "security.authentication"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::Core::ClassMethods.find_by",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "sqlite3/SQLite3::Statement#columns",
+                                "labels": []
+                              },
+                              {
+                                "kind": "function",
+                                "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "logger/Logger::LogDevice#write",
+                                    "labels": [
+                                      "log"
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                                "labels": []
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+                                },
+                                "analyzed_query": {
+                                  "actions": [
+                                    "select"
+                                  ],
+                                  "tables": [
+                                    "users"
+                                  ],
+                                  "columns": [
+                                    "users.*",
+                                    "users.id"
+                                  ],
+                                  "joinCount": 0
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/SessionsHelper#current_user",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Request::Session#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activerecord/ActiveRecord::AttributeMethods::Query#query_attribute",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "string/String#==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/UsersController#destroy",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "activerecord/ActiveRecord::Core::ClassMethods.find",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "sqlite3/SQLite3::Statement#columns",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                    "labels": []
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "users"
+                      ],
+                      "columns": [
+                        "users.*",
+                        "users.id"
+                      ],
+                      "joinCount": 0
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                "labels": [
+                  "mvc.before_action"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::Associations#association",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::Relation#records",
+                    "labels": [
+                      "dao.materialize"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "string/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::ModelSchema::ClassMethods.ignored_columns",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "string/Module.==",
+                        "labels": [
+                          "string.equals"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Querying.find_by_sql",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "sqlite3/SQLite3::Database#execute",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "string/String#==",
+                                "labels": [
+                                  "string.equals"
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "string/String#==",
+                                "labels": [
+                                  "string.equals"
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                            "labels": []
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SAVEPOINT active_record_1"
+                            },
+                            "analyzed_query": {
+                              "actions": [],
+                              "tables": [],
+                              "columns": [],
+                              "joinCount": 0
+                            }
+                          },
+                          {
+                            "kind": "function",
+                            "function": "sqlite3/SQLite3::Database#prepare",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::ConnectionAdapters::StatementPool#[]=",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "sqlite3/SQLite3::Statement#columns",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "logger/Logger::LogDevice#write",
+                                "labels": [
+                                  "log"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                            "labels": []
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "microposts"
+                              ],
+                              "columns": [
+                                "microposts.*",
+                                "microposts.created_at",
+                                "microposts.user_id"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                    "labels": [
+                      "mvc.before_action"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Associations#association",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "sqlite3/SQLite3::Database#prepare",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                        "labels": []
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "normalized_query": "PRAGMA table_info(\"active_storage_attachments\")"
+                        },
+                        "analyzed_query": {
+                          "actions": [],
+                          "tables": [],
+                          "columns": [],
+                          "joinCount": 0
+                        }
+                      },
+                      {
+                        "kind": "function",
+                        "function": "sqlite3/SQLite3::Database.quote",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::ConnectionAdapters::SQLite3::DatabaseStatements#exec_query",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "sqlite3/SQLite3::Database#prepare",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                            "labels": []
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "normalized_query": "SELECT sql FROM\n  (SELECT * FROM sqlite_master UNION ALL\n   SELECT * FROM sqlite_temp_master)\nWHERE type = ? AND name = ?\n"
+                            },
+                            "analyzed_query": {
+                              "actions": [
+                                "select"
+                              ],
+                              "tables": [
+                                "sqlite_master",
+                                "sqlite_temp_master"
+                              ],
+                              "columns": [
+                                "*",
+                                "name",
+                                "sql",
+                                "type"
+                              ],
+                              "joinCount": 0
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Relation#records",
+                        "labels": [
+                          "dao.materialize"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "string/String#==",
+                            "labels": [
+                              "string.equals"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "string/Module.==",
+                            "labels": [
+                              "string.equals"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::Querying.find_by_sql",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "sqlite3/SQLite3::Database#prepare",
+                                "labels": []
+                              },
+                              {
+                                "kind": "function",
+                                "function": "activerecord/ActiveRecord::ConnectionAdapters::StatementPool#[]=",
+                                "labels": []
+                              },
+                              {
+                                "kind": "function",
+                                "function": "sqlite3/SQLite3::Statement#columns",
+                                "labels": []
+                              },
+                              {
+                                "kind": "function",
+                                "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "logger/Logger::LogDevice#write",
+                                    "labels": [
+                                      "log"
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                                "labels": []
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                                },
+                                "analyzed_query": {
+                                  "actions": [
+                                    "select"
+                                  ],
+                                  "tables": [
+                                    "active_storage_attachments"
+                                  ],
+                                  "columns": [
+                                    "active_storage_attachments.*",
+                                    "active_storage_attachments.name",
+                                    "active_storage_attachments.record_id",
+                                    "active_storage_attachments.record_type"
+                                  ],
+                                  "joinCount": 0
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "sqlite3/SQLite3::Database#prepare",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                    "labels": []
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "DELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "delete"
+                      ],
+                      "tables": [
+                        "microposts"
+                      ],
+                      "columns": [
+                        "microposts.id"
+                      ],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                    "labels": [
+                      "mvc.after_action"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::Persistence#destroy!",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                        "labels": [
+                          "mvc.before_action"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::Associations#association",
+                            "labels": []
+                          },
+                          {
+                            "kind": "function",
+                            "function": "activerecord/ActiveRecord::Relation#records",
+                            "labels": [
+                              "dao.materialize"
+                            ],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "string/String#==",
+                                "labels": [
+                                  "string.equals"
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                                "labels": []
+                              },
+                              {
+                                "kind": "function",
+                                "function": "string/Module.==",
+                                "labels": [
+                                  "string.equals"
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "activerecord/ActiveRecord::Querying.find_by_sql",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "sqlite3/SQLite3::Statement#columns",
+                                    "labels": []
+                                  },
+                                  {
+                                    "kind": "function",
+                                    "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                                    "labels": [],
+                                    "children": [
+                                      {
+                                        "kind": "function",
+                                        "function": "logger/Logger::LogDevice#write",
+                                        "labels": [
+                                          "log"
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "kind": "function",
+                                    "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                                    "labels": []
+                                  },
+                                  {
+                                    "kind": "sql",
+                                    "sql": {
+                                      "normalized_query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+                                    },
+                                    "analyzed_query": {
+                                      "actions": [
+                                        "select"
+                                      ],
+                                      "tables": [
+                                        "active_storage_attachments"
+                                      ],
+                                      "columns": [
+                                        "active_storage_attachments.*",
+                                        "active_storage_attachments.name",
+                                        "active_storage_attachments.record_id",
+                                        "active_storage_attachments.record_type"
+                                      ],
+                                      "joinCount": 0
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "sqlite3/SQLite3::Database#prepare",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "logger/Logger::LogDevice#write",
+                            "labels": [
+                              "log"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                        "labels": []
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "normalized_query": "DELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = ?"
+                        },
+                        "analyzed_query": {
+                          "actions": [
+                            "delete"
+                          ],
+                          "tables": [
+                            "microposts"
+                          ],
+                          "columns": [
+                            "microposts.id"
+                          ],
+                          "joinCount": 0
+                        }
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                        "labels": [
+                          "mvc.after_action"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::AttributeMethods::PrimaryKey#id",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "string/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::ConnectionAdapters::SQLite3::Quoting#quote_table_name",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "sqlite3/SQLite3::Database#prepare",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::ConnectionAdapters::StatementPool#[]=",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "sqlite3/SQLite3::Statement#columns",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                    "labels": []
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT \"relationships\".* FROM \"relationships\" WHERE \"relationships\".\"follower_id\" = ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "relationships"
+                      ],
+                      "columns": [
+                        "relationships.*",
+                        "relationships.follower_id"
+                      ],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "sqlite3/SQLite3::Database#prepare",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                    "labels": []
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "DELETE FROM \"relationships\" WHERE \"relationships\".\"id\" = ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "delete"
+                      ],
+                      "tables": [
+                        "relationships"
+                      ],
+                      "columns": [
+                        "relationships.id"
+                      ],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "string/Module.==",
+                    "labels": [
+                      "string.equals"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::ConnectionAdapters::SQLite3::Quoting#quote_table_name",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "sqlite3/SQLite3::Database#prepare",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::ConnectionAdapters::StatementPool#[]=",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "sqlite3/SQLite3::Statement#columns",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                    "labels": []
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT \"relationships\".* FROM \"relationships\" WHERE \"relationships\".\"followed_id\" = ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "relationships"
+                      ],
+                      "columns": [
+                        "relationships.*",
+                        "relationships.followed_id"
+                      ],
+                      "joinCount": 0
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "sqlite3/SQLite3::Database#prepare",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                "labels": []
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "DELETE FROM \"users\" WHERE \"users\".\"id\" = ?"
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "delete"
+                  ],
+                  "tables": [
+                    "users"
+                  ],
+                  "columns": [
+                    "users.id"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activerecord/ActiveRecord::ConnectionAdapters::TransactionManager#commit_transaction",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                    "labels": [
+                      "mvc.before_action"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                    "labels": [
+                      "mvc.after_action"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::Transactions#before_committed!",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                        "labels": [
+                          "mvc.before_action"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                        "labels": [
+                          "mvc.after_action"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activerecord/ActiveRecord::ConnectionAdapters::SavepointTransaction#commit",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "sqlite3/SQLite3::Database#execute",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::LogSubscriber#sql",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "string/String#==",
+                            "labels": [
+                              "string.equals"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "string/String#==",
+                            "labels": [
+                              "string.equals"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "logger/Logger::LogDevice#write",
+                            "labels": [
+                              "log"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::ConnectionHandling.connection",
+                        "labels": []
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "normalized_query": "RELEASE SAVEPOINT active_record_1"
+                        },
+                        "analyzed_query": {
+                          "actions": [],
+                          "tables": [],
+                          "columns": [],
+                          "joinCount": 0
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                    "labels": [
+                      "mvc.before_action"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                    "labels": [
+                      "mvc.after_action"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Persistence#persisted?",
+                        "labels": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                    "labels": [
+                      "mvc.before_action"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                    "labels": [
+                      "mvc.after_action"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "activerecord/ActiveRecord::Persistence#persisted?",
+                        "labels": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "string/String#==",
+                "labels": [
+                  "string.equals"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionController::Instrumentation#redirect_to",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activerecord/ActiveRecord::ConnectionHandling.connected?",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "string/String#==",
+            "labels": [
+              "string.equals"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

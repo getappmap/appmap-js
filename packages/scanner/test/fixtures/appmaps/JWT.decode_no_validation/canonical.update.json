@@ -1,0 +1,36 @@
+[
+  {
+    "kind": "function",
+    "labels": [
+      "jwt.decode"
+    ],
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "string.unpack"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "format.json.parse",
+          "deserialize.safe"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "string.unpack"
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": [
+          "format.json.parse",
+          "deserialize.safe"
+        ]
+      }
+    ]
+  }
+]

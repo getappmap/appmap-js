@@ -1,0 +1,2848 @@
+[
+  {
+    "type": "package",
+    "name": "build",
+    "children": [
+      {
+        "type": "package",
+        "name": "lib",
+        "children": [
+          {
+            "type": "package",
+            "name": "startup",
+            "children": [
+              {
+                "type": "package",
+                "name": "validateDependencies.js",
+                "children": [
+                  {
+                    "type": "class",
+                    "name": "validateDependencies",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/validateDependencies.js:17"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "package",
+                "name": "validateChatBot.js",
+                "children": [
+                  {
+                    "type": "class",
+                    "name": "validateChatBot",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/validateChatBot.js:11"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "checkIntentWithFunctionHandlerExists",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/validateChatBot.js:29"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "package",
+                "name": "validatePreconditions.js",
+                "children": [
+                  {
+                    "type": "class",
+                    "name": "validatePreconditions",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/validatePreconditions.js:21"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "checkIfRunningOnSupportedNodeVersion",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/validatePreconditions.js:51"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "checkIfRunningOnSupportedOS",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/validatePreconditions.js:61"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "checkIfRunningOnSupportedCPU",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/validatePreconditions.js:70"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "checkIfPortIsAvailable",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/validatePreconditions.js:79"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "checkIfRequiredFileExists",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/validatePreconditions.js:98"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "package",
+                "name": "cleanupFtpFolder.js",
+                "children": [
+                  {
+                    "type": "class",
+                    "name": "cleanupFtpFolder",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/cleanupFtpFolder.js:11"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "package",
+                "name": "validateConfig.js",
+                "children": [
+                  {
+                    "type": "class",
+                    "name": "validateConfig",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/validateConfig.js:23"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "checkYamlSchema",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/validateConfig.js:49"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "checkMinimumRequiredNumberOfProducts",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/validateConfig.js:61"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "checkUnambiguousMandatorySpecialProducts",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/validateConfig.js:69"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "checkNecessaryExtraKeysOnSpecialProducts",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/validateConfig.js:84"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "checkUniqueSpecialOnProducts",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/validateConfig.js:95"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "checkMinimumRequiredNumberOfMemories",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/validateConfig.js:106"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "checkUnambiguousMandatorySpecialMemories",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/validateConfig.js:114"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "checkSpecialMemoriesHaveNoUserAssociated",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/validateConfig.js:129"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "checkUniqueSpecialOnMemories",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/validateConfig.js:140"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "checkForIllogicalCombos",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/validateConfig.js:151"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "package",
+                "name": "restoreOverwrittenFilesWithOriginals.js",
+                "children": [
+                  {
+                    "type": "class",
+                    "name": "exists",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/restoreOverwrittenFilesWithOriginals.js:14"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "restoreOverwrittenFilesWithOriginals",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/restoreOverwrittenFilesWithOriginals.js:15"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "package",
+                "name": "registerWebsocketEvents.js",
+                "children": [
+                  {
+                    "type": "class",
+                    "name": "registerWebsocketEvents",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/registerWebsocketEvents.js:13"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "package",
+                "name": "customizeApplication.js",
+                "children": [
+                  {
+                    "type": "class",
+                    "name": "customizeApplication",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/customizeApplication.js:11"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "customizeLogo",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/customizeApplication.js:38"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "customizeChatbotAvatar",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/customizeApplication.js:41"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "customizeHackingInstructorAvatar",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/customizeApplication.js:45"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "customizeFavicon",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/customizeApplication.js:49"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "customizePromotionVideo",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/customizeApplication.js:59"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "customizePromotionSubtitles",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/customizeApplication.js:62"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "retrieveCustomFile",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/customizeApplication.js:65"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "customizeTitle",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/customizeApplication.js:74"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "customizeTheme",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/customizeApplication.js:84"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "customizeCookieConsentBanner",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/customizeApplication.js:94"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "package",
+                "name": "customizeEasterEgg.js",
+                "children": [
+                  {
+                    "type": "class",
+                    "name": "customizeEasterEgg",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/customizeEasterEgg.js:10"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "replaceImagePath",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/customizeEasterEgg.js:24"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "replaceThreeJsTitleTag",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/lib/startup/customizeEasterEgg.js:34"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "package",
+        "name": "server.js",
+        "children": [
+          {
+            "type": "class",
+            "name": "collectDurationPromise",
+            "children": [
+              {
+                "type": "function",
+                "name": "()",
+                "static": false,
+                "location": "build/server.js:107"
+              }
+            ]
+          },
+          {
+            "type": "class",
+            "name": "restoreOverwrittenFilesWithOriginals",
+            "children": [
+              {
+                "type": "function",
+                "name": "()",
+                "static": false,
+                "location": "build/server.js:119"
+              }
+            ]
+          },
+          {
+            "type": "class",
+            "name": "start",
+            "children": [
+              {
+                "type": "function",
+                "name": "()",
+                "static": false,
+                "location": "build/server.js:556"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "package",
+        "name": "routes",
+        "children": [
+          {
+            "type": "package",
+            "name": "profileImageFileUpload.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "fileUpload",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/profileImageFileUpload.js:13"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "profileImageUrlUpload.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "profileImageUrlUpload",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/profileImageUrlUpload.js:12"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "redirect.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "performRedirect",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/redirect.js:10"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "angular.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "serveAngularClient",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/angular.js:9"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "easterEgg.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "serveEasterEgg",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/easterEgg.js:10"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "premiumReward.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "servePremiumContent",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/premiumReward.js:10"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "privacyPolicyProof.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "servePrivacyPolicyProof",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/privacyPolicyProof.js:10"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "appVersion.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "retrieveAppVersion",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/appVersion.js:9"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "repeatNotification.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "repeatNotification",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/repeatNotification.js:8"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "continueCode.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "retrieveCurrentContinueCode",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/continueCode.js:10"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "restoreProgress.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "restoreProgress",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/restoreProgress.js:11"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "fileServer.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "servePublicFiles",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/fileServer.js:11"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "quarantineServer.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "serveQuarantineFiles",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/quarantineServer.js:8"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "keyServer.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "serveKeyFiles",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/keyServer.js:8"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "logfileServer.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "serveLogFiles",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/logfileServer.js:8"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "metrics.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "observeRequestMetricsMiddleware",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/metrics.js:28"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "observeFileUploadMetricsMiddleware",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/metrics.js:42"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "serveMetrics",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/metrics.js:52"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "observeMetrics",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/metrics.js:62"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "authenticatedUsers.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "retrieveUserList",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/authenticatedUsers.js:10"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "currentUser.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "retrieveLoggedInUser",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/currentUser.js:11"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "login.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "login",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/login.js:14"
+                  },
+                  {
+                    "type": "class",
+                    "name": "verifyPreLoginChallenges",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/routes/login.js:55"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "changePassword.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "changePassword",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/changePassword.js:12"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "resetPassword.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "resetPassword",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/resetPassword.js:13"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "securityQuestion.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "securityQuestion",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/securityQuestion.js:8"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "search.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "searchProducts",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/search.js:11"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "coupon.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "applyCoupon",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/coupon.js:9"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "basket.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "retrieveBasket",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/basket.js:11"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "order.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "placeOrder",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/order.js:17"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "verify.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "jwtChallenge",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/verify.js:86"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "changeProductChallenge",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/verify.js:135"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "feedbackChallenge",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/verify.js:153"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "knownVulnerableComponentChallenge",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/verify.js:160"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "knownVulnerableComponents",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/verify.js:184"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "weirdCryptoChallenge",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/verify.js:200"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "weirdCryptos",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/verify.js:224"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "typosquattingNpmChallenge",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/verify.js:233"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "typosquattingAngularChallenge",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/verify.js:245"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "hiddenImageChallenge",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/verify.js:257"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "supplyChainAttackChallenge",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/verify.js:269"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "eslintScopeVulnIds",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/verify.js:281"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "dlpPastebinDataLeakChallenge",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/verify.js:287"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "dangerousIngredients",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/verify.js:307"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "b2bOrder.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "b2bOrder",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/b2bOrder.js:12"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "showProductReviews.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "productReviews",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/showProductReviews.js:22"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "createProductReviews.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "productReviews",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/createProductReviews.js:11"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "updateProductReviews.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "productReviews",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/updateProductReviews.js:12"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "likeProductReviews.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "productReviews",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/likeProductReviews.js:11"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "appConfiguration.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "retrieveAppConfiguration",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/appConfiguration.js:8"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "captcha.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "captchas",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/captcha.js:8"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "trackOrder.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "trackOrder",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/trackOrder.js:10"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "countryMapping.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "countryMapping",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/countryMapping.js:8"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "basketItems.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "addBasketItem",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/basketItems.js:11"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "quantityCheckBeforeBasketItemAddition",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/basketItems.js:52"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "quantityCheckBeforeBasketItemUpdate",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/basketItems.js:59"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "saveLoginIp.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "saveLoginIp",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/saveLoginIp.js:12"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "userProfile.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "getUserProfile",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/userProfile.js:15"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "updateUserProfile.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "updateUserProfile",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/updateUserProfile.js:12"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "languages.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "getLanguageList",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/languages.js:12"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "imageCaptcha.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "imageCaptchas",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/imageCaptcha.js:11"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "dataExport.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "dataExport",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/dataExport.js:12"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "address.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "getAddress",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/address.js:8"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "getAddressById",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/address.js:14"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "delAddressById",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/address.js:25"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "payment.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "getPaymentMethods",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/payment.js:8"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "getPaymentMethodById",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/payment.js:18"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "delPaymentMethodById",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/payment.js:33"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "wallet.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "getWalletBalance",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/wallet.js:8"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "addWalletBalance",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/wallet.js:19"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "orderHistory.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "orderHistory",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/orderHistory.js:9"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "allOrders",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/orderHistory.js:24"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "toggleDeliveryStatus",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/orderHistory.js:30"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "delivery.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "getDeliveryMethods",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/delivery.js:9"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "getDeliveryMethod",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/delivery.js:30"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "deluxe.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "upgradeToDeluxe",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/deluxe.js:11"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "deluxeMembershipStatus",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/deluxe.js:45"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "memory.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "addMemory",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/memory.js:8"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "getMemories",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/memory.js:19"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "package",
+            "name": "chatbot.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "initialize",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/chatbot.js:19"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "status",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/chatbot.js:112"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "respond",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/routes/chatbot.js:159"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "package",
+        "name": "data",
+        "children": [
+          {
+            "type": "package",
+            "name": "datacreator.js",
+            "children": [
+              {
+                "type": "class",
+                "name": "loadStaticData",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:22"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "createChallenges",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:50"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "createUsers",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:80"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "createWallet",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:111"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "createDeliveryMethods",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:122"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "createAddresses",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:139"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "createCards",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:155"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "deleteUser",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:168"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "createRandomFakeUsers",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:173"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "createQuantity",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:191"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "createMemories",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:202"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "createProducts",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:237"
+                  },
+                  {
+                    "type": "class",
+                    "name": "customizeChangeProductChallenge",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/data/datacreator.js:302"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "class",
+                    "name": "customizeRetrieveBlueprintChallenge",
+                    "children": [
+                      {
+                        "type": "function",
+                        "name": "()",
+                        "static": false,
+                        "location": "build/data/datacreator.js:307"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "createBaskets",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:311"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "createBasketItems",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:325"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "createAnonymousFeedback",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:374"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "createFeedback",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:395"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "createComplaints",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:401"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "createRecycleItem",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:409"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "createRecycle",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:477"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "createSecurityQuestions",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:482"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "createSecurityAnswer",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:493"
+                  }
+                ]
+              },
+              {
+                "type": "class",
+                "name": "createOrders",
+                "children": [
+                  {
+                    "type": "function",
+                    "name": "()",
+                    "static": false,
+                    "location": "build/data/datacreator.js:498"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "PRAGMA table_info(`Users`)"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA table_info(`Wallets`)"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA table_info(`Feedbacks`)"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA table_info(`Complaints`)"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA table_info(`Products`)"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA table_info(`Quantities`)"
+      },
+      {
+        "type": "query",
+        "name": "SELECT sql FROM sqlite_master"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM Products WHERE ((name LIKE '%%' OR description LIKE '%%') AND deletedAt IS NULL) ORDER BY name"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA table_info(`Challenges`)"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM Users WHERE email = 'foo' AND password = '37b51d194a7513e45b56f6524f2d51f2' AND deletedAt IS NULL"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO `Memories` (`id`,`caption`,`imagePath`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4,$5);"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO `SecurityAnswers` (`id`,`answer`,`UserId`,`createdAt`,`updatedAt`,`SecurityQuestionId`) VALUES (NULL,$1,$2,$3,$4,$5);"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO `Deliveries` (`id`,`name`,`price`,`deluxePrice`,`eta`,`icon`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7);"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO `Wallets` (`id`,`balance`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4);"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO `Quantities` (`id`,`quantity`,`limitPerUser`,`createdAt`,`updatedAt`,`ProductId`) VALUES (NULL,$1,$2,$3,$4,$5);"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO `Recycles` (`id`,`quantity`,`isPickup`,`date`,`createdAt`,`updatedAt`,`UserId`,`AddressId`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7);"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO `Complaints` (`id`,`message`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4);"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO `Feedbacks` (`id`,`comment`,`rating`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4,$5);"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO `BasketItems` (`id`,`quantity`,`createdAt`,`updatedAt`,`BasketId`,`ProductId`) VALUES (NULL,$1,$2,$3,$4,$5);"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO `Baskets` (`id`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3);"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO `Products` (`id`,`name`,`description`,`price`,`deluxePrice`,`image`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7);"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO `Products` (`id`,`name`,`description`,`price`,`deluxePrice`,`image`,`createdAt`,`updatedAt`,`deletedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8);"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO `Challenges` (`id`,`key`,`name`,`category`,`tags`,`description`,`difficulty`,`hint`,`hintUrl`,`mitigationUrl`,`solved`,`disabledEnv`,`tutorialOrder`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14);"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO `Challenges` (`id`,`key`,`name`,`category`,`description`,`difficulty`,`hint`,`hintUrl`,`mitigationUrl`,`solved`,`disabledEnv`,`tutorialOrder`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13);"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO `Challenges` (`id`,`key`,`name`,`category`,`tags`,`description`,`difficulty`,`hint`,`solved`,`disabledEnv`,`tutorialOrder`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12);"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO `Cards` (`id`,`fullName`,`cardNum`,`expMonth`,`expYear`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7);"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO `Addresses` (`id`,`fullName`,`mobileNum`,`zipCode`,`streetAddress`,`city`,`state`,`country`,`createdAt`,`updatedAt`,`UserId`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10);"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO `Users` (`id`,`username`,`email`,`password`,`role`,`deluxeToken`,`lastLoginIp`,`profileImage`,`totpSecret`,`isActive`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11);"
+      },
+      {
+        "type": "query",
+        "name": "UPDATE `Users` SET `deletedAt`=$1 WHERE `deletedAt` IS NULL AND `id` = $2"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO `SecurityQuestions` (`id`,`question`,`createdAt`,`updatedAt`) VALUES (NULL,$1,$2,$3);"
+      },
+      {
+        "type": "query",
+        "name": "CREATE TABLE IF NOT EXISTS `Wallets` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `balance` INTEGER DEFAULT 0, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_LIST(`Wallets`)"
+      },
+      {
+        "type": "query",
+        "name": "DROP TABLE IF EXISTS `Wallets`;"
+      },
+      {
+        "type": "query",
+        "name": "CREATE TABLE IF NOT EXISTS `SecurityAnswers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `answer` VARCHAR(255), `UserId` INTEGER UNIQUE REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `SecurityQuestionId` INTEGER REFERENCES `SecurityQuestions` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_LIST(`SecurityAnswers`)"
+      },
+      {
+        "type": "query",
+        "name": "DROP TABLE IF EXISTS `SecurityAnswers`;"
+      },
+      {
+        "type": "query",
+        "name": "CREATE TABLE IF NOT EXISTS `SecurityQuestions` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `question` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL);"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_LIST(`SecurityQuestions`)"
+      },
+      {
+        "type": "query",
+        "name": "DROP TABLE IF EXISTS `SecurityQuestions`;"
+      },
+      {
+        "type": "query",
+        "name": "CREATE TABLE IF NOT EXISTS `Recycles` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `quantity` INTEGER(4), `isPickup` TINYINT(1) DEFAULT 0, `date` DATETIME, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, `AddressId` INTEGER REFERENCES `Addresses` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_LIST(`Recycles`)"
+      },
+      {
+        "type": "query",
+        "name": "DROP TABLE IF EXISTS `Recycles`;"
+      },
+      {
+        "type": "query",
+        "name": "CREATE TABLE IF NOT EXISTS `Quantities` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `quantity` INTEGER, `limitPerUser` INTEGER DEFAULT NULL, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `ProductId` INTEGER REFERENCES `Products` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_LIST(`Quantities`)"
+      },
+      {
+        "type": "query",
+        "name": "DROP TABLE IF EXISTS `Quantities`;"
+      },
+      {
+        "type": "query",
+        "name": "CREATE TABLE IF NOT EXISTS `PrivacyRequests` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE, `deletionRequested` TINYINT(1) DEFAULT 0, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL);"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_LIST(`PrivacyRequests`)"
+      },
+      {
+        "type": "query",
+        "name": "DROP TABLE IF EXISTS `PrivacyRequests`;"
+      },
+      {
+        "type": "query",
+        "name": "CREATE TABLE IF NOT EXISTS `Memories` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `caption` VARCHAR(255), `imagePath` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_LIST(`Memories`)"
+      },
+      {
+        "type": "query",
+        "name": "DROP TABLE IF EXISTS `Memories`;"
+      },
+      {
+        "type": "query",
+        "name": "CREATE TABLE IF NOT EXISTS `ImageCaptchas` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `image` VARCHAR(255), `answer` VARCHAR(255), `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL);"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_LIST(`ImageCaptchas`)"
+      },
+      {
+        "type": "query",
+        "name": "DROP TABLE IF EXISTS `ImageCaptchas`;"
+      },
+      {
+        "type": "query",
+        "name": "CREATE TABLE IF NOT EXISTS `Feedbacks` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `comment` VARCHAR(255), `rating` INTEGER NOT NULL, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_LIST(`Feedbacks`)"
+      },
+      {
+        "type": "query",
+        "name": "DROP TABLE IF EXISTS `Feedbacks`;"
+      },
+      {
+        "type": "query",
+        "name": "CREATE TABLE IF NOT EXISTS `Deliveries` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` VARCHAR(255), `price` FLOAT, `deluxePrice` FLOAT, `eta` FLOAT, `icon` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL);"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_LIST(`Deliveries`)"
+      },
+      {
+        "type": "query",
+        "name": "DROP TABLE IF EXISTS `Deliveries`;"
+      },
+      {
+        "type": "query",
+        "name": "CREATE TABLE IF NOT EXISTS `Complaints` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `message` VARCHAR(255), `file` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_LIST(`Complaints`)"
+      },
+      {
+        "type": "query",
+        "name": "DROP TABLE IF EXISTS `Complaints`;"
+      },
+      {
+        "type": "query",
+        "name": "CREATE TABLE IF NOT EXISTS `Challenges` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `key` VARCHAR(255), `name` VARCHAR(255), `category` VARCHAR(255), `tags` VARCHAR(255), `description` VARCHAR(255), `difficulty` INTEGER, `hint` VARCHAR(255), `hintUrl` VARCHAR(255), `mitigationUrl` VARCHAR(255), `solved` TINYINT(1), `disabledEnv` VARCHAR(255), `tutorialOrder` NUMBER, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL);"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_LIST(`Challenges`)"
+      },
+      {
+        "type": "query",
+        "name": "DROP TABLE IF EXISTS `Challenges`;"
+      },
+      {
+        "type": "query",
+        "name": "CREATE TABLE IF NOT EXISTS `Cards` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `fullName` VARCHAR(255), `cardNum` INTEGER, `expMonth` INTEGER, `expYear` INTEGER, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_LIST(`Cards`)"
+      },
+      {
+        "type": "query",
+        "name": "DROP TABLE IF EXISTS `Cards`;"
+      },
+      {
+        "type": "query",
+        "name": "CREATE TABLE IF NOT EXISTS `Captchas` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `captchaId` INTEGER, `captcha` VARCHAR(255), `answer` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL);"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_LIST(`Captchas`)"
+      },
+      {
+        "type": "query",
+        "name": "DROP TABLE IF EXISTS `Captchas`;"
+      },
+      {
+        "type": "query",
+        "name": "CREATE TABLE IF NOT EXISTS `BasketItems` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `quantity` INTEGER, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `BasketId` INTEGER REFERENCES `Baskets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, `ProductId` INTEGER REFERENCES `Products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, UNIQUE (`BasketId`, `ProductId`));"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_LIST(`BasketItems`)"
+      },
+      {
+        "type": "query",
+        "name": "DROP TABLE IF EXISTS `BasketItems`;"
+      },
+      {
+        "type": "query",
+        "name": "CREATE TABLE IF NOT EXISTS `Products` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` VARCHAR(255), `description` VARCHAR(255), `price` DECIMAL, `deluxePrice` DECIMAL, `image` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `deletedAt` DATETIME);"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_LIST(`Products`)"
+      },
+      {
+        "type": "query",
+        "name": "DROP TABLE IF EXISTS `Products`;"
+      },
+      {
+        "type": "query",
+        "name": "CREATE TABLE IF NOT EXISTS `Baskets` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `coupon` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_LIST(`Baskets`)"
+      },
+      {
+        "type": "query",
+        "name": "DROP TABLE IF EXISTS `Baskets`;"
+      },
+      {
+        "type": "query",
+        "name": "CREATE TABLE IF NOT EXISTS `Addresses` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `fullName` VARCHAR(255), `mobileNum` INTEGER, `zipCode` VARCHAR(255), `streetAddress` VARCHAR(255), `city` VARCHAR(255), `state` VARCHAR(255), `country` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `UserId` INTEGER REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_LIST(`Addresses`)"
+      },
+      {
+        "type": "query",
+        "name": "DROP TABLE IF EXISTS `Addresses`;"
+      },
+      {
+        "type": "query",
+        "name": "CREATE TABLE IF NOT EXISTS `Users` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `username` VARCHAR(255) DEFAULT '', `email` VARCHAR(255) UNIQUE, `password` VARCHAR(255), `role` VARCHAR(255) DEFAULT 'customer', `deluxeToken` VARCHAR(255) DEFAULT '', `lastLoginIp` VARCHAR(255) DEFAULT '0.0.0.0', `profileImage` VARCHAR(255) DEFAULT '/assets/public/images/uploads/default.svg', `totpSecret` VARCHAR(255) DEFAULT '', `isActive` TINYINT(1) DEFAULT 1, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `deletedAt` DATETIME);"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_LIST(`Users`)"
+      },
+      {
+        "type": "query",
+        "name": "DROP TABLE IF EXISTS `Users`;"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA KEY='password'"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA FOREIGN_KEYS=ON"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_INFO(`sqlite_autoindex_Users_1`)"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_INFO(`sqlite_autoindex_BasketItems_1`)"
+      },
+      {
+        "type": "query",
+        "name": "PRAGMA INDEX_INFO(`sqlite_autoindex_SecurityAnswers_1`)"
+      },
+      {
+        "type": "query",
+        "name": "SELECT sum(`balance`) AS `sum` FROM `Wallets` AS `Wallet`;"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Users` AS `User` WHERE (`User`.`deletedAt` IS NULL AND `User`.`role` = 'customer');"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Users` AS `User` WHERE (`User`.`deletedAt` IS NULL AND `User`.`role` = 'deluxe');"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Users` AS `User` WHERE (`User`.`deletedAt` IS NULL);"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback`;"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Complaints` AS `Complaint`;"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`rating` = 5;"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE ((`Feedback`.`comment` LIKE '%sanitize-html%' AND `Feedback`.`comment` LIKE '%1.4.2%') OR (`Feedback`.`comment` LIKE '%express-jwt%' AND `Feedback`.`comment` LIKE '%0.1.3%'));"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Complaints` AS `Complaint` WHERE ((`Complaint`.`message` LIKE '%sanitize-html%' AND `Complaint`.`message` LIKE '%1.4.2%') OR (`Complaint`.`message` LIKE '%express-jwt%' AND `Complaint`.`message` LIKE '%0.1.3%'));"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE (`Feedback`.`comment` LIKE '%z85%' OR `Feedback`.`comment` LIKE '%base85%' OR `Feedback`.`comment` LIKE '%hashids%' OR `Feedback`.`comment` LIKE '%md5%' OR `Feedback`.`comment` LIKE '%base64%');"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%z85%' OR `Complaint`.`message` LIKE '%base85%' OR `Complaint`.`message` LIKE '%hashids%' OR `Complaint`.`message` LIKE '%md5%' OR `Complaint`.`message` LIKE '%base64%');"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`comment` LIKE '%epilogue-js%';"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Complaints` AS `Complaint` WHERE `Complaint`.`message` LIKE '%epilogue-js%';"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`comment` LIKE '%anuglar2-qrcode%';"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Complaints` AS `Complaint` WHERE `Complaint`.`message` LIKE '%anuglar2-qrcode%';"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`comment` LIKE '%pickle rick%';"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Complaints` AS `Complaint` WHERE `Complaint`.`message` LIKE '%pickle rick%';"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE (`Feedback`.`comment` LIKE '%eslint-scope/issues/39%' OR `Feedback`.`comment` LIKE '%npm:eslint-scope:20180712%');"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%eslint-scope/issues/39%' OR `Complaint`.`message` LIKE '%npm:eslint-scope:20180712%');"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Feedbacks` AS `Feedback` WHERE (`Feedback`.`comment` LIKE '%hueteroneel%' AND `Feedback`.`comment` LIKE '%eurogium edule%');"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%hueteroneel%' AND `Complaint`.`message` LIKE '%eurogium edule%');"
+      },
+      {
+        "type": "query",
+        "name": "SELECT `id`, `name`, `description`, `price`, `deluxePrice`, `image`, `createdAt`, `updatedAt`, `deletedAt` FROM `Products` AS `Product` WHERE (`Product`.`deletedAt` IS NULL AND `Product`.`id` = 9);"
+      },
+      {
+        "type": "query",
+        "name": "SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`rating` = 5;"
+      },
+      {
+        "type": "query",
+        "name": "SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE ((`Feedback`.`comment` LIKE '%sanitize-html%' AND `Feedback`.`comment` LIKE '%1.4.2%') OR (`Feedback`.`comment` LIKE '%express-jwt%' AND `Feedback`.`comment` LIKE '%0.1.3%'));"
+      },
+      {
+        "type": "query",
+        "name": "SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE ((`Complaint`.`message` LIKE '%sanitize-html%' AND `Complaint`.`message` LIKE '%1.4.2%') OR (`Complaint`.`message` LIKE '%express-jwt%' AND `Complaint`.`message` LIKE '%0.1.3%'));"
+      },
+      {
+        "type": "query",
+        "name": "SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE (`Feedback`.`comment` LIKE '%z85%' OR `Feedback`.`comment` LIKE '%base85%' OR `Feedback`.`comment` LIKE '%hashids%' OR `Feedback`.`comment` LIKE '%md5%' OR `Feedback`.`comment` LIKE '%base64%');"
+      },
+      {
+        "type": "query",
+        "name": "SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%z85%' OR `Complaint`.`message` LIKE '%base85%' OR `Complaint`.`message` LIKE '%hashids%' OR `Complaint`.`message` LIKE '%md5%' OR `Complaint`.`message` LIKE '%base64%');"
+      },
+      {
+        "type": "query",
+        "name": "SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`comment` LIKE '%epilogue-js%';"
+      },
+      {
+        "type": "query",
+        "name": "SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE `Complaint`.`message` LIKE '%epilogue-js%';"
+      },
+      {
+        "type": "query",
+        "name": "SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`comment` LIKE '%anuglar2-qrcode%';"
+      },
+      {
+        "type": "query",
+        "name": "SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE `Complaint`.`message` LIKE '%anuglar2-qrcode%';"
+      },
+      {
+        "type": "query",
+        "name": "SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE `Feedback`.`comment` LIKE '%pickle rick%';"
+      },
+      {
+        "type": "query",
+        "name": "SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE `Complaint`.`message` LIKE '%pickle rick%';"
+      },
+      {
+        "type": "query",
+        "name": "SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE (`Feedback`.`comment` LIKE '%eslint-scope/issues/39%' OR `Feedback`.`comment` LIKE '%npm:eslint-scope:20180712%');"
+      },
+      {
+        "type": "query",
+        "name": "SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%eslint-scope/issues/39%' OR `Complaint`.`message` LIKE '%npm:eslint-scope:20180712%');"
+      },
+      {
+        "type": "query",
+        "name": "SELECT `id`, `comment`, `rating`, `createdAt`, `updatedAt`, `UserId` FROM `Feedbacks` AS `Feedback` WHERE (`Feedback`.`comment` LIKE '%hueteroneel%' AND `Feedback`.`comment` LIKE '%eurogium edule%');"
+      },
+      {
+        "type": "query",
+        "name": "SELECT `id`, `message`, `file`, `createdAt`, `updatedAt`, `UserId` FROM `Complaints` AS `Complaint` WHERE (`Complaint`.`message` LIKE '%hueteroneel%' AND `Complaint`.`message` LIKE '%eurogium edule%');"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Challenges` AS `Challenge` WHERE `Challenge`.`name` = 'Score Board';"
+      },
+      {
+        "type": "query",
+        "name": "SELECT `id`, `key`, `name`, `category`, `tags`, `description`, `difficulty`, `hint`, `hintUrl`, `mitigationUrl`, `solved`, `disabledEnv`, `tutorialOrder`, `createdAt`, `updatedAt` FROM `Challenges` AS `Challenge` WHERE `Challenge`.`name` = 'Score Board' LIMIT 0, 100;"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS `count` FROM `Quantities` AS `Quantity`;"
+      },
+      {
+        "type": "query",
+        "name": "SELECT `id`, `quantity`, `limitPerUser`, `createdAt`, `updatedAt`, `ProductId` FROM `Quantities` AS `Quantity` LIMIT 0, 100;"
+      },
+      {
+        "type": "query",
+        "name": "SELECT `id`, `username`, `email`, `password`, `role`, `deluxeToken`, `lastLoginIp`, `profileImage`, `totpSecret`, `isActive`, `createdAt`, `updatedAt`, `deletedAt` FROM `Users` AS `User` WHERE (`User`.`deletedAt` IS NULL);"
+      }
+    ]
+  },
+  {
+    "type": "http",
+    "name": "HTTP server requests",
+    "children": [
+      {
+        "type": "route",
+        "name": "GET /"
+      },
+      {
+        "type": "route",
+        "name": "GET /styles.css"
+      },
+      {
+        "type": "route",
+        "name": "GET /rest/admin/application-configuration"
+      },
+      {
+        "type": "route",
+        "name": "GET /api/Quantitys/"
+      },
+      {
+        "type": "route",
+        "name": "GET /runtime-es2018.js"
+      },
+      {
+        "type": "route",
+        "name": "GET /assets/i18n/en.json"
+      },
+      {
+        "type": "route",
+        "name": "GET /MaterialIcons-Regular.woff2"
+      },
+      {
+        "type": "route",
+        "name": "GET /assets/public/favicon_js.ico"
+      },
+      {
+        "type": "route",
+        "name": "GET /polyfills-es2018.js"
+      },
+      {
+        "type": "route",
+        "name": "GET /rest/admin/application-version"
+      },
+      {
+        "type": "route",
+        "name": "GET /rest/products/search"
+      },
+      {
+        "type": "route",
+        "name": "GET /vendor-es2018.js"
+      },
+      {
+        "type": "route",
+        "name": "GET /api/Challenges/"
+      },
+      {
+        "type": "route",
+        "name": "GET /main-es2018.js"
+      },
+      {
+        "type": "route",
+        "name": "GET /rest/languages"
+      },
+      {
+        "type": "route",
+        "name": "GET /apple-touch-icon-precomposed.png"
+      },
+      {
+        "type": "route",
+        "name": "GET /apple-touch-icon.png"
+      },
+      {
+        "type": "route",
+        "name": "GET /assets/public/images/JuiceShop_Logo.png"
+      },
+      {
+        "type": "route",
+        "name": "GET /font-mfizz.svg"
+      },
+      {
+        "type": "route",
+        "name": "GET /assets/public/images/products/20th.jpeg"
+      },
+      {
+        "type": "route",
+        "name": "GET /rest/user/whoami"
+      },
+      {
+        "type": "route",
+        "name": "GET /assets/public/images/products/apple_juice.jpg"
+      },
+      {
+        "type": "route",
+        "name": "GET /assets/public/images/products/carrot_juice.jpeg"
+      },
+      {
+        "type": "route",
+        "name": "GET /assets/public/images/products/permafrost.jpg"
+      },
+      {
+        "type": "route",
+        "name": "GET /assets/public/images/products/apple_pressings.jpg"
+      },
+      {
+        "type": "route",
+        "name": "GET /assets/public/images/products/fruit_press.jpg"
+      },
+      {
+        "type": "route",
+        "name": "GET /assets/public/images/products/melon_bike.jpeg"
+      },
+      {
+        "type": "route",
+        "name": "GET /assets/public/images/products/banana_juice.jpg"
+      },
+      {
+        "type": "route",
+        "name": "GET /assets/public/images/products/green_smoothie.jpg"
+      },
+      {
+        "type": "route",
+        "name": "GET /assets/public/images/products/artwork2.jpg"
+      },
+      {
+        "type": "route",
+        "name": "GET /assets/public/images/products/lemon_juice.jpg"
+      },
+      {
+        "type": "route",
+        "name": "GET /assets/public/images/products/eggfruit_juice.jpg"
+      },
+      {
+        "type": "route",
+        "name": "POST /rest/user/login"
+      }
+    ]
+  }
+]

@@ -1,0 +1,10 @@
+[
+  "format.json",
+  "http.session",
+  "mvc.before_action",
+  "mvc.controller",
+  "mvc.template",
+  "mvc.template.resolver",
+  "public",
+  "security.authentication"
+]

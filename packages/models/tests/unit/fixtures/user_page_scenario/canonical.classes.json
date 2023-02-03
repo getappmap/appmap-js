@@ -1,0 +1,9 @@
+[
+  "app/controllers/OrganizationsController",
+  "app/models/Configuration",
+  "app/models/User",
+  "app/models/User::Show",
+  "json/JSON::Ext::Parser",
+  "openssl/Digest::Instance",
+  "openssl/OpenSSL::Cipher"
+]

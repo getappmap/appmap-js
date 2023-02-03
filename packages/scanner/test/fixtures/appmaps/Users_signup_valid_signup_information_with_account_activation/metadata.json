@@ -1,0 +1,130 @@
+{
+  "app": "sample_app_6th_ed",
+  "language": {
+    "name": "ruby",
+    "engine": "ruby",
+    "version": "3.0.1"
+  },
+  "client": {
+    "name": "appmap",
+    "url": "https://github.com/getappmap/appmap-ruby",
+    "version": "0.67.0"
+  },
+  "frameworks": [
+    {
+      "name": "rails",
+      "version": "6.0.3.7"
+    },
+    {
+      "name": "minitest",
+      "version": "5.11.3"
+    }
+  ],
+  "git": {
+    "repository": "git@github.com:land-of-apps/sample_app_6th_ed.git",
+    "branch": "appmap-e2e-ruby-3",
+    "commit": "7fc9e9e84d3378a42e2a7124dde282164ff3c295",
+    "status": [
+      "M Gemfile",
+      "M Gemfile.lock",
+      "M appmap.yml",
+      "M config/environments/test.rb",
+      "D  package-lock.json",
+      "M test/integration/following_test.rb",
+      "M yarn.lock",
+      "?? call_stack_profile.html",
+      "?? coverage/",
+      "?? flat_profile.txt",
+      "?? flat_profile_appmap.txt",
+      "?? flat_profile_no_appmap.txt",
+      "?? followers_page_requires_login/",
+      "?? graph_profile.txt",
+      "?? hook.log",
+      "?? user_page_not_logged_in/"
+    ],
+    "git_last_annotated_tag": null,
+    "git_last_tag": null,
+    "git_commits_since_last_annotated_tag": null,
+    "git_commits_since_last_tag": null
+  },
+  "name": "Users_signup valid signup information with account activation",
+  "source_location": "/Users/kgilpin/source/land-of-apps/sample_app_6th_ed/test/integration/users_signup_test.rb:22",
+  "recorder": {
+    "name": "minitest"
+  },
+  "test_status": "succeeded",
+  "fingerprints": [
+    {
+      "appmap_digest": "dfc046cb59ef948739e7b1999d0183fe5ae2b1630e1d673cfaf3717b520a23ef",
+      "canonicalization_algorithm": "classDependencies",
+      "digest": "e6e0d9efc10ad9cc371d57f2b397db0493c18f1e44e59ab3073e9f9fb8c99b0d",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "dfc046cb59ef948739e7b1999d0183fe5ae2b1630e1d673cfaf3717b520a23ef",
+      "canonicalization_algorithm": "classes",
+      "digest": "eeca3d083a71a1c0dc2adb32b37efadf095ccde2c7b6d79901c7a39f53a371d2",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "dfc046cb59ef948739e7b1999d0183fe5ae2b1630e1d673cfaf3717b520a23ef",
+      "canonicalization_algorithm": "httpClientRequests",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "dfc046cb59ef948739e7b1999d0183fe5ae2b1630e1d673cfaf3717b520a23ef",
+      "canonicalization_algorithm": "httpServerRequests",
+      "digest": "14a59c0f3ade009b03fe744b4ca33ec304dc6d2e32f0fcdbc5a4fee2b4099747",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "dfc046cb59ef948739e7b1999d0183fe5ae2b1630e1d673cfaf3717b520a23ef",
+      "canonicalization_algorithm": "info",
+      "digest": "308b6d25e449c0572b5151b09da545442770eca267f4ac02a4498d8bd319f5fe",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "dfc046cb59ef948739e7b1999d0183fe5ae2b1630e1d673cfaf3717b520a23ef",
+      "canonicalization_algorithm": "labels",
+      "digest": "387c15f99c0e04a6a53778a42e841f786932248009808589c004f9006e37bde1",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "dfc046cb59ef948739e7b1999d0183fe5ae2b1630e1d673cfaf3717b520a23ef",
+      "canonicalization_algorithm": "packageDependencies",
+      "digest": "0ae6d36fb55e5144400cdd0014d483c61442f72bfc2773841dcf0676eaf78a11",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "dfc046cb59ef948739e7b1999d0183fe5ae2b1630e1d673cfaf3717b520a23ef",
+      "canonicalization_algorithm": "packages",
+      "digest": "d618bfe392846654996cca0a59f41bed10198f30860f732f86bfdeac6cfce0b1",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "dfc046cb59ef948739e7b1999d0183fe5ae2b1630e1d673cfaf3717b520a23ef",
+      "canonicalization_algorithm": "sqlNormalized",
+      "digest": "5d100cb6d523bb36e17c77151293b5171010a8e63ae359acd2fee70d6e750967",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "dfc046cb59ef948739e7b1999d0183fe5ae2b1630e1d673cfaf3717b520a23ef",
+      "canonicalization_algorithm": "sqlTables",
+      "digest": "8bb43aeefc5b65ede30ced12f8f60333c7879c749ed0828b4c0680b1e22d1d65",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "dfc046cb59ef948739e7b1999d0183fe5ae2b1630e1d673cfaf3717b520a23ef",
+      "canonicalization_algorithm": "trace",
+      "digest": "fcf9278b909a52289d2082ee22e8a4c051fe531fff91e2c31ba64cdf7e29f001",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "dfc046cb59ef948739e7b1999d0183fe5ae2b1630e1d673cfaf3717b520a23ef",
+      "canonicalization_algorithm": "update",
+      "digest": "1b2753c9f527be8531b5dbb7981eb20918d8f082781102ecf7dc5d237719af21",
+      "fingerprint_algorithm": "sha256"
+    }
+  ]
+}

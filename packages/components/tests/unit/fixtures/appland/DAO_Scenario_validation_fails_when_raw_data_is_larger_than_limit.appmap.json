@@ -1,1 +1,299 @@
-{"version":"1.4","metadata":{"app":"appland/AppLand","language":{"name":"ruby","engine":"ruby","version":"2.6.6"},"client":{"name":"appmap","url":"https://github.com/getappmap/appmap-ruby","version":"0.40.0"},"frameworks":[{"name":"rails","version":"5.2.4.2"},{"name":"rspec","version":"3.9.1"}],"git":{"repository":"git@github.com:getappmap/appland.git","branch":"apply-labels","commit":"5428f5df16a93d59a15d2559c626f6918d8f0523","status":["M app/controllers/api/scenarios_controller.rb","M app/controllers/sessions_controller.rb","M appmap.yml"],"git_last_annotated_tag":null,"git_last_tag":"v0.17.1","git_commits_since_last_annotated_tag":null,"git_commits_since_last_tag":0},"name":"DAO::Scenario validation fails when raw_data is larger than limit","feature":"DAO::Scenario validation","feature_group":"DAO scenario","recorder":{"name":"rspec"}},"classMap":[{"name":"app/models","type":"package","children":[{"name":"DAO","type":"class","children":[{"name":"Scenario","type":"class","children":[{"name":"raw_data=","type":"function","location":"app/models/dao/scenario.rb:160","static":false},{"name":"validate","type":"function","location":"app/models/dao/scenario.rb:182","static":false},{"name":"raw_data","type":"function","location":"app/models/dao/scenario.rb:156","static":false}]}]}]}],"events":[{"id":56433,"event":"call","thread_id":70323680821280,"defined_class":"DAO::Scenario","method_id":"raw_data=","path":"app/models/dao/scenario.rb","lineno":160,"static":false,"parameters":[{"name":"data","class":"String","object_id":70323779471660,"value":"{\n  \"version\": \"1.2\",\n  \"classMap\": [\n\n  ],\n  \"metadata\": {\n    \"name\": \"Example scenario\"\n  },\n  \"e","kind":"req"}],"receiver":{"class":"DAO::Scenario","object_id":70323779493780,"value":"#<DAO::Scenario:0x00007feb0fcabf28>"}},{"id":56434,"event":"return","thread_id":70323680821280,"parent_id":56433,"elapsed":8.0e-06,"return_value":{"class":"String","value":"{\n  \"version\": \"1.2\",\n  \"classMap\": [\n\n  ],\n  \"metadata\": {\n    \"name\": \"Example scenario\"\n  },\n  \"e","object_id":70323779471660}},{"id":56435,"event":"call","thread_id":70323680821280,"defined_class":"DAO::Scenario","method_id":"validate","path":"app/models/dao/scenario.rb","lineno":182,"static":false,"parameters":[],"receiver":{"class":"DAO::Scenario","object_id":70323779493780,"value":"#<DAO::Scenario:0x00007feb0fcabf28>"}},{"id":56436,"event":"call","thread_id":70323680821280,"defined_class":"DAO::Scenario","method_id":"raw_data","path":"app/models/dao/scenario.rb","lineno":156,"static":false,"parameters":[],"receiver":{"class":"DAO::Scenario","object_id":70323779493780,"value":"#<DAO::Scenario:0x00007feb0fcabf28>"}},{"id":56437,"event":"return","thread_id":70323680821280,"parent_id":56436,"elapsed":5.0e-06,"return_value":{"class":"String","value":"{\n  \"version\": \"1.2\",\n  \"classMap\": [\n\n  ],\n  \"metadata\": {\n    \"name\": \"Example scenario\"\n  },\n  \"e","object_id":70323779471660}},{"id":56438,"event":"call","thread_id":70323680821280,"defined_class":"DAO::Scenario","method_id":"raw_data","path":"app/models/dao/scenario.rb","lineno":156,"static":false,"parameters":[],"receiver":{"class":"DAO::Scenario","object_id":70323779493780,"value":"#<DAO::Scenario:0x00007feb0fcabf28>"}},{"id":56439,"event":"return","thread_id":70323680821280,"parent_id":56438,"elapsed":4.0e-06,"return_value":{"class":"String","value":"{\n  \"version\": \"1.2\",\n  \"classMap\": [\n\n  ],\n  \"metadata\": {\n    \"name\": \"Example scenario\"\n  },\n  \"e","object_id":70323779471660}},{"id":56440,"event":"call","thread_id":70323680821280,"defined_class":"DAO::Scenario","method_id":"raw_data","path":"app/models/dao/scenario.rb","lineno":156,"static":false,"parameters":[],"receiver":{"class":"DAO::Scenario","object_id":70323779493780,"value":"#<DAO::Scenario:0x00007feb0fcabf28>"}},{"id":56441,"event":"return","thread_id":70323680821280,"parent_id":56440,"elapsed":5.0e-06,"return_value":{"class":"String","value":"{\n  \"version\": \"1.2\",\n  \"classMap\": [\n\n  ],\n  \"metadata\": {\n    \"name\": \"Example scenario\"\n  },\n  \"e","object_id":70323779471660}},{"id":56442,"event":"return","thread_id":70323680821280,"parent_id":56435,"elapsed":0.000278}]}
+{
+  "events": [
+    {
+      "id": 1,
+      "event": "call",
+      "thread_id": 70323680821280,
+      "defined_class": "DAO::Scenario",
+      "method_id": "raw_data=",
+      "path": "app/models/dao/scenario.rb",
+      "lineno": 160,
+      "static": false,
+      "parameters": [
+        {
+          "name": "data",
+          "class": "String",
+          "object_id": 70323779471660,
+          "value": "{\n  \"version\": \"1.2\",\n  \"classMap\": [\n\n  ],\n  \"metadata\": {\n    \"name\": \"Example scenario\"\n  },\n  \"e",
+          "kind": "req"
+        }
+      ],
+      "receiver": {
+        "class": "DAO::Scenario",
+        "object_id": 70323779493780,
+        "value": "#<DAO::Scenario:0x00007feb0fcabf28>"
+      }
+    },
+    {
+      "id": 2,
+      "event": "return",
+      "thread_id": 70323680821280,
+      "parent_id": 1,
+      "elapsed": 0.000008,
+      "return_value": {
+        "class": "String",
+        "value": "{\n  \"version\": \"1.2\",\n  \"classMap\": [\n\n  ],\n  \"metadata\": {\n    \"name\": \"Example scenario\"\n  },\n  \"e",
+        "object_id": 70323779471660
+      }
+    },
+    {
+      "id": 3,
+      "event": "call",
+      "thread_id": 70323680821280,
+      "defined_class": "DAO::Scenario",
+      "method_id": "validate",
+      "path": "app/models/dao/scenario.rb",
+      "lineno": 182,
+      "static": false,
+      "receiver": {
+        "class": "DAO::Scenario",
+        "object_id": 70323779493780,
+        "value": "#<DAO::Scenario:0x00007feb0fcabf28>"
+      }
+    },
+    {
+      "id": 4,
+      "event": "call",
+      "thread_id": 70323680821280,
+      "defined_class": "DAO::Scenario",
+      "method_id": "raw_data",
+      "path": "app/models/dao/scenario.rb",
+      "lineno": 156,
+      "static": false,
+      "receiver": {
+        "class": "DAO::Scenario",
+        "object_id": 70323779493780,
+        "value": "#<DAO::Scenario:0x00007feb0fcabf28>"
+      }
+    },
+    {
+      "id": 5,
+      "event": "return",
+      "thread_id": 70323680821280,
+      "parent_id": 4,
+      "elapsed": 0.000005,
+      "return_value": {
+        "class": "String",
+        "value": "{\n  \"version\": \"1.2\",\n  \"classMap\": [\n\n  ],\n  \"metadata\": {\n    \"name\": \"Example scenario\"\n  },\n  \"e",
+        "object_id": 70323779471660
+      }
+    },
+    {
+      "id": 6,
+      "event": "call",
+      "thread_id": 70323680821280,
+      "defined_class": "DAO::Scenario",
+      "method_id": "raw_data",
+      "path": "app/models/dao/scenario.rb",
+      "lineno": 156,
+      "static": false,
+      "receiver": {
+        "class": "DAO::Scenario",
+        "object_id": 70323779493780,
+        "value": "#<DAO::Scenario:0x00007feb0fcabf28>"
+      }
+    },
+    {
+      "id": 7,
+      "event": "return",
+      "thread_id": 70323680821280,
+      "parent_id": 6,
+      "elapsed": 0.000004,
+      "return_value": {
+        "class": "String",
+        "value": "{\n  \"version\": \"1.2\",\n  \"classMap\": [\n\n  ],\n  \"metadata\": {\n    \"name\": \"Example scenario\"\n  },\n  \"e",
+        "object_id": 70323779471660
+      }
+    },
+    {
+      "id": 8,
+      "event": "call",
+      "thread_id": 70323680821280,
+      "defined_class": "DAO::Scenario",
+      "method_id": "raw_data",
+      "path": "app/models/dao/scenario.rb",
+      "lineno": 156,
+      "static": false,
+      "receiver": {
+        "class": "DAO::Scenario",
+        "object_id": 70323779493780,
+        "value": "#<DAO::Scenario:0x00007feb0fcabf28>"
+      }
+    },
+    {
+      "id": 9,
+      "event": "return",
+      "thread_id": 70323680821280,
+      "parent_id": 8,
+      "elapsed": 0.000005,
+      "return_value": {
+        "class": "String",
+        "value": "{\n  \"version\": \"1.2\",\n  \"classMap\": [\n\n  ],\n  \"metadata\": {\n    \"name\": \"Example scenario\"\n  },\n  \"e",
+        "object_id": 70323779471660
+      }
+    },
+    {
+      "id": 10,
+      "event": "return",
+      "thread_id": 70323680821280,
+      "parent_id": 3,
+      "elapsed": 0.000278
+    }
+  ],
+  "version": "1.4",
+  "metadata": {
+    "app": "appland/AppLand",
+    "language": {
+      "name": "ruby",
+      "engine": "ruby",
+      "version": "2.6.6"
+    },
+    "client": {
+      "name": "appmap",
+      "url": "https://github.com/getappmap/appmap-ruby",
+      "version": "0.40.0"
+    },
+    "frameworks": [
+      {
+        "name": "rails",
+        "version": "5.2.4.2"
+      },
+      {
+        "name": "rspec",
+        "version": "3.9.1"
+      }
+    ],
+    "git": {
+      "repository": "git@github.com:getappmap/appland.git",
+      "branch": "apply-labels",
+      "commit": "5428f5df16a93d59a15d2559c626f6918d8f0523",
+      "status": [
+        "M app/controllers/api/scenarios_controller.rb",
+        "M app/controllers/sessions_controller.rb",
+        "M appmap.yml"
+      ],
+      "git_last_annotated_tag": null,
+      "git_last_tag": "v0.17.1",
+      "git_commits_since_last_annotated_tag": null,
+      "git_commits_since_last_tag": 0
+    },
+    "name": "DAO::Scenario validation fails when raw_data is larger than limit",
+    "feature": "DAO::Scenario validation",
+    "feature_group": "DAO scenario",
+    "recorder": {
+      "name": "rspec"
+    },
+    "fingerprints": [
+      {
+        "appmap_digest": "50ff6b3442be4fc893cd2d7c0c0c45e5766c23471f9a1c6a068ace1e777b34dc",
+        "canonicalization_algorithm": "classDependencies",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "50ff6b3442be4fc893cd2d7c0c0c45e5766c23471f9a1c6a068ace1e777b34dc",
+        "canonicalization_algorithm": "classes",
+        "digest": "e67600cb0890baf69eb3f6a12a37e1e4227995cb92d0202e45e2479b5855e28c",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "50ff6b3442be4fc893cd2d7c0c0c45e5766c23471f9a1c6a068ace1e777b34dc",
+        "canonicalization_algorithm": "httpClientRequests",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "50ff6b3442be4fc893cd2d7c0c0c45e5766c23471f9a1c6a068ace1e777b34dc",
+        "canonicalization_algorithm": "httpServerRequests",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "50ff6b3442be4fc893cd2d7c0c0c45e5766c23471f9a1c6a068ace1e777b34dc",
+        "canonicalization_algorithm": "info",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "50ff6b3442be4fc893cd2d7c0c0c45e5766c23471f9a1c6a068ace1e777b34dc",
+        "canonicalization_algorithm": "labels",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "50ff6b3442be4fc893cd2d7c0c0c45e5766c23471f9a1c6a068ace1e777b34dc",
+        "canonicalization_algorithm": "packageDependencies",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "50ff6b3442be4fc893cd2d7c0c0c45e5766c23471f9a1c6a068ace1e777b34dc",
+        "canonicalization_algorithm": "packages",
+        "digest": "e7929efc8ee23235cd20b33ce78d2b8e3b323bb2a655b5b4b98092fdefe78c16",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "50ff6b3442be4fc893cd2d7c0c0c45e5766c23471f9a1c6a068ace1e777b34dc",
+        "canonicalization_algorithm": "sqlNormalized",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "50ff6b3442be4fc893cd2d7c0c0c45e5766c23471f9a1c6a068ace1e777b34dc",
+        "canonicalization_algorithm": "sqlTables",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "50ff6b3442be4fc893cd2d7c0c0c45e5766c23471f9a1c6a068ace1e777b34dc",
+        "canonicalization_algorithm": "trace",
+        "digest": "351b8f33dc5fb6b750d312c0acef2d91173a54c06a0fcd84251309d343e21699",
+        "fingerprint_algorithm": "sha256"
+      },
+      {
+        "appmap_digest": "50ff6b3442be4fc893cd2d7c0c0c45e5766c23471f9a1c6a068ace1e777b34dc",
+        "canonicalization_algorithm": "update",
+        "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "fingerprint_algorithm": "sha256"
+      }
+    ]
+  },
+  "classMap": [
+    {
+      "name": "app/models",
+      "type": "package",
+      "children": [
+        {
+          "name": "DAO",
+          "type": "class",
+          "children": [
+            {
+              "name": "Scenario",
+              "type": "class",
+              "children": [
+                {
+                  "name": "raw_data=",
+                  "type": "function",
+                  "static": false,
+                  "location": "app/models/dao/scenario.rb:160"
+                },
+                {
+                  "name": "validate",
+                  "type": "function",
+                  "static": false,
+                  "location": "app/models/dao/scenario.rb:182"
+                },
+                {
+                  "name": "raw_data",
+                  "type": "function",
+                  "static": false,
+                  "location": "app/models/dao/scenario.rb:156"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

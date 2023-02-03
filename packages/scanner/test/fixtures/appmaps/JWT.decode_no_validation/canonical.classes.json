@@ -1,0 +1,5 @@
+[
+  "json/JSON::Ext::Parser",
+  "jwt/JWT",
+  "ruby/String"
+]

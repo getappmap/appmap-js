@@ -1,0 +1,484 @@
+[
+  {
+    "name": "app/controllers",
+    "type": "package",
+    "children": [
+      {
+        "name": "Spree",
+        "type": "class",
+        "children": [
+          {
+            "name": "Admin",
+            "type": "class",
+            "children": [
+              {
+                "name": "RootController",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "index",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/controllers/spree/admin/root_controller.rb:8"
+                  }
+                ]
+              },
+              {
+                "name": "OrdersController",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "index",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/controllers/spree/admin/orders_controller.rb:16"
+                  },
+                  {
+                    "name": "edit",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/controllers/spree/admin/orders_controller.rb:72"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "openssl",
+    "type": "package",
+    "children": [
+      {
+        "name": "OpenSSL",
+        "type": "class",
+        "children": [
+          {
+            "name": "Cipher",
+            "type": "class",
+            "children": [
+              {
+                "name": "encrypt",
+                "type": "function",
+                "labels": [
+                  "security",
+                  "crypto"
+                ],
+                "static": false,
+                "location": "OpenSSL::Cipher#encrypt"
+              },
+              {
+                "name": "final",
+                "type": "function",
+                "labels": [
+                  "security",
+                  "crypto"
+                ],
+                "static": false,
+                "location": "OpenSSL::Cipher#final"
+              },
+              {
+                "name": "decrypt",
+                "type": "function",
+                "labels": [
+                  "security",
+                  "crypto"
+                ],
+                "static": false,
+                "location": "OpenSSL::Cipher#decrypt"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Digest",
+        "type": "class",
+        "children": [
+          {
+            "name": "Instance",
+            "type": "class",
+            "children": [
+              {
+                "name": "digest",
+                "type": "function",
+                "labels": [
+                  "security",
+                  "crypto"
+                ],
+                "static": false,
+                "location": "Digest::Instance#digest"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "active_support",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActiveSupport",
+        "type": "class",
+        "children": [
+          {
+            "name": "SecurityUtils",
+            "type": "class",
+            "children": [
+              {
+                "name": "secure_compare",
+                "type": "function",
+                "labels": [
+                  "security",
+                  "crypto"
+                ],
+                "static": true,
+                "location": "/home/travis/.rvm/gems/ruby-2.6.5/gems/activesupport-6.0.3.4/lib/active_support/security_utils.rb:26"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "json",
+    "type": "package",
+    "children": [
+      {
+        "name": "JSON",
+        "type": "class",
+        "children": [
+          {
+            "name": "Ext",
+            "type": "class",
+            "children": [
+              {
+                "name": "Parser",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "parse",
+                    "type": "function",
+                    "labels": [
+                      "serialization",
+                      "json"
+                    ],
+                    "static": false,
+                    "location": "JSON::Ext::Parser#parse"
+                  }
+                ]
+              },
+              {
+                "name": "Generator",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "State",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "generate",
+                        "type": "function",
+                        "labels": [
+                          "serialization",
+                          "json"
+                        ],
+                        "static": false,
+                        "location": "JSON::Ext::Generator::State#generate"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/helpers",
+    "type": "package",
+    "children": [
+      {
+        "name": "Spree",
+        "type": "class",
+        "children": [
+          {
+            "name": "Admin",
+            "type": "class",
+            "children": [
+              {
+                "name": "BaseHelper",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "admin_layout",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/helpers/spree/admin/base_helper.rb:142"
+                  }
+                ]
+              },
+              {
+                "name": "NavigationHelper",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "admin_breadcrumb",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/helpers/spree/admin/navigation_helper.rb:11"
+                  },
+                  {
+                    "name": "admin_breadcrumbs",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/helpers/spree/admin/navigation_helper.rb:6"
+                  },
+                  {
+                    "name": "link_to_edit_url",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/helpers/spree/admin/navigation_helper.rb:100"
+                  },
+                  {
+                    "name": "link_to_with_icon",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/helpers/spree/admin/navigation_helper.rb:114"
+                  },
+                  {
+                    "name": "admin_page_title",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/helpers/spree/admin/navigation_helper.rb:30"
+                  },
+                  {
+                    "name": "tab",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/helpers/spree/admin/navigation_helper.rb:47"
+                  },
+                  {
+                    "name": "render_admin_breadcrumbs",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/helpers/spree/admin/navigation_helper.rb:17"
+                  }
+                ]
+              },
+              {
+                "name": "OrdersHelper",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "event_links",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/helpers/spree/admin/orders_helper.rb:7"
+                  },
+                  {
+                    "name": "line_item_shipment_price",
+                    "type": "function",
+                    "static": false,
+                    "location": "app/helpers/spree/admin/orders_helper.rb:18"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "lib",
+    "type": "package",
+    "children": [
+      {
+        "name": "Spree",
+        "type": "class",
+        "children": [
+          {
+            "name": "BackendConfiguration",
+            "type": "class",
+            "children": [
+              {
+                "name": "menu_items",
+                "type": "function",
+                "static": false,
+                "location": "lib/spree/backend_configuration.rb:92"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "http",
+    "name": "HTTP server requests",
+    "children": [
+      {
+        "type": "route",
+        "name": "GET /admin"
+      },
+      {
+        "type": "route",
+        "name": "GET /admin/orders"
+      },
+      {
+        "type": "route",
+        "name": "GET /admin/orders/:id/edit"
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "SELECT COUNT(*) FROM \"spree_stores\""
+      },
+      {
+        "type": "query",
+        "name": "SELECT COUNT(*) FROM \"spree_orders\" WHERE \"spree_orders\".\"completed_at\" IS NOT NULL"
+      },
+      {
+        "type": "query",
+        "name": "SELECT $1 AS one FROM \"spree_orders\" WHERE \"spree_orders\".\"completed_at\" IS NOT NULL LIMIT ? OFFSET ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_orders\".* FROM \"spree_orders\" WHERE \"spree_orders\".\"completed_at\" IS NOT NULL ORDER BY \"spree_orders\".\"completed_at\" DESC LIMIT ? OFFSET ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_users\".* FROM \"spree_users\" WHERE \"spree_users\".\"id\" = ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_orders\".* FROM \"spree_orders\" WHERE \"spree_orders\".\"number\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_adjustments\".* FROM \"spree_adjustments\" WHERE \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"adjustable_id\" = ? ORDER BY \"spree_adjustments\".\"created_at\" ASC"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_addresses\".* FROM \"spree_addresses\" WHERE \"spree_addresses\".\"id\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_users\".* FROM \"spree_users\" WHERE \"spree_users\".\"id\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT COUNT(*) FROM \"spree_shipments\" WHERE \"spree_shipments\".\"order_id\" = ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT COUNT(*) FROM \"spree_shipments\" WHERE \"spree_shipments\".\"order_id\" = ? AND \"spree_shipments\".\"state\" = ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_inventory_units\".* FROM \"spree_inventory_units\" INNER JOIN \"spree_shipments\" ON \"spree_inventory_units\".\"shipment_id\" = \"spree_shipments\".\"id\" WHERE \"spree_shipments\".\"order_id\" = ? AND \"spree_inventory_units\".\"state\" IN (?, ?, ?) AND \"spree_inventory_units\".\"pending\" = ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT $1 AS one FROM \"spree_payments\" WHERE \"spree_payments\".\"order_id\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT COUNT(*) FROM \"spree_payments\" WHERE \"spree_payments\".\"order_id\" = ? AND (avs_response IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16) OR (cvv_response_code IS NOT NULL and cvv_response_code != $17) OR state = $18)"
+      },
+      {
+        "type": "query",
+        "name": "SELECT $1 AS one FROM \"spree_line_items\" WHERE \"spree_line_items\".\"order_id\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT DISTINCT \"spree_cartons\".* FROM \"spree_cartons\" INNER JOIN \"spree_inventory_units\" ON \"spree_cartons\".\"id\" = \"spree_inventory_units\".\"carton_id\" INNER JOIN \"spree_shipments\" ON \"spree_inventory_units\".\"shipment_id\" = \"spree_shipments\".\"id\" WHERE \"spree_shipments\".\"order_id\" = ? ORDER BY \"spree_cartons\".\"shipped_at\" ASC"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_shipments\".* FROM \"spree_shipments\" WHERE \"spree_shipments\".\"order_id\" = ? ORDER BY \"spree_shipments\".\"created_at\" ASC"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_inventory_units\".* FROM \"spree_inventory_units\" WHERE \"spree_inventory_units\".\"shipment_id\" = ? AND \"spree_inventory_units\".\"carton_id\" IS NULL"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_line_items\".* FROM \"spree_line_items\" WHERE \"spree_line_items\".\"id\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_variants\".* FROM \"spree_variants\" WHERE \"spree_variants\".\"id\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_stock_locations\".* FROM \"spree_stock_locations\" WHERE \"spree_stock_locations\".\"id\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_assets\".* FROM \"spree_assets\" WHERE \"spree_assets\".\"type\" = ? AND \"spree_assets\".\"viewable_id\" = ? AND \"spree_assets\".\"viewable_type\" = ? ORDER BY \"spree_assets\".\"position\" ASC"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_products\".* FROM \"spree_products\" WHERE \"spree_products\".\"id\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_assets\".* FROM \"spree_assets\" INNER JOIN \"spree_variants\" ON \"spree_assets\".\"viewable_id\" = \"spree_variants\".\"id\" WHERE \"spree_variants\".\"deleted_at\" IS NULL AND \"spree_assets\".\"type\" = ? AND \"spree_variants\".\"product_id\" = ? AND \"spree_assets\".\"viewable_type\" = ? ORDER BY \"spree_assets\".\"position\" ASC, \"spree_variants\".\"position\" ASC LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT $1 AS one FROM \"spree_option_values\" INNER JOIN \"spree_option_values_variants\" ON \"spree_option_values\".\"id\" = \"spree_option_values_variants\".\"option_value_id\" WHERE \"spree_option_values_variants\".\"variant_id\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_orders\".* FROM \"spree_orders\" WHERE \"spree_orders\".\"id\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT $1 AS one FROM \"spree_adjustments\" INNER JOIN \"spree_line_items\" ON \"spree_adjustments\".\"adjustable_id\" = \"spree_line_items\".\"id\" WHERE \"spree_line_items\".\"order_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_adjustments\".* FROM \"spree_adjustments\" INNER JOIN \"spree_line_items\" ON \"spree_adjustments\".\"adjustable_id\" = \"spree_line_items\".\"id\" WHERE \"spree_line_items\".\"order_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ? ORDER BY \"spree_line_items\".\"created_at\" ASC, \"spree_line_items\".\"id\" ASC"
+      },
+      {
+        "type": "query",
+        "name": "SELECT $1 AS one FROM \"spree_adjustments\" INNER JOIN \"spree_shipments\" ON \"spree_adjustments\".\"adjustable_id\" = \"spree_shipments\".\"id\" WHERE \"spree_shipments\".\"order_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_adjustments\".* FROM \"spree_adjustments\" INNER JOIN \"spree_shipments\" ON \"spree_adjustments\".\"adjustable_id\" = \"spree_shipments\".\"id\" WHERE \"spree_shipments\".\"order_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT $1 AS one FROM \"spree_adjustments\" WHERE \"spree_adjustments\".\"adjustable_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_adjustments\".* FROM \"spree_adjustments\" WHERE \"spree_adjustments\".\"adjustable_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ? ORDER BY \"spree_adjustments\".\"created_at\" ASC"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_shipments\".* FROM \"spree_shipments\" WHERE \"spree_shipments\".\"order_id\" = ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_inventory_units\".* FROM \"spree_inventory_units\" WHERE \"spree_inventory_units\".\"shipment_id\" = ?"
+      }
+    ]
+  }
+]

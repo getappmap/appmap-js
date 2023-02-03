@@ -1,0 +1,686 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "GET /signup",
+    "parameter_names": [
+      "controller",
+      "action"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/UsersController#new",
+            "labels": [
+              "public"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "actionview/ActionView::Resolver#find_all",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/views/app_views_users_new_html_erb.render",
+            "labels": [
+              "mvc.template"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionview/ActionView::Resolver#find_all",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_shared__error_messages_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/helpers/ApplicationHelper#full_title",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "json/JSON::Ext::Parser#parse",
+                "labels": [
+                  "format.json.parse",
+                  "deserialize.safe"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__shim_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__header_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#logged_in?",
+                    "labels": [
+                      "security.authentication"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#current_user",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Request::Session#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                            "labels": [
+                              "http.session.read"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_layouts__footer_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "POST /users",
+    "parameter_names": [
+      "user",
+      "controller",
+      "action"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/UsersController#create",
+            "labels": [
+              "public"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                "labels": [
+                  "mvc.before_action"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SAVEPOINT active_record_1"
+                    },
+                    "analyzed_query": {
+                      "actions": [],
+                      "tables": [],
+                      "columns": [],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT ? AS one FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "users"
+                      ],
+                      "columns": [
+                        "users.email"
+                      ],
+                      "joinCount": 0
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "logger/Logger::LogDevice#write",
+                "labels": [
+                  "log"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "ROLLBACK TO SAVEPOINT active_record_1"
+                },
+                "analyzed_query": {
+                  "actions": [],
+                  "tables": [],
+                  "columns": [],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "app/views/app_views_users_new_html_erb.render",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionview/ActionView::Resolver#find_all",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/views/app_views_shared__error_messages_html_erb.render",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/ApplicationHelper#full_title",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "logger/Logger::LogDevice#write",
+                    "labels": [
+                      "log"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse",
+                      "deserialize.safe"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/views/app_views_layouts__shim_html_erb.render",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/views/app_views_layouts__header_html_erb.render",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/SessionsHelper#logged_in?",
+                        "labels": [
+                          "security.authentication"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/SessionsHelper#current_user",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                                "labels": [
+                                  "http.session.read"
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Request::Session#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/views/app_views_layouts__footer_html_erb.render",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "logger/Logger::LogDevice#write",
+                        "labels": [
+                          "log"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "logger/Logger::LogDevice#write",
+            "labels": [
+              "log"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

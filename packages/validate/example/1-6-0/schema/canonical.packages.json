@@ -1,0 +1,8 @@
+[
+  "active_support",
+  "app/controllers",
+  "app/helpers",
+  "json",
+  "lib",
+  "openssl"
+]

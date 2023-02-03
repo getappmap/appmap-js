@@ -1,0 +1,221 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "DELETE /microposts/{id}",
+    "parameter_names": [
+      "controller",
+      "action",
+      "id"
+    ],
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "actionpack/ActionDispatch::Request::Session#[]",
+                "labels": [
+                  "http.session.read"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.write"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "openssl/OpenSSL::Cipher#decrypt",
+                    "labels": [
+                      "crypto.decrypt"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Parser#parse",
+                    "labels": [
+                      "format.json.parse"
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "app/controllers/MicropostsController#correct_user",
+                "labels": [
+                  "security.authorization"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/helpers/SessionsHelper#current_user",
+                    "labels": [
+                      "security.authentication"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionpack/ActionDispatch::Request::Session#[]",
+                        "labels": [
+                          "http.session.read"
+                        ]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+                        },
+                        "analyzed_query": {
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "users"
+                          ],
+                          "columns": [
+                            "users.*",
+                            "users.id"
+                          ],
+                          "joinCount": 0
+                        }
+                      },
+                      {
+                        "kind": "function",
+                        "function": "actionpack/ActionDispatch::Request::Session#[]",
+                        "labels": [
+                          "http.session.read"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/models/User#session_token",
+                        "labels": []
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? AND \"microposts\".\"id\" = ? ORDER BY \"microposts\".\"created_at\" DESC LIMIT ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "microposts"
+                      ],
+                      "columns": [
+                        "microposts.*",
+                        "microposts.created_at",
+                        "microposts.id",
+                        "microposts.user_id"
+                      ],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionController::Instrumentation#redirect_to",
+                    "labels": [
+                      "mvc.controller"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/helpers/SessionsHelper#logged_in?",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "app/helpers/SessionsHelper#current_user",
+                "labels": [
+                  "security.authentication"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Request::Session#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "normalized_query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+                    },
+                    "analyzed_query": {
+                      "actions": [
+                        "select"
+                      ],
+                      "tables": [
+                        "users"
+                      ],
+                      "columns": [
+                        "users.*",
+                        "users.id"
+                      ],
+                      "joinCount": 0
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Request::Session#[]",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/models/User#session_token",
+                    "labels": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

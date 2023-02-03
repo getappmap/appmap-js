@@ -1,0 +1,18 @@
+[
+  "INSERT INTO \"apps\" (\"org_id\", \"name\", \"slug\") VALUES (?, ?, ?) RETURNING *",
+  "INSERT INTO \"mapsets\" (\"user_id\", \"app_id\") VALUES (?, ?) RETURNING *",
+  "RELEASE SAVEPOINT autopoint_1",
+  "SAVEPOINT autopoint_1",
+  "SELECT * FROM \"api_keys\" WHERE (\"login\" = ?)",
+  "SELECT * FROM \"apps\" WHERE (((\"apps\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = ?) AND (\"orgs\".\"id\" IS NOT ?)))) OR (\"public\" IS ?)) AND (\"apps\".\"org_id\" = ?) AND (\"name\" = ?)) LIMIT ?",
+  "SELECT * FROM \"apps\" WHERE ((\"apps\".\"org_id\" IN (SELECT \"orgs\".\"id\" FROM \"orgs\" INNER JOIN \"users_orgs\" ON (\"users_orgs\".\"org_id\" = \"orgs\".\"id\") WHERE ((\"users_orgs\".\"user_id\" = ?) AND (\"orgs\".\"id\" IS NOT ?)))) AND (\"apps\".\"org_id\" = ?) AND (\"name\" = ?)) LIMIT ?",
+  "SELECT * FROM \"apps\" WHERE ((\"slug\" = ?) AND (\"org_id\" = ?)) LIMIT ?",
+  "SELECT * FROM \"orgs\" WHERE ((\"name\" IS ?) AND (\"slug\" IS ?) AND (\"owner_id\" = ?)) LIMIT ?",
+  "SELECT * FROM \"orgs\" WHERE \"id\" = ?",
+  "SELECT * FROM \"users\" WHERE (\"users\".\"login\" = ?) LIMIT ?",
+  "SELECT * FROM \"users\" WHERE \"id\" = ?",
+  "SELECT * FROM \"users_orgs\" WHERE ((\"user_id\" = ?) AND (\"org_id\" = ?))",
+  "SELECT \"id\", \"org_id\" FROM \"scenarios\" WHERE (\"uuid\" IN (?))",
+  "UPDATE \"api_keys\" SET \"last_used\" = ? WHERE (\"id\" = ?)",
+  "UPDATE \"scenarios\" SET \"mapset_id\" = ? WHERE (\"id\" IN (?))"
+]

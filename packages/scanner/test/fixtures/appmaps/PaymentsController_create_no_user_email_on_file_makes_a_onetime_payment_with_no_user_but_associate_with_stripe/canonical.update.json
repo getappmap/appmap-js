@@ -1,0 +1,174 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "POST /payments",
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ]
+          },
+          {
+            "kind": "http_client_request",
+            "route": "GET https://api.stripe.com/v1/customers",
+            "status_code": 200
+          },
+          {
+            "kind": "http_client_request",
+            "route": "POST https://api.stripe.com/v1/customers/cus_JnA0JVDwH8BjTl",
+            "status_code": 200
+          },
+          {
+            "kind": "http_client_request",
+            "route": "POST https://api.stripe.com/v1/charges",
+            "status_code": 200
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [
+                  "insert"
+                ],
+                "tables": [
+                  "payments"
+                ],
+                "columns": [
+                  "amount_cents",
+                  "created_at",
+                  "email",
+                  "first_payment_date",
+                  "id",
+                  "kind",
+                  "stripe_id",
+                  "updated_at"
+                ],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.before_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.template"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": [
+                  "mvc.template"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": [
+                      "mvc.template.resolver"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": [
+              "mvc.after_action"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

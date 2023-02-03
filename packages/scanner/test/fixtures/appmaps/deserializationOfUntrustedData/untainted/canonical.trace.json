@@ -1,0 +1,36 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "GET /password_resets/{id}/edit",
+    "parameter_names": [
+      "email",
+      "controller",
+      "action",
+      "id"
+    ],
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "function": "ruby/String#unpack1",
+        "labels": [
+          "string.unpack"
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "psych/Psych.safe_load",
+        "labels": [
+          "deserialize.safe"
+        ]
+      },
+      {
+        "kind": "function",
+        "function": "psych/Psych.load",
+        "labels": [
+          "deserialize.unsafe"
+        ]
+      }
+    ]
+  }
+]

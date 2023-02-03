@@ -1,0 +1,534 @@
+[
+  {
+    "name": "activesupport",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActiveSupport",
+        "type": "class",
+        "children": [
+          {
+            "name": "Callbacks",
+            "type": "class",
+            "children": [
+              {
+                "name": "CallbackSequence",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "invoke_before",
+                    "type": "function",
+                    "labels": ["mvc.before_action"],
+                    "static": false,
+                    "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb:512"
+                  },
+                  {
+                    "name": "invoke_after",
+                    "type": "function",
+                    "labels": ["mvc.after_action"],
+                    "static": false,
+                    "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb:516"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "actionpack",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActionController",
+        "type": "class",
+        "children": [
+          {
+            "name": "Instrumentation",
+            "type": "class",
+            "children": [
+              {
+                "name": "process_action",
+                "type": "function",
+                "labels": ["mvc.controller"],
+                "static": false,
+                "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_controller/metal/instrumentation.rb:19"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "ActionDispatch",
+        "type": "class",
+        "children": [
+          {
+            "name": "Request",
+            "type": "class",
+            "children": [
+              {
+                "name": "Session",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "[]",
+                    "type": "function",
+                    "labels": ["http.session"],
+                    "static": false,
+                    "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_dispatch/request/session.rb:91"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Cookies",
+            "type": "class",
+            "children": [
+              {
+                "name": "CookieJar",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "update",
+                    "type": "function",
+                    "labels": ["http.session"],
+                    "static": false,
+                    "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionpack-5.2.5/lib/action_dispatch/middleware/cookies.rb:344"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/controllers",
+    "type": "package",
+    "children": [
+      {
+        "name": "AnonymousAccess",
+        "type": "class",
+        "children": [
+          {
+            "name": "allow_anonymous_access",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/anonymous_access.rb:5"
+          },
+          {
+            "name": "anonymous_access?",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/anonymous_access.rb:9"
+          }
+        ]
+      },
+      {
+        "name": "CurrentUser",
+        "type": "class",
+        "children": [
+          {
+            "name": "check_current_user",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/current_user.rb:19"
+          },
+          {
+            "name": "current_user",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/current_user.rb:36"
+          },
+          {
+            "name": "lookup_session_user",
+            "type": "function",
+            "labels": ["security.authentication"],
+            "static": false,
+            "location": "app/controllers/concerns/current_user.rb:41"
+          },
+          {
+            "name": "ensure_eula_accepted",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/current_user.rb:27"
+          }
+        ]
+      },
+      {
+        "name": "WithAuthentication",
+        "type": "class",
+        "children": [
+          {
+            "name": "with_authentication",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/with_authentication.rb:6"
+          },
+          {
+            "name": "with_anonymous_user",
+            "type": "function",
+            "labels": ["public"],
+            "static": false,
+            "location": "app/controllers/concerns/with_authentication.rb:15"
+          }
+        ]
+      },
+      {
+        "name": "ApplicationController",
+        "type": "class",
+        "children": [
+          {
+            "name": "render_404",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/application_controller.rb:28"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/models",
+    "type": "package",
+    "children": [
+      {
+        "name": "Configuration",
+        "type": "class",
+        "children": [
+          {
+            "name": "find",
+            "type": "function",
+            "static": true,
+            "location": "app/models/configuration.rb:8"
+          },
+          {
+            "name": "attributes=",
+            "type": "function",
+            "static": false,
+            "location": "app/models/configuration.rb:44"
+          },
+          {
+            "name": "attributes",
+            "type": "function",
+            "static": false,
+            "location": "app/models/configuration.rb:30"
+          }
+        ]
+      },
+      {
+        "name": "App",
+        "type": "class",
+        "children": [
+          {
+            "name": "Search",
+            "type": "class",
+            "children": [
+              {
+                "name": "find!",
+                "type": "function",
+                "static": false,
+                "location": "app/models/app/search.rb:39"
+              },
+              {
+                "name": "find_by_slug!",
+                "type": "function",
+                "static": false,
+                "location": "app/models/app/search.rb:58"
+              },
+              {
+                "name": "find_by_org_scope!",
+                "type": "function",
+                "static": false,
+                "location": "app/models/app/search.rb:67"
+              },
+              {
+                "name": "find_by_user_scope!",
+                "type": "function",
+                "static": false,
+                "location": "app/models/app/search.rb:75"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Search",
+        "type": "class",
+        "children": [
+          {
+            "name": "filter",
+            "type": "function",
+            "static": false,
+            "location": "app/models/search.rb:34"
+          }
+        ]
+      },
+      {
+        "name": "DAO",
+        "type": "class",
+        "children": [
+          {
+            "name": "PublicResource",
+            "type": "class",
+            "children": [
+              {
+                "name": "coerce",
+                "type": "function",
+                "static": true,
+                "location": "app/models/dao/public_resource.rb:18"
+              },
+              {
+                "name": "scope",
+                "type": "function",
+                "static": true,
+                "location": "app/models/dao/public_resource.rb:26"
+              }
+            ]
+          },
+          {
+            "name": "SequelUtil",
+            "type": "class",
+            "children": [
+              {
+                "name": "build_where_clause",
+                "type": "function",
+                "static": true,
+                "location": "app/models/dao/sequel_util.rb:6"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Exceptions",
+        "type": "class",
+        "children": [
+          {
+            "name": "RecordNotFound",
+            "type": "class",
+            "children": [
+              {
+                "name": "build_message",
+                "type": "function",
+                "static": true,
+                "location": "app/models/exceptions/record_not_found.rb:16"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "json",
+    "type": "package",
+    "children": [
+      {
+        "name": "JSON",
+        "type": "class",
+        "children": [
+          {
+            "name": "Ext",
+            "type": "class",
+            "children": [
+              {
+                "name": "Parser",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "parse",
+                    "type": "function",
+                    "labels": ["format.json"],
+                    "static": false,
+                    "location": "JSON::Ext::Parser#parse"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "actionview",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActionView",
+        "type": "class",
+        "children": [
+          {
+            "name": "Resolver",
+            "type": "class",
+            "children": [
+              {
+                "name": "find_all",
+                "type": "function",
+                "labels": ["mvc.template.resolver"],
+                "static": false,
+                "location": "/Users/dustin/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb:145"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/views",
+    "type": "package",
+    "children": [
+      {
+        "name": "app_views_errors_not_found_html_haml",
+        "type": "class",
+        "children": [
+          {
+            "name": "render",
+            "type": "function",
+            "labels": ["mvc.template"],
+            "static": true,
+            "location": "app/views/errors/not_found.html.haml"
+          }
+        ]
+      },
+      {
+        "name": "app_views_layouts__standard_head_html_haml",
+        "type": "class",
+        "children": [
+          {
+            "name": "render",
+            "type": "function",
+            "labels": ["mvc.template"],
+            "static": true,
+            "location": "app/views/layouts/_standard_head.html.haml"
+          }
+        ]
+      },
+      {
+        "name": "app_views_layouts__css_head_html_haml",
+        "type": "class",
+        "children": [
+          {
+            "name": "render",
+            "type": "function",
+            "labels": ["mvc.template"],
+            "static": true,
+            "location": "app/views/layouts/_css_head.html.haml"
+          }
+        ]
+      },
+      {
+        "name": "app_views_layouts__js_head_html_haml",
+        "type": "class",
+        "children": [
+          {
+            "name": "render",
+            "type": "function",
+            "labels": ["mvc.template"],
+            "static": true,
+            "location": "app/views/layouts/_js_head.html.haml"
+          }
+        ]
+      },
+      {
+        "name": "app_views_partials__header_html_haml",
+        "type": "class",
+        "children": [
+          {
+            "name": "render",
+            "type": "function",
+            "labels": ["mvc.template"],
+            "static": true,
+            "location": "app/views/partials/_header.html.haml"
+          }
+        ]
+      },
+      {
+        "name": "app_views_partials__flash_html_haml",
+        "type": "class",
+        "children": [
+          {
+            "name": "render",
+            "type": "function",
+            "labels": ["mvc.template"],
+            "static": true,
+            "location": "app/views/partials/_flash.html.haml"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/helpers",
+    "type": "package",
+    "children": [
+      {
+        "name": "ConfigurationHelper",
+        "type": "class",
+        "children": [
+          {
+            "name": "content_for_feature_flag",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/configuration_helper.rb:8"
+          },
+          {
+            "name": "feature_flag?",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/configuration_helper.rb:4"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "http",
+    "name": "HTTP server requests",
+    "children": [
+      {
+        "type": "route",
+        "name": "GET /{organization_id}/{id}/scenarios_list"
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "SAVEPOINT autopoint_1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"apps\".* FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") WHERE ((\"public\" IS TRUE) AND (\"apps\".\"slug\" = 'appland') AND (\"orgs\".\"slug\" = 'default')) LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"apps\".* FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") INNER JOIN \"users\" ON (\"users\".\"id\" = \"orgs\".\"owner_id\") WHERE ((\"public\" IS TRUE) AND (\"apps\".\"slug\" = 'appland') AND (\"users\".\"login\" = 'default')) LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "ROLLBACK TO SAVEPOINT autopoint_1"
+      }
+    ]
+  },
+  {
+    "type": "class",
+    "name": "inline_template",
+    "children": [
+      {
+        "type": "function",
+        "name": "render",
+        "static": true
+      }
+    ]
+  }
+]

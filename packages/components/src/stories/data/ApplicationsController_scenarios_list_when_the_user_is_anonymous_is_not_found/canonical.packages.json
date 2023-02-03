@@ -1,0 +1,10 @@
+[
+  "actionpack",
+  "actionview",
+  "activesupport",
+  "app/controllers",
+  "app/helpers",
+  "app/models",
+  "app/views",
+  "json"
+]

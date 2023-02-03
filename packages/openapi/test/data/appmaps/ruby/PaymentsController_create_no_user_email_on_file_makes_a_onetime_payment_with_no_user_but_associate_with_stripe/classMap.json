@@ -1,0 +1,817 @@
+[
+  {
+    "name": "vcr",
+    "type": "package",
+    "children": [
+      {
+        "name": "VCR",
+        "type": "class",
+        "children": [
+          {
+            "name": "use_cassette",
+            "type": "function",
+            "static": true,
+            "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr.rb:178"
+          },
+          {
+            "name": "HTTPInteraction",
+            "type": "class",
+            "children": [
+              {
+                "name": "from_hash",
+                "type": "function",
+                "static": true,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr/structs.rb:523"
+              }
+            ]
+          },
+          {
+            "name": "LibraryHooks",
+            "type": "class",
+            "children": [
+              {
+                "name": "WebMock",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "global_hook_disabled?",
+                    "type": "function",
+                    "static": true,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr/library_hooks/webmock.rb:27"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "library_hooks",
+            "type": "function",
+            "static": true,
+            "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr.rb:345"
+          },
+          {
+            "name": "eject_cassette",
+            "type": "function",
+            "static": true,
+            "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr.rb:153"
+          },
+          {
+            "name": "Cassette",
+            "type": "class",
+            "children": [
+              {
+                "name": "Persisters",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "FileSystem",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "[]=",
+                        "type": "function",
+                        "static": true,
+                        "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/vcr-5.0.0/lib/vcr/cassette/persisters/file_system.rb:33"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "yaml",
+    "type": "package",
+    "children": [
+      {
+        "name": "Psych",
+        "type": "class",
+        "children": [
+          {
+            "name": "load",
+            "type": "function",
+            "labels": [
+              "format.yaml.parse"
+            ],
+            "static": true,
+            "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/2.7.0/psych.rb:271"
+          },
+          {
+            "name": "parse",
+            "type": "function",
+            "labels": [
+              "format.yaml.parse"
+            ],
+            "static": true,
+            "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/2.7.0/psych.rb:384"
+          },
+          {
+            "name": "parse_stream",
+            "type": "function",
+            "labels": [
+              "format.yaml.parse"
+            ],
+            "static": true,
+            "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/2.7.0/psych.rb:448"
+          },
+          {
+            "name": "dump",
+            "type": "function",
+            "labels": [
+              "format.yaml.generate"
+            ],
+            "static": true,
+            "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/2.7.0/psych.rb:506"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "stripe",
+    "type": "package",
+    "children": [
+      {
+        "name": "Stripe",
+        "type": "class",
+        "children": [
+          {
+            "name": "APIOperations",
+            "type": "class",
+            "children": [
+              {
+                "name": "Create",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "create",
+                    "type": "function",
+                    "static": true,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/stripe-3.3.2/lib/stripe/api_operations/create.rb:4"
+                  }
+                ]
+              },
+              {
+                "name": "List",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "all",
+                    "type": "function",
+                    "static": true,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/stripe-3.3.2/lib/stripe/api_operations/list.rb:4"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Util",
+            "type": "class",
+            "children": [
+              {
+                "name": "normalize_headers",
+                "type": "function",
+                "static": true,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/stripe-3.3.2/lib/stripe/util.rb:252"
+              }
+            ]
+          },
+          {
+            "name": "StripeClient",
+            "type": "class",
+            "children": [
+              {
+                "name": "RequestLogContext",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "dup_from_response",
+                    "type": "function",
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/stripe-3.3.2/lib/stripe/stripe_client.rb:524"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "json",
+    "type": "package",
+    "children": [
+      {
+        "name": "JSON",
+        "type": "class",
+        "children": [
+          {
+            "name": "Ext",
+            "type": "class",
+            "children": [
+              {
+                "name": "Generator",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "State",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "generate",
+                        "type": "function",
+                        "labels": [
+                          "format.json.generate"
+                        ],
+                        "static": false,
+                        "location": "JSON::Ext::Generator::State#generate"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "actionpack",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActionDispatch",
+        "type": "class",
+        "children": [
+          {
+            "name": "Cookies",
+            "type": "class",
+            "children": [
+              {
+                "name": "CookieJar",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "update",
+                    "type": "function",
+                    "labels": [
+                      "http.session.read"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-5.2.5/lib/action_dispatch/middleware/cookies.rb:344"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "ActionController",
+        "type": "class",
+        "children": [
+          {
+            "name": "Instrumentation",
+            "type": "class",
+            "children": [
+              {
+                "name": "process_action",
+                "type": "function",
+                "labels": [
+                  "mvc.controller"
+                ],
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-5.2.5/lib/action_controller/metal/instrumentation.rb:19"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "activesupport",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActiveSupport",
+        "type": "class",
+        "children": [
+          {
+            "name": "Callbacks",
+            "type": "class",
+            "children": [
+              {
+                "name": "CallbackSequence",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "invoke_before",
+                    "type": "function",
+                    "labels": [
+                      "mvc.before_action"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb:512"
+                  },
+                  {
+                    "name": "invoke_after",
+                    "type": "function",
+                    "labels": [
+                      "mvc.after_action"
+                    ],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-5.2.5/lib/active_support/callbacks.rb:516"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/controllers",
+    "type": "package",
+    "children": [
+      {
+        "name": "ControllerHelpers",
+        "type": "class",
+        "children": [
+          {
+            "name": "enable_rack_profiler",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/controller_helpers.rb:30"
+          },
+          {
+            "name": "controller_namespace",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/controller_helpers.rb:196"
+          },
+          {
+            "name": "page_id",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/controller_helpers.rb:201"
+          },
+          {
+            "name": "user_root_url",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/controller_helpers.rb:85"
+          },
+          {
+            "name": "append_info_to_payload",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/controller_helpers.rb:21"
+          },
+          {
+            "name": "forwarded_ip_address",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/controller_helpers.rb:26"
+          }
+        ]
+      },
+      {
+        "name": "PaymentsController",
+        "type": "class",
+        "children": [
+          {
+            "name": "create",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/payments_controller.rb:7"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/models",
+    "type": "package",
+    "children": [
+      {
+        "name": "User",
+        "type": "class",
+        "children": [
+          {
+            "name": "from_auth",
+            "type": "function",
+            "static": true,
+            "location": "app/models/user.rb:124"
+          },
+          {
+            "name": "fuzzy_confirmed_or_unconfirmed_email_find",
+            "type": "function",
+            "static": true,
+            "location": "app/models/user.rb:90"
+          },
+          {
+            "name": "fuzzy_email_find",
+            "type": "function",
+            "static": true,
+            "location": "app/models/user.rb:82"
+          },
+          {
+            "name": "fuzzy_unconfirmed_primary_email_find",
+            "type": "function",
+            "static": true,
+            "location": "app/models/user.rb:86"
+          }
+        ]
+      },
+      {
+        "name": "UserEmail",
+        "type": "class",
+        "children": [
+          {
+            "name": "fuzzy_user_find",
+            "type": "function",
+            "static": true,
+            "location": "app/models/user_email.rb:41"
+          },
+          {
+            "name": "fuzzy_find",
+            "type": "function",
+            "static": true,
+            "location": "app/models/user_email.rb:31"
+          }
+        ]
+      },
+      {
+        "name": "Payment",
+        "type": "class",
+        "children": [
+          {
+            "name": "set_calculated_attributes",
+            "type": "function",
+            "static": false,
+            "location": "app/models/payment.rb:55"
+          },
+          {
+            "name": "email_or_organization_present",
+            "type": "function",
+            "static": false,
+            "location": "app/models/payment.rb:68"
+          },
+          {
+            "name": "send_invoice_email",
+            "type": "function",
+            "static": false,
+            "location": "app/models/payment.rb:64"
+          },
+          {
+            "name": "update_associations",
+            "type": "function",
+            "static": false,
+            "location": "app/models/payment.rb:74"
+          }
+        ]
+      },
+      {
+        "name": "Amountable",
+        "type": "class",
+        "children": [
+          {
+            "name": "amount",
+            "type": "function",
+            "static": false,
+            "location": "app/models/concerns/amountable.rb:7"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/services",
+    "type": "package",
+    "children": [
+      {
+        "name": "EmailNormalizer",
+        "type": "class",
+        "children": [
+          {
+            "name": "normalize",
+            "type": "function",
+            "static": true,
+            "location": "app/services/email_normalizer.rb:2"
+          }
+        ]
+      },
+      {
+        "name": "ParamsNormalizer",
+        "type": "class",
+        "children": [
+          {
+            "name": "boolean",
+            "type": "function",
+            "static": true,
+            "location": "app/services/params_normalizer.rb:2"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "sidekiq",
+    "type": "package",
+    "children": [
+      {
+        "name": "Sidekiq",
+        "type": "class",
+        "children": [
+          {
+            "name": "Worker",
+            "type": "class",
+            "children": [
+              {
+                "name": "ClassMethods",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "perform_async",
+                    "type": "function",
+                    "static": true,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/sidekiq-6.2.1/lib/sidekiq/worker.rb:199"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "load_json",
+            "type": "function",
+            "static": true,
+            "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/sidekiq-6.2.1/lib/sidekiq.rb:179"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "actionview",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActionView",
+        "type": "class",
+        "children": [
+          {
+            "name": "Resolver",
+            "type": "class",
+            "children": [
+              {
+                "name": "find_all",
+                "type": "function",
+                "labels": [
+                  "mvc.template.resolver"
+                ],
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionview-5.2.5/lib/action_view/template/resolver.rb:145"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/views",
+    "type": "package",
+    "children": [
+      {
+        "name": "app_views_payments_create_html_haml",
+        "type": "class",
+        "children": [
+          {
+            "name": "render",
+            "type": "function",
+            "labels": [
+              "mvc.template"
+            ],
+            "static": true,
+            "location": "app/views/payments/create.html.haml"
+          }
+        ]
+      },
+      {
+        "name": "app_views_layouts__revised_messages_html_haml",
+        "type": "class",
+        "children": [
+          {
+            "name": "render",
+            "type": "function",
+            "labels": [
+              "mvc.template"
+            ],
+            "static": true,
+            "location": "app/views/layouts/_revised_messages.html.haml"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "wicked_pdf",
+    "type": "package",
+    "children": [
+      {
+        "name": "WickedPdf",
+        "type": "class",
+        "children": [
+          {
+            "name": "PdfHelper",
+            "type": "class",
+            "children": [
+              {
+                "name": "render",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/wicked_pdf-1.4.0/lib/wicked_pdf/pdf_helper.rb:29"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/helpers",
+    "type": "package",
+    "children": [
+      {
+        "name": "HeaderTagHelper",
+        "type": "class",
+        "children": [
+          {
+            "name": "header_tags",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/header_tag_helper.rb:2"
+          },
+          {
+            "name": "header_tag_array",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/header_tag_helper.rb:8"
+          },
+          {
+            "name": "page_with_custom_header_tags?",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/header_tag_helper.rb:13"
+          },
+          {
+            "name": "default_meta_hash",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/header_tag_helper.rb:52"
+          },
+          {
+            "name": "page_description",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/header_tag_helper.rb:38"
+          },
+          {
+            "name": "auto_description",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/header_tag_helper.rb:47"
+          },
+          {
+            "name": "page_description=",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/header_tag_helper.rb:23"
+          },
+          {
+            "name": "page_title",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/header_tag_helper.rb:27"
+          },
+          {
+            "name": "auto_title",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/header_tag_helper.rb:42"
+          },
+          {
+            "name": "page_title=",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/header_tag_helper.rb:19"
+          },
+          {
+            "name": "page_image",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/header_tag_helper.rb:34"
+          },
+          {
+            "name": "social_meta_content_tags",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/header_tag_helper.rb:69"
+          },
+          {
+            "name": "main_header_tags",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/header_tag_helper.rb:73"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "SELECT COUNT(*) FROM \"payments\""
+      },
+      {
+        "type": "query",
+        "name": "SELECT  \"user_emails\".* FROM \"user_emails\" WHERE (confirmation_token IS NULL) AND \"user_emails\".\"email\" = $1 LIMIT $2"
+      },
+      {
+        "type": "query",
+        "name": "SELECT  \"users\".* FROM \"users\" WHERE \"users\".\"email\" = $1 LIMIT $2"
+      },
+      {
+        "type": "query",
+        "name": "SAVEPOINT active_record_2"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"payments\" (\"stripe_id\", \"first_payment_date\", \"amount_cents\", \"created_at\", \"updated_at\", \"email\", \"kind\") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING \"id\""
+      },
+      {
+        "type": "query",
+        "name": "RELEASE SAVEPOINT active_record_2"
+      },
+      {
+        "type": "query",
+        "name": "SELECT  \"payments\".* FROM \"payments\" ORDER BY \"payments\".\"id\" DESC LIMIT $1"
+      }
+    ]
+  },
+  {
+    "type": "external-service",
+    "name": "api.stripe.com",
+    "children": [
+      {
+        "type": "external-route",
+        "name": "POST https://api.stripe.com/v1/tokens"
+      },
+      {
+        "type": "external-route",
+        "name": "GET https://api.stripe.com/v1/customers"
+      },
+      {
+        "type": "external-route",
+        "name": "POST https://api.stripe.com/v1/customers/cus_JnA0JVDwH8BjTl"
+      },
+      {
+        "type": "external-route",
+        "name": "POST https://api.stripe.com/v1/charges"
+      }
+    ]
+  },
+  {
+    "type": "http",
+    "name": "HTTP server requests",
+    "children": [
+      {
+        "type": "route",
+        "name": "POST /payments"
+      }
+    ]
+  },
+  {
+    "type": "class",
+    "name": "inline_template",
+    "children": [
+      {
+        "type": "function",
+        "name": "render",
+        "static": true
+      }
+    ]
+  }
+]

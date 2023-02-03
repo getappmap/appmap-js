@@ -1,0 +1,5 @@
+[
+  "deserialize.sanitize",
+  "deserialize.unsafe",
+  "string.unpack"
+]

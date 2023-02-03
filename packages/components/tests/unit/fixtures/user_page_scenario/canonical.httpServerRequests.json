@@ -1,0 +1,7 @@
+[
+  {
+    "route": "GET /organizations/new",
+    "parameters": "(_method,controller,action)",
+    "status": 200
+  }
+]

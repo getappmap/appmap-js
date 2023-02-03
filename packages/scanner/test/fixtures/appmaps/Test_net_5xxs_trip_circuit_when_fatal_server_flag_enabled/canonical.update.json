@@ -1,0 +1,90 @@
+[
+  {
+    "kind": "function",
+    "labels": [
+      "rpc.circuit_breaker"
+    ]
+  },
+  {
+    "kind": "http_client_request",
+    "route": "GET http://toxiproxy:8474/proxies",
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "rpc.circuit_breaker"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "format.json.parse"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "rpc.circuit_breaker"
+    ]
+  },
+  {
+    "kind": "http_client_request",
+    "route": "GET http://semian:31050/500",
+    "status_code": 500,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "rpc.circuit_breaker"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "rpc.circuit_breaker"
+    ]
+  },
+  {
+    "kind": "http_client_request",
+    "route": "GET http://semian:31050/500",
+    "status_code": 500,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "rpc.circuit_breaker"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "rpc.circuit_breaker"
+    ]
+  },
+  {
+    "kind": "http_client_request",
+    "route": "GET http://semian:31050/500",
+    "status_code": 500,
+    "children": [
+      {
+        "kind": "function",
+        "labels": [
+          "rpc.circuit_breaker"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "rpc.circuit_breaker"
+    ]
+  }
+]

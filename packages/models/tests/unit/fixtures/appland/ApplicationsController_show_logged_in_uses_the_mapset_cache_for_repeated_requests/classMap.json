@@ -1,0 +1,920 @@
+[
+  {
+    "name": "app/controllers",
+    "type": "package",
+    "children": [
+      {
+        "name": "CurrentUser",
+        "type": "class",
+        "children": [
+          {
+            "name": "allow_anonymous_access",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/current_user.rb:12"
+          },
+          {
+            "name": "check_current_user",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/current_user.rb:23"
+          },
+          {
+            "name": "anonymous_access?",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/current_user.rb:16"
+          },
+          {
+            "name": "current_user",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/current_user.rb:57"
+          },
+          {
+            "name": "lookup_session_user",
+            "type": "function",
+            "labels": ["provider.authentication"],
+            "static": false,
+            "location": "app/controllers/concerns/current_user.rb:62"
+          },
+          {
+            "name": "with_authentication",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/current_user.rb:32"
+          }
+        ]
+      },
+      {
+        "name": "ApplicationsController",
+        "type": "class",
+        "children": [
+          {
+            "name": "show",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/applications_controller.rb:54"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "openssl",
+    "type": "package",
+    "children": [
+      {
+        "name": "OpenSSL",
+        "type": "class",
+        "children": [
+          {
+            "name": "Cipher",
+            "type": "class",
+            "children": [
+              {
+                "name": "decrypt",
+                "type": "function",
+                "labels": ["security", "crypto"],
+                "static": false,
+                "location": "OpenSSL::Cipher#decrypt"
+              },
+              {
+                "name": "final",
+                "type": "function",
+                "labels": ["security", "crypto"],
+                "static": false,
+                "location": "OpenSSL::Cipher#final"
+              },
+              {
+                "name": "encrypt",
+                "type": "function",
+                "labels": ["security", "crypto"],
+                "static": false,
+                "location": "OpenSSL::Cipher#encrypt"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Digest",
+        "type": "class",
+        "children": [
+          {
+            "name": "Instance",
+            "type": "class",
+            "children": [
+              {
+                "name": "digest",
+                "type": "function",
+                "labels": ["security", "crypto"],
+                "static": false,
+                "location": "Digest::Instance#digest"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "json",
+    "type": "package",
+    "children": [
+      {
+        "name": "JSON",
+        "type": "class",
+        "children": [
+          {
+            "name": "Ext",
+            "type": "class",
+            "children": [
+              {
+                "name": "Parser",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "parse",
+                    "type": "function",
+                    "labels": ["serialization", "json"],
+                    "static": false,
+                    "location": "JSON::Ext::Parser#parse"
+                  }
+                ]
+              },
+              {
+                "name": "Generator",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "State",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "generate",
+                        "type": "function",
+                        "labels": ["serialization", "json"],
+                        "static": false,
+                        "location": "JSON::Ext::Generator::State#generate"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/models",
+    "type": "package",
+    "children": [
+      {
+        "name": "User",
+        "type": "class",
+        "children": [
+          {
+            "name": "find_by_id!",
+            "type": "function",
+            "static": true,
+            "location": "app/models/user.rb:31"
+          },
+          {
+            "name": "Show",
+            "type": "class",
+            "children": [
+              {
+                "name": "accept_eula?",
+                "type": "function",
+                "static": false,
+                "location": "app/models/user.rb:110"
+              },
+              {
+                "name": "admin?",
+                "type": "function",
+                "static": false,
+                "location": "app/models/user.rb:106"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Configuration",
+        "type": "class",
+        "children": [
+          {
+            "name": "find",
+            "type": "function",
+            "static": true,
+            "location": "app/models/configuration.rb:8"
+          },
+          {
+            "name": "attributes=",
+            "type": "function",
+            "static": false,
+            "location": "app/models/configuration.rb:34"
+          },
+          {
+            "name": "attributes",
+            "type": "function",
+            "static": false,
+            "location": "app/models/configuration.rb:22"
+          }
+        ]
+      },
+      {
+        "name": "App",
+        "type": "class",
+        "children": [
+          {
+            "name": "Search",
+            "type": "class",
+            "children": [
+              {
+                "name": "find!",
+                "type": "function",
+                "static": false,
+                "location": "app/models/app.rb:43"
+              },
+              {
+                "name": "find_by_slug!",
+                "type": "function",
+                "static": false,
+                "location": "app/models/app.rb:62"
+              },
+              {
+                "name": "find_by_org_scope!",
+                "type": "function",
+                "static": false,
+                "location": "app/models/app.rb:71"
+              },
+              {
+                "name": "search",
+                "type": "function",
+                "static": false,
+                "location": "app/models/app.rb:13"
+              }
+            ]
+          },
+          {
+            "name": "Show",
+            "type": "class",
+            "children": [
+              {
+                "name": "mapsets",
+                "type": "function",
+                "static": false,
+                "location": "app/models/app.rb:239"
+              },
+              {
+                "name": "fully_qualified_name",
+                "type": "function",
+                "static": false,
+                "location": "app/models/app.rb:263"
+              },
+              {
+                "name": "org",
+                "type": "function",
+                "static": false,
+                "location": "app/models/app.rb:243"
+              },
+              {
+                "name": "managed_by?",
+                "type": "function",
+                "static": false,
+                "location": "app/models/app.rb:254"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Search",
+        "type": "class",
+        "children": [
+          {
+            "name": "filter",
+            "type": "function",
+            "static": false,
+            "location": "app/models/search.rb:33"
+          }
+        ]
+      },
+      {
+        "name": "Mapset",
+        "type": "class",
+        "children": [
+          {
+            "name": "ordered_list",
+            "type": "function",
+            "static": true,
+            "location": "app/models/mapset.rb:22"
+          },
+          {
+            "name": "find_in_app!",
+            "type": "function",
+            "static": true,
+            "location": "app/models/mapset.rb:13"
+          },
+          {
+            "name": "Show",
+            "type": "class",
+            "children": [
+              {
+                "name": "pending?",
+                "type": "function",
+                "static": false,
+                "location": "app/models/mapset.rb:253"
+              },
+              {
+                "name": "pending_scenarios",
+                "type": "function",
+                "static": false,
+                "location": "app/models/mapset.rb:257"
+              },
+              {
+                "name": "with_cache",
+                "type": "function",
+                "static": false,
+                "location": "app/models/mapset.rb:220"
+              },
+              {
+                "name": "scenarios",
+                "type": "function",
+                "static": false,
+                "location": "app/models/mapset.rb:247"
+              },
+              {
+                "name": "paginate_scenario_count",
+                "type": "function",
+                "static": false,
+                "location": "app/models/mapset.rb:239"
+              },
+              {
+                "name": "paginate_scenarios",
+                "type": "function",
+                "static": false,
+                "location": "app/models/mapset.rb:243"
+              },
+              {
+                "name": "component_diagram",
+                "type": "function",
+                "static": false,
+                "location": "app/models/mapset.rb:268"
+              },
+              {
+                "name": "app",
+                "type": "function",
+                "static": false,
+                "location": "app/models/mapset.rb:231"
+              },
+              {
+                "name": "web_resources",
+                "type": "function",
+                "static": false,
+                "location": "app/models/mapset.rb:104"
+              },
+              {
+                "name": "web_resources",
+                "type": "function",
+                "static": false,
+                "location": "app/models/mapset.rb:364"
+              },
+              {
+                "name": "data_model",
+                "type": "function",
+                "static": false,
+                "location": "app/models/mapset.rb:104"
+              },
+              {
+                "name": "data_model",
+                "type": "function",
+                "static": false,
+                "location": "app/models/mapset.rb:360"
+              },
+              {
+                "name": "recording_method_counts",
+                "type": "function",
+                "static": false,
+                "location": "app/models/mapset.rb:104"
+              },
+              {
+                "name": "recording_method_counts",
+                "type": "function",
+                "static": false,
+                "location": "app/models/mapset.rb:348"
+              },
+              {
+                "name": "code_object_counts",
+                "type": "function",
+                "static": false,
+                "location": "app/models/mapset.rb:104"
+              },
+              {
+                "name": "code_object_counts",
+                "type": "function",
+                "static": false,
+                "location": "app/models/mapset.rb:352"
+              },
+              {
+                "name": "key_stats_counts",
+                "type": "function",
+                "static": false,
+                "location": "app/models/mapset.rb:104"
+              },
+              {
+                "name": "key_stats_counts",
+                "type": "function",
+                "static": false,
+                "location": "app/models/mapset.rb:356"
+              }
+            ]
+          },
+          {
+            "name": "MapsetCacheModule",
+            "type": "class",
+            "children": [
+              {
+                "name": "included",
+                "type": "function",
+                "static": true,
+                "location": "app/models/mapset.rb:99"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "DAO",
+        "type": "class",
+        "children": [
+          {
+            "name": "App",
+            "type": "class",
+            "children": [
+              {
+                "name": "ordered_mapset_dataset",
+                "type": "function",
+                "static": false,
+                "location": "app/models/dao/app.rb:19"
+              }
+            ]
+          },
+          {
+            "name": "Scenario",
+            "type": "class",
+            "children": [
+              {
+                "name": "distinct_invocation_graph_dataset",
+                "type": "function",
+                "static": true,
+                "location": "app/models/dao/scenario.rb:68"
+              },
+              {
+                "name": "first_source_control_dataset",
+                "type": "function",
+                "static": true,
+                "location": "app/models/dao/scenario.rb:79"
+              },
+              {
+                "name": "class_locations_dataset",
+                "type": "function",
+                "static": true,
+                "location": "app/models/dao/scenario.rb:90"
+              },
+              {
+                "name": "sql_queries_dataset",
+                "type": "function",
+                "static": true,
+                "location": "app/models/dao/scenario.rb:107"
+              },
+              {
+                "name": "recording_methods_dataset",
+                "type": "function",
+                "static": true,
+                "location": "app/models/dao/scenario.rb:95"
+              },
+              {
+                "name": "distinct_code_objects_dataset",
+                "type": "function",
+                "static": true,
+                "location": "app/models/dao/scenario.rb:60"
+              },
+              {
+                "name": "http_server_requests_dataset",
+                "type": "function",
+                "static": true,
+                "location": "app/models/dao/scenario.rb:119"
+              },
+              {
+                "name": "messages_dataset",
+                "type": "function",
+                "static": true,
+                "location": "app/models/dao/scenario.rb:131"
+              }
+            ]
+          },
+          {
+            "name": "ToModel",
+            "type": "class",
+            "children": [
+              {
+                "name": "to_model",
+                "type": "function",
+                "static": false,
+                "location": "app/models/dao/to_model.rb:5"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Scenario",
+        "type": "class",
+        "children": [
+          {
+            "name": "SearchActions",
+            "type": "class",
+            "children": [
+              {
+                "name": "search",
+                "type": "function",
+                "static": true,
+                "location": "app/models/scenario.rb:30"
+              },
+              {
+                "name": "count",
+                "type": "function",
+                "static": true,
+                "location": "app/models/scenario.rb:25"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Org",
+        "type": "class",
+        "children": [
+          {
+            "name": "Show",
+            "type": "class",
+            "children": [
+              {
+                "name": "personal?",
+                "type": "function",
+                "static": false,
+                "location": "app/models/org.rb:108"
+              },
+              {
+                "name": "name",
+                "type": "function",
+                "static": false,
+                "location": "app/models/org.rb:92"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "DataModel",
+        "type": "class",
+        "children": [
+          {
+            "name": "for_mapset",
+            "type": "function",
+            "static": true,
+            "location": "app/models/data_model.rb:15"
+          },
+          {
+            "name": "dehydrate",
+            "type": "function",
+            "static": true,
+            "location": "app/models/data_model.rb:37"
+          }
+        ]
+      },
+      {
+        "name": "WebResources",
+        "type": "class",
+        "children": [
+          {
+            "name": "load",
+            "type": "function",
+            "static": true,
+            "location": "app/models/web_resources.rb:46"
+          },
+          {
+            "name": "any?",
+            "type": "function",
+            "static": false,
+            "location": "app/models/web_resources.rb:191"
+          },
+          {
+            "name": "dehydrate",
+            "type": "function",
+            "static": true,
+            "location": "app/models/web_resources.rb:53"
+          }
+        ]
+      },
+      {
+        "name": "RecordingMethod",
+        "type": "class",
+        "children": [
+          {
+            "name": "count",
+            "type": "function",
+            "static": true,
+            "location": "app/models/recording_method.rb:9"
+          }
+        ]
+      },
+      {
+        "name": "CodeObject",
+        "type": "class",
+        "children": [
+          {
+            "name": "count_table",
+            "type": "function",
+            "static": true,
+            "location": "app/models/code_object.rb:39"
+          },
+          {
+            "name": "count",
+            "type": "function",
+            "static": true,
+            "location": "app/models/code_object.rb:10"
+          }
+        ]
+      },
+      {
+        "name": "KeyDataStats",
+        "type": "class",
+        "children": [
+          {
+            "name": "count_table",
+            "type": "function",
+            "static": true,
+            "location": "app/models/key_data_stats.rb:66"
+          },
+          {
+            "name": "count",
+            "type": "function",
+            "static": true,
+            "location": "app/models/key_data_stats.rb:11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "lib/appland",
+    "type": "package",
+    "children": [
+      {
+        "name": "Diagram",
+        "type": "class",
+        "children": [
+          {
+            "name": "ComponentDiagram",
+            "type": "class",
+            "children": [
+              {
+                "name": "from_invocation_graph",
+                "type": "function",
+                "static": true,
+                "location": "lib/appland/diagram/component_diagram.rb:10"
+              },
+              {
+                "name": "add_graph",
+                "type": "function",
+                "static": false,
+                "location": "lib/appland/diagram/component_diagram.rb:54"
+              },
+              {
+                "name": "set_class_locations",
+                "type": "function",
+                "static": false,
+                "location": "lib/appland/diagram/component_diagram.rb:45"
+              },
+              {
+                "name": "to_json",
+                "type": "function",
+                "static": false,
+                "location": "lib/appland/diagram/component_diagram.rb:90"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "action_view",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActionView",
+        "type": "class",
+        "children": [
+          {
+            "name": "Renderer",
+            "type": "class",
+            "children": [
+              {
+                "name": "render",
+                "type": "function",
+                "labels": ["view"],
+                "static": false,
+                "location": "/Users/kgilpin/tmp/appland/vendor/bundle/ruby/2.6.0/gems/actionview-5.2.4.2/lib/action_view/renderer/renderer.rb:21"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/helpers",
+    "type": "package",
+    "children": [
+      {
+        "name": "ApplicationPathHelper",
+        "type": "class",
+        "children": [
+          {
+            "name": "application_path",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/application_path_helper.rb:4"
+          }
+        ]
+      },
+      {
+        "name": "ConfigurationHelper",
+        "type": "class",
+        "children": [
+          {
+            "name": "content_for_feature_flag",
+            "type": "function",
+            "static": false,
+            "location": "app/helpers/configuration_helper.rb:4"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"orgs\" WHERE \"id\" = 56"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"mapsets\" WHERE (\"mapsets\".\"app_id\" = 30)"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"users\" WHERE (\"id\" = 16) LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"apps\".* FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") WHERE ((\"apps\".\"slug\" = 'appland') AND (\"orgs\".\"slug\" = 'default')) LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT *, \"mapsets\".\"name\", \"mapsets\".\"branch\", \"mapsets\".\"commit\", \"mapsets\".\"environment\", \"mapsets\".\"version\", (SELECT \"login\" FROM \"users\" WHERE (\"id\" = \"user_id\")), (SELECT count(*) AS \"scenario_count\" FROM \"scenarios\" WHERE (\"mapset_id\" = \"mapsets\".\"id\")) FROM \"mapsets_preference_ordered\" AS \"mapsets\" WHERE (\"mapsets\".\"app_id\" = 30)"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"mapsets\" WHERE \"id\" = 21"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"scenarios\" WHERE ((\"scenarios\".\"mapset_id\" = 21) AND (\"data\" IS NULL) AND ((\"scenarios\".\"sha_256\" NOT IN (SELECT \"scenario_processing_errors\".\"sha_256\" FROM \"scenario_processing_errors\" WHERE ((\"version\" = '0.17.1') AND (\"scenario_processing_errors\".\"sha_256\" IS NOT NULL)))) OR (\"scenarios\".\"sha_256\" IS NULL)))"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"apps\".\"id\", \"apps\".\"name\" AS \"name\", \"orgs\".\"slug\" AS \"org_slug\", \"orgs\".\"name\" AS \"org_name\", \"url\", \"apps\".\"created_at\", \"apps\".\"slug\", \"users\".\"login\" AS \"owner_login\" FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") INNER JOIN \"users\" ON (\"users\".\"id\" = \"orgs\".\"owner_id\") ORDER BY \"name\" OFFSET 0"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"scenarios\".\"id\", \"scenarios\".\"uuid\", metadata->>'name' AS \"name\", metadata->>'feature_group' AS \"feature_group\", metadata->>'feature' AS \"feature\", \"scenarios\".\"event_field_counts\", \"scenarios\".\"mapset_id\", \"mapsets\".\"app_id\", \"scenarios\".\"created_at\", \"metadata\" FROM \"scenarios\" INNER JOIN \"mapsets\" ON (\"mapsets\".\"id\" = \"scenarios\".\"mapset_id\") WHERE (\"scenarios\".\"mapset_id\" = 21) ORDER BY \"scenarios\".\"created_at\" DESC"
+      },
+      {
+        "type": "query",
+        "name": "SELECT count(*) AS \"v\" FROM \"scenarios\" INNER JOIN \"mapsets\" ON (\"mapsets\".\"id\" = \"scenarios\".\"mapset_id\") WHERE (\"scenarios\".\"mapset_id\" = 21) LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"scenarios\".\"id\", \"scenarios\".\"uuid\", metadata->>'name' AS \"name\", metadata->>'feature_group' AS \"feature_group\", metadata->>'feature' AS \"feature\", \"scenarios\".\"event_field_counts\", \"scenarios\".\"mapset_id\", \"mapsets\".\"app_id\", \"scenarios\".\"created_at\" FROM \"scenarios\" INNER JOIN \"mapsets\" ON (\"mapsets\".\"id\" = \"scenarios\".\"mapset_id\") WHERE (\"scenarios\".\"mapset_id\" = 21) ORDER BY metadata->>'name' LIMIT 10 OFFSET 0"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"scenarios\".\"id\", \"scenarios\".\"uuid\", metadata->>'name' AS \"name\", metadata->>'feature_group' AS \"feature_group\", metadata->>'feature' AS \"feature\", \"scenarios\".\"event_field_counts\", \"scenarios\".\"mapset_id\", \"mapsets\".\"app_id\", \"scenarios\".\"created_at\" FROM \"scenarios\" INNER JOIN \"mapsets\" ON (\"mapsets\".\"id\" = \"scenarios\".\"mapset_id\") WHERE (\"scenarios\".\"mapset_id\" = 21) ORDER BY \"scenarios\".\"created_at\" DESC"
+      },
+      {
+        "type": "query",
+        "name": "SELECT DISTINCT \"caller\", \"callee\" FROM \"scenarios\", lateral jsonb_to_recordset(class_invocation_graph) as graph(caller q_class, callee q_class) WHERE (1 = 0)"
+      },
+      {
+        "type": "query",
+        "name": "SELECT scenarios.metadata->'git'->>'repository' AS \"repository_url\", scenarios.metadata->'git'->>'commit' AS \"commit\" FROM \"scenarios\" WHERE ((scenarios.metadata->'git'->>'repository' IS NOT NULL) AND (scenarios.metadata->'git'->>'commit' IS NOT NULL) AND (1 = 0)) LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT jsonb_object_agg(compute_code_objects_by_location(data->'classMap')) AS \"code_objects_by_location\" FROM \"scenarios\" WHERE (1 = 0) LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"apps\" WHERE \"id\" = 30"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"mapset_caches\" WHERE (\"mapset_id\" = 21) LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT mapset_digest(21) AS \"digest\" LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"mapset_caches\" (\"mapset_id\", \"sha_256\") VALUES (21, '\\x74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b') RETURNING *"
+      },
+      {
+        "type": "query",
+        "name": "WITH \"sql_queries\" AS (SELECT sql_query.sql_query ->> 'database_type'::text AS \"database_type\", COALESCE(sql_query.sql_query ->> 'normalized_sql', sql_query.sql_query ->> 'sql')::text AS \"sql\" FROM \"scenarios\", LATERAL jsonb_to_recordset(COALESCE(scenarios.events_sql_queries, '[]'::jsonb)) sql_query(id integer, sql_query jsonb) WHERE (\"mapset_id\" = 21)) SELECT DISTINCT \"sql\" FROM \"sql_queries\""
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"mapset_caches\" SET \"data_model\" = '{\"tables\":[],\"joins\":[]}'::jsonb WHERE (\"id\" = 5)"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"mapsets\" WHERE (\"id\" = 21) LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT metadata->>'name' AS \"name\", \"uuid\", \"events_http_server_requests\", \"events_http_server_responses\" FROM \"scenarios\" WHERE ((\"scenarios\".\"mapset_id\" = 21) AND ((\"events_http_server_requests\" IS NOT NULL) OR (\"events_http_server_responses\" IS NOT NULL)))"
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"mapset_caches\" SET \"web_resources\" = '{\"resource_map\":{},\"model_names\":[]}'::jsonb WHERE (\"id\" = 5)"
+      },
+      {
+        "type": "query",
+        "name": "SELECT * FROM \"users\" WHERE \"id\" = 16"
+      },
+      {
+        "type": "query",
+        "name": "WITH \"recording_methods\" AS (SELECT scenarios.metadata->'recorder'->>'name' AS \"recording_method\" FROM \"scenarios\" WHERE ((scenarios.metadata->'recorder'->>'name' IS NOT NULL) AND (\"mapset_id\" = 21))) SELECT \"recording_method\", count(*) AS \"num_scenarios\" FROM \"recording_methods\" GROUP BY \"recording_method\""
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"mapset_caches\" SET \"recording_method_counts\" = '[]'::jsonb WHERE (\"id\" = 5)"
+      },
+      {
+        "type": "query",
+        "name": "WITH \"code_objects\" AS (SELECT DISTINCT \"type\", \"object_name\" FROM \"scenarios\" INNER JOIN \"scenario_code_objects\" ON (\"scenario_code_objects\".\"scenario_id\" = \"scenarios\".\"id\") WHERE (\"mapset_id\" = 21)) SELECT \"type\", count(\"object_name\") AS \"num_code_objects\" FROM \"code_objects\" GROUP BY \"type\""
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"mapset_caches\" SET \"code_object_counts\" = '{\"package\":0,\"class\":0,\"function\":0}'::jsonb WHERE (\"id\" = 5)"
+      },
+      {
+        "type": "query",
+        "name": "WITH \"key_data_stats\" AS (SELECT DISTINCT http_server_request.http_server_request ->> 'request_method'::text AS \"request_method\", http_server_request.http_server_request ->> 'normalized_path_info'::text AS \"path_info\" FROM \"scenarios\", LATERAL jsonb_to_recordset(COALESCE(scenarios.events_http_server_requests, '[]'::jsonb)) http_server_request(id integer, http_server_request jsonb) WHERE (\"mapset_id\" = 21)) SELECT count(*) AS \"num_distinct\" FROM \"key_data_stats\" LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "WITH \"key_data_stats\" AS (SELECT DISTINCT sql_query.sql_query ->> 'database_type'::text AS \"database_type\", COALESCE(sql_query.sql_query ->> 'normalized_sql', sql_query.sql_query ->> 'sql')::text AS \"sql\" FROM \"scenarios\", LATERAL jsonb_to_recordset(COALESCE(scenarios.events_sql_queries, '[]'::jsonb)) sql_query(id integer, sql_query jsonb) WHERE (\"mapset_id\" = 21)) SELECT count(*) AS \"num_distinct\" FROM \"key_data_stats\" LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "WITH \"key_data_stats\" AS (WITH \"messages\" AS (SELECT array_agg(msg.name) AS \"message_fields\" FROM \"scenarios\", LATERAL jsonb_to_recordset(COALESCE(scenarios.events_messages, '[]'::jsonb)) message(id integer, message jsonb), LATERAL jsonb_to_recordset(message.message) msg(name text) WHERE (\"mapset_id\" = 21) GROUP BY \"message\".\"id\") SELECT DISTINCT \"message_fields\" FROM \"messages\") SELECT count(*) AS \"num_distinct\" FROM \"key_data_stats\" LIMIT 1"
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"mapset_caches\" SET \"key_stats_counts\" = '{\"HTTP server requests\":0,\"SQL queries\":0,\"Messages\":0}'::jsonb WHERE (\"id\" = 5)"
+      }
+    ]
+  },
+  {
+    "type": "http",
+    "name": "HTTP server requests",
+    "children": [
+      {
+        "type": "route",
+        "name": "GET /:organization_id/:id(.:format)"
+      }
+    ]
+  }
+]

@@ -1,0 +1,5 @@
+[
+  "activerecord/ActiveRecord::Relation",
+  "activesupport/ActiveSupport::Callbacks::CallbackSequence",
+  "logger/Logger::LogDevice"
+]

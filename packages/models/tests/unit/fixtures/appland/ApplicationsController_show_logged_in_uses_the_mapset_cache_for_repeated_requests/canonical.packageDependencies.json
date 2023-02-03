@@ -1,0 +1,70 @@
+[
+  {
+    "caller": "HTTP server requests",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "HTTP server requests",
+    "callee": "app/models"
+  },
+  {
+    "caller": "HTTP server requests",
+    "callee": "json"
+  },
+  {
+    "caller": "HTTP server requests",
+    "callee": "openssl"
+  },
+  {
+    "caller": "action_view",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "action_view",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "action_view",
+    "callee": "app/models"
+  },
+  {
+    "caller": "action_view",
+    "callee": "json"
+  },
+  {
+    "caller": "action_view",
+    "callee": "lib/appland"
+  },
+  {
+    "caller": "action_view",
+    "callee": "openssl"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "action_view"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "app/models"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "app/models"
+  },
+  {
+    "caller": "app/models",
+    "callee": "Database"
+  },
+  {
+    "caller": "app/models",
+    "callee": "json"
+  },
+  {
+    "caller": "app/models",
+    "callee": "lib/appland"
+  },
+  {
+    "caller": "lib/appland",
+    "callee": "json"
+  }
+]

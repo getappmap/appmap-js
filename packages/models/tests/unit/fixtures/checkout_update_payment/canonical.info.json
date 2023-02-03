@@ -1,0 +1,4958 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "PATCH /checkout/update/{state}",
+    "parameter_names": [
+      "_method",
+      "authenticity_token",
+      "order",
+      "payment_source",
+      "controller",
+      "action",
+      "state"
+    ],
+    "status_code": 302,
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["mvc.controller"],
+        "children": [
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["http.session.write"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.decrypt"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_key"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_iv"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_auth_tag"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.set_auth_data"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.final"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["crypto.secure_compare"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["string.unpack"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["dao.materialize"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": ["select"],
+                        "tables": ["spree_roles"],
+                        "columns": [
+                          "spree_roles.*",
+                          "spree_roles.name",
+                          "spree_roles.sample_indicator_id"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["dao.materialize"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "analyzed_query": {
+                                "actions": ["select"],
+                                "tables": ["spree_sample_changes"],
+                                "columns": [
+                                  "spree_sample_changes.*",
+                                  "spree_sample_changes.changeable_id",
+                                  "spree_sample_changes.changeable_type",
+                                  "spree_sample_changes.sample_indicator_id"
+                                ],
+                                "joinCount": 0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["dao.materialize"]
+              },
+              {
+                "kind": "function",
+                "labels": ["dao.materialize"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.secure_compare"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["string.unpack"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["http.session.write"]
+              },
+              {
+                "kind": "function",
+                "labels": ["dao.materialize"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": ["select"],
+                        "tables": ["spree_stores"],
+                        "columns": [
+                          "spree_stores.*",
+                          "spree_stores.default",
+                          "spree_stores.sample_indicator_id",
+                          "spree_stores.url"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["dao.materialize"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "analyzed_query": {
+                                "actions": ["select"],
+                                "tables": ["spree_sample_changes"],
+                                "columns": [
+                                  "spree_sample_changes.*",
+                                  "spree_sample_changes.changeable_id",
+                                  "spree_sample_changes.changeable_type",
+                                  "spree_sample_changes.sample_indicator_id"
+                                ],
+                                "joinCount": 0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.secure_compare"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["string.unpack"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.secure_compare"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["string.unpack"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["dao.materialize"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": ["select"],
+                        "tables": ["spree_orders"],
+                        "columns": [
+                          "spree_orders.*",
+                          "spree_orders.completed_at",
+                          "spree_orders.currency",
+                          "spree_orders.guest_token",
+                          "spree_orders.sample_indicator_id",
+                          "spree_orders.store_id",
+                          "spree_orders.user_id"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["dao.materialize"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "analyzed_query": {
+                                "actions": ["select"],
+                                "tables": ["spree_sample_changes"],
+                                "columns": [
+                                  "spree_sample_changes.*",
+                                  "spree_sample_changes.changeable_id",
+                                  "spree_sample_changes.changeable_type",
+                                  "spree_sample_changes.sample_indicator_id"
+                                ],
+                                "joinCount": 0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["delete"],
+                "tables": ["spree_order_mutexes"],
+                "columns": [
+                  "spree_order_mutexes.created_at",
+                  "spree_order_mutexes.order_id",
+                  "spree_order_mutexes.sample_indicator_id"
+                ],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [],
+                "tables": [],
+                "columns": [],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["insert"],
+                "tables": ["spree_order_mutexes"],
+                "columns": ["created_at", "id", "order_id", "sample_indicator_id"],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [],
+                "tables": [],
+                "columns": [],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["select"],
+                    "tables": ["spree_line_items"],
+                    "columns": [
+                      "*",
+                      "spree_line_items.order_id",
+                      "spree_line_items.sample_indicator_id"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": ["dao.materialize"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": ["select"],
+                        "tables": ["spree_line_items"],
+                        "columns": [
+                          "spree_line_items.*",
+                          "spree_line_items.created_at",
+                          "spree_line_items.id",
+                          "spree_line_items.order_id",
+                          "spree_line_items.sample_indicator_id"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["dao.materialize"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "analyzed_query": {
+                                "actions": ["select"],
+                                "tables": ["spree_sample_changes"],
+                                "columns": [
+                                  "spree_sample_changes.*",
+                                  "spree_sample_changes.changeable_id",
+                                  "spree_sample_changes.changeable_type",
+                                  "spree_sample_changes.sample_indicator_id"
+                                ],
+                                "joinCount": 0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["dao.materialize"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": ["select"],
+                        "tables": ["spree_variants"],
+                        "columns": [
+                          "spree_variants.*",
+                          "spree_variants.id",
+                          "spree_variants.sample_indicator_id"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["dao.materialize"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "analyzed_query": {
+                                "actions": ["select"],
+                                "tables": ["spree_sample_changes"],
+                                "columns": [
+                                  "spree_sample_changes.*",
+                                  "spree_sample_changes.changeable_id",
+                                  "spree_sample_changes.changeable_type",
+                                  "spree_sample_changes.sample_indicator_id"
+                                ],
+                                "joinCount": 0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["select"],
+                    "tables": ["spree_stock_items", "spree_stock_locations"],
+                    "columns": [
+                      "spree_stock_items.count_on_hand",
+                      "spree_stock_items.deleted_at",
+                      "spree_stock_items.stock_location_id",
+                      "spree_stock_items.variant_id",
+                      "spree_stock_locations.active",
+                      "spree_stock_locations.id",
+                      "spree_stock_locations.sample_indicator_id"
+                    ],
+                    "joinCount": 1
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.secure_compare"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["string.unpack"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["dao.materialize"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": ["select"],
+                        "tables": ["spree_users"],
+                        "columns": [
+                          "spree_users.*",
+                          "spree_users.id",
+                          "spree_users.sample_indicator_id"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.secure_compare"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["string.unpack"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["dao.materialize"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": ["select"],
+                        "tables": ["spree_users"],
+                        "columns": [
+                          "spree_users.*",
+                          "spree_users.id",
+                          "spree_users.sample_indicator_id"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["update"],
+                    "tables": ["spree_orders"],
+                    "columns": ["created_by_id", "email", "spree_orders.id", "user_id"],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.secure_compare"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["string.unpack"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["security.authorization"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["crypto.secure_compare"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["string.unpack"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["string.unpack"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["format.json.parse", "deserialize.safe"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["string.unpack"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["format.json.parse", "deserialize.safe"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["dao.materialize"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": ["select"],
+                        "tables": ["spree_shipments"],
+                        "columns": [
+                          "spree_shipments.*",
+                          "spree_shipments.order_id",
+                          "spree_shipments.sample_indicator_id"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["dao.materialize"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "analyzed_query": {
+                                "actions": ["select"],
+                                "tables": ["spree_sample_changes"],
+                                "columns": [
+                                  "spree_sample_changes.*",
+                                  "spree_sample_changes.changeable_id",
+                                  "spree_sample_changes.changeable_type",
+                                  "spree_sample_changes.sample_indicator_id"
+                                ],
+                                "joinCount": 0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["dao.materialize"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": ["select"],
+                        "tables": ["spree_stock_locations"],
+                        "columns": [
+                          "spree_stock_locations.*",
+                          "spree_stock_locations.id",
+                          "spree_stock_locations.sample_indicator_id"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["dao.materialize"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "analyzed_query": {
+                                "actions": ["select"],
+                                "tables": ["spree_sample_changes"],
+                                "columns": [
+                                  "spree_sample_changes.*",
+                                  "spree_sample_changes.changeable_id",
+                                  "spree_sample_changes.changeable_type",
+                                  "spree_sample_changes.sample_indicator_id"
+                                ],
+                                "joinCount": 0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["dao.materialize"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": ["select"],
+                        "tables": ["spree_inventory_units", "spree_variants"],
+                        "columns": [
+                          "spree_inventory_units.*",
+                          "spree_inventory_units.sample_indicator_id",
+                          "spree_inventory_units.shipment_id",
+                          "spree_inventory_units.variant_id",
+                          "spree_variants.id",
+                          "spree_variants.sample_indicator_id"
+                        ],
+                        "joinCount": 1
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["dao.materialize"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "analyzed_query": {
+                                "actions": ["select"],
+                                "tables": ["spree_sample_changes"],
+                                "columns": [
+                                  "spree_sample_changes.*",
+                                  "spree_sample_changes.changeable_id",
+                                  "spree_sample_changes.changeable_type",
+                                  "spree_sample_changes.sample_indicator_id"
+                                ],
+                                "joinCount": 0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["dao.materialize"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "analyzed_query": {
+                                "actions": ["select"],
+                                "tables": ["spree_sample_changes"],
+                                "columns": [
+                                  "spree_sample_changes.*",
+                                  "spree_sample_changes.changeable_id",
+                                  "spree_sample_changes.changeable_type",
+                                  "spree_sample_changes.sample_indicator_id"
+                                ],
+                                "joinCount": 0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": ["select"],
+                        "tables": ["spree_variants"],
+                        "columns": [
+                          "spree_variants.*",
+                          "spree_variants.id",
+                          "spree_variants.sample_indicator_id"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["dao.materialize"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "analyzed_query": {
+                                "actions": ["select"],
+                                "tables": ["spree_sample_changes"],
+                                "columns": [
+                                  "spree_sample_changes.*",
+                                  "spree_sample_changes.changeable_id",
+                                  "spree_sample_changes.changeable_type",
+                                  "spree_sample_changes.sample_indicator_id"
+                                ],
+                                "joinCount": 0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["dao.materialize"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": ["select"],
+                        "tables": ["spree_products"],
+                        "columns": ["spree_products.*", "spree_products.id"],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["dao.materialize"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "analyzed_query": {
+                                "actions": ["select"],
+                                "tables": ["spree_sample_changes"],
+                                "columns": [
+                                  "spree_sample_changes.*",
+                                  "spree_sample_changes.changeable_id",
+                                  "spree_sample_changes.changeable_type",
+                                  "spree_sample_changes.sample_indicator_id"
+                                ],
+                                "joinCount": 0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["dao.materialize"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.secure_compare"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["string.unpack"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.secure_compare"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["string.unpack"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["crypto.secure_compare"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["string.unpack"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["string.unpack"]
+              },
+              {
+                "kind": "function",
+                "labels": ["format.json.parse", "deserialize.safe"]
+              },
+              {
+                "kind": "function",
+                "labels": ["dao.materialize"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": ["select"],
+                        "tables": ["spree_wallet_payment_sources"],
+                        "columns": [
+                          "spree_wallet_payment_sources.*",
+                          "spree_wallet_payment_sources.sample_indicator_id",
+                          "spree_wallet_payment_sources.user_id"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["dao.materialize"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["select"],
+                    "tables": ["spree_stores"],
+                    "columns": [
+                      "spree_stores.*",
+                      "spree_stores.id",
+                      "spree_stores.sample_indicator_id"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["dao.materialize"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["select"],
+                            "tables": ["spree_sample_changes"],
+                            "columns": [
+                              "spree_sample_changes.*",
+                              "spree_sample_changes.changeable_id",
+                              "spree_sample_changes.changeable_type",
+                              "spree_sample_changes.sample_indicator_id"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["select"],
+                "tables": ["spree_payment_methods", "spree_store_payment_methods"],
+                "columns": [
+                  "spree_payment_methods.deleted_at",
+                  "spree_payment_methods.id",
+                  "spree_payment_methods.sample_indicator_id",
+                  "spree_store_payment_methods.payment_method_id",
+                  "spree_store_payment_methods.sample_indicator_id",
+                  "spree_store_payment_methods.store_id"
+                ],
+                "joinCount": 1
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["dao.materialize"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["select"],
+                    "tables": ["spree_payment_methods"],
+                    "columns": [
+                      "spree_payment_methods.*",
+                      "spree_payment_methods.active",
+                      "spree_payment_methods.available_to_users",
+                      "spree_payment_methods.deleted_at",
+                      "spree_payment_methods.id",
+                      "spree_payment_methods.position",
+                      "spree_payment_methods.sample_indicator_id"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["dao.materialize"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["select"],
+                            "tables": ["spree_sample_changes"],
+                            "columns": [
+                              "spree_sample_changes.*",
+                              "spree_sample_changes.changeable_id",
+                              "spree_sample_changes.changeable_type",
+                              "spree_sample_changes.sample_indicator_id"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["dao.materialize"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["select"],
+                            "tables": ["spree_sample_changes"],
+                            "columns": [
+                              "spree_sample_changes.*",
+                              "spree_sample_changes.changeable_id",
+                              "spree_sample_changes.changeable_type",
+                              "spree_sample_changes.sample_indicator_id"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["dao.materialize"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["select"],
+                    "tables": ["spree_payment_methods"],
+                    "columns": [
+                      "spree_payment_methods.*",
+                      "spree_payment_methods.deleted_at",
+                      "spree_payment_methods.id",
+                      "spree_payment_methods.sample_indicator_id"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["dao.materialize"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["select"],
+                            "tables": ["spree_sample_changes"],
+                            "columns": [
+                              "spree_sample_changes.*",
+                              "spree_sample_changes.changeable_id",
+                              "spree_sample_changes.changeable_type",
+                              "spree_sample_changes.sample_indicator_id"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["dao.materialize"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["select"],
+                            "tables": ["spree_sample_changes"],
+                            "columns": [
+                              "spree_sample_changes.*",
+                              "spree_sample_changes.changeable_id",
+                              "spree_sample_changes.changeable_type",
+                              "spree_sample_changes.sample_indicator_id"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["dao.materialize"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["select"],
+                    "tables": ["spree_payments"],
+                    "columns": [
+                      "spree_payments.*",
+                      "spree_payments.created_at",
+                      "spree_payments.order_id",
+                      "spree_payments.state"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["select"],
+                    "tables": ["pg_attribute", "pg_index"],
+                    "columns": [
+                      "a.attname",
+                      "a.attnum",
+                      "a.attrelid",
+                      "i.idx",
+                      "i.indkey",
+                      "i.indrelid",
+                      "indisprimary",
+                      "indkey",
+                      "indrelid"
+                    ],
+                    "joinCount": 1
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["dao.materialize"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["select"],
+                            "tables": ["spree_sample_changes"],
+                            "columns": [
+                              "spree_sample_changes.*",
+                              "spree_sample_changes.changeable_id",
+                              "spree_sample_changes.changeable_type",
+                              "spree_sample_changes.sample_indicator_id"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["dao.materialize"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["select"],
+                    "tables": ["spree_payment_methods"],
+                    "columns": [
+                      "spree_payment_methods.*",
+                      "spree_payment_methods.id",
+                      "spree_payment_methods.sample_indicator_id"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["dao.materialize"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["select"],
+                            "tables": ["spree_sample_changes"],
+                            "columns": [
+                              "spree_sample_changes.*",
+                              "spree_sample_changes.changeable_id",
+                              "spree_sample_changes.changeable_type",
+                              "spree_sample_changes.sample_indicator_id"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["dao.materialize"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["select"],
+                            "tables": ["spree_sample_changes"],
+                            "columns": [
+                              "spree_sample_changes.*",
+                              "spree_sample_changes.changeable_id",
+                              "spree_sample_changes.changeable_type",
+                              "spree_sample_changes.sample_indicator_id"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["dao.materialize"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["select"],
+                    "tables": ["spree_payment_methods"],
+                    "columns": [
+                      "spree_payment_methods.*",
+                      "spree_payment_methods.id",
+                      "spree_payment_methods.sample_indicator_id"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["dao.materialize"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["select"],
+                            "tables": ["spree_sample_changes"],
+                            "columns": [
+                              "spree_sample_changes.*",
+                              "spree_sample_changes.changeable_id",
+                              "spree_sample_changes.changeable_type",
+                              "spree_sample_changes.sample_indicator_id"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["dao.materialize"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["select"],
+                            "tables": ["spree_sample_changes"],
+                            "columns": [
+                              "spree_sample_changes.*",
+                              "spree_sample_changes.changeable_id",
+                              "spree_sample_changes.changeable_type",
+                              "spree_sample_changes.sample_indicator_id"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              }
+            ]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["select"],
+                "tables": ["pg_attribute", "pg_index"],
+                "columns": [
+                  "a.attname",
+                  "a.attnum",
+                  "a.attrelid",
+                  "i.idx",
+                  "i.indkey",
+                  "i.indrelid",
+                  "indisprimary",
+                  "indkey",
+                  "indrelid"
+                ],
+                "joinCount": 1
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["dao.materialize"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["select"],
+                    "tables": ["spree_addresses"],
+                    "columns": [
+                      "spree_addresses.*",
+                      "spree_addresses.address1",
+                      "spree_addresses.address2",
+                      "spree_addresses.alternative_phone",
+                      "spree_addresses.city",
+                      "spree_addresses.company",
+                      "spree_addresses.country_id",
+                      "spree_addresses.firstname",
+                      "spree_addresses.lastname",
+                      "spree_addresses.name",
+                      "spree_addresses.phone",
+                      "spree_addresses.sample_indicator_id",
+                      "spree_addresses.state_id",
+                      "spree_addresses.state_name",
+                      "spree_addresses.zipcode"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": [],
+                                    "tables": [],
+                                    "columns": [],
+                                    "joinCount": 0
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": ["select"],
+                                    "tables": ["spree_countries"],
+                                    "columns": [
+                                      "spree_countries.*",
+                                      "spree_countries.id",
+                                      "spree_countries.sample_indicator_id"
+                                    ],
+                                    "joinCount": 0
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["mvc.before_action"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["mvc.after_action"],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "labels": ["dao.materialize"],
+                                    "children": [
+                                      {
+                                        "kind": "function",
+                                        "labels": ["log"]
+                                      },
+                                      {
+                                        "kind": "function",
+                                        "labels": ["log"]
+                                      },
+                                      {
+                                        "kind": "function",
+                                        "labels": ["log"]
+                                      },
+                                      {
+                                        "kind": "function",
+                                        "labels": ["log"]
+                                      },
+                                      {
+                                        "kind": "sql",
+                                        "sql": {
+                                          "analyzed_query": {
+                                            "actions": ["select"],
+                                            "tables": ["spree_sample_changes"],
+                                            "columns": [
+                                              "spree_sample_changes.*",
+                                              "spree_sample_changes.changeable_id",
+                                              "spree_sample_changes.changeable_type",
+                                              "spree_sample_changes.sample_indicator_id"
+                                            ],
+                                            "joinCount": 0
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": ["select"],
+                                    "tables": ["spree_states"],
+                                    "columns": [
+                                      "spree_states.*",
+                                      "spree_states.id",
+                                      "spree_states.sample_indicator_id"
+                                    ],
+                                    "joinCount": 0
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["mvc.before_action"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["mvc.after_action"],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "labels": ["dao.materialize"],
+                                    "children": [
+                                      {
+                                        "kind": "function",
+                                        "labels": ["log"]
+                                      },
+                                      {
+                                        "kind": "function",
+                                        "labels": ["log"]
+                                      },
+                                      {
+                                        "kind": "function",
+                                        "labels": ["log"]
+                                      },
+                                      {
+                                        "kind": "function",
+                                        "labels": ["log"]
+                                      },
+                                      {
+                                        "kind": "sql",
+                                        "sql": {
+                                          "analyzed_query": {
+                                            "actions": ["select"],
+                                            "tables": ["spree_sample_changes"],
+                                            "columns": [
+                                              "spree_sample_changes.*",
+                                              "spree_sample_changes.changeable_id",
+                                              "spree_sample_changes.changeable_type",
+                                              "spree_sample_changes.sample_indicator_id"
+                                            ],
+                                            "joinCount": 0
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": ["select"],
+                                    "tables": ["spree_countries"],
+                                    "columns": [
+                                      "spree_countries.*",
+                                      "spree_countries.id",
+                                      "spree_countries.sample_indicator_id"
+                                    ],
+                                    "joinCount": 0
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["mvc.before_action"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["mvc.after_action"],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "labels": ["dao.materialize"],
+                                    "children": [
+                                      {
+                                        "kind": "function",
+                                        "labels": ["log"]
+                                      },
+                                      {
+                                        "kind": "function",
+                                        "labels": ["log"]
+                                      },
+                                      {
+                                        "kind": "function",
+                                        "labels": ["log"]
+                                      },
+                                      {
+                                        "kind": "function",
+                                        "labels": ["log"]
+                                      },
+                                      {
+                                        "kind": "sql",
+                                        "sql": {
+                                          "analyzed_query": {
+                                            "actions": ["select"],
+                                            "tables": ["spree_sample_changes"],
+                                            "columns": [
+                                              "spree_sample_changes.*",
+                                              "spree_sample_changes.changeable_id",
+                                              "spree_sample_changes.changeable_type",
+                                              "spree_sample_changes.sample_indicator_id"
+                                            ],
+                                            "joinCount": 0
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "analyzed_query": {
+                                "actions": ["select"],
+                                "tables": ["spree_states"],
+                                "columns": [
+                                  "spree_states.country_id",
+                                  "spree_states.sample_indicator_id"
+                                ],
+                                "joinCount": 0
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["select"],
+                    "tables": ["spree_orders"],
+                    "columns": ["spree_orders.id", "spree_orders.number"],
+                    "joinCount": 0
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["select"],
+                            "tables": ["spree_roles_users"],
+                            "columns": ["spree_roles_users.role_id", "spree_roles_users.user_id"],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["select"],
+                            "tables": ["spree_roles"],
+                            "columns": ["spree_roles.id", "spree_roles.name"],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "analyzed_query": {
+                                "actions": ["select"],
+                                "tables": ["spree_states"],
+                                "columns": [
+                                  "spree_states.country_id",
+                                  "spree_states.sample_indicator_id"
+                                ],
+                                "joinCount": 0
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["mvc.before_action"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": ["select"],
+                                    "tables": ["spree_roles_users"],
+                                    "columns": [
+                                      "spree_roles_users.role_id",
+                                      "spree_roles_users.user_id"
+                                    ],
+                                    "joinCount": 0
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["mvc.after_action"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["mvc.before_action"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["mvc.before_action"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": ["select"],
+                                    "tables": ["spree_roles"],
+                                    "columns": ["spree_roles.id", "spree_roles.name"],
+                                    "joinCount": 0
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["mvc.after_action"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["mvc.after_action"]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["insert"],
+                            "tables": ["spree_addresses"],
+                            "columns": [
+                              "address1",
+                              "address2",
+                              "alternative_phone",
+                              "city",
+                              "company",
+                              "country_id",
+                              "created_at",
+                              "firstname",
+                              "id",
+                              "name",
+                              "phone",
+                              "sample_indicator_id",
+                              "state_id",
+                              "updated_at",
+                              "zipcode"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": ["insert"],
+                        "tables": ["spree_credit_cards"],
+                        "columns": [
+                          "address_id",
+                          "cc_type",
+                          "created_at",
+                          "id",
+                          "last_digits",
+                          "month",
+                          "name",
+                          "payment_method_id",
+                          "sample_indicator_id",
+                          "updated_at",
+                          "user_id",
+                          "year"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": ["select"],
+                        "tables": ["spree_payments"],
+                        "columns": ["spree_payments.number"],
+                        "joinCount": 0
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["insert"],
+                    "tables": ["spree_payments"],
+                    "columns": [
+                      "amount",
+                      "created_at",
+                      "id",
+                      "number",
+                      "order_id",
+                      "payment_method_id",
+                      "sample_indicator_id",
+                      "source_id",
+                      "source_type",
+                      "state",
+                      "updated_at"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["dao.materialize"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["select"],
+                            "tables": ["spree_payments"],
+                            "columns": [
+                              "spree_payments.*",
+                              "spree_payments.created_at",
+                              "spree_payments.order_id"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": ["select"],
+                                    "tables": ["spree_sample_changes"],
+                                    "columns": [
+                                      "spree_sample_changes.*",
+                                      "spree_sample_changes.changeable_id",
+                                      "spree_sample_changes.changeable_type",
+                                      "spree_sample_changes.sample_indicator_id"
+                                    ],
+                                    "joinCount": 0
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": ["select"],
+                                    "tables": ["spree_sample_changes"],
+                                    "columns": [
+                                      "spree_sample_changes.*",
+                                      "spree_sample_changes.changeable_id",
+                                      "spree_sample_changes.changeable_type",
+                                      "spree_sample_changes.sample_indicator_id"
+                                    ],
+                                    "joinCount": 0
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": ["select"],
+                                    "tables": ["spree_sample_changes"],
+                                    "columns": [
+                                      "spree_sample_changes.*",
+                                      "spree_sample_changes.changeable_id",
+                                      "spree_sample_changes.changeable_type",
+                                      "spree_sample_changes.sample_indicator_id"
+                                    ],
+                                    "joinCount": 0
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": ["select"],
+                                    "tables": ["spree_sample_changes"],
+                                    "columns": [
+                                      "spree_sample_changes.*",
+                                      "spree_sample_changes.changeable_id",
+                                      "spree_sample_changes.changeable_type",
+                                      "spree_sample_changes.sample_indicator_id"
+                                    ],
+                                    "joinCount": 0
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": ["select"],
+                                    "tables": ["spree_sample_changes"],
+                                    "columns": [
+                                      "spree_sample_changes.*",
+                                      "spree_sample_changes.changeable_id",
+                                      "spree_sample_changes.changeable_type",
+                                      "spree_sample_changes.sample_indicator_id"
+                                    ],
+                                    "joinCount": 0
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": ["select"],
+                                    "tables": ["spree_sample_changes"],
+                                    "columns": [
+                                      "spree_sample_changes.*",
+                                      "spree_sample_changes.changeable_id",
+                                      "spree_sample_changes.changeable_type",
+                                      "spree_sample_changes.sample_indicator_id"
+                                    ],
+                                    "joinCount": 0
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": ["select"],
+                                    "tables": ["spree_sample_changes"],
+                                    "columns": [
+                                      "spree_sample_changes.*",
+                                      "spree_sample_changes.changeable_id",
+                                      "spree_sample_changes.changeable_type",
+                                      "spree_sample_changes.sample_indicator_id"
+                                    ],
+                                    "joinCount": 0
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": ["select"],
+                                    "tables": ["spree_sample_changes"],
+                                    "columns": [
+                                      "spree_sample_changes.*",
+                                      "spree_sample_changes.changeable_id",
+                                      "spree_sample_changes.changeable_type",
+                                      "spree_sample_changes.sample_indicator_id"
+                                    ],
+                                    "joinCount": 0
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": ["select"],
+                                    "tables": ["spree_sample_changes"],
+                                    "columns": [
+                                      "spree_sample_changes.*",
+                                      "spree_sample_changes.changeable_id",
+                                      "spree_sample_changes.changeable_type",
+                                      "spree_sample_changes.sample_indicator_id"
+                                    ],
+                                    "joinCount": 0
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["dao.materialize"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["select"],
+                            "tables": ["spree_payment_methods"],
+                            "columns": [
+                              "spree_payment_methods.*",
+                              "spree_payment_methods.id",
+                              "spree_payment_methods.sample_indicator_id"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": ["select"],
+                                    "tables": ["spree_sample_changes"],
+                                    "columns": [
+                                      "spree_sample_changes.*",
+                                      "spree_sample_changes.changeable_id",
+                                      "spree_sample_changes.changeable_type",
+                                      "spree_sample_changes.sample_indicator_id"
+                                    ],
+                                    "joinCount": 0
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": ["select"],
+                                    "tables": ["spree_sample_changes"],
+                                    "columns": [
+                                      "spree_sample_changes.*",
+                                      "spree_sample_changes.changeable_id",
+                                      "spree_sample_changes.changeable_type",
+                                      "spree_sample_changes.sample_indicator_id"
+                                    ],
+                                    "joinCount": 0
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["dao.materialize"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["log"]
+                          },
+                          {
+                            "kind": "sql",
+                            "sql": {
+                              "analyzed_query": {
+                                "actions": ["select"],
+                                "tables": ["spree_credit_cards"],
+                                "columns": [
+                                  "spree_credit_cards.*",
+                                  "spree_credit_cards.id",
+                                  "spree_credit_cards.sample_indicator_id"
+                                ],
+                                "joinCount": 0
+                              }
+                            }
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["mvc.before_action"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["mvc.after_action"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["dao.materialize"],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "labels": ["log"]
+                                  },
+                                  {
+                                    "kind": "function",
+                                    "labels": ["log"]
+                                  },
+                                  {
+                                    "kind": "function",
+                                    "labels": ["log"]
+                                  },
+                                  {
+                                    "kind": "function",
+                                    "labels": ["log"]
+                                  },
+                                  {
+                                    "kind": "sql",
+                                    "sql": {
+                                      "analyzed_query": {
+                                        "actions": ["select"],
+                                        "tables": ["spree_sample_changes"],
+                                        "columns": [
+                                          "spree_sample_changes.*",
+                                          "spree_sample_changes.changeable_id",
+                                          "spree_sample_changes.changeable_type",
+                                          "spree_sample_changes.sample_indicator_id"
+                                        ],
+                                        "joinCount": 0
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": ["update"],
+                        "tables": ["spree_payments"],
+                        "columns": ["spree_payments.id", "state", "updated_at"],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": ["insert"],
+                        "tables": ["spree_state_changes"],
+                        "columns": [
+                          "created_at",
+                          "id",
+                          "name",
+                          "next_state",
+                          "previous_state",
+                          "sample_indicator_id",
+                          "stateful_id",
+                          "stateful_type",
+                          "updated_at"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["dao.materialize"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["select"],
+                            "tables": ["spree_addresses"],
+                            "columns": [
+                              "spree_addresses.*",
+                              "spree_addresses.id",
+                              "spree_addresses.sample_indicator_id"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": ["select"],
+                                    "tables": ["spree_sample_changes"],
+                                    "columns": [
+                                      "spree_sample_changes.*",
+                                      "spree_sample_changes.changeable_id",
+                                      "spree_sample_changes.changeable_type",
+                                      "spree_sample_changes.sample_indicator_id"
+                                    ],
+                                    "joinCount": 0
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["dao.materialize"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["select"],
+                            "tables": ["spree_countries"],
+                            "columns": [
+                              "spree_countries.*",
+                              "spree_countries.id",
+                              "spree_countries.sample_indicator_id"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": ["select"],
+                                    "tables": ["spree_sample_changes"],
+                                    "columns": [
+                                      "spree_sample_changes.*",
+                                      "spree_sample_changes.changeable_id",
+                                      "spree_sample_changes.changeable_type",
+                                      "spree_sample_changes.sample_indicator_id"
+                                    ],
+                                    "joinCount": 0
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["dao.materialize"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["select"],
+                            "tables": ["spree_states"],
+                            "columns": [
+                              "spree_states.*",
+                              "spree_states.id",
+                              "spree_states.sample_indicator_id"
+                            ],
+                            "joinCount": 0
+                          }
+                        }
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["dao.materialize"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": ["select"],
+                                    "tables": ["spree_sample_changes"],
+                                    "columns": [
+                                      "spree_sample_changes.*",
+                                      "spree_sample_changes.changeable_id",
+                                      "spree_sample_changes.changeable_type",
+                                      "spree_sample_changes.sample_indicator_id"
+                                    ],
+                                    "joinCount": 0
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["serialize"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["serialize"]
+                  },
+                  {
+                    "kind": "http_client_request",
+                    "route": "POST https://api.stripe.com/v1/customers",
+                    "parameter_names": null,
+                    "status_code": 200
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["format.json.parse", "deserialize.safe"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.before_action"],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "labels": ["mvc.before_action"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": ["select"],
+                                    "tables": ["spree_roles_users"],
+                                    "columns": [
+                                      "spree_roles_users.role_id",
+                                      "spree_roles_users.user_id"
+                                    ],
+                                    "joinCount": 0
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["mvc.after_action"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["mvc.before_action"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["mvc.before_action"],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "function",
+                                "labels": ["log"]
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "analyzed_query": {
+                                    "actions": ["select"],
+                                    "tables": ["spree_roles"],
+                                    "columns": ["spree_roles.id", "spree_roles.name"],
+                                    "joinCount": 0
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["mvc.after_action"]
+                          },
+                          {
+                            "kind": "function",
+                            "labels": ["mvc.after_action"]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["mvc.after_action"]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["log"]
+                  },
+                  {
+                    "kind": "sql",
+                    "sql": {
+                      "analyzed_query": {
+                        "actions": ["update"],
+                        "tables": ["spree_credit_cards"],
+                        "columns": [
+                          "gateway_customer_profile_id",
+                          "gateway_payment_profile_id",
+                          "spree_credit_cards.id",
+                          "updated_at"
+                        ],
+                        "joinCount": 0
+                      }
+                    }
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["update"],
+                "tables": ["spree_orders"],
+                "columns": ["spree_orders.id", "updated_at"],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [],
+                "tables": [],
+                "columns": [],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["select"],
+                "tables": ["spree_payments"],
+                "columns": [
+                  "spree_payments.order_id",
+                  "spree_payments.source_type",
+                  "spree_payments.state"
+                ],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["dao.materialize"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["select"],
+                    "tables": ["spree_store_credits"],
+                    "columns": [
+                      "spree_store_credits.*",
+                      "spree_store_credits.deleted_at",
+                      "spree_store_credits.sample_indicator_id",
+                      "spree_store_credits.user_id"
+                    ],
+                    "joinCount": 0
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [],
+                    "tables": [],
+                    "columns": [],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["select"],
+                    "tables": ["spree_orders"],
+                    "columns": ["spree_orders.id", "spree_orders.number"],
+                    "joinCount": 0
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["select"],
+                            "tables": ["spree_roles_users"],
+                            "columns": ["spree_roles_users.role_id", "spree_roles_users.user_id"],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["select"],
+                            "tables": ["spree_roles"],
+                            "columns": ["spree_roles.id", "spree_roles.name"],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["update"],
+                "tables": ["spree_orders"],
+                "columns": ["spree_orders.id", "state", "updated_at"],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [],
+                "tables": [],
+                "columns": [],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [],
+                "tables": [],
+                "columns": [],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["insert"],
+                "tables": ["spree_state_changes"],
+                "columns": [
+                  "created_at",
+                  "id",
+                  "name",
+                  "next_state",
+                  "previous_state",
+                  "sample_indicator_id",
+                  "stateful_id",
+                  "stateful_type",
+                  "updated_at",
+                  "user_id"
+                ],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [],
+                "tables": [],
+                "columns": [],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": [],
+                    "tables": [],
+                    "columns": [],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["select"],
+                    "tables": ["spree_orders"],
+                    "columns": ["spree_orders.id", "spree_orders.number"],
+                    "joinCount": 0
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.before_action"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["select"],
+                            "tables": ["spree_roles_users"],
+                            "columns": ["spree_roles_users.role_id", "spree_roles_users.user_id"],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.before_action"],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "function",
+                        "labels": ["log"]
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "analyzed_query": {
+                            "actions": ["select"],
+                            "tables": ["spree_roles"],
+                            "columns": ["spree_roles.id", "spree_roles.name"],
+                            "joinCount": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["mvc.after_action"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              },
+              {
+                "kind": "function",
+                "labels": ["mvc.after_action"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [],
+                "tables": [],
+                "columns": [],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.controller"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["log"]
+              },
+              {
+                "kind": "function",
+                "labels": ["log"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.before_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [],
+                "tables": [],
+                "columns": [],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["delete"],
+                "tables": ["spree_order_mutexes"],
+                "columns": ["spree_order_mutexes.id"],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": [],
+                "tables": [],
+                "columns": [],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["mvc.after_action"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          },
+          {
+            "kind": "function",
+            "labels": ["log"]
+          }
+        ]
+      }
+    ]
+  }
+]

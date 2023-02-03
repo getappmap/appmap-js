@@ -1,0 +1,111 @@
+{
+  "name": "juice",
+  "app": "juice-shop",
+  "labels": [],
+  "language": {
+    "name": "ecmascript",
+    "version": "2020",
+    "engine": "node@v14.17.5"
+  },
+  "frameworks": [],
+  "client": {
+    "name": "@appland/appmap-agent-js",
+    "version": "4.3.0",
+    "url": "https://github.com/getappmap/appmap-agent-js.git/#readme"
+  },
+  "recorder": {
+    "name": "process"
+  },
+  "recording": null,
+  "git": {
+    "repository": "https://github.com/bkimminich/juice-shop.git",
+    "branch": "master",
+    "commit": "7433ade4c036bc95e4ae68545bec134ccc9fd95b",
+    "status": [
+      "M tmp/appmap/juice.appmap.json"
+    ],
+    "tag": "v12.8.1",
+    "annotated_tag": "v12.8.1",
+    "commits_since_tag": 3,
+    "commits_since_annotated_tag": 3
+  },
+  "test_status": "failed",
+  "exception": {
+    "class": "AppmapError",
+    "message": "client disconnection"
+  },
+  "fingerprints": [
+    {
+      "appmap_digest": "179b59b6f90168c066d41aab03d00f51881810e729bf21d229012895106861df",
+      "canonicalization_algorithm": "classDependencies",
+      "digest": "ccb9b32b4b9df46e886cb1ae7e31b69f2bec5ed43ad5cc2fb007311bcee5f8c1",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "179b59b6f90168c066d41aab03d00f51881810e729bf21d229012895106861df",
+      "canonicalization_algorithm": "classes",
+      "digest": "42f41fe02007f9dc518bffe7d3887a4169315ae736f25c3b2fd0cf7523a113c0",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "179b59b6f90168c066d41aab03d00f51881810e729bf21d229012895106861df",
+      "canonicalization_algorithm": "httpClientRequests",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "179b59b6f90168c066d41aab03d00f51881810e729bf21d229012895106861df",
+      "canonicalization_algorithm": "httpServerRequests",
+      "digest": "f36d3242ce04412b11fc21494d75eab11ba4ffaef5cc71928f76a8b3751fbb35",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "179b59b6f90168c066d41aab03d00f51881810e729bf21d229012895106861df",
+      "canonicalization_algorithm": "info",
+      "digest": "a616c3f174eab8e7f8de3dd679018bb4ea0f2ee2e3f969b44e5cec7d92e6f261",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "179b59b6f90168c066d41aab03d00f51881810e729bf21d229012895106861df",
+      "canonicalization_algorithm": "labels",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "179b59b6f90168c066d41aab03d00f51881810e729bf21d229012895106861df",
+      "canonicalization_algorithm": "packageDependencies",
+      "digest": "7d09664bd73d06efdf714b9fddb0ff1d57f2cff0e652ab301bcfe0ca94478508",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "179b59b6f90168c066d41aab03d00f51881810e729bf21d229012895106861df",
+      "canonicalization_algorithm": "packages",
+      "digest": "08dc0fd199021cf93bb74c59dc03d819ff01666897910f62315771594cb92161",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "179b59b6f90168c066d41aab03d00f51881810e729bf21d229012895106861df",
+      "canonicalization_algorithm": "sqlNormalized",
+      "digest": "890eaf3621e2a0fb152ba789b9eb08c4c39037f9713005c5c4ac7c92ad419c5b",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "179b59b6f90168c066d41aab03d00f51881810e729bf21d229012895106861df",
+      "canonicalization_algorithm": "sqlTables",
+      "digest": "19e6e0681f7d6370b482e59066db76a7c7fe176fb4c69717dc4937d50fea00c4",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "179b59b6f90168c066d41aab03d00f51881810e729bf21d229012895106861df",
+      "canonicalization_algorithm": "trace",
+      "digest": "84ae22eafb45032cd61aab4666a97c26bd178117ea66167c28aef76eee000c76",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "179b59b6f90168c066d41aab03d00f51881810e729bf21d229012895106861df",
+      "canonicalization_algorithm": "update",
+      "digest": "e89aaacc76be301b1686d570660a8c68b8f90b1ca64aa428ee2618934940d3ae",
+      "fingerprint_algorithm": "sha256"
+    }
+  ]
+}

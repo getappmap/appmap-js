@@ -1,0 +1,128 @@
+{
+  "app": "appland/AppLand",
+  "language": {
+    "name": "ruby",
+    "engine": "ruby",
+    "version": "2.6.6"
+  },
+  "client": {
+    "name": "appmap",
+    "url": "https://github.com/getappmap/appmap-ruby",
+    "version": "0.40.0"
+  },
+  "frameworks": [
+    {
+      "name": "rails",
+      "version": "5.2.4.2"
+    },
+    {
+      "name": "rspec",
+      "version": "3.9.1"
+    }
+  ],
+  "git": {
+    "repository": "git@github.com:getappmap/appland.git",
+    "branch": "apply-labels",
+    "commit": "5428f5df16a93d59a15d2559c626f6918d8f0523",
+    "status": [
+      "M app/controllers/api/scenarios_controller.rb",
+      "M app/controllers/application_controller.rb",
+      "M app/controllers/applications_controller.rb",
+      "M app/controllers/concerns/current_user.rb",
+      "M app/controllers/home_controller.rb",
+      "M app/controllers/js/examples_controller.rb",
+      "M app/controllers/profile_filters_controller.rb",
+      "M app/controllers/scenario_uploads_controller.rb",
+      "M app/controllers/scenarios_controller.rb",
+      "M app/controllers/sessions_controller.rb",
+      "M app/controllers/setup_controller.rb",
+      "M app/controllers/static_controller.rb",
+      "M app/controllers/web_resources_controller.rb",
+      "M appmap.yml"
+    ],
+    "git_last_annotated_tag": null,
+    "git_last_tag": "v0.17.1",
+    "git_commits_since_last_annotated_tag": null,
+    "git_commits_since_last_tag": 0
+  },
+  "name": "Application page component diagram context menu opens source code of a class",
+  "feature": "Application page component diagram",
+  "feature_group": "Application page",
+  "recorder": {
+    "name": "rspec"
+  },
+  "fingerprints": [
+    {
+      "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+      "canonicalization_algorithm": "classDependencies",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+      "canonicalization_algorithm": "classes",
+      "digest": "5a9de429b6b8313e0785496f671cce49d4e043e6111150f1fe5fe0d2e0f5888b",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+      "canonicalization_algorithm": "httpClientRequests",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+      "canonicalization_algorithm": "httpServerRequests",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+      "canonicalization_algorithm": "info",
+      "digest": "7be379a81c1073e0b27a2d6c00cfc4e2b4a96bf3113893f4164fd603ceb8617c",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+      "canonicalization_algorithm": "labels",
+      "digest": "845bf6b8ba4a59becbbdff5a9681cec63a2125e665b32b254a536fe38490e6fb",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+      "canonicalization_algorithm": "packageDependencies",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+      "canonicalization_algorithm": "packages",
+      "digest": "b60d95619abb8018a77529a7cbc902507e7d7a29b30fc84d7df9b15ce6f3cb8c",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+      "canonicalization_algorithm": "sqlNormalized",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+      "canonicalization_algorithm": "sqlTables",
+      "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+      "canonicalization_algorithm": "trace",
+      "digest": "24a0768f8dc58110dca7abb94e88fdd44ce50086f0c2f8a7ff085aebc6ce76bd",
+      "fingerprint_algorithm": "sha256"
+    },
+    {
+      "appmap_digest": "a010ea9b5728491e8e2a18697eb604b32dc86ea61dcaac040a09e95d190fbaa9",
+      "canonicalization_algorithm": "update",
+      "digest": "7be379a81c1073e0b27a2d6c00cfc4e2b4a96bf3113893f4164fd603ceb8617c",
+      "fingerprint_algorithm": "sha256"
+    }
+  ]
+}

@@ -1,0 +1,1311 @@
+[
+  {
+    "name": "activesupport",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActiveSupport",
+        "type": "class",
+        "children": [
+          {
+            "name": "Callbacks",
+            "type": "class",
+            "children": [
+              {
+                "name": "CallbackSequence",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "invoke_before",
+                    "type": "function",
+                    "labels": ["mvc.before_action"],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-6.1.4.1/lib/active_support/callbacks.rb:511"
+                  },
+                  {
+                    "name": "invoke_after",
+                    "type": "function",
+                    "labels": ["mvc.after_action"],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-6.1.4.1/lib/active_support/callbacks.rb:515"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "SecurityUtils",
+            "type": "class",
+            "children": [
+              {
+                "name": "secure_compare",
+                "type": "function",
+                "labels": ["crypto.secure_compare"],
+                "static": true,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-6.1.4.1/lib/active_support/security_utils.rb:33"
+              }
+            ]
+          },
+          {
+            "name": "MessageEncryptor",
+            "type": "class",
+            "children": [
+              {
+                "name": "encrypt_and_sign",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activesupport-6.1.4.1/lib/active_support/message_encryptor.rb:147"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ruby",
+    "type": "package",
+    "children": [
+      {
+        "name": "String",
+        "type": "class",
+        "children": [
+          {
+            "name": "unpack",
+            "type": "function",
+            "labels": ["string.unpack"],
+            "static": false,
+            "location": "<internal:pack>:256"
+          },
+          {
+            "name": "unpack1",
+            "type": "function",
+            "labels": ["string.unpack"],
+            "static": false,
+            "location": "<internal:pack>:280"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "logger",
+    "type": "package",
+    "children": [
+      {
+        "name": "Logger",
+        "type": "class",
+        "children": [
+          {
+            "name": "LogDevice",
+            "type": "class",
+            "children": [
+              {
+                "name": "write",
+                "type": "function",
+                "labels": ["log"],
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/2.7.0/logger/log_device.rb:31"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "actionpack",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActionController",
+        "type": "class",
+        "children": [
+          {
+            "name": "Instrumentation",
+            "type": "class",
+            "children": [
+              {
+                "name": "process_action",
+                "type": "function",
+                "labels": ["mvc.controller"],
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-6.1.4.1/lib/action_controller/metal/instrumentation.rb:19"
+              },
+              {
+                "name": "redirect_to",
+                "type": "function",
+                "labels": ["mvc.controller"],
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-6.1.4.1/lib/action_controller/metal/instrumentation.rb:64"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "ActionDispatch",
+        "type": "class",
+        "children": [
+          {
+            "name": "Request",
+            "type": "class",
+            "children": [
+              {
+                "name": "Session",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "[]",
+                    "type": "function",
+                    "labels": ["http.session.read"],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-6.1.4.1/lib/action_dispatch/request/session.rb:91"
+                  },
+                  {
+                    "name": "[]=",
+                    "type": "function",
+                    "labels": ["http.session.write"],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-6.1.4.1/lib/action_dispatch/request/session.rb:131"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Cookies",
+            "type": "class",
+            "children": [
+              {
+                "name": "CookieJar",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "update",
+                    "type": "function",
+                    "labels": ["http.session.write"],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-6.1.4.1/lib/action_dispatch/middleware/cookies.rb:345"
+                  },
+                  {
+                    "name": "[]",
+                    "type": "function",
+                    "labels": ["http.session.read"],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-6.1.4.1/lib/action_dispatch/middleware/cookies.rb:329"
+                  },
+                  {
+                    "name": "[]=",
+                    "type": "function",
+                    "labels": ["http.session.write"],
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/actionpack-6.1.4.1/lib/action_dispatch/middleware/cookies.rb:363"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "openssl",
+    "type": "package",
+    "children": [
+      {
+        "name": "OpenSSL",
+        "type": "class",
+        "children": [
+          {
+            "name": "Cipher",
+            "type": "class",
+            "children": [
+              {
+                "name": "decrypt",
+                "type": "function",
+                "labels": ["crypto.decrypt"],
+                "static": false,
+                "location": "OpenSSL::Cipher#decrypt"
+              },
+              {
+                "name": "key=",
+                "type": "function",
+                "labels": ["crypto.set_key"],
+                "static": false,
+                "location": "OpenSSL::Cipher#key="
+              },
+              {
+                "name": "iv=",
+                "type": "function",
+                "labels": ["crypto.set_iv"],
+                "static": false,
+                "location": "OpenSSL::Cipher#iv="
+              },
+              {
+                "name": "auth_tag=",
+                "type": "function",
+                "labels": ["crypto.set_auth_tag"],
+                "static": false,
+                "location": "OpenSSL::Cipher#auth_tag="
+              },
+              {
+                "name": "auth_data=",
+                "type": "function",
+                "labels": ["crypto.set_auth_data"],
+                "static": false,
+                "location": "OpenSSL::Cipher#auth_data="
+              },
+              {
+                "name": "update",
+                "type": "function",
+                "static": false,
+                "location": "OpenSSL::Cipher#update"
+              },
+              {
+                "name": "final",
+                "type": "function",
+                "labels": ["crypto.final"],
+                "static": false,
+                "location": "OpenSSL::Cipher#final"
+              },
+              {
+                "name": "encrypt",
+                "type": "function",
+                "labels": ["crypto.encrypt"],
+                "static": false,
+                "location": "OpenSSL::Cipher#encrypt"
+              },
+              {
+                "name": "random_iv",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/2.7.0/openssl/cipher.rb:55"
+              }
+            ]
+          },
+          {
+            "name": "Random",
+            "type": "class",
+            "children": [
+              {
+                "name": "random_bytes",
+                "type": "function",
+                "labels": ["random.secure"],
+                "static": true,
+                "location": "OpenSSL::Random.random_bytes"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "json",
+    "type": "package",
+    "children": [
+      {
+        "name": "JSON",
+        "type": "class",
+        "children": [
+          {
+            "name": "Ext",
+            "type": "class",
+            "children": [
+              {
+                "name": "Parser",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "parse",
+                    "type": "function",
+                    "labels": ["format.json.parse", "deserialize.safe"],
+                    "static": false,
+                    "location": "JSON::Ext::Parser#parse"
+                  }
+                ]
+              },
+              {
+                "name": "Generator",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "State",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "generate",
+                        "type": "function",
+                        "labels": ["format.json.generate", "serialize"],
+                        "static": false,
+                        "location": "JSON::Ext::Generator::State#generate"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app",
+    "type": "package",
+    "children": [
+      {
+        "name": "models",
+        "type": "package",
+        "children": [
+          {
+            "name": "Current",
+            "type": "class",
+            "children": [
+              {
+                "name": "token",
+                "type": "function",
+                "static": false,
+                "location": "app/models/current.rb:4"
+              }
+            ]
+          },
+          {
+            "name": "spree",
+            "type": "package",
+            "children": [
+              {
+                "name": "Spree",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "BaseDecorator",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "set_token",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/spree/base_decorator.rb:19"
+                      },
+                      {
+                        "name": "restore_changes",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/spree/base_decorator.rb:24"
+                      },
+                      {
+                        "name": "preserve_global_records_from_destruction",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/models/spree/base_decorator.rb:40"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "monkey_patches/spree",
+        "type": "package",
+        "children": [
+          {
+            "name": "Spree",
+            "type": "class",
+            "children": [
+              {
+                "name": "SolidusDemoUser",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "solidus_demo_user",
+                    "type": "function",
+                    "static": true,
+                    "location": "app/monkey_patches/spree/legacy_user_monkey_patch.rb:5"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "controllers/action_dispatch/cookies",
+        "type": "package",
+        "children": [
+          {
+            "name": "ActionDispatch",
+            "type": "class",
+            "children": [
+              {
+                "name": "Cookies",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "AbstractCookieJarDecorator",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "[]=",
+                        "type": "function",
+                        "static": false,
+                        "location": "app/controllers/action_dispatch/cookies/abstract_cookie_jar_decorator.rb:6"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "activerecord",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActiveRecord",
+        "type": "class",
+        "children": [
+          {
+            "name": "Relation",
+            "type": "class",
+            "children": [
+              {
+                "name": "records",
+                "type": "function",
+                "labels": ["dao.materialize"],
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activerecord-6.1.4.1/lib/active_record/relation.rb:248"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "solidus_core",
+    "type": "package",
+    "children": [
+      {
+        "name": "Spree",
+        "type": "class",
+        "children": [
+          {
+            "name": "Core",
+            "type": "class",
+            "children": [
+              {
+                "name": "ControllerHelpers",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "Auth",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "set_guest_token",
+                        "type": "function",
+                        "static": false,
+                        "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/lib/spree/core/controller_helpers/auth.rb:56"
+                      },
+                      {
+                        "name": "try_spree_current_user",
+                        "type": "function",
+                        "static": false,
+                        "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/lib/spree/core/controller_helpers/auth.rb:71"
+                      },
+                      {
+                        "name": "current_ability",
+                        "type": "function",
+                        "static": false,
+                        "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/lib/spree/core/controller_helpers/auth.rb:47"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Order",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "current_order",
+                        "type": "function",
+                        "static": false,
+                        "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/lib/spree/core/controller_helpers/order.rb:32"
+                      },
+                      {
+                        "name": "ip_address",
+                        "type": "function",
+                        "static": false,
+                        "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/lib/spree/core/controller_helpers/order.rb:69"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Pricing",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "current_pricing_options",
+                        "type": "function",
+                        "static": false,
+                        "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/lib/spree/core/controller_helpers/pricing.rb:16"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Store",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "current_store",
+                        "type": "function",
+                        "static": false,
+                        "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/lib/spree/core/controller_helpers/store.rb:13"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "PaymentParameters",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "move_payment_source_into_payments_attributes",
+                        "type": "function",
+                        "static": false,
+                        "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/lib/spree/core/controller_helpers/payment_parameters.rb:43"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "ClassConstantizer",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "Set",
+                    "type": "class",
+                    "children": [
+                      {
+                        "name": "each",
+                        "type": "function",
+                        "static": false,
+                        "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/lib/spree/core/class_constantizer.rb:31"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "i18n_available_locales",
+            "type": "function",
+            "static": true,
+            "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/lib/spree/i18n.rb:8"
+          },
+          {
+            "name": "Preferences",
+            "type": "class",
+            "children": [
+              {
+                "name": "Preferable",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "get_preference",
+                    "type": "function",
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/lib/spree/preferences/preferable.rb:65"
+                  },
+                  {
+                    "name": "default_preferences",
+                    "type": "function",
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/lib/spree/preferences/preferable.rb:110"
+                  }
+                ]
+              },
+              {
+                "name": "StaticallyConfigurable",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "preferences",
+                    "type": "function",
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/lib/spree/preferences/statically_configurable.rb:23"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Order",
+            "type": "class",
+            "children": [
+              {
+                "name": "Checkout",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "can_go_to_state?",
+                    "type": "function",
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/spree/order/checkout.rb:238"
+                  },
+                  {
+                    "name": "has_checkout_step?",
+                    "type": "function",
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/spree/order/checkout.rb:226"
+                  }
+                ]
+              },
+              {
+                "name": "insufficient_stock_lines",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/spree/order.rb:496"
+              },
+              {
+                "name": "associate_user!",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/spree/order.rb:325"
+              },
+              {
+                "name": "completed?",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/spree/order.rb:242"
+              },
+              {
+                "name": "add_store_credit_payments",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/spree/order.rb:681"
+              },
+              {
+                "name": "currency",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/spree/order.rb:230"
+              }
+            ]
+          },
+          {
+            "name": "LineItem",
+            "type": "class",
+            "children": [
+              {
+                "name": "insufficient_stock?",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/spree/line_item.rb:132"
+              }
+            ]
+          },
+          {
+            "name": "Stock",
+            "type": "class",
+            "children": [
+              {
+                "name": "Quantifier",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "can_supply?",
+                    "type": "function",
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/spree/stock/quantifier.rb:44"
+                  }
+                ]
+              },
+              {
+                "name": "Package",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "add_multiple",
+                    "type": "function",
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/spree/stock/package.rb:32"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "AppConfiguration",
+            "type": "class",
+            "children": [
+              {
+                "name": "roles",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/lib/spree/app_configuration.rb:548"
+              }
+            ]
+          },
+          {
+            "name": "PermissionSets",
+            "type": "class",
+            "children": [
+              {
+                "name": "Base",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "can",
+                    "type": "function",
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/lib/spree/permission_sets/base.rb:29"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Shipment",
+            "type": "class",
+            "children": [
+              {
+                "name": "to_package",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/spree/shipment.rb:262"
+              }
+            ]
+          },
+          {
+            "name": "UserMethods",
+            "type": "class",
+            "children": [
+              {
+                "name": "wallet",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/concerns/spree/user_methods.rb:42"
+              }
+            ]
+          },
+          {
+            "name": "CreditCard",
+            "type": "class",
+            "children": [
+              {
+                "name": "number=",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/spree/credit_card.rb:98"
+              },
+              {
+                "name": "has_payment_profile?",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/spree/credit_card.rb:156"
+              },
+              {
+                "name": "set_last_digits",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/spree/credit_card.rb:126"
+              },
+              {
+                "name": "verification_value?",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/spree/credit_card.rb:140"
+              }
+            ]
+          },
+          {
+            "name": "Address",
+            "type": "class",
+            "children": [
+              {
+                "name": "name=",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/spree/address.rb:226"
+              },
+              {
+                "name": "require_zipcode?",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/spree/address.rb:184"
+              },
+              {
+                "name": "require_phone?",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/spree/address.rb:178"
+              },
+              {
+                "name": "set_name_from_firstname_and_lastname",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/spree/address.rb:208"
+              }
+            ]
+          },
+          {
+            "name": "EmailValidator",
+            "type": "class",
+            "children": [
+              {
+                "name": "validate_each",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/lib/spree/core/validators/email.rb:17"
+              }
+            ]
+          },
+          {
+            "name": "Payment",
+            "type": "class",
+            "children": [
+              {
+                "name": "store_credit?",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/spree/payment.rb:158"
+              }
+            ]
+          },
+          {
+            "name": "StateChange",
+            "type": "class",
+            "children": [
+              {
+                "name": "assign_user",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/solidus_core-2.11.10/app/models/spree/state_change.rb:13"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "cancancan",
+    "type": "package",
+    "children": [
+      {
+        "name": "CanCan",
+        "type": "class",
+        "children": [
+          {
+            "name": "ControllerAdditions",
+            "type": "class",
+            "children": [
+              {
+                "name": "authorize!",
+                "type": "function",
+                "labels": ["security.authorization"],
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/cancancan-3.3.0/lib/cancan/controller_additions.rb:337"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "solidus_starter_frontend",
+    "type": "package",
+    "children": [
+      {
+        "name": "Spree",
+        "type": "class",
+        "children": [
+          {
+            "name": "CheckoutController",
+            "type": "class",
+            "children": [
+              {
+                "name": "update",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/bundler/gems/solidus_starter_frontend-709e44e93dbe/app/controllers/spree/checkout_controller.rb:29"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "solidus_stripe",
+    "type": "package",
+    "children": [
+      {
+        "name": "Spree",
+        "type": "class",
+        "children": [
+          {
+            "name": "OrderUpdateAttributesDecorator",
+            "type": "class",
+            "children": [
+              {
+                "name": "assign_payments_attributes",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/bundler/gems/solidus_stripe-a817c407d75c/app/decorators/models/spree/order_update_attributes_decorator.rb:5"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "solidus_paypal_commerce_platform",
+    "type": "package",
+    "children": [
+      {
+        "name": "SolidusPaypalCommercePlatform",
+        "type": "class",
+        "children": [
+          {
+            "name": "Spree",
+            "type": "class",
+            "children": [
+              {
+                "name": "AddressDecorator",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "require_phone?",
+                    "type": "function",
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/bundler/gems/solidus_paypal_commerce_platform-1e3a3a4cee32/app/decorators/models/solidus_paypal_commerce_platform/spree/address_decorator.rb:10"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "activemerchant",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActiveMerchant",
+        "type": "class",
+        "children": [
+          {
+            "name": "Billing",
+            "type": "class",
+            "children": [
+              {
+                "name": "Gateway",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "inherited",
+                    "type": "function",
+                    "static": true,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activemerchant-1.121.0/lib/active_merchant/billing/gateway.rb:104"
+                  },
+                  {
+                    "name": "live_url",
+                    "type": "function",
+                    "static": false,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activemerchant-1.121.0/lib/active_merchant/billing/gateway.rb:134"
+                  }
+                ]
+              },
+              {
+                "name": "AVSResult",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "messages",
+                    "type": "function",
+                    "static": true,
+                    "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activemerchant-1.121.0/lib/active_merchant/billing/avs_result.rb:64"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "PostsData",
+            "type": "class",
+            "children": [
+              {
+                "name": "ssl_request",
+                "type": "function",
+                "static": false,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activemerchant-1.121.0/lib/active_merchant/posts_data.rb:43"
+              }
+            ]
+          },
+          {
+            "name": "NetworkConnectionRetries",
+            "type": "class",
+            "children": [
+              {
+                "name": "log",
+                "type": "function",
+                "static": true,
+                "location": "/Users/kgilpin/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/activemerchant-1.121.0/lib/active_merchant/network_connection_retries.rb:37"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "http",
+    "name": "HTTP server requests",
+    "children": [
+      {
+        "type": "route",
+        "name": "PATCH /checkout/update/{state}"
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "SELECT \"spree_roles\".* FROM \"spree_roles\" WHERE \"spree_roles\".\"sample_indicator_id\" IS NULL AND \"spree_roles\".\"name\" = $1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_sample_changes\".* FROM \"spree_sample_changes\" WHERE \"spree_sample_changes\".\"sample_indicator_id\" IS NULL AND \"spree_sample_changes\".\"changeable_type\" = $1 AND \"spree_sample_changes\".\"changeable_id\" = $2 LIMIT $3"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_stores\".* FROM \"spree_stores\" WHERE (\"spree_stores\".\"sample_indicator_id\" = $1 OR \"spree_stores\".\"sample_indicator_id\" IS NULL) AND (\"spree_stores\".\"url\" = $2 OR \"spree_stores\".\"default\" = $3) ORDER BY \"spree_stores\".\"default\" ASC LIMIT $4"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_sample_changes\".* FROM \"spree_sample_changes\" WHERE (\"spree_sample_changes\".\"sample_indicator_id\" = $1 OR \"spree_sample_changes\".\"sample_indicator_id\" IS NULL) AND \"spree_sample_changes\".\"changeable_type\" = $2 AND \"spree_sample_changes\".\"changeable_id\" = $3 LIMIT $4"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_orders\".* FROM \"spree_orders\" WHERE (\"spree_orders\".\"sample_indicator_id\" = $1 OR \"spree_orders\".\"sample_indicator_id\" IS NULL) AND \"spree_orders\".\"completed_at\" IS NULL AND \"spree_orders\".\"currency\" = $2 AND \"spree_orders\".\"guest_token\" = $3 AND \"spree_orders\".\"store_id\" = $4 AND \"spree_orders\".\"user_id\" = $5 LIMIT $6"
+      },
+      {
+        "type": "query",
+        "name": "DELETE FROM \"spree_order_mutexes\" WHERE (\"spree_order_mutexes\".\"sample_indicator_id\" = $1 OR \"spree_order_mutexes\".\"sample_indicator_id\" IS NULL) AND \"spree_order_mutexes\".\"created_at\" <= '2022-10-13 22:18:24.590338' AND \"spree_order_mutexes\".\"order_id\" = $2"
+      },
+      {
+        "type": "query",
+        "name": "BEGIN"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"spree_order_mutexes\" (\"order_id\", \"created_at\", \"sample_indicator_id\") VALUES ($1, $2, $3) RETURNING \"id\""
+      },
+      {
+        "type": "query",
+        "name": "COMMIT"
+      },
+      {
+        "type": "query",
+        "name": "SELECT COUNT(*) FROM \"spree_line_items\" WHERE (\"spree_line_items\".\"sample_indicator_id\" = $1 OR \"spree_line_items\".\"sample_indicator_id\" IS NULL) AND \"spree_line_items\".\"order_id\" = $2"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_line_items\".* FROM \"spree_line_items\" WHERE (\"spree_line_items\".\"sample_indicator_id\" = $1 OR \"spree_line_items\".\"sample_indicator_id\" IS NULL) AND \"spree_line_items\".\"order_id\" = $2 ORDER BY \"spree_line_items\".\"created_at\" ASC, \"spree_line_items\".\"id\" ASC"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_variants\".* FROM \"spree_variants\" WHERE (\"spree_variants\".\"sample_indicator_id\" = $1 OR \"spree_variants\".\"sample_indicator_id\" IS NULL) AND \"spree_variants\".\"id\" = $2 LIMIT $3"
+      },
+      {
+        "type": "query",
+        "name": "SELECT SUM(\"spree_stock_items\".\"count_on_hand\") FROM \"spree_stock_items\" INNER JOIN \"spree_stock_locations\" ON (\"spree_stock_locations\".\"sample_indicator_id\" = $1 OR \"spree_stock_locations\".\"sample_indicator_id\" IS NULL) AND \"spree_stock_locations\".\"id\" = \"spree_stock_items\".\"stock_location_id\" WHERE \"spree_stock_items\".\"deleted_at\" IS NULL AND \"spree_stock_items\".\"variant_id\" = $2 AND (\"spree_stock_locations\".\"sample_indicator_id\" = $3 OR \"spree_stock_locations\".\"sample_indicator_id\" IS NULL) AND \"spree_stock_locations\".\"active\" = $4"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_users\".* FROM \"spree_users\" WHERE (\"spree_users\".\"sample_indicator_id\" = $1 OR \"spree_users\".\"sample_indicator_id\" IS NULL) AND \"spree_users\".\"id\" = $2 LIMIT $3"
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"spree_orders\" SET \"user_id\" = $1, \"email\" = $2, \"created_by_id\" = $3 WHERE \"spree_orders\".\"id\" = $4"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_shipments\".* FROM \"spree_shipments\" WHERE (\"spree_shipments\".\"sample_indicator_id\" = $1 OR \"spree_shipments\".\"sample_indicator_id\" IS NULL) AND \"spree_shipments\".\"order_id\" = $2"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_stock_locations\".* FROM \"spree_stock_locations\" WHERE (\"spree_stock_locations\".\"sample_indicator_id\" = $1 OR \"spree_stock_locations\".\"sample_indicator_id\" IS NULL) AND \"spree_stock_locations\".\"id\" = $2 LIMIT $3"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_inventory_units\".* FROM \"spree_inventory_units\" INNER JOIN \"spree_variants\" ON (\"spree_variants\".\"sample_indicator_id\" = $1 OR \"spree_variants\".\"sample_indicator_id\" IS NULL) AND \"spree_variants\".\"id\" = \"spree_inventory_units\".\"variant_id\" WHERE (\"spree_inventory_units\".\"sample_indicator_id\" = $2 OR \"spree_inventory_units\".\"sample_indicator_id\" IS NULL) AND \"spree_inventory_units\".\"shipment_id\" = $3"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_variants\".* FROM \"spree_variants\" WHERE (\"spree_variants\".\"sample_indicator_id\" = $1 OR \"spree_variants\".\"sample_indicator_id\" IS NULL) AND \"spree_variants\".\"id\" = $2"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_products\".* FROM \"spree_products\" WHERE \"spree_products\".\"id\" = $1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_wallet_payment_sources\".* FROM \"spree_wallet_payment_sources\" WHERE (\"spree_wallet_payment_sources\".\"sample_indicator_id\" = $1 OR \"spree_wallet_payment_sources\".\"sample_indicator_id\" IS NULL) AND \"spree_wallet_payment_sources\".\"user_id\" = $2"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_stores\".* FROM \"spree_stores\" WHERE (\"spree_stores\".\"sample_indicator_id\" = $1 OR \"spree_stores\".\"sample_indicator_id\" IS NULL) AND \"spree_stores\".\"id\" = $2 LIMIT $3"
+      },
+      {
+        "type": "query",
+        "name": "SELECT 1 AS one FROM \"spree_payment_methods\" INNER JOIN \"spree_store_payment_methods\" ON \"spree_payment_methods\".\"id\" = \"spree_store_payment_methods\".\"payment_method_id\" WHERE \"spree_payment_methods\".\"deleted_at\" IS NULL AND (\"spree_payment_methods\".\"sample_indicator_id\" = $1 OR \"spree_payment_methods\".\"sample_indicator_id\" IS NULL) AND (\"spree_store_payment_methods\".\"sample_indicator_id\" = $2 OR \"spree_store_payment_methods\".\"sample_indicator_id\" IS NULL) AND \"spree_store_payment_methods\".\"store_id\" = $3 LIMIT $4"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_payment_methods\".* FROM \"spree_payment_methods\" WHERE \"spree_payment_methods\".\"deleted_at\" IS NULL AND (\"spree_payment_methods\".\"sample_indicator_id\" = $1 OR \"spree_payment_methods\".\"sample_indicator_id\" IS NULL) AND \"spree_payment_methods\".\"active\" = $2 AND \"spree_payment_methods\".\"available_to_users\" = $3 AND \"spree_payment_methods\".\"id\" = $4 ORDER BY \"spree_payment_methods\".\"position\" ASC LIMIT $5"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_payment_methods\".* FROM \"spree_payment_methods\" WHERE \"spree_payment_methods\".\"deleted_at\" IS NULL AND (\"spree_payment_methods\".\"sample_indicator_id\" = $1 OR \"spree_payment_methods\".\"sample_indicator_id\" IS NULL) AND \"spree_payment_methods\".\"id\" = $2 LIMIT $3"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_payments\".* FROM \"spree_payments\" WHERE \"spree_payments\".\"order_id\" = $1 AND \"spree_payments\".\"state\" NOT IN ($2, $3, $4) ORDER BY \"spree_payments\".\"created_at\" ASC"
+      },
+      {
+        "type": "query",
+        "name": "SELECT a.attname\n  FROM (\n         SELECT indrelid, indkey, generate_subscripts(indkey, 1) idx\n           FROM pg_index\n          WHERE indrelid = '\"spree_payments\"'::regclass\n            AND indisprimary\n       ) i\n  JOIN pg_attribute a\n    ON a.attrelid = i.indrelid\n   AND a.attnum = i.indkey[i.idx]\n ORDER BY i.idx\n"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_payment_methods\".* FROM \"spree_payment_methods\" WHERE (\"spree_payment_methods\".\"sample_indicator_id\" = $1 OR \"spree_payment_methods\".\"sample_indicator_id\" IS NULL) AND \"spree_payment_methods\".\"id\" = $2 LIMIT $3"
+      },
+      {
+        "type": "query",
+        "name": "SELECT a.attname\n  FROM (\n         SELECT indrelid, indkey, generate_subscripts(indkey, 1) idx\n           FROM pg_index\n          WHERE indrelid = '\"spree_credit_cards\"'::regclass\n            AND indisprimary\n       ) i\n  JOIN pg_attribute a\n    ON a.attrelid = i.indrelid\n   AND a.attnum = i.indkey[i.idx]\n ORDER BY i.idx\n"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_addresses\".* FROM \"spree_addresses\" WHERE (\"spree_addresses\".\"sample_indicator_id\" = $1 OR \"spree_addresses\".\"sample_indicator_id\" IS NULL) AND \"spree_addresses\".\"firstname\" = $2 AND \"spree_addresses\".\"lastname\" IS NULL AND \"spree_addresses\".\"address1\" = $3 AND \"spree_addresses\".\"address2\" = $4 AND \"spree_addresses\".\"city\" = $5 AND \"spree_addresses\".\"zipcode\" = $6 AND \"spree_addresses\".\"phone\" = $7 AND \"spree_addresses\".\"state_name\" = $8 AND \"spree_addresses\".\"alternative_phone\" = $9 AND \"spree_addresses\".\"company\" = $10 AND \"spree_addresses\".\"state_id\" = $11 AND \"spree_addresses\".\"country_id\" = $12 AND \"spree_addresses\".\"sample_indicator_id\" IS NULL AND \"spree_addresses\".\"name\" = $13 LIMIT $14"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_countries\".* FROM \"spree_countries\" WHERE (\"spree_countries\".\"sample_indicator_id\" = $1 OR \"spree_countries\".\"sample_indicator_id\" IS NULL) AND \"spree_countries\".\"id\" = $2 LIMIT $3"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_states\".* FROM \"spree_states\" WHERE (\"spree_states\".\"sample_indicator_id\" = $1 OR \"spree_states\".\"sample_indicator_id\" IS NULL) AND \"spree_states\".\"id\" = $2 LIMIT $3"
+      },
+      {
+        "type": "query",
+        "name": "SELECT 1 AS one FROM \"spree_states\" WHERE (\"spree_states\".\"sample_indicator_id\" = $1 OR \"spree_states\".\"sample_indicator_id\" IS NULL) AND \"spree_states\".\"country_id\" = $2 LIMIT $3"
+      },
+      {
+        "type": "query",
+        "name": "SELECT 1 AS one FROM \"spree_orders\" WHERE \"spree_orders\".\"number\" = $1 AND \"spree_orders\".\"id\" != $2 LIMIT $3"
+      },
+      {
+        "type": "query",
+        "name": "SELECT 1 AS one FROM \"spree_roles_users\" WHERE \"spree_roles_users\".\"role_id\" = $1 AND \"spree_roles_users\".\"user_id\" = $2 LIMIT $3"
+      },
+      {
+        "type": "query",
+        "name": "SELECT 1 AS one FROM \"spree_roles\" WHERE \"spree_roles\".\"name\" = $1 AND \"spree_roles\".\"id\" != $2 LIMIT $3"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"spree_addresses\" (\"firstname\", \"address1\", \"address2\", \"city\", \"zipcode\", \"phone\", \"alternative_phone\", \"company\", \"state_id\", \"country_id\", \"created_at\", \"updated_at\", \"sample_indicator_id\", \"name\") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING \"id\""
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"spree_credit_cards\" (\"month\", \"year\", \"cc_type\", \"last_digits\", \"created_at\", \"updated_at\", \"name\", \"user_id\", \"payment_method_id\", \"address_id\", \"sample_indicator_id\") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING \"id\""
+      },
+      {
+        "type": "query",
+        "name": "SELECT 1 AS one FROM \"spree_payments\" WHERE \"spree_payments\".\"number\" = $1 LIMIT $2"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"spree_payments\" (\"amount\", \"order_id\", \"source_type\", \"source_id\", \"payment_method_id\", \"state\", \"created_at\", \"updated_at\", \"number\", \"sample_indicator_id\") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING \"id\""
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_payments\".* FROM \"spree_payments\" WHERE \"spree_payments\".\"order_id\" = $1 ORDER BY \"spree_payments\".\"created_at\" ASC"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_credit_cards\".* FROM \"spree_credit_cards\" WHERE (\"spree_credit_cards\".\"sample_indicator_id\" = $1 OR \"spree_credit_cards\".\"sample_indicator_id\" IS NULL) AND \"spree_credit_cards\".\"id\" = $2 LIMIT $3"
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"spree_payments\" SET \"state\" = $1, \"updated_at\" = $2 WHERE \"spree_payments\".\"id\" = $3"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"spree_state_changes\" (\"name\", \"previous_state\", \"stateful_id\", \"stateful_type\", \"next_state\", \"created_at\", \"updated_at\", \"sample_indicator_id\") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING \"id\""
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_addresses\".* FROM \"spree_addresses\" WHERE (\"spree_addresses\".\"sample_indicator_id\" = $1 OR \"spree_addresses\".\"sample_indicator_id\" IS NULL) AND \"spree_addresses\".\"id\" = $2 LIMIT $3"
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"spree_credit_cards\" SET \"gateway_customer_profile_id\" = $1, \"gateway_payment_profile_id\" = $2, \"updated_at\" = $3 WHERE \"spree_credit_cards\".\"id\" = $4"
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"spree_orders\" SET \"updated_at\" = $1 WHERE \"spree_orders\".\"id\" = $2"
+      },
+      {
+        "type": "query",
+        "name": "SELECT 1 AS one FROM \"spree_payments\" WHERE \"spree_payments\".\"order_id\" = $1 AND \"spree_payments\".\"source_type\" = $2 AND \"spree_payments\".\"state\" = $3 LIMIT $4"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"spree_store_credits\".* FROM \"spree_store_credits\" WHERE (\"spree_store_credits\".\"sample_indicator_id\" = $1 OR \"spree_store_credits\".\"sample_indicator_id\" IS NULL) AND \"spree_store_credits\".\"deleted_at\" IS NULL AND \"spree_store_credits\".\"user_id\" = $2"
+      },
+      {
+        "type": "query",
+        "name": "UPDATE \"spree_orders\" SET \"state\" = $1, \"updated_at\" = $2 WHERE \"spree_orders\".\"id\" = $3"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"spree_state_changes\" (\"name\", \"previous_state\", \"stateful_id\", \"user_id\", \"stateful_type\", \"next_state\", \"created_at\", \"updated_at\", \"sample_indicator_id\") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING \"id\""
+      },
+      {
+        "type": "query",
+        "name": "DELETE FROM \"spree_order_mutexes\" WHERE \"spree_order_mutexes\".\"id\" = $1"
+      }
+    ]
+  },
+  {
+    "type": "external-service",
+    "name": "api.stripe.com",
+    "children": [
+      {
+        "type": "external-route",
+        "name": "POST https://api.stripe.com/v1/customers"
+      }
+    ]
+  }
+]

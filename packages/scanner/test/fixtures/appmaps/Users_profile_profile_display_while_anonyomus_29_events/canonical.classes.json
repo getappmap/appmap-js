@@ -1,0 +1,21 @@
+[
+  "actionpack/ActionController::Instrumentation",
+  "actionpack/ActionDispatch::Cookies::CookieJar",
+  "actionpack/ActionDispatch::Request::Session",
+  "actionview/ActionView::Resolver",
+  "activesupport/ActiveSupport::Callbacks::CallbackSequence",
+  "app/controllers/UsersController",
+  "app/helpers/ApplicationHelper",
+  "app/helpers/SessionsHelper",
+  "app/helpers/UsersHelper",
+  "app/views/app_views_layouts__footer_html_erb",
+  "app/views/app_views_layouts__header_html_erb",
+  "app/views/app_views_layouts__shim_html_erb",
+  "app/views/app_views_microposts__micropost_html_erb",
+  "app/views/app_views_shared__stats_html_erb",
+  "app/views/app_views_users_show_html_erb",
+  "json/JSON::Ext::Parser",
+  "logger/Logger::LogDevice",
+  "ruby/Module",
+  "ruby/String"
+]

@@ -1,0 +1,9 @@
+[
+  "build/data/datacreator.js",
+  "build/lib/startup/customizeApplication.js",
+  "build/lib/startup/customizeEasterEgg.js",
+  "build/lib/startup/validateDependencies.js",
+  "build/routes/login.js",
+  "build/routes/verify.js",
+  "build/server.js"
+]

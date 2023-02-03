@@ -1,0 +1,33 @@
+[
+  {
+    "kind": "function",
+    "labels": [
+      "log"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "log"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "log"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "log"
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": [
+      "format.json.parse",
+      "deserialize.safe"
+    ]
+  }
+]

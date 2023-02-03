@@ -1,0 +1,494 @@
+[
+  {
+    "caller": "HTTP server requests->DELETE /microposts/{id}",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "HTTP server requests->GET /",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "HTTP server requests->GET /users/{id}",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "HTTP server requests->POST /login",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "HTTP server requests->POST /microposts",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/controllers/MicropostsController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/controllers/SessionsController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/controllers/StaticPagesController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/controllers/UsersController"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/views/app_views_static_pages_home_html_erb"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/views/app_views_users_show_html_erb"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "activejob/ActiveJob",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "Database->DELETE FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"id\" = ?"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "Database->INSERT INTO \"active_storage_attachments\" (\"name\", \"record_type\", \"record_id\", \"blob_id\", \"created_at\") VALUES (?, ?, ?, ?, ?)"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "Database->INSERT INTO \"active_storage_blobs\" (\"key\", \"filename\", \"content_type\", \"metadata\", \"byte_size\", \"checksum\", \"created_at\") VALUES (?, ?, ?, ?, ?, ?, ?)"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "Database->PRAGMA table_info(\"active_storage_attachments\")"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "Database->PRAGMA table_info(\"active_storage_blobs\")"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "Database->SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "Database->SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "Database->SELECT \"active_storage_blobs\".* FROM \"active_storage_blobs\" WHERE \"active_storage_blobs\".\"id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "Database->SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? AND \"microposts\".\"id\" = ? ORDER BY \"microposts\".\"created_at\" DESC LIMIT ?"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "Database->SELECT sql FROM\n  (SELECT * FROM sqlite_master UNION ALL\n   SELECT * FROM sqlite_temp_master)\nWHERE type = 'table' AND name = 'active_storage_attachments'\n"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "Database->SELECT sql FROM\n  (SELECT * FROM sqlite_master UNION ALL\n   SELECT * FROM sqlite_temp_master)\nWHERE type = 'table' AND name = 'active_storage_blobs'\n"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "Database->UPDATE \"microposts\" SET \"updated_at\" = ? WHERE \"microposts\".\"id\" = ?"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "activejob/ActiveJob"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "yaml/Psych"
+  },
+  {
+    "caller": "app/controllers/MicropostsController",
+    "callee": "Database->DELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = ?"
+  },
+  {
+    "caller": "app/controllers/MicropostsController",
+    "callee": "Database->INSERT INTO \"microposts\" (\"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (?, ?, ?, ?)"
+  },
+  {
+    "caller": "app/controllers/MicropostsController",
+    "callee": "Database->RELEASE SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/controllers/MicropostsController",
+    "callee": "Database->SELECT \"users\".* FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"follower_id\" WHERE \"relationships\".\"followed_id\" = ?"
+  },
+  {
+    "caller": "app/controllers/MicropostsController",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "app/controllers/MicropostsController",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/controllers/MicropostsController",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "app/controllers/MicropostsController",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/controllers/MicropostsController",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "app/controllers/MicropostsController",
+    "callee": "app/views/app_views_static_pages_home_html_erb"
+  },
+  {
+    "caller": "app/controllers/SessionsController",
+    "callee": "Database->SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/controllers/SessionsController",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "app/controllers/SessionsController",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/controllers/SessionsController",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/controllers/StaticPagesController",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/controllers/StaticPagesController",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "app/controllers/UsersController",
+    "callee": "Database->SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/helpers/SessionsHelper",
+    "callee": "Database->SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/helpers/SessionsHelper",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/helpers/SessionsHelper",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "app/helpers/SessionsHelper",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/helpers/SessionsHelper",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "app/models/Micropost",
+    "callee": "Database->SELECT \"active_storage_blobs\".* FROM \"active_storage_blobs\" WHERE \"active_storage_blobs\".\"id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "Database->RELEASE SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "Database->SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "Database->SELECT 1 AS one FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"followed_id\" WHERE \"relationships\".\"follower_id\" = ? AND \"users\".\"id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "Database->UPDATE \"users\" SET \"remember_digest\" = ?, \"updated_at\" = ? WHERE \"users\".\"id\" = ?"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "activejob/ActiveJob"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "app/views/app_views_layouts__footer_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_layouts__header_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_layouts__header_html_erb",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/views/app_views_layouts__shim_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_microposts__micropost_html_erb",
+    "callee": "Database->PRAGMA table_info(\"active_storage_attachments\")"
+  },
+  {
+    "caller": "app/views/app_views_microposts__micropost_html_erb",
+    "callee": "Database->SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/views/app_views_microposts__micropost_html_erb",
+    "callee": "Database->SELECT \"microposts\".* FROM \"microposts\" WHERE (user_id IN (SELECT followed_id FROM relationships\n                     WHERE  follower_id = 762146111)\n                     OR user_id = 762146111) ORDER BY \"microposts\".\"created_at\" DESC LIMIT ? OFFSET ?"
+  },
+  {
+    "caller": "app/views/app_views_microposts__micropost_html_erb",
+    "callee": "Database->SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC LIMIT ? OFFSET ?"
+  },
+  {
+    "caller": "app/views/app_views_microposts__micropost_html_erb",
+    "callee": "Database->SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/views/app_views_microposts__micropost_html_erb",
+    "callee": "Database->SELECT sql FROM\n  (SELECT * FROM sqlite_master UNION ALL\n   SELECT * FROM sqlite_temp_master)\nWHERE type = 'table' AND name = 'active_storage_attachments'\n"
+  },
+  {
+    "caller": "app/views/app_views_microposts__micropost_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_microposts__micropost_html_erb",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/views/app_views_microposts__micropost_html_erb",
+    "callee": "app/helpers/UsersHelper"
+  },
+  {
+    "caller": "app/views/app_views_microposts__micropost_html_erb",
+    "callee": "app/models/Micropost"
+  },
+  {
+    "caller": "app/views/app_views_microposts__micropost_html_erb",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/views/app_views_shared__error_messages_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_shared__feed_html_erb",
+    "callee": "Database->SELECT COUNT(*) FROM \"microposts\" WHERE (user_id IN (SELECT followed_id FROM relationships\n                     WHERE  follower_id = 762146111)\n                     OR user_id = 762146111)"
+  },
+  {
+    "caller": "app/views/app_views_shared__feed_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_shared__feed_html_erb",
+    "callee": "app/views/app_views_microposts__micropost_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_shared__micropost_form_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_shared__micropost_form_html_erb",
+    "callee": "app/views/app_views_shared__error_messages_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_shared__stats_html_erb",
+    "callee": "Database->SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"followed_id\" WHERE \"relationships\".\"follower_id\" = ?"
+  },
+  {
+    "caller": "app/views/app_views_shared__stats_html_erb",
+    "callee": "Database->SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"follower_id\" WHERE \"relationships\".\"followed_id\" = ?"
+  },
+  {
+    "caller": "app/views/app_views_shared__stats_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_shared__stats_html_erb",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/views/app_views_shared__user_info_html_erb",
+    "callee": "Database->SELECT COUNT(*) FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ?"
+  },
+  {
+    "caller": "app/views/app_views_shared__user_info_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_shared__user_info_html_erb",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/views/app_views_shared__user_info_html_erb",
+    "callee": "app/helpers/UsersHelper"
+  },
+  {
+    "caller": "app/views/app_views_static_pages_home_html_erb",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/views/app_views_static_pages_home_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_static_pages_home_html_erb",
+    "callee": "app/helpers/ApplicationHelper"
+  },
+  {
+    "caller": "app/views/app_views_static_pages_home_html_erb",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/views/app_views_static_pages_home_html_erb",
+    "callee": "app/views/app_views_layouts__footer_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_static_pages_home_html_erb",
+    "callee": "app/views/app_views_layouts__header_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_static_pages_home_html_erb",
+    "callee": "app/views/app_views_layouts__shim_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_static_pages_home_html_erb",
+    "callee": "app/views/app_views_shared__feed_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_static_pages_home_html_erb",
+    "callee": "app/views/app_views_shared__micropost_form_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_static_pages_home_html_erb",
+    "callee": "app/views/app_views_shared__stats_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_static_pages_home_html_erb",
+    "callee": "app/views/app_views_shared__user_info_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_static_pages_home_html_erb",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/views/app_views_users__follow_form_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_users__follow_form_html_erb",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/views/app_views_users__follow_form_html_erb",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "app/views/app_views_users__follow_form_html_erb",
+    "callee": "app/views/app_views_users__follow_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users__follow_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_users__follow_html_erb",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "Database->SELECT 1 AS one FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "Database->SELECT COUNT(*) FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ?"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/helpers/ApplicationHelper"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/helpers/UsersHelper"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/views/app_views_layouts__footer_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/views/app_views_layouts__header_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/views/app_views_layouts__shim_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/views/app_views_microposts__micropost_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/views/app_views_shared__stats_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "app/views/app_views_users__follow_form_html_erb"
+  },
+  {
+    "caller": "app/views/app_views_users_show_html_erb",
+    "callee": "json/JSON"
+  }
+]

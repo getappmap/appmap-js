@@ -1,0 +1,20 @@
+[
+  {
+    "name": "app/controllers",
+    "type": "package",
+    "children": [
+      {
+        "name": "GitHubAuthentication",
+        "type": "class",
+        "children": [
+          {
+            "name": "login_with_github",
+            "type": "function",
+            "static": false,
+            "location": "app/controllers/concerns/git_hub_authentication.rb:24"
+          }
+        ]
+      }
+    ]
+  }
+]

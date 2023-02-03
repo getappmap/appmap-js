@@ -1,0 +1,7 @@
+[
+  {
+    "route": "GET /password_resets/{id}/edit",
+    "parameters": "(email,controller,action,id)",
+    "status": 302
+  }
+]

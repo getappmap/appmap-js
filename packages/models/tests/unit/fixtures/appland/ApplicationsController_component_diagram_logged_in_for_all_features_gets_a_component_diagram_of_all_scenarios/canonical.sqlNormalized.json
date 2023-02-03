@@ -1,0 +1,10 @@
+[
+  "SELECT * FROM \"mapsets\" WHERE \"id\" = ?",
+  "SELECT * FROM \"users\" WHERE (\"id\" = ?) LIMIT ?",
+  "SELECT *, \"mapsets\".\"name\", \"mapsets\".\"branch\", \"mapsets\".\"commit\", \"mapsets\".\"environment\", \"mapsets\".\"version\", (SELECT \"login\" FROM \"users\" WHERE (\"id\" = \"user_id\")), (SELECT count(*) AS \"scenario_count\" FROM \"scenarios\" WHERE (\"mapset_id\" = \"mapsets\".\"id\")) FROM \"mapsets_preference_ordered\" AS \"mapsets\" WHERE (\"mapsets\".\"app_id\" = ?)",
+  "SELECT DISTINCT \"caller\", \"callee\" FROM \"scenarios\", lateral jsonb_to_recordset(class_invocation_graph) as graph(caller q_class, callee q_class) WHERE (\"id\" IN (?, ?))",
+  "SELECT \"apps\".* FROM \"apps\" INNER JOIN \"orgs\" ON (\"orgs\".\"id\" = \"apps\".\"org_id\") WHERE ((\"apps\".\"slug\" = ?) AND (\"orgs\".\"slug\" = ?)) LIMIT ?",
+  "SELECT \"scenarios\".\"id\", \"scenarios\".\"uuid\", metadata->>? AS \"name\", metadata->>? AS \"feature_group\", metadata->>? AS \"feature\", \"scenarios\".\"event_field_counts\", \"scenarios\".\"mapset_id\", \"mapsets\".\"app_id\", \"scenarios\".\"created_at\" FROM \"scenarios\" INNER JOIN \"mapsets\" ON (\"mapsets\".\"id\" = \"scenarios\".\"mapset_id\") WHERE (\"scenarios\".\"mapset_id\" = ?) ORDER BY \"scenarios\".\"created_at\" DESC",
+  "SELECT jsonb_object_agg(compute_code_objects_by_location(data->?)) AS \"code_objects_by_location\" FROM \"scenarios\" WHERE (\"id\" IN (?, ?)) LIMIT ?",
+  "SELECT scenarios.metadata->?->>? AS \"repository_url\", scenarios.metadata->?->>? AS \"commit\" FROM \"scenarios\" WHERE ((scenarios.metadata->?->>? IS NOT ?) AND (scenarios.metadata->?->>? IS NOT ?) AND (\"id\" IN (?, ?))) LIMIT ?"
+]

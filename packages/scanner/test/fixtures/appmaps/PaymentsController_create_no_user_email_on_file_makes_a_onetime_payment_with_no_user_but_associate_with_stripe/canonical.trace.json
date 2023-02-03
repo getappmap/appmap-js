@@ -1,0 +1,788 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "POST /payments",
+    "parameter_names": [
+      "is_payment",
+      "stripe_amount",
+      "stripe_email",
+      "stripe_token",
+      "controller",
+      "action"
+    ],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "function": "actionpack/ActionController::Instrumentation#process_action",
+        "labels": [
+          "mvc.controller"
+        ],
+        "children": [
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ],
+            "children": [
+              {
+                "kind": "function",
+                "function": "app/controllers/ControllerHelpers#enable_rack_profiler",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "actionpack/ActionDispatch::Cookies::CookieJar#update",
+                    "labels": [
+                      "http.session.read"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/models/User.from_auth",
+                    "labels": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/ControllerHelpers#controller_namespace",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "app/models/User.from_auth",
+            "labels": []
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+            "labels": [
+              "mvc.before_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/PaymentsController#create",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "app/models/User.from_auth",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "app/models/User.fuzzy_confirmed_or_unconfirmed_email_find",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/models/User.fuzzy_email_find",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/models/UserEmail.fuzzy_user_find",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/models/UserEmail.fuzzy_find",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "app/services/EmailNormalizer.normalize",
+                                "labels": []
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "normalized_query": "SELECT  \"user_emails\".* FROM \"user_emails\" WHERE (confirmation_token IS ?) AND \"user_emails\".\"email\" = $? LIMIT $?"
+                                },
+                                "analyzed_query": {
+                                  "actions": [
+                                    "select"
+                                  ],
+                                  "tables": [
+                                    "user_emails"
+                                  ],
+                                  "columns": [
+                                    "confirmation_token",
+                                    "user_emails.*",
+                                    "user_emails.email"
+                                  ],
+                                  "joinCount": 0
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "app/models/User.fuzzy_unconfirmed_primary_email_find",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/services/EmailNormalizer.normalize",
+                        "labels": []
+                      },
+                      {
+                        "kind": "sql",
+                        "sql": {
+                          "normalized_query": "SELECT  \"users\".* FROM \"users\" WHERE \"users\".\"email\" = $? LIMIT $?"
+                        },
+                        "analyzed_query": {
+                          "actions": [
+                            "select"
+                          ],
+                          "tables": [
+                            "users"
+                          ],
+                          "columns": [
+                            "users.*",
+                            "users.email"
+                          ],
+                          "joinCount": 0
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "stripe/Stripe::APIOperations::List.all",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "json/JSON::Ext::Generator::State#generate",
+                    "labels": [
+                      "format.json.generate"
+                    ]
+                  },
+                  {
+                    "kind": "function",
+                    "function": "stripe/Stripe::Util.normalize_headers",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "vcr/VCR::LibraryHooks::WebMock.global_hook_disabled?",
+                    "labels": []
+                  },
+                  {
+                    "kind": "http_client_request",
+                    "route": "GET https://api.stripe.com/v1/customers",
+                    "parameter_names": null,
+                    "status_code": 200
+                  },
+                  {
+                    "kind": "function",
+                    "function": "vcr/VCR.library_hooks",
+                    "labels": []
+                  },
+                  {
+                    "kind": "function",
+                    "function": "stripe/Stripe::StripeClient::RequestLogContext#dup_from_response",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "json/JSON::Ext::Generator::State#generate",
+                "labels": [
+                  "format.json.generate"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "stripe/Stripe::Util.normalize_headers",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "vcr/VCR::LibraryHooks::WebMock.global_hook_disabled?",
+                "labels": []
+              },
+              {
+                "kind": "http_client_request",
+                "route": "POST https://api.stripe.com/v1/customers/cus_JnA0JVDwH8BjTl",
+                "parameter_names": null,
+                "status_code": 200
+              },
+              {
+                "kind": "function",
+                "function": "vcr/VCR.library_hooks",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "stripe/Stripe::StripeClient::RequestLogContext#dup_from_response",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "json/JSON::Ext::Generator::State#generate",
+                "labels": [
+                  "format.json.generate"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "stripe/Stripe::Util.normalize_headers",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "vcr/VCR::LibraryHooks::WebMock.global_hook_disabled?",
+                "labels": []
+              },
+              {
+                "kind": "http_client_request",
+                "route": "POST https://api.stripe.com/v1/charges",
+                "parameter_names": null,
+                "status_code": 200
+              },
+              {
+                "kind": "function",
+                "function": "vcr/VCR.library_hooks",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "stripe/Stripe::StripeClient::RequestLogContext#dup_from_response",
+                "labels": []
+              },
+              {
+                "kind": "function",
+                "function": "app/services/ParamsNormalizer.boolean",
+                "labels": []
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "SAVEPOINT active_record_2"
+                },
+                "analyzed_query": {
+                  "actions": [],
+                  "tables": [],
+                  "columns": [],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                "labels": [
+                  "mvc.before_action"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/models/Payment#set_calculated_attributes",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "app/models/User.fuzzy_confirmed_or_unconfirmed_email_find",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/models/User.fuzzy_email_find",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "app/models/UserEmail.fuzzy_user_find",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "app/models/UserEmail.fuzzy_find",
+                                    "labels": [],
+                                    "children": [
+                                      {
+                                        "kind": "function",
+                                        "function": "app/services/EmailNormalizer.normalize",
+                                        "labels": []
+                                      },
+                                      {
+                                        "kind": "sql",
+                                        "sql": {
+                                          "normalized_query": "SELECT  \"user_emails\".* FROM \"user_emails\" WHERE (confirmation_token IS ?) AND \"user_emails\".\"email\" = $? LIMIT $?"
+                                        },
+                                        "analyzed_query": {
+                                          "actions": [
+                                            "select"
+                                          ],
+                                          "tables": [
+                                            "user_emails"
+                                          ],
+                                          "columns": [
+                                            "confirmation_token",
+                                            "user_emails.*",
+                                            "user_emails.email"
+                                          ],
+                                          "joinCount": 0
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "app/models/User.fuzzy_unconfirmed_primary_email_find",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "app/services/EmailNormalizer.normalize",
+                                "labels": []
+                              },
+                              {
+                                "kind": "sql",
+                                "sql": {
+                                  "normalized_query": "SELECT  \"users\".* FROM \"users\" WHERE \"users\".\"email\" = $? LIMIT $?"
+                                },
+                                "analyzed_query": {
+                                  "actions": [
+                                    "select"
+                                  ],
+                                  "tables": [
+                                    "users"
+                                  ],
+                                  "columns": [
+                                    "users.*",
+                                    "users.email"
+                                  ],
+                                  "joinCount": 0
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                "labels": [
+                  "mvc.before_action"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/models/Payment#email_or_organization_present",
+                    "labels": []
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "INSERT INTO \"payments\" (\"stripe_id\", \"first_payment_date\", \"amount_cents\", \"created_at\", \"updated_at\", \"email\", \"kind\") VALUES ($?, $?, $?, $?, $?, $?, $?) RETURNING \"id\""
+                },
+                "analyzed_query": {
+                  "actions": [
+                    "insert"
+                  ],
+                  "tables": [
+                    "payments"
+                  ],
+                  "columns": [
+                    "amount_cents",
+                    "created_at",
+                    "email",
+                    "first_payment_date",
+                    "id",
+                    "kind",
+                    "stripe_id",
+                    "updated_at"
+                  ],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                "labels": [
+                  "mvc.after_action"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/models/Payment#send_invoice_email",
+                    "labels": [],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "sidekiq/Sidekiq::Worker::ClassMethods.perform_async",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "json/JSON::Ext::Generator::State#generate",
+                            "labels": [
+                              "format.json.generate"
+                            ]
+                          },
+                          {
+                            "kind": "function",
+                            "function": "sidekiq/Sidekiq.load_json",
+                            "labels": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                "labels": [
+                  "mvc.after_action"
+                ]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "normalized_query": "RELEASE SAVEPOINT active_record_2"
+                },
+                "analyzed_query": {
+                  "actions": [],
+                  "tables": [],
+                  "columns": [],
+                  "joinCount": 0
+                }
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+                "labels": [
+                  "mvc.before_action"
+                ]
+              },
+              {
+                "kind": "function",
+                "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+                "labels": [
+                  "mvc.after_action"
+                ],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/models/Payment#update_associations",
+                    "labels": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "actionview/ActionView::Resolver#find_all",
+            "labels": [
+              "mvc.template.resolver"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "wicked_pdf/WickedPdf::PdfHelper#render",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "inline_template.render",
+                "labels": [],
+                "children": [
+                  {
+                    "kind": "function",
+                    "function": "app/views/app_views_payments_create_html_haml.render",
+                    "labels": [
+                      "mvc.template"
+                    ],
+                    "children": [
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "actionview/ActionView::Resolver#find_all",
+                        "labels": [
+                          "mvc.template.resolver"
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/models/Amountable#amount",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/helpers/HeaderTagHelper#header_tags",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/helpers/HeaderTagHelper#header_tag_array",
+                            "labels": [],
+                            "children": [
+                              {
+                                "kind": "function",
+                                "function": "app/helpers/HeaderTagHelper#page_with_custom_header_tags?",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "app/controllers/ControllerHelpers#controller_namespace",
+                                    "labels": []
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "app/helpers/HeaderTagHelper#default_meta_hash",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "app/helpers/HeaderTagHelper#page_description",
+                                    "labels": [],
+                                    "children": [
+                                      {
+                                        "kind": "function",
+                                        "function": "app/helpers/HeaderTagHelper#auto_description",
+                                        "labels": [],
+                                        "children": [
+                                          {
+                                            "kind": "function",
+                                            "function": "app/controllers/ControllerHelpers#controller_namespace",
+                                            "labels": []
+                                          },
+                                          {
+                                            "kind": "function",
+                                            "function": "app/controllers/ControllerHelpers#page_id",
+                                            "labels": [],
+                                            "children": [
+                                              {
+                                                "kind": "function",
+                                                "function": "app/controllers/ControllerHelpers#controller_namespace",
+                                                "labels": []
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "kind": "function",
+                                        "function": "app/helpers/HeaderTagHelper#page_description=",
+                                        "labels": []
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "kind": "function",
+                                    "function": "app/helpers/HeaderTagHelper#page_description",
+                                    "labels": []
+                                  },
+                                  {
+                                    "kind": "function",
+                                    "function": "app/helpers/HeaderTagHelper#page_title",
+                                    "labels": [],
+                                    "children": [
+                                      {
+                                        "kind": "function",
+                                        "function": "app/helpers/HeaderTagHelper#auto_title",
+                                        "labels": [],
+                                        "children": [
+                                          {
+                                            "kind": "function",
+                                            "function": "app/controllers/ControllerHelpers#controller_namespace",
+                                            "labels": []
+                                          },
+                                          {
+                                            "kind": "function",
+                                            "function": "app/controllers/ControllerHelpers#page_id",
+                                            "labels": []
+                                          },
+                                          {
+                                            "kind": "function",
+                                            "function": "app/controllers/ControllerHelpers#controller_namespace",
+                                            "labels": []
+                                          },
+                                          {
+                                            "kind": "function",
+                                            "function": "app/controllers/ControllerHelpers#page_id",
+                                            "labels": []
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "kind": "function",
+                                        "function": "app/helpers/HeaderTagHelper#page_title=",
+                                        "labels": []
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "kind": "function",
+                                    "function": "app/helpers/HeaderTagHelper#page_title",
+                                    "labels": []
+                                  },
+                                  {
+                                    "kind": "function",
+                                    "function": "app/helpers/HeaderTagHelper#page_image",
+                                    "labels": []
+                                  },
+                                  {
+                                    "kind": "function",
+                                    "function": "app/helpers/HeaderTagHelper#page_image",
+                                    "labels": []
+                                  },
+                                  {
+                                    "kind": "function",
+                                    "function": "app/helpers/HeaderTagHelper#page_image",
+                                    "labels": []
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "function",
+                                "function": "app/helpers/HeaderTagHelper#social_meta_content_tags",
+                                "labels": []
+                              },
+                              {
+                                "kind": "function",
+                                "function": "app/helpers/HeaderTagHelper#main_header_tags",
+                                "labels": [],
+                                "children": [
+                                  {
+                                    "kind": "function",
+                                    "function": "app/helpers/HeaderTagHelper#page_title",
+                                    "labels": []
+                                  },
+                                  {
+                                    "kind": "function",
+                                    "function": "app/helpers/HeaderTagHelper#page_description",
+                                    "labels": []
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/controllers/ControllerHelpers#page_id",
+                        "labels": []
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/views/app_views_layouts__revised_messages_html_haml.render",
+                        "labels": [
+                          "mvc.template"
+                        ],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "actionview/ActionView::Resolver#find_all",
+                            "labels": [
+                              "mvc.template.resolver"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "function",
+                        "function": "app/controllers/ControllerHelpers#user_root_url",
+                        "labels": [],
+                        "children": [
+                          {
+                            "kind": "function",
+                            "function": "app/models/User.from_auth",
+                            "labels": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+            "labels": [
+              "mvc.after_action"
+            ]
+          },
+          {
+            "kind": "function",
+            "function": "app/controllers/ControllerHelpers#append_info_to_payload",
+            "labels": [],
+            "children": [
+              {
+                "kind": "function",
+                "function": "app/controllers/ControllerHelpers#forwarded_ip_address",
+                "labels": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

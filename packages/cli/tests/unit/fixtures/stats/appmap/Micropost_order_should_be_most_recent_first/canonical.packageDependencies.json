@@ -1,0 +1,10 @@
+[
+  {
+    "caller": "activerecord",
+    "callee": "Database"
+  },
+  {
+    "caller": "activerecord",
+    "callee": "logger"
+  }
+]

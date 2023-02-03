@@ -1,0 +1,123 @@
+[
+  {
+    "kind": "function",
+    "labels": ["mvc.before_action"]
+  },
+  {
+    "kind": "function",
+    "labels": ["mvc.after_action"]
+  },
+  {
+    "kind": "function",
+    "labels": ["log"]
+  },
+  {
+    "kind": "sql",
+    "sql": {
+      "analyzed_query": {
+        "actions": [],
+        "tables": [],
+        "columns": [],
+        "joinCount": 0
+      }
+    }
+  },
+  {
+    "kind": "function",
+    "labels": ["log"]
+  },
+  {
+    "kind": "function",
+    "labels": ["log"]
+  },
+  {
+    "kind": "function",
+    "labels": ["log"]
+  },
+  {
+    "kind": "function",
+    "labels": ["dao.materialize"],
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["log"]
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["users"],
+            "columns": ["users.*", "users.id"],
+            "joinCount": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": ["dao.materialize"],
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["log"]
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["microposts"],
+            "columns": ["microposts.*", "microposts.id"],
+            "joinCount": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": ["dao.materialize"],
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["log"]
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["microposts"],
+            "columns": ["microposts.*", "microposts.created_at"],
+            "joinCount": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "function",
+    "labels": ["log"]
+  },
+  {
+    "kind": "sql",
+    "sql": {
+      "analyzed_query": {
+        "actions": [],
+        "tables": [],
+        "columns": [],
+        "joinCount": 0
+      }
+    }
+  },
+  {
+    "kind": "function",
+    "labels": ["mvc.before_action"]
+  },
+  {
+    "kind": "function",
+    "labels": ["mvc.after_action"]
+  }
+]

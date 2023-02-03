@@ -1,0 +1,7 @@
+[
+  {
+    "route": "GET /api/scenarios/:id(.:format)",
+    "parameters": "(mode,controller,action,id)",
+    "status": 200
+  }
+]

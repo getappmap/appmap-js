@@ -1,0 +1,7 @@
+[
+  "SELECT \"microposts\".* FROM \"microposts\" ORDER BY \"microposts\".\"created_at\" DESC LIMIT ?",
+  "SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"id\" = ? LIMIT ?",
+  "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?",
+  "begin transaction",
+  "rollback transaction"
+]

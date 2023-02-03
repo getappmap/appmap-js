@@ -1,0 +1,1113 @@
+[
+  {
+    "kind": "http_server_request",
+    "route": "GET /:organization_id/:id(.:format)",
+    "parameter_names": ["mapset", "controller", "action", "organization_id", "id"],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["security", "crypto"]
+      },
+      {
+        "kind": "function",
+        "labels": ["security", "crypto"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "labels": ["provider.authentication"],
+        "children": [
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["select"],
+                "tables": ["users"],
+                "columns": ["*", "id"],
+                "joinCount": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["apps", "orgs"],
+            "columns": ["apps.*", "apps.org_id", "apps.slug", "orgs.id", "orgs.slug"],
+            "joinCount": 1
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["mapsets_preference_ordered", "scenarios", "users"],
+            "columns": [
+              "*",
+              "id",
+              "login",
+              "mapset_id",
+              "mapsets.app_id",
+              "mapsets.branch",
+              "mapsets.commit",
+              "mapsets.environment",
+              "mapsets.id",
+              "mapsets.name",
+              "mapsets.version",
+              "user_id"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["mapsets"],
+            "columns": ["*", "id"],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["scenario_processing_errors", "scenarios"],
+            "columns": [
+              "*",
+              "data",
+              "scenario_processing_errors.sha_256",
+              "scenarios.mapset_id",
+              "scenarios.sha_256",
+              "version"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["apps", "orgs", "users"],
+            "columns": [
+              "apps.created_at",
+              "apps.id",
+              "apps.name",
+              "apps.org_id",
+              "apps.slug",
+              "name",
+              "orgs.id",
+              "orgs.name",
+              "orgs.owner_id",
+              "orgs.slug",
+              "url",
+              "users.id",
+              "users.login"
+            ],
+            "joinCount": 2
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["scenario_processing_errors", "scenarios"],
+            "columns": [
+              "*",
+              "data",
+              "scenario_processing_errors.sha_256",
+              "scenarios.mapset_id",
+              "scenarios.sha_256",
+              "version"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["mapsets", "scenarios"],
+            "columns": [
+              "mapsets.app_id",
+              "mapsets.id",
+              "metadata",
+              "scenarios.created_at",
+              "scenarios.event_field_counts",
+              "scenarios.id",
+              "scenarios.mapset_id",
+              "scenarios.uuid"
+            ],
+            "joinCount": 1
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["mapsets", "scenarios"],
+            "columns": ["*", "mapsets.id", "scenarios.mapset_id"],
+            "joinCount": 1
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["mapsets", "scenarios"],
+            "columns": [
+              "mapsets.app_id",
+              "mapsets.id",
+              "metadata",
+              "scenarios.created_at",
+              "scenarios.event_field_counts",
+              "scenarios.id",
+              "scenarios.mapset_id",
+              "scenarios.uuid"
+            ],
+            "joinCount": 1
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["mapsets", "scenarios"],
+            "columns": [
+              "mapsets.app_id",
+              "mapsets.id",
+              "metadata",
+              "scenarios.created_at",
+              "scenarios.event_field_counts",
+              "scenarios.id",
+              "scenarios.mapset_id",
+              "scenarios.uuid"
+            ],
+            "joinCount": 1
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["scenarios"],
+            "columns": ["callee", "caller", "class_invocation_graph"],
+            "joinCount": 1
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["scenarios"],
+            "columns": ["scenarios.metadata"],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["scenarios"],
+            "columns": ["data"],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["apps"],
+            "columns": ["*", "id"],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "function",
+        "labels": ["view"],
+        "children": [
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["select"],
+                "tables": ["orgs"],
+                "columns": ["*", "id"],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["select"],
+                "tables": ["mapset_caches"],
+                "columns": ["*", "mapset_id"],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["select"],
+                "tables": [],
+                "columns": [],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["insert"],
+                "tables": ["mapset_caches"],
+                "columns": ["mapset_id", "sha_256"],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["select"],
+                "tables": ["scenarios", "sql_queries"],
+                "columns": [
+                  "mapset_id",
+                  "scenarios.events_sql_queries",
+                  "sql",
+                  "sql_query.sql_query"
+                ],
+                "joinCount": 1
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["update"],
+                "tables": ["mapset_caches"],
+                "columns": ["data_model", "id"],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["select"],
+                "tables": ["mapsets"],
+                "columns": ["*", "id"],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["select"],
+                "tables": ["scenarios"],
+                "columns": [
+                  "events_http_server_requests",
+                  "events_http_server_responses",
+                  "metadata",
+                  "scenarios.mapset_id",
+                  "uuid"
+                ],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["update"],
+                "tables": ["mapset_caches"],
+                "columns": ["id", "web_resources"],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["view"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["view"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["view"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["view"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["view"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["view"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["view"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["view"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["view"],
+            "children": [
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["select"],
+                    "tables": ["users"],
+                    "columns": ["*", "id"],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["select"],
+                    "tables": ["recording_methods", "scenarios"],
+                    "columns": ["*", "mapset_id", "recording_method", "scenarios.metadata"],
+                    "joinCount": 0
+                  }
+                }
+              },
+              {
+                "kind": "function",
+                "labels": ["serialization", "json"]
+              },
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["update"],
+                    "tables": ["mapset_caches"],
+                    "columns": ["id", "recording_method_counts"],
+                    "joinCount": 0
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["select"],
+                "tables": ["code_objects", "scenario_code_objects", "scenarios"],
+                "columns": [
+                  "mapset_id",
+                  "object_name",
+                  "scenario_code_objects.scenario_id",
+                  "scenarios.id",
+                  "type"
+                ],
+                "joinCount": 1
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["update"],
+                "tables": ["mapset_caches"],
+                "columns": ["code_object_counts", "id"],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["view"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["select"],
+                "tables": ["key_data_stats", "scenarios"],
+                "columns": [
+                  "*",
+                  "http_server_request.http_server_request",
+                  "mapset_id",
+                  "scenarios.events_http_server_requests"
+                ],
+                "joinCount": 1
+              }
+            }
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["select"],
+                "tables": ["key_data_stats", "scenarios"],
+                "columns": [
+                  "*",
+                  "mapset_id",
+                  "scenarios.events_sql_queries",
+                  "sql_query.sql_query"
+                ],
+                "joinCount": 1
+              }
+            }
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["select"],
+                "tables": ["key_data_stats", "messages", "scenarios"],
+                "columns": [
+                  "*",
+                  "mapset_id",
+                  "message.id",
+                  "message.message",
+                  "message_fields",
+                  "msg.name",
+                  "scenarios.events_messages"
+                ],
+                "joinCount": 2
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["update"],
+                "tables": ["mapset_caches"],
+                "columns": ["id", "key_stats_counts"],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["view"]
+          },
+          {
+            "kind": "function",
+            "labels": ["view"]
+          },
+          {
+            "kind": "function",
+            "labels": ["view"]
+          },
+          {
+            "kind": "function",
+            "labels": ["view"]
+          },
+          {
+            "kind": "function",
+            "labels": ["view"]
+          },
+          {
+            "kind": "function",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "function",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "function",
+            "labels": ["security", "crypto"]
+          },
+          {
+            "kind": "function",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "function",
+            "labels": ["view"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["view"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["security", "crypto"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["serialization", "json"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["view"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["view"]
+          },
+          {
+            "kind": "function",
+            "labels": ["view"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["view"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "http_server_request",
+    "route": "GET /:organization_id/:id(.:format)",
+    "parameter_names": ["mapset", "controller", "action", "organization_id", "id"],
+    "status_code": 200,
+    "children": [
+      {
+        "kind": "function",
+        "labels": ["security", "crypto"]
+      },
+      {
+        "kind": "function",
+        "labels": ["security", "crypto"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "function",
+        "labels": ["provider.authentication"],
+        "children": [
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["select"],
+                "tables": ["users"],
+                "columns": ["*", "id"],
+                "joinCount": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["apps", "orgs"],
+            "columns": ["apps.*", "apps.org_id", "apps.slug", "orgs.id", "orgs.slug"],
+            "joinCount": 1
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["mapsets_preference_ordered", "scenarios", "users"],
+            "columns": [
+              "*",
+              "id",
+              "login",
+              "mapset_id",
+              "mapsets.app_id",
+              "mapsets.branch",
+              "mapsets.commit",
+              "mapsets.environment",
+              "mapsets.id",
+              "mapsets.name",
+              "mapsets.version",
+              "user_id"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["mapsets"],
+            "columns": ["*", "id"],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["scenario_processing_errors", "scenarios"],
+            "columns": [
+              "*",
+              "data",
+              "scenario_processing_errors.sha_256",
+              "scenarios.mapset_id",
+              "scenarios.sha_256",
+              "version"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["apps", "orgs", "users"],
+            "columns": [
+              "apps.created_at",
+              "apps.id",
+              "apps.name",
+              "apps.org_id",
+              "apps.slug",
+              "name",
+              "orgs.id",
+              "orgs.name",
+              "orgs.owner_id",
+              "orgs.slug",
+              "url",
+              "users.id",
+              "users.login"
+            ],
+            "joinCount": 2
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["scenario_processing_errors", "scenarios"],
+            "columns": [
+              "*",
+              "data",
+              "scenario_processing_errors.sha_256",
+              "scenarios.mapset_id",
+              "scenarios.sha_256",
+              "version"
+            ],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["mapsets", "scenarios"],
+            "columns": [
+              "mapsets.app_id",
+              "mapsets.id",
+              "metadata",
+              "scenarios.created_at",
+              "scenarios.event_field_counts",
+              "scenarios.id",
+              "scenarios.mapset_id",
+              "scenarios.uuid"
+            ],
+            "joinCount": 1
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["mapsets", "scenarios"],
+            "columns": ["*", "mapsets.id", "scenarios.mapset_id"],
+            "joinCount": 1
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["mapsets", "scenarios"],
+            "columns": [
+              "mapsets.app_id",
+              "mapsets.id",
+              "metadata",
+              "scenarios.created_at",
+              "scenarios.event_field_counts",
+              "scenarios.id",
+              "scenarios.mapset_id",
+              "scenarios.uuid"
+            ],
+            "joinCount": 1
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["mapsets", "scenarios"],
+            "columns": [
+              "mapsets.app_id",
+              "mapsets.id",
+              "metadata",
+              "scenarios.created_at",
+              "scenarios.event_field_counts",
+              "scenarios.id",
+              "scenarios.mapset_id",
+              "scenarios.uuid"
+            ],
+            "joinCount": 1
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["scenarios"],
+            "columns": ["callee", "caller", "class_invocation_graph"],
+            "joinCount": 1
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["scenarios"],
+            "columns": ["scenarios.metadata"],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["scenarios"],
+            "columns": ["data"],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "function",
+        "labels": ["serialization", "json"]
+      },
+      {
+        "kind": "sql",
+        "sql": {
+          "analyzed_query": {
+            "actions": ["select"],
+            "tables": ["apps"],
+            "columns": ["*", "id"],
+            "joinCount": 0
+          }
+        }
+      },
+      {
+        "kind": "function",
+        "labels": ["view"],
+        "children": [
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["select"],
+                "tables": ["orgs"],
+                "columns": ["*", "id"],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["select"],
+                "tables": ["mapset_caches"],
+                "columns": ["*", "mapset_id"],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "function",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "function",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "function",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "function",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "sql",
+            "sql": {
+              "analyzed_query": {
+                "actions": ["select"],
+                "tables": [],
+                "columns": [],
+                "joinCount": 0
+              }
+            }
+          },
+          {
+            "kind": "function",
+            "labels": ["view"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["view"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["view"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["view"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["view"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["view"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["view"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["view"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["view"],
+            "children": [
+              {
+                "kind": "sql",
+                "sql": {
+                  "analyzed_query": {
+                    "actions": ["select"],
+                    "tables": ["users"],
+                    "columns": ["*", "id"],
+                    "joinCount": 0
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["view"]
+          },
+          {
+            "kind": "function",
+            "labels": ["view"]
+          },
+          {
+            "kind": "function",
+            "labels": ["view"]
+          },
+          {
+            "kind": "function",
+            "labels": ["view"]
+          },
+          {
+            "kind": "function",
+            "labels": ["view"]
+          },
+          {
+            "kind": "function",
+            "labels": ["view"]
+          },
+          {
+            "kind": "function",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "function",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "function",
+            "labels": ["security", "crypto"]
+          },
+          {
+            "kind": "function",
+            "labels": ["serialization", "json"]
+          },
+          {
+            "kind": "function",
+            "labels": ["view"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["view"],
+                "children": [
+                  {
+                    "kind": "function",
+                    "labels": ["security", "crypto"]
+                  },
+                  {
+                    "kind": "function",
+                    "labels": ["serialization", "json"]
+                  }
+                ]
+              },
+              {
+                "kind": "function",
+                "labels": ["view"]
+              }
+            ]
+          },
+          {
+            "kind": "function",
+            "labels": ["view"]
+          },
+          {
+            "kind": "function",
+            "labels": ["view"],
+            "children": [
+              {
+                "kind": "function",
+                "labels": ["view"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

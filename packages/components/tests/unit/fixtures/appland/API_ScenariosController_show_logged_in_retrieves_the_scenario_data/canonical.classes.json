@@ -1,0 +1,15 @@
+[
+  "app/controllers/API::ScenariosController",
+  "app/models/ApiKey",
+  "app/models/DAO::PublicResource",
+  "app/models/DAO::Scenario",
+  "app/models/DAO::SequelUtil",
+  "app/models/DAO::ToModel",
+  "app/models/Scenario",
+  "app/models/Scenario::SearchActions",
+  "app/models/Scenario::Show",
+  "app/models/Search",
+  "app/models/User::Show",
+  "json/JSON::Ext::Generator::State",
+  "json/JSON::Ext::Parser"
+]

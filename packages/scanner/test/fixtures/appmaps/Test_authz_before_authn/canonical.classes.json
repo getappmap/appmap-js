@@ -1,0 +1,11 @@
+[
+  "actionpack/ActionController::Instrumentation",
+  "actionpack/ActionDispatch::Cookies::CookieJar",
+  "actionpack/ActionDispatch::Request::Session",
+  "activesupport/ActiveSupport::Callbacks::CallbackSequence",
+  "app/controllers/MicropostsController",
+  "app/helpers/SessionsHelper",
+  "app/models/User",
+  "json/JSON::Ext::Parser",
+  "openssl/OpenSSL::Cipher"
+]
