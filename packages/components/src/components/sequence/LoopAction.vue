@@ -78,14 +78,13 @@ export default {
   margin: 15px -20px 10px -20px;
   border: 1px solid magenta;
   position: relative;
-  z-index: 3;
   display: inline-block;
   font-weight: bold;
   pointer-events: none;
 
   .label-container {
     white-space: nowrap;
-    background-color: rgba(200, 200, 200, 0.25);
+    background-color: rgb(50, 50, 50);
 
     div {
       display: inline-block;
