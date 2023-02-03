@@ -1,5 +1,5 @@
 context('VS Code Extension', () => {
-  context('Ruby appmap', () => {
+  context('default configuration', () => {
     beforeEach(() => {
       cy.visit('http://localhost:6006/iframe.html?id=pages-vs-code--extension&viewMode=story');
     });
@@ -1026,6 +1026,18 @@ context('VS Code Extension', () => {
     });
   });
 
+  context('configured to open with the sequence diagram', () => {
+    beforeEach(() => {
+      cy.visit(
+        'http://localhost:6006/iframe.html?id=pages-vs-code--extension-with-default-sequence-view&viewMode=story'
+      );
+    });
+
+    it('renders the sequence diagram initially', () => {
+      cy.get('.sequence-diagram').children('.lane').should('have.length', 9);
+    });
+  });
+
   context('No HTTP appmap', () => {
     beforeEach(() => {
       cy.visit(
@@ -1071,7 +1083,7 @@ context('VS Code Extension', () => {
     });
   });
 
-  context('Appmap with one associated finding', () => {
+  context('with one associated finding', () => {
     beforeEach(() => {
       cy.visit(
         'http://localhost:6006/iframe.html?args=scenario:mapWithFindings&id=pages-vs-code--extension&viewMode=story'
@@ -1136,7 +1148,7 @@ context('VS Code Extension', () => {
     });
   });
 
-  context('Appmap with two associated findings', () => {
+  context('with two associated findings', () => {
     beforeEach(() => {
       cy.visit(
         'http://localhost:6006/iframe.html?args=scenario:mapWithTwoFindings&id=pages-vs-code--extension&viewMode=story'

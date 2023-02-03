@@ -48,7 +48,7 @@
     </div>
 
     <div class="main-column main-column--right">
-      <v-tabs @activateTab="onChangeTab" ref="tabs">
+      <v-tabs @activateTab="onChangeTab" ref="tabs" :activate-first-tab="false">
         <v-tab
           name="Dependency Map"
           :is-active="isViewingComponent"
@@ -433,6 +433,10 @@ export default {
   },
 
   props: {
+    defaultView: {
+      type: String,
+      default: VIEW_COMPONENT,
+    },
     appMapUploadable: {
       type: Boolean,
       default: false,
@@ -1132,6 +1136,10 @@ export default {
         this.$store.commit(SELECT_CODE_OBJECT, this.highlightedEvent);
       }
     },
+  },
+
+  beforeMount() {
+    this.setView(this.defaultView);
   },
 
   mounted() {
