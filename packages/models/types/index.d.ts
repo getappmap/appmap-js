@@ -106,6 +106,7 @@ declare module '@appland/models' {
     readonly id: string;
     readonly name: string;
     readonly type: CodeObjectType;
+    readonly data: any;
     readonly static: boolean;
     readonly location: string | undefined;
     readonly locations: string[];
@@ -140,6 +141,7 @@ declare module '@appland/models' {
     readonly codeObjects: CodeObject[];
     readonly httpObject?: CodeObject;
     readonly sqlObject?: CodeObject;
+    readonly roots: CodeObject[];
 
     visit(fn: (codeObject: CodeObject) => void): void;
     search(query: string): CodeObject[];
