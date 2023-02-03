@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.64.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.64.2...@appland/appmap-v3.64.3) (2023-02-03)
+
+
+### Bug Fixes
+
+* throttle the globber's stat() calls ([1caf55a](https://github.com/getappmap/appmap-js/commit/1caf55a4d87adc3227df6a8cf416803aa88a1ce2))
+
 # [@appland/appmap-v3.64.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.64.1...@appland/appmap-v3.64.2) (2023-02-01)
 
 
