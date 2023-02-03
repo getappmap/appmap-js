@@ -111,6 +111,9 @@ $min-height: 3rem;
 }
 
 .label-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 3px 0;
   text-align: center;
   padding: 3px;

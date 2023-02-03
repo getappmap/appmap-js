@@ -1516,6 +1516,9 @@ code {
       min-width: 400px;
       word-break: break-all;
       overflow: hidden;
+      &::-webkit-scrollbar:horizontal {
+        height: 100px;
+      }
 
       .control-button {
         border: none;

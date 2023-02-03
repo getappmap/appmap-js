@@ -68,7 +68,7 @@ export default {
 <style scoped lang="scss">
 .tabs {
   width: 100%;
-  height: 100%;
+  height: 100%; //96.6%;
 
   &__header {
     position: relative;
