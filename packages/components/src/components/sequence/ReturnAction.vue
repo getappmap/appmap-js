@@ -179,7 +179,7 @@ export default {
         ...this.actionSpec.diffClasses,
       ];
       const caller = this.actionSpec.diagramSpec.actions[this.actionSpec.callIndex];
-      const ancestorIndexes = caller.ancestorIndexes;
+      const { ancestorIndexes } = caller;
       if (ancestorIndexes.find((ancestorIndex) => this.collapsedActionState[ancestorIndex]))
         result.push('return-collapsed');
       if (this.actionSpec.index === 0) result.push('first-action');
