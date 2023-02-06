@@ -1,14 +1,20 @@
 import { CommandModule } from 'yargs';
-import { AppMap, loadConfiguration, Mapset } from '@appland/client';
-import { listAppMapFiles } from '../utils';
+import { AppMap, loadConfiguration, Mapset, UploadAppMapResponse } from '@appland/client';
+import { listAppMapFiles, verbose } from '../utils';
 import { readFile, stat } from 'fs/promises';
 import assert from 'assert';
 import UI from './userInteraction';
 import { ValidationError } from './errors';
 import { Stats } from 'fs';
+import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
+import { locateAppMapDir } from '../lib/locateAppMapDir';
+import { warn } from 'console';
+import { load } from 'js-yaml';
 
 interface Arguments {
-  appmapDir: string;
+  verbose: boolean;
+  directory?: string;
+  appmapDir?: string;
   app?: string;
   force?: boolean;
 }
@@ -33,17 +39,17 @@ function applyOrCheck(data: { [x: string]: string | undefined }, key: string, in
   }
 }
 
-function checkMetadata(current: Metadata, input: unknown) {
+function checkMetadata(metadata: Metadata, input: unknown) {
   if (!input) return; // no metadata in appmap, ie. matches
 
   assert(typeof input === 'object');
 
-  applyOrCheck(current, 'application', input['app']);
+  applyOrCheck(metadata, 'application', input['app']);
 
   const git = input['git'];
   if (typeof git !== 'object') return;
-  applyOrCheck(current, 'branch', git['branch']);
-  applyOrCheck(current, 'commit', git['commit']);
+  applyOrCheck(metadata, 'branch', git['branch']);
+  applyOrCheck(metadata, 'commit', git['commit']);
 }
 
 async function collect(appmapDir: string, force: boolean): Promise<[string[], Metadata]> {
@@ -62,20 +68,32 @@ async function collect(appmapDir: string, force: boolean): Promise<[string[], Me
   return [paths, metadata];
 }
 
-export async function handler({ appmapDir, app, force }: Arguments): Promise<void> {
+export async function handler(argv: Arguments): Promise<void> {
+  const { directory, appmapDir: appmapDirOpt, app: appOpt, force } = argv;
+
+  verbose(argv.verbose);
+  handleWorkingDirectory(directory);
+  const appmapDir = await locateAppMapDir(appmapDirOpt);
+
+  let app = appOpt;
+  if (!app) {
+    const appMapConfigData = load((await readFile('appmap.yml')).toString()) as any;
+    app = appMapConfigData['name'];
+  }
+
+  if (!app) {
+    throw new ValidationError(
+      [
+        'Application name is required.',
+        `You can provide the application name by setting the 'name' field in appmap.yml, or with the --app option.`,
+      ].join('\n')
+    );
+  }
+
   UI.progress(`Examining AppMaps...`);
   const [paths, metadata] = await collect(appmapDir, !!force);
 
   if (paths.length === 0) throw new Error(`No AppMaps found in ${appmapDir}`);
-
-  if (!(app ||= metadata.application)) {
-    throw new ValidationError(
-      [
-        'Application name required.',
-        'You can provide the application name using --app option.',
-      ].join('\n')
-    );
-  }
 
   let total = paths.length;
   const { baseURL } = loadConfiguration();
@@ -87,7 +105,13 @@ export async function handler({ appmapDir, app, force }: Arguments): Promise<voi
     processed += 1;
     UI.status = `[${processed}/${total}] ${path}`;
     const data = await readFile(path); //  TODO: stream this instead of slurping the whole thing?
-    const response = await AppMap.create(data, { app });
+    let response: UploadAppMapResponse;
+    try {
+      response = await AppMap.create(data, { app });
+    } catch (e) {
+      warn(`Error uploading ${path}: ${e}`);
+      throw e;
+    }
     uuids.push(response.uuid);
   }
 
@@ -112,12 +136,12 @@ function checkSize({ size }: Stats) {
 }
 
 const command: CommandModule<{}, Arguments> = {
-  command: 'upload [appmap-dir]',
+  command: 'upload',
   builder: {
-    appmapDir: {
-      default: '.',
-      hidden: true,
+    directory: {
+      alias: 'd',
     },
+    'appmap-dir': {},
     app: {
       alias: 'a',
       description: 'application name override',
