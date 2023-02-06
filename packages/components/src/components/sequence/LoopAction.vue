@@ -55,9 +55,8 @@ export default {
   computed: {
     loopClasses(): string[] {
       const result = ['loop'];
-      const ancestorIndexes = this.actionSpec.ancestorIndexes;
-      if (ancestorIndexes.find((ancestorIndex) => this.collapsedActionState[ancestorIndex]))
-        result.push('loop-collapsed');
+
+      if (this.actionSpec.isCollapsed) result.push('loop-collapsed');
 
       return result;
     },

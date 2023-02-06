@@ -178,10 +178,10 @@ export default {
         `return-${this.actionSpec.callArrowDirection}`,
         ...this.actionSpec.diffClasses,
       ];
-      const caller = this.actionSpec.diagramSpec.actions[this.actionSpec.callIndex];
-      const { ancestorIndexes } = caller;
-      if (ancestorIndexes.find((ancestorIndex) => this.collapsedActionState[ancestorIndex]))
-        result.push('return-collapsed');
+
+      const caller: ActionSpec = this.actionSpec.diagramSpec.actions[this.actionSpec.callIndex];
+      if (caller.isCollapsed(this.collapsedActionState)) result.push('return-collapsed');
+
       if (this.actionSpec.index === 0) result.push('first-action');
 
       return result;
