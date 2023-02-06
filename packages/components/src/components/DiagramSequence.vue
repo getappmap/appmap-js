@@ -15,6 +15,7 @@
           :actionSpec="action"
           :selected-actions="selectedActions"
           :collapsed-actions="collapsedActions"
+          :selected-trace-event="selectedTraceEvent"
         />
       </template>
       <template v-if="action.nodeType === 'return'">
@@ -61,6 +62,10 @@ export default {
     },
     serializedDiagram: {
       type: Object,
+    },
+    selectedTraceEvent: {
+      type: Object,
+      default: null,
     },
     selectedEvents: {
       type: Array,
@@ -121,6 +126,21 @@ export default {
         ...(codeObject as any).ancestors().map((ancestor: CodeObject) => ancestor.fqid),
       ];
       return this.actors.find((actor) => ancestorIds.indexOf(actor.id) !== -1);
+    },
+  },
+
+  methods: {
+    focusFocused() {
+      setTimeout(() => {
+        const element = this.$el.querySelector(
+          '.call.focused .self-call, .call.focused .call-line-segment'
+        );
+        if (!element) {
+          return;
+        }
+
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 16);
     },
   },
 };

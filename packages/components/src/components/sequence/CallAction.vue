@@ -1,6 +1,7 @@
 <template>
   <div
     :class="containerClasses"
+    ref="container"
     :data-comment="`${actionSpec.nodeName} spans from ${actionSpec.callerActionIndex} to
       ${actionSpec.calleeActionIndex}`"
   >
@@ -205,6 +206,10 @@ export default {
       type: Array,
       required: true,
     },
+    selectedTraceEvent: {
+      type: Object,
+      default: null,
+    },
   },
 
   data() {
@@ -224,6 +229,12 @@ export default {
       if (ancestorIndexes.find((ancestorIndex) => this.collapsedActionState[ancestorIndex]))
         result.push('call-collapsed');
       if (this.actionSpec.index === 0) result.push('first-action');
+
+      if (
+        this.selectedTraceEvent &&
+        this.actionSpec.action.eventIds.includes(this.selectedTraceEvent.id)
+      )
+        result.push('focused');
 
       return result;
     },
@@ -256,6 +267,23 @@ export default {
   position: relative;
   padding-top: 4px;
   display: contents;
+}
+
+.call.focused {
+  .call-line-segment,
+  .self-call {
+    outline: 4px solid transparent;
+    animation: node-focused 4s ease-out 0.5s;
+  }
+}
+
+@keyframes node-focused {
+  from {
+    outline-color: $hotpink;
+  }
+  to {
+    outline-color: transparent;
+  }
 }
 
 .call-collapsed {
