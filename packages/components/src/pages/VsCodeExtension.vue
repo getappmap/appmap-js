@@ -52,7 +52,7 @@
         <v-tab
           name="Dependency Map"
           :is-active="isViewingComponent"
-          :reference="VIEW_COMPONENT"
+          :tabName="VIEW_COMPONENT"
           :ref="VIEW_COMPONENT"
         >
           <v-diagram-component ref="componentDiagram" :class-map="filteredAppMap.classMap" />
@@ -62,17 +62,18 @@
           name="Sequence Diagram"
           :is-active="isViewingSequence"
           :ref="VIEW_SEQUENCE"
-          :reference="VIEW_SEQUENCE"
+          :tabName="VIEW_SEQUENCE"
           :allow-scroll="true"
         >
           <v-diagram-sequence
-            ref="sequenceDiagram"
+            ref="viewSequence_diagram"
             :app-map="filteredAppMap"
+            :selected-trace-event="selectedTraceEvent"
             :selected-events="selectedEvent"
           />
         </v-tab>
 
-        <v-tab name="Trace View" :is-active="isViewingFlow" :reference="VIEW_FLOW" :ref="VIEW_FLOW">
+        <v-tab name="Trace View" :is-active="isViewingFlow" :tabName="VIEW_FLOW" :ref="VIEW_FLOW">
           <div class="trace-view">
             <v-trace-filter
               ref="traceFilter"
@@ -89,7 +90,7 @@
               @onNextArrow="nextTraceFilter"
             />
             <v-diagram-trace
-              ref="diagramFlow"
+              ref="viewFlow_diagram"
               :events="filteredAppMap.rootEvents()"
               :selected-events="selectedEvent"
               :selected-trace-event="selectedTraceEvent"
@@ -475,9 +476,11 @@ export default {
     '$store.getters.selectedTraceEvent': {
       handler(event) {
         if (event) {
-          this.setView(VIEW_FLOW);
+          if (this.currentView === VIEW_COMPONENT) {
+            this.setView(this.defaultView);
+          }
           this.$nextTick(() => {
-            this.$refs.diagramFlow.focusFocused();
+            this.$refs[[this.defaultView, 'diagram'].join('_')].focusFocused();
           });
         }
       },

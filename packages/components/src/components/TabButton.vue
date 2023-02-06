@@ -23,12 +23,12 @@ export default {
       required: true,
     },
     isActive: Boolean,
-    reference: String,
+    tabName: String,
   },
 
   methods: {
     clickTab() {
-      this.$root.$emit('clickTab', this.reference);
+      this.$root.$emit('clickTab', this.tabName);
     },
   },
 };
