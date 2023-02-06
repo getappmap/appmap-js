@@ -184,7 +184,7 @@
 </template>
 
 <script lang="ts">
-//@ts-nocheck
+// @ts-nocheck
 import Arrow from '@/assets/sequence-action-arrow.svg';
 import { ActionSpec } from './ActionSpec';
 import VCallLabel from './CallLabel.vue';
@@ -220,7 +220,7 @@ export default {
         `call-${this.actionSpec.callArrowDirection}`,
         ...this.actionSpec.diffClasses,
       ];
-      const ancestorIndexes = this.actionSpec.ancestorIndexes;
+      const { ancestorIndexes } = this.actionSpec;
       if (ancestorIndexes.find((ancestorIndex) => this.collapsedActionState[ancestorIndex]))
         result.push('call-collapsed');
       if (this.actionSpec.index === 0) result.push('first-action');
