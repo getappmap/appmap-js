@@ -138,7 +138,7 @@ $bg-fade: rgba(0, 0, 0, 0.8);
 .label {
   display: inline-block;
   font-size: 9pt;
-  margin-left: 1em;
+  margin-left: 0.5rem;
   white-space: nowrap;
   max-width: 160px;
   text-overflow: ellipsis;
@@ -152,20 +152,28 @@ $bg-fade: rgba(0, 0, 0, 0.8);
   .name {
     display: inline-block;
     background-color: $bg-fade;
+    padding: 2px 4px;
+    border-radius: 3px;
   }
 
   .name.static {
     text-decoration: underline;
+    padding: 2px 4px;
+    border-radius: 3px;
   }
 
   .name > .delete {
     text-decoration: line-through;
     color: $gray4;
+    padding: 2px 4px;
+    border-radius: 3px;
   }
 
   .elapsed {
     color: $sequence-elapsed-time-color;
     background-color: $bg-fade;
+    padding: 2px 4px;
+    border-radius: 3px;
   }
 }
 

@@ -281,7 +281,7 @@ export default {
 .self-call {
   margin-top: calc(var(--open-group-count) * 40px);
   padding-top: 15px;
-  padding-bottom: 3px;
+  padding-bottom: 4px;
 }
 
 .single-span {
