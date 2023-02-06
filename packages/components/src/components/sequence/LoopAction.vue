@@ -75,7 +75,7 @@ export default {
 <style scoped lang="scss">
 .loop {
   margin: 15px -20px 10px -20px;
-  border: 1px solid #6fddd6bb;
+  border: 2px solid $dark-purple; // #6fddd6bb;
   position: relative;
   display: inline-block;
   font-weight: bold;
@@ -83,7 +83,7 @@ export default {
 
   .label-container {
     white-space: nowrap;
-    background-color: #1b3046;
+    background-color: #4f3fa199; // #1b3046;
 
     div {
       display: inline-block;
@@ -92,9 +92,9 @@ export default {
     .label {
       padding: 5px;
       height: 28px;
-      background-color: #6fddd6;
+      background-color: $dark-purple; //#6fddd6;
       color: black;
-      border-bottom: 2px solid #6fddd6bb;
+      border-bottom: 2px solid $dark-purple; //#6fddd6bb;
       position: relative;
 
       .rhs-effect {
