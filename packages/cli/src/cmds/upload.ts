@@ -1,5 +1,5 @@
 import { CommandModule } from 'yargs';
-import { AppMap, loadConfiguration, Mapset, UploadAppMapResponse } from '@appland/client';
+import { App, AppMap, loadConfiguration, Mapset, UploadAppMapResponse } from '@appland/client';
 import { listAppMapFiles, verbose } from '../utils';
 import { readFile, stat } from 'fs/promises';
 import assert from 'assert';
@@ -86,6 +86,9 @@ export async function handler(argv: Arguments): Promise<void> {
       ].join('\n')
     );
   }
+
+  const exists = await new App(app).exists();
+  if (!exists) throw new ValidationError(`Application '${app}' does not exist.`);
 
   UI.progress(`Examining AppMaps...`);
   const [paths, metadata] = await collect(appmapDir, !!force);
