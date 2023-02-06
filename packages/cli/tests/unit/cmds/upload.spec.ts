@@ -6,14 +6,17 @@ import fs from 'node:fs/promises';
 import * as client from '@appland/client';
 import UI_ from '../../../src/cmds/userInteraction';
 import * as utils from '../../../src/utils';
-import { assert } from 'node:console';
 import { Stats } from 'node:fs';
+import * as appNameFromConfig from '../../../src/lib/appNameFromConfig';
+import * as locateAppMapDir from '../../../src/lib/locateAppMapDir';
+
+const AppMapDir = path.join(__dirname, '../', 'fixtures', 'stats');
 
 describe('upload command', () => {
   it('uploads appmaps', async () => {
     expect.assertions(3);
 
-    await handler({ appmapDir });
+    await handler({});
 
     expect(UI.success).toHaveBeenCalledWith(
       'Created mapset https://appmap.test/applications/69/mapsets/42 with 3 AppMaps'
@@ -24,7 +27,7 @@ describe('upload command', () => {
 
   it('allows overriding the app name', async () => {
     expect.assertions(1);
-    await handler({ appmapDir, app: 'test-app' });
+    await handler({ app: 'test-app' });
     expect(Mapset.create).toHaveBeenCalledWith('test-app', mapIds, expect.anything());
   });
 
@@ -33,7 +36,7 @@ describe('upload command', () => {
 
     jest.spyOn(fs, 'readFile').mockRejectedValueOnce(new Error('test error while reading'));
 
-    await expect(handler({ appmapDir })).rejects.toThrowError();
+    await expect(handler({})).rejects.toThrowError();
 
     expect(fs.readFile).toHaveBeenCalledTimes(1);
     expect(UI.success).not.toHaveBeenCalled();
@@ -46,7 +49,7 @@ describe('upload command', () => {
 
     AppMap.create.mockRejectedValue(new Error('test error while uploading'));
 
-    await expect(handler({ appmapDir })).rejects.toThrowError();
+    await expect(handler({})).rejects.toThrowError();
 
     expect(UI.success).not.toHaveBeenCalled();
     expect(AppMap.create).toHaveBeenCalledTimes(1);
@@ -58,7 +61,7 @@ describe('upload command', () => {
 
     jest.spyOn(utils, 'listAppMapFiles').mockResolvedValue();
 
-    await expect(handler({ appmapDir })).rejects.toThrowError();
+    await expect(handler({})).rejects.toThrowError();
 
     expect(UI.success).not.toHaveBeenCalled();
     expect(AppMap.create).not.toHaveBeenCalled();
@@ -73,7 +76,7 @@ describe('upload command', () => {
       return { ...stat, size: 128 * 1024 * 1024 } as Stats;
     });
 
-    await expect(handler({ appmapDir })).rejects.toThrowError();
+    await expect(handler({})).rejects.toThrowError();
 
     expect(UI.success).not.toHaveBeenCalled();
     expect(AppMap.create).not.toHaveBeenCalled();
@@ -88,7 +91,7 @@ describe('upload command', () => {
       return { ...stat, size: 128 * 1024 * 1024 } as Stats;
     });
 
-    await handler({ appmapDir, force: true });
+    await handler({ force: true });
 
     expect(UI.success).toHaveBeenCalled();
     expect(AppMap.create).toHaveBeenCalledTimes(3);
@@ -97,10 +100,16 @@ describe('upload command', () => {
 });
 
 const mapIds = ['foo', 'bar', 'baz'];
+let cwd: string | undefined;
 
 beforeEach(() => {
+  cwd = process.cwd();
+
   jest.restoreAllMocks();
   jest.resetAllMocks();
+
+  jest.spyOn(locateAppMapDir, 'locateAppMapDir').mockResolvedValue(AppMapDir);
+  jest.spyOn(appNameFromConfig, 'appNameFromConfig').mockResolvedValue('sample_app_6th_ed');
 
   const idsIter = mapIds[Symbol.iterator]();
   jest.mocked(client.loadConfiguration).mockReturnValue({ baseURL: 'https://appmap.test' });
@@ -113,8 +122,9 @@ beforeEach(() => {
     user_id: 79,
   });
 });
-
-const appmapDir = path.join(__dirname, '../', 'fixtures', 'stats');
+afterEach(() => {
+  if (cwd) process.chdir(cwd);
+});
 
 jest.mock('../../../src/telemetry');
 jest.mock('@appland/client');

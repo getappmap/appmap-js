@@ -9,10 +9,10 @@ import { Stats } from 'fs';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../lib/locateAppMapDir';
 import { warn } from 'console';
-import { load } from 'js-yaml';
+import { appNameFromConfig } from '../lib/appNameFromConfig';
 
 interface Arguments {
-  verbose: boolean;
+  verbose?: boolean;
   directory?: string;
   appmapDir?: string;
   app?: string;
@@ -76,10 +76,7 @@ export async function handler(argv: Arguments): Promise<void> {
   const appmapDir = await locateAppMapDir(appmapDirOpt);
 
   let app = appOpt;
-  if (!app) {
-    const appMapConfigData = load((await readFile('appmap.yml')).toString()) as any;
-    app = appMapConfigData['name'];
-  }
+  if (!app) app = await appNameFromConfig();
 
   if (!app) {
     throw new ValidationError(
@@ -93,7 +90,7 @@ export async function handler(argv: Arguments): Promise<void> {
   UI.progress(`Examining AppMaps...`);
   const [paths, metadata] = await collect(appmapDir, !!force);
 
-  if (paths.length === 0) throw new Error(`No AppMaps found in ${appmapDir}`);
+  if (paths.length === 0) throw new Error(`No AppMaps found in directory '${appmapDir}'`);
 
   let total = paths.length;
   const { baseURL } = loadConfiguration();
