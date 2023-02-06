@@ -4,11 +4,10 @@ module.exports = {
     es2020: true,
     browser: true,
   },
-  extends: ['plugin:vue/essential', '@vue/airbnb', 'prettier'],
+  extends: ['plugin:vue/essential', '@vue/eslint-config-typescript', 'prettier'],
   plugins: ['prettier'],
   parserOptions: {
-    parser: 'babel-eslint',
-    ecmaVersion: 11,
+    parser: '@typescript-eslint/parser',
   },
   rules: {
     'no-param-reassign': ['error', { props: false }],
