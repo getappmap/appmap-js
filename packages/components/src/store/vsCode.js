@@ -62,9 +62,8 @@ export function buildStore() {
       // The code object can be a package, class, function, SQL, etc, or it can
       // be a specific event.
       [SELECT_CODE_OBJECT](state, selection) {
-        if (!Array.isArray(selection)) selection = [selection];
-
-        state.selectionStack.push(...selection);
+        let selectionStack = Array.isArray(selection) ? selection : [selection];
+        state.selectionStack.push(...selectionStack);
         state.selectedLabel = null;
         state.selectedTraceEvent = null;
       },

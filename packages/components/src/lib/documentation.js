@@ -5,7 +5,6 @@ const documentationUrls = {
   javascript: 'https://appmap.io/docs/reference/appmap-agent-js.html',
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export function getAgentDocumentationUrl(language) {
   if (!language || typeof language !== 'string') return undefined;
 
