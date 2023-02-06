@@ -96,9 +96,14 @@ $sequence-group-border-width: 2px;
 $sequence-group-border-color: magenta;
 
 // Diff background
-$sequence-diff-insert-bg-color: rgba(56, 139, 253, 0.35);
-$sequence-diff-delete-bg-color: rgba(212, 118, 22, 0.35);
-$sequence-diff-change-bg-color: rgba(88, 166, 255, 0.35);
+$sequence-diff-insert-bg-color: rgba(
+  32,
+  200,
+  63,
+  0.25
+); // (v2)rgba(32, 175, 59, 0.2); rgba(56, 139, 253, 0.35);
+$sequence-diff-delete-bg-color: rgba(246, 47, 47, 0.32); //rgba(212, 118, 22, 0.35);
+$sequence-diff-change-bg-color: rgba(71, 122, 184, 0.4); // rgba(88, 166, 255, 0.35);
 
 // End sequence diagram
 
