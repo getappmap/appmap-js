@@ -56,7 +56,7 @@ export default {
     loopClasses(): string[] {
       const result = ['loop'];
 
-      if (this.actionSpec.isCollapsed) result.push('loop-collapsed');
+      if (this.actionSpec.isCollapsed(this.collapsedActionState)) result.push('loop-collapsed');
 
       return result;
     },
