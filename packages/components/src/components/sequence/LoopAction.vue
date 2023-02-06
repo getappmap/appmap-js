@@ -75,7 +75,7 @@ export default {
 <style scoped lang="scss">
 .loop {
   margin: 15px -20px 10px -20px;
-  border: 1px solid magenta;
+  border: 1px solid #6fddd6bb;
   position: relative;
   display: inline-block;
   font-weight: bold;
@@ -94,7 +94,7 @@ export default {
       height: 28px;
       background-color: #6fddd6;
       color: black;
-      border-bottom: 2px solid magenta;
+      border-bottom: 2px solid #6fddd6bb;
       position: relative;
 
       .rhs-effect {
