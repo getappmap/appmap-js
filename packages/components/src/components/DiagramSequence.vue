@@ -13,17 +13,13 @@
       <template v-if="action.nodeType === 'call'">
         <VCallAction
           :actionSpec="action"
-          :selected-actions="selectedActions"
           :collapsed-actions="collapsedActions"
+          :selected-events="selectedEvents"
           :selected-trace-event="selectedTraceEvent"
         />
       </template>
       <template v-if="action.nodeType === 'return'">
-        <VReturnAction
-          :actionSpec="action"
-          :selected-actions="selectedActions"
-          :collapsed-actions="collapsedActions"
-        />
+        <VReturnAction :actionSpec="action" :collapsed-actions="collapsedActions" />
       </template>
     </template>
     <template v-for="action in diagramSpec.actions">
@@ -101,19 +97,6 @@ export default {
     },
     actors() {
       return this.diagram.actors;
-    },
-    selectedActions() {
-      if (!this.selectedEvents || this.selectedEvents.length === 0) return;
-
-      const selectedEventIds = (this.selectedEvents as Event[]).map((event) => event.id);
-      const result: Action[] = [];
-      const collectActions = (action: Action) => {
-        if ((action.eventIds || []).find((id) => selectedEventIds.indexOf(id) !== -1))
-          result.push(action);
-        action.children.forEach(collectActions);
-      };
-      this.diagram.rootActions.forEach((action) => collectActions(action));
-      return result;
     },
     selectedActor() {
       if (!this.$store) return;

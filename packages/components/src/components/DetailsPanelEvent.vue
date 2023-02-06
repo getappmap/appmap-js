@@ -7,7 +7,10 @@
       :object-id="object.id.toString()"
     >
       <template v-slot:links>
-        <v-details-button v-if="shouldDisplayViewEvent" @click.native="viewEvent">
+        <v-details-button v-if="shouldDisplayViewInSequence" @click.native="viewEventInSequence">
+          Show in Sequence
+        </v-details-button>
+        <v-details-button v-if="shouldDisplayViewInTrace" @click.native="viewEventInTrace">
           Show in Trace
         </v-details-button>
       </template>
@@ -105,7 +108,7 @@ import VDetailsButton from '@/components/DetailsButton.vue';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 import VSqlCode from '@/components/SqlCode.vue';
-import { SET_VIEW, VIEW_FLOW } from '@/store/vsCode';
+import { SET_VIEW, VIEW_FLOW, VIEW_SEQUENCE } from '@/store/vsCode';
 import toListItem from '@/lib/finding';
 
 export default {
@@ -187,7 +190,11 @@ export default {
       return Boolean(this.object.returnValue);
     },
 
-    shouldDisplayViewEvent() {
+    shouldDisplayViewInSequence() {
+      return this.$store.state.currentView !== VIEW_SEQUENCE;
+    },
+
+    shouldDisplayViewInTrace() {
       return this.$store.state.currentView !== VIEW_FLOW;
     },
 
@@ -201,7 +208,10 @@ export default {
   },
 
   methods: {
-    viewEvent() {
+    viewEventInSequence() {
+      this.$store.commit(SET_VIEW, VIEW_SEQUENCE);
+    },
+    viewEventInTrace() {
       this.$store.commit(SET_VIEW, VIEW_FLOW);
     },
   },

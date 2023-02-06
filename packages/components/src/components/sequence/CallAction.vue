@@ -210,6 +210,9 @@ export default {
       type: Object,
       default: null,
     },
+    selectedEvents: {
+      type: Array,
+    },
   },
 
   data() {
@@ -235,6 +238,16 @@ export default {
         this.actionSpec.action.eventIds.includes(this.selectedTraceEvent.id)
       )
         result.push('focused');
+
+      if (
+        this.selectedEvents &&
+        this.selectedEvents.find((event) => this.actionSpec.action.eventIds.includes(event.id))
+      ) {
+        result.push('selected');
+        this.$el
+          .querySelector('.self-call, .call-line-segment')
+          .scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
 
       return result;
     },
@@ -274,6 +287,13 @@ export default {
   .self-call {
     outline: 4px solid transparent;
     animation: node-focused 4s ease-out 0.5s;
+  }
+}
+
+.call.selected {
+  .call-line-segment,
+  .self-call {
+    outline: 4px solid $hotpink;
   }
 }
 
