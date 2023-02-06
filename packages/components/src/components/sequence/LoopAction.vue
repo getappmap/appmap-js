@@ -7,12 +7,7 @@
     }"
   >
     <div class="label-container">
-      <div class="label">
-        Loop
-        <div class="rhs-effect">
-          <SequenceGroupLabelRHS />
-        </div>
-      </div>
+      <div class="label">Loop</div>
       <div class="description">
         [
         <div class="count">{{ actionSpec.action.count }} times</div>
@@ -26,12 +21,9 @@
 <script lang="ts">
 // @ts-nocheck
 import { ActionSpec } from './ActionSpec';
-import SequenceGroupLabelRHS from '@/assets/sequence-group-label-rhs.svg';
 
 export default {
   name: 'v-sequence-loop',
-
-  components: { SequenceGroupLabelRHS },
 
   props: {
     actionSpec: {
@@ -81,10 +73,23 @@ export default {
   display: inline-block;
   font-weight: bold;
   pointer-events: none;
+  border-radius: 0.4rem;
 
   .label-container {
     white-space: nowrap;
-    background-color: #4f3fa199; // #1b3046;
+    //background-color: #4f3fa199; // #1b3046;
+    // background: rgb(79, 63, 161);
+    // background: linear-gradient(
+    //   80deg,
+    //   rgba(79, 63, 161, 1) 17%,
+    //   rgba(79, 63, 161, 0.2679446778711485) 100%
+    // );
+    background: rgb(79, 63, 161);
+    background: linear-gradient(
+      80deg,
+      rgba(79, 63, 161, 1) 73%,
+      rgba(79, 63, 161, 0.5144432773109244) 100%
+    );
 
     div {
       display: inline-block;
@@ -94,7 +99,7 @@ export default {
       padding: 5px;
       height: 28px;
       background-color: $dark-purple; //#6fddd6;
-      color: black;
+      color: $white;
       border-bottom: 2px solid $dark-purple; //#6fddd6bb;
       position: relative;
 
@@ -107,7 +112,7 @@ export default {
 
     .description {
       font-size: 9pt;
-      margin-left: 20px;
+      font-weight: 400;
 
       .elapsed {
         color: $sequence-elapsed-time-color;
