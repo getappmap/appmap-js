@@ -225,9 +225,9 @@ export default {
         `call-${this.actionSpec.callArrowDirection}`,
         ...this.actionSpec.diffClasses,
       ];
-      const { ancestorIndexes } = this.actionSpec;
-      if (ancestorIndexes.find((ancestorIndex) => this.collapsedActionState[ancestorIndex]))
-        result.push('call-collapsed');
+
+      if (this.actionSpec.isCollapsed(this.collapsedActionState)) result.push('call-collapsed');
+
       if (this.actionSpec.index === 0) result.push('first-action');
 
       if (

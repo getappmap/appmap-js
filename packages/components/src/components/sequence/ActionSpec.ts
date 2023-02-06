@@ -166,4 +166,11 @@ export class ActionSpec {
   get hasResult(): boolean {
     return nodeResult(this.action as Action) !== undefined;
   }
+
+  isCollapsed(collapsedActionState: boolean[]): boolean {
+    return (
+      this.ancestorIndexes.find((ancestorIndex) => collapsedActionState[ancestorIndex]) !==
+      undefined
+    );
+  }
 }
