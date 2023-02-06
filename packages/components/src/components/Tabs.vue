@@ -6,7 +6,7 @@
         :key="tab.name"
         :label="tab.name"
         :is-active="activeTab === tab"
-        :reference="tab.reference"
+        :tabName="tab.tabName"
         @click.native="activateTab(tab)"
       >
       </v-tab-button>
@@ -68,7 +68,7 @@ export default {
       this.tabs = this.$children.filter((c) => c.$options.name === 'v-tab');
 
       let tab;
-      if (this.initialTab) tab = this.tabs.find((t) => t.reference === this.initialTab);
+      if (this.initialTab) tab = this.tabs.find((t) => t.tabName === this.initialTab);
       else tab = this.tabs[0];
 
       if (tab) this.activateTab(tab);

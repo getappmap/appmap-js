@@ -58,6 +58,9 @@ export function buildStore() {
         });
       },
 
+      // Show information about a code object in the sidebar.
+      // The code object can be a package, class, function, SQL, etc, or it can
+      // be a specific event.
       [SELECT_CODE_OBJECT](state, selection) {
         if (!Array.isArray(selection)) selection = [selection];
 
@@ -86,6 +89,7 @@ export function buildStore() {
         state.currentView = view;
       },
 
+      // Show the selected event in the current diagram (not the sidebar).
       [SET_SELECTED_TRACE_EVENT](state, event) {
         state.selectedTraceEvent = event;
       },
