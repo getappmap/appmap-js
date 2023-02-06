@@ -208,15 +208,6 @@ export default {
   border-bottom: $sequence-call-line-width dotted $sequence-call-line-color;
 }
 
-// .return.diff {
-//   .return-line-segment {
-//     border-bottom: $sequence-call-line-width dotted $gray4;
-//     .arrow {
-//       fill: $gray4;
-//     }
-//   }
-// }
-
 .return-line-segment,
 .self-return {
   margin-bottom: calc(var(--close-group-count) * 40px);
@@ -278,6 +269,33 @@ export default {
     right: 0px;
     position: absolute;
     bottom: -7px;
+  }
+}
+
+.return.diff {
+  &.diff-delete {
+    .return-line-segment {
+      border-bottom: $sequence-call-line-width dotted rgba(185, 25, 33, 1);
+      .arrow {
+        fill: rgba(185, 25, 33, 1);
+      }
+    }
+  }
+  &.diff-insert {
+    .return-line-segment {
+      border-bottom: $sequence-call-line-width dotted rgba(10, 110, 52, 1);
+      .arrow {
+        fill: rgba(10, 110, 52, 1);
+      }
+    }
+  }
+  &.diff-change {
+    .return-line-segment {
+      border-bottom: $sequence-call-line-width dotted rgba(45, 71, 103, 1);
+      .arrow {
+        fill: rgba(45, 71, 103, 1);
+      }
+    }
   }
 }
 </style>

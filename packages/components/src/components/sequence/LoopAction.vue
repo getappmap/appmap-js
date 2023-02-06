@@ -68,7 +68,7 @@ export default {
 <style scoped lang="scss">
 .loop {
   margin: 15px -20px 10px -20px;
-  border: 2px solid $dark-purple; // #6fddd6bb;
+  border: 2px solid #d71996;
   position: relative;
   display: inline-block;
   font-weight: bold;
@@ -77,19 +77,7 @@ export default {
 
   .label-container {
     white-space: nowrap;
-    //background-color: #4f3fa199; // #1b3046;
-    // background: rgb(79, 63, 161);
-    // background: linear-gradient(
-    //   80deg,
-    //   rgba(79, 63, 161, 1) 17%,
-    //   rgba(79, 63, 161, 0.2679446778711485) 100%
-    // );
-    background: rgb(79, 63, 161);
-    background: linear-gradient(
-      80deg,
-      rgba(79, 63, 161, 1) 73%,
-      rgba(79, 63, 161, 0.5144432773109244) 100%
-    );
+    background-color: #d71996;
 
     div {
       display: inline-block;
@@ -98,9 +86,9 @@ export default {
     .label {
       padding: 5px;
       height: 28px;
-      background-color: $dark-purple; //#6fddd6;
+      background-color: #d71996;
       color: $white;
-      border-bottom: 2px solid $dark-purple; //#6fddd6bb;
+      border-bottom: 2px solid #d71996;
       position: relative;
 
       .rhs-effect {
