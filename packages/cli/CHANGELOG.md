@@ -1,3 +1,12 @@
+# [@appland/appmap-v3.65.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.64.3...@appland/appmap-v3.65.0) (2023-02-06)
+
+
+### Features
+
+* Standardize command options ([e8dd5fa](https://github.com/getappmap/appmap-js/commit/e8dd5fa523e32799f4e3566168c53317ffedc9f8))
+* Upload command ([7f83aa5](https://github.com/getappmap/appmap-js/commit/7f83aa52890c86c604acb1233ca1b8b21dd74b69))
+* Verify that the app exists before upload ([1ddf241](https://github.com/getappmap/appmap-js/commit/1ddf2414020446d692a44751154b60631b2f9356))
+
 # [@appland/appmap-v3.64.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.64.2...@appland/appmap-v3.64.3) (2023-02-03)
 
 
