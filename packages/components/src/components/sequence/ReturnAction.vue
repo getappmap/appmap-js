@@ -208,14 +208,14 @@ export default {
   border-bottom: $sequence-call-line-width dotted $sequence-call-line-color;
 }
 
-.return.diff {
-  .return-line-segment {
-    border-bottom: $sequence-call-line-width dotted $gray4;
-    .arrow {
-      fill: $gray4;
-    }
-  }
-}
+// .return.diff {
+//   .return-line-segment {
+//     border-bottom: $sequence-call-line-width dotted $gray4;
+//     .arrow {
+//       fill: $gray4;
+//     }
+//   }
+// }
 
 .return-line-segment,
 .self-return {
