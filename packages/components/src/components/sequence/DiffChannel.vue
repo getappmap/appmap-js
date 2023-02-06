@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-//@ts-nocheck
+// @ts-nocheck
 import { DiffMode } from '@appland/sequence-diagram';
 import { ActionSpec } from './ActionSpec';
 
@@ -41,8 +41,8 @@ export default {
     },
     diffRowLabel(): string {
       if (this.actionSpec.action.diffMode === DiffMode.Insert) return '+';
-      else if (this.actionSpec.action.diffMode === DiffMode.Delete) return '-';
-      else if (this.actionSpec.action.diffMode === DiffMode.Change) return '+/-';
+      if (this.actionSpec.action.diffMode === DiffMode.Delete) return '-';
+      if (this.actionSpec.action.diffMode === DiffMode.Change) return '+/-';
 
       return '';
     },
