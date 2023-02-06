@@ -992,11 +992,40 @@ appmap_dir: tmp/appmap
         );
       });
 
-      it('yarn getYarnSubprojects for yarn 1', async () => {
+      it('yarn getYarnSubprojects for yarn 1, error', async () => {
         expect.assertions(1);
         const projectFixture = path.join(fixtureDir, 'javascript', 'yarn_with_subprojects');
         const installer = new YarnInstaller(projectFixture);
-        sinon.stub(installer, 'isYarnVersionOne').resolves(true);
+        jest.spyOn(installer, 'isYarnVersionOne').mockResolvedValue(true);
+        jest.spyOn(commandRunner, 'run').mockResolvedValueOnce({
+          stdout: `yarn workspaces v1.22.19
+error Cannot find the root of your workspace - are you sure you're currently in a workspace?
+info Visit https://yarnpkg.com/en/docs/cli/workspaces for documentation about this command.`,
+          stderr: '',
+        });
+        expect(await getYarnSubprojects(projectFixture, [installer])).toStrictEqual([]);
+      });
+
+      it('yarn getYarnSubprojects for yarn 1, some workspaces', async () => {
+        expect.assertions(1);
+        const projectFixture = path.join(fixtureDir, 'javascript', 'yarn_with_subprojects');
+        const installer = new YarnInstaller(projectFixture);
+        jest.spyOn(installer, 'isYarnVersionOne').mockResolvedValue(true);
+        jest.spyOn(commandRunner, 'run').mockResolvedValueOnce({
+          stdout: `{
+            "subproject_one": {
+              "location": "packages/subproject_one",
+              "workspaceDependencies": [],
+              "mismatchedWorkspaceDependencies": []
+            },
+            "subproject_two": {
+              "location": "packages/subproject_two",
+              "workspaceDependencies": [],
+              "mismatchedWorkspaceDependencies": []
+            }
+          }`,
+          stderr: '',
+        });
         expect(await getYarnSubprojects(projectFixture, [installer])).toStrictEqual([
           // it doesn't detect the root workspace
           {
@@ -1034,6 +1063,7 @@ appmap_dir: tmp/appmap
         const installer = new YarnInstaller(projectFixture);
         sinon.stub(installer, 'isYarnVersionOne').resolves(false);
         expect(await getYarnSubprojects(projectFixture, [installer])).toStrictEqual([
+          // it does detect the root workspace
           {
             name: 'yarn_with_subprojects',
             path: projectFixture,

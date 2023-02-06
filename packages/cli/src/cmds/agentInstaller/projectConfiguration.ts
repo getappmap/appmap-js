@@ -1,9 +1,8 @@
+import assert from 'assert';
 import chalk from 'chalk';
-import { promises as fs, constants as fsConstants, lstatSync } from 'fs';
+import { promises as fs, constants as fsConstants } from 'fs';
 
 import { basename, join, resolve } from 'path';
-import { glob } from 'glob';
-import packages from '../../fingerprint/canonicalize/packages';
 import { AbortError, InvalidPathError } from '../errors';
 import UI from '../userInteraction';
 import AgentInstaller from './agentInstaller';
@@ -93,52 +92,59 @@ async function resolveSelectedInstallers(
   }
 }
 
-// With yarn 1 we get the following error.  Try to get the packages manually.
-// $ yarn run workspaces list --json
-// yarn run v1.22.19
-// error Command "workspaces" not found.
+function yarn1Workspaces(info: unknown): [string, string][] {
+  assert(info && typeof info === 'object');
+  return Object.entries(info).map(([name, data]: [string, unknown]) => {
+    assert(data && typeof data === 'object');
+    assert('location' in data);
+    assert(typeof data['location'] === 'string');
+    return [name, data['location']];
+  });
+}
+// With yarn 1:
+// - if there's no "workspaces" key in package.json we get the following error:
+//   $ yarn workspaces info --json
+//   yarn workspaces v1.22.19
+//   error Cannot find the root of your workspace - are you sure you're currently in a workspace?
+//   info Visit https://yarnpkg.com/en/docs/cli/workspaces for documentation about this command.
+// - if there is a "workspaces" key in package.json the output contains text
+//   outside of json. Remove it:
+//   $ yarn workspaces info --json
+//   yarn workspaces v1.22.19
+//   {
+//    "workspace-a": {
+//      "location": "workspace-a",
+//      "workspaceDependencies": [],
+//      "mismatchedWorkspaceDependencies": []
+//    }
+//   }
+//   Done in 0.02s.
 async function getYarnSubprojectsVersionOne(
   dir: string,
   installer: YarnInstaller,
   subprojects: ProjectConfiguration[]
 ) {
-  const packageJsonFilename = join(installer.path, 'package.json');
-  try {
-    const data = await fs.readFile(packageJsonFilename, 'utf-8');
-    const packageJson = JSON.parse(data);
-    if ('workspaces' in packageJson) {
-      const workspaces = packageJson['workspaces'];
-      // process as glob because it could be something like
-      // workspaces: [ 'packages/*' ]
-      for (const workspace of workspaces) {
-        const matches = glob.sync(workspace, {
-          matchBase: true,
-          cwd: installer.path,
-          ignore: ['**/node_modules/**', '**/.git/**'],
-          strict: false,
-        });
-        for (const yarnPackage of matches) {
-          // packages must be directories; don't break on leftover files
-          const isDir = lstatSync(join(installer.path, yarnPackage)).isDirectory();
-          if (isDir) {
-            const subProjectPath = join(dir, yarnPackage);
-            const subProjectName = basename(yarnPackage);
-            subprojects.push({
-              name: subProjectName,
-              path: subProjectPath,
-              // must set the new path in the installer
-              availableInstallers: [new YarnInstaller(subProjectPath)],
-            } as ProjectConfiguration);
-          }
-        }
-      }
-    }
-  } catch (err) {
-    if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
-      // there's no package.json file. don't crash
-    } else {
-      throw err;
-    }
+  const cmd = new CommandStruct('yarn', ['workspaces', 'info', '--json'], installer.path);
+  const output = await run(cmd);
+
+  // Remove any text before and after JSON
+  let lines = output.stdout.split('\n');
+  let outputClean = '';
+  for (const line of lines) {
+    if (line.startsWith('error')) return;
+    if (!(line.startsWith('yarn workspaces v') || line.startsWith('Done in '))) outputClean += line;
+  }
+
+  for (const [name, location] of yarn1Workspaces(JSON.parse(outputClean))) {
+    const subProjectPath = join(dir, location);
+    const subProjectName = basename(name);
+    const projectConfiguration: ProjectConfiguration = {
+      name: subProjectName,
+      path: subProjectPath,
+      // must set the new path in the installer
+      availableInstallers: [new YarnInstaller(subProjectPath)],
+    };
+    subprojects.push(projectConfiguration);
   }
 }
 
@@ -155,12 +161,13 @@ async function getYarnSubprojectsVersionAboveOne(
       const yarnWorkspace = JSON.parse(line);
       const subProjectPath = join(dir, yarnWorkspace['location']);
       const subProjectName = basename(yarnWorkspace['name']);
-      subprojects.push({
+      const projectConfiguration: ProjectConfiguration = {
         name: subProjectName,
         path: subProjectPath,
         // must set the new path in the installer
         availableInstallers: [new YarnInstaller(subProjectPath)],
-      } as ProjectConfiguration);
+      };
+      subprojects.push(projectConfiguration);
     }
   }
 }
@@ -173,10 +180,11 @@ export async function getYarnSubprojects(
 
   for (const installer of availableInstallers) {
     if (installer.name === 'yarn') {
-      if (await (installer as YarnInstaller).isYarnVersionOne()) {
-        await getYarnSubprojectsVersionOne(dir, installer as YarnInstaller, subprojects);
+      const yarnInstaller = installer as YarnInstaller;
+      if (await yarnInstaller.isYarnVersionOne()) {
+        await getYarnSubprojectsVersionOne(dir, yarnInstaller, subprojects);
       } else {
-        await getYarnSubprojectsVersionAboveOne(dir, installer as YarnInstaller, subprojects);
+        await getYarnSubprojectsVersionAboveOne(dir, yarnInstaller, subprojects);
       }
     }
   }

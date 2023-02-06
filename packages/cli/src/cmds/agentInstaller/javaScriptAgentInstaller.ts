@@ -134,6 +134,6 @@ export class YarnInstaller extends JavaScriptInstaller {
       throw new UserConfigError(err as string);
     }
 
-    return new Promise(resolve => resolve(isVersionOne));
+    return isVersionOne;
   }
 }
