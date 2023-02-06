@@ -151,7 +151,6 @@ $bg-fade: rgba(0, 0, 0, 0.8);
 
   .name {
     display: inline-block;
-    background-color: $bg-fade;
   }
 
   .name.static {
@@ -165,7 +164,6 @@ $bg-fade: rgba(0, 0, 0, 0.8);
 
   .elapsed {
     color: $sequence-elapsed-time-color;
-    background-color: $bg-fade;
   }
 }
 
