@@ -63,26 +63,37 @@ export default {
   height: 100%;
   width: 29px;
   top: 0;
-  border-right: 1px solid $gray4;
+  border-right: 1px solid lighten($gray4, 20);
   text-align: center;
-  padding-top: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   .diff-channel-label {
     font-size: 9pt;
-    color: $gray4;
+    color: lighten($gray4, 20);
   }
 }
 
 .diff-insert .diff-channel {
   background-color: $sequence-diff-insert-bg-color;
+  .diff-channel-marker {
+    background-color: rgba(10, 110, 52, 0.5);
+  }
 }
 
 .diff-change .diff-channel {
   background-color: $sequence-diff-change-bg-color;
+  .diff-channel-marker {
+    background-color: rgba(45, 71, 103, 0.5);
+  }
 }
 
 .diff-delete .diff-channel {
   background-color: $sequence-diff-delete-bg-color;
+  .diff-channel-marker {
+    background-color: rgba(185, 25, 33, 0.5);
+  }
 }
 </style>
 }
