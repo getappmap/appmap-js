@@ -50,7 +50,7 @@ export default {
 .tab-content.tab-content-scroll {
   overflow: auto;
   padding-bottom: 2rem;
-  height: 96.6%;
+  height: calc(100% - 44px);
   &::-webkit-scrollbar:horizontal {
     height: 8px;
   }
