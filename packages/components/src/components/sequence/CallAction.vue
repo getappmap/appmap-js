@@ -318,6 +318,15 @@ export default {
   border-bottom: $sequence-call-line-width solid $sequence-call-line-color;
 }
 
+.call.diff {
+  .call-line-segment {
+    border-bottom: $sequence-call-line-width solid $gray4;
+    .arrow {
+      fill: $gray4;
+    }
+  }
+}
+
 .first-action {
   .call-line-segment,
   .diff-channel {

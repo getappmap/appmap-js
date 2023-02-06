@@ -1,3 +1,4 @@
+{
 <template>
   <div
     class="diff-channel"
@@ -84,3 +85,4 @@ export default {
   background-color: $sequence-diff-delete-bg-color;
 }
 </style>
+}
