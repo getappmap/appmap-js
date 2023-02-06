@@ -84,7 +84,7 @@ export default {
 
   .label-container {
     white-space: nowrap;
-    background-color: rgb(50, 50, 50);
+    background-color: #1b3046;
 
     div {
       display: inline-block;
