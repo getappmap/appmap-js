@@ -11,11 +11,17 @@ import { ActionSpec } from './ActionSpec';
 
 type ActionId = string;
 
+let UniqueId = 1;
+
 export default class DiagramSpec {
+  uniqueId: number;
+
   public actions: ActionSpec[] = [];
   public parentIndex = new Map<number, number>();
 
   constructor(public diagram: Diagram) {
+    UniqueId += 1;
+    this.uniqueId = UniqueId;
     this.actions = [];
     const lifecycleDepth: Map<ActionId, number> = new Map();
     const collectActions = (action: Action, parent?: ActionSpec): void => {

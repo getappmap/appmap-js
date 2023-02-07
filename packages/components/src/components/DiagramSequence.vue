@@ -1,8 +1,9 @@
 <template>
-  <div class="sequence-diagram" id="sequence-diagram-ui" :key="renderKey">
+  <div class="sequence-diagram" id="sequence-diagram-ui">
     <template v-for="(actor, index) in actors">
       <VActor
         :actor="actor"
+        :key="actorKey(actor)"
         :row="1"
         :index="index"
         :height="diagramSpec.actions.length"
@@ -13,18 +14,26 @@
       <template v-if="action.nodeType === 'call'">
         <VCallAction
           :actionSpec="action"
+          :key="actionKey(action)"
           :collapsed-actions="collapsedActions"
           :selected-events="selectedEvents"
           :selected-trace-event="selectedTraceEvent"
         />
       </template>
       <template v-if="action.nodeType === 'return'">
-        <VReturnAction :actionSpec="action" :collapsed-actions="collapsedActions" />
+        <VReturnAction
+          :actionSpec="action"
+          :collapsed-actions="collapsedActions"
+          :key="actionKey(action)"
+        />
       </template>
     </template>
     <template v-for="action in diagramSpec.actions">
       <template v-if="action.nodeType === 'loop'"
-        ><VLoopAction :actionSpec="action" :collapsed-actions="collapsedActions"
+        ><VLoopAction
+          :actionSpec="action"
+          :collapsed-actions="collapsedActions"
+          :key="actionKey(action)"
       /></template>
     </template>
   </div>
@@ -32,20 +41,15 @@
 
 <script lang="ts">
 // @ts-nocheck
-import { AppMap, CodeObject, Event } from '@appland/models';
-import {
-  buildDiagram,
-  unparseDiagram,
-  Action,
-  Diagram,
-  Specification,
-} from '@appland/sequence-diagram';
+import { AppMap, CodeObject } from '@appland/models';
+import { buildDiagram, unparseDiagram, Diagram, Specification } from '@appland/sequence-diagram';
 import VLoopAction from '@/components/sequence/LoopAction.vue';
 import VCallAction from '@/components/sequence/CallAction.vue';
 import VReturnAction from '@/components/sequence/ReturnAction.vue';
 import VActor from '@/components/sequence/Actor.vue';
 import DiagramSpec from './sequence/DiagramSpec';
 import assert from 'assert';
+import { ActionSpec } from './sequence/ActionSpec';
 
 export default {
   name: 'v-diagram-sequence',
@@ -68,15 +72,8 @@ export default {
     },
   },
 
-  data() {
-    return {
-      renderKey: 0,
-    };
-  },
-
   computed: {
     diagram() {
-      this.renderKey += 1;
       let result: Diagram | undefined;
       if (this.serializedDiagram) {
         result = unparseDiagram(this.serializedDiagram as Diagram);
@@ -90,7 +87,7 @@ export default {
     },
     diagramSpec(): DiagramSpec {
       const result = new DiagramSpec(this.diagram);
-      this.collapsedActions = [];
+      this.collapsedActions = []; // eslint-disable-line vue/no-side-effects-in-computed-properties
       for (let index = 0; index < result.actions.length; index++)
         this.$set(this.collapsedActions, index, false);
       return result;
@@ -113,6 +110,12 @@ export default {
   },
 
   methods: {
+    actorKey(actor: Actor): string {
+      return ['actor', this.diagramSpec.uniqueId, actor.id].join(':');
+    },
+    actionKey(action: ActionSpec): string {
+      return ['action', this.diagramSpec.uniqueId, action.id].join(':');
+    },
     focusFocused() {
       setTimeout(() => {
         const element = this.$el.querySelector(
