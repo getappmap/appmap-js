@@ -46,6 +46,13 @@ export class ActionSpec {
     this.children = [];
   }
 
+  get id(): string {
+    const [caller, callee] = actionActors(this.action);
+    return [caller, this.action.nodeType, this.action.subtreeDigest, callee]
+      .filter(Boolean)
+      .join(':');
+  }
+
   get diagram(): Diagram {
     return this.diagramSpec.diagram;
   }
