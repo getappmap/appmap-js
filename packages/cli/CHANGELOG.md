@@ -1,3 +1,12 @@
+# [@appland/appmap-v3.65.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.65.0...@appland/appmap-v3.65.1) (2023-02-07)
+
+
+### Bug Fixes
+
+* add @appland/client dependency ([9bd2b6f](https://github.com/getappmap/appmap-js/commit/9bd2b6f5bec5a99a1f3e1416a6a1c28e7644d805))
+* Detect yarn packages as sub-projects ([17871e3](https://github.com/getappmap/appmap-js/commit/17871e3f3e9f693391b179d209383d77fdc0ba21))
+* Improve detection for yarn 1. ([013004a](https://github.com/getappmap/appmap-js/commit/013004a03b59c876bc8b51f01828183e0338425e))
+
 # [@appland/appmap-v3.65.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.64.3...@appland/appmap-v3.65.0) (2023-02-06)
 
 
