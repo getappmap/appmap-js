@@ -114,7 +114,7 @@ export default {
       return ['actor', this.diagramSpec.uniqueId, actor.id].join(':');
     },
     actionKey(action: ActionSpec): string {
-      return ['action', this.diagramSpec.uniqueId, action.id].join(':');
+      return ['action', this.diagramSpec.uniqueId, action.index].join(':');
     },
     focusFocused() {
       setTimeout(() => {
