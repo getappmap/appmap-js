@@ -1,50 +1,56 @@
-import { AppMap, buildAppMap, CodeObject, Event } from '@appland/models';
+import buildAppMap from './appMapBuilder';
+import AppMap from './appMap';
+import CodeObject from './codeObject';
 
-type DeclutterProperty = {
-  on: boolean;
-  default: boolean;
-};
+class DeclutterProperty {
+  on = true;
+  default = true;
 
-type DeclutterTimeProperty = DeclutterProperty & {
-  time: number;
-};
+  constructor(on = true, defaultValue = true) {
+    this.on = on;
+    this.default = defaultValue;
+  }
+}
 
-type DeclutterNamesProperty = DeclutterProperty & {
-  names: [];
-};
+class DeclutterTimeProperty extends DeclutterProperty {
+  time = 100;
 
-export class Declutter {
-  public limitRootEvents: DeclutterProperty = {
-    on: true,
-    default: true,
-  };
-  public hideMediaRequests: DeclutterProperty = {
-    on: true,
-    default: true,
-  };
-  public hideUnlabeled: DeclutterProperty = {
-    on: false,
-    default: false,
-  };
-  public hideElapsedTimeUnder: DeclutterTimeProperty = {
-    on: false,
-    default: false,
-    time: 100,
-  };
-  public hideName: DeclutterNamesProperty = {
-    on: false,
-    default: false,
-    names: [],
-  };
+  constructor(on = true, defaultValue = true, time = 100) {
+    super(on, defaultValue);
+
+    this.time = time;
+  }
+}
+
+class DeclutterNamesProperty extends DeclutterProperty {
+  names = [];
+
+  constructor(on = true, defaultValue = true, names = []) {
+    super(on, defaultValue);
+
+    this.names = names;
+  }
+}
+
+class Declutter {
+  limitRootEvents = new DeclutterProperty();
+  hideMediaRequests = new DeclutterProperty();
+  hideUnlabeled = new DeclutterProperty(false, false);
+  hideElapsedTimeUnder = new DeclutterTimeProperty(false, false, 100);
+  hideName = new DeclutterNamesProperty(false, false, []);
 }
 
 export default class AppMapFilter {
-  public rootObjects = [];
-  public declutter = new Declutter();
+  rootObjects = [];
+  declutter = new Declutter();
 
-  constructor() {}
-
-  filter(appMap: AppMap, findings: any[]): AppMap {
+  /**
+   *
+   * @param {AppMap} appMap
+   * @param {any[]} findings
+   * @returns {AppMap}
+   */
+  filter(appMap, findings) {
     const { classMap } = appMap;
     let rootEvents = appMap.rootEvents();
 
@@ -55,10 +61,10 @@ export default class AppMapFilter {
     let events = rootEvents.reduce((callTree, rootEvent) => {
       rootEvent.traverse((e) => callTree.push(e));
       return callTree;
-    }, new Array<Event>());
+    }, new Array());
 
     if (this.rootObjects.length) {
-      let eventBranches: [eventId: number, linkedEventId: number][] = [];
+      let eventBranches = [];
 
       classMap.codeObjects.forEach((codeObject) => {
         this.rootObjects.forEach((id) => {
@@ -87,10 +93,7 @@ export default class AppMapFilter {
 
     if (this.declutter.hideElapsedTimeUnder.on && this.declutter.hideElapsedTimeUnder.time > 0) {
       events = events.filter(
-        (e) =>
-          e.returnEvent &&
-          e.returnEvent.elapsedTime &&
-          e.returnEvent.elapsedTime >= this.declutter.hideElapsedTimeUnder.time / 1000
+        (e) => e.elapsedTime && e.elapsedTime >= this.declutter.hideElapsedTimeUnder.time / 1000
       );
     }
 
@@ -127,8 +130,13 @@ export default class AppMapFilter {
     }).build();
   }
 
-  static filterMediaRequests(events: Event[]): Event[] {
-    const excludedEvents: number[] = [];
+  /**
+   *
+   * @param {Event[]} events
+   * @returns Event[]
+   */
+  static filterMediaRequests(events) {
+    const excludedEvents = [];
     const mediaRegex = [
       'application/javascript',
       'application/ecmascript',
@@ -193,7 +201,7 @@ export default class AppMapFilter {
           excludedEvents.push(e.id);
         }
       } else if (httpServerResponse) {
-        let mimeType: string | undefined;
+        let mimeType;
         const { headers } = httpServerResponse;
 
         if (headers) {
@@ -203,10 +211,10 @@ export default class AppMapFilter {
 
           mimeType = headers[contentTypeKey];
         } else {
-          mimeType = (httpServerResponse as any).mime_type; // 'mime_type' is no longer supported in the AppMap data standard, but we should keep this code for backward compatibility
+          mimeType = httpServerResponse.mime_type; // 'mime_type' is no longer supported in the AppMap data standard, but we should keep this code for backward compatibility
         }
 
-        if (mimeType && e.parentId && mediaRegex.some((regex) => regex.test(mimeType!))) {
+        if (mimeType && e.parentId && mediaRegex.some((regex) => regex.test(mimeType))) {
           excludedEvents.push(e.parentId);
         }
       }
@@ -215,7 +223,13 @@ export default class AppMapFilter {
     return events.filter((e) => !excludedEvents.includes(e.id));
   }
 
-  static codeObjectIsMatched(object: CodeObject, query: string): boolean {
+  /**
+   *
+   * @param {CodeObject} object
+   * @param {string} query
+   * @returns boolean
+   */
+  static codeObjectIsMatched(object, query) {
     if (query.startsWith('label:')) {
       const labelRegExp = new RegExp(`^${query.replace('label:', '').replace('*', '.*')}$`, 'ig');
       return Array.from(object.labels).some((label) => labelRegExp.test(label));
@@ -234,21 +248,21 @@ export default class AppMapFilter {
   // Regarding untyped 'findings' - Finding is declared in @appland/scanner, but I'm not going to
   // add a dependency on that package just yet. All the code in this file was originally located
   // in VsCodeExtension, and as a first step I'm just refactoring it out.
-  static attachFindingsToEvents(events: Event[], findings: any[]) {
+  static attachFindingsToEvents(events, findings) {
     const eventsById = events.reduce((map, e) => {
       map[e.id] = e.callEvent;
       return map;
-    }, {} as Record<number, Event>);
+    }, {});
 
     findings.forEach((finding) => {
-      const traceFilter: string =
+      const traceFilter =
         finding.appMapUri && finding.appMapUri.fragment && finding.appMapUri.fragment.traceFilter;
 
       if (traceFilter) {
         const ids = traceFilter.split(' ').map((idStr) => Number(idStr.split(':')[1]));
 
         ids.forEach((id) => {
-          const event = eventsById[id] as any;
+          const event = eventsById[id];
 
           if (event && !AppMapFilter.eventAlreadyHasFinding(event, finding)) {
             if (event.findings) {
@@ -264,11 +278,11 @@ export default class AppMapFilter {
     return events;
   }
 
-  static eventAlreadyHasFinding(event: any, finding: any): boolean {
+  static eventAlreadyHasFinding(event, finding) {
     return (
       event.findings &&
       !!event.findings.find(
-        (attachedFinding: any) => attachedFinding.finding.hash_v2 === finding.finding.hash_v2
+        (attachedFinding) => attachedFinding.finding.hash_v2 === finding.finding.hash_v2
       )
     );
   }

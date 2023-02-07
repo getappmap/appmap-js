@@ -335,6 +335,43 @@ declare module '@appland/models' {
     build(): AppMap;
   }
 
+  export namespace Filter {
+    export class DeclutterProperty {
+      public on: boolean;
+      public default: boolean;
+
+      constructor(on: boolean, defaultValue: boolean);
+    }
+
+    export class DeclutterTimeProperty extends DeclutterProperty {
+      public time: number;
+
+      constructor(on: boolean, defaultValue: boolean, time: number);
+    }
+
+    export class DeclutterNamesProperty extends DeclutterProperty {
+      public names: string[];
+
+      constructor(on: boolean, defaultValue: boolean, names: string[]);
+    }
+
+    export class Declutter {
+      public limitRootEvents: DeclutterProperty;
+      public hideMediaRequests: DeclutterProperty;
+      public hideUnlabeled: DeclutterProperty;
+      public hideElapsedTimeUnder: DeclutterTimeProperty;
+      public hideName: DeclutterNamesProperty;
+    }
+  }
+
+  export class AppMapFilter {
+    public rootObjects: CodeObject[];
+    public declutter: Filter.Declutter;
+
+    // TODO: Define Finding type
+    filter(appMap: AppMap, findings: any[]): AppMap;
+  }
+
   export type SQLAnalysis = {
     actions: string[];
     tables: string[];
