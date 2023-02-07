@@ -68,6 +68,7 @@
     "vuex"
   ],
   "dependencies": {
+    "@appland/client": "workspace:^1",
     "@appland/components": "workspace:^2",
     "@appland/diagrams": "workspace:^1",
     "@appland/models": "workspace:^2.0.0",
