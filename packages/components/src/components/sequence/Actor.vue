@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-//@ts-nocheck
+// @ts-nocheck
 import { SELECT_CODE_OBJECT } from '@/store/vsCode';
 import { CodeObject } from '@appland/models';
 

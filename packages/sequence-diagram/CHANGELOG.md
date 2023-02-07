@@ -1,3 +1,10 @@
+# [@appland/sequence-diagram-v1.3.3](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.3.2...@appland/sequence-diagram-v1.3.3) (2023-02-02)
+
+
+### Bug Fixes
+
+* Update [@appland](https://github.com/appland) deps ([fb4d442](https://github.com/getappmap/appmap-js/commit/fb4d442d1570f5fddbb08dfed78c9acfa63db1a0))
+
 # [@appland/sequence-diagram-v1.3.2](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.3.1...@appland/sequence-diagram-v1.3.2) (2023-01-24)
 
 

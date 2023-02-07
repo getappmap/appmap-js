@@ -19,19 +19,19 @@ const appMapCatalog = require('./appMapCatalog');
 const FingerprintDirectoryCommand = require('./fingerprint/fingerprintDirectoryCommand');
 const FingerprintWatchCommand = require('./fingerprint/fingerprintWatchCommand').default;
 const Depends = require('./depends');
+import InstallCommand from './cmds/agentInstaller/install-agent';
+import StatusCommand from './cmds/agentInstaller/status';
 import { default as OpenAPICommand } from './cmds/openapi';
+import PruneCommand from './cmds/prune/prune';
+import RecordCommand from './cmds/record/record';
+import { handleWorkingDirectory } from './lib/handleWorkingDirectory';
+import { locateAppMapDir } from './lib/locateAppMapDir';
 const InventoryCommand = require('./inventoryCommand');
 const OpenCommand = require('./cmds/open/open');
 const InspectCommand = require('./cmds/inspect/inspect');
 const SequenceDiagramCommand = require('./cmds/sequenceDiagram');
 const SequenceDiagramDiffCommand = require('./cmds/sequenceDiagramDiff');
-import RecordCommand from './cmds/record/record';
-import InstallCommand from './cmds/agentInstaller/install-agent';
-import StatusCommand from './cmds/agentInstaller/status';
 const StatsCommand = require('./cmds/stats/stats');
-import PruneCommand from './cmds/prune/prune';
-import { handleWorkingDirectory } from './lib/handleWorkingDirectory';
-import { locateAppMapDir } from './lib/locateAppMapDir';
 
 class DiffCommand {
   public appMapNames: any;
@@ -349,17 +349,25 @@ yargs(process.argv.slice(2))
     'index',
     'Compute fingerprints and update index files for all appmaps in a directory',
     (args) => {
+      args.showHidden();
+
       args.option('directory', {
         describe: 'program working directory',
         type: 'string',
         alias: 'd',
       });
+      args.option('appmap-dir', {
+        describe: 'directory to recursively inspect for AppMaps',
+      });
       args.option('watch', {
         describe: 'watch the directory for changes to appmaps',
         boolean: true,
       });
-      args.option('appmap-dir', {
-        describe: 'directory to recursively inspect for AppMaps',
+      args.options('watch-stat-delay', {
+        type: 'number',
+        default: 10,
+        describe: 'delay between stat calls when watching, in milliseconds',
+        hidden: true,
       });
       return args.strict();
     },
@@ -370,7 +378,7 @@ yargs(process.argv.slice(2))
 
       if (argv.watch) {
         const cmd = new FingerprintWatchCommand(appmapDir);
-        await cmd.execute();
+        await cmd.execute({ statDelayMs: argv.watchDelay });
 
         if (!argv.verbose && process.stdout.isTTY) {
           process.stdout.write('\x1B[?25l');

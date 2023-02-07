@@ -6,6 +6,7 @@
         :key="tab.name"
         :label="tab.name"
         :is-active="activeTab === tab"
+        :tabName="tab.tabName"
         @click.native="activateTab(tab)"
       >
       </v-tab-button>
@@ -29,6 +30,12 @@ export default {
   name: 'v-tabs',
 
   components: { VTabButton },
+
+  props: {
+    initialTab: {
+      type: String,
+    },
+  },
 
   data() {
     return {
@@ -59,7 +66,12 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.tabs = this.$children.filter((c) => c.$options.name === 'v-tab');
-      this.activateTab(this.tabs[0]);
+
+      let tab;
+      if (this.initialTab) tab = this.tabs.find((t) => t.tabName === this.initialTab);
+      else tab = this.tabs[0];
+
+      if (tab) this.activateTab(tab);
     });
   },
 };

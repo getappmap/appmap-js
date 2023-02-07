@@ -48,8 +48,13 @@
     </div>
 
     <div class="main-column main-column--right">
-      <v-tabs @activateTab="onChangeTab" ref="tabs">
-        <v-tab name="Dependency Map" :is-active="isViewingComponent" :ref="VIEW_COMPONENT">
+      <v-tabs @activateTab="onChangeTab" ref="tabs" :initial-tab="defaultView">
+        <v-tab
+          name="Dependency Map"
+          :is-active="isViewingComponent"
+          :tabName="VIEW_COMPONENT"
+          :ref="VIEW_COMPONENT"
+        >
           <v-diagram-component ref="componentDiagram" :class-map="filteredAppMap.classMap" />
         </v-tab>
 
@@ -57,16 +62,18 @@
           name="Sequence Diagram"
           :is-active="isViewingSequence"
           :ref="VIEW_SEQUENCE"
+          :tabName="VIEW_SEQUENCE"
           :allow-scroll="true"
         >
           <v-diagram-sequence
-            ref="sequenceDiagram"
+            ref="viewSequence_diagram"
             :app-map="filteredAppMap"
+            :selected-trace-event="selectedTraceEvent"
             :selected-events="selectedEvent"
           />
         </v-tab>
 
-        <v-tab name="Trace View" :is-active="isViewingFlow" :ref="VIEW_FLOW">
+        <v-tab name="Trace View" :is-active="isViewingFlow" :tabName="VIEW_FLOW" :ref="VIEW_FLOW">
           <div class="trace-view">
             <v-trace-filter
               ref="traceFilter"
@@ -83,7 +90,7 @@
               @onNextArrow="nextTraceFilter"
             />
             <v-diagram-trace
-              ref="diagramFlow"
+              ref="viewFlow_diagram"
               :events="filteredAppMap.rootEvents()"
               :selected-events="selectedEvent"
               :selected-trace-event="selectedTraceEvent"
@@ -120,12 +127,36 @@
           </v-popper>
 
           <template v-if="showDownload">
+            Download
+            <!--
+              TODO: FAIL  tests/unit/VsCodeExtension.spec.js
+              ● Test suite failed to run
+
+                /Users/kgilpin/source/appland/appmap-js/node_modules/dom-to-svg/lib/index.js:1
+                ({"Object.<anonymous>":function(module,exports,require,__dirname,__filename,global,jest){import * as postcss from 'postcss';
+                                                                                                        ^^^^^^
+
+                SyntaxError: Cannot use import statement outside a module
+
+                  5 | <script>
+                  6 | import assert from 'assert';
+                >  7 | import { elementToSVG, inlineResources } from 'dom-to-svg';
+                    | ^
+                  8 |
+                  9 | export default {
+                  10 |   name: 'v-download-sequence-diagram',
+
+                  at ScriptTransformer._transformAndBuildScript (../../node_modules/@vue/cli-plugin-unit-jest/node_modules/@jest/transform/build/ScriptTransformer.js:537:17)
+                  at src/components/sequence/DownloadSequenceDiagram.vue:7:1
+                  at Object.<anonymous> (src/components/sequence/DownloadSequenceDiagram.vue:46:3)
+
             <v-download-sequence-diagram></v-download-sequence-diagram>
+            -->
           </template>
 
           <v-popper-menu :isHighlight="filtersChanged">
             <template v-slot:icon>
-              <FilterIcon class="control-button__icon" />
+              <FilterIcon class="control-button__icon" @click="openFilterModal" />
             </template>
             <template v-slot:body>
               <div class="filters">
@@ -302,7 +333,7 @@
 
 <script>
 import { Buffer } from 'buffer';
-import { CodeObjectType, Event, buildAppMap } from '@appland/models';
+import { Event } from '@appland/models';
 import CheckIcon from '@/assets/check.svg';
 import CopyIcon from '@/assets/copy-icon.svg';
 import CloseThinIcon from '@/assets/close-thin.svg';
@@ -317,7 +348,7 @@ import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramSequence from '../components/DiagramSequence.vue';
 import VDiagramTrace from '../components/DiagramTrace.vue';
-import VDownloadSequenceDiagram from '@/components/sequence/DownloadSequenceDiagram.vue';
+// import VDownloadSequenceDiagram from '@/components/sequence/DownloadSequenceDiagram.vue';
 import VFiltersForm from '../components/FiltersForm.vue';
 import VInstructions from '../components/Instructions.vue';
 import VNotification from '../components/Notification.vue';
@@ -340,6 +371,7 @@ import {
   CLEAR_SELECTION_STACK,
   DEFAULT_VIEW,
 } from '../store/vsCode';
+import AppMapFilter from '@/lib/appMapFilter';
 
 function base64UrlEncode(text) {
   const buffer = Buffer.from(text, 'utf-8');
@@ -368,7 +400,6 @@ export default {
     VDiagramComponent,
     VDiagramSequence,
     VDiagramTrace,
-    VDownloadSequenceDiagram,
     VFiltersForm,
     VInstructions,
     VNotification,
@@ -394,33 +425,7 @@ export default {
       VIEW_COMPONENT,
       VIEW_SEQUENCE,
       VIEW_FLOW,
-      filters: {
-        rootObjects: [],
-        declutter: {
-          limitRootEvents: {
-            on: true,
-            default: true,
-          },
-          hideMediaRequests: {
-            on: true,
-            default: true,
-          },
-          hideUnlabeled: {
-            on: false,
-            default: false,
-          },
-          hideElapsedTimeUnder: {
-            on: false,
-            default: false,
-            time: 100,
-          },
-          hideName: {
-            on: false,
-            default: false,
-            names: [],
-          },
-        },
-      },
+      filters: new AppMapFilter(),
       traceFilterValue: '',
       currentTraceFilterIndex: 0,
       showDownloadButton: false,
@@ -430,6 +435,10 @@ export default {
   },
 
   props: {
+    defaultView: {
+      type: String,
+      default: VIEW_COMPONENT,
+    },
     appMapUploadable: {
       type: Boolean,
       default: false,
@@ -467,9 +476,11 @@ export default {
     '$store.getters.selectedTraceEvent': {
       handler(event) {
         if (event) {
-          this.setView(VIEW_FLOW);
+          if (this.currentView === VIEW_COMPONENT) {
+            this.setView(this.defaultView);
+          }
           this.$nextTick(() => {
-            this.$refs.diagramFlow.focusFocused();
+            this.$refs[[this.defaultView, 'diagram'].join('_')].focusFocused();
           });
         }
       },
@@ -509,91 +520,7 @@ export default {
 
     filteredAppMap() {
       const { appMap } = this.$store.state;
-      const { classMap } = appMap;
-      let rootEvents = appMap.rootEvents();
-
-      if (this.filters.declutter.limitRootEvents.on) {
-        rootEvents = rootEvents.filter((e) => e.httpServerRequest);
-      }
-
-      let events = rootEvents.reduce((callTree, rootEvent) => {
-        rootEvent.traverse((e) => callTree.push(e));
-        return callTree;
-      }, []);
-
-      if (this.filters.rootObjects.length) {
-        let eventBranches = [];
-
-        classMap.codeObjects.forEach((codeObject) => {
-          this.filters.rootObjects.forEach((id) => {
-            if (this.codeObjectIsMatched(codeObject, id)) {
-              eventBranches = eventBranches.concat(
-                codeObject.allEvents.map((e) => [e.id, e.linkedEvent.id])
-              );
-            }
-          });
-        });
-
-        if (eventBranches.length) {
-          events = events.filter((e) =>
-            eventBranches.some((branch) => e.id >= branch[0] && e.id <= branch[1])
-          );
-        }
-      }
-
-      if (this.filters.declutter.hideMediaRequests.on) {
-        events = this.filterMediaRequests(events);
-      }
-
-      if (this.filters.declutter.hideUnlabeled.on) {
-        events = events.filter(
-          (e) => e.labels.size > 0 || e.codeObject.type !== CodeObjectType.FUNCTION
-        );
-      }
-
-      if (
-        this.filters.declutter.hideElapsedTimeUnder.on &&
-        this.filters.declutter.hideElapsedTimeUnder.time > 0
-      ) {
-        events = events.filter(
-          (e) =>
-            e.returnEvent &&
-            e.returnEvent.elapsedTime &&
-            e.returnEvent.elapsedTime >= this.filters.declutter.hideElapsedTimeUnder.time / 1000
-        );
-      }
-
-      if (this.filters.declutter.hideName.on && this.filters.declutter.hideName.names.length) {
-        classMap.codeObjects.forEach((codeObject) => {
-          this.filters.declutter.hideName.names.forEach((fqid) => {
-            if (this.codeObjectIsMatched(codeObject, fqid)) {
-              events = events.filter((e) => !codeObject.allEvents.includes(e));
-            }
-          });
-        });
-      }
-
-      const eventIds = new Set(events.filter((e) => e.isCall()).map((e) => e.id));
-
-      if (this.findings && this.findings.length > 0) {
-        this.findings.forEach((finding) => {
-          if (
-            finding.appMapUri &&
-            finding.appMapUri.fragment &&
-            typeof finding.appMapUri.fragment === 'string'
-          ) {
-            finding.appMapUri.fragment = JSON.parse(finding.appMapUri.fragment);
-          }
-        });
-
-        events = this.attachFindingsToEvents(events, this.findings);
-      }
-
-      return buildAppMap({
-        events: events.filter((e) => eventIds.has(e.id) || eventIds.has(e.parent_id)),
-        classMap: classMap.roots.map((c) => ({ ...c.data })),
-        metadata: appMap.metadata,
-      }).build();
+      return this.filters.filter(appMap, this.findings);
     },
 
     rootObjectsSuggestions() {
@@ -826,8 +753,9 @@ export default {
     },
 
     onChangeTab(tab) {
-      // tabs are referenced by their view key
-      const index = Object.values(this.$refs).findIndex((ref) => ref === tab);
+      // 'tab' can be the tab name or the actual tab.
+      let index = Object.values(this.$refs).findIndex((ref) => ref === tab);
+      if (index === -1) index = Object.keys(this.$refs).findIndex((ref) => ref === tab);
       if (index === -1) {
         // There's no ref set up for this tab
         return;
@@ -847,9 +775,7 @@ export default {
     getState() {
       const state = {};
 
-      if (this.currentView !== DEFAULT_VIEW) {
-        state.currentView = this.currentView;
-      }
+      state.currentView = this.currentView;
 
       if (this.selectedObject && this.selectedObject.fqid) {
         state.selectedObject = this.selectedObject.fqid;
@@ -893,6 +819,10 @@ export default {
       }
 
       return base64UrlEncode(JSON.stringify(state));
+    },
+
+    openFilterModal() {
+      this.$root.$emit('clickFilterButton');
     },
 
     setSelectedObject(fqid) {
@@ -1048,6 +978,7 @@ export default {
     resetDiagram() {
       this.clearSelection();
       this.resetFilters();
+      this.$root.$emit('resetDiagram');
 
       this.renderKey += 1;
     },
@@ -1065,45 +996,6 @@ export default {
           unique[finding.finding.hash_v2] = finding;
           return unique;
         }, {})
-      );
-    },
-
-    attachFindingsToEvents(events, findings) {
-      const eventsHash = events.reduce((map, e) => {
-        map[e.id] = e.callEvent;
-        return map;
-      }, {});
-
-      findings.forEach((finding) => {
-        const traceFilter =
-          finding.appMapUri && finding.appMapUri.fragment && finding.appMapUri.fragment.traceFilter;
-
-        if (traceFilter) {
-          const ids = traceFilter.split(' ').map((idStr) => Number(idStr.split(':')[1]));
-
-          ids.forEach((id) => {
-            const event = eventsHash[id];
-
-            if (event && !this.eventAlreadyHasFinding(event, finding)) {
-              if (event.findings) {
-                event.findings.push(finding);
-              } else {
-                event.findings = [finding];
-              }
-            }
-          });
-        }
-      });
-
-      return events;
-    },
-
-    eventAlreadyHasFinding(event, finding) {
-      return (
-        event.findings &&
-        !!event.findings.find(
-          (attachedFinding) => attachedFinding.finding.hash_v2 === finding.finding.hash_v2
-        )
       );
     },
 
@@ -1153,6 +1045,7 @@ export default {
       Object.keys(this.filters.declutter).forEach((k) => {
         this.filters.declutter[k].on = this.filters.declutter[k].default;
       });
+      this.filters.declutter.hideElapsedTimeUnder.time = 100;
       this.filters.declutter.hideName.names = [];
     },
 
@@ -1186,108 +1079,6 @@ export default {
 
     removeRootObject(index) {
       this.filters.rootObjects.splice(index, 1);
-    },
-
-    filterMediaRequests(events) {
-      const excludedEvents = [];
-      const mediaRegex = [
-        'application/javascript',
-        'application/ecmascript',
-        'audio/.+',
-        'font/.+',
-        'image/.+',
-        'text/javascript',
-        'text/ecmascript',
-        'text/css',
-        'video/.+',
-      ].map((t) => new RegExp(t, 'i'));
-      const mediaFileExtensions = new Set([
-        'aac',
-        'avi',
-        'bmp',
-        'css',
-        'flv',
-        'gif',
-        'htm',
-        'html',
-        'ico',
-        'jpeg',
-        'jpg',
-        'js',
-        'json',
-        'jsonld',
-        'mid',
-        'midi',
-        'mjs',
-        'mov',
-        'mp3',
-        'mp4',
-        'mpeg',
-        'oga',
-        'ogg',
-        'ogv',
-        'ogx',
-        'opus',
-        'otf',
-        'png',
-        'svg',
-        'tif',
-        'tiff',
-        'ts',
-        'ttf',
-        'wav',
-        'weba',
-        'webm',
-        'webp',
-        'woff',
-        'woff2',
-        'xhtml',
-        '3gp',
-        '3g2',
-      ]);
-
-      events.forEach((e) => {
-        if (e.requestMethod === 'GET' && e.requestPath) {
-          const pathExt = e.requestPath.match(/.*\.([\S]*)$/);
-          if (pathExt && mediaFileExtensions.has(pathExt[1])) {
-            excludedEvents.push(e.id);
-          }
-        } else if (e.http_server_response) {
-          let mimeType;
-
-          if (e.http_server_response.headers) {
-            const contentTypeKey = Object.keys(e.http_server_response.headers).filter(
-              (k) => k.toLowerCase() === 'content-type'
-            )[0];
-
-            mimeType = e.http_server_response.headers[contentTypeKey];
-          } else if (e.http_server_response.mime_type) {
-            mimeType = e.http_server_response.mime_type; // 'mime_type' is no longer supported in the AppMap data standard, but we should keep this code for backward compatibility
-          }
-
-          if (mimeType && mediaRegex.some((regex) => regex.test(mimeType))) {
-            excludedEvents.push(e.parent_id);
-          }
-        }
-      });
-
-      return events.filter((e) => !excludedEvents.includes(e.id));
-    },
-
-    codeObjectIsMatched(object, query) {
-      if (query.startsWith('label:')) {
-        const labelRegExp = new RegExp(`^${query.replace('label:', '').replace('*', '.*')}$`, 'ig');
-        return Array.from(object.labels).some((label) => labelRegExp.test(label));
-      }
-      if (query.includes('*')) {
-        const filterRegExp = new RegExp(`^${query.replace('*', '.*')}$`, 'ig');
-        if (filterRegExp.test(object.fqid)) {
-          return true;
-        }
-      } else if (query === object.fqid) {
-        return true;
-      }
-      return false;
     },
 
     prevTraceFilter() {
@@ -1539,8 +1330,8 @@ code {
         }
 
         &__icon {
-          width: 0.95rem;
-          height: 0.95rem;
+          width: 16px;
+          height: 14px;
           fill: currentColor;
         }
       }
@@ -1562,7 +1353,7 @@ code {
           background-color: $dark-purple;
           border-radius: 0.5rem;
           color: $white;
-          padding: 0.35rem 0.8rem;
+          padding: 0.25rem 0.65rem;
           text-transform: uppercase;
           flex-direction: row-reverse;
           gap: 0.5rem;

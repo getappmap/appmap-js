@@ -1,13 +1,13 @@
 import { join, normalize } from 'path';
 import { cwd } from 'process';
-import provider from '../src/provider';
+import provider from '../src/rules/lib/openapiProvider';
 
-describe('openapi.provider', () => {
+describe('openapiProvider', () => {
   it('caches the schema', async () => {
     const host = 'railsSampleApp';
     const schemata = {
       railsSampleApp: `file://${normalize(
-        join(cwd(), 'test', 'data', 'railsSampleApp6thEd.openapiv3.yaml')
+        join(cwd(), 'test', 'fixtures', 'schemata', 'railsSampleApp6thEd.openapiv3.yaml')
       )}`,
     };
 

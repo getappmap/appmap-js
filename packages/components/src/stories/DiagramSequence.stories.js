@@ -1,6 +1,5 @@
 import VDiagramSequence from '@/components/DiagramSequence.vue';
 import appland_api_key_diff from '@/stories/data/sequence/appland_api_key_diff.sequence.json';
-import forem from '@/stories/data/sequence/forem.sequence.json';
 import create_api_key from '@/stories/data/sequence/create_api_key.sequence.json';
 import list_users from '@/stories/data/sequence/list_users.sequence.json';
 import list_users_prefetch from '@/stories/data/sequence/list_users_prefetch.sequence.json';
@@ -21,10 +20,6 @@ const Template = (args, { argTypes }) => ({
 export const AppLandApiKeyDiff = Template.bind({});
 AppLandApiKeyDiff.args = {
   serializedDiagram: appland_api_key_diff,
-};
-export const Forem = Template.bind({});
-Forem.args = {
-  serializedDiagram: forem,
 };
 export const CreateApiKey = Template.bind({});
 CreateApiKey.args = {

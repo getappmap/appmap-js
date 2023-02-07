@@ -27,11 +27,11 @@ describe('Canonicalize', () => {
       if (doUpdateFixtures()) {
         updateFixtureFile();
       }
-      expect(
+      expect(normalForm).toEqual(
         JSON.parse(
           readFileSync(`tests/unit/fixtures/ruby/canonicalize/revoke_api_key.${algorithmName}.json`)
         )
-      ).toEqual(normalForm);
+      );
     });
   });
 });

@@ -1,6 +1,6 @@
 {
   "name": "@appland/components",
-  "version": "2.26.0",
+  "version": "2.28.0",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "scripts": {
@@ -27,9 +27,9 @@
     "dist/index.js"
   ],
   "dependencies": {
-    "@appland/diagrams": "workspace:^1.6.0",
-    "@appland/models": "workspace:^1.23.0",
-    "@appland/sequence-diagram": "workspace:^",
+    "@appland/diagrams": "workspace:^1.6.2",
+    "@appland/models": "workspace:^2.0.0",
+    "@appland/sequence-diagram": "workspace:^1.3.3",
     "buffer": "^6.0.3",
     "diff": "^5.1.0",
     "dom-to-svg": "^0.12.2",
@@ -47,6 +47,7 @@
     "@rollup/plugin-image": "^2.0.6",
     "@rollup/plugin-replace": "^2.3.2",
     "@rollup/pluginutils": "^4.1.0",
+    "@rushstack/eslint-patch": "^1.2.0",
     "@storybook/addon-actions": "^6.5.14",
     "@storybook/addon-docs": "^6.5.14",
     "@storybook/addon-essentials": "^6.5.14",
@@ -56,11 +57,13 @@
     "@storybook/vue": "^6.5.14",
     "@types/assert": "^1.5.6",
     "@types/yargs": "^16.0.0",
+    "@typescript-eslint/parser": "^5.51.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-unit-jest": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.8",
     "@vue/eslint-config-airbnb": "^5.0.2",
+    "@vue/eslint-config-typescript": "^11.0.2",
     "@vue/test-utils": "^1.0.3",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",

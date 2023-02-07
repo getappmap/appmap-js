@@ -1,6 +1,6 @@
 {
   "name": "@appland/appmap",
-  "version": "3.63.1",
+  "version": "3.64.3",
   "description": "",
   "bin": "built/cli.js",
   "publishConfig": {
@@ -50,6 +50,7 @@
     "jest": "^27.4.7",
     "jest-sinon": "^1.0.4",
     "lint-staged": "^10.5.4",
+    "memfs": "^3.4.13",
     "prettier": "^2.7.1",
     "sinon": "^11.1.2",
     "tmp": "^0.2.1",
@@ -69,7 +70,7 @@
   "dependencies": {
     "@appland/components": "workspace:^2",
     "@appland/diagrams": "workspace:^1",
-    "@appland/models": "workspace:^1",
+    "@appland/models": "workspace:^2.0.0",
     "@appland/openapi": "workspace:^1",
     "@appland/sequence-diagram": "workspace:^1",
     "@sidvind/better-ajv-errors": "^0.9.1",

@@ -104,19 +104,6 @@ class AppMapBuilder extends EventSource {
         event.returnEvent.parent_id = event.id;
       }
 
-      // Normalize status/status_code properties
-      const { httpServerResponse, httpClientResponse } = event;
-      if (event.isReturn()) {
-        if (httpServerResponse && httpServerResponse.status_code) {
-          httpServerResponse.status = httpServerResponse.status_code;
-          delete httpServerResponse.status_code;
-        }
-        if (httpClientResponse && httpClientResponse.status_code) {
-          httpClientResponse.status = httpClientResponse.status_code;
-          delete httpClientResponse.status_code;
-        }
-      }
-
       // Normalize path info
       const { httpServerRequest } = event;
       if (httpServerRequest && httpServerRequest.normalized_path_info) {

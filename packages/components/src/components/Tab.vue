@@ -25,6 +25,7 @@ export default {
       type: Boolean,
       default: false,
     },
+    tabName: String,
   },
 
   data() {

@@ -22,7 +22,6 @@ export class ActionSpec {
   children?: ActionSpec[];
   callIndex?: number;
   returnIndex?: number;
-  public collapsed = false;
   // Indicates whether this action is the the first, or last, action in a group. In these cases,
   // the action rendering will leave extra space for the group enclosure box.
   public openGroup?: boolean;
@@ -166,5 +165,12 @@ export class ActionSpec {
 
   get hasResult(): boolean {
     return nodeResult(this.action as Action) !== undefined;
+  }
+
+  isCollapsed(collapsedActionState: boolean[]): boolean {
+    return (
+      this.ancestorIndexes.find((ancestorIndex) => collapsedActionState[ancestorIndex]) !==
+      undefined
+    );
   }
 }

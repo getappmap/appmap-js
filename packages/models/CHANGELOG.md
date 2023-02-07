@@ -1,3 +1,24 @@
+# [@appland/models-v2.0.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v1.23.2...@appland/models-v2.0.0) (2023-02-01)
+
+
+### Bug Fixes
+
+* Safely access CodeObject#location to prevent usage of undefined ([a4756a9](https://github.com/getappmap/appmap-js/commit/a4756a90747f2dfa8300050896a8e968b70fab2e))
+
+
+### BREAKING CHANGES
+
+* `CodeObject#location` is now marked as being
+potentially undefined
+
+# [@appland/models-v1.23.2](https://github.com/getappmap/appmap-js/compare/@appland/models-v1.23.1...@appland/models-v1.23.2) (2023-01-25)
+
+
+### Bug Fixes
+
+* `http_server_response` `status_code` is no longer modified ([89c5a50](https://github.com/getappmap/appmap-js/commit/89c5a503049660163b971d22eeb0e0817e2ed61f))
+* Allow writing of objects when serializing event properties ([b2b190a](https://github.com/getappmap/appmap-js/commit/b2b190ab30d7bffeb732085ceb93160639d7673b))
+
 # [@appland/models-v1.23.1](https://github.com/getappmap/appmap-js/compare/@appland/models-v1.23.0...@appland/models-v1.23.1) (2023-01-24)
 
 
