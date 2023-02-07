@@ -1,3 +1,10 @@
+# [@appland/components-v2.29.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.28.0...@appland/components-v2.29.0) (2023-02-07)
+
+
+### Features
+
+* update wording for analysis CTA in web view ([15320d8](https://github.com/getappmap/appmap-js/commit/15320d8da6270b23502cae200b004810f13645be))
+
 # [@appland/components-v2.28.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.27.1...@appland/components-v2.28.0) (2023-02-02)
 
 
