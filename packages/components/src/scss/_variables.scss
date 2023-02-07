@@ -89,21 +89,16 @@ $sequence-activation-gutter-width: 4px;
 
 // Lines that indicate call or return from one actor to another.
 $sequence-call-line-width: 2px;
-$sequence-call-line-color: #6fddd6bb; //rgba(97, 94, 111, 1); //$dark-purple;
+$sequence-call-line-color: #6fddbc;
 
 // Border around a group element, e.g. a loop.
 $sequence-group-border-width: 2px;
 $sequence-group-border-color: $white;
 
 // Diff background
-$sequence-diff-insert-bg-color: rgba(
-  32,
-  200,
-  63,
-  0.2
-); // (v2)rgba(32, 175, 59, 0.2); rgba(56, 139, 253, 0.35);
-$sequence-diff-delete-bg-color: rgba(246, 47, 47, 0.25); //rgba(212, 118, 22, 0.35);
-$sequence-diff-change-bg-color: rgba(71, 122, 184, 0.2); // rgba(88, 166, 255, 0.35);
+$sequence-diff-insert-bg-color: rgba(32, 200, 63, 0.2);
+$sequence-diff-delete-bg-color: rgba(246, 47, 47, 0.25);
+$sequence-diff-change-bg-color: rgba(71, 122, 184, 0.2);
 
 // End sequence diagram
 
