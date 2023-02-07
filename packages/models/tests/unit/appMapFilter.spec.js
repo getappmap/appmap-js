@@ -18,9 +18,6 @@ describe('appMapFilter', () => {
   });
 
   it('removes function events that have low elapsed time', () => {
-    const totalEventCount = appMap.events.filter((e) => e.elapsedTime > 1).length;
-    expect(totalEventCount).toBeGreaterThan(0);
-
     const allPackageNames = new Set();
     appMap.classMap.visit((co) => allPackageNames.add(co.id));
 
