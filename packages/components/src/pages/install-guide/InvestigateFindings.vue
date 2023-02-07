@@ -10,6 +10,11 @@
           maintainability. Our runtime code analysis can find the problems that static code
           analyzers miss — and that cause serious production issues.
         </article>
+        <article v-if="!(analysisEnabled && scanned)" class="subheading">
+          To unlock this feature you will authenticate to the AppMap server with your GitHub or
+          GitLab account. AppMap does not upload your AppMaps. AppMap does not read the contents of
+          your AppMaps. AppMap does not have read or write access to your repo.
+        </article>
         <div v-if="analysisEnabled">
           <article v-if="!scanned">
             <p>
