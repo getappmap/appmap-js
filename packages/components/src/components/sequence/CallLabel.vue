@@ -5,7 +5,7 @@
     </template>
     <div :class="nameClasses">
       <template v-for="text in name">
-        <span @click="selectEvent" :class="text.class">{{ text.text }}</span>
+        <span @click="selectEvent" :class="text.class" :key="text.text">{{ text.text }}</span>
       </template>
     </div>
     <template v-if="actionSpec.hasElapsed">
