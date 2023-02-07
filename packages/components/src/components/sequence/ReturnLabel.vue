@@ -33,5 +33,6 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   font-style: italic;
+  color: darken($gray4, 20);
 }
 </style>
