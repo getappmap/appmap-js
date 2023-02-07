@@ -127,12 +127,16 @@ $min-height: 3rem;
   position: absolute;
 
   // These attributes are taken from the component diagram package element.
-  background-color: #6fddd6;
+  background-color: $gray4; //#6fddd6;
   font-family: 'IBM Plex Mono', monospace;
   color: #010306;
   font-size: 75%;
   font-weight: 700;
-  border: 3px solid #6fddd6;
+  border: 3px solid $gray4;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &--selected {
     border: 3px solid #ff07aa;
@@ -158,7 +162,7 @@ $min-height: 3rem;
 }
 
 .sequence-actor-lane-separator {
-  border-left: 1px dashed #6fddd6;
+  border-left: 1px dashed $gray4;
   position: relative;
   height: 100%;
   width: 1px;
