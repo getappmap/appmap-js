@@ -116,7 +116,6 @@ export default {
       displayUnlabeledEvents: true,
       selectedEventsBase: [],
       selectedEventsWorking: [],
-      renderKey: 0,
       filters: {
         unlabeled: {
           on: true,
