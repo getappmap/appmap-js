@@ -333,7 +333,7 @@
 
 <script>
 import { Buffer } from 'buffer';
-import { Event } from '@appland/models';
+import { Event, AppMapFilter } from '@appland/models';
 import CheckIcon from '@/assets/check.svg';
 import CopyIcon from '@/assets/copy-icon.svg';
 import CloseThinIcon from '@/assets/close-thin.svg';
@@ -369,9 +369,7 @@ import {
   SELECT_LABEL,
   POP_SELECTION_STACK,
   CLEAR_SELECTION_STACK,
-  DEFAULT_VIEW,
 } from '../store/vsCode';
-import AppMapFilter from '@/lib/appMapFilter';
 
 function base64UrlEncode(text) {
   const buffer = Buffer.from(text, 'utf-8');
