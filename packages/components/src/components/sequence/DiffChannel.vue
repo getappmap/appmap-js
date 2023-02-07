@@ -85,7 +85,7 @@ export default {
 .diff-change .diff-channel {
   background-color: $sequence-diff-change-bg-color;
   .diff-channel-marker {
-    background-color: rgba(45, 71, 103, 0.5);
+    background-color: rgba(45, 71, 103, 0.67);
   }
 }
 
