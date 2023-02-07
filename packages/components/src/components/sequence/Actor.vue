@@ -137,15 +137,18 @@ $min-height: 3rem;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: $transition;
 
   &--selected {
-    border: 3px solid #ff07aa;
+    background-color: $black;
+    color: $white;
   }
 }
 
 .label-container:hover {
   cursor: pointer;
-  color: $lightblue;
+  background-color: darken($gray4, 20);
+  color: $black;
 }
 
 .lane {

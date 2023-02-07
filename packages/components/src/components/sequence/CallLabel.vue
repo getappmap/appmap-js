@@ -154,6 +154,7 @@ $bg-fade: rgba(0, 0, 0, 0.8);
     background-color: $bg-fade;
     padding: 2px 4px;
     border-radius: 3px;
+    color: darken($gray4, 20);
   }
 
   .name.static {
