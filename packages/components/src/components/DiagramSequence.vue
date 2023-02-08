@@ -116,17 +116,15 @@ export default {
     actionKey(action: ActionSpec): string {
       return ['action', this.diagramSpec.uniqueId, action.index].join(':');
     },
-    focusFocused() {
-      setTimeout(() => {
-        const element = this.$el.querySelector(
-          '.call.focused .self-call, .call.focused .call-line-segment'
-        );
-        if (!element) {
-          return;
-        }
+    showFocusEffect() {
+      const element = this.$el.querySelector(
+        '.call.focused .self-call, .call.focused .call-line-segment'
+      );
+      if (!element) {
+        return;
+      }
 
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 16);
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
     },
   },
 };

@@ -47,13 +47,16 @@ export default {
 
     '$store.getters.selectedObject': {
       handler() {
-        this.highlightSelectedComponent();
+        this.highlightSelectedCodeObject();
       },
     },
   },
 
   methods: {
-    highlightSelectedComponent(expandParent = true) {
+    // In response to the user selecting a code object, find and highlight that code object
+    // in the component view. Traverse up the code object's ancestors until we find a
+    // code object that is visible in the component view.
+    highlightSelectedCodeObject(expandParent = true) {
       const { selectedObject } = this.$store.getters;
       if (!selectedObject) {
         this.componentDiagram.highlight(null);
@@ -106,21 +109,21 @@ export default {
         this.componentDiagram.render(this.classMap);
 
         this.componentDiagram
-          .on('click', (codeObject) => this.selectObject(codeObject))
-          .on('edge', (edge) => this.selectObject({ ...edge, type: 'edge' }))
-          .on('collapse', () => this.highlightSelectedComponent(false))
-          .on('expand', () => this.highlightSelectedComponent(false))
+          .on('click', (codeObject) => this.selectCodeObject(codeObject))
+          .on('edge', (edge) => this.selectCodeObject({ ...edge, type: 'edge' }))
+          .on('collapse', () => this.highlightSelectedCodeObject(false))
+          .on('expand', () => this.highlightSelectedCodeObject(false))
           .on('makeRoot', (codeObject) => {
             this.$root.$emit('makeRoot', codeObject);
           });
-        this.highlightSelectedComponent();
+        this.highlightSelectedCodeObject();
       });
     },
 
-    selectObject(object) {
+    selectCodeObject(codeObject) {
       if (this.$store) {
         this.$store.commit(CLEAR_SELECTION_STACK);
-        this.$store.commit(SELECT_CODE_OBJECT, object);
+        this.$store.commit(SELECT_CODE_OBJECT, codeObject);
       }
     },
   },
@@ -136,7 +139,7 @@ export default {
   activated() {
     if (this.componentDiagram) {
       this.componentDiagram.render(this.classMap);
-      this.highlightSelectedComponent();
+      this.highlightSelectedCodeObject();
     }
   },
 };

@@ -478,7 +478,7 @@ export default {
             this.setView(this.defaultView);
           }
           this.$nextTick(() => {
-            this.$refs[[this.defaultView, 'diagram'].join('_')].focusFocused();
+            this.$refs[[this.defaultView, 'diagram'].join('_')].showFocusEffect();
           });
         }
       },
