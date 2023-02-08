@@ -200,11 +200,11 @@ export default {
     },
     hasHighlightedEventInTree() {
       return (
-        this.eventFilterMatchIndex &&
+        this.eventFilterMatch &&
         this.event
           .descendants()
           .map((e) => e.id)
-          .includes(this.eventFilterMatchIndex)
+          .includes(this.eventFilterMatch.id)
       );
     },
   },

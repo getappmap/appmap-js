@@ -202,7 +202,7 @@ context('VS Code Extension', () => {
 
       cy.get('.tabs .tab-btn').last().click();
 
-      // Verify the flow view renders as expected
+      // Verify the trace view renders as expected
       cy.get('.trace').should('be.visible');
       cy.get('.trace .trace-node').should('have.length', 4);
 
@@ -258,7 +258,7 @@ context('VS Code Extension', () => {
         });
     });
 
-    it('the current event is highlighted upon opening the flow view', () => {
+    it('the current event is highlighted upon opening the trace view', () => {
       cy.get('.details-search').should('be.visible');
 
       cy.get(`.node[data-type="http"]`)
@@ -383,7 +383,7 @@ context('VS Code Extension', () => {
         .should('contain.text', 'Spree::Admin::BaseHelper#admin_layout');
     });
 
-    it('event can navigate directly to flow view', () => {
+    it('event can navigate directly to trace view', () => {
       cy.get(`.node[data-type="database"]`).click();
 
       cy.get('.v-details-panel-list')
