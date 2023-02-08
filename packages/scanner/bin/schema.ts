@@ -4,7 +4,7 @@ import { writeFileSync } from 'fs';
 import { createGenerator } from 'ts-json-schema-generator';
 
 function generate(schemaId: string, path: string) {
-  const generator = createGenerator({ path, schemaId });
+  const generator = createGenerator({ path, schemaId, skipTypeCheck: true });
   const schema = generator.createSchema();
 
   if (!schema.definitions) throw 'error generating schema';
