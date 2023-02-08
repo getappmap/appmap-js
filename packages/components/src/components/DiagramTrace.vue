@@ -4,9 +4,9 @@
       :events="events"
       :selected-events="selectedEvents"
       :selected-trace-event="selectedTraceEvent"
-      :highlighted-events="highlightedEvents"
-      :highlighted-event="highlightedEvent"
-      :highlighted-event-index="highlightedEventIndex"
+      :event-filter-matches="eventFilterMatches"
+      :event-filter-match="eventFilterMatch"
+      :event-filter-match-index="eventFilterMatchIndex"
       :highlight-color="highlightColor"
       :highlight-all="highlightAll"
       :highlight-style="highlightStyle"
@@ -44,15 +44,15 @@ export default {
       type: Object,
       default: null,
     },
-    highlightedEvents: {
+    eventFilterMatches: {
       type: Set,
       default: new Set(),
     },
-    highlightedEvent: {
+    eventFilterMatch: {
       type: Event,
       default: null,
     },
-    highlightedEventIndex: {
+    eventFilterMatchIndex: {
       type: Number,
       default: null,
     },
