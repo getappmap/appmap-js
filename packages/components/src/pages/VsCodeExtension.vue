@@ -68,7 +68,7 @@
           <v-diagram-sequence
             ref="viewSequence_diagram"
             :app-map="filteredAppMap"
-            :selected-trace-event="selectedTraceEvent"
+            :focused-event="focusedEvent"
             :selected-events="selectedEvent"
           />
         </v-tab>
@@ -93,7 +93,7 @@
               ref="viewFlow_diagram"
               :events="filteredAppMap.rootEvents()"
               :selected-events="selectedEvent"
-              :selected-trace-event="selectedTraceEvent"
+              :focused-event="focusedEvent"
               :event-filter-matches="new Set(eventFilterMatches)"
               :event-filter-match="eventFilterMatch"
               :event-filter-match-index="eventFilterMatchIndex + 1"
@@ -471,7 +471,7 @@ export default {
         this.$root.$emit('stateChanged', 'selectedObject');
       },
     },
-    '$store.getters.selectedTraceEvent': {
+    '$store.getters.focusedEvent': {
       handler(event) {
         if (event) {
           if (this.currentView === VIEW_COMPONENT) {
@@ -659,8 +659,8 @@ export default {
       return this.$store.getters.selectedLabel;
     },
 
-    selectedTraceEvent() {
-      return this.$store.getters.selectedTraceEvent;
+    focusedEvent() {
+      return this.$store.getters.focusedEvent;
     },
 
     currentView() {

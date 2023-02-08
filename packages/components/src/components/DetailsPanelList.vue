@@ -28,7 +28,7 @@
 <script>
 import EyeIcon from '@/assets/eye.svg';
 import VDetailsPanelListHeader from '@/components/DetailsPanelListHeader.vue';
-import { SELECT_CODE_OBJECT, SET_SELECTED_TRACE_EVENT } from '@/store/vsCode';
+import { SELECT_CODE_OBJECT, SET_FOCUSED_EVENT } from '@/store/vsCode';
 
 export default {
   name: 'v-details-panel-list',
@@ -69,7 +69,7 @@ export default {
     },
     selectTraceEvent(item) {
       if (this.$store) {
-        this.$store.commit(SET_SELECTED_TRACE_EVENT, item.object);
+        this.$store.commit(SET_FOCUSED_EVENT, item.object);
       }
     },
   },
