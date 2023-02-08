@@ -475,10 +475,12 @@ export default {
       handler(event) {
         if (event) {
           if (this.currentView === VIEW_COMPONENT) {
-            this.setView(this.defaultView);
+            this.setView(this.defaultView === VIEW_SEQUENCE ? VIEW_SEQUENCE : VIEW_FLOW);
           }
           this.$nextTick(() => {
-            this.$refs[[this.defaultView, 'diagram'].join('_')].showFocusEffect();
+            Object.keys(this.$refs)
+              .filter((ref) => ref.endsWith('_diagram'))
+              .forEach((ref) => this.$refs[ref].showFocusEffect());
           });
         }
       },
