@@ -393,7 +393,7 @@ context('VS Code Extension', () => {
           cy.get('.list-item').first().click();
         });
 
-      cy.get('.details-panel-header button').contains('Show in').click();
+      cy.get('.details-panel-header button').contains('Show in Trace').click();
 
       cy.get('.trace').should('be.visible');
       cy.get('.trace .trace-node').should('have.length', 38);
@@ -1143,7 +1143,10 @@ context('VS Code Extension', () => {
       cy.get('.v-details-panel-list').find('li.list-item').should('have.length', 3).first().click();
       cy.get('.details-panel-header__details-type').should('contain.text', '681');
 
-      cy.get('.details-panel-header__ghost-link').find('.details-btn').click();
+      cy.get('.details-panel-header__ghost-link')
+        .find('.details-btn')
+        .contains('Show in Trace')
+        .click();
       cy.get('.trace-node.highlight').should('exist');
     });
   });
