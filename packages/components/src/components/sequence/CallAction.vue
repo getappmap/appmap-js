@@ -206,7 +206,7 @@ export default {
       type: Array,
       required: true,
     },
-    selectedTraceEvent: {
+    focusedEvent: {
       type: Object,
       default: null,
     },
@@ -233,10 +233,7 @@ export default {
 
       if (this.actionSpec.index === 0) result.push('first-action');
 
-      if (
-        this.selectedTraceEvent &&
-        this.actionSpec.action.eventIds.includes(this.selectedTraceEvent.id)
-      )
+      if (this.focusedEvent && this.actionSpec.action.eventIds.includes(this.focusedEvent.id))
         result.push('focused');
 
       if (
@@ -244,9 +241,6 @@ export default {
         this.selectedEvents.find((event) => this.actionSpec.action.eventIds.includes(event.id))
       ) {
         result.push('selected');
-        this.$el
-          .querySelector('.self-call, .call-line-segment')
-          .scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
 
       return result;

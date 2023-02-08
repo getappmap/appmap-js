@@ -17,7 +17,7 @@
           :key="actionKey(action)"
           :collapsed-actions="collapsedActions"
           :selected-events="selectedEvents"
-          :selected-trace-event="selectedTraceEvent"
+          :focused-event="focusedEvent"
         />
       </template>
       <template v-if="action.nodeType === 'return'">
@@ -63,7 +63,7 @@ export default {
     serializedDiagram: {
       type: Object,
     },
-    selectedTraceEvent: {
+    focusedEvent: {
       type: Object,
       default: null,
     },
@@ -117,14 +117,16 @@ export default {
       return ['action', this.diagramSpec.uniqueId, action.index].join(':');
     },
     showFocusEffect() {
-      const element = this.$el.querySelector(
-        '.call.focused .self-call, .call.focused .call-line-segment'
-      );
-      if (!element) {
-        return;
-      }
+      setTimeout(() => {
+        const element = this.$el.querySelector(
+          '.call.focused .self-call, .call.focused .call-line-segment'
+        );
+        if (!element) {
+          return;
+        }
 
-      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
     },
   },
 };
