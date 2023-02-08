@@ -186,7 +186,7 @@ export default {
     const cmd = new OpenAPICommand(appmapDir);
     cmd.filter = fileSizeFilter(maxAppMapSizeInBytes);
     const [openapi, numAppMaps] = await cmd.execute();
-    sendTelemetry(openapi.paths, numAppMaps, appmapDir);
+    await sendTelemetry(openapi.paths, numAppMaps, appmapDir);
 
     for (const error of cmd.errors) {
       console.warn(error);
