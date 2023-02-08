@@ -10,7 +10,7 @@ export const SET_APPMAP_DATA = 'setAppMapData';
 export const POP_SELECTION_STACK = 'popSelectionStack';
 export const CLEAR_SELECTION_STACK = 'clearSelectionStack';
 export const SET_VIEW = 'setView';
-export const SET_SELECTED_TRACE_EVENT = 'setSelectedTraceEvent';
+export const SET_FOCUSED_EVENT = 'setSelectedTraceEvent';
 export const VIEW_COMPONENT = 'viewComponent';
 export const VIEW_SEQUENCE = 'viewSequence';
 export const VIEW_FLOW = 'viewFlow';
@@ -24,7 +24,7 @@ export function buildStore() {
       selectionStack: [],
       currentView: DEFAULT_VIEW,
       selectedLabel: null,
-      selectedTraceEvent: null,
+      focusedEvent: null,
       filteredAppMap: new AppMap(),
     },
 
@@ -43,8 +43,8 @@ export function buildStore() {
       selectedLabel(state) {
         return state.selectedLabel;
       },
-      selectedTraceEvent(state) {
-        return state.selectedTraceEvent;
+      focusedEvent(state) {
+        return state.focusedEvent;
       },
     },
 
@@ -68,7 +68,7 @@ export function buildStore() {
         let selectionStack = Array.isArray(selection) ? selection : [selection];
         state.selectionStack.push(...selectionStack);
         state.selectedLabel = null;
-        state.selectedTraceEvent = null;
+        state.focusedEvent = null;
       },
 
       [POP_SELECTION_STACK](state) {
@@ -78,25 +78,25 @@ export function buildStore() {
       [CLEAR_SELECTION_STACK](state) {
         state.selectionStack = [];
         state.selectedLabel = null;
-        state.selectedTraceEvent = null;
+        state.focusedEvent = null;
       },
 
       [SELECT_LABEL](state, label) {
         state.selectionStack = [];
         state.selectedLabel = label;
-        state.selectedTraceEvent = null;
+        state.focusedEvent = null;
       },
 
       [SET_VIEW](state, view) {
         state.currentView = view;
       },
 
-      // Selected event refers to an event that should be displayed and emphasized in
+      // Focused event refers to an event that should be displayed and emphasized in
       // the current events view (sequence diagram or trace view). The viewport should be adjusted
       // so that this event is visible, and an effect can be rendered on the event.
       // This action does not imply that the sidebar display should be changed.
-      [SET_SELECTED_TRACE_EVENT](state, event) {
-        state.selectedTraceEvent = event;
+      [SET_FOCUSED_EVENT](state, event) {
+        state.focusedEvent = event;
       },
 
       // When the view filters are changed (e.g. roots, decluttering), a filtered AppMap

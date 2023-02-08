@@ -5,7 +5,7 @@
       :key="event.id"
       :event="event"
       :selected-events="selectedEvents"
-      :selected-trace-event="selectedTraceEvent"
+      :focused-event="focusedEvent"
       :event-filter-matches="eventFilterMatches"
       :event-filter-match="eventFilterMatch"
       :event-filter-match-index="eventFilterMatchIndex"
@@ -46,7 +46,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    selectedTraceEvent: {
+    focusedEvent: {
       type: Object,
       default: null,
     },
