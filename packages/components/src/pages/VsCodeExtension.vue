@@ -17,7 +17,7 @@
         :findings="findings"
         @onChangeFilter="
           (value) => {
-            this.traceFilterValue = value;
+            this.eventFilterText = value;
           }
         "
       >
@@ -55,7 +55,7 @@
           :tabName="VIEW_COMPONENT"
           :ref="VIEW_COMPONENT"
         >
-          <v-diagram-component ref="componentDiagram" :class-map="filteredAppMap.classMap" />
+          <v-diagram-component :class-map="filteredAppMap.classMap" />
         </v-tab>
 
         <v-tab
@@ -77,13 +77,13 @@
           <div class="trace-view">
             <v-trace-filter
               ref="traceFilter"
-              :nodesLength="highlightedNodes.length"
-              :currentIndex="currentTraceFilterIndex"
+              :nodesLength="eventFilterMatches.length"
+              :currentIndex="eventFilterMatchIndex"
               :suggestions="eventsSuggestions"
-              :initialFilterValue="traceFilterValue"
+              :initialFilterValue="eventFilterText"
               @onChange="
                 (value) => {
-                  this.traceFilterValue = value;
+                  this.eventFilterText = value;
                 }
               "
               @onPrevArrow="prevTraceFilter"
@@ -94,9 +94,9 @@
               :events="filteredAppMap.rootEvents()"
               :selected-events="selectedEvent"
               :selected-trace-event="selectedTraceEvent"
-              :highlighted-events="new Set(highlightedNodes)"
-              :highlighted-event="highlightedEvent"
-              :highlighted-event-index="currentTraceFilterIndex + 1"
+              :event-filter-matches="new Set(eventFilterMatches)"
+              :event-filter-match="eventFilterMatch"
+              :event-filter-match-index="eventFilterMatchIndex + 1"
               :name="VIEW_FLOW"
               :zoom-controls="true"
               @clickEvent="onClickTraceEvent"
@@ -424,8 +424,8 @@ export default {
       VIEW_SEQUENCE,
       VIEW_FLOW,
       filters: new AppMapFilter(),
-      traceFilterValue: '',
-      currentTraceFilterIndex: 0,
+      eventFilterText: '',
+      eventFilterMatchIndex: 0,
       showDownloadButton: false,
       showShareModal: false,
       shareURL: undefined,
@@ -455,12 +455,12 @@ export default {
       handler(selectedObject) {
         if (selectedObject) {
           if (selectedObject instanceof Event) {
-            const highlightedIndex = this.highlightedNodes.findIndex((e) => e === selectedObject);
+            const highlightedIndex = this.eventFilterMatches.findIndex((e) => e === selectedObject);
 
-            this.currentTraceFilterIndex = highlightedIndex >= 0 ? highlightedIndex : undefined;
+            this.eventFilterMatchIndex = highlightedIndex >= 0 ? highlightedIndex : undefined;
           }
         } else {
-          this.currentTraceFilterIndex = undefined;
+          this.eventFilterMatchIndex = undefined;
         }
 
         this.$root.$emit('stateChanged', 'selectedObject');
@@ -485,11 +485,11 @@ export default {
     },
     highlightedNodes: {
       handler() {
-        this.currentTraceFilterIndex = 0;
+        this.eventFilterMatchIndex = 0;
         this.selectCurrentHighlightedEvent();
       },
     },
-    currentTraceFilterIndex: {
+    eventFilterMatchIndex: {
       handler() {
         this.selectCurrentHighlightedEvent();
       },
@@ -534,7 +534,7 @@ export default {
     },
 
     eventsSuggestions() {
-      const highlightedIds = new Set(this.highlightedNodes.map((e) => e.id));
+      const highlightedIds = new Set(this.eventFilterMatches.map((e) => e.id));
       const uniqueEventNames = new Set(
         this.filteredAppMap.events
           .filter((e) => e.isCall() && !highlightedIds.has(e.id))
@@ -562,14 +562,14 @@ export default {
         }, {});
     },
 
-    highlightedNodes() {
+    eventFilterMatches() {
       const nodes = new Set();
 
-      if (this.traceFilterValue) {
-        const queryTerms = this.traceFilterValue.match(/(?:[^\s"]+|"[^"]*"|"[^"]*)+/g);
+      if (this.eventFilterText) {
+        const queryTerms = this.eventFilterText.match(/(?:[^\s"]+|"[^"]*"|"[^"]*)+/g);
 
         if (queryTerms) {
-          if (!this.traceFilterValue.endsWith(' ')) {
+          if (!this.eventFilterText.endsWith(' ')) {
             queryTerms.pop();
           }
 
@@ -643,8 +643,8 @@ export default {
       return Array.from(nodes).sort((a, b) => a.id - b.id);
     },
 
-    highlightedEvent() {
-      return this.highlightedNodes[this.currentTraceFilterIndex];
+    eventFilterMatch() {
+      return this.eventFilterMatches[this.eventFilterMatchIndex];
     },
 
     selectedObject() {
@@ -697,7 +697,7 @@ export default {
       const hasClassMap =
         Array.isArray(appMap.classMap.codeObjects) && appMap.classMap.codeObjects.length;
 
-      return !this.filtersChanged && !this.traceFilterValue && (!hasEvents || !hasClassMap);
+      return !this.filtersChanged && !this.eventFilterText && (!hasEvents || !hasClassMap);
     },
 
     filtersChanged() {
@@ -781,8 +781,8 @@ export default {
         state.selectedObject = `label:${this.selectedLabel}`;
       }
 
-      if (this.traceFilterValue) {
-        state.traceFilter = this.traceFilterValue;
+      if (this.eventFilterText) {
+        state.traceFilter = this.eventFilterText;
       }
 
       const { declutter } = this.filters;
@@ -964,7 +964,7 @@ export default {
     },
 
     clearSelection() {
-      this.currentTraceFilterIndex = 0;
+      this.eventFilterMatchIndex = 0;
       this.$store.commit(CLEAR_SELECTION_STACK);
       this.$root.$emit('clearSelection');
     },
@@ -1080,61 +1080,63 @@ export default {
     },
 
     prevTraceFilter() {
-      if (this.highlightedNodes.length === 0) {
+      if (this.eventFilterMatches.length === 0) {
         return;
       }
 
-      if (Number.isFinite(this.currentTraceFilterIndex)) {
-        this.currentTraceFilterIndex -= 1;
+      if (Number.isFinite(this.eventFilterMatchIndex)) {
+        this.eventFilterMatchIndex -= 1;
       } else {
         const [selectedEvent] = this.selectedEvent;
         if (selectedEvent) {
-          const previousEvent = this.highlightedNodes.filter((e) => e.id < selectedEvent.id).pop();
-          this.currentTraceFilterIndex = this.highlightedNodes.findIndex(
+          const previousEvent = this.eventFilterMatches
+            .filter((e) => e.id < selectedEvent.id)
+            .pop();
+          this.eventFilterMatchIndex = this.eventFilterMatches.findIndex(
             (e) => e === previousEvent
           );
         } else {
-          this.currentTraceFilterIndex = -1;
+          this.eventFilterMatchIndex = -1;
         }
       }
 
-      if (this.currentTraceFilterIndex < 0) {
-        this.currentTraceFilterIndex = this.highlightedNodes.length - 1;
+      if (this.eventFilterMatchIndex < 0) {
+        this.eventFilterMatchIndex = this.eventFilterMatches.length - 1;
       }
     },
 
     nextTraceFilter() {
-      if (this.highlightedNodes.length === 0) {
+      if (this.eventFilterMatches.length === 0) {
         return;
       }
 
-      if (Number.isFinite(this.currentTraceFilterIndex)) {
-        this.currentTraceFilterIndex += 1;
+      if (Number.isFinite(this.eventFilterMatchIndex)) {
+        this.eventFilterMatchIndex += 1;
       } else {
         const [selectedEvent] = this.selectedEvent;
         if (selectedEvent) {
-          const previousEvent = this.highlightedNodes
+          const previousEvent = this.eventFilterMatches
             .filter((e) => e.id > selectedEvent.id)
             .shift();
-          this.currentTraceFilterIndex = this.highlightedNodes.findIndex(
+          this.eventFilterMatchIndex = this.eventFilterMatches.findIndex(
             (e) => e === previousEvent
           );
         } else {
-          this.currentTraceFilterIndex = 0;
+          this.eventFilterMatchIndex = 0;
         }
       }
 
       if (
-        this.currentTraceFilterIndex >= this.highlightedNodes.length ||
-        this.currentTraceFilterIndex < 0
+        this.eventFilterMatchIndex >= this.eventFilterMatches.length ||
+        this.eventFilterMatchIndex < 0
       ) {
-        this.currentTraceFilterIndex = 0;
+        this.eventFilterMatchIndex = 0;
       }
     },
 
     selectCurrentHighlightedEvent() {
-      if (this.highlightedEvent) {
-        this.$store.commit(SELECT_CODE_OBJECT, this.highlightedEvent);
+      if (this.eventFilterMatch) {
+        this.$store.commit(SELECT_CODE_OBJECT, this.eventFilterMatch);
       }
     },
   },
