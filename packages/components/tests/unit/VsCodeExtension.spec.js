@@ -5,11 +5,11 @@ import data from './fixtures/user_page_scenario.appmap.json';
 import Vue from 'vue';
 
 describe('VsCodeExtension.vue', () => {
-  let wrapper;
-  let rootWrapper;
+  let wrapper; // Wrapper<Vue>
+  let rootWrapper; // Wrapper<Vue>
 
-  function serialize(json) {
-    return Buffer.from(JSON.stringify(json), 'utf-8').toString('base64url');
+  function stateObjectToBase64(stateObject) {
+    return Buffer.from(JSON.stringify(stateObject), 'utf-8').toString('base64url');
   }
 
   beforeEach(() => {
@@ -50,62 +50,80 @@ describe('VsCodeExtension.vue', () => {
     expect(wrapper.vm.filters.declutter.hideName.names).toContain('package:json');
 
     expect(wrapper.vm.getState()).toEqual(
-      'eyJmaWx0ZXJzIjp7InJvb3RPYmplY3RzIjpbInBhY2thZ2U6YXBwL2NvbnRyb2xsZXJzIl0sImxpbWl0Um9vdEV2ZW50cyI6ZmFsc2UsImhpZGVNZWRpYVJlcXVlc3RzIjpmYWxzZSwiaGlkZVVubGFiZWxlZCI6dHJ1ZSwiaGlkZUVsYXBzZWRUaW1lVW5kZXIiOjEwMCwiaGlkZU5hbWUiOlsicGFja2FnZTpqc29uIl19fQ'
+      'eyJjdXJyZW50VmlldyI6InZpZXdDb21wb25lbnQiLCJmaWx0ZXJzIjp7InJvb3RPYmplY3RzIjpbInBhY2thZ2U6YXBwL2NvbnRyb2xsZXJzIl0sImxpbWl0Um9vdEV2ZW50cyI6ZmFsc2UsImhpZGVNZWRpYVJlcXVlc3RzIjpmYWxzZSwiaGlkZVVubGFiZWxlZCI6dHJ1ZSwiaGlkZUVsYXBzZWRUaW1lVW5kZXIiOjEwMCwiaGlkZU5hbWUiOlsicGFja2FnZTpqc29uIl19fQ'
     );
   });
 
-  it('default state results in an empty string', () => {
-    expect(wrapper.vm.getState()).toEqual('');
+  it('default state encodes the current view', () => {
+    expect(wrapper.vm.getState()).toEqual(stateObjectToBase64({ currentView: 'viewComponent' }));
   });
 
   it('serializes selectedObject state', async () => {
     const state = { selectedObject: 'event:44' };
     await wrapper.vm.setState(JSON.stringify(state));
     expect(wrapper.vm.selectedObject.toString()).toMatch('User.find_by_id!');
-    expect(wrapper.vm.getState()).toEqual(serialize(state));
+    expect(wrapper.vm.getState()).toEqual(
+      stateObjectToBase64({ ...{ currentView: 'viewComponent' }, ...state })
+    );
   });
 
   it('serializes rootObjects state', async () => {
     const state = { filters: { rootObjects: ['package:app/controllers'] } };
     await wrapper.vm.setState(JSON.stringify(state));
     expect(wrapper.vm.filters.declutter.rootObjects).toContain('package:app/controllers');
-    expect(wrapper.vm.getState()).toEqual(serialize(state));
+    expect(wrapper.vm.getState()).toEqual(
+      stateObjectToBase64({ ...{ currentView: 'viewComponent' }, ...state })
+    );
   });
 
   it('serializes limitRootEvents state', async () => {
     const state = { filters: { limitRootEvents: false } };
     await wrapper.vm.setState(JSON.stringify(state));
-    expect(wrapper.vm.getState()).toEqual(serialize(state));
+    expect(wrapper.vm.getState()).toEqual(
+      stateObjectToBase64({ ...{ currentView: 'viewComponent' }, ...state })
+    );
   });
 
   it('serializes hideMediaRequests state', async () => {
     const state = { filters: { hideMediaRequests: false } };
     await wrapper.vm.setState(JSON.stringify(state));
-    expect(wrapper.vm.getState()).toEqual(serialize(state));
+    expect(wrapper.vm.getState()).toEqual(
+      stateObjectToBase64({ ...{ currentView: 'viewComponent' }, ...state })
+    );
   });
 
   it('serializes hideUnlabeled state', async () => {
     const state = { filters: { hideUnlabeled: true } };
     await wrapper.vm.setState(JSON.stringify(state));
-    expect(wrapper.vm.getState()).toEqual(serialize(state));
+    expect(wrapper.vm.getState()).toEqual(
+      stateObjectToBase64({ ...{ currentView: 'viewComponent' }, ...state })
+    );
   });
 
   it('serializes hideElapsedTimeUnder state', async () => {
     const state = { filters: { hideElapsedTimeUnder: 100 } };
     await wrapper.vm.setState(JSON.stringify(state));
-    expect(wrapper.vm.getState()).toEqual(serialize(state));
+    expect(wrapper.vm.getState()).toEqual(
+      stateObjectToBase64({ ...{ currentView: 'viewComponent' }, ...state })
+    );
   });
 
   it('serializes hideName state', async () => {
-    const state = { filters: { hideName: ['package:json', 'class:User'] } };
+    const state = {
+      filters: { hideName: ['package:json', 'class:User'] },
+    };
     await wrapper.vm.setState(JSON.stringify(state));
-    expect(wrapper.vm.getState()).toEqual(serialize(state));
+    expect(wrapper.vm.getState()).toEqual(
+      stateObjectToBase64({ ...{ currentView: 'viewComponent' }, ...state })
+    );
   });
 
   it('accepts a base64 encoded JSON object as state', async () => {
-    const state = serialize({ filters: { hideName: ['package:json', 'class:User'] } });
-    await wrapper.vm.setState(state);
-    expect(wrapper.vm.getState()).toEqual(state);
+    const state = { filters: { hideName: ['package:json', 'class:User'] } };
+    await wrapper.vm.setState(stateObjectToBase64(state));
+    expect(wrapper.vm.getState()).toEqual(
+      stateObjectToBase64({ ...{ currentView: 'viewComponent' }, ...state })
+    );
   });
 
   it('changes views and modifies the trace filter after setState', async () => {
