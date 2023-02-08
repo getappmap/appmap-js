@@ -49,6 +49,8 @@ export function buildStore() {
     },
 
     mutations: {
+      // Stores the initial, complete AppMap. See also SET_FILTERED_MAP, which is used to
+      // apply the effects of view filters.
       [SET_APPMAP_DATA](state, data) {
         state.selectionStack = [];
         state.appMap = buildAppMap().source(data).normalize().build();
@@ -60,7 +62,8 @@ export function buildStore() {
 
       // Show information about a code object in the sidebar.
       // The code object can be a package, class, function, SQL, etc, or it can
-      // be a specific event.
+      // be a specific event. These code object selections are stored in a stack, so that
+      // the user can navigate back to the previous selection.
       [SELECT_CODE_OBJECT](state, selection) {
         let selectionStack = Array.isArray(selection) ? selection : [selection];
         state.selectionStack.push(...selectionStack);
@@ -88,11 +91,16 @@ export function buildStore() {
         state.currentView = view;
       },
 
-      // Show the selected event in the current diagram (not the sidebar).
+      // Selected event refers to an event that should be displayed and emphasized in
+      // the current events view (sequence diagram or trace view). The viewport should be adjusted
+      // so that this event is visible, and an effect can be rendered on the event.
+      // This action does not imply that the sidebar display should be changed.
       [SET_SELECTED_TRACE_EVENT](state, event) {
         state.selectedTraceEvent = event;
       },
 
+      // When the view filters are changed (e.g. roots, decluttering), a filtered AppMap
+      // is comptued and stored in this state variable.
       [SET_FILTERED_MAP](state, filteredAppMap) {
         state.filteredAppMap = filteredAppMap;
       },

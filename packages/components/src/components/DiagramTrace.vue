@@ -99,7 +99,7 @@ export default {
       }, 16);
     },
 
-    focusFocused() {
+    showFocusEffect() {
       setTimeout(() => {
         const { container, trace } = this.$refs;
         const element = container.$el.querySelector('.trace-node.focused');
