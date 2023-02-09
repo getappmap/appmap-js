@@ -23,21 +23,38 @@ const isMerge = (item: Merge | Action): item is Merge => item.constructor === Ar
 
 const buildLoop = (merge: Merge): Loop => {
   const digest = buildDigest(merge[0]);
-  const elapsed = merge.reduce<number>(
-    (total, members) =>
-      total +
-      members.reduce<number>((sum, member) => sum + (member.elapsed ? member.elapsed : 0), 0),
-    0
-  );
-  const eventIds = merge.map((actions) => actions.map((action) => action.eventIds).flat()).flat();
+
+  // Since we are going to use merge[0] as the children of the loop, the event ids and elapsed time from the
+  // loop actions that will be discarded need to be merged into merge[0]. This needs to happen
+  // recursively in order to avoid losing event ids and elapsed time data from nested loops.
+  const aggregateLoopMemberData = (action: Action, duplicates: Action[]): void => {
+    action.eventIds = [...action.eventIds, ...duplicates.map((d) => d.eventIds).flat()].sort(
+      (a, b) => a - b
+    );
+    action.elapsed =
+      (action.elapsed || 0) + duplicates.reduce((sum, d) => sum + (d.elapsed || 0), 0);
+    action.children.forEach((child, index) => {
+      aggregateLoopMemberData(
+        child,
+        duplicates.map((d) => d.children[index])
+      );
+    });
+  };
+  merge[0].forEach((member, index) => {
+    aggregateLoopMemberData(
+      member,
+      merge.slice(1).map((m) => m[index])
+    );
+  });
+
   return {
     nodeType: NodeType.Loop,
     count: merge.length,
     digest: 'loop',
     subtreeDigest: ['loop', digest].join(':'),
     children: merge[0],
-    elapsed,
-    eventIds,
+    elapsed: merge[0].reduce((sum, action) => sum + (action.elapsed || 0), 0),
+    eventIds: [],
   } as Loop;
 };
 

@@ -5,19 +5,19 @@ participant models as "models"
 participant database as "database"
 participant users as "users"
 participant posts as "posts"
-  [->controllers: list <color:gray> 1.49 ms</color>
+  [->controllers: list <color:gray> 1.29 ms</color>
   activate controllers
-    controllers->models: <u>list</u> <color:gray> 0.102 ms</color>
+    controllers->models: <u>list</u> <color:gray> 0.086 ms</color>
     activate models
       models->database: <u>query</u> <color:gray> 0.001 ms</color>
     controllers<--models: array
     deactivate models
-    controllers->users: list <color:gray> 0.98 ms</color>
+    controllers->users: list <color:gray> 0.874 ms</color>
     activate users
-      Loop 5 times <color:gray> 0.426 ms</color>
-        users->models: posts <color:gray> 0.12 ms</color>
+      Loop 5 times <color:gray> 0.374 ms</color>
+        users->models: posts <color:gray> 0.109 ms</color>
         activate models
-          models->models: <u>find_for_user</u> <color:gray> 0.039 ms</color>
+          models->models: <u>find_for_user</u> <color:gray> 0.033 ms</color>
           activate models
             models->database: <u>query</u> <color:gray> 0.001 ms</color>
           models<--models: array

@@ -2,6 +2,7 @@
   <div
     :class="containerClasses"
     ref="container"
+    :data-event-ids="actionSpec.eventIds.join(' ')"
     :data-comment="`${actionSpec.nodeName} spans from ${actionSpec.callerActionIndex} to
       ${actionSpec.calleeActionIndex}`"
   >
@@ -233,14 +234,19 @@ export default {
 
       if (this.actionSpec.index === 0) result.push('first-action');
 
-      if (this.focusedEvent && this.actionSpec.action.eventIds.includes(this.focusedEvent.id))
+      if (this.focusedEvent && this.actionSpec.eventIds.includes(this.focusedEvent.id))
         result.push('focused');
 
       if (
         this.selectedEvents &&
-        this.selectedEvents.find((event) => this.actionSpec.action.eventIds.includes(event.id))
+        this.selectedEvents.find((event) => this.actionSpec.eventIds.includes(event.id))
       ) {
         result.push('selected');
+        this.$nextTick(() =>
+          this.$el
+            .querySelector('.self-call, .call-line-segment')
+            .scrollIntoView({ behavior: 'smooth', block: 'center' })
+        );
       }
 
       return result;
@@ -280,7 +286,7 @@ export default {
   .call-line-segment,
   .self-call {
     outline: 4px solid transparent;
-    animation: node-focused 4s ease-out 0.5s;
+    animation: node-focused 4s ease-out 0.25s;
   }
 }
 

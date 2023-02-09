@@ -5,26 +5,26 @@ participant models as "models"
 participant database as "database"
 participant users as "users"
 participant posts as "posts"
-  [->controllers: show <color:gray> 0.618 ms</color>
+  [->controllers: show <color:gray> 0.597 ms</color>
   activate controllers
-    controllers-[#CA9C3F]>models: <u>find</u> <color:gray> 0.087 ms</color>
+    controllers-[#CA9C3F]>models: <u>find</u> <color:gray> 0.089 ms</color>
     activate models
-      models-[#green]>database: <u><color:lightgray><back:#172238>query</back></color></u> <color:gray> 0.002 ms</color>
+      models-[#green]>database: <u><color:lightgray><back:#172238>query</back></color></u> <color:gray> 0.001 ms</color>
     controllers<[#CA9C3F]--models: <color:lightgray><back:#29201A>--exception!--</back></color> <color:lightgray><back:#172238>object</back></color>
     deactivate models
-    controllers-[#green]>users: <color:lightgray><back:#172238>show</back></color> <color:gray> 0.3 ms</color>
+    controllers-[#green]>users: <color:lightgray><back:#172238>show</back></color> <color:gray> 0.289 ms</color>
     activate users
-      users-[#green]>models: <color:lightgray><back:#172238>posts</back></color> <color:gray> 0.122 ms</color>
+      users-[#green]>models: <color:lightgray><back:#172238>posts</back></color> <color:gray> 0.114 ms</color>
       activate models
-        models-[#green]>models: <u><color:lightgray><back:#172238>find_for_user</back></color></u> <color:gray> 0.036 ms</color>
+        models-[#green]>models: <u><color:lightgray><back:#172238>find_for_user</back></color></u> <color:gray> 0.033 ms</color>
         activate models
           models->database: <u>query</u> <color:gray> 0.001 ms</color>
         models<[#green]--models: <color:lightgray><back:#172238>array</back></color>
         deactivate models
       users<[#green]--models: <color:lightgray><back:#172238>array</back></color>
       deactivate models
-      Loop#green 2 times <color:gray> 0.003 ms</color>
-        users-[#green]>posts: <color:lightgray><back:#172238>show</back></color> <color:gray> 0.002 ms</color>
+      Loop#green 2 times <color:gray> 0.002 ms</color>
+        users-[#green]>posts: <color:lightgray><back:#172238>show</back></color> <color:gray> 0.001 ms</color>
         activate posts
         users<[#green]--posts: <color:lightgray><back:#172238>string</back></color>
         deactivate posts
