@@ -124,7 +124,8 @@ export default function buildDiagram(
       }
 
       const typeName =
-        classNameToOpenAPIType(returnEvent.returnValue.class) || returnEvent.returnValue.class;
+        classNameToOpenAPIType(returnEvent.returnValue.class, { strict: true }) ||
+        returnEvent.returnValue.class;
       returnValueType = {
         name: typeName,
         properties: propertyNames,
