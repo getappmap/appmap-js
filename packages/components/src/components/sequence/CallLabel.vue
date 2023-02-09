@@ -120,7 +120,7 @@ export default {
     },
     selectEvent() {
       if (this.$store) {
-        const eventId = this.actionSpec.action.eventIds[0];
+        const eventId = this.actionSpec.eventIds[0];
         if (eventId === undefined) return;
 
         const event = this.$store.state.appMap.events[eventId - 1];

@@ -46,6 +46,10 @@ export class ActionSpec {
     this.children = [];
   }
 
+  get eventIds(): number[] {
+    return this.action.eventIds || [];
+  }
+
   get diagram(): Diagram {
     return this.diagramSpec.diagram;
   }
