@@ -19,14 +19,23 @@ declare module '@appland/models' {
   export interface ValueBase extends ObjectBase {
     readonly value: string;
     readonly size?: number;
-    readonly properties?: ParameterProperty[];
+    readonly properties?: NamedParameterProperty[];
+    readonly items?: ParameterProperty[];
   }
 
   export interface ParameterProperty {
-    readonly name: string;
+    readonly name?: string;
     readonly class: string;
-    readonly properties?: ParameterProperty[];
+    readonly properties?: NamedParameterProperty[];
+    readonly items?: ParameterProperty[];
   }
+
+  // Utility types for ParameterProperty
+  export type NamedParameterProperty = ParameterProperty & { readonly name: string };
+  export type ArrayParameterProperty = ParameterProperty & { readonly items: ParameterProperty[] };
+  export type ObjectParameterProperty = ParameterProperty & {
+    readonly properties: NamedParameterProperty[];
+  };
 
   export interface ParameterObject extends ValueBase {
     readonly name?: string;
