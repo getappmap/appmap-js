@@ -1,5 +1,5 @@
 <template>
-  <button type="button" @click="download" class="download-button">Download</button>
+  <div><slot /></div>
 </template>
 
 <script>

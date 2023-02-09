@@ -116,8 +116,8 @@
           <v-popper
             v-if="appMapUploadable"
             class="hover-text-popper"
-            text="Create a link to this AppMap."
-            placement="left"
+            text="Create a link to this AppMap"
+            placement="bottom"
             text-align="right"
           >
             <button class="control-button appmap-upload" @click="uploadAppmap" title="">
@@ -125,35 +125,24 @@
               <span>Share</span>
             </button>
           </v-popper>
-
-          <template v-if="showDownload">
-            Download
-            <!--
-              TODO: FAIL  tests/unit/VsCodeExtension.spec.js
-              ● Test suite failed to run
-
-                /Users/kgilpin/source/appland/appmap-js/node_modules/dom-to-svg/lib/index.js:1
-                ({"Object.<anonymous>":function(module,exports,require,__dirname,__filename,global,jest){import * as postcss from 'postcss';
-                                                                                                        ^^^^^^
-
-                SyntaxError: Cannot use import statement outside a module
-
-                  5 | <script>
-                  6 | import assert from 'assert';
-                >  7 | import { elementToSVG, inlineResources } from 'dom-to-svg';
-                    | ^
-                  8 |
-                  9 | export default {
-                  10 |   name: 'v-download-sequence-diagram',
-
-                  at ScriptTransformer._transformAndBuildScript (../../node_modules/@vue/cli-plugin-unit-jest/node_modules/@jest/transform/build/ScriptTransformer.js:537:17)
-                  at src/components/sequence/DownloadSequenceDiagram.vue:7:1
-                  at Object.<anonymous> (src/components/sequence/DownloadSequenceDiagram.vue:46:3)
-
-            <v-download-sequence-diagram></v-download-sequence-diagram>
-            -->
-          </template>
-
+          <v-popper
+            v-if="showDownload"
+            class="hover-text-popper"
+            text="Export in SVG format"
+            placement="bottom"
+            text-align="right"
+          >
+            <v-download-sequence-diagram ref="export">
+              <button
+                class="control-button appmap-upload"
+                @click="$refs.export.download()"
+                title=""
+              >
+                <ExportIcon class="control-button__icon" />
+                <span>Export</span>
+              </button>
+            </v-download-sequence-diagram>
+          </v-popper>
           <v-popper-menu :isHighlight="filtersChanged">
             <template v-slot:icon>
               <FilterIcon class="control-button__icon" @click="openFilterModal" />
@@ -340,7 +329,8 @@ import CloseThinIcon from '@/assets/close-thin.svg';
 import CloseIcon from '@/assets/close.svg';
 import ReloadIcon from '@/assets/reload.svg';
 import ResetIcon from '@/assets/reset.svg';
-import UploadIcon from '@/assets/upload.svg';
+import UploadIcon from '@/assets/link-icon.svg';
+import ExportIcon from '@/assets/export.svg';
 import FilterIcon from '@/assets/filter.svg';
 import DiagramGray from '@/assets/diagram-empty.svg';
 import VDetailsPanel from '../components/DetailsPanel.vue';
@@ -348,7 +338,7 @@ import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramSequence from '../components/DiagramSequence.vue';
 import VDiagramTrace from '../components/DiagramTrace.vue';
-// import VDownloadSequenceDiagram from '@/components/sequence/DownloadSequenceDiagram.vue';
+import VDownloadSequenceDiagram from '../components/sequence/DownloadSequenceDiagram.vue';
 import VFiltersForm from '../components/FiltersForm.vue';
 import VInstructions from '../components/Instructions.vue';
 import VNotification from '../components/Notification.vue';
@@ -392,12 +382,14 @@ export default {
     ReloadIcon,
     ResetIcon,
     UploadIcon,
+    ExportIcon,
     FilterIcon,
     VDetailsPanel,
     VDetailsButton,
     VDiagramComponent,
     VDiagramSequence,
     VDiagramTrace,
+    VDownloadSequenceDiagram,
     VFiltersForm,
     VInstructions,
     VNotification,
@@ -426,7 +418,6 @@ export default {
       filters: new AppMapFilter(),
       eventFilterText: '',
       eventFilterMatchIndex: 0,
-      showDownloadButton: false,
       showShareModal: false,
       shareURL: undefined,
     };
