@@ -817,11 +817,13 @@ export default {
     },
 
     setSelectedObject(fqid) {
-      const [match, type, object] = fqid.match(/^([a-z]+):(.+)/);
+      const matchResult = fqid.match(/^([a-z\-]+):(.+)/);
 
-      if (!match) {
+      if (!matchResult) {
         return;
       }
+
+      const [, type, object] = matchResult;
 
       if (type === 'label') {
         this.$store.commit(SELECT_LABEL, object);
