@@ -34,7 +34,15 @@ function parseScheme(authorization: string): Scheme {
 type OptSchemaObjectType = OpenAPIV3.SchemaObject['type'];
 type OptObjectTypeOrUnknown = OptSchemaObjectType | 'unknown';
 
-function classNameToOpenAPIType(className?: string): OptSchemaObjectType {
+export interface ClassNameToOpenApiTypeOptions {
+  // If true, unrecognized types will return undefined.
+  strict?: boolean;
+}
+
+function classNameToOpenAPIType(
+  className?: string,
+  options: ClassNameToOpenApiTypeOptions = {}
+): OptSchemaObjectType {
   if (!className || className === '') return;
   if (unrecognizedTypes.has(className)) return 'object';
 
@@ -92,18 +100,25 @@ function classNameToOpenAPIType(className?: string): OptSchemaObjectType {
 
   const mapper = (t: string): OptObjectTypeOrUnknown =>
     mapRubyType(t) || mapPythonType(t) || mapJavaType(t);
+
   const mapped = mapper(className.toLowerCase());
-  if (!mapped && !unrecognizedTypes.has(className)) {
-    if (verbose()) {
-      console.warn(
-        `Warning: Don't know how to map "${className}" to an OpenAPI type. You'll need to update the generated file.`
-      );
+  if (!mapped) {
+    if (options.strict) {
+      return;
     }
-    unrecognizedTypes.add(className);
-    return 'object';
+
+    if (!unrecognizedTypes.has(className)) {
+      if (verbose()) {
+        console.warn(
+          `Warning: Don't know how to map "${className}" to an OpenAPI type. You'll need to update the generated file.`
+        );
+      }
+      unrecognizedTypes.add(className);
+      return 'object';
+    }
   }
-  if (mapped === 'unknown') return;
-  return mapped;
+
+  return mapped === 'unknown' ? undefined : mapped;
 }
 
 function messageToOpenAPISchema(example: SchemaExample): OpenAPIV3.SchemaObject | undefined {
