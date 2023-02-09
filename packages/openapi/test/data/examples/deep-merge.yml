@@ -1,0 +1,149 @@
+- class: Hash
+  value: '{}'
+  properties:
+    - name: id
+      class: Integer
+    - name: created_at
+      class: String
+    - name: updated_at
+      class: String
+    - name: uuid
+      class: String
+    - name: data
+      class: Hash
+      properties:
+        - name: events
+          class: Array
+          items:
+            - class: Hash
+        - name: version
+          class: String
+        - name: classMap
+          class: Array
+          items:
+            - class: Hash
+        - name: metadata
+          class: Hash
+          properties:
+            - name: git
+              class: Hash
+            - name: name
+              class: String
+            - name: labels
+              class: Array
+              items:
+                - class: String
+            - name: feature
+              class: String
+            - name: language
+              class: Hash
+    - name: org_id
+      class: Integer
+    - name: mapset_id
+      class: Integer
+    - name: link_sharing
+      class: FalseClass
+    - name: name
+      class: String
+- class: Hash
+  value: '{}'
+  properties:
+    - name: events
+      class: Array
+      items:
+        - class: Hash
+          properties:
+            - name: id
+              class: Integer
+            - name: event
+              class: String
+            - name: message
+              class: Array
+              items:
+                - class: Hash
+            - name: http_server_request
+              class: Hash
+        - class: Hash
+          properties:
+            - name: id
+              class: Integer
+            - name: self
+              class: Hash
+            - name: event
+              class: String
+            - name: sql_query
+              class: Hash
+        - class: Hash
+          properties:
+            - name: id
+              class: Integer
+            - name: path
+              class: String
+            - name: self
+              class: Hash
+            - name: event
+              class: String
+            - name: lineno
+              class: Integer
+            - name: method_id
+              class: String
+            - name: defined_class
+              class: String
+        - class: Hash
+          properties:
+            - name: id
+              class: Integer
+            - name: path
+              class: String
+            - name: event
+              class: String
+            - name: lineno
+              class: Integer
+            - name: method_id
+              class: String
+            - name: parent_id
+              class: Integer
+            - name: defined_class
+              class: String
+    - name: version
+      class: String
+    - name: classMap
+      class: Array
+      items:
+        - class: Hash
+          properties:
+            - name: name
+              class: String
+            - name: type
+              class: String
+            - name: children
+              class: Array
+              items:
+                - class: Hash
+            - name: location
+              class: String
+    - name: metadata
+      class: Hash
+      properties:
+        - name: git
+          class: Hash
+          properties:
+            - name: branch
+              class: String
+            - name: commit
+              class: String
+            - name: repository
+              class: String
+        - name: name
+          class: String
+        - name: labels
+          class: Array
+          items:
+            - class: String
+        - name: feature
+          class: String
+        - name: language
+          class: Hash
+          properties:
+            - name: name
+              class: String

@@ -1,0 +1,240 @@
+examples:
+  - type: object
+    properties:
+      created_at:
+        type: string
+      data:
+        type: object
+        properties:
+          classMap:
+            type: array
+            items:
+              type: object
+          events:
+            type: array
+            items:
+              type: object
+          metadata:
+            type: object
+            properties:
+              feature:
+                type: string
+              git:
+                type: object
+              labels:
+                type: array
+                items:
+                  type: string
+              language:
+                type: object
+              name:
+                type: string
+          version:
+            type: string
+      id:
+        type: integer
+      link_sharing:
+        type: boolean
+      mapset_id:
+        type: integer
+      name:
+        type: string
+      org_id:
+        type: integer
+      updated_at:
+        type: string
+      uuid:
+        type: string
+
+  - type: object
+    properties:
+      classMap:
+        type: array
+        items:
+          type: object
+          properties:
+            children:
+              type: array
+              items:
+                type: object
+            location:
+              type: string
+            name:
+              type: string
+            type:
+              type: string
+      events:
+        type: array
+        items:
+          type: object
+          properties:
+            defined_class:
+              type: string
+            event:
+              type: string
+            http_server_request:
+              type: object
+            id:
+              type: integer
+            lineno:
+              type: integer
+            message:
+              type: array
+              items:
+                type: object
+            method_id:
+              type: string
+            parent_id:
+              type: integer
+            path:
+              type: string
+            self:
+              type: object
+            sql_query:
+              type: object
+      metadata:
+        type: object
+        properties:
+          feature:
+            type: string
+          git:
+            type: object
+            properties:
+              branch:
+                type: string
+              commit:
+                type: string
+              repository:
+                type: string
+          labels:
+            type: array
+            items:
+              type: string
+          language:
+            type: object
+            properties:
+              name:
+                type: string
+          name:
+            type: string
+      version:
+        type: string
+
+mergeResult:
+  type: object
+  properties:
+    classMap:
+      type: array
+      items:
+        type: object
+        properties:
+          children:
+            type: array
+            items:
+              type: object
+          location:
+            type: string
+          name:
+            type: string
+          type:
+            type: string
+    created_at:
+      type: string
+    data:
+      type: object
+      properties:
+        classMap:
+          type: array
+          items:
+            type: object
+        events:
+          type: array
+          items:
+            type: object
+        metadata:
+          type: object
+          properties:
+            feature:
+              type: string
+            git:
+              type: object
+            labels:
+              type: array
+              items:
+                type: string
+            language:
+              type: object
+            name:
+              type: string
+        version:
+          type: string
+    events:
+      type: array
+      items:
+        type: object
+        properties:
+          defined_class:
+            type: string
+          event:
+            type: string
+          http_server_request:
+            type: object
+          id:
+            type: integer
+          lineno:
+            type: integer
+          message:
+            type: array
+            items:
+              type: object
+          method_id:
+            type: string
+          parent_id:
+            type: integer
+          path:
+            type: string
+          self:
+            type: object
+          sql_query:
+            type: object
+    id:
+      type: integer
+    link_sharing:
+      type: boolean
+    mapset_id:
+      type: integer
+    metadata:
+      type: object
+      properties:
+        feature:
+          type: string
+        git:
+          type: object
+          properties:
+            branch:
+              type: string
+            commit:
+              type: string
+            repository:
+              type: string
+        labels:
+          type: array
+          items:
+            type: string
+        language:
+          type: object
+          properties:
+            name:
+              type: string
+        name:
+          type: string
+    name:
+      type: string
+    org_id:
+      type: integer
+    updated_at:
+      type: string
+    uuid:
+      type: string
+    version:
+      type: string

@@ -41,17 +41,19 @@
       code]'
     object_id: 119460
     size: 1
-    properties:
-    - name: mapset_id
-      class: NilClass
-    - name: scenario_uuid
-      class: String
-    - name: code_objects
-      class: Array
-    - name: metadata
-      class: Sequel::Postgres::JSONBHash
-    - name: labels
-      class: Sequel::Postgres::PGArray
+    items:
+      - class: Hash
+        properties:
+        - name: mapset_id
+          class: NilClass
+        - name: scenario_uuid
+          class: String
+        - name: code_objects
+          class: Array
+        - name: metadata
+          class: Sequel::Postgres::JSONBHash
+        - name: labels
+          class: Sequel::Postgres::PGArray
   http_server_response:
     status_code: 200
     headers:

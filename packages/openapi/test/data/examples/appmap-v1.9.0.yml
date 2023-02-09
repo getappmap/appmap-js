@@ -1,0 +1,13 @@
+---
+- class: Array
+  properties:
+    - name: mapset_id
+      class: NilClass
+    - name: scenario_uuid
+      class: String
+    - name: code_objects
+      class: Array
+    - name: metadata
+      class: Sequel::Postgres::JSONBHash
+    - name: labels
+      class: Sequel::Postgres::PGArray

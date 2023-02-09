@@ -1,4 +1,4 @@
-import { ParameterObject } from '@appland/models';
+import { Event, ParameterObject } from '@appland/models';
 import { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
 import Response from './response';
 import { headerValue, RPCRequest } from './rpcRequest';

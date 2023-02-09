@@ -20,7 +20,7 @@ describe('openapi.method', () => {
       },
     });
   });
-  it('http_server_request', async () => {
+  it('http_server_request', () => {
     const request = rpcRequestForEvent(httpServerRequests[0])!;
     expect(request.status).toEqual(201);
 
@@ -69,6 +69,7 @@ describe('openapi.method', () => {
                         },
                         appmaps: {
                           type: 'array',
+                          items: {},
                         },
                       },
                     },

@@ -31,12 +31,14 @@ describe('openapi.response', () => {
                 },
                 code_objects: {
                   type: 'array',
+                  items: {},
                 },
                 metadata: {
                   type: 'object',
                 },
                 labels: {
                   type: 'array',
+                  items: {},
                 },
               },
             },

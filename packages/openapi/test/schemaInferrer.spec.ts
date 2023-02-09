@@ -1,4 +1,5 @@
-import SchemaInferrer from '../src/schemaInferrer';
+import { OpenAPIV3 } from 'openapi-types';
+import SchemaInferrer, { isAmbiguousArray, mergeItems } from '../src/schemaInferrer';
 
 describe(SchemaInferrer, () => {
   it('returns undefined when no examples', () => {
@@ -23,26 +24,31 @@ describe(SchemaInferrer, () => {
         {
           name: 'plans',
           class: 'Array',
-          properties: [
+          items: [
             {
-              name: 'id',
-              class: 'Integer',
-            },
-            {
-              name: 'category',
-              class: 'String',
-            },
-            {
-              name: 'country',
-              class: 'NilClass',
-            },
-            {
-              name: 'created_at',
-              class: 'String',
-            },
-            {
-              name: 'is_current',
-              class: 'TrueClass',
+              class: 'Hash',
+              properties: [
+                {
+                  name: 'id',
+                  class: 'Integer',
+                },
+                {
+                  name: 'category',
+                  class: 'String',
+                },
+                {
+                  name: 'country',
+                  class: 'NilClass',
+                },
+                {
+                  name: 'created_at',
+                  class: 'String',
+                },
+                {
+                  name: 'is_current',
+                  class: 'TrueClass',
+                },
+              ],
             },
           ],
         },
@@ -152,6 +158,7 @@ describe(SchemaInferrer, () => {
       properties: {
         products: {
           type: 'array',
+          items: {},
         },
       },
       type: 'object',
@@ -260,6 +267,119 @@ describe(SchemaInferrer, () => {
         },
       },
       type: 'object',
+    });
+  });
+
+  describe('merging array items', () => {
+    it('identifies ambiguous array types', () => {
+      expect(isAmbiguousArray({ type: 'array', items: {} })).toEqual(true);
+      expect(
+        isAmbiguousArray({
+          type: 'array',
+          items: { type: 'string' },
+        })
+      ).toEqual(false);
+    });
+
+    it('merges two ambiguous arrays', () => {
+      expect(mergeItems({ type: 'array', items: {} }, { type: 'array', items: {} })).toEqual({
+        type: 'array',
+        items: {},
+      });
+    });
+
+    it('merges two arrays with the same type', () => {
+      const schema = {
+        type: 'array',
+        items: {
+          type: 'string',
+        },
+      } as OpenAPIV3.ArraySchemaObject;
+      expect(mergeItems(schema, schema)).toEqual(schema);
+    });
+
+    it('merges two arrays with differing types', () => {
+      const schemaA = {
+        type: 'array',
+        items: {
+          type: 'string',
+        },
+      } as OpenAPIV3.ArraySchemaObject;
+      const schemaB = {
+        type: 'array',
+        items: {
+          type: 'number',
+        },
+      } as OpenAPIV3.ArraySchemaObject;
+      expect(mergeItems(schemaA, schemaB)).toEqual({
+        type: 'array',
+        items: {
+          anyOf: [{ type: 'string' }, { type: 'number' }],
+        },
+      });
+    });
+
+    it('merges two arrays where one side contains multiple types', () => {
+      const schemaA = {
+        type: 'array',
+        items: {
+          anyOf: [{ type: 'string' }, { type: 'number' }],
+        },
+      } as OpenAPIV3.ArraySchemaObject;
+      const schemaB = {
+        type: 'array',
+        items: {
+          type: 'number',
+        },
+      } as OpenAPIV3.ArraySchemaObject;
+      expect(mergeItems(schemaA, schemaB)).toEqual({
+        type: 'array',
+        items: {
+          anyOf: [{ type: 'string' }, { type: 'number' }],
+        },
+      });
+    });
+
+    it('merges nested types within an array', () => {
+      const schemaA = {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string',
+            },
+          },
+        },
+      } as OpenAPIV3.ArraySchemaObject;
+      const schemaB = {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string',
+            },
+            age: {
+              type: 'number',
+            },
+          },
+        },
+      } as OpenAPIV3.ArraySchemaObject;
+      expect(mergeItems(schemaA, schemaB)).toEqual({
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string',
+            },
+            age: {
+              type: 'number',
+            },
+          },
+        },
+      });
     });
   });
 });
