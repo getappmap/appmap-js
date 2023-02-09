@@ -2,7 +2,7 @@
   <div>
     <v-details-panel-header object-type="External service" :object="object" :title="object.name" />
     <v-details-panel-filters :object="object" :is-root-object="isRootObject" />
-    <v-details-panel-list title="Events" :items="object.events" :event-quickview="true" />
+    <v-details-panel-list title="Events" :items="object.allEvents" :event-quickview="true" />
   </div>
 </template>
 
@@ -12,7 +12,7 @@ import VDetailsPanelFilters from '@/components/DetailsPanelFilters.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 
 export default {
-  name: 'v-details-panel-route',
+  name: 'v-details-panel-external-service',
   components: {
     VDetailsPanelList,
     VDetailsPanelFilters,

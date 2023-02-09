@@ -85,12 +85,18 @@ export default {
           result.push(codeObject.packageObject, codeObject.classObject, codeObject);
         }
 
-        if (codeObject.type === CodeObjectType.ROUTE || codeObject.type === CodeObjectType.QUERY) {
+        if (
+          codeObject.type === CodeObjectType.ROUTE ||
+          codeObject.type === CodeObjectType.QUERY ||
+          codeObject.type === CodeObjectType.EXTERNAL_ROUTE
+        ) {
           result.unshift(codeObject.parent);
         }
       }
 
-      return result.filter((obj) => obj && obj !== this.object);
+      return result.filter(
+        (obj) => obj && obj !== this.object && obj.type !== CodeObjectType.EXTERNAL_ROUTE
+      );
     },
   },
   methods: {
