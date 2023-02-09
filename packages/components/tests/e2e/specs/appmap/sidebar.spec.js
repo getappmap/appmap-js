@@ -329,9 +329,7 @@ context('AppMap sidebar', () => {
       .should('not.match', /SELECT.*FROM/);
   });
 
-  // FIXME
-  // This test is broken.
-  xit('renders HTTP client requests correctly', () => {
+  it('renders HTTP client requests correctly', () => {
     cy.get('.details-search__block--external-service')
       .contains('External services')
       .get('.details-search__block-item')
@@ -383,7 +381,7 @@ context('AppMap sidebar', () => {
 
     cy.get('.trace-node.highlight').within(() => {
       cy.get('.trace-node__header--http-client').contains(
-        'External service call to 127.0.0.1:9515'
+        'External service call to POST http://127.0.0.1:9515'
       );
 
       cy.get('.columns__column--left').within(() => {
