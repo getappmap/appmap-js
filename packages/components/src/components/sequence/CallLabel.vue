@@ -154,7 +154,7 @@ $bg-fade: rgba(0, 0, 0, 0.8);
     background-color: $bg-fade;
     padding: 2px 4px;
     border-radius: 3px;
-    color: darken($gray4, 20);
+    color: lighten($gray4, 18);
   }
 
   .name.static {
@@ -171,7 +171,7 @@ $bg-fade: rgba(0, 0, 0, 0.8);
   }
 
   .elapsed {
-    color: $sequence-elapsed-time-color;
+    color: darken($gray4, 20);
     background-color: $bg-fade;
     padding: 2px 4px;
     border-radius: 3px;
