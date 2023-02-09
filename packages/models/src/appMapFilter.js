@@ -61,7 +61,7 @@ export default class AppMapFilter {
     let events = rootEvents.reduce((callTree, rootEvent) => {
       rootEvent.traverse((e) => callTree.push(e));
       return callTree;
-    }, new Array());
+    }, []);
 
     if (this.rootObjects.length) {
       let eventBranches = [];
