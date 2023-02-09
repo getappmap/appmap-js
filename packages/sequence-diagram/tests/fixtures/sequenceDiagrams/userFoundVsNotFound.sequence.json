@@ -80,11 +80,17 @@
                 "raises_exception": false
               },
               "children": [],
-              "elapsed": 0.00000200001522898674,
+              "elapsed": 0.000001000240445137024,
+              "eventIds": [
+                3
+              ],
               "diffMode": 1
             }
           ],
-          "elapsed": 0.00008699996396899223,
+          "elapsed": 0.00008899997919797897,
+          "eventIds": [
+            2
+          ],
           "diffMode": 3,
           "formerName": "find",
           "formerResult": "exception!"
@@ -163,14 +169,23 @@
                         "raises_exception": false
                       },
                       "children": [],
-                      "elapsed": 0.00000100000761449337
+                      "elapsed": 0.000001000240445137024,
+                      "eventIds": [
+                        9
+                      ]
                     }
                   ],
-                  "elapsed": 0.00003600004129111767,
+                  "elapsed": 0.00003300001844763756,
+                  "eventIds": [
+                    8
+                  ],
                   "diffMode": 1
                 }
               ],
-              "elapsed": 0.00012199999764561653,
+              "elapsed": 0.00011399993672966957,
+              "eventIds": [
+                7
+              ],
               "diffMode": 1
             },
             {
@@ -199,19 +214,32 @@
                     "raisesException": false
                   },
                   "children": [],
-                  "elapsed": 0.00000200001522898674,
+                  "elapsed": 0.000001000240445137024,
+                  "eventIds": [
+                    13
+                  ],
                   "diffMode": 1
                 }
               ],
-              "elapsed": 0.00000300002284348011,
+              "elapsed": 0.000002000480890274048,
+              "eventIds": [
+                13,
+                15
+              ],
               "diffMode": 1
             }
           ],
-          "elapsed": 0.0002999999560415745,
+          "elapsed": 0.00028900010511279106,
+          "eventIds": [
+            6
+          ],
           "diffMode": 1
         }
       ],
-      "elapsed": 0.000617999816313386
+      "elapsed": 0.0005970001220703125,
+      "eventIds": [
+        1
+      ]
     }
   ]
 }

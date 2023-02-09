@@ -154,7 +154,7 @@ $bg-color: $gray2;
 
   &.focused {
     outline: 4px solid transparent;
-    animation: node-focused 4s ease-out 0.5s;
+    animation: node-focused 4s ease-out 0.25s;
   }
 
   &.exceptions {

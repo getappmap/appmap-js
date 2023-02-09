@@ -124,5 +124,12 @@ describe('Sequence diagram', () => {
       assert(isLoop(enclosingLoop));
       assert.strictEqual(enclosingLoop.count, 5);
     });
+    describe('members', () => {
+      it('acculumates event ids', () => {
+        const action = findActionById(LIST_USERS_APPMAP, 'lib/models/User#posts');
+
+        assert.deepEqual(action.eventIds, [7, 17, 27, 39, 49]);
+      });
+    });
   });
 });
