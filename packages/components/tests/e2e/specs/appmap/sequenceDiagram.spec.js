@@ -1,6 +1,8 @@
 context('AppMap sequence diagram', () => {
   beforeEach(() => {
-    'http://localhost:6006/iframe.html?id=pages-vs-code--extension-with-default-sequence-view&viewMode=story';
+    cy.visit(
+      'http://localhost:6006/iframe.html?id=pages-vs-code--extension-with-default-sequence-view&viewMode=story'
+    );
   });
 
   context('when it is the default view', () => {
