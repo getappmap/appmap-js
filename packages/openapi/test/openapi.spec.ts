@@ -12,8 +12,9 @@ type ClassName = string;
 type SchemaObjectType = OpenAPIV3.ArraySchemaObjectType | OpenAPIV3.NonArraySchemaObjectType;
 
 const message = (c: ClassName) => ({ message: { class: c } });
-const expected = (t?: SchemaObjectType, i?: SchemaObjectType) => {
+const expected = (t?: SchemaObjectType, i?: SchemaObjectType | object) => {
   if (!t) return { expected: undefined };
+  if (i && typeof i === 'object') return { expected: { type: t, items: i } };
 
   const r: any = { expected: { type: t } };
   if (i) {
@@ -22,7 +23,7 @@ const expected = (t?: SchemaObjectType, i?: SchemaObjectType) => {
   return r;
 };
 
-const mapping = (c: ClassName, t?: SchemaObjectType, i?: SchemaObjectType) => ({
+const mapping = (c: ClassName, t?: SchemaObjectType, i?: SchemaObjectType | object) => ({
   ...message(c),
   ...expected(t, i),
 });
@@ -141,9 +142,7 @@ describe('openapi', () => {
                         type: 'string',
                       },
                       selected_items: {
-                        items: {
-                          type: 'string',
-                        },
+                        items: {},
                         type: 'array',
                       },
                       sort: {
@@ -173,7 +172,7 @@ describe('openapi', () => {
 describe('messageToOpenAPISchema', () => {
   describe('for Ruby types', () => {
     const rubyMappings = [
-      mapping('Array', 'array', 'string'),
+      mapping('Array', 'array', {}),
       mapping('NilClass', undefined),
       mapping('MyClass', 'object'),
       ...multi(['Hash', 'ActiveSupport::HashWithIndifferentAccess'], 'object'),
@@ -188,7 +187,7 @@ describe('messageToOpenAPISchema', () => {
       mapping('builtins.bool', 'boolean'),
       mapping('builtins.dict', 'object'),
       mapping('builtins.int', 'integer'),
-      mapping('builtins.list', 'array', 'string'),
+      mapping('builtins.list', 'array', {}),
       mapping('builtins.str', 'string'),
       mapping('builtins.NoneType', undefined),
       mapping('MyPythonClass', 'object'),
