@@ -1,3 +1,10 @@
+# [@appland/models-v2.1.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.0.0...@appland/models-v2.1.0) (2023-02-10)
+
+
+### Features
+
+* Update ParameterProperty to AppMap spec v1.10.0 ([10ece88](https://github.com/getappmap/appmap-js/commit/10ece88487351b7078367905c559bd1b733d5ff5))
+
 # [@appland/models-v2.0.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v1.23.2...@appland/models-v2.0.0) (2023-02-01)
 
 
