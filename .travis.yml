@@ -6,7 +6,7 @@ node_js: 16
 cache:
   npm: false
   directories:
-  - $HOME/.yarn/berry/cache
+    - $HOME/.yarn/berry/cache
 
 git:
   # required to enable symlinks on windows
@@ -19,9 +19,9 @@ script: yarn run ci
 jobs:
   include:
     - node_js: 18
-      script:  # also run lint on node 18
-      - yarn run lint
-      - yarn run ci
+      script: # also run lint on node 18
+        - yarn run lint
+        - yarn run ci
 
     - node_js: 16
     - node_js: 14
@@ -31,6 +31,26 @@ jobs:
       env:
         - YARN_GPG=no
       script: yarn test
+
+    - stage: cypress
+      node_js: 18
+      script: yarn ci:cypress
+      env: [STAGE_NAME="4x Cypress"]
+
+    - stage: cypress
+      node_js: 18
+      script: yarn ci:cypress
+      env: [STAGE_NAME="4x Cypress"]
+
+    - stage: cypress
+      node_js: 18
+      script: yarn ci:cypress
+      env: [STAGE_NAME="4x Cypress"]
+
+    - stage: cypress
+      node_js: 18
+      script: yarn ci:cypress
+      env: [STAGE_NAME="4x Cypress"]
 
     - stage: deploy
       if: branch != main
