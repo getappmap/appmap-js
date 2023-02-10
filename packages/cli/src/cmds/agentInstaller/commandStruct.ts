@@ -33,6 +33,7 @@ export default class CommandStruct {
 export interface CommandReturn {
   stdout: string;
   stderr: string;
+  code: number;
 }
 
 /**

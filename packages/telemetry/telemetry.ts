@@ -4,9 +4,13 @@ import * as os from 'os';
 import { sync as readPackageUpSync } from 'read-pkg-up';
 import { TelemetryClient, setup as AppInsights } from 'applicationinsights';
 import Conf from 'conf';
-import { ChildProcess, exec as execCallback, spawn as spawnCallback } from 'child_process';
+import { exec as execCallback, spawn as spawnCallback } from 'child_process';
 import { promisify } from 'util';
 import { PathLike } from 'fs';
+import { CommandReturn } from '../cli/src/cmds/agentInstaller/commandStruct';
+import CommandStruct from '../cli/src/cmds/agentInstaller/commandStruct';
+import { run } from '../cli/src/cmds/agentInstaller/commandRunner';
+import { ChildProcessError } from '../cli/src/cmds/errors';
 
 const exec = promisify(execCallback);
 const spawn = promisify(spawnCallback);
@@ -289,21 +293,32 @@ class GitProperties {
   }
 
   static async state(cwd?: PathLike): Promise<GitState> {
-    const commandProcess = (await spawn('git', ['status'], {
-      shell: true,
-      cwd: cwd?.toString(),
-    })) as ChildProcess;
-    return new Promise((resolve) => {
-      commandProcess.on('exit', (code) => {
-        switch (code) {
-          case 127:
-            return resolve(GitState.NotInstalled);
-          case 128:
-            return resolve(GitState.NoRepository);
-          default:
-            return resolve(GitState.Ok);
+    const cmd = new CommandStruct(
+      'git',
+      ['status'],
+      cwd?.toString() || '' // perhaps cwd should never be undefined
+    );
+
+    return new Promise(async (resolve) => {
+      let returnCode;
+      try {
+        const commandReturn = await run(cmd);
+        returnCode = commandReturn.code;
+      } catch (err) {
+        if (err instanceof ChildProcessError) {
+          returnCode = (err as ChildProcessError).code;
+        } else {
+          return err;
         }
-      });
+      }
+      switch (returnCode) {
+        case 127:
+          return resolve(GitState.NotInstalled);
+        case 128:
+          return resolve(GitState.NoRepository);
+        default:
+          return resolve(GitState.Ok);
+      }
     });
   }
 }

@@ -28,7 +28,7 @@ describe(AgentInstallerProcedure, () => {
         },
       ],
     });
-    run.mockResolvedValue({ stdout: '{"configuration": {"contents": ""}}', stderr: '' });
+    run.mockResolvedValue({ stdout: '{"configuration": {"contents": ""}}', stderr: '', code: 0 });
     jest.spyOn(fs, 'writeFileSync').mockImplementation();
 
     await procedure.run();

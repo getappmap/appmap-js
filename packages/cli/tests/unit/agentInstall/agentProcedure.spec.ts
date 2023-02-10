@@ -22,6 +22,7 @@ describe(AgentProcedure, () => {
           "contents": "name: js-project\\npackages: []\\n"
         }
       }`,
+        code: 0
       });
       return expect(procedure.validateProject(false)).resolves.not.toThrow();
     });
@@ -35,6 +36,7 @@ describe(AgentProcedure, () => {
           "message": "test warning"
         }]
       }`,
+        code: 0
       });
       return expect(procedure.validateProject(false)).resolves.not.toThrow();
     });
@@ -48,6 +50,7 @@ describe(AgentProcedure, () => {
           "message": "test error"
         }]
       }`,
+        code: 0
       });
       return expect(procedure.validateProject(false)).rejects.toThrowError(/test error/);
     });

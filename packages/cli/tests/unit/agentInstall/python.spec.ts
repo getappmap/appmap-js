@@ -67,7 +67,7 @@ describe('Python Agent Installation', () => {
     });
 
     it('adds appmap to requirements.txt when missing', async () => {
-      sinon.stub(commandRunner, 'run').resolves({ stderr: '', stdout: '' });
+      sinon.stub(commandRunner, 'run').resolves({ stderr: '', stdout: '', code: 0 });
 
       await btInstaller.installAgent();
       const requirementsTxt = fs.readFileSync(join(projectDirectory, 'requirements.txt'), 'utf8');
@@ -75,7 +75,7 @@ describe('Python Agent Installation', () => {
     });
 
     it('replaces existing appmap in requirements.txt', async () => {
-      sinon.stub(commandRunner, 'run').resolves({ stderr: '', stdout: '' });
+      sinon.stub(commandRunner, 'run').resolves({ stderr: '', stdout: '', code: 0 });
 
       const requirementsPath = join(projectDirectory, 'requirements.txt');
       fs.writeFileSync(requirementsPath, ' appmap == 1.0.0');
@@ -86,7 +86,7 @@ describe('Python Agent Installation', () => {
     });
 
     it("doesn't munge a non-matching requirement", async () => {
-      sinon.stub(commandRunner, 'run').resolves({ stderr: '', stdout: '' });
+      sinon.stub(commandRunner, 'run').resolves({ stderr: '', stdout: '', code: 0 });
 
       const requirementsPath = join(projectDirectory, 'requirements.txt');
       fs.writeFileSync(requirementsPath, ' not-appmap == 1.0.0');
