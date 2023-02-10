@@ -118,6 +118,7 @@ export async function run(command: CommandStruct): Promise<CommandReturn> {
         return resolve({
           stdout: output.stdout,
           stderr: output.stderr,
+          code: code,
         });
       }
 

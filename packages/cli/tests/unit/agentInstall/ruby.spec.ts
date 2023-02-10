@@ -48,7 +48,7 @@ describe('Ruby Agent Installation', () => {
       const bundleInstall = (cmdStruct: CommandStruct): Promise<CommandReturn> => {
         expect(cmdStruct.program).toEqual('bundle');
         expect(cmdStruct.args).toEqual(['install']);
-        return Promise.resolve({ stdout: '', stderr: '' });
+        return Promise.resolve({ stdout: '', stderr: '', code: 0 });
       };
 
       const checkBundlerConfig = (cmdStruct: CommandStruct) => {
@@ -58,6 +58,7 @@ describe('Ruby Agent Installation', () => {
           stdout:
             'Set for your local app (/home/ahtrotta/projects/land-of-apps/sample_app_6th_ed/.bundle/config): [:test]',
           stderr: '',
+          code: 0
         });
       };
 
