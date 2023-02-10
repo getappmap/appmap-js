@@ -117,7 +117,6 @@ $min-height: 3rem;
 .label-container {
   margin: 3px 0;
   text-align: center;
-  padding: 3px;
   overflow: hidden;
   text-overflow: ellipsis;
   overflow: visible;
@@ -131,12 +130,12 @@ $min-height: 3rem;
   position: absolute;
 
   // These attributes are taken from the component diagram package element.
-  background-color: $gray4; //#6fddd6;
-  font-family: 'IBM Plex Mono', monospace;
+  background-color: lighten($gray4, 10); //#6fddd6;
+  //font-family: 'IBM Plex Mono', monospace;
   color: #010306;
-  font-size: 75%;
-  font-weight: 700;
-  border: 3px solid $gray4;
+  font-size: 9pt;
+  font-weight: 500;
+  border: 3px solid lighten($gray4, 10);
   border-radius: 3px;
   display: flex;
   justify-content: center;

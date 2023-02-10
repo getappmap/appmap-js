@@ -295,7 +295,19 @@ export default {
 .call.selected {
   .call-line-segment,
   .self-call {
-    outline: 4px solid $hotpink;
+  }
+}
+
+.call.selected > .call-line-segment {
+  background-color: #6c8ba54f;
+  &.arrow-base {
+    border-radius: 0.5rem 0 0 0;
+  }
+  &.arrow-head {
+    border-radius: 0 0.5rem 0 0;
+  }
+  &.single-span {
+    border-radius: 0.5rem 0.5rem 0 0;
   }
 }
 
@@ -367,9 +379,9 @@ export default {
 
 .call-line-segment,
 .self-call {
-  margin-top: calc(var(--open-group-count) * 40px);
-  padding-top: 15px;
-  padding-bottom: 4px;
+  margin-top: calc(var(--open-group-count) * 50px);
+  padding-top: 0.5rem;
+  padding-bottom: 0.25rem;
 }
 
 .single-span {
@@ -404,6 +416,29 @@ export default {
 
   .arrow-base {
     left: calc((var(--caller-lifecycle-depth) * $sequence-activation-gutter-width));
+  }
+
+  .arrow {
+    right: 0px;
+    position: absolute;
+    bottom: -7px;
+  }
+}
+
+.call.selected.call-right {
+  .single-span {
+    left: calc(((var(--caller-lifecycle-depth)) * $sequence-activation-gutter-width));
+  }
+
+  .arrow-base {
+    left: calc((var(--caller-lifecycle-depth) * $sequence-activation-gutter-width));
+  }
+  .arrow-head,
+  .connecting-span {
+  }
+
+  .connecting-span {
+    border-radius: 0;
   }
 
   .arrow {
