@@ -34,18 +34,22 @@ jobs:
 
     - stage: cypress
       script: yarn ci:cypress
+      name: Cypress 1
       env: [STAGE_NAME="4x Cypress"]
 
     - stage: cypress
       script: yarn ci:cypress
+      name: Cypress 2
       env: [STAGE_NAME="4x Cypress"]
 
     - stage: cypress
       script: yarn ci:cypress
+      name: Cypress 3
       env: [STAGE_NAME="4x Cypress"]
 
     - stage: cypress
       script: yarn ci:cypress
+      name: Cypress 4
       env: [STAGE_NAME="4x Cypress"]
 
     - stage: deploy
