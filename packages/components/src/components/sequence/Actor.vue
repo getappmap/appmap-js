@@ -3,7 +3,7 @@
     <div class="sequence-actor-lane-separator" />
     <div class="offset">
       <div class="on-top">
-        <div class="sequence-actor">
+        <div class="sequence-actor" :data-actor-id="actor.id">
           <div
             class="label-container"
             ref="label_container"
@@ -11,6 +11,7 @@
             @click="selectCodeObject"
           >
             <span class="label"> {{ actor.name }} </span>
+            <span class="hide-container" @click.stop="hideCodeObject">[x]</span>
           </div>
         </div>
       </div>
@@ -67,6 +68,9 @@ export default {
     },
   },
   methods: {
+    hideCodeObject() {
+      this.$root.$emit('addHiddenName', this.actor.id);
+    },
     selectCodeObject() {
       if (this.$store) {
         const codeObject = this.$store.state.appMap.classMap.codeObjects.find(
@@ -119,7 +123,7 @@ $min-height: 3rem;
   overflow: visible;
 
   min-width: 145px;
-  min-height: 40px;
+  min-height: 60px;
   max-width: $min-width - 6;
   width: fit-content;
 
@@ -142,6 +146,19 @@ $min-height: 3rem;
   &--selected {
     background-color: $black;
     color: $white;
+  }
+
+  .hide-container {
+    position: absolute;
+    display: inline-block;
+    right: 0;
+    top: 0;
+
+    &:hover {
+      color: blue;
+      text-decoration: underline;
+      cursor: pointer;
+    }
   }
 }
 

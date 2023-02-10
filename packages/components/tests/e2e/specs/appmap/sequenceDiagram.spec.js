@@ -9,6 +9,15 @@ context('AppMap sequence diagram', () => {
     it('opens as the initial view', () => {
       cy.get('.sequence-diagram').children('.lane').should('have.length', 9);
     });
+
+    it('a button in the Actor box will hide a package', () => {
+      cy.get('.sequence-actor[data-actor-id="package:openssl"] .hide-container').click();
+
+      cy.get('.sequence-actor[data-actor-id="package:openssl"]').should('not.exist');
+
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters .filters__hide-item').should('have.length', 1);
+    });
   });
 
   context('opening with component view', () => {
