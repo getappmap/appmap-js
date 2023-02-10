@@ -35,22 +35,22 @@ jobs:
     - stage: cypress
       script: yarn ci:cypress
       name: Cypress 1
-      env: [STAGE_NAME="4x Cypress"]
+      env: [STAGE_NAME="4x-electron"]
 
     - stage: cypress
       script: yarn ci:cypress
       name: Cypress 2
-      env: [STAGE_NAME="4x Cypress"]
+      env: [STAGE_NAME="4x-electron"]
 
     - stage: cypress
       script: yarn ci:cypress
       name: Cypress 3
-      env: [STAGE_NAME="4x Cypress"]
+      env: [STAGE_NAME="4x-electron"]
 
     - stage: cypress
       script: yarn ci:cypress
       name: Cypress 4
-      env: [STAGE_NAME="4x Cypress"]
+      env: [STAGE_NAME="4x-electron"]
 
     - stage: deploy
       if: branch != main
