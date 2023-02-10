@@ -122,7 +122,7 @@ appmap_dir: build/appmap
          "contents": "${providedConfig.replace(/[\n]/g, '\\n')}"
        }
     }`;
-      const ret = { stdout: fakeConfig, stderr: '' };
+      const ret = { stdout: fakeConfig, stderr: '', code: 0 };
       return Promise.resolve(ret);
     };
 
@@ -130,14 +130,14 @@ appmap_dir: build/appmap
       expect(cmdStruct.program).toEqual('java');
       const args = cmdStruct.args;
       expect(args).toEqual(['-jar', 'appmap.jar', '-d', projectDir, 'validate']);
-      const ret = { stdout: '[]', stderr: '' };
+      const ret = { stdout: '[]', stderr: '', code: 0 };
       return Promise.resolve(ret);
     };
 
     const verifyJavaVersion = (cmdStruct: CommandStruct) => {
       expect(cmdStruct.program).toEqual('javac');
       expect(cmdStruct.args).toEqual(['-version']);
-      return Promise.resolve({ stdout: '11.0.11', stderr: '' });
+      return Promise.resolve({ stdout: '11.0.11', stderr: '', code: 0 });
     };
 
     describe('managed with gradle', () => {
@@ -157,6 +157,7 @@ appmap_dir: build/appmap
         const ret = {
           stdout: '',
           stderr: '',
+          code: 0
         };
         return Promise.resolve(ret);
       };
@@ -168,6 +169,7 @@ appmap_dir: build/appmap
         const ret = {
           stdout: 'com.appland:appmap-agent.jar.path=appmap.jar',
           stderr: '',
+          code: 0
         };
         return Promise.resolve(ret);
       };
@@ -233,6 +235,7 @@ appmap_dir: build/appmap
         const ret = {
           stdout: '',
           stderr: '',
+          code: 0
         };
         return Promise.resolve(ret);
       };
@@ -244,6 +247,7 @@ appmap_dir: build/appmap
         const ret = {
           stdout: 'com.appland:appmap-agent.jar.path=appmap.jar',
           stderr: '',
+          code: 0
         };
         return Promise.resolve(ret);
       };
@@ -305,7 +309,7 @@ appmap_dir: build/appmap
       expect(cmdStruct.program).toEqual('bundle');
       const args = cmdStruct.args;
       expect(args).toEqual(['check', '--dry-run']);
-      const ret = { stdout: '', stderr: '' };
+      const ret = { stdout: '', stderr: '', code: 0 };
       return Promise.resolve(ret);
     };
 
@@ -313,7 +317,7 @@ appmap_dir: build/appmap
       expect(cmdStruct.program).toEqual('bundle');
       const args = cmdStruct.args;
       expect(args).toEqual(['install']);
-      const ret = { stdout: '', stderr: '' };
+      const ret = { stdout: '', stderr: '', code: 0 };
       return Promise.resolve(ret);
     };
 
@@ -339,7 +343,7 @@ appmap_dir: tmp/appmap
      "contents": "${providedConfig.replace(/[\n]/g, '\\n')}"
    }
 }`;
-      const ret = { stdout: fakeConfig, stderr: '' };
+      const ret = { stdout: fakeConfig, stderr: '', code: 0 };
       return Promise.resolve(ret);
     };
 
@@ -347,20 +351,20 @@ appmap_dir: tmp/appmap
       expect(cmdStruct.program).toEqual('bundle');
       const args = cmdStruct.args;
       expect(args).toEqual(['exec', 'appmap-agent-validate']);
-      const ret = { stdout: '[]', stderr: '' };
+      const ret = { stdout: '[]', stderr: '', code: 0 };
       return Promise.resolve(ret);
     };
 
     const rubyVersion = (cmdStruct: CommandStruct) => {
       expect(cmdStruct.program).toEqual('ruby');
       expect(cmdStruct.args).toEqual(['-v']);
-      return Promise.resolve({ stdout: 'ruby 2.5.1p57', stderr: '' });
+      return Promise.resolve({ stdout: 'ruby 2.5.1p57', stderr: '', code: 0 });
     };
 
     const gemHome = (cmdStruct: CommandStruct) => {
       expect(cmdStruct.program).toEqual('ruby');
       expect(cmdStruct.args).toEqual(['-v']);
-      return Promise.resolve({ stdout: '/usr/local/gems', stderr: '' });
+      return Promise.resolve({ stdout: '/usr/local/gems', stderr: '', code: 0 });
     };
 
     const checkBundlerConfig = (cmdStruct: CommandStruct) => {
@@ -370,6 +374,7 @@ appmap_dir: tmp/appmap
         stdout:
           'Set for your local app (/home/ahtrotta/projects/land-of-apps/sample_app_6th_ed/.bundle/config): [:test]',
         stderr: '',
+        code: 0
       });
     };
 
@@ -452,7 +457,7 @@ appmap_dir: tmp/appmap
       const msg = 'failValidate, validation failed';
       const testValidation = async (errorObj: any) => {
         const failValidate = () => {
-          return Promise.resolve({ stdout: errorObj, stderr: '' });
+          return Promise.resolve({ stdout: errorObj, stderr: '', code: 0 });
         };
         const evalResults = (err: Error | undefined, argv: any, output: string) => {
           expect(err?.message).toMatch(msg);
@@ -488,13 +493,13 @@ appmap_dir: tmp/appmap
     const pythonVersion = (cmdStruct: CommandStruct) => {
       expect(cmdStruct.program).toEqual('python3');
       expect(cmdStruct.args).toEqual(['--version']);
-      return Promise.resolve({ stdout: 'Python 3.7.0', stderr: '' });
+      return Promise.resolve({ stdout: 'Python 3.7.0', stderr: '', code: 0 });
     };
 
     const pythonPath = (cmdStruct: CommandStruct) => {
       expect(cmdStruct.program).toEqual('python3');
       expect(cmdStruct.args).toEqual(['-c', "'import sys; print(sys.prefix)'"]);
-      return Promise.resolve({ stdout: '/usr/local', stderr: '' });
+      return Promise.resolve({ stdout: '/usr/local', stderr: '', code: 0 });
     };
 
     const providedConfig = `name: fake-app
@@ -554,7 +559,7 @@ appmap_dir: tmp/appmap
       const installAgent = (cmdStruct: CommandStruct) => {
         expect(cmdStruct.program).toEqual('python3');
         expect(cmdStruct.args).toEqual(['-m', 'pip', 'install', '-r', 'requirements.txt']);
-        const ret = { stdout: '', stderr: '' };
+        const ret = { stdout: '', stderr: '', code: 0 };
         return Promise.resolve(ret);
       };
 
@@ -567,7 +572,7 @@ appmap_dir: tmp/appmap
      "contents": "${providedConfig.replace(/[\n]/g, '\\n')}"
    }
 }`;
-        const ret = { stdout: fakeConfig, stderr: '' };
+        const ret = { stdout: fakeConfig, stderr: '', code: 0 };
         return Promise.resolve(ret);
       };
 
@@ -579,6 +584,7 @@ appmap_dir: tmp/appmap
             stdout:
               'pip 22.0 from /home/user/.pyenv/versions/3.7.0/lib/python3.7/site-packages/pip (python 3.7)',
             stderr: '',
+            code: 0
           });
         };
 
@@ -586,7 +592,7 @@ appmap_dir: tmp/appmap
           expect(cmdStruct.program).toEqual('python3');
           const args = cmdStruct.args;
           expect(args).toEqual(['-m', 'pip', 'install', '-r', 'requirements.txt']);
-          const ret = { stdout: '', stderr: '' };
+          const ret = { stdout: '', stderr: '', code: 0 };
           return Promise.resolve(ret);
         };
 
@@ -616,7 +622,7 @@ appmap_dir: tmp/appmap
         const pythonVersion = (cmdStruct: CommandStruct) => {
           expect(cmdStruct.program).toEqual('python3');
           expect(cmdStruct.args).toEqual(['--version']);
-          return Promise.resolve({ stdout: 'Python 3.10.7', stderr: '' });
+          return Promise.resolve({ stdout: 'Python 3.10.7', stderr: '', code: 0 });
         };
 
         const pipVersion = (cmdStruct: CommandStruct) => {
@@ -626,6 +632,7 @@ appmap_dir: tmp/appmap
             stdout:
               'pip 22.2.2 from /home/user/.pyenv/versions/3.10.7/lib/python3.7/site-packages/pip (python 3.10)',
             stderr: '',
+            code: 0
           });
         };
 
@@ -633,7 +640,7 @@ appmap_dir: tmp/appmap
           expect(cmdStruct.program).toEqual('python3');
           const args = cmdStruct.args;
           expect(args).toEqual(['-m', 'pip', 'install', '-r', 'requirements.txt', '--dry-run']);
-          const ret = { stdout: '', stderr: '' };
+          const ret = { stdout: '', stderr: '', code: 0 };
           return Promise.resolve(ret);
         };
 
@@ -691,7 +698,7 @@ appmap_dir: tmp/appmap
       const pythonVersion = (cmdStruct: CommandStruct) => {
         expect(cmdStruct.program).toEqual('python3');
         expect(cmdStruct.args).toEqual(['--version']);
-        return Promise.resolve({ stdout: 'Python 3.7.0', stderr: '' });
+        return Promise.resolve({ stdout: 'Python 3.7.0', stderr: '', code: 0 });
       };
 
       beforeEach(() => {
@@ -703,14 +710,14 @@ appmap_dir: tmp/appmap
         expect(cmdStruct.program).toEqual('poetry');
         const args = cmdStruct.args;
         expect(args).toEqual(['install', '--dry-run']);
-        const ret = { stdout: '', stderr: '' };
+        const ret = { stdout: '', stderr: '', code: 0 };
         return Promise.resolve(ret);
       };
 
       const installAgent = (cmdStruct: CommandStruct) => {
         expect(cmdStruct.program).toEqual('poetry');
         expect(cmdStruct.args).toEqual(['add', '--dev', '--allow-prereleases', 'appmap']);
-        const ret = { stdout: '', stderr: '' };
+        const ret = { stdout: '', stderr: '', code: 0 };
         return Promise.resolve(ret);
       };
 
@@ -723,7 +730,7 @@ appmap_dir: tmp/appmap
      "contents": "${expectedConfig.replace(/[\n]/g, '\\n')}"
    }
 }`;
-        const ret = { stdout: fakeConfig, stderr: '' };
+        const ret = { stdout: fakeConfig, stderr: '', code: 0 };
         return Promise.resolve(ret);
       };
 
@@ -802,7 +809,7 @@ appmap_dir: tmp/appmap
     const nodeVersion = (cmdStruct: CommandStruct) => {
       expect(cmdStruct.program).toEqual('node');
       expect(cmdStruct.args).toEqual(['--version']);
-      return Promise.resolve({ stdout: 'v16.11.1', stderr: '' });
+      return Promise.resolve({ stdout: 'v16.11.1', stderr: '', code: 0 });
     };
 
     const providedConfig = `name: fake-app
@@ -824,6 +831,7 @@ appmap_dir: tmp/appmap
       const ret = {
         stdout: '3.2.1',
         stderr: '',
+        code: 0,
       };
       return Promise.resolve(ret);
     };
@@ -835,6 +843,7 @@ appmap_dir: tmp/appmap
       const ret = {
         stdout: '',
         stderr: '',
+        code: 0,
       };
       return Promise.resolve(ret);
     };
@@ -849,7 +858,7 @@ appmap_dir: tmp/appmap
          "contents": "${providedConfig.replace(/[\n]/g, '\\n')}"
        }
     }`;
-      const ret = { stdout: fakeConfig, stderr: '' };
+      const ret = { stdout: fakeConfig, stderr: '', code: 0 };
       return Promise.resolve(ret);
     };
 
@@ -857,7 +866,7 @@ appmap_dir: tmp/appmap
       expect(cmdStruct.program).toEqual('npx');
       const args = cmdStruct.args;
       expect(args).toEqual(['@appland/appmap-agent-js', 'status', projectDir]);
-      const ret = { stdout: '[]', stderr: '' };
+      const ret = { stdout: '[]', stderr: '', code: 0 };
       return Promise.resolve(ret);
     };
 
@@ -873,14 +882,14 @@ appmap_dir: tmp/appmap
         expect(cmdStruct.program).toEqual('npm');
         const args = cmdStruct.args;
         expect(args).toEqual(['install', '--dry-run']);
-        const ret = { stdout: '', stderr: '' };
+        const ret = { stdout: '', stderr: '', code: 0 };
         return Promise.resolve(ret);
       };
 
       const installAgent = (cmdStruct: CommandStruct) => {
         expect(cmdStruct.program).toEqual('npm');
         expect(cmdStruct.args).toEqual(['install', '--saveDev', '@appland/appmap-agent-js@latest']);
-        const ret = { stdout: '', stderr: '' };
+        const ret = { stdout: '', stderr: '', code: 0 };
         return Promise.resolve(ret);
       };
 
@@ -939,14 +948,14 @@ appmap_dir: tmp/appmap
         expect(cmdStruct.program).toEqual('yarn');
         const args = cmdStruct.args;
         expect(args).toEqual(['install', '--immutable']);
-        const ret = { stdout: '', stderr: '' };
+        const ret = { stdout: '', stderr: '', code: 0 };
         return Promise.resolve(ret);
       };
 
       const installAgent = (cmdStruct: CommandStruct) => {
         expect(cmdStruct.program).toEqual('yarn');
         expect(cmdStruct.args).toEqual(['add', '--dev', '@appland/appmap-agent-js@latest']);
-        const ret = { stdout: '', stderr: '' };
+        const ret = { stdout: '', stderr: '', code: 0 };
         return Promise.resolve(ret);
       };
 
@@ -1002,6 +1011,7 @@ appmap_dir: tmp/appmap
 error Cannot find the root of your workspace - are you sure you're currently in a workspace?
 info Visit https://yarnpkg.com/en/docs/cli/workspaces for documentation about this command.`,
           stderr: '',
+          code: 0,
         });
         expect(await getYarnSubprojects(projectFixture, [installer])).toStrictEqual([]);
       });
@@ -1025,6 +1035,7 @@ info Visit https://yarnpkg.com/en/docs/cli/workspaces for documentation about th
             }
           }`,
           stderr: '',
+          code: 0,
         });
         expect(await getYarnSubprojects(projectFixture, [installer])).toStrictEqual([
           // it doesn't detect the root workspace
@@ -1057,6 +1068,7 @@ info Visit https://yarnpkg.com/en/docs/cli/workspaces for documentation about th
 {"location":"packages/subproject_one","name":"subproject_one"}
 {"location":"packages/subproject_two","name":"subproject_two"}`,
             stderr: '',
+            code: 0,
           });
 
         const projectFixture = path.join(fixtureDir, 'javascript', 'yarn_with_subprojects');
@@ -1090,7 +1102,7 @@ info Visit https://yarnpkg.com/en/docs/cli/workspaces for documentation about th
 
   describe('Varied project configurations', () => {
     beforeEach(() => {
-      sinon.stub(commandRunner, 'run').resolves({ stdout: '', stderr: '' });
+      sinon.stub(commandRunner, 'run').resolves({ stdout: '', stderr: '', code: 0 });
     });
 
     it('requests the user to select a project type if more than one exist', async () => {
@@ -1189,6 +1201,7 @@ info Visit https://yarnpkg.com/en/docs/cli/workspaces for documentation about th
       sinon.stub(commandRunner, 'run').resolves({
         stdout: '{"configuration": { "contents": "{}" }, "errors": []}',
         stderr: '',
+        code: 0
       });
 
       sinon.stub(BundleInstaller.prototype, 'installAgent').resolves();
@@ -1198,7 +1211,7 @@ info Visit https://yarnpkg.com/en/docs/cli/workspaces for documentation about th
 
       sinon
         .stub(AgentInstallerProcedure.prototype, 'validateAgent')
-        .resolves({ stdout: '{"errors": [], "schema": "{}"}', stderr: '' });
+        .resolves({ stdout: '{"errors": [], "schema": "{}"}', stderr: '', code: 0 });
     });
 
     it('succeeds when the config syntax is valid', async () => {
@@ -1290,7 +1303,7 @@ info Visit https://yarnpkg.com/en/docs/cli/workspaces for documentation about th
       // NOTE: stdout produced invalid JSON
       sinon
         .stub(AgentInstallerProcedure.prototype, 'validateAgent')
-        .resolves({ stdout: '[ }', stderr: '' });
+        .resolves({ stdout: '[ }', stderr: '', code: 0 });
 
       const validateConfig = sinon.stub(validator, 'validateConfig').returns({ valid: true });
 
@@ -1307,6 +1320,7 @@ info Visit https://yarnpkg.com/en/docs/cli/workspaces for documentation about th
       sinon.stub(commandRunner, 'run').resolves({
         stdout: '{"configuration": { "contents": "" }, "errors": []}',
         stderr: '',
+        code: 0
       });
 
       expectedStubs = [GradleInstaller.prototype, MavenInstaller.prototype].flatMap((prototype) => [
@@ -1398,6 +1412,7 @@ info Visit https://yarnpkg.com/en/docs/cli/workspaces for documentation about th
         .resolves({
           stdout: '3.2.1',
           stderr: '',
+          code: 0,
         })
         // yarn workspaces list --json
         .onCall(callIdx++)
@@ -1406,84 +1421,100 @@ info Visit https://yarnpkg.com/en/docs/cli/workspaces for documentation about th
 {"location":"packages/subproject_one","name":"subproject_one"}
 {"location":"packages/subproject_two","name":"subproject_two"}`,
           stderr: '',
+          code: 0,
         })
         // installing root project
         .onCall(callIdx++)
         .resolves({
           stdout: '{"configuration": { "contents": "" }, "errors": []}',
           stderr: '',
+          code: 0,
         })
         .onCall(callIdx++)
         .resolves({
           stdout: '', // why wasn't '{}' necessary here?
           stderr: '',
+          code: 0,
         })
         .onCall(callIdx++)
         .resolves({
           stdout: '',
           stderr: '',
+          code: 0,
         })
         // installing first sub-project
         .onCall(callIdx++)
         .resolves({
           stdout: '{"configuration": { "contents": "" }, "errors": []}',
           stderr: '',
+          code: 0,
         })
         .onCall(callIdx++)
         .resolves({
           stdout: '{}',
           stderr: '',
+          code: 0,
         })
         .onCall(callIdx++)
         .resolves({
           stdout: '',
           stderr: '',
+          code: 0,
         })
         .onCall(callIdx++)
         .resolves({
           stdout: '',
           stderr: '',
+          code: 0,
         })
         .onCall(callIdx++)
         .resolves({
           stdout: '',
           stderr: '',
+          code: 0,
         })
         // installing second sub-project
         .onCall(callIdx++)
         .resolves({
           stdout: '{"configuration": { "contents": "" }, "errors": []}',
           stderr: '',
+          code: 0,
         })
         .onCall(callIdx++)
         .resolves({
           stdout: '{}',
           stderr: '',
+          code: 0,
         })
         .onCall(callIdx++)
         .resolves({
           stdout: '',
           stderr: '',
+          code: 0,
         })
         .onCall(callIdx++)
         .resolves({
           stdout: '',
           stderr: '',
+          code: 0,
         })
         .onCall(callIdx++)
         .resolves({
           stdout: '',
           stderr: '',
+          code: 0,
         })
         .onCall(callIdx++)
         .resolves({
           stdout: '{"configuration": { "contents": "" }, "errors": []}',
           stderr: '',
+          code: 0,
         })
         .onCall(callIdx++)
         .resolves({
           stdout: '{}',
           stderr: '',
+          code: 0,
         });
 
       const promptStub = sinon.stub(inquirer, 'prompt').resolves({

@@ -186,7 +186,7 @@ export default {
     const cmd = new OpenAPICommand(appmapDir);
     cmd.filter = fileSizeFilter(maxAppMapSizeInBytes);
     const [openapi, numAppMaps] = await cmd.execute();
-    sendTelemetry(openapi.paths, numAppMaps, appmapDir);
+    await sendTelemetry(openapi.paths, numAppMaps, appmapDir);
 
     for (const error of cmd.errors) {
       console.warn(error);
@@ -247,15 +247,17 @@ ${yaml.dump(template)}
 };
 
 async function sendTelemetry(paths: OpenAPIV3.PathsObject, numAppMaps: number, appmapDir: string) {
+  const gitContributors = (await Git.contributors(60, appmapDir));
+  const gitState = GitState[await Git.state(appmapDir)];
   Telemetry.sendEvent(
     {
       name: 'appmap:openapi',
       properties: {
-        git_state: GitState[await Git.state(appmapDir)],
+        git_state: gitState,
       },
       metrics: {
         paths: Object.keys(paths).length,
-        contributors: (await Git.contributors(60, appmapDir)).length,
+        contributors: gitContributors.length,
         numAppMaps,
       },
     },
