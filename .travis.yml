@@ -33,22 +33,18 @@ jobs:
       script: yarn test
 
     - stage: cypress
-      node_js: 18
       script: yarn ci:cypress
       env: [STAGE_NAME="4x Cypress"]
 
     - stage: cypress
-      node_js: 18
       script: yarn ci:cypress
       env: [STAGE_NAME="4x Cypress"]
 
     - stage: cypress
-      node_js: 18
       script: yarn ci:cypress
       env: [STAGE_NAME="4x Cypress"]
 
     - stage: cypress
-      node_js: 18
       script: yarn ci:cypress
       env: [STAGE_NAME="4x Cypress"]
 
