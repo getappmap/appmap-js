@@ -22,6 +22,7 @@
         }"
       >
         <VCallLabel :action-spec="actionSpec" :collapsed-actions="collapsedActionState" />
+        <VSelfCallArrow :action-spec="actionSpec" />
       </div>
     </template>
     <template v-else-if="actionSpec.callArrowDirection === 'right'">
@@ -191,11 +192,12 @@ import Arrow from '@/assets/sequence-action-arrow.svg';
 import { ActionSpec } from './ActionSpec';
 import VCallLabel from './CallLabel.vue';
 import VDiffChannel from './DiffChannel.vue';
+import VSelfCallArrow from './SelfCallArrow.vue';
 
 export default {
   name: 'v-sequence-call-action',
 
-  components: { Arrow, VCallLabel, VDiffChannel },
+  components: { Arrow, VCallLabel, VDiffChannel, VSelfCallArrow },
 
   props: {
     actionSpec: {
