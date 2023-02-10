@@ -1,15 +1,17 @@
 <template>
   <div class="tabs">
     <div class="tabs__header">
-      <v-tab-button
-        v-for="tab in tabs"
-        :key="tab.name"
-        :label="tab.name"
-        :is-active="activeTab === tab"
-        :tabName="tab.tabName"
-        @click.native="activateTab(tab)"
-      >
-      </v-tab-button>
+      <div class="tabs__group">
+        <v-tab-button
+          v-for="tab in tabs"
+          :key="tab.name"
+          :label="tab.name"
+          :is-active="activeTab === tab"
+          :tabName="tab.tabName"
+          @click.native="activateTab(tab)"
+        >
+        </v-tab-button>
+      </div>
       <div class="tabs__notification">
         <slot name="notification" />
       </div>
@@ -83,21 +85,25 @@ export default {
   height: 100%;
 
   &__header {
-    position: relative;
+    position: absolute;
+    width: inherit;
     border-bottom: 1px solid $gray2;
     height: 44px;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     padding-left: 1.25rem;
     padding-right: 1.25rem;
     z-index: 100;
   }
 
+  &__group {
+    align-self: flex-end;
+  }
+
   &__notification {
     align-self: flex-end;
     margin: 0 1rem 0.25rem 1rem;
-    flex: 1;
   }
 
   &__controls {
@@ -112,6 +118,7 @@ export default {
   &__content {
     width: 100%;
     height: 100%;
+    padding-top: 44px;
   }
 }
 </style>
