@@ -292,7 +292,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/models@workspace:*, @appland/models@workspace:^2.0.0, @appland/models@workspace:packages/models":
+"@appland/models@workspace:*, @appland/models@workspace:^2.0.0, @appland/models@workspace:^2.1.0, @appland/models@workspace:packages/models":
   version: 0.0.0-use.local
   resolution: "@appland/models@workspace:packages/models"
   dependencies:
@@ -317,7 +317,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/openapi@workspace:packages/openapi"
   dependencies:
-    "@appland/models": "workspace:^2.0.0"
+    "@appland/models": "workspace:^2.1.0"
     "@types/jest": ^27.4.1
     "@types/js-yaml": ^4.0.5
     "@typescript-eslint/eslint-plugin": ^5.7.0
