@@ -1,3 +1,10 @@
+# [@appland/sequence-diagram-v1.3.4](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.3.3...@appland/sequence-diagram-v1.3.4) (2023-02-10)
+
+
+### Bug Fixes
+
+* Use the most recent `classNameToOpenAPIType` API ([8e2686c](https://github.com/getappmap/appmap-js/commit/8e2686c432ffdae5c30731c13e0e3cc433894121))
+
 # [@appland/sequence-diagram-v1.3.3](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.3.2...@appland/sequence-diagram-v1.3.3) (2023-02-02)
 
 
