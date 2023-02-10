@@ -1,3 +1,15 @@
+# [@appland/openapi-v1.4.0](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.3.3...@appland/openapi-v1.4.0) (2023-02-10)
+
+
+### Bug Fixes
+
+* Remove side effect in `classNameToOpenAPIType` ([d7612d0](https://github.com/getappmap/appmap-js/commit/d7612d0f39b3fa0a7354bd3102f548d09e8dc416))
+
+
+### Features
+
+* Support array items in parameter property objects ([71834bf](https://github.com/getappmap/appmap-js/commit/71834bfb7f841b360cf1f0da6241ce2aa1117b4c))
+
 # [@appland/openapi-v1.3.3](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.3.2...@appland/openapi-v1.3.3) (2023-02-01)
 
 
