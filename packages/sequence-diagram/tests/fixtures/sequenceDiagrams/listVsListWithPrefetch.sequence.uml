@@ -5,22 +5,22 @@ participant models as "models"
 participant database as "database"
 participant users as "users"
 participant posts as "posts"
-  [->controllers: list <color:gray> 1.34 ms</color>
+  [->controllers: list <color:gray> 1.32 ms</color>
   activate controllers
-    controllers->models: <u>list</u> <color:gray> 0.356 ms</color>
+    controllers->models: <u>list</u> <color:gray> 0.351 ms</color>
     activate models
-      models-[#green]>database: <u><color:lightgray><back:#172238>query</back></color></u> <color:gray> 0.001 ms</color>
-      models-[#green]>models: <u><color:lightgray><back:#172238>find_for_users</back></color></u> <color:gray> 0.04 ms</color>
+      models-[#green]>database: <u><color:lightgray><back:#172238>query</back></color></u> <color:gray> 0.002 ms</color>
+      models-[#green]>models: <u><color:lightgray><back:#172238>find_for_users</back></color></u> <color:gray> 0.042 ms</color>
       activate models
         models->database: <u>query</u> <color:gray> 0.001 ms</color>
       models<[#green]--models: <color:lightgray><back:#172238>object</back></color>
       deactivate models
     controllers<--models: array
     deactivate models
-    controllers->users: list <color:gray> 0.551 ms</color>
+    controllers->users: list <color:gray> 0.529 ms</color>
     activate users
-      Loop 5 times <color:gray> 0.017 ms</color>
-        users->models: posts <color:gray> 0.001 ms</color>
+      Loop 5 times <color:gray> 0.013 ms</color>
+        users->models: posts <color:gray> 0.004 ms</color>
         activate models
           models-[#red]>models: <color:lightgray><back:#29201A>--find_for_user--</back></color>
           activate models
@@ -29,8 +29,8 @@ participant posts as "posts"
           deactivate models
         users<--models: array
         deactivate models
-        Loop ~2 times <color:gray> 0.004 ms</color>
-          users->posts: show <color:gray> 0.003 ms</color>
+        Loop ~2 times <color:gray> 0.009 ms</color>
+          users->posts: show <color:gray> 0.009 ms</color>
           activate posts
           users<--posts: string
           deactivate posts
