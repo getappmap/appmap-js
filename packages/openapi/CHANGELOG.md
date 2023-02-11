@@ -1,3 +1,10 @@
+# [@appland/openapi-v1.4.1](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.4.0...@appland/openapi-v1.4.1) (2023-02-11)
+
+
+### Bug Fixes
+
+* Update @appland/models to v2.1.0 ([b853448](https://github.com/getappmap/appmap-js/commit/b8534481251a0fd0917e7b490439aa63805aa094))
+
 # [@appland/openapi-v1.4.0](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.3.3...@appland/openapi-v1.4.0) (2023-02-10)
 
 
