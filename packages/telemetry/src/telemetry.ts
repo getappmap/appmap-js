@@ -4,7 +4,7 @@ import * as os from 'os';
 import { sync as readPackageUpSync } from 'read-pkg-up';
 import { TelemetryClient, setup as AppInsights } from 'applicationinsights';
 import Conf from 'conf';
-import { exec as execCallback, spawn as spawnCallback } from 'child_process';
+import { exec as execCallback } from 'child_process';
 import { promisify } from 'util';
 import { PathLike } from 'fs';
 import { CommandReturn } from '@appland/appmap/src/cmds/agentInstaller/commandStruct';
@@ -13,7 +13,6 @@ import { run } from '@appland/appmap/src/cmds/agentInstaller/commandRunner';
 import { ChildProcessError } from '@appland/appmap/src/cmds/errors';
 
 const exec = promisify(execCallback);
-const spawn = promisify(spawnCallback);
 
 const { name, version } = (() => {
   const result = readPackageUpSync({ cwd: __dirname })?.packageJson;
@@ -306,7 +305,7 @@ class GitProperties {
         returnCode = commandReturn.code;
       } catch (err) {
         if (err instanceof ChildProcessError) {
-          returnCode = (err as ChildProcessError).code;
+          returnCode = err.code;
         } else {
           return err;
         }
