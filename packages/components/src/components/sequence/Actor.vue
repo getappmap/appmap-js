@@ -126,6 +126,7 @@ $min-height: 3rem;
   overflow: hidden;
   text-overflow: ellipsis;
   overflow: visible;
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.55);
 
   min-width: 145px;
   min-height: 60px;
@@ -137,7 +138,7 @@ $min-height: 3rem;
 
   // These attributes are taken from the component diagram package element.
   background-color: $black;
-  color: $white; //#010306;
+  color: $white;
   font-size: 9pt;
   border: 2px solid lighten($gray4, 15);
   border-radius: 0.25rem;
@@ -153,8 +154,8 @@ $min-height: 3rem;
   .hide-container {
     position: absolute;
     display: inline-block;
-    right: 0;
-    top: 0;
+    right: 2px;
+    top: 2px;
 
     &:hover {
       color: blue;
@@ -164,7 +165,11 @@ $min-height: 3rem;
 
     svg {
       fill: $white;
-      opacity: 70%;
+      opacity: 33%;
+      transition: $transition;
+      &:hover {
+        opacity: 93%;
+      }
     }
   }
 }
