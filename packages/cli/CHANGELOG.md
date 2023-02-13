@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.65.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.65.1...@appland/appmap-v3.65.2) (2023-02-13)
+
+
+### Bug Fixes
+
+* Update @appland/models and @appland/openapi ([03b001b](https://github.com/getappmap/appmap-js/commit/03b001b34ec3e5f415107c14e9a582a8f3b83374))
+
 # [@appland/appmap-v3.65.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.65.0...@appland/appmap-v3.65.1) (2023-02-07)
 
 
