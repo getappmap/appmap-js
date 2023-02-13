@@ -6,7 +6,7 @@ import { verbose } from '@appland/appmap/src/utils';
 import { ChildProcessError } from '@appland/appmap/src/cmds/errors';
 
 export class ProcessLog {
-  public static buffer: string = '';
+  public static buffer = '';
 
   public static log(command: string, childProcess: ChildProcess) {
     this.buffer = this.buffer.concat(`\n\nRunning command: \`${command}\`\n\n`);
@@ -19,7 +19,9 @@ export class ProcessLog {
   }
 
   public static recordExit(program: string, code: number | null, signal: NodeJS.Signals | null) {
-    this.buffer.concat(`\n\n'${program}' exited with code ${code}, signal ${signal}\n\n`);
+    const codeString = code === null ? '': code.toString();
+    const signalString = signal === null ? '': signal.toString();
+    this.buffer.concat(`\n\n'${program}' exited with code ${codeString}, signal ${signalString}\n\n`);
   }
 
   // Return the current buffer and clear it for future use
@@ -69,7 +71,7 @@ export async function run(command: CommandStruct): Promise<CommandReturn> {
       cwd: command.path as string,
     });
 
-    let output = new CommandOutput();
+    const output = new CommandOutput();
 
     if (verbose()) {
       console.log(
@@ -84,11 +86,11 @@ export async function run(command: CommandStruct): Promise<CommandReturn> {
       cp.stdout?.pipe(process.stdout);
     }
 
-    cp.stderr?.on('data', (data) => {
+    cp.stderr?.on('data', (data: object) => {
       output.append('stderr', data.toString());
     });
 
-    cp.stdout?.on('data', (data) => {
+    cp.stdout?.on('data', (data: object) => {
       output.append('stdout', data.toString());
     });
 
@@ -109,7 +111,8 @@ export async function run(command: CommandStruct): Promise<CommandReturn> {
 
     cp.on('exit', (code, signal) => {
       if (verbose()) {
-        console.log(`'${command.program}' exited with code ${code}`);
+        const codeStr = code === null ? '' : code.toString();
+        console.log(`'${command.program}' exited with code ${codeStr}`);
       }
 
       ProcessLog.recordExit(command.program, code, signal);
