@@ -3,8 +3,8 @@
 import sinon, { SinonSpy } from 'sinon';
 import Conf from 'conf';
 import * as os from 'os';
-import Telemetry, { Git } from './telemetry';
-import { name as appName, version } from './package.json';
+import Telemetry, { Git } from '../../src/telemetry';
+import { name as appName, version } from '../../package.json';
 import * as childProcess from 'child_process';
 
 const invalidExpiration = () => Date.now() - 1000 * 60 * 60;

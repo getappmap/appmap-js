@@ -1,0 +1,1 @@
+../../telemetry/src/commandStruct.ts

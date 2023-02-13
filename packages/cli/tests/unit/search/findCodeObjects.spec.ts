@@ -15,6 +15,7 @@ const appMapDir = tmp.dirSync().name.replace(/\\/g, '/');
 
 describe('FindCodeObjects', () => {
   beforeAll(async () => {
+    jest.setTimeout(15000); // 10000 fails locally when all cli tests run
     await copyFile(checkoutDataFile, join(appMapDir, basename(checkoutDataFile)));
     await indexDirectory(appMapDir);
   });
