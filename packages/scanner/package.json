@@ -18,6 +18,7 @@
     "schema-up-to-date": "git diff --exit-code src/configuration/schema/options.json",
     "doc-up-to-date": "git diff --exit-code doc/",
     "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
     "ci": "yarn lint && yarn build && yarn schema-up-to-date && yarn doc-up-to-date && yarn test",
     "test": "jest --filter=./test/testFilter.js",
     "semantic-release": "semantic-release",
