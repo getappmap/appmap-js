@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.76.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.75.1...@appland/scanner-v1.76.0) (2023-02-13)
+
+
+### Features
+
+* Show a warning when watch scanning fails ([19e782c](https://github.com/getappmap/appmap-js/commit/19e782c4ab4571b428c98c4b2a3957fac5d57c93))
+
 # [@appland/scanner-v1.75.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.75.0...@appland/scanner-v1.75.1) (2023-02-01)
 
 
