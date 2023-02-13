@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "lint": "eslint telemetry.ts",
+    "lint": "eslint src/commandRunner.ts src/commandStruct.ts src/telemetry.ts",
     "pre-commit": "lint-staged"
   },
   "lint-staged": {

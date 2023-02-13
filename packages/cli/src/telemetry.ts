@@ -1,1 +1,1 @@
-../../telemetry/telemetry.ts
+../../telemetry/src/telemetry.ts
