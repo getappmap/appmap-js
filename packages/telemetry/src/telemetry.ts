@@ -7,10 +7,10 @@ import Conf from 'conf';
 import { exec as execCallback, spawn as spawnCallback } from 'child_process';
 import { promisify } from 'util';
 import { PathLike } from 'fs';
-import { CommandReturn } from '../cli/src/cmds/agentInstaller/commandStruct';
-import CommandStruct from '../cli/src/cmds/agentInstaller/commandStruct';
-import { run } from '../cli/src/cmds/agentInstaller/commandRunner';
-import { ChildProcessError } from '../cli/src/cmds/errors';
+import { CommandReturn } from '@appland/appmap/src/cmds/agentInstaller/commandStruct';
+import CommandStruct from '@appland/appmap/src/cmds/agentInstaller/commandStruct';
+import { run } from '@appland/appmap/src/cmds/agentInstaller/commandRunner';
+import { ChildProcessError } from '@appland/appmap/src/cmds/errors';
 
 const exec = promisify(execCallback);
 const spawn = promisify(spawnCallback);
@@ -302,7 +302,7 @@ class GitProperties {
     return new Promise(async (resolve) => {
       let returnCode;
       try {
-        const commandReturn = await run(cmd);
+        const commandReturn: CommandReturn = await run(cmd);
         returnCode = commandReturn.code;
       } catch (err) {
         if (err instanceof ChildProcessError) {
