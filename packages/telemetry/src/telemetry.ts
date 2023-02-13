@@ -257,6 +257,7 @@ export default class Telemetry {
 }
 
 export enum GitState {
+  OtherError, // Some other error
   NotInstalled, // The git cli was not found.
   NoRepository, // Git is installed but no repository was found.
   Ok, // Git is installed, a repository is present.
@@ -297,28 +298,26 @@ class GitProperties {
       ['status'],
       cwd?.toString() || '' // perhaps cwd should never be undefined
     );
-
-    return new Promise(async (resolve) => {
-      let returnCode;
-      try {
-        const commandReturn: CommandReturn = await run(cmd);
-        returnCode = commandReturn.code;
-      } catch (err) {
-        if (err instanceof ChildProcessError) {
-          returnCode = err.code;
-        } else {
-          return err;
-        }
+    let returnCode;
+    try {
+      const commandReturn: CommandReturn = await run(cmd);
+      returnCode = commandReturn.code;
+    } catch (err) {
+      if (err instanceof ChildProcessError) {
+        returnCode = err.code;
+      } else {
+        returnCode = GitState.OtherError;
+        return returnCode;
       }
-      switch (returnCode) {
-        case 127:
-          return resolve(GitState.NotInstalled);
-        case 128:
-          return resolve(GitState.NoRepository);
-        default:
-          return resolve(GitState.Ok);
-      }
-    });
+    }
+    switch (returnCode) {
+      case 127:
+        return GitState.NotInstalled;
+      case 128:
+        return GitState.NoRepository;
+      default:
+        return GitState.Ok;
+    }
   }
 }
 
