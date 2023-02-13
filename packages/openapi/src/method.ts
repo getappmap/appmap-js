@@ -5,7 +5,7 @@ import { headerValue, RPCRequest } from './rpcRequest';
 import ObjectSchema from './objectSchema';
 import { messageToOpenAPISchema, parseScheme } from './util';
 
-const bodyParamMethods = new Set(['delete', 'put', 'post', 'patch']);
+const bodyParamMethods = new Set(['options', 'put', 'post', 'patch']);
 
 function openapiIn(rpcRequest: RPCRequest, name: string) {
   const pathInfo = rpcRequest.requestPath;
