@@ -4,12 +4,12 @@ import * as os from 'os';
 import { sync as readPackageUpSync } from 'read-pkg-up';
 import { TelemetryClient, setup as AppInsights } from 'applicationinsights';
 import Conf from 'conf';
-import { ChildProcess, exec as execCallback, spawn as spawnCallback } from 'child_process';
+import { ChildProcess, exec as execCallback, spawn } from 'child_process';
 import { promisify } from 'util';
 import { PathLike } from 'fs';
+import { command } from 'yargs';
 
 const exec = promisify(execCallback);
-const spawn = promisify(spawnCallback);
 
 const { name, version } = (() => {
   const result = readPackageUpSync({ cwd: __dirname })?.packageJson;
@@ -289,11 +289,11 @@ class GitProperties {
   }
 
   static async state(cwd?: PathLike): Promise<GitState> {
-    const commandProcess = (await spawn('git', ['status'], {
-      shell: true,
-      cwd: cwd?.toString(),
-    })) as ChildProcess;
     return new Promise((resolve) => {
+      const commandProcess = spawn('git', ['status'], {
+        shell: true,
+        cwd: cwd?.toString(),
+      });
       commandProcess.on('exit', (code) => {
         switch (code) {
           case 127:
