@@ -1,0 +1,17 @@
+#!/bin/bash
+set -e
+
+TMP_DIR="$(mktemp -d)"
+APPLE_IDENTITY_PRIVATE_KEY_PATH="${TMP_DIR}/private_key.pem"
+APPLE_IDENTITY_CERTIFICATE_PATH="${TMP_DIR}/certificate.pem"
+
+echo "${APPLE_IDENTITY_PRIVATE_KEY}" > "${APPLE_IDENTITY_PRIVATE_KEY_PATH}"
+echo "${APPLE_IDENTITY_CERTIFICATE}" > "${APPLE_IDENTITY_CERTIFICATE_PATH}"
+
+for BINARY_PATH in "$@"; do
+  rcodesign sign \
+    --pem-source "${APPLE_IDENTITY_PRIVATE_KEY_PATH}" \
+    --pem-source "${APPLE_IDENTITY_CERTIFICATE_PATH}" \
+    --code-signature-flags runtime \
+    "${BINARY_PATH}"
+done

@@ -15,6 +15,7 @@
     "test": "yarn workspaces foreach --exclude '{root}' -v run test",
     "build": "yarn workspaces foreach -t --exclude root -v run build",
     "build-native": "yarn workspaces foreach -t --exclude root -v run build-native",
+    "codesign": "yarn workspaces foreach -t --exclude root -v run codesign",
     "ci": "yarn run test && ./smoketest.sh",
     "chromatic": "yarn workspaces foreach --exclude root -v run chromatic",
     "watch": "yarn workspaces foreach -t --exclude root -v -p -i run watch",
