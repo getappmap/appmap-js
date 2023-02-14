@@ -12,6 +12,7 @@
   "scripts": {
     "build": "node bin/preBuild.js && tsc -p tsconfig.build.json && yarn schema && yarn doc",
     "build-native": "yarn build && ./bin/build-native",
+    "codesign": "${PROJECT_CWD}/bin/sign release/scanner-macos-x64 release/scanner-macos-arm64 && ${PROJECT_CWD}/bin/notarize release/scanner-macos-x64 release/scanner-macos-arm64",
     "start": "ts-node src/cli.ts",
     "doc": "ts-node ./bin/verify-rules-doc.ts && ts-node ./bin/verify-labels-doc.ts && ts-node ./bin/front-matter.ts",
     "schema": "ts-node ./bin/schema.ts",

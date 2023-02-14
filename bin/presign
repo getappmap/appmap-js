@@ -1,0 +1,28 @@
+#!/bin/bash
+set -e
+
+EXIT_CODE=0
+REQUIRED_VARS=(
+  APPLE_IDENTITY_PRIVATE_KEY
+  APPLE_IDENTITY_CERTIFICATE
+  APPLE_CONNECT_KEY_B64
+)
+
+for VAR in "${REQUIRED_VARS[@]}"; do
+  if [ -z "${!VAR}" ]; then
+    echo "Missing required environment variable: ${VAR}"
+    EXIT_CODE=1
+  fi
+done
+
+[ "${EXIT_CODE}" -ne 0 ] && exit "${EXIT_CODE}"
+
+# If rcodesign is not installed, install it.
+if ! command -v rcodesign &>/dev/null; then
+  echo "Installing codesigning dependencies..."
+  cargo install \
+    --git https://github.com/indygreg/apple-platform-rs \
+    --branch main \
+    --bin rcodesign \
+    apple-codesign
+fi

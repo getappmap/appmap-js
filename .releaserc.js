@@ -44,6 +44,13 @@ module.exports = {
         publishCmd: 'yarn build',
       },
     ],
+    [
+      '@semantic-release/exec',
+      {
+        verifyConditionsCmd: './bin/presign',
+        publishCmd: 'yarn codesign',
+      },
+    ],
     '@semantic-release/git',
     [
       '@semantic-release/github',
@@ -55,9 +62,9 @@ module.exports = {
       '@semantic-release/exec',
       {
         verifyConditionsCmd: 'test -n "$YARN_NPM_AUTH_TOKEN"',
-        publishCmd: 'yarn npm publish'
-      }
-    ]
+        publishCmd: 'yarn npm publish',
+      },
+    ],
   ],
   extends: 'semantic-release-monorepo',
 };
