@@ -79,7 +79,13 @@ describe(watchScanTelemetry.WatchScanTelemetry, () => {
       'Expected sendScanResultsTelemetry to have been called once'
     );
     assert.deepEqual(sendScanResultsTelemetry.firstCall.args, [
-      { elapsedMs: 15, numAppMaps: 22, numFindings: 3, ruleIds: ['a', 'b', 'c'] },
+      {
+        elapsedMs: 15,
+        numAppMaps: 22,
+        numFindings: 3,
+        ruleIds: ['a', 'b', 'c'],
+        appmapDir: undefined,
+      },
     ]);
   });
 
@@ -114,10 +120,10 @@ describe(watchScanTelemetry.WatchScanTelemetry, () => {
       'Expected sendScanResultsTelemetry to have been called twice'
     );
     assert.deepEqual(sendScanResultsTelemetry.firstCall.args, [
-      { elapsedMs: 5, numAppMaps: 10, numFindings: 1, ruleIds: ['a', 'b'] },
+      { elapsedMs: 5, numAppMaps: 10, numFindings: 1, ruleIds: ['a', 'b'], appmapDir: undefined },
     ]);
     assert.deepEqual(sendScanResultsTelemetry.secondCall.args, [
-      { elapsedMs: 10, numAppMaps: 12, numFindings: 2, ruleIds: ['b', 'c'] },
+      { elapsedMs: 10, numAppMaps: 12, numFindings: 2, ruleIds: ['b', 'c'], appmapDir: undefined },
     ]);
   });
 });
