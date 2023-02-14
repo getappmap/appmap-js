@@ -163,9 +163,22 @@ describe('telemetry', () => {
   });
 
   describe('Git', () => {
+    const sinceDaysAgo = 365;
+
     it('returns a list of unique git contributors', async () => {
-      const contributors = await Git.contributors(365 * 10);
+      const contributors = await Git.contributors(sinceDaysAgo);
       expect(contributors.length).toBeGreaterThan(0);
+    });
+
+    it('properly caches the list of git contributors', async () => {
+      let firstResult: string[] | undefined;
+      for (let i = 0; i < 10; i++) {
+        if (!firstResult) {
+          firstResult = await Git.contributors(sinceDaysAgo);
+        }
+
+        expect(await Git.contributors(sinceDaysAgo)).toEqual(firstResult);
+      }
     });
   });
 });

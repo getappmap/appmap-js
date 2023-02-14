@@ -3,4 +3,5 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   testTimeout: parseInt(process.env.TEST_TIMEOUT, 10) || 5000,
+  setupFilesAfterEnv: ['./test/setup.ts'],
 };

@@ -80,5 +80,6 @@ export default async function singleScan(options: SingleScanOptions): Promise<vo
     numAppMaps: scanResults.summary.numAppMaps,
     numFindings: scanResults.summary.numFindings,
     elapsedMs: elapsed,
+    appmapDir: options.appmapDir,
   });
 }

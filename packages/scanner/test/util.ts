@@ -47,4 +47,23 @@ const scan = async (
   return { appMap: appMapData, findings };
 };
 
-export { fixtureAppMap, fixtureAppMapFileName, scan };
+const stubTelemetry = (): void => {
+  jest.mock('../src/telemetry', () => {
+    const originalModule = jest.requireActual('../src/telemetry');
+
+    //Mock the default export and named export 'foo'
+    return {
+      __esModule: true,
+      ...originalModule,
+      default: {
+        sendEvent: jest.fn(),
+      },
+    };
+  });
+};
+
+const unstubTelemetry = (): void => {
+  jest.unmock('../src/telemetry');
+};
+
+export { fixtureAppMap, fixtureAppMapFileName, scan, stubTelemetry, unstubTelemetry };
