@@ -3,7 +3,7 @@ import Check from '../check';
 import Configuration from '../configuration/types/configuration';
 import { Finding } from '../types';
 import { AppMapMetadata, ScanSummary } from './scanSummary';
-import Telemetry from '../telemetry';
+import Telemetry, { Git } from '../telemetry';
 
 class DistinctItems<T> {
   private members: Record<string, T> = {};
@@ -100,9 +100,10 @@ export type ScanTelemetry = {
   numAppMaps: number;
   numFindings: number;
   elapsedMs: number;
+  appmapDir?: string;
 };
 
-export function sendScanResultsTelemetry(telemetry: ScanTelemetry): void {
+export async function sendScanResultsTelemetry(telemetry: ScanTelemetry): Promise<void> {
   Telemetry.sendEvent({
     name: 'scan:completed',
     properties: {
@@ -113,6 +114,7 @@ export function sendScanResultsTelemetry(telemetry: ScanTelemetry): void {
       numRules: telemetry.ruleIds.length,
       numAppMaps: telemetry.numAppMaps,
       numFindings: telemetry.numFindings,
+      contributors: (await Git.contributors(60, telemetry.appmapDir)).length,
     },
   }),
     { includeEnvironmentVariables: true };
