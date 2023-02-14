@@ -1,3 +1,10 @@
+# [@appland/openapi-v1.4.2](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.4.1...@appland/openapi-v1.4.2) (2023-02-14)
+
+
+### Bug Fixes
+
+* Don't provide requestBody for DELETE requests ([9918588](https://github.com/getappmap/appmap-js/commit/9918588669da70eaa1abfb01b460521d0a9f8c8b))
+
 # [@appland/openapi-v1.4.1](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.4.0...@appland/openapi-v1.4.1) (2023-02-11)
 
 
