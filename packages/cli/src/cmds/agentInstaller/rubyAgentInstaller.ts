@@ -4,13 +4,13 @@
 import os from 'os';
 import { join } from 'path';
 import chalk from 'chalk';
-import { exists } from '../../utils';
+import { exists } from '@appland/common/src/utils';
 import AgentInstaller from './agentInstaller';
 import { run } from '@appland/common/src/commandRunner';
 import { getOutput } from './commandUtil';
 import CommandStruct from '@appland/common/src/commandStruct';
 import EncodedFile from '../../encodedFile';
-import { BundlerConfigError } from '../errors';
+import { BundlerConfigError } from '@appland/common/src/errors';
 
 const REGEX_GEM_DECLARATION = /^(?:gem|group|require)\s/m;
 

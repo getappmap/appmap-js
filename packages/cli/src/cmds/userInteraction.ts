@@ -1,7 +1,7 @@
 import boxen from 'boxen';
 import inquirer, { Answers, QuestionCollection } from 'inquirer';
 import ora, { Ora } from 'ora';
-import { verbose } from '../utils';
+import { verbose } from '@appland/common/src/utils';
 
 interface SpinnerOptions {
   supressSpinner?: boolean;

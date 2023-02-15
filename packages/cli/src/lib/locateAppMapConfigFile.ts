@@ -1,5 +1,5 @@
 import { join, resolve } from 'path';
-import { exists } from '../utils';
+import { exists } from '@appland/common/src/utils';
 
 export async function locateAppMapConfigFile(appmapDir: string): Promise<string | undefined> {
   let dir: string = appmapDir;

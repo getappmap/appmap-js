@@ -1,4 +1,4 @@
-import { verbose } from '../utils';
+import { verbose } from '@appland/common/src/utils';
 import { CodeObject, CodeObjectMatcher } from './types';
 
 export default class IterateCodeObjectMatcher implements CodeObjectMatcher {

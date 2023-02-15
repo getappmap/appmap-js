@@ -6,7 +6,7 @@ import { buildAppMap, Metadata } from '@appland/models';
 import assert from 'assert';
 import FileTooLargeError from './fileTooLargeError';
 
-import { verbose, mtime } from '../utils';
+import { verbose, mtime } from '@appland/common/src/utils';
 import { algorithms, canonicalize } from './canonicalize';
 import AppMapIndex from './appmapIndex';
 import EventEmitter from 'events';

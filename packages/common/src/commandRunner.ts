@@ -2,8 +2,8 @@ import { ChildProcess, execSync, spawn } from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
 import CommandStruct, { CommandReturn } from './commandStruct';
-import { verbose } from '@appland/appmap/src/utils';
-import { ChildProcessError } from '@appland/appmap/src/cmds/errors';
+import { verbose } from './utils';
+import { ChildProcessError } from './errors';
 
 export class ProcessLog {
   public static buffer = '';

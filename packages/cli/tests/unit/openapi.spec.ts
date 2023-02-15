@@ -1,4 +1,4 @@
-import { verbose } from '../../src/utils';
+import { verbose } from '@appland/common/src/utils';
 import { default as openapi, fileSizeFilter } from '../../src/cmds/openapi';
 import assert from 'assert';
 import path from 'path';

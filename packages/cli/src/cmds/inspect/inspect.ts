@@ -3,7 +3,7 @@ import Context from '../../inspect/context';
 import UI from '../../inspect/ui';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../lib/locateAppMapDir';
-import { verbose } from '../../utils';
+import { verbose } from '@appland/common/src/utils';
 
 export const command = 'inspect <code-object>';
 export const describe =

@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import { promises as fs, constants as fsConstants } from 'fs';
 
 import { basename, join, resolve } from 'path';
-import { AbortError, InvalidPathError } from '../errors';
+import { AbortError, InvalidPathError } from '@appland/common/src/errors';
 import UI from '../userInteraction';
 import AgentInstaller from './agentInstaller';
 import getAvailableInstallers from './installers';

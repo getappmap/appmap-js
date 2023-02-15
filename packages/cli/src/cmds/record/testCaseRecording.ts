@@ -1,6 +1,6 @@
 import { ChildProcess, exec, spawn } from 'child_process';
 import { kill } from 'process';
-import { exists, verbose } from '../../utils';
+import { exists, verbose } from '@appland/common/src/utils';
 import UI from '../userInteraction';
 import { TestCommand } from './configuration';
 import RecordContext, { RecordProcessResult } from './recordContext';

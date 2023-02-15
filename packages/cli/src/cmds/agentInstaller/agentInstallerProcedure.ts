@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import fs from 'fs';
 import Yargs from 'yargs';
 
-import { AbortError } from '../errors';
+import { AbortError } from '@appland/common/src/errors';
 import { run } from '@appland/common/src/commandRunner';
 import UI from '../userInteraction';
 import AgentProcedure from './agentProcedure';

@@ -1,6 +1,6 @@
 import FingerprintQueue from '../../../src/fingerprint/fingerprintQueue';
 import sinon, { SinonStub } from 'sinon';
-import { verbose } from '../../../src/utils';
+import { verbose } from '@appland/common/src/utils';
 
 describe(FingerprintQueue, () => {
   beforeEach(() => verbose(process.env.DEBUG === 'true'));

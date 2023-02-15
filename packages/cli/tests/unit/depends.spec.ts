@@ -5,7 +5,7 @@ import fs from 'fs-extra';
 
 import Fingerprinter from '../../src/fingerprint/fingerprinter';
 import Depends from '../../src/depends';
-import { listAppMapFiles, verbose } from '../../src/utils';
+import { listAppMapFiles, verbose } from '@appland/common/src/utils';
 
 if (process.env.DEBUG !== 'true') tmp.setGracefulCleanup();
 

@@ -1,7 +1,7 @@
 import { utimesSync } from 'fs';
 import Fingerprinter from '../../src/fingerprint/fingerprinter';
 import { CodeObject, CodeObjectMatch } from '../../src/search/types';
-import { listAppMapFiles, verbose } from '../../src/utils';
+import { listAppMapFiles, verbose } from '@appland/common/src/utils';
 
 if (process.env.DEBUG) {
   verbose(true);

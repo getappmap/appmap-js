@@ -10,7 +10,7 @@ import { PathLike } from 'fs';
 import { CommandReturn } from './commandStruct';
 import CommandStruct from './commandStruct';
 import { run } from './commandRunner';
-import { ChildProcessError } from '@appland/appmap/src/cmds/errors';
+import { ChildProcessError } from './errors';
 
 const exec = promisify(execCallback);
 

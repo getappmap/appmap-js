@@ -5,7 +5,7 @@ import { JSDOM } from 'jsdom';
 import xmlSerializer from 'w3c-xmlserializer';
 import chalk from 'chalk';
 import CommandStruct from '@appland/common/src/commandStruct';
-import { verbose, exists } from '../../utils';
+import { verbose, exists } from '@appland/common/src/utils';
 import JavaBuildToolInstaller from './javaBuildToolInstaller';
 import EncodedFile from '../../encodedFile';
 

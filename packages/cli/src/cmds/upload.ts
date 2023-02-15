@@ -1,10 +1,10 @@
 import { CommandModule } from 'yargs';
 import { App, AppMap, loadConfiguration, Mapset, UploadAppMapResponse } from '@appland/client';
-import { listAppMapFiles, verbose } from '../utils';
+import { listAppMapFiles, verbose } from '@appland/common/src/utils';
 import { readFile, stat } from 'fs/promises';
 import assert from 'assert';
 import UI from './userInteraction';
-import { ValidationError } from './errors';
+import { ValidationError } from '@appland/common/src/errors';
 import { Stats } from 'fs';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../lib/locateAppMapDir';

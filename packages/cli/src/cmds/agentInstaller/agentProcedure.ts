@@ -2,7 +2,7 @@ import fs from 'fs';
 import { join, resolve } from 'path';
 import yaml from 'js-yaml';
 import chalk from 'chalk';
-import { ValidationError } from '../errors';
+import { ValidationError } from '@appland/common/src/errors';
 import AgentInstaller from './agentInstaller';
 import UI from '../userInteraction';
 import { run, runSync } from '@appland/common/src/commandRunner';

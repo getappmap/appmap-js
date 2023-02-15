@@ -1,6 +1,6 @@
 import 'jest-sinon';
 import sinon from 'sinon';
-import { HttpError, HttpErrorResponse } from '../../../src/cmds/errors';
+import { HttpError, HttpErrorResponse } from '@appland/common/src/errors';
 
 import UI from '../../../src/cmds/userInteraction';
 import openTicket from '../../../src/lib/ticket/openTicket';

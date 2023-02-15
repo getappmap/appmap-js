@@ -4,7 +4,7 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
 import stripAnsi from 'strip-ansi';
-import { HttpError } from '../../cmds/errors';
+import { HttpError } from '@appland/common/src/errors';
 
 export const APPMAP_SUPPORT_URL = process.env.APPMAP_SUPPORT_URL || 'https://appland.zendesk.com';
 

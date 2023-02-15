@@ -3,7 +3,7 @@ import { chdir } from 'process';
 const fs = require('fs');
 import UI from '../userInteraction';
 import Telemetry from '@appland/common/src/telemetry';
-import { listAppMapFiles, verbose } from '../../utils';
+import { listAppMapFiles, verbose } from '@appland/common/src/utils';
 import { Event, buildAppMap } from '@appland/models';
 
 import { AppMapSize, AppMapSizeTable, SortedAppMapSize } from './types/appMapSize';

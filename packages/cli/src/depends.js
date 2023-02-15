@@ -1,6 +1,6 @@
 const fsp = require('fs').promises;
 const { dirname, join: joinPath, isAbsolute, basename } = require('path');
-const { verbose, mtime, processFiles } = require('./utils');
+const { verbose, mtime, processFiles } = require('@appland/common/src/utils');
 
 // Gets the file path of a location. Location may include a line number or other info
 // in addition to the file path.

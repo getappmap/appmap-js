@@ -6,8 +6,8 @@ import {
   InvalidPathError,
   ValidationError,
   UserConfigError,
-} from '../errors';
-import { endTime, prefixLines, verbose } from '../../utils';
+} from '@appland/common/src/errors';
+import { endTime, prefixLines, verbose } from '@appland/common/src/utils';
 import AgentInstallerProcedure from './agentInstallerProcedure';
 import chalk from 'chalk';
 import UI from '../userInteraction';

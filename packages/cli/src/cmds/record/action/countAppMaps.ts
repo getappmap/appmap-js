@@ -1,4 +1,4 @@
-import { listAppMapFiles, verbose } from '../../../utils';
+import { listAppMapFiles, verbose } from '@appland/common/src/utils';
 
 export default async function countAppMaps(appMapDir: string): Promise<number> {
   let fileCount = 0;

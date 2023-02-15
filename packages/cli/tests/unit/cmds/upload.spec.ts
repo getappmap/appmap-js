@@ -5,7 +5,7 @@ import fs from 'node:fs/promises';
 
 import * as client from '@appland/client';
 import UI_ from '../../../src/cmds/userInteraction';
-import * as utils from '../../../src/utils';
+import * as utils from '@appland/common/src/utils';
 import { Stats } from 'node:fs';
 import * as appNameFromConfig from '../../../src/lib/appNameFromConfig';
 import * as locateAppMapDir from '../../../src/lib/locateAppMapDir';

@@ -2,7 +2,7 @@ import assert from 'assert';
 import { mkdir, readFile, stat as fStat } from 'fs/promises';
 import { join } from 'path';
 import { satisfies as versionSatisfies } from 'semver';
-import { baseName, mtime, verbose, writeFileAtomic } from '../utils';
+import { baseName, mtime, verbose, writeFileAtomic } from '@appland/common/src/utils';
 
 /**
  * Raw AppMaps are processed into an index, which consists of:

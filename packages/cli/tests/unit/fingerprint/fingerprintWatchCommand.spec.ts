@@ -5,7 +5,7 @@ import { basename, join } from 'path';
 import { restore, stub } from 'sinon';
 import { dirSync } from 'tmp';
 import FingerprintWatchCommand from '../../../src/fingerprint/fingerprintWatchCommand';
-import { verbose } from '../../../src/utils';
+import { verbose } from '@appland/common/src/utils';
 import OriginalTelemetry from '@appland/common/src/telemetry';
 import { once } from 'events';
 import Fingerprinter from '../../../src/fingerprint/fingerprinter';

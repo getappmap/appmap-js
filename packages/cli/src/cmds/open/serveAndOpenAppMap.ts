@@ -4,7 +4,7 @@ import { AddressInfo, Server } from 'net';
 import open from 'open';
 import { extname, join } from 'path';
 import { parse } from 'url';
-import { exists, verbose } from '../../utils';
+import { exists, verbose } from '@appland/common/src/utils';
 import UI from '../userInteraction';
 
 function mimeTypeOfName(filename: string): string {

@@ -1,4 +1,4 @@
-import { endTime, verbose } from '../../utils';
+import { endTime, verbose } from '@appland/common/src/utils';
 import runCommand from '../runCommand';
 import showAppMap from '../open/showAppMap';
 import yargs from 'yargs';

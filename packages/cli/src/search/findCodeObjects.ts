@@ -7,7 +7,7 @@ import { codeObjectId } from '@appland/models';
 import { readFile } from 'fs/promises';
 import { basename, dirname } from 'path';
 import { inspect } from 'util';
-import { processFiles, verbose } from '../utils';
+import { processFiles, verbose } from '@appland/common/src/utils';
 import DescentCodeObjectMatcher from './descentCodeObjectMatcher';
 import IterateCodeObjectMatcher from './iterateCodeObjectMatcher';
 import {

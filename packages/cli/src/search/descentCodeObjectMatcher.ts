@@ -1,4 +1,4 @@
-import { verbose } from '../utils';
+import { verbose } from '@appland/common/src/utils';
 import { CodeObject, CodeObjectMatcher, CodeObjectMatchSpec } from './types';
 
 const { MATCH_ABORT, MATCH_CONTINUE, MATCH_COMPLETE } = require('./constants');

@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { HttpError } from '../../cmds/errors';
+import { HttpError } from '@appland/common/src/errors';
 import UI from '../../cmds/userInteraction';
 import Telemetry from '@appland/common/src/telemetry';
 import createZendeskRequest from './zendesk';

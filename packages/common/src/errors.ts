@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { prefixLines } from '../utils';
+import { prefixLines } from './utils';
 
 export class InvalidPathError extends Error {
   constructor(readonly message: string, readonly path?: string) {

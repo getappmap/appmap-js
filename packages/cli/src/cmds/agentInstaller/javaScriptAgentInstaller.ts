@@ -1,11 +1,11 @@
-import { exists } from '../../utils';
+import { exists } from '@appland/common/src/utils';
 import { getOutput } from './commandUtil';
 import { join } from 'path';
 import { run } from '@appland/common/src/commandRunner';
 import AgentInstaller from './agentInstaller';
 import chalk from 'chalk';
 import CommandStruct from '@appland/common/src/commandStruct';
-import { UserConfigError } from '../errors';
+import { UserConfigError } from '@appland/common/src/errors';
 import semver from 'semver';
 
 const AGENT_PACKAGE = '@appland/appmap-agent-js@latest';

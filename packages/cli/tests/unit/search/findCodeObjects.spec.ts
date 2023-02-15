@@ -3,7 +3,7 @@ import { copyFile } from 'fs/promises';
 import { basename, join } from 'path';
 import tmp from 'tmp';
 import FindCodeObjects from '../../../src/search/findCodeObjects';
-import { verbose } from '../../../src/utils';
+import { verbose } from '@appland/common/src/utils';
 import { indexDirectory, stripCodeObjectParents } from '../util';
 
 const checkoutDataFile = join(

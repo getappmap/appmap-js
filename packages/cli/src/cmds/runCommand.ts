@@ -1,5 +1,5 @@
-import { AbortError, ValidationError } from './errors';
-import { verbose } from '../utils';
+import { AbortError, ValidationError } from '@appland/common/src/errors';
+import { verbose } from '@appland/common/src/utils';
 import UI from './userInteraction';
 import chalk from 'chalk';
 import { ExitCode } from './record/types/exitCode';

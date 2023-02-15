@@ -15,7 +15,7 @@ import * as ProjectConfiguration from '../../../src/cmds/agentInstaller/projectC
 import { getYarnSubprojects } from '../../../src/cmds/agentInstaller/projectConfiguration';
 
 import UI from '../../../src/cmds/userInteraction';
-import { ValidationError } from '../../../src/cmds/errors';
+import { ValidationError } from '@appland/common/src/errors';
 
 import * as validator from '../../../src/service/config/validator';
 

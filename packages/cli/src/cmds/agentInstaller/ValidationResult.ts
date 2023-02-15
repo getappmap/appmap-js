@@ -1,6 +1,6 @@
 import { AnySchema } from 'ajv';
 import { PartialDeep } from 'type-fest';
-import { ValidationError } from '../errors';
+import { ValidationError } from '@appland/common/src/errors';
 
 type ValidationErrorDescription = {
   level: 'warning' | 'error';

@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import { UserConfigError } from '../errors';
+import { UserConfigError } from '@appland/common/src/errors';
 import { run } from  '@appland/common/src/commandRunner';
 import CommandStruct from '@appland/common/src/commandStruct';
 

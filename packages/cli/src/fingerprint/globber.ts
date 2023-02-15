@@ -3,7 +3,7 @@ import { default as defaultfs } from 'fs';
 import { Stats } from 'fs-extra';
 import { Glob, IGlob } from 'glob';
 import { EventEmitter } from 'stream';
-import { verbose } from '../utils';
+import { verbose } from '@appland/common/src/utils';
 
 class Globber extends EventEmitter {
   private interval: number;
