@@ -92,7 +92,7 @@ export default {
             (co) => co.fqid
           );
           if (ancestorFqids.indexOf(this.actor.id) > -1) {
-            this.$refs.label_container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            this.$refs.label_container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
           }
         }
       },
