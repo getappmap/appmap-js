@@ -4,12 +4,11 @@ import * as os from 'os';
 import { sync as readPackageUpSync } from 'read-pkg-up';
 import { TelemetryClient, setup as AppInsights } from 'applicationinsights';
 import Conf from 'conf';
-import { ChildProcess, exec as execCallback, spawn as spawnCallback } from 'child_process';
+import { exec as execCallback, spawn } from 'child_process';
 import { promisify } from 'util';
 import { PathLike } from 'fs';
 
 const exec = promisify(execCallback);
-const spawn = promisify(spawnCallback);
 
 const { name, version } = (() => {
   const result = readPackageUpSync({ cwd: __dirname })?.packageJson;
@@ -254,6 +253,7 @@ export default class Telemetry {
 }
 
 export enum GitState {
+  OtherError, // Some other error
   NotInstalled, // The git cli was not found.
   NoRepository, // Git is installed but no repository was found.
   Ok, // Git is installed, a repository is present.
@@ -289,12 +289,21 @@ class GitProperties {
   }
 
   static async state(cwd?: PathLike): Promise<GitState> {
-    const commandProcess = (await spawn('git', ['status'], {
-      shell: true,
-      cwd: cwd?.toString(),
-    })) as ChildProcess;
     return new Promise((resolve) => {
-      commandProcess.on('exit', (code) => {
+      const commandProcess = spawn('git', ['status'], {
+        shell: true,
+        cwd: cwd?.toString(),
+      });
+
+      // If there is no 'error' event listener it throws
+      // https://github.com/nodejs/node/blob/main/lib/events.js#L468
+      commandProcess.on('error', (_err: Error) => {
+        return resolve(GitState.OtherError);
+      });
+
+      // without _signal test/eventUtil.spec.ts fails with
+      // Error: spawn /bin/sh ENOENT
+      commandProcess.on('exit', (code, _signal) => {
         switch (code) {
           case 127:
             return resolve(GitState.NotInstalled);
