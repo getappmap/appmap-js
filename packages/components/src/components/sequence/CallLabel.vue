@@ -123,7 +123,7 @@ export default {
         const eventId = this.actionSpec.eventIds[0];
         if (eventId === undefined) return;
 
-        const event = this.$store.state.appMap.events[eventId - 1];
+        const event = this.$store.state.filteredAppMap.events.find((e) => e.id === eventId);
         if (event) this.$store.commit(SELECT_CODE_OBJECT, event);
       }
     },
