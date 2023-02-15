@@ -139,7 +139,7 @@ afterEach(() => {
   if (cwd) process.chdir(cwd);
 });
 
-jest.mock('../../../src/telemetry');
+jest.mock('@appland/common/src/telemetry');
 jest.mock('@appland/client');
 jest.mock('../../../src/cmds/userInteraction');
 

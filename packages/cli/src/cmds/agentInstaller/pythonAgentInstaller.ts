@@ -12,8 +12,8 @@ import { exists, isFile } from '../../utils';
 import { UserConfigError } from '../errors';
 import UI from '../userInteraction';
 import AgentInstaller from './agentInstaller';
-import { run } from '../../commandRunner';
-import CommandStruct from '../../commandStruct';
+import { run } from '@appland/common/src/commandRunner';
+import CommandStruct from '@appland/common/src/commandStruct';
 import { getOutput } from './commandUtil';
 
 const REGEX_PKG_DEPENDENCY = /^\s*appmap\s*[=>~]+=.*$/m;

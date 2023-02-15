@@ -48,8 +48,8 @@ const scan = async (
 };
 
 const stubTelemetry = (): void => {
-  jest.mock('../src/telemetry', () => {
-    const originalModule = jest.requireActual('../src/telemetry');
+  jest.mock('@appland/common/src/telemetry', () => {
+    const originalModule = jest.requireActual('@appland/common/src/telemetry');
 
     //Mock the default export and named export 'foo'
     return {
@@ -63,7 +63,7 @@ const stubTelemetry = (): void => {
 };
 
 const unstubTelemetry = (): void => {
-  jest.unmock('../src/telemetry');
+  jest.unmock('@appland/common/src/telemetry');
 };
 
 export { fixtureAppMap, fixtureAppMapFileName, scan, stubTelemetry, unstubTelemetry };

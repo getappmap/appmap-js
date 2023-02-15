@@ -7,7 +7,7 @@ import { newFindings } from '../../findings';
 import findingsReport from '../../report/findingsReport';
 import summaryReport from '../../report/summaryReport';
 import { formatReport } from './formatReport';
-import Telemetry from '../../telemetry';
+import Telemetry from '@appland/common/src/telemetry';
 import { sendScanResultsTelemetry } from '../../report/scanResults';
 import { collectAppMapFiles } from '../../rules/lib/util';
 import validateFile from '../validateFile';

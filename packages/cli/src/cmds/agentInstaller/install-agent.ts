@@ -11,12 +11,12 @@ import { endTime, prefixLines, verbose } from '../../utils';
 import AgentInstallerProcedure from './agentInstallerProcedure';
 import chalk from 'chalk';
 import UI from '../userInteraction';
-import Telemetry from '../../telemetry';
+import Telemetry from '@appland/common/src/telemetry';
 import { INSTALLERS, INSTALLER_NAMES } from './installers';
 import { getDirectoryProperty } from './telemetryUtil';
 import { getProjects, ProjectConfiguration } from './projectConfiguration';
 import AgentInstaller from './agentInstaller';
-import { ProcessLog } from '../../commandRunner';
+import { ProcessLog } from '@appland/common/src/commandRunner';
 import openTicket from '../../lib/ticket/openTicket';
 interface InstallCommandOptions {
   verbose?: any;

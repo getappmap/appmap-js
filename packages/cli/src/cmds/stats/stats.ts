@@ -2,7 +2,7 @@ import yargs from 'yargs';
 import { chdir } from 'process';
 const fs = require('fs');
 import UI from '../userInteraction';
-import Telemetry from '../../telemetry';
+import Telemetry from '@appland/common/src/telemetry';
 import { listAppMapFiles, verbose } from '../../utils';
 import { Event, buildAppMap } from '@appland/models';
 

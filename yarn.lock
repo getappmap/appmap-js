@@ -78,6 +78,7 @@ __metadata:
   resolution: "@appland/appmap@workspace:packages/cli"
   dependencies:
     "@appland/client": "workspace:^1"
+    "@appland/common": 1.0.0
     "@appland/components": "workspace:^2"
     "@appland/diagrams": "workspace:^1"
     "@appland/models": "workspace:^2.1.0"
@@ -185,6 +186,27 @@ __metadata:
     ts-jest: ^27.1.4
     ts-node: ^10.4.0
     tsc: ^2.0.3
+    typescript: ^4.5.4
+  languageName: unknown
+  linkType: soft
+
+"@appland/common@1.0.0, @appland/common@^1.0.0, @appland/common@workspace:packages/common":
+  version: 0.0.0-use.local
+  resolution: "@appland/common@workspace:packages/common"
+  dependencies:
+    "@types/jest": ^27.4.1
+    "@typescript-eslint/eslint-plugin": ^5.7.0
+    "@typescript-eslint/parser": ^5.7.0
+    applicationinsights: ^2.1.4
+    conf: ^10.0.2
+    eslint: ^8.4.1
+    eslint-config-prettier: ^8.3.0
+    jest: ^27.4.7
+    lint-staged: ^10.5.4
+    prettier: ^2.7.1
+    read-pkg-up: ^7.0.1
+    sinon: ^13.0.1
+    ts-jest: ^27.1.4
     typescript: ^4.5.4
   languageName: unknown
   linkType: soft
@@ -336,7 +358,8 @@ __metadata:
   resolution: "@appland/scanner@workspace:packages/scanner"
   dependencies:
     "@appland/client": ^1.5.0
-    "@appland/models": "workspace:^2.0.0"
+    "@appland/common": ^1.0.0
+    "@appland/models": "workspace:^2.1.0"
     "@appland/openapi": "workspace:packages/openapi"
     "@appland/sql-parser": ^1.5.0
     "@semantic-release/changelog": ^6.0.1
@@ -426,27 +449,6 @@ __metadata:
   checksum: 28fdd0863384a6635251eab884c404e1153aa6c9cca90dd4799112e3b609800b655066f6c97bf35caf38c63b26203123179702a95d70cfdabeadc41854f87e00
   languageName: node
   linkType: hard
-
-"@appland/telemetry@workspace:packages/telemetry":
-  version: 0.0.0-use.local
-  resolution: "@appland/telemetry@workspace:packages/telemetry"
-  dependencies:
-    "@types/jest": ^27.4.1
-    "@typescript-eslint/eslint-plugin": ^5.7.0
-    "@typescript-eslint/parser": ^5.7.0
-    applicationinsights: ^2.1.4
-    conf: ^10.0.2
-    eslint: ^8.4.1
-    eslint-config-prettier: ^8.3.0
-    jest: ^27.4.7
-    lint-staged: ^10.5.4
-    prettier: ^2.7.1
-    read-pkg-up: ^7.0.1
-    sinon: ^13.0.1
-    ts-jest: ^27.1.4
-    typescript: ^4.5.4
-  languageName: unknown
-  linkType: soft
 
 "@azure/abort-controller@npm:^1.0.0":
   version: 1.0.4

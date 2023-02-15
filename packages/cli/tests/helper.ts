@@ -1,6 +1,6 @@
 import sinon from 'sinon';
 import extend from 'sinon/lib/sinon/util/core/extend';
-import Telemetry from '../src/telemetry';
+import Telemetry from '@appland/common/src/telemetry';
 
 export function withSandbox() {
   // The sinon doc says the default export is a sandbox, but it actually isn't (which is what this

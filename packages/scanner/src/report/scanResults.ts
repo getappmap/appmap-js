@@ -3,7 +3,7 @@ import Check from '../check';
 import Configuration from '../configuration/types/configuration';
 import { Finding } from '../types';
 import { AppMapMetadata, ScanSummary } from './scanSummary';
-import Telemetry, { Git, GitState } from '../telemetry';
+import Telemetry, { Git, GitState } from '@appland/common/src/telemetry';
 
 class DistinctItems<T> {
   private members: Record<string, T> = {};

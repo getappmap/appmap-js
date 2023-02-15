@@ -69,6 +69,7 @@
   ],
   "dependencies": {
     "@appland/client": "workspace:^1",
+    "@appland/common": "1.0.0",
     "@appland/components": "workspace:^2",
     "@appland/diagrams": "workspace:^1",
     "@appland/models": "workspace:^2.1.0",

@@ -1,6 +1,6 @@
 import path from 'path';
 import AgentInstaller from '../../../src/cmds/agentInstaller/agentInstaller';
-import commandStruct from '../../../src/commandStruct';
+import commandStruct from '@appland/common/src/commandStruct';
 
 class FakeInstaller extends AgentInstaller {
   public buildFile: string = 'bf';

@@ -3,8 +3,8 @@ import path from 'path';
 import tmp from 'tmp';
 import fs from 'fs-extra';
 import { BundleInstaller } from '../../../src/cmds/agentInstaller/rubyAgentInstaller';
-import * as commandRunner from '../../../src/commandRunner';
-import CommandStruct, { CommandReturn } from '../../../src/commandStruct';
+import * as commandRunner from '@appland/common/src/commandRunner';
+import CommandStruct, { CommandReturn } from '@appland/common/src/commandStruct';
 import sinon from 'sinon';
 
 tmp.setGracefulCleanup();

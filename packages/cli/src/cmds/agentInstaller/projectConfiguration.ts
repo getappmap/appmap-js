@@ -8,8 +8,8 @@ import UI from '../userInteraction';
 import AgentInstaller from './agentInstaller';
 import getAvailableInstallers from './installers';
 import { YarnInstaller } from './javaScriptAgentInstaller';
-import CommandStruct from '../../commandStruct';
-import { run } from '../../commandRunner';
+import CommandStruct from '@appland/common/src/commandStruct';
+import { run } from '@appland/common/src/commandRunner';
 
 export interface ProjectConfiguration {
   name: string;

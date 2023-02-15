@@ -5,10 +5,10 @@ import chalk from 'chalk';
 import { ValidationError } from '../errors';
 import AgentInstaller from './agentInstaller';
 import UI from '../userInteraction';
-import { run, runSync } from '../../commandRunner';
+import { run, runSync } from '@appland/common/src/commandRunner';
 import { validateConfig } from '../../service/config/validator';
-import CommandStruct from '../../commandStruct';
-import Telemetry from '../../telemetry';
+import CommandStruct from '@appland/common/src/commandStruct';
+import Telemetry from '@appland/common/src/telemetry';
 import { formatValidationError, parseValidationResult, ValidationResult } from './ValidationResult';
 import { GitStatus } from './types/state';
 

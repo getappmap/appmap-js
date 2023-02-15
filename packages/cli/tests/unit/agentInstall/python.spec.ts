@@ -5,7 +5,7 @@ import 'jest-sinon';
 import { join } from 'path';
 import sinon from 'sinon';
 import tmp from 'tmp';
-import * as commandRunner from '../../../src/commandRunner';
+import * as commandRunner from '@appland/common/src/commandRunner';
 import {
   PipenvInstaller,
   PipInstaller,

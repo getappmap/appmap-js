@@ -7,7 +7,7 @@ import { FileName } from './types/fileName';
 import { chdir } from 'process';
 
 import initial, { createState as createInitialState } from './state/initial';
-import Telemetry from '../../telemetry';
+import Telemetry from '@appland/common/src/telemetry';
 import RecordContext from './recordContext';
 import Configuration from './configuration';
 const StatsCommand = require('../stats/stats');

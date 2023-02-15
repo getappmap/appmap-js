@@ -2,7 +2,7 @@ import fs from 'fs';
 import os from 'os';
 import { join, sep } from 'path';
 import chalk from 'chalk';
-import CommandStruct from '../../commandStruct';
+import CommandStruct from '@appland/common/src/commandStruct';
 import { verbose, exists } from '../../utils';
 import UI from '../userInteraction';
 import { getColumn, getWhitespace, Whitespace } from './sourceUtil';

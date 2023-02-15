@@ -5,7 +5,7 @@ import path, { join, resolve } from 'path';
 import EventAggregator from '../lib/eventAggregator';
 import flattenMetadata from '../lib/flattenMetadata';
 import { intersectMaps } from '../lib/intersectMaps';
-import Telemetry, { Git, GitState } from '../telemetry';
+import Telemetry, { Git, GitState } from '@appland/common/src/telemetry';
 import { verbose } from '../utils';
 import { FingerprintEvent } from './fingerprinter';
 import FingerprintQueue from './fingerprintQueue';

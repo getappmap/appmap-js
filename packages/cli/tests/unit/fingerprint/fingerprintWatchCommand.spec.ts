@@ -6,15 +6,15 @@ import { restore, stub } from 'sinon';
 import { dirSync } from 'tmp';
 import FingerprintWatchCommand from '../../../src/fingerprint/fingerprintWatchCommand';
 import { verbose } from '../../../src/utils';
-import OriginalTelemetry from '../../../src/telemetry';
+import OriginalTelemetry from '@appland/common/src/telemetry';
 import { once } from 'events';
 import Fingerprinter from '../../../src/fingerprint/fingerprinter';
 import { MaxMSBetween } from '../../../src/lib/eventAggregator';
 import { mkdir } from 'fs/promises';
 import { FSWatcher } from 'chokidar';
 
-jest.mock('../../../src/telemetry', () => {
-  const originalModule = jest.requireActual('../../../src/telemetry');
+jest.mock('@appland/common/src/telemetry', () => {
+  const originalModule = jest.requireActual('@appland/common/src/telemetry');
 
   //Mock the default export and named export 'foo'
   return {

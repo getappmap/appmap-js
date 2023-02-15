@@ -1,6 +1,6 @@
 import AgentInstaller from '../../../src/cmds/agentInstaller/agentInstaller';
 import AgentProcedure from '../../../src/cmds/agentInstaller/agentProcedure';
-import commandStruct from '../../../src/commandStruct';
+import commandStruct from '@appland/common/src/commandStruct';
 
 export class TestAgentProcedure extends AgentProcedure {
   constructor() {

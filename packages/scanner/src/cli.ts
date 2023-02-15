@@ -8,8 +8,8 @@ import MergeCommand from './cli/merge/command';
 import { verbose } from './rules/lib/util';
 import { AbortError, ValidationError } from './errors';
 import { ExitCode } from './cli/exitCode';
-import Telemetry from './telemetry';
-import { TelemetryData } from './telemetry';
+import Telemetry from '@appland/common/src/telemetry';
+import { TelemetryData } from '@appland/common/src/telemetry';
 
 function errorInfo(err: Error) {
   if (err instanceof ValidationError)

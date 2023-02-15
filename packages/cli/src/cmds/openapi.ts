@@ -20,7 +20,7 @@ import { inspect } from 'util';
 import { locateAppMapDir } from '../lib/locateAppMapDir';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { locateAppMapConfigFile } from '../lib/locateAppMapConfigFile';
-import Telemetry, { Git, GitState } from '../telemetry';
+import Telemetry, { Git, GitState } from '@appland/common/src/telemetry';
 
 type FilterFunction = (file: string) => Promise<{ enable: boolean; message?: string }>;
 

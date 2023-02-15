@@ -6,9 +6,9 @@ import { join } from 'path';
 import chalk from 'chalk';
 import { exists } from '../../utils';
 import AgentInstaller from './agentInstaller';
-import { run } from '../../commandRunner';
+import { run } from '@appland/common/src/commandRunner';
 import { getOutput } from './commandUtil';
-import CommandStruct from '../../commandStruct';
+import CommandStruct from '@appland/common/src/commandStruct';
 import EncodedFile from '../../encodedFile';
 import { BundlerConfigError } from '../errors';
 

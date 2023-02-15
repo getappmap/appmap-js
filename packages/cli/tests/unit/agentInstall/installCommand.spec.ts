@@ -3,14 +3,14 @@ import fse from 'fs-extra';
 import tmp from 'tmp';
 import sinon, { SinonStub } from 'sinon';
 import inquirer from 'inquirer';
-import Telemetry from '../../../src/telemetry';
+import Telemetry from '@appland/common/src/telemetry';
 import yargs from 'yargs';
 
 import { PoetryInstaller } from '../../../src/cmds/agentInstaller/pythonAgentInstaller';
 import { BundleInstaller } from '../../../src/cmds/agentInstaller/rubyAgentInstaller';
 import AgentInstallerProcedure from '../../../src/cmds/agentInstaller/agentInstallerProcedure';
-import * as commandRunner from '../../../src/commandRunner';
-import CommandStruct, { CommandReturn } from '../../../src/commandStruct';
+import * as commandRunner from '@appland/common/src/commandRunner';
+import CommandStruct, { CommandReturn } from '@appland/common/src/commandStruct';
 import * as ProjectConfiguration from '../../../src/cmds/agentInstaller/projectConfiguration';
 import { getYarnSubprojects } from '../../../src/cmds/agentInstaller/projectConfiguration';
 

@@ -1,7 +1,7 @@
 import { resolve } from 'path';
 import { UserConfigError } from '../errors';
-import { run } from  '../../commandRunner';
-import CommandStruct from '../../commandStruct';
+import { run } from  '@appland/common/src/commandRunner';
+import CommandStruct from '@appland/common/src/commandStruct';
 
 export default abstract class AgentInstaller {
   public abstract buildFile: string;

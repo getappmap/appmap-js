@@ -1,5 +1,5 @@
-import { run } from '../../commandRunner';
-import CommandStruct, { CommandOutput } from '../../commandStruct';
+import { run } from '@appland/common/src/commandRunner';
+import CommandStruct, { CommandOutput } from '@appland/common/src/commandStruct';
 
 /**
  * Small utility method to run a command and return the output - ONE OF stdout OR stderr. This
