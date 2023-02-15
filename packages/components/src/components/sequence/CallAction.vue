@@ -373,7 +373,7 @@ export default {
 .first-action {
   .call-line-segment,
   .diff-channel {
-    margin-top: 50px;
+    margin-top: 80px;
   }
 }
 
