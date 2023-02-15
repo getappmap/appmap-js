@@ -12,7 +12,6 @@
     "**/*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
-    "@appland/client": "^1.5.0",
     "applicationinsights": "^2.1.4",
     "conf": "^10.0.2",
     "read-pkg-up": "^7.0.1"
