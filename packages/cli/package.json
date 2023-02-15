@@ -26,12 +26,6 @@
       "prettier --write"
     ]
   },
-  "exports": {
-    "./src/cmds/agentInstaller/commandStruct": "./built/cmds/agentInstaller/commandStruct",
-    "./src/cmds/agentInstaller/commandRunner": "./built/cmds/agentInstaller/commandRunner",
-    "./src/utils": "./built/utils",
-    "./src/cmds/errors": "./built/cmds/errors"
-  },
   "author": "",
   "license": "MIT",
   "devDependencies": {
