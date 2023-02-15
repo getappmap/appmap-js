@@ -6,8 +6,8 @@ node_js: 16
 cache:
   npm: false
   directories:
-  - $HOME/.yarn/berry/cache
-  - $HOME/.cargo
+    - $HOME/.yarn/berry/cache
+    - $HOME/.cargo
 
 git:
   # required to enable symlinks on windows
@@ -20,9 +20,9 @@ script: yarn run ci
 jobs:
   include:
     - node_js: 18
-      script:  # also run lint on node 18
-      - yarn run lint
-      - yarn run ci
+      script: # also run lint on node 18
+        - yarn run lint
+        - yarn run ci
 
     - node_js: 16
     - node_js: 14
@@ -39,7 +39,8 @@ jobs:
 
     - stage: deploy
       if: branch = main
+      install: |
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --profile default -y
       script: |
         yarn run chromatic --auto-accept-changes \
-        && yarn run build-native \
         && yarn run semantic-release
