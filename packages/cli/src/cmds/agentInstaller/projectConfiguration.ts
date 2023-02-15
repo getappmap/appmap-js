@@ -3,12 +3,12 @@ import chalk from 'chalk';
 import { promises as fs, constants as fsConstants } from 'fs';
 
 import { basename, join, resolve } from 'path';
-import { AbortError, InvalidPathError } from '../errors';
+import { AbortError, ChildProcessError, InvalidPathError } from '../errors';
 import UI from '../userInteraction';
 import AgentInstaller from './agentInstaller';
 import getAvailableInstallers from './installers';
 import { YarnInstaller } from './javaScriptAgentInstaller';
-import CommandStruct from './commandStruct';
+import CommandStruct, { CommandReturn } from './commandStruct';
 import { run } from './commandRunner';
 
 export interface ProjectConfiguration {
@@ -125,15 +125,19 @@ async function getYarnSubprojectsVersionOne(
   subprojects: ProjectConfiguration[]
 ) {
   const cmd = new CommandStruct('yarn', ['workspaces', 'info', '--json'], installer.path);
-  const output = await run(cmd);
+  let output: CommandReturn;
+  try {
+    output = await run(cmd);
+  } catch (e) {
+    if (ChildProcessError.check(e)) return;
+    throw e;
+  }
 
   // Remove any text before and after JSON
   let lines = output.stdout.split('\n');
   let outputClean = '';
-  for (const line of lines) {
-    if (line.startsWith('error')) return;
+  for (const line of lines)
     if (!(line.startsWith('yarn workspaces v') || line.startsWith('Done in '))) outputClean += line;
-  }
 
   for (const [name, location] of yarn1Workspaces(JSON.parse(outputClean))) {
     const subProjectPath = join(dir, location);

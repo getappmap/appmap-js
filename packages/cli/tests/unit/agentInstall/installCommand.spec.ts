@@ -992,20 +992,6 @@ appmap_dir: tmp/appmap
         );
       });
 
-      it('yarn getYarnSubprojects for yarn 1, error', async () => {
-        expect.assertions(1);
-        const projectFixture = path.join(fixtureDir, 'javascript', 'yarn_with_subprojects');
-        const installer = new YarnInstaller(projectFixture);
-        jest.spyOn(installer, 'isYarnVersionOne').mockResolvedValue(true);
-        jest.spyOn(commandRunner, 'run').mockResolvedValueOnce({
-          stdout: `yarn workspaces v1.22.19
-error Cannot find the root of your workspace - are you sure you're currently in a workspace?
-info Visit https://yarnpkg.com/en/docs/cli/workspaces for documentation about this command.`,
-          stderr: '',
-        });
-        expect(await getYarnSubprojects(projectFixture, [installer])).toStrictEqual([]);
-      });
-
       it('yarn getYarnSubprojects for yarn 1, some workspaces', async () => {
         expect.assertions(1);
         const projectFixture = path.join(fixtureDir, 'javascript', 'yarn_with_subprojects');
