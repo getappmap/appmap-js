@@ -77,7 +77,7 @@ export default {
     },
     selectCodeObject() {
       if (this.$store) {
-        const codeObject = this.$store.state.appMap.classMap.codeObjects.find(
+        const codeObject = this.$store.state.filteredAppMap.classMap.codeObjects.find(
           (co: CodeObject) => co.fqid === this.actor.id
         );
         if (codeObject) this.$store.commit(SELECT_CODE_OBJECT, codeObject);
