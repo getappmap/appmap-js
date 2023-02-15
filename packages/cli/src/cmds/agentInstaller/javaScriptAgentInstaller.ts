@@ -1,10 +1,10 @@
 import { exists } from '../../utils';
 import { getOutput } from './commandUtil';
 import { join } from 'path';
-import { run } from './commandRunner';
+import { run } from '../../commandRunner';
 import AgentInstaller from './agentInstaller';
 import chalk from 'chalk';
-import CommandStruct from './commandStruct';
+import CommandStruct from '../../commandStruct';
 import { UserConfigError } from '../errors';
 import semver from 'semver';
 

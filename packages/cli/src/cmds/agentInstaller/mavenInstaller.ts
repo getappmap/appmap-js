@@ -4,7 +4,7 @@ import { join, sep, delimiter as pathDelimiter } from 'path';
 import { JSDOM } from 'jsdom';
 import xmlSerializer from 'w3c-xmlserializer';
 import chalk from 'chalk';
-import CommandStruct from './commandStruct';
+import CommandStruct from '../../commandStruct';
 import { verbose, exists } from '../../utils';
 import JavaBuildToolInstaller from './javaBuildToolInstaller';
 import EncodedFile from '../../encodedFile';

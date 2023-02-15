@@ -1,6 +1,6 @@
 import path from 'path';
 import AgentInstaller from '../../../src/cmds/agentInstaller/agentInstaller';
-import commandStruct from '../../../src/cmds/agentInstaller/commandStruct';
+import commandStruct from '../../../src/commandStruct';
 
 class FakeInstaller extends AgentInstaller {
   public buildFile: string = 'bf';

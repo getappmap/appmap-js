@@ -9,8 +9,8 @@ import yargs from 'yargs';
 import { PoetryInstaller } from '../../../src/cmds/agentInstaller/pythonAgentInstaller';
 import { BundleInstaller } from '../../../src/cmds/agentInstaller/rubyAgentInstaller';
 import AgentInstallerProcedure from '../../../src/cmds/agentInstaller/agentInstallerProcedure';
-import * as commandRunner from '../../../src/cmds/agentInstaller/commandRunner';
-import CommandStruct, { CommandReturn } from '../../../src/cmds/agentInstaller/commandStruct';
+import * as commandRunner from '../../../src/commandRunner';
+import CommandStruct, { CommandReturn } from '../../../src/commandStruct';
 import * as ProjectConfiguration from '../../../src/cmds/agentInstaller/projectConfiguration';
 import { getYarnSubprojects } from '../../../src/cmds/agentInstaller/projectConfiguration';
 
