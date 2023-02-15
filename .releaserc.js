@@ -1,3 +1,4 @@
+const path = require('path');
 const { join } = require('path');
 
 module.exports = {
@@ -47,8 +48,14 @@ module.exports = {
     [
       '@semantic-release/exec',
       {
-        verifyConditionsCmd: './bin/presign',
-        publishCmd: 'yarn codesign',
+        publishCmd: 'yarn build-native',
+      },
+    ],
+    [
+      '@semantic-release/exec',
+      {
+        verifyConditionsCmd: path.join(process.env.PROJECT_CWD, 'bin', 'presign'),
+        publishCmd: 'yarn codesign || true',
       },
     ],
     '@semantic-release/git',
