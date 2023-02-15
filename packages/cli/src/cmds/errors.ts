@@ -1,4 +1,5 @@
 import chalk from 'chalk';
+import { types } from 'node:util';
 import { prefixLines } from '../utils';
 
 export class InvalidPathError extends Error {
@@ -36,5 +37,14 @@ export class ChildProcessError extends Error {
         .filter(Boolean)
         .join('')
     );
+  }
+
+  static check(err: unknown): err is ChildProcessError {
+    if (!types.isNativeError(err)) return false;
+    if (!err || typeof err !== 'object') return false;
+    if (!('command' in err && typeof err['command'] === 'string')) return false;
+    if (!('output' in err && typeof err['output'] === 'string')) return false;
+    if ('code' in err && err['code'] !== null && typeof err['code'] !== 'number') return false;
+    return true;
   }
 }
