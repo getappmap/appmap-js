@@ -7,15 +7,3 @@ yarn pkg \
   --compress GZip \
   -o release/scanner \
   built/cli.js
-
-echo "Generating hashes..."
-pushd release>/dev/null
-  rm -rf *.sha256
-  for i in scanner-*; do
-    shasum -a 256 -b "${i}" \
-      | awk '{printf $1}' \
-      > "${i}.sha256"
-  done
-popd>/dev/null
-
-echo "Success!"

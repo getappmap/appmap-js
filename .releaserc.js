@@ -1,5 +1,4 @@
 const path = require('path');
-const { join } = require('path');
 
 module.exports = {
   branches: ['main'],
@@ -56,6 +55,16 @@ module.exports = {
       {
         verifyConditionsCmd: path.join(process.env.PROJECT_CWD, 'bin', 'presign'),
         publishCmd: 'yarn codesign || true',
+      },
+    ],
+    [
+      '@semantic-release/exec',
+      {
+        publishCmd: [
+          path.join(process.env.PROJECT_CWD, 'bin', 'hash'),
+          path.join('.', 'release', '*'),
+          '|| true',
+        ].join(' '),
       },
     ],
     '@semantic-release/git',

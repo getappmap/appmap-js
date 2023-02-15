@@ -1,4 +1,6 @@
 #!/bin/bash
+#
+# Verify the environment is able to code sign and notarize.
 set -e
 
 EXIT_CODE=0

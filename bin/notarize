@@ -1,4 +1,6 @@
 #!/bin/bash
+#
+# Notarize any Mach-O binaries passed as arguments.
 set -e
 
 TMP_DIR="$(mktemp -d)"
