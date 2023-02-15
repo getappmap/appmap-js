@@ -32,6 +32,6 @@ export default function retry(
     if (verbose()) {
       console.log(`Retrying ${description} in ${computeDelay()}ms`);
     }
-    setTimeout(() => retryFn().then(resolve).catch(reject), computeDelay());
+    setTimeout(() => retryFn().then(resolve).catch(reject), computeDelay()).unref();
   };
 }
