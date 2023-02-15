@@ -11,7 +11,9 @@
             @click="selectCodeObject"
           >
             <span class="label"> {{ actor.name }} </span>
-            <span class="hide-container" @click.stop="hideCodeObject">[x]</span>
+            <span class="hide-container" @click.stop="hideCodeObject">
+              <XIcon />
+            </span>
           </div>
         </div>
       </div>
@@ -23,11 +25,13 @@
 // @ts-nocheck
 import { SELECT_CODE_OBJECT } from '@/store/vsCode';
 import { CodeObject } from '@appland/models';
+import XIcon from '@/assets/x-icon.svg';
 
 export default {
   name: 'v-sequence-actor',
-
-  components: {},
+  components: {
+    XIcon,
+  },
 
   props: {
     actor: {
@@ -120,6 +124,7 @@ $min-height: 3rem;
   overflow: hidden;
   text-overflow: ellipsis;
   overflow: visible;
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.55);
 
   min-width: 145px;
   min-height: 60px;
@@ -130,41 +135,46 @@ $min-height: 3rem;
   position: absolute;
 
   // These attributes are taken from the component diagram package element.
-  background-color: lighten($gray4, 10); //#6fddd6;
-  //font-family: 'IBM Plex Mono', monospace;
-  color: #010306;
+  background-color: $black;
+  color: $white;
   font-size: 9pt;
-  font-weight: 500;
-  border: 3px solid lighten($gray4, 10);
-  border-radius: 3px;
+  border: 2px solid lighten($gray4, 15);
+  border-radius: 0.25rem;
   display: flex;
   justify-content: center;
   align-items: center;
   transition: $transition;
 
   &--selected {
-    background-color: $black;
-    color: $white;
+    background-color: #444e69;
   }
 
   .hide-container {
     position: absolute;
     display: inline-block;
-    right: 0;
-    top: 0;
+    right: 2px;
+    top: 2px;
 
     &:hover {
       color: blue;
       text-decoration: underline;
       cursor: pointer;
     }
+
+    svg {
+      fill: $white;
+      opacity: 33%;
+      transition: $transition;
+      &:hover {
+        opacity: 93%;
+      }
+    }
   }
 }
 
 .label-container:hover {
   cursor: pointer;
-  background-color: darken($gray4, 20);
-  color: $black;
+  background-color: #444e69;
 }
 
 .lane {
