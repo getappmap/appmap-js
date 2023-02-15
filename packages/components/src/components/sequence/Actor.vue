@@ -25,13 +25,11 @@
 // @ts-nocheck
 import { SELECT_CODE_OBJECT } from '@/store/vsCode';
 import { CodeObject } from '@appland/models';
-import CloseIcon from '@/assets/close.svg';
 import XIcon from '@/assets/x-icon.svg';
 
 export default {
   name: 'v-sequence-actor',
   components: {
-    CloseIcon,
     XIcon,
   },
 
