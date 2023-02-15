@@ -293,7 +293,7 @@ class GitProperties {
         shell: true,
         cwd: cwd?.toString(),
       });
-      commandProcess.on('exit', (code) => {
+      commandProcess.on('exit', (code, _) => {
         switch (code) {
           case 127:
             return resolve(GitState.NotInstalled);
