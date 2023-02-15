@@ -7,9 +7,9 @@ import Conf from 'conf';
 import { exec as execCallback } from 'child_process';
 import { promisify } from 'util';
 import { PathLike } from 'fs';
-import { CommandReturn } from '@appland/appmap/src/cmds/agentInstaller/commandStruct';
-import CommandStruct from '@appland/appmap/src/cmds/agentInstaller/commandStruct';
-import { run } from '@appland/appmap/src/cmds/agentInstaller/commandRunner';
+import { CommandReturn } from './commandStruct';
+import CommandStruct from './commandStruct';
+import { run } from './commandRunner';
 import { ChildProcessError } from '@appland/appmap/src/cmds/errors';
 
 const exec = promisify(execCallback);

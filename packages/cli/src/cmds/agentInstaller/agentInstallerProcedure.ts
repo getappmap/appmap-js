@@ -3,11 +3,11 @@ import fs from 'fs';
 import Yargs from 'yargs';
 
 import { AbortError } from '../errors';
-import { run } from './commandRunner';
+import { run } from '../../commandRunner';
 import UI from '../userInteraction';
 import AgentProcedure from './agentProcedure';
 import Telemetry from '../../telemetry';
-import CommandStruct from './commandStruct';
+import CommandStruct from '../../commandStruct';
 import { formatValidationError } from './ValidationResult';
 import { GitStatus } from './types/state';
 import { dump, load } from 'js-yaml';

@@ -1,6 +1,6 @@
 import { randomBytes } from 'crypto';
-import { run, runSync } from '@appland/appmap/src/cmds/agentInstaller/commandRunner';
-import CommandStruct from '@appland/appmap/src/cmds/agentInstaller/commandStruct';
+import { run, runSync } from '../../src/commandRunner';
+import CommandStruct from '../../src/commandStruct';
 
 describe('CommandRunner', () => {
   describe('run', () => {

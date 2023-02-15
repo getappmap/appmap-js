@@ -16,7 +16,7 @@ import { INSTALLERS, INSTALLER_NAMES } from './installers';
 import { getDirectoryProperty } from './telemetryUtil';
 import { getProjects, ProjectConfiguration } from './projectConfiguration';
 import AgentInstaller from './agentInstaller';
-import { ProcessLog } from './commandRunner';
+import { ProcessLog } from '../../commandRunner';
 import openTicket from '../../lib/ticket/openTicket';
 interface InstallCommandOptions {
   verbose?: any;

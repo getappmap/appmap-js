@@ -1,5 +1,5 @@
 import AgentInstallerProcedure from '../../../src/cmds/agentInstaller/agentInstallerProcedure';
-import * as CommandRunner from '../../../src/cmds/agentInstaller/commandRunner';
+import * as CommandRunner from '../../../src/commandRunner';
 
 import fs from 'fs';
 import { TestAgentInstaller } from './TestAgentProcedure';
@@ -8,7 +8,7 @@ import sinon, { SinonStub } from 'sinon';
 import { withStubbedTelemetry } from '../../helper';
 
 jest.mock('../../../src/cmds/userInteraction');
-jest.mock('../../../src/cmds/agentInstaller/commandRunner');
+jest.mock('../../../src/commandRunner');
 
 const { prompt, success, warn } = jest.mocked(UI);
 const { run } = jest.mocked(CommandRunner);
