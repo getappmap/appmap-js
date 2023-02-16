@@ -45,5 +45,5 @@ jobs:
         - source "$HOME/.cargo/env"
       script: |
         yarn build \
-        yarn run semantic-release \
+        && yarn run semantic-release \
         && yarn run chromatic --auto-accept-changes
