@@ -1,3 +1,12 @@
+# [@appland/appmap-v3.65.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.65.2...@appland/appmap-v3.65.3) (2023-02-16)
+
+
+### Bug Fixes
+
+* Codesign and notarize MacOS binaries ([d7303d7](https://github.com/getappmap/appmap-js/commit/d7303d7169c9dfffe08f6cde7b8d9a5daed2e069))
+* Don't error out with yarn 1 projects without workspaces ([341ca7c](https://github.com/getappmap/appmap-js/commit/341ca7c58fbf927926ce440efce09fd9248098e1)), closes [#1020](https://github.com/getappmap/appmap-js/issues/1020)
+* Write binary hashes after code signing ([394e545](https://github.com/getappmap/appmap-js/commit/394e545abae6cfc9bfd814a5ec80da220966e2bc))
+
 # [@appland/appmap-v3.65.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.65.1...@appland/appmap-v3.65.2) (2023-02-13)
 
 
