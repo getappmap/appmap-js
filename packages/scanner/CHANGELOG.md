@@ -1,3 +1,11 @@
+# [@appland/scanner-v1.76.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.76.0...@appland/scanner-v1.76.1) (2023-02-16)
+
+
+### Bug Fixes
+
+* Codesign and notarize MacOS binaries ([d7303d7](https://github.com/getappmap/appmap-js/commit/d7303d7169c9dfffe08f6cde7b8d9a5daed2e069))
+* Write binary hashes after code signing ([394e545](https://github.com/getappmap/appmap-js/commit/394e545abae6cfc9bfd814a5ec80da220966e2bc))
+
 # [@appland/scanner-v1.76.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.75.1...@appland/scanner-v1.76.0) (2023-02-13)
 
 
