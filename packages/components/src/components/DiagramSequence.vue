@@ -116,6 +116,7 @@ export default {
     actionKey(action: ActionSpec): string {
       return ['action', this.diagramSpec.uniqueId, action.index].join(':');
     },
+    // TODO: Determine if this is necessary/unused
     showFocusEffect() {
       setTimeout(() => {
         const element = this.$el.querySelector(
@@ -128,6 +129,28 @@ export default {
         element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
     },
+    focusHighlighted() {
+      setTimeout(() => {
+        const selected = this.$el.querySelector('.selected');
+        if (selected && selected.firstElementChild) {
+          selected.firstElementChild.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'center',
+          });
+        }
+      }, 16);
+    },
+  },
+
+  mounted() {
+    this.focusHighlighted();
+  },
+  activated() {
+    this.focusHighlighted();
+  },
+  updated() {
+    this.focusHighlighted();
   },
 };
 </script>
