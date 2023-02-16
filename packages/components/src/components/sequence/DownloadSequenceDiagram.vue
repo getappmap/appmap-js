@@ -21,15 +21,7 @@ export default {
 
       // Get SVG string
       const svgString = new XMLSerializer().serializeToString(svgDocument);
-
-      const url = window.URL.createObjectURL(new Blob([svgString], { type: 'image/svg+xml' }));
-      const a = document.createElement('a');
-      a.style.display = 'none';
-      a.href = url;
-      a.download = 'sequence-diagram.svg';
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
+      this.$root.$emit('exportSVG', svgString);
     },
   },
 };
