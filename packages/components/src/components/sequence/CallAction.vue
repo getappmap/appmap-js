@@ -288,13 +288,7 @@ export default {
   .call-line-segment,
   .self-call {
     outline: 4px solid transparent;
-    animation: node-focused 4s ease-out 0.25s;
-  }
-}
-
-.call.selected {
-  .call-line-segment,
-  .self-call {
+    animation: node-focused 6s ease-out 0.25s;
   }
 }
 
@@ -313,10 +307,10 @@ export default {
 
 @keyframes node-focused {
   from {
-    outline-color: $hotpink;
+    background-color: #6c8ba54f;
   }
   to {
-    outline-color: transparent;
+    background-color: black;
   }
 }
 
