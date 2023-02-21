@@ -122,6 +122,7 @@ export default {
     z-index: 1;
     display: flex;
     gap: 0.5rem;
+    align-items: baseline;
   }
 
   &__content {
