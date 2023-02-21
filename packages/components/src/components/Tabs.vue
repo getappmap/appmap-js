@@ -11,6 +11,9 @@
           @click.native="activateTab(tab)"
         >
         </v-tab-button>
+        <!-- <div class="tabs__controls">
+          <slot name="controls" />
+        </div> -->
       </div>
       <div class="tabs__notification">
         <slot name="notification" />
@@ -83,6 +86,10 @@ export default {
 .tabs {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background-color: $black;
 
   &__header {
     position: absolute;
@@ -99,6 +106,10 @@ export default {
 
   &__group {
     align-self: flex-end;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
   }
 
   &__notification {
@@ -109,16 +120,32 @@ export default {
   &__controls {
     position: relative;
     z-index: 1;
+    display: flex;
+    gap: 0.5rem;
 
     & > *:not(:last-child) {
-      margin-right: 0.5rem;
+      // margin-right: 0.5rem;
     }
   }
 
   &__content {
     width: 100%;
     height: 100%;
-    padding-top: 44px;
+    padding-top: 70px;
+  }
+}
+
+@media (max-width: 900px) {
+  .tabs {
+    &__header {
+      flex-direction: column-reverse;
+      min-height: 70px;
+      padding-top: 0.5rem;
+    }
+    &__group {
+      width: 100%;
+      justify-content: center;
+    }
   }
 }
 </style>

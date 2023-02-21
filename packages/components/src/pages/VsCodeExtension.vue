@@ -1250,7 +1250,6 @@ code {
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: 100%;
-  min-width: 800px;
   height: 100vh;
   color: $base11;
   background-color: $black;

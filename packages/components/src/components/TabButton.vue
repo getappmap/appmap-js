@@ -61,10 +61,6 @@ export default {
     outline: none;
   }
 
-  & + & {
-    margin-left: 1rem;
-  }
-
   &--active {
     border-bottom-color: $black;
     cursor: default;
