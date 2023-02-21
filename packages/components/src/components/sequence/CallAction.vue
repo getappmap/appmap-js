@@ -293,7 +293,7 @@ export default {
 }
 
 .call.selected > .call-line-segment {
-  background-color: #6c8ba54f;
+  background-color: #6fddbc94; //#6c8ba54f;
   &.arrow-base {
     border-radius: 0.5rem 0 0 0;
   }
