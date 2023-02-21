@@ -11,18 +11,18 @@
           @click.native="activateTab(tab)"
         >
         </v-tab-button>
-        <!-- <div class="tabs__controls">
-          <slot name="controls" />
-        </div> -->
       </div>
-      <div class="tabs__notification">
+      <!-- <div class="tabs__notification">
         <slot name="notification" />
-      </div>
+      </div> -->
       <div class="tabs__controls">
         <slot name="controls" />
       </div>
     </div>
     <div class="tabs__content">
+      <div class="tabs__notification">
+        <slot name="notification" />
+      </div>
       <slot />
     </div>
   </div>
@@ -92,15 +92,15 @@ export default {
   background-color: $black;
 
   &__header {
-    position: absolute;
-    width: inherit;
+    width: 100%;
     border-bottom: 1px solid $gray2;
-    height: 44px;
+    height: max-content;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-left: 1.25rem;
     padding-right: 1.25rem;
+    padding-top: 0.4rem;
     z-index: 100;
   }
 
@@ -113,8 +113,7 @@ export default {
   }
 
   &__notification {
-    align-self: flex-end;
-    margin: 0 1rem 0.25rem 1rem;
+    margin: 1rem 1.5rem;
   }
 
   &__controls {
@@ -122,16 +121,11 @@ export default {
     z-index: 1;
     display: flex;
     gap: 0.5rem;
-
-    & > *:not(:last-child) {
-      // margin-right: 0.5rem;
-    }
   }
 
   &__content {
     width: 100%;
     height: 100%;
-    padding-top: 70px;
   }
 }
 
@@ -141,10 +135,17 @@ export default {
       flex-direction: column-reverse;
       min-height: 70px;
       padding-top: 0.5rem;
+      height: auto;
+      gap: 0.4rem;
+      justify-content: center;
+      justify-items: center;
     }
     &__group {
       width: 100%;
       justify-content: center;
+    }
+    &__notification {
+      align-self: center;
     }
   }
 }
