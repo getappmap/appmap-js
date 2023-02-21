@@ -33,7 +33,7 @@ export default {
 .signin-sidebar {
   background-color: $black;
   color: $white;
-  width: 100%;
+  width: auto;
   height: 100%;
   padding: 1.5rem;
   line-height: 1.4rem;
