@@ -307,7 +307,7 @@ export default {
 
 @keyframes node-focused {
   from {
-    background-color: #6c8ba54f;
+    background-color: #6fddbc94;
   }
   to {
     background-color: black;
