@@ -113,7 +113,8 @@ export default {
   }
 
   &__notification {
-    margin: 1rem 1.5rem;
+    margin: 0;
+    border-radius: 0;
   }
 
   &__controls {

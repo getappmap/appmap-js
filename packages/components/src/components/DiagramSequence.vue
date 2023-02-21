@@ -162,7 +162,7 @@ export default {
   gap: 0;
   // Right padding to extend the background color beyond the right-most Actor box.
   // Bottom padding to extend below the last action line.
-  padding: 10px 100px 20px 30px;
+  padding: 0px 100px 20px 30px;
   width: fit-content;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 10pt;
