@@ -1,0 +1,34 @@
+ordering: chronological
+log:
+  level: info
+command: yarn exec jest --no-cache
+command-options:
+  shell: false
+recorder: jest
+serialization:
+  impure-printing: false
+  impure-constructor-naming: false
+  impure-array-inspection: false
+  impure-error-inspection: false
+  impure-hash-inspection: false
+exclude:
+  - \[anonymous\]
+packages:
+  - path: src/util.js
+    enabled: true
+    exclude:
+      - isEmpty
+      - addHiddenProperty
+  - path: src/event.js
+    enabled: true
+    exclude:
+      - isCall
+      - isReturn
+      - callEvent
+      - returnEvent
+  - regexp: (^|/)node_modules/
+    enabled: false
+  - regexp: ^../
+    enabled: false
+  - regexp: ^
+    enabled: true

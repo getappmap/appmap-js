@@ -43,6 +43,7 @@
     "typescript": "^4.5.4"
   },
   "dependencies": {
+    "@appland/appmap-agent-js": "https://github.com/getappmap/appmap-agent-js#1e6e171c765657434ab4e32bd9a0950e264e39fc",
     "@appland/sql-parser": "^1.5.0",
     "crypto-js": "^4.0.0"
   }
