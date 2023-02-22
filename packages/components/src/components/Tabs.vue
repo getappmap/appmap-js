@@ -102,6 +102,7 @@ export default {
     padding-right: 1.25rem;
     padding-top: 0.4rem;
     z-index: 100;
+    position: absolute;
   }
 
   &__group {
@@ -128,6 +129,7 @@ export default {
   &__content {
     width: 100%;
     height: 100%;
+    padding-top: 40px;
   }
 }
 
@@ -148,6 +150,9 @@ export default {
     }
     &__notification {
       align-self: center;
+    }
+    &__content {
+      padding-top: 70px;
     }
   }
 }
