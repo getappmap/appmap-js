@@ -15,5 +15,6 @@ for BINARY_PATH in "$@"; do
     --pem-source "${APPLE_IDENTITY_PRIVATE_KEY_PATH}" \
     --pem-source "${APPLE_IDENTITY_CERTIFICATE_PATH}" \
     --code-signature-flags runtime \
+    --entitlements-xml-path ci/osx-entitlements.plist \
     "${BINARY_PATH}"
 done
