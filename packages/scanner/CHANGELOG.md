@@ -1,3 +1,11 @@
+# [@appland/scanner-v1.76.2](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.76.1...@appland/scanner-v1.76.2) (2023-02-22)
+
+
+### Bug Fixes
+
+* Include contributor counts in `scan` ([1c5de40](https://github.com/getappmap/appmap-js/commit/1c5de40410ae2e1794509fb29e9ba128eaac18c0))
+* Report git state ([a5d3797](https://github.com/getappmap/appmap-js/commit/a5d3797815b283ed114a57351067ed911ca36fa2))
+
 # [@appland/scanner-v1.76.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.76.0...@appland/scanner-v1.76.1) (2023-02-16)
 
 
