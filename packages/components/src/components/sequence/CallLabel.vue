@@ -176,6 +176,17 @@ $bg-fade: rgba(0, 0, 0, 0.8);
   }
 }
 
+.call.selected > .call-line-segment {
+  .label {
+    .name {
+      color: $white;
+    }
+    .elapsed {
+      color: #e3e5e8a6;
+    }
+  }
+}
+
 .name:hover,
 .collapse-expand:hover {
   cursor: pointer;
