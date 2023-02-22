@@ -1,3 +1,13 @@
+# [@appland/appmap-v3.65.4](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.65.3...@appland/appmap-v3.65.4) (2023-02-22)
+
+
+### Bug Fixes
+
+* Include contributor counts in `appmap index` ([9d341f4](https://github.com/getappmap/appmap-js/commit/9d341f4607b9f0e3bf84cc9233614b6f82f983f0))
+* Include git contributor count in OpenAPI event ([4c9ee2c](https://github.com/getappmap/appmap-js/commit/4c9ee2c419d95ef0d09f5a12c90712bab890a8b7))
+* Report git state ([a5d3797](https://github.com/getappmap/appmap-js/commit/a5d3797815b283ed114a57351067ed911ca36fa2))
+* Wait for configuration to be loaded on upload ([37d2242](https://github.com/getappmap/appmap-js/commit/37d2242c1e2b3c6f3ee7522eca72cf4b895846d9))
+
 # [@appland/appmap-v3.65.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.65.2...@appland/appmap-v3.65.3) (2023-02-16)
 
 
