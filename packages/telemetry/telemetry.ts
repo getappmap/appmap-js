@@ -304,7 +304,7 @@ class GitProperties {
               return resolve(GitState.Ok);
           }
         });
-        commandProcess.on('error', () => GitState.NotInstalled);
+        commandProcess.on('error', () => resolve(GitState.NotInstalled));
       } catch {
         resolve(GitState.NotInstalled);
       }

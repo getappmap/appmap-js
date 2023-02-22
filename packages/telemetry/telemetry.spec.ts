@@ -2,8 +2,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import sinon, { SinonSpy } from 'sinon';
 import Conf from 'conf';
-import Telemetry, { Git } from './telemetry';
+import Telemetry, { Git, GitState } from './telemetry';
 import { name as appName, version } from './package.json';
+import child_process, { ChildProcess } from 'node:child_process';
+import { nextTick } from 'node:process';
 
 const invalidExpiration = () => Date.now() - 1000 * 60 * 60;
 
@@ -177,6 +179,18 @@ describe('telemetry', () => {
 
         expect(await Git.contributors(sinceDaysAgo)).toEqual(firstResult);
       }
+    });
+
+    describe('state', () => {
+      it('returns NotInstalled on error', () => {
+        jest.spyOn(child_process, 'spawn').mockImplementation(() => {
+          const cp = new ChildProcess();
+          nextTick(() => cp.emit('error', new Error('test error')));
+          return cp;
+        });
+
+        return expect(Git.state()).resolves.toEqual(GitState.NotInstalled);
+      });
     });
   });
 });
