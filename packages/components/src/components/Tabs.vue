@@ -12,14 +12,17 @@
         >
         </v-tab-button>
       </div>
-      <div class="tabs__notification">
+      <!-- <div class="tabs__notification">
         <slot name="notification" />
-      </div>
+      </div> -->
       <div class="tabs__controls">
         <slot name="controls" />
       </div>
     </div>
     <div class="tabs__content">
+      <div class="tabs__notification">
+        <slot name="notification" />
+      </div>
       <slot />
     </div>
   </div>
@@ -83,42 +86,74 @@ export default {
 .tabs {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background-color: $black;
 
   &__header {
-    position: absolute;
-    width: inherit;
+    width: 100%;
     border-bottom: 1px solid $gray2;
-    height: 44px;
+    height: max-content;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-left: 1.25rem;
     padding-right: 1.25rem;
+    padding-top: 0.4rem;
     z-index: 100;
+    position: absolute;
   }
 
   &__group {
     align-self: flex-end;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
   }
 
   &__notification {
-    align-self: flex-end;
-    margin: 0 1rem 0.25rem 1rem;
+    margin: 0;
+    border-radius: 0;
   }
 
   &__controls {
     position: relative;
     z-index: 1;
-
-    & > *:not(:last-child) {
-      margin-right: 0.5rem;
-    }
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
   }
 
   &__content {
     width: 100%;
     height: 100%;
-    padding-top: 44px;
+    padding-top: 40px;
+  }
+}
+
+@media (max-width: 900px) {
+  .tabs {
+    &__header {
+      flex-direction: column-reverse;
+      min-height: 70px;
+      padding-top: 0.5rem;
+      height: auto;
+      gap: 0.4rem;
+      justify-content: center;
+      justify-items: center;
+    }
+    &__group {
+      width: 100%;
+      justify-content: center;
+    }
+    &__notification {
+      align-self: center;
+    }
+    &__content {
+      padding-top: 70px;
+    }
   }
 }
 </style>

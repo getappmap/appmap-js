@@ -76,7 +76,7 @@ export default {
 <style lang="scss" scoped>
 .notification {
   border: 1px solid transparent;
-  border-radius: $border-radius;
+  border-radius: 0;
   background-color: $gray6;
   color: $gray2;
   font-size: 0.75rem;
@@ -94,7 +94,7 @@ export default {
   &__head {
     display: flex;
     align-items: center;
-    padding: 0.4rem 1rem;
+    padding: 0.4rem 1.5rem;
     cursor: pointer;
     user-select: none;
   }
