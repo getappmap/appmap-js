@@ -44,6 +44,10 @@ jobs:
         - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --profile default -y
         - source "$HOME/.cargo/env"
       script: |
-        yarn build \
+        ./bin/presign \
+        && yarn build \
+        && yarn build-native \
+        && yarn codesign \
+        && ./bin/hash packages/*/release/* \
         && yarn run semantic-release \
         && yarn run chromatic --auto-accept-changes
