@@ -8,3 +8,4 @@ export { default as VAnalysisFindings } from '@/pages/AnalysisFindings.vue';
 export { default as VFindingDetails } from '@/pages/FindingDetails.vue';
 export { default as VOpenAppmaps } from '@/pages/install-guide/OpenAppMaps.vue';
 export { default as VSignIn } from '@/pages/install-guide/SignIn.vue';
+export { default as VSidebarSignIn } from '@/components/SignIn.vue';
