@@ -31,7 +31,7 @@ describe('telemetry', () => {
       const conf = sandbox.stub(Conf.prototype, 'get');
       conf.withArgs(sinon.match('sessionId')).returns(undefined);
 
-      const setStub = Conf.prototype.set as SinonSpy;
+      const setStub = Conf.prototype['set'] as SinonSpy;
       const { session } = Telemetry;
 
       expect(setStub.getCall(-2).args[1]).toBe(session.id);

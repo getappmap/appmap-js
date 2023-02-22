@@ -6,8 +6,7 @@ import { TelemetryClient, setup as AppInsights } from 'applicationinsights';
 import Conf from 'conf';
 import { exec as execCallback, spawn } from 'child_process';
 import { promisify } from 'util';
-import { PathLike, promises as fs, constants as fsConstants } from 'fs';
-import * as path from 'path';
+import { PathLike } from 'fs';
 
 const exec = promisify(execCallback);
 
