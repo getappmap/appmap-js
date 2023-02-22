@@ -180,14 +180,12 @@ $min-height: 3rem;
 .lane {
   min-width: $min-width;
   min-height: $min-height;
-  // position: relative;
 }
 
 .on-top {
   position: absolute;
   z-index: 1;
   height: 100%;
-  // width: 100%;
 }
 
 .sequence-actor-lane-separator {

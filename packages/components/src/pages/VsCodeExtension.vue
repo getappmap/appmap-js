@@ -1250,7 +1250,6 @@ code {
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: 100%;
-  min-width: 800px;
   height: 100vh;
   color: $base11;
   background-color: $black;
@@ -1712,5 +1711,18 @@ code {
 }
 ::-webkit-scrollbar-corner {
   background: transparent;
+}
+
+@media (max-width: 1250px) {
+  #app .main-column--right .hover-text-popper .appmap-upload {
+    background-color: transparent;
+    padding: 0;
+    span {
+      display: none;
+    }
+    svg {
+      fill: $gray4;
+    }
+  }
 }
 </style>
