@@ -1,3 +1,10 @@
+# [@appland/components-v2.30.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.29.0...@appland/components-v2.30.0) (2023-02-22)
+
+
+### Features
+
+* component for sidebar sign-in page ([5c18782](https://github.com/getappmap/appmap-js/commit/5c18782dccae16a61a121aefa199d87697448d27))
+
 # [@appland/components-v2.29.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.28.0...@appland/components-v2.29.0) (2023-02-07)
 
 
