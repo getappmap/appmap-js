@@ -54,7 +54,16 @@ export default {
     },
 
     gridRows(): string {
-      return [this.actionSpec.index + 2, this.actionSpec.returnIndex! + 2].join(' / ');
+      const gridEndFactor =
+        this.actionSpec.action.children.reduce((accumulator, child) => {
+          // add an extra grid row if the loop has a single child with no return value
+          if (!child.returnValue && child.children.length === 0) {
+            return accumulator + 1;
+          }
+          return accumulator;
+        }, 2) || 2;
+
+      return [this.actionSpec.index + 2, this.actionSpec.returnIndex! + gridEndFactor].join(' / ');
     },
     gridColumns(): string {
       const [min, max] = this.columnIndexSpan;
