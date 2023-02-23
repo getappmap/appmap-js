@@ -19,8 +19,7 @@
     "watch": "tsc --watch",
     "build:html": "ts-node esbuild.html.ts",
     "start": "ts-node src/cli.ts",
-    "build-native": "yarn build && ./bin/build-native",
-    "codesign": "${PROJECT_CWD}/bin/sign release/appmap-macos-x64 release/appmap-macos-arm64 && ${PROJECT_CWD}/bin/notarize release/appmap-macos-x64 release/appmap-macos-arm64"
+    "build-native": "yarn build && ./bin/build-native"
   },
   "lint-staged": {
     "*.{js,md,json,ts}": [
@@ -130,4 +129,4 @@
     ],
     "outputPath": "dist"
   }
-} 
+}
