@@ -140,7 +140,7 @@ export class ActionSpec {
     const indexes = [...actorIds]
       .map((actorId) => this.diagram.actors.findIndex((a) => a.id === actorId))
       .filter((id) => id >= 0)
-      .sort();
+      .sort((a, b) => (a > b ? 1 : -1));
 
     return [indexes[0], indexes[indexes.length - 1]];
   }
