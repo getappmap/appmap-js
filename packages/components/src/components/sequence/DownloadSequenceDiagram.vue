@@ -13,6 +13,9 @@ export default {
     async download() {
       // Capture specific element
       const node = document.querySelector('#sequence-diagram-ui');
+      [...node.querySelectorAll('.sequence-actor')].forEach(
+        (element) => (element.style.position = 'absolute')
+      );
       assert(node, '#sequence-diagram-ui not found');
       const svgDocument = elementToSVG(node);
 
