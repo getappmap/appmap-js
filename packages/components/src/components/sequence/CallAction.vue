@@ -315,7 +315,8 @@ export default {
   }
 }
 
-.call.selected > .call-line-segment {
+.call.selected > .call-line-segment,
+.call.selected > .self-call {
   background-color: #6fddbc94; //#6c8ba54f;
   &.arrow-base {
     border-radius: 0.5rem 0 0 0;
@@ -449,9 +450,6 @@ export default {
 
   .arrow-base {
     left: calc((var(--caller-lifecycle-depth) * $sequence-activation-gutter-width));
-  }
-  .arrow-head,
-  .connecting-span {
   }
 
   .connecting-span {
