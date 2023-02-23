@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.76.3](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.76.2...@appland/scanner-v1.76.3) (2023-02-23)
+
+
+### Bug Fixes
+
+* Include node entitlements during codesign ([f870eed](https://github.com/getappmap/appmap-js/commit/f870eed52907604b93ae5f049283243209ace1ba))
+
 # [@appland/scanner-v1.76.2](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.76.1...@appland/scanner-v1.76.2) (2023-02-22)
 
 
