@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.65.5](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.65.4...@appland/appmap-v3.65.5) (2023-02-23)
+
+
+### Bug Fixes
+
+* Include node entitlements during codesign ([f870eed](https://github.com/getappmap/appmap-js/commit/f870eed52907604b93ae5f049283243209ace1ba))
+
 # [@appland/appmap-v3.65.4](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.65.3...@appland/appmap-v3.65.4) (2023-02-22)
 
 
