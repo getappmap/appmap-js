@@ -21,7 +21,11 @@
           },
         }"
       >
-        <VCallLabel :action-spec="actionSpec" :collapsed-actions="collapsedActionState" />
+        <VCallLabel
+          :action-spec="actionSpec"
+          :collapsed-actions="collapsedActionState"
+          :appMap="appMap"
+        />
         <VSelfCallArrow :action-spec="actionSpec" />
       </div>
     </template>
@@ -38,7 +42,11 @@
             },
           }"
         >
-          <VCallLabel :action-spec="actionSpec" :collapsed-actions="collapsedActionState" />
+          <VCallLabel
+            :action-spec="actionSpec"
+            :collapsed-actions="collapsedActionState"
+            :appMap="appMap"
+          />
           <Arrow class="arrow" />
         </div>
       </template>
@@ -54,7 +62,11 @@
             },
           }"
         >
-          <VCallLabel :action-spec="actionSpec" :collapsed-actions="collapsedActionState" />
+          <VCallLabel
+            :action-spec="actionSpec"
+            :collapsed-actions="collapsedActionState"
+            :appMap="appMap"
+          />
         </div>
         <template v-if="actionSpec.calleeActionIndex - actionSpec.callerActionIndex > 2">
           <div
@@ -100,7 +112,11 @@
             },
           }"
         >
-          <VCallLabel :action-spec="actionSpec" :collapsed-actions="collapsedActionState" />
+          <VCallLabel
+            :action-spec="actionSpec"
+            :collapsed-actions="collapsedActionState"
+            :appMap="appMap"
+          />
           <Arrow class="arrow" />
         </div>
       </template>
@@ -116,7 +132,11 @@
             },
           }"
         >
-          <VCallLabel :action-spec="actionSpec" :collapsed-actions="collapsedActionState" />
+          <VCallLabel
+            :action-spec="actionSpec"
+            :collapsed-actions="collapsedActionState"
+            :appMap="appMap"
+          />
           <Arrow class="arrow" />
         </div>
         <template v-if="actionSpec.callerActionIndex - actionSpec.calleeActionIndex > 2">
@@ -215,6 +235,9 @@ export default {
     },
     selectedEvents: {
       type: Array,
+    },
+    appMap: {
+      type: Object,
     },
   },
 
