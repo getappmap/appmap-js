@@ -179,7 +179,8 @@ $bg-fade: rgba(0, 0, 0, 0.8);
   }
 }
 
-.call.selected > .call-line-segment {
+.call.selected > .call-line-segment,
+.call.selected > .self-call {
   .label {
     .name {
       color: $white;
