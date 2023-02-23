@@ -18,6 +18,7 @@
           :collapsed-actions="collapsedActions"
           :selected-events="selectedEvents"
           :focused-event="focusedEvent"
+          :appMap="appMap"
         />
       </template>
       <template v-if="action.nodeType === 'return'">
