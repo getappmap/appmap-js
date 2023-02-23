@@ -47,7 +47,7 @@ jobs:
         ./bin/presign \
         && yarn build \
         && yarn build-native \
-        && ./bin/codesign packages/*/release/*-macos-* \
+        && ./bin/sign packages/*/release/*-macos-* \
         && ./bin/hash packages/*/release/* \
         && yarn run semantic-release \
         && yarn run chromatic --auto-accept-changes
