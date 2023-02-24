@@ -319,13 +319,16 @@ export default {
 .call.selected > .self-call {
   background-color: #6fddbc94; //#6c8ba54f;
   &.arrow-base {
-    border-radius: 0.5rem 0 0 0;
+    border-radius: 0;
+    margin-top: 0.5rem;
   }
   &.arrow-head {
-    border-radius: 0 0.5rem 0 0;
+    border-radius: 0;
+    margin-top: 0.5rem;
   }
   &.single-span {
-    border-radius: 0.5rem 0.5rem 0 0;
+    border-radius: 0;
+    margin-top: 0.5rem;
   }
 }
 
@@ -454,6 +457,7 @@ export default {
 
   .connecting-span {
     border-radius: 0;
+    margin-top: 0.5rem;
   }
 
   .arrow {
