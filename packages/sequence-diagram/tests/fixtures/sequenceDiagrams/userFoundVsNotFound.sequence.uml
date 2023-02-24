@@ -10,7 +10,7 @@ participant posts as "posts"
     controllers-[#CA9C3F]>models: <u>find</u> <color:gray> 0.094 ms</color>
     activate models
       models-[#green]>database: <u><color:lightgray><back:#172238>query</back></color></u> <color:gray> 0.002 ms</color>
-    controllers<[#CA9C3F]--models: <color:lightgray><back:#29201A>--exception!--</back></color> <color:lightgray><back:#172238>object</back></color>
+    controllers<[#CA9C3F]--models: <color:lightgray><back:#29201A>--exception!--</back></color> <color:lightgray><back:#172238>User</back></color>
     deactivate models
     controllers-[#green]>users: <color:lightgray><back:#172238>show</back></color> <color:gray> 0.299 ms</color>
     activate users
