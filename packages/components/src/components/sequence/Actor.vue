@@ -187,7 +187,7 @@ $min-height: 3rem;
 
 .on-top {
   position: absolute;
-  z-index: 1;
+  z-index: 99999;
   height: 100%;
 }
 
