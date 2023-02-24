@@ -63,6 +63,7 @@ export default {
       if (this.appMap) {
         return (this.finding.relatedEvents || []).map((e) => this.appMap.getEvent(e.id));
       }
+      return [];
     },
   },
 };
