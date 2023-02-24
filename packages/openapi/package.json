@@ -1,7 +1,7 @@
 {
   "name": "@appland/openapi",
   "description": "Shared code for OpenAPI support in AppLand products",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "files": [
     "dist"
   ],

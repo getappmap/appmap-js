@@ -1,3 +1,10 @@
+# [@appland/openapi-v1.4.3](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.4.2...@appland/openapi-v1.4.3) (2023-02-24)
+
+
+### Bug Fixes
+
+* Remove http-dependent code from openapi ([2cae20f](https://github.com/getappmap/appmap-js/commit/2cae20f6cc0ca72123c2288178d1f7a234099cc5))
+
 # [@appland/openapi-v1.4.2](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.4.1...@appland/openapi-v1.4.2) (2023-02-14)
 
 
