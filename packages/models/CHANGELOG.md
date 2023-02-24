@@ -1,3 +1,15 @@
+# [@appland/models-v2.2.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.1.0...@appland/models-v2.2.0) (2023-02-24)
+
+
+### Bug Fixes
+
+* Linter error ([e9ce565](https://github.com/getappmap/appmap-js/commit/e9ce565d70244153d617d332b7d06b1675dbe7b3))
+
+
+### Features
+
+* Move AppMapFilter to @appland/models ([17ef95b](https://github.com/getappmap/appmap-js/commit/17ef95be62adb82222d4357b4d80e943e96abf7e))
+
 # [@appland/models-v2.1.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.0.0...@appland/models-v2.1.0) (2023-02-10)
 
 
