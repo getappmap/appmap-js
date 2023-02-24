@@ -317,18 +317,19 @@ export default {
 
 .call.selected > .call-line-segment,
 .call.selected > .self-call {
-  background-color: #6fddbc94; //#6c8ba54f;
+  background-color: #6fddbc94;
+  border-top: 4px solid $black;
   &.arrow-base {
     border-radius: 0;
-    margin-top: 0.5rem;
+    border-top: 4px solid $black;
   }
   &.arrow-head {
     border-radius: 0;
-    margin-top: 0.5rem;
+    border-top: 4px solid $black;
   }
   &.single-span {
     border-radius: 0;
-    margin-top: 0.5rem;
+    border-top: 4px solid $black;
   }
 }
 
@@ -337,7 +338,7 @@ export default {
     background-color: #6fddbc94;
   }
   to {
-    background-color: black;
+    background-color: $black;
   }
 }
 
@@ -443,6 +444,7 @@ export default {
     right: 0px;
     position: absolute;
     bottom: -7px;
+    z-index: 9999;
   }
 }
 
@@ -457,7 +459,7 @@ export default {
 
   .connecting-span {
     border-radius: 0;
-    margin-top: 0.5rem;
+    border-top: 4px solid $black;
   }
 
   .arrow {
@@ -472,6 +474,11 @@ export default {
     left: calc(((var(--callee-lifecycle-depth)) * $sequence-activation-gutter-width));
   }
 
+  .connecting-span {
+    border-radius: 0;
+    border-top: 4px solid $black;
+  }
+
   .arrow-head {
     left: calc((var(--callee-lifecycle-depth) * $sequence-activation-gutter-width));
   }
@@ -481,6 +488,7 @@ export default {
     transform: rotate(180deg);
     position: absolute;
     bottom: -7px;
+    z-index: 9999;
   }
 }
 
