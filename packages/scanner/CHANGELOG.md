@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.76.4](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.76.3...@appland/scanner-v1.76.4) (2023-02-24)
+
+
+### Bug Fixes
+
+* Release notarized Mac OS binaries ([f13e619](https://github.com/getappmap/appmap-js/commit/f13e619648903dbb1989a72c64aab65aa1adf8dc))
+
 # [@appland/scanner-v1.76.3](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.76.2...@appland/scanner-v1.76.3) (2023-02-23)
 
 
