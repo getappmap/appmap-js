@@ -1,3 +1,21 @@
+# [@appland/sequence-diagram-v1.4.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.3.4...@appland/sequence-diagram-v1.4.0) (2023-02-24)
+
+
+### Bug Fixes
+
+* Ensure enum numeric values stay stable ([532423d](https://github.com/getappmap/appmap-js/commit/532423ddcccbe3a0bd382454beac1ae03d2fe8c4))
+* Fix linting of sequence-diagram project ([1c0f26f](https://github.com/getappmap/appmap-js/commit/1c0f26fb066476a3674fae035404dea59f2cd321))
+* Sequence diagram displays selected event ([db0a271](https://github.com/getappmap/appmap-js/commit/db0a27172d3fad767ba688dedaa243095fca8f89))
+* Switch to crypto-js ([3aacc3c](https://github.com/getappmap/appmap-js/commit/3aacc3cd0459fc15497bb97b3f073cb82d424dbb))
+
+
+### Features
+
+* Add seq diagram Text mode output ([4ec622e](https://github.com/getappmap/appmap-js/commit/4ec622ef41599749d5ec90d830e1961eba12536d))
+* Optionally skip loop rollup ([fa04ca9](https://github.com/getappmap/appmap-js/commit/fa04ca99e1950ed0a79cfe0e63cc0074ad1b3138))
+* Remove diff mode labels ([8bf6a96](https://github.com/getappmap/appmap-js/commit/8bf6a9601645ea4cfc9b197fb8d482f41414ea32))
+* Save event ids on seq diagram actions ([310f641](https://github.com/getappmap/appmap-js/commit/310f641728e07a5d787d0fe065b57caf4f72ae48))
+
 # [@appland/sequence-diagram-v1.3.4](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.3.3...@appland/sequence-diagram-v1.3.4) (2023-02-10)
 
 
