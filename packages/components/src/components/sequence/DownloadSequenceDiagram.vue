@@ -13,10 +13,9 @@ export default {
     async download() {
       // Capture specific element
       const node = document.querySelector('#sequence-diagram-ui');
-      [...node.querySelectorAll('.sequence-actor')].forEach(
-        (element) => (element.style.position = 'absolute')
-      );
       assert(node, '#sequence-diagram-ui not found');
+
+      this.cleanUpDOM(node);
       const svgDocument = elementToSVG(node);
 
       // Inline external resources (fonts, images, etc) as data: URIs
@@ -25,6 +24,16 @@ export default {
       // Get SVG string
       const svgString = new XMLSerializer().serializeToString(svgDocument);
       this.$root.$emit('exportSVG', svgString);
+    },
+
+    cleanUpDOM(node) {
+      [...node.querySelectorAll('.sequence-actor')].forEach(
+        (element) => (element.style.position = 'absolute')
+      );
+
+      [...node.querySelectorAll('.hide-container').forEach((element) => element.remove())];
+
+      [...node.querySelectorAll('.collapse-expand').forEach((element) => element.remove())];
     },
   },
 };
