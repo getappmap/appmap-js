@@ -253,6 +253,7 @@ export default {
     transform: rotate(180deg);
     position: absolute;
     bottom: -7px;
+    z-index: 9999;
   }
 }
 
