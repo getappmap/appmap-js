@@ -351,7 +351,6 @@ import {
   store,
   SET_APPMAP_DATA,
   SET_VIEW,
-  SET_FILTERED_MAP,
   VIEW_COMPONENT,
   VIEW_SEQUENCE,
   VIEW_FLOW,
@@ -720,7 +719,6 @@ export default {
       this.filters.declutter.limitRootEvents.default = hasHttpRoot;
 
       this.isLoading = false;
-      this.$store.commit(SET_FILTERED_MAP, this.filteredAppMap);
     },
 
     showInstructions() {

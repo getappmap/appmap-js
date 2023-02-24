@@ -48,6 +48,9 @@ export default {
       type: Object,
       required: true,
     },
+    appMap: {
+      type: Object,
+    },
   },
   computed: {
     finding() {
@@ -57,9 +60,9 @@ export default {
       return this.object.resolvedFinding;
     },
     relatedEvents() {
-      return (this.finding.relatedEvents || []).map((e) =>
-        this.$store.state.filteredAppMap.getEvent(e.id)
-      );
+      if (this.appMap) {
+        return (this.finding.relatedEvents || []).map((e) => this.appMap.getEvent(e.id));
+      }
     },
   },
 };
