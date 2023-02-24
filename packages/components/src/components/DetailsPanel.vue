@@ -30,6 +30,7 @@
         :object="selectedObject"
         :is-root-object="isRootObject"
         :filters-root-objects="filtersRootObjects"
+        :appMap="appMap"
       />
       <v-details-panel-labels
         v-if="selectedObject && selectedObject.labels"
