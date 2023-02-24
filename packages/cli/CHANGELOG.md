@@ -1,3 +1,12 @@
+# [@appland/appmap-v3.66.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.65.6...@appland/appmap-v3.66.0) (2023-02-24)
+
+
+### Features
+
+* Create multiple sequence diagrams with one invocation ([8e829a6](https://github.com/getappmap/appmap-js/commit/8e829a6280e78d6002327de16a11b5979d9595f1))
+* Optionally skip loop rollup ([fa04ca9](https://github.com/getappmap/appmap-js/commit/fa04ca99e1950ed0a79cfe0e63cc0074ad1b3138))
+* Seq diagram diff include and exclude ([fc12f5c](https://github.com/getappmap/appmap-js/commit/fc12f5c9db117030f1c7ee34a1c46d45708a5165))
+
 # [@appland/appmap-v3.65.6](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.65.5...@appland/appmap-v3.65.6) (2023-02-24)
 
 
