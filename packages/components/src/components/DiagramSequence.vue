@@ -8,6 +8,7 @@
         :index="index"
         :height="diagramSpec.actions.length"
         :selected-actor="selectedActor"
+        :appMap="appMap"
       />
     </template>
     <template v-for="action in diagramSpec.actions">

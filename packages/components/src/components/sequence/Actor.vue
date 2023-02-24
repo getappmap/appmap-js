@@ -57,6 +57,9 @@ export default {
       required: true,
       readonly: true,
     },
+    appMap: {
+      type: Object,
+    },
   },
   computed: {
     inlineStyle(): { [key: string]: string } {
@@ -76,8 +79,8 @@ export default {
       this.$root.$emit('addHiddenName', this.actor.id);
     },
     selectCodeObject() {
-      if (this.$store) {
-        const codeObject = this.$store.state.filteredAppMap.classMap.codeObjects.find(
+      if (this.appMap) {
+        const codeObject = this.appMap.classMap.codeObjects.find(
           (co: CodeObject) => co.fqid === this.actor.id
         );
         if (codeObject) this.$store.commit(SELECT_CODE_OBJECT, codeObject);

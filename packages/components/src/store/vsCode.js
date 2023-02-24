@@ -15,7 +15,6 @@ export const VIEW_COMPONENT = 'viewComponent';
 export const VIEW_SEQUENCE = 'viewSequence';
 export const VIEW_FLOW = 'viewFlow';
 export const DEFAULT_VIEW = VIEW_COMPONENT;
-export const SET_FILTERED_MAP = 'setFilteredMap';
 
 export function buildStore() {
   return new Vuex.Store({
@@ -25,7 +24,6 @@ export function buildStore() {
       currentView: DEFAULT_VIEW,
       selectedLabel: null,
       focusedEvent: null,
-      filteredAppMap: new AppMap(),
     },
 
     getters: {
@@ -49,8 +47,7 @@ export function buildStore() {
     },
 
     mutations: {
-      // Stores the initial, complete AppMap. See also SET_FILTERED_MAP, which is used to
-      // apply the effects of view filters.
+      // Stores the initial, complete AppMap.
       [SET_APPMAP_DATA](state, data) {
         state.selectionStack = [];
         state.appMap = buildAppMap().source(data).normalize().build();
@@ -97,12 +94,6 @@ export function buildStore() {
       // This action does not imply that the sidebar display should be changed.
       [SET_FOCUSED_EVENT](state, event) {
         state.focusedEvent = event;
-      },
-
-      // When the view filters are changed (e.g. roots, decluttering), a filtered AppMap
-      // is comptued and stored in this state variable.
-      [SET_FILTERED_MAP](state, filteredAppMap) {
-        state.filteredAppMap = filteredAppMap;
       },
     },
   });
