@@ -24,6 +24,7 @@ export default {
       // Get SVG string
       const svgString = new XMLSerializer().serializeToString(svgDocument);
       this.$root.$emit('exportSVG', svgString);
+      this.restoreDOM(node);
     },
 
     cleanUpDOM(node) {
@@ -31,9 +32,35 @@ export default {
         (element) => (element.style.position = 'absolute')
       );
 
-      [...node.querySelectorAll('.hide-container').forEach((element) => element.remove())];
+      [
+        ...node
+          .querySelectorAll('.hide-container')
+          .forEach((element) => (element.style.display = 'none')),
+      ];
 
-      [...node.querySelectorAll('.collapse-expand').forEach((element) => element.remove())];
+      [
+        ...node
+          .querySelectorAll('.collapse-expand')
+          .forEach((element) => (element.style.display = 'none')),
+      ];
+    },
+
+    restoreDOM(node) {
+      [...node.querySelectorAll('.sequence-actor')].forEach(
+        (element) => (element.style.position = 'sticky')
+      );
+
+      [
+        ...node
+          .querySelectorAll('.hide-container')
+          .forEach((element) => (element.style.display = 'inline-block')),
+      ];
+
+      [
+        ...node
+          .querySelectorAll('.collapse-expand')
+          .forEach((element) => (element.style.display = 'inline-block')),
+      ];
     },
   },
 };
