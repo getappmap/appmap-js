@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.65.6](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.65.5...@appland/appmap-v3.65.6) (2023-02-24)
+
+
+### Bug Fixes
+
+* Release notarized Mac OS binaries ([f13e619](https://github.com/getappmap/appmap-js/commit/f13e619648903dbb1989a72c64aab65aa1adf8dc))
+
 # [@appland/appmap-v3.65.5](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.65.4...@appland/appmap-v3.65.5) (2023-02-23)
 
 
