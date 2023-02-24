@@ -1,3 +1,11 @@
+# [@appland/scanner-v1.76.5](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.76.4...@appland/scanner-v1.76.5) (2023-02-24)
+
+
+### Bug Fixes
+
+* Remove http-dependent code from openapi ([2cae20f](https://github.com/getappmap/appmap-js/commit/2cae20f6cc0ca72123c2288178d1f7a234099cc5))
+* Update minimatch version to match appmap ([2720750](https://github.com/getappmap/appmap-js/commit/2720750d1e3b95c83c4e86a489636267397a9c11))
+
 # [@appland/scanner-v1.76.4](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.76.3...@appland/scanner-v1.76.4) (2023-02-24)
 
 
