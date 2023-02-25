@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.76.6](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.76.5...@appland/scanner-v1.76.6) (2023-02-25)
+
+
+### Bug Fixes
+
+* update internal dependencies for sequence diagram release ([4f6ddeb](https://github.com/getappmap/appmap-js/commit/4f6ddebedf3ecdfb18429ddca5a117e91498bc5c))
+
 # [@appland/scanner-v1.76.5](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.76.4...@appland/scanner-v1.76.5) (2023-02-24)
 
 
