@@ -1,3 +1,10 @@
+# [@appland/openapi-v1.4.4](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.4.3...@appland/openapi-v1.4.4) (2023-02-25)
+
+
+### Bug Fixes
+
+* update internal dependencies for sequence diagram release ([4f6ddeb](https://github.com/getappmap/appmap-js/commit/4f6ddebedf3ecdfb18429ddca5a117e91498bc5c))
+
 # [@appland/openapi-v1.4.3](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.4.2...@appland/openapi-v1.4.3) (2023-02-24)
 
 
