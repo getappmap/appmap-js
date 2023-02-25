@@ -24,7 +24,7 @@ export default async function configureHostAndPort({ configuration }: RecordCont
       default: defaultPort,
     });
     port = parseInt(answer);
-    if (port !== NaN && port !== defaultPort) {
+    if (!Number.isNaN(port) && port !== defaultPort) {
       configuration.setSetting('remote_recording.port', port);
     }
   }
