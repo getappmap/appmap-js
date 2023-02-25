@@ -1,3 +1,10 @@
+# [@appland/components-v2.31.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.31.0...@appland/components-v2.31.1) (2023-02-25)
+
+
+### Bug Fixes
+
+* update internal dependencies for sequence diagram release ([4f6ddeb](https://github.com/getappmap/appmap-js/commit/4f6ddebedf3ecdfb18429ddca5a117e91498bc5c))
+
 # [@appland/components-v2.31.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.30.0...@appland/components-v2.31.0) (2023-02-24)
 
 
