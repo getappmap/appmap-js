@@ -6,12 +6,14 @@ import Telemetry, { Git, GitState } from './telemetry';
 import { name as appName, version } from './package.json';
 import child_process, { ChildProcess } from 'node:child_process';
 import { nextTick } from 'node:process';
+import { Contracts } from 'applicationinsights';
+import assert from 'node:assert';
 
 const invalidExpiration = () => Date.now() - 1000 * 60 * 60;
 
 describe('telemetry', () => {
   const sandbox = sinon.createSandbox();
-  let trackEvent: sinon.SinonStub;
+  let trackEvent: sinon.SinonStub<[Contracts.EventTelemetry]>;
   beforeEach(() => {
     // Don't accidentally send data
     sandbox.stub(Telemetry, 'client').value({
@@ -141,6 +143,18 @@ describe('telemetry', () => {
 
       expect(properties).not.toHaveProperty('appmap.cli.prop');
       expect(properties).not.toHaveProperty('appmap.cli.metric');
+    });
+
+    it('does not transform qualified keys', () => {
+      Telemetry.sendEvent({
+        name: 'test event',
+        properties: {
+          'qualified.test.property': 'test value',
+        },
+      });
+      const [[{ properties }]] = trackEvent.args;
+      assert(properties);
+      expect(properties['qualified.test.property']).toEqual('test value');
     });
 
     it('sends env var names upon request', () => {
