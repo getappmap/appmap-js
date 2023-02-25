@@ -122,6 +122,10 @@ const transformProps = <T>(obj: Record<string, T | undefined>): Record<string, T
 
   for (const [k, v] of Object.entries(obj)) {
     if (v === undefined) continue;
+    if (k.includes('.')) {
+      result[k] = v;
+      continue;
+    }
     const prefixedKey = k.startsWith(propPrefix) ? k : `${propPrefix}${k}`;
     result[prefixedKey] = v;
   }

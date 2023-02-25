@@ -21,6 +21,7 @@ import { locateAppMapDir } from '../lib/locateAppMapDir';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { locateAppMapConfigFile } from '../lib/locateAppMapConfigFile';
 import Telemetry, { Git, GitState } from '../telemetry';
+import { findRepository } from '../lib/git';
 
 type FilterFunction = (file: string) => Promise<{ enable: boolean; message?: string }>;
 
@@ -254,6 +255,7 @@ async function sendTelemetry(paths: OpenAPIV3.PathsObject, numAppMaps: number, a
       name: 'appmap:openapi',
       properties: {
         git_state: gitState,
+        'appmap.version_control.repository': await warnCatch(findRepository(appmapDir)),
       },
       metrics: {
         paths: Object.keys(paths).length,
@@ -296,4 +298,13 @@ function applySchemaOverrides(paths: Record<string, any>, overrides: Record<stri
       applySchemaOverrides(paths[key], value);
     }
   });
+}
+
+async function warnCatch<T>(fn: Promise<T | undefined>): Promise<T | undefined> {
+  try {
+    return await fn;
+  } catch (err) {
+    console.warn(err);
+    return;
+  }
 }
