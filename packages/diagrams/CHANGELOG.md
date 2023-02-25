@@ -1,3 +1,10 @@
+# [@appland/diagrams-v1.6.3](https://github.com/getappmap/appmap-js/compare/@appland/diagrams-v1.6.2...@appland/diagrams-v1.6.3) (2023-02-25)
+
+
+### Bug Fixes
+
+* update internal dependencies for sequence diagram release ([4f6ddeb](https://github.com/getappmap/appmap-js/commit/4f6ddebedf3ecdfb18429ddca5a117e91498bc5c))
+
 # [@appland/diagrams-v1.6.2](https://github.com/getappmap/appmap-js/compare/@appland/diagrams-v1.6.1...@appland/diagrams-v1.6.2) (2023-02-01)
 
 
