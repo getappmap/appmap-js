@@ -1,3 +1,10 @@
+# [@appland/sequence-diagram-v1.4.1](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.4.0...@appland/sequence-diagram-v1.4.1) (2023-02-25)
+
+
+### Bug Fixes
+
+* update internal dependencies for sequence diagram release ([4f6ddeb](https://github.com/getappmap/appmap-js/commit/4f6ddebedf3ecdfb18429ddca5a117e91498bc5c))
+
 # [@appland/sequence-diagram-v1.4.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.3.4...@appland/sequence-diagram-v1.4.0) (2023-02-24)
 
 
