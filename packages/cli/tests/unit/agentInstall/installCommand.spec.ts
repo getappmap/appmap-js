@@ -27,6 +27,7 @@ import { dump } from 'js-yaml';
 import * as openTicket from '../../../src/lib/ticket/openTicket';
 import { withStubbedTelemetry } from '../../helper';
 import { YarnInstaller } from '../../../src/cmds/agentInstaller/javaScriptAgentInstaller';
+import assert from 'node:assert';
 
 const fixtureDir = path.join(__dirname, '..', 'fixtures');
 tmp.setGracefulCleanup();
@@ -1090,7 +1091,8 @@ appmap_dir: tmp/appmap
 
       await invokeCommand(projectDir, () => {});
 
-      const firstPrompt = promptStub.getCall(0).args[0] as inquirer.Question;
+      const firstPrompt = promptStub.getCall(0).args[0];
+      assert('name' in firstPrompt);
       expect(firstPrompt.name).toEqual('installer0');
       expect(installAgentStub).toBeCalled();
     });

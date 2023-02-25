@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "applicationinsights": "^2.1.4",
-    "conf": "^10.0.2",
+    "conf": "<11",
     "read-pkg-up": "^7.0.1"
   },
   "devDependencies": {
@@ -27,6 +27,6 @@
     "prettier": "^2.7.1",
     "sinon": "^13.0.1",
     "ts-jest": "^27.1.4",
-    "typescript": "^4.5.4"
+    "typescript": "^4.9.5"
   }
 }
