@@ -61,7 +61,7 @@
   },
   "dependencies": {
     "@appland/client": "^1.5.0",
-    "@appland/models": "workspace:^2.0.0",
+    "@appland/models": "workspace:^2.2.0",
     "@appland/openapi": "workspace:packages/openapi",
     "@appland/sql-parser": "^1.5.0",
     "@types/cli-progress": "^3.9.2",
