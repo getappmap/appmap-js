@@ -5,15 +5,16 @@
       <div class="on-top">
         <div class="sequence-actor" :data-actor-id="actor.id">
           <div
-            class="label-container"
             ref="label_container"
             :class="labelClasses"
             @click="selectCodeObject"
           >
             <span class="label"> {{ actor.name }} </span>
-            <span class="hide-container" @click.stop="hideCodeObject">
-              <XIcon />
-            </span>
+            <template v-if="interactive">
+              <span class="hide-container" @click.stop="hideCodeObject">
+                <XIcon />
+              </span>
+            </template>
           </div>
         </div>
       </div>
@@ -57,6 +58,11 @@ export default {
       required: true,
       readonly: true,
     },
+    interactive: {
+      type: Boolean,
+      required: true,
+      readonly: true,
+    },
     appMap: {
       type: Object,
     },
@@ -71,6 +77,7 @@ export default {
       return {
         'label-container': true,
         'label-container--selected': this.actor === this.selectedActor,
+        interactive: this.interactive,
       };
     },
   },
@@ -176,7 +183,7 @@ $min-height: 3rem;
   }
 }
 
-.label-container:hover {
+.interactive.label-container:hover {
   cursor: pointer;
   background-color: #444e69;
   .hide-container {
