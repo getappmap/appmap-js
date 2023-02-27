@@ -1,4 +1,4 @@
-import serveAndOpenAppMap from './serveAndOpenAppMap';
+import { serveAndOpenAppMap } from '../../lib/serveAndOpen';
 import supportsHyperlinks from 'supports-hyperlinks';
 import { join, resolve } from 'path';
 
@@ -19,8 +19,8 @@ export function abspath(file: string) {
   return resolve(process.cwd(), file);
 }
 
-export async function openInBrowser(appMapFile: string) {
-  await serveAndOpenAppMap(appMapFile);
+export async function openInBrowser(appMapFile: string, verifyInSubdir: boolean) {
+  await serveAndOpenAppMap(appMapFile, verifyInSubdir);
 }
 
 export function vscodeURL(appMapFile: string) {
