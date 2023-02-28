@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import assert from 'assert';
 import { elementToSVG, inlineResources } from 'dom-to-svg';
 
 export default {
@@ -13,7 +12,7 @@ export default {
     async download() {
       // Capture specific element
       const node = document.querySelector('#sequence-diagram-ui');
-      assert(node, '#sequence-diagram-ui not found');
+      if (!node) throw Error('#sequence-diagram-ui not found');
 
       this.cleanUpDOM(node);
       const svgDocument = elementToSVG(node);

@@ -1,6 +1,5 @@
 import { AppMap, Event } from '@appland/models';
 import { classNameToOpenAPIType } from '@appland/openapi';
-import assert from 'assert';
 import sha256 from 'crypto-js/sha256.js';
 import { merge } from './mergeWindow';
 import { selectEvents } from './selectEvents';
@@ -31,9 +30,9 @@ export default function buildDiagram(
   const actors: Actor[] = [];
   const actorsByCodeObjectId = new Map<string, Actor>();
 
-  const findOrCreateActor = (event: Event): Actor => {
+  const findOrCreateActor = (event: Event): Actor | undefined => {
     const actorCodeObject = specification.isIncludedCodeObject(event.codeObject);
-    assert(actorCodeObject, 'actor code object');
+    if (!actorCodeObject) throw Error('actor code object not found');
     const order = specification.priorityOf(actorCodeObject);
 
     const actorKey = actorCodeObject.fqid;
@@ -53,7 +52,7 @@ export default function buildDiagram(
 
   function buildRequest(caller?: Event | undefined, callee?: Event): Action | undefined {
     if (callee?.httpServerRequest && callee?.httpServerResponse) {
-      assert(callee.route, 'callee.route');
+      if (!callee.route) throw Error('callee.route not found');
       const response = callee.httpServerResponse as any;
       return {
         nodeType: NodeType.ServerRPC,
@@ -67,7 +66,7 @@ export default function buildDiagram(
         eventIds: [callee.id],
       } as ServerRPC;
     } else if (callee?.httpClientRequest && callee?.httpClientResponse) {
-      assert(callee.route, 'callee.route');
+      if (!callee.route) throw Error('callee.route not found');
       const response = callee.httpClientResponse as any;
       return {
         nodeType: NodeType.ClientRPC,

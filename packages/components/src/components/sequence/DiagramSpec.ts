@@ -6,7 +6,6 @@ import {
   Actor,
   Diagram,
 } from '@appland/sequence-diagram';
-import assert from 'assert';
 import { ActionSpec } from './ActionSpec';
 
 type ActionId = string;
@@ -29,15 +28,15 @@ export default class DiagramSpec {
       const [caller, callee] = actionActors(action);
 
       const incrementLifecycleDepth = (actor: Actor | undefined): void => {
-        assert(actor);
+        if (!actor) throw Error;
         const depth = lifecycleDepth.get(actor.id) || 0;
         lifecycleDepth.set(actor.id, depth + 1);
       };
 
       const decrementLifecycleDepth = (actor: Actor | undefined): void => {
-        assert(actor);
+        if (!actor) throw Error;
         const depth = lifecycleDepth.get(actor.id);
-        assert(depth !== undefined);
+        if (!depth) throw Error;
         lifecycleDepth.set(actor.id, depth - 1);
       };
 
@@ -98,7 +97,7 @@ export default class DiagramSpec {
     if (parentIndex === undefined) return;
 
     const parent = this.actions[parentIndex];
-    assert(parent, `No parent found for action spec ${actionSpec.index}`);
+    if (!parent) throw Error(`No parent found for action spec ${actionSpec.index}`);
     return parent;
   }
 }

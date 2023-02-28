@@ -1,7 +1,5 @@
-import assert from 'assert';
 import { MinPriorityQueue } from '@datastructures-js/priority-queue';
 import { Action, actionActors, Diagram, nodeName } from './types';
-import { inspect } from 'util';
 
 type ActionIndex = number;
 
@@ -33,7 +31,7 @@ export class Move {
     this.lNode = position.lNode;
     this.rNode = position.rNode;
     const cost = Costs.get(moveType);
-    assert(cost !== undefined, `No cost for ${moveType}`);
+    if (cost === undefined) throw Error(`No cost for ${moveType}`);
     this.cost = cost;
   }
 }
@@ -194,11 +192,9 @@ export default function diff(
 
   while (!pq.isEmpty()) {
     const { position, preceding, cost: totalCost } = pq.dequeue();
-    assert(position, 'next position');
+    if (!position) throw Error('next position not found');
 
     if (position.lNode === lActions.length && position.rNode === rActions.length) break;
-
-    if (diffOptions.verbose) console.log(`Trying ${inspect(position)}, cost = ${totalCost}`);
 
     if (
       distances.get(positionKey(position)) === undefined ||
@@ -235,7 +231,7 @@ export default function diff(
   {
     let reachedState: string | undefined = [lActions.length - 1, rActions.length - 1].join(',');
     while (reachedState !== '-1,-1') {
-      assert(reachedState);
+      if (!reachedState) throw Error('reachedState not found');
       const [lNode, rNode] = reachedState.split(',').map(Number);
       const move = stateMoves.get(reachedState);
       const state = { lNode: lNode, rNode: rNode, moveType: move } as Move;
