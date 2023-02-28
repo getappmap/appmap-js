@@ -1,4 +1,3 @@
-import assert from 'assert';
 import { AppMap, Event } from '@appland/models';
 import Specification from './specification';
 
@@ -9,7 +8,8 @@ export function selectEvents(appmap: AppMap, specification: Specification): Even
     !!specification.isIncludedCodeObject(event.codeObject);
 
   const hasRequiredCodeObjectAncestor = (): EventFilter => {
-    assert(specification.hasRequiredCodeObjects, 'Expecting at least one required code object id');
+    if (!specification.hasRequiredCodeObjects)
+      throw Error('Expecting at least one required code object id');
 
     const stack: Event[] = [];
     let numberOfRequiredCodeObjectsInStack = 0;

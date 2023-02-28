@@ -50,7 +50,6 @@ import VCallAction from '@/components/sequence/CallAction.vue';
 import VReturnAction from '@/components/sequence/ReturnAction.vue';
 import VActor from '@/components/sequence/Actor.vue';
 import DiagramSpec from './sequence/DiagramSpec';
-import assert from 'assert';
 import { ActionSpec } from './sequence/ActionSpec';
 
 export default {
@@ -84,7 +83,7 @@ export default {
         const specification = Specification.build(appMapObj, { loops: true });
         result = buildDiagram('<an AppMap file>', appMapObj, specification);
       }
-      assert(result);
+      if (!result) throw Error;
       return result;
     },
     diagramSpec(): DiagramSpec {

@@ -1,4 +1,3 @@
-import assert from 'assert';
 import { Diff, MoveType, Move } from './diff';
 import { Action, actionActors, Actor, Diagram, DiffMode, nodeName, nodeResult } from './types';
 
@@ -111,7 +110,7 @@ export default function buildDiffDiagram(diff: Diff): Diagram {
     .flat()
     .filter(Boolean)
     .forEach((actor) => {
-      assert(actor);
+      if (!actor) throw Error('actor not found');
       if (!uniqueActorIds.has(actor.id)) {
         uniqueActorIds.add(actor.id);
         actors.push(actor);
