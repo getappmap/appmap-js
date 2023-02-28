@@ -100,11 +100,6 @@ export default {
     toggleVisibility() {
       this.expanded = !this.expanded;
 
-      // Cache the expanded state on the event
-      if (this.cacheState) {
-        this.event.$hidden.expanded = this.expanded;
-      }
-
       this.$nextTick(() => {
         if (this.expanded) {
           this.$emit('expand', this.$refs.node);
@@ -122,10 +117,12 @@ export default {
       });
     },
     async getOutput() {
-      return new Promise((resolve) => this.$nextTick(() => resolve(this.$refs.node.$refs.flowOut)));
+      await this.$nextTick();
+      return this.$refs.node.$refs.flowOut;
     },
     async getRef(ref) {
-      return new Promise((resolve) => this.$nextTick(() => resolve(this.$refs[ref])));
+      await this.$nextTick();
+      return this.$refs[ref];
     },
     initialize() {
       if (

@@ -128,7 +128,7 @@ export class ActionSpec {
 
   // Gets the minimum and maximum action index that are spanned by any descendant.
   get descendantsActorIndexSpan(): [number, number] {
-    let actorIds: Set<ActorId> = new Set();
+    const actorIds: Set<ActorId> = new Set();
 
     const collectActors = (action: Action): void => {
       actionActors(action)

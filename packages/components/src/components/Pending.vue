@@ -11,7 +11,7 @@ import VLoaderIcon from '@/assets/eva_loader-outline.svg';
 import VCheckIcon from '@/assets/check.svg';
 
 export default {
-  name: 'Pending',
+  name: 'PendingState',
   components: { VLoaderIcon, VCheckIcon },
   props: {
     isPending: Boolean,

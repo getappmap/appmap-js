@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'Accordion',
+  name: 'AccordionWithHeader',
   props: {
     disabled: {
       type: Boolean,

@@ -243,8 +243,8 @@ export default {
       required: true,
       readonly: true,
     },
-    selectedEvents: {
-      type: Array,
+    selected: {
+      type: Boolean,
     },
     appMap: {
       type: Object,
@@ -272,17 +272,7 @@ export default {
       if (this.focusedEvent && this.actionSpec.eventIds.includes(this.focusedEvent.id))
         result.push('focused');
 
-      if (
-        this.selectedEvents &&
-        this.selectedEvents.find((event) => this.actionSpec.eventIds.includes(event.id))
-      ) {
-        result.push('selected');
-        this.$nextTick(() =>
-          this.$el
-            .querySelector('.self-call, .call-line-segment')
-            .scrollIntoView({ behavior: 'smooth', block: 'center' })
-        );
-      }
+      if (this.selected) result.push('selected');
 
       return result;
     },

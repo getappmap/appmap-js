@@ -114,7 +114,7 @@ import VTestsPrompt from './TestsPrompt.vue';
 import VWebFrameworkPrompt from './WebFrameworkPrompt.vue';
 
 export default {
-  name: 'Ruby',
+  name: 'RubyRecordingInstructions',
 
   components: {
     VCodeSnippet,

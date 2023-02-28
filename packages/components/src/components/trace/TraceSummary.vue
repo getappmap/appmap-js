@@ -35,8 +35,9 @@ export default {
     },
   },
   methods: {
-    getElement() {
-      return new Promise((resolve) => this.$nextTick(() => resolve(this.$refs.text)));
+    async getElement() {
+      await this.$nextTick();
+      return this.$refs.text;
     },
   },
 };

@@ -38,10 +38,6 @@ export default {
       type: Array,
       required: true,
     },
-    cacheState: {
-      type: Boolean,
-      default: false,
-    },
     selectedEvents: {
       type: Array,
       default: () => [],

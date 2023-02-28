@@ -42,7 +42,7 @@
 import VCodeSnippet from '@/components/CodeSnippet.vue';
 
 export default {
-  name: 'Python',
+  name: 'PythonInstructions',
   components: { VCodeSnippet },
   props: { ctaButtonType: { type: String, default: 'primary' } },
 };

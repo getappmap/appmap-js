@@ -53,7 +53,7 @@ export enum InstructionStep {
 }
 
 export default {
-  name: 'Status',
+  name: 'StatusInfo',
 
   components: {
     VButton,

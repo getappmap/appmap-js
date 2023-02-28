@@ -20,6 +20,7 @@ const Template = (args, { argTypes }) => ({
 export const MicropostUserProfileDiff = Template.bind({});
 MicropostUserProfileDiff.args = {
   serializedDiagram: micropost_diff,
+  selectedEvents: [{ id: 536 }],
 };
 export const Empty = Template.bind({});
 

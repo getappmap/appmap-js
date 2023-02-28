@@ -1,6 +1,6 @@
 <template>
   <div class="sql-code">
-    <pre v-html="formattedSQL">{{ formattedSQL }}</pre>
+    <pre v-html="formattedSQL"></pre>
   </div>
 </template>
 

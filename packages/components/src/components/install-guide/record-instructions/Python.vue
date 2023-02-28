@@ -7,7 +7,7 @@
     <br />
     <h2>Choose the best recording method for this project</h2>
     <br />
-    <template class="recording-method" v-if="testFramework">
+    <template v-if="testFramework">
       <section class="recording-method">
         <h3>
           <!--TODO make recommended tag dynamic-->
@@ -19,7 +19,7 @@
           When you run your {{ testFramework.name }} tests with AppMap enabled, an AppMap will be
           created for each test.
         </p>
-        <template class="recording-method" v-if="testFramework.name.toLowerCase() == 'pytest'">
+        <template v-if="testFramework.name.toLowerCase() == 'pytest'">
           Run Pytest tests:
           <v-code-snippet clipboard-text="pytest" :kind="codeSnippetType" />
         </template>
@@ -98,7 +98,7 @@ import VTestsPrompt from './TestsPrompt.vue';
 import VWebFrameworkPrompt from './WebFrameworkPrompt.vue';
 
 export default {
-  name: 'Python',
+  name: 'PythonRecordingInstructions',
 
   components: {
     VCodeSnippet,

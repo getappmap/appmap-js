@@ -143,7 +143,7 @@ import PlayIcon from '@/assets/play-icon.svg';
 import VTestsPrompt from './TestsPrompt.vue';
 
 export default {
-  name: 'Java',
+  name: 'JavaRecordInstructions',
 
   props: {
     webFramework: Object,
