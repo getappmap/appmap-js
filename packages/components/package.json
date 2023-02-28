@@ -44,7 +44,7 @@
     "@babel/core": "^7.22.5",
     "@babel/node": "^7.22.5",
     "@babel/preset-env": "^7.22.5",
-    "@rollup/plugin-alias": "^2.2.0",
+    "@rollup/plugin-alias": "^4.0.3",
     "@rollup/plugin-commonjs": "^11.1.0",
     "@rollup/plugin-image": "^2.0.6",
     "@rollup/plugin-replace": "^2.3.2",
