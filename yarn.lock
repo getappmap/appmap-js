@@ -486,6 +486,7 @@ __metadata:
     "@types/diff": ^5.0.2
     "@types/jest": ^29.4.1
     "@typescript-eslint/eslint-plugin": ^5.51.0
+    "@typescript-eslint/parser": ^5.51.0
     crypto-js: ^4.1.1
     diff: ^5.1.0
     eslint: ^7.32.0
