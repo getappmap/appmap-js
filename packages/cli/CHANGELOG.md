@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.67.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.66.1...@appland/appmap-v3.67.0) (2023-03-01)
+
+
+### Features
+
+* Send git repository URL in appmap:openapi telemetry ([61de641](https://github.com/getappmap/appmap-js/commit/61de641ae05bdfb60558cfd91b69a5a15a6f0c98))
+
 # [@appland/appmap-v3.66.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.66.0...@appland/appmap-v3.66.1) (2023-02-25)
 
 
