@@ -2,6 +2,7 @@
   <div class="details-panel">
     <h3 class="details-panel__title">
       <AppMapLogo width="70" />
+      <v-button>Feedback</v-button>
     </h3>
     <div
       class="details-panel__source"
@@ -44,6 +45,7 @@
 <script>
 import { Event, AppMap } from '@appland/models';
 import AppMapLogo from '@/assets/appmap-full-logo.svg';
+import VButton from '@/components/Button.vue';
 import VDetailsLabel from '@/components/DetailsLabel.vue';
 import VDetailsPanelAnalysisFinding from '@/components/DetailsPanelAnalysisFinding.vue';
 import VDetailsPanelClass from '@/components/DetailsPanelClass.vue';
@@ -65,6 +67,7 @@ export default {
   name: 'v-details-panel',
   components: {
     AppMapLogo,
+    VButton,
     VDetailsLabel,
     VDetailsPanelAnalysisFinding,
     VDetailsPanelClass,
@@ -151,10 +154,11 @@ export default {
     font-size: 0;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 
     svg {
       max-width: 20rem;
-      width: 100%;
+      width: 50%;
     }
   }
 
