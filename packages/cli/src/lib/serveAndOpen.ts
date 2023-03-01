@@ -1,8 +1,8 @@
 import { createReadStream } from 'fs';
-import { createServer, ServerResponse } from 'http';
-import { AddressInfo, Server } from 'net';
+import { createServer } from 'http';
+import { AddressInfo } from 'net';
 import open from 'open';
-import { extname, join } from 'path';
+import { extname, isAbsolute, join } from 'path';
 import { parse } from 'url';
 import { exists, verbose } from '../utils';
 import UI from '../cmds/userInteraction';
@@ -12,34 +12,50 @@ function mimeTypeOfName(filename: string): string {
     {
       js: 'application/javascript',
       css: 'text/css',
+      json: 'application/json',
       map: 'application/json',
     }[extname(filename)] || 'application/octet-stream'
   );
 }
 
-export default async function serveAndOpen(file: string, resources: Record<string, string>) {
+export default async function serveAndOpen(
+  file: string,
+  resources: Record<string, string>,
+  verifyInSubdir: boolean,
+  onListen: (url: string) => void
+) {
   UI.progress(`Opening ${file}`);
 
   const baseDir = join(__dirname, '..', '..', 'built', 'html');
+  if (!(await exists(join(baseDir, file)))) throw new Error(`File ${file} does not exist`);
 
   const server = createServer(async (req, res) => {
-    const serveStaticFile = (fileName: string, contentType: string) => {
+    const send404 = () => {
+      res.writeHead(404);
+      res.end();
+    };
+
+    const serveStaticFile = (dir: string, fileName: string, contentType?: string) => {
+      const path = isAbsolute(fileName) ? fileName : join(dir, fileName);
+      if (verifyInSubdir && !path.startsWith(dir)) return send404();
+
+      if (!contentType) contentType = mimeTypeOfName(fileName);
+
       res.writeHead(200, 'OK', { 'Content-Type': contentType });
 
-      const fileStream = createReadStream(fileName);
+      const fileStream = createReadStream(path);
       fileStream.pipe(res);
       fileStream.on('open', function () {
         if (verbose()) {
-          console.log(`${fileName}: 200`);
+          console.log(`${path}: 200`);
         }
         res.writeHead(200);
       });
       fileStream.on('error', function (e) {
         if (verbose()) {
-          console.log(`${fileName}: 404`);
+          console.log(`${path}: 404 (${e})`);
         }
-        res.writeHead(404);
-        res.end();
+        send404();
       });
     };
 
@@ -48,27 +64,18 @@ export default async function serveAndOpen(file: string, resources: Record<strin
         console.log(req.url);
       }
 
-      var requestUrl = parse(req.url!);
+      const requestUrl = parse(req.url!);
       const pathname = requestUrl.pathname;
-
       if (pathname === '/') {
-        return serveStaticFile(join(baseDir, file), 'text/html');
-      } else if (pathname?.startsWith('/resources/')) {
-        const resourceName = pathname.substring('/resources/'.length);
-        const fileName = resources[resourceName];
-        if (fileName) {
-          return serveStaticFile(fileName, 'application/json');
-        }
-      } else if (pathname && !pathname.startsWith('.')) {
-        const path = join(baseDir, pathname);
-        return serveStaticFile(path, mimeTypeOfName(path));
+        return serveStaticFile(baseDir, file, 'text/html');
+      } else if (pathname === '/resource') {
+        const pathname = requestUrl.query;
+        if (pathname) serveStaticFile(process.cwd(), decodeURIComponent(pathname));
+        else send404();
+      } else {
+        serveStaticFile(baseDir, (pathname || '/').slice(1));
       }
 
-      if (verbose()) {
-        console.log(`${pathname}: 404`);
-      }
-      res.writeHead(404);
-      res.end();
     } catch (e: any) {
       console.log(e.stack);
       res.writeHead(500);
@@ -77,30 +84,63 @@ export default async function serveAndOpen(file: string, resources: Record<strin
   })
     .listen(0, '127.0.0.1', () => {
       const port = (server!.address() as AddressInfo).port;
-      tryOpen(`http://localhost:${port}/`);
+
+      const params = new URLSearchParams();
+      for (const [key, value] of Object.entries(resources)) {
+        params.append(key, value);
+      }
+      const url = new URL(`http://localhost:${port}/?${params.toString()}`);
+      onListen(url.toString());
     })
     .on('connection', function (socket) {
       // Don't let the open socket keep the process alive.
       socket.unref();
     })
-//    .unref();
+    .unref();
 }
 
-export async function serveAndOpenSequenceDiagram(diagramFile: string) {
-  return serveAndOpen('sequenceDiagram.html', {
-    diagram: diagramFile,
+export async function serveAndOpenSequenceDiagram(
+  diagramFile: string,
+  verifyInSubdir: boolean,
+  onListen: (url: string) => void
+): Promise<string> {
+  return new Promise((resolve) => {
+    serveAndOpen(
+      'sequenceDiagram.html',
+      {
+        diagram: diagramFile,
+      },
+      verifyInSubdir,
+      async (url) => {
+        onListen(url);
+        resolve(url);
+      }
+    );
   });
 }
 
-export async function serveAndOpenAppMap(appMapFile: string) {
-  return serveAndOpen('appmap.html', {
-    appmap: appMapFile,
+export async function serveAndOpenAppMap(
+  appMapFile: string,
+  verifyInSubdir: boolean
+): Promise<string> {
+  return new Promise((resolve) => {
+    serveAndOpen(
+      'appmap.html',
+      {
+        appmap: appMapFile,
+      },
+      verifyInSubdir,
+      async (url) => {
+        await tryOpen(url);
+        resolve(url);
+      }
+    );
   });
 }
 
 async function tryOpen(url: string) {
   const showMessage = () =>
-    UI.warn(`\nWe could not open the browser automatically.\nOpen ${url} to see the AppMap.\n`);
+    UI.warn(`\nWe could not open the browser automatically.\nOpen ${url} to view the content.\n`);
   const cp = await open(url);
   cp.once('error', showMessage);
   cp.once('exit', (code, signal) => (code || signal) && showMessage());
