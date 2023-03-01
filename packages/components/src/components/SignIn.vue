@@ -2,12 +2,12 @@
   <div class="signin-sidebar">
     <AppMapLogo width="120" />
     <div class="content-wrap">
-      <h1>Activate</h1>
+      <h1 data-cy="title">Activate</h1>
       <p>To begin using AppMap for free, please sign in using your GitHub or GitLab account.</p>
-      <a href="/" class="btn btn-primary" @click="signIn">Get Started</a>
+      <a href="/" class="btn btn-primary" data-cy="sign-in-button" @click="signIn">Get Started</a>
       <div class="your-data">
         <shieldIcon />
-        <p>
+        <p data-cy="your-data-text">
           Authentication with GitHub or GitLab is used solely for verification purposes. AppMap will
           not be granted access to source code.
         </p>
