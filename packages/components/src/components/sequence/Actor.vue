@@ -155,8 +155,12 @@ $min-height: 3rem;
   .hide-container {
     position: absolute;
     display: inline-block;
-    right: 2px;
-    top: 2px;
+    right: 0px;
+    top: 0px;
+    z-index: 99999;
+    transition: all 0.6s ease;
+    padding: 5px;
+    border-radius: 4px;
 
     &:hover {
       color: blue;
@@ -178,6 +182,9 @@ $min-height: 3rem;
 .label-container:hover {
   cursor: pointer;
   background-color: #444e69;
+  .hide-container {
+    background-color: #444e69;
+  }
 }
 
 .lane {
