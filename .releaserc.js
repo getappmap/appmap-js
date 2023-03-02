@@ -1,5 +1,3 @@
-const path = require('path');
-
 module.exports = {
   branches: ['main'],
   plugins: [
@@ -42,6 +40,14 @@ module.exports = {
       '@semantic-release/exec',
       {
         publishCmd: 'yarn build',
+      },
+    ],
+    [
+      '@semantic-release/exec',
+      {
+        verifyConditionsCmd: '$PROJECT_CWD/bin/presign',
+        publishCmd: '$PROJECT_CWD/bin/build-native',
+        shell: '/bin/bash',
       },
     ],
     '@semantic-release/git',

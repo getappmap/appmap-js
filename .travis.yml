@@ -46,9 +46,5 @@ jobs:
       script: |
         ./bin/presign \
         && yarn build \
-        && yarn build-native \
-        && ./bin/sign packages/*/release/*-macos-* \
-        && ./bin/notarize packages/*/release/*-macos-* \
-        && ./bin/hash packages/*/release/* \
         && yarn run semantic-release \
         && yarn run chromatic --auto-accept-changes
