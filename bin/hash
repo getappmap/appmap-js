@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Create hashes for any files passed as arguments.
-set -ex
+set -e
 
 for HASH_TARGET_PATH in "$@"; do
   HASH_PATH="${HASH_TARGET_PATH}.sha256"
