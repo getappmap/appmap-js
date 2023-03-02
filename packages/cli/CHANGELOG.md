@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.67.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.67.0...@appland/appmap-v3.67.1) (2023-03-02)
+
+
+### Bug Fixes
+
+* Resolve an issue with arm64 binaries ([e79f7ed](https://github.com/getappmap/appmap-js/commit/e79f7ed0975120da99d70df9519480bdb5a1cee1))
+
 # [@appland/appmap-v3.67.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.66.1...@appland/appmap-v3.67.0) (2023-03-01)
 
 
