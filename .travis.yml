@@ -8,6 +8,7 @@ cache:
   directories:
     - $HOME/.yarn/berry/cache
     - $HOME/.cargo
+    - $HOME/.pkg-cache
 
 git:
   # required to enable symlinks on windows
