@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.76.7](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.76.6...@appland/scanner-v1.76.7) (2023-03-02)
+
+
+### Bug Fixes
+
+* Resolve an issue with arm64 binaries ([e79f7ed](https://github.com/getappmap/appmap-js/commit/e79f7ed0975120da99d70df9519480bdb5a1cee1))
+
 # [@appland/scanner-v1.76.6](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.76.5...@appland/scanner-v1.76.6) (2023-02-25)
 
 
