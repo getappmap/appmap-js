@@ -309,6 +309,7 @@ __metadata:
     lint-staged: ^10.5.3
     mathjs: ^9.0.0
     minimist: ^1.2.8
+    postcss: ^8.4.21
     prettier: ^2.7.1
     rollup: ^2.7.3
     rollup-plugin-babel: ^4.4.0
@@ -28764,7 +28765,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.2.9":
+"postcss@npm:^8.2.9, postcss@npm:^8.4.21":
   version: 8.4.21
   resolution: "postcss@npm:8.4.21"
   dependencies:
