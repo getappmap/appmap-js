@@ -146,7 +146,6 @@ $min-height: 3rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: $transition;
 
   &--selected {
     background-color: #444e69;
@@ -155,8 +154,11 @@ $min-height: 3rem;
   .hide-container {
     position: absolute;
     display: inline-block;
-    right: 2px;
-    top: 2px;
+    right: 0px;
+    top: 0px;
+    z-index: 99999;
+    padding: 5px;
+    border-radius: 4px;
 
     &:hover {
       color: blue;
@@ -167,7 +169,6 @@ $min-height: 3rem;
     svg {
       fill: $white;
       opacity: 33%;
-      transition: $transition;
       &:hover {
         opacity: 93%;
       }
@@ -178,6 +179,9 @@ $min-height: 3rem;
 .label-container:hover {
   cursor: pointer;
   background-color: #444e69;
+  .hide-container {
+    background-color: #444e69;
+  }
 }
 
 .lane {
