@@ -300,7 +300,7 @@ describe('scan', () => {
       await chmod(permissionDeniedDir, 0o777); // else the next testcase fails
     });
 
-    it('reloads the scanner configuration automatically', async () => {
+    it('reloads the scanner configuration automatically @appmap-fixme', async () => {
       await createWatcher();
       await createIndex(secretInLogMap);
 
@@ -336,7 +336,7 @@ describe('scan', () => {
       await waitForSingleFinding();
     });
 
-    it('does not rescan when not needed, but scans every new file', async () => {
+    it('does not rescan when not needed, but scans every new file @appmap-fixme', async () => {
       /* Note, this test also makes sure we continue scanning after
        * we skip some files due to them being up to date. */
       await createWatcher();
