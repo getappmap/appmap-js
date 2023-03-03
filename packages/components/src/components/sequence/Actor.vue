@@ -146,7 +146,6 @@ $min-height: 3rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: $transition;
 
   &--selected {
     background-color: #444e69;
@@ -158,7 +157,6 @@ $min-height: 3rem;
     right: 0px;
     top: 0px;
     z-index: 99999;
-    transition: all 0.6s ease;
     padding: 5px;
     border-radius: 4px;
 
@@ -171,7 +169,6 @@ $min-height: 3rem;
     svg {
       fill: $white;
       opacity: 33%;
-      transition: $transition;
       &:hover {
         opacity: 93%;
       }
