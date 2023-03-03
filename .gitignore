@@ -36,3 +36,5 @@ pnpm-debug.log*
 .pnp.*
 
 release
+
+packages/*/tmp/

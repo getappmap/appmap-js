@@ -3,10 +3,11 @@ import normalize from '../../src/sql/normalize';
 import parse from '../../src/sql/parse';
 import { join } from 'path';
 import { getSQLErrorHandler, setSQLErrorHandler } from '../../src/sql/sqlErrorHandler';
+import { fileURLToPath } from 'url';
 
-const Examples = JSON.parse(
-  readFileSync(join(__dirname, './fixtures/sql/sql_examples.json'), 'utf8')
-);
+const examplePath = join(fileURLToPath(import.meta.url), '../fixtures/sql/sql_examples.json');
+
+const Examples = JSON.parse(readFileSync(examplePath, 'utf8'));
 
 setSQLErrorHandler((error) => {
   if (process.env.APPMAP_SQL_DEBUG) {
