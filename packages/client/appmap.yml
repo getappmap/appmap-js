@@ -1,0 +1,12 @@
+ordering: chronological
+command: yarn exec jest --no-cache
+recorder: jest
+exclude:
+- \[anonymous\]
+packages:
+- regexp: (^|/)node_modules/
+  enabled: false
+- regexp: ^../
+  enabled: false
+- regexp: ^
+  enabled: true

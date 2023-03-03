@@ -213,6 +213,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/client@workspace:packages/client"
   dependencies:
+    "@appland/appmap-agent-js": ^13.9.0
     "@appland/models": "workspace:*"
     "@types/form-data": ^2.5.0
     "@types/jest": ^29.4.1

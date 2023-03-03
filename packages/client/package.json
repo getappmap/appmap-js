@@ -7,6 +7,7 @@
     "dist"
   ],
   "scripts": {
+    "appmap": "appmap-agent-js -- jest --no-cache",
     "build": "tsc",
     "lint": "eslint",
     "test": "jest"
@@ -23,6 +24,7 @@
     "js-yaml": "^4.1.0"
   },
   "devDependencies": {
+    "@appland/appmap-agent-js": "^13.9.0",
     "@types/jest": "^29.4.1",
     "@types/js-yaml": "^4.0.5",
     "@types/nock": "^11.1.0",
