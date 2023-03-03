@@ -12,3 +12,4 @@ export { default as AppMap, CreateAppMapOptions, UploadAppMapResponse } from './
 export { default as Mapset, CreateMapsetOptions, CreateMapsetResponse } from './mapset';
 export { default as AppMapListItem } from './appMapListItem';
 export { default as FindingStatusListItem } from './findingStatusListItem';
+export { default as Subscription, SubscriptionEntity, SubscriptionFeature } from './subscription';
