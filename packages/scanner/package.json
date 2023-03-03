@@ -19,13 +19,15 @@
     "doc-up-to-date": "git diff --exit-code doc/",
     "lint": "eslint src --ext .ts",
     "ci": "yarn lint && yarn build && yarn schema-up-to-date && yarn doc-up-to-date && yarn test",
-    "test": "jest --filter=./test/testFilter.js",
+    "test": "appmap-agent-js && jest -t @appmap-fixme --filter=./test/testFilter.js",
+    "jest": "jest --filter=./test/testFilter.js",
     "semantic-release": "semantic-release",
     "watch": "node bin/preBuild.js && tsc -p tsconfig.build.json --watch"
   },
   "author": "AppLand, Inc.",
   "license": "Commons Clause + MIT",
   "devDependencies": {
+    "@appland/appmap-agent-js": "^13.9.0",
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/git": "^10.0.1",
     "@types/async": "^3.2.12",

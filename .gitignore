@@ -38,4 +38,4 @@ pnpm-debug.log*
 release
 
 # AppMap
-*/*/tmp/appmap
+packages/*/tmp/
