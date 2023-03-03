@@ -20,7 +20,8 @@ async function initializeApp() {
     async mounted() {
       const params = new URL(document.location).searchParams;
       const appmap = params.get('appmap');
-      const res = await fetch(`/resource?${encodeURIComponent(appmap)}`);
+      const res = await fetch(appmap);
+
       const { ui } = this.$refs;
 
       ui.loadData((await res.json()) || {});

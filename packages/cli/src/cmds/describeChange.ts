@@ -4,33 +4,20 @@ import readline from 'readline';
 
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../lib/locateAppMapDir';
-import { fingerprintDirectory } from '../fingerprint';
-import Depends from '../depends';
 import { exists, verbose } from '../utils';
 import { exec } from 'child_process';
-import { cwd, nextTick, rawListeners } from 'process';
-import { queue } from 'async';
-import { basename, isAbsolute, join, relative } from 'path';
+import { isAbsolute, join, relative } from 'path';
 import { existsSync } from 'fs';
 import { tmpdir } from 'os';
-import {
-  Action,
-  actionActors,
-  buildDiagram,
-  Diagram,
-  format,
-  FormatType,
-  SequenceDiagramOptions,
-  Specification,
-} from '@appland/sequence-diagram';
-import { AppMap, CodeObject, buildAppMap } from '@appland/models';
+import { Action, actionActors, Diagram, format, FormatType } from '@appland/sequence-diagram';
+import { buildAppMap } from '@appland/models';
 import { glob } from 'glob';
 import { promisify } from 'util';
 import { DiffDiagrams } from '../sequenceDiagramDiff/DiffDiagrams';
-import { readDiagramFile } from './sequenceDiagram/readDiagramFile';
 import assert from 'assert';
-import { touch } from '../touchFile';
 import chalk from 'chalk';
+import { AppMapReference } from '../describeChange/AppMapReference';
+import { RevisionName } from '../describeChange/RevisionName';
 
 export class ValidationError extends Error {}
 
@@ -69,17 +56,6 @@ export const builder = (args: yargs.Argv) => {
     describe: 'command to use to run the head tests',
   });
 
-  args.option('touch', {
-    describe: 'touch out-of-date test files when switching to a new revision',
-    type: 'boolean',
-    default: false,
-  });
-
-  args.option('plantuml-jar', {
-    describe: 'location of PlantUML JAR file',
-    default: 'plantuml.jar',
-  });
-
   args.option('include', {
     describe: 'code objects to include in the comparison (inclusive of descendants)',
   });
@@ -89,94 +65,6 @@ export const builder = (args: yargs.Argv) => {
 
   return args.strict();
 };
-
-enum RevisionName {
-  Base = 'base',
-  Head = 'head',
-  Diff = 'diff',
-}
-
-class AppMapReference {
-  // Set of all source files that were used by the app.
-  public sourcePaths = new Set<string>();
-  // Name of the test case that produced these AppMaps.
-  public sourceLocation: string | undefined;
-  public appmapName: string | undefined;
-
-  constructor(public outputDir: string, public appmapFileName: string) {}
-
-  async sourceDiff(baseRevision: string): Promise<string | undefined> {
-    if (this.sourcePaths.size === 0) return;
-
-    const existingSourcePaths = [...this.sourcePaths].filter(existsSync).sort();
-    return (
-      await executeCommand(
-        `git diff ${baseRevision} -- ${existingSourcePaths.join(' ')}`,
-        false,
-        false,
-        false
-      )
-    ).trim();
-  }
-
-  sequenceDiagramFileName(format: string): string {
-    return [basename(this.appmapFileName, '.appmap.json'), `sequence.${format}`].join('.');
-  }
-
-  sequenceDiagramFilePath(
-    revisionName: RevisionName,
-    format: FormatType | string,
-    includeOutputDir: boolean
-  ): string {
-    const tokens = [revisionName, this.sequenceDiagramFileName(format)];
-    if (includeOutputDir) tokens.unshift(this.outputDir);
-    return join(...tokens);
-  }
-
-  archivedAppMapFilePath(revisionName: RevisionName): string {
-    return join(this.outputDir, revisionName, basename(this.appmapFileName));
-  }
-
-  async loadSequenceDiagramJSON(revisionName: RevisionName): Promise<Diagram> {
-    return readDiagramFile(this.sequenceDiagramFilePath(revisionName, FormatType.JSON, true));
-  }
-
-  async loadSequenceDiagramText(revisionName: RevisionName): Promise<string> {
-    return await readFile(
-      this.sequenceDiagramFilePath(revisionName, FormatType.Text, true),
-      'utf-8'
-    );
-  }
-
-  async buildSequenceDiagram(): Promise<Diagram> {
-    const specOptions = { loops: false } as SequenceDiagramOptions;
-    const appmap = await this.buildAppMap();
-    const specification = Specification.build(appmap, specOptions);
-    return buildDiagram(this.appmapFileName, appmap, specification);
-  }
-
-  async buildAppMap(): Promise<AppMap> {
-    const appmapData = JSON.parse(await readFile(this.appmapFileName, 'utf-8'));
-    const appmap = buildAppMap().source(appmapData).build();
-    this.populateMetadata(appmap);
-    return appmap;
-  }
-
-  populateMetadata(appmap: AppMap): void {
-    if (appmap.metadata) {
-      if (!this.sourceLocation) this.sourceLocation = (appmap.metadata as any).source_location;
-      if (!this.appmapName) this.appmapName = appmap.metadata.name;
-    }
-    const collectSourcePath = (codeObject: CodeObject) => {
-      const location = codeObject.location;
-      if (location) {
-        const path = location.split(':')[0];
-        if (!isAbsolute(path)) this.sourcePaths.add(path);
-      }
-    };
-    appmap.classMap.visit(collectSourcePath);
-  }
-}
 
 export const handler = async (argv: any) => {
   verbose(argv.verbose);
@@ -192,14 +80,8 @@ export const handler = async (argv: any) => {
   handleWorkingDirectory(argv.directory);
   const appmapDir = await locateAppMapDir();
 
-  const { touch: touchOutDateTestFiles, plantumlJar, baseCommand, headCommand } = argv;
+  const { baseCommand, headCommand } = argv;
   let { outputDir } = argv;
-
-  if (!(await exists(plantumlJar))) {
-    throw new ValidationError(
-      `PlantUML JAR file ${plantumlJar} does not exist. Use --plantuml-jar option to provide the JAR file location.`
-    );
-  }
 
   let currentBranch = (await executeCommand(`git branch --show-current`)).trim();
   if (currentBranch === '') {
@@ -316,12 +198,9 @@ export const handler = async (argv: any) => {
         RevisionName.Head,
         outputDir,
         baseRevision,
+        headRevision,
         appmapReference,
-        reportLines,
-        'is new in the head revision',
-        rl,
-        plantumlJar,
-        undefined
+        reportLines
       );
       continue;
     }
@@ -391,6 +270,7 @@ export const handler = async (argv: any) => {
     );
 
     if (diffSnippets.has(diffText)) continue;
+
     diffSnippets.add(diffText);
 
     changedAppMaps.push(appmapReference);
@@ -412,27 +292,40 @@ export const handler = async (argv: any) => {
       continue;
     }
 
-    const diffDiagram = await appmapReference.loadSequenceDiagramJSON(RevisionName.Diff);
-
-    console.log(prominentStyle(`${appmapReference.appmapFileName} changed:`));
-    printDiagramText(diagramTextLines);
-    await printSourceDiff(baseRevision, appmapReference, rl);
-    let diagramFile = await showDiagram(rl, plantumlJar, diffDiagram);
     await reportDiagram(
       RevisionName.Diff,
       outputDir,
       baseRevision,
+      headRevision,
       appmapReference,
-      reportLines,
-      'has changed',
-      rl,
-      plantumlJar,
-      diagramFile
+      reportLines
     );
   }
 
   if (outputDir) {
-    await writeFile(join(outputDir, 'report.md'), reportLines.join('\n'));
+    const report = `<head>
+    <title>AppMap code change report</title>
+</head>
+<body>
+  ${reportLines.join('\n')}
+</body>`;
+    const diagramHTML = `<head>
+  Sequence diagram
+</head>
+<body>
+  <div id="app"></div>
+  <script src="http://127.0.0.1:5501/packages/cli/built/html/sequenceDiagram.js" defer=""></script>
+</body>`;
+    const appmapHTML = `<head>
+  AppMap
+</head>
+<body>
+  <div id="app"></div>
+  <script src="http://127.0.0.1:5501/packages/cli/built/html/appmap.js" defer=""></script>
+</body>`;
+    await writeFile(join(outputDir, 'report.html'), report);
+    await writeFile(join(outputDir, 'diagram.html'), diagramHTML);
+    await writeFile(join(outputDir, 'appmap.html'), appmapHTML);
   }
 
   rl.close();
@@ -451,72 +344,11 @@ async function createBaselineAppMaps(rl: readline.Interface, testCommand?: strin
   }
 
   console.log(
-    prominentStyle(`Run the tests for this revision in a separate terminal. For example:`)
+    prominentStyle(
+      `Generate the AppMaps for this revision in a separate terminal - for example, by running the tests.`
+    )
   );
-  console.log(`  rails test`);
-  await waitForEnter(rl);
-}
-
-async function updateAppMaps(
-  appmapDir: string,
-  rl: readline.Interface,
-  touchOutDateTestFiles: boolean,
-  testCommand?: string
-): Promise<number> {
-  await indexAppMaps(appmapDir);
-  const testFileNames = await enumerateOutOfDateTestFiles(appmapDir, rl);
-  if (testFileNames.length === 0) return 0;
-
-  console.log(prominentStyle(`${testFileNames.length} tests are out of date.`));
-
-  const fileName = makeTempFile('outOfDateTests.txt');
-  writeFile(fileName, testFileNames.sort().join('\n'));
-  if (touchOutDateTestFiles) {
-    testFileNames.forEach(touch);
-  }
-
-  if (testCommand) {
-    await executeCommand(testCommand);
-    return testFileNames.length;
-  }
-
-  console.log(`A list of the test cases that are out-of-date has been written to a temp file:`);
-  console.log(`\t${fileName}`);
-  if (touchOutDateTestFiles) {
-    console.log(`Each file has also been "touched".`);
-  }
-
-  console.log(`Re-run these tests in a separate terminal. For example:`);
-  console.log(`  cat ${fileName} | xargs rails test`);
-  console.log();
-  await waitForEnter(rl);
-  return testFileNames.length;
-}
-
-async function enumerateOutOfDateTestFiles(
-  appmapDir: string,
-  rl: readline.Interface
-): Promise<string[]> {
-  const depends = new Depends(appmapDir);
-  const outOfDateAppMapNames = await depends.depends((appmapName: string) => {});
-  const testFileNames = new Set<string>();
-  if (outOfDateAppMapNames.length > 0) {
-    const q = queue(async (appMapBaseName: string) => {
-      const data = await readFile(join(appMapBaseName, 'metadata.json'), 'utf-8');
-      const metadata = JSON.parse(data);
-      const value = metadata['source_location'] as string;
-      if (value) {
-        const tokens = value.split(':');
-        testFileNames.add(tokens[0]);
-      } else {
-        console.warn(warningStyle(`No source_location in ${appMapBaseName}`));
-      }
-    }, 5);
-    outOfDateAppMapNames.forEach((name) => q.push(name));
-    await q.drain();
-  }
-
-  return [...testFileNames].sort();
+  await waitForEnter(rl, `Press Enter when the AppMaps are ready`);
 }
 
 async function checkout(revisionName: string, revision: string): Promise<void> {
@@ -524,17 +356,6 @@ async function checkout(revisionName: string, revision: string): Promise<void> {
   console.log(actionStyle(`Switching to ${revisionName} revision: ${revision}`));
   await executeCommand(`git checkout ${revision}`, true, false, false);
   console.log();
-}
-
-async function indexAppMaps(appmapDir: string): Promise<void> {
-  console.log(mutedStyle(`Indexing AppMaps in ${cwd()}`));
-  await fingerprintDirectory(appmapDir);
-}
-
-function makeTempFile(fileName: string): string {
-  if (existsSync('tmp')) return join('tmp', fileName);
-
-  return join(tmpdir(), fileName);
 }
 
 async function processAppMapDir(
@@ -548,7 +369,7 @@ async function processAppMapDir(
     const appmapFileName = appmapFileNames[i];
     const appmapReference = new AppMapReference(outputDir, appmapFileName);
     const diagram = await appmapReference.buildSequenceDiagram();
-    await copyFile(appmapFileName, appmapReference.archivedAppMapFilePath(revisionName));
+    await copyFile(appmapFileName, appmapReference.archivedAppMapFilePath(revisionName, true));
     await writeFile(
       appmapReference.sequenceDiagramFilePath(revisionName, FormatType.JSON, true),
       format(FormatType.JSON, diagram, appmapFileName).diagram
@@ -592,39 +413,7 @@ async function confirm(prompt: string, rl: readline.Interface): Promise<boolean>
   return response === 'y';
 }
 
-async function showDiagram(
-  rl: readline.Interface,
-  plantumlJar: string,
-  diagram: Diagram | undefined
-): Promise<string | undefined> {
-  if (!diagram) return;
-
-  if (!(await confirm('Open diagram?', rl))) {
-    return;
-  }
-
-  const fileNameSVG = await renderDiagram(plantumlJar, diagram);
-  await executeCommand(`open ${fileNameSVG}`);
-  return fileNameSVG;
-}
-
-/*
-async function stashAll(): Promise<void> {
-  console.log(`Stashing all modified and untracked files`);
-  await executeCommand(`git stash --include-untracked`);
-}
-
-async function unstashAll(): Promise<void> {
-  console.log(`Restoring modified and untracked files`);
-  try {
-    await executeCommand(`git stash pop`);
-  } catch {
-    console.log(warningStyle(`Command failed. Continuing optimistically...`));
-  }
-}
-*/
-
-function executeCommand(
+export function executeCommand(
   cmd: string,
   printCommand = true,
   printStdout = true,
@@ -651,9 +440,6 @@ function executeCommand(
   });
 }
 
-function warningStyle(message: string): string {
-  return chalk.yellow(message);
-}
 function actionStyle(message: string): string {
   return chalk.bold(chalk.green(message));
 }
@@ -666,8 +452,11 @@ function mutedStyle(message: string): string {
 function commandStyle(message: string): string {
   return chalk.gray(`$ ${message}`);
 }
-async function waitForEnter(rl: readline.Interface): Promise<void> {
-  console.log(prominentStyle(`Press Enter to continue...`));
+async function waitForEnter(
+  rl: readline.Interface,
+  prompt = 'Press Enter to continue'
+): Promise<void> {
+  console.log(prominentStyle(`${prompt}...`));
   await new Promise<void>((resolve) => {
     const listener = () => {
       rl.removeListener('line', listener);
@@ -677,41 +466,43 @@ async function waitForEnter(rl: readline.Interface): Promise<void> {
   });
 }
 
-async function renderDiagram(plantumlJar: string, diagram: Diagram): Promise<string> {
-  const plantUML = format(FormatType.PlantUML, diagram, `Diagram`);
-  const fileNameUML = makeTempFile(`sequence${plantUML.extension}`);
-  const fileNameSVG = makeTempFile(`sequence.svg`);
-  await writeFile(fileNameUML, plantUML.diagram);
-  await executeCommand(`java -jar ${plantumlJar} -tsvg ${fileNameUML}`);
-  return fileNameSVG;
-}
-
 async function reportDiagram(
   revisionName: RevisionName,
   outputDir: string,
   baseRevision: string,
+  headRevision: string,
   appmapReference: AppMapReference,
-  reportLines: string[],
-  message: string,
-  rl: readline.Interface,
-  plantumlJar: any,
-  diagramFile?: string
+  reportLines: string[]
 ): Promise<void> {
-  if (await confirm(`Include in the change report?`, rl)) {
-    const diagram = await appmapReference.loadSequenceDiagramJSON(revisionName);
+  if (true /* await confirm(`Include in the change report?`, rl)) */) {
     const diagramText = await appmapReference.loadSequenceDiagramText(revisionName);
-    if (!diagramFile) diagramFile = await renderDiagram(plantumlJar, diagram);
 
     const appmapName = appmapReference.appmapName || appmapReference.appmapFileName;
 
-    await rename(diagramFile, appmapReference.sequenceDiagramFilePath(revisionName, 'svg', true));
-    reportLines.push(
-      `## [${appmapName}](${appmapReference.sequenceDiagramFilePath(
-        revisionName,
-        'svg',
-        false
-      )}) ${message}.`
-    );
+    if (revisionName === RevisionName.Head) {
+      reportLines.push(
+        `<h2>
+          <a href="http://127.0.0.1:5500/${outputDir}/appmap.html?appmap=/${appmapReference.archivedAppMapFilePath(
+          revisionName,
+          true
+        )}">${appmapName}</a> is new in ${headRevision}
+        </h2>`
+      );
+    } else {
+      assert(
+        revisionName === RevisionName.Diff,
+        `Expecting revisionName to be '${RevisionName.Diff}', got '${revisionName}'`
+      );
+      reportLines.push(
+        `<h2>
+          <a href="http://127.0.0.1:5500/${outputDir}/diagram.html?diagram=/${appmapReference.sequenceDiagramFilePath(
+          revisionName,
+          'json',
+          true
+        )}">${appmapName}</a> has changed
+        </h2>`
+      );
+    }
 
     if (appmapReference.sourceLocation) {
       const sourcePath = appmapReference.sourceLocation.split(':')[0];
@@ -719,29 +510,38 @@ async function reportDiagram(
         ? relative(outputDir, sourcePath)
         : relative(outputDir, join(process.cwd(), sourcePath));
       reportLines.push('');
-      reportLines.push(`[${relative(process.cwd(), appmapReference.sourceLocation)}](${fileURL})`);
+      reportLines.push(
+        `<a href="${fileURL}">${relative(process.cwd(), appmapReference.sourceLocation)}</a>`
+      );
       reportLines.push('');
     }
 
     const sourceDiff = await appmapReference.sourceDiff(baseRevision);
     if (sourceDiff) {
-      reportLines.push('```');
+      reportLines.push('<br/>');
+      reportLines.push('<code>');
+      reportLines.push('<pre>');
       reportLines.push(sourceDiff);
-      reportLines.push('```');
+      reportLines.push('</pre>');
+      reportLines.push('</code>');
+      reportLines.push('<br/>');
     }
 
-    reportLines.push('');
-    reportLines.push('');
-    reportLines.push('```');
+    reportLines.push('<br/>');
+    reportLines.push('<br/>');
+    reportLines.push('<code>');
+    reportLines.push('<pre>');
     reportLines.push(diagramText);
-    reportLines.push('```');
-    reportLines.push('');
-    reportLines.push(
-      `![${appmapName}](${appmapReference.sequenceDiagramFilePath(revisionName, 'svg', false)})`
-    );
-    reportLines.push('');
+    reportLines.push('</pre>');
+    reportLines.push('</code>');
+    // reportLines.push('');
+    // reportLines.push(
+    //   `![${appmapName}](${appmapReference.sequenceDiagramFilePath(revisionName, 'svg', false)})`
+    // );
+    // reportLines.push('');
   }
 }
+
 function sanitizeRevision(revision: string): string {
   return revision.replace(/[^a-zA-Z0-9_]/g, '_');
 }
@@ -753,11 +553,11 @@ async function printSourceDiff(
 ): Promise<void> {
   const sourceDiff = await appmapReference.sourceDiff(baseRevision);
   if (sourceDiff) {
-    if (await confirm(`View ${sourceDiff.split('\n').length} line source diff?`, rl)) {
-      console.log();
-      console.log(sourceDiff);
-      console.log();
-    }
+    // if (await confirm(`View ${sourceDiff.split('\n').length} line source diff?`, rl)) {
+    console.log();
+    console.log(sourceDiff);
+    console.log();
+    // }
   }
 }
 
