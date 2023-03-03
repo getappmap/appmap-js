@@ -13,11 +13,8 @@ export type Request = {
   headers: Record<string, string>;
 };
 
-export default async function buildRequest(
-  requestPath: string,
-  requireApiKey = true
-): Promise<Request> {
-  const configuration = await loadConfiguration(requireApiKey);
+export default function buildRequest(requestPath: string, requireApiKey = true): Request {
+  const configuration = loadConfiguration(requireApiKey);
   const url = new URL([configuration.baseURL, requestPath].join('/'));
   const requestFunction = url.protocol === 'https:' ? httpsRequest : httpRequest;
   const headers = {
@@ -28,5 +25,5 @@ export default async function buildRequest(
     headers['Authorization'] = `Bearer ${configuration.apiKey}`;
   }
 
-  return { requestFunction, url, headers } as Request;
+  return { requestFunction, url, headers };
 }
