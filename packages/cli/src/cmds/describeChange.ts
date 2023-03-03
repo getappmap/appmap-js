@@ -1,14 +1,12 @@
 import { copyFile, mkdir, readFile, rename, rm, writeFile } from 'fs/promises';
 import yargs from 'yargs';
 import readline from 'readline';
+import { OpenAPIV3 } from 'openapi-types';
 
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../lib/locateAppMapDir';
 import { exists, verbose } from '../utils';
-import { exec } from 'child_process';
 import { isAbsolute, join, relative } from 'path';
-import { existsSync } from 'fs';
-import { tmpdir } from 'os';
 import { Action, actionActors, Diagram, format, FormatType } from '@appland/sequence-diagram';
 import { buildAppMap } from '@appland/models';
 import { glob } from 'glob';
@@ -18,6 +16,11 @@ import assert from 'assert';
 import chalk from 'chalk';
 import { AppMapReference } from '../describeChange/AppMapReference';
 import { RevisionName } from '../describeChange/RevisionName';
+import { OpenAPICommand } from '../openapi/OpenAPICommand';
+import { DefaultMaxAppMapSizeInMB, fileSizeFilter } from '../openapi/fileSizeFilter';
+import buildChangeReport from '../describeChange/buildChangeReport';
+import { executeCommand } from '../describeChange/executeCommand';
+import { OperationReference } from '../describeChange/OperationReference';
 
 export class ValidationError extends Error {}
 
@@ -134,6 +137,7 @@ export const handler = async (argv: any) => {
   await mkdir(outputDir, { recursive: true });
   await mkdir(join(outputDir, RevisionName.Diff), { recursive: true });
 
+  const operationReference = new OperationReference();
   const appmapReferences = new Map<string, AppMapReference>();
   let baseAppMapFileNames: Set<string>;
   let headAppMapFileNames: Set<string>;
@@ -148,7 +152,13 @@ export const handler = async (argv: any) => {
     await createBaselineAppMaps(rl, command);
     process.stdout.write(`Processing AppMaps in ${appmapDir}...`);
     const result = new Set([
-      ...(await processAppMapDir(appmapDir, outputDir, revisionName, appmapReferences)),
+      ...(await processAppMapDir(
+        appmapDir,
+        outputDir,
+        revisionName,
+        operationReference,
+        appmapReferences
+      )),
     ]);
     process.stdout.write(`done (${result.size})\n`);
     return result;
@@ -159,7 +169,7 @@ export const handler = async (argv: any) => {
       `Loading existing AppMap and diagram data from ${join(outputDir, revisionName)}...`
     );
     const result = new Set([
-      ...(await restoreAppMapDir(outputDir, revisionName, appmapReferences)),
+      ...(await restoreAppMapDir(outputDir, revisionName, operationReference, appmapReferences)),
     ]);
     process.stdout.write(`done (${result.size})\n`);
     return result;
@@ -177,10 +187,31 @@ export const handler = async (argv: any) => {
     }
   };
 
+  const buildOpenAPI = async (revisionName: RevisionName): Promise<OpenAPIV3.PathsObject> => {
+    const cmd = new OpenAPICommand(AppMapReference.outputPath(outputDir, revisionName));
+    cmd.filter = fileSizeFilter(DefaultMaxAppMapSizeInMB * 1024 * 1024);
+    const [openapi] = await cmd.execute();
+    return openapi.paths;
+  };
+
   baseAppMapFileNames = await processOrRestoreAppMaps(RevisionName.Base, baseRevision, baseCommand);
   headAppMapFileNames = await processOrRestoreAppMaps(RevisionName.Head, headRevision, headCommand);
 
+  const basePaths = await buildOpenAPI(RevisionName.Base);
+  const headPaths = await buildOpenAPI(RevisionName.Head);
+
   // unstashAll()
+
+  const changeReport = await buildChangeReport(
+    baseRevision,
+    basePaths,
+    headPaths,
+    baseAppMapFileNames,
+    headAppMapFileNames,
+    operationReference,
+    appmapReferences
+  );
+  console.log(JSON.stringify(changeReport, null, 2));
 
   const headAppMapFileNameArray = [...headAppMapFileNames].sort();
   const changedAppMaps = new Array<AppMapReference>();
@@ -362,12 +393,13 @@ async function processAppMapDir(
   appmapDir: string,
   outputDir: string,
   revisionName: RevisionName,
+  operationReference: OperationReference,
   appmapReferences: Map<string, AppMapReference>
 ): Promise<string[]> {
   const appmapFileNames = await promisify(glob)(`${appmapDir}/**/*.appmap.json`);
   for (let i = 0; i < appmapFileNames.length; i++) {
     const appmapFileName = appmapFileNames[i];
-    const appmapReference = new AppMapReference(outputDir, appmapFileName);
+    const appmapReference = new AppMapReference(operationReference, outputDir, appmapFileName);
     const diagram = await appmapReference.buildSequenceDiagram();
     await copyFile(appmapFileName, appmapReference.archivedAppMapFilePath(revisionName, true));
     await writeFile(
@@ -388,13 +420,18 @@ async function processAppMapDir(
 async function restoreAppMapDir(
   outputDir: string,
   revisionName: RevisionName,
+  operationReference: OperationReference,
   appmapReferences: Map<string, AppMapReference>
 ): Promise<string[]> {
   const baseDir = join(outputDir, revisionName);
   const appmapFileNames = await promisify(glob)(`${baseDir}/*.appmap.json`);
   for (let i = 0; i < appmapFileNames.length; i++) {
     const appmapFileName = appmapFileNames[i];
-    const appmapReference = new AppMapReference(outputDir, relative(baseDir, appmapFileName));
+    const appmapReference = new AppMapReference(
+      operationReference,
+      outputDir,
+      relative(baseDir, appmapFileName)
+    );
     const appmapData = JSON.parse(await readFile(appmapFileName, 'utf-8'));
     const appmap = buildAppMap().source(appmapData).build();
     appmapReference.populateMetadata(appmap);
@@ -413,33 +450,6 @@ async function confirm(prompt: string, rl: readline.Interface): Promise<boolean>
   return response === 'y';
 }
 
-export function executeCommand(
-  cmd: string,
-  printCommand = true,
-  printStdout = true,
-  printStderr = true
-): Promise<string> {
-  if (printCommand) console.log(commandStyle(cmd));
-  const command = exec(cmd);
-  const result: string[] = [];
-  if (command.stdout) {
-    command.stdout.addListener('data', (data) => {
-      if (printStdout) process.stdout.write(data);
-      result.push(data);
-    });
-  }
-  if (printStderr && command.stderr) command.stderr.pipe(process.stdout);
-  return new Promise<string>((resolve, reject) => {
-    command.addListener('exit', (code) => {
-      if (code === 0) {
-        resolve(result.join(''));
-      } else {
-        reject(new Error(`Command failed with code ${code}`));
-      }
-    });
-  });
-}
-
 function actionStyle(message: string): string {
   return chalk.bold(chalk.green(message));
 }
@@ -449,7 +459,7 @@ function prominentStyle(message: string): string {
 function mutedStyle(message: string): string {
   return chalk.dim(message);
 }
-function commandStyle(message: string): string {
+export function commandStyle(message: string): string {
   return chalk.gray(`$ ${message}`);
 }
 async function waitForEnter(

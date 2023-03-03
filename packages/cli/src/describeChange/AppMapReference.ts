@@ -10,8 +10,9 @@ import {
 } from '@appland/sequence-diagram';
 import { AppMap, CodeObject, buildAppMap } from '@appland/models';
 import { readDiagramFile } from '../cmds/sequenceDiagram/readDiagramFile';
-import { executeCommand } from '../cmds/describeChange';
+import { executeCommand } from './executeCommand';
 import { RevisionName } from './RevisionName';
+import { OperationReference } from './OperationReference';
 
 export class AppMapReference {
   // Set of all source files that were used by the app.
@@ -20,7 +21,15 @@ export class AppMapReference {
   public sourceLocation: string | undefined;
   public appmapName: string | undefined;
 
-  constructor(public outputDir: string, public appmapFileName: string) {}
+  constructor(
+    private operationReference: OperationReference,
+    public outputDir: string,
+    public appmapFileName: string
+  ) {}
+
+  static outputPath(outputDir: string, revisionName: RevisionName): string {
+    return join(outputDir, revisionName);
+  }
 
   async sourceDiff(baseRevision: string): Promise<string | undefined> {
     if (this.sourcePaths.size === 0) return;
@@ -86,13 +95,37 @@ export class AppMapReference {
       if (!this.sourceLocation) this.sourceLocation = (appmap.metadata as any).source_location;
       if (!this.appmapName) this.appmapName = appmap.metadata.name;
     }
-    const collectSourcePath = (codeObject: CodeObject) => {
+    const collectPath = (codeObject: CodeObject, fn: (path: string) => void) => {
       const location = codeObject.location;
       if (location) {
         const path = location.split(':')[0];
-        if (!isAbsolute(path)) this.sourcePaths.add(path);
+        if (!isAbsolute(path)) fn(path);
       }
     };
+
+    const collectSourcePath = (codeObject: CodeObject) => {
+      collectPath(codeObject, (path) => this.sourcePaths.add(path));
+    };
+
     appmap.classMap.visit(collectSourcePath);
+    for (let eventId = 0; eventId < appmap.events.length; eventId++) {
+      const event = appmap.events[eventId];
+      if (event.httpServerRequest && event.httpServerResponse) {
+        const method = event.httpServerRequest.request_method;
+        const path =
+          event.httpServerRequest.normalized_path_info || event.httpServerRequest.path_info;
+        const status = event.httpServerResponse.status;
+        const key = OperationReference.operationKey(method, path, status);
+        while (eventId < event.returnEvent.id) {
+          const event = appmap.events[eventId];
+          collectPath(event.codeObject, (path) => {
+            if (!this.operationReference.sourcePathsByOperation.get(key))
+              this.operationReference.sourcePathsByOperation.set(key, new Set<string>());
+            this.operationReference.sourcePathsByOperation.get(key)!.add(path);
+          });
+          eventId += 1;
+        }
+      }
+    }
   }
 }
