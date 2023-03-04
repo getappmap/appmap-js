@@ -1,4 +1,4 @@
-import { copyFile, mkdir, readFile, rename, rm, writeFile } from 'fs/promises';
+import { mkdir, rm, writeFile } from 'fs/promises';
 import yargs from 'yargs';
 import readline from 'readline';
 import { OpenAPIV3 } from 'openapi-types';
@@ -8,7 +8,6 @@ import { locateAppMapDir } from '../lib/locateAppMapDir';
 import { exists, verbose } from '../utils';
 import { isAbsolute, join, relative } from 'path';
 import { Action, actionActors, Diagram, format, FormatType } from '@appland/sequence-diagram';
-import { buildAppMap } from '@appland/models';
 import { glob } from 'glob';
 import { promisify } from 'util';
 import { DiffDiagrams } from '../sequenceDiagramDiff/DiffDiagrams';
@@ -137,7 +136,7 @@ export const handler = async (argv: any) => {
   await mkdir(outputDir, { recursive: true });
   await mkdir(join(outputDir, RevisionName.Diff), { recursive: true });
 
-  const operationReference = new OperationReference();
+  const operationReference = new OperationReference(outputDir);
   const appmapReferences = new Map<string, AppMapReference>();
   let baseAppMapFileNames: Set<string>;
   let headAppMapFileNames: Set<string>;
@@ -148,6 +147,10 @@ export const handler = async (argv: any) => {
     command?: string
   ): Promise<Set<string>> => {
     await mkdir(join(outputDir, revisionName), { recursive: true });
+    await mkdir(join(outputDir, revisionName, 'operations', 'sequence-diagrams'), {
+      recursive: true,
+    });
+
     await checkout(revisionName, revision);
     await createBaselineAppMaps(rl, command);
     process.stdout.write(`Processing AppMaps in ${appmapDir}...`);
@@ -181,9 +184,16 @@ export const handler = async (argv: any) => {
     command?: string
   ): Promise<Set<string>> => {
     if (await exists(join(outputDir, revisionName))) {
-      return restoreAppMaps(revisionName);
+      // TODO: This is temporary; operation reference indexing is not needed here.
+      operationReference.startIndexing();
+      const result = await restoreAppMaps(revisionName);
+      await operationReference.finishIndexing();
+      return result;
     } else {
-      return processAppMaps(revisionName, revision, command);
+      operationReference.startIndexing();
+      const result = await processAppMaps(revisionName, revision, command);
+      await operationReference.finishIndexing();
+      return result;
     }
   };
 
@@ -211,7 +221,6 @@ export const handler = async (argv: any) => {
     operationReference,
     appmapReferences
   );
-  console.log(JSON.stringify(changeReport, null, 2));
 
   const headAppMapFileNameArray = [...headAppMapFileNames].sort();
   const changedAppMaps = new Array<AppMapReference>();
@@ -400,16 +409,7 @@ async function processAppMapDir(
   for (let i = 0; i < appmapFileNames.length; i++) {
     const appmapFileName = appmapFileNames[i];
     const appmapReference = new AppMapReference(operationReference, outputDir, appmapFileName);
-    const diagram = await appmapReference.buildSequenceDiagram();
-    await copyFile(appmapFileName, appmapReference.archivedAppMapFilePath(revisionName, true));
-    await writeFile(
-      appmapReference.sequenceDiagramFilePath(revisionName, FormatType.JSON, true),
-      format(FormatType.JSON, diagram, appmapFileName).diagram
-    );
-    await writeFile(
-      appmapReference.sequenceDiagramFilePath(revisionName, FormatType.Text, true),
-      format(FormatType.Text, diagram, appmapFileName).diagram
-    );
+    await appmapReference.processAppMap(revisionName);
     if (!appmapReferences.get(appmapFileName)) {
       appmapReferences.set(appmapFileName, appmapReference);
     }
@@ -432,12 +432,9 @@ async function restoreAppMapDir(
       outputDir,
       relative(baseDir, appmapFileName)
     );
-    const appmapData = JSON.parse(await readFile(appmapFileName, 'utf-8'));
-    const appmap = buildAppMap().source(appmapData).build();
-    appmapReference.populateMetadata(appmap);
-    if (!appmapReferences.get(appmapReference.appmapFileName)) {
+    await appmapReference.restoreMetadata(revisionName);
+    if (!appmapReferences.get(appmapReference.appmapFileName))
       appmapReferences.set(appmapReference.appmapFileName, appmapReference);
-    }
   }
   return appmapFileNames.map((fileName) => relative(baseDir, fileName));
 }

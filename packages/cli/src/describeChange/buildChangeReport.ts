@@ -5,6 +5,9 @@ import assert from 'assert';
 import { executeCommand } from './executeCommand';
 import { exists } from '../utils';
 import { OperationReference } from './OperationReference';
+import { RevisionName } from './RevisionName';
+import { Action, Diagram as SequenceDiagram } from '@appland/sequence-diagram';
+import { DiffDiagrams } from '../sequenceDiagramDiff/DiffDiagrams';
 
 export default async function buildChangeReport(
   baseRevision: string,
@@ -25,20 +28,102 @@ export default async function buildChangeReport(
       OperationReference.operationKey(operation.method, operation.path, operation.status)
     );
 
+    const baseDiagrams = new Set(
+      await operationReference.listSequenceDiagrams(RevisionName.Base, {
+        method: operation.method,
+        path: operation.path,
+        status: operation.status,
+      })
+    );
+    const headDiagrams = new Set(
+      await operationReference.listSequenceDiagrams(RevisionName.Head, {
+        method: operation.method,
+        path: operation.path,
+        status: operation.status,
+      })
+    );
+    const baseOnlyDiagrams = new Array<string>();
+    const headOnlyDiagrams = new Array<string>();
+    baseDiagrams.forEach((diagram) =>
+      headDiagrams.has(diagram) ? undefined : baseOnlyDiagrams.push(diagram)
+    );
+    headDiagrams.forEach((diagram) =>
+      baseDiagrams.has(diagram) ? undefined : headOnlyDiagrams.push(diagram)
+    );
+
+    if (baseOnlyDiagrams.length === 0 && headOnlyDiagrams.length === 0) return;
+
+    const diffAlgorithm = new DiffDiagrams();
+    // TODO: Apply includes and excludes to reduce noise and false positives.
+
+    function countDiffActions(diagram: SequenceDiagram | undefined): number {
+      if (!diagram) return 0;
+
+      let count = 0;
+      const countAction = (action: Action) => {
+        if (action.diffMode) count += 1;
+        action.children.forEach(countAction);
+      };
+      diagram.rootActions.forEach(countAction);
+      return count;
+    }
+
+    const minimalDiff = async (
+      headDiagram: SequenceDiagram,
+      baseDiagrams: string[]
+    ): Promise<SequenceDiagram | undefined> => {
+      return (
+        await Promise.all<SequenceDiagram | undefined>(
+          baseDiagrams.map(async (baseDiagramId) => {
+            const baseDiagram = await operationReference.loadSequenceDiagram(
+              RevisionName.Base,
+              baseDiagramId
+            );
+            return diffAlgorithm.diff(baseDiagram, headDiagram);
+          })
+        )
+      )
+        .filter(Boolean)
+        .sort((a, b) => countDiffActions(a) - countDiffActions(b))[0];
+    };
+
+    const sequenceDiagrams = (
+      await Promise.all<SequenceDiagram | undefined>(
+        headOnlyDiagrams.map(async (headDiagramId) => {
+          const headDiagram = await operationReference.loadSequenceDiagram(
+            RevisionName.Head,
+            headDiagramId
+          );
+          // Choose three random base diagrams. Compute the diff between the head diagram and each of
+          // the randomly selected base diagrams. Report the diff with the smallest number of changes.
+          const baseDiagramIds = [
+            ...new Set(
+              [0, 1, 2].map(
+                () => baseOnlyDiagrams[Math.floor(Math.random() * baseOnlyDiagrams.length)]
+              )
+            ),
+          ];
+          return await minimalDiff(headDiagram, baseDiagramIds);
+        })
+      )
+    ).filter(Boolean) as SequenceDiagram[];
+
+    let sourcePaths: string[] | undefined;
+    let sourceDiff: string | undefined;
+
     const candidateSourcePaths = operationReference.sourcePathsByOperation.get(
       OperationReference.operationKey(operation.method, operation.path, operation.status)
     );
-    if (!candidateSourcePaths) return;
+    if (candidateSourcePaths) {
+      const existingSourcePaths = new Set<string>();
+      await Promise.all(
+        [...candidateSourcePaths].map(
+          async (path) => (await exists(path)) && existingSourcePaths.add(path)
+        )
+      );
+      sourcePaths = [...candidateSourcePaths].filter((path) => existingSourcePaths.has(path));
+    }
 
-    const existingSourcePaths = new Set<string>();
-    await Promise.all(
-      [...candidateSourcePaths].map(
-        async (path) => (await exists(path)) && existingSourcePaths.add(path)
-      )
-    );
-    const sourcePaths = [...candidateSourcePaths].filter((path) => existingSourcePaths.has(path));
-
-    let sourceDiff: string | undefined;
     if (sourcePaths && sourcePaths.length > 0) {
       sourceDiff = await executeCommand(
         `git diff ${baseRevision} -- ${[...sourcePaths].sort().join(' ')}`,
@@ -48,9 +133,7 @@ export default async function buildChangeReport(
       );
     }
 
-    if (!sourceDiff) return;
-
-    return { operation, sourceDiff /* sequenceDiagrams */ };
+    return { operation, sourceDiff, sequenceDiagrams };
   };
   const buildOperationRemoved = (operation: Operation): OperationChange => {
     return { operation };
