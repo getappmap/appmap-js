@@ -8,6 +8,7 @@
   "main": "dist/types.js",
   "types": "dist/types.d.ts",
   "scripts": {
+    "appmap": "appmap-agent-js -- jest --no-cache",
     "build": "tsc -p tsconfig.build.json",
     "watch": "tsc -p tsconfig.build.json --watch",
     "lint": "eslint src --ext .ts",
@@ -28,6 +29,7 @@
     "access": "public"
   },
   "devDependencies": {
+    "@appland/appmap-agent-js": "^13.9.0",
     "@types/diff": "^5.0.2",
     "@types/jest": "^29.4.1",
     "@typescript-eslint/eslint-plugin": "^5.51.0",

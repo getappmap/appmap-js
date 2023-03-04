@@ -470,6 +470,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/sequence-diagram@workspace:packages/sequence-diagram"
   dependencies:
+    "@appland/appmap-agent-js": ^13.9.0
     "@appland/models": "workspace:^2.2.0"
     "@appland/openapi": "workspace:^1.4.3"
     "@datastructures-js/priority-queue": ^6.1.3
