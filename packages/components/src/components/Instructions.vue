@@ -28,7 +28,7 @@
         </div>
       </div>
       <section class="instructions-wrap">
-        <div class="dependency-map">
+        <div class="dependency-map" v-if="isViewingDependency">
           <h4>Dependency map</h4>
           <ul class="feature-list">
             <li>
@@ -60,7 +60,17 @@
             </li>
           </ul>
         </div>
-        <div class="trace">
+        <div class="sequence" v-if="isViewingSequence">
+          <h4>Sequence</h4>
+          <ul class="feature-list">
+            <!-- TODO: sequence diagram feature list -->
+          </ul>
+          <ul class="legend">
+            <h5>Legend</h5>
+            <!-- TODO: sequence diagram legend -->
+          </ul>
+        </div>
+        <div class="trace" v-if="isViewingTrace">
           <h4>Trace</h4>
           <ul class="feature-list">
             <li>&nbsp;Use arrow keys to navigate between nodes</li>
@@ -81,6 +91,7 @@
 </template>
 
 <script>
+import { VIEW_COMPONENT, VIEW_FLOW, VIEW_SEQUENCE } from '@/store/vsCode';
 import CloseIcon from '../assets/close.svg';
 import InfoIcon from '../assets/info.svg';
 
@@ -91,10 +102,26 @@ export default {
     InfoIcon,
   },
 
+  props: {
+    currentView: String,
+  },
+
   data() {
     return {
       isOpen: false,
     };
+  },
+
+  computed: {
+    isViewingDependency() {
+      return this.currentView === VIEW_COMPONENT;
+    },
+    isViewingSequence() {
+      return this.currentView === VIEW_SEQUENCE;
+    },
+    isViewingTrace() {
+      return this.currentView === VIEW_FLOW;
+    },
   },
 
   methods: {
