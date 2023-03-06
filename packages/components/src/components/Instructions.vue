@@ -69,14 +69,14 @@
           </ul>
           <ul class="legend">
             <h5>Legend</h5>
-            <li><FromArrow />From arrow</li>
+            <li><FromArrow />Call arrow</li>
             <li><ReturnArrow />Return arrow</li>
             <li><LoopBox />Loop container</li>
             <li><CollapseSection />Collapse section</li>
             <li><ExpandSection />Expand section</li>
-            <li><XIcon />Hide actor</li>
+            <li><XIcon />Hide lifeline</li>
             <li><Lifeline />Lifeline</li>
-            <li><LaneSeparator />Lane separator</li>
+            <li><ActiveLifeline />Active lifeline</li>
           </ul>
         </div>
         <div class="trace" v-if="isViewingTrace">
@@ -108,8 +108,8 @@ import ExpandSection from '../assets/sequence-legend/expand-section.svg';
 import FromArrow from '../assets/sequence-legend/from-arrow.svg';
 import ReturnArrow from '../assets/sequence-legend/return-arrow.svg';
 import LoopBox from '../assets/sequence-legend/loop-box.svg';
+import ActiveLifeline from '../assets/sequence-legend/active-lifeline.svg';
 import Lifeline from '../assets/sequence-legend/lifeline.svg';
-import LaneSeparator from '../assets/sequence-legend/lane-separator.svg';
 import XIcon from '@/assets/x-icon.svg';
 
 export default {
@@ -124,7 +124,7 @@ export default {
     LoopBox,
     XIcon,
     Lifeline,
-    LaneSeparator,
+    ActiveLifeline,
   },
 
   props: {
