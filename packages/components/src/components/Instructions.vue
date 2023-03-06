@@ -63,11 +63,20 @@
         <div class="sequence" v-if="isViewingSequence">
           <h4>Sequence</h4>
           <ul class="feature-list">
-            <!-- TODO: sequence diagram feature list -->
+            <li>Clicking an event will show details in left panel</li>
+            <li>Expand and collapse sections</li>
+            <li>Hide sequence diagram actors to optimize map</li>
           </ul>
           <ul class="legend">
             <h5>Legend</h5>
-            <!-- TODO: sequence diagram legend -->
+            <li><FromArrow />From arrow</li>
+            <li><ReturnArrow />Return arrow</li>
+            <li><CollapseSection />Collapse section</li>
+            <li><ExpandSection />Expand section</li>
+            <li><LoopBox />Loop container</li>
+            <li><XIcon />Hide actor</li>
+            <li><Lifeline />Lifeline</li>
+            <li><LaneSeparator />Lane separator</li>
           </ul>
         </div>
         <div class="trace" v-if="isViewingTrace">
@@ -94,12 +103,28 @@
 import { VIEW_COMPONENT, VIEW_FLOW, VIEW_SEQUENCE } from '@/store/vsCode';
 import CloseIcon from '../assets/close.svg';
 import InfoIcon from '../assets/info.svg';
+import CollapseSection from '../assets/sequence-legend/collapse-section.svg';
+import ExpandSection from '../assets/sequence-legend/expand-section.svg';
+import FromArrow from '../assets/sequence-legend/from-arrow.svg';
+import ReturnArrow from '../assets/sequence-legend/return-arrow.svg';
+import LoopBox from '../assets/sequence-legend/loop-box.svg';
+import Lifeline from '../assets/sequence-legend/lifeline.svg';
+import LaneSeparator from '../assets/sequence-legend/lane-separator.svg';
+import XIcon from '@/assets/x-icon.svg';
 
 export default {
   name: 'v-instructions',
   components: {
     CloseIcon,
     InfoIcon,
+    CollapseSection,
+    ExpandSection,
+    FromArrow,
+    ReturnArrow,
+    LoopBox,
+    XIcon,
+    Lifeline,
+    LaneSeparator,
   },
 
   props: {
@@ -177,9 +202,9 @@ export default {
     right: 0;
     bottom: 100%;
     margin: 0 0.75rem 1rem 0;
-    width: max-content;
+    min-width: 30vw;
     height: max-content;
-    max-width: 50vw;
+    max-width: 40vw;
     max-height: 80vh;
     padding: 1.5rem;
     color: $gray6;
@@ -229,7 +254,7 @@ ul.feature-list {
 .instructions-wrap {
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   column-gap: 2rem;
   overflow: auto;
   .legend {
@@ -246,19 +271,22 @@ ul.feature-list {
     li {
       display: flex;
       flex-direction: row;
+      align-items: center;
       margin: 0.5rem 0;
       line-height: 2rem;
+      gap: 0.5rem;
+      font-size: 0.85rem;
       p {
         flex: 1;
         margin: 0;
         line-height: 1.5rem;
       }
-      align-items: flex-start;
     }
   }
 
   .dependency-map,
-  .trace {
+  .trace,
+  .sequence {
     padding: 1rem;
     border-radius: $border-radius-big;
     border: 1px solid $gray2;
