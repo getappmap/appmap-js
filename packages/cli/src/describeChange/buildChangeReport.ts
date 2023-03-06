@@ -10,16 +10,25 @@ import { Action, Diagram as SequenceDiagram } from '@appland/sequence-diagram';
 import { DiffDiagrams } from '../sequenceDiagramDiff/DiffDiagrams';
 
 export default async function buildChangeReport(
+  diffDiagrams: DiffDiagrams,
   baseRevision: string,
   basePaths: OpenAPIV3.PathsObject,
   headPaths: OpenAPIV3.PathsObject,
-  baseAppMapFileNames: Set<string>,
-  headAppMapFileNames: Set<string>,
-  operationReference: OperationReference,
-  appmapReferences: Map<string, AppMapReference>
+  operationReference: OperationReference
 ): Promise<Changes> {
   const buildOperationAdded = async (operation: Operation): Promise<OperationChange> => {
-    return { operation /* sourceDiff, sequenceDiagrams */ };
+    const diagramIds = await operationReference.listSequenceDiagrams(RevisionName.Head, {
+      method: operation.method,
+      path: operation.path,
+      status: operation.status,
+    });
+    const sequenceDiagrams = new Array<SequenceDiagram>();
+    for (const diagramId of diagramIds)
+      sequenceDiagrams.push(
+        await operationReference.loadSequenceDiagram(RevisionName.Head, diagramId)
+      );
+
+    return { operation, sequenceDiagrams };
   };
   const buildOperationChanged = async (
     operation: Operation
@@ -53,9 +62,6 @@ export default async function buildChangeReport(
 
     if (baseOnlyDiagrams.length === 0 && headOnlyDiagrams.length === 0) return;
 
-    const diffAlgorithm = new DiffDiagrams();
-    // TODO: Apply includes and excludes to reduce noise and false positives.
-
     function countDiffActions(diagram: SequenceDiagram | undefined): number {
       if (!diagram) return 0;
 
@@ -79,7 +85,7 @@ export default async function buildChangeReport(
               RevisionName.Base,
               baseDiagramId
             );
-            return diffAlgorithm.diff(baseDiagram, headDiagram);
+            return diffDiagrams.diff(baseDiagram, headDiagram);
           })
         )
       )

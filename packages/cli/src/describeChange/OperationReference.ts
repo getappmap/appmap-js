@@ -1,22 +1,22 @@
-import { CodeObject } from '@appland/models';
+import { AppMap, CodeObject } from '@appland/models';
 import {
-  Action,
-  actionActors,
-  Actor,
+  buildDiagram,
+  Diagram,
   Diagram as SequenceDiagram,
   format,
   FormatType,
-  isFunction,
-  ServerRPC,
+  SequenceDiagramOptions,
+  Specification,
 } from '@appland/sequence-diagram';
 import assert from 'assert';
 import * as async from 'async';
-import { link, mkdir, writeFile } from 'fs/promises';
+import { link, mkdir, unlink, writeFile } from 'fs/promises';
 import { glob } from 'glob';
 import { basename, join } from 'path';
 import { promisify } from 'util';
 import { readDiagramFile } from '../cmds/sequenceDiagram/readDiagramFile';
 import { exists } from '../utils';
+import { AppMapReference } from './AppMapReference';
 import { RevisionName } from './RevisionName';
 
 type Route = {
@@ -25,13 +25,11 @@ type Route = {
   status: number;
 };
 
-type QueueJob = { revisionName: RevisionName; action: ServerRPC };
+type QueueJob = { revisionName: RevisionName; appmap: AppMap; diagram: Diagram };
 
 export class OperationReference {
   // Set of all source files, indexed by route ([<METHOD> <PATH> (<STATUS>)]).
   public sourcePathsByOperation = new Map<string, Set<string>>();
-
-  private codeObjectIds = new Set<string>();
 
   // The queue has concurrency of 1, so it's used to ensure that only one route
   // is processed / updated at a time. It's essential to begin indexing with startIndexing,
@@ -47,39 +45,56 @@ export class OperationReference {
   startIndexing() {
     this.queue = async.queue(async (job: QueueJob) => {
       try {
-        const { revisionName, action } = job;
-        const { subtreeDigest } = action;
-        const [baseMethod, path] = action.route.split(' ');
-        const method = baseMethod.toUpperCase();
+        const { revisionName, appmap, diagram } = job;
+        assert(appmap.events[0].httpServerRequest, 'Expecting an HTTP server request (only)');
+        const rootEvent = appmap.events[0];
+        assert(rootEvent.httpServerRequest);
+        assert(rootEvent.httpServerResponse);
+        assert(diagram.rootActions.length === 1, 'Expecting a single root action');
+        const { subtreeDigest } = diagram.rootActions[0];
 
-        await this.findOrCreateDiagram(revisionName, subtreeDigest, action);
+        const method = rootEvent.httpServerRequest?.request_method.toUpperCase();
+        const path =
+          rootEvent.httpServerRequest.normalized_path_info || rootEvent.httpServerRequest.path_info;
+        const status = rootEvent.httpServerResponse.status;
 
-        await this.saveDiagramLink(
-          revisionName,
-          { method, path, status: action.status },
-          subtreeDigest
-        );
+        const key = OperationReference.operationKey(method, path, status);
+        appmap.classMap.visit((codeObject) => {
+          AppMapReference.collectPath(codeObject, (path) =>
+            this.addSourcePath(key, path, codeObject)
+          );
+        });
+
+        await this.findOrCreateAppMap(revisionName, appmap, diagram);
+        await this.saveLinks(revisionName, { method, path, status: status }, subtreeDigest);
       } catch (err) {
         console.warn(err);
       }
     }, 1);
   }
 
-  async findOrCreateDiagram(
+  // Returns true if the appmap was created, false if it already existed.
+  async findOrCreateAppMap(
     revisionName: RevisionName,
-    subtreeDigest: string,
-    action: ServerRPC
-  ): Promise<SequenceDiagram> {
-    if (await exists(this.diagramPath(revisionName, subtreeDigest))) {
-      return readDiagramFile(this.diagramPath(revisionName, subtreeDigest));
+    appmap: AppMap,
+    diagram: Diagram
+  ): Promise<boolean> {
+    assert(diagram.rootActions.length === 1, 'Expecting a single root action');
+    const { subtreeDigest } = diagram.rootActions[0];
+
+    if (
+      (await exists(this.diagramPath(revisionName, subtreeDigest))) &&
+      (await exists(this.appmapPath(revisionName, subtreeDigest)))
+    ) {
+      return false;
     }
 
-    const diagram = this.buildDiagram(action);
+    await writeFile(this.appmapPath(revisionName, subtreeDigest), JSON.stringify(appmap, null, 2));
     await writeFile(
       this.diagramPath(revisionName, subtreeDigest),
       format(FormatType.JSON, diagram, subtreeDigest).diagram
     );
-    return diagram;
+    return true;
   }
 
   async listSequenceDiagrams(revisionName: RevisionName, route: Route): Promise<string[]> {
@@ -104,85 +119,42 @@ export class OperationReference {
     this.queue = undefined;
   }
 
-  addSourcePath(key: string, path: string, codeObject: CodeObject): void {
+  addServerRPC(revisionName: RevisionName, appmap: AppMap) {
+    assert(this.queue, 'OperationReference is not in processing mode');
+
+    const specOptions = { loops: false } as SequenceDiagramOptions;
+    const specification = Specification.build(appmap, specOptions);
+    const diagram = buildDiagram('<appmap>', appmap, specification);
+
+    this.queue.push({ revisionName, appmap, diagram });
+  }
+
+  private addSourcePath(key: string, path: string, codeObject: CodeObject): void {
     if (!this.sourcePathsByOperation.get(key))
       this.sourcePathsByOperation.set(key, new Set<string>());
     this.sourcePathsByOperation.get(key)!.add(path);
-
-    let co: CodeObject | undefined = codeObject;
-    while (co) {
-      this.codeObjectIds.add(co.fqid);
-      co = co.parent;
-    }
   }
 
-  addServerRPC(revisionName: RevisionName, action: ServerRPC) {
-    assert(this.queue, 'OperationReference is not in processing mode');
-
-    this.queue.push({ revisionName, action });
-  }
-
-  private buildDiagram(rootAction: Action): SequenceDiagram {
-    const validSourceLocation = (action: Action) => {
-      if (!isFunction(action)) return true;
-
-      return this.codeObjectIds.has(action.callee.id);
-    };
-
-    const filterAction = (action: Action, parent: Action | undefined) => {
-      let actionClone: Action | undefined;
-      if (validSourceLocation(action)) {
-        actionClone = cloneAction(action);
-        if (parent) {
-          actionClone.parent = parent;
-          parent.children.push(actionClone);
-        }
-        parent = actionClone;
-      }
-
-      action.children.forEach((child) => filterAction(child, parent));
-
-      return actionClone;
-    };
-
-    const rootActionClone = filterAction(rootAction, undefined);
-    assert(rootActionClone);
-
-    const actors = new Array<Actor>();
-    const actorIds = new Set<string>();
-
-    const collectActors = (action: Action) => {
-      actionActors(action).forEach((actor) => {
-        if (!actor) return;
-
-        if (!actorIds.has(actor.id)) {
-          actorIds.add(actor.id);
-          actors.push(actor);
-        }
-      });
-
-      action.children.forEach(collectActors);
-    };
-    collectActors(rootActionClone);
-
-    return {
-      actors,
-      rootActions: [rootActionClone],
-    };
-  }
-
-  private async saveDiagramLink(revisionName: RevisionName, route: Route, subtreeDigest: string) {
+  private async saveLinks(revisionName: RevisionName, route: Route, subtreeDigest: string) {
     await mkdir(this.operationPath(revisionName, route), {
       recursive: true,
     });
 
-    const targetPath = join(
-      this.operationPath(revisionName, route),
-      [subtreeDigest, 'sequence.json'].join('.')
-    );
-    if (await exists(targetPath)) return;
+    const paths = [
+      [
+        this.diagramPath(revisionName, subtreeDigest),
+        join(this.operationPath(revisionName, route), [subtreeDigest, 'sequence.json'].join('.')),
+      ],
+      [
+        this.appmapPath(revisionName, subtreeDigest),
+        join(this.operationPath(revisionName, route), [subtreeDigest, 'appmap.json'].join('.')),
+      ],
+    ];
+    for (const [src, dest] of paths) {
+      if (await exists(dest)) continue;
 
-    await link(this.diagramPath(revisionName, subtreeDigest), targetPath);
+      await link(src, dest);
+    }
   }
 
   private operationPath(revisionName: RevisionName, route: Route): string {
@@ -201,33 +173,21 @@ export class OperationReference {
     );
   }
 
+  private appmapPath(revisionName: RevisionName, subtreeDigest: string): string {
+    return join(
+      this.outputDir,
+      revisionName,
+      'operations',
+      [subtreeDigest, 'appmap.json'].join('.')
+    );
+  }
+
   private diagramPath(revisionName: RevisionName, subtreeDigest: string): string {
     return join(
       this.outputDir,
       revisionName,
       'operations',
-      'sequence-diagrams',
       [subtreeDigest, 'sequence.json'].join('.')
     );
   }
-}
-
-function cloneAction(action: Action): Action {
-  const { children, caller, callee } = action as any;
-
-  let { parent } = action as any;
-  if (caller) (action as any).caller = undefined;
-  if (callee) (action as any).callee = undefined;
-  action.parent = undefined;
-  action.children = [];
-  const actionClone = JSON.parse(JSON.stringify(action));
-  assert(actionClone);
-  action.children = children;
-  action.parent = parent;
-  if (caller) (action as any).caller = caller;
-  if (callee) (action as any).callee = callee;
-  if (caller) (actionClone as any).caller = caller;
-  if (callee) (actionClone as any).callee = callee;
-
-  return actionClone;
 }

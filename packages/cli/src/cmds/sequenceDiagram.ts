@@ -12,7 +12,7 @@ import {
   Formatters,
   FormatType,
 } from '@appland/sequence-diagram';
-import { serveAndOpenSequenceDiagram } from '../lib/serveAndOpen';
+import { renderSequenceDiagramPNG } from '../sequenceDiagram/renderSequenceDiagramPNG';
 import assert from 'assert';
 import BrowserRenderer from './sequenceDiagram/browserRenderer';
 
@@ -112,22 +112,14 @@ export const handler = async (argv: any) => {
     if (argv.format === 'png') {
       // PNG rendering is performed by loading the sequence
       // diagram in a browser and taking a screenshot.
+      assert(browserRender);
       const diagramPath = await printDiagram(FormatType.JSON);
-      const outputPath = await new Promise((resolve) =>
-        serveAndOpenSequenceDiagram(diagramPath, false, async (url) => {
-          if (verbose()) console.warn(`Rendering PNG`);
-          assert(browserRender, 'Browser not initialized');
-
-          const outputPath = join(
-            dirname(diagramPath),
-            [basename(diagramPath, '.json'), '.png'].join('')
-          );
-
-          await browserRender.screenshot(url, outputPath);
-
-          resolve(outputPath);
-        })
+      const outputPath = join(
+        dirname(diagramPath),
+        [basename(diagramPath, '.json'), '.png'].join('')
       );
+      await renderSequenceDiagramPNG(outputPath, diagramPath, browserRender);
+
       console.warn(`Printed diagram ${outputPath}`);
     } else {
       // Other forms of output are produced directly by the

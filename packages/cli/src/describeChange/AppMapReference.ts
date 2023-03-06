@@ -12,7 +12,7 @@ import {
   ServerRPC,
   Specification,
 } from '@appland/sequence-diagram';
-import { AppMap, CodeObject, buildAppMap } from '@appland/models';
+import { AppMap, CodeObject, buildAppMap, Event } from '@appland/models';
 import { readDiagramFile } from '../cmds/sequenceDiagram/readDiagramFile';
 import { executeCommand } from './executeCommand';
 import { RevisionName } from './RevisionName';
@@ -93,10 +93,9 @@ export class AppMapReference {
   async processAppMap(revisionName: RevisionName) {
     const appmap = await this.loadAppMap();
 
-    this.collectAppMapOperationData(appmap);
+    this.collectAppMapOperationData(revisionName, appmap);
     const metadata = AppMapReference.collectMetadata(appmap);
     const diagram = await this.buildSequenceDiagram(appmap);
-    this.collectSequenceDiagramOperationData(revisionName, diagram);
 
     await copyFile(this.appmapFileName, this.archivedAppMapFilePath(revisionName, true));
     await writeFile(
@@ -123,10 +122,7 @@ export class AppMapReference {
     );
     const appmap = buildAppMap().source(appmapData).build();
 
-    this.collectAppMapOperationData(appmap);
-    const diagram = await this.buildSequenceDiagram(appmap);
-    this.collectSequenceDiagramOperationData(revisionName, diagram);
-
+    this.collectAppMapOperationData(revisionName, appmap);
     const metadata = JSON.parse(
       await readFile(this.archivedMetadataFilePath(revisionName, true), 'utf-8')
     );
@@ -153,52 +149,51 @@ export class AppMapReference {
     return join(...tokens);
   }
 
-  private collectAppMapOperationData(appmap: AppMap) {
+  private collectAppMapOperationData(revisionName: RevisionName, appmap: AppMap) {
     for (let eventId = 0; eventId < appmap.events.length; eventId++) {
       const event = appmap.events[eventId];
       if (event.httpServerRequest && event.httpServerResponse) {
-        const method = event.httpServerRequest.request_method;
-        const path =
-          event.httpServerRequest.normalized_path_info || event.httpServerRequest.path_info;
-        const status = event.httpServerResponse.status;
-        const key = OperationReference.operationKey(method, path, status);
-        while (eventId < event.returnEvent.id) {
-          const event = appmap.events[eventId];
-          AppMapReference.collectPath(event.codeObject, (path) =>
-            this.operationReference.addSourcePath(key, path, event.codeObject)
-          );
-          eventId += 1;
-        }
+        const requestAppMap = AppMapReference.buildServerRPCAppMap(appmap, event);
+        this.operationReference.addServerRPC(revisionName, requestAppMap);
+        eventId = event.returnEvent.id;
       }
     }
   }
 
-  private collectSequenceDiagramOperationData(revisionName: RevisionName, diagram: Diagram) {
-    const serverRPCActions: ServerRPC[] = [];
+  private static buildServerRPCAppMap(appmap: AppMap, event: Event) {
+    const startId = event.id;
+    const endId = event.returnEvent.id;
+    const events = appmap.events.filter((e) => {
+      if (e.id < startId || e.id > endId) return false;
 
-    const collectServerRPCActions = (action: Action) => {
-      if (isServerRPC(action)) {
-        serverRPCActions.push(action);
-      } else {
-        action.children.forEach(collectServerRPCActions);
-      }
-    };
+      if (e.codeObject.type !== 'function') return true;
 
-    diagram.rootActions.forEach(collectServerRPCActions);
-
-    serverRPCActions.forEach((action) => {
-      this.operationReference.addServerRPC(revisionName, action);
+      const { isLocal } = AppMapReference.isLocalPath(e.codeObject.location);
+      return isLocal;
     });
+
+    return buildAppMap({
+      events,
+      classMap: appmap.classMap.roots.map((c) => ({ ...c.data })),
+      metadata: appmap.metadata,
+    }).build();
   }
 
-  private static collectPath(codeObject: CodeObject, fn: (path: string) => void) {
-    const location = codeObject.location;
-    // If there's no line number, it's not considered a proper source location.
-    // It may be native code, or some kind of pseudo-path.
-    if (location && location.includes(':')) {
-      const path = location.split(':')[0];
-      if (path.match(/\.\w+$/) && !isAbsolute(path)) fn(path);
-    }
+  static isLocalPath(location?: string): { isLocal: boolean; path?: string } {
+    if (!location) return { isLocal: false };
+
+    if (!location.includes(':')) return { isLocal: false };
+
+    const path = location.split(':')[0];
+    if (path.match(/\.\w+$/) && !isAbsolute(path)) return { isLocal: true, path };
+
+    return { isLocal: false };
+  }
+
+  static collectPath(codeObject: CodeObject, fn: (path: string) => void) {
+    const { isLocal, path } = AppMapReference.isLocalPath(codeObject.location);
+
+    if (isLocal && path) fn(path);
   }
 
   private static collectMetadata(appmap: AppMap): Metadata {

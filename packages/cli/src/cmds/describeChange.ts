@@ -7,7 +7,14 @@ import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../lib/locateAppMapDir';
 import { exists, verbose } from '../utils';
 import { isAbsolute, join, relative } from 'path';
-import { Action, actionActors, Diagram, format, FormatType } from '@appland/sequence-diagram';
+import {
+  Action,
+  actionActors,
+  Diagram,
+  format,
+  FormatType,
+  ServerRPC,
+} from '@appland/sequence-diagram';
 import { glob } from 'glob';
 import { promisify } from 'util';
 import { DiffDiagrams } from '../sequenceDiagramDiff/DiffDiagrams';
@@ -20,6 +27,9 @@ import { DefaultMaxAppMapSizeInMB, fileSizeFilter } from '../openapi/fileSizeFil
 import buildChangeReport from '../describeChange/buildChangeReport';
 import { executeCommand } from '../describeChange/executeCommand';
 import { OperationReference } from '../describeChange/OperationReference';
+import { Operation } from '../describeChange/types';
+import puppeteer from 'puppeteer';
+import { renderSequenceDiagramPNG } from '../sequenceDiagram/renderSequenceDiagramPNG';
 
 export class ValidationError extends Error {}
 
@@ -212,15 +222,100 @@ export const handler = async (argv: any) => {
 
   // unstashAll()
 
+  const diffDiagrams = new DiffDiagrams();
+
+  if (argv.include)
+    (Array.isArray(argv.include) ? argv.include : [argv.include]).forEach((expr: string) =>
+      diffDiagrams.include(expr)
+    );
+  if (argv.exclude)
+    (Array.isArray(argv.exclude) ? argv.exclude : [argv.exclude]).forEach((expr: string) =>
+      diffDiagrams.exclude(expr)
+    );
+
   const changeReport = await buildChangeReport(
+    diffDiagrams,
     baseRevision,
     basePaths,
     headPaths,
-    baseAppMapFileNames,
-    headAppMapFileNames,
-    operationReference,
-    appmapReferences
+    operationReference
   );
+
+  const operationUrl = (operation: Operation): string =>
+    [operation.method.toUpperCase(), operation.path, `(${operation.status})`].join(' ');
+
+  if (verbose()) console.warn(`Preparing browser for PNG rendering`);
+  const browser = await puppeteer.launch({ timeout: 120 * 1000, headless: !argv.showBrowser });
+
+  async function saveSequenceDiagram(subdir: string, diagram: Diagram, name?: string) {
+    if (!name) {
+      const { subtreeDigest } = diagram.rootActions[0];
+      name = subtreeDigest;
+    }
+    const serverRPC = diagram.rootActions[0] as ServerRPC;
+
+    let { route, status } = serverRPC;
+    const [method, path] = route.split(' ');
+
+    const operationDir = join(
+      outputDir,
+      RevisionName.Diff,
+      subdir,
+      method.toUpperCase(),
+      path,
+      status.toString()
+    );
+    await mkdir(operationDir, { recursive: true });
+    await writeFile(
+      join(operationDir, [name, 'sequence.json'].join('.')),
+      format(FormatType.JSON, diagram, name).diagram
+    );
+
+    const diagramAsText = format(FormatType.Text, diagram, '<diff>');
+    if (diagramAsText.diagram.trim().length > 0)
+      await writeFile(join(operationDir, [name, 'sequence.txt'].join('.')), diagramAsText.diagram);
+
+    await renderSequenceDiagramPNG(
+      join(operationDir, [name, 'sequence.png'].join('.')),
+      join(operationDir, [name, 'sequence.json'].join('.')),
+      browser
+    );
+  }
+
+  await Promise.all(
+    changeReport.routeChanges.added.map(async (change) => {
+      console.log(`Added route: ${operationUrl(change.operation)}`);
+      if (change.sourceDiff) console.log(`Source diff: ${change.sourceDiff}`);
+      console.log(`${change.sequenceDiagrams?.length} sequence diagrams`);
+      for (const diagram of change.sequenceDiagrams || []) {
+        assert(diagram.rootActions.length === 1, 'Expecting a single root action');
+
+        await saveSequenceDiagram('added', diagram);
+      }
+    })
+  );
+  changeReport.routeChanges.removed.forEach((change) => {
+    console.log(`Removed route: ${operationUrl(change.operation)}`);
+    if (change.sourceDiff) console.log(`Source diff: ${change.sourceDiff}`);
+  });
+  await Promise.all(
+    changeReport.routeChanges.changed.map(async (change) => {
+      if (!change.sourceDiff && (!change.sequenceDiagrams || change.sequenceDiagrams.length === 0))
+        return;
+
+      assert(change.sequenceDiagrams);
+      console.log(`Changed route: ${operationUrl(change.operation)}`);
+      if (change.sourceDiff) console.log(`Source diff: ${change.sourceDiff}`);
+      console.log(`${change.sequenceDiagrams?.length} sequence diagrams`);
+      for (let index = 0; index < change.sequenceDiagrams.length; index++) {
+        const diagram = change.sequenceDiagrams[index];
+        assert(diagram.rootActions.length === 1, 'Expecting a single root action');
+        await saveSequenceDiagram('changed', diagram, `diagram_${index + 1}`);
+      }
+    })
+  );
+
+  /*
 
   const headAppMapFileNameArray = [...headAppMapFileNames].sort();
   const changedAppMaps = new Array<AppMapReference>();
@@ -368,6 +463,7 @@ export const handler = async (argv: any) => {
     await writeFile(join(outputDir, 'appmap.html'), appmapHTML);
   }
 
+  */
   rl.close();
 };
 
