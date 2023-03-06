@@ -3,7 +3,7 @@ import { OpenAPIV3 } from 'openapi-types';
 import { Changes, Operation, OperationChange, RouteChanges } from './types';
 import assert from 'assert';
 import { executeCommand } from './executeCommand';
-import { exists } from '../utils';
+import { exists, shuffleArray } from '../utils';
 import { OperationReference } from './OperationReference';
 import { RevisionName } from './RevisionName';
 import { Action, Diagram as SequenceDiagram } from '@appland/sequence-diagram';
@@ -96,13 +96,7 @@ export default async function buildChangeReport(
           );
           // Choose three random base diagrams. Compute the diff between the head diagram and each of
           // the randomly selected base diagrams. Report the diff with the smallest number of changes.
-          const baseDiagramIds = [
-            ...new Set(
-              [0, 1, 2].map(
-                () => baseOnlyDiagrams[Math.floor(Math.random() * baseOnlyDiagrams.length)]
-              )
-            ),
-          ];
+          const baseDiagramIds = shuffleArray([...baseOnlyDiagrams]).slice(0, 3);
           return await minimalDiff(headDiagram, baseDiagramIds);
         })
       )
