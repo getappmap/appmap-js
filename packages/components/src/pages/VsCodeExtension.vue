@@ -414,6 +414,8 @@ export default {
       eventFilterMatchIndex: 0,
       showShareModal: false,
       shareURL: undefined,
+      seqDiagramTimeoutId: undefined,
+      isActive: true,
     };
   },
 
@@ -431,7 +433,6 @@ export default {
   watch: {
     '$store.state.currentView': {
       handler(view) {
-        this.onChangeTab(this.$refs[view]);
         this.$refs.tabs.activateTab(this.$refs[view]);
         this.$root.$emit('stateChanged', 'currentView');
       },
@@ -485,6 +486,14 @@ export default {
       handler() {
         if (this.selectedObject) {
           this.setSelectedObject(this.selectedObject.fqid);
+        }
+      },
+    },
+    isActive: {
+      handler() {
+        clearTimeout(this.seqDiagramTimeoutId);
+        if (this.isActive && this.isViewingSequence) {
+          this.startSeqDiagramTimer();
         }
       },
     },
@@ -748,6 +757,19 @@ export default {
       const viewKey = Object.keys(this.$refs)[index];
       this.setView(viewKey);
       this.$root.$emit('changeTab', viewKey);
+
+      if (viewKey === VIEW_SEQUENCE) {
+        this.startSeqDiagramTimer();
+      } else {
+        clearTimeout(this.seqDiagramTimeoutId);
+      }
+    },
+
+    startSeqDiagramTimer() {
+      // prompt for feedback after viewing a sequence diagram for 1 minute
+      this.seqDiagramTimeoutId = setTimeout(() => {
+        this.$root.$emit('seq-diagram-feedback');
+      }, 60 * 1000);
     },
 
     setView(view) {
