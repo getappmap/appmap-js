@@ -71,9 +71,9 @@
             <h5>Legend</h5>
             <li><FromArrow />From arrow</li>
             <li><ReturnArrow />Return arrow</li>
+            <li><LoopBox />Loop container</li>
             <li><CollapseSection />Collapse section</li>
             <li><ExpandSection />Expand section</li>
-            <li><LoopBox />Loop container</li>
             <li><XIcon />Hide actor</li>
             <li><Lifeline />Lifeline</li>
             <li><LaneSeparator />Lane separator</li>
