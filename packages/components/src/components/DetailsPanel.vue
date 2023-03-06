@@ -3,6 +3,11 @@
     <h3 class="details-panel__title">
       <AppMapLogo width="70" />
     </h3>
+    <div class="details-panel__notification">
+      <FeedbackIcon />
+      Help us improve AppMap.
+      <a href="https://appmap.io/product/feedback/general.html">Send your feedback.</a>
+    </div>
     <div
       class="details-panel__source"
       v-if="!selectedObject && !selectedLabel && sourceLocationObject"
@@ -10,9 +15,6 @@
       <v-source-code-link :object="sourceLocationObject" />
     </div>
     <div class="details-panel__content">
-      <div class="details-panel__notification">
-        <slot name="notification" />
-      </div>
       <div class="details-panel__buttons">
         <slot name="buttons" />
       </div>
@@ -60,6 +62,7 @@ import VDetailsPanelLabels from '@/components/DetailsPanelLabels.vue';
 import VDetailsSearch from '@/components/DetailsSearch.vue';
 import VPopper from '@/components/Popper.vue';
 import VSourceCodeLink from '@/components/SourceCodeLink.vue';
+import FeedbackIcon from '@/assets/feedback-icon.svg';
 
 export default {
   name: 'v-details-panel',
@@ -81,6 +84,7 @@ export default {
     VDetailsSearch,
     VPopper,
     VSourceCodeLink,
+    FeedbackIcon,
   },
   props: {
     subtitle: String,
@@ -195,8 +199,22 @@ export default {
     }
   }
 
-  &__notification:not(:empty) {
-    padding: 0 0 1rem;
+  &__notification {
+    padding: 0.5rem 0.75rem;
+    background-color: $gray2;
+    border-radius: $border-radius;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    svg {
+      margin-right: 0.3rem;
+    }
+    a {
+      color: lighten($blue, 15);
+      transition: $transition;
+      &:hover {
+        color: $blue;
+      }
+    }
   }
 }
 </style>
