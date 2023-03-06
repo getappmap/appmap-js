@@ -64,6 +64,7 @@
           :ref="VIEW_SEQUENCE"
           :tabName="VIEW_SEQUENCE"
           :allow-scroll="true"
+          :isNew="true"
         >
           <v-diagram-sequence
             ref="viewSequence_diagram"

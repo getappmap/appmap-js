@@ -27,6 +27,10 @@ export default {
       default: false,
     },
     tabName: String,
+    isNew: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
