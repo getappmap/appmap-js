@@ -83,7 +83,7 @@ export default {
         const specification = Specification.build(appMapObj, { loops: true });
         result = buildDiagram('<an AppMap file>', appMapObj, specification);
       }
-      if (!result) throw Error;
+      if (!result) throw Error();
       return result;
     },
     diagramSpec(): DiagramSpec {

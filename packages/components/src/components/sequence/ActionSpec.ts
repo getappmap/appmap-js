@@ -151,7 +151,7 @@ export class ActionSpec {
     if (!actors[0]) return 1;
 
     const actorIndex = this.diagram.actors.findIndex((actor: Actor) => actors[0]!.id === actor.id);
-    if (actorIndex === -1) throw Error;
+    if (actorIndex === -1) throw Error();
     return actorIndex + 2;
   }
 
@@ -162,7 +162,7 @@ export class ActionSpec {
     if (!actors[1]) return 1;
 
     const actorIndex = this.diagram.actors.findIndex((actor: Actor) => actors[1]!.id === actor.id);
-    if (actorIndex === -1) throw Error;
+    if (actorIndex === -1) throw Error();
     return actorIndex + 2;
   }
 

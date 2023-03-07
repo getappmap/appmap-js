@@ -320,7 +320,7 @@ export function format(diagram: Diagram, _source: string): string {
       const response = actionResponse(action);
       const doActivate = response && actors[1];
       if (doActivate) {
-        if (!actors[1]) throw Error;
+        if (!actors[1]) throw Error();
         events.print(`activate ${alias(actors[1].name)}`);
       }
       renderChildren(action);
@@ -337,7 +337,7 @@ export function format(diagram: Diagram, _source: string): string {
       }
 
       if (doActivate) {
-        if (!actors[1]) throw Error;
+        if (!actors[1]) throw Error();
         events.print(`deactivate ${alias(actors[1].name)}`);
       }
     }
