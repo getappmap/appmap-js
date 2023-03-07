@@ -1,3 +1,20 @@
+# [@appland/components-v2.32.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.31.1...@appland/components-v2.32.0) (2023-03-07)
+
+
+### Bug Fixes
+
+* consistent styling for export and share buttons ([dcac59a](https://github.com/getappmap/appmap-js/commit/dcac59a973d93e90a797248a13df1ad3d47866ad))
+* hide actor is visible with really long actor names ([1417ba7](https://github.com/getappmap/appmap-js/commit/1417ba7c578548e50200c1a864d9ca4a05863380))
+* keep font white in NEW badge ([f35bf5f](https://github.com/getappmap/appmap-js/commit/f35bf5fd5e8171b85fb8f6d6ff35285d6d01a82e))
+
+
+### Features
+
+* add general feedback prompt to sidebar ([c867877](https://github.com/getappmap/appmap-js/commit/c867877200e59801b892b7efb8929e0fa5f09280))
+* add NEW badge to sequence diagram tab ([bdd7662](https://github.com/getappmap/appmap-js/commit/bdd7662a43136be3d7f967b58de17cd94a822c47))
+* sequence diagram feedback prompt after 1 minute ([3982f5f](https://github.com/getappmap/appmap-js/commit/3982f5f842c3129cea9e16bcdffd4f504ada0235))
+* sequence diagram legend ([951e2a8](https://github.com/getappmap/appmap-js/commit/951e2a8afbf652caa4389bff0b287b77084d1b69))
+
 # [@appland/components-v2.31.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.31.0...@appland/components-v2.31.1) (2023-02-25)
 
 
