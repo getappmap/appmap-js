@@ -1,6 +1,6 @@
 import { AppMapReference } from './AppMapReference';
 import { OpenAPIV3 } from 'openapi-types';
-import { Changes, Operation, OperationChange, RouteChanges } from './types';
+import { Changes, LogEntry, Operation, OperationChange, RouteChanges, TestFailure } from './types';
 import assert from 'assert';
 import { executeCommand } from './executeCommand';
 import { exists, shuffleArray } from '../utils';
@@ -8,6 +8,8 @@ import { OperationReference } from './OperationReference';
 import { RevisionName } from './RevisionName';
 import { Action, Diagram as SequenceDiagram } from '@appland/sequence-diagram';
 import { DiffDiagrams } from '../sequenceDiagramDiff/DiffDiagrams';
+import { readFile } from 'fs/promises';
+import { buildAppMap } from '@appland/models';
 
 export default async function buildChangeReport(
   diffDiagrams: DiffDiagrams,
@@ -187,7 +189,43 @@ export default async function buildChangeReport(
     }
   }
 
+  const appmapFileNamesOfFailedTests = await AppMapReference.listFailedTests(
+    operationReference.outputDir,
+    RevisionName.Head
+  );
+
+  const buildFailedTest = async (appmapFileName: string): Promise<TestFailure> => {
+    const appmapData = await readFile(appmapFileName, 'utf-8');
+    const appmap = buildAppMap().source(appmapData).build();
+
+    const logEntries = appmap.events
+      .filter((event) => event.isCall() && event.labels.has('log'))
+      .map((log) => {
+        const message = (log.parameters || []).map((param) => param.value).join('');
+        if (message) {
+          return {
+            message,
+            stack: log
+              .callStack()
+              .map((event) => event.codeObject.location || event.codeObject.fqid),
+          };
+        }
+      })
+      .filter(Boolean) as LogEntry[];
+
+    return {
+      appmapFile: appmapFileName,
+      name: appmap.metadata.name,
+      testLocation: appmap.metadata.source_location,
+      logEntries,
+    };
+  };
+
+  const failedTests = await Promise.all(appmapFileNamesOfFailedTests.map(buildFailedTest));
+
   return {
     routeChanges,
+    findings: [],
+    failedTests,
   };
 }

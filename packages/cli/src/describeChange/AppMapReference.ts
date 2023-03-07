@@ -1,15 +1,12 @@
 import { copyFile, readFile, writeFile } from 'fs/promises';
-import { basename, isAbsolute, join } from 'path';
+import { basename, dirname, isAbsolute, join } from 'path';
 import { existsSync } from 'fs';
 import {
-  Action,
   buildDiagram,
   Diagram,
   format,
   FormatType,
-  isServerRPC,
   SequenceDiagramOptions,
-  ServerRPC,
   Specification,
 } from '@appland/sequence-diagram';
 import { AppMap, CodeObject, buildAppMap, Event } from '@appland/models';
@@ -17,11 +14,14 @@ import { readDiagramFile } from '../cmds/sequenceDiagram/readDiagramFile';
 import { executeCommand } from './executeCommand';
 import { RevisionName } from './RevisionName';
 import { OperationReference } from './OperationReference';
+import { promisify } from 'util';
+import { glob } from 'glob';
 
 type Metadata = {
   sourceLocation: string | undefined;
   appmapName: string | undefined;
   sourcePaths: string[];
+  testStatus?: string;
 };
 
 export class AppMapReference {
@@ -79,6 +79,26 @@ export class AppMapReference {
     return join(...tokens);
   }
 
+  /**
+   * Gets the AppMap file names of failed test cases.
+   */
+  static async listFailedTests(outputDir: string, revisionName: RevisionName): Promise<string[]> {
+    const metadataFiles = await promisify(glob)(`${outputDir}/${revisionName}/*.metadata.json`);
+    const result = new Array<string>();
+    for (const metadataFile of metadataFiles) {
+      const metadata = JSON.parse(await readFile(metadataFile, 'utf-8')) as Metadata;
+      if (metadata.testStatus === 'failed') {
+        result.push(
+          join(
+            dirname(metadataFile),
+            [basename(metadataFile, '.metadata.json'), 'appmap.json'].join('.')
+          )
+        );
+      }
+    }
+    return result;
+  }
+
   async loadSequenceDiagramJSON(revisionName: RevisionName): Promise<Diagram> {
     return readDiagramFile(this.sequenceDiagramFilePath(revisionName, FormatType.JSON, true));
   }
@@ -116,7 +136,7 @@ export class AppMapReference {
     );
   }
 
-  public async restoreMetadata(revisionName: RevisionName) {
+  async restoreMetadata(revisionName: RevisionName) {
     const appmapData = JSON.parse(
       await readFile(this.archivedAppMapFilePath(revisionName, true), 'utf-8')
     );
@@ -208,6 +228,7 @@ export class AppMapReference {
     return {
       sourceLocation: (appmap.metadata as any).source_location,
       appmapName: appmap.metadata.name,
+      testStatus: appmap.metadata.test_status,
       sourcePaths: [...sourcePaths].sort(),
     };
   }

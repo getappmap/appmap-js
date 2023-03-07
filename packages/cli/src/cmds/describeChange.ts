@@ -275,11 +275,15 @@ export const handler = async (argv: any) => {
     if (diagramAsText.diagram.trim().length > 0)
       await writeFile(join(operationDir, [name, 'sequence.txt'].join('.')), diagramAsText.diagram);
 
-    await renderSequenceDiagramPNG(
-      join(operationDir, [name, 'sequence.png'].join('.')),
-      join(operationDir, [name, 'sequence.json'].join('.')),
-      browser
-    );
+    try {
+      await renderSequenceDiagramPNG(
+        join(operationDir, [name, 'sequence.png'].join('.')),
+        join(operationDir, [name, 'sequence.json'].join('.')),
+        browser
+      );
+    } catch (e) {
+      console.warn(`Failed to render sequence diagram for ${operationDir}: ${e}`);
+    }
   }
 
   await Promise.all(
@@ -314,6 +318,21 @@ export const handler = async (argv: any) => {
       }
     })
   );
+
+  if (changeReport.failedTests) {
+    console.log(`${changeReport.failedTests.length} tests failed`);
+    for (const test of changeReport.failedTests) {
+      console.log(`${test.testLocation} (${test.name})`);
+      console.log(`${test.appmapFile}`);
+      console.log(`Log messages:`);
+      for (const logEntry of test.logEntries) {
+        process.stdout.write(`${logEntry.message}`);
+        if (verbose()) console.log(`  ${logEntry.stack.join('\n  ')}`);
+      }
+    }
+  } else {
+    console.log(`All tests passed`);
+  }
 
   /*
 

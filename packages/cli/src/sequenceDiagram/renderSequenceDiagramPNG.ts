@@ -9,14 +9,18 @@ export async function renderSequenceDiagramPNG(
   diagramPath: string,
   browser: BrowserRenderer
 ): Promise<void> {
-  return new Promise((resolve) =>
+  return new Promise((resolve, reject) =>
     serveAndOpenSequenceDiagram(diagramPath, false, async (url) => {
-      if (verbose()) console.warn(`Rendering PNG`);
-      assert(browser, 'Browser not initialized');
+      try {
+        if (verbose()) console.warn(`Rendering PNG`);
+        assert(browser, 'Browser not initialized');
 
-      await browser.screenshot(url, outputPath);
+        await browser.screenshot(url, outputPath);
 
-      resolve();
+        resolve();
+      } catch (e) {
+        reject(e);
+      }
     })
   );
 }
