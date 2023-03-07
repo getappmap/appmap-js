@@ -61,10 +61,14 @@
           </ul>
         </div>
         <div class="sequence" v-if="isViewingSequence">
-          <h4>Sequence</h4>
+          <h4>Sequence diagram</h4>
           <ul class="feature-list">
-            <li>Clicking an event will show details in left panel</li>
-            <li>Expand and collapse sections</li>
+            <li>Show details in left panel by selecting an event</li>
+            <li>
+              Expand and collapse sections with the
+              <span class="icons"><ExpandSection /> <CollapseSection /></span>
+              icons
+            </li>
             <li>Hide sequence diagram actors to optimize map</li>
           </ul>
           <ul class="legend">
@@ -80,7 +84,7 @@
           </ul>
         </div>
         <div class="trace" v-if="isViewingTrace">
-          <h4>Trace</h4>
+          <h4>Trace view</h4>
           <ul class="feature-list">
             <li>&nbsp;Use arrow keys to navigate between nodes</li>
             <li>&nbsp;Expand nodes to see children</li>
@@ -236,19 +240,23 @@ export default {
   }
 }
 ul {
-  padding-left: 1rem;
+  padding-left: 1.2rem;
   word-break: break-word;
-  list-style-type: '\002D';
-  list-style-position: inside;
   li {
     margin: 0.3rem 0;
   }
 }
 ul.feature-list {
-  border-bottom: 1px solid $gray2;
-  padding-left: 0;
+  border-bottom: 1px solid $gray4;
+  padding-left: 1rem;
   padding-bottom: 1rem;
   line-height: 1.3rem;
+  svg {
+    margin: 0 0.2rem;
+  }
+  .icons {
+    margin: 0 0.25rem;
+  }
 }
 
 .instructions-wrap {
@@ -264,7 +272,7 @@ ul.feature-list {
     word-break: break-word;
     h5 {
       margin: 0 0 0.4rem 0;
-      color: $gray2;
+      color: $gray4;
       font-size: 1rem;
       font-weight: 400;
     }
@@ -289,7 +297,7 @@ ul.feature-list {
   .sequence {
     padding: 1rem;
     border-radius: $border-radius-big;
-    border: 1px solid $gray2;
+    border: 1px solid $gray4;
     width: 100%;
     font-size: 0.9rem;
     h4 {
