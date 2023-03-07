@@ -287,7 +287,7 @@
       </div>
 
       <div class="diagram-instructions">
-        <v-instructions ref="instructions" />
+        <v-instructions ref="instructions" :currentView="currentView" />
       </div>
     </div>
 

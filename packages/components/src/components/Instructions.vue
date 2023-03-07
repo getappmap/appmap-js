@@ -28,7 +28,7 @@
         </div>
       </div>
       <section class="instructions-wrap">
-        <div class="dependency-map">
+        <div class="dependency-map" v-if="isViewingDependency">
           <h4>Dependency map</h4>
           <ul class="feature-list">
             <li>
@@ -60,8 +60,31 @@
             </li>
           </ul>
         </div>
-        <div class="trace">
-          <h4>Trace</h4>
+        <div class="sequence" v-if="isViewingSequence">
+          <h4>Sequence diagram</h4>
+          <ul class="feature-list">
+            <li>Show details in left panel by selecting an event</li>
+            <li>
+              Expand and collapse sections with the
+              <span class="icons"><ExpandSection /> <CollapseSection /></span>
+              icons
+            </li>
+            <li>Hide sequence diagram actors to optimize map</li>
+          </ul>
+          <ul class="legend">
+            <h5>Legend</h5>
+            <li><FromArrow />Call arrow</li>
+            <li><ReturnArrow />Return arrow</li>
+            <li><LoopBox />Loop container</li>
+            <li><CollapseSection />Collapse section</li>
+            <li><ExpandSection />Expand section</li>
+            <li><XIcon />Hide lifeline</li>
+            <li><Lifeline />Lifeline</li>
+            <li><ActiveLifeline />Active lifeline</li>
+          </ul>
+        </div>
+        <div class="trace" v-if="isViewingTrace">
+          <h4>Trace view</h4>
           <ul class="feature-list">
             <li>&nbsp;Use arrow keys to navigate between nodes</li>
             <li>&nbsp;Expand nodes to see children</li>
@@ -81,20 +104,53 @@
 </template>
 
 <script>
+import { VIEW_COMPONENT, VIEW_FLOW, VIEW_SEQUENCE } from '@/store/vsCode';
 import CloseIcon from '../assets/close.svg';
 import InfoIcon from '../assets/info.svg';
+import CollapseSection from '../assets/sequence-legend/collapse-section.svg';
+import ExpandSection from '../assets/sequence-legend/expand-section.svg';
+import FromArrow from '../assets/sequence-legend/from-arrow.svg';
+import ReturnArrow from '../assets/sequence-legend/return-arrow.svg';
+import LoopBox from '../assets/sequence-legend/loop-box.svg';
+import ActiveLifeline from '../assets/sequence-legend/active-lifeline.svg';
+import Lifeline from '../assets/sequence-legend/lifeline.svg';
+import XIcon from '@/assets/x-icon.svg';
 
 export default {
   name: 'v-instructions',
   components: {
     CloseIcon,
     InfoIcon,
+    CollapseSection,
+    ExpandSection,
+    FromArrow,
+    ReturnArrow,
+    LoopBox,
+    XIcon,
+    Lifeline,
+    ActiveLifeline,
+  },
+
+  props: {
+    currentView: String,
   },
 
   data() {
     return {
       isOpen: false,
     };
+  },
+
+  computed: {
+    isViewingDependency() {
+      return this.currentView === VIEW_COMPONENT;
+    },
+    isViewingSequence() {
+      return this.currentView === VIEW_SEQUENCE;
+    },
+    isViewingTrace() {
+      return this.currentView === VIEW_FLOW;
+    },
   },
 
   methods: {
@@ -150,9 +206,9 @@ export default {
     right: 0;
     bottom: 100%;
     margin: 0 0.75rem 1rem 0;
-    width: max-content;
+    min-width: 30vw;
     height: max-content;
-    max-width: 50vw;
+    max-width: 40vw;
     max-height: 80vh;
     padding: 1.5rem;
     color: $gray6;
@@ -184,25 +240,29 @@ export default {
   }
 }
 ul {
-  padding-left: 1rem;
+  padding-left: 1.2rem;
   word-break: break-word;
-  list-style-type: '\002D';
-  list-style-position: inside;
   li {
     margin: 0.3rem 0;
   }
 }
 ul.feature-list {
-  border-bottom: 1px solid $gray2;
-  padding-left: 0;
+  border-bottom: 1px solid $gray4;
+  padding-left: 1rem;
   padding-bottom: 1rem;
   line-height: 1.3rem;
+  svg {
+    margin: 0 0.2rem;
+  }
+  .icons {
+    margin: 0 0.25rem;
+  }
 }
 
 .instructions-wrap {
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   column-gap: 2rem;
   overflow: auto;
   .legend {
@@ -212,29 +272,32 @@ ul.feature-list {
     word-break: break-word;
     h5 {
       margin: 0 0 0.4rem 0;
-      color: $gray2;
+      color: $gray4;
       font-size: 1rem;
       font-weight: 400;
     }
     li {
       display: flex;
       flex-direction: row;
+      align-items: center;
       margin: 0.5rem 0;
       line-height: 2rem;
+      gap: 0.5rem;
+      font-size: 0.85rem;
       p {
         flex: 1;
         margin: 0;
         line-height: 1.5rem;
       }
-      align-items: flex-start;
     }
   }
 
   .dependency-map,
-  .trace {
+  .trace,
+  .sequence {
     padding: 1rem;
     border-radius: $border-radius-big;
-    border: 1px solid $gray2;
+    border: 1px solid $gray4;
     width: 100%;
     font-size: 0.9rem;
     h4 {
