@@ -18,12 +18,10 @@ context('AppMap component diagram', () => {
       cy.get(`.nodes .node[data-type="http"]`).should('not.have.class', 'highlight');
     });
 
-    xit('expands package when a child is selected from the sidebar', () => {
+    it('expands package when a child is selected from the sidebar', () => {
       cy.get('.node[data-id="app/helpers"]').click();
 
-      cy.get('.v-details-panel-list').within(() => {
-        cy.get('.list-item').first().click();
-      });
+      cy.get('.list-item').first().click();
 
       cy.get('.cluster[data-id="app/helpers"]').should('have.length', 1);
     });
