@@ -117,29 +117,23 @@
             v-if="appMapUploadable"
             class="hover-text-popper"
             text="Create a link to this AppMap"
-            placement="bottom"
-            text-align="right"
+            placement="left"
+            text-align="left"
           >
-            <button class="control-button appmap-upload" @click="uploadAppmap" title="">
+            <button class="control-button" data-cy="share-button" @click="uploadAppmap" title="">
               <UploadIcon class="control-button__icon" />
-              <span>Share</span>
             </button>
           </v-popper>
           <v-popper
             v-if="showDownload"
             class="hover-text-popper"
             text="Export in SVG format"
-            placement="bottom"
-            text-align="right"
+            placement="left"
+            text-align="left"
           >
             <v-download-sequence-diagram ref="export">
-              <button
-                class="control-button appmap-upload"
-                @click="$refs.export.download()"
-                title=""
-              >
+              <button class="control-button" @click="$refs.export.download()" title="">
                 <ExportIcon class="control-button__icon" />
-                <span>Export</span>
               </button>
             </v-download-sequence-diagram>
           </v-popper>
@@ -1340,20 +1334,6 @@ code {
 
       .hover-text-popper {
         display: inline-block;
-
-        .appmap-upload {
-          background-color: $dark-purple;
-          border-radius: 0.5rem;
-          color: $white;
-          padding: 0.25rem 0.65rem;
-          text-transform: uppercase;
-          flex-direction: row-reverse;
-          gap: 0.5rem;
-          span {
-            font-size: 0.85rem;
-            margin: auto;
-          }
-        }
       }
     }
 
@@ -1712,7 +1692,7 @@ code {
 }
 
 @media (max-width: 1250px) {
-  #app .main-column--right .hover-text-popper .appmap-upload {
+  #app .main-column--right .hover-text-popper {
     background-color: transparent;
     padding: 0;
     span {
