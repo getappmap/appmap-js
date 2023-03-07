@@ -28,15 +28,15 @@ export default class DiagramSpec {
       const [caller, callee] = actionActors(action);
 
       const incrementLifecycleDepth = (actor: Actor | undefined): void => {
-        if (!actor) throw Error;
+        if (!actor) throw Error();
         const depth = lifecycleDepth.get(actor.id) || 0;
         lifecycleDepth.set(actor.id, depth + 1);
       };
 
       const decrementLifecycleDepth = (actor: Actor | undefined): void => {
-        if (!actor) throw Error;
+        if (!actor) throw Error();
         const depth = lifecycleDepth.get(actor.id);
-        if (!depth) throw Error;
+        if (!depth) throw Error();
         lifecycleDepth.set(actor.id, depth - 1);
       };
 
