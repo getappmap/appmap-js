@@ -157,7 +157,7 @@ export const handler = async (argv: any) => {
     command?: string
   ): Promise<Set<string>> => {
     await mkdir(join(outputDir, revisionName), { recursive: true });
-    await mkdir(join(outputDir, revisionName, 'operations', 'sequence-diagrams'), {
+    await mkdir(join(outputDir, revisionName, 'operations'), {
       recursive: true,
     });
 

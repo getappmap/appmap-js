@@ -115,7 +115,8 @@ export class OperationReference {
   async finishIndexing() {
     if (!this.queue) return;
 
-    await this.queue.drain();
+    this.queue.length() === 0 || (await this.queue.drain());
+
     this.queue = undefined;
   }
 
