@@ -4,7 +4,7 @@ log:
 command: yarn exec jest --no-cache
 command-options:
   shell: false
-recorder: jest
+recorder: process
 serialization:
   impure-printing: false
   impure-constructor-naming: false
@@ -14,8 +14,25 @@ serialization:
 exclude:
   - \[anonymous\]
 packages:
+  - regexp: /ruleChecker\.js$
+    enabled: true
+    exclude:
+      - adopt
+      - checkEvent
   - regexp: (^|/)node_modules/
     enabled: false
+  - regexp: /util\.js$
+    enabled: false
+  - regexp: /checkInstance\.js$
+    enabled: false
+  - regexp: commandScope\.js$
+    enabled: false
+  - regexp: check\.js$
+    enabled: false
+  # - regexp: rpcWithoutCircuitBreaker\.js$
+  #   enabled: false
+  # - regexp: rpcWithoutProtection\.js$
+  #   enabled: false
   - regexp: ^../
     enabled: false
   - regexp: ^
