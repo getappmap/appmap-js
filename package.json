@@ -11,6 +11,7 @@
     "packages/*"
   ],
   "scripts": {
+    "appmap": "yarn exec appmap-agent-js",
     "lint": "yarn workspaces foreach --exclude root -v run lint",
     "test": "yarn workspaces foreach --exclude '{root}' -v run test",
     "build": "yarn workspaces foreach -t --exclude root -v run build",
@@ -46,5 +47,8 @@
     "semantic-release-monorepo": "^7.0.5",
     "yarn-changed-workspaces": "^2.0.9"
   },
-  "packageManager": "yarn@3.2.1"
+  "packageManager": "yarn@3.2.1",
+  "dependencies": {
+    "@appland/appmap-agent-js": "https://github.com/getappmap/appmap-agent-js#8b8a70c08466f08e243e0524588d5da0daf43480"
+  }
 }
