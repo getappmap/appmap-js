@@ -1,3 +1,15 @@
+# [@appland/components-v2.32.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.32.0...@appland/components-v2.32.1) (2023-03-10)
+
+
+### Bug Fixes
+
+* remove assert and util from vue code ([0af4d95](https://github.com/getappmap/appmap-js/commit/0af4d9508bc6328f357182ece4176850d9df38a4))
+
+
+### Reverts
+
+* Revert "test: fix broken sequence diagram test" ([c916654](https://github.com/getappmap/appmap-js/commit/c916654757df982f0dbb6d8f2520bf85df6f4358))
+
 # [@appland/components-v2.32.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.31.1...@appland/components-v2.32.0) (2023-03-07)
 
 
