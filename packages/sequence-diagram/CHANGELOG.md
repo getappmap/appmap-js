@@ -1,3 +1,10 @@
+# [@appland/sequence-diagram-v1.4.2](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.4.1...@appland/sequence-diagram-v1.4.2) (2023-03-10)
+
+
+### Bug Fixes
+
+* remove assert and util from vue code ([0af4d95](https://github.com/getappmap/appmap-js/commit/0af4d9508bc6328f357182ece4176850d9df38a4))
+
 # [@appland/sequence-diagram-v1.4.1](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.4.0...@appland/sequence-diagram-v1.4.1) (2023-02-25)
 
 
