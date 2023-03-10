@@ -36,3 +36,6 @@ pnpm-debug.log*
 .pnp.*
 
 release
+
+# Dog Food
+*.appmap.json

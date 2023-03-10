@@ -1,0 +1,96 @@
+log:
+  level: info
+# Do not use node async_hooks to order callbacks.
+# This has a big performance hit.
+ordering: chronological
+# Only use safe serialization methods.
+# For instance `object.toString()` can trigger arbritary code.
+# In particular, it can cause infinite recursion.
+serialization:
+  impure-printing: false
+  impure-constructor-naming: false
+  impure-array-inspection: false
+  impure-error-inspection: false
+  impure-hash-inspection: false
+# Exclude anonymous functions everywhere
+exclude:
+  - \[anonymous\]
+packages:
+  # Exclude package files
+  - regexp: (^|/)node_modules/
+    enabled: false
+  # Exclude external files
+  - regexp: ^../
+    enabled: false
+  # Include the rest by default
+  - regexp: ^
+    enabled: true
+# By default run all scenarios.
+# To run only one scenario:
+# yarn exec appmap-agent-js --scenario jest-models
+scenario: ^
+scenarios:
+  cli:
+    appmap_dir: packages/cli/tmp
+    command: yarn exec jest --no-cache
+    command-options:
+      cwd: packages/cli
+  # TODO
+  # client:
+  #   appmap_dir: packages/client/tmp
+  #   command: yarn exec jest --no-cache
+  #   command-options:
+  #     cwd: packages/client
+  # components: Let's not map components atm because it uses cypress
+  diagrams:
+    appmap_dir: packages/diagrams/tmp
+    command: yarn exec jest --no-cache
+    command-options:
+      cwd: packages/diagrams
+      env:
+        NODE_OPTIONS: --experimental-vm-modules
+  models:
+    appmap_dir: packages/models/tmp
+    command: yarn exec jest --no-cache
+    command-options:
+      cwd: packages/models
+    # These methods are recorded too many times during testing.
+    # They cause memory overflow on my machine.
+    packages:
+      - path: packages/models/src/util.js
+        enabled: true
+        exclude:
+          - isEmpty
+          - addHiddenProperty
+      - path: packages/models/src/event.js
+        enabled: true
+        exclude:
+          - isCall
+          - isReturn
+          - callEvent
+          - returnEvent
+  openapi:
+    appmap_dir: packages/openapi/tmp
+    command: yarn exec jest --no-cache
+    command-options:
+      cwd: packages/openapi
+  scanner:
+    appmap_dir: packages/scanner/tmp
+    command: yarn exec jest --no-cache
+    command-options:
+      cwd: packages/scanner
+  sequence-diagram:
+    appmap_dir: packages/sequence-diagram/tmp
+    command: yarn exec jest --no-cache
+    command-options:
+      cwd: packages/sequence-diagram
+  telemetry:
+    appmap_dir: packages/telemetry/tmp
+    command: yarn exec jest --no-cache
+    command-options:
+      cwd: packages/telemetry
+  validate:
+    appmap_dir: packages/validate/tmp
+    command: node test/smoke.js
+    command-options:
+      cwd: packages/validate
