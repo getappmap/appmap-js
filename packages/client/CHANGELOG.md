@@ -1,3 +1,10 @@
+# [@appland/client-v1.7.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.6.0...@appland/client-v1.7.0) (2023-03-10)
+
+
+### Features
+
+* Add subscription models and API ([c09292d](https://github.com/getappmap/appmap-js/commit/c09292d6c1370986fd6a3e4f619f9fa6299cb842))
+
 # [@appland/client-v1.6.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.5.0...@appland/client-v1.6.0) (2023-01-21)
 
 
