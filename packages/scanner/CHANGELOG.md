@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.76.8](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.76.7...@appland/scanner-v1.76.8) (2023-03-10)
+
+
+### Bug Fixes
+
+* Update latest ARM release ([4e29c9a](https://github.com/getappmap/appmap-js/commit/4e29c9a392c7fcdd391efd96509539d0afd00e03))
+
 # [@appland/scanner-v1.76.7](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.76.6...@appland/scanner-v1.76.7) (2023-03-02)
 
 
