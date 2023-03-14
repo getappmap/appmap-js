@@ -4,11 +4,7 @@
     <div class="offset">
       <div class="on-top">
         <div class="sequence-actor" :data-actor-id="actor.id">
-          <div
-            ref="label_container"
-            :class="labelClasses"
-            @click="selectCodeObject"
-          >
+          <div ref="label_container" :class="labelClasses" @click="selectCodeObject">
             <span class="label"> {{ actor.name }} </span>
             <template v-if="interactive">
               <span class="hide-container" @click.stop="hideCodeObject">
