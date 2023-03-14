@@ -299,7 +299,8 @@ declare module '@appland/models' {
     git?: Metadata.Git;
     language?: Metadata.Language;
     recorder: Metadata.Recorder;
-    testStatus?: 'succeeded' | 'failed';
+    test_status?: 'succeeded' | 'failed';
+    source_location?: string;
     exception: Metadata.Exception;
   }
 

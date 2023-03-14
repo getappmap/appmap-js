@@ -36,7 +36,10 @@ export default function flattenMetadata(metadata: Metadata): Map<string, string>
     if (metadata.recorder.type) result.set('recorder.type', metadata.recorder.type);
   }
 
-  if (metadata.testStatus) result.set('testStatus', metadata.testStatus);
+  if (metadata.test_status) result.set('test_status', metadata.test_status);
+  // KEG For backwards compatibility, but I don't see how testStatus could be non-blank
+  // since the appmap spec says it's called test_status.
+  if ((metadata as any).testStatus) result.set('test_status', (metadata as any).testStatus);
 
   return result;
 }

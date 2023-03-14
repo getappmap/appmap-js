@@ -1,28 +1,42 @@
 import buildAppMap from '../../src/appMapBuilder';
-import scenario from '../../../components/tests/unit/fixtures/large_scenario.json';
+import LargeAppMapData from '../../../components/tests/unit/fixtures/large_scenario.json';
+import TestStatusFailedAppMapData from './fixtures/Hello_failed_failed.appmap.json';
+
+const LargeAppMap = buildAppMap().source(LargeAppMapData).normalize().build();
+const TestStatusFailedAppMap = buildAppMap().source(TestStatusFailedAppMapData).normalize().build();
 
 describe('AppMap', () => {
-  const appMap = buildAppMap().source(scenario).normalize().build();
-
   test('version', () => {
-    expect(appMap.version).toEqual('1.2');
+    expect(LargeAppMap.version).toEqual('1.2');
   });
 
-  test('metadata', () => {
-    expect(appMap.metadata.language.name).toEqual('java');
+  // https://github.com/getappmap/appmap#metadata
+  // Expect language.name, test_status, source_location
+  describe('metadata', () => {
+    test('language.name is available', () => {
+      expect(LargeAppMap.metadata.language.name).toEqual('java');
+    });
+    test('test_status is available', () => {
+      expect(TestStatusFailedAppMap.metadata.test_status).toEqual('failed');
+    });
+    test('source_location is available', () => {
+      expect(TestStatusFailedAppMap.metadata.source_location).toEqual(
+        'test/hello_failed_test.rb:9'
+      );
+    });
   });
 
   test('name', () => {
-    expect(appMap.name).toEqual('Curator master elect single master');
+    expect(LargeAppMap.name).toEqual('Curator master elect single master');
   });
 
   test('event tree', () => {
-    expect(appMap.rootEvent.count()).toEqual(409);
+    expect(LargeAppMap.rootEvent.count()).toEqual(409);
   });
 
   describe('serialization', () => {
     it('can be stringified', () => {
-      expect(() => JSON.stringify(appMap)).not.toThrow();
+      expect(() => JSON.stringify(LargeAppMap)).not.toThrow();
     });
 
     it('outputs the expected JSON for http_server_response', () => {
@@ -160,8 +174,8 @@ describe('AppMap', () => {
   });
 
   test('getEvent', () => {
-    for (let i = 0; i < appMap.events.length; i += 1) {
-      expect(appMap.getEvent(i + 1)).toEqual(appMap.events[i]);
+    for (let i = 0; i < LargeAppMap.events.length; i += 1) {
+      expect(LargeAppMap.getEvent(i + 1)).toEqual(LargeAppMap.events[i]);
     }
   });
 });
