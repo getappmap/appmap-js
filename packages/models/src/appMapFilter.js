@@ -273,6 +273,11 @@ export default class AppMapFilter {
       ]);
       return Array.from(object.labels).some((label) => pattern.test(label));
     }
+    if (query.length > 2 && query.charAt(0) === '/' && query.charAt(query.length - 1) === '/') {
+      const pattern = filterRegExp(query, () => [query.substring(1, query.length - 1), 'ig']);
+      if (pattern.test(object.fqid)) {
+        return true;
+      }
     }
     if (query.includes('*')) {
       const pattern = filterRegExp(query, () => [`^${query.replace('*', '.*')}$`, 'ig']);
