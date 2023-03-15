@@ -1,42 +1,52 @@
 <template>
-  <div class="sequence-diagram" id="sequence-diagram-ui">
-    <template v-for="(actor, index) in actors">
-      <VActor
-        :actor="actor"
-        :key="actorKey(actor)"
-        :row="1"
-        :index="index"
-        :height="diagramSpec.actions.length"
-        :selected-actor="selectedActor"
-        :appMap="appMap"
-      />
+  <!-- Workaround for: Cannot use <template> as component root element because it may contain multiple nodes. -->
+  <div>
+    <template v-if="isLoading">
+      <div class="sequence-diagram-loading"></div>
     </template>
-    <template v-for="action in diagramSpec.actions">
-      <template v-if="action.nodeType === 'call'">
-        <VCallAction
-          :actionSpec="action"
-          :key="actionKey(action)"
-          :collapsed-actions="collapsedActions"
-          :selected-events="selectedEvents"
-          :focused-event="focusedEvent"
-          :appMap="appMap"
-        />
-      </template>
-      <template v-if="action.nodeType === 'return'">
-        <VReturnAction
-          :actionSpec="action"
-          :collapsed-actions="collapsedActions"
-          :key="actionKey(action)"
-        />
-      </template>
-    </template>
-    <template v-for="action in diagramSpec.actions">
-      <template v-if="action.nodeType === 'loop'"
-        ><VLoopAction
-          :actionSpec="action"
-          :collapsed-actions="collapsedActions"
-          :key="actionKey(action)"
-      /></template>
+    <template v-else>
+      <div class="sequence-diagram" id="sequence-diagram-ui">
+        <template v-for="(actor, index) in actors">
+          <VActor
+            :actor="actor"
+            :key="actorKey(actor)"
+            :row="1"
+            :index="index"
+            :height="diagramSpec.actions.length"
+            :interactive="interactive"
+            :selected-actor="selectedActor"
+            :appMap="appMap"
+          />
+        </template>
+        <template v-for="action in diagramSpec.actions">
+          <template v-if="action.nodeType === 'call'">
+            <VCallAction
+              :actionSpec="action"
+              :key="actionKey(action)"
+              :interactive="interactive"
+              :collapsed-actions="collapsedActions"
+              :selected-events="selectedEvents"
+              :focused-event="focusedEvent"
+              :appMap="appMap"
+            />
+          </template>
+          <template v-if="action.nodeType === 'return'">
+            <VReturnAction
+              :actionSpec="action"
+              :collapsed-actions="collapsedActions"
+              :key="actionKey(action)"
+            />
+          </template>
+        </template>
+        <template v-for="action in diagramSpec.actions">
+          <template v-if="action.nodeType === 'loop'"
+            ><VLoopAction
+              :actionSpec="action"
+              :collapsed-actions="collapsedActions"
+              :key="actionKey(action)"
+          /></template>
+        </template>
+      </div>
     </template>
   </div>
 </template>
@@ -61,19 +71,34 @@ export default {
     appMap: {
       type: Object,
     },
-    serializedDiagram: {
-      type: Object,
-    },
     focusedEvent: {
       type: Object,
       default: null,
+    },
+    interactive: {
+      type: Boolean,
+      default: true,
     },
     selectedEvents: {
       type: Array,
     },
   },
 
+  data() {
+    return {
+      serializedDiagram: undefined,
+    }
+  },
+
   computed: {
+    styles() {
+      if (this.isLoading) return 'display: none;';
+
+      return '';
+    },
+    isLoading() {
+      return this.diagram === undefined;
+    },
     diagram() {
       let result: Diagram | undefined;
       if (this.serializedDiagram) {
@@ -83,7 +108,6 @@ export default {
         const specification = Specification.build(appMapObj, { loops: true });
         result = buildDiagram('<an AppMap file>', appMapObj, specification);
       }
-      if (!result) throw Error();
       return result;
     },
     diagramSpec(): DiagramSpec {
@@ -111,6 +135,9 @@ export default {
   },
 
   methods: {
+    loadData(data) {
+      this.serializedDiagram = data;
+    },
     actorKey(actor: Actor): string {
       return ['actor', this.diagramSpec.uniqueId, actor.id].join(':');
     },
@@ -132,6 +159,8 @@ export default {
     },
     focusHighlighted() {
       setTimeout(() => {
+        if (!this.$el || !this.$el.querySelector) return;
+
         const selected = this.$el.querySelector('.selected');
         if (selected && selected.firstElementChild) {
           selected.firstElementChild.scrollIntoView({
