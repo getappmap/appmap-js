@@ -35,9 +35,41 @@ class DeclutterNamesProperty extends DeclutterProperty {
 class Declutter {
   limitRootEvents = new DeclutterProperty();
   hideMediaRequests = new DeclutterProperty();
+  hideExternalPaths = new DeclutterProperty(false, false);
   hideUnlabeled = new DeclutterProperty(false, false);
   hideElapsedTimeUnder = new DeclutterTimeProperty(false, false, 100);
   hideName = new DeclutterNamesProperty(false, false, []);
+}
+
+const FilterRegExps = {};
+function filterRegExp(filterExpression, regexpConstructorArgs) {
+  if (!FilterRegExps[filterExpression])
+    FilterRegExps[filterExpression] = new RegExp(...regexpConstructorArgs());
+
+  return FilterRegExps[filterExpression];
+}
+
+function isAbsolute(path) {
+  if (!path) return false;
+
+  if (path.length === 0) return false;
+
+  if (['/', '\\'].includes(path.charAt(0))) return true;
+
+  if (/^[a-zA-Z]:[\\/]/.test(path)) return true;
+
+  return false;
+}
+
+export function isLocalPath(location) {
+  if (!location) return { isLocal: false };
+
+  if (!location.includes(':')) return { isLocal: false };
+
+  const path = location.split(':')[0];
+  if (path.match(/\.\w+$/) && !isAbsolute(path)) return { isLocal: true, path };
+
+  return { isLocal: false };
 }
 
 export default class AppMapFilter {
@@ -89,6 +121,10 @@ export default class AppMapFilter {
 
     if (this.declutter.hideUnlabeled.on) {
       events = events.filter((e) => e.labels.size > 0 || e.codeObject.type !== 'function');
+    }
+
+    if (this.declutter.hideExternalPaths.on) {
+      events = events.filter((e) => isLocalPath(e.codeObject.location).isLocal);
     }
 
     if (this.declutter.hideElapsedTimeUnder.on && this.declutter.hideElapsedTimeUnder.time > 0) {
@@ -231,12 +267,21 @@ export default class AppMapFilter {
    */
   static codeObjectIsMatched(object, query) {
     if (query.startsWith('label:')) {
-      const labelRegExp = new RegExp(`^${query.replace('label:', '').replace('*', '.*')}$`, 'ig');
-      return Array.from(object.labels).some((label) => labelRegExp.test(label));
+      const pattern = filterRegExp(query, () => [
+        `^${query.replace('label:', '').replace('*', '.*')}$`,
+        'ig',
+      ]);
+      return Array.from(object.labels).some((label) => pattern.test(label));
+    }
+    if (query.length > 2 && query.charAt(0) === '/' && query.charAt(query.length - 1) === '/') {
+      const pattern = filterRegExp(query, () => [query.substring(1, query.length - 1), 'ig']);
+      if (pattern.test(object.fqid)) {
+        return true;
+      }
     }
     if (query.includes('*')) {
-      const filterRegExp = new RegExp(`^${query.replace('*', '.*')}$`, 'ig');
-      if (filterRegExp.test(object.fqid)) {
+      const pattern = filterRegExp(query, () => [`^${query.replace('*', '.*')}$`, 'ig']);
+      if (pattern.test(object.fqid)) {
         return true;
       }
     } else if (query === object.fqid) {

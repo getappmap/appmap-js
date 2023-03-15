@@ -942,6 +942,9 @@ export default {
           if ('hideUnlabeled' in filters) {
             this.filters.declutter.hideUnlabeled.on = filters.hideUnlabeled;
           }
+          if ('hideExternalPaths' in filters) {
+            this.filters.declutter.hideExternalPaths.on = filters.hideExternalPaths;
+          }
           if ('hideElapsedTimeUnder' in filters && filters.hideElapsedTimeUnder !== false) {
             this.filters.declutter.hideElapsedTimeUnder.on = true;
             this.filters.declutter.hideElapsedTimeUnder.time = filters.hideElapsedTimeUnder;
