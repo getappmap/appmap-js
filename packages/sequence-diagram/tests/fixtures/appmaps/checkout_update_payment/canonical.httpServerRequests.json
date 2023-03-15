@@ -1,7 +1,0 @@
-[
-  {
-    "route": "PATCH /checkout/update/{state}",
-    "parameters": "(_method,authenticity_token,order,payment_source,controller,action,state)",
-    "status": 302
-  }
-]
