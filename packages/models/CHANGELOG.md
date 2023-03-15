@@ -1,3 +1,10 @@
+# [@appland/models-v2.2.1](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.2.0...@appland/models-v2.2.1) (2023-03-15)
+
+
+### Bug Fixes
+
+* Add metadata.test_status and .location ([69d1a39](https://github.com/getappmap/appmap-js/commit/69d1a394186a261e0fbd64ce107a31366efab132))
+
 # [@appland/models-v2.2.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.1.0...@appland/models-v2.2.0) (2023-02-24)
 
 
