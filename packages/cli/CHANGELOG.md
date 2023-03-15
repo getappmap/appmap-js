@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.67.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.67.1...@appland/appmap-v3.67.2) (2023-03-15)
+
+
+### Bug Fixes
+
+* Add metadata.test_status and .location ([69d1a39](https://github.com/getappmap/appmap-js/commit/69d1a394186a261e0fbd64ce107a31366efab132))
+
 # [@appland/appmap-v3.67.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.67.0...@appland/appmap-v3.67.1) (2023-03-02)
 
 
