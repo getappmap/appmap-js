@@ -1,0 +1,256 @@
+{
+  "events": [
+    {
+      "defined_class": "org.springframework.ExampleClass",
+      "event": "call",
+      "id": 1,
+      "lineno": 7,
+      "method_id": "exampleMethod",
+      "path": "org/springframework/ExampleClass.java",
+      "receiver": {
+        "class": "org.springframework.ExampleClass",
+        "object_id": 2083776473,
+        "value": "org.springframework.ExampleClass@7c33e7d9"
+      },
+      "static": false,
+      "thread_id": 1
+    },
+    {
+      "defined_class": "org.springframework.samples.petclinic.vet.VetTests",
+      "event": "call",
+      "id": 2,
+      "lineno": 30,
+      "method_id": "testSerialization",
+      "path": "org/springframework/samples/petclinic/vet/VetTests.java",
+      "receiver": {
+        "class": "org.springframework.samples.petclinic.vet.VetTests",
+        "object_id": 2083776473,
+        "value": "org.springframework.samples.petclinic.vet.VetTests@7c33e7d9"
+      },
+      "static": false,
+      "thread_id": 1
+    },
+    {
+      "defined_class": "org.springframework.samples.petclinic.model.Person",
+      "event": "call",
+      "id": 3,
+      "lineno": 43,
+      "method_id": "setFirstName",
+      "parameters": [
+        {
+          "class": "java.lang.String",
+          "kind": "req",
+          "name": "firstName",
+          "object_id": 1411109946,
+          "value": "Zaphod"
+        }
+      ],
+      "path": "org/springframework/samples/petclinic/model/Person.java",
+      "receiver": {
+        "class": "org.springframework.samples.petclinic.vet.Vet",
+        "object_id": 448807862,
+        "value": "org.springframework.samples.petclinic.vet.Vet@1ac043b6"
+      },
+      "static": false,
+      "thread_id": 1
+    },
+    {
+      "elapsed": 0.0000117,
+      "event": "return",
+      "id": 4,
+      "parent_id": 3,
+      "thread_id": 1
+    },
+    {
+      "defined_class": "org.springframework.samples.petclinic.model.Person",
+      "event": "call",
+      "id": 5,
+      "lineno": 51,
+      "method_id": "setLastName",
+      "parameters": [
+        {
+          "class": "java.lang.String",
+          "kind": "req",
+          "name": "lastName",
+          "object_id": 2055096704,
+          "value": "Beeblebrox"
+        }
+      ],
+      "path": "org/springframework/samples/petclinic/model/Person.java",
+      "receiver": {
+        "class": "org.springframework.samples.petclinic.vet.Vet",
+        "object_id": 448807862,
+        "value": "org.springframework.samples.petclinic.vet.Vet@1ac043b6"
+      },
+      "static": false,
+      "thread_id": 1
+    },
+    {
+      "elapsed": 0.0000022,
+      "event": "return",
+      "id": 6,
+      "parent_id": 5,
+      "thread_id": 1
+    },
+    {
+      "defined_class": "org.springframework.samples.petclinic.model.BaseEntity",
+      "event": "call",
+      "id": 7,
+      "lineno": 44,
+      "method_id": "setId",
+      "parameters": [
+        {
+          "class": "java.lang.Integer",
+          "kind": "req",
+          "name": "id",
+          "object_id": 420504633,
+          "value": "123"
+        }
+      ],
+      "path": "org/springframework/samples/petclinic/model/BaseEntity.java",
+      "receiver": {
+        "class": "org.springframework.samples.petclinic.vet.Vet",
+        "object_id": 448807862,
+        "value": "org.springframework.samples.petclinic.vet.Vet@1ac043b6"
+      },
+      "static": false,
+      "thread_id": 1
+    },
+    {
+      "elapsed": 0.0000013,
+      "event": "return",
+      "id": 8,
+      "parent_id": 7,
+      "thread_id": 1
+    },
+    {
+      "elapsed": 0.0018295,
+      "event": "return",
+      "id": 9,
+      "parent_id": 2,
+      "thread_id": 1
+    },
+    {
+      "event": "return",
+      "thread_id": 1,
+      "parent_id": 1
+    }
+  ],
+  "version": "1.2",
+  "metadata": {
+    "name": "Vets test serialization",
+    "app": "spring-petclinic",
+    "language": {
+      "name": "java",
+      "version": "11.0.18+10",
+      "engine": "OpenJDK 64-Bit Server VM"
+    },
+    "client": {
+      "name": "appmap-java",
+      "url": "https://github.com/appland/appmap-java"
+    },
+    "recorder": {
+      "name": "junit",
+      "type": "tests"
+    },
+    "recording": {
+      "defined_class": "org.springframework.samples.petclinic.vet.VetTests",
+      "method_id": "testSerialization"
+    },
+    "source_location": "org/springframework/samples/petclinic/vet/VetTests.java:30",
+    "framework": {},
+    "test_status": "succeeded"
+  },
+  "classMap": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "name": "ExampleClass",
+              "type": "class",
+              "children": [
+                {
+                  "name": "exampleMethod",
+                  "type": "function",
+                  "static": false,
+                  "location": "org/springframework/ExampleClass.java:7"
+                }
+              ]
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "name": "setFirstName",
+                              "type": "function",
+                              "static": false,
+                              "location": "org/springframework/samples/petclinic/model/Person.java:43"
+                            },
+                            {
+                              "name": "setLastName",
+                              "type": "function",
+                              "static": false,
+                              "location": "org/springframework/samples/petclinic/model/Person.java:51"
+                            }
+                          ],
+                          "name": "Person",
+                          "type": "class"
+                        },
+                        {
+                          "children": [
+                            {
+                              "name": "setId",
+                              "type": "function",
+                              "static": false,
+                              "location": "org/springframework/samples/petclinic/model/BaseEntity.java:44"
+                            }
+                          ],
+                          "name": "BaseEntity",
+                          "type": "class"
+                        }
+                      ],
+                      "name": "model",
+                      "type": "package"
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "name": "testSerialization",
+                              "type": "function",
+                              "static": false,
+                              "location": "org/springframework/samples/petclinic/vet/VetTests.java:30"
+                            }
+                          ],
+                          "name": "VetTests",
+                          "type": "class"
+                        }
+                      ],
+                      "name": "vet",
+                      "type": "package"
+                    }
+                  ],
+                  "name": "petclinic",
+                  "type": "package"
+                }
+              ],
+              "name": "samples",
+              "type": "package"
+            }
+          ],
+          "name": "springframework",
+          "type": "package"
+        }
+      ],
+      "name": "org",
+      "type": "package"
+    }
+  ]
+}

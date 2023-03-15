@@ -1,6 +1,6 @@
 import { CodeObject } from './types';
 import Priority from './priority';
-import { AppMap, CodeObject as AppMapCodeObject } from '@appland/models';
+import { AppMap, CodeObject as AppMapCodeObject, CodeObjectType } from '@appland/models';
 
 export type CodeObjectId = string;
 
@@ -23,6 +23,12 @@ export interface SequenceDiagramOptions {
 
 export default class Specification {
   public loops = true;
+  private static readonly DefaultActorTypes: ReadonlyArray<CodeObjectType> = [
+    'package',
+    'database',
+    'http',
+    'external-service',
+  ];
 
   constructor(
     private priority: Priority,
@@ -57,23 +63,20 @@ export default class Specification {
       return co.children.some((child) => child.type !== 'package');
     };
 
-    const includeCodeObjects = (co: AppMapCodeObject, ancestors: string[]): void => {
+    const includeCodeObjects = (co: AppMapCodeObject): void => {
+      if (!this.DefaultActorTypes.includes(co.type)) return;
       if (excludeSet.has(co.fqid)) return;
 
       if (co.parent && expandSet.has(co.parent.fqid)) {
         includedCodeObjectIds.add(co.fqid);
       } else if (!expandSet.has(co.fqid) && hasNonPackageChildren(co)) {
         includedCodeObjectIds.add(co.fqid);
-      } else {
-        ancestors.push(co.fqid);
-        co.children.forEach((child) => includeCodeObjects(child, ancestors));
-        ancestors.pop();
       }
+
+      co.children.forEach((child) => includeCodeObjects(child));
     };
 
-    (appmap.classMap as any).roots.forEach((root: AppMapCodeObject) =>
-      includeCodeObjects(root, [])
-    );
+    (appmap.classMap as any).roots.forEach((root: AppMapCodeObject) => includeCodeObjects(root));
 
     const requiredCodeObjectIds = new Set<string>(options.require || []);
     for (const coid of requiredCodeObjectIds) {

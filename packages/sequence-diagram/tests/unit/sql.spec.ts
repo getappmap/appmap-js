@@ -32,7 +32,7 @@ describe('Sequence diagram', () => {
     });
     it('sorts to the right side of the diagram', () => {
       const database = findActor(diagram, 'database:Database');
-      assert.strictEqual(database.order, 21000);
+      assert.strictEqual(database.order, 22000);
     });
   });
 });
