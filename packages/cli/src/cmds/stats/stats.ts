@@ -2,24 +2,25 @@ import yargs from 'yargs';
 import { statsForDirectory } from './directory/statsForDirectory';
 
 export const command = 'stats [directory]';
-export const describe = 'Show some statistics about events in scenarios read from AppMap files';
+export const describe =
+  'Show statistics about events from an AppMap or from all AppMaps in a directory';
 const LIMIT_DEFAULT = 10;
 
 export const builder = (args: yargs.Argv) => {
   args.option('directory', {
-    describe: 'Working directory for the command.',
+    describe: 'Directory to analyze',
     type: 'string',
     alias: 'd',
   });
 
   args.option('json', {
-    describe: 'Format results as JSON.',
+    describe: 'Format results as JSON',
     type: 'boolean',
     alias: 'j',
   });
 
   args.option('limit', {
-    describe: 'limit the number of methods displayed (default ' + LIMIT_DEFAULT + ').',
+    describe: 'Number of methods to display',
     type: 'number',
     alias: 'l',
     default: LIMIT_DEFAULT,
