@@ -69,10 +69,11 @@ export default {
   },
 
   computed: {
-    classes(): string[] {
-      const result = ['label'];
-      if (this.interactive) result.push('interactive');
-      return result;
+    classes(): { [key: string]: boolean } {
+      return {
+        label: true,
+        interactive: this.interactive,
+      };
     },
     collapseEnabled(): boolean {
       if (!this.interactive) return false;
