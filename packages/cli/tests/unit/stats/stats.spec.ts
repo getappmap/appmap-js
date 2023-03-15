@@ -35,8 +35,8 @@ describe('stats subcommand', () => {
     let argv = {
       _: ['stats'],
       $0: 'src/cli.ts',
-      map: mapPath,
-      m: mapPath,
+      ['appmap-file']: mapPath,
+      f: mapPath,
       limit: 10,
       l: 10,
     };

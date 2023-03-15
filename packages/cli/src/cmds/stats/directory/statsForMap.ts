@@ -85,7 +85,7 @@ async function accumulateEvents(mapPath: string): Promise<Array<EventInfo>> {
 }
 
 export async function statsForMap(argv: any): Promise<Array<EventInfo>> {
-  const eventsStats = (await accumulateEvents(argv.map)).slice(0, argv.limit);
+  const eventsStats = (await accumulateEvents(argv.f)).slice(0, argv.limit);
 
   if (argv.json) {
     console.log(JSON.stringify(eventsStats, null, 2));

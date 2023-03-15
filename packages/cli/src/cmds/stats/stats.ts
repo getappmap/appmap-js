@@ -29,10 +29,10 @@ export const builder = (args: yargs.Argv) => {
     default: LIMIT_DEFAULT,
   });
 
-  args.option('map', {
+  args.option('appmap-file', {
     describe: 'AppMap to analyze',
     type: 'string',
-    alias: 'm',
+    alias: 'f',
   });
 
   return args.strict();
@@ -42,7 +42,7 @@ export async function handler(
   argv: any,
   handlerCaller: string = 'from_stats'
 ): Promise<Array<EventInfo> | Promise<[SortedAppMapSize[], SlowestExecutionTime[]]>> {
-  if (argv.map) {
+  if (argv.f) {
     return await statsForMap(argv);
   }
   return await statsForDirectory(argv, handlerCaller);
