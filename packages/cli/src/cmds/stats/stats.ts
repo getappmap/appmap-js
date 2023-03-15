@@ -1,5 +1,6 @@
 import yargs from 'yargs';
 import { statsForDirectory } from './directory/statsForDirectory';
+import { statsForMap } from './directory/statsForMap';
 
 export const command = 'stats [directory]';
 export const describe =
@@ -26,11 +27,21 @@ export const builder = (args: yargs.Argv) => {
     default: LIMIT_DEFAULT,
   });
 
+  args.option('map', {
+    describe: 'AppMap to analyze',
+    type: 'string',
+    alias: 'm',
+  });
+
   return args.strict();
 };
 
 export async function handler(argv: any, handlerCaller: string = 'from_stats') {
-  await statsForDirectory(argv, handlerCaller);
+  if (argv.map) {
+    await statsForMap(argv);
+  } else {
+    await statsForDirectory(argv, handlerCaller);
+  }
 }
 
 export default {
