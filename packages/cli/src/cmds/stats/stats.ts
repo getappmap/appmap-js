@@ -1,6 +1,8 @@
 import yargs from 'yargs';
 import { statsForDirectory } from './directory/statsForDirectory';
-import { statsForMap } from './directory/statsForMap';
+import { EventInfo, statsForMap } from './directory/statsForMap';
+import { SortedAppMapSize } from './types/appMapSize';
+import { SlowestExecutionTime } from './types/functionExecutionTime';
 
 export const command = 'stats [directory]';
 export const describe =
@@ -36,12 +38,14 @@ export const builder = (args: yargs.Argv) => {
   return args.strict();
 };
 
-export async function handler(argv: any, handlerCaller: string = 'from_stats') {
+export async function handler(
+  argv: any,
+  handlerCaller: string = 'from_stats'
+): Promise<Array<EventInfo> | Promise<[SortedAppMapSize[], SlowestExecutionTime[]]>> {
   if (argv.map) {
-    await statsForMap(argv);
-  } else {
-    await statsForDirectory(argv, handlerCaller);
+    return await statsForMap(argv);
   }
+  return await statsForDirectory(argv, handlerCaller);
 }
 
 export default {

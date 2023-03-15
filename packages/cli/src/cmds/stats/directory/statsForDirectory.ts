@@ -15,7 +15,10 @@ export function sizeInMB(size: number): number {
   return Number((size / 1000 / 1000).toFixed(1));
 }
 
-export async function statsForDirectory(argv: any, handlerCaller: string = 'from_stats') {
+export async function statsForDirectory(
+  argv: any,
+  handlerCaller: string = 'from_stats'
+): Promise<[SortedAppMapSize[], SlowestExecutionTime[]]> {
   verbose(argv.verbose);
 
   const { directory, json, limit: limitToUse } = argv;

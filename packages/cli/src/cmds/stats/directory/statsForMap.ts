@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import { Event } from '@appland/models';
 import JSONStream from 'JSONStream';
 
-type EventInfo = {
+export type EventInfo = {
   id: string;
   method_id: string;
   defined_class: string;
@@ -84,20 +84,21 @@ async function accumulateEvents(mapPath: string): Promise<Array<EventInfo>> {
   });
 }
 
-export async function statsForMap(argv: any) {
+export async function statsForMap(argv: any): Promise<Array<EventInfo>> {
   const eventsStats = (await accumulateEvents(argv.map)).slice(0, argv.limit);
 
   if (argv.json) {
     console.log(JSON.stringify(eventsStats, null, 2));
-    return;
+  } else {
+    eventsStats.forEach((callData, index) => {
+      const { id, count, size } = callData;
+      console.log(
+        [`${index + 1}. ${id}`, `count: ${count}`, `estimated size: ${displaySize(size)}`, ''].join(
+          '\n      '
+        )
+      );
+    });
   }
 
-  eventsStats.forEach((callData, index) => {
-    const { id, count, size } = callData;
-    console.log(
-      [`${index + 1}. ${id}`, `count: ${count}`, `estimated size: ${displaySize(size)}`, ''].join(
-        '\n      '
-      )
-    );
-  });
+  return eventsStats;
 }
