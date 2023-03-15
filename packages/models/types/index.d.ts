@@ -360,6 +360,7 @@ declare module '@appland/models' {
       public limitRootEvents: DeclutterProperty;
       public hideMediaRequests: DeclutterProperty;
       public hideUnlabeled: DeclutterProperty;
+      public hideExternalPaths: DeclutterProperty;
       public hideElapsedTimeUnder: DeclutterTimeProperty;
       public hideName: DeclutterNamesProperty;
     }
