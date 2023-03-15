@@ -40,7 +40,7 @@ const renameFile = promisify(gracefulFs.rename);
  * * Fix handling of parent assignment in normalization.
  * * sql can contain the analysis (action, tables, columns), and/or the normalized query string.
  */
-const VERSION = '1.1.4';
+export const VERSION = '1.1.4';
 
 const MAX_APPMAP_SIZE = 50 * 1000 * 1000;
 

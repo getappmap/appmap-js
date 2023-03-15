@@ -22,6 +22,8 @@ import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { locateAppMapConfigFile } from '../lib/locateAppMapConfigFile';
 import Telemetry, { Git, GitState } from '../telemetry';
 import { findRepository } from '../lib/git';
+import { DefaultMaxAppMapSizeInMB, fileSizeFilter } from '../openapi/fileSizeFilter';
+import { OpenAPICommand } from '../openapi/OpenAPICommand';
 
 type FilterFunction = (file: string) => Promise<{ enable: boolean; message?: string }>;
 
