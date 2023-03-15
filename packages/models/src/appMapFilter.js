@@ -267,12 +267,16 @@ export default class AppMapFilter {
    */
   static codeObjectIsMatched(object, query) {
     if (query.startsWith('label:')) {
-      const labelRegExp = new RegExp(`^${query.replace('label:', '').replace('*', '.*')}$`, 'ig');
-      return Array.from(object.labels).some((label) => labelRegExp.test(label));
+      const pattern = filterRegExp(query, () => [
+        `^${query.replace('label:', '').replace('*', '.*')}$`,
+        'ig',
+      ]);
+      return Array.from(object.labels).some((label) => pattern.test(label));
+    }
     }
     if (query.includes('*')) {
-      const filterRegExp = new RegExp(`^${query.replace('*', '.*')}$`, 'ig');
-      if (filterRegExp.test(object.fqid)) {
+      const pattern = filterRegExp(query, () => [`^${query.replace('*', '.*')}$`, 'ig']);
+      if (pattern.test(object.fqid)) {
         return true;
       }
     } else if (query === object.fqid) {
