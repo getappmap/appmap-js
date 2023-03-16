@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.68.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.67.2...@appland/appmap-v3.68.0) (2023-03-16)
+
+
+### Features
+
+* Generate png of sequence diagram ([c7fc54b](https://github.com/getappmap/appmap-js/commit/c7fc54bd56b14db6e76749e9c46f810ada8001b9))
+
 # [@appland/appmap-v3.67.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.67.1...@appland/appmap-v3.67.2) (2023-03-15)
 
 
