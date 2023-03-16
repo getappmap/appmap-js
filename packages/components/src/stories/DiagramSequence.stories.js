@@ -21,34 +21,22 @@ export const AppLandApiKeyDiff = Template.bind({});
 AppLandApiKeyDiff.args = {
   serializedDiagram: appland_api_key_diff,
 };
-export const Empty = Template.bind({});
-
 export const CreateApiKey = Template.bind({});
 CreateApiKey.args = {
   serializedDiagram: create_api_key,
 };
-
 export const ListUsers = Template.bind({});
 ListUsers.args = {
   serializedDiagram: list_users,
 };
-
-export const NonInteractive = Template.bind({});
-NonInteractive.args = {
-  serializedDiagram: list_users,
-  interactive: false,
-};
-
 export const ListUsersPrefetch = Template.bind({});
 ListUsersPrefetch.args = {
   serializedDiagram: list_users_prefetch,
 };
-
 export const ShowUser = Template.bind({});
 ShowUser.args = {
   serializedDiagram: show_user,
 };
-
 export const UserNotFound = Template.bind({});
 UserNotFound.args = {
   serializedDiagram: user_not_found,
