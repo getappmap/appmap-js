@@ -25,7 +25,6 @@
           :action-spec="actionSpec"
           :collapsed-actions="collapsedActionState"
           :appMap="appMap"
-          :interactive="interactive"
         />
         <VSelfCallArrow :action-spec="actionSpec" />
       </div>
@@ -47,7 +46,6 @@
             :action-spec="actionSpec"
             :collapsed-actions="collapsedActionState"
             :appMap="appMap"
-            :interactive="interactive"
           />
           <Arrow class="arrow" />
         </div>
@@ -68,7 +66,6 @@
             :action-spec="actionSpec"
             :collapsed-actions="collapsedActionState"
             :appMap="appMap"
-            :interactive="interactive"
           />
         </div>
         <template v-if="actionSpec.calleeActionIndex - actionSpec.callerActionIndex > 2">
@@ -119,7 +116,6 @@
             :action-spec="actionSpec"
             :collapsed-actions="collapsedActionState"
             :appMap="appMap"
-            :interactive="interactive"
           />
           <Arrow class="arrow" />
         </div>
@@ -140,7 +136,6 @@
             :action-spec="actionSpec"
             :collapsed-actions="collapsedActionState"
             :appMap="appMap"
-            :interactive="interactive"
           />
           <Arrow class="arrow" />
         </div>
@@ -237,11 +232,6 @@ export default {
     focusedEvent: {
       type: Object,
       default: null,
-    },
-    interactive: {
-      type: Boolean,
-      required: true,
-      readonly: true,
     },
     selectedEvents: {
       type: Array,

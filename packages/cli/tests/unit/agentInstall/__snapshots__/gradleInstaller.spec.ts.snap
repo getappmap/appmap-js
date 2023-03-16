@@ -30,7 +30,7 @@ exports[`GradleInstaller installAgent transforms buildscript.gradle.kts as expec
 }
 
 plugins {
-    id("com.appland.appmap") version "1.1.0"
+    id(\\"com.appland.appmap\\") version \\"1.1.0\\"
 }
 
 repositories {
@@ -63,7 +63,7 @@ exports[`GradleInstaller installAgent transforms buildscript-plugins.gradle.kts 
 }
 
 plugins {
-  id("com.appland.appmap") version "1.1.0"
+  id(\\"com.appland.appmap\\") version \\"1.1.0\\"
 }
 
 repositories {
@@ -101,7 +101,7 @@ exports[`GradleInstaller installAgent transforms empty.gradle.kts as expected 1`
 
 
 plugins {
-  id("com.appland.appmap") version "1.1.0"
+  id(\\"com.appland.appmap\\") version \\"1.1.0\\"
 }
 
 repositories {
@@ -123,7 +123,7 @@ repositories {
 
 exports[`GradleInstaller installAgent transforms existing-appmap.gradle.kts as expected 1`] = `
 "plugins {
-  id("com.appland.appmap") version "1.1.0"
+  id(\\"com.appland.appmap\\") version \\"1.1.0\\"
 }
 
 repositories {
@@ -160,7 +160,7 @@ exports[`GradleInstaller installAgent transforms extra-repo-block.gradle.kts as 
 "// This is a comment before the plugins block.
 plugins {
   java
-  id("com.appland.appmap") version "1.1.0"
+  id(\\"com.appland.appmap\\") version \\"1.1.0\\"
 }
 repositories {
   mavenCentral()
@@ -198,7 +198,7 @@ exports[`GradleInstaller installAgent transforms no-maven.gradle.kts as expected
 "// This is a comment before the plugins block.
 plugins {
   java
-  id("com.appland.appmap") version "1.1.0"
+  id(\\"com.appland.appmap\\") version \\"1.1.0\\"
 }
 
 repositories {
@@ -224,7 +224,7 @@ exports[`GradleInstaller installAgent transforms no-plugins.gradle.kts as expect
 "
 
 plugins {
-  id("com.appland.appmap") version "1.1.0"
+  id(\\"com.appland.appmap\\") version \\"1.1.0\\"
 }
 repositories {
   mavenCentral()
@@ -249,7 +249,7 @@ exports[`GradleInstaller installAgent transforms plugins.gradle.kts as expected 
 "// This is a comment before the plugins block.
 plugins {
   java
-  id("com.appland.appmap") version "1.1.0"
+  id(\\"com.appland.appmap\\") version \\"1.1.0\\"
 }
 
 repositories {

@@ -46,8 +46,5 @@
     "semantic-release-monorepo": "^7.0.5",
     "yarn-changed-workspaces": "^2.0.9"
   },
-  "packageManager": "yarn@3.2.1",
-  "dependencies": {
-    "puppeteer": "^19.7.2"
-  }
+  "packageManager": "yarn@3.2.1"
 }

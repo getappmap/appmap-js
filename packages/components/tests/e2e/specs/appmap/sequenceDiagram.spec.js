@@ -20,32 +20,6 @@ context('AppMap sequence diagram', () => {
     });
   });
 
-  context('with no data provided', () => {
-    beforeEach(() => {
-      cy.visit(
-        'http://localhost:6006/iframe.html?id=appland-diagrams-sequence--empty&viewMode=story'
-      );
-    });
-
-    it('shows a loading placeholder', () => {
-      cy.get('.sequence-diagram-loading').should('exist');
-    });
-  });
-
-  context('non-interactive mode', () => {
-    beforeEach(() => {
-      cy.visit(
-        'http://localhost:6006/iframe.html?id=appland-diagrams-sequence--non-interactive&viewMode=story'
-      );
-    });
-
-    it('Actor cannot be hidden', () => {
-      cy.get('.sequence-actor[data-actor-id="package:openssl"] .hide-container').should(
-        'not.exist'
-      );
-    });
-  });
-
   context('opening with component view', () => {
     beforeEach(() => {
       cy.visit('http://localhost:6006/iframe.html?id=pages-vs-code--extension&viewMode=story');
