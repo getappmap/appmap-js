@@ -71,6 +71,9 @@ export default {
     appMap: {
       type: Object,
     },
+    serializedDiagram: {
+      type: Object,
+    },
     focusedEvent: {
       type: Object,
       default: null,
@@ -82,12 +85,6 @@ export default {
     selectedEvents: {
       type: Array,
     },
-  },
-
-  data() {
-    return {
-      serializedDiagram: undefined,
-    }
   },
 
   computed: {
