@@ -34,6 +34,7 @@ const SequenceDiagramDiffCommand = require('./cmds/sequenceDiagramDiff');
 const StatsCommand = require('./cmds/stats/stats');
 import UploadCommand from './cmds/upload';
 const BuildArchive = require('./cmds/archive/archive');
+const RestoreArchive = require('./cmds/archive/restore');
 
 class DiffCommand {
   public appMapNames: any;
@@ -457,6 +458,7 @@ yargs(process.argv.slice(2))
   .command(PruneCommand)
   .command(UploadCommand)
   .command(BuildArchive)
+  .command(RestoreArchive)
   .strict()
   .demandCommand()
   .help().argv;
