@@ -1,23 +1,17 @@
 import * as fs from 'fs';
-import { Event } from '@appland/models';
+import { ClassMap, Event } from '@appland/models';
 import JSONStream from 'JSONStream';
 
 export type EventInfo = {
-  id: string;
-  method_id: string;
-  defined_class: string;
+  fqid: string;
   count: number;
   size: number;
-  path: string;
-  lineno: string | undefined;
+  location: string;
 };
 
 const KILOBYTE = 1000;
 const MEGABYTE = KILOBYTE * 1000;
 const GIGABYTE = MEGABYTE * 1000;
-
-const eventName = (event: Event): string =>
-  `${event.definedClass}${event.isStatic ? '.' : '#'}${event.methodId}`;
 
 const sizeof = (obj: any): number => JSON.stringify(obj).length;
 
@@ -42,40 +36,61 @@ function displaySize(size: number): string {
   return `${(size / divisor).toFixed(1)} ${suffix}`;
 }
 
-async function accumulateEvents(mapPath: string): Promise<Array<EventInfo>> {
-  const events = {};
+async function parseClassMap(mapPath: string): Promise<ClassMap> {
+  let classMap: ClassMap;
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     fs.createReadStream(mapPath).pipe(
       JSONStream.parse('events.*')
-        .on('data', (obj: any) => {
+        .on('header', (obj: any) => {
+          classMap = new ClassMap(obj.classMap);
+        })
+        .on('close', () => {
+          resolve(classMap);
+        })
+    );
+  });
+}
+
+async function accumulateEvents(mapPath: string): Promise<Array<EventInfo>> {
+  const classMap = await parseClassMap(mapPath);
+  const events = {};
+
+  return new Promise((resolve) => {
+    fs.createReadStream(mapPath).pipe(
+      JSONStream.parse('events.*')
+        .on('data', (eventData: any) => {
           if (
-            obj.event !== 'call' ||
-            obj.sql_query ||
-            obj.http_server_request ||
-            obj.http_client_request
+            eventData.event !== 'call' ||
+            eventData.sql_query ||
+            eventData.http_server_request ||
+            eventData.http_client_request
           ) {
             return;
           }
 
-          const event = new Event(obj);
-          const name = eventName(event);
-          const size = sizeof(obj);
-          const entry = events[name];
+          const event = new Event(eventData);
+          const obj = classMap.codeObjectFromEvent(event);
 
-          if (entry) {
-            entry.size += size;
-            entry.count += 1;
-          } else {
-            events[name] = { ...event, size, count: 1 };
+          if (obj) {
+            const fqid = obj.fqid;
+            const size = sizeof(event);
+            const entry = events[fqid];
+
+            if (entry) {
+              entry.size += size;
+              entry.count += 1;
+            } else {
+              events[fqid] = { location: obj.location, size, count: 1 };
+            }
           }
         })
         .on('close', () => {
           resolve(
             Object.keys(events)
               .map((key) => {
-                const { lineno, path, size, count, method_id, defined_class } = events[key];
-                return { id: key, method_id, defined_class, count, size, path, lineno };
+                const { location, size, count } = events[key];
+                return { fqid: key, count, size, location };
               })
               .sort((a, b) => b.count - a.count)
           );
@@ -91,11 +106,14 @@ export async function statsForMap(argv: any): Promise<Array<EventInfo>> {
     console.log(JSON.stringify(eventsStats, null, 2));
   } else {
     eventsStats.forEach((callData, index) => {
-      const { id, count, size } = callData;
+      const { fqid, count, size } = callData;
       console.log(
-        [`${index + 1}. ${id}`, `count: ${count}`, `estimated size: ${displaySize(size)}`, ''].join(
-          '\n      '
-        )
+        [
+          `${index + 1}. ${fqid}`,
+          `count: ${count}`,
+          `estimated size: ${displaySize(size)}`,
+          '',
+        ].join('\n      ')
       );
     });
   }
