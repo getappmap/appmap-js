@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { exec, spawn } from 'child_process';
+import { spawn } from 'child_process';
 import { mkdtemp, rmdir, writeFile } from 'fs/promises';
 import { tmpdir } from 'os';
 import { join } from 'path';
