@@ -99,10 +99,14 @@ async function accumulateEvents(mapPath: string): Promise<Array<EventInfo>> {
   });
 }
 
-export async function statsForMap(argv: any): Promise<Array<EventInfo>> {
-  const eventsStats = (await accumulateEvents(argv.f)).slice(0, argv.limit);
+export async function statsForMap(
+  format: string,
+  limit: number,
+  mapPath: string
+): Promise<Array<EventInfo>> {
+  const eventsStats = (await accumulateEvents(mapPath)).slice(0, limit);
 
-  if (argv.json) {
+  if (format === 'json') {
     console.log(JSON.stringify(eventsStats, null, 2));
   } else {
     eventsStats.forEach((callData, index) => {

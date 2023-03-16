@@ -16,12 +16,14 @@ export function sizeInMB(size: number): number {
 }
 
 export async function statsForDirectory(
-  argv: any,
+  isVerbose: boolean,
+  directory: string,
+  format: string,
+  limit: number,
   handlerCaller: string = 'from_stats'
 ): Promise<[SortedAppMapSize[], SlowestExecutionTime[]]> {
-  verbose(argv.verbose);
+  verbose(isVerbose);
 
-  const { directory, json, limit: limitToUse } = argv;
   if (directory) {
     if (verbose()) console.log(`Using working directory ${directory}`);
     chdir(directory);
@@ -173,14 +175,14 @@ export async function statsForDirectory(
       );
       sortedAppMapSizes
         .filter((appmap) => appmap.size > MINIMUM_APPMAP_SIZE)
-        .slice(0, limitToUse)
+        .slice(0, limit)
         .forEach((appmap) => {
           biggestAppMapSizes.push({
             size: appmap.size,
             path: appmap.path,
           });
         });
-      if (json) {
+      if (format === 'json') {
         console.log(JSON.stringify(biggestAppMapSizes));
       } else {
         biggestAppMapSizes.forEach((appmap) => {
@@ -209,7 +211,7 @@ export async function statsForDirectory(
           "These AppMaps don't contain function overhead data. Please update your appmap package to the latest version."
         );
       } else {
-        sortedExecutionTimes.slice(0, limitToUse).forEach((executionTime) => {
+        sortedExecutionTimes.slice(0, limit).forEach((executionTime) => {
           slowestExecutionTimes.push({
             elapsed_instrumentation_time_total: Number(
               executionTime.elapsedInstrumentationTime.toFixed(6)
@@ -220,7 +222,7 @@ export async function statsForDirectory(
           });
         });
 
-        if (json) {
+        if (format === 'json') {
           console.log(JSON.stringify(slowestExecutionTimes));
         } else {
           UI.progress(chalk.underline(`Total instrumentation time`));
