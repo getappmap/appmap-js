@@ -1,8 +1,10 @@
+import { chdir } from 'process';
 import yargs from 'yargs';
 import { statsForDirectory } from './directory/statsForDirectory';
 import { EventInfo, statsForMap } from './directory/statsForMap';
 import { SortedAppMapSize } from './types/appMapSize';
 import { SlowestExecutionTime } from './types/functionExecutionTime';
+import { verbose } from '../../utils';
 
 export const command = 'stats [directory]';
 export const describe =
@@ -14,6 +16,7 @@ export const builder = (args: yargs.Argv) => {
     describe: 'Working directory for the command',
     type: 'string',
     alias: 'd',
+    default: '.',
   });
 
   args.option('format', {
@@ -43,16 +46,16 @@ export async function handler(
   argv: any,
   handlerCaller: string = 'from_stats'
 ): Promise<Array<EventInfo> | Promise<[SortedAppMapSize[], SlowestExecutionTime[]]>> {
-  if (argv.appmapFile) {
-    return await statsForMap(argv.format, argv.limit, argv.appmapFile);
+  const { directory, format, limit, appmapFile } = argv;
+  const isVerbose = argv.verbose;
+
+  if (isVerbose) console.log(`Using working directory ${directory}`);
+  chdir(directory);
+
+  if (appmapFile) {
+    return await statsForMap(format, limit, appmapFile);
   }
-  return await statsForDirectory(
-    argv.verbose,
-    argv.directory,
-    argv.format,
-    argv.limit,
-    handlerCaller
-  );
+  return await statsForDirectory(isVerbose, directory, format, limit, handlerCaller);
 }
 
 export default {

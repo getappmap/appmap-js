@@ -1,4 +1,3 @@
-import { chdir } from 'process';
 import * as fs from 'fs';
 import UI from '../../userInteraction';
 import Telemetry from '../../../telemetry';
@@ -23,14 +22,6 @@ export async function statsForDirectory(
   handlerCaller: string = 'from_stats'
 ): Promise<[SortedAppMapSize[], SlowestExecutionTime[]]> {
   verbose(isVerbose);
-
-  if (directory) {
-    if (verbose()) console.log(`Using working directory ${directory}`);
-    chdir(directory);
-  }
-
-  let directoryToUse = directory;
-  if (!directoryToUse) directoryToUse = '.';
 
   async function calculateAppMapSizes(appMapDir: string): Promise<AppMapSizeTable> {
     const appMapSizes: AppMapSizeTable = {};
@@ -165,7 +156,7 @@ export async function statsForDirectory(
     let slowestExecutionTimes: SlowestExecutionTime[] = [];
     try {
       UI.status = `Computing AppMap stats...`;
-      const appMapDir = directoryToUse;
+      const appMapDir = directory;
       const appMapSizes: AppMapSizeTable = await calculateAppMapSizes(appMapDir);
       const sortedAppMapSizes: SortedAppMapSize[] = await sortAppMapSizes(appMapSizes);
       UI.success();
