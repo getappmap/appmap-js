@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.68.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.68.0...@appland/appmap-v3.68.1) (2023-03-16)
+
+
+### Bug Fixes
+
+* Revert the addition of puppeteer ([b91f57d](https://github.com/getappmap/appmap-js/commit/b91f57d3710e819c708624ea373064c75870314f))
+
 # [@appland/appmap-v3.68.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.67.2...@appland/appmap-v3.68.0) (2023-03-16)
 
 
