@@ -1,3 +1,16 @@
+# [@appland/components-v2.33.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.32.1...@appland/components-v2.33.0) (2023-03-16)
+
+
+### Bug Fixes
+
+* Restore serializedDiagram to its proper place ([0a04dd4](https://github.com/getappmap/appmap-js/commit/0a04dd458602630a4ade1d9640e2255fb0616da9))
+
+
+### Features
+
+* Filter out code from outside the source tree ([22dfb51](https://github.com/getappmap/appmap-js/commit/22dfb519e747eb4f3828a83ec392cebf8619f6c8))
+* Sequence diagram can render without interactive elements ([9f81cc4](https://github.com/getappmap/appmap-js/commit/9f81cc4c258ff6cbdc1e5433f763b74bcacf816b))
+
 # [@appland/components-v2.32.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.32.0...@appland/components-v2.32.1) (2023-03-10)
 
 
