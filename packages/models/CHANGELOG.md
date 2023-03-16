@@ -1,3 +1,16 @@
+# [@appland/models-v2.3.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.2.1...@appland/models-v2.3.0) (2023-03-16)
+
+
+### Bug Fixes
+
+* Cache RegExp for filter expressions ([68dcad9](https://github.com/getappmap/appmap-js/commit/68dcad9616a0d1edeeea3f7716d69f112d99d8de))
+
+
+### Features
+
+* Code name filter can be an explicit RegExp ([24ee58d](https://github.com/getappmap/appmap-js/commit/24ee58deb206f7c9bd2842fef9b616617c9cff5c))
+* Filter out code from outside the source tree ([22dfb51](https://github.com/getappmap/appmap-js/commit/22dfb519e747eb4f3828a83ec392cebf8619f6c8))
+
 # [@appland/models-v2.2.1](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.2.0...@appland/models-v2.2.1) (2023-03-15)
 
 
