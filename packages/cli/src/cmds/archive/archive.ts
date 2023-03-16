@@ -18,10 +18,12 @@ import {
 } from '@appland/sequence-diagram';
 import { queue } from 'async';
 import { AppMapFilter, buildAppMap, Filter } from '@appland/models';
-import { DefaultMaxAppMapSizeInMB } from '../../openapi/fileSizeFilter';
-import loadAppMapConfig, { AppMapConfig } from '../../lib/loadAppMapConfig';
+import { DefaultMaxAppMapSizeInMB } from '../../lib/fileSizeFilter';
+import loadAppMapConfig from '../../lib/loadAppMapConfig';
 import { VERSION as IndexVersion } from '../../fingerprint/fingerprinter';
 import chalk from 'chalk';
+import gitRevision from './gitRevision';
+import { Metadata } from './Metadata';
 
 const ArchiveVersion = '1.0';
 const { name: ApplandAppMapPackageName, version: ApplandAppMapPackageVersion } = PackageConfig;
@@ -35,18 +37,6 @@ export const DefaultFilters = {
   python: [],
   java: [],
   javascript: [],
-};
-
-export type Metadata = {
-  versions: Record<string, string>;
-  workingDirectory: string;
-  appMapDir: string;
-  commandArguments: Record<string, string | string[]>;
-  baseRevision?: string;
-  revision: string;
-  timestamp: string;
-  oversizedAppMaps: string[];
-  config: AppMapConfig;
 };
 
 export const command = 'archive';
@@ -103,16 +93,6 @@ commit of the current git revision may not be the one that triggered the build.`
   return args.strict();
 };
 
-async function gitRevision(): Promise<string | undefined> {
-  return new Promise((resolve) => {
-    exec('git rev-parse HEAD', (error, stdout) => {
-      if (error) resolve(undefined);
-
-      resolve(stdout.trim());
-    });
-  });
-}
-
 export const handler = async (argv: any) => {
   verbose(argv.verbose);
 
@@ -137,11 +117,7 @@ export const handler = async (argv: any) => {
 
   console.log(`Building '${type}' archive from ${appMapDir}`);
 
-  const revision = defaultRevision || (await gitRevision());
-  if (!revision)
-    throw new Error(
-      `Unable to determine revision. Use --revision to specify it, or run this command in a Git repo.`
-    );
+  const revision = await gitRevision(defaultRevision);
 
   console.log(`Building archive of revision ${revision}`);
   const versions = { archive: ArchiveVersion, index: IndexVersion };
