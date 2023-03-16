@@ -8,7 +8,8 @@ interface PreflightFilterConfig {
 
 interface PreflightConfig {
   base_branch?: string;
-  test_command?: string;
+  test_folders?: string[];
+  test_commands?: Record<string, string>;
   filter?: PreflightFilterConfig;
 }
 
