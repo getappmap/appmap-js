@@ -66,7 +66,7 @@ class Depends {
    * @param {function} callback
    * @returns string[]
    */
-  async depends(callback) {
+  async depends(callback = undefined) {
     const outOfDateNames = new Set();
 
     const checkClassMap = async (fileName) => {
