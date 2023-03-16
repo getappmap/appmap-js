@@ -1,17 +1,21 @@
 import chalk from 'chalk';
 import { readFile } from 'fs/promises';
 import { glob } from 'glob';
-import { join } from 'path';
+import { dirname, join, relative, resolve } from 'path';
 import { promisify } from 'util';
 import yargs from 'yargs';
+import { Metadata as AppMapMetadata } from '@appland/models';
+import Depends from '../depends';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import loadAppMapConfig from '../lib/loadAppMapConfig';
+import { locateAppMapDir } from '../lib/locateAppMapDir';
 import { verbose } from '../utils';
 import gitDeletedFiles from './archive/gitDeletedFiles';
 import gitModifiedFiles from './archive/gitModifiedFiles';
 import gitNewFiles from './archive/gitNewFiles';
 import { Metadata } from './archive/Metadata';
 import runTests from './archive/runTests';
+import FingerprintDirectoryCommand from '../fingerprint/fingerprintDirectoryCommand';
 
 export const command = 'update';
 export const describe = 'Update AppMaps by running new and out-of-date tests';
@@ -51,6 +55,7 @@ export const handler = async (argv: any) => {
   const { baseAppmapDir } = argv;
 
   handleWorkingDirectory(argv.directory);
+  const appmapDir = await locateAppMapDir();
   const appmapConfig = await loadAppMapConfig();
   if (!appmapConfig) throw new Error(`Unable to load appmap.yml config file`);
 
@@ -101,21 +106,75 @@ be included in the file arguments passed to the test runner.`)
   const baseRevision = fullArchives[0].revision;
 
   const addedTestFiles = await gitNewFiles(testFolders);
-  const modifiedTestFiles = await gitModifiedFiles(baseRevision, testFolders);
+  const modifiedFiles = await gitModifiedFiles(baseRevision, []);
+  const modifiedTestFiles = await gitModifiedFiles(baseRevision, ['d'], testFolders);
   const deletedTestFiles = await gitDeletedFiles(baseRevision, testFolders);
-  const updatedTestFiles = [...new Set([...addedTestFiles, ...modifiedTestFiles])].sort();
+  const outOfDateTestFiles = new Set([...addedTestFiles, ...modifiedTestFiles]);
 
   if (addedTestFiles.length > 0) console.log(`Added tests: ${addedTestFiles.join(' ')}`);
   if (modifiedTestFiles.length > 0) console.log(`Modified tests: ${modifiedTestFiles.join(' ')}`);
   if (deletedTestFiles.length > 0) console.log(`Deleted tests: ${deletedTestFiles.join(' ')}`);
-  if (updatedTestFiles.length > 0)
-    console.log(`Updated (added+modified) tests: ${updatedTestFiles.join(' ')}`);
+
+  const indexAppMaps = async () => {
+    process.stdout.write(`Indexing AppMaps...`);
+    const numIndexed = await new FingerprintDirectoryCommand(appmapDir).execute();
+    process.stdout.write(`done (${numIndexed})\n`);
+  };
+
+  await indexAppMaps();
+
+  const dirtyTests = new Set([...modifiedTestFiles, ...deletedTestFiles]);
+  const deletedAppMaps = new Array<string>();
+  // Remove AppMaps for deleted and modified tests
+  await Promise.all(
+    (
+      await promisify(glob)(join(appmapDir, '**/metadata.json'))
+    ).map(async (metadataFile) => {
+      const metadata = JSON.parse(await readFile(metadataFile, 'utf-8'));
+      const { source_location: sourceLocation } = metadata;
+      if (!sourceLocation) return;
+
+      const [path] = sourceLocation.split(':');
+
+      if (dirtyTests.has(path)) {
+        const appmapName = dirname(metadataFile);
+        console.warn(
+          `AppMap ${appmapName} is out of date because ${path} has been ${
+            modifiedTestFiles.includes(path) ? 'modified' : 'deleted'
+          }`
+        );
+        deletedAppMaps.push(appmapName);
+      }
+    })
+  );
+
+  const depends = new Depends(appmapDir);
+  depends.files = modifiedFiles;
+  const outOfDateAppMaps = await depends.depends();
+  if (outOfDateAppMaps.length > 0) {
+    console.log(`Out-of-date AppMaps: ${outOfDateAppMaps.join(' ')}`);
+    for (const appmap of outOfDateAppMaps) {
+      const metadata = JSON.parse(
+        await readFile(join(appmap, 'metadata.json'), 'utf-8')
+      ) as AppMapMetadata;
+      if (metadata.source_location) outOfDateTestFiles.add(metadata.source_location.split(':')[0]);
+    }
+  }
+
+  if (outOfDateTestFiles.size > 0)
+    console.log(`Updated (added+modified) tests: ${[...outOfDateTestFiles].join(' ')}`);
+
+  if (outOfDateTestFiles.size === 0) {
+    console.log('No changes detected to the code or tests.');
+    return;
+  }
 
   const testFilesByFolder = new Map<string, string[]>();
-  updatedTestFiles.forEach((testFile) => {
+  outOfDateTestFiles.forEach((testFile) => {
+    const localPath = relative(process.cwd(), testFile);
     testFolders?.forEach((folder) => {
-      if (testFile.startsWith(folder))
-        testFilesByFolder.set(folder, [...(testFilesByFolder.get(folder) || []), testFile]);
+      if (localPath.startsWith(folder))
+        testFilesByFolder.set(folder, [...(testFilesByFolder.get(folder) || []), localPath]);
     });
   });
 
@@ -125,6 +184,8 @@ be included in the file arguments passed to the test runner.`)
       console.warn(chalk.yellow(`No test command configured for folder ${folder}`));
       continue;
     }
-    runTests(command, testFiles);
+    await runTests(command, testFiles);
   }
+
+  await indexAppMaps();
 };
