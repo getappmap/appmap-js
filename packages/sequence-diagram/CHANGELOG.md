@@ -1,3 +1,15 @@
+# [@appland/sequence-diagram-v1.5.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.4.2...@appland/sequence-diagram-v1.5.0) (2023-03-16)
+
+
+### Bug Fixes
+
+* All packages will now be considered as potential actors ([2b931a4](https://github.com/getappmap/appmap-js/commit/2b931a451a6df4bda1ac1bc3ec1eccb16da18c63))
+
+
+### Features
+
+* Generate png of sequence diagram ([c7fc54b](https://github.com/getappmap/appmap-js/commit/c7fc54bd56b14db6e76749e9c46f810ada8001b9))
+
 # [@appland/sequence-diagram-v1.4.2](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.4.1...@appland/sequence-diagram-v1.4.2) (2023-03-10)
 
 
