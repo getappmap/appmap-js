@@ -1,0 +1,61 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+
+revision = ARGV[0]
+no_test = true if ARGV[1..-1]&.member?('--no-test')
+
+cli_dir = Dir.pwd
+
+sys_command = ->(cmd, env = nil) do
+  Array(cmd).each do |c|
+    args = [ env, c ].compact
+    p args
+    system *args or raise "Command failed: #{c}"
+  end
+end
+
+node_version = `node -v`
+raise "Node version should be 14, got #{node_version}" unless node_version.index('v14.')
+
+Dir.chdir File.expand_path('~/source/land-of-apps/sample_app_6th_ed')
+project_dir = Dir.pwd
+
+required_ruby_version = '2.7.3'
+ruby_version = `ruby -v`
+raise "Ruby version must be #{required_ruby_version}, is #{ruby_version}" unless ruby_version.index(required_ruby_version)
+
+sys_command.call [
+  "git checkout #{revision}",
+]
+
+unless no_test
+  sys_command.call 'git lfs track "*.tar"' \
+    unless File.read('.gitattributes').index('*.tar filter=lfs diff=lfs merge=lfs -text')
+
+  File.write 'appmap.yml', <<~APPMAP_CONFIG
+name: sample_app_6th_ed
+language: ruby
+appmap_dir: tmp/appmap
+packages:
+  - path: app
+  - path: lib
+APPMAP_CONFIG
+      
+  FileUtils.rm_rf 'tmp/appmap'
+  FileUtils.mkdir_p 'tmp/appmap/minitest'
+  FileUtils.mkdir_p '.appmap/archive/full'
+
+  sys_command.call [
+    'bundle update mimemagic puma',
+    'bundle info appmap || bundle add appmap',
+    'bundle update appmap',
+    'yarn install',
+    'rails db:test:prepare',
+    'rails test'
+  ], { 'RAILS_ENV' => 'test', 'DISABLE_SPRING' => 'true' }
+end
+
+Dir.chdir cli_dir
+
+system "node ./built/src/cli.js archive -d #{project_dir}"
