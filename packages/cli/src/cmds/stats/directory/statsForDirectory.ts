@@ -16,7 +16,7 @@ export function sizeInMB(size: number): number {
 
 export async function statsForDirectory(
   isVerbose: boolean,
-  directory: string,
+  appMapDir: string,
   format: string,
   limit: number,
   handlerCaller: string = 'from_stats'
@@ -156,7 +156,6 @@ export async function statsForDirectory(
     let slowestExecutionTimes: SlowestExecutionTime[] = [];
     try {
       UI.status = `Computing AppMap stats...`;
-      const appMapDir = directory;
       const appMapSizes: AppMapSizeTable = await calculateAppMapSizes(appMapDir);
       const sortedAppMapSizes: SortedAppMapSize[] = await sortAppMapSizes(appMapSizes);
       UI.success();
