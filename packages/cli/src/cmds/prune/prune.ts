@@ -48,18 +48,26 @@ function parseSize(size: string) {
 export default {
   command: 'prune <file> <size>',
 
-  describe: 'Prune an appmap file down to the given size',
+  describe: 'Make an appmap file smaller by removing events',
 
   builder: (argv: Yargs.Argv) => {
     argv.option('output-dir', {
-      describe: 'Specifies the output directory. Pruned files will be written here.',
+      describe: 'Specifies the output directory',
       type: 'string',
       default: '.',
       alias: 'o',
     });
+
+    argv.option('format', {
+      describe: 'How to format the output',
+      choices: ['json', 'text'],
+      default: 'text',
+    });
+
     argv.positional('file', {
       describe: 'AppMap to prune',
     });
+
     argv.positional('size', {
       describe: 'Prune input file to this size',
     });
@@ -71,6 +79,15 @@ export default {
 
     const outputPath = `${argv.outputDir}/${basename(argv.file)}`;
     fs.writeFileSync(outputPath, JSON.stringify(appMap));
-    console.log('done');
+
+    let message = 'done';
+    if (argv.format === 'json' && !argv.fqids)
+      message = JSON.stringify(
+        { exclusions: Array.from(appMap.data.exclusions.values()) },
+        null,
+        2
+      );
+
+    console.log(message);
   },
 };

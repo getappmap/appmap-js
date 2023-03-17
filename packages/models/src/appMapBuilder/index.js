@@ -5,16 +5,6 @@ import Event from '../event';
 import EventSorter from './eventSorter';
 import { sizeof } from '../util';
 
-function eventName(classMap, e) {
-  const { callEvent } = e;
-  const obj = classMap.codeObjectFromEvent(callEvent);
-  if (obj) {
-    return obj.id;
-  }
-
-  return `${callEvent.defined_class}${callEvent.static ? '.' : '#'}${callEvent.method_id}`;
-}
-
 // Performs an array of transform functions on an object. The transform function
 // is expected to return the transformed object.
 const transform = (transforms, obj, ...args) => transforms.reduce((x, fn) => fn(x, ...args), obj);
@@ -31,6 +21,7 @@ class AppMapBuilder extends EventSource {
       stack: [],
       chunk: [],
     };
+    this.allEvents = [];
 
     if (data) {
       this.source(data);
@@ -48,12 +39,16 @@ class AppMapBuilder extends EventSource {
       throw new Error(`got invalid type ${dataType}, expected object or string`);
     }
 
+    this.data.exclusions = new Set();
+
     (this.data.events || []).forEach((e) => {
       if (this.data.eventUpdates && this.data.eventUpdates[e.id]) {
         // eslint-disable-next-line no-param-reassign
         e = this.data.eventUpdates[e.id];
       }
-      this.sorter.add(new Event(e));
+      const event = new Event(e);
+      this.allEvents.push(event);
+      this.sorter.add(event);
     });
 
     delete this.data.events;
@@ -143,12 +138,13 @@ class AppMapBuilder extends EventSource {
 
     let classMap;
     let pruneRatio = 0;
+
     return this.on('preprocess', (d) => {
       classMap = new ClassMap(d.data.classMap);
       pruneRatio = Math.min(sizeBytes / d.size, 1);
-    }).chunk((stacks) => {
+
       // We're storing size/count state in the global class map. This isn't
-      // great but it works for now. Reset the counts for each chunk.
+      // great but it works for now.
       classMap.visit((obj) => {
         /* eslint-disable no-param-reassign */
         obj.size = 0;
@@ -156,8 +152,7 @@ class AppMapBuilder extends EventSource {
         /* eslint-enable no-param-reassign */
       });
 
-      // Iterate each event, regardless of the stack
-      stacks.flat(2).forEach((e) => {
+      this.allEvents.forEach((e) => {
         if (e.event !== 'call' || e.sql_query || e.http_server_request || e.http_client_request) {
           return;
         }
@@ -179,7 +174,7 @@ class AppMapBuilder extends EventSource {
         .map((obj) => {
           totalBytes += obj.size;
           return {
-            id: obj.id,
+            fqid: obj.fqid,
             count: obj.count,
             size: obj.size,
             totalBytes,
@@ -190,37 +185,35 @@ class AppMapBuilder extends EventSource {
       // Build a list of unique exclusions, starting with the largest event
       // type. Iterate until the estimated event array size is under our
       // threshold.
-      const exclusions = new Set();
       for (let i = 0; i < eventAggregates.length; i += 1) {
         const eventInfo = eventAggregates[i];
         if (eventInfo.totalBytes <= totalBytes * pruneRatio) {
           break;
         }
-        exclusions.add(eventInfo.id);
+        this.data.exclusions.add(eventInfo.fqid);
       }
+    }).chunk((stacks) => this.excludeEvents(stacks, classMap, this.data.exclusions));
+  }
 
-      return stacks.map((events) =>
-        events.filter((e) => {
-          const { callEvent } = e;
+  // expects exclusions to be a Set
+  excludeEvents(stacks, classMap, exclusions) {
+    return stacks.map((events) =>
+      events.filter((e) => {
+        const { callEvent } = e;
 
-          // If there's no call event, there's no need to retain this event
-          if (!callEvent) {
-            return false;
-          }
+        // If there's no call event, there's no need to retain this event
+        if (!callEvent) {
+          return false;
+        }
 
-          if (
-            callEvent.http_server_request ||
-            callEvent.http_client_request ||
-            callEvent.sql_query
-          ) {
-            return true;
-          }
+        if (callEvent.http_server_request || callEvent.http_client_request || callEvent.sql_query) {
+          return true;
+        }
 
-          const name = eventName(classMap, e);
-          return !exclusions.has(name);
-        })
-      );
-    });
+        const codeObj = classMap.codeObjectFromEvent(callEvent);
+        return !exclusions.has(codeObj.fqid);
+      })
+    );
   }
 
   removeNoise() {
