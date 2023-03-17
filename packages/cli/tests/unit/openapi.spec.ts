@@ -1,7 +1,8 @@
 import { verbose } from '../../src/utils';
-import { default as openapi, fileSizeFilter } from '../../src/cmds/openapi';
+import { default as openapi } from '../../src/cmds/openapi';
 import assert from 'assert';
 import path from 'path';
+import { fileSizeFilter } from '../../src/lib/fileSizeFilter';
 
 describe('OpenAPI', () => {
   const malformedHTTPServerRequestDir = 'tests/unit/fixtures/malformedHTTPServerRequest';
