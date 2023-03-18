@@ -68,14 +68,13 @@ commit of the current git revision may not be the one that triggered the build.`
   });
 
   args.option('output-dir', {
-    describe: 'directory in which to save the output file',
+    describe: `directory in which to save the output file. By default, it's .appmap/archive/<type>.`,
     type: 'string',
   });
 
   args.option('output-file', {
-    describe: 'output file name',
+    describe: 'output file name. Default output name is <revision>.tar',
     type: 'string',
-    default: 'appmap_archive.tar',
     alias: 'f',
   });
 
@@ -107,15 +106,15 @@ export const handler = async (argv: any) => {
   const {
     concurrency,
     maxSize,
-    type,
+    type: typeArg,
     revision: defaultRevision,
-    outputFile: outputFileName,
+    outputFile: outputFileNameArg,
   } = argv;
-  const { outputDir } = argv || '.';
+  const { outputDirArg } = argv;
 
   const maxAppMapSizeInBytes = Math.round(parseFloat(maxSize) * 1024 * 1024);
 
-  console.log(`Building '${type}' archive from ${appMapDir}`);
+  console.log(`Building '${typeArg}' archive from ${appMapDir}`);
 
   const revision = await gitRevision(defaultRevision);
 
@@ -203,16 +202,17 @@ export const handler = async (argv: any) => {
     config: appmapConfig,
   };
 
+  let type: string;
   if (await exists('appmap_archive.json')) {
     const existingMetadata = JSON.parse(await readFile('appmap_archive.json', 'utf8'));
     const { revision: baseRevision } = existingMetadata;
-    if (type === 'auto') {
+    if (typeArg === 'auto') {
       console.log(
         `The AppMap directory contains appmap_archive.json, so the archive type will be 'incremental'.
 The base revision is ${baseRevision}.`
       );
     }
-    if (type === 'full') {
+    if (typeArg === 'full') {
       console.warn(
         chalk.yellow(
           `\nThe AppMap directory contains appmap_archive.json, so it looks like the directory contains incremental AppMaps
@@ -223,17 +223,19 @@ remove appmap_archive.json if your intention is to build a full archive. Otherwi
     } else {
       metadata.baseRevision = baseRevision;
     }
+    type = 'incremental';
   } else {
-    if (type === 'auto') {
+    if (typeArg === 'auto') {
       console.log(
         `The AppMap directory does not contain appmap_archive.json, so the archive type will be 'full'.`
       );
-    } else if (type === 'incremental') {
+    } else if (typeArg === 'incremental') {
       throw new Error(
         `AppMap directory does not contain appmap_archive.json, but you've specified --type=incremental.
 The base revision cannot be determined, so either use --type=auto or --type=full.`
       );
     }
+    type = 'full';
   }
 
   await new Promise<void>((resolveCB, rejectCB) => {
@@ -250,6 +252,11 @@ The base revision cannot be determined, so either use --type=auto or --type=full
   process.on('exit', () => unlink('appmaps.tar.gz'));
 
   await writeFile('appmap_archive.json', JSON.stringify(metadata, null, 2));
+
+  const outputFileName = outputFileNameArg || `${revision}.tar`;
+
+  const defaultOutputDir = () => join('.appmap', 'archive', type);
+  const outputDir = outputDirArg || defaultOutputDir();
 
   await new Promise<void>((resolveCB, rejectCB) => {
     exec(

@@ -51,7 +51,7 @@ export const handler = async (argv: any) => {
 
   console.log(`Restoring AppMaps of revision ${revision} to ${outputDir}`);
 
-  const ancestors = await gitAncestors(defaultRevision);
+  const ancestors = await gitAncestors();
 
   // Find the AppMap tarball that's closest in the git ancestry.
   const fullArchivesAvailable = await promisify(glob)(join(archiveDir, 'full', '*.tar'));
