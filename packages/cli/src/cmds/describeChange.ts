@@ -7,14 +7,7 @@ import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../lib/locateAppMapDir';
 import { exists, verbose } from '../utils';
 import { isAbsolute, join, relative } from 'path';
-import {
-  Action,
-  actionActors,
-  Diagram,
-  format,
-  FormatType,
-  ServerRPC,
-} from '@appland/sequence-diagram';
+import { Diagram, format, FormatType, ServerRPC } from '@appland/sequence-diagram';
 import { glob } from 'glob';
 import { promisify } from 'util';
 import { DiffDiagrams } from '../sequenceDiagramDiff/DiffDiagrams';
@@ -30,6 +23,7 @@ import { OperationReference } from '../describeChange/OperationReference';
 import { Operation } from '../describeChange/types';
 import puppeteer from 'puppeteer';
 import { renderSequenceDiagramPNG } from '../sequenceDiagram/renderSequenceDiagramPNG';
+import BrowserRenderer from './sequenceDiagram/browserRenderer';
 
 export class ValidationError extends Error {}
 
@@ -245,7 +239,7 @@ export const handler = async (argv: any) => {
     [operation.method.toUpperCase(), operation.path, `(${operation.status})`].join(' ');
 
   if (verbose()) console.warn(`Preparing browser for PNG rendering`);
-  const browser = await puppeteer.launch({ timeout: 120 * 1000, headless: !argv.showBrowser });
+  const browserRender = new BrowserRenderer(argv.showBrowser);
 
   async function saveSequenceDiagram(subdir: string, diagram: Diagram, name?: string) {
     if (!name) {
@@ -279,7 +273,7 @@ export const handler = async (argv: any) => {
       await renderSequenceDiagramPNG(
         join(operationDir, [name, 'sequence.png'].join('.')),
         join(operationDir, [name, 'sequence.json'].join('.')),
-        browser
+        browserRender
       );
     } catch (e) {
       console.warn(`Failed to render sequence diagram for ${operationDir}: ${e}`);
@@ -298,6 +292,9 @@ export const handler = async (argv: any) => {
       }
     })
   );
+
+  await browserRender.close();
+
   changeReport.routeChanges.removed.forEach((change) => {
     console.log(`Removed route: ${operationUrl(change.operation)}`);
     if (change.sourceDiff) console.log(`Source diff: ${change.sourceDiff}`);
