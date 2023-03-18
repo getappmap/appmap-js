@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from 'fs/promises';
 import { basename, dirname, join } from 'path';
+import puppeteer, { Browser } from 'puppeteer';
 import yargs from 'yargs';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { verbose } from '../utils';
@@ -10,7 +11,10 @@ import {
   Specification,
   format as formatDiagram,
   Formatters,
+  FormatType,
 } from '@appland/sequence-diagram';
+import { serveAndOpenSequenceDiagram } from '../lib/serveAndOpen';
+import assert from 'assert';
 
 export const command = 'sequence-diagram <appmap...>';
 export const describe = 'Generate a sequence diagram for an AppMap';
@@ -29,6 +33,11 @@ export const builder = (args: yargs.Argv) => {
   args.option('output-dir', {
     describe: 'directory in which to save the sequence diagrams',
   });
+  args.option('show-browser', {
+    describe: 'when using a browser to render the diagram, show the browser window',
+    type: 'boolean',
+    default: false,
+  });
   args.option('loops', {
     describe: 'identify loops and collect under a Loop object',
     type: 'boolean',
@@ -37,8 +46,8 @@ export const builder = (args: yargs.Argv) => {
   args.option('format', {
     describe: 'output format',
     alias: 'f',
-    choices: ['plantuml', 'json'],
-    default: 'plantuml',
+    choices: ['png', 'plantuml', 'json'],
+    default: 'png',
   });
   args.option('exclude', {
     describe: 'code objects to exclude from the diagram',
@@ -57,10 +66,16 @@ export const handler = async (argv: any) => {
     return;
   }
 
-  if (!Formatters.includes(argv.format)) {
+  if (argv.format !== 'png' && !Formatters.includes(argv.format)) {
     console.log(`Invalid format: ${argv.format}`);
     process.exitCode = 1;
     return;
+  }
+
+  let browser: Browser | undefined;
+  if (argv.format === 'png') {
+    if (verbose()) console.warn(`Preparing browser for PNG rendering`);
+    browser = await puppeteer.launch({ timeout: 120 * 1000, headless: !argv.showBrowser });
   }
 
   const generateDiagram = async (appmapFileName: string): Promise<void> => {
@@ -73,30 +88,65 @@ export const handler = async (argv: any) => {
     if (argv.exclude)
       specOptions.exclude = Array.isArray(argv.exclude) ? argv.exclude : [argv.exclude];
 
+    if (argv.outputDir) await mkdir(argv.outputDir, { recursive: true });
+
     const specification = Specification.build(appmap, specOptions);
 
     const diagram = buildDiagram(appmapFileName, appmap, specification);
-    const template = formatDiagram(argv.format, diagram, appmapFileName);
 
-    if (argv.outputDir) await mkdir(argv.outputDir, { recursive: true });
+    const printDiagram = async (format: FormatType): Promise<string> => {
+      const template = formatDiagram(format, diagram, appmapFileName);
+      const outputFileName = [
+        basename(appmapFileName, '.appmap.json'),
+        '.sequence',
+        template.extension,
+      ].join('');
 
-    const outputFileName = [
-      basename(appmapFileName, '.appmap.json'),
-      '.sequence',
-      template.extension,
-    ].join('');
+      let resultPath: string;
+      if (argv.outputDir) resultPath = join(argv.outputDir, outputFileName);
+      else resultPath = join(dirname(appmapFileName), outputFileName);
 
-    let outputPath: string;
-    if (argv.outputDir) outputPath = join(argv.outputDir, outputFileName);
-    else outputPath = join(dirname(appmapFileName), outputFileName);
+      await writeFile(resultPath, template.diagram);
+      return resultPath;
+    };
 
-    await writeFile(outputPath, template.diagram);
+    if (argv.format === 'png') {
+      // PNG rendering is performed by loading the sequence
+      // diagram in a browser and taking a screenshot.
+      const diagramPath = await printDiagram(FormatType.JSON);
+      const outputPath = await new Promise((resolve) =>
+        serveAndOpenSequenceDiagram(diagramPath, false, async (url) => {
+          if (verbose()) console.warn(`Rendering PNG`);
+          assert(browser, 'Browser not initialized');
 
-    console.log(`Printed diagram ${outputPath}`);
+          const page = await browser.newPage();
+          if (argv.verbose) page.on('console', (msg) => console.log('CONSOLE: ', msg.text()));
+
+          const outputPath = join(
+            dirname(diagramPath),
+            [basename(diagramPath, '.json'), '.png'].join('')
+          );
+
+          await page.goto(url);
+          await page.waitForSelector('.sequence-diagram');
+          await page.screenshot({ path: outputPath, fullPage: true });
+
+          resolve(outputPath);
+        })
+      );
+      console.warn(`Printed diagram ${outputPath}`);
+    } else {
+      // Other forms of output are produced directly by the
+      // sequence diagram library.
+      const outputPath = await printDiagram(argv.format);
+      console.log(`Printed diagram ${outputPath}`);
+    }
   };
 
   for (let i = 0; i < argv.appmap.length; i++) {
     const appmapFile = argv.appmap[i];
     await generateDiagram(appmapFile);
   }
+
+  if (browser) await browser.close();
 };
