@@ -2,6 +2,7 @@ import fs from 'fs';
 import JSONStream from 'JSONStream';
 import { basename } from 'path';
 import Yargs from 'yargs';
+import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { AppMap, pruneAppMap } from './pruneAppMap';
 
 async function fromFile(filePath): Promise<AppMap> {
@@ -71,9 +72,16 @@ export default {
     argv.positional('size', {
       describe: 'Prune input file to this size',
     });
+
+    argv.option('directory', {
+      describe: 'Working directory for the command',
+      type: 'string',
+      alias: 'd',
+    });
   },
 
   handler: async (argv: any): Promise<void> => {
+    handleWorkingDirectory(argv.directory);
     const size = parseSize(argv.size);
     const appMap = pruneAppMap(await fromFile(argv.file), size);
 
