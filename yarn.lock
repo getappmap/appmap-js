@@ -166,6 +166,9 @@ __metadata:
     validator: ^13.7.0
     w3c-xmlserializer: ^2.0.0
     yargs: ^17.1.1
+  dependenciesMeta:
+    puppeteer:
+      optional: true
   bin:
     appmap: built/cli.js
   languageName: unknown

@@ -1,6 +1,5 @@
 import { mkdir, readFile, writeFile } from 'fs/promises';
 import { basename, dirname, join } from 'path';
-import puppeteer, { Browser } from 'puppeteer';
 import yargs from 'yargs';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { verbose } from '../utils';
@@ -15,6 +14,7 @@ import {
 } from '@appland/sequence-diagram';
 import { serveAndOpenSequenceDiagram } from '../lib/serveAndOpen';
 import assert from 'assert';
+import BrowserRenderer from './sequenceDiagram/browserRenderer';
 
 export const command = 'sequence-diagram <appmap...>';
 export const describe = 'Generate a sequence diagram for an AppMap';
@@ -72,10 +72,9 @@ export const handler = async (argv: any) => {
     return;
   }
 
-  let browser: Browser | undefined;
+  let browserRender: BrowserRenderer | undefined;
   if (argv.format === 'png') {
-    if (verbose()) console.warn(`Preparing browser for PNG rendering`);
-    browser = await puppeteer.launch({ timeout: 120 * 1000, headless: !argv.showBrowser });
+    browserRender = new BrowserRenderer(argv.showBrowser);
   }
 
   const generateDiagram = async (appmapFileName: string): Promise<void> => {
@@ -117,19 +116,14 @@ export const handler = async (argv: any) => {
       const outputPath = await new Promise((resolve) =>
         serveAndOpenSequenceDiagram(diagramPath, false, async (url) => {
           if (verbose()) console.warn(`Rendering PNG`);
-          assert(browser, 'Browser not initialized');
-
-          const page = await browser.newPage();
-          if (argv.verbose) page.on('console', (msg) => console.log('CONSOLE: ', msg.text()));
+          assert(browserRender, 'Browser not initialized');
 
           const outputPath = join(
             dirname(diagramPath),
             [basename(diagramPath, '.json'), '.png'].join('')
           );
 
-          await page.goto(url);
-          await page.waitForSelector('.sequence-diagram');
-          await page.screenshot({ path: outputPath, fullPage: true });
+          await browserRender.screenshot(url, outputPath);
 
           resolve(outputPath);
         })
@@ -148,5 +142,5 @@ export const handler = async (argv: any) => {
     await generateDiagram(appmapFile);
   }
 
-  if (browser) await browser.close();
+  if (browserRender) await browserRender.close();
 };
