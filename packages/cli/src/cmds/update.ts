@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { readFile } from 'fs/promises';
+import { mkdir, readFile, writeFile } from 'fs/promises';
 import { glob } from 'glob';
 import { dirname, join, relative, resolve } from 'path';
 import { promisify } from 'util';
@@ -9,13 +9,15 @@ import Depends from '../depends';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import loadAppMapConfig from '../lib/loadAppMapConfig';
 import { locateAppMapDir } from '../lib/locateAppMapDir';
-import { verbose } from '../utils';
+import { exists, verbose } from '../utils';
 import gitDeletedFiles from './archive/gitDeletedFiles';
 import gitModifiedFiles from './archive/gitModifiedFiles';
 import gitNewFiles from './archive/gitNewFiles';
 import { Metadata } from './archive/Metadata';
 import runTests from './archive/runTests';
 import FingerprintDirectoryCommand from '../fingerprint/fingerprintDirectoryCommand';
+import gitAncestors from './archive/gitAncestors';
+import assert from 'assert';
 
 export const command = 'update';
 export const describe = 'Update AppMaps by running new and out-of-date tests';
@@ -90,20 +92,22 @@ be included in the file arguments passed to the test runner.`)
     appmapConfig.preflight?.test_commands;
   const testCommands = testCommandsArgument() || testCommandsConfig();
 
-  const fullArchives = (
-    await Promise.all<Metadata>(
-      (
-        await promisify(glob)(join(baseAppmapDir, 'appmap_archive.*.json'))
-      ).map(async (metadataFile) => JSON.parse(await readFile(metadataFile, 'utf8')))
-    )
-  ).filter((metadata) => !metadata.baseRevision);
+  const archiveMetadata = await Promise.all<Metadata>(
+    (
+      await promisify(glob)(join(baseAppmapDir, 'appmap_archive.*.json'))
+    ).map(async (metadataFile) => JSON.parse(await readFile(metadataFile, 'utf8')))
+  );
 
-  if (fullArchives.length !== 1)
-    throw new Error(
-      `Expecting exactly one full archive in ${baseAppmapDir}, found ${fullArchives.length}.`
-    );
+  const archiveRevisions = archiveMetadata.map((metadata) => metadata.revision);
+  const repoRevisions = await gitAncestors();
+  const baseRevision = repoRevisions.find((revision) => archiveRevisions.includes(revision));
 
-  const baseRevision = fullArchives[0].revision;
+  if (!baseRevision) throw new Error(`No AppMap archive found for any ancestor revision.`);
+
+  console.log(`Comparing code changes with revision ${baseRevision}`);
+
+  const baseArchive = archiveMetadata.find((metadata) => metadata.revision === baseRevision);
+  assert(baseArchive);
 
   const addedTestFiles = await gitNewFiles(testFolders);
   const modifiedFiles = await gitModifiedFiles(baseRevision, []);
@@ -111,17 +115,21 @@ be included in the file arguments passed to the test runner.`)
   const deletedTestFiles = await gitDeletedFiles(baseRevision, testFolders);
   const outOfDateTestFiles = new Set([...addedTestFiles, ...modifiedTestFiles]);
 
-  if (addedTestFiles.length > 0) console.log(`Added tests: ${addedTestFiles.join(' ')}`);
-  if (modifiedTestFiles.length > 0) console.log(`Modified tests: ${modifiedTestFiles.join(' ')}`);
-  if (deletedTestFiles.length > 0) console.log(`Deleted tests: ${deletedTestFiles.join(' ')}`);
+  console.log(`${outOfDateTestFiles.size} test case files are added or modified.`);
 
-  const indexAppMaps = async () => {
+  if (verbose()) {
+    if (addedTestFiles.length > 0) console.log(`Added tests: ${addedTestFiles.join(' ')}`);
+    if (modifiedTestFiles.length > 0) console.log(`Modified tests: ${modifiedTestFiles.join(' ')}`);
+    if (deletedTestFiles.length > 0) console.log(`Deleted tests: ${deletedTestFiles.join(' ')}`);
+  }
+
+  const indexAppMaps = async (dir: string) => {
     process.stdout.write(`Indexing AppMaps...`);
-    const numIndexed = await new FingerprintDirectoryCommand(appmapDir).execute();
+    const numIndexed = await new FingerprintDirectoryCommand(dir).execute();
     process.stdout.write(`done (${numIndexed})\n`);
   };
 
-  await indexAppMaps();
+  await indexAppMaps(baseAppmapDir);
 
   const dirtyTests = new Set([...modifiedTestFiles, ...deletedTestFiles]);
   const deletedAppMaps = new Array<string>();
@@ -148,11 +156,12 @@ be included in the file arguments passed to the test runner.`)
     })
   );
 
-  const depends = new Depends(appmapDir);
+  const depends = new Depends(baseAppmapDir);
   depends.files = modifiedFiles;
   const outOfDateAppMaps = await depends.depends();
   if (outOfDateAppMaps.length > 0) {
-    console.log(`Out-of-date AppMaps: ${outOfDateAppMaps.join(' ')}`);
+    console.log(`${outOfDateAppMaps.length} AppMaps are out of date.`);
+    if (verbose()) console.log(`Out-of-date AppMaps: ${outOfDateAppMaps.join(' ')}`);
     for (const appmap of outOfDateAppMaps) {
       const metadata = JSON.parse(
         await readFile(join(appmap, 'metadata.json'), 'utf-8')
@@ -161,22 +170,32 @@ be included in the file arguments passed to the test runner.`)
     }
   }
 
-  if (outOfDateTestFiles.size > 0)
-    console.log(`Updated (added+modified) tests: ${[...outOfDateTestFiles].join(' ')}`);
+  if (verbose()) {
+    if (outOfDateTestFiles.size > 0)
+      console.log(`Updated (added+modified) tests: ${[...outOfDateTestFiles].join(' ')}`);
+  }
 
   if (outOfDateTestFiles.size === 0) {
     console.log('No changes detected to the code or tests.');
     return;
   }
 
+  console.log(`${outOfDateTestFiles.size} tests will be re-run.`);
+
+  await mkdir(appmapDir, { recursive: true });
+
   const testFilesByFolder = new Map<string, string[]>();
-  outOfDateTestFiles.forEach((testFile) => {
+  for (const testFile of outOfDateTestFiles) {
     const localPath = relative(process.cwd(), testFile);
+    if (!(await exists(testFile))) {
+      console.warn(chalk.yellow(`Test file ${testFile} does not exist`));
+      continue;
+    }
     testFolders?.forEach((folder) => {
       if (localPath.startsWith(folder))
         testFilesByFolder.set(folder, [...(testFilesByFolder.get(folder) || []), localPath]);
     });
-  });
+  }
 
   for (const [folder, testFiles] of testFilesByFolder.entries()) {
     const command = testCommands?.[folder];
@@ -187,5 +206,5 @@ be included in the file arguments passed to the test runner.`)
     await runTests(command, testFiles);
   }
 
-  await indexAppMaps();
+  await writeFile(join(appmapDir, 'appmap_archive.json'), JSON.stringify(baseArchive, null, 2));
 };
