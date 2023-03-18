@@ -3,7 +3,7 @@ import JSONStream from 'JSONStream';
 import { basename } from 'path';
 import Yargs from 'yargs';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
-import { AppMap, pruneAppMap } from './pruneAppMap';
+import { AppMap, pruneAppMap, removeEventsByFqid } from './pruneAppMap';
 
 async function fromFile(filePath): Promise<AppMap> {
   let data: AppMap = { events: [] };
@@ -47,7 +47,7 @@ function parseSize(size: string) {
 }
 
 export default {
-  command: 'prune <file> <size>',
+  command: 'prune <file>',
 
   describe: 'Make an appmap file smaller by removing events',
 
@@ -69,8 +69,11 @@ export default {
       describe: 'AppMap to prune',
     });
 
-    argv.positional('size', {
+    argv.option('size', {
       describe: 'Prune input file to this size',
+      default: '15mb',
+      type: 'string',
+      alias: 's',
     });
 
     argv.option('directory', {
@@ -78,12 +81,25 @@ export default {
       type: 'string',
       alias: 'd',
     });
+
+    argv.option('fqids', {
+      describe: 'Remove events from the map by fqid',
+      type: 'array',
+    });
   },
 
   handler: async (argv: any): Promise<void> => {
     handleWorkingDirectory(argv.directory);
-    const size = parseSize(argv.size);
-    const appMap = pruneAppMap(await fromFile(argv.file), size);
+    const map = await fromFile(argv.file);
+    let appMap: AppMap;
+
+    if (argv.fqids) {
+      appMap = removeEventsByFqid(map, argv.fqids);
+    } else if (argv.size) {
+      appMap = pruneAppMap(map, parseSize(argv.size));
+    } else {
+      throw Error('Invalid usage');
+    }
 
     const outputPath = `${argv.outputDir}/${basename(argv.file)}`;
     fs.writeFileSync(outputPath, JSON.stringify(appMap));
