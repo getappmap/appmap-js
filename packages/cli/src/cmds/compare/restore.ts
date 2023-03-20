@@ -15,5 +15,6 @@ export async function restore(
     revision: revision,
     outputDir: join(outputDir, revisionName),
     archiveDir: archiveDir,
+    exact: true,
   });
 }
