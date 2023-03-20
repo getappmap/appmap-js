@@ -1,11 +1,13 @@
+import { base64UrlEncode } from '@appland/models';
 import fs from 'fs';
 import fse from 'fs-extra';
 import path from 'path';
 import sinon from 'sinon';
-import tmp from 'tmp';
+import tmp, { file } from 'tmp';
 import yargs from 'yargs';
 import * as PruneAppMap from '../../src/cmds/prune/pruneAppMap';
 const fixtureDir = path.join(__dirname, 'fixtures', 'ruby');
+const cmd = require('../../src/cmds/prune/prune').default;
 tmp.setGracefulCleanup();
 
 describe('prune subcommand', () => {
@@ -20,7 +22,6 @@ describe('prune subcommand', () => {
   });
 
   it('works', async () => {
-    const cmd = require('../../src/cmds/prune/prune').default;
     const parser = yargs.command(cmd);
 
     sinon.stub(PruneAppMap, 'pruneAppMap').returns({ events: [] });
@@ -41,5 +42,36 @@ describe('prune subcommand', () => {
     // tested in @appland/models.
     const actual = fs.readFileSync(appMapFile);
     expect(actual.toString()).toEqual('{"events":[]}');
+  });
+
+  it('correctly reduces the size of an appmap from a base64url-encoded filter', async () => {
+    const filterState = {
+      hideName: [
+        'function:logger/Logger::LogDevice#write',
+        'function:activerecord/ActiveRecord::Relation#records',
+        'function:actionpack/ActionDispatch::Request::Session#[]',
+      ],
+    };
+    const serializedFilterState = base64UrlEncode(JSON.stringify(filterState));
+
+    const appmapFile = path.join(
+      __dirname,
+      'fixtures',
+      'stats',
+      'appmap',
+      'Microposts_interface_micropost_interface.appmap.json'
+    );
+
+    const argv = {
+      file: appmapFile,
+      filter: serializedFilterState,
+      outputDir: projectDir,
+    };
+    await cmd.handler(argv);
+
+    const outPath = path.join(projectDir, 'Microposts_interface_micropost_interface.appmap.json');
+    const fileStats = fs.lstatSync(outPath);
+    expect(fileStats.isFile);
+    expect(fileStats.size).toEqual(740567);
   });
 });

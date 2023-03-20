@@ -416,4 +416,5 @@ declare module '@appland/models' {
   // TODO: define type for appmap state
   export function deserializeAppmapState(stringInput: string): any;
   export function base64UrlEncode(text: string): string;
+  export function base64UrlDecode(text: string): string;
 }
