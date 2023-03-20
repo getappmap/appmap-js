@@ -1,3 +1,15 @@
+# [@appland/appmap-v3.69.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.68.1...@appland/appmap-v3.69.0) (2023-03-20)
+
+
+### Features
+
+* Specify puppeteer as an optional dependency ([ad49f57](https://github.com/getappmap/appmap-js/commit/ad49f57ca442eef9cbb379a1ac049746f4201ff8))
+
+
+### Reverts
+
+* Revert "Revert "Merge pull request #1076 from getappmap/feat/sequence-diagram-png-format"" ([5164b7e](https://github.com/getappmap/appmap-js/commit/5164b7e92966e402ca441d1580a0dd44a953bed3)), closes [#1076](https://github.com/getappmap/appmap-js/issues/1076)
+
 # [@appland/appmap-v3.68.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.68.0...@appland/appmap-v3.68.1) (2023-03-16)
 
 
