@@ -20,7 +20,7 @@ async function initializeApp() {
     async mounted() {
       const params = new URL(document.location).searchParams;
       const diagram = params.get('diagram');
-      const res = await fetch(`/resource?${encodeURIComponent(diagram)}`);
+      const res = await fetch(diagram);
       const { ui } = this.$refs;
 
       ui.loadData((await res.json()) || {});
