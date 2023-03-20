@@ -1,26 +1,19 @@
-import { mkdir, rm } from 'fs/promises';
 import yargs from 'yargs';
 import readline from 'readline';
 
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
-import { exists, verbose } from '../../utils';
 import { join } from 'path';
-import { executeCommand } from '../../lib/executeCommand';
 import { RevisionName } from './RevisionName';
-import * as UI from './ui';
-import { handler as restore } from '../archive/restore';
-
-export class ValidationError extends Error {}
+import { checkout } from './checkout';
+import detectRevisions from './detectRevisions';
+import { prepareOutputDir } from './prepareOutputDir';
+import { verbose } from '../../utils';
+import { restore } from './restore';
+import buildChangeReport from './buildChangeReport';
+import { writeFile } from 'fs/promises';
 
 export const command = 'compare';
 export const describe = 'Compare runtime code behavior between base and head revisions';
-
-async function checkout(revisionName: string, revision: string): Promise<void> {
-  console.log();
-  console.log(UI.actionStyle(`Switching to ${revisionName} revision: ${revision}`));
-  await executeCommand(`git checkout ${revision}`, true, true, true);
-  console.log();
-}
 
 export const builder = (args: yargs.Argv) => {
   args.option('directory', {
@@ -69,75 +62,33 @@ export const handler = async (argv: any) => {
     yargs.exit(0, new Error());
   });
 
-  handleWorkingDirectory(argv.directory);
+  const {
+    archiveDir,
+    directory,
+    baseRevision: baseRevisionArg,
+    outputDir: outputDirArg,
+    headRevision: headRevisionArg,
+  } = argv;
 
-  const { baseRevision, outputDir: outputDirArg, headRevision: headRevisionArg } = argv;
+  handleWorkingDirectory(directory);
 
-  let headRevision = headRevisionArg;
-  if (!headRevision) {
-    let currentBranch = (await executeCommand(`git branch --show-current`)).trim();
-    if (currentBranch === '') {
-      currentBranch = (await executeCommand(`git show --format=oneline --abbrev-commit`)).split(
-        /\s/
-      )[0];
-    }
+  const { baseRevision, headRevision } = await detectRevisions(baseRevisionArg, headRevisionArg);
 
-    headRevision = currentBranch;
-  }
+  const outputDir = await prepareOutputDir(
+    outputDirArg,
+    baseRevision,
+    headRevision,
+    argv.clobberOutputDir,
+    rl
+  );
 
-  console.log(UI.prominentStyle(`Current revision is: ${headRevision}`));
+  await restore(outputDir, archiveDir, RevisionName.Base, baseRevision);
+  await restore(outputDir, archiveDir, RevisionName.Head, headRevision);
 
-  if (baseRevision === headRevision) {
-    throw new ValidationError(`Base and head revisions are the same: ${baseRevision}`);
-  }
+  const changeReport = await buildChangeReport(baseRevision, headRevision, outputDir);
 
-  let outputDir = outputDirArg;
-  if (!outputDir) {
-    outputDir = `change-report/${UI.sanitizeRevision(baseRevision)}-${UI.sanitizeRevision(
-      headRevision
-    )}`;
-  }
-
-  if (await exists(outputDir)) {
-    if (
-      argv.clobberOutputDir ||
-      !(await UI.confirm(`Use existing data directory ${outputDir}?`, rl))
-    ) {
-      if (
-        !argv.clobberOutputDir &&
-        !(await UI.confirm(`Delete existing data directory ${outputDir}?`, rl))
-      ) {
-        const msg = `The data directory ${outputDir} exists but you don't want to use it or delete it. Aborting...`;
-        console.warn(msg);
-        yargs.exit(1, new Error(msg));
-      }
-      await rm(outputDir, { recursive: true, force: true });
-      // Rapid rm and then mkdir will silently fail in practice.
-      await new Promise<void>((resolve) => setTimeout(resolve, 100));
-    }
-  }
-
-  await mkdir(outputDir, { recursive: true });
-  await mkdir(join(outputDir, RevisionName.Diff), { recursive: true });
-
-  await checkout('base', baseRevision);
-
-  await restore({
-    directory: argv.directory,
-    revision: baseRevision,
-    outputDir: join(outputDir, RevisionName.Base),
-    archiveDir: argv.archiveDir,
-  });
-
-  await checkout('head', headRevision);
-
-  await restore({
-    directory: argv.directory,
-    revision: headRevision,
-    outputDir: join(outputDir, RevisionName.Head),
-    archiveDir: argv.archiveDir,
-    exact: true,
-  });
+  await writeFile(join(outputDir, 'change-report.json'), JSON.stringify(changeReport, null, 2));
+  console.log(JSON.stringify(changeReport, null, 2));
 
   rl.close();
 };
