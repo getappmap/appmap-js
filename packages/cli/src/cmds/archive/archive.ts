@@ -107,7 +107,7 @@ export const handler = async (argv: any) => {
     concurrency,
     maxSize,
     type: typeArg,
-    revision: defaultRevision,
+    revision: revisionArg,
     outputFile: outputFileNameArg,
   } = argv;
   const { outputDirArg } = argv;
@@ -116,7 +116,7 @@ export const handler = async (argv: any) => {
 
   console.log(`Building '${typeArg}' archive from ${appMapDir}`);
 
-  const revision = await gitRevision(defaultRevision);
+  const revision = revisionArg || (await gitRevision());
 
   console.log(`Building archive of revision ${revision}`);
   const versions = { archive: ArchiveVersion, index: IndexVersion };
