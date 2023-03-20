@@ -3,7 +3,7 @@ import JSONStream from 'JSONStream';
 import { basename } from 'path';
 import Yargs from 'yargs';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
-import { AppMap, pruneAppMap, removeEventsByFqid } from './pruneAppMap';
+import { AppMap, pruneAppMap, pruneWithFilter } from './pruneAppMap';
 
 async function fromFile(filePath): Promise<AppMap> {
   let data: AppMap = { events: [] };
@@ -82,9 +82,9 @@ export default {
       alias: 'd',
     });
 
-    argv.option('fqids', {
-      describe: 'Remove events from the map by fqid',
-      type: 'array',
+    argv.option('filter', {
+      describe: 'Filter to use to prune the map',
+      type: 'string',
     });
   },
 
@@ -93,8 +93,8 @@ export default {
     const map = await fromFile(argv.file);
     let appMap: AppMap;
 
-    if (argv.fqids) {
-      appMap = removeEventsByFqid(map, argv.fqids);
+    if (argv.filter) {
+      appMap = pruneWithFilter(map, argv.filter);
     } else if (argv.size) {
       appMap = pruneAppMap(map, parseSize(argv.size));
     } else {
