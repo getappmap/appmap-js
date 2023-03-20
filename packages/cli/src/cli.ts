@@ -36,6 +36,7 @@ import UploadCommand from './cmds/upload';
 const BuildArchive = require('./cmds/archive/archive');
 const RestoreArchive = require('./cmds/archive/restore');
 const UpdateAppMaps = require('./cmds/update');
+const Compare = require('./cmds/compare/compare');
 
 class DiffCommand {
   public appMapNames: any;
@@ -461,6 +462,7 @@ yargs(process.argv.slice(2))
   .command(BuildArchive)
   .command(RestoreArchive)
   .command(UpdateAppMaps)
+  .command(Compare)
   .strict()
   .demandCommand()
   .help().argv;
