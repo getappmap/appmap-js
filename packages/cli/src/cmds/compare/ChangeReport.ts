@@ -18,4 +18,5 @@ export type ChangeReport = {
   testFailures: TestFailure[];
   newAppMaps: AppMapLink[];
   changedAppMaps: ChangedAppMap[];
+  sequenceDiagramDiffSnippets: Record<string, AppMapLink[]>;
 };
