@@ -1,8 +1,6 @@
 import { exec } from 'child_process';
 
-export default async function gitRevision(defaultRevision?: string): Promise<string> {
-  if (defaultRevision) return Promise.resolve(defaultRevision);
-
+export default async function gitRevision(): Promise<string> {
   const revision = await new Promise<string | undefined>((resolve) => {
     exec('git rev-parse HEAD', (error, stdout) => {
       if (error) resolve(undefined);
