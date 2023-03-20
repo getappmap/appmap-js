@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.70.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.69.0...@appland/appmap-v3.70.0) (2023-03-20)
+
+
+### Features
+
+* add --appmap-dir option ([778b31f](https://github.com/getappmap/appmap-js/commit/778b31f4b03488f17cdefb972d684462357728ba))
+* stats for a single appmap ([34a4b67](https://github.com/getappmap/appmap-js/commit/34a4b672452755c356877e4ecae8f04d0f9e1994))
+
 # [@appland/appmap-v3.69.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.68.1...@appland/appmap-v3.69.0) (2023-03-20)
 
 
