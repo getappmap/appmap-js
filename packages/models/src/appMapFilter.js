@@ -323,6 +323,32 @@ export default class AppMapFilter {
     return events;
   }
 
+  apply(filterState) {
+    if ('rootObjects' in filterState) {
+      this.declutter.rootObjects = filterState.rootObjects;
+    }
+    if ('limitRootEvents' in filterState) {
+      this.declutter.limitRootEvents.on = filterState.limitRootEvents;
+    }
+    if ('hideMediaRequests' in filterState) {
+      this.declutter.hideMediaRequests.on = filterState.hideMediaRequests;
+    }
+    if ('hideUnlabeled' in filterState) {
+      this.declutter.hideUnlabeled.on = filterState.hideUnlabeled;
+    }
+    if ('hideExternalPaths' in filterState) {
+      this.declutter.hideExternalPaths.on = filterState.hideExternalPaths;
+    }
+    if ('hideElapsedTimeUnder' in filterState && filterState.hideElapsedTimeUnder !== false) {
+      this.declutter.hideElapsedTimeUnder.on = true;
+      this.declutter.hideElapsedTimeUnder.time = filterState.hideElapsedTimeUnder;
+    }
+    if ('hideName' in filterState && filterState.hideName !== false) {
+      this.declutter.hideName.on = true;
+      this.declutter.hideName.names = filterState.hideName;
+    }
+  }
+
   static eventAlreadyHasFinding(event, finding) {
     return (
       event.findings &&
