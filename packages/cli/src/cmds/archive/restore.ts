@@ -37,6 +37,12 @@ export const builder = (args: yargs.Argv) => {
     default: '.appmap/archive',
   });
 
+  args.option('exact', {
+    describe: 'fail unless the specific revision requested is available to be restored',
+    type: 'boolean',
+    default: false,
+  });
+
   return args.strict();
 };
 
@@ -45,9 +51,9 @@ export const handler = async (argv: any) => {
 
   handleWorkingDirectory(argv.directory);
 
-  const { revision: defaultRevision, outputDir, archiveDir } = argv;
+  const { revision: revisionArg, outputDir, archiveDir, exact } = argv;
 
-  const revision = await gitRevision(defaultRevision);
+  const revision = revisionArg || (await gitRevision());
 
   console.log(`Restoring AppMaps of revision ${revision} to ${outputDir}`);
 
@@ -69,21 +75,36 @@ export const handler = async (argv: any) => {
 
   console.log(`Restoring full archive ${mostRecentFullArchive}`);
   await unpackArchive(outputDir, mostRecentFullArchive);
+  let restoredRevision = baseRevision;
+  const restoredRevisions = [restoredRevision];
 
-  const baseRevisionIndex = ancestors.indexOf(baseRevision);
-  assert(baseRevisionIndex !== -1);
-  const ancestorsAfterBaseRevision = new Set<string>(ancestors.slice(0, baseRevisionIndex));
-  const incrementalArchivesAvailable = (
-    await promisify(glob)(join(archiveDir, 'incremental', '*.tar'))
-  ).filter((archive) => {
-    const revision = basename(archive, '.tar');
-    return ancestorsAfterBaseRevision.has(revision);
-  });
+  if (baseRevision !== revision) {
+    const baseRevisionIndex = ancestors.indexOf(baseRevision);
+    assert(baseRevisionIndex !== -1);
+    const ancestorsAfterBaseRevision = new Set<string>(ancestors.slice(0, baseRevisionIndex));
+    const incrementalArchivesAvailable = (
+      await promisify(glob)(join(archiveDir, 'incremental', '*.tar'))
+    ).filter((archive) => {
+      const revision = basename(archive, '.tar');
+      return ancestorsAfterBaseRevision.has(revision);
+    });
 
-  console.log(`Applying incremental archives ${incrementalArchivesAvailable.join(', ')}`);
+    console.log(`Applying incremental archives ${incrementalArchivesAvailable.join(', ')}`);
 
-  for (const archive of incrementalArchivesAvailable) {
-    await unpackArchive(outputDir, archive);
+    for (const archive of incrementalArchivesAvailable) {
+      const incrementalRevision = basename(archive, '.tar');
+      restoredRevision = incrementalRevision;
+      restoredRevisions.push(restoredRevision);
+      await unpackArchive(outputDir, archive);
+    }
+  }
+
+  if (exact) {
+    if (restoredRevisions[restoredRevisions.length - 1] !== revision) {
+      throw new Error(
+        `Unable to restore specific revision ${revision}; applied ${restoredRevisions.join(', ')}.`
+      );
+    }
   }
 
   console.log(`Updating indexes`);
