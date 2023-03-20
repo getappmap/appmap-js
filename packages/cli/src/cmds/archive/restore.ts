@@ -60,26 +60,28 @@ export const handler = async (argv: any) => {
   const ancestors = await gitAncestors();
 
   // Find the AppMap tarball that's closest in the git ancestry.
-  const fullArchivesAvailable = await promisify(glob)(join(archiveDir, 'full', '*.tar'));
-  const mostRecentFullArchive = fullArchivesAvailable.find((archive) => {
-    const revision = basename(archive, '.tar');
-    return ancestors.includes(revision);
-  });
-  if (!mostRecentFullArchive) throw new Error(`No AppMap tarball found in the ancestry of HEAD`);
+  const fullArchivesAvailable = new Set<string>(
+    await promisify(glob)(join(archiveDir, 'full', '*.tar'))
+  );
+  const mostRecentRevisionAvailable = ancestors.find((revision) =>
+    fullArchivesAvailable.has(join(archiveDir, 'full', `${revision}.tar`))
+  );
+  if (!mostRecentRevisionAvailable)
+    throw new Error(`No full AppMap archive found in the ancestry of ${revision}`);
 
-  const baseRevision = basename(mostRecentFullArchive, '.tar');
+  console.log(`Using revision ${mostRecentRevisionAvailable} as the baseline`);
 
-  console.log(`Using revision ${baseRevision} as the baseline`);
+  const mostRecentFullArchive = join(archiveDir, 'full', `${mostRecentRevisionAvailable}.tar`);
 
   await rmdir(outputDir, { recursive: true });
 
   console.log(`Restoring full archive ${mostRecentFullArchive}`);
   await unpackArchive(outputDir, mostRecentFullArchive);
-  let restoredRevision = baseRevision;
+  let restoredRevision = mostRecentRevisionAvailable;
   const restoredRevisions = [restoredRevision];
 
-  if (baseRevision !== revision) {
-    const baseRevisionIndex = ancestors.indexOf(baseRevision);
+  if (mostRecentRevisionAvailable !== revision) {
+    const baseRevisionIndex = ancestors.indexOf(mostRecentRevisionAvailable);
     assert(baseRevisionIndex !== -1);
     const ancestorsAfterBaseRevision = new Set<string>(ancestors.slice(0, baseRevisionIndex));
     const incrementalArchivesAvailable = (
