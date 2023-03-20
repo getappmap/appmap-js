@@ -143,6 +143,8 @@ declare module '@appland/models' {
     readonly sqlObject?: CodeObject;
     readonly roots: CodeObject[];
 
+    constructor(data: any);
+
     visit(fn: (codeObject: CodeObject) => void): void;
     search(query: string): CodeObject[];
     codeObjectFromId(id: string): CodeObject | undefined;

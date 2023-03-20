@@ -1,335 +1,112 @@
-import yargs from 'yargs';
 import { chdir } from 'process';
-const fs = require('fs');
-import UI from '../userInteraction';
-import Telemetry from '../../telemetry';
-import { listAppMapFiles, verbose } from '../../utils';
-import { Event, buildAppMap } from '@appland/models';
-
-import { AppMapSize, AppMapSizeTable, SortedAppMapSize } from './types/appMapSize';
-import { FunctionExecutionTime, SlowestExecutionTime } from './types/functionExecutionTime';
+import { existsSync, lstatSync } from 'fs';
+import path from 'path';
+import glob from 'glob';
 import chalk from 'chalk';
-import { relative } from 'path';
+import yargs from 'yargs';
+import { statsForDirectory } from './directory/statsForDirectory';
+import { EventInfo, statsForMap } from './directory/statsForMap';
+import { SortedAppMapSize } from './types/appMapSize';
+import { SlowestExecutionTime } from './types/functionExecutionTime';
+import { locateAppMapDir } from '../../lib/locateAppMapDir';
+import UI from '../userInteraction';
+import { verbose } from '../../utils';
+import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 
 export const command = 'stats [directory]';
-export const describe = 'Show some statistics about events in scenarios read from AppMap files';
+export const describe =
+  'Show statistics about events from an AppMap or from all AppMaps in a directory';
 const LIMIT_DEFAULT = 10;
-const MINIMUM_APPMAP_SIZE = (1024 * 1024) / 1;
+
+async function locateAppMapFile(userInput: string, appmapDir: string): Promise<string | undefined> {
+  let extension = '.appmap.json';
+  if (userInput.endsWith('.appmap.json')) {
+    extension = '';
+  } else if (userInput.endsWith('.appmap')) {
+    extension = '.json';
+  }
+
+  const globMatch = (globString: string) => {
+    return glob.sync(globString);
+  };
+
+  const appmapInWorkingDir = () => globMatch(path.join(appmapDir, '**', userInput + extension));
+  const appmapInAppMapDir = () => [path.join(userInput + extension)].filter((p) => existsSync(p));
+  const appmapAbsolute = () => {
+    if (!path.isAbsolute(userInput + extension)) return [];
+
+    return globMatch(userInput + extension);
+  };
+
+  let matches = [...appmapAbsolute(), ...appmapInWorkingDir(), ...appmapInAppMapDir()];
+
+  if (matches.length === 0) {
+    console.error(chalk.red('No matching AppMap found'));
+    return;
+  } else if (matches.length > 1) {
+    const { choice } = await UI.prompt({
+      type: 'list',
+      choices: matches,
+      name: 'choice',
+      message: 'There are multiple matching AppMaps, which one do you want to anlyze?',
+    });
+    return choice;
+  }
+  return matches[0];
+}
 
 export const builder = (args: yargs.Argv) => {
   args.option('directory', {
-    describe: 'Working directory for the command.',
+    describe: 'program working directory',
     type: 'string',
     alias: 'd',
   });
+  args.option('appmap-dir', {
+    describe: 'directory to recursively inspect for AppMaps',
+  });
 
-  args.option('json', {
-    describe: 'Format results as JSON.',
-    type: 'boolean',
-    alias: 'j',
+  args.option('format', {
+    describe: 'How to format the output',
+    choices: ['json', 'text'],
+    alias: 'f',
+    default: 'text',
   });
 
   args.option('limit', {
-    describe: 'limit the number of methods displayed (default ' + LIMIT_DEFAULT + ').',
+    describe: 'Number of methods to display',
     type: 'number',
     alias: 'l',
     default: LIMIT_DEFAULT,
   });
 
+  args.option('appmap-file', {
+    describe: 'AppMap to analyze',
+    type: 'string',
+    alias: 'a',
+  });
+
   return args.strict();
 };
 
-export async function handler(argv: any, handlerCaller: string = 'from_stats') {
+export async function handler(
+  argv: any,
+  handlerCaller: string = 'from_stats'
+): Promise<Array<EventInfo> | Promise<[SortedAppMapSize[], SlowestExecutionTime[]]> | undefined> {
   verbose(argv.verbose);
+  handleWorkingDirectory(argv.directory);
+  const appmapDir = await locateAppMapDir(argv.appmapDir);
 
-  const commandFn = async () => {
-    const { directory, json, limit: limitToUse } = argv;
-    if (directory) {
-      if (verbose()) console.log(`Using working directory ${directory}`);
-      chdir(directory);
-    }
+  const { format, limit, appmapFile } = argv;
 
-    let directoryToUse = directory;
-    if (!directoryToUse) directoryToUse = '.';
+  if (appmapFile) {
+    const fileToAnalyze = await locateAppMapFile(appmapFile, appmapDir);
+    if (!fileToAnalyze) return;
+    
+    console.warn(`Analyzing AppMap: ${fileToAnalyze}`);
+    return await statsForMap(format, limit, fileToAnalyze);
+  }
 
-    async function calculateAppMapSizes(appMapDir: string): Promise<AppMapSizeTable> {
-      const appMapSizes: AppMapSizeTable = {};
-
-      // This function is too verbose to be useful in this context.
-      const v = verbose();
-      verbose(false);
-      await listAppMapFiles(appMapDir, (fileName: string) => {
-        const stats = fs.statSync(fileName);
-        appMapSizes[fileName] = {
-          path: relative(appMapDir, fileName),
-          size: stats.size,
-        };
-      });
-      verbose(v);
-
-      return appMapSizes;
-    }
-
-    async function sortAppMapSizes(appMapSizes: AppMapSizeTable): Promise<SortedAppMapSize[]> {
-      let appMapSizesArray: SortedAppMapSize[] = [];
-
-      for (const key in appMapSizes) {
-        appMapSizesArray.push({
-          path: appMapSizes[key].path,
-          size: appMapSizes[key].size,
-        });
-      }
-
-      return appMapSizesArray.sort((a, b) => b.size - a.size);
-    }
-
-    function sizeInMB(size: number): number {
-      return Number((size / 1000 / 1000).toFixed(1));
-    }
-
-    async function calculateExecutionTimes(
-      appMapDir: string
-    ): Promise<{ totalTime: number; functions: FunctionExecutionTime[] }> {
-      // now that all functions were collected, index them by function
-      // name, not by <thread_id,parent_id>
-      let totalFunctionExecutionTimes: Record<
-        string,
-        {
-          elapsedInstrumentationTime: number;
-          numberOfCalls: number;
-          path: string;
-        }
-      > = {};
-
-      // This function is too verbose to be useful in this context.
-      const v = verbose();
-      verbose(false);
-      // Note that event#elapsed time does NOT include instrumentation overhead.
-      // So, instrumentation / elapsed can theoretically be greater than 1.
-      let totalTime = 0;
-      await listAppMapFiles(appMapDir, (fileName: string) => {
-        const file = fs.readFileSync(fileName, 'utf-8');
-        const appmapData = JSON.parse(file.toString());
-        const appmap = buildAppMap(appmapData).build();
-        appmap.events.forEach((event: Event) => {
-          if (event.isCall()) {
-            const eventReturn = event.returnEvent;
-            if (!eventReturn) return;
-
-            const name = event.codeObject.fqid;
-            let elapsedInstrumentationTime = eventReturn.elapsedInstrumentationTime || 0;
-            let path = '';
-
-            // some paths are library functions but don't start with /. i.e.:
-            // <internal:pack>
-            // OpenSSL::Cipher#decrypt
-            // Kernel#eval
-            if (
-              event.definedClass &&
-              event.path &&
-              (event.path[0] == '/' ||
-                event.path[0] == '<' ||
-                event.path.includes('::') ||
-                event.path.startsWith('Kernel'))
-            ) {
-              // Absolute path names generally signify a library function.
-              // Send library function data to help optimize AppMap;
-              // don't send user function data.
-              path = event.path;
-            }
-
-            // Total up the elapsed time of root events.
-            if (!event.parent && eventReturn.elapsedTime) {
-              totalTime += eventReturn.elapsedTime;
-            }
-
-            const existingRecord = totalFunctionExecutionTimes[name];
-            if (!existingRecord) {
-              totalFunctionExecutionTimes[name] = {
-                path,
-                numberOfCalls: 1,
-                elapsedInstrumentationTime,
-              };
-            } else {
-              existingRecord.numberOfCalls += 1;
-              existingRecord.elapsedInstrumentationTime += elapsedInstrumentationTime;
-              if (existingRecord.path === '') existingRecord.path = path;
-            }
-          }
-        });
-      });
-      verbose(v);
-
-      // convert hash to array
-      let flatFunctionExecutionTimes: FunctionExecutionTime[] = [];
-      for (const name in totalFunctionExecutionTimes) {
-        flatFunctionExecutionTimes.push({
-          name: name,
-          elapsedInstrumentationTime: totalFunctionExecutionTimes[name].elapsedInstrumentationTime,
-          numberOfCalls: totalFunctionExecutionTimes[name].numberOfCalls,
-          path: totalFunctionExecutionTimes[name].path,
-        });
-      }
-
-      return { totalTime, functions: flatFunctionExecutionTimes };
-    }
-
-    async function sortExecutionTimes(
-      functionExecutionTimes: FunctionExecutionTime[]
-    ): Promise<FunctionExecutionTime[]> {
-      // sort the array
-      return functionExecutionTimes.sort(
-        (a, b) => b.elapsedInstrumentationTime - a.elapsedInstrumentationTime
-      );
-    }
-
-    async function showStats(): Promise<[SortedAppMapSize[], SlowestExecutionTime[]]> {
-      let biggestAppMapSizes: SortedAppMapSize[] = [];
-      // column names in JSON files use snakecase
-      let slowestExecutionTimes: SlowestExecutionTime[] = [];
-      try {
-        UI.status = `Computing AppMap stats...`;
-        const appMapDir = directoryToUse;
-        const appMapSizes: AppMapSizeTable = await calculateAppMapSizes(appMapDir);
-        const sortedAppMapSizes: SortedAppMapSize[] = await sortAppMapSizes(appMapSizes);
-        UI.success();
-        UI.progress('');
-        UI.progress(
-          chalk.underline(`Largest AppMaps (which are bigger than ${MINIMUM_APPMAP_SIZE / 1024}kb)`)
-        );
-        sortedAppMapSizes
-          .filter((appmap) => appmap.size > MINIMUM_APPMAP_SIZE)
-          .slice(0, limitToUse)
-          .forEach((appmap) => {
-            biggestAppMapSizes.push({
-              size: appmap.size,
-              path: appmap.path,
-            });
-          });
-        if (json) {
-          console.log(JSON.stringify(biggestAppMapSizes));
-        } else {
-          biggestAppMapSizes.forEach((appmap) => {
-            console.log(sizeInMB(appmap.size) + 'MB ' + appmap.path);
-          });
-        }
-
-        UI.progress('');
-        UI.status = `Computing functions with highest AppMap overhead...`;
-        const executionTimes = await calculateExecutionTimes(appMapDir);
-        const sortedExecutionTimes = await sortExecutionTimes(executionTimes.functions);
-        let totalInstrumentationTime = 0;
-        sortedExecutionTimes.forEach(
-          (time) => (totalInstrumentationTime += time.elapsedInstrumentationTime)
-        );
-
-        UI.success();
-        UI.progress('');
-
-        // if there are no instrumentation data don't show this report
-        if (
-          sortedExecutionTimes.length > 0 &&
-          sortedExecutionTimes[0].elapsedInstrumentationTime === 0
-        ) {
-          console.log(
-            "These AppMaps don't contain function overhead data. Please update your appmap package to the latest version."
-          );
-        } else {
-          sortedExecutionTimes.slice(0, limitToUse).forEach((executionTime) => {
-            slowestExecutionTimes.push({
-              elapsed_instrumentation_time_total: Number(
-                executionTime.elapsedInstrumentationTime.toFixed(6)
-              ),
-              num_calls: executionTime.numberOfCalls,
-              name: executionTime.name,
-              path: executionTime.path,
-            });
-          });
-
-          if (json) {
-            console.log(JSON.stringify(slowestExecutionTimes));
-          } else {
-            UI.progress(chalk.underline(`Total instrumentation time`));
-            console.log(`${Math.round(totalInstrumentationTime * 1000)}ms`);
-            UI.progress('');
-            UI.progress(chalk.underline(`Functions with highest AppMap overhead`));
-
-            console.log(
-              chalk.underline(
-                [
-                  'Time'.padStart(9),
-                  '%'.padStart(5),
-                  'Count'.padStart(7),
-                  'Function name'.padEnd(30),
-                ].join(' | ')
-              )
-            );
-            slowestExecutionTimes.forEach((executionTime) => {
-              const displayMs = [
-                Math.round(executionTime.elapsed_instrumentation_time_total * 1000).toString(),
-                'ms',
-              ].join('');
-              const displayPercent = `${(
-                Math.round(
-                  (executionTime.elapsed_instrumentation_time_total / totalInstrumentationTime) *
-                    1000
-                ) / 10
-              ).toLocaleString('en-us', { maximumFractionDigits: 2, minimumFractionDigits: 0 })}%`;
-
-              console.log(
-                [
-                  displayMs.padStart(9),
-                  displayPercent.padStart(5),
-                  executionTime.num_calls.toString().padStart(7),
-                  executionTime.name.split(':').slice(1).join(':'),
-                ].join(' | ')
-              );
-            });
-          }
-        }
-
-        let telemetryMetrics = {};
-        let telemetryMetricsCounter = 1;
-        biggestAppMapSizes.forEach((appmap) => {
-          telemetryMetrics[`biggestAppmaps_${telemetryMetricsCounter}`] = appmap.size;
-          telemetryMetricsCounter += 1;
-        });
-        telemetryMetricsCounter = 1;
-        slowestExecutionTimes.forEach((executionTime) => {
-          telemetryMetrics[`slowestInstrumentationTimesTotal_${telemetryMetricsCounter}`] =
-            executionTime.elapsed_instrumentation_time_total;
-          telemetryMetrics[`slowestInstrumentationTimesPath_${telemetryMetricsCounter}`] =
-            executionTime.path;
-          telemetryMetricsCounter += 1;
-        });
-
-        Telemetry.sendEvent({
-          name: `stats:${handlerCaller}:success`,
-          properties: {
-            path: appMapDir,
-          },
-          metrics: telemetryMetrics,
-        });
-      } catch (err) {
-        let errorMessage: string | undefined = (err as any).toString();
-        if (err instanceof Error) {
-          Telemetry.sendEvent({
-            name: `stats:${handlerCaller}:error`,
-            properties: {
-              errorMessage,
-              errorStack: err.stack,
-            },
-          });
-        }
-      }
-
-      return [biggestAppMapSizes, slowestExecutionTimes];
-    }
-
-    return await showStats();
-  };
-
-  return await commandFn();
+  return await statsForDirectory(appmapDir, format, limit, handlerCaller);
 }
 
 export default {
