@@ -255,8 +255,9 @@ export default async function buildChangeReport(
     const testFailure = {
       appmap,
       name: metadata.name,
-      testLocation: metadata.source_location,
-    };
+    } as TestFailure;
+    if (metadata.source_location)
+      testFailure.testLocation = relative(process.cwd(), metadata.source_location);
     return testFailure;
   });
 
