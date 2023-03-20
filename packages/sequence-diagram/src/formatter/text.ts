@@ -25,11 +25,11 @@ function diffModeName(diffMode: DiffMode): string {
   }
 }
 
-export function format(diagram: Diagram): string {
+export function format(diagram: Diagram, maxDepth = 4): string {
   const lineCount = new Map<string, number>();
   const lines: string[] = [];
   const describeChange = (action: Action, depth = 1): void => {
-    if (depth > 4) return;
+    if (depth > maxDepth) return;
 
     if (action.diffMode !== undefined) {
       const tokens: string[] = [];
@@ -88,13 +88,17 @@ export function format(diagram: Diagram): string {
         tokens.push(diffModeName(action.diffMode));
         tokens.push(qualifyAction(normalizeName(nodeName(action))));
       }
-      const message = [new Array(depth).join('  '), tokens.join(' ')].join('');
-      if (lineCount.has(message)) {
-        lineCount.set(message, lineCount.get(message)! + 1);
-      } else {
-        lineCount.set(message, 1);
-        lines.push(message);
+
+      if (tokens.length > 0) {
+        const message = [new Array(depth).join('  '), tokens.join(' ')].join('');
+        if (lineCount.has(message)) {
+          lineCount.set(message, lineCount.get(message)! + 1);
+        } else {
+          lineCount.set(message, 1);
+          lines.push(message);
+        }
       }
+
       depth += 1;
     }
     action.children.forEach((child) => describeChange(child, depth));

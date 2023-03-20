@@ -1,5 +1,5 @@
 <template>
-  <div class="label">
+  <div :class="classes">
     <template v-if="collapseEnabled">
       <div :class="collapseClasses" @click="collapseOrExpand">{{ collapseExpandIndicator }}</div>
     </template>
@@ -52,6 +52,11 @@ export default {
       type: Array,
       required: true,
     },
+    interactive: {
+      type: Boolean,
+      required: true,
+      readonly: true,
+    },
     appMap: {
       type: Object,
     },
@@ -64,7 +69,15 @@ export default {
   },
 
   computed: {
+    classes(): { [key: string]: boolean } {
+      return {
+        label: true,
+        interactive: this.interactive,
+      };
+    },
     collapseEnabled(): boolean {
+      if (!this.interactive) return false;
+
       if (this.actionSpec.action.children.length === 0) return false;
 
       return true;
@@ -191,9 +204,11 @@ $bg-fade: rgba(0, 0, 0, 0.8);
   }
 }
 
-.name:hover,
-.collapse-expand:hover {
-  cursor: pointer;
-  color: $lightblue;
+.interactive {
+  .name:hover,
+  .collapse-expand:hover {
+    cursor: pointer;
+    color: $lightblue;
+  }
 }
 </style>

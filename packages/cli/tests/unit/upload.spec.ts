@@ -1,16 +1,16 @@
-import { handler } from '../../../src/cmds/upload';
+import { handler } from '../../src/cmds/upload';
 
 import path from 'node:path';
 import fs from 'node:fs/promises';
 
 import * as client from '@appland/client';
-import UI_ from '../../../src/cmds/userInteraction';
-import * as utils from '../../../src/utils';
+import UI_ from '../../src/cmds/userInteraction';
+import * as utils from '../../src/utils';
 import { Stats } from 'node:fs';
-import * as appNameFromConfig from '../../../src/lib/appNameFromConfig';
-import * as locateAppMapDir from '../../../src/lib/locateAppMapDir';
+import * as appNameFromConfig from '../../src/lib/appNameFromConfig';
+import * as locateAppMapDir from '../../src/lib/locateAppMapDir';
 
-const AppMapDir = path.join(__dirname, '../', 'fixtures', 'stats');
+const AppMapDir = path.join(__dirname, 'fixtures', 'stats');
 
 describe('upload command', () => {
   describe('when app exists', () => {
@@ -139,9 +139,9 @@ afterEach(() => {
   if (cwd) process.chdir(cwd);
 });
 
-jest.mock('../../../src/telemetry');
+jest.mock('../../src/telemetry');
 jest.mock('@appland/client');
-jest.mock('../../../src/cmds/userInteraction');
+jest.mock('../../src/cmds/userInteraction');
 
 const App = jest.mocked(client.App);
 const AppMap = jest.mocked(client.AppMap);
