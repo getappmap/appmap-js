@@ -14,7 +14,7 @@ import { dirname, isAbsolute, join, relative, resolve } from 'path';
 import { promisify } from 'util';
 import { executeCommand } from '../../lib/executeCommand';
 import { DiffDiagrams } from '../../sequenceDiagramDiff/DiffDiagrams';
-import { ChangedAppMap, ChangeReport } from './ChangeReport';
+import { ChangedAppMap, ChangeReport, TestFailure } from './ChangeReport';
 import { RevisionName } from './RevisionName';
 import { mutedStyle } from './ui';
 
@@ -192,6 +192,7 @@ export default async function buildChangeReport(
     .filter((appmap) => existingAppMaps.has(appmap))
     .map((appmap) => ({ appmap }));
 
+  const sequenceDiagramDiffSnippets = new Map<string, AppMapName[]>();
   {
     const changedQueue = queue(async (changedAppMap: ChangedAppMap) => {
       const { appmap } = changedAppMap;
@@ -229,6 +230,19 @@ export default async function buildChangeReport(
         await mkdir(dirname(path), { recursive: true });
         await writeFile(path, diagramJSON.diagram);
         changedAppMap.sequenceDiagramDiff = relative(workingDir, path);
+
+        // Build a text snippet for each top level context.
+        const allActions = [...diagramDiff.rootActions];
+        for (let actionIndex = 0; actionIndex < diagramDiff.rootActions.length; actionIndex++) {
+          const action = diagramDiff.rootActions[actionIndex];
+          diagramDiff.rootActions = [action];
+          const snippet = format(FormatType.Text, diagramDiff, 'diff');
+
+          if (!sequenceDiagramDiffSnippets.has(snippet.diagram))
+            sequenceDiagramDiffSnippets.set(snippet.diagram, []);
+          sequenceDiagramDiffSnippets.get(snippet.diagram)?.push(appmap);
+        }
+        diagramDiff.rootActions = allActions;
       }
     }, 5);
     changedQueue.error(console.warn);
@@ -265,5 +279,13 @@ export default async function buildChangeReport(
     testFailures,
     newAppMaps,
     changedAppMaps,
+    sequenceDiagramDiffSnippets: [...sequenceDiagramDiffSnippets.entries()].reduce(
+      (memo, entry) => {
+        const [snippet, appmaps] = entry;
+        memo[snippet] = appmaps;
+        return memo;
+      },
+      {}
+    ),
   };
 }
