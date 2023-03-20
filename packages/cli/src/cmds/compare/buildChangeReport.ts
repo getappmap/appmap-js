@@ -92,7 +92,7 @@ class AppMapIndex {
     q.error(console.warn);
     baseAppMaps.forEach((appmap) => q.push({ revisionName: RevisionName.Base, appmap }));
     headAppMaps.forEach((appmap) => q.push({ revisionName: RevisionName.Head, appmap }));
-    await q.drain();
+    if (q.length()) await q.drain();
 
     this.unchangedDigests = new Set(
       [...this.digests[RevisionName.Base]].filter((digest) =>
@@ -233,7 +233,7 @@ export default async function buildChangeReport(
     }, 5);
     changedQueue.error(console.warn);
     changedAppMaps.forEach((appmap) => changedQueue.push(appmap));
-    await changedQueue.drain();
+    if (changedQueue.length()) await changedQueue.drain();
   }
 
   const failedAppMaps = new Array<{ appmap: AppMapName; metadata: Metadata }>();
@@ -248,6 +248,7 @@ export default async function buildChangeReport(
     }, 5);
     failedQueue.error(console.warn);
     (await appmapData.appmaps(RevisionName.Head)).forEach((appmap) => failedQueue.push(appmap));
+    if (failedQueue.length()) await failedQueue.drain();
   }
 
   const testFailures = failedAppMaps.map(({ appmap, metadata }) => {
