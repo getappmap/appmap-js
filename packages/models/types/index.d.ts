@@ -368,12 +368,21 @@ declare module '@appland/models' {
     }
   }
 
+  type FilterState = {
+    limitRootEvents?: boolean;
+    hideMediaRequests?: boolean;
+    hideUnlabeled?: boolean;
+    hideElapsedTimeUnder?: number;
+    hideName?: Array<string>;
+  };
+
   export class AppMapFilter {
     public rootObjects: CodeObject[];
     public declutter: Filter.Declutter;
 
     // TODO: Define Finding type
     filter(appMap: AppMap, findings: any[]): AppMap;
+    apply(filterState: FilterState): void;
   }
 
   export type SQLAnalysis = {
@@ -404,4 +413,7 @@ declare module '@appland/models' {
   export function normalizeSQL(sql: string, databaseType: string): string;
 
   export function buildAppMap(data?: string | Record<string, unknown>): AppMapBuilder;
+  // TODO: define type for appmap state
+  export function deserializeAppmapState(stringInput: string): any;
+  export function base64UrlEncode(text: string): string;
 }

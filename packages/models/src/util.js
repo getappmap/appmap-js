@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/extensions
 import sha256 from 'crypto-js/sha256.js';
 import analyze from './sql/analyze';
+import { Buffer } from 'buffer';
 
 export const hasProp = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop);
 
@@ -445,4 +446,28 @@ export function transformToJSON(dataKeys, obj) {
     }
     return memo;
   }, {});
+}
+
+export function base64UrlDecode(encodedText) {
+  const buffer = Buffer.from(encodedText, 'base64');
+  return buffer.toString('utf-8');
+}
+
+export function base64UrlEncode(text) {
+  const buffer = Buffer.from(text, 'utf-8');
+  return buffer.toString('base64').replace(/=/g, '').replace(/_/g, '/').replace(/-/g, '+');
+}
+
+export function deserializeAppmapState(stringInput) {
+  let json;
+  const isStringifiedJson = stringInput.trimStart().startsWith('{');
+  if (isStringifiedJson) {
+    // The old style of deserialization expected a raw stringified JSON object.
+    // To avoid introducing a breaking change, we'll support both for now.
+    json = stringInput;
+  } else {
+    json = base64UrlDecode(stringInput);
+  }
+
+  return JSON.parse(json);
 }

@@ -316,8 +316,7 @@
 </template>
 
 <script>
-import { Buffer } from 'buffer';
-import { Event, AppMapFilter } from '@appland/models';
+import { Event, AppMapFilter, deserializeAppmapState, base64UrlEncode } from '@appland/models';
 import CheckIcon from '@/assets/check.svg';
 import CopyIcon from '@/assets/copy-icon.svg';
 import CloseThinIcon from '@/assets/close-thin.svg';
@@ -354,16 +353,6 @@ import {
   POP_SELECTION_STACK,
   CLEAR_SELECTION_STACK,
 } from '../store/vsCode';
-
-function base64UrlEncode(text) {
-  const buffer = Buffer.from(text, 'utf-8');
-  return buffer.toString('base64').replace(/=/g, '').replace(/_/g, '/').replace(/-/g, '+');
-}
-
-function base64UrlDecode(encodedText) {
-  const buffer = Buffer.from(encodedText, 'base64');
-  return buffer.toString('utf-8');
-}
 
 export default {
   name: 'VSCodeExtension',
@@ -870,17 +859,7 @@ export default {
           return;
         }
 
-        let json;
-        const isStringifiedJson = serializedState.trimLeft().startsWith('{');
-        if (isStringifiedJson) {
-          // The old style of deserialization expected a raw stringified JSON object.
-          // To avoid introducing a breaking change, we'll support both for now.
-          json = serializedState;
-        } else {
-          json = base64UrlDecode(serializedState);
-        }
-
-        const state = JSON.parse(json);
+        const state = deserializeAppmapState(serializedState);
         if (state.selectedObject) {
           do {
             const fqid = state.selectedObject;
@@ -930,29 +909,7 @@ export default {
 
         const { filters } = state;
         if (filters) {
-          if ('rootObjects' in filters) {
-            this.filters.declutter.rootObjects = filters.rootObjects;
-          }
-          if ('limitRootEvents' in filters) {
-            this.filters.declutter.limitRootEvents.on = filters.limitRootEvents;
-          }
-          if ('hideMediaRequests' in filters) {
-            this.filters.declutter.hideMediaRequests.on = filters.hideMediaRequests;
-          }
-          if ('hideUnlabeled' in filters) {
-            this.filters.declutter.hideUnlabeled.on = filters.hideUnlabeled;
-          }
-          if ('hideExternalPaths' in filters) {
-            this.filters.declutter.hideExternalPaths.on = filters.hideExternalPaths;
-          }
-          if ('hideElapsedTimeUnder' in filters && filters.hideElapsedTimeUnder !== false) {
-            this.filters.declutter.hideElapsedTimeUnder.on = true;
-            this.filters.declutter.hideElapsedTimeUnder.time = filters.hideElapsedTimeUnder;
-          }
-          if ('hideName' in filters && filters.hideName !== false) {
-            this.filters.declutter.hideName.on = true;
-            this.filters.declutter.hideName.names = filters.hideName;
-          }
+          this.filters.apply(filters);
         }
 
         this.$nextTick(() => {
