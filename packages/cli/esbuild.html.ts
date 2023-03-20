@@ -27,7 +27,10 @@ esbuild
       }),
     ],
   })
-  .catch(() => process.exit(1));
+  .catch((err) => {
+    console.warn(err);
+    process.exit(1);
+  });
 
 esbuild
   .build({
@@ -55,4 +58,7 @@ esbuild
       }),
     ],
   })
-  .catch(() => process.exit(1));
+  .catch((err) => {
+    console.warn(err);
+    process.exit(1);
+  });
