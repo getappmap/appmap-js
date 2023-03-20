@@ -10,6 +10,8 @@ import { SortedAppMapSize } from './types/appMapSize';
 import { SlowestExecutionTime } from './types/functionExecutionTime';
 import { locateAppMapDir } from '../../lib/locateAppMapDir';
 import UI from '../userInteraction';
+import { verbose } from '../../utils';
+import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 
 export const command = 'stats [directory]';
 export const describe =
@@ -24,12 +26,19 @@ async function locateAppMapFile(userInput: string, appmapDir: string): Promise<s
     extension = '.json';
   }
 
-  let globString = path.join(appmapDir, '**', userInput + extension);
-  if (path.isAbsolute(userInput + extension)) {
-    globString = userInput + extension;
-  }
+  const globMatch = (globString: string) => {
+    return glob.sync(globString);
+  };
 
-  const matches = glob.sync(globString);
+  const appmapInWorkingDir = () => globMatch(path.join(appmapDir, '**', userInput + extension));
+  const appmapInAppMapDir = () => [path.join(userInput + extension)].filter((p) => existsSync(p));
+  const appmapAbsolute = () => {
+    if (!path.isAbsolute(userInput + extension)) return [];
+
+    return globMatch(userInput + extension);
+  };
+
+  let matches = [...appmapAbsolute(), ...appmapInWorkingDir(), ...appmapInAppMapDir()];
 
   if (matches.length === 0) {
     console.error(chalk.red('No matching AppMap found'));
@@ -48,10 +57,12 @@ async function locateAppMapFile(userInput: string, appmapDir: string): Promise<s
 
 export const builder = (args: yargs.Argv) => {
   args.option('directory', {
-    describe: 'Working directory for the command',
+    describe: 'program working directory',
     type: 'string',
     alias: 'd',
-    default: '.',
+  });
+  args.option('appmap-dir', {
+    describe: 'directory to recursively inspect for AppMaps',
   });
 
   args.option('format', {
@@ -74,11 +85,6 @@ export const builder = (args: yargs.Argv) => {
     alias: 'a',
   });
 
-  args.option('appmap-dir', {
-    describe: 'Directory to recursively inspect for AppMaps',
-    type: 'string',
-  });
-
   return args.strict();
 };
 
@@ -86,33 +92,21 @@ export async function handler(
   argv: any,
   handlerCaller: string = 'from_stats'
 ): Promise<Array<EventInfo> | Promise<[SortedAppMapSize[], SlowestExecutionTime[]]> | undefined> {
-  const { directory, format, limit, appmapFile } = argv;
-  const isVerbose = argv.verbose;
-  let appmapDir: string;
+  verbose(argv.verbose);
+  handleWorkingDirectory(argv.directory);
+  const appmapDir = await locateAppMapDir(argv.appmapDir);
 
-  if (!existsSync(directory) || !lstatSync(directory).isDirectory())
-    throw Error('Invalid directory');
-  if (isVerbose) console.log(`Using working directory: ${directory}`);
-  chdir(directory);
-
-  try {
-    appmapDir = await locateAppMapDir(argv.appmapDir);
-    if (isVerbose) console.log(`Using appmap-dir: ${path.join(__dirname, appmapDir)}`);
-  } catch (e) {
-    console.warn(
-      chalk.yellow('No appmap-dir found, defaulting to the current working directory.\n')
-    );
-    appmapDir = directory;
-  }
+  const { format, limit, appmapFile } = argv;
 
   if (appmapFile) {
     const fileToAnalyze = await locateAppMapFile(appmapFile, appmapDir);
     if (!fileToAnalyze) return;
-    if (isVerbose) console.log('Analyzing map: ', path.join(__dirname, fileToAnalyze));
+    
+    console.warn(`Analyzing AppMap: ${fileToAnalyze}`);
     return await statsForMap(format, limit, fileToAnalyze);
   }
 
-  return await statsForDirectory(isVerbose, appmapDir, format, limit, handlerCaller);
+  return await statsForDirectory(appmapDir, format, limit, handlerCaller);
 }
 
 export default {

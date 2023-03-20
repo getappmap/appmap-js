@@ -3,7 +3,7 @@ import { ClassMap, Event } from '@appland/models';
 import JSONStream from 'JSONStream';
 
 export type EventInfo = {
-  fqid: string;
+  function: string;
   count: number;
   size: number;
   location: string;
@@ -90,7 +90,7 @@ async function accumulateEvents(mapPath: string): Promise<Array<EventInfo>> {
             Object.keys(events)
               .map((key) => {
                 const { location, size, count } = events[key];
-                return { fqid: key, count, size, location };
+                return { function: key, count, size, location };
               })
               .sort((a, b) => b.count - a.count)
           );
@@ -110,14 +110,11 @@ export async function statsForMap(
     console.log(JSON.stringify(eventsStats, null, 2));
   } else {
     eventsStats.forEach((callData, index) => {
-      const { fqid, count, size } = callData;
+      const { function: fn, count, size } = callData;
       console.log(
-        [
-          `${index + 1}. ${fqid}`,
-          `count: ${count}`,
-          `estimated size: ${displaySize(size)}`,
-          '',
-        ].join('\n      ')
+        [`${index + 1}. ${fn}`, `count: ${count}`, `estimated size: ${displaySize(size)}`, ''].join(
+          '\n      '
+        )
       );
     });
   }

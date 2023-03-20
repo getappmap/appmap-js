@@ -15,14 +15,11 @@ export function sizeInMB(size: number): number {
 }
 
 export async function statsForDirectory(
-  isVerbose: boolean,
   appMapDir: string,
   format: string,
   limit: number,
   handlerCaller: string = 'from_stats'
 ): Promise<[SortedAppMapSize[], SlowestExecutionTime[]]> {
-  verbose(isVerbose);
-
   async function calculateAppMapSizes(appMapDir: string): Promise<AppMapSizeTable> {
     const appMapSizes: AppMapSizeTable = {};
 

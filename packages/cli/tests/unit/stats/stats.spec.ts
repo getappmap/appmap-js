@@ -4,11 +4,7 @@ import StatsCommand from '../../../src/cmds/stats/stats';
 import { withStubbedTelemetry } from '../../helper';
 
 const fixtureDir = path.join(__dirname, '../', 'fixtures', 'stats');
-const mapPath = path.join(
-  fixtureDir,
-  'appmap',
-  'Microposts_interface_micropost_interface.appmap.json'
-);
+const mapPath = path.join('Microposts_interface_micropost_interface.appmap.json');
 
 const originalDir = process.cwd();
 
@@ -17,13 +13,15 @@ describe('stats subcommand', () => {
 
   afterEach(() => process.chdir(originalDir));
 
+  const commonArgs = {
+    _: ['stats'],
+    $0: 'src/cli.ts',
+    directory: fixtureDir,
+    appmapDir: 'appmap',
+  };
+
   it('analyzes a directory', async () => {
-    const argv = {
-      _: ['stats'],
-      $0: 'src/cli.ts',
-      directory: fixtureDir,
-      d: fixtureDir,
-    };
+    const argv = { ...commonArgs };
 
     const ret = await StatsCommand.handler(argv);
     if (!ret) throw Error();
@@ -36,22 +34,16 @@ describe('stats subcommand', () => {
 
   it('analyzes an appmap', async () => {
     let argv = {
-      _: ['stats'],
-      $0: 'src/cli.ts',
-      ['appmap-file']: mapPath,
+      ...commonArgs,
       appmapFile: mapPath,
-      a: mapPath,
       limit: 10,
-      l: 10,
-      directory: '.',
-      d: '.',
     };
 
     const ret = await StatsCommand.handler(argv);
     if (!ret) throw Error();
     expect(ret.length).toEqual(argv.limit);
-    const { fqid, count, size } = ret[0] as EventInfo;
-    expect(fqid).toEqual('function:logger/Logger::LogDevice#write');
+    const { function: fn, count, size } = ret[0] as EventInfo;
+    expect(fn).toEqual('function:logger/Logger::LogDevice#write');
     expect(count).toEqual(319);
     expect(size).toEqual(172419);
   });
