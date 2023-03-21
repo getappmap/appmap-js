@@ -99,7 +99,7 @@ be included in the file arguments passed to the test runner.`)
   );
 
   const archiveRevisions = archiveMetadata.map((metadata) => metadata.revision);
-  const repoRevisions = await gitAncestors();
+  const repoRevisions = await gitAncestors('HEAD');
   const baseRevision = repoRevisions.find((revision) => archiveRevisions.includes(revision));
 
   if (!baseRevision) throw new Error(`No AppMap archive found for any ancestor revision.`);

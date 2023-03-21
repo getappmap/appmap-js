@@ -57,7 +57,7 @@ export const handler = async (argv: any) => {
 
   console.log(`Restoring AppMaps of revision ${revision} to ${outputDir}`);
 
-  const ancestors = await gitAncestors();
+  const ancestors = await gitAncestors(revision);
 
   // Find the AppMap tarball that's closest in the git ancestry.
   const fullArchivesAvailable = new Set<string>(
