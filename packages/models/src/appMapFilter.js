@@ -84,16 +84,8 @@ export default class AppMapFilter {
    */
   filter(appMap, findings) {
     const { classMap } = appMap;
-    let rootEvents = appMap.rootEvents();
 
-    if (this.declutter.limitRootEvents.on) {
-      rootEvents = rootEvents.filter((e) => e.httpServerRequest);
-    }
-
-    let events = rootEvents.reduce((callTree, rootEvent) => {
-      rootEvent.traverse((e) => callTree.push(e));
-      return callTree;
-    }, []);
+    let { events } = appMap;
 
     if (this.rootObjects.length) {
       let eventBranches = [];
@@ -113,6 +105,18 @@ export default class AppMapFilter {
           eventBranches.some((branch) => e.id >= branch[0] && e.id <= branch[1])
         );
       }
+    }
+
+    if (this.declutter.limitRootEvents.on) {
+      const includeEvents = new Set();
+      const httpServerRequestStack = [];
+      const markIncludedEvents = (e) => {
+        if (e.isCall() && e.httpServerRequest) httpServerRequestStack.push(e);
+        if (httpServerRequestStack.length > 0) includeEvents.add(e.id);
+        if (e.isReturn() && e.httpServerResponse) httpServerRequestStack.pop();
+      };
+      appMap.events.forEach(markIncludedEvents);
+      if (includeEvents.size > 0) events = appMap.events.filter((e) => includeEvents.has(e.id));
     }
 
     if (this.declutter.hideMediaRequests.on) {
