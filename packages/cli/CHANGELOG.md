@@ -1,3 +1,14 @@
+# [@appland/appmap-v3.71.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.70.0...@appland/appmap-v3.71.0) (2023-03-21)
+
+
+### Features
+
+* add --directory option to prune command ([1ec6551](https://github.com/getappmap/appmap-js/commit/1ec655147378e0cce49e3cb1446438eb95f2c787))
+* add ability to prune functions by fqid ([d358dac](https://github.com/getappmap/appmap-js/commit/d358dacd4852530da6e01278e3591808dae352bd))
+* better output for prune command ([47ed85f](https://github.com/getappmap/appmap-js/commit/47ed85f53154bb1edbb7883e768700cde69e42b7))
+* update prune cli command ([e6472ab](https://github.com/getappmap/appmap-js/commit/e6472ab8877fcded10c1a22927c43837f5793753))
+* use base64url-encoded filter state for pruning ([2a1c3d9](https://github.com/getappmap/appmap-js/commit/2a1c3d9ffa8e0b95186f886418e49493a022fa19))
+
 # [@appland/appmap-v3.70.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.69.0...@appland/appmap-v3.70.0) (2023-03-20)
 
 
