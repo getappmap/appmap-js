@@ -46,6 +46,35 @@ function parseSize(size: string) {
   return Number(byteStr) * p;
 }
 
+function messageWhenUsingFilter(filters: any): string {
+  let exclusions = [] as Array<any>;
+
+  if ('hideUnlabeled' in filters) exclusions.push('All unlabeled functions');
+  if ('hideMediaRequests' in filters) exclusions.push('All media requests');
+  if ('hideExternalPaths' in filters) exclusions.push('All external paths');
+  if ('hideElapsedTimeUnder' in filters && filters.hideElapsedTimeUnder !== false)
+    exclusions.push(`All functions with elapsed time under ${filters.hideElapsedTimeUnder} ms`);
+  if ('hideName' in filters) exclusions = [...exclusions, ...filters.hideName];
+
+  return `The following was pruned from the map: \n  ${exclusions.join('\n  ')}`;
+}
+
+function displayMessage(appMap: AppMap, format: string, usesFilter: boolean): void {
+  let message: string;
+  if (usesFilter) {
+    const filters = appMap.data.exclusions;
+    message =
+      format === 'json' ? JSON.stringify({ filters }, null, 2) : messageWhenUsingFilter(filters);
+  } else {
+    const exclusions = Array.from(appMap.data.exclusions.values());
+    message =
+      format === 'json'
+        ? JSON.stringify({ exclusions }, null, 2)
+        : `The following was pruned from the map:\n  ${exclusions.join('\n  ')}`;
+  }
+  console.log(message);
+}
+
 export default {
   command: 'prune <file>',
 
@@ -104,14 +133,6 @@ export default {
     const outputPath = `${argv.outputDir}/${basename(argv.file)}`;
     fs.writeFileSync(outputPath, JSON.stringify(appMap));
 
-    let message = 'done';
-    if (argv.format === 'json' && !argv.fqids)
-      message = JSON.stringify(
-        { exclusions: Array.from(appMap.data.exclusions.values()) },
-        null,
-        2
-      );
-
-    console.log(message);
+    displayMessage(appMap, argv.format, !!argv.filter);
   },
 };

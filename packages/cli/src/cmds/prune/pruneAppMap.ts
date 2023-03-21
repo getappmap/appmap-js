@@ -20,5 +20,8 @@ export const pruneWithFilter = (appMap: AppMap, serializedFilter: string): any =
   appmapFilter.declutter.limitRootEvents.on = false;
   appmapFilter.declutter.hideMediaRequests.on = false;
   appmapFilter.apply(filters);
-  return appmapFilter.filter(fullMap, []);
+
+  const prunedMap = appmapFilter.filter(fullMap, []) as any;
+  prunedMap.data = { ...prunedMap.data, exclusions: filters };
+  return prunedMap;
 };
