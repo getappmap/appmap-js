@@ -8,12 +8,7 @@ export default async function detectRevisions(
 ): Promise<{ baseRevision: string; headRevision: string }> {
   let headRevision = headArg;
   if (!headRevision) {
-    let currentBranch = (await executeCommand(`git branch --show-current`)).trim();
-    if (currentBranch === '') {
-      currentBranch = (await executeCommand(`git show --format=oneline --abbrev-commit`)).split(
-        /\s/
-      )[0];
-    }
+    let currentBranch = (await executeCommand(`git rev-parse HEAD`)).trim().split('\n')[0];
 
     headRevision = currentBranch;
   }

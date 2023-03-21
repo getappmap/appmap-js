@@ -185,11 +185,12 @@ export const handler = async (argv: any) => {
     const diagramFileName = join(indexDir, 'sequence.json');
     await writeFile(diagramFileName, diagramOutput.diagram);
   }, concurrency);
+  sequenceDiagramQueue.error(console.warn);
 
   (await promisify(glob)('**/*.appmap.json')).forEach((appmapFileName) =>
     sequenceDiagramQueue.push(appmapFileName)
   );
-  await sequenceDiagramQueue.drain();
+  if (sequenceDiagramQueue.length()) await sequenceDiagramQueue.drain();
 
   const metadata: Metadata = {
     versions,
