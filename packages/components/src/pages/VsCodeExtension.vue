@@ -121,7 +121,12 @@
             placement="left"
             text-align="left"
           >
-            <button class="control-button" data-cy="share-button" @click="uploadAppmap" title="">
+            <button
+              class="control-button"
+              data-cy="share-button"
+              @click="toggleShareModal"
+              title=""
+            >
               <UploadIcon class="control-button__icon" />
             </button>
           </v-popper>
@@ -137,6 +142,22 @@
                 <ExportIcon class="control-button__icon" />
               </button>
             </v-download-sequence-diagram>
+          </v-popper>
+          <v-popper
+            v-if="hasStats"
+            class="hover-text-popper"
+            text="Show statistics about this AppMap"
+            placement="left"
+            text-align="left"
+          >
+            <button
+              class="control-button"
+              data-cy="stats-button"
+              @click="toggleStatsPanel"
+              title=""
+            >
+              <UploadIcon class="control-button__icon" />
+            </button>
           </v-popper>
           <v-popper-menu :isHighlight="filtersChanged">
             <template v-slot:icon>
@@ -281,6 +302,10 @@
         </div>
       </div>
 
+      <div v-if="showStatsPanel" class="share-appmap">
+        <v-stats-panel :stats="stats" />
+      </div>
+
       <div class="diagram-instructions">
         <v-instructions ref="instructions" :currentView="currentView" />
       </div>
@@ -339,6 +364,7 @@ import VInstructions from '../components/Instructions.vue';
 import VNotification from '../components/Notification.vue';
 import VPopperMenu from '../components/PopperMenu.vue';
 import VPopper from '../components/Popper.vue';
+import VStatsPanel from '../components/StatsPanel.vue';
 import VTabs from '../components/Tabs.vue';
 import VTab from '../components/Tab.vue';
 import VTraceFilter from '../components/trace/TraceFilter.vue';
@@ -389,6 +415,7 @@ export default {
     VNotification,
     VPopperMenu,
     VPopper,
+    VStatsPanel,
     VTabs,
     VTab,
     VTraceFilter,
@@ -413,6 +440,7 @@ export default {
       eventFilterText: '',
       eventFilterMatchIndex: 0,
       showShareModal: false,
+      showStatsPanel: false,
       shareURL: undefined,
       seqDiagramTimeoutId: undefined,
       isActive: true,
@@ -427,6 +455,10 @@ export default {
     appMapUploadable: {
       type: Boolean,
       default: false,
+    },
+    stats: {
+      type: Object,
+      default: () => ({}),
     },
   },
 
@@ -711,6 +743,10 @@ export default {
       if (this.shareURL) return this.shareURL;
       return 'Retrieving link...';
     },
+
+    hasStats() {
+      return Object.keys(this.stats).length > 0;
+    },
   },
 
   methods: {
@@ -994,9 +1030,15 @@ export default {
       this.renderKey += 1;
     },
 
-    uploadAppmap() {
-      this.showShareModal = true;
+    toggleShareModal() {
+      this.showShareModal = !this.showShareModal;
       this.$root.$emit('uploadAppmap');
+      if (this.showShareModal && this.showStatsPanel) this.showStatsPanel = false;
+    },
+
+    toggleStatsPanel() {
+      this.showStatsPanel = !this.showStatsPanel;
+      if (this.showShareModal && this.showStatsPanel) this.showShareModal = false;
     },
 
     uniqueFindings(findings) {

@@ -1,0 +1,128 @@
+[
+  {
+    "function": "function:app/helpers/Spree::Admin::NavigationHelper#tab",
+    "count": 57,
+    "size": 33904,
+    "location": "app/helpers/spree/admin/navigation_helper.rb:47"
+  },
+  {
+    "function": "function:openssl/Digest::Instance#digest",
+    "count": 24,
+    "size": 10552,
+    "location": "Digest::Instance#digest"
+  },
+  {
+    "function": "function:app/helpers/Spree::Admin::NavigationHelper#link_to_with_icon",
+    "count": 20,
+    "size": 14287,
+    "location": "app/helpers/spree/admin/navigation_helper.rb:114"
+  },
+  {
+    "function": "function:app/helpers/Spree::Admin::NavigationHelper#admin_breadcrumbs",
+    "count": 19,
+    "size": 6191,
+    "location": "app/helpers/spree/admin/navigation_helper.rb:6"
+  },
+  {
+    "function": "function:json/JSON::Ext::Parser#parse",
+    "count": 18,
+    "size": 4926,
+    "location": "JSON::Ext::Parser#parse"
+  },
+  {
+    "function": "function:active_support/ActiveSupport::SecurityUtils.secure_compare",
+    "count": 12,
+    "size": 7364,
+    "location": "/home/travis/.rvm/gems/ruby-2.6.5/gems/activesupport-6.0.3.4/lib/active_support/security_utils.rb:26"
+  },
+  {
+    "function": "function:openssl/OpenSSL::Cipher#final",
+    "count": 10,
+    "size": 2656,
+    "location": "OpenSSL::Cipher#final"
+  },
+  {
+    "function": "function:json/JSON::Ext::Generator::State#generate",
+    "count": 9,
+    "size": 4530,
+    "location": "JSON::Ext::Generator::State#generate"
+  },
+  {
+    "function": "function:openssl/OpenSSL::Cipher#decrypt",
+    "count": 6,
+    "size": 2218,
+    "location": "OpenSSL::Cipher#decrypt"
+  },
+  {
+    "function": "function:app/helpers/Spree::Admin::NavigationHelper#admin_breadcrumb",
+    "count": 5,
+    "size": 2679,
+    "location": "app/helpers/spree/admin/navigation_helper.rb:11"
+  },
+  {
+    "function": "function:openssl/OpenSSL::Cipher#encrypt",
+    "count": 4,
+    "size": 1478,
+    "location": "OpenSSL::Cipher#encrypt"
+  },
+  {
+    "function": "function:app/helpers/Spree::Admin::NavigationHelper#admin_page_title",
+    "count": 3,
+    "size": 977,
+    "location": "app/helpers/spree/admin/navigation_helper.rb:30"
+  },
+  {
+    "function": "function:lib/Spree::BackendConfiguration#menu_items",
+    "count": 3,
+    "size": 995,
+    "location": "lib/spree/backend_configuration.rb:92"
+  },
+  {
+    "function": "function:app/helpers/Spree::Admin::NavigationHelper#render_admin_breadcrumbs",
+    "count": 3,
+    "size": 1002,
+    "location": "app/helpers/spree/admin/navigation_helper.rb:17"
+  },
+  {
+    "function": "function:app/controllers/Spree::Admin::OrdersController#index",
+    "count": 2,
+    "size": 699,
+    "location": "app/controllers/spree/admin/orders_controller.rb:16"
+  },
+  {
+    "function": "function:app/helpers/Spree::Admin::BaseHelper#admin_layout",
+    "count": 2,
+    "size": 843,
+    "location": "app/helpers/spree/admin/base_helper.rb:142"
+  },
+  {
+    "function": "function:app/helpers/Spree::Admin::NavigationHelper#link_to_edit_url",
+    "count": 2,
+    "size": 1161,
+    "location": "app/helpers/spree/admin/navigation_helper.rb:100"
+  },
+  {
+    "function": "function:app/controllers/Spree::Admin::RootController#index",
+    "count": 1,
+    "size": 339,
+    "location": "app/controllers/spree/admin/root_controller.rb:8"
+  },
+  {
+    "function": "function:app/controllers/Spree::Admin::OrdersController#edit",
+    "count": 1,
+    "size": 349,
+    "location": "app/controllers/spree/admin/orders_controller.rb:72"
+  },
+  {
+    "function": "function:app/helpers/Spree::Admin::OrdersHelper#event_links",
+    "count": 1,
+    "size": 312,
+    "location": "app/helpers/spree/admin/orders_helper.rb:7"
+  },
+  {
+    "function": "function:app/helpers/Spree::Admin::OrdersHelper#line_item_shipment_price",
+    "count": 1,
+    "size": 553,
+    "location": "app/helpers/spree/admin/orders_helper.rb:18"
+  }
+]
