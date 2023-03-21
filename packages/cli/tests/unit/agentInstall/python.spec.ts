@@ -6,6 +6,7 @@ import { join } from 'path';
 import sinon from 'sinon';
 import tmp from 'tmp';
 import * as commandRunner from '../../../src/cmds/agentInstaller/commandRunner';
+import InstallerUI from '../../../src/cmds/agentInstaller/installerUI';
 import {
   PipenvInstaller,
   PipInstaller,
@@ -17,6 +18,7 @@ const Cwd = process.cwd();
 tmp.setGracefulCleanup();
 
 const fixtureDir = join(__dirname, '..', 'fixtures', 'python');
+const interactiveUI = new InstallerUI(true, {});
 
 function getProjectDirectory(projectType) {
   const projectFixtures = join(fixtureDir, projectType);
@@ -69,7 +71,7 @@ describe('Python Agent Installation', () => {
     it('adds appmap to requirements.txt when missing', async () => {
       sinon.stub(commandRunner, 'run').resolves({ stderr: '', stdout: '' });
 
-      await btInstaller.installAgent();
+      await btInstaller.installAgent(interactiveUI);
       const requirementsTxt = fs.readFileSync(join(projectDirectory, 'requirements.txt'), 'utf8');
       expect(requirementsTxt).toMatch(/^appmap>=/);
     });
@@ -80,7 +82,7 @@ describe('Python Agent Installation', () => {
       const requirementsPath = join(projectDirectory, 'requirements.txt');
       fs.writeFileSync(requirementsPath, ' appmap == 1.0.0');
 
-      await btInstaller.installAgent();
+      await btInstaller.installAgent(interactiveUI);
       const requirementsTxt = fs.readFileSync(join(projectDirectory, 'requirements.txt'), 'utf8');
       expect(requirementsTxt).toMatch(/^appmap>=/);
     });
@@ -91,7 +93,7 @@ describe('Python Agent Installation', () => {
       const requirementsPath = join(projectDirectory, 'requirements.txt');
       fs.writeFileSync(requirementsPath, ' not-appmap == 1.0.0');
 
-      await btInstaller.installAgent();
+      await btInstaller.installAgent(interactiveUI);
       const requirementsTxt = fs.readFileSync(join(projectDirectory, 'requirements.txt'), 'utf8');
       expect(requirementsTxt).toMatch(/^appmap>=/m);
       expect(requirementsTxt).toMatch(/^ not-appmap == 1.0.0/m);
@@ -113,7 +115,7 @@ describe('Python Agent Installation', () => {
         sinon.stub(glob, 'sync').returns(['test-requirements.txt']);
         const prompt = sinon.stub(UI, 'prompt');
 
-        expect(await installer.resolveBuildFile()).toBe('test-requirements.txt');
+        expect(await installer.resolveBuildFile(interactiveUI)).toBe('test-requirements.txt');
 
         expect(prompt).not.toBeCalled();
       });
@@ -121,7 +123,7 @@ describe('Python Agent Installation', () => {
       it('offers requirements files', async () => {
         const prompt = sinon.stub(UI, 'prompt').resolves({ buildFile: 'requirements.txt' });
 
-        expect(await installer.resolveBuildFile()).toBe('requirements.txt');
+        expect(await installer.resolveBuildFile(interactiveUI)).toBe('requirements.txt');
 
         const promptCalls = prompt.getCalls();
         expect(promptCalls.length).toStrictEqual(1);

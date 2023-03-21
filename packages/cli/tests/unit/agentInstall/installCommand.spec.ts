@@ -1289,7 +1289,7 @@ appmap_dir: tmp/appmap
   });
 
   describe('Multi-project install flow', () => {
-    let expectedStubs: SinonStub[];
+    let expectedStubs: SinonStub<any>[];
 
     beforeEach(() => {
       sinon.stub(commandRunner, 'run').resolves({

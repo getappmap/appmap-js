@@ -6,6 +6,7 @@ import AgentInstaller from './agentInstaller';
 import { INSTALLERS } from './installers';
 import AgentStatusProcedure from './agentStatusProcedure';
 import { getProjects } from './projectConfiguration';
+import InstallerUI from './installerUI';
 
 interface InstallCommandOptions {
   verbose?: any;
@@ -47,15 +48,16 @@ export default {
 
     verbose(isVerbose);
 
+    const ui = new InstallerUI(false, { overwriteAppMapConfig: false });
     try {
-      const [project] = await getProjects(installers, directory, false, projectType);
+      const [project] = await getProjects(ui, installers, directory, false, projectType);
 
       const statusProcedure = new AgentStatusProcedure(
         project.selectedInstaller as AgentInstaller,
         directory
       );
 
-      await statusProcedure.run();
+      await statusProcedure.run(ui);
     } catch (e) {
       const err = e as Error;
       UI.error(err.message);

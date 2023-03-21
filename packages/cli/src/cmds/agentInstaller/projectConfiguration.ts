@@ -4,7 +4,7 @@ import { promises as fs, constants as fsConstants } from 'fs';
 
 import { basename, join, resolve } from 'path';
 import { AbortError, ChildProcessError, InvalidPathError } from '../errors';
-import UI from '../userInteraction';
+import InstallerUI from './installerUI';
 import AgentInstaller from './agentInstaller';
 import getAvailableInstallers from './installers';
 import { YarnInstaller } from './javaScriptAgentInstaller';
@@ -20,6 +20,7 @@ export interface ProjectConfiguration {
 }
 
 async function resolveSelectedInstallers(
+  ui: InstallerUI,
   projects: ProjectConfiguration[],
   userSpecifiedInstaller?: string
 ): Promise<void> {
@@ -34,19 +35,13 @@ async function resolveSelectedInstallers(
       );
 
       if (!selectedInstaller) {
-        const { willContinue } = await UI.prompt([
-          {
-            type: 'confirm',
-            name: 'willContinue',
-            prefix: chalk.yellow('!'),
-            message: `${chalk.red(
-              userSpecifiedInstaller
-            )} is not a supported project type. However, installation may continue with: ${availableInstallers
-              .map((i) => chalk.blue(i.name))
-              .join(', ')}. Continue?`,
-          },
-        ]);
-
+        const willContinue = await ui.attemptUnsupportedProjectType(
+          `${chalk.red(
+            userSpecifiedInstaller
+          )} is not a supported project type. However, installation may continue with: ${availableInstallers
+            .map((i) => chalk.blue(i.name))
+            .join(', ')}. Continue?`
+        );
         if (!willContinue) {
           throw new AbortError(
             [
@@ -70,15 +65,13 @@ async function resolveSelectedInstallers(
         project.selectedInstaller = project.availableInstallers[0];
       } else {
         const key = `installer${i}`;
-        const result = await UI.prompt({
-          type: 'list',
-          name: key,
-          message: `Multiple project types were found in ${chalk.blue(
+        const installerName = await ui.selectProject(
+          `Multiple project types were found in ${chalk.blue(
             resolve(project.path)
           )}. Select one to continue.`,
-          choices: project.availableInstallers.map((i) => i.name),
-        });
-        const installerName = result[key];
+          key,
+          project.availableInstallers.map((i) => i.name)
+        );
         project.selectedInstaller = project.availableInstallers.find(
           (i) => i.name === installerName
         );
@@ -206,6 +199,7 @@ export async function getYarnSubprojects(
  *          undefined
  */
 async function getSubprojects(
+  ui: InstallerUI,
   dir: string,
   rootHasInstaller: boolean,
   availableInstallers: AgentInstaller[]
@@ -257,26 +251,14 @@ async function getSubprojects(
     return undefined;
   }
 
-  const { addSubprojects } = await UI.prompt({
-    type: 'confirm',
-    default: !rootHasInstaller,
-    name: 'addSubprojects',
-    message:
-      'This directory contains sub-projects. Would you like to choose sub-projects for installation?',
-  });
-  if (!addSubprojects) {
+  const chooseSubprojects = await ui.chooseSubprojects(rootHasInstaller);
+  if (!chooseSubprojects) {
     // The user has opted not to continue by not selecting subprojects.
     return undefined;
   }
 
   const subProjectConfigurations: ProjectConfiguration[] = [];
-  const { selectedSubprojects } = await UI.prompt({
-    type: 'checkbox',
-    name: 'selectedSubprojects',
-    message: 'Select the projects to install AppMap to.',
-    choices: subprojects.map(({ name }) => name),
-  });
-
+  const selectedSubprojects = await ui.selectSubprojects(subprojects.map(({ name }) => name));
   if (selectedSubprojects.length > 0) {
     subProjectConfigurations.push(
       ...subprojects.filter(({ name }) => selectedSubprojects.includes(name))
@@ -287,6 +269,7 @@ async function getSubprojects(
 }
 
 export async function getProjects(
+  ui: InstallerUI,
   installers: readonly AgentInstaller[],
   dir: string,
   allowMulti?: boolean,
@@ -297,7 +280,7 @@ export async function getProjects(
   const availableInstallers = await getAvailableInstallers(dir);
   const rootHasInstaller = !!availableInstallers.length;
   if (allowMulti) {
-    const subprojects = await getSubprojects(dir, rootHasInstaller, availableInstallers);
+    const subprojects = await getSubprojects(ui, dir, rootHasInstaller, availableInstallers);
     if (subprojects?.length) {
       projectConfigurations.push(...(subprojects as ProjectConfiguration[]));
     } else if (subprojects?.length === 0) {
@@ -346,7 +329,7 @@ export async function getProjects(
     }
   }
 
-  await resolveSelectedInstallers(projectConfigurations, userSpecifiedInstaller);
+  await resolveSelectedInstallers(ui, projectConfigurations, userSpecifiedInstaller);
 
   return projectConfigurations;
 }

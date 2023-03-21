@@ -6,11 +6,10 @@ import minimatch from 'minimatch';
 import os from 'os';
 import { basename, join } from 'path';
 import semver from 'semver';
-import { promisify } from 'util';
 import EncodedFile from '../../encodedFile';
 import { exists, isFile } from '../../utils';
 import { UserConfigError } from '../errors';
-import UI from '../userInteraction';
+import InstallerUI from './installerUI';
 import AgentInstaller from './agentInstaller';
 import { run } from './commandRunner';
 import CommandStruct from './commandStruct';
@@ -77,7 +76,7 @@ export class PoetryInstaller extends PythonInstaller {
     return new CommandStruct('poetry', ['run', 'appmap-agent-init'], this.path);
   }
 
-  async checkConfigCommand(): Promise<CommandStruct | undefined> {
+  async checkConfigCommand(_ui: InstallerUI): Promise<CommandStruct | undefined> {
     return new CommandStruct('poetry', ['install', '--dry-run'], this.path);
   }
 
@@ -128,11 +127,11 @@ export class PipenvInstaller extends PythonInstaller {
     return new CommandStruct('pipenv', ['run', 'appmap-agent-init'], this.path);
   }
 
-  async checkConfigCommand(): Promise<CommandStruct | undefined> {
+  async checkConfigCommand(_ui: InstallerUI): Promise<CommandStruct | undefined> {
     return new CommandStruct('pipenv', ['install', '--dev'], this.path);
   }
 
-  async installAgent(): Promise<void> {
+  async installAgent(_ui: InstallerUI): Promise<void> {
     const cmd = new CommandStruct('pipenv', ['install', '--dev', '--pre', 'appmap'], this.path);
 
     await run(cmd);
@@ -179,40 +178,30 @@ export class PipInstaller extends PythonInstaller {
     });
   }
 
-  private async chooseBuildFile(choices: string[]): Promise<string> {
+  private async chooseBuildFile(ui: InstallerUI, choices: string[]): Promise<string> {
     const defaultChoice = choices.filter((f) => minimatch(f, '*dev*', { matchBase: true }));
-
-    const { buildFile } = await UI.prompt([
-      {
-        type: 'list',
-        name: 'buildFile',
-        message: 'Please choose the requirements file used for development:',
-        choices,
-        default: defaultChoice[0],
-      },
-    ]);
-
+    const buildFile = await ui.pythonBuildFile(defaultChoice[0], choices);
     return basename(buildFile);
   }
 
-  async resolveBuildFile(): Promise<string> {
+  async resolveBuildFile(ui: InstallerUI): Promise<string> {
     const choices = this.findBuildFiles();
 
     if (choices.length === 1) {
       return choices[0];
     } else {
-      UI.progress(`
+      ui.message(`
 
 This project contains multiple Pip requirements files. AppMap should only be
 installed during development and testing, not when deploying in a production
 environment.
 `);
-      return this.chooseBuildFile(choices);
+      return this.chooseBuildFile(ui, choices);
     }
   }
 
-  async checkConfigCommand(): Promise<CommandStruct | undefined> {
-    this._buildFile = await this.resolveBuildFile();
+  async checkConfigCommand(ui: InstallerUI): Promise<CommandStruct | undefined> {
+    this._buildFile = await this.resolveBuildFile(ui);
     let commandArgs = ['-m', 'pip', 'install', '-r', this.buildFile];
     let supportsDryRun: boolean;
 
@@ -236,7 +225,7 @@ environment.
     return new CommandStruct('python3', commandArgs, this.path);
   }
 
-  async installAgent(): Promise<void> {
+  async installAgent(_ui: InstallerUI): Promise<void> {
     const encodedFile: EncodedFile = new EncodedFile(this.buildFilePath);
     let requirements = encodedFile.toString();
 

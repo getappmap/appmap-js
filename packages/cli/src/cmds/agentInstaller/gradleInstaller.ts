@@ -4,7 +4,7 @@ import { join, sep } from 'path';
 import chalk from 'chalk';
 import CommandStruct from './commandStruct';
 import { verbose, exists } from '../../utils';
-import UI from '../userInteraction';
+import InstallerUI from './installerUI';
 import { getColumn, getWhitespace, Whitespace } from './sourceUtil';
 import { AbortError } from '../errors';
 import JavaBuildToolInstaller from './javaBuildToolInstaller';
@@ -110,6 +110,7 @@ export default class GradleInstaller extends JavaBuildToolInstaller {
    * from which copying should continue
    */
   async insertPluginSpec(
+    ui: InstallerUI,
     buildFileSource: string,
     parseResult: GradleParseResult,
     whitespace: Whitespace
@@ -126,17 +127,8 @@ export default class GradleInstaller extends JavaBuildToolInstaller {
 
     const javaPresent = lines.some((line) => line.match(/^\s*id\s+["']\s*java/));
     if (!javaPresent) {
-      const { userWillContinue } = await UI.prompt({
-        type: 'list',
-        name: 'userWillContinue',
-        message: `The ${chalk.red(
-          "'java'"
-        )} plugin was not found. This configuration is unsupported and is likely to fail. Continue?`,
-        default: 'Abort',
-        choices: ['Abort', 'Continue'],
-      });
-
-      if (userWillContinue === 'Abort') {
+      const userWillContinue = await ui.continueWithoutJavaPlugin();
+      if (!userWillContinue) {
         throw new AbortError('no java plugin found');
       }
     }
@@ -165,8 +157,6 @@ ${whitespace.padLine(pluginSpec)}
       lines.push(pluginSpec);
     }
 
-    const column = getColumn(buildFileSource, parseResult.plugins.lbrace);
-
     const updatedSrc = [
       buildFileSource.substring(0, parseResult.plugins.lbrace + 1),
       lines.map((l) => whitespace.padLine(l)).join(os.EOL),
@@ -194,6 +184,7 @@ ${whitespace.padLine(pluginSpec)}
    * source from which copying should continue.
    */
   async insertRepository(
+    ui: InstallerUI,
     buildFileSource: string,
     updatedSrc: string,
     offset: number,
@@ -206,14 +197,8 @@ ${whitespace.padLine(pluginSpec)}
       return { updatedSrc, offset };
     }
 
-    const { addMavenCentral } = await UI.prompt({
-      type: 'list',
-      name: 'addMavenCentral',
-      message:
-        'The Maven Central repository is required by the AppMap plugin to fetch the AppMap agent JAR. Add it now?',
-      choices: ['Yes', 'No'],
-    });
-    if (addMavenCentral !== 'Yes') {
+    const addMavenCentral = await ui.addMavenCentral();
+    if (!addMavenCentral) {
       return { updatedSrc, offset };
     }
 
@@ -238,11 +223,11 @@ ${whitespace.padLine(mavenCentral)}
   }
 
   // TODO: validate the user's project before adding AppMap
-  async checkConfigCommand(): Promise<CommandStruct | undefined> {
+  async checkConfigCommand(_ui: InstallerUI): Promise<CommandStruct | undefined> {
     return undefined;
   }
 
-  async installAgent(): Promise<void> {
+  async installAgent(ui: InstallerUI): Promise<void> {
     const encodedFile: EncodedFile = new EncodedFile(this.buildFilePath);
     const buildFileSource = encodedFile.toString();
     const parser = new GradleParser();
@@ -251,12 +236,14 @@ ${whitespace.padLine(mavenCentral)}
     const whitespace = getWhitespace(buildFileSource);
 
     let { updatedSrc, offset } = await this.insertPluginSpec(
+      ui,
       buildFileSource,
       parseResult,
       whitespace
     );
 
     ({ updatedSrc, offset } = await this.insertRepository(
+      ui,
       buildFileSource,
       updatedSrc,
       offset,

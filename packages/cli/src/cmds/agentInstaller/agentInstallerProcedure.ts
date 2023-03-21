@@ -4,7 +4,7 @@ import Yargs from 'yargs';
 
 import { AbortError } from '../errors';
 import { run } from './commandRunner';
-import UI from '../userInteraction';
+import InstallerUI, { OverwriteOption } from './installerUI';
 import AgentProcedure from './agentProcedure';
 import Telemetry from '../../telemetry';
 import CommandStruct from './commandStruct';
@@ -14,23 +14,21 @@ import { dump, load } from 'js-yaml';
 import { readFile } from 'fs/promises';
 
 export default class AgentInstallerProcedure extends AgentProcedure {
-  async run(): Promise<void> {
-    const { confirm } = await UI.prompt({
-      type: 'confirm',
-      name: 'confirm',
-      message: [
+  async run(ui: InstallerUI): Promise<void> {
+    const confirm = ui.confirm(
+      [
         `AppMap is about to be installed. Confirm the details below.`,
         await this.getEnvironmentForDisplay(),
         '',
         '  Is this correct?',
       ]
         .flat()
-        .join('\n'),
-    });
+        .join('\n')
+    );
 
     if (!confirm) {
-      UI.status = 'Aborting installation.';
-      UI.error(
+      ui.status('Aborting installation.');
+      ui.error(
         [
           'Modify the installation environment as needed, and re-run the command.',
           `Use ${chalk.blue('--help')} for more information.`,
@@ -42,23 +40,13 @@ export default class AgentInstallerProcedure extends AgentProcedure {
     let useExistingAppMapYml = false;
     let existingConfig: any;
     if (this.configExists) {
-      const USE_EXISTING = 'Use existing';
-      const OVERWRITE = 'Overwrite';
-      const ABORT = 'Abort';
+      const overwriteAppMapConfig = await ui.overwriteAppMapConfig();
 
-      const { overwriteAppMapYml } = await UI.prompt({
-        type: 'list',
-        name: 'overwriteAppMapYml',
-        message:
-          'An appmap.yml configuration file already exists. How should the conflict be resolved?',
-        choices: [USE_EXISTING, OVERWRITE, ABORT],
-      });
-
-      if (overwriteAppMapYml === ABORT) {
+      if (overwriteAppMapConfig === OverwriteOption.ABORT) {
         Yargs.exit(0, new Error());
       }
 
-      if (overwriteAppMapYml === USE_EXISTING) {
+      if (overwriteAppMapConfig === OverwriteOption.USE_EXISTING) {
         try {
           existingConfig = this.loadConfig();
           useExistingAppMapYml = true;
@@ -70,7 +58,7 @@ export default class AgentInstallerProcedure extends AgentProcedure {
       }
     }
 
-    UI.status = 'Installing AppMap...';
+    ui.status('Installing AppMap...');
 
     try {
       const filesBeforeGitStatus: GitStatus[] = await this.gitStatus();
@@ -78,8 +66,8 @@ export default class AgentInstallerProcedure extends AgentProcedure {
       for (const file of filesBeforeGitStatus) {
         filesBefore.push(file.file);
       }
-      await this.installer.checkCurrentConfig();
-      await this.installer.installAgent();
+      await this.installer.checkCurrentConfig(ui);
+      await this.installer.installAgent(ui);
 
       await this.verifyProject();
 
@@ -97,7 +85,7 @@ export default class AgentInstallerProcedure extends AgentProcedure {
         let dirty = false;
         const updateField = (fieldName: string): void => {
           if (!existingConfig[fieldName]) {
-            UI.success(`Updating ${fieldName} in appmap.yml`);
+            ui.success(`Updating ${fieldName} in appmap.yml`);
             existingConfig[fieldName] = this.installer[fieldName];
             dirty = true;
           }
@@ -108,9 +96,9 @@ export default class AgentInstallerProcedure extends AgentProcedure {
         }
       }
 
-      const result = await this.validateProject(useExistingAppMapYml);
+      const result = await this.validateProject(ui, useExistingAppMapYml);
 
-      await this.commitConfiguration(filesBefore);
+      if (ui.interactive) await this.commitConfiguration(ui, filesBefore);
 
       const successMessage = [
         chalk.green('Success! AppMap has finished installing.'),
@@ -121,11 +109,11 @@ export default class AgentInstallerProcedure extends AgentProcedure {
         'instructions provided in the AppMap code editor extension.',
       ];
 
-      UI.success(successMessage.join('\n'));
+      ui.success(successMessage.join('\n'));
 
       if (result?.errors)
         for (const warning of result.errors.filter((e) => e.level === 'warning'))
-          UI.warn(formatValidationError(warning));
+          ui.warn(formatValidationError(warning));
     } catch (e) {
       const error = e as Error;
       console.log(error?.message);
@@ -152,7 +140,7 @@ export default class AgentInstallerProcedure extends AgentProcedure {
             },
           });
 
-          UI.error(incompatibleArchitectureMessage.join('\n'));
+          ui.error(incompatibleArchitectureMessage.join('\n'));
         } else if (error?.message.includes('without the test and development groups')) {
           const bundlerConfigErrorMessage = [
             '\n',
@@ -178,7 +166,7 @@ export default class AgentInstallerProcedure extends AgentProcedure {
             },
           });
 
-          UI.error(bundlerConfigErrorMessage.join('\n'));
+          ui.error(bundlerConfigErrorMessage.join('\n'));
         } else {
           throw e;
         }

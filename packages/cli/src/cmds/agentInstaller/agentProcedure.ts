@@ -4,7 +4,7 @@ import yaml from 'js-yaml';
 import chalk from 'chalk';
 import { ValidationError } from '../errors';
 import AgentInstaller from './agentInstaller';
-import UI from '../userInteraction';
+import InstallerUI from './installerUI';
 import { run, runSync } from './commandRunner';
 import { validateConfig } from '../../service/config/validator';
 import CommandStruct from './commandStruct';
@@ -60,24 +60,27 @@ export default abstract class AgentProcedure {
     }
   }
 
-  async validateAgent(cmd) {
+  async validateAgent(ui: InstallerUI, cmd: CommandStruct) {
     try {
       return run(cmd);
     } catch (e) {
-      UI.error('Failed to validate the installation.');
+      ui.error('Failed to validate the installation.');
       throw e;
     }
   }
 
-  async validateProject(checkSyntax: boolean): Promise<ValidationResult | undefined> {
+  async validateProject(
+    ui: InstallerUI,
+    checkSyntax: boolean
+  ): Promise<ValidationResult | undefined> {
     const validateCmd = await this.installer.validateAgentCommand();
     if (!validateCmd) {
       return;
     }
 
-    UI.status = 'Validating the AppMap agent...';
+    ui.status('Validating the AppMap agent...');
 
-    let { stdout } = await this.validateAgent(validateCmd);
+    let { stdout } = await this.validateAgent(ui, validateCmd);
 
     const validationResult = parseValidationResult(stdout);
 
@@ -90,7 +93,7 @@ export default abstract class AgentProcedure {
     // If appmap-agent-validate returned a schema, and we're using an
     // existing appmap.yml, verify that the config matches the schema.
     if (schema && checkSyntax) {
-      UI.status = `Checking the syntax of AppMap agent configuration...`;
+      ui.status(`Checking the syntax of AppMap agent configuration...`);
       const config = this.loadConfig();
       const result = validateConfig(schema, config);
       if (!result.valid) {
@@ -185,7 +188,7 @@ export default abstract class AgentProcedure {
     }
   }
 
-  async commitConfiguration(filesBefore: string[]) {
+  async commitConfiguration(ui: InstallerUI, filesBefore: string[]) {
     Telemetry.sendEvent({
       name: `install-agent:commit_config:commit_start`,
       properties: {},
@@ -222,10 +225,8 @@ export default abstract class AgentProcedure {
     for (const file of filesDiff) {
       filesMessages.push(`  ${chalk.blue(file)}`);
     }
-    const { commit } = await UI.prompt({
-      type: 'confirm',
-      name: 'commit',
-      message: [
+    const commit = await ui.commitConfiguration(
+      [
         `Commit these files to your repo so that everyone on your team can use AppMap`,
         `  without them having to repeat the setup process. Bring runtime code analysis`,
         `  to your whole team!`,
@@ -234,8 +235,8 @@ export default abstract class AgentProcedure {
         '  Commit?',
       ]
         .flat()
-        .join('\n'),
-    });
+        .join('\n')
+    );
 
     if (commit) {
       Telemetry.sendEvent({
@@ -249,7 +250,7 @@ export default abstract class AgentProcedure {
       // Gemfile.lock etc. when the installer runs for the first time
       const addGitReturn = await this.gitAdd(filesDiff);
       if (!addGitReturn.success) {
-        UI.error(addGitReturn.errorMessage);
+        ui.error(addGitReturn.errorMessage);
       }
 
       const commitGitReturn = await this.gitCommit(
@@ -264,7 +265,7 @@ installer tool:
         npx @appland/appmap@latest install`
       );
       if (!commitGitReturn.success) {
-        UI.error(commitGitReturn.errorMessage);
+        ui.error(commitGitReturn.errorMessage);
       }
 
       Telemetry.sendEvent({
