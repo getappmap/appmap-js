@@ -26,9 +26,8 @@ export const builder = (args: yargs.Argv) => {
   });
 
   args.option('output-dir', {
-    describe: 'directory in which to restore the data',
+    describe: 'directory in which to restore the data. Default: .appmap/work/<revision>.',
     type: 'string',
-    demandOption: true,
   });
 
   args.option('archive-dir', {
@@ -51,9 +50,10 @@ export const handler = async (argv: any) => {
 
   handleWorkingDirectory(argv.directory);
 
-  const { revision: revisionArg, outputDir, archiveDir, exact } = argv;
+  const { revision: revisionArg, outputDirArg, archiveDir, exact } = argv;
 
   const revision = revisionArg || (await gitRevision());
+  const outputDir = outputDirArg || join('.appmap', 'work', revision);
 
   console.log(`Restoring AppMaps of revision ${revision} to ${outputDir}`);
 
