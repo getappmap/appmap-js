@@ -9,8 +9,6 @@ export async function restore(
   revisionName: RevisionName,
   revision: string
 ) {
-  await checkout(revisionName, revision);
-
   await restoreCmd({
     revision: revision,
     outputDir: join(outputDir, revisionName),
