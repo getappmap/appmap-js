@@ -3,10 +3,12 @@ import { TestAgentProcedure } from './TestAgentProcedure';
 import UI from '../../../src/cmds/userInteraction';
 import sinon, { SinonStub } from 'sinon';
 import { withStubbedTelemetry } from '../../helper';
+import InstallerUI from '../../../src/cmds/agentInstaller/installerUI';
 
 jest.mock('../../../src/cmds/userInteraction');
 
 const procedure = new TestAgentProcedure();
+const interactiveUI = new InstallerUI(true, {});
 
 const { prompt } = jest.mocked(UI);
 
@@ -23,7 +25,7 @@ describe(AgentProcedure, () => {
         }
       }`,
       });
-      return expect(procedure.validateProject(false)).resolves.not.toThrow();
+      return expect(procedure.validateProject(interactiveUI, false)).resolves.not.toThrow();
     });
 
     it('does not fail if there are only warnings', () => {
@@ -36,7 +38,7 @@ describe(AgentProcedure, () => {
         }]
       }`,
       });
-      return expect(procedure.validateProject(false)).resolves.not.toThrow();
+      return expect(procedure.validateProject(interactiveUI, false)).resolves.not.toThrow();
     });
 
     it('fails if there are errors', () => {
@@ -49,7 +51,9 @@ describe(AgentProcedure, () => {
         }]
       }`,
       });
-      return expect(procedure.validateProject(false)).rejects.toThrowError(/test error/);
+      return expect(procedure.validateProject(interactiveUI, false)).rejects.toThrowError(
+        /test error/
+      );
     });
   });
 
@@ -79,14 +83,18 @@ describe(AgentProcedure, () => {
         const filesBefore = [];
         const filesAfter = [];
         jest.spyOn(procedure, 'gitStatus').mockResolvedValue(filesAfter);
-        return expect(procedure.commitConfiguration(filesBefore)).resolves.toBe(false);
+        return expect(procedure.commitConfiguration(interactiveUI, filesBefore)).resolves.toBe(
+          false
+        );
       });
 
       it('there is a diff and user selected to not commit', () => {
         const filesBefore = [];
         jest.spyOn(procedure, 'gitStatus').mockResolvedValue(filesAfter);
         prompt.mockResolvedValue({ commit: false });
-        return expect(procedure.commitConfiguration(filesBefore)).resolves.toBe(false);
+        return expect(procedure.commitConfiguration(interactiveUI, filesBefore)).resolves.toBe(
+          false
+        );
       });
     });
 
@@ -99,7 +107,9 @@ describe(AgentProcedure, () => {
           success: true,
           errorMessage: '',
         });
-        return expect(procedure.commitConfiguration(filesBefore)).resolves.toBe(true);
+        return expect(procedure.commitConfiguration(interactiveUI, filesBefore)).resolves.toBe(
+          true
+        );
       });
     });
   });

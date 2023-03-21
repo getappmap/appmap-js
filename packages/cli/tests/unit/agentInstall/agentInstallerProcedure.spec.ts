@@ -6,6 +6,7 @@ import { TestAgentInstaller } from './TestAgentProcedure';
 import UI from '../../../src/cmds/userInteraction';
 import sinon, { SinonStub } from 'sinon';
 import { withStubbedTelemetry } from '../../helper';
+import InstallerUI from '../../../src/cmds/agentInstaller/installerUI';
 
 jest.mock('../../../src/cmds/userInteraction');
 jest.mock('../../../src/cmds/agentInstaller/commandRunner');
@@ -14,6 +15,7 @@ const { prompt, success, warn } = jest.mocked(UI);
 const { run } = jest.mocked(CommandRunner);
 
 const procedure = new AgentInstallerProcedure(new TestAgentInstaller(), '/test/path');
+const interactiveUI = new InstallerUI(true, {});
 
 describe(AgentInstallerProcedure, () => {
   withStubbedTelemetry(sinon);
@@ -31,7 +33,7 @@ describe(AgentInstallerProcedure, () => {
     run.mockResolvedValue({ stdout: '{"configuration": {"contents": ""}}', stderr: '' });
     jest.spyOn(fs, 'writeFileSync').mockImplementation();
 
-    await procedure.run();
+    await procedure.run(interactiveUI);
 
     expect(success).toBeCalled();
 

@@ -8,6 +8,7 @@ import CommandStruct from './commandStruct';
 import { verbose, exists } from '../../utils';
 import JavaBuildToolInstaller from './javaBuildToolInstaller';
 import EncodedFile from '../../encodedFile';
+import InstallerUI from './installerUI';
 
 export default class MavenInstaller extends JavaBuildToolInstaller {
   static identifier = 'Maven';
@@ -66,11 +67,11 @@ export default class MavenInstaller extends JavaBuildToolInstaller {
   }
 
   // TODO: validate the user's project before adding AppMap
-  async checkConfigCommand(): Promise<CommandStruct | undefined> {
+  async checkConfigCommand(_ui: InstallerUI): Promise<CommandStruct | undefined> {
     return undefined;
   }
 
-  async installAgent(): Promise<void> {
+  async installAgent(_ui: InstallerUI): Promise<void> {
     const encodedFile: EncodedFile = new EncodedFile(this.buildFilePath);
     const buildFileSource = encodedFile.toString();
     const jsdom = new JSDOM();

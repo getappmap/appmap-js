@@ -7,6 +7,7 @@ import chalk from 'chalk';
 import CommandStruct from './commandStruct';
 import { UserConfigError } from '../errors';
 import semver from 'semver';
+import InstallerUI from './installerUI';
 
 const AGENT_PACKAGE = '@appland/appmap-agent-js@latest';
 
@@ -63,11 +64,11 @@ export class NpmInstaller extends JavaScriptInstaller {
     return await exists(this.buildFilePath);
   }
 
-  async checkConfigCommand(): Promise<CommandStruct | undefined> {
+  async checkConfigCommand(_ui: InstallerUI): Promise<CommandStruct | undefined> {
     return new CommandStruct('npm', ['install', '--dry-run'], this.path);
   }
 
-  async installAgent(): Promise<void> {
+  async installAgent(_ui: InstallerUI): Promise<void> {
     const cmd = new CommandStruct(
       'npm',
       ['install', '--saveDev', process.env.APPMAP_AGENT_PACKAGE || AGENT_PACKAGE],
@@ -101,11 +102,11 @@ export class YarnInstaller extends JavaScriptInstaller {
     return await exists(this.buildFilePath);
   }
 
-  async checkConfigCommand(): Promise<CommandStruct | undefined> {
+  async checkConfigCommand(_ui: InstallerUI): Promise<CommandStruct | undefined> {
     return new CommandStruct('yarn', ['install', '--immutable'], this.path);
   }
 
-  async installAgent(): Promise<void> {
+  async installAgent(_ui: InstallerUI): Promise<void> {
     const cmd = new CommandStruct(
       'yarn',
       ['add', '--dev', process.env.APPMAP_AGENT_PACKAGE || AGENT_PACKAGE],

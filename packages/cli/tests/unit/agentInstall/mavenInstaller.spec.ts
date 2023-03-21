@@ -5,9 +5,11 @@ import { promisify } from 'util';
 import sinon from 'sinon';
 import MavenInstaller from '../../../src/cmds/agentInstaller/mavenInstaller';
 import EncodedFile from '../../../src/encodedFile';
+import InstallerUI from '../../../src/cmds/agentInstaller/installerUI';
 
 const glob = promisify(globCallback);
 const fixtureDir = path.join(__dirname, '..', 'fixtures', 'java', 'maven');
+const interactiveUI = new InstallerUI(true, {});
 
 describe('MavenInstaller', () => {
   afterEach(() => {
@@ -35,11 +37,11 @@ describe('MavenInstaller', () => {
         const test = tests[i];
         sinon.stub(maven, 'buildFilePath').value(path.join(dataDir, `${test}.actual.xml`));
 
-        const expected = (
-          await fs.readFile(path.join(dataDir, `${test}${expectedExt}`))
-        ).toString().replace(/\s+/g, ' ');
+        const expected = (await fs.readFile(path.join(dataDir, `${test}${expectedExt}`)))
+          .toString()
+          .replace(/\s+/g, ' ');
 
-        await maven.installAgent();
+        await maven.installAgent(interactiveUI);
 
         const actual = efWrite.getCall(-1).args[0].replace(/\s+/g, ' ');
         expect(actual).toBe(expected);
@@ -58,7 +60,7 @@ describe('MavenInstaller', () => {
           encoding: undefined,
         });
 
-      expect(maven.installAgent()).rejects.toThrow(/No project section found/);
+      expect(maven.installAgent(interactiveUI)).rejects.toThrow(/No project section found/);
     });
   });
 });

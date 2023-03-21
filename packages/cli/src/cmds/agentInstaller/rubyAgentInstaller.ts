@@ -11,6 +11,7 @@ import { getOutput } from './commandUtil';
 import CommandStruct from './commandStruct';
 import EncodedFile from '../../encodedFile';
 import { BundlerConfigError } from '../errors';
+import InstallerUI from './installerUI';
 
 const REGEX_GEM_DECLARATION = /^(?:gem|group|require)\s/m;
 
@@ -48,7 +49,7 @@ export class BundleInstaller extends AgentInstaller {
     return await exists(this.buildFilePath);
   }
 
-  async checkConfigCommand(): Promise<CommandStruct | undefined> {
+  async checkConfigCommand(_ui: InstallerUI): Promise<CommandStruct | undefined> {
     return new CommandStruct('bundle', ['check', '--dry-run'], this.path);
   }
 
@@ -65,7 +66,7 @@ export class BundleInstaller extends AgentInstaller {
     }
   }
 
-  async installAgent(): Promise<void> {
+  async installAgent(_ui: InstallerUI): Promise<void> {
     await this.checkBundlerConfig();
     const encodedFile: EncodedFile = new EncodedFile(this.buildFilePath);
     let gemfile = encodedFile.toString();

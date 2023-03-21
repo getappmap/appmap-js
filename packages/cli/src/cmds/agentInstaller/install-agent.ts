@@ -10,7 +10,6 @@ import {
 import { endTime, prefixLines, verbose } from '../../utils';
 import AgentInstallerProcedure from './agentInstallerProcedure';
 import chalk from 'chalk';
-import UI from '../userInteraction';
 import Telemetry from '../../telemetry';
 import { INSTALLERS, INSTALLER_NAMES } from './installers';
 import { getDirectoryProperty } from './telemetryUtil';
@@ -18,10 +17,16 @@ import { getProjects, ProjectConfiguration } from './projectConfiguration';
 import AgentInstaller from './agentInstaller';
 import { ProcessLog } from './commandRunner';
 import openTicket from '../../lib/ticket/openTicket';
+import InstallerUI from './installerUI';
+
 interface InstallCommandOptions {
   verbose?: any;
   projectType?: string;
   directory: string;
+  interactive: boolean;
+  overwriteAppmapConfig?: boolean;
+  installerName?: string;
+  buildFile?: string;
 }
 
 class InstallerError {
@@ -43,8 +48,8 @@ class InstallerError {
     return String(this.error);
   }
 
-  async handle(): Promise<boolean> {
-    UI.error();
+  async handle(ui: InstallerUI): Promise<boolean> {
+    ui.error();
 
     const installersAvailable = this.project?.availableInstallers.map((i) => i.name).join(', ');
 
@@ -62,7 +67,7 @@ class InstallerError {
         },
       });
 
-      UI.error(`${chalk.yellow('!')} Installation has been aborted.`);
+      ui.error(`${chalk.yellow('!')} Installation has been aborted.`);
       return true;
     } else if (this.error instanceof InvalidPathError) {
       Telemetry.sendEvent({
@@ -73,10 +78,10 @@ class InstallerError {
         },
       });
 
-      UI.error(`${chalk.red('!')} ${this.error.message}`);
+      ui.error(`${chalk.red('!')} ${this.error.message}`);
       return true;
     } else if (this.error instanceof UserConfigError) {
-      UI.error(`${chalk.red('!')} Error in project configuration:\n\n${this.error?.message}`);
+      ui.error(`${chalk.red('!')} Error in project configuration:\n\n${this.error?.message}`);
 
       Telemetry.sendEvent({
         name: 'install-agent:user-config-error',
@@ -133,14 +138,25 @@ class InstallerError {
 const _handler = async (
   args: InstallCommandOptions
 ): Promise<{ exitCode: number; err: Error | null }> => {
-  const { projectType, directory, verbose: isVerbose } = args;
+  const {
+    projectType,
+    directory,
+    verbose: isVerbose,
+    interactive: interactiveArg,
+    overwriteAppmapConfig: overwriteAppMapConfig,
+    installerName,
+    buildFile,
+  } = args;
   const errors: InstallerError[] = [];
   const installers = INSTALLERS.map((constructor) => new constructor(directory));
 
   verbose(isVerbose);
 
+  const interactive = interactiveArg !== undefined ? interactiveArg : process.stdout.isTTY;
+  const ui = new InstallerUI(interactive, { overwriteAppMapConfig, installerName, buildFile });
+
   try {
-    const projects = await getProjects(installers, directory, true, projectType);
+    const projects = await getProjects(ui, installers, directory, true, projectType);
 
     for (let i = 0; i < projects.length; i++) {
       const project = projects[i];
@@ -149,10 +165,10 @@ const _handler = async (
         project.path
       );
 
-      console.log(`Installing AppMap agent for ${chalk.blue(project.name)}...`);
+      ui.message(`Installing AppMap agent for ${chalk.blue(project.name)}...`);
 
       try {
-        await installProcedure.run();
+        await installProcedure.run(ui);
 
         Telemetry.sendEvent({
           name: 'install-agent:success',
@@ -166,7 +182,7 @@ const _handler = async (
         });
       } catch (e) {
         let installerError = new InstallerError(e, endTime(), project);
-        const handled = await installerError.handle();
+        const handled = await installerError.handle(ui);
         if (handled) {
           return { exitCode: 1, err: e as Error };
         }
@@ -180,19 +196,9 @@ const _handler = async (
           ? 'Installation failed. View error details?'
           : `${errors.length} out of ${projects.length} installations failed. View error details?`;
 
-      const { showError } = await UI.prompt(
-        {
-          name: 'showError',
-          type: 'confirm',
-          message,
-          prefix: chalk.red('!'),
-        },
-        { supressSpinner: true }
-      );
-
-      if (showError) {
+      if (await ui.shouldShowError(message)) {
         errors.forEach((error) => {
-          UI.error(
+          ui.error(
             projects.length > 1
               ? prefixLines(error.message, `[${chalk.red(error.project?.name)}] `)
               : error.message
@@ -202,7 +208,7 @@ const _handler = async (
     }
   } catch (err) {
     const installerError = new InstallerError(err, 0, undefined);
-    const handled = await installerError.handle();
+    const handled = await installerError.handle(ui);
     if (handled) {
       return { exitCode: 1, err: err as Error };
     }
@@ -210,7 +216,7 @@ const _handler = async (
   }
 
   if (errors.length) {
-    await openTicket(errors.map((e) => e.message));
+    if (ui.interactive) await openTicket(errors.map((e) => e.message));
 
     const reason = new Error(errors.map((e) => e.message).join('\n'));
     return { exitCode: 1, err: reason };
@@ -238,6 +244,27 @@ export default {
       describe: 'Directory in which to install.',
       type: 'string',
       alias: 'd',
+    });
+
+    args.option('interactive', {
+      describe: `Whether to interact with the user (assuming there's a TTY).`,
+      type: 'boolean',
+      default: true,
+    });
+
+    args.option('overwrite-appmap-config', {
+      describe: `Whether to overwrite the appmap.yml file.`,
+      type: 'boolean',
+    });
+
+    args.option('installer-name', {
+      describe: `Installer name to use, in case of ambiguity.`,
+      type: 'string',
+    });
+
+    args.option('build-file', {
+      describe: `Build file name to use, in case of ambiguity.`,
+      type: 'string',
     });
 
     args.positional('directory', {

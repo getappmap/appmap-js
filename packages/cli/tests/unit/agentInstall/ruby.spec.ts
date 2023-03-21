@@ -6,10 +6,12 @@ import { BundleInstaller } from '../../../src/cmds/agentInstaller/rubyAgentInsta
 import * as commandRunner from '../../../src/cmds/agentInstaller/commandRunner';
 import CommandStruct, { CommandReturn } from '../../../src/cmds/agentInstaller/commandStruct';
 import sinon from 'sinon';
+import InstallerUI from '../../../src/cmds/agentInstaller/installerUI';
 
 tmp.setGracefulCleanup();
 
 const fixtureDir = path.join(__dirname, '..', 'fixtures', 'ruby');
+const interactiveUI = new InstallerUI(true, {});
 
 function getProjectDirectory(projectFixtures: fs.PathLike) {
   const projectDir = tmp.dirSync({} as any).name;
@@ -69,7 +71,7 @@ describe('Ruby Agent Installation', () => {
         .onCall(callIdx++)
         .callsFake(bundleInstall);
 
-      await btInstaller.installAgent();
+      await btInstaller.installAgent(interactiveUI);
 
       const expected = fs.readFileSync(path.join(projectFixtures, 'Gemfile.expected'), 'utf-8');
       const actual = fs.readFileSync(path.join(btInstaller.path, 'Gemfile'), 'utf-8');

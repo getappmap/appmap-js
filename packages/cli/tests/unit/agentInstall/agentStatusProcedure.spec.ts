@@ -1,4 +1,5 @@
 import AgentStatusProcedure from '../../../src/cmds/agentInstaller/agentStatusProcedure';
+import InstallerUI from '../../../src/cmds/agentInstaller/installerUI';
 
 import UI from '../../../src/cmds/userInteraction';
 import { TestAgentInstaller } from './TestAgentProcedure';
@@ -7,6 +8,7 @@ jest.mock('../../../src/cmds/userInteraction');
 const { success, warn } = jest.mocked(UI);
 
 const procedure = new AgentStatusProcedure(new TestAgentInstaller(), '/test/project/path');
+const nonInteractiveUI = new InstallerUI(false, { overwriteAppMapConfig: false });
 
 describe(AgentStatusProcedure, () => {
   it('prints any warnings from the validator', async () => {
@@ -20,7 +22,7 @@ describe(AgentStatusProcedure, () => {
       ],
     });
 
-    await procedure.run();
+    await procedure.run(nonInteractiveUI);
 
     expect(success).toBeCalled();
 

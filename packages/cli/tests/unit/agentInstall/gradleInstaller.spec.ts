@@ -4,9 +4,12 @@ import sinon from 'sinon';
 import inquirer from 'inquirer';
 import GradleInstaller from '../../../src/cmds/agentInstaller/gradleInstaller';
 import EncodedFile from '../../../src/encodedFile';
+import InstallerUI from '../../../src/cmds/agentInstaller/installerUI';
 
 const fixtureDir = path.join(__dirname, '..', 'fixtures', 'java', 'gradle');
 const dataDir = path.join(fixtureDir, 'data');
+
+const interactiveUI = new InstallerUI(true, {});
 
 describe('GradleInstaller', () => {
   afterEach(() => {
@@ -48,7 +51,7 @@ describe('GradleInstaller', () => {
 
           const efWrite = sinon.stub(EncodedFile.prototype, 'write');
 
-          await gradle.installAgent();
+          await gradle.installAgent(interactiveUI);
 
           let actual = efWrite.getCall(-1).args[0].toString();
           expect(actual).toMatchSnapshot();

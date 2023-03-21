@@ -2,6 +2,7 @@ import { resolve } from 'path';
 import { UserConfigError } from '../errors';
 import { run } from './commandRunner';
 import CommandStruct from './commandStruct';
+import InstallerUI from './installerUI';
 
 export default abstract class AgentInstaller {
   public abstract buildFile: string;
@@ -15,11 +16,11 @@ export default abstract class AgentInstaller {
 
   abstract get language(): string;
   abstract get appmap_dir(): string;
-  abstract installAgent(): Promise<void>;
+  abstract installAgent(ui: InstallerUI): Promise<void>;
 
-  abstract checkConfigCommand(): Promise<CommandStruct | undefined>;
-  async checkCurrentConfig(): Promise<void> {
-    const cmd = await this.checkConfigCommand();
+  abstract checkConfigCommand(ui: InstallerUI): Promise<CommandStruct | undefined>;
+  async checkCurrentConfig(ui: InstallerUI): Promise<void> {
+    const cmd = await this.checkConfigCommand(ui);
     if (!cmd) {
       return;
     }
