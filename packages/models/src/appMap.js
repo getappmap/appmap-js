@@ -100,8 +100,7 @@ export default class AppMap {
     return copy;
   }
 
-  // Retrieve an array of root entry point events (currently, just HTTP server requests). If none
-  // are found, return all the root nodes which have no caller.
+  // Gets an array of root events, which is all events whose parent is undefined.
   rootEvents() {
     return getRootEvents(this.events);
   }

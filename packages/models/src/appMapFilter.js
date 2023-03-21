@@ -72,6 +72,28 @@ export function isLocalPath(location) {
   return { isLocal: false };
 }
 
+// Collect all code objects that match a filter expressions.
+// Mark all events that are in a subtree whose root is one of the matched code objects.
+// Collect all marked events.
+// This filter should run in O(n), assuming set insertion and lookup is constant time.
+function includeSubtrees(events, filterFn, applyIfEmpty) {
+  const includedEvents = new Set();
+  const includedEventStack = [];
+  const markIncludedEvents = (e) => {
+    if (e.isCall() && filterFn(e)) includedEventStack.push(e);
+    if (includedEventStack.length > 0) {
+      includedEvents.add(e);
+      if (e.returnEvent) includedEvents.add(e.returnEvent);
+    }
+    if (e.isReturn() && filterFn(e.callEvent)) includedEventStack.pop();
+  };
+
+  events.forEach(markIncludedEvents);
+
+  if (applyIfEmpty || includedEvents.size()) return events.filter((e) => includedEvents.has(e));
+  else return events;
+}
+
 export default class AppMapFilter {
   rootObjects = [];
   declutter = new Declutter();
@@ -84,39 +106,25 @@ export default class AppMapFilter {
    */
   filter(appMap, findings) {
     const { classMap } = appMap;
-
     let { events } = appMap;
 
-    if (this.rootObjects.length) {
-      let eventBranches = [];
-
-      classMap.codeObjects.forEach((codeObject) => {
-        this.rootObjects.forEach((id) => {
-          if (AppMapFilter.codeObjectIsMatched(codeObject, id)) {
-            eventBranches = eventBranches.concat(
-              codeObject.allEvents.map((e) => [e.id, e.linkedEvent.id])
-            );
-          }
-        });
-      });
-
-      if (eventBranches.length) {
-        events = events.filter((e) =>
-          eventBranches.some((branch) => e.id >= branch[0] && e.id <= branch[1])
-        );
-      }
+    if (this.declutter.limitRootEvents.on) {
+      events = includeSubtrees(events, (e) => e.httpServerRequest, true);
     }
 
-    if (this.declutter.limitRootEvents.on) {
-      const includeEvents = new Set();
-      const httpServerRequestStack = [];
-      const markIncludedEvents = (e) => {
-        if (e.isCall() && e.httpServerRequest) httpServerRequestStack.push(e);
-        if (httpServerRequestStack.length > 0) includeEvents.add(e.id);
-        if (e.isReturn() && e.httpServerResponse) httpServerRequestStack.pop();
-      };
-      appMap.events.forEach(markIncludedEvents);
-      if (includeEvents.size > 0) events = appMap.events.filter((e) => includeEvents.has(e.id));
+    if (this.rootObjects.length) {
+      const includeCodeObjects = classMap.codeObjects.reduce((memo, codeObject) => {
+        let ancestor = codeObject;
+        while (ancestor) {
+          if (this.rootObjects.some((expr) => AppMapFilter.codeObjectIsMatched(ancestor, expr)))
+            memo.add(codeObject);
+          ancestor = ancestor.parent;
+        }
+
+        return memo;
+      }, new Set());
+
+      events = includeSubtrees(events, (e) => includeCodeObjects.has(e.codeObject), true);
     }
 
     if (this.declutter.hideMediaRequests.on) {
