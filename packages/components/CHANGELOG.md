@@ -1,3 +1,10 @@
+# [@appland/components-v2.33.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.33.0...@appland/components-v2.33.1) (2023-03-21)
+
+
+### Bug Fixes
+
+* Upgrade @appland/sequence-diagram to v1.5.0 ([302a9ae](https://github.com/getappmap/appmap-js/commit/302a9ae7656fd00e63c3bff6207095108917a6a9))
+
 # [@appland/components-v2.33.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.32.1...@appland/components-v2.33.0) (2023-03-16)
 
 
