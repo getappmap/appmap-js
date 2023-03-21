@@ -4,7 +4,6 @@ import readline from 'readline';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { join } from 'path';
 import { RevisionName } from './RevisionName';
-import { checkout } from './checkout';
 import detectRevisions from './detectRevisions';
 import { prepareOutputDir } from './prepareOutputDir';
 import { verbose } from '../../utils';
