@@ -156,7 +156,7 @@
               @click="toggleStatsPanel"
               title=""
             >
-              <UploadIcon class="control-button__icon" />
+              <StatsIcon class="control-button__icon" />
             </button>
           </v-popper>
           <v-popper-menu :isHighlight="filtersChanged">
@@ -302,7 +302,30 @@
         </div>
       </div>
 
-      <div v-if="showStatsPanel" class="share-appmap">
+      <div v-if="showStatsPanel" class="appmap-stats">
+        <div class="notification blocked">
+          <ExclamationIcon />
+          <div class="content">
+            <p><strong>This AppMap is too large to open.</strong></p>
+            <p>
+              To learn more about making your AppMaps smaller, please see our
+              <a href="/">documentation</a>.
+            </p>
+          </div>
+        </div>
+
+        <div class="notification trimmed">
+          <ScissorsIcon />
+          <div class="content">
+            <p><strong>This AppMap has been automatically trimmed.</strong></p>
+            <p>
+              We have identified functions that my impact performance of yoru AppMap, and removed
+              them from this map. Please see our <a href="/">documentation</a> for more information
+              on how to optimize your AppMaps.
+            </p>
+          </div>
+        </div>
+
         <v-stats-panel :stats="stats" />
       </div>
 
@@ -353,6 +376,9 @@ import UploadIcon from '@/assets/link-icon.svg';
 import ExportIcon from '@/assets/export.svg';
 import FilterIcon from '@/assets/filter.svg';
 import DiagramGray from '@/assets/diagram-empty.svg';
+import StatsIcon from '@/assets/stats-icon.svg';
+import ExclamationIcon from '@/assets/exclamation-circle.svg';
+import ScissorsIcon from '@/assets/scissors-icon.svg';
 import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
@@ -420,6 +446,9 @@ export default {
     VTab,
     VTraceFilter,
     DiagramGray,
+    StatsIcon,
+    ExclamationIcon,
+    ScissorsIcon,
   },
 
   store,
@@ -1230,7 +1259,8 @@ code {
   color: $teal;
 }
 
-.share-appmap {
+.share-appmap,
+.appmap-stats {
   box-shadow: $box-shadow-min;
   font-family: $appland-text-font-family;
   position: absolute;
@@ -1256,6 +1286,9 @@ code {
     align-items: center;
     padding: 1rem 2rem;
     border-bottom: 1px solid #808b9869;
+    svg {
+      margin-right: 0.5rem;
+    }
   }
   .content {
     padding: 0 2rem;
@@ -1301,6 +1334,35 @@ code {
     &:hover {
       fill: $blue;
       cursor: pointer;
+    }
+  }
+}
+
+.appmap-stats {
+  background-color: transparent;
+  .notification {
+    padding: 1rem;
+    border-radius: 1rem;
+    display: grid;
+    grid-template-columns: 1rem auto;
+    gap: 0.5rem;
+    align-items: baseline;
+    margin-bottom: 1.5rem;
+    .content {
+      margin: 0;
+      padding: 0;
+    }
+    a {
+      color: inherit;
+    }
+    p {
+      margin: 0;
+    }
+    &.blocked {
+      background-color: #d1245c;
+    }
+    &.trimmed {
+      background: rgba(219, 139, 20, 0.85);
     }
   }
 }
