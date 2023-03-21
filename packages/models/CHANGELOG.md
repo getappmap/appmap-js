@@ -1,3 +1,10 @@
+# [@appland/models-v2.4.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.3.0...@appland/models-v2.4.0) (2023-03-21)
+
+
+### Features
+
+* update prune cli command ([e6472ab](https://github.com/getappmap/appmap-js/commit/e6472ab8877fcded10c1a22927c43837f5793753))
+
 # [@appland/models-v2.3.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.2.1...@appland/models-v2.3.0) (2023-03-16)
 
 
