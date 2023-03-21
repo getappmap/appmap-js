@@ -5,7 +5,7 @@ import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../lib/locateAppMapDir';
 import { exists, verbose } from '../../utils';
 import PackageConfig from '../../../package.json';
-import { readFile, stat, unlink, writeFile } from 'fs/promises';
+import { mkdir, readFile, stat, unlink, writeFile } from 'fs/promises';
 import { glob } from 'glob';
 import { promisify } from 'util';
 import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
@@ -257,6 +257,7 @@ The base revision cannot be determined, so either use --type=auto or --type=full
 
   const defaultOutputDir = () => join('.appmap', 'archive', type);
   const outputDir = outputDirArg || defaultOutputDir();
+  await mkdir(resolve(workingDirectory, outputDir), { recursive: true });
 
   await new Promise<void>((resolveCB, rejectCB) => {
     exec(
