@@ -50,7 +50,7 @@ export const handler = async (argv: any) => {
 
   handleWorkingDirectory(argv.directory);
 
-  const { revision: revisionArg, outputDirArg, archiveDir, exact } = argv;
+  const { revision: revisionArg, outputDir: outputDirArg, archiveDir, exact } = argv;
 
   const revision = revisionArg || (await gitRevision());
   const outputDir = outputDirArg || join('.appmap', 'work', revision);
