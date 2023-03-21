@@ -24,7 +24,7 @@ describe('prune subcommand', () => {
   it('works', async () => {
     const parser = yargs.command(cmd);
 
-    sinon.stub(PruneAppMap, 'pruneAppMap').returns({ events: [] });
+    sinon.stub(PruneAppMap, 'pruneAppMap').returns({ events: [], data: { exclusions: [] } });
 
     const appMapFile = path.join(projectDir, 'revoke_api_key.appmap.json');
     const cmdLine = `prune -o ${projectDir} ${appMapFile} 2MB`;
@@ -41,7 +41,7 @@ describe('prune subcommand', () => {
     // Check that we wrote the output file correctly. Validity of pruning is
     // tested in @appland/models.
     const actual = fs.readFileSync(appMapFile);
-    expect(actual.toString()).toEqual('{"events":[]}');
+    expect(actual.toString()).toEqual('{"events":[],"data":{"exclusions":[]}}');
   });
 
   it('correctly reduces the size of an appmap from a base64url-encoded filter', async () => {
@@ -72,6 +72,6 @@ describe('prune subcommand', () => {
     const outPath = path.join(projectDir, 'Microposts_interface_micropost_interface.appmap.json');
     const fileStats = fs.lstatSync(outPath);
     expect(fileStats.isFile);
-    expect(fileStats.size).toEqual(740567);
+    expect(fileStats.size).toEqual(740734);
   });
 });
