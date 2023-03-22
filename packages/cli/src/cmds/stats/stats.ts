@@ -1,5 +1,4 @@
-import { chdir } from 'process';
-import { existsSync, lstatSync } from 'fs';
+import { existsSync } from 'fs';
 import path from 'path';
 import glob from 'glob';
 import chalk from 'chalk';
@@ -25,20 +24,20 @@ async function locateAppMapFile(userInput: string, appmapDir: string): Promise<s
   } else if (userInput.endsWith('.appmap')) {
     extension = '.json';
   }
+  const mapFile = userInput + extension;
 
-  const globMatch = (globString: string) => {
-    return glob.sync(globString);
-  };
+  const appmapDirIsCwd = (): boolean => path.resolve(appmapDir) === process.cwd();
 
-  const appmapInWorkingDir = () => globMatch(path.join(appmapDir, '**', userInput + extension));
-  const appmapInAppMapDir = () => [path.join(userInput + extension)].filter((p) => existsSync(p));
-  const appmapAbsolute = () => {
-    if (!path.isAbsolute(userInput + extension)) return [];
+  // if --appmap-file is a valid exact path, then return it
+  if (path.isAbsolute(mapFile) && existsSync(mapFile)) return mapFile;
 
-    return globMatch(userInput + extension);
-  };
+  // resolve --appmap-dir and --appmap-file and check for an exact match
+  const searchPath = appmapDirIsCwd() ? mapFile : path.join(appmapDir, mapFile);
+  if (existsSync(path.resolve(searchPath))) return searchPath;
 
-  let matches = [...appmapAbsolute(), ...appmapInWorkingDir(), ...appmapInAppMapDir()];
+  // recursively search in the --appmap-dir
+  const globArray = appmapDirIsCwd() ? ['**', mapFile] : [appmapDir, '**', mapFile];
+  const matches = glob.sync(path.join(...globArray));
 
   if (matches.length === 0) {
     console.error(chalk.red('No matching AppMap found'));
@@ -94,15 +93,21 @@ export async function handler(
 ): Promise<Array<EventInfo> | Promise<[SortedAppMapSize[], SlowestExecutionTime[]]> | undefined> {
   verbose(argv.verbose);
   handleWorkingDirectory(argv.directory);
-  const appmapDir = await locateAppMapDir(argv.appmapDir);
+
+  let appmapDir: string;
+  try {
+    appmapDir = await locateAppMapDir(argv.appmapDir);
+  } catch (e) {
+    appmapDir = process.cwd();
+  }
 
   const { format, limit, appmapFile } = argv;
 
   if (appmapFile) {
     const fileToAnalyze = await locateAppMapFile(appmapFile, appmapDir);
     if (!fileToAnalyze) return;
-    
-    console.warn(`Analyzing AppMap: ${fileToAnalyze}`);
+
+    console.warn(chalk.yellow(`Analyzing AppMap: ${fileToAnalyze}\n`));
     return await statsForMap(format, limit, fileToAnalyze);
   }
 
