@@ -2,16 +2,16 @@
   <div class="stats-panel">
     <div class="heading">
       <h1><StatsIconLg />Stats</h1>
-      <CloseIcon class="close-me" @click.stop="closeShareModal" />
+      <CloseIcon class="close-me" @click.stop="closeStatsPanel" />
     </div>
 
     <ul class="stats-table">
       <li>
         <ul class="stats-row row-header">
-          <li><strong>Function</strong></li>
-          <li><strong>Count</strong></li>
-          <li><strong>Size on disk</strong></li>
-          <li class="location"><strong>Location</strong></li>
+          <li><strong @click="updateSorting('function')">Function</strong></li>
+          <li><strong @click="updateSorting('count')">Count</strong></li>
+          <li><strong @click="updateSorting('size')">Size on disk</strong></li>
+          <li class="location"><strong @click="updateSorting('location')">Location</strong></li>
         </ul>
       </li>
       <li class="pruned-row">
@@ -61,18 +61,51 @@ import StatsIconLg from '@/assets/stats-icon-lg.svg';
 
 export default {
   name: 'v-stats-panel',
+
+  components: {
+    CloseIcon,
+    StatsIcon,
+    StatsIconLg,
+    HiddenIcon,
+  },
+
   props: {
     stats: {
       type: Object,
       default: () => ({}),
     },
   },
+
+  data() {
+    return {
+      sortBy: 'count',
+      sortAscending: false,
+    };
+  },
+
   computed: {
     functions() {
-      return this.stats.functions;
+      return this.stats.functions.sort(this.sortFunctions);
     },
   },
+
   methods: {
+    updateSorting(sortBy) {
+      this.sortAscending = !this.sortAscending;
+      this.sortBy = sortBy;
+    },
+
+    sortFunctions(a, b) {
+      if (['count', 'size'].includes(this.sortBy)) {
+        return this.sortAscending
+          ? a[this.sortBy] - b[this.sortBy]
+          : b[this.sortBy] - a[this.sortBy];
+      }
+      return this.sortAscending
+        ? a[this.sortBy].localeCompare(b[this.sortBy])
+        : b[this.sortBy].localeCompare(a[this.sortBy]);
+    },
+
     displaySize(sizeInBytes) {
       let divisor;
       let suffix;
@@ -93,12 +126,10 @@ export default {
 
       return `${(sizeInBytes / divisor).toFixed(1)} ${suffix}`;
     },
-  },
-  components: {
-    CloseIcon,
-    StatsIcon,
-    StatsIconLg,
-    HiddenIcon,
+
+    closeStatsPanel() {
+      this.$emit('closeStatsPanel');
+    },
   },
 };
 </script>
@@ -130,6 +161,10 @@ export default {
     }
     strong {
       color: $gray4;
+      &:hover {
+        cursor: pointer;
+        color: $white;
+      }
     }
     .location {
       word-break: keep-all;
@@ -140,6 +175,7 @@ export default {
         text-decoration: none;
         &:hover {
           text-decoration: underline;
+          cursor: pointer;
         }
       }
     }

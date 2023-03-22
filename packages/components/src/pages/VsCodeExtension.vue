@@ -326,7 +326,7 @@
           </div>
         </div>
 
-        <v-stats-panel :stats="stats" />
+        <v-stats-panel :stats="stats" @closeStatsPanel="closeStatsPanel" />
       </div>
 
       <div class="diagram-instructions">
@@ -1072,6 +1072,10 @@ export default {
     toggleStatsPanel() {
       this.showStatsPanel = !this.showStatsPanel;
       if (this.showShareModal && this.showStatsPanel) this.showShareModal = false;
+    },
+
+    closeStatsPanel() {
+      this.showStatsPanel = false;
     },
 
     uniqueFindings(findings) {
