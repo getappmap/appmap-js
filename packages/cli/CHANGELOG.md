@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.73.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.72.0...@appland/appmap-v3.73.0) (2023-03-22)
+
+
+### Features
+
+* more robust appmap locating ([c52a390](https://github.com/getappmap/appmap-js/commit/c52a3902edfa214ed4637d0ed8de6932248fceb4))
+
 # [@appland/appmap-v3.72.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.71.0...@appland/appmap-v3.72.0) (2023-03-22)
 
 
