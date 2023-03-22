@@ -303,6 +303,7 @@
       </div>
 
       <div v-if="showStatsPanel" class="appmap-stats">
+        <!-- TODO: show notifications for large and giant appmaps
         <div class="notification blocked">
           <ExclamationIcon />
           <div class="content">
@@ -325,6 +326,7 @@
             </p>
           </div>
         </div>
+        -->
 
         <v-stats-panel :stats="stats" @closeStatsPanel="closeStatsPanel" />
       </div>
@@ -1265,6 +1267,11 @@ body.sb-show-main.sb-main-padded {
 
 code {
   color: $teal;
+}
+
+.appmap-stats {
+  height: 95%;
+  overflow-y: auto;
 }
 
 .share-appmap,

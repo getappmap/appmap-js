@@ -14,6 +14,7 @@
           <li class="location"><strong @click="updateSorting('location')">Location</strong></li>
         </ul>
       </li>
+      <!-- TODO: implement pruned rows
       <li class="pruned-row">
         <ul class="stats-row pruned">
           <HiddenIcon />
@@ -36,6 +37,7 @@
           </li>
         </ul>
       </li>
+      -->
       <li v-for="func in functions" :key="func['function']">
         <ul class="stats-row">
           <li>{{ func['function'] }}</li>
