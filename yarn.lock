@@ -90,7 +90,7 @@ __metadata:
     "@appland/client": "workspace:^1"
     "@appland/components": "workspace:^2"
     "@appland/diagrams": "workspace:^1"
-    "@appland/models": "workspace:^2.2.0"
+    "@appland/models": "workspace:^2.4.0"
     "@appland/openapi": "workspace:^1.4.3"
     "@appland/sequence-diagram": "workspace:^1"
     "@craftamap/esbuild-plugin-html": ^0.4.0
@@ -213,7 +213,7 @@ __metadata:
   resolution: "@appland/components@workspace:packages/components"
   dependencies:
     "@appland/diagrams": "workspace:^1.6.2"
-    "@appland/models": "workspace:^2.2.0"
+    "@appland/models": "workspace:^2.4.0"
     "@appland/sequence-diagram": "workspace:^1.5.0"
     "@babel/core": ^7.13.1
     "@babel/node": ^7.13.0
@@ -320,7 +320,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/models@workspace:*, @appland/models@workspace:^2.2.0, @appland/models@workspace:packages/models":
+"@appland/models@workspace:*, @appland/models@workspace:^2.2.0, @appland/models@workspace:^2.4.0, @appland/models@workspace:packages/models":
   version: 0.0.0-use.local
   resolution: "@appland/models@workspace:packages/models"
   dependencies:

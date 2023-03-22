@@ -28,7 +28,7 @@
   ],
   "dependencies": {
     "@appland/diagrams": "workspace:^1.6.2",
-    "@appland/models": "workspace:^2.2.0",
+    "@appland/models": "workspace:^2.4.0",
     "@appland/sequence-diagram": "workspace:^1.5.0",
     "buffer": "^6.0.3",
     "diff": "^5.1.0",
