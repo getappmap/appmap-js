@@ -74,7 +74,7 @@
     "@appland/client": "workspace:^1",
     "@appland/components": "workspace:^2",
     "@appland/diagrams": "workspace:^1",
-    "@appland/models": "workspace:^2.2.0",
+    "@appland/models": "workspace:^2.4.0",
     "@appland/openapi": "workspace:^1.4.3",
     "@appland/sequence-diagram": "workspace:^1",
     "@sidvind/better-ajv-errors": "^0.9.1",
