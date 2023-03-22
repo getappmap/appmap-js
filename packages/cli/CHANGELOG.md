@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.72.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.71.0...@appland/appmap-v3.72.0) (2023-03-22)
+
+
+### Features
+
+* Non-interactive AppMap installer ([8631211](https://github.com/getappmap/appmap-js/commit/8631211b3cca5b59262f3b1d2ee90792942cf04a))
+
 # [@appland/appmap-v3.71.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.70.0...@appland/appmap-v3.71.0) (2023-03-21)
 
 
