@@ -1,3 +1,10 @@
+# [@appland/components-v2.33.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.33.1...@appland/components-v2.33.2) (2023-03-22)
+
+
+### Bug Fixes
+
+* Upgrade @appland/models to v2.4.0 ([dee51b1](https://github.com/getappmap/appmap-js/commit/dee51b1ade14d96a5e6220c24a2b5f064b74e197))
+
 # [@appland/components-v2.33.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.33.0...@appland/components-v2.33.1) (2023-03-21)
 
 
