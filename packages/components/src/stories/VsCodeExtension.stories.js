@@ -10,7 +10,6 @@ import mapWithTwoFindings from './data/appmap_with_two_findings.json';
 import patchNotes from './data/patch_notes_html';
 import bindResolvePath from './support/resolvePath';
 import './scss/fullscreen.scss';
-import defaultScenarioStats from './data/scenario.stats.json';
 
 const scenarioData = {
   default: defaultScenario,
@@ -63,11 +62,6 @@ export const extension = Template.bind({});
 export const extensionWithDefaultSequenceView = Template.bind({});
 extensionWithDefaultSequenceView.args = {
   defaultView: VIEW_SEQUENCE,
-};
-
-export const extensionWithStats = Template.bind({});
-extensionWithStats.args = {
-  stats: defaultScenarioStats,
 };
 
 export const extensionWithNotification = (args, { argTypes }) => ({

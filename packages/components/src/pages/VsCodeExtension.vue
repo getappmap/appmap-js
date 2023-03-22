@@ -485,10 +485,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    stats: {
-      type: Object,
-      default: () => ({}),
-    },
   },
 
   watch: {
@@ -571,6 +567,14 @@ export default {
         data: { findings },
       } = appMap;
       return this.uniqueFindings(findings);
+    },
+
+    stats() {
+      const { appMap } = this.$store.state;
+      const {
+        data: { stats },
+      } = appMap;
+      return stats;
     },
 
     filteredAppMap() {
@@ -774,7 +778,7 @@ export default {
     },
 
     hasStats() {
-      return Object.keys(this.stats).length > 0;
+      return this.stats && this.stats.functions && this.stats.functions.length > 0;
     },
   },
 

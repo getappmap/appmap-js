@@ -36,7 +36,7 @@
           </li>
         </ul>
       </li>
-      <li v-for="func in stats" :key="func['function']">
+      <li v-for="func in functions" :key="func['function']">
         <ul class="stats-row">
           <li>{{ func['function'] }}</li>
           <li>{{ func.count }}</li>
@@ -65,6 +65,11 @@ export default {
     stats: {
       type: Object,
       default: () => ({}),
+    },
+  },
+  computed: {
+    functions() {
+      return this.stats.functions;
     },
   },
   methods: {
