@@ -9,6 +9,8 @@ import assert from 'assert';
 import { queue } from 'async';
 import { mkdir, readFile, rm, writeFile } from 'fs/promises';
 import { dirname, isAbsolute, join, relative, resolve } from 'path';
+import { default as openapiDiff } from 'openapi-diff';
+
 import { executeCommand } from '../../lib/executeCommand';
 import { Finding } from '../../lib/findings';
 import { DiffDiagrams } from '../../sequenceDiagramDiff/DiffDiagrams';
@@ -214,12 +216,37 @@ export default async function buildChangeReport(
     );
   }
 
+  let apiDiff: any;
+  {
+    const baseDefinitions = await readFile(appmapData.openapiPath(RevisionName.Base), 'utf-8');
+    const headDefinitions = await readFile(appmapData.openapiPath(RevisionName.Head), 'utf-8');
+
+    const result = await openapiDiff.diffSpecs({
+      sourceSpec: {
+        content: baseDefinitions,
+        location: 'base',
+        format: 'openapi3',
+      },
+      destinationSpec: {
+        content: headDefinitions,
+        location: 'head',
+        format: 'openapi3',
+      },
+    });
+
+    if (result.breakingDifferencesFound) {
+      console.log('Breaking change found!');
+    }
+    apiDiff = result;
+  }
+
   return {
     testFailures,
     newAppMaps,
     changedAppMaps,
     newFindings,
     resolvedFindings,
+    apiDiff,
     sequenceDiagramDiffSnippets: mapToRecord(sequenceDiagramDiffSnippets),
     scanConfiguration: {
       [RevisionName.Base]: baseScanResults.configuration,
