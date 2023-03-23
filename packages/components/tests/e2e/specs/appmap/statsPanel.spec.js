@@ -121,5 +121,15 @@ context('AppMap stats panel', () => {
         'app/helpers/spree/admin/navigation_helper.rb:47'
       );
     });
+
+    it('will not allow user to click on unavailable filtered functions', () => {
+      cy.get('.tabs__header').contains('Sequence').click();
+      cy.get('.sequence-actor[data-actor-id="package:openssl"] .hide-container').click();
+      cy.get('[data-cy="stats-button"]').click();
+      cy.get('.stats-row').eq(1).find('a').should('exist');
+      cy.get('.stats-row').eq(2).find('a').should('not.exist');
+      cy.get('.stats-row').eq(3).find('a').should('exist');
+      cy.get('.stats-row').eq(7).find('a').should('not.exist');
+    });
   });
 });

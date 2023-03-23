@@ -47,9 +47,17 @@
       <li v-for="func in functions" :key="func['function']">
         <ul class="stats-row">
           <li class="fqid">
-            <a href="#" @click.prevent="openEventInTrace(removeFunctionPrefix(func['function']))">
+            <a
+              v-if="isAvailable(removeFunctionPrefix(func['function']))"
+              href="#"
+              @click.prevent="openFunction(removeFunctionPrefix(func['function']))"
+            >
               {{ removeFunctionPrefix(func['function']) }}
             </a>
+            <div class="hidden-fqid" v-else>
+              <HiddenIcon />
+              {{ removeFunctionPrefix(func['function']) }}
+            </div>
           </li>
           <li>{{ func.count }}</li>
           <li>{{ displaySize(func.size) }}</li>
@@ -71,8 +79,9 @@ const MEGABYTE = KILOBYTE * 1000;
 const GIGABYTE = MEGABYTE * 1000;
 import CloseIcon from '@/assets/close.svg';
 import StatsIconLg from '@/assets/stats-icon-lg.svg';
-// import HiddenIcon from '@/assets/hidden-icon.svg';
+import HiddenIcon from '@/assets/hidden-icon.svg';
 // import StatsIcon from '@/assets/stats-icon.svg';
+import { SET_FOCUSED_EVENT, SET_VIEW, VIEW_SEQUENCE, SELECT_CODE_OBJECT } from '@/store/vsCode';
 
 export default {
   name: 'v-stats-panel',
@@ -80,7 +89,7 @@ export default {
   components: {
     CloseIcon,
     StatsIconLg,
-    // HiddenIcon,
+    HiddenIcon,
     // StatsIcon,
   },
 
@@ -88,6 +97,9 @@ export default {
     stats: {
       type: Object,
       default: () => ({}),
+    },
+    appMap: {
+      type: Object,
     },
   },
 
@@ -156,6 +168,10 @@ export default {
       return /[\\/]/.test(location);
     },
 
+    isAvailable(fqid) {
+      return this.appMap.classMap.codeObjectsById[fqid];
+    },
+
     closeStatsPanel() {
       this.$emit('closeStatsPanel');
     },
@@ -164,8 +180,16 @@ export default {
       this.$root.$emit('viewSource', { location });
     },
 
-    openEventInTrace(fqid) {
-      this.$emit('openEventInTrace', fqid);
+    openFunction(fqid) {
+      const codeObject = this.appMap.classMap.codeObjectsById[fqid];
+      if (codeObject) {
+        const firstEvent = codeObject.events[0];
+
+        this.$store.commit(SET_VIEW, VIEW_SEQUENCE);
+        this.$store.commit(SELECT_CODE_OBJECT, codeObject);
+        this.$store.commit(SET_FOCUSED_EVENT, firstEvent);
+        this.$emit('closeStatsPanel');
+      }
     },
   },
 };
@@ -208,6 +232,14 @@ export default {
       word-break: keep-all;
       overflow: hidden;
       text-overflow: ellipsis;
+      .hidden-fqid {
+        color: $gray4;
+        display: flex;
+        align-items: center;
+        svg {
+          margin-right: 0.5rem;
+        }
+      }
       a {
         color: $brightblue;
         text-decoration: none;
