@@ -1,3 +1,10 @@
+# [@appland/components-v2.34.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.33.2...@appland/components-v2.34.0) (2023-03-23)
+
+
+### Features
+
+* Add stats panel to AppMap viewer ([#1117](https://github.com/getappmap/appmap-js/issues/1117)) ([dac8fcd](https://github.com/getappmap/appmap-js/commit/dac8fcdd956fcaed67e85ebc28d73c173054cbf9))
+
 # [@appland/components-v2.33.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.33.1...@appland/components-v2.33.2) (2023-03-22)
 
 
