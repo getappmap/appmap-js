@@ -1,5 +1,11 @@
+import { Metadata } from '@appland/models';
+
 export type AppMapLink = string;
 export type SequenceDiagramLink = string;
+// AppMap file path, without the .appmap.json extension.
+export type AppMapName = string;
+// hex digest of an AppMap's canonical sequence diagram.
+export type AppMapDigest = string;
 
 export type ChangedAppMap = {
   appmap: string;
@@ -19,4 +25,8 @@ export type ChangeReport = {
   newAppMaps: AppMapLink[];
   changedAppMaps: ChangedAppMap[];
   sequenceDiagramDiffSnippets: Record<string, AppMapLink[]>;
+  appMapMetadata: {
+    base: Record<AppMapName, Metadata>;
+    head: Record<AppMapName, Metadata>;
+  };
 };
