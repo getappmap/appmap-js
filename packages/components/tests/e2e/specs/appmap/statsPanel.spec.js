@@ -37,6 +37,12 @@ context('AppMap stats panel', () => {
       cy.get('[data-cy="stats-panel"]').should('not.exist');
     });
 
+    it('opens the filter modal on top of the stats panel', () => {
+      cy.get('[data-cy="stats-button"]').click();
+      cy.get('[data-cy="filter-button"]').click();
+      cy.get('div.filters').should('exist').should('be.visible');
+    });
+
     it('defaults to sorting by count and allows for sorting by any column', () => {
       // check that it is sorted by count
       cy.get('[data-cy="stats-button"]').click();
