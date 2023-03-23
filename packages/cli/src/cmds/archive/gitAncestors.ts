@@ -1,11 +1,6 @@
-import { exec } from 'child_process';
+import { executeCommand } from '../../lib/executeCommand';
 
 export default async function gitAncestors(revision: string): Promise<string[]> {
-  return new Promise<string[]>((resolve, reject) => {
-    exec(`git rev-list ${revision}`, (error, stdout) => {
-      if (error) reject(error);
-
-      resolve(stdout.trim().split('\n'));
-    });
-  });
+  const command = `git rev-list ${revision}`;
+  return (await executeCommand(command)).trim().split('\n').filter(Boolean);
 }
