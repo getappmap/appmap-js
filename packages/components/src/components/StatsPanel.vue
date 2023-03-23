@@ -1,5 +1,5 @@
 <template>
-  <div class="stats-panel">
+  <div class="stats-panel" data-cy="stats-panel">
     <div class="heading">
       <h1><StatsIconLg />Stats</h1>
       <CloseIcon class="close-me" @click.stop="closeStatsPanel" />
@@ -8,10 +8,16 @@
     <ul class="stats-table">
       <li>
         <ul class="stats-row row-header">
-          <li><strong @click="updateSorting('function')">Function</strong></li>
-          <li><strong @click="updateSorting('count')">Count</strong></li>
-          <li><strong @click="updateSorting('size')">Size on disk</strong></li>
-          <li class="location"><strong @click="updateSorting('location')">Location</strong></li>
+          <li>
+            <strong data-cy="function-header" @click="updateSorting('function')">Function</strong>
+          </li>
+          <li><strong data-cy="count-header" @click="updateSorting('count')">Count</strong></li>
+          <li>
+            <strong data-cy="size-header" @click="updateSorting('size')">Size on disk</strong>
+          </li>
+          <li class="location">
+            <strong data-cy="location-header" @click="updateSorting('location')">Location</strong>
+          </li>
         </ul>
       </li>
       <!-- TODO: implement pruned rows
