@@ -7,9 +7,9 @@ import { RevisionName } from './RevisionName';
 import detectRevisions from './detectRevisions';
 import { prepareOutputDir } from './prepareOutputDir';
 import { verbose } from '../../utils';
-import { restore } from './restore';
 import buildChangeReport from './buildChangeReport';
 import { writeFile } from 'fs/promises';
+import analyzeArchive from './ArchiveAnalyzer';
 
 export const command = 'compare';
 export const describe = 'Compare runtime code behavior between base and head revisions';
@@ -47,6 +47,12 @@ export const builder = (args: yargs.Argv) => {
     default: '.appmap/archive',
   });
 
+  args.option('source-dir', {
+    describe: 'root directory of the application source code',
+    type: 'string',
+    default: '.',
+  });
+
   return args.strict();
 };
 
@@ -64,6 +70,7 @@ export const handler = async (argv: any) => {
   const {
     archiveDir,
     directory,
+    sourceDir: srcDir,
     baseRevision: baseRevisionArg,
     outputDir: outputDirArg,
     headRevision: headRevisionArg,
@@ -81,10 +88,15 @@ export const handler = async (argv: any) => {
     rl
   );
 
-  await restore(outputDir, archiveDir, RevisionName.Base, baseRevision);
-  await restore(outputDir, archiveDir, RevisionName.Head, headRevision);
+  for (const [revisionName, revision] of [
+    [RevisionName.Base, baseRevision],
+    [RevisionName.Head, headRevision],
+  ] as [RevisionName, string][]) {
+    // These need to be serialized, because a git checkout is performed.
+    await analyzeArchive(archiveDir, revision, join(outputDir, revisionName));
+  }
 
-  const changeReport = await buildChangeReport(baseRevision, headRevision, outputDir);
+  const changeReport = await buildChangeReport(baseRevision, headRevision, outputDir, srcDir);
 
   await writeFile(join(outputDir, 'change-report.json'), JSON.stringify(changeReport, null, 2));
   console.log(JSON.stringify(changeReport, null, 2));
