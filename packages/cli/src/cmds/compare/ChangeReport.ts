@@ -27,6 +27,7 @@ export type ChangeReport = {
   changedAppMaps: ChangedAppMap[];
   newFindings: Finding[];
   resolvedFindings: Finding[];
+  apiDiff: any;
   scanConfiguration: {
     base: Configuration;
     head: Configuration;
