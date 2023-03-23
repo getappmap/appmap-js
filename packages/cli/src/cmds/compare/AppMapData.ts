@@ -16,6 +16,10 @@ export class AppMapData {
     );
   }
 
+  findingsPath(revisionName: RevisionName): string {
+    return join(this.workingDir, revisionName, 'appmap-findings.json');
+  }
+
   appmapPath(revisionName: RevisionName, appmap: string) {
     return join(this.workingDir, revisionName, appmap);
   }
