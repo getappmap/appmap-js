@@ -20,6 +20,10 @@ export class AppMapData {
     return join(this.workingDir, revisionName, 'appmap-findings.json');
   }
 
+  openapiPath(revisionName: RevisionName): string {
+    return join(this.workingDir, revisionName, 'openapi.yml');
+  }
+
   appmapPath(revisionName: RevisionName, appmap: string) {
     return join(this.workingDir, revisionName, appmap);
   }
