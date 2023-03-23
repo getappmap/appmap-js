@@ -64,18 +64,18 @@ const KILOBYTE = 1000;
 const MEGABYTE = KILOBYTE * 1000;
 const GIGABYTE = MEGABYTE * 1000;
 import CloseIcon from '@/assets/close.svg';
-import HiddenIcon from '@/assets/hidden-icon.svg';
-import StatsIcon from '@/assets/stats-icon.svg';
 import StatsIconLg from '@/assets/stats-icon-lg.svg';
+// import HiddenIcon from '@/assets/hidden-icon.svg';
+// import StatsIcon from '@/assets/stats-icon.svg';
 
 export default {
   name: 'v-stats-panel',
 
   components: {
     CloseIcon,
-    StatsIcon,
     StatsIconLg,
-    HiddenIcon,
+    // HiddenIcon,
+    // StatsIcon,
   },
 
   props: {
@@ -94,7 +94,8 @@ export default {
 
   computed: {
     functions() {
-      return this.stats.functions.sort(this.sortFunctions);
+      if (this.stats.functions) return this.sortFunctions(this.stats.functions.slice());
+      return [];
     },
   },
 
@@ -104,7 +105,11 @@ export default {
       this.sortBy = sortBy;
     },
 
-    sortFunctions(a, b) {
+    sortFunctions(functionsArray) {
+      return functionsArray.sort(this.sorter);
+    },
+
+    sorter(a, b) {
       if (['count', 'size'].includes(this.sortBy)) {
         return this.sortAscending
           ? a[this.sortBy] - b[this.sortBy]

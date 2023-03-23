@@ -383,8 +383,8 @@ import ExportIcon from '@/assets/export.svg';
 import FilterIcon from '@/assets/filter.svg';
 import DiagramGray from '@/assets/diagram-empty.svg';
 import StatsIcon from '@/assets/stats-icon.svg';
-import ExclamationIcon from '@/assets/exclamation-circle.svg';
-import ScissorsIcon from '@/assets/scissors-icon.svg';
+// import ExclamationIcon from '@/assets/exclamation-circle.svg';
+// import ScissorsIcon from '@/assets/scissors-icon.svg';
 import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
@@ -454,8 +454,8 @@ export default {
     VTraceFilter,
     DiagramGray,
     StatsIcon,
-    ExclamationIcon,
-    ScissorsIcon,
+    // ExclamationIcon,
+    // ScissorsIcon,
   },
 
   store,
