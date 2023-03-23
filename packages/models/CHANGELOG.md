@@ -1,3 +1,11 @@
+# [@appland/models-v2.4.1](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.4.0...@appland/models-v2.4.1) (2023-03-23)
+
+
+### Bug Fixes
+
+* Fix root objects and root HTTP filters ([c2e9dbd](https://github.com/getappmap/appmap-js/commit/c2e9dbdabff20c404f714d3c5d38fb53acf3633a))
+* Optimize root objects filter ([f1bb820](https://github.com/getappmap/appmap-js/commit/f1bb8204f475c407c6cf88aa8efe4ad67223db97))
+
 # [@appland/models-v2.4.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.3.0...@appland/models-v2.4.0) (2023-03-21)
 
 
