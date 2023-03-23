@@ -1,4 +1,5 @@
 import { Metadata } from '@appland/models';
+import Configuration, { Finding } from '../../lib/findings';
 
 export type AppMapLink = string;
 export type SequenceDiagramLink = string;
@@ -24,9 +25,15 @@ export type ChangeReport = {
   testFailures: TestFailure[];
   newAppMaps: AppMapLink[];
   changedAppMaps: ChangedAppMap[];
-  sequenceDiagramDiffSnippets: Record<string, AppMapLink[]>;
+  newFindings: Finding[];
+  resolvedFindings: Finding[];
+  scanConfiguration: {
+    base: Configuration;
+    head: Configuration;
+  };
   appMapMetadata: {
     base: Record<AppMapName, Metadata>;
     head: Record<AppMapName, Metadata>;
   };
+  sequenceDiagramDiffSnippets: Record<string, AppMapLink[]>;
 };

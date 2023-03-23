@@ -99,7 +99,6 @@ export const handler = async (argv: any) => {
   const changeReport = await buildChangeReport(baseRevision, headRevision, outputDir, srcDir);
 
   await writeFile(join(outputDir, 'change-report.json'), JSON.stringify(changeReport, null, 2));
-  console.log(JSON.stringify(changeReport, null, 2));
 
   rl.close();
 };
