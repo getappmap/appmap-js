@@ -94,7 +94,7 @@ be included in the file arguments passed to the test runner.`)
 
   const archiveMetadata = await Promise.all<Metadata>(
     (
-      await promisify(glob)(join(baseAppmapDir, 'appmap_archive.*.json'))
+      await promisify(glob)(join(baseAppmapDir, 'appmap_archive*.json'))
     ).map(async (metadataFile) => JSON.parse(await readFile(metadataFile, 'utf8')))
   );
 
