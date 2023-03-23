@@ -10,6 +10,7 @@ import { queue } from 'async';
 import { mkdir, readFile, rm, writeFile } from 'fs/promises';
 import { dirname, isAbsolute, join, relative, resolve } from 'path';
 import { executeCommand } from '../../lib/executeCommand';
+import { Finding } from '../../lib/findings';
 import { DiffDiagrams } from '../../sequenceDiagramDiff/DiffDiagrams';
 import { exists } from '../../utils';
 import { AppMapData } from './AppMapData';
@@ -95,10 +96,9 @@ export default async function buildChangeReport(
   }
 
   const baseAppMaps = new Set(await appmapData.appmaps(RevisionName.Base));
-  const newAppMaps = (await appmapData.appmaps(RevisionName.Head)).filter(
-    (appmap) => !baseAppMaps.has(appmap)
-  );
-  const changedAppMaps = (await appmapData.appmaps(RevisionName.Head))
+  const headAppMaps = new Set(await appmapData.appmaps(RevisionName.Head));
+  const newAppMaps = [...headAppMaps].filter((appmap) => !baseAppMaps.has(appmap));
+  const changedAppMaps = [...headAppMaps]
     .filter((appmap) => baseAppMaps.has(appmap))
     .map((appmap) => ({ appmap }));
 
@@ -184,11 +184,47 @@ export default async function buildChangeReport(
     return testFailure;
   });
 
+  const baseScanResults = JSON.parse(
+    await readFile(appmapData.findingsPath(RevisionName.Base), 'utf-8')
+  );
+  const headScanResults = JSON.parse(
+    await readFile(appmapData.findingsPath(RevisionName.Head), 'utf-8')
+  );
+
+  let newFindings: Finding[];
+  let resolvedFindings: Finding[];
+  {
+    const baseFindingHashes = (baseScanResults.findings as Finding[]).reduce(
+      (memo, finding: Finding) => (memo.add(finding.hash_v2), memo),
+      new Set<string>()
+    );
+    const headFindingHashes = (headScanResults.findings as Finding[]).reduce(
+      (memo, finding: Finding) => (memo.add(finding.hash_v2), memo),
+      new Set<string>()
+    );
+    const newFindingHashes = [...headFindingHashes].filter((hash) => !baseFindingHashes.has(hash));
+    const resolvedFindingHashes = [...baseFindingHashes].filter(
+      (hash) => !headFindingHashes.has(hash)
+    );
+    newFindings = (headScanResults.findings as Finding[]).filter((finding) =>
+      newFindingHashes.includes(finding.hash_v2)
+    );
+    resolvedFindings = (baseScanResults.findings as Finding[]).filter((finding) =>
+      resolvedFindingHashes.includes(finding.hash_v2)
+    );
+  }
+
   return {
     testFailures,
     newAppMaps,
     changedAppMaps,
+    newFindings,
+    resolvedFindings,
     sequenceDiagramDiffSnippets: mapToRecord(sequenceDiagramDiffSnippets),
+    scanConfiguration: {
+      [RevisionName.Base]: baseScanResults.configuration,
+      [RevisionName.Head]: headScanResults.configuration,
+    },
     appMapMetadata: {
       [RevisionName.Base]: mapToRecord(appMapMetadata[RevisionName.Base]),
       [RevisionName.Head]: mapToRecord(appMapMetadata[RevisionName.Head]),
