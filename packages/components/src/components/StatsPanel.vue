@@ -40,11 +40,18 @@
       -->
       <li v-for="func in functions" :key="func['function']">
         <ul class="stats-row">
-          <li>{{ func['function'] }}</li>
+          <li class="fqid">
+            <a href="#" @click.prevent="openEventInTrace(removeFunctionPrefix(func['function']))">
+              {{ removeFunctionPrefix(func['function']) }}
+            </a>
+          </li>
           <li>{{ func.count }}</li>
           <li>{{ displaySize(func.size) }}</li>
           <li class="location">
-            <a href="/">{{ func.location }}</a>
+            <a v-if="isPath(func.location)" href="/" @click.prevent="openLocation(func.location)">
+              {{ func.location }}
+            </a>
+            <div v-else>{{ func.location }}</div>
           </li>
         </ul>
       </li>
@@ -129,8 +136,25 @@ export default {
       return `${(sizeInBytes / divisor).toFixed(1)} ${suffix}`;
     },
 
+    removeFunctionPrefix(fqid) {
+      if (fqid.startsWith('function:')) return fqid.slice('function:'.length);
+      return fqid;
+    },
+
+    isPath(location) {
+      return /[\\/]/.test(location);
+    },
+
     closeStatsPanel() {
       this.$emit('closeStatsPanel');
+    },
+
+    openLocation(location) {
+      this.$root.$emit('viewSource', { location });
+    },
+
+    openEventInTrace(fqid) {
+      this.$emit('openEventInTrace', fqid);
     },
   },
 };
@@ -168,7 +192,8 @@ export default {
         color: $white;
       }
     }
-    .location {
+    .location,
+    .fqid {
       word-break: keep-all;
       overflow: hidden;
       text-overflow: ellipsis;

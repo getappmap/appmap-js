@@ -328,7 +328,11 @@
         </div>
         -->
 
-        <v-stats-panel :stats="stats" @closeStatsPanel="closeStatsPanel" />
+        <v-stats-panel
+          :stats="stats"
+          @closeStatsPanel="closeStatsPanel"
+          @openEventInTrace="(fqid) => openEventInTrace(fqid)"
+        />
       </div>
 
       <div class="diagram-instructions">
@@ -399,6 +403,7 @@ import VTraceFilter from '../components/trace/TraceFilter.vue';
 import {
   store,
   SET_APPMAP_DATA,
+  SET_FOCUSED_EVENT,
   SET_VIEW,
   VIEW_COMPONENT,
   VIEW_SEQUENCE,
@@ -1077,6 +1082,17 @@ export default {
     },
 
     closeStatsPanel() {
+      this.showStatsPanel = false;
+    },
+
+    openEventInTrace(fqid) {
+      const codeObject = this.filteredAppMap.classMap.codeObjectsById[fqid];
+      const firstEvent = codeObject.events[0];
+
+      this.$store.commit(SET_VIEW, VIEW_SEQUENCE);
+      this.$store.commit(SELECT_CODE_OBJECT, codeObject);
+      this.$store.commit(SET_FOCUSED_EVENT, firstEvent);
+
       this.showStatsPanel = false;
     },
 
