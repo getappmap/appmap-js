@@ -121,7 +121,12 @@
             placement="left"
             text-align="left"
           >
-            <button class="control-button" data-cy="share-button" @click="uploadAppmap" title="">
+            <button
+              class="control-button"
+              data-cy="share-button"
+              @click="toggleShareModal"
+              title=""
+            >
               <UploadIcon class="control-button__icon" />
             </button>
           </v-popper>
@@ -138,9 +143,29 @@
               </button>
             </v-download-sequence-diagram>
           </v-popper>
+          <v-popper
+            v-if="hasStats"
+            class="hover-text-popper"
+            text="Show statistics about this AppMap"
+            placement="left"
+            text-align="left"
+          >
+            <button
+              class="control-button"
+              data-cy="stats-button"
+              @click="toggleStatsPanel"
+              title=""
+            >
+              <StatsIcon class="control-button__icon" />
+            </button>
+          </v-popper>
           <v-popper-menu :isHighlight="filtersChanged">
             <template v-slot:icon>
-              <FilterIcon class="control-button__icon" @click="openFilterModal" />
+              <FilterIcon
+                class="control-button__icon"
+                data-cy="filter-button"
+                @click="openFilterModal"
+              />
             </template>
             <template v-slot:body>
               <div class="filters">
@@ -281,6 +306,35 @@
         </div>
       </div>
 
+      <div v-if="showStatsPanel" class="appmap-stats">
+        <!-- TODO: show notifications for large and giant appmaps
+        <div class="notification blocked">
+          <ExclamationIcon />
+          <div class="content">
+            <p><strong>This AppMap is too large to open.</strong></p>
+            <p>
+              To learn more about making your AppMaps smaller, please see our
+              <a href="/">documentation</a>.
+            </p>
+          </div>
+        </div>
+
+        <div class="notification trimmed">
+          <ScissorsIcon />
+          <div class="content">
+            <p><strong>This AppMap has been automatically trimmed.</strong></p>
+            <p>
+              We have identified functions that my impact performance of yoru AppMap, and removed
+              them from this map. Please see our <a href="/">documentation</a> for more information
+              on how to optimize your AppMaps.
+            </p>
+          </div>
+        </div>
+        -->
+
+        <v-stats-panel :stats="stats" :appMap="filteredAppMap" @closeStatsPanel="closeStatsPanel" />
+      </div>
+
       <div class="diagram-instructions">
         <v-instructions ref="instructions" :currentView="currentView" />
       </div>
@@ -327,6 +381,9 @@ import UploadIcon from '@/assets/link-icon.svg';
 import ExportIcon from '@/assets/export.svg';
 import FilterIcon from '@/assets/filter.svg';
 import DiagramGray from '@/assets/diagram-empty.svg';
+import StatsIcon from '@/assets/stats-icon.svg';
+// import ExclamationIcon from '@/assets/exclamation-circle.svg';
+// import ScissorsIcon from '@/assets/scissors-icon.svg';
 import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
@@ -338,6 +395,7 @@ import VInstructions from '../components/Instructions.vue';
 import VNotification from '../components/Notification.vue';
 import VPopperMenu from '../components/PopperMenu.vue';
 import VPopper from '../components/Popper.vue';
+import VStatsPanel from '../components/StatsPanel.vue';
 import VTabs from '../components/Tabs.vue';
 import VTab from '../components/Tab.vue';
 import VTraceFilter from '../components/trace/TraceFilter.vue';
@@ -378,10 +436,14 @@ export default {
     VNotification,
     VPopperMenu,
     VPopper,
+    VStatsPanel,
     VTabs,
     VTab,
     VTraceFilter,
     DiagramGray,
+    StatsIcon,
+    // ExclamationIcon,
+    // ScissorsIcon,
   },
 
   store,
@@ -402,6 +464,7 @@ export default {
       eventFilterText: '',
       eventFilterMatchIndex: 0,
       showShareModal: false,
+      showStatsPanel: false,
       shareURL: undefined,
       seqDiagramTimeoutId: undefined,
       isActive: true,
@@ -499,6 +562,14 @@ export default {
         data: { findings },
       } = appMap;
       return this.uniqueFindings(findings);
+    },
+
+    stats() {
+      const { appMap } = this.$store.state;
+      const {
+        data: { stats },
+      } = appMap;
+      return stats;
     },
 
     filteredAppMap() {
@@ -699,6 +770,10 @@ export default {
     shareURLmessage() {
       if (this.shareURL) return this.shareURL;
       return 'Retrieving link...';
+    },
+
+    hasStats() {
+      return this.stats && this.stats.functions && this.stats.functions.length > 0;
     },
   },
 
@@ -951,9 +1026,19 @@ export default {
       this.renderKey += 1;
     },
 
-    uploadAppmap() {
-      this.showShareModal = true;
+    toggleShareModal() {
+      this.showShareModal = !this.showShareModal;
       this.$root.$emit('uploadAppmap');
+      if (this.showShareModal && this.showStatsPanel) this.showStatsPanel = false;
+    },
+
+    toggleStatsPanel() {
+      this.showStatsPanel = !this.showStatsPanel;
+      if (this.showShareModal && this.showStatsPanel) this.showShareModal = false;
+    },
+
+    closeStatsPanel() {
+      this.showStatsPanel = false;
     },
 
     uniqueFindings(findings) {
@@ -1145,7 +1230,13 @@ code {
   color: $teal;
 }
 
-.share-appmap {
+.appmap-stats {
+  height: 95%;
+  overflow-y: auto;
+}
+
+.share-appmap,
+.appmap-stats {
   box-shadow: $box-shadow-min;
   font-family: $appland-text-font-family;
   position: absolute;
@@ -1156,7 +1247,7 @@ code {
   padding: 0 0 2rem 0;
   width: calc(100% - 4rem);
   word-break: break-word;
-  z-index: 200;
+  z-index: 2;
   h1 {
     color: $white;
     font-weight: 800;
@@ -1171,6 +1262,9 @@ code {
     align-items: center;
     padding: 1rem 2rem;
     border-bottom: 1px solid #808b9869;
+    svg {
+      margin-right: 0.5rem;
+    }
   }
   .content {
     padding: 0 2rem;
@@ -1216,6 +1310,35 @@ code {
     &:hover {
       fill: $blue;
       cursor: pointer;
+    }
+  }
+}
+
+.appmap-stats {
+  background-color: transparent;
+  .notification {
+    padding: 1rem;
+    border-radius: 1rem;
+    display: grid;
+    grid-template-columns: 1rem auto;
+    gap: 0.5rem;
+    align-items: baseline;
+    margin-bottom: 1.5rem;
+    .content {
+      margin: 0;
+      padding: 0;
+    }
+    a {
+      color: inherit;
+    }
+    p {
+      margin: 0;
+    }
+    &.blocked {
+      background-color: #d1245c;
+    }
+    &.trimmed {
+      background: rgba(219, 139, 20, 0.85);
     }
   }
 }
