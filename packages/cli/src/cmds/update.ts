@@ -57,7 +57,7 @@ export const handler = async (argv: any) => {
   const { baseAppmapDir } = argv;
 
   handleWorkingDirectory(argv.directory);
-  const appmapDir = await locateAppMapDir();
+  const appmapDir = await locateAppMapDir(argv.appmapDir);
   const appmapConfig = await loadAppMapConfig();
   if (!appmapConfig) throw new Error(`Unable to load appmap.yml config file`);
 
