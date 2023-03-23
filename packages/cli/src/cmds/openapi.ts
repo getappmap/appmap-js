@@ -130,7 +130,8 @@ export default {
     });
     args.option('max-size', {
       describe: 'maximum AppMap size that will be processed, in filesystem-reported MB',
-      default: `${DefaultMaxAppMapSizeInMB}mb`,
+      type: 'number',
+      default: DefaultMaxAppMapSizeInMB,
     });
     args.option('output-file', {
       alias: ['o'],
