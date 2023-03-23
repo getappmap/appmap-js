@@ -106,10 +106,18 @@ class OpenAPICommand {
   }
 }
 
-async function loadTemplate(fileName: string): Promise<any> {
+const TemplateFiles = [
+  '../../resources/openapi-template.yaml', // As packaged
+  '../../../resources/openapi-template.yaml', // In development
+].map((fileName) => join(__dirname, fileName));
+
+async function loadTemplate(fileName: string | undefined): Promise<any> {
   if (!fileName) {
-    // eslint-disable-next-line no-param-reassign
-    fileName = join(__dirname, '../../resources/openapi-template.yaml');
+    fileName = TemplateFiles.find((fileName) => existsSync(fileName));
+    if (!fileName)
+      throw new Error(
+        `Unable to locate default OpenAPI template file. Checked: ${TemplateFiles.join(', ')}.`
+      );
   }
   return yaml.load((await fsp.readFile(fileName)).toString());
 }
