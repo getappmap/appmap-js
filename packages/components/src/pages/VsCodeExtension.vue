@@ -1327,6 +1327,10 @@ code {
       margin: 0;
       padding: 0;
     }
+    svg {
+      width: 1.5rem;
+      height: 1rem;
+    }
     a {
       color: inherit;
     }
