@@ -307,7 +307,6 @@
       </div>
 
       <div v-if="showStatsPanel" class="appmap-stats">
-        <!-- TODO: show notifications for large and giant appmaps
         <div class="notification blocked">
           <ExclamationIcon />
           <div class="content">
@@ -330,7 +329,6 @@
             </p>
           </div>
         </div>
-        -->
 
         <v-stats-panel :stats="stats" :appMap="filteredAppMap" @closeStatsPanel="closeStatsPanel" />
       </div>
@@ -382,8 +380,8 @@ import ExportIcon from '@/assets/export.svg';
 import FilterIcon from '@/assets/filter.svg';
 import DiagramGray from '@/assets/diagram-empty.svg';
 import StatsIcon from '@/assets/stats-icon.svg';
-// import ExclamationIcon from '@/assets/exclamation-circle.svg';
-// import ScissorsIcon from '@/assets/scissors-icon.svg';
+import ExclamationIcon from '@/assets/exclamation-circle.svg';
+import ScissorsIcon from '@/assets/scissors-icon.svg';
 import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
@@ -442,8 +440,8 @@ export default {
     VTraceFilter,
     DiagramGray,
     StatsIcon,
-    // ExclamationIcon,
-    // ScissorsIcon,
+    ExclamationIcon,
+    ScissorsIcon,
   },
 
   store,
