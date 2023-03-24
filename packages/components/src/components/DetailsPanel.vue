@@ -3,6 +3,32 @@
     <h3 class="details-panel__title">
       <AppMapLogo width="70" />
     </h3>
+
+    <div class="details-panel__notification blocked">
+      <div class="content">
+        <p class="notification-head">
+          <ExclamationIcon /><strong>This AppMap is too large to open.</strong>
+        </p>
+        <p>
+          To learn more about making your AppMaps smaller, please see our
+          <a href="/">documentation</a>.
+        </p>
+      </div>
+    </div>
+
+    <div class="details-panel__notification trimmed">
+      <div class="content">
+        <p class="notification-head">
+          <ScissorsIcon /><strong>This AppMap has been automatically trimmed.</strong>
+        </p>
+        <p>
+          We have identified functions that my impact performance of yoru AppMap, and removed them
+          from this map. Please see our <a href="/">documentation</a> for more information on how to
+          optimize your AppMaps.
+        </p>
+      </div>
+    </div>
+
     <div class="details-panel__notification">
       <FeedbackIcon />
       Help us improve AppMap.
@@ -46,6 +72,7 @@
 <script>
 import { Event, AppMap } from '@appland/models';
 import AppMapLogo from '@/assets/appmap-full-logo.svg';
+
 import VDetailsLabel from '@/components/DetailsLabel.vue';
 import VDetailsPanelAnalysisFinding from '@/components/DetailsPanelAnalysisFinding.vue';
 import VDetailsPanelClass from '@/components/DetailsPanelClass.vue';
@@ -63,6 +90,8 @@ import VDetailsSearch from '@/components/DetailsSearch.vue';
 import VPopper from '@/components/Popper.vue';
 import VSourceCodeLink from '@/components/SourceCodeLink.vue';
 import FeedbackIcon from '@/assets/feedback-icon.svg';
+import ExclamationIcon from '@/assets/exclamation-circle.svg';
+import ScissorsIcon from '@/assets/scissors-icon.svg';
 
 export default {
   name: 'v-details-panel',
@@ -85,6 +114,8 @@ export default {
     VPopper,
     VSourceCodeLink,
     FeedbackIcon,
+    ExclamationIcon,
+    ScissorsIcon,
   },
   props: {
     subtitle: String,
@@ -206,13 +237,36 @@ export default {
     font-size: 0.9rem;
     margin-bottom: 1rem;
     svg {
-      margin-right: 0.3rem;
+      width: 1.5rem;
+      height: 1rem;
     }
     a {
       color: lighten($blue, 15);
       transition: $transition;
       &:hover {
         color: $blue;
+      }
+    }
+    p {
+      margin: 0 0 0.5rem 0;
+    }
+    p.notification-head {
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      gap: 0.5rem;
+      margin: 0.5rem 0;
+    }
+    &.blocked {
+      background-color: #d1245c;
+      a {
+        color: $white;
+      }
+    }
+    &.trimmed {
+      background-color: #c07d1b;
+      a {
+        color: $white;
       }
     }
   }
