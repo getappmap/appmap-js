@@ -1607,8 +1607,7 @@ code {
         display: flex;
         padding: 0.5rem 0rem;
         line-height: 1.25rem;
-        background: $black;
-        border-bottom: 1px solid $gray2;
+        border-bottom: 1px solid lighten($gray2, 15);
       }
 
       &-title {
@@ -1622,8 +1621,6 @@ code {
       &-body {
         border-radius: 0 0 0.25rem 0.25rem;
         padding: 1rem 0.75rem;
-        background: $black;
-
         &--flex {
           display: flex;
           flex-wrap: wrap;

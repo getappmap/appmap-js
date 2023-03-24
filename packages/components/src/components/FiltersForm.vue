@@ -189,7 +189,7 @@ export default {
   height: 22px;
   padding: 0 0.5rem;
   border: 1px solid $gray2;
-  background: $black;
+  background: darken($gray4, 50);
 
   &--show-suggestions {
     border-radius: 0.25rem 0.25rem 0 0;
