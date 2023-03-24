@@ -237,7 +237,7 @@ export default {
     font-size: 0.9rem;
     margin-bottom: 1rem;
     svg {
-      width: 1.5rem;
+      width: 1rem;
       height: 1rem;
     }
     a {

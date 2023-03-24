@@ -308,9 +308,10 @@
 
       <div v-if="showStatsPanel" class="appmap-stats">
         <div class="notification blocked">
-          <ExclamationIcon />
           <div class="content">
-            <p><strong>This AppMap is too large to open.</strong></p>
+            <p class="notification-head">
+              <ExclamationIcon /><strong>This AppMap is too large to open.</strong>
+            </p>
             <p>
               To learn more about making your AppMaps smaller, please see our
               <a href="/">documentation</a>.
@@ -319,9 +320,10 @@
         </div>
 
         <div class="notification trimmed">
-          <ScissorsIcon />
           <div class="content">
-            <p><strong>This AppMap has been automatically trimmed.</strong></p>
+            <p class="notification-head">
+              <ScissorsIcon /><strong>This AppMap has been automatically trimmed.</strong>
+            </p>
             <p>
               We have identified functions that my impact performance of yoru AppMap, and removed
               them from this map. Please see our <a href="/">documentation</a> for more information
@@ -1318,7 +1320,7 @@ code {
     padding: 1rem;
     border-radius: 1rem;
     display: grid;
-    grid-template-columns: 1rem auto;
+    grid-template-columns: auto;
     gap: 0.5rem;
     align-items: baseline;
     margin-bottom: 1.5rem;
@@ -1327,8 +1329,13 @@ code {
       margin: 0;
       padding: 0;
     }
+    .notification-head {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
     svg {
-      width: 1.5rem;
+      width: 1rem;
       height: 1rem;
     }
     a {
