@@ -22,8 +22,7 @@
       </li>
       <li class="pruned-row">
         <ul class="stats-row pruned">
-          <HiddenIcon />
-          <li>function:activerecord/ActiveRecord::Relation#records</li>
+          <li><HiddenIcon />function:activerecord/ActiveRecord::Relation#records</li>
           <li>2,234</li>
           <li>21.7mb</li>
           <li class="location">
@@ -33,8 +32,7 @@
       </li>
       <li class="pruned-row">
         <ul class="stats-row pruned">
-          <HiddenIcon />
-          <li>function:activerecord/ActiveRecord::Relation#records</li>
+          <li><HiddenIcon />function:activerecord/ActiveRecord::Relation#records</li>
           <li>2,234</li>
           <li>21.7mb</li>
           <li class="location">
@@ -197,18 +195,19 @@ export default {
 .stats-panel {
   background-color: $gray2;
   border-radius: 1rem;
+  box-shadow: 0px 0px 20px 2px rgb(0 0 0 / 90%);
 }
 .stats-table {
   list-style-type: none;
   padding: 1.5rem;
-  margin: 0;
+  margin: 0 0 2rem 0;
   font-size: 0.95rem;
   li {
     border-bottom: 1px solid lighten($gray2, 15);
   }
   .stats-row {
     display: grid;
-    grid-template-columns: 2fr 125px 125px 1fr;
+    grid-template-columns: 2fr 100px 100px 1fr;
     gap: 1rem;
     padding: 0.7rem 0;
     list-style-type: none;
@@ -236,6 +235,8 @@ export default {
         align-items: center;
         svg {
           margin-right: 0.5rem;
+          width: 1rem;
+          height: 1rem;
         }
       }
       a {
@@ -248,16 +249,23 @@ export default {
       }
     }
     &.pruned {
-      grid-template-columns: 1rem 2fr 125px 125px 1fr;
+      grid-template-columns: 2fr 100px 100px 1fr;
       color: $gray4;
       li {
         color: $gray4;
+        word-break: keep-all;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: flex;
+        align-items: center;
       }
       a {
         color: $gray4;
       }
       svg {
         margin-right: 0.5rem;
+        width: 1rem;
+        height: 1rem;
       }
     }
   }

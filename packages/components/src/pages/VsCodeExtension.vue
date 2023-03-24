@@ -1242,7 +1242,7 @@ code {
   right: 2rem;
   background-color: $gray2;
   border-radius: 0.5rem;
-  padding: 0 0 2rem 0;
+  padding: 0px 0.5rem 2rem 0.5rem;
   width: calc(100% - 4rem);
   word-break: break-word;
   z-index: 2;
@@ -1322,6 +1322,7 @@ code {
     gap: 0.5rem;
     align-items: baseline;
     margin-bottom: 1.5rem;
+    box-shadow: 0px 0px 20px 2px rgb(0 0 0 / 90%);
     .content {
       margin: 0;
       padding: 0;
@@ -1336,7 +1337,7 @@ code {
       background-color: #d1245c;
     }
     &.trimmed {
-      background: rgba(219, 139, 20, 0.85);
+      background: #c07d1b;
     }
   }
 }
