@@ -3,7 +3,7 @@
     <div class="popper__button" @click="open = !open">
       <slot name="icon" />
     </div>
-    <div class="popper__body" v-if="open">
+    <div class="popper__body filter" v-if="open">
       <div class="popper__content">
         <slot name="body" />
       </div>
@@ -96,7 +96,7 @@ export default {
 
   &__body {
     border-radius: 0.5rem;
-    border: 1px solid $light-purple;
+    //border: 1px solid $light-purple;
     position: absolute;
     width: max-content;
     height: max-content;
@@ -108,6 +108,10 @@ export default {
     color: $gray6;
     background: $black;
     overflow: auto;
+
+    &.filter {
+      background-color: $gray2;
+    }
 
     .popper--v-top & {
       bottom: 100%;
