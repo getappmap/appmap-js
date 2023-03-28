@@ -1,0 +1,456 @@
+{
+  "stats": {
+    "functions": [
+      {
+        "function": "function:logger/Logger::LogDevice#write",
+        "count": 319,
+        "size": 173279,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb:31"
+      },
+      {
+        "function": "function:activerecord/ActiveRecord::Relation#records",
+        "count": 192,
+        "size": 79207,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activerecord-6.0.4.1/lib/active_record/relation.rb:249"
+      },
+      {
+        "function": "function:actionpack/ActionDispatch::Request::Session#[]",
+        "count": 160,
+        "size": 80960,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb:91"
+      },
+      {
+        "function": "function:app/helpers/SessionsHelper#current_user",
+        "count": 142,
+        "size": 40968,
+        "location": "app/helpers/sessions_helper.rb:16"
+      },
+      {
+        "function": "function:app/helpers/UsersHelper#gravatar_for",
+        "count": 96,
+        "size": 47374,
+        "location": "app/helpers/users_helper.rb:4"
+      },
+      {
+        "function": "function:app/helpers/SessionsHelper#current_user?",
+        "count": 93,
+        "size": 37635,
+        "location": "app/helpers/sessions_helper.rb:29"
+      },
+      {
+        "function": "function:activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_before",
+        "count": 61,
+        "size": 35152,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb:512"
+      },
+      {
+        "function": "function:activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after",
+        "count": 61,
+        "size": 35092,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/callbacks.rb:516"
+      },
+      {
+        "function": "function:actionview/ActionView::Resolver#find_all",
+        "count": 57,
+        "size": 61335,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb:116"
+      },
+      {
+        "function": "function:ruby/String#unpack1",
+        "count": 24,
+        "size": 8658,
+        "location": "<internal:pack>:280"
+      },
+      {
+        "function": "function:json/JSON::Ext::Generator::State#generate",
+        "count": 20,
+        "size": 9957,
+        "location": "JSON::Ext::Generator::State#generate"
+      },
+      {
+        "function": "function:json/JSON::Ext::Parser#parse",
+        "count": 17,
+        "size": 4366,
+        "location": "JSON::Ext::Parser#parse"
+      },
+      {
+        "function": "function:openssl/OpenSSL::Cipher#key=",
+        "count": 14,
+        "size": 5303,
+        "location": "OpenSSL::Cipher#key="
+      },
+      {
+        "function": "function:openssl/OpenSSL::Cipher#iv=",
+        "count": 14,
+        "size": 4943,
+        "location": "OpenSSL::Cipher#iv="
+      },
+      {
+        "function": "function:openssl/OpenSSL::Cipher#auth_data=",
+        "count": 14,
+        "size": 4869,
+        "location": "OpenSSL::Cipher#auth_data="
+      },
+      {
+        "function": "function:openssl/OpenSSL::Cipher#update",
+        "count": 14,
+        "size": 6980,
+        "location": "OpenSSL::Cipher#update"
+      },
+      {
+        "function": "function:openssl/OpenSSL::Cipher#final",
+        "count": 14,
+        "size": 3483,
+        "location": "OpenSSL::Cipher#final"
+      },
+      {
+        "function": "function:app/helpers/SessionsHelper#logged_in?",
+        "count": 13,
+        "size": 3717,
+        "location": "app/helpers/sessions_helper.rb:35"
+      },
+      {
+        "function": "function:ruby/String#unpack",
+        "count": 12,
+        "size": 3894,
+        "location": "<internal:pack>:256"
+      },
+      {
+        "function": "function:openssl/OpenSSL::Random.random_bytes",
+        "count": 9,
+        "size": 2867,
+        "location": "OpenSSL::Random.random_bytes"
+      },
+      {
+        "function": "function:actionpack/ActionDispatch::Cookies::CookieJar#[]=",
+        "count": 9,
+        "size": 7770,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/middleware/cookies.rb:373"
+      },
+      {
+        "function": "function:activesupport/ActiveSupport::MessageEncryptor#encrypt_and_sign",
+        "count": 8,
+        "size": 6897,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/message_encryptor.rb:150"
+      },
+      {
+        "function": "function:openssl/OpenSSL::Cipher#encrypt",
+        "count": 8,
+        "size": 3181,
+        "location": "OpenSSL::Cipher#encrypt"
+      },
+      {
+        "function": "function:openssl/OpenSSL::Cipher#random_iv",
+        "count": 8,
+        "size": 2502,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/3.0.0/openssl/cipher.rb:55"
+      },
+      {
+        "function": "function:actionpack/ActionController::Instrumentation#process_action",
+        "count": 7,
+        "size": 3566,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19"
+      },
+      {
+        "function": "function:actionpack/ActionDispatch::Cookies::CookieJar#update",
+        "count": 7,
+        "size": 5612,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/middleware/cookies.rb:333"
+      },
+      {
+        "function": "function:actionpack/ActionDispatch::Cookies::CookieJar#[]",
+        "count": 7,
+        "size": 3679,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/middleware/cookies.rb:317"
+      },
+      {
+        "function": "function:openssl/OpenSSL::Cipher#decrypt",
+        "count": 6,
+        "size": 2387,
+        "location": "OpenSSL::Cipher#decrypt"
+      },
+      {
+        "function": "function:openssl/OpenSSL::Cipher#auth_tag=",
+        "count": 6,
+        "size": 2230,
+        "location": "OpenSSL::Cipher#auth_tag="
+      },
+      {
+        "function": "function:actionpack/ActionDispatch::Request::Session#[]=",
+        "count": 5,
+        "size": 3034,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb:131"
+      },
+      {
+        "function": "function:ruby/Kernel#eval",
+        "count": 5,
+        "size": 2427,
+        "location": "Kernel#eval"
+      },
+      {
+        "function": "function:actionpack/ActionController::Renderers#render_to_body",
+        "count": 4,
+        "size": 2607,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/renderers.rb:141"
+      },
+      {
+        "function": "function:app/views/app_views_shared__stats_html_erb.render",
+        "count": 4,
+        "size": 1203,
+        "location": "app/views/shared/_stats.html.erb"
+      },
+      {
+        "function": "function:app/views/app_views_microposts__micropost_html_erb.render",
+        "count": 4,
+        "size": 1267,
+        "location": "app/views/microposts/_micropost.html.erb"
+      },
+      {
+        "function": "function:app/helpers/ApplicationHelper#full_title",
+        "count": 4,
+        "size": 1646,
+        "location": "app/helpers/application_helper.rb:4"
+      },
+      {
+        "function": "function:sprockets/Sprockets::EncodingUtils.unmarshaled_deflated",
+        "count": 4,
+        "size": 2851,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/sprockets-4.0.2/lib/sprockets/encoding_utils.rb:39"
+      },
+      {
+        "function": "function:ruby/Marshal.load",
+        "count": 4,
+        "size": 2235,
+        "location": "Marshal.load"
+      },
+      {
+        "function": "function:app/views/app_views_layouts__shim_html_erb.render",
+        "count": 4,
+        "size": 1203,
+        "location": "app/views/layouts/_shim.html.erb"
+      },
+      {
+        "function": "function:app/views/app_views_layouts__header_html_erb.render",
+        "count": 4,
+        "size": 1219,
+        "location": "app/views/layouts/_header.html.erb"
+      },
+      {
+        "function": "function:app/views/app_views_layouts__footer_html_erb.render",
+        "count": 4,
+        "size": 1219,
+        "location": "app/views/layouts/_footer.html.erb"
+      },
+      {
+        "function": "function:actionpack/ActionController::Instrumentation#redirect_to",
+        "count": 3,
+        "size": 1588,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:62"
+      },
+      {
+        "function": "function:app/models/User#feed",
+        "count": 3,
+        "size": 674,
+        "location": "app/models/user.rb:102"
+      },
+      {
+        "function": "function:app/views/app_views_static_pages_home_html_erb.render",
+        "count": 3,
+        "size": 932,
+        "location": "app/views/static_pages/home.html.erb"
+      },
+      {
+        "function": "function:app/views/app_views_shared__user_info_html_erb.render",
+        "count": 3,
+        "size": 926,
+        "location": "app/views/shared/_user_info.html.erb"
+      },
+      {
+        "function": "function:app/views/app_views_shared__micropost_form_html_erb.render",
+        "count": 3,
+        "size": 956,
+        "location": "app/views/shared/_micropost_form.html.erb"
+      },
+      {
+        "function": "function:app/views/app_views_shared__error_messages_html_erb.render",
+        "count": 3,
+        "size": 956,
+        "location": "app/views/shared/_error_messages.html.erb"
+      },
+      {
+        "function": "function:app/views/app_views_shared__feed_html_erb.render",
+        "count": 3,
+        "size": 896,
+        "location": "app/views/shared/_feed.html.erb"
+      },
+      {
+        "function": "function:app/helpers/LoggedInHelper#logged_in_user",
+        "count": 3,
+        "size": 867,
+        "location": "app/helpers/logged_in_helper.rb:10"
+      },
+      {
+        "function": "function:app/controllers/StaticPagesController#home",
+        "count": 2,
+        "size": 595,
+        "location": "app/controllers/static_pages_controller.rb:4"
+      },
+      {
+        "function": "function:app/controllers/MicropostsController#create",
+        "count": 2,
+        "size": 590,
+        "location": "app/controllers/microposts_controller.rb:6"
+      },
+      {
+        "function": "function:activejob/ActiveJob::Enqueuing#enqueue",
+        "count": 2,
+        "size": 930,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activejob-6.0.4.1/lib/active_job/enqueuing.rb:48"
+      },
+      {
+        "function": "function:ruby/Marshal.dump",
+        "count": 2,
+        "size": 613,
+        "location": "Marshal.dump"
+      },
+      {
+        "function": "function:actionpack/ActionDispatch::Request::Session#delete",
+        "count": 2,
+        "size": 1012,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb:165"
+      },
+      {
+        "function": "function:actionpack/ActionDispatch::Integration::Runner#before_setup",
+        "count": 1,
+        "size": 404,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/testing/integration.rb:320"
+      },
+      {
+        "function": "function:app/controllers/SessionsController#create",
+        "count": 1,
+        "size": 285,
+        "location": "app/controllers/sessions_controller.rb:9"
+      },
+      {
+        "function": "function:actionpack/ActionDispatch::Request::Session#destroy",
+        "count": 1,
+        "size": 410,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb:79"
+      },
+      {
+        "function": "function:actionpack/ActionDispatch::Request::Session#clear",
+        "count": 1,
+        "size": 409,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionpack-6.0.4.1/lib/action_dispatch/request/session.rb:137"
+      },
+      {
+        "function": "function:app/helpers/SessionsHelper#log_in",
+        "count": 1,
+        "size": 388,
+        "location": "app/helpers/sessions_helper.rb:4"
+      },
+      {
+        "function": "function:app/helpers/SessionsHelper#remember",
+        "count": 1,
+        "size": 390,
+        "location": "app/helpers/sessions_helper.rb:9"
+      },
+      {
+        "function": "function:app/models/User#remember",
+        "count": 1,
+        "size": 226,
+        "location": "app/models/user.rb:45"
+      },
+      {
+        "function": "function:app/models/User.new_remember_token",
+        "count": 1,
+        "size": 213,
+        "location": "app/models/user.rb:30"
+      },
+      {
+        "function": "function:app/models/User.digest",
+        "count": 1,
+        "size": 316,
+        "location": "app/models/user.rb:23"
+      },
+      {
+        "function": "function:activesupport/ActiveSupport::LazyLoadHooks.run_load_hooks",
+        "count": 1,
+        "size": 554,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/activesupport-6.0.4.1/lib/active_support/lazy_load_hooks.rb:49"
+      },
+      {
+        "function": "function:ruby/ERB#result",
+        "count": 1,
+        "size": 351,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/3.0.0/erb.rb:901"
+      },
+      {
+        "function": "function:psych/Psych.load",
+        "count": 1,
+        "size": 874,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/3.0.0/psych.rb:274"
+      },
+      {
+        "function": "function:psych/Psych.parse",
+        "count": 1,
+        "size": 733,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/3.0.0/psych.rb:384"
+      },
+      {
+        "function": "function:psych/Psych.parse_stream",
+        "count": 1,
+        "size": 739,
+        "location": "/home/ahtrotta/.rbenv/versions/3.0.2/lib/ruby/3.0.0/psych.rb:448"
+      },
+      {
+        "function": "function:app/models/Micropost#display_image",
+        "count": 1,
+        "size": 253,
+        "location": "app/models/micropost.rb:13"
+      },
+      {
+        "function": "function:app/controllers/MicropostsController#destroy",
+        "count": 1,
+        "size": 297,
+        "location": "app/controllers/microposts_controller.rb:18"
+      },
+      {
+        "function": "function:app/controllers/UsersController#show",
+        "count": 1,
+        "size": 274,
+        "location": "app/controllers/users_controller.rb:13"
+      },
+      {
+        "function": "function:app/controllers/UsersController#page_number",
+        "count": 1,
+        "size": 281,
+        "location": "app/controllers/users_controller.rb:72"
+      },
+      {
+        "function": "function:app/views/app_views_users_show_html_erb.render",
+        "count": 1,
+        "size": 297,
+        "location": "app/views/users/show.html.erb"
+      },
+      {
+        "function": "function:app/views/app_views_users__follow_form_html_erb.render",
+        "count": 1,
+        "size": 311,
+        "location": "app/views/users/_follow_form.html.erb"
+      },
+      {
+        "function": "function:app/models/User#following?",
+        "count": 1,
+        "size": 352,
+        "location": "app/models/user.rb:120"
+      },
+      {
+        "function": "function:app/views/app_views_users__follow_html_erb.render",
+        "count": 1,
+        "size": 301,
+        "location": "app/views/users/_follow.html.erb"
+      }
+    ]
+  }
+}
