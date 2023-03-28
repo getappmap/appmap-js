@@ -39,7 +39,7 @@ class AppMapBuilder extends EventSource {
       throw new Error(`got invalid type ${dataType}, expected object or string`);
     }
 
-    this.data.exclusions = new Set();
+    this.exclusions = new Set();
 
     (this.data.events || []).forEach((e) => {
       if (this.data.eventUpdates && this.data.eventUpdates[e.id]) {
@@ -190,9 +190,10 @@ class AppMapBuilder extends EventSource {
         if (eventInfo.totalBytes <= totalBytes * pruneRatio) {
           break;
         }
-        this.data.exclusions.add(eventInfo.fqid);
+        this.exclusions.add(eventInfo.fqid);
       }
-    }).chunk((stacks) => this.excludeEvents(stacks, classMap, this.data.exclusions));
+      this.data.pruneFilter = { hideName: Array.from(this.exclusions.values()) };
+    }).chunk((stacks) => this.excludeEvents(stacks, classMap, this.exclusions));
   }
 
   // expects exclusions to be a Set
@@ -258,7 +259,8 @@ class AppMapBuilder extends EventSource {
   build() {
     const size = this.sorter.size();
     this.emit('preprocess', { size, data: this.data });
-    return new AppMap({ ...this.data, events: this.collectEvents() });
+    const events = this.collectEvents();
+    return new AppMap({ ...this.data, events });
   }
 }
 
