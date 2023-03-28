@@ -16,6 +16,7 @@
         :filters-root-objects="filters.rootObjects"
         :findings="findings"
         :wasAutoPruned="wasAutoPruned"
+        :isGiantAppMap="isGiantAppMap"
         @onChangeFilter="
           (value) => {
             this.eventFilterText = value;
@@ -65,7 +66,7 @@
           :ref="VIEW_SEQUENCE"
           :tabName="VIEW_SEQUENCE"
           :allow-scroll="true"
-          :isNew="true"
+          :isNew="!isGiantAppMap"
         >
           <v-diagram-sequence
             ref="viewSequence_diagram"
@@ -116,7 +117,7 @@
         </template>
         <template v-slot:controls>
           <v-popper
-            v-if="appMapUploadable"
+            v-if="appMapUploadable && !isGiantAppMap"
             class="hover-text-popper"
             text="Create a link to this AppMap"
             placement="left"
@@ -132,7 +133,7 @@
             </button>
           </v-popper>
           <v-popper
-            v-if="showDownload"
+            v-if="showDownload && !isGiantAppMap"
             class="hover-text-popper"
             text="Export in SVG format"
             placement="left"
@@ -160,7 +161,7 @@
               <StatsIcon class="control-button__icon" />
             </button>
           </v-popper>
-          <v-popper-menu :isHighlight="filtersChanged">
+          <v-popper-menu v-if="!isGiantAppMap" :isHighlight="filtersChanged">
             <template v-slot:icon>
               <FilterIcon
                 class="control-button__icon"
@@ -279,7 +280,12 @@
               </div>
             </template>
           </v-popper-menu>
-          <button class="control-button diagram-reload" @click="resetDiagram" title="Clear">
+          <button
+            v-if="!isGiantAppMap"
+            class="control-button diagram-reload"
+            @click="resetDiagram"
+            title="Clear"
+          >
             <ReloadIcon class="control-button__icon" />
           </button>
         </template>
@@ -314,8 +320,8 @@
           :pruneFilter="pruneFilter"
           @closeStatsPanel="closeStatsPanel"
         >
-          <!-- <template v-slot:notification>
-            <div class="notification blocked">
+          <template v-slot:notification>
+            <div v-if="isGiantAppMap" class="notification blocked">
               <div class="content">
                 <p class="notification-head">
                   <ExclamationIcon /><strong>This AppMap is too large to open.</strong>
@@ -326,9 +332,7 @@
                 </p>
               </div>
             </div>
-          </template> -->
-          <template v-if="wasAutoPruned" v-slot:notification>
-            <div class="notification trimmed">
+            <div v-if="wasAutoPruned" class="notification trimmed">
               <div class="content">
                 <p class="notification-head">
                   <ScissorsIcon /><strong>This AppMap has been automatically trimmed.</strong>
@@ -349,7 +353,7 @@
       </div>
     </div>
 
-    <div class="no-data-notice" v-if="isEmptyAppMap && !isLoading">
+    <div class="no-data-notice" v-if="isEmptyAppMap && !isLoading && !hasStats">
       <div class="notice">
         <p class="no-data-notice__title">Sorry, but there's no data to display :(</p>
         <ul class="why-me">
@@ -775,6 +779,10 @@ export default {
         Array.isArray(appMap.classMap.codeObjects) && appMap.classMap.codeObjects.length;
 
       return !this.filtersChanged && !this.eventFilterText && (!hasEvents || !hasClassMap);
+    },
+
+    isGiantAppMap() {
+      return this.isEmptyAppMap && this.hasStats;
     },
 
     filtersChanged() {
@@ -1227,6 +1235,13 @@ export default {
     this.$root.$on('addHiddenName', (objectId) => {
       this.addHiddenName(objectId);
     });
+  },
+
+  beforeUpdate() {
+    if (this.isGiantAppMap) {
+      this.showStatsPanel = true;
+      this.setView(null);
+    }
   },
 };
 </script>
