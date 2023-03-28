@@ -4,7 +4,7 @@
       <AppMapLogo width="70" />
     </h3>
 
-    <!-- <div class="details-panel__notification blocked">
+    <div v-if="isGiantAppMap" class="details-panel__notification blocked">
       <div class="content">
         <p class="notification-head">
           <ExclamationIcon /><strong>This AppMap is too large to open.</strong>
@@ -14,7 +14,7 @@
           <a href="/">documentation</a>.
         </p>
       </div>
-    </div> -->
+    </div>
 
     <div v-if="wasAutoPruned" class="details-panel__notification trimmed">
       <div class="content">
@@ -46,7 +46,7 @@
       </div>
       <keep-alive>
         <v-details-search
-          v-if="!selectedObject && !selectedLabel"
+          v-if="!isGiantAppMap && !selectedObject && !selectedLabel"
           :appMap="appMap"
           :findings="findings"
           @onChangeFilter="(value) => this.$emit('onChangeFilter', value)"
@@ -65,6 +65,7 @@
         :items="Array.from(selectedObject.labels)"
       />
       <v-details-label v-if="selectedLabel" :label="selectedLabel" :appMap="appMap" />
+      <div v-if="isGiantAppMap">Info about Giant AppMaps here?</div>
     </div>
   </div>
 </template>
@@ -135,6 +136,10 @@ export default {
       default: () => [],
     },
     wasAutoPruned: {
+      type: Boolean,
+      default: false,
+    },
+    isGiantAppMap: {
       type: Boolean,
       default: false,
     },
