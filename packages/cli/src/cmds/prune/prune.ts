@@ -56,7 +56,7 @@ function generateConsoleMessage(filters: any): string {
     exclusions.push(`All functions with elapsed time under ${filters.hideElapsedTimeUnder} ms`);
   if ('hideName' in filters) exclusions = [...exclusions, ...filters.hideName];
 
-  return `The following was pruned from the map: \n  ${exclusions.join('\n  ')}`;
+  return `The following has been pruned from the original map: \n  ${exclusions.join('\n  ')}`;
 }
 
 function displayMessage(appMap: AppMap, format: string): void {
