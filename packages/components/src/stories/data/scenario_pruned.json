@@ -1,0 +1,5736 @@
+{
+  "events": [
+    {
+      "id": 1,
+      "event": "call",
+      "message": [
+        {
+          "name": "controller",
+          "class": "String",
+          "value": "spree/admin/root",
+          "object_id": 70021264966880
+        },
+        {
+          "name": "action",
+          "class": "String",
+          "value": "index",
+          "object_id": 70021264966940
+        }
+      ],
+      "thread_id": 47346401950060,
+      "http_server_request": {
+        "path_info": "/admin",
+        "request_method": "GET",
+        "normalized_path_info": "/admin"
+      }
+    },
+    {
+      "id": 2,
+      "path": "app/controllers/spree/admin/root_controller.rb",
+      "event": "call",
+      "lineno": 8,
+      "static": false,
+      "receiver": {
+        "class": "Spree::Admin::RootController",
+        "value": "#<Spree::Admin::RootController:0x00007f5e30e34b68>",
+        "object_id": 70021261927860
+      },
+      "method_id": "index",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::RootController"
+    },
+    {
+      "id": 3,
+      "event": "call",
+      "thread_id": 47346401950060,
+      "http_client_request": {
+        "request_method": "POST",
+        "url": "http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/execute/sync",
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json; charset=UTF-8",
+          "User-Agent": "selenium/3.142.7 (ruby macosx)",
+          "Content-Length": "5067",
+          "Accept-Encoding": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "event": "return",
+      "thread_id": 47346401950060,
+      "parent_id": 3,
+      "elapsed": 0.004415,
+      "http_client_response": {
+        "status_code": 200,
+        "headers": {
+          "Content-Length": "14",
+          "Content-Type": "application/json; charset=utf-8",
+          "Cache-Control": "no-cache"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "event": "return",
+      "elapsed": 0.001858651,
+      "parent_id": 2,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "<html><body>You are being <a href=\"http://www.example.com/admin/orders\">redirected</a>.</body></html",
+        "object_id": 70021262067520
+      }
+    },
+    {
+      "id": 6,
+      "event": "return",
+      "elapsed": 0.003613387,
+      "parent_id": 1,
+      "thread_id": 47346401950060,
+      "http_server_response": {
+        "status": 302
+      }
+    },
+    {
+      "id": 7,
+      "path": "OpenSSL::Cipher#encrypt",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x00007f5e30e844d8>",
+        "object_id": 70021262090860
+      },
+      "method_id": "encrypt",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[]",
+          "object_id": 70021262105400
+        }
+      ],
+      "defined_class": "OpenSSL::Cipher"
+    },
+    {
+      "id": 8,
+      "event": "return",
+      "elapsed": 0.000007765,
+      "parent_id": 7,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x00007f5e30e844d8>",
+        "object_id": 70021262090860
+      }
+    },
+    {
+      "id": 9,
+      "path": "OpenSSL::Cipher#final",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x00007f5e30e844d8>",
+        "object_id": 70021262090860
+      },
+      "method_id": "final",
+      "thread_id": 47346401950060,
+      "defined_class": "OpenSSL::Cipher"
+    },
+    {
+      "id": 10,
+      "event": "return",
+      "elapsed": 0.000006279,
+      "parent_id": 9,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "a_ _=_fz2__\u001e2___",
+        "object_id": 70021262098560
+      }
+    },
+    {
+      "id": 11,
+      "event": "call",
+      "message": [
+        {
+          "name": "controller",
+          "class": "String",
+          "value": "spree/admin/orders",
+          "object_id": 70021263036800
+        },
+        {
+          "name": "action",
+          "class": "String",
+          "value": "index",
+          "object_id": 47346402040280
+        }
+      ],
+      "thread_id": 47346401950060,
+      "http_server_request": {
+        "path_info": "/admin/orders",
+        "request_method": "GET",
+        "normalized_path_info": "/admin/orders"
+      }
+    },
+    {
+      "id": 12,
+      "path": "/home/travis/.rvm/gems/ruby-2.6.5/gems/activesupport-6.0.3.4/lib/active_support/security_utils.rb",
+      "event": "call",
+      "lineno": 26,
+      "static": true,
+      "receiver": {
+        "class": "Module",
+        "value": "ActiveSupport::SecurityUtils",
+        "object_id": 47346414723160
+      },
+      "method_id": "secure_compare",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "a",
+          "class": "String",
+          "value": "6f1d4cb7ab7e13064d2f85fda5e215631b844ab5",
+          "object_id": 70021262219300
+        },
+        {
+          "kind": "req",
+          "name": "b",
+          "class": "String",
+          "value": "6f1d4cb7ab7e13064d2f85fda5e215631b844ab5",
+          "object_id": 70021262219220
+        }
+      ],
+      "defined_class": "ActiveSupport::SecurityUtils"
+    },
+    {
+      "id": 13,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 70021262214740
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"6f1d4cb7ab7e13064d2f85fda5e215631b844ab5\"]",
+          "object_id": 70021262237240
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 14,
+      "event": "return",
+      "elapsed": 0.000008939,
+      "parent_id": 13,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
+        "object_id": 70021262236040
+      }
+    },
+    {
+      "id": 15,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 70021262235300
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"6f1d4cb7ab7e13064d2f85fda5e215631b844ab5\"]",
+          "object_id": 70021262233940
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 16,
+      "event": "return",
+      "elapsed": 0.000006674,
+      "parent_id": 15,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
+        "object_id": 70021262233000
+      }
+    },
+    {
+      "id": 17,
+      "event": "return",
+      "elapsed": 0.000180768,
+      "parent_id": 12,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
+    },
+    {
+      "id": 18,
+      "path": "JSON::Ext::Parser#parse",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "value": "#<JSON::Ext::Parser:0x00007f5e30ec8b38>",
+        "object_id": 70021262230940
+      },
+      "method_id": "parse",
+      "thread_id": 47346401950060,
+      "defined_class": "JSON::Ext::Parser"
+    },
+    {
+      "id": 19,
+      "event": "return",
+      "elapsed": 0.000233389,
+      "parent_id": 18,
+      "thread_id": 47346401950060,
+      "exceptions": [
+        {
+          "path": "/home/travis/.rvm/gems/ruby-2.6.5/bundler/gems/appmap-ruby-d2ba81e811c2/lib/appmap/hook/method.rb",
+          "class": "JSON::ParserError",
+          "lineno": 67,
+          "message": "767: unexpected token at '\u0004\bI\"\u001btl6XJ4RO1HrIDc1OU_u2kw\u0006:\u0006EF'",
+          "object_id": 70021262245300
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "path": "/home/travis/.rvm/gems/ruby-2.6.5/gems/activesupport-6.0.3.4/lib/active_support/security_utils.rb",
+      "event": "call",
+      "lineno": 26,
+      "static": true,
+      "receiver": {
+        "class": "Module",
+        "value": "ActiveSupport::SecurityUtils",
+        "object_id": 47346414723160
+      },
+      "method_id": "secure_compare",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "a",
+          "class": "String",
+          "value": "6f1d4cb7ab7e13064d2f85fda5e215631b844ab5",
+          "object_id": 70021262247300
+        },
+        {
+          "kind": "req",
+          "name": "b",
+          "class": "String",
+          "value": "6f1d4cb7ab7e13064d2f85fda5e215631b844ab5",
+          "object_id": 70021262247220
+        }
+      ],
+      "defined_class": "ActiveSupport::SecurityUtils"
+    },
+    {
+      "id": 21,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 70021262276600
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"6f1d4cb7ab7e13064d2f85fda5e215631b844ab5\"]",
+          "object_id": 70021262274860
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 22,
+      "event": "return",
+      "elapsed": 0.000007715,
+      "parent_id": 21,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
+        "object_id": 70021262273740
+      }
+    },
+    {
+      "id": 23,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 70021262273060
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"6f1d4cb7ab7e13064d2f85fda5e215631b844ab5\"]",
+          "object_id": 70021262271640
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 24,
+      "event": "return",
+      "elapsed": 0.00000675,
+      "parent_id": 23,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
+        "object_id": 70021262294800
+      }
+    },
+    {
+      "id": 25,
+      "event": "return",
+      "elapsed": 0.000162022,
+      "parent_id": 20,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
+    },
+    {
+      "id": 26,
+      "path": "JSON::Ext::Parser#parse",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "value": "#<JSON::Ext::Parser:0x00007f5e30ee7308>",
+        "object_id": 70021262293380
+      },
+      "method_id": "parse",
+      "thread_id": 47346401950060,
+      "defined_class": "JSON::Ext::Parser"
+    },
+    {
+      "id": 27,
+      "event": "return",
+      "elapsed": 0.000217642,
+      "parent_id": 26,
+      "thread_id": 47346401950060,
+      "exceptions": [
+        {
+          "path": "/home/travis/.rvm/gems/ruby-2.6.5/bundler/gems/appmap-ruby-d2ba81e811c2/lib/appmap/hook/method.rb",
+          "class": "JSON::ParserError",
+          "lineno": 67,
+          "message": "767: unexpected token at '\u0004\bI\"\u001btl6XJ4RO1HrIDc1OU_u2kw\u0006:\u0006EF'",
+          "object_id": 70021262291500
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "path": "/home/travis/.rvm/gems/ruby-2.6.5/gems/activesupport-6.0.3.4/lib/active_support/security_utils.rb",
+      "event": "call",
+      "lineno": 26,
+      "static": true,
+      "receiver": {
+        "class": "Module",
+        "value": "ActiveSupport::SecurityUtils",
+        "object_id": 47346414723160
+      },
+      "method_id": "secure_compare",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "a",
+          "class": "String",
+          "value": "79254735bd22fa34399d5cba07b0ccc20e7a4c29",
+          "object_id": 70021262328060
+        },
+        {
+          "kind": "req",
+          "name": "b",
+          "class": "String",
+          "value": "79254735bd22fa34399d5cba07b0ccc20e7a4c29",
+          "object_id": 70021262327960
+        }
+      ],
+      "defined_class": "ActiveSupport::SecurityUtils"
+    },
+    {
+      "id": 29,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 70021262356560
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"79254735bd22fa34399d5cba07b0ccc20e7a4c29\"]",
+          "object_id": 70021262355380
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 30,
+      "event": "return",
+      "elapsed": 0.000008221,
+      "parent_id": 29,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "K_Pz\u001b\u0002__>o\u0018___[_____X__\u0004X_kb_+_*",
+        "object_id": 70021262354100
+      }
+    },
+    {
+      "id": 31,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 70021262353520
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"79254735bd22fa34399d5cba07b0ccc20e7a4c29\"]",
+          "object_id": 70021262375980
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 32,
+      "event": "return",
+      "elapsed": 0.000006367,
+      "parent_id": 31,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "K_Pz\u001b\u0002__>o\u0018___[_____X__\u0004X_kb_+_*",
+        "object_id": 70021262374920
+      }
+    },
+    {
+      "id": 33,
+      "event": "return",
+      "elapsed": 0.000176536,
+      "parent_id": 28,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
+    },
+    {
+      "id": 34,
+      "path": "JSON::Ext::Parser#parse",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "value": "#<JSON::Ext::Parser:0x00007f5e30f0dff8>",
+        "object_id": 70021262372860
+      },
+      "method_id": "parse",
+      "thread_id": 47346401950060,
+      "defined_class": "JSON::Ext::Parser"
+    },
+    {
+      "id": 35,
+      "event": "return",
+      "elapsed": 0.000223891,
+      "parent_id": 34,
+      "thread_id": 47346401950060,
+      "exceptions": [
+        {
+          "path": "/home/travis/.rvm/gems/ruby-2.6.5/bundler/gems/appmap-ruby-d2ba81e811c2/lib/appmap/hook/method.rb",
+          "class": "JSON::ParserError",
+          "lineno": 67,
+          "message": "767: unexpected token at 'rbhR4nRgSkFMzJW2uZj6a/ePWI9KX8ckHvDOIzwNu6+avqscXjE/q2u65z5Eun2huWw/jxOP9q3RppaweCgnAG4l2yLhqfPJSwzvnpWdKrhh1iBfPc1mejKG2h4y2caY--l6xfePqbqwh/KPeFNlZd7Q=='",
+          "object_id": 70021262370720
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "path": "OpenSSL::Cipher#decrypt",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x00007f5e2c027bc8>",
+        "object_id": 70021221006820
+      },
+      "method_id": "decrypt",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[]",
+          "object_id": 70021221004740
+        }
+      ],
+      "defined_class": "OpenSSL::Cipher"
+    },
+    {
+      "id": 37,
+      "event": "return",
+      "elapsed": 0.000005704,
+      "parent_id": 36,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x00007f5e2c027bc8>",
+        "object_id": 70021221006820
+      }
+    },
+    {
+      "id": 38,
+      "path": "OpenSSL::Cipher#final",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x00007f5e2c027bc8>",
+        "object_id": 70021221006820
+      },
+      "method_id": "final",
+      "thread_id": 47346401950060,
+      "defined_class": "OpenSSL::Cipher"
+    },
+    {
+      "id": 39,
+      "event": "return",
+      "elapsed": 0.000005778,
+      "parent_id": 38,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": ":\u0007en",
+        "object_id": 70021220999320
+      }
+    },
+    {
+      "id": 40,
+      "path": "JSON::Ext::Parser#parse",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "value": "#<JSON::Ext::Parser:0x00007f5e2c02fc60>",
+        "object_id": 70021221023280
+      },
+      "method_id": "parse",
+      "thread_id": 47346401950060,
+      "defined_class": "JSON::Ext::Parser"
+    },
+    {
+      "id": 41,
+      "event": "return",
+      "elapsed": 0.000218622,
+      "parent_id": 40,
+      "thread_id": 47346401950060,
+      "exceptions": [
+        {
+          "path": "/home/travis/.rvm/gems/ruby-2.6.5/bundler/gems/appmap-ruby-d2ba81e811c2/lib/appmap/hook/method.rb",
+          "class": "JSON::ParserError",
+          "lineno": 67,
+          "message": "767: unexpected token at '\u0004\b{\u0007I\"\u000fsession_id\u0006:\u0006ETI\"%7e0725c1d81062278d9c31654355e0fe\u0006;'",
+          "object_id": 70021221021040
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "path": "/home/travis/.rvm/gems/ruby-2.6.5/gems/activesupport-6.0.3.4/lib/active_support/security_utils.rb",
+      "event": "call",
+      "lineno": 26,
+      "static": true,
+      "receiver": {
+        "class": "Module",
+        "value": "ActiveSupport::SecurityUtils",
+        "object_id": 47346414723160
+      },
+      "method_id": "secure_compare",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "a",
+          "class": "String",
+          "value": "79254735bd22fa34399d5cba07b0ccc20e7a4c29",
+          "object_id": 70021262396380
+        },
+        {
+          "kind": "req",
+          "name": "b",
+          "class": "String",
+          "value": "79254735bd22fa34399d5cba07b0ccc20e7a4c29",
+          "object_id": 70021262396260
+        }
+      ],
+      "defined_class": "ActiveSupport::SecurityUtils"
+    },
+    {
+      "id": 43,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 70021262432800
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"79254735bd22fa34399d5cba07b0ccc20e7a4c29\"]",
+          "object_id": 70021262431320
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 44,
+      "event": "return",
+      "elapsed": 0.000007041,
+      "parent_id": 43,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "K_Pz\u001b\u0002__>o\u0018___[_____X__\u0004X_kb_+_*",
+        "object_id": 70021262428200
+      }
+    },
+    {
+      "id": 45,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 70021262450560
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"79254735bd22fa34399d5cba07b0ccc20e7a4c29\"]",
+          "object_id": 70021262449160
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 46,
+      "event": "return",
+      "elapsed": 0.000006763,
+      "parent_id": 45,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "K_Pz\u001b\u0002__>o\u0018___[_____X__\u0004X_kb_+_*",
+        "object_id": 70021262446820
+      }
+    },
+    {
+      "id": 47,
+      "event": "return",
+      "elapsed": 0.000163125,
+      "parent_id": 42,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
+    },
+    {
+      "id": 48,
+      "path": "JSON::Ext::Parser#parse",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "value": "#<JSON::Ext::Parser:0x00007f5e30f304e0>",
+        "object_id": 70021262443120
+      },
+      "method_id": "parse",
+      "thread_id": 47346401950060,
+      "defined_class": "JSON::Ext::Parser"
+    },
+    {
+      "id": 49,
+      "event": "return",
+      "elapsed": 0.000219578,
+      "parent_id": 48,
+      "thread_id": 47346401950060,
+      "exceptions": [
+        {
+          "path": "/home/travis/.rvm/gems/ruby-2.6.5/bundler/gems/appmap-ruby-d2ba81e811c2/lib/appmap/hook/method.rb",
+          "class": "JSON::ParserError",
+          "lineno": 67,
+          "message": "767: unexpected token at 'rbhR4nRgSkFMzJW2uZj6a/ePWI9KX8ckHvDOIzwNu6+avqscXjE/q2u65z5Eun2huWw/jxOP9q3RppaweCgnAG4l2yLhqfPJSwzvnpWdKrhh1iBfPc1mejKG2h4y2caY--l6xfePqbqwh/KPeFNlZd7Q=='",
+          "object_id": 70021262473740
+        }
+      ]
+    },
+    {
+      "id": 50,
+      "path": "OpenSSL::Cipher#decrypt",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x00007f5e30f57270>",
+        "object_id": 70021262522680
+      },
+      "method_id": "decrypt",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[]",
+          "object_id": 70021262520280
+        }
+      ],
+      "defined_class": "OpenSSL::Cipher"
+    },
+    {
+      "id": 51,
+      "event": "return",
+      "elapsed": 0.000006243,
+      "parent_id": 50,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x00007f5e30f57270>",
+        "object_id": 70021262522680
+      }
+    },
+    {
+      "id": 52,
+      "path": "OpenSSL::Cipher#final",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x00007f5e30f57270>",
+        "object_id": 70021262522680
+      },
+      "method_id": "final",
+      "thread_id": 47346401950060,
+      "defined_class": "OpenSSL::Cipher"
+    },
+    {
+      "id": 53,
+      "event": "return",
+      "elapsed": 0.000005157,
+      "parent_id": 52,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": ":\u0007en",
+        "object_id": 70021262517080
+      }
+    },
+    {
+      "id": 54,
+      "path": "JSON::Ext::Parser#parse",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "value": "#<JSON::Ext::Parser:0x00007f5e30f542c8>",
+        "object_id": 70021262516580
+      },
+      "method_id": "parse",
+      "thread_id": 47346401950060,
+      "defined_class": "JSON::Ext::Parser"
+    },
+    {
+      "id": 55,
+      "event": "return",
+      "elapsed": 0.000225418,
+      "parent_id": 54,
+      "thread_id": 47346401950060,
+      "exceptions": [
+        {
+          "path": "/home/travis/.rvm/gems/ruby-2.6.5/bundler/gems/appmap-ruby-d2ba81e811c2/lib/appmap/hook/method.rb",
+          "class": "JSON::ParserError",
+          "lineno": 67,
+          "message": "767: unexpected token at '\u0004\b{\u0007I\"\u000fsession_id\u0006:\u0006ETI\"%7e0725c1d81062278d9c31654355e0fe\u0006;'",
+          "object_id": 70021262547500
+        }
+      ]
+    },
+    {
+      "id": 56,
+      "path": "app/controllers/spree/admin/orders_controller.rb",
+      "event": "call",
+      "lineno": 16,
+      "static": false,
+      "receiver": {
+        "class": "Spree::Admin::OrdersController",
+        "value": "#<Spree::Admin::OrdersController:0x00007f5e30eb10c8>",
+        "object_id": 70021262182500
+      },
+      "method_id": "index",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::OrdersController"
+    },
+    {
+      "id": 57,
+      "event": "return",
+      "elapsed": 0.001118142,
+      "parent_id": 56,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 58,
+      "path": "app/helpers/spree/admin/base_helper.rb",
+      "event": "call",
+      "lineno": 142,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
+        "object_id": 70021262842240
+      },
+      "method_id": "admin_layout",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "opt",
+          "name": "layout",
+          "class": "String",
+          "value": "full-width",
+          "object_id": 70021262836100
+        }
+      ],
+      "defined_class": "Spree::Admin::BaseHelper"
+    },
+    {
+      "id": 59,
+      "event": "return",
+      "elapsed": 0.000015515,
+      "parent_id": 58,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "full-width",
+        "object_id": 70021262836100
+      }
+    },
+    {
+      "id": 60,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 11,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
+        "object_id": 70021262842240
+      },
+      "method_id": "admin_breadcrumb",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "ancestors",
+          "class": "Array",
+          "value": "[\"Orders\"]",
+          "object_id": 70021262845260
+        },
+        {
+          "kind": "block",
+          "name": "block",
+          "class": "NilClass",
+          "value": null,
+          "object_id": 8
+        }
+      ],
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 61,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 6,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
+        "object_id": 70021262842240
+      },
+      "method_id": "admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 62,
+      "event": "return",
+      "elapsed": 0.000015654,
+      "parent_id": 61,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 70021262857900
+      }
+    },
+    {
+      "id": 63,
+      "event": "return",
+      "elapsed": 0.004048762,
+      "parent_id": 60,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 64,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT COUNT(*) FROM \"spree_stores\"",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT COUNT(*) FROM \"spree_stores\"",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 65,
+      "event": "return",
+      "elapsed": 0.000243323,
+      "parent_id": 64,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 66,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT COUNT(*) FROM \"spree_orders\" WHERE \"spree_orders\".\"completed_at\" IS NOT NULL",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT COUNT(*) FROM \"spree_orders\" WHERE \"spree_orders\".\"completed_at\" IS NOT NULL",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 67,
+      "event": "return",
+      "elapsed": 0.00026609,
+      "parent_id": 66,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 68,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT 1 AS one FROM \"spree_orders\" WHERE \"spree_orders\".\"completed_at\" IS NOT NULL LIMIT ? OFFSET ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT $1 AS one FROM \"spree_orders\" WHERE \"spree_orders\".\"completed_at\" IS NOT NULL LIMIT ? OFFSET ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 69,
+      "event": "return",
+      "elapsed": 0.000274276,
+      "parent_id": 68,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 70,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_orders\".* FROM \"spree_orders\" WHERE \"spree_orders\".\"completed_at\" IS NOT NULL ORDER BY \"spree_orders\".\"completed_at\" DESC LIMIT ? OFFSET ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_orders\".* FROM \"spree_orders\" WHERE \"spree_orders\".\"completed_at\" IS NOT NULL ORDER BY \"spree_orders\".\"completed_at\" DESC LIMIT ? OFFSET ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 71,
+      "event": "return",
+      "elapsed": 0.000245815,
+      "parent_id": 70,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 72,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_users\".* FROM \"spree_users\" WHERE \"spree_users\".\"id\" = ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_users\".* FROM \"spree_users\" WHERE \"spree_users\".\"id\" = ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 73,
+      "event": "return",
+      "elapsed": 0.000203306,
+      "parent_id": 72,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 74,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 100,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
+        "object_id": 70021262842240
+      },
+      "method_id": "link_to_edit_url",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "url",
+          "class": "String",
+          "value": "/admin/orders/R100/edit",
+          "object_id": 70021268893000
+        },
+        {
+          "kind": "opt",
+          "name": "options",
+          "class": "Hash",
+          "value": "{:title=>\"admin_edit_order_1\", :no_text=>true}",
+          "object_id": 70021268892720
+        }
+      ],
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 75,
+      "event": "return",
+      "elapsed": 0.004669494,
+      "parent_id": 74,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "ActiveSupport::SafeBuffer",
+        "value": "<a title=\"Edit\" data-action=\"edit\" class=\"fa fa-edit icon_link with-tip no-text\" href=\"/admin/orders",
+        "object_id": 70021268901920
+      }
+    },
+    {
+      "id": 76,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 30,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
+        "object_id": 70021262842240
+      },
+      "method_id": "admin_page_title",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 77,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 6,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
+        "object_id": 70021262842240
+      },
+      "method_id": "admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 78,
+      "event": "return",
+      "elapsed": 0.00001601,
+      "parent_id": 77,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[\"Orders\"]",
+        "object_id": 70021262857900
+      }
+    },
+    {
+      "id": 79,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 6,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
+        "object_id": 70021262842240
+      },
+      "method_id": "admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 80,
+      "event": "return",
+      "elapsed": 0.000015359,
+      "parent_id": 79,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[\"Orders\"]",
+        "object_id": 70021262857900
+      }
+    },
+    {
+      "id": 81,
+      "event": "return",
+      "elapsed": 0.008361013,
+      "parent_id": 76,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "Orders",
+        "object_id": 70021268941360
+      }
+    },
+    {
+      "id": 82,
+      "path": "JSON::Ext::Generator::State#generate",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "value": "#<JSON::Ext::Generator::State:0x00007f5e31bf47a8>",
+        "object_id": 70021269136340
+      },
+      "method_id": "generate",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "arg",
+          "class": "Hash",
+          "value": "{:abbreviation=>\"Abbreviation\", :accept=>\"Accept\", :acceptance_errors=>\"Acceptance errors\", :accepta",
+          "object_id": 70021269136380
+        }
+      ],
+      "defined_class": "JSON::Ext::Generator::State"
+    },
+    {
+      "id": 83,
+      "event": "return",
+      "elapsed": 0.002574983,
+      "parent_id": 82,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "{\"abbreviation\":\"Abbreviation\",\"accept\":\"Accept\",\"acceptance_errors\":\"Acceptance errors\",\"acceptance",
+        "object_id": 70021269827420
+      }
+    },
+    {
+      "id": 84,
+      "path": "JSON::Ext::Generator::State#generate",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "value": "#<JSON::Ext::Generator::State:0x00007f5e31d71b58>",
+        "object_id": 70021269917100
+      },
+      "method_id": "generate",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "arg",
+          "class": "Hash",
+          "value": "{\"USD\"=>[\"$\", 2, \"%s%v\"], \"EUR\"=>[\"€\", 2, \"%s%v\"], \"GBP\"=>[\"£\", 2, \"%s%v\"], \"AUD\"=>[\"$\", 2, \"%s%v\"],",
+          "object_id": 70021269909160
+        }
+      ],
+      "defined_class": "JSON::Ext::Generator::State"
+    },
+    {
+      "id": 85,
+      "event": "return",
+      "elapsed": 0.000247322,
+      "parent_id": 84,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "{\"USD\":[\"$\",2,\"%s%v\"],\"EUR\":[\"€\",2,\"%s%v\"],\"GBP\":[\"£\",2,\"%s%v\"],\"AUD\":[\"$\",2,\"%s%v\"],\"CAD\":[\"$\",2,\"%",
+        "object_id": 70021270031860
+      }
+    },
+    {
+      "id": 86,
+      "path": "lib/spree/backend_configuration.rb",
+      "event": "call",
+      "lineno": 92,
+      "static": false,
+      "receiver": {
+        "class": "Spree::BackendConfiguration",
+        "value": "#<Spree::BackendConfiguration:0x0000561f6679cc88>",
+        "object_id": 47346431616580
+      },
+      "method_id": "menu_items",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::BackendConfiguration"
+    },
+    {
+      "id": 87,
+      "event": "return",
+      "elapsed": 0.000009352,
+      "parent_id": 86,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Spree::BackendConfiguration::MenuItem:0x0000561f7177c2c0 @condition=#<Proc:0x0000561f7177c310@/ho",
+        "object_id": 47346523864000
+      }
+    },
+    {
+      "id": 88,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 17,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
+        "object_id": 70021262842240
+      },
+      "method_id": "render_admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 89,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 6,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
+        "object_id": 70021262842240
+      },
+      "method_id": "admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 90,
+      "event": "return",
+      "elapsed": 0.000017249,
+      "parent_id": 89,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[\"Orders\"]",
+        "object_id": 70021262857900
+      }
+    },
+    {
+      "id": 91,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 6,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e30ff3300>",
+        "object_id": 70021262842240
+      },
+      "method_id": "admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 92,
+      "event": "return",
+      "elapsed": 0.000015299,
+      "parent_id": 91,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[\"Orders\"]",
+        "object_id": 70021262857900
+      }
+    },
+    {
+      "id": 93,
+      "event": "return",
+      "elapsed": 0.008157619,
+      "parent_id": 88,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "ActiveSupport::SafeBuffer",
+        "value": "<ol class=\"breadcrumb\"><li class=\"breadcrumb-item active\">Orders</li></ol>",
+        "object_id": 70021270821700
+      }
+    },
+    {
+      "id": 94,
+      "event": "return",
+      "elapsed": 0.231098285,
+      "parent_id": 11,
+      "thread_id": 47346401950060,
+      "http_server_response": {
+        "status": 200,
+        "mime_type": "text/html; charset=utf-8"
+      }
+    },
+    {
+      "id": 95,
+      "path": "OpenSSL::Cipher#encrypt",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x00007f5e31f3edf0>",
+        "object_id": 70021270861560
+      },
+      "method_id": "encrypt",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[]",
+          "object_id": 70021270860160
+        }
+      ],
+      "defined_class": "OpenSSL::Cipher"
+    },
+    {
+      "id": 96,
+      "event": "return",
+      "elapsed": 0.000008119,
+      "parent_id": 95,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x00007f5e31f3edf0>",
+        "object_id": 70021270861560
+      }
+    },
+    {
+      "id": 97,
+      "path": "OpenSSL::Cipher#final",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x00007f5e31f3edf0>",
+        "object_id": 70021270861560
+      },
+      "method_id": "final",
+      "thread_id": 47346401950060,
+      "defined_class": "OpenSSL::Cipher"
+    },
+    {
+      "id": 98,
+      "event": "return",
+      "elapsed": 0.000006622,
+      "parent_id": 97,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "____B_\f________J",
+        "object_id": 70021270857120
+      }
+    },
+    {
+      "id": 99,
+      "event": "call",
+      "message": [
+        {
+          "name": "controller",
+          "class": "String",
+          "value": "spree/admin/orders",
+          "object_id": 70021263036800
+        },
+        {
+          "name": "action",
+          "class": "String",
+          "value": "index",
+          "object_id": 47346402040280
+        }
+      ],
+      "thread_id": 47346401950060,
+      "http_server_request": {
+        "path_info": "/admin/orders",
+        "request_method": "GET",
+        "normalized_path_info": "/admin/orders"
+      }
+    },
+    {
+      "id": 100,
+      "path": "/home/travis/.rvm/gems/ruby-2.6.5/gems/activesupport-6.0.3.4/lib/active_support/security_utils.rb",
+      "event": "call",
+      "lineno": 26,
+      "static": true,
+      "receiver": {
+        "class": "Module",
+        "value": "ActiveSupport::SecurityUtils",
+        "object_id": 47346414723160
+      },
+      "method_id": "secure_compare",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "a",
+          "class": "String",
+          "value": "6f1d4cb7ab7e13064d2f85fda5e215631b844ab5",
+          "object_id": 70021270962400
+        },
+        {
+          "kind": "req",
+          "name": "b",
+          "class": "String",
+          "value": "6f1d4cb7ab7e13064d2f85fda5e215631b844ab5",
+          "object_id": 70021270962300
+        }
+      ],
+      "defined_class": "ActiveSupport::SecurityUtils"
+    },
+    {
+      "id": 101,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 70021270984740
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"6f1d4cb7ab7e13064d2f85fda5e215631b844ab5\"]",
+          "object_id": 70021270983740
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 102,
+      "event": "return",
+      "elapsed": 0.000011774,
+      "parent_id": 101,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
+        "object_id": 70021270982840
+      }
+    },
+    {
+      "id": 103,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 70021270982420
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"6f1d4cb7ab7e13064d2f85fda5e215631b844ab5\"]",
+          "object_id": 70021270981600
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 104,
+      "event": "return",
+      "elapsed": 0.000007635,
+      "parent_id": 103,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
+        "object_id": 70021270980820
+      }
+    },
+    {
+      "id": 105,
+      "event": "return",
+      "elapsed": 0.000343837,
+      "parent_id": 100,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
+    },
+    {
+      "id": 106,
+      "path": "JSON::Ext::Parser#parse",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "value": "#<JSON::Ext::Parser:0x00007f5e31f78aa0>",
+        "object_id": 70021270979920
+      },
+      "method_id": "parse",
+      "thread_id": 47346401950060,
+      "defined_class": "JSON::Ext::Parser"
+    },
+    {
+      "id": 107,
+      "event": "return",
+      "elapsed": 0.000245236,
+      "parent_id": 106,
+      "thread_id": 47346401950060,
+      "exceptions": [
+        {
+          "path": "/home/travis/.rvm/gems/ruby-2.6.5/bundler/gems/appmap-ruby-d2ba81e811c2/lib/appmap/hook/method.rb",
+          "class": "JSON::ParserError",
+          "lineno": 67,
+          "message": "767: unexpected token at '\u0004\bI\"\u001btl6XJ4RO1HrIDc1OU_u2kw\u0006:\u0006EF'",
+          "object_id": 70021270978800
+        }
+      ]
+    },
+    {
+      "id": 108,
+      "path": "/home/travis/.rvm/gems/ruby-2.6.5/gems/activesupport-6.0.3.4/lib/active_support/security_utils.rb",
+      "event": "call",
+      "lineno": 26,
+      "static": true,
+      "receiver": {
+        "class": "Module",
+        "value": "ActiveSupport::SecurityUtils",
+        "object_id": 47346414723160
+      },
+      "method_id": "secure_compare",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "a",
+          "class": "String",
+          "value": "6f1d4cb7ab7e13064d2f85fda5e215631b844ab5",
+          "object_id": 70021271026800
+        },
+        {
+          "kind": "req",
+          "name": "b",
+          "class": "String",
+          "value": "6f1d4cb7ab7e13064d2f85fda5e215631b844ab5",
+          "object_id": 70021271026680
+        }
+      ],
+      "defined_class": "ActiveSupport::SecurityUtils"
+    },
+    {
+      "id": 109,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 70021271024300
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"6f1d4cb7ab7e13064d2f85fda5e215631b844ab5\"]",
+          "object_id": 70021271023080
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 110,
+      "event": "return",
+      "elapsed": 0.000007692,
+      "parent_id": 109,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
+        "object_id": 70021271021760
+      }
+    },
+    {
+      "id": 111,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 70021271020780
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"6f1d4cb7ab7e13064d2f85fda5e215631b844ab5\"]",
+          "object_id": 70021271035380
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 112,
+      "event": "return",
+      "elapsed": 0.000007408,
+      "parent_id": 111,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
+        "object_id": 70021271032800
+      }
+    },
+    {
+      "id": 113,
+      "event": "return",
+      "elapsed": 0.00015976,
+      "parent_id": 108,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
+    },
+    {
+      "id": 114,
+      "path": "JSON::Ext::Parser#parse",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "value": "#<JSON::Ext::Parser:0x00007f5e31f91960>",
+        "object_id": 70021271030960
+      },
+      "method_id": "parse",
+      "thread_id": 47346401950060,
+      "defined_class": "JSON::Ext::Parser"
+    },
+    {
+      "id": 115,
+      "event": "return",
+      "elapsed": 0.000194038,
+      "parent_id": 114,
+      "thread_id": 47346401950060,
+      "exceptions": [
+        {
+          "path": "/home/travis/.rvm/gems/ruby-2.6.5/bundler/gems/appmap-ruby-d2ba81e811c2/lib/appmap/hook/method.rb",
+          "class": "JSON::ParserError",
+          "lineno": 67,
+          "message": "767: unexpected token at '\u0004\bI\"\u001btl6XJ4RO1HrIDc1OU_u2kw\u0006:\u0006EF'",
+          "object_id": 70021271041220
+        }
+      ]
+    },
+    {
+      "id": 116,
+      "path": "/home/travis/.rvm/gems/ruby-2.6.5/gems/activesupport-6.0.3.4/lib/active_support/security_utils.rb",
+      "event": "call",
+      "lineno": 26,
+      "static": true,
+      "receiver": {
+        "class": "Module",
+        "value": "ActiveSupport::SecurityUtils",
+        "object_id": 47346414723160
+      },
+      "method_id": "secure_compare",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "a",
+          "class": "String",
+          "value": "17052c26fb1f818a3abfdb187ce54507f1106b64",
+          "object_id": 70021271090500
+        },
+        {
+          "kind": "req",
+          "name": "b",
+          "class": "String",
+          "value": "17052c26fb1f818a3abfdb187ce54507f1106b64",
+          "object_id": 70021271090420
+        }
+      ],
+      "defined_class": "ActiveSupport::SecurityUtils"
+    },
+    {
+      "id": 117,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 70021271088520
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"17052c26fb1f818a3abfdb187ce54507f1106b64\"]",
+          "object_id": 70021271087720
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 118,
+      "event": "return",
+      "elapsed": 0.000008324,
+      "parent_id": 117,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "l_l0?_f_qXt__%\t_\u0010\f_____0}o]T_X#_",
+        "object_id": 70021271086820
+      }
+    },
+    {
+      "id": 119,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 70021271086280
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"17052c26fb1f818a3abfdb187ce54507f1106b64\"]",
+          "object_id": 70021271085240
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 120,
+      "event": "return",
+      "elapsed": 0.000007943,
+      "parent_id": 119,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "l_l0?_f_qXt__%\t_\u0010\f_____0}o]T_X#_",
+        "object_id": 70021271099960
+      }
+    },
+    {
+      "id": 121,
+      "event": "return",
+      "elapsed": 0.000180377,
+      "parent_id": 116,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
+    },
+    {
+      "id": 122,
+      "path": "JSON::Ext::Parser#parse",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "value": "#<JSON::Ext::Parser:0x00007f5e31fb2a48>",
+        "object_id": 70021271098660
+      },
+      "method_id": "parse",
+      "thread_id": 47346401950060,
+      "defined_class": "JSON::Ext::Parser"
+    },
+    {
+      "id": 123,
+      "event": "return",
+      "elapsed": 0.000233076,
+      "parent_id": 122,
+      "thread_id": 47346401950060,
+      "exceptions": [
+        {
+          "path": "/home/travis/.rvm/gems/ruby-2.6.5/bundler/gems/appmap-ruby-d2ba81e811c2/lib/appmap/hook/method.rb",
+          "class": "JSON::ParserError",
+          "lineno": 67,
+          "message": "767: unexpected token at 'QEN2RDyn3pLBTxQx++KNvAkwuuAk1T8xzc4K7YHOY3p6zxaVxHFwHBJLcoFsb3bJxxKweqGW8/6jpJQ1Q10nSLKoImt+5uIuc/yq9Q6YgriPNSuxGhotlU9eioWWraaegfV7/MWdPzlsH2jTpMVK3XQBpsy5Cth9UfboaZJi5XuyF8NL0o2XF2pten637eD8+rj9kLUDNao75uk3pXHSg==--fQ+8YJdUT2Tx2Bwr+ji+cA=='",
+          "object_id": 70021271096680
+        }
+      ]
+    },
+    {
+      "id": 124,
+      "path": "OpenSSL::Cipher#decrypt",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x00007f5e31fbdba0>",
+        "object_id": 70021271121360
+      },
+      "method_id": "decrypt",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[]",
+          "object_id": 70021271118940
+        }
+      ],
+      "defined_class": "OpenSSL::Cipher"
+    },
+    {
+      "id": 125,
+      "event": "return",
+      "elapsed": 0.000007062,
+      "parent_id": 124,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x00007f5e31fbdba0>",
+        "object_id": 70021271121360
+      }
+    },
+    {
+      "id": 126,
+      "path": "OpenSSL::Cipher#final",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x00007f5e31fbdba0>",
+        "object_id": 70021271121360
+      },
+      "method_id": "final",
+      "thread_id": 47346401950060,
+      "defined_class": "OpenSSL::Cipher"
+    },
+    {
+      "id": 127,
+      "event": "return",
+      "elapsed": 0.00000632,
+      "parent_id": 126,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "XLA0=\u0006;␀F",
+        "object_id": 70021271132320
+      }
+    },
+    {
+      "id": 128,
+      "path": "JSON::Ext::Parser#parse",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "value": "#<JSON::Ext::Parser:0x00007f5e31fc2cb8>",
+        "object_id": 70021271131740
+      },
+      "method_id": "parse",
+      "thread_id": 47346401950060,
+      "defined_class": "JSON::Ext::Parser"
+    },
+    {
+      "id": 129,
+      "event": "return",
+      "elapsed": 0.00021461,
+      "parent_id": 128,
+      "thread_id": 47346401950060,
+      "exceptions": [
+        {
+          "path": "/home/travis/.rvm/gems/ruby-2.6.5/bundler/gems/appmap-ruby-d2ba81e811c2/lib/appmap/hook/method.rb",
+          "class": "JSON::ParserError",
+          "lineno": 67,
+          "message": "767: unexpected token at '\u0004\b{\bI\"\u000fsession_id\u0006:\u0006ETI\"%7e0725c1d81062278d9c31654355e0fe\u0006;'",
+          "object_id": 70021271130620
+        }
+      ]
+    },
+    {
+      "id": 130,
+      "path": "/home/travis/.rvm/gems/ruby-2.6.5/gems/activesupport-6.0.3.4/lib/active_support/security_utils.rb",
+      "event": "call",
+      "lineno": 26,
+      "static": true,
+      "receiver": {
+        "class": "Module",
+        "value": "ActiveSupport::SecurityUtils",
+        "object_id": 47346414723160
+      },
+      "method_id": "secure_compare",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "a",
+          "class": "String",
+          "value": "17052c26fb1f818a3abfdb187ce54507f1106b64",
+          "object_id": 70021271173060
+        },
+        {
+          "kind": "req",
+          "name": "b",
+          "class": "String",
+          "value": "17052c26fb1f818a3abfdb187ce54507f1106b64",
+          "object_id": 70021271173020
+        }
+      ],
+      "defined_class": "ActiveSupport::SecurityUtils"
+    },
+    {
+      "id": 131,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 70021271169940
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"17052c26fb1f818a3abfdb187ce54507f1106b64\"]",
+          "object_id": 70021271168460
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 132,
+      "event": "return",
+      "elapsed": 0.000008773,
+      "parent_id": 131,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "l_l0?_f_qXt__%\t_\u0010\f_____0}o]T_X#_",
+        "object_id": 70021271167480
+      }
+    },
+    {
+      "id": 133,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 70021271183320
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"17052c26fb1f818a3abfdb187ce54507f1106b64\"]",
+          "object_id": 70021271182400
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 134,
+      "event": "return",
+      "elapsed": 0.000007861,
+      "parent_id": 133,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "l_l0?_f_qXt__%\t_\u0010\f_____0}o]T_X#_",
+        "object_id": 70021271181380
+      }
+    },
+    {
+      "id": 135,
+      "event": "return",
+      "elapsed": 0.000177567,
+      "parent_id": 130,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
+    },
+    {
+      "id": 136,
+      "path": "JSON::Ext::Parser#parse",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "value": "#<JSON::Ext::Parser:0x00007f5e31fda728>",
+        "object_id": 70021271180180
+      },
+      "method_id": "parse",
+      "thread_id": 47346401950060,
+      "defined_class": "JSON::Ext::Parser"
+    },
+    {
+      "id": 137,
+      "event": "return",
+      "elapsed": 0.000230975,
+      "parent_id": 136,
+      "thread_id": 47346401950060,
+      "exceptions": [
+        {
+          "path": "/home/travis/.rvm/gems/ruby-2.6.5/bundler/gems/appmap-ruby-d2ba81e811c2/lib/appmap/hook/method.rb",
+          "class": "JSON::ParserError",
+          "lineno": 67,
+          "message": "767: unexpected token at 'QEN2RDyn3pLBTxQx++KNvAkwuuAk1T8xzc4K7YHOY3p6zxaVxHFwHBJLcoFsb3bJxxKweqGW8/6jpJQ1Q10nSLKoImt+5uIuc/yq9Q6YgriPNSuxGhotlU9eioWWraaegfV7/MWdPzlsH2jTpMVK3XQBpsy5Cth9UfboaZJi5XuyF8NL0o2XF2pten637eD8+rj9kLUDNao75uk3pXHSg==--fQ+8YJdUT2Tx2Bwr+ji+cA=='",
+          "object_id": 70021271178880
+        }
+      ]
+    },
+    {
+      "id": 138,
+      "path": "OpenSSL::Cipher#decrypt",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x00007f5e31fdccd0>",
+        "object_id": 70021271185000
+      },
+      "method_id": "decrypt",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[]",
+          "object_id": 70021271183980
+        }
+      ],
+      "defined_class": "OpenSSL::Cipher"
+    },
+    {
+      "id": 139,
+      "event": "return",
+      "elapsed": 0.000007322,
+      "parent_id": 138,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x00007f5e31fdccd0>",
+        "object_id": 70021271185000
+      }
+    },
+    {
+      "id": 140,
+      "path": "OpenSSL::Cipher#final",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x00007f5e31fdccd0>",
+        "object_id": 70021271185000
+      },
+      "method_id": "final",
+      "thread_id": 47346401950060,
+      "defined_class": "OpenSSL::Cipher"
+    },
+    {
+      "id": 141,
+      "event": "return",
+      "elapsed": 0.000006515,
+      "parent_id": 140,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "XLA0=\u0006;␀F",
+        "object_id": 70021271205760
+      }
+    },
+    {
+      "id": 142,
+      "path": "JSON::Ext::Parser#parse",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "value": "#<JSON::Ext::Parser:0x00007f5e31fe6500>",
+        "object_id": 70021271204480
+      },
+      "method_id": "parse",
+      "thread_id": 47346401950060,
+      "defined_class": "JSON::Ext::Parser"
+    },
+    {
+      "id": 143,
+      "event": "return",
+      "elapsed": 0.000227043,
+      "parent_id": 142,
+      "thread_id": 47346401950060,
+      "exceptions": [
+        {
+          "path": "/home/travis/.rvm/gems/ruby-2.6.5/bundler/gems/appmap-ruby-d2ba81e811c2/lib/appmap/hook/method.rb",
+          "class": "JSON::ParserError",
+          "lineno": 67,
+          "message": "767: unexpected token at '\u0004\b{\bI\"\u000fsession_id\u0006:\u0006ETI\"%7e0725c1d81062278d9c31654355e0fe\u0006;'",
+          "object_id": 70021271202420
+        }
+      ]
+    },
+    {
+      "id": 144,
+      "path": "app/controllers/spree/admin/orders_controller.rb",
+      "event": "call",
+      "lineno": 16,
+      "static": false,
+      "receiver": {
+        "class": "Spree::Admin::OrdersController",
+        "value": "#<Spree::Admin::OrdersController:0x00007f5e31f6cf70>",
+        "object_id": 70021270955960
+      },
+      "method_id": "index",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::OrdersController"
+    },
+    {
+      "id": 145,
+      "event": "return",
+      "elapsed": 0.001127721,
+      "parent_id": 144,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 146,
+      "path": "app/helpers/spree/admin/base_helper.rb",
+      "event": "call",
+      "lineno": 142,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
+        "object_id": 70021271331140
+      },
+      "method_id": "admin_layout",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "opt",
+          "name": "layout",
+          "class": "String",
+          "value": "full-width",
+          "object_id": 70021271352140
+        }
+      ],
+      "defined_class": "Spree::Admin::BaseHelper"
+    },
+    {
+      "id": 147,
+      "event": "return",
+      "elapsed": 0.000015895,
+      "parent_id": 146,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "full-width",
+        "object_id": 70021271352140
+      }
+    },
+    {
+      "id": 148,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 11,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
+        "object_id": 70021271331140
+      },
+      "method_id": "admin_breadcrumb",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "ancestors",
+          "class": "Array",
+          "value": "[\"Orders\"]",
+          "object_id": 70021271360960
+        },
+        {
+          "kind": "block",
+          "name": "block",
+          "class": "NilClass",
+          "value": null,
+          "object_id": 8
+        }
+      ],
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 149,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 6,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
+        "object_id": 70021271331140
+      },
+      "method_id": "admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 150,
+      "event": "return",
+      "elapsed": 0.000015664,
+      "parent_id": 149,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 70021271357920
+      }
+    },
+    {
+      "id": 151,
+      "event": "return",
+      "elapsed": 0.003913153,
+      "parent_id": 148,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 152,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT COUNT(*) FROM \"spree_stores\"",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT COUNT(*) FROM \"spree_stores\"",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 153,
+      "event": "return",
+      "elapsed": 0.000228277,
+      "parent_id": 152,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 154,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT COUNT(*) FROM \"spree_orders\" WHERE \"spree_orders\".\"completed_at\" IS NOT NULL",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT COUNT(*) FROM \"spree_orders\" WHERE \"spree_orders\".\"completed_at\" IS NOT NULL",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 155,
+      "event": "return",
+      "elapsed": 0.000216719,
+      "parent_id": 154,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 156,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT 1 AS one FROM \"spree_orders\" WHERE \"spree_orders\".\"completed_at\" IS NOT NULL LIMIT ? OFFSET ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT $1 AS one FROM \"spree_orders\" WHERE \"spree_orders\".\"completed_at\" IS NOT NULL LIMIT ? OFFSET ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 157,
+      "event": "return",
+      "elapsed": 0.000276498,
+      "parent_id": 156,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 158,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_orders\".* FROM \"spree_orders\" WHERE \"spree_orders\".\"completed_at\" IS NOT NULL ORDER BY \"spree_orders\".\"completed_at\" DESC LIMIT ? OFFSET ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_orders\".* FROM \"spree_orders\" WHERE \"spree_orders\".\"completed_at\" IS NOT NULL ORDER BY \"spree_orders\".\"completed_at\" DESC LIMIT ? OFFSET ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 159,
+      "event": "return",
+      "elapsed": 0.000204994,
+      "parent_id": 158,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 160,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_users\".* FROM \"spree_users\" WHERE \"spree_users\".\"id\" = ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_users\".* FROM \"spree_users\" WHERE \"spree_users\".\"id\" = ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 161,
+      "event": "return",
+      "elapsed": 0.000177602,
+      "parent_id": 160,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 162,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 100,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
+        "object_id": 70021271331140
+      },
+      "method_id": "link_to_edit_url",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "url",
+          "class": "String",
+          "value": "/admin/orders/R100/edit",
+          "object_id": 47346495933240
+        },
+        {
+          "kind": "opt",
+          "name": "options",
+          "class": "Hash",
+          "value": "{:title=>\"admin_edit_order_1\", :no_text=>true}",
+          "object_id": 47346495932240
+        }
+      ],
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 163,
+      "event": "return",
+      "elapsed": 0.004386412,
+      "parent_id": 162,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "ActiveSupport::SafeBuffer",
+        "value": "<a title=\"Edit\" data-action=\"edit\" class=\"fa fa-edit icon_link with-tip no-text\" href=\"/admin/orders",
+        "object_id": 47346496002200
+      }
+    },
+    {
+      "id": 164,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 30,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
+        "object_id": 70021271331140
+      },
+      "method_id": "admin_page_title",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 165,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 6,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
+        "object_id": 70021271331140
+      },
+      "method_id": "admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 166,
+      "event": "return",
+      "elapsed": 0.000016649,
+      "parent_id": 165,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[\"Orders\"]",
+        "object_id": 70021271357920
+      }
+    },
+    {
+      "id": 167,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 6,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
+        "object_id": 70021271331140
+      },
+      "method_id": "admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 168,
+      "event": "return",
+      "elapsed": 0.000014851,
+      "parent_id": 167,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[\"Orders\"]",
+        "object_id": 70021271357920
+      }
+    },
+    {
+      "id": 169,
+      "event": "return",
+      "elapsed": 0.008634321,
+      "parent_id": 164,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "Orders",
+        "object_id": 47346496099220
+      }
+    },
+    {
+      "id": 170,
+      "path": "JSON::Ext::Generator::State#generate",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "value": "#<JSON::Ext::Generator::State:0x0000561f6ccc69d8>",
+        "object_id": 47346484655340
+      },
+      "method_id": "generate",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "arg",
+          "class": "Hash",
+          "value": "{:abbreviation=>\"Abbreviation\", :accept=>\"Accept\", :acceptance_errors=>\"Acceptance errors\", :accepta",
+          "object_id": 47346484655380
+        }
+      ],
+      "defined_class": "JSON::Ext::Generator::State"
+    },
+    {
+      "id": 171,
+      "event": "return",
+      "elapsed": 0.002593347,
+      "parent_id": 170,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "{\"abbreviation\":\"Abbreviation\",\"accept\":\"Accept\",\"acceptance_errors\":\"Acceptance errors\",\"acceptance",
+        "object_id": 70021355441460
+      }
+    },
+    {
+      "id": 172,
+      "path": "JSON::Ext::Generator::State#generate",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "value": "#<JSON::Ext::Generator::State:0x00007f5e3c100080>",
+        "object_id": 70021355667520
+      },
+      "method_id": "generate",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "arg",
+          "class": "Hash",
+          "value": "{\"USD\"=>[\"$\", 2, \"%s%v\"], \"EUR\"=>[\"€\", 2, \"%s%v\"], \"GBP\"=>[\"£\", 2, \"%s%v\"], \"AUD\"=>[\"$\", 2, \"%s%v\"],",
+          "object_id": 70021355632260
+        }
+      ],
+      "defined_class": "JSON::Ext::Generator::State"
+    },
+    {
+      "id": 173,
+      "event": "return",
+      "elapsed": 0.000246938,
+      "parent_id": 172,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "{\"USD\":[\"$\",2,\"%s%v\"],\"EUR\":[\"€\",2,\"%s%v\"],\"GBP\":[\"£\",2,\"%s%v\"],\"AUD\":[\"$\",2,\"%s%v\"],\"CAD\":[\"$\",2,\"%",
+        "object_id": 70021355940620
+      }
+    },
+    {
+      "id": 174,
+      "path": "lib/spree/backend_configuration.rb",
+      "event": "call",
+      "lineno": 92,
+      "static": false,
+      "receiver": {
+        "class": "Spree::BackendConfiguration",
+        "value": "#<Spree::BackendConfiguration:0x0000561f6679cc88>",
+        "object_id": 47346431616580
+      },
+      "method_id": "menu_items",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::BackendConfiguration"
+    },
+    {
+      "id": 175,
+      "event": "return",
+      "elapsed": 0.000008185,
+      "parent_id": 174,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Spree::BackendConfiguration::MenuItem:0x0000561f7177c2c0 @condition=#<Proc:0x0000561f7177c310@/ho",
+        "object_id": 47346523864000
+      }
+    },
+    {
+      "id": 176,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 17,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
+        "object_id": 70021271331140
+      },
+      "method_id": "render_admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 177,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 6,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
+        "object_id": 70021271331140
+      },
+      "method_id": "admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 178,
+      "event": "return",
+      "elapsed": 0.000015767,
+      "parent_id": 177,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[\"Orders\"]",
+        "object_id": 70021271357920
+      }
+    },
+    {
+      "id": 179,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 6,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x00007f5e32024288>",
+        "object_id": 70021271331140
+      },
+      "method_id": "admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 180,
+      "event": "return",
+      "elapsed": 0.000015989,
+      "parent_id": 179,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[\"Orders\"]",
+        "object_id": 70021271357920
+      }
+    },
+    {
+      "id": 181,
+      "event": "return",
+      "elapsed": 0.008559907,
+      "parent_id": 176,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "ActiveSupport::SafeBuffer",
+        "value": "<ol class=\"breadcrumb\"><li class=\"breadcrumb-item active\">Orders</li></ol>",
+        "object_id": 47346483128080
+      }
+    },
+    {
+      "id": 182,
+      "event": "return",
+      "elapsed": 0.287589181,
+      "parent_id": 99,
+      "thread_id": 47346401950060,
+      "http_server_response": {
+        "status": 200,
+        "mime_type": "text/html; charset=utf-8"
+      }
+    },
+    {
+      "id": 183,
+      "path": "OpenSSL::Cipher#encrypt",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x0000561f6cd71338>",
+        "object_id": 47346485004700
+      },
+      "method_id": "encrypt",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[]",
+          "object_id": 47346485003560
+        }
+      ],
+      "defined_class": "OpenSSL::Cipher"
+    },
+    {
+      "id": 184,
+      "event": "return",
+      "elapsed": 0.000008024,
+      "parent_id": 183,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x0000561f6cd71338>",
+        "object_id": 47346485004700
+      }
+    },
+    {
+      "id": 185,
+      "path": "OpenSSL::Cipher#final",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x0000561f6cd71338>",
+        "object_id": 47346485004700
+      },
+      "method_id": "final",
+      "thread_id": 47346401950060,
+      "defined_class": "OpenSSL::Cipher"
+    },
+    {
+      "id": 186,
+      "event": "return",
+      "elapsed": 0.000006717,
+      "parent_id": 185,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "___:\u000e_}_______f(",
+        "object_id": 47346485015320
+      }
+    },
+    {
+      "id": 187,
+      "event": "call",
+      "message": [
+        {
+          "name": "controller",
+          "class": "String",
+          "value": "spree/admin/orders",
+          "object_id": 70021263057540
+        },
+        {
+          "name": "action",
+          "class": "String",
+          "value": "edit",
+          "object_id": 47346416243440
+        },
+        {
+          "name": "id",
+          "class": "String",
+          "value": "R100",
+          "object_id": 47346494309380
+        }
+      ],
+      "thread_id": 47346401950060,
+      "http_server_request": {
+        "path_info": "/admin/orders/R100/edit",
+        "request_method": "GET",
+        "normalized_path_info": "/admin/orders/:id/edit"
+      }
+    },
+    {
+      "id": 188,
+      "path": "/home/travis/.rvm/gems/ruby-2.6.5/gems/activesupport-6.0.3.4/lib/active_support/security_utils.rb",
+      "event": "call",
+      "lineno": 26,
+      "static": true,
+      "receiver": {
+        "class": "Module",
+        "value": "ActiveSupport::SecurityUtils",
+        "object_id": 47346414723160
+      },
+      "method_id": "secure_compare",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "a",
+          "class": "String",
+          "value": "6f1d4cb7ab7e13064d2f85fda5e215631b844ab5",
+          "object_id": 47346494323100
+        },
+        {
+          "kind": "req",
+          "name": "b",
+          "class": "String",
+          "value": "6f1d4cb7ab7e13064d2f85fda5e215631b844ab5",
+          "object_id": 47346494323000
+        }
+      ],
+      "defined_class": "ActiveSupport::SecurityUtils"
+    },
+    {
+      "id": 189,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 47346494317540
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"6f1d4cb7ab7e13064d2f85fda5e215631b844ab5\"]",
+          "object_id": 47346494331480
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 190,
+      "event": "return",
+      "elapsed": 0.000011544,
+      "parent_id": 189,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
+        "object_id": 47346494329440
+      }
+    },
+    {
+      "id": 191,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 47346494328120
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"6f1d4cb7ab7e13064d2f85fda5e215631b844ab5\"]",
+          "object_id": 47346494326120
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 192,
+      "event": "return",
+      "elapsed": 0.000008663,
+      "parent_id": 191,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
+        "object_id": 47346495446820
+      }
+    },
+    {
+      "id": 193,
+      "event": "return",
+      "elapsed": 0.000224741,
+      "parent_id": 188,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
+    },
+    {
+      "id": 194,
+      "path": "JSON::Ext::Parser#parse",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "value": "#<JSON::Ext::Parser:0x0000561f6e15ade0>",
+        "object_id": 47346495444720
+      },
+      "method_id": "parse",
+      "thread_id": 47346401950060,
+      "defined_class": "JSON::Ext::Parser"
+    },
+    {
+      "id": 195,
+      "event": "return",
+      "elapsed": 0.000269692,
+      "parent_id": 194,
+      "thread_id": 47346401950060,
+      "exceptions": [
+        {
+          "path": "/home/travis/.rvm/gems/ruby-2.6.5/bundler/gems/appmap-ruby-d2ba81e811c2/lib/appmap/hook/method.rb",
+          "class": "JSON::ParserError",
+          "lineno": 67,
+          "message": "767: unexpected token at '\u0004\bI\"\u001btl6XJ4RO1HrIDc1OU_u2kw\u0006:\u0006EF'",
+          "object_id": 47346495440360
+        }
+      ]
+    },
+    {
+      "id": 196,
+      "path": "/home/travis/.rvm/gems/ruby-2.6.5/gems/activesupport-6.0.3.4/lib/active_support/security_utils.rb",
+      "event": "call",
+      "lineno": 26,
+      "static": true,
+      "receiver": {
+        "class": "Module",
+        "value": "ActiveSupport::SecurityUtils",
+        "object_id": 47346414723160
+      },
+      "method_id": "secure_compare",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "a",
+          "class": "String",
+          "value": "6f1d4cb7ab7e13064d2f85fda5e215631b844ab5",
+          "object_id": 47346495424540
+        },
+        {
+          "kind": "req",
+          "name": "b",
+          "class": "String",
+          "value": "6f1d4cb7ab7e13064d2f85fda5e215631b844ab5",
+          "object_id": 47346495424260
+        }
+      ],
+      "defined_class": "ActiveSupport::SecurityUtils"
+    },
+    {
+      "id": 197,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 47346493245820
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"6f1d4cb7ab7e13064d2f85fda5e215631b844ab5\"]",
+          "object_id": 47346493263500
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 198,
+      "event": "return",
+      "elapsed": 0.000009827,
+      "parent_id": 197,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
+        "object_id": 47346493275320
+      }
+    },
+    {
+      "id": 199,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 47346493273020
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"6f1d4cb7ab7e13064d2f85fda5e215631b844ab5\"]",
+          "object_id": 47346493270640
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 200,
+      "event": "return",
+      "elapsed": 0.000009225,
+      "parent_id": 199,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "__\n\f^___m_\u0018__\u001a__n\u0015__\u0005\u0004_oUA__o__",
+        "object_id": 47346488057540
+      }
+    },
+    {
+      "id": 201,
+      "event": "return",
+      "elapsed": 0.000214255,
+      "parent_id": 196,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
+    },
+    {
+      "id": 202,
+      "path": "JSON::Ext::Parser#parse",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "value": "#<JSON::Ext::Parser:0x0000561f6d341c18>",
+        "object_id": 47346488053260
+      },
+      "method_id": "parse",
+      "thread_id": 47346401950060,
+      "defined_class": "JSON::Ext::Parser"
+    },
+    {
+      "id": 203,
+      "event": "return",
+      "elapsed": 0.000231875,
+      "parent_id": 202,
+      "thread_id": 47346401950060,
+      "exceptions": [
+        {
+          "path": "/home/travis/.rvm/gems/ruby-2.6.5/bundler/gems/appmap-ruby-d2ba81e811c2/lib/appmap/hook/method.rb",
+          "class": "JSON::ParserError",
+          "lineno": 67,
+          "message": "767: unexpected token at '\u0004\bI\"\u001btl6XJ4RO1HrIDc1OU_u2kw\u0006:\u0006EF'",
+          "object_id": 47346488064060
+        }
+      ]
+    },
+    {
+      "id": 204,
+      "path": "/home/travis/.rvm/gems/ruby-2.6.5/gems/activesupport-6.0.3.4/lib/active_support/security_utils.rb",
+      "event": "call",
+      "lineno": 26,
+      "static": true,
+      "receiver": {
+        "class": "Module",
+        "value": "ActiveSupport::SecurityUtils",
+        "object_id": 47346414723160
+      },
+      "method_id": "secure_compare",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "a",
+          "class": "String",
+          "value": "8974d4f9687b0727be7cac8250a34d4ea64cffef",
+          "object_id": 47346496816520
+        },
+        {
+          "kind": "req",
+          "name": "b",
+          "class": "String",
+          "value": "8974d4f9687b0727be7cac8250a34d4ea64cffef",
+          "object_id": 47346496816480
+        }
+      ],
+      "defined_class": "ActiveSupport::SecurityUtils"
+    },
+    {
+      "id": 205,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 47346496830180
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"8974d4f9687b0727be7cac8250a34d4ea64cffef\"]",
+          "object_id": 47346496828700
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 206,
+      "event": "return",
+      "elapsed": 0.000009528,
+      "parent_id": 205,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "___i\u001d_T__'\u0003\u0018P_\u0015_vA__a[Mf`_tF_\b__",
+        "object_id": 47346496826740
+      }
+    },
+    {
+      "id": 207,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 47346496825840
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"8974d4f9687b0727be7cac8250a34d4ea64cffef\"]",
+          "object_id": 47346496824680
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 208,
+      "event": "return",
+      "elapsed": 0.00000822,
+      "parent_id": 207,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "___i\u001d_T__'\u0003\u0018P_\u0015_vA__a[Mf`_tF_\b__",
+        "object_id": 47346496823500
+      }
+    },
+    {
+      "id": 209,
+      "event": "return",
+      "elapsed": 0.000191976,
+      "parent_id": 204,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
+    },
+    {
+      "id": 210,
+      "path": "JSON::Ext::Parser#parse",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "value": "#<JSON::Ext::Parser:0x0000561f6e403650>",
+        "object_id": 47346496838440
+      },
+      "method_id": "parse",
+      "thread_id": 47346401950060,
+      "defined_class": "JSON::Ext::Parser"
+    },
+    {
+      "id": 211,
+      "event": "return",
+      "elapsed": 0.000315063,
+      "parent_id": 210,
+      "thread_id": 47346401950060,
+      "exceptions": [
+        {
+          "path": "/home/travis/.rvm/gems/ruby-2.6.5/bundler/gems/appmap-ruby-d2ba81e811c2/lib/appmap/hook/method.rb",
+          "class": "JSON::ParserError",
+          "lineno": 67,
+          "message": "767: unexpected token at 'PjWXCtB4Y9DH4KajHNB1lkxlOuG7PuhxktaiFETErowH0kNO+VCJ292e854O+LeS/pLOEjzI7nj2EDSATCOdr103jdWt5JY3CFh8eHAyNNwQQiD1XQY2SvfaG+ld9T7t0KjOQx1zkayjlZP9+X/LsUuy1g77cQA83qDtCAL18dRu29OEjnCf1St3UU+X/gRmun7Og7ffd+tkIGNi4lmKA==--MhYqMRJLLhRkZLU3z1N1LA=='",
+          "object_id": 47346496836920
+        }
+      ]
+    },
+    {
+      "id": 212,
+      "path": "OpenSSL::Cipher#decrypt",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x0000561f6e408c40>",
+        "object_id": 47346496849440
+      },
+      "method_id": "decrypt",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[]",
+          "object_id": 47346496864120
+        }
+      ],
+      "defined_class": "OpenSSL::Cipher"
+    },
+    {
+      "id": 213,
+      "event": "return",
+      "elapsed": 0.000007253,
+      "parent_id": 212,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x0000561f6e408c40>",
+        "object_id": 47346496849440
+      }
+    },
+    {
+      "id": 214,
+      "path": "OpenSSL::Cipher#final",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x0000561f6e408c40>",
+        "object_id": 47346496849440
+      },
+      "method_id": "final",
+      "thread_id": 47346401950060,
+      "defined_class": "OpenSSL::Cipher"
+    },
+    {
+      "id": 215,
+      "event": "return",
+      "elapsed": 0.000007189,
+      "parent_id": 214,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "XLA0=\u0006;␀F",
+        "object_id": 47346496860180
+      }
+    },
+    {
+      "id": 216,
+      "path": "JSON::Ext::Parser#parse",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "value": "#<JSON::Ext::Parser:0x0000561f6e40dbc8>",
+        "object_id": 47346496859620
+      },
+      "method_id": "parse",
+      "thread_id": 47346401950060,
+      "defined_class": "JSON::Ext::Parser"
+    },
+    {
+      "id": 217,
+      "event": "return",
+      "elapsed": 0.000256452,
+      "parent_id": 216,
+      "thread_id": 47346401950060,
+      "exceptions": [
+        {
+          "path": "/home/travis/.rvm/gems/ruby-2.6.5/bundler/gems/appmap-ruby-d2ba81e811c2/lib/appmap/hook/method.rb",
+          "class": "JSON::ParserError",
+          "lineno": 67,
+          "message": "767: unexpected token at '\u0004\b{\bI\"\u000fsession_id\u0006:\u0006ETI\"%7e0725c1d81062278d9c31654355e0fe\u0006;'",
+          "object_id": 47346496858060
+        }
+      ]
+    },
+    {
+      "id": 218,
+      "path": "/home/travis/.rvm/gems/ruby-2.6.5/gems/activesupport-6.0.3.4/lib/active_support/security_utils.rb",
+      "event": "call",
+      "lineno": 26,
+      "static": true,
+      "receiver": {
+        "class": "Module",
+        "value": "ActiveSupport::SecurityUtils",
+        "object_id": 47346414723160
+      },
+      "method_id": "secure_compare",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "a",
+          "class": "String",
+          "value": "8974d4f9687b0727be7cac8250a34d4ea64cffef",
+          "object_id": 47346487983300
+        },
+        {
+          "kind": "req",
+          "name": "b",
+          "class": "String",
+          "value": "8974d4f9687b0727be7cac8250a34d4ea64cffef",
+          "object_id": 47346487983260
+        }
+      ],
+      "defined_class": "ActiveSupport::SecurityUtils"
+    },
+    {
+      "id": 219,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 47346487979240
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"8974d4f9687b0727be7cac8250a34d4ea64cffef\"]",
+          "object_id": 47346487978080
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 220,
+      "event": "return",
+      "elapsed": 0.000008737,
+      "parent_id": 219,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "___i\u001d_T__'\u0003\u0018P_\u0015_vA__a[Mf`_tF_\b__",
+        "object_id": 47346487977040
+      }
+    },
+    {
+      "id": 221,
+      "path": "Digest::Instance#digest",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "Digest::SHA256",
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "object_id": 47346487976460
+      },
+      "method_id": "digest",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[\"8974d4f9687b0727be7cac8250a34d4ea64cffef\"]",
+          "object_id": 47346487991360
+        }
+      ],
+      "defined_class": "Digest::Instance"
+    },
+    {
+      "id": 222,
+      "event": "return",
+      "elapsed": 0.000008706,
+      "parent_id": 221,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "___i\u001d_T__'\u0003\u0018P_\u0015_vA__a[Mf`_tF_\b__",
+        "object_id": 47346487990040
+      }
+    },
+    {
+      "id": 223,
+      "event": "return",
+      "elapsed": 0.000186834,
+      "parent_id": 218,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "TrueClass",
+        "value": "true",
+        "object_id": 20
+      }
+    },
+    {
+      "id": 224,
+      "path": "JSON::Ext::Parser#parse",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "value": "#<JSON::Ext::Parser:0x0000561f6d3223e0>",
+        "object_id": 47346487988720
+      },
+      "method_id": "parse",
+      "thread_id": 47346401950060,
+      "defined_class": "JSON::Ext::Parser"
+    },
+    {
+      "id": 225,
+      "event": "return",
+      "elapsed": 0.000258646,
+      "parent_id": 224,
+      "thread_id": 47346401950060,
+      "exceptions": [
+        {
+          "path": "/home/travis/.rvm/gems/ruby-2.6.5/bundler/gems/appmap-ruby-d2ba81e811c2/lib/appmap/hook/method.rb",
+          "class": "JSON::ParserError",
+          "lineno": 67,
+          "message": "767: unexpected token at 'PjWXCtB4Y9DH4KajHNB1lkxlOuG7PuhxktaiFETErowH0kNO+VCJ292e854O+LeS/pLOEjzI7nj2EDSATCOdr103jdWt5JY3CFh8eHAyNNwQQiD1XQY2SvfaG+ld9T7t0KjOQx1zkayjlZP9+X/LsUuy1g77cQA83qDtCAL18dRu29OEjnCf1St3UU+X/gRmun7Og7ffd+tkIGNi4lmKA==--MhYqMRJLLhRkZLU3z1N1LA=='",
+          "object_id": 47346487986440
+        }
+      ]
+    },
+    {
+      "id": 226,
+      "path": "OpenSSL::Cipher#decrypt",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x0000561f6d32f7c0>",
+        "object_id": 47346488015840
+      },
+      "method_id": "decrypt",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[]",
+          "object_id": 47346488013740
+        }
+      ],
+      "defined_class": "OpenSSL::Cipher"
+    },
+    {
+      "id": 227,
+      "event": "return",
+      "elapsed": 0.000008009,
+      "parent_id": 226,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x0000561f6d32f7c0>",
+        "object_id": 47346488015840
+      }
+    },
+    {
+      "id": 228,
+      "path": "OpenSSL::Cipher#final",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x0000561f6d32f7c0>",
+        "object_id": 47346488015840
+      },
+      "method_id": "final",
+      "thread_id": 47346401950060,
+      "defined_class": "OpenSSL::Cipher"
+    },
+    {
+      "id": 229,
+      "event": "return",
+      "elapsed": 0.000007294,
+      "parent_id": 228,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "XLA0=\u0006;␀F",
+        "object_id": 47346488253860
+      }
+    },
+    {
+      "id": 230,
+      "path": "JSON::Ext::Parser#parse",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Parser",
+        "value": "#<JSON::Ext::Parser:0x0000561f6d3a3350>",
+        "object_id": 47346488252840
+      },
+      "method_id": "parse",
+      "thread_id": 47346401950060,
+      "defined_class": "JSON::Ext::Parser"
+    },
+    {
+      "id": 231,
+      "event": "return",
+      "elapsed": 0.000261401,
+      "parent_id": 230,
+      "thread_id": 47346401950060,
+      "exceptions": [
+        {
+          "path": "/home/travis/.rvm/gems/ruby-2.6.5/bundler/gems/appmap-ruby-d2ba81e811c2/lib/appmap/hook/method.rb",
+          "class": "JSON::ParserError",
+          "lineno": 67,
+          "message": "767: unexpected token at '\u0004\b{\bI\"\u000fsession_id\u0006:\u0006ETI\"%7e0725c1d81062278d9c31654355e0fe\u0006;'",
+          "object_id": 47346488250260
+        }
+      ]
+    },
+    {
+      "id": 232,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_orders\".* FROM \"spree_orders\" WHERE \"spree_orders\".\"number\" = ? LIMIT ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_orders\".* FROM \"spree_orders\" WHERE \"spree_orders\".\"number\" = ? LIMIT ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 233,
+      "event": "return",
+      "elapsed": 0.000240092,
+      "parent_id": 232,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 234,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_adjustments\".* FROM \"spree_adjustments\" WHERE \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"adjustable_id\" = ? ORDER BY \"spree_adjustments\".\"created_at\" ASC",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_adjustments\".* FROM \"spree_adjustments\" WHERE \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"adjustable_id\" = ? ORDER BY \"spree_adjustments\".\"created_at\" ASC",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 235,
+      "event": "return",
+      "elapsed": 0.000200165,
+      "parent_id": 234,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 236,
+      "path": "app/controllers/spree/admin/orders_controller.rb",
+      "event": "call",
+      "lineno": 72,
+      "static": false,
+      "receiver": {
+        "class": "Spree::Admin::OrdersController",
+        "value": "#<Spree::Admin::OrdersController:0x0000561f6df42ad0>",
+        "object_id": 47346494346600
+      },
+      "method_id": "edit",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::OrdersController"
+    },
+    {
+      "id": 237,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_addresses\".* FROM \"spree_addresses\" WHERE \"spree_addresses\".\"id\" = ? LIMIT ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_addresses\".* FROM \"spree_addresses\" WHERE \"spree_addresses\".\"id\" = ? LIMIT ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 238,
+      "event": "return",
+      "elapsed": 0.00017372,
+      "parent_id": 237,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 239,
+      "event": "return",
+      "elapsed": 0.005908013,
+      "parent_id": 236,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 240,
+      "path": "app/helpers/spree/admin/orders_helper.rb",
+      "event": "call",
+      "lineno": 7,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
+        "object_id": 47346524607880
+      },
+      "method_id": "event_links",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::OrdersHelper"
+    },
+    {
+      "id": 241,
+      "event": "return",
+      "elapsed": 0.001373049,
+      "parent_id": 240,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "ActiveSupport::SafeBuffer",
+        "value": "<form class=\"button_to\" method=\"post\" action=\"/admin/orders/R100/approve\"><input type=\"hidden\" name=",
+        "object_id": 47346524770160
+      }
+    },
+    {
+      "id": 242,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 11,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
+        "object_id": 47346524607880
+      },
+      "method_id": "admin_breadcrumb",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "ancestors",
+          "class": "Array",
+          "value": "[\"<a href=\\\"/admin/orders\\\">Orders</a>\"]",
+          "object_id": 47346524878980
+        },
+        {
+          "kind": "block",
+          "name": "block",
+          "class": "NilClass",
+          "value": null,
+          "object_id": 8
+        }
+      ],
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 243,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 6,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
+        "object_id": 47346524607880
+      },
+      "method_id": "admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 244,
+      "event": "return",
+      "elapsed": 0.00001489,
+      "parent_id": 243,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[]",
+        "object_id": 47346524874080
+      }
+    },
+    {
+      "id": 245,
+      "event": "return",
+      "elapsed": 0.004082068,
+      "parent_id": 242,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 246,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 11,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
+        "object_id": 47346524607880
+      },
+      "method_id": "admin_breadcrumb",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "ancestors",
+          "class": "Array",
+          "value": "[\"<a href=\\\"/admin/orders/R100/edit\\\">#R100</a>\"]",
+          "object_id": 47346524908980
+        },
+        {
+          "kind": "block",
+          "name": "block",
+          "class": "NilClass",
+          "value": null,
+          "object_id": 8
+        }
+      ],
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 247,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 6,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
+        "object_id": 47346524607880
+      },
+      "method_id": "admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 248,
+      "event": "return",
+      "elapsed": 0.000016225,
+      "parent_id": 247,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[\"<a href=\\\"/admin/orders\\\">Orders</a>\"]",
+        "object_id": 47346524874080
+      }
+    },
+    {
+      "id": 249,
+      "event": "return",
+      "elapsed": 0.003993178,
+      "parent_id": 246,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 250,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_users\".* FROM \"spree_users\" WHERE \"spree_users\".\"id\" = ? LIMIT ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_users\".* FROM \"spree_users\" WHERE \"spree_users\".\"id\" = ? LIMIT ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 251,
+      "event": "return",
+      "elapsed": 0.000212773,
+      "parent_id": 250,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 252,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT COUNT(*) FROM \"spree_shipments\" WHERE \"spree_shipments\".\"order_id\" = ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT COUNT(*) FROM \"spree_shipments\" WHERE \"spree_shipments\".\"order_id\" = ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 253,
+      "event": "return",
+      "elapsed": 0.000275186,
+      "parent_id": 252,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 254,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT COUNT(*) FROM \"spree_shipments\" WHERE \"spree_shipments\".\"order_id\" = ? AND \"spree_shipments\".\"state\" = ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT COUNT(*) FROM \"spree_shipments\" WHERE \"spree_shipments\".\"order_id\" = ? AND \"spree_shipments\".\"state\" = ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 255,
+      "event": "return",
+      "elapsed": 0.000261736,
+      "parent_id": 254,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 256,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_inventory_units\".* FROM \"spree_inventory_units\" INNER JOIN \"spree_shipments\" ON \"spree_inventory_units\".\"shipment_id\" = \"spree_shipments\".\"id\" WHERE \"spree_shipments\".\"order_id\" = ? AND \"spree_inventory_units\".\"state\" IN (?, ?, ?) AND \"spree_inventory_units\".\"pending\" = ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_inventory_units\".* FROM \"spree_inventory_units\" INNER JOIN \"spree_shipments\" ON \"spree_inventory_units\".\"shipment_id\" = \"spree_shipments\".\"id\" WHERE \"spree_shipments\".\"order_id\" = ? AND \"spree_inventory_units\".\"state\" IN (?, ?, ?) AND \"spree_inventory_units\".\"pending\" = ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 257,
+      "event": "return",
+      "elapsed": 0.000367929,
+      "parent_id": 256,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 258,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 11,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
+        "object_id": 47346524607880
+      },
+      "method_id": "admin_breadcrumb",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "ancestors",
+          "class": "Array",
+          "value": "[\"Shipments\"]",
+          "object_id": 70021265806020
+        },
+        {
+          "kind": "block",
+          "name": "block",
+          "class": "NilClass",
+          "value": null,
+          "object_id": 8
+        }
+      ],
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 259,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 6,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
+        "object_id": 47346524607880
+      },
+      "method_id": "admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 260,
+      "event": "return",
+      "elapsed": 0.00001717,
+      "parent_id": 259,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[\"<a href=\\\"/admin/orders\\\">Orders</a>\", \"<a href=\\\"/admin/orders/R100/edit\\\">#R100</a>\"]",
+        "object_id": 47346524874080
+      }
+    },
+    {
+      "id": 261,
+      "event": "return",
+      "elapsed": 0.004483569,
+      "parent_id": 258,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 262,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT 1 AS one FROM \"spree_payments\" WHERE \"spree_payments\".\"order_id\" = ? LIMIT ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT $1 AS one FROM \"spree_payments\" WHERE \"spree_payments\".\"order_id\" = ? LIMIT ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 263,
+      "event": "return",
+      "elapsed": 0.000219902,
+      "parent_id": 262,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 264,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT COUNT(*) FROM \"spree_payments\" WHERE \"spree_payments\".\"order_id\" = ? AND (avs_response IN ('A','C','E','F','G','I','K','L','N','O','P','R','S','U','W','Z') OR (cvv_response_code IS NOT NULL and cvv_response_code != 'M') OR state = 'failed')",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT COUNT(*) FROM \"spree_payments\" WHERE \"spree_payments\".\"order_id\" = ? AND (avs_response IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16) OR (cvv_response_code IS NOT NULL and cvv_response_code != $17) OR state = $18)",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 265,
+      "event": "return",
+      "elapsed": 0.000301936,
+      "parent_id": 264,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 266,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT 1 AS one FROM \"spree_line_items\" WHERE \"spree_line_items\".\"order_id\" = ? LIMIT ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT $1 AS one FROM \"spree_line_items\" WHERE \"spree_line_items\".\"order_id\" = ? LIMIT ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 267,
+      "event": "return",
+      "elapsed": 0.000207564,
+      "parent_id": 266,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 268,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT DISTINCT \"spree_cartons\".* FROM \"spree_cartons\" INNER JOIN \"spree_inventory_units\" ON \"spree_cartons\".\"id\" = \"spree_inventory_units\".\"carton_id\" INNER JOIN \"spree_shipments\" ON \"spree_inventory_units\".\"shipment_id\" = \"spree_shipments\".\"id\" WHERE \"spree_shipments\".\"order_id\" = ? ORDER BY \"spree_cartons\".\"shipped_at\" ASC",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT DISTINCT \"spree_cartons\".* FROM \"spree_cartons\" INNER JOIN \"spree_inventory_units\" ON \"spree_cartons\".\"id\" = \"spree_inventory_units\".\"carton_id\" INNER JOIN \"spree_shipments\" ON \"spree_inventory_units\".\"shipment_id\" = \"spree_shipments\".\"id\" WHERE \"spree_shipments\".\"order_id\" = ? ORDER BY \"spree_cartons\".\"shipped_at\" ASC",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 269,
+      "event": "return",
+      "elapsed": 0.000209326,
+      "parent_id": 268,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 270,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_shipments\".* FROM \"spree_shipments\" WHERE \"spree_shipments\".\"order_id\" = ? ORDER BY \"spree_shipments\".\"created_at\" ASC",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_shipments\".* FROM \"spree_shipments\" WHERE \"spree_shipments\".\"order_id\" = ? ORDER BY \"spree_shipments\".\"created_at\" ASC",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 271,
+      "event": "return",
+      "elapsed": 0.000166575,
+      "parent_id": 270,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 272,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_inventory_units\".* FROM \"spree_inventory_units\" WHERE \"spree_inventory_units\".\"shipment_id\" = ? AND \"spree_inventory_units\".\"carton_id\" IS NULL",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_inventory_units\".* FROM \"spree_inventory_units\" WHERE \"spree_inventory_units\".\"shipment_id\" = ? AND \"spree_inventory_units\".\"carton_id\" IS NULL",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 273,
+      "event": "return",
+      "elapsed": 0.000158066,
+      "parent_id": 272,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 274,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_line_items\".* FROM \"spree_line_items\" WHERE \"spree_line_items\".\"id\" = ? LIMIT ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_line_items\".* FROM \"spree_line_items\" WHERE \"spree_line_items\".\"id\" = ? LIMIT ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 275,
+      "event": "return",
+      "elapsed": 0.000167172,
+      "parent_id": 274,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 276,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_variants\".* FROM \"spree_variants\" WHERE \"spree_variants\".\"id\" = ? LIMIT ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_variants\".* FROM \"spree_variants\" WHERE \"spree_variants\".\"id\" = ? LIMIT ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 277,
+      "event": "return",
+      "elapsed": 0.000205336,
+      "parent_id": 276,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 278,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_stock_locations\".* FROM \"spree_stock_locations\" WHERE \"spree_stock_locations\".\"id\" = ? LIMIT ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_stock_locations\".* FROM \"spree_stock_locations\" WHERE \"spree_stock_locations\".\"id\" = ? LIMIT ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 279,
+      "event": "return",
+      "elapsed": 0.000183618,
+      "parent_id": 278,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 280,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_assets\".* FROM \"spree_assets\" WHERE \"spree_assets\".\"type\" = ? AND \"spree_assets\".\"viewable_id\" = ? AND \"spree_assets\".\"viewable_type\" = ? ORDER BY \"spree_assets\".\"position\" ASC",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_assets\".* FROM \"spree_assets\" WHERE \"spree_assets\".\"type\" = ? AND \"spree_assets\".\"viewable_id\" = ? AND \"spree_assets\".\"viewable_type\" = ? ORDER BY \"spree_assets\".\"position\" ASC",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 281,
+      "event": "return",
+      "elapsed": 0.000207947,
+      "parent_id": 280,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 282,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_products\".* FROM \"spree_products\" WHERE \"spree_products\".\"id\" = ? LIMIT ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_products\".* FROM \"spree_products\" WHERE \"spree_products\".\"id\" = ? LIMIT ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 283,
+      "event": "return",
+      "elapsed": 0.000162711,
+      "parent_id": 282,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 284,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_assets\".* FROM \"spree_assets\" INNER JOIN \"spree_variants\" ON \"spree_assets\".\"viewable_id\" = \"spree_variants\".\"id\" WHERE \"spree_variants\".\"deleted_at\" IS NULL AND \"spree_assets\".\"type\" = ? AND \"spree_variants\".\"product_id\" = ? AND \"spree_assets\".\"viewable_type\" = ? ORDER BY \"spree_assets\".\"position\" ASC, \"spree_variants\".\"position\" ASC LIMIT ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_assets\".* FROM \"spree_assets\" INNER JOIN \"spree_variants\" ON \"spree_assets\".\"viewable_id\" = \"spree_variants\".\"id\" WHERE \"spree_variants\".\"deleted_at\" IS NULL AND \"spree_assets\".\"type\" = ? AND \"spree_variants\".\"product_id\" = ? AND \"spree_assets\".\"viewable_type\" = ? ORDER BY \"spree_assets\".\"position\" ASC, \"spree_variants\".\"position\" ASC LIMIT ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 285,
+      "event": "return",
+      "elapsed": 0.000216175,
+      "parent_id": 284,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 286,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT 1 AS one FROM \"spree_option_values\" INNER JOIN \"spree_option_values_variants\" ON \"spree_option_values\".\"id\" = \"spree_option_values_variants\".\"option_value_id\" WHERE \"spree_option_values_variants\".\"variant_id\" = ? LIMIT ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT $1 AS one FROM \"spree_option_values\" INNER JOIN \"spree_option_values_variants\" ON \"spree_option_values\".\"id\" = \"spree_option_values_variants\".\"option_value_id\" WHERE \"spree_option_values_variants\".\"variant_id\" = ? LIMIT ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 287,
+      "event": "return",
+      "elapsed": 0.000246693,
+      "parent_id": 286,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 288,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_orders\".* FROM \"spree_orders\" WHERE \"spree_orders\".\"id\" = ? LIMIT ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_orders\".* FROM \"spree_orders\" WHERE \"spree_orders\".\"id\" = ? LIMIT ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 289,
+      "event": "return",
+      "elapsed": 0.000175807,
+      "parent_id": 288,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 290,
+      "path": "app/helpers/spree/admin/orders_helper.rb",
+      "event": "call",
+      "lineno": 18,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
+        "object_id": 47346524607880
+      },
+      "method_id": "line_item_shipment_price",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "line_item",
+          "class": "Spree::LineItem",
+          "value": "#<Spree::LineItem:0x0000561f6678a0d8>",
+          "object_id": 47346431578220
+        },
+        {
+          "kind": "req",
+          "name": "quantity",
+          "class": "Integer",
+          "value": "1",
+          "object_id": 3
+        }
+      ],
+      "defined_class": "Spree::Admin::OrdersHelper"
+    },
+    {
+      "id": 291,
+      "event": "return",
+      "elapsed": 0.000091446,
+      "parent_id": 290,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Spree::Money",
+        "value": "$10.00",
+        "object_id": 70021259963220
+      }
+    },
+    {
+      "id": 292,
+      "path": "JSON::Ext::Generator::State#generate",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "value": "#<JSON::Ext::Generator::State:0x00007f5e30a89f90>",
+        "object_id": 70021260005320
+      },
+      "method_id": "generate",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "arg",
+          "class": "Integer",
+          "value": "1",
+          "object_id": 3
+        }
+      ],
+      "defined_class": "JSON::Ext::Generator::State"
+    },
+    {
+      "id": 293,
+      "event": "return",
+      "elapsed": 0.000010955,
+      "parent_id": 292,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "1",
+        "object_id": 70021260002840
+      }
+    },
+    {
+      "id": 294,
+      "path": "JSON::Ext::Generator::State#generate",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "value": "#<JSON::Ext::Generator::State:0x00007f5e30ab3598>",
+        "object_id": 70021260090060
+      },
+      "method_id": "generate",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "arg",
+          "class": "Integer",
+          "value": "1",
+          "object_id": 3
+        }
+      ],
+      "defined_class": "JSON::Ext::Generator::State"
+    },
+    {
+      "id": 295,
+      "event": "return",
+      "elapsed": 0.000009802,
+      "parent_id": 294,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "1",
+        "object_id": 70021260088400
+      }
+    },
+    {
+      "id": 296,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT 1 AS one FROM \"spree_adjustments\" INNER JOIN \"spree_line_items\" ON \"spree_adjustments\".\"adjustable_id\" = \"spree_line_items\".\"id\" WHERE \"spree_line_items\".\"order_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ? LIMIT ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT $1 AS one FROM \"spree_adjustments\" INNER JOIN \"spree_line_items\" ON \"spree_adjustments\".\"adjustable_id\" = \"spree_line_items\".\"id\" WHERE \"spree_line_items\".\"order_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ? LIMIT ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 297,
+      "event": "return",
+      "elapsed": 0.000282046,
+      "parent_id": 296,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 298,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_adjustments\".* FROM \"spree_adjustments\" INNER JOIN \"spree_line_items\" ON \"spree_adjustments\".\"adjustable_id\" = \"spree_line_items\".\"id\" WHERE \"spree_line_items\".\"order_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ? ORDER BY \"spree_line_items\".\"created_at\" ASC, \"spree_line_items\".\"id\" ASC",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_adjustments\".* FROM \"spree_adjustments\" INNER JOIN \"spree_line_items\" ON \"spree_adjustments\".\"adjustable_id\" = \"spree_line_items\".\"id\" WHERE \"spree_line_items\".\"order_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ? ORDER BY \"spree_line_items\".\"created_at\" ASC, \"spree_line_items\".\"id\" ASC",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 299,
+      "event": "return",
+      "elapsed": 0.000192421,
+      "parent_id": 298,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 300,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT 1 AS one FROM \"spree_adjustments\" INNER JOIN \"spree_shipments\" ON \"spree_adjustments\".\"adjustable_id\" = \"spree_shipments\".\"id\" WHERE \"spree_shipments\".\"order_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ? LIMIT ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT $1 AS one FROM \"spree_adjustments\" INNER JOIN \"spree_shipments\" ON \"spree_adjustments\".\"adjustable_id\" = \"spree_shipments\".\"id\" WHERE \"spree_shipments\".\"order_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ? LIMIT ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 301,
+      "event": "return",
+      "elapsed": 0.000249045,
+      "parent_id": 300,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 302,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_adjustments\".* FROM \"spree_adjustments\" INNER JOIN \"spree_shipments\" ON \"spree_adjustments\".\"adjustable_id\" = \"spree_shipments\".\"id\" WHERE \"spree_shipments\".\"order_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_adjustments\".* FROM \"spree_adjustments\" INNER JOIN \"spree_shipments\" ON \"spree_adjustments\".\"adjustable_id\" = \"spree_shipments\".\"id\" WHERE \"spree_shipments\".\"order_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 303,
+      "event": "return",
+      "elapsed": 0.000168011,
+      "parent_id": 302,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 304,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT 1 AS one FROM \"spree_adjustments\" WHERE \"spree_adjustments\".\"adjustable_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ? LIMIT ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT $1 AS one FROM \"spree_adjustments\" WHERE \"spree_adjustments\".\"adjustable_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ? LIMIT ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 305,
+      "event": "return",
+      "elapsed": 0.000224256,
+      "parent_id": 304,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 306,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_adjustments\".* FROM \"spree_adjustments\" WHERE \"spree_adjustments\".\"adjustable_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ? ORDER BY \"spree_adjustments\".\"created_at\" ASC",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_adjustments\".* FROM \"spree_adjustments\" WHERE \"spree_adjustments\".\"adjustable_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ? ORDER BY \"spree_adjustments\".\"created_at\" ASC",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 307,
+      "event": "return",
+      "elapsed": 0.000170447,
+      "parent_id": 306,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 308,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT 1 AS one FROM \"spree_line_items\" WHERE \"spree_line_items\".\"order_id\" = ? LIMIT ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT $1 AS one FROM \"spree_line_items\" WHERE \"spree_line_items\".\"order_id\" = ? LIMIT ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 309,
+      "event": "return",
+      "elapsed": 0.000100337,
+      "parent_id": 308,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 310,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_shipments\".* FROM \"spree_shipments\" WHERE \"spree_shipments\".\"order_id\" = ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_shipments\".* FROM \"spree_shipments\" WHERE \"spree_shipments\".\"order_id\" = ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 311,
+      "event": "return",
+      "elapsed": 0.0001499,
+      "parent_id": 310,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 312,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_inventory_units\".* FROM \"spree_inventory_units\" WHERE \"spree_inventory_units\".\"shipment_id\" = ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_inventory_units\".* FROM \"spree_inventory_units\" WHERE \"spree_inventory_units\".\"shipment_id\" = ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 313,
+      "event": "return",
+      "elapsed": 0.000149768,
+      "parent_id": 312,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 314,
+      "event": "call",
+      "sql_query": {
+        "sql": "SELECT \"spree_stock_locations\".* FROM \"spree_stock_locations\" WHERE \"spree_stock_locations\".\"id\" = ? LIMIT ?",
+        "normalized": true,
+        "database_type": "sqlite",
+        "normalized_sql": "SELECT \"spree_stock_locations\".* FROM \"spree_stock_locations\" WHERE \"spree_stock_locations\".\"id\" = ? LIMIT ?",
+        "server_version": "3.22.0"
+      },
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 315,
+      "event": "return",
+      "elapsed": 0.000114064,
+      "parent_id": 314,
+      "thread_id": 47346401950060
+    },
+    {
+      "id": 316,
+      "path": "JSON::Ext::Generator::State#generate",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "value": "#<JSON::Ext::Generator::State:0x0000561f67090448>",
+        "object_id": 47346436309540
+      },
+      "method_id": "generate",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "arg",
+          "class": "Hash",
+          "value": "{\"id\"=>1, \"tracking\"=>\"U10000\", \"number\"=>\"H28253457438\", \"state\"=>\"ready\", \"stock_location_id\"=>1, ",
+          "object_id": 47346436309740
+        }
+      ],
+      "defined_class": "JSON::Ext::Generator::State"
+    },
+    {
+      "id": 317,
+      "event": "return",
+      "elapsed": 0.00017253,
+      "parent_id": 316,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "{\"id\":1,\"tracking\":\"U10000\",\"number\":\"H28253457438\",\"state\":\"ready\",\"stock_location_id\":1,\"inventory",
+        "object_id": 47346436498040
+      }
+    },
+    {
+      "id": 318,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 30,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
+        "object_id": 47346524607880
+      },
+      "method_id": "admin_page_title",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 319,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 6,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
+        "object_id": 47346524607880
+      },
+      "method_id": "admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 320,
+      "event": "return",
+      "elapsed": 0.00001757,
+      "parent_id": 319,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[\"<a href=\\\"/admin/orders\\\">Orders</a>\", \"<a href=\\\"/admin/orders/R100/edit\\\">#R100</a>\", \"Shipments",
+        "object_id": 47346524874080
+      }
+    },
+    {
+      "id": 321,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 6,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
+        "object_id": 47346524607880
+      },
+      "method_id": "admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 322,
+      "event": "return",
+      "elapsed": 0.000016758,
+      "parent_id": 321,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[\"<a href=\\\"/admin/orders\\\">Orders</a>\", \"<a href=\\\"/admin/orders/R100/edit\\\">#R100</a>\", \"Shipments",
+        "object_id": 47346524874080
+      }
+    },
+    {
+      "id": 323,
+      "event": "return",
+      "elapsed": 0.0094841,
+      "parent_id": 318,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "Shipments - #R100 - Orders",
+        "object_id": 47346436822620
+      }
+    },
+    {
+      "id": 324,
+      "path": "JSON::Ext::Generator::State#generate",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "value": "#<JSON::Ext::Generator::State:0x0000561f673d6378>",
+        "object_id": 47346438025660
+      },
+      "method_id": "generate",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "arg",
+          "class": "Hash",
+          "value": "{:abbreviation=>\"Abbreviation\", :accept=>\"Accept\", :acceptance_errors=>\"Acceptance errors\", :accepta",
+          "object_id": 47346438025680
+        }
+      ],
+      "defined_class": "JSON::Ext::Generator::State"
+    },
+    {
+      "id": 325,
+      "event": "return",
+      "elapsed": 0.002839058,
+      "parent_id": 324,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "{\"abbreviation\":\"Abbreviation\",\"accept\":\"Accept\",\"acceptance_errors\":\"Acceptance errors\",\"acceptance",
+        "object_id": 47346469116940
+      }
+    },
+    {
+      "id": 326,
+      "path": "JSON::Ext::Generator::State#generate",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "JSON::Ext::Generator::State",
+        "value": "#<JSON::Ext::Generator::State:0x0000561f6b359298>",
+        "object_id": 47346471323980
+      },
+      "method_id": "generate",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "req",
+          "name": "arg",
+          "class": "Hash",
+          "value": "{\"USD\"=>[\"$\", 2, \"%s%v\"], \"EUR\"=>[\"€\", 2, \"%s%v\"], \"GBP\"=>[\"£\", 2, \"%s%v\"], \"AUD\"=>[\"$\", 2, \"%s%v\"],",
+          "object_id": 47346471237120
+        }
+      ],
+      "defined_class": "JSON::Ext::Generator::State"
+    },
+    {
+      "id": 327,
+      "event": "return",
+      "elapsed": 0.000277979,
+      "parent_id": 326,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "{\"USD\":[\"$\",2,\"%s%v\"],\"EUR\":[\"€\",2,\"%s%v\"],\"GBP\":[\"£\",2,\"%s%v\"],\"AUD\":[\"$\",2,\"%s%v\"],\"CAD\":[\"$\",2,\"%",
+        "object_id": 47346471870300
+      }
+    },
+    {
+      "id": 328,
+      "path": "lib/spree/backend_configuration.rb",
+      "event": "call",
+      "lineno": 92,
+      "static": false,
+      "receiver": {
+        "class": "Spree::BackendConfiguration",
+        "value": "#<Spree::BackendConfiguration:0x0000561f6679cc88>",
+        "object_id": 47346431616580
+      },
+      "method_id": "menu_items",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::BackendConfiguration"
+    },
+    {
+      "id": 329,
+      "event": "return",
+      "elapsed": 0.000008276,
+      "parent_id": 328,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[#<Spree::BackendConfiguration::MenuItem:0x0000561f7177c2c0 @condition=#<Proc:0x0000561f7177c310@/ho",
+        "object_id": 47346523864000
+      }
+    },
+    {
+      "id": 330,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 17,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
+        "object_id": 47346524607880
+      },
+      "method_id": "render_admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 331,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 6,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
+        "object_id": 47346524607880
+      },
+      "method_id": "admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 332,
+      "event": "return",
+      "elapsed": 0.000015853,
+      "parent_id": 331,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[\"<a href=\\\"/admin/orders\\\">Orders</a>\", \"<a href=\\\"/admin/orders/R100/edit\\\">#R100</a>\", \"Shipments",
+        "object_id": 47346524874080
+      }
+    },
+    {
+      "id": 333,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 6,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
+        "object_id": 47346524607880
+      },
+      "method_id": "admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 334,
+      "event": "return",
+      "elapsed": 0.000015865,
+      "parent_id": 333,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[\"<a href=\\\"/admin/orders\\\">Orders</a>\", \"<a href=\\\"/admin/orders/R100/edit\\\">#R100</a>\", \"Shipments",
+        "object_id": 47346524874080
+      }
+    },
+    {
+      "id": 335,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 6,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
+        "object_id": 47346524607880
+      },
+      "method_id": "admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 336,
+      "event": "return",
+      "elapsed": 0.000016261,
+      "parent_id": 335,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[\"<a href=\\\"/admin/orders\\\">Orders</a>\", \"<a href=\\\"/admin/orders/R100/edit\\\">#R100</a>\", \"Shipments",
+        "object_id": 47346524874080
+      }
+    },
+    {
+      "id": 337,
+      "path": "app/helpers/spree/admin/navigation_helper.rb",
+      "event": "call",
+      "lineno": 6,
+      "static": false,
+      "receiver": {
+        "class": null,
+        "value": "#<#<Class:0x0000561f713c79b8>:0x0000561f718fab10>",
+        "object_id": 47346524607880
+      },
+      "method_id": "admin_breadcrumbs",
+      "thread_id": 47346401950060,
+      "defined_class": "Spree::Admin::NavigationHelper"
+    },
+    {
+      "id": 338,
+      "event": "return",
+      "elapsed": 0.000015478,
+      "parent_id": 337,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "Array",
+        "value": "[\"<a href=\\\"/admin/orders\\\">Orders</a>\", \"<a href=\\\"/admin/orders/R100/edit\\\">#R100</a>\", \"Shipments",
+        "object_id": 47346524874080
+      }
+    },
+    {
+      "id": 339,
+      "event": "return",
+      "elapsed": 0.016564955,
+      "parent_id": 330,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "ActiveSupport::SafeBuffer",
+        "value": "<ol class=\"breadcrumb\"><li class=\"breadcrumb-item \"><a href=\"/admin/orders\">Orders</a></li><li class",
+        "object_id": 47346474113940
+      }
+    },
+    {
+      "id": 340,
+      "event": "return",
+      "elapsed": 0.576345611,
+      "parent_id": 187,
+      "thread_id": 47346401950060,
+      "http_server_response": {
+        "status": 200,
+        "mime_type": "text/html; charset=utf-8"
+      }
+    },
+    {
+      "id": 341,
+      "path": "OpenSSL::Cipher#encrypt",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x0000561f6b748430>",
+        "object_id": 47346473386520
+      },
+      "method_id": "encrypt",
+      "thread_id": 47346401950060,
+      "parameters": [
+        {
+          "kind": "rest",
+          "name": "arg",
+          "class": "Array",
+          "value": "[]",
+          "object_id": 47346473415640
+        }
+      ],
+      "defined_class": "OpenSSL::Cipher"
+    },
+    {
+      "id": 342,
+      "event": "return",
+      "elapsed": 0.000010205,
+      "parent_id": 341,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x0000561f6b748430>",
+        "object_id": 47346473386520
+      }
+    },
+    {
+      "id": 343,
+      "path": "OpenSSL::Cipher#final",
+      "event": "call",
+      "static": false,
+      "receiver": {
+        "class": "OpenSSL::Cipher",
+        "value": "#<OpenSSL::Cipher:0x0000561f6b748430>",
+        "object_id": 47346473386520
+      },
+      "method_id": "final",
+      "thread_id": 47346401950060,
+      "defined_class": "OpenSSL::Cipher"
+    },
+    {
+      "id": 344,
+      "event": "return",
+      "elapsed": 0.000008394,
+      "parent_id": 343,
+      "thread_id": 47346401950060,
+      "return_value": {
+        "class": "String",
+        "value": "_T\u0003\r(3__xr____|W",
+        "object_id": 47346474429660
+      }
+    },
+    {
+      "id": 345,
+      "path": "src/main/java/org/kohsuke/stapler/DiagnosticThreadNameFilter.java",
+      "event": "call",
+      "lineno": 24,
+      "static": false,
+      "method_id": "doFilter",
+      "thread_id": 92,
+      "defined_class": "org.kohsuke.stapler.DiagnosticThreadNameFilter",
+      "http_server_request": {
+        "protocol": "HTTP/1.1",
+        "path_info": "/jenkins/static/5bbfe734/css/simple-page.css",
+        "request_method": "GET",
+        "normalized_path_info": "/jenkins/static/5bbfe734/css/simple-page.css"
+      }
+    },
+    {
+      "id": 346,
+      "path": "src/main/java/org/kohsuke/stapler/DiagnosticThreadNameFilter.java",
+      "event": "return",
+      "lineno": 24,
+      "static": false,
+      "method_id": "doFilter",
+      "thread_id": 92,
+      "defined_class": "org.kohsuke.stapler.DiagnosticThreadNameFilter",
+      "http_server_response": {
+        "status": 200,
+        "mime_type": "text/css"
+      }
+    }
+  ],
+  "version": "1.3",
+  "metadata": {
+    "app": "solidus",
+    "git": {
+      "branch": "appland",
+      "commit": "620695333ac6621e408f21ef86fc34ef766a674f",
+      "repository": "https://github.com/land-of-apps/solidus.git"
+    },
+    "name": "Cancel items when all items are not cancelable does not display the link to cancel items",
+    "client": {
+      "url": "https://github.com/getappmap/appmap-ruby",
+      "name": "appmap",
+      "version": "0.37.2"
+    },
+    "feature": "Cancel items when all items are not cancelable",
+    "language": {
+      "name": "ruby",
+      "engine": "ruby",
+      "version": "2.6.5"
+    },
+    "recorder": {
+      "name": "rspec"
+    },
+    "frameworks": [
+      {
+        "name": "rails",
+        "version": "6.0.3.4"
+      },
+      {
+        "name": "rspec",
+        "version": "3.10.0"
+      }
+    ],
+    "feature_group": "Cancel items",
+    "source_location": "spec/system/application_spec.rb"
+  },
+  "stats": {
+    "functions": [
+      {
+        "function": "function:app/helpers/Spree::Admin::NavigationHelper#tab",
+        "count": 57,
+        "size": 33904,
+        "location": "app/helpers/spree/admin/navigation_helper.rb:47"
+      },
+      {
+        "function": "function:openssl/Digest::Instance#digest",
+        "count": 24,
+        "size": 10552,
+        "location": "Digest::Instance#digest"
+      },
+      {
+        "function": "function:app/helpers/Spree::Admin::NavigationHelper#link_to_with_icon",
+        "count": 20,
+        "size": 14287,
+        "location": "app/helpers/spree/admin/navigation_helper.rb:114"
+      },
+      {
+        "function": "function:app/helpers/Spree::Admin::NavigationHelper#admin_breadcrumbs",
+        "count": 19,
+        "size": 6191,
+        "location": "app/helpers/spree/admin/navigation_helper.rb:6"
+      },
+      {
+        "function": "function:json/JSON::Ext::Parser#parse",
+        "count": 18,
+        "size": 4926,
+        "location": "JSON::Ext::Parser#parse"
+      },
+      {
+        "function": "function:active_support/ActiveSupport::SecurityUtils.secure_compare",
+        "count": 12,
+        "size": 7364,
+        "location": "/home/travis/.rvm/gems/ruby-2.6.5/gems/activesupport-6.0.3.4/lib/active_support/security_utils.rb:26"
+      },
+      {
+        "function": "function:openssl/OpenSSL::Cipher#final",
+        "count": 10,
+        "size": 2656,
+        "location": "OpenSSL::Cipher#final"
+      },
+      {
+        "function": "function:json/JSON::Ext::Generator::State#generate",
+        "count": 9,
+        "size": 4530,
+        "location": "JSON::Ext::Generator::State#generate"
+      },
+      {
+        "function": "function:openssl/OpenSSL::Cipher#decrypt",
+        "count": 6,
+        "size": 2218,
+        "location": "OpenSSL::Cipher#decrypt"
+      },
+      {
+        "function": "function:app/helpers/Spree::Admin::NavigationHelper#admin_breadcrumb",
+        "count": 5,
+        "size": 2679,
+        "location": "app/helpers/spree/admin/navigation_helper.rb:11"
+      },
+      {
+        "function": "function:openssl/OpenSSL::Cipher#encrypt",
+        "count": 4,
+        "size": 1478,
+        "location": "OpenSSL::Cipher#encrypt"
+      },
+      {
+        "function": "function:app/helpers/Spree::Admin::NavigationHelper#admin_page_title",
+        "count": 3,
+        "size": 977,
+        "location": "app/helpers/spree/admin/navigation_helper.rb:30"
+      },
+      {
+        "function": "function:lib/Spree::BackendConfiguration#menu_items",
+        "count": 3,
+        "size": 995,
+        "location": "lib/spree/backend_configuration.rb:92"
+      },
+      {
+        "function": "function:app/helpers/Spree::Admin::NavigationHelper#render_admin_breadcrumbs",
+        "count": 3,
+        "size": 1002,
+        "location": "app/helpers/spree/admin/navigation_helper.rb:17"
+      },
+      {
+        "function": "function:app/controllers/Spree::Admin::OrdersController#index",
+        "count": 2,
+        "size": 699,
+        "location": "app/controllers/spree/admin/orders_controller.rb:16"
+      },
+      {
+        "function": "function:app/helpers/Spree::Admin::BaseHelper#admin_layout",
+        "count": 2,
+        "size": 843,
+        "location": "app/helpers/spree/admin/base_helper.rb:142"
+      },
+      {
+        "function": "function:app/helpers/Spree::Admin::NavigationHelper#link_to_edit_url",
+        "count": 2,
+        "size": 1161,
+        "location": "app/helpers/spree/admin/navigation_helper.rb:100"
+      },
+      {
+        "function": "function:app/controllers/Spree::Admin::RootController#index",
+        "count": 1,
+        "size": 339,
+        "location": "app/controllers/spree/admin/root_controller.rb:8"
+      },
+      {
+        "function": "function:app/controllers/Spree::Admin::OrdersController#edit",
+        "count": 1,
+        "size": 349,
+        "location": "app/controllers/spree/admin/orders_controller.rb:72"
+      },
+      {
+        "function": "function:app/helpers/Spree::Admin::OrdersHelper#event_links",
+        "count": 1,
+        "size": 312,
+        "location": "app/helpers/spree/admin/orders_helper.rb:7"
+      },
+      {
+        "function": "function:app/helpers/Spree::Admin::OrdersHelper#line_item_shipment_price",
+        "count": 1,
+        "size": 553,
+        "location": "app/helpers/spree/admin/orders_helper.rb:18"
+      }
+    ]
+  },
+  "pruneFilter": {
+    "hideName": [
+      "function:app/helpers/Spree::Admin::NavigationHelper#tab",
+      "function:app/helpers/Spree::Admin::NavigationHelper#link_to_with_icon"
+    ],
+    "auto": "true"
+  },
+  "classMap": [
+    {
+      "name": "app/controllers",
+      "type": "package",
+      "children": [
+        {
+          "name": "Spree",
+          "type": "class",
+          "children": [
+            {
+              "name": "Admin",
+              "type": "class",
+              "children": [
+                {
+                  "name": "RootController",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "index",
+                      "type": "function",
+                      "static": false,
+                      "location": "app/controllers/spree/admin/root_controller.rb:8"
+                    }
+                  ]
+                },
+                {
+                  "name": "OrdersController",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "index",
+                      "type": "function",
+                      "static": false,
+                      "location": "app/controllers/spree/admin/orders_controller.rb:16"
+                    },
+                    {
+                      "name": "edit",
+                      "type": "function",
+                      "static": false,
+                      "location": "app/controllers/spree/admin/orders_controller.rb:72"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "openssl",
+      "type": "package",
+      "children": [
+        {
+          "name": "OpenSSL",
+          "type": "class",
+          "children": [
+            {
+              "name": "Cipher",
+              "type": "class",
+              "children": [
+                {
+                  "name": "encrypt",
+                  "type": "function",
+                  "labels": [
+                    "security",
+                    "crypto"
+                  ],
+                  "static": false,
+                  "location": "OpenSSL::Cipher#encrypt"
+                },
+                {
+                  "name": "final",
+                  "type": "function",
+                  "labels": [
+                    "security",
+                    "crypto"
+                  ],
+                  "static": false,
+                  "location": "OpenSSL::Cipher#final"
+                },
+                {
+                  "name": "decrypt",
+                  "type": "function",
+                  "labels": [
+                    "security",
+                    "crypto"
+                  ],
+                  "static": false,
+                  "location": "OpenSSL::Cipher#decrypt"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Digest",
+          "type": "class",
+          "children": [
+            {
+              "name": "Instance",
+              "type": "class",
+              "children": [
+                {
+                  "name": "digest",
+                  "type": "function",
+                  "labels": [
+                    "security",
+                    "crypto"
+                  ],
+                  "static": false,
+                  "location": "Digest::Instance#digest"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "active_support",
+      "type": "package",
+      "children": [
+        {
+          "name": "ActiveSupport",
+          "type": "class",
+          "children": [
+            {
+              "name": "SecurityUtils",
+              "type": "class",
+              "children": [
+                {
+                  "name": "secure_compare",
+                  "type": "function",
+                  "labels": [
+                    "security",
+                    "crypto"
+                  ],
+                  "static": true,
+                  "location": "/home/travis/.rvm/gems/ruby-2.6.5/gems/activesupport-6.0.3.4/lib/active_support/security_utils.rb:26"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "json",
+      "type": "package",
+      "children": [
+        {
+          "name": "JSON",
+          "type": "class",
+          "children": [
+            {
+              "name": "Ext",
+              "type": "class",
+              "children": [
+                {
+                  "name": "Parser",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "parse",
+                      "type": "function",
+                      "labels": [
+                        "serialization",
+                        "json"
+                      ],
+                      "static": false,
+                      "location": "JSON::Ext::Parser#parse"
+                    }
+                  ]
+                },
+                {
+                  "name": "Generator",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "State",
+                      "type": "class",
+                      "children": [
+                        {
+                          "name": "generate",
+                          "type": "function",
+                          "labels": [
+                            "serialization",
+                            "json"
+                          ],
+                          "static": false,
+                          "location": "JSON::Ext::Generator::State#generate"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "app/helpers",
+      "type": "package",
+      "children": [
+        {
+          "name": "Spree",
+          "type": "class",
+          "children": [
+            {
+              "name": "Admin",
+              "type": "class",
+              "children": [
+                {
+                  "name": "BaseHelper",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "admin_layout",
+                      "type": "function",
+                      "static": false,
+                      "location": "app/helpers/spree/admin/base_helper.rb:142"
+                    }
+                  ]
+                },
+                {
+                  "name": "NavigationHelper",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "admin_breadcrumb",
+                      "type": "function",
+                      "static": false,
+                      "location": "app/helpers/spree/admin/navigation_helper.rb:11"
+                    },
+                    {
+                      "name": "admin_breadcrumbs",
+                      "type": "function",
+                      "static": false,
+                      "location": "app/helpers/spree/admin/navigation_helper.rb:6"
+                    },
+                    {
+                      "name": "link_to_edit_url",
+                      "type": "function",
+                      "static": false,
+                      "location": "app/helpers/spree/admin/navigation_helper.rb:100"
+                    },
+                    {
+                      "name": "admin_page_title",
+                      "type": "function",
+                      "static": false,
+                      "location": "app/helpers/spree/admin/navigation_helper.rb:30"
+                    },
+                    {
+                      "name": "render_admin_breadcrumbs",
+                      "type": "function",
+                      "static": false,
+                      "location": "app/helpers/spree/admin/navigation_helper.rb:17"
+                    }
+                  ]
+                },
+                {
+                  "name": "OrdersHelper",
+                  "type": "class",
+                  "children": [
+                    {
+                      "name": "event_links",
+                      "type": "function",
+                      "static": false,
+                      "location": "app/helpers/spree/admin/orders_helper.rb:7"
+                    },
+                    {
+                      "name": "line_item_shipment_price",
+                      "type": "function",
+                      "static": false,
+                      "location": "app/helpers/spree/admin/orders_helper.rb:18"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "lib",
+      "type": "package",
+      "children": [
+        {
+          "name": "Spree",
+          "type": "class",
+          "children": [
+            {
+              "name": "BackendConfiguration",
+              "type": "class",
+              "children": [
+                {
+                  "name": "menu_items",
+                  "type": "function",
+                  "static": false,
+                  "location": "lib/spree/backend_configuration.rb:92"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "http",
+      "name": "HTTP server requests",
+      "children": [
+        {
+          "type": "route",
+          "name": "GET /admin"
+        },
+        {
+          "type": "route",
+          "name": "GET /admin/orders"
+        },
+        {
+          "type": "route",
+          "name": "GET /admin/orders/:id/edit"
+        },
+        {
+          "type": "route",
+          "name": "GET /jenkins/static/5bbfe734/css/simple-page.css"
+        }
+      ]
+    },
+    {
+      "type": "external-service",
+      "name": "127.0.0.1:9515",
+      "children": [
+        {
+          "type": "external-route",
+          "name": "POST http://127.0.0.1:9515/session/06552baf520e7e9e7502d6e66a913294/execute/sync"
+        }
+      ]
+    },
+    {
+      "type": "database",
+      "name": "Database",
+      "children": [
+        {
+          "type": "query",
+          "name": "SELECT COUNT(*) FROM \"spree_stores\""
+        },
+        {
+          "type": "query",
+          "name": "SELECT COUNT(*) FROM \"spree_orders\" WHERE \"spree_orders\".\"completed_at\" IS NOT NULL"
+        },
+        {
+          "type": "query",
+          "name": "SELECT $1 AS one FROM \"spree_orders\" WHERE \"spree_orders\".\"completed_at\" IS NOT NULL LIMIT ? OFFSET ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT \"spree_orders\".* FROM \"spree_orders\" WHERE \"spree_orders\".\"completed_at\" IS NOT NULL ORDER BY \"spree_orders\".\"completed_at\" DESC LIMIT ? OFFSET ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT \"spree_users\".* FROM \"spree_users\" WHERE \"spree_users\".\"id\" = ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT \"spree_orders\".* FROM \"spree_orders\" WHERE \"spree_orders\".\"number\" = ? LIMIT ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT \"spree_adjustments\".* FROM \"spree_adjustments\" WHERE \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"adjustable_id\" = ? ORDER BY \"spree_adjustments\".\"created_at\" ASC"
+        },
+        {
+          "type": "query",
+          "name": "SELECT \"spree_addresses\".* FROM \"spree_addresses\" WHERE \"spree_addresses\".\"id\" = ? LIMIT ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT \"spree_users\".* FROM \"spree_users\" WHERE \"spree_users\".\"id\" = ? LIMIT ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT COUNT(*) FROM \"spree_shipments\" WHERE \"spree_shipments\".\"order_id\" = ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT COUNT(*) FROM \"spree_shipments\" WHERE \"spree_shipments\".\"order_id\" = ? AND \"spree_shipments\".\"state\" = ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT \"spree_inventory_units\".* FROM \"spree_inventory_units\" INNER JOIN \"spree_shipments\" ON \"spree_inventory_units\".\"shipment_id\" = \"spree_shipments\".\"id\" WHERE \"spree_shipments\".\"order_id\" = ? AND \"spree_inventory_units\".\"state\" IN (?, ?, ?) AND \"spree_inventory_units\".\"pending\" = ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT $1 AS one FROM \"spree_payments\" WHERE \"spree_payments\".\"order_id\" = ? LIMIT ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT COUNT(*) FROM \"spree_payments\" WHERE \"spree_payments\".\"order_id\" = ? AND (avs_response IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16) OR (cvv_response_code IS NOT NULL and cvv_response_code != $17) OR state = $18)"
+        },
+        {
+          "type": "query",
+          "name": "SELECT $1 AS one FROM \"spree_line_items\" WHERE \"spree_line_items\".\"order_id\" = ? LIMIT ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT DISTINCT \"spree_cartons\".* FROM \"spree_cartons\" INNER JOIN \"spree_inventory_units\" ON \"spree_cartons\".\"id\" = \"spree_inventory_units\".\"carton_id\" INNER JOIN \"spree_shipments\" ON \"spree_inventory_units\".\"shipment_id\" = \"spree_shipments\".\"id\" WHERE \"spree_shipments\".\"order_id\" = ? ORDER BY \"spree_cartons\".\"shipped_at\" ASC"
+        },
+        {
+          "type": "query",
+          "name": "SELECT \"spree_shipments\".* FROM \"spree_shipments\" WHERE \"spree_shipments\".\"order_id\" = ? ORDER BY \"spree_shipments\".\"created_at\" ASC"
+        },
+        {
+          "type": "query",
+          "name": "SELECT \"spree_inventory_units\".* FROM \"spree_inventory_units\" WHERE \"spree_inventory_units\".\"shipment_id\" = ? AND \"spree_inventory_units\".\"carton_id\" IS NULL"
+        },
+        {
+          "type": "query",
+          "name": "SELECT \"spree_line_items\".* FROM \"spree_line_items\" WHERE \"spree_line_items\".\"id\" = ? LIMIT ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT \"spree_variants\".* FROM \"spree_variants\" WHERE \"spree_variants\".\"id\" = ? LIMIT ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT \"spree_stock_locations\".* FROM \"spree_stock_locations\" WHERE \"spree_stock_locations\".\"id\" = ? LIMIT ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT \"spree_assets\".* FROM \"spree_assets\" WHERE \"spree_assets\".\"type\" = ? AND \"spree_assets\".\"viewable_id\" = ? AND \"spree_assets\".\"viewable_type\" = ? ORDER BY \"spree_assets\".\"position\" ASC"
+        },
+        {
+          "type": "query",
+          "name": "SELECT \"spree_products\".* FROM \"spree_products\" WHERE \"spree_products\".\"id\" = ? LIMIT ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT \"spree_assets\".* FROM \"spree_assets\" INNER JOIN \"spree_variants\" ON \"spree_assets\".\"viewable_id\" = \"spree_variants\".\"id\" WHERE \"spree_variants\".\"deleted_at\" IS NULL AND \"spree_assets\".\"type\" = ? AND \"spree_variants\".\"product_id\" = ? AND \"spree_assets\".\"viewable_type\" = ? ORDER BY \"spree_assets\".\"position\" ASC, \"spree_variants\".\"position\" ASC LIMIT ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT $1 AS one FROM \"spree_option_values\" INNER JOIN \"spree_option_values_variants\" ON \"spree_option_values\".\"id\" = \"spree_option_values_variants\".\"option_value_id\" WHERE \"spree_option_values_variants\".\"variant_id\" = ? LIMIT ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT \"spree_orders\".* FROM \"spree_orders\" WHERE \"spree_orders\".\"id\" = ? LIMIT ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT $1 AS one FROM \"spree_adjustments\" INNER JOIN \"spree_line_items\" ON \"spree_adjustments\".\"adjustable_id\" = \"spree_line_items\".\"id\" WHERE \"spree_line_items\".\"order_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ? LIMIT ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT \"spree_adjustments\".* FROM \"spree_adjustments\" INNER JOIN \"spree_line_items\" ON \"spree_adjustments\".\"adjustable_id\" = \"spree_line_items\".\"id\" WHERE \"spree_line_items\".\"order_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ? ORDER BY \"spree_line_items\".\"created_at\" ASC, \"spree_line_items\".\"id\" ASC"
+        },
+        {
+          "type": "query",
+          "name": "SELECT $1 AS one FROM \"spree_adjustments\" INNER JOIN \"spree_shipments\" ON \"spree_adjustments\".\"adjustable_id\" = \"spree_shipments\".\"id\" WHERE \"spree_shipments\".\"order_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ? LIMIT ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT \"spree_adjustments\".* FROM \"spree_adjustments\" INNER JOIN \"spree_shipments\" ON \"spree_adjustments\".\"adjustable_id\" = \"spree_shipments\".\"id\" WHERE \"spree_shipments\".\"order_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT $1 AS one FROM \"spree_adjustments\" WHERE \"spree_adjustments\".\"adjustable_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ? LIMIT ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT \"spree_adjustments\".* FROM \"spree_adjustments\" WHERE \"spree_adjustments\".\"adjustable_id\" = ? AND \"spree_adjustments\".\"adjustable_type\" = ? AND \"spree_adjustments\".\"eligible\" = ? ORDER BY \"spree_adjustments\".\"created_at\" ASC"
+        },
+        {
+          "type": "query",
+          "name": "SELECT \"spree_shipments\".* FROM \"spree_shipments\" WHERE \"spree_shipments\".\"order_id\" = ?"
+        },
+        {
+          "type": "query",
+          "name": "SELECT \"spree_inventory_units\".* FROM \"spree_inventory_units\" WHERE \"spree_inventory_units\".\"shipment_id\" = ?"
+        }
+      ]
+    }
+  ]
+}
