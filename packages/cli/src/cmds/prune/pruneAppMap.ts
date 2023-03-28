@@ -22,6 +22,6 @@ export const pruneWithFilter = (appMap: AppMap, serializedFilter: string): any =
   appmapFilter.apply(filters);
 
   const prunedMap = appmapFilter.filter(fullMap, []) as any;
-  prunedMap.data = { ...prunedMap.data, exclusions: filters };
+  prunedMap.data = { ...prunedMap.data, pruneFilter: filters };
   return prunedMap;
 };

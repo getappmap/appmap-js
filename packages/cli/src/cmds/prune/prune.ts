@@ -46,7 +46,7 @@ function parseSize(size: string) {
   return Number(byteStr) * p;
 }
 
-function messageWhenUsingFilter(filters: any): string {
+function generateConsoleMessage(filters: any): string {
   let exclusions = [] as Array<any>;
 
   if ('hideUnlabeled' in filters) exclusions.push('All unlabeled functions');
@@ -59,19 +59,10 @@ function messageWhenUsingFilter(filters: any): string {
   return `The following was pruned from the map: \n  ${exclusions.join('\n  ')}`;
 }
 
-function displayMessage(appMap: AppMap, format: string, usesFilter: boolean): void {
-  let message: string;
-  if (usesFilter) {
-    const filters = appMap.data.exclusions;
-    message =
-      format === 'json' ? JSON.stringify({ filters }, null, 2) : messageWhenUsingFilter(filters);
-  } else {
-    const exclusions = Array.from(appMap.data.exclusions.values());
-    message =
-      format === 'json'
-        ? JSON.stringify({ exclusions }, null, 2)
-        : `The following was pruned from the map:\n  ${exclusions.join('\n  ')}`;
-  }
+function displayMessage(appMap: AppMap, format: string): void {
+  const { pruneFilter } = appMap.data;
+  const message =
+    format === 'json' ? JSON.stringify(pruneFilter, null, 2) : generateConsoleMessage(pruneFilter);
   console.log(message);
 }
 
@@ -133,6 +124,6 @@ export default {
     const outputPath = `${argv.outputDir}/${basename(argv.file)}`;
     fs.writeFileSync(outputPath, JSON.stringify(appMap));
 
-    displayMessage(appMap, argv.format, !!argv.filter);
+      displayMessage(appMap, argv.format);
   },
 };
