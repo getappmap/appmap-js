@@ -15,6 +15,7 @@
         :selected-label="selectedLabel"
         :filters-root-objects="filters.rootObjects"
         :findings="findings"
+        :wasAutoPruned="wasAutoPruned"
         @onChangeFilter="
           (value) => {
             this.eventFilterText = value;
@@ -307,32 +308,40 @@
       </div>
 
       <div v-if="showStatsPanel" class="appmap-stats">
-        <div class="notification blocked">
-          <div class="content">
-            <p class="notification-head">
-              <ExclamationIcon /><strong>This AppMap is too large to open.</strong>
-            </p>
-            <p>
-              To learn more about making your AppMaps smaller, please see our
-              <a href="/">documentation</a>.
-            </p>
-          </div>
-        </div>
-
-        <div class="notification trimmed">
-          <div class="content">
-            <p class="notification-head">
-              <ScissorsIcon /><strong>This AppMap has been automatically trimmed.</strong>
-            </p>
-            <p>
-              We have identified functions that my impact performance of yoru AppMap, and removed
-              them from this map. Please see our <a href="/">documentation</a> for more information
-              on how to optimize your AppMaps.
-            </p>
-          </div>
-        </div>
-
-        <v-stats-panel :stats="stats" :appMap="filteredAppMap" @closeStatsPanel="closeStatsPanel" />
+        <v-stats-panel
+          :stats="stats"
+          :appMap="filteredAppMap"
+          :pruneFilter="pruneFilter"
+          @closeStatsPanel="closeStatsPanel"
+        >
+          <!-- <template v-slot:notification>
+            <div class="notification blocked">
+              <div class="content">
+                <p class="notification-head">
+                  <ExclamationIcon /><strong>This AppMap is too large to open.</strong>
+                </p>
+                <p>
+                  To learn more about making your AppMaps smaller, please see our
+                  <a href="/">documentation</a>.
+                </p>
+              </div>
+            </div>
+          </template> -->
+          <template v-if="wasAutoPruned" v-slot:notification>
+            <div class="notification trimmed">
+              <div class="content">
+                <p class="notification-head">
+                  <ScissorsIcon /><strong>This AppMap has been automatically trimmed.</strong>
+                </p>
+                <p>
+                  We have identified functions that my impact performance of yoru AppMap, and
+                  removed them from this map. Please see our <a href="/">documentation</a> for more
+                  information on how to optimize your AppMaps.
+                </p>
+              </div>
+            </div>
+          </template>
+        </v-stats-panel>
       </div>
 
       <div class="diagram-instructions">
@@ -554,6 +563,18 @@ export default {
   computed: {
     classes() {
       return this.isLoading ? 'app--loading' : '';
+    },
+
+    pruneFilter() {
+      const { appMap } = this.$store.state;
+      const {
+        data: { pruneFilter },
+      } = appMap;
+      return pruneFilter || {};
+    },
+
+    wasAutoPruned() {
+      return this.pruneFilter.auto;
     },
 
     findings() {
