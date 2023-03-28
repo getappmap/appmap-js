@@ -4,7 +4,7 @@
       <AppMapLogo width="70" />
     </h3>
 
-    <div class="details-panel__notification blocked">
+    <!-- <div class="details-panel__notification blocked">
       <div class="content">
         <p class="notification-head">
           <ExclamationIcon /><strong>This AppMap is too large to open.</strong>
@@ -14,9 +14,9 @@
           <a href="/">documentation</a>.
         </p>
       </div>
-    </div>
+    </div> -->
 
-    <div class="details-panel__notification trimmed">
+    <div v-if="wasAutoPruned" class="details-panel__notification trimmed">
       <div class="content">
         <p class="notification-head">
           <ScissorsIcon /><strong>This AppMap has been automatically trimmed.</strong>
@@ -133,6 +133,10 @@ export default {
     findings: {
       type: Array,
       default: () => [],
+    },
+    wasAutoPruned: {
+      type: Boolean,
+      default: false,
     },
   },
 

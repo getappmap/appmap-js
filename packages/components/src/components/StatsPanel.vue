@@ -1,10 +1,10 @@
 <template>
   <div class="stats-panel" data-cy="stats-panel">
+    <slot name="notification"></slot>
     <div class="heading">
       <h1><StatsIconLg />Stats</h1>
       <CloseIcon class="close-me" @click.stop="closeStatsPanel" />
     </div>
-
     <ul class="stats-table">
       <li>
         <ul class="stats-row row-header">
@@ -20,40 +20,24 @@
           </li>
         </ul>
       </li>
-      <li class="pruned-row">
-        <ul class="stats-row pruned">
-          <li><HiddenIcon />function:activerecord/ActiveRecord::Relation#records</li>
-          <li>2,234</li>
-          <li>21.7mb</li>
-          <li class="location">
-            <a href="/">app/helpers/spree/admin/navigation_helper.rb:114</a>
-          </li>
-        </ul>
-      </li>
-      <li class="pruned-row">
-        <ul class="stats-row pruned">
-          <li><HiddenIcon />function:activerecord/ActiveRecord::Relation#records</li>
-          <li>2,234</li>
-          <li>21.7mb</li>
-          <li class="location">
-            <a href="/">app/helpers/spree/admin/navigation_helper.rb:114</a>
-          </li>
-        </ul>
-      </li>
       <li v-for="func in functions" :key="func['function']">
         <ul class="stats-row">
           <li class="fqid">
+            <div class="pruned-fqid" v-if="isPruned(func['function'])">
+              <ScissorsIcon />
+              {{ removeFunctionPrefix(func['function']) }}
+            </div>
+            <div class="hidden-fqid" v-else-if="isHidden(removeFunctionPrefix(func['function']))">
+              <HiddenIcon />
+              {{ removeFunctionPrefix(func['function']) }}
+            </div>
             <a
-              v-if="isAvailable(removeFunctionPrefix(func['function']))"
+              v-else
               href="#"
               @click.prevent="openFunction(removeFunctionPrefix(func['function']))"
             >
               {{ removeFunctionPrefix(func['function']) }}
             </a>
-            <div class="hidden-fqid" v-else>
-              <HiddenIcon />
-              {{ removeFunctionPrefix(func['function']) }}
-            </div>
           </li>
           <li>{{ func.count }}</li>
           <li>{{ displaySize(func.size) }}</li>
@@ -76,7 +60,7 @@ const GIGABYTE = MEGABYTE * 1000;
 import CloseIcon from '@/assets/close.svg';
 import StatsIconLg from '@/assets/stats-icon-lg.svg';
 import HiddenIcon from '@/assets/hidden-icon.svg';
-// import StatsIcon from '@/assets/stats-icon.svg';
+import ScissorsIcon from '@/assets/scissors-icon.svg';
 import { SET_FOCUSED_EVENT, SET_VIEW, VIEW_SEQUENCE, SELECT_CODE_OBJECT } from '@/store/vsCode';
 
 export default {
@@ -86,7 +70,7 @@ export default {
     CloseIcon,
     StatsIconLg,
     HiddenIcon,
-    // StatsIcon,
+    ScissorsIcon,
   },
 
   props: {
@@ -95,6 +79,9 @@ export default {
       default: () => ({}),
     },
     appMap: {
+      type: Object,
+    },
+    pruneFilter: {
       type: Object,
     },
   },
@@ -164,8 +151,15 @@ export default {
       return /[\\/]/.test(location);
     },
 
-    isAvailable(fqid) {
-      return this.appMap.classMap.codeObjectsById[fqid];
+    isHidden(fqid) {
+      return !this.appMap.classMap.codeObjectsById[fqid];
+    },
+
+    isPruned(fqid) {
+      return (
+        this.pruneFilter.hideName &&
+        this.pruneFilter.hideName.some((hiddenName) => fqid.includes(hiddenName))
+      );
     },
 
     closeStatsPanel() {
@@ -239,6 +233,17 @@ export default {
           height: 1rem;
         }
       }
+      .pruned-fqid {
+        color: #c07d1b;
+        display: flex;
+        align-items: center;
+        text-decoration: line-through;
+        svg {
+          margin-right: 0.5rem;
+          width: 1rem;
+          height: 1rem;
+        }
+      }
       a {
         color: $brightblue;
         text-decoration: none;
@@ -246,26 +251,6 @@ export default {
           text-decoration: underline;
           cursor: pointer;
         }
-      }
-    }
-    &.pruned {
-      grid-template-columns: 2fr 100px 100px 1fr;
-      color: $gray4;
-      li {
-        color: $gray4;
-        word-break: keep-all;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: flex;
-        align-items: center;
-      }
-      a {
-        color: $gray4;
-      }
-      svg {
-        margin-right: 0.5rem;
-        width: 1rem;
-        height: 1rem;
       }
     }
   }
