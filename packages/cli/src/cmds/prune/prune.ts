@@ -111,6 +111,12 @@ export default {
       describe: 'Whether to output all AppMap data or just output what was removed',
       type: 'boolean',
     });
+
+    argv.option('auto', {
+      describe:
+        'Indicate whether the map was pruned automatically by the code editor extension/plugin',
+      hidden: true,
+    });
   },
 
   handler: async (argv: any): Promise<void> => {
@@ -126,11 +132,13 @@ export default {
       throw Error('Invalid usage');
     }
 
+    if (argv.auto) appMap.data.pruneFilter.auto = true;
+
     if (argv.outputData) {
       console.log(JSON.stringify(appMap));
     } else {
-    const outputPath = `${argv.outputDir}/${basename(argv.file)}`;
-    fs.writeFileSync(outputPath, JSON.stringify(appMap));
+      const outputPath = `${argv.outputDir}/${basename(argv.file)}`;
+      fs.writeFileSync(outputPath, JSON.stringify(appMap));
 
       displayMessage(appMap, argv.format);
     }
