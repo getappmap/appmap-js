@@ -106,6 +106,11 @@ export default {
       describe: 'Filter to use to prune the map',
       type: 'string',
     });
+
+    argv.option('output-data', {
+      describe: 'Whether to output all AppMap data or just output what was removed',
+      type: 'boolean',
+    });
   },
 
   handler: async (argv: any): Promise<void> => {
@@ -121,9 +126,13 @@ export default {
       throw Error('Invalid usage');
     }
 
+    if (argv.outputData) {
+      console.log(JSON.stringify(appMap));
+    } else {
     const outputPath = `${argv.outputDir}/${basename(argv.file)}`;
     fs.writeFileSync(outputPath, JSON.stringify(appMap));
 
       displayMessage(appMap, argv.format);
+    }
   },
 };
