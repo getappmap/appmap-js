@@ -2,6 +2,7 @@ import VVsCodeExtension from '@/pages/VsCodeExtension.vue';
 import { VIEW_SEQUENCE } from '@/store/vsCode';
 import defaultScenario from './data/scenario.json';
 import pruned from './data/scenario_pruned.json';
+import giant from './data/giant_map.json';
 import petClinicScenario from './data/java_scenario.json';
 import diffScenario from './data/diff_base.json';
 import appland1 from './data/Application_page_component_diagram_highlights_node_connections_upon_selection.appmap.json';
@@ -15,6 +16,7 @@ import './scss/fullscreen.scss';
 const scenarioData = {
   default: defaultScenario,
   pruned,
+  giant,
   'pet-clinic': petClinicScenario,
   appland1,
   appland2,
