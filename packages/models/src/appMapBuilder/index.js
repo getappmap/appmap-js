@@ -192,8 +192,20 @@ class AppMapBuilder extends EventSource {
         }
         this.exclusions.add(eventInfo.fqid);
       }
-      this.data.pruneFilter = { hideName: Array.from(this.exclusions.values()) };
+      this.updatePruneFilter();
     }).chunk((stacks) => this.excludeEvents(stacks, classMap, this.exclusions));
+  }
+
+  updatePruneFilter() {
+    const currentHideName = Array.from(this.exclusions.values());
+
+    if (!this.data.pruneFilter) {
+      this.data.pruneFilter = { hideName: currentHideName };
+    } else if (!this.data.pruneFilter.hideName) {
+      this.data.pruneFilter.hideName = currentHideName;
+    } else {
+      currentHideName.forEach((pruned) => this.data.pruneFilter.hideName.push(pruned));
+    }
   }
 
   // expects exclusions to be a Set
