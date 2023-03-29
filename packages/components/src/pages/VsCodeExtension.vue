@@ -1269,6 +1269,8 @@ code {
 .appmap-stats {
   height: 95%;
   overflow-y: auto;
+  overflow: scroll;
+  padding: 0;
 }
 
 .share-appmap,
@@ -1280,7 +1282,6 @@ code {
   right: 2rem;
   background-color: $gray2;
   border-radius: 0.5rem;
-  padding: 0px 0.5rem 2rem 0.5rem;
   width: calc(100% - 4rem);
   word-break: break-word;
   z-index: 2;
@@ -1354,13 +1355,13 @@ code {
   background-color: transparent;
   .notification {
     padding: 1rem;
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     display: grid;
     grid-template-columns: auto;
     gap: 0.5rem;
     align-items: baseline;
-    margin-bottom: 1.5rem;
-    box-shadow: 0px 0px 20px 2px rgb(0 0 0 / 90%);
+    margin: 0 1rem 1rem 1rem;
+    box-shadow: $box-shadow-min;
     .content {
       margin: 0;
       padding: 0;
@@ -1373,6 +1374,7 @@ code {
     svg {
       width: 1rem;
       height: 1rem;
+      fill: $white;
     }
     a {
       color: inherit;
