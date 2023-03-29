@@ -13,6 +13,6 @@
     "target": "es2017",
     "types": ["node", "jest"]
   },
-  "include": ["src/**/*"],
-  "exclude": ["**/node_modules", "src/html.js"]
+  "include": ["src"],
+  "exclude": ["**/node_modules", "src/html"]
 }
