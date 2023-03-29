@@ -25,7 +25,7 @@ context('AppMap stats panel', () => {
       cy.get('[data-cy="stats-panel"]').should('not.exist');
       cy.get('[data-cy="stats-button"]').click();
       cy.get('[data-cy="stats-panel"]').should('exist').should('be.visible');
-      cy.get('.close-me').click();
+      cy.get('[data-cy="close-stats-button"]').click();
       cy.get('[data-cy="stats-panel"]').should('not.exist');
     });
 

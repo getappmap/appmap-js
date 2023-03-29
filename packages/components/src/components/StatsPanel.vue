@@ -3,7 +3,7 @@
     <slot name="notification"></slot>
     <div class="heading">
       <h1><StatsIconLg />Stats</h1>
-      <CloseIcon class="close-me" @click.stop="closeStatsPanel" />
+      <CloseIcon class="close-me" data-cy="close-stats-button" @click.stop="closeStatsPanel" />
     </div>
     <ul class="stats-table">
       <li>
