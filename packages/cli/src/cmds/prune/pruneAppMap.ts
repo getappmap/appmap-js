@@ -61,7 +61,7 @@ export const pruneAppMap = (appMap: AppMap, size: number): any => {
 export const pruneWithFilter = (appMap: AppMap, serializedFilter: string): any => {
   // TODO: update type for AppMap
   const fullMap = buildAppMap().source(appMap).normalize().build() as any;
-  const filterBefore = fullMap.data.pruneFilter;
+  const filterBefore = fullMap.data.pruneFilter || {};
 
   const filterOrState = deserializeAppmapState(serializedFilter);
   const filter = 'filters' in filterOrState ? filterOrState.filters : filterOrState;
