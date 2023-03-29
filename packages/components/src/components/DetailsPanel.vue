@@ -22,9 +22,9 @@
           <ScissorsIcon /><strong>This AppMap has been automatically trimmed.</strong>
         </p>
         <p>
-          We have identified functions that my impact performance of yoru AppMap, and removed them
-          from this map. Please see our <a href="/">documentation</a> for more information on how to
-          optimize your AppMaps.
+          This AppMap is too large, so we removed some functions. Please see the
+          <a href="#" data-cy="stats-panel-link" @click.prevent="openStatsPanel">Stats panel</a> for
+          more information.
         </p>
       </div>
     </div>
@@ -65,7 +65,6 @@
         :items="Array.from(selectedObject.labels)"
       />
       <v-details-label v-if="selectedLabel" :label="selectedLabel" :appMap="appMap" />
-      <div v-if="isGiantAppMap">Info about Giant AppMaps here?</div>
     </div>
   </div>
 </template>
@@ -172,6 +171,11 @@ export default {
         sourceLocation = this.appMap.metadata.source_location;
       }
       return sourceLocation;
+    },
+  },
+  methods: {
+    openStatsPanel() {
+      this.$emit('openStatsPanel');
     },
   },
 };
