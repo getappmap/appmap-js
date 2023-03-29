@@ -108,6 +108,7 @@ export default {
     color: $gray6;
     background: $black;
     overflow: auto;
+    box-shadow: 0px 0px 20px 0px rgb(0 0 0 / 88%);
 
     &.filter {
       background-color: $gray2;
