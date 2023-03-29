@@ -18,7 +18,7 @@ class FingerprintDirectoryCommand {
       count += 1;
       return fpQueue.push(file);
     });
-    await fpQueue.process();
+    if (count > 0) await fpQueue.process();
     return count;
   }
 

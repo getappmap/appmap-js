@@ -1,7 +1,7 @@
 import { join } from 'path';
 
-import { existsSync, promises as fsp, Stats } from 'fs';
-import { readFile, stat } from 'fs/promises';
+import { existsSync, promises as fsp } from 'fs';
+import { readFile } from 'fs/promises';
 import { queue } from 'async';
 import { glob } from 'glob';
 import yaml, { load } from 'js-yaml';
@@ -22,27 +22,9 @@ import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { locateAppMapConfigFile } from '../lib/locateAppMapConfigFile';
 import Telemetry, { Git, GitState } from '../telemetry';
 import { findRepository } from '../lib/git';
+import { DefaultMaxAppMapSizeInMB, fileSizeFilter } from '../lib/fileSizeFilter';
 
-type FilterFunction = (file: string) => Promise<{ enable: boolean; message?: string }>;
-
-// Skip files that are larger than a specified max size.
-export function fileSizeFilter(maxFileSize: number): FilterFunction {
-  return async (file: string): Promise<{ enable: boolean; message?: string }> => {
-    let fileStat: Stats;
-    try {
-      fileStat = await stat(file);
-    } catch {
-      return { enable: false, message: `File ${file} not found` };
-    }
-
-    if (fileStat.size <= maxFileSize) return { enable: true };
-    else
-      return {
-        enable: false,
-        message: `Skipping ${file} as its file size of ${fileStat.size} bytes is larger than the maximum configured file size of ${maxFileSize} bytes`,
-      };
-  };
-}
+export type FilterFunction = (file: string) => Promise<{ enable: boolean; message?: string }>;
 
 class OpenAPICommand {
   private readonly model = new Model();
@@ -124,10 +106,18 @@ class OpenAPICommand {
   }
 }
 
-async function loadTemplate(fileName: string): Promise<any> {
+const TemplateFiles = [
+  '../../resources/openapi-template.yaml', // As packaged
+  '../../../resources/openapi-template.yaml', // In development
+].map((fileName) => join(__dirname, fileName));
+
+async function loadTemplate(fileName: string | undefined): Promise<any> {
   if (!fileName) {
-    // eslint-disable-next-line no-param-reassign
-    fileName = join(__dirname, '../../resources/openapi-template.yaml');
+    fileName = TemplateFiles.find((fileName) => existsSync(fileName));
+    if (!fileName)
+      throw new Error(
+        `Unable to locate default OpenAPI template file. Checked: ${TemplateFiles.join(', ')}.`
+      );
   }
   return yaml.load((await fsp.readFile(fileName)).toString());
 }
@@ -148,7 +138,8 @@ export default {
     });
     args.option('max-size', {
       describe: 'maximum AppMap size that will be processed, in filesystem-reported MB',
-      default: '50',
+      type: 'number',
+      default: DefaultMaxAppMapSizeInMB,
     });
     args.option('output-file', {
       alias: ['o'],
