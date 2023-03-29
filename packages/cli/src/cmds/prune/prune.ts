@@ -5,7 +5,7 @@ import Yargs from 'yargs';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { AppMap, pruneAppMap, pruneWithFilter } from './pruneAppMap';
 
-async function fromFile(filePath): Promise<AppMap> {
+export async function fromFile(filePath: string): Promise<AppMap> {
   let data: AppMap = { events: [] };
 
   return new Promise((resolve, reject) => {
