@@ -189,6 +189,8 @@ export default {
 .stats-panel {
   background-color: $gray2;
   border-radius: 1rem;
+  padding-top: 1rem;
+  margin-right: 0.5rem;
   box-shadow: 0px 0px 20px 2px rgb(0 0 0 / 90%);
 }
 .stats-table {
@@ -225,7 +227,9 @@ export default {
       text-overflow: ellipsis;
       .hidden-fqid {
         color: $gray4;
-        display: flex;
+        display: grid;
+        grid-template-columns: 1rem 1fr;
+        gap: 0.5rem;
         align-items: center;
         svg {
           margin-right: 0.5rem;
@@ -235,13 +239,16 @@ export default {
       }
       .pruned-fqid {
         color: #c07d1b;
-        display: flex;
+        display: grid;
+        grid-template-columns: 1rem 1fr;
+        gap: 0.5rem;
         align-items: center;
         text-decoration: line-through;
         svg {
           margin-right: 0.5rem;
           width: 1rem;
           height: 1rem;
+          fill: #c07d1b;
         }
       }
       a {
