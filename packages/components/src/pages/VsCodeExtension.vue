@@ -22,6 +22,11 @@
             this.eventFilterText = value;
           }
         "
+        @openStatsPanel="
+          () => {
+            this.showStatsPanel = true;
+          }
+        "
       >
         <template v-slot:buttons>
           <v-details-button
@@ -338,9 +343,9 @@
                   <ScissorsIcon /><strong>This AppMap has been automatically trimmed.</strong>
                 </p>
                 <p>
-                  We have identified functions that my impact performance of yoru AppMap, and
-                  removed them from this map. Please see our <a href="/">documentation</a> for more
-                  information on how to optimize your AppMaps.
+                  This AppMap is too large, so we removed the highlighted functions below. Please
+                  see our <a href="#">documentation</a> for more information on how to optimize your
+                  AppMaps.
                 </p>
               </div>
             </div>
