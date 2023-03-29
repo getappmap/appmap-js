@@ -1754,7 +1754,8 @@ code {
       vertical-align: middle;
       height: 22px;
       padding: 0 0.25rem;
-      border: 1px solid $gray2;
+      //border: 1px solid $gray2;
+      background: darken($gray4, 50);
 
       &-input {
         display: inline-block;
@@ -1765,7 +1766,6 @@ code {
         box-shadow: none;
         background: transparent;
         font: inherit;
-        text-align: right;
         color: inherit;
         outline: none;
       }
