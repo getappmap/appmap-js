@@ -287,6 +287,7 @@
           </v-popper-menu>
           <button
             v-if="!isGiantAppMap"
+            data-cy="reload-button"
             class="control-button diagram-reload"
             @click="resetDiagram"
             title="Clear"
@@ -326,7 +327,11 @@
           @closeStatsPanel="closeStatsPanel"
         >
           <template v-slot:notification>
-            <div v-if="isGiantAppMap" class="notification blocked">
+            <div
+              v-if="isGiantAppMap"
+              class="notification blocked"
+              data-cy="giant-map-stats-notification"
+            >
               <div class="content">
                 <p class="notification-head">
                   <ExclamationIcon /><strong>This AppMap is too large to open.</strong>
@@ -337,7 +342,11 @@
                 </p>
               </div>
             </div>
-            <div v-if="wasAutoPruned" class="notification trimmed">
+            <div
+              v-if="wasAutoPruned"
+              class="notification trimmed"
+              data-cy="pruned-map-stats-notification"
+            >
               <div class="content">
                 <p class="notification-head">
                   <ScissorsIcon /><strong>This AppMap has been automatically trimmed.</strong>

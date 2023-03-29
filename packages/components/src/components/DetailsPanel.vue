@@ -4,7 +4,11 @@
       <AppMapLogo width="70" />
     </h3>
 
-    <div v-if="isGiantAppMap" class="details-panel__notification blocked">
+    <div
+      v-if="isGiantAppMap"
+      class="details-panel__notification blocked"
+      data-cy="giant-map-sidebar-notification"
+    >
       <div class="content">
         <p class="notification-head">
           <ExclamationIcon /><strong>This AppMap is too large to open.</strong>
@@ -16,7 +20,11 @@
       </div>
     </div>
 
-    <div v-if="wasAutoPruned" class="details-panel__notification trimmed">
+    <div
+      v-if="wasAutoPruned"
+      class="details-panel__notification trimmed"
+      data-cy="pruned-map-sidebar-notification"
+    >
       <div class="content">
         <p class="notification-head">
           <ScissorsIcon /><strong>This AppMap has been automatically trimmed.</strong>
