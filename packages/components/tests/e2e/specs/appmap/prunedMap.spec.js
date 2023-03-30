@@ -6,7 +6,7 @@ context('pruned AppMap', () => {
   });
 
   it('shows the correct notifications', () => {
-    const notificationHeader = 'This AppMap has been automatically trimmed.';
+    const notificationHeader = 'This AppMap has been automatically pruned.';
     cy.get('[data-cy="pruned-map-sidebar-notification"]')
       .should('be.visible')
       .should('include.text', notificationHeader);

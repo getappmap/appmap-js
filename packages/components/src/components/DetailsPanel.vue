@@ -15,7 +15,7 @@
         </p>
         <p>
           To learn more about making your AppMaps smaller, please see our
-          <a href="/">documentation</a>.
+          <a href="https://appmap.io/docs/reference/handling-large-appmaps.html">documentation</a>.
         </p>
       </div>
     </div>
@@ -27,7 +27,7 @@
     >
       <div class="content">
         <p class="notification-head">
-          <ScissorsIcon /><strong>This AppMap has been automatically trimmed.</strong>
+          <ScissorsIcon /><strong>This AppMap has been automatically pruned.</strong>
         </p>
         <p>
           This AppMap is too large, so we removed some functions. Please see the
