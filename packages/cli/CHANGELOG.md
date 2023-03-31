@@ -1,3 +1,16 @@
+# [@appland/appmap-v3.74.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.73.0...@appland/appmap-v3.74.0) (2023-03-31)
+
+
+### Bug Fixes
+
+* handle base64url-filter pruning of previously pruned map ([e0ea606](https://github.com/getappmap/appmap-js/commit/e0ea60670ea2e5b6ab2d34fde03d4d3697ab45bf))
+
+
+### Features
+
+* add hidden option to indicate automatic pruning ([0240cc8](https://github.com/getappmap/appmap-js/commit/0240cc86f35b64f2bd9eaf69da14a57344d5f4c6))
+* add prune option to display all appmap data ([a02eb7d](https://github.com/getappmap/appmap-js/commit/a02eb7d3ea6c32b1db869c0799839618ec3bde3b))
+
 # [@appland/appmap-v3.73.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.72.0...@appland/appmap-v3.73.0) (2023-03-22)
 
 
