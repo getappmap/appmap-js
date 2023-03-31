@@ -1,3 +1,12 @@
+# [@appland/components-v2.35.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.34.0...@appland/components-v2.35.0) (2023-03-31)
+
+
+### Features
+
+* display notifications for auto-pruned map ([2a169a8](https://github.com/getappmap/appmap-js/commit/2a169a87fdf0c14e81f9b87ae2940f7944fb1d23))
+* open stats panel from sidebar notification ([ba1ddd8](https://github.com/getappmap/appmap-js/commit/ba1ddd833c3d281cc3717f5a923e5f6be8f44149))
+* show only the stats panel for giant appmaps ([ab361f1](https://github.com/getappmap/appmap-js/commit/ab361f1f0ffee1c05327c56cefbaae580d8baec0))
+
 # [@appland/components-v2.34.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.33.2...@appland/components-v2.34.0) (2023-03-23)
 
 
