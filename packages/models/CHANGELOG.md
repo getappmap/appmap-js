@@ -1,3 +1,10 @@
+# [@appland/models-v2.4.2](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.4.1...@appland/models-v2.4.2) (2023-03-31)
+
+
+### Bug Fixes
+
+* handle auto-prune when map already has pruneFilter ([2478528](https://github.com/getappmap/appmap-js/commit/24785289135ad80226f20c7fb273c9605cb448ab))
+
 # [@appland/models-v2.4.1](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.4.0...@appland/models-v2.4.1) (2023-03-23)
 
 
