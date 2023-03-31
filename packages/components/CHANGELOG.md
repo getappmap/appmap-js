@@ -1,3 +1,10 @@
+# [@appland/components-v2.36.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.35.0...@appland/components-v2.36.0) (2023-03-31)
+
+
+### Features
+
+* update @appland/models to 2.4.2 ([4691796](https://github.com/getappmap/appmap-js/commit/469179691b5611fdb821f685e740b77c1747588f))
+
 # [@appland/components-v2.35.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.34.0...@appland/components-v2.35.0) (2023-03-31)
 
 
