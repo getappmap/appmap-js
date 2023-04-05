@@ -64,11 +64,11 @@ export default {
     text-decoration: none;
     text-align: center;
     &.btn-primary {
-      background-color: desaturate($hotpink, 20);
+      background-color: desaturate($powderblue, 20);
       font-weight: 600;
       margin: 0 1.25rem;
       &:hover {
-        background-color: darken($hotpink, 15);
+        background-color: darken($powderblue, 15);
       }
     }
   }
@@ -100,9 +100,6 @@ export default {
     flex-direction: column;
     align-content: center;
     text-align: center;
-    svg {
-      //max-width: 100px;
-    }
   }
 }
 </style>
