@@ -1,3 +1,11 @@
+# [@appland/components-v2.37.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.36.0...@appland/components-v2.37.0) (2023-04-05)
+
+
+### Features
+
+* remove new badge from sequence diagram tab ([522ceb6](https://github.com/getappmap/appmap-js/commit/522ceb630e68b86582c74fa98ac5d244aded44dc))
+* switch sign-in button from pink to blue ([deffbad](https://github.com/getappmap/appmap-js/commit/deffbad95156fcad1221f657f0ae17ab73f0bf8e))
+
 # [@appland/components-v2.36.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.35.0...@appland/components-v2.36.0) (2023-03-31)
 
 
