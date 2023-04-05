@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { rmdir, unlink } from 'fs/promises';
+import { rmdir } from 'fs/promises';
 import { glob } from 'glob';
 import { basename, join } from 'path';
 import { promisify } from 'util';
@@ -7,7 +7,12 @@ import yargs from 'yargs';
 import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { verbose } from '../../utils';
-import { ArchiveStore, FileArchiveStore, GitHubArchiveStore } from './archiveStore';
+import {
+  ArchiveEntry,
+  ArchiveStore,
+  FileArchiveStore,
+  GitHubArchiveStore,
+} from './archiveStore';
 import gitAncestors from './gitAncestors';
 import gitRevision from './gitRevision';
 import unpackArchive from './unpackArchive';
@@ -75,32 +80,45 @@ export const handler = async (argv: any) => {
     archiveStore = new FileArchiveStore(archiveDir);
   }
 
-  const archivesAvailable = await archiveStore.revisionsAvailable();
-
-  const mostRecentRevisionAvailable = ancestors.find((revision) =>
-    [...archivesAvailable.full.values()].find((archive) => archive.revision === revision)
-  );
-  if (!mostRecentRevisionAvailable)
+  let mostRecentArchiveAvailable: ArchiveEntry | undefined;
+  {
+    const archivesAvailable = await archiveStore.revisionsAvailable();
+    const ancestorIndex = ancestors.reduce(
+      (memo, revision, index) => ((memo[revision] = index), memo),
+      {} as Record<string, number>
+    );
+    let mostRecentAncestorIndex: number | undefined;
+    for (const archive of archivesAvailable.full.values()) {
+      const index = ancestorIndex[archive.revision];
+      if (
+        index !== undefined &&
+        (mostRecentAncestorIndex === undefined || index < mostRecentAncestorIndex)
+      ) {
+        mostRecentAncestorIndex = index;
+        mostRecentArchiveAvailable = archive;
+      }
+    }
+  }
+  if (!mostRecentArchiveAvailable)
     throw new Error(`No full AppMap archive found in the ancestry of ${revision}`);
 
-  console.log(`Using revision ${mostRecentRevisionAvailable} as the baseline`);
+  console.log(`Using revision ${mostRecentArchiveAvailable.revision} as the baseline`);
 
   await rmdir(outputDir, { recursive: true });
 
-  const fullArchivePath = await archiveStore.fetch(mostRecentRevisionAvailable);
+  const fullArchivePath = await archiveStore.fetch(mostRecentArchiveAvailable.id);
 
   console.log(
-    `Restoring full archive revision '${mostRecentRevisionAvailable}' from '${fullArchivePath}'}`
+    `Restoring full archive revision '${mostRecentArchiveAvailable.revision}' from '${fullArchivePath}'`
   );
 
   await unpackArchive(outputDir, fullArchivePath);
-  await archiveStore.cleanup(fullArchivePath);
 
-  let restoredRevision = mostRecentRevisionAvailable;
+  let restoredRevision = mostRecentArchiveAvailable.revision;
   const restoredRevisions = [restoredRevision];
 
-  if (mostRecentRevisionAvailable !== revision) {
-    const baseRevisionIndex = ancestors.indexOf(mostRecentRevisionAvailable);
+  if (mostRecentArchiveAvailable.revision !== revision) {
+    const baseRevisionIndex = ancestors.indexOf(mostRecentArchiveAvailable.revision);
     assert(baseRevisionIndex !== -1);
     const ancestorsAfterBaseRevision = new Set<string>(ancestors.slice(0, baseRevisionIndex));
     const incrementalArchivesAvailable = (

@@ -1,22 +1,23 @@
 import { glob } from 'glob';
-import { dirname, join } from 'path';
+import { join } from 'path';
 import { promisify } from 'util';
 import { Octokit } from '@octokit/rest';
-import { mkdtemp, rm, rmdir } from 'fs/promises';
+import { mkdtemp, rm, rmdir, unlink } from 'fs/promises';
 import { createWriteStream } from 'fs';
-import fetch from 'node-fetch';
 import { tmpdir } from 'os';
 import { executeCommand } from '../../lib/executeCommand';
+import assert from 'assert';
+import { get } from 'https';
 
-type ArchiveId = string;
+export type ArchiveId = string;
 
-type ArchiveEntry = {
+export type ArchiveEntry = {
   id: ArchiveId;
   type: string;
   revision: string;
 };
 
-type ArchiveInventory = {
+export type ArchiveInventory = {
   full: Map<ArchiveId, ArchiveEntry>;
   incremental: Map<ArchiveId, ArchiveEntry>;
 };
@@ -27,9 +28,6 @@ export interface ArchiveStore {
 
   // Download and store an archive to a file.
   fetch(archiveId: string): Promise<string>;
-
-  // Cleanup a previously downloaded archive.
-  cleanup(path: string): Promise<void>;
 }
 
 export class FileArchiveStore implements ArchiveStore {
@@ -64,11 +62,6 @@ export class FileArchiveStore implements ArchiveStore {
   async fetch(archiveId: string): Promise<string> {
     return archiveId;
   }
-
-  // Leave the file in place, since it's not a temp file.
-  async cleanup(path: string) {
-    return;
-  }
 }
 
 export class GitHubArchiveStore implements ArchiveStore {
@@ -88,43 +81,46 @@ export class GitHubArchiveStore implements ArchiveStore {
   }
 
   async revisionsAvailable(): Promise<ArchiveInventory> {
+    const { owner, repo } = this;
     const result = {
       full: new Map<ArchiveId, ArchiveEntry>(),
       incremental: new Map<ArchiveId, ArchiveEntry>(),
     };
     for (let page = 1; true; page++) {
-      const artifacts = (
+      const response = (
         await this.octokit.rest.actions.listArtifactsForRepo({
+          owner,
+          repo,
           page,
           per_page: 100,
-          repo: this.repository,
         })
       ).data;
-      const { total_count } = artifacts;
-      if (total_count === 0) break;
+      if (response.artifacts.length === 0) break;
 
-      for (const artifact of artifacts) {
+      for (const artifact of response.artifacts) {
         // TODO: Use id or node_id?
         const { id, name } = artifact;
 
-        // Example archive name: appmap-archive-full_2c51afaae3cc355e4bac499e9b68ea1d3dc1b36a.json
+        // Example archive name: appmap-archive-full_2c51afaae3cc355e4bac499e9b68ea1d3dc1b36a.tar
         // Extract archive type and revision from the name
-        const { 1: archiveType, 2: revision } = name.match(/appmap-archive-(\w+)_(\w+)\.json/);
-        if (archiveType && revision) {
-          let archives: Map<ArchiveId, ArchiveEntry> | undefined;
-          if (archiveType === 'full') {
-            archives = result.full;
-          } else if (archiveType === 'incremental') {
-            archives = result.incremental;
-          }
-          if (archives)
-            archives.set(id.toString(), {
-              id: id.toString(),
-              type: archiveType,
-              revision,
-            });
-          else console.warn(`Unknown archive type '${archiveType}' in artifact '${name}'`);
+        const matchResult = /appmap-archive-(\w+)_(\w+)\.tar/.exec(name);
+        if (!matchResult) continue;
+
+        let archives: Map<ArchiveId, ArchiveEntry> | undefined;
+        const archiveType = matchResult[1];
+        const revision = matchResult[2];
+        if (archiveType === 'full') {
+          archives = result.full;
+        } else if (archiveType === 'incremental') {
+          archives = result.incremental;
         }
+        if (archives)
+          archives.set(id.toString(), {
+            id: id.toString(),
+            type: archiveType,
+            revision,
+          });
+        else console.warn(`Unknown archive type '${archiveType}' in artifact '${name}'`);
       }
     }
     return result;
@@ -132,37 +128,43 @@ export class GitHubArchiveStore implements ArchiveStore {
 
   async fetch(archiveId: string): Promise<string> {
     const { owner, repo } = this;
-    const artifactUrl = await this.octokit.rest.actions.downloadArtifact({
+    const { url: artifactUrl } = await this.octokit.rest.actions.downloadArtifact({
       owner,
       repo,
-      artifact_id: archiveId,
+      artifact_id: parseInt(archiveId, 10),
       archive_format: 'zip',
     });
+    assert(artifactUrl, `No location header in response for artifact ${archiveId}`);
+
     const tempDir = await mkdtemp(join(tmpdir(), 'appmap-'));
+    process.on('exit', () => rm(tempDir, { recursive: true, force: true }));
+
     const tempFile = join(tempDir, 'archive.zip');
     await downloadFile(new URL(artifactUrl), tempFile);
     await executeCommand(`unzip -o -d ${tempDir} ${tempFile}`);
-    const filesAvailable = await promisify(glob)(join(tempDir, '**', '*.json'));
-    if (filesAvailable.length === 0) throw new Error(`No JSON files found in archive ${archiveId}`);
-    return filesAvailable.join(', ');
-  }
-
-  // Remove the enclosing directory of the artifact, because it's been unzipped into a temp dir.
-  async cleanup(path: string) {
-    await rmdir(dirname(path), { recursive: true });
+    const filesAvailable = await promisify(glob)([tempDir, '**', '*.tar'].join('/'), {
+      dot: true,
+    });
+    if (filesAvailable.length === 0)
+      throw new Error(`No *.tar found in GitHub artifact ${archiveId}`);
+    if (filesAvailable.length > 1)
+      throw new Error(`Multiple *.tar found in GitHub artifact ${archiveId}`);
+    return filesAvailable.pop()!;
   }
 }
 
 export async function downloadFile(url: URL, path: string) {
-  const res = await fetch(url);
-  if (!res) throw new Error(`Could not download ${url}`);
-  if (!res.body) throw new Error(`Response body for ${url} is empty`);
-  if (res.status !== 200) throw new Error(`Could not download ${url}: ${res.statusText}`);
-
-  const readStream = res.body;
-  const writeStream = createWriteStream(path);
-
-  await new Promise((resolve, reject) => {
-    readStream.on('error', reject).pipe(writeStream).on('error', reject).on('finish', resolve);
+  const file = createWriteStream(path);
+  return new Promise<void>((resolve, reject) => {
+    get(url, function (response) {
+      response.pipe(file);
+      file.on('finish', () => {
+        file.close();
+        resolve();
+      });
+    }).on('error', function (err) {
+      unlink(path);
+      reject(err);
+    });
   });
 }
