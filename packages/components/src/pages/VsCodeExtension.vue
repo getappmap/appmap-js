@@ -71,7 +71,6 @@
           :ref="VIEW_SEQUENCE"
           :tabName="VIEW_SEQUENCE"
           :allow-scroll="true"
-          :isNew="!isGiantAppMap"
         >
           <v-diagram-sequence
             ref="viewSequence_diagram"
