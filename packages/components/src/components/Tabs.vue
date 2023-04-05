@@ -8,7 +8,6 @@
           :label="tab.name"
           :is-active="activeTab === tab"
           :tabName="tab.tabName"
-          :isNew="tab.isNew"
           @click.native="activateTab(tab)"
         >
         </v-tab-button>

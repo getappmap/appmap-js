@@ -1,8 +1,5 @@
 <template>
-  <button v-if="isNew" :class="classes" @click="clickTab">
-    {{ label }} <span class="tab-badge">NEW!</span>
-  </button>
-  <button v-else :class="classes" @click="clickTab">
+  <button :class="classes" @click="clickTab">
     {{ label }}
   </button>
 </template>
@@ -27,10 +24,6 @@ export default {
     },
     isActive: Boolean,
     tabName: String,
-    isNew: {
-      type: Boolean,
-      default: false,
-    },
   },
 
   methods: {
