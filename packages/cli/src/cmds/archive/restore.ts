@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { rmdir, unlink } from 'fs/promises';
+import { rmdir } from 'fs/promises';
 import { glob } from 'glob';
 import { basename, join } from 'path';
 import { promisify } from 'util';
@@ -7,6 +7,12 @@ import yargs from 'yargs';
 import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { verbose } from '../../utils';
+import {
+  ArchiveEntry,
+  ArchiveStore,
+  FileArchiveStore,
+  GitHubArchiveStore,
+} from './archiveStore';
 import gitAncestors from './gitAncestors';
 import gitRevision from './gitRevision';
 import unpackArchive from './unpackArchive';
@@ -26,7 +32,7 @@ export const builder = (args: yargs.Argv) => {
   });
 
   args.option('output-dir', {
-    describe: 'directory in which to restore the data. Default: .appmap/work/<revision>.',
+    describe: 'directory in which to restore the data. Default: .appmap/work/<revision>',
     type: 'string',
   });
 
@@ -34,6 +40,12 @@ export const builder = (args: yargs.Argv) => {
     describe: 'directory in which the archives are stored',
     type: 'string',
     default: '.appmap/archive',
+  });
+
+  args.option('github-repo', {
+    describe:
+      'Fetch AppMap archives from artifacts on a GitHub repository. GITHUB_TOKEN must be set for this option to work.',
+    type: 'string',
   });
 
   args.option('exact', {
@@ -50,7 +62,7 @@ export const handler = async (argv: any) => {
 
   handleWorkingDirectory(argv.directory);
 
-  const { revision: revisionArg, outputDir: outputDirArg, archiveDir, exact } = argv;
+  const { revision: revisionArg, outputDir: outputDirArg, githubRepo, archiveDir, exact } = argv;
 
   const revision = revisionArg || (await gitRevision());
   const outputDir = outputDirArg || join('.appmap', 'work', revision);
@@ -59,29 +71,54 @@ export const handler = async (argv: any) => {
 
   const ancestors = await gitAncestors(revision);
 
-  // Find the AppMap tarball that's closest in the git ancestry.
-  const fullArchivesAvailable = new Set<string>(
-    await promisify(glob)(join(archiveDir, 'full', '*.tar'))
-  );
-  const mostRecentRevisionAvailable = ancestors.find((revision) =>
-    fullArchivesAvailable.has(join(archiveDir, 'full', `${revision}.tar`))
-  );
-  if (!mostRecentRevisionAvailable)
+  let archiveStore: ArchiveStore;
+  if (githubRepo) {
+    const token = process.env.GITHUB_TOKEN;
+    if (!token) throw new Error('GITHUB_TOKEN must be set to use the --github-repo option');
+    archiveStore = new GitHubArchiveStore(githubRepo, token);
+  } else {
+    archiveStore = new FileArchiveStore(archiveDir);
+  }
+
+  let mostRecentArchiveAvailable: ArchiveEntry | undefined;
+  {
+    const archivesAvailable = await archiveStore.revisionsAvailable();
+    const ancestorIndex = ancestors.reduce(
+      (memo, revision, index) => ((memo[revision] = index), memo),
+      {} as Record<string, number>
+    );
+    let mostRecentAncestorIndex: number | undefined;
+    for (const archive of archivesAvailable.full.values()) {
+      const index = ancestorIndex[archive.revision];
+      if (
+        index !== undefined &&
+        (mostRecentAncestorIndex === undefined || index < mostRecentAncestorIndex)
+      ) {
+        mostRecentAncestorIndex = index;
+        mostRecentArchiveAvailable = archive;
+      }
+    }
+  }
+  if (!mostRecentArchiveAvailable)
     throw new Error(`No full AppMap archive found in the ancestry of ${revision}`);
 
-  console.log(`Using revision ${mostRecentRevisionAvailable} as the baseline`);
-
-  const mostRecentFullArchive = join(archiveDir, 'full', `${mostRecentRevisionAvailable}.tar`);
+  console.log(`Using revision ${mostRecentArchiveAvailable.revision} as the baseline`);
 
   await rmdir(outputDir, { recursive: true });
 
-  console.log(`Restoring full archive ${mostRecentFullArchive}`);
-  await unpackArchive(outputDir, mostRecentFullArchive);
-  let restoredRevision = mostRecentRevisionAvailable;
+  const fullArchivePath = await archiveStore.fetch(mostRecentArchiveAvailable.id);
+
+  console.log(
+    `Restoring full archive revision '${mostRecentArchiveAvailable.revision}' from '${fullArchivePath}'`
+  );
+
+  await unpackArchive(outputDir, fullArchivePath);
+
+  let restoredRevision = mostRecentArchiveAvailable.revision;
   const restoredRevisions = [restoredRevision];
 
-  if (mostRecentRevisionAvailable !== revision) {
-    const baseRevisionIndex = ancestors.indexOf(mostRecentRevisionAvailable);
+  if (mostRecentArchiveAvailable.revision !== revision) {
+    const baseRevisionIndex = ancestors.indexOf(mostRecentArchiveAvailable.revision);
     assert(baseRevisionIndex !== -1);
     const ancestorsAfterBaseRevision = new Set<string>(ancestors.slice(0, baseRevisionIndex));
     const incrementalArchivesAvailable = (
