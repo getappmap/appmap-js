@@ -35,16 +35,11 @@ export const builder = (args: yargs.Argv) => {
     describe:
       'directory in which to save the report files. Default is ./change-report/<base-revision>-<head-revision>.',
   });
+  
   args.option('clobber-output-dir', {
     describe: 'remove the output directory if it exists',
     type: 'boolean',
     default: false,
-  });
-
-  args.option('archive-dir', {
-    describe: 'directory in which the archives are stored',
-    type: 'string',
-    default: '.appmap/archive',
   });
 
   args.option('source-dir', {
@@ -68,7 +63,6 @@ export const handler = async (argv: any) => {
   });
 
   const {
-    archiveDir,
     directory,
     sourceDir: srcDir,
     baseRevision: baseRevisionArg,
@@ -93,7 +87,7 @@ export const handler = async (argv: any) => {
     [RevisionName.Head, headRevision],
   ] as [RevisionName, string][]) {
     // These need to be serialized, because a git checkout is performed.
-    await analyzeArchive(archiveDir, revision, join(outputDir, revisionName));
+    await analyzeArchive(revision, join(outputDir, revisionName));
   }
 
   const changeReport = await buildChangeReport(baseRevision, headRevision, outputDir, srcDir);
