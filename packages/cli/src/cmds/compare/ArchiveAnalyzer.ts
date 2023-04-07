@@ -3,25 +3,16 @@ import { handler as restoreCmd } from '../archive/restore';
 import { default as openAPICmd } from '../openapi';
 import { DefaultMaxAppMapSizeInMB } from '../../lib/fileSizeFilter';
 
-export default async function analyzeArchive(
-  archiveDir: string,
-  revision: string,
-  dir: string
-): Promise<void> {
-  const analyzer = new ArchiveAnalyzer(archiveDir, revision, dir);
+export default async function analyzeArchive(revision: string, dir: string): Promise<void> {
+  const analyzer = new ArchiveAnalyzer(revision, dir);
   return analyzer.analyze();
 }
 
 class ArchiveAnalyzer {
-  constructor(
-    public readonly archiveDir: string,
-    public readonly revision: string,
-    public readonly dir: string
-  ) {}
+  constructor(public readonly revision: string, public readonly dir: string) {}
 
   async analyze() {
     await this.checkout();
-    await this.restore();
     await this.inWorkingDirectory(this.dir, async () => {
       await this.openAPI();
       await this.runtimeAnalysis();
@@ -29,16 +20,7 @@ class ArchiveAnalyzer {
   }
 
   private async checkout() {
-    await executeCommand(`git checkout ${this.revision}`, true, true, true);
-  }
-
-  private async restore() {
-    await restoreCmd({
-      outputDir: this.dir,
-      archiveDir: this.archiveDir,
-      revision: this.revision,
-      exact: true,
-    });
+    await executeCommand(`git checkout ${this.revision}`);
   }
 
   private async openAPI() {
