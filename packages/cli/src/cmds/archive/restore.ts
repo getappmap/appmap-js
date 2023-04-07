@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { rmdir } from 'fs/promises';
+import { existsSync } from 'fs';
 import { glob } from 'glob';
 import { basename, join } from 'path';
 import { promisify } from 'util';
@@ -7,12 +7,7 @@ import yargs from 'yargs';
 import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { verbose } from '../../utils';
-import {
-  ArchiveEntry,
-  ArchiveStore,
-  FileArchiveStore,
-  GitHubArchiveStore,
-} from './archiveStore';
+import { ArchiveEntry, ArchiveStore, FileArchiveStore, GitHubArchiveStore } from './archiveStore';
 import gitAncestors from './gitAncestors';
 import gitRevision from './gitRevision';
 import unpackArchive from './unpackArchive';
@@ -66,6 +61,7 @@ export const handler = async (argv: any) => {
 
   const revision = revisionArg || (await gitRevision());
   const outputDir = outputDirArg || join('.appmap', 'work', revision);
+  if (existsSync(outputDir)) throw new Error(`Output directory ${outputDir} already exists`);
 
   console.log(`Restoring AppMaps of revision ${revision} to ${outputDir}`);
 
@@ -104,12 +100,10 @@ export const handler = async (argv: any) => {
 
   console.log(`Using revision ${mostRecentArchiveAvailable.revision} as the baseline`);
 
-  await rmdir(outputDir, { recursive: true });
-
   const fullArchivePath = await archiveStore.fetch(mostRecentArchiveAvailable.id);
 
   console.log(
-    `Restoring full archive revision '${mostRecentArchiveAvailable.revision}' from '${fullArchivePath}'`
+    `Restoring full archive revision '${mostRecentArchiveAvailable.revision}' from '${fullArchivePath}' to '${outputDir}'`
   );
 
   await unpackArchive(outputDir, fullArchivePath);
