@@ -167,11 +167,18 @@
           </v-popper>
           <v-popper-menu v-if="!isGiantAppMap" :isHighlight="filtersChanged">
             <template v-slot:icon>
-              <FilterIcon
-                class="control-button__icon"
-                data-cy="filter-button"
-                @click="openFilterModal"
-              />
+              <v-popper
+                class="hover-text-popper"
+                text="Filter your view"
+                placement="left"
+                text-align="left"
+              >
+                <FilterIcon
+                  class="control-button__icon"
+                  data-cy="filter-button"
+                  @click="openFilterModal"
+                />
+              </v-popper>
             </template>
             <template v-slot:body>
               <div class="filters">
@@ -284,15 +291,17 @@
               </div>
             </template>
           </v-popper-menu>
-          <button
-            v-if="!isGiantAppMap"
-            data-cy="reload-button"
-            class="control-button diagram-reload"
-            @click="resetDiagram"
-            title="Clear"
-          >
-            <ReloadIcon class="control-button__icon" />
-          </button>
+          <v-popper class="hover-text-popper" text="Reload map" placement="left" text-align="left">
+            <button
+              v-if="!isGiantAppMap"
+              data-cy="reload-button"
+              class="control-button diagram-reload"
+              @click="resetDiagram"
+              title="Clear"
+            >
+              <ReloadIcon class="control-button__icon" />
+            </button>
+          </v-popper>
         </template>
       </v-tabs>
 
