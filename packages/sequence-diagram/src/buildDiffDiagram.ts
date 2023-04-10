@@ -43,6 +43,7 @@ export default function buildDiffDiagram(diff: Diff): Diagram {
         action.diffMode = DiffMode.Change;
         action.formerName = nodeName(lAction);
         action.formerResult = nodeResult(lAction);
+        if ('count' in lAction) action.formerCount = lAction.count;
         if (rAction.parent) {
           const parent = diffActionsByAction.get(rAction.parent);
           parent?.children.push(action);

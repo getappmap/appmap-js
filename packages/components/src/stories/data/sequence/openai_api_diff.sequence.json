@@ -1,0 +1,223 @@
+{
+  "actors": [
+    {
+      "id": "http:HTTP server requests",
+      "name": "HTTP server requests",
+      "order": 0
+    },
+    {
+      "id": "package:app/controllers",
+      "name": "controllers",
+      "order": 1000
+    },
+    {
+      "id": "package:app/models",
+      "name": "models",
+      "order": 2000
+    },
+    {
+      "id": "external-service:api.openai.com",
+      "name": "api.openai.com",
+      "order": 6000
+    },
+    {
+      "id": "database:Database",
+      "name": "Database",
+      "order": 7000
+    }
+  ],
+  "rootActions": [
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "GET /v1/code/completions",
+      "status": 200,
+      "digest": "ec900b9d1789e528e360fe2044ca7872aaa8c37aa32cc1efc19a5af5031b87a4",
+      "subtreeDigest": "unknown",
+      "children": [
+        {
+          "nodeType": 6,
+          "caller": "http:HTTP server requests",
+          "callee": "database:Database",
+          "query": "SAVEPOINT autopoint_1",
+          "digest": "e2acca958778708cd318075230576c80baf753d686a606ba55fb223a746335ee",
+          "subtreeDigest": "unknown",
+          "children": [],
+          "elapsed": 0.001344,
+          "eventIds": [
+            1034
+          ]
+        },
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:app/controllers",
+          "name": "authenticate_session",
+          "static": false,
+          "digest": "c1555e7ba0c34ece558323b46161be2f3496b7ee89559246f10096d26163a1a8",
+          "subtreeDigest": "unknown",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/controllers/ApplicationController#authenticate_session",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "boolean"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 3,
+              "caller": "package:app/controllers",
+              "callee": "package:app/models",
+              "name": "find_by_id",
+              "static": true,
+              "digest": "af70b626c42c2ab64eb3db771bec1704d3d8a36690cc1b04afe817e3e1b42627",
+              "subtreeDigest": "unknown",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/models/User.find_by_id",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "User::Show"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 6,
+                  "caller": "package:app/models",
+                  "callee": "database:Database",
+                  "query": "SELECT * FROM \"users\" WHERE (\"id\" = 47) LIMIT 1",
+                  "digest": "0c35a882ce9d80661ab4e9db1ae4f3b03309c05a89ac023a9fc90d7472c8ff88",
+                  "subtreeDigest": "unknown",
+                  "children": [],
+                  "elapsed": 0.00115,
+                  "eventIds": [
+                    1051
+                  ]
+                }
+              ],
+              "elapsed": 0.0015119999879971147,
+              "eventIds": [
+                1048
+              ]
+            }
+          ],
+          "elapsed": 0.0018970000091940165,
+          "eventIds": [
+            1040
+          ]
+        },
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:app/models",
+          "name": "generate_completions",
+          "static": true,
+          "digest": "d3415991153ee610183485885f9218b014158eb673c3a594821f87987a92dd18",
+          "subtreeDigest": "unknown",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/models/ScannerJob.generate_completions",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "CodeCompletion"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 1,
+              "count": 36,
+              "digest": "loop:b0799aa7b357094b0da839a286c89f89e2a9c97eb4fa409906f9de7111af6d1b:36",
+              "subtreeDigest": "unknown",
+              "children": [
+                {
+                  "nodeType": 5,
+                  "caller": "package:app/models",
+                  "callee": "external-service:api.openai.com",
+                  "route": "POST https://api.openai.com/v1/completions",
+                  "status": 200,
+                  "digest": "13e5bff13c8429b6a579b2b6fc3f38ab05f51a8f14b9b10246c3c824e55bfeda",
+                  "subtreeDigest": "unknown",
+                  "children": [],
+                  "elapsed": 0.41432397812604904,
+                  "eventIds": [
+                    1097,
+                    1099,
+                    1111,
+                    1113,
+                    1115,
+                    1117,
+                    1119,
+                    1121,
+                    1123,
+                    1125,
+                    1127,
+                    1129,
+                    1131,
+                    1133,
+                    1135,
+                    1137,
+                    1139,
+                    1141,
+                    1143,
+                    1145,
+                    1147,
+                    1149,
+                    1151,
+                    1153,
+                    1155,
+                    1157,
+                    1159,
+                    1161,
+                    1163,
+                    1165,
+                    1167,
+                    1169,
+                    1171,
+                    1173,
+                    1175,
+                    1177
+                  ]
+                }
+              ],
+              "elapsed": 0.41432397812604904,
+              "eventIds": [],
+              "diffMode": 3,
+              "formerName": "loop",
+              "formerCount": 10
+            }
+          ],
+          "elapsed": 0.002129000029526651,
+          "eventIds": [
+            1094
+          ]
+        },
+        {
+          "nodeType": 6,
+          "caller": "http:HTTP server requests",
+          "callee": "database:Database",
+          "query": "RELEASE SAVEPOINT autopoint_1",
+          "digest": "682ac0a00b08652a98b568707671487755467437670b11481dd664a20840d2ed",
+          "subtreeDigest": "unknown",
+          "children": [],
+          "elapsed": 0.001451,
+          "eventIds": [
+            1360
+          ]
+        }
+      ],
+      "eventIds": [
+        967
+      ]
+    }
+  ]
+}

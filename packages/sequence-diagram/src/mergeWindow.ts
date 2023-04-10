@@ -50,7 +50,7 @@ const buildLoop = (merge: Merge): Loop => {
   return {
     nodeType: NodeType.Loop,
     count: merge.length,
-    digest: 'loop',
+    digest: ['loop', merge.length].join(':'),
     subtreeDigest: ['loop', digest].join(':'),
     children: merge[0],
     elapsed: merge[0].reduce((sum, action) => sum + (action.elapsed || 0), 0),

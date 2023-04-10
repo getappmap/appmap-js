@@ -10,6 +10,9 @@
       <div class="label">Loop</div>
       <div class="description">
         [
+        <div class="count-previous" v-if="actionSpec.action.formerCount !== undefined">
+          {{ actionSpec.action.formerCount }} times
+        </div>
         <div class="count">{{ actionSpec.action.count }} times</div>
         <div class="elapsed">{{ actionSpec.elapsedTimeMs }}ms</div>
         ]
@@ -52,7 +55,6 @@ export default {
 
       return result;
     },
-
     gridRows(): string {
       const gridEndFactor =
         this.actionSpec.action.children.reduce((accumulator, child) => {
@@ -112,6 +114,11 @@ export default {
 
       .elapsed {
         color: $sequence-elapsed-time-color;
+      }
+
+      .count-previous {
+        text-decoration: line-through;
+        color: #808b98;
       }
     }
   }
