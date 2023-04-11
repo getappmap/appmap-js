@@ -11,10 +11,20 @@
       </div>
 
       <ul class="signin-ctas">
-        <li><a href="/">Sequence diagrams</a></li>
-        <li><a href="/">Trace views</a></li>
-        <li><a href="/">Dependency maps</a></li>
-        <li><a href="/">OpenAPI definitions</a></li>
+        <li><a href="https://appmap.io/docs/diagrams/sequence-diagrams">Sequence diagrams</a></li>
+        <li>
+          <a
+            href="https://appmap.io/docs/diagrams/how-to-use-appmaps.html#view-and-interact-with-the-trace-diagram"
+            >Trace views</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://appmap.io/docs/diagrams/how-to-use-appmaps.html#view-and-interact-with-the-dependency-map"
+            >Dependency maps</a
+          >
+        </li>
+        <li><a href="https://appmap.io/docs/openapi">OpenAPI definitions</a></li>
       </ul>
       <a href="/" class="btn btn-primary" data-cy="sign-in-button" @click="signIn">Sign in</a>
       <div class="your-data">
@@ -101,9 +111,17 @@ export default {
     border-radius: 0.25rem;
     padding: 0.8rem 1rem;
     font-weight: 600;
+    transition: $transition;
     a {
       color: desaturate($powderblue, 30);
       text-decoration: none;
+      display: flex;
+    }
+    &:hover {
+      background-color: #12222f;
+      a {
+        text-decoration: underline;
+      }
     }
   }
 }
