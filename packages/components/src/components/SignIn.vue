@@ -5,8 +5,8 @@
       <div class="sidebar-title">
         <h1 data-cy="title">Sign in</h1>
         <p>
-          Start visualizing your runtime code, identifying problems, and finding solutions.
-          Automatically generate:
+          Start visualizing your runtime code, identifying problems, and finding solutions. Sign-in
+          via GitHub or GitLab to start automatically generating:
         </p>
       </div>
 
