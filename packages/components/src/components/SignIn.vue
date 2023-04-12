@@ -5,7 +5,7 @@
       <div class="sidebar-title">
         <h1 data-cy="title">Sign in</h1>
         <p>
-          Start visualizing your runtime code, identifying problems, and finding solutions. Sign-in
+          Start visualizing your runtime code, identifying problems, and finding solutions. Sign in
           via GitHub or GitLab to start automatically generating:
         </p>
       </div>
@@ -30,8 +30,8 @@
       <div class="your-data">
         <shieldIcon />
         <p data-cy="your-data-text">
-          Authentication is used solely for issuing a license. AppMap runs in your code editor, so
-          your AppMaps and your source code stay on your machine.
+          Authentication with GitHub or GitLab is used solely for issuing a license. AppMap runs in
+          your code editor, so your AppMaps and your source code stay on your machine.
         </p>
       </div>
     </div>
@@ -88,11 +88,11 @@ export default {
     text-decoration: none;
     text-align: center;
     &.btn-primary {
-      background-color: $hotpink; //desaturate($powderblue, 20);
+      background-color: desaturate($powderblue, 20); //$hotpink;
       font-weight: 600;
       margin: 0 1.25rem;
       &:hover {
-        background-color: darken($hotpink, 15);
+        background-color: darken($powderblue, 15);
       }
     }
   }
