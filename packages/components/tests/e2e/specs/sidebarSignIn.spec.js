@@ -4,17 +4,17 @@ describe('Sidebar sign-in page', () => {
   });
 
   it('displays a title', () => {
-    cy.get('[data-cy="title"]').should('have.text', 'Activate');
+    cy.get('[data-cy="title"]').should('have.text', 'Sign in');
   });
 
   it('has a sign-in button', () => {
-    cy.get('[data-cy="sign-in-button"]').should('have.text', 'Get Started');
+    cy.get('[data-cy="sign-in-button"]').should('have.text', 'Sign in');
   });
 
   it('informs the user that we do not access their source code', () => {
     const expectedText1 =
-      'Authentication with GitHub or GitLab is used solely for verification purposes.';
-    const expectedText2 = 'AppMap will\n        not be granted access to source code.';
+      'Authentication is used solely for issuing a license. AppMap runs in your code editor, so';
+    const expectedText2 = 'your AppMaps and your source code stay on your machine.';
 
     const textElement = cy.get('[data-cy="your-data-text"]');
     textElement.should('contain.text', expectedText1);
