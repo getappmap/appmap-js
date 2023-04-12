@@ -13,8 +13,9 @@ describe('Sidebar sign-in page', () => {
 
   it('informs the user that we do not access their source code', () => {
     const expectedText1 =
-      'Authentication is used solely for issuing a license. AppMap runs in your code editor, so';
-    const expectedText2 = 'your AppMaps and your source code stay on your machine.';
+      'Authentication with GitHub or GitLab is used solely for issuing a license. AppMap runs in';
+    const expectedText2 =
+      'your code editor, so your AppMaps and your source code stay on your machine.';
 
     const textElement = cy.get('[data-cy="your-data-text"]');
     textElement.should('contain.text', expectedText1);
