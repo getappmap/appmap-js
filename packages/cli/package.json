@@ -32,10 +32,12 @@
     "@craftamap/esbuild-plugin-html": "^0.4.0",
     "@types/fs-extra": "^9.0.13",
     "@types/gitconfiglocal": "^2.0.1",
+    "@types/handlebars": "^4.1.0",
     "@types/inquirer": "^9.0.3",
     "@types/jest": "^29.4.1",
     "@types/jest-sinon": "^1.0.2",
     "@types/jsdom": "^16.2.13",
+    "@types/moo": "^0.5.5",
     "@types/node": "^16",
     "@types/semver": "^7.3.10",
     "@types/sinon": "^10.0.2",
@@ -80,7 +82,6 @@
     "@octokit/rest": "^19.0.7",
     "@octokit/types": "^9.0.0",
     "@sidvind/better-ajv-errors": "^0.9.1",
-    "@types/moo": "^0.5.5",
     "JSONStream": "^1.3.5",
     "ajv": "^8.6.3",
     "applicationinsights": "^2.1.4",
@@ -99,6 +100,7 @@
     "gitconfiglocal": "^2.1.0",
     "glob": "^7.2.3",
     "graceful-fs": "^4.2.10",
+    "handlebars": "^4.7.7",
     "inquirer": "^8.1.2",
     "js-yaml": "^4.0.3",
     "jsdom": "^16.6.0",
@@ -132,6 +134,7 @@
     "assets": [
       "package.json",
       "**/openapi-template.yaml",
+      "**/change-report.hbs",
       "built/appmap.html"
     ],
     "outputPath": "dist"

@@ -37,7 +37,7 @@ const BuildArchive = require('./cmds/archive/archive');
 const RestoreArchive = require('./cmds/archive/restore');
 const UpdateAppMaps = require('./cmds/update');
 const Compare = require('./cmds/compare/compare');
-const CompareReport = require('./cmds/compare/report');
+const CompareReport = require('./cmds/compare-report/compareReport');
 
 class DiffCommand {
   public appMapNames: any;

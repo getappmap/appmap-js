@@ -104,6 +104,20 @@ export default async function buildChangeReport(
     .filter((appmap) => baseAppMaps.has(appmap))
     .map((appmap) => ({ appmap }));
 
+  const failedAppMaps = new Array<{ appmap: AppMapName; metadata: Metadata }>();
+  {
+    for (const appmap of await appmapData.appmaps(RevisionName.Head)) {
+      const metadata = appMapMetadata[RevisionName.Head].get(appmap);
+      assert(metadata);
+      if (metadata.test_status === 'failed') {
+        failedAppMaps.push({ appmap, metadata });
+        // Ensure that there is a changedAppMaps entry for each test failure.
+        // This way the source diff and sequence diagram diff will be guaranteed available.
+        changedAppMaps.push({ appmap });
+      }
+    }
+  }
+
   const sequenceDiagramDiffSnippets = new Map<string, AppMapLink[]>();
   {
     const changedQueue = queue(async (changedAppMap: ChangedAppMap) => {
@@ -166,34 +180,22 @@ export default async function buildChangeReport(
     if (changedQueue.length()) await changedQueue.drain();
   }
 
-  const failedAppMaps = new Array<{ appmap: AppMapName; metadata: Metadata }>();
-  {
-    for (const appmap of await appmapData.appmaps(RevisionName.Head)) {
-      const metadata = appMapMetadata[RevisionName.Head].get(appmap);
-      assert(metadata);
-      if (metadata.test_status === 'failed') {
-        failedAppMaps.push({ appmap, metadata });
-      }
-    }
-  }
-
   const testFailures = await Promise.all(
     failedAppMaps.map(async ({ appmap, metadata }) => {
       const testFailure = {
         appmap,
         name: metadata.name,
       } as TestFailure;
-      console.warn(metadata);
-      // TODO: Should populate changedAppMap
       if (metadata.source_location)
         testFailure.testLocation = relative(process.cwd(), metadata.source_location);
-      if ((metadata as any).test_failure) {
-        testFailure.failureMessage = (metadata as any).test_failure?.message;
-        const location = (metadata as any).test_failure?.location;
+      if (metadata.test_failure) {
+        testFailure.failureMessage = metadata.test_failure.message;
+        const location = metadata.test_failure.location;
         if (location) {
           testFailure.failureLocation = location;
-          const [path, lineno] = location.split(':');
-          if (await exists(path)) {
+          const [path, linenoStr] = location.split(':');
+          if (linenoStr && (await exists(path))) {
+            const lineno = parseInt(linenoStr, 10);
             const testCode = (await readFile(path, 'utf-8')).split('\n');
             const minIndex = Math.max(lineno - 10, 0);
             const maxIndex = Math.min(lineno + 10, testCode.length);
