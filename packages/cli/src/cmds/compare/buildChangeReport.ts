@@ -152,6 +152,7 @@ export default async function buildChangeReport(
           const action = diagramDiff.rootActions[actionIndex];
           diagramDiff.rootActions = [action];
           const snippet = format(FormatType.Text, diagramDiff, 'diff');
+          // TODO: nop if this is the empty string
 
           if (!sequenceDiagramDiffSnippets.has(snippet.diagram))
             sequenceDiagramDiffSnippets.set(snippet.diagram, []);
@@ -176,15 +177,37 @@ export default async function buildChangeReport(
     }
   }
 
-  const testFailures = failedAppMaps.map(({ appmap, metadata }) => {
-    const testFailure = {
-      appmap,
-      name: metadata.name,
-    } as TestFailure;
-    if (metadata.source_location)
-      testFailure.testLocation = relative(process.cwd(), metadata.source_location);
-    return testFailure;
-  });
+  const testFailures = await Promise.all(
+    failedAppMaps.map(async ({ appmap, metadata }) => {
+      const testFailure = {
+        appmap,
+        name: metadata.name,
+      } as TestFailure;
+      console.warn(metadata);
+      // TODO: Should populate changedAppMap
+      if (metadata.source_location)
+        testFailure.testLocation = relative(process.cwd(), metadata.source_location);
+      if ((metadata as any).test_failure) {
+        testFailure.failureMessage = (metadata as any).test_failure?.message;
+        const location = (metadata as any).test_failure?.location;
+        if (location) {
+          testFailure.failureLocation = location;
+          const [path, lineno] = location.split(':');
+          if (await exists(path)) {
+            const testCode = (await readFile(path, 'utf-8')).split('\n');
+            const minIndex = Math.max(lineno - 10, 0);
+            const maxIndex = Math.min(lineno + 10, testCode.length);
+            testFailure.testSnippet = {
+              codeFragment: testCode.slice(minIndex, maxIndex).join('\n'),
+              startLine: minIndex + 1,
+              language: metadata.language?.name,
+            };
+          }
+        }
+      }
+      return testFailure;
+    })
+  );
 
   const baseScanResults = JSON.parse(
     await readFile(appmapData.findingsPath(RevisionName.Base), 'utf-8')
