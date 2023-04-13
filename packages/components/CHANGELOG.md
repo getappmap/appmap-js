@@ -1,3 +1,11 @@
+# [@appland/components-v2.38.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.37.0...@appland/components-v2.38.0) (2023-04-13)
+
+
+### Features
+
+* tooltips for map controls ([237cc3a](https://github.com/getappmap/appmap-js/commit/237cc3a0d71a855ae27c35b2b7f42ae6c475591d))
+* update sidebar sign-in messaging ([03a3c89](https://github.com/getappmap/appmap-js/commit/03a3c89ce2bc13b6e8732d1bb6955417494594ad))
+
 # [@appland/components-v2.37.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.36.0...@appland/components-v2.37.0) (2023-04-05)
 
 
