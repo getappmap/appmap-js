@@ -104,6 +104,20 @@ export default async function buildChangeReport(
     .filter((appmap) => baseAppMaps.has(appmap))
     .map((appmap) => ({ appmap }));
 
+  const failedAppMaps = new Array<{ appmap: AppMapName; metadata: Metadata }>();
+  {
+    for (const appmap of await appmapData.appmaps(RevisionName.Head)) {
+      const metadata = appMapMetadata[RevisionName.Head].get(appmap);
+      assert(metadata);
+      if (metadata.test_status === 'failed') {
+        failedAppMaps.push({ appmap, metadata });
+        // Ensure that there is a changedAppMaps entry for each test failure.
+        // This way the source diff and sequence diagram diff will be guaranteed available.
+        changedAppMaps.push({ appmap });
+      }
+    }
+  }
+
   const sequenceDiagramDiffSnippets = new Map<string, AppMapLink[]>();
   {
     const changedQueue = queue(async (changedAppMap: ChangedAppMap) => {
@@ -152,6 +166,7 @@ export default async function buildChangeReport(
           const action = diagramDiff.rootActions[actionIndex];
           diagramDiff.rootActions = [action];
           const snippet = format(FormatType.Text, diagramDiff, 'diff');
+          // TODO: nop if this is the empty string
 
           if (!sequenceDiagramDiffSnippets.has(snippet.diagram))
             sequenceDiagramDiffSnippets.set(snippet.diagram, []);
@@ -165,26 +180,36 @@ export default async function buildChangeReport(
     if (changedQueue.length()) await changedQueue.drain();
   }
 
-  const failedAppMaps = new Array<{ appmap: AppMapName; metadata: Metadata }>();
-  {
-    for (const appmap of await appmapData.appmaps(RevisionName.Head)) {
-      const metadata = appMapMetadata[RevisionName.Head].get(appmap);
-      assert(metadata);
-      if (metadata.test_status === 'failed') {
-        failedAppMaps.push({ appmap, metadata });
+  const testFailures = await Promise.all(
+    failedAppMaps.map(async ({ appmap, metadata }) => {
+      const testFailure = {
+        appmap,
+        name: metadata.name,
+      } as TestFailure;
+      if (metadata.source_location)
+        testFailure.testLocation = relative(process.cwd(), metadata.source_location);
+      if (metadata.test_failure) {
+        testFailure.failureMessage = metadata.test_failure.message;
+        const location = metadata.test_failure.location;
+        if (location) {
+          testFailure.failureLocation = location;
+          const [path, linenoStr] = location.split(':');
+          if (linenoStr && (await exists(path))) {
+            const lineno = parseInt(linenoStr, 10);
+            const testCode = (await readFile(path, 'utf-8')).split('\n');
+            const minIndex = Math.max(lineno - 10, 0);
+            const maxIndex = Math.min(lineno + 10, testCode.length);
+            testFailure.testSnippet = {
+              codeFragment: testCode.slice(minIndex, maxIndex).join('\n'),
+              startLine: minIndex + 1,
+              language: metadata.language?.name,
+            };
+          }
+        }
       }
-    }
-  }
-
-  const testFailures = failedAppMaps.map(({ appmap, metadata }) => {
-    const testFailure = {
-      appmap,
-      name: metadata.name,
-    } as TestFailure;
-    if (metadata.source_location)
-      testFailure.testLocation = relative(process.cwd(), metadata.source_location);
-    return testFailure;
-  });
+      return testFailure;
+    })
+  );
 
   const baseScanResults = JSON.parse(
     await readFile(appmapData.findingsPath(RevisionName.Base), 'utf-8')
