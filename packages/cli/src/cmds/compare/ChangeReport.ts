@@ -16,9 +16,11 @@ export type ChangedAppMap = {
 
 export type TestFailure = {
   appmap: string;
-  changedAppMap?: ChangedAppMap;
   name: string;
   testLocation?: string;
+  testSnippet?: { codeFragment: string; language?: string; startLine: number };
+  failureMessage?: string;
+  failureLocation?: string;
 };
 
 export type ChangeReport = {
