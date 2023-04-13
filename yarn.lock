@@ -99,6 +99,7 @@ __metadata:
     "@sidvind/better-ajv-errors": ^0.9.1
     "@types/fs-extra": ^9.0.13
     "@types/gitconfiglocal": ^2.0.1
+    "@types/handlebars": ^4.1.0
     "@types/inquirer": ^9.0.3
     "@types/jest": ^29.4.1
     "@types/jest-sinon": ^1.0.2
@@ -134,6 +135,7 @@ __metadata:
     gitconfiglocal: ^2.1.0
     glob: ^7.2.3
     graceful-fs: ^4.2.10
+    handlebars: ^4.7.7
     inquirer: ^8.1.2
     jest: ^29.5.0
     jest-sinon: ^1.1.0
@@ -6453,6 +6455,15 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: c3070ccdc9ca0f40df747bced1c96c71a61992d6f7c767e8fd24bb6a3c2de26e8b84135ede000b7e79db530a23e7e88dcd9db60eee6395d0f4ce1dae91369dd4
+  languageName: node
+  linkType: hard
+
+"@types/handlebars@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@types/handlebars@npm:4.1.0"
+  dependencies:
+    handlebars: "*"
+  checksum: 536d9f690c93f5d13fcc4a37ae7dd11f41eb73c47416d56f51623aedc3b573ad9775d6618ede75d7bf9148ac75694e50f8e6ba5773de7d9f040811368c73739f
   languageName: node
   linkType: hard
 
@@ -16777,7 +16788,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"handlebars@npm:^4.7.6, handlebars@npm:^4.7.7":
+"handlebars@npm:*, handlebars@npm:^4.7.6, handlebars@npm:^4.7.7":
   version: 4.7.7
   resolution: "handlebars@npm:4.7.7"
   dependencies:
