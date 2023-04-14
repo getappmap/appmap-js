@@ -16,9 +16,14 @@ const renameFile = promisify(gracefulFs.rename);
 /**
  * CHANGELOG
  *
+ * # 1.2.0
+ *
+ * * Drop fingerprint fields, as these are no longer used by downstream tools.
+ *   Canonicalization via sequence diagram is now the preferred mechanism.
+ *
  * # 1.1.4
  *
- * Add missing status_code to normalized AppMaps.
+ * * Add missing status_code to normalized AppMaps.
  *
  * # 1.1.3
  *
@@ -40,7 +45,7 @@ const renameFile = promisify(gracefulFs.rename);
  * * Fix handling of parent assignment in normalization.
  * * sql can contain the analysis (action, tables, columns), and/or the normalized query string.
  */
-export const VERSION = '1.1.4';
+export const VERSION = '1.2.0';
 
 const MAX_APPMAP_SIZE = 50 * 1000 * 1000;
 
