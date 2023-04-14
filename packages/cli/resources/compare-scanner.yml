@@ -1,0 +1,6 @@
+checks:
+  - rule: http-500
+  - rule: missing-content-type
+  - rule: n-plus-one-query
+  - rule: too-many-joins
+  - rule: too-many-updates
