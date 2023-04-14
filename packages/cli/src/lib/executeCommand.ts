@@ -27,8 +27,9 @@ export function executeCommand(
     else command.stderr.addListener('data', (data) => stderr.push(data));
   }
   return new Promise<string>((resolve, reject) => {
-    command.addListener('exit', (code) => {
-      if (code === 0) {
+    command.addListener('exit', (code, signal) => {
+      if (signal || code === 0) {
+        if (signal) console.log(`Command killed by signal ${signal}`);
         resolve(result.join(''));
       } else {
         if (!printCommand) console.log(commandStyle(cmd));
