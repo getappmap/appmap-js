@@ -84,6 +84,10 @@ export default class MarkdownReport implements Report {
       changeReport.apiDiff?.breakingDifferences?.length +
         changeReport.apiDiff?.nonBreakingDifferences?.length +
         changeReport.apiDiff?.unclassifiedDifferences?.length || 0;
+    changeReport.apiDiff.breakingDifferenceCount =
+      changeReport.apiDiff?.breakingDifferences?.length || 0;
+    changeReport.apiDiff.nonBreakingDifferenceCount =
+      changeReport.apiDiff?.nonBreakingDifferences?.length || 0;
     (changeReport as any).sequenceDiagramDiffSnippetCount = Object.keys(
       changeReport.sequenceDiagramDiffSnippets || {}
     ).length;

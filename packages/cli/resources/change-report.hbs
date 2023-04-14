@@ -8,12 +8,8 @@
   :white_check_mark: No API changes
   {{~/unless}}
   {{~#if apiDiff.differenceCount }}
-  {{~#if apiDiff.breakingDifferencesFound }}:warning:{{/if~}}
-  {{~#unless apiDiff.breakingDifferencesFound }}:wrench:{{/unless~}}
-  &nbsp;{{apiDiff.differenceCount}}
-  {{~#if apiDiff.breakingDifferencesFound }} breaking {{/if~}}
-  {{~#unless apiDiff.breakingDifferencesFound }} compatible {{/unless~}}
-  changes
+  {{~#if apiDiff.breakingDifferenceCount }}:warning: {{apiDiff.breakingDifferenceCount}} breaking{{~/if}}
+  {{~#if apiDiff.nonBreakingDifferenceCount }}{{#if apiDiff.breakingDifferenceCount }},&nbsp;{{~/if}}:wrench: {{apiDiff.nonBreakingDifferenceCount}} non-breaking{{~/if}}
   {{~/if}}
   |
 | [Changed AppMaps](#changed-appmaps) | 
@@ -21,7 +17,7 @@
   :white_check_mark: No changes
   {{~/unless}}
   {{~#if changedAppMaps.length }}
-  :wrench: {{changedAppMaps.length}} changes
+  :wrench: {{changedAppMaps.length}} changed
   {{~/if}}
   |
 | [Changed code behavior](#changed-code-behavior) |
@@ -29,7 +25,7 @@
   :white_check_mark: No changes
   {{~/unless}}
   {{~#if sequenceDiagramDiffSnippetCount }}
-  :wrench: {{sequenceDiagramDiffSnippetCount}} changes 
+  :wrench: {{sequenceDiagramDiffSnippetCount}} changed
   {{~/if}}
   |
 
