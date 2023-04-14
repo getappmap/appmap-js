@@ -41,34 +41,11 @@ export default async function buildChangeReport(
   assert(appmapIndex.addedDigests);
   assert(appmapIndex.removedDigests);
 
-  async function deleteUnchangedAppMaps() {
-    assert(appmapIndex.unchangedDigests);
-
-    const deleteAppMap = async (revisionName: RevisionName, appmap: AppMapName) => {
-      console.log(mutedStyle(`AppMap ${revisionName}/${appmap} is unchanged.`));
-      const path = appmapData.appmapPath(revisionName, appmap);
-      const fileName = [path, 'appmap.json'].join('.');
-      assert(await exists(fileName));
-      await rm(fileName);
-      await rm(path, { recursive: true });
-    };
-
-    for (const digest of appmapIndex.unchangedDigests) {
-      for (const appmap of appmapIndex.appmapsByDigest[RevisionName.Base].get(digest) || []) {
-        deleteAppMap(RevisionName.Base, appmap);
-      }
-      for (const appmap of appmapIndex.appmapsByDigest[RevisionName.Head].get(digest) || []) {
-        deleteAppMap(RevisionName.Head, appmap);
-      }
-    }
-  }
-
-  await deleteUnchangedAppMaps();
-
   const appMapMetadata = {
     base: new Map<AppMapName, Metadata>(),
     head: new Map<AppMapName, Metadata>(),
   };
+
   {
     const loadMetadataQueue = queue(
       async (appmap: { revisionName: RevisionName.Base | RevisionName.Head; name: string }) => {
@@ -97,26 +74,58 @@ export default async function buildChangeReport(
     if (loadMetadataQueue.length() > 0) await loadMetadataQueue.drain();
   }
 
+  const failedAppMaps = new Set<AppMapName>();
+  {
+    for (const appmap of await appmapData.appmaps(RevisionName.Head)) {
+      const metadata = appMapMetadata[RevisionName.Head].get(appmap);
+      assert(metadata);
+      if (metadata.test_status === 'failed') {
+        failedAppMaps.add(appmap);
+      }
+    }
+  }
+
+  async function deleteUnchangedAppMaps() {
+    assert(appmapIndex.unchangedDigests);
+
+    const deleteAppMap = async (revisionName: RevisionName, appmap: AppMapName) => {
+      if (failedAppMaps.has(appmap)) {
+        console.log(
+          mutedStyle(
+            `AppMap ${revisionName}/${appmap} is unchanged, but it failed. base and head will be left on the filesystem.`
+          )
+        );
+        return;
+      }
+
+      console.log(
+        mutedStyle(`AppMap ${revisionName}/${appmap} is unchanged so it will be deleted.`)
+      );
+      const path = appmapData.appmapPath(revisionName, appmap);
+      const fileName = [path, 'appmap.json'].join('.');
+      assert(await exists(fileName));
+      await rm(fileName);
+      await rm(path, { recursive: true });
+    };
+
+    for (const digest of appmapIndex.unchangedDigests) {
+      for (const appmap of appmapIndex.appmapsByDigest[RevisionName.Base].get(digest) || []) {
+        deleteAppMap(RevisionName.Base, appmap);
+      }
+      for (const appmap of appmapIndex.appmapsByDigest[RevisionName.Head].get(digest) || []) {
+        deleteAppMap(RevisionName.Head, appmap);
+      }
+    }
+  }
+
+  await deleteUnchangedAppMaps();
+
   const baseAppMaps = new Set(await appmapData.appmaps(RevisionName.Base));
   const headAppMaps = new Set(await appmapData.appmaps(RevisionName.Head));
   const newAppMaps = [...headAppMaps].filter((appmap) => !baseAppMaps.has(appmap));
   const changedAppMaps = [...headAppMaps]
     .filter((appmap) => baseAppMaps.has(appmap))
     .map((appmap) => ({ appmap }));
-
-  const failedAppMaps = new Array<{ appmap: AppMapName; metadata: Metadata }>();
-  {
-    for (const appmap of await appmapData.appmaps(RevisionName.Head)) {
-      const metadata = appMapMetadata[RevisionName.Head].get(appmap);
-      assert(metadata);
-      if (metadata.test_status === 'failed') {
-        failedAppMaps.push({ appmap, metadata });
-        // Ensure that there is a changedAppMaps entry for each test failure.
-        // This way the source diff and sequence diagram diff will be guaranteed available.
-        changedAppMaps.push({ appmap });
-      }
-    }
-  }
 
   const sequenceDiagramDiffSnippets = new Map<string, AppMapLink[]>();
   {
@@ -180,36 +189,43 @@ export default async function buildChangeReport(
     if (changedQueue.length()) await changedQueue.drain();
   }
 
-  const testFailures = await Promise.all(
-    failedAppMaps.map(async ({ appmap, metadata }) => {
-      const testFailure = {
-        appmap,
-        name: metadata.name,
-      } as TestFailure;
-      if (metadata.source_location)
-        testFailure.testLocation = relative(process.cwd(), metadata.source_location);
-      if (metadata.test_failure) {
-        testFailure.failureMessage = metadata.test_failure.message;
-        const location = metadata.test_failure.location;
-        if (location) {
-          testFailure.failureLocation = location;
-          const [path, linenoStr] = location.split(':');
-          if (linenoStr && (await exists(path))) {
-            const lineno = parseInt(linenoStr, 10);
-            const testCode = (await readFile(path, 'utf-8')).split('\n');
-            const minIndex = Math.max(lineno - 10, 0);
-            const maxIndex = Math.min(lineno + 10, testCode.length);
-            testFailure.testSnippet = {
-              codeFragment: testCode.slice(minIndex, maxIndex).join('\n'),
-              startLine: minIndex + 1,
-              language: metadata.language?.name,
-            };
+  const testFailures = (
+    await Promise.all(
+      [...failedAppMaps].map(async (appmap) => {
+        const metadata = appMapMetadata[RevisionName.Head].get(appmap);
+        if (!metadata) {
+          console.log(`No Appmap metadata available for failed test ${appmap}`);
+          return;
+        }
+        const testFailure = {
+          appmap,
+          name: metadata.name,
+        } as TestFailure;
+        if (metadata.source_location)
+          testFailure.testLocation = relative(process.cwd(), metadata.source_location);
+        if (metadata.test_failure) {
+          testFailure.failureMessage = metadata.test_failure.message;
+          const location = metadata.test_failure.location;
+          if (location) {
+            testFailure.failureLocation = location;
+            const [path, linenoStr] = location.split(':');
+            if (linenoStr && (await exists(path))) {
+              const lineno = parseInt(linenoStr, 10);
+              const testCode = (await readFile(path, 'utf-8')).split('\n');
+              const minIndex = Math.max(lineno - 10, 0);
+              const maxIndex = Math.min(lineno + 10, testCode.length);
+              testFailure.testSnippet = {
+                codeFragment: testCode.slice(minIndex, maxIndex).join('\n'),
+                startLine: minIndex + 1,
+                language: metadata.language?.name,
+              };
+            }
           }
         }
-      }
-      return testFailure;
-    })
-  );
+        return testFailure;
+      })
+    )
+  ).filter(Boolean) as TestFailure[];
 
   const baseScanResults = JSON.parse(
     await readFile(appmapData.findingsPath(RevisionName.Base), 'utf-8')

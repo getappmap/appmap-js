@@ -1,0 +1,3 @@
+name: getappmap/sequence-diagram
+packages:
+  - path: src

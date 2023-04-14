@@ -1,5 +1,4 @@
 import { executeCommand } from '../../lib/executeCommand';
-import { handler as restoreCmd } from '../archive/restore';
 import { default as openAPICmd } from '../openapi';
 import { DefaultMaxAppMapSizeInMB } from '../../lib/fileSizeFilter';
 

@@ -1,0 +1,13 @@
+name: appmap-js/scanner
+serialization:
+  impure-printing: false
+  impure-constructor-naming: false
+  impure-array-inspection: false
+  impure-error-inspection: false
+  impure-hash-inspection: false
+packages:
+  - path: src
+exclude:
+  - \[anonymous\]
+language: javascript
+appmap_dir: tmp/appmap

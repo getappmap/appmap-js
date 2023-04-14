@@ -1,0 +1,25 @@
+name: appmap-js/models
+serialization:
+  impure-printing: false
+  impure-constructor-naming: false
+  impure-array-inspection: false
+  impure-error-inspection: false
+  impure-hash-inspection: false
+packages:
+  - path: src
+  - path: src/util.js
+    enabled: true
+    exclude:
+      - isEmpty
+      - addHiddenProperty
+  - path: src/event.js
+    enabled: true
+    exclude:
+      - isCall
+      - isReturn
+      - callEvent
+      - returnEvent
+exclude:
+  - \[anonymous\]
+language: javascript
+appmap_dir: tmp/appmap
