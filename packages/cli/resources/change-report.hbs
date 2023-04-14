@@ -91,7 +91,7 @@ The following code changes are related to this test:
 <h2 id="api-changes">API changes</h2>
 
 {{#*inline "api-diff"}}
-{{action}} {{#each sourceSpecEntityDetails}}{{location}}{{/each}}
+{{code}} {{#each sourceSpecEntityDetails}}{{location}}{{/each}} {{#each destinationSpecEntityDetails}}{{location}}{{/each}}
 {{/inline}}
 
 {{#if apiDiff.breakingDifferences}}
