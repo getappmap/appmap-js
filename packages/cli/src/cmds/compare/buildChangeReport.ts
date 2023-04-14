@@ -136,12 +136,12 @@ export default async function buildChangeReport(
       );
       const classMap = new ClassMap(classMapData);
 
-      const sourcePaths = new Array<string>();
+      const sourcePaths = new Set<string>();
       classMap.visit((codeObject) => {
         if (!codeObject.location) return;
 
         const path = codeObject.location.split(':')[0];
-        if (path.indexOf('.') && !path.startsWith('<') && !isAbsolute(path)) sourcePaths.push(path);
+        if (path.indexOf('.') && !path.startsWith('<') && !isAbsolute(path)) sourcePaths.add(path);
       });
 
       const sourceDiff = await executeCommand(
