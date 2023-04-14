@@ -135,6 +135,7 @@
       "package.json",
       "**/openapi-template.yaml",
       "**/change-report.hbs",
+      "**/compare-scanner.yml",
       "built/appmap.html"
     ],
     "outputPath": "dist"

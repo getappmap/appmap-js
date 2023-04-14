@@ -2,11 +2,20 @@ import { executeCommand } from '../../lib/executeCommand';
 import { default as openAPICmd } from '../openapi';
 import { DefaultMaxAppMapSizeInMB } from '../../lib/fileSizeFilter';
 import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
+import { join } from 'node:path';
+import { existsSync } from 'node:fs';
 
 export default async function analyzeArchive(revision: string, dir: string): Promise<void> {
   const analyzer = new ArchiveAnalyzer(revision, dir);
   return analyzer.analyze();
 }
+
+const ScanConfigFile = [
+  '../../../resources/compare-scanner.yml', // As packaged
+  '../../../../resources/compare-scanner.yml', // In development
+]
+  .map((fileName) => join(__dirname, fileName))
+  .find((fileName) => existsSync(fileName));
 
 class ArchiveAnalyzer {
   constructor(public readonly revision: string, public readonly dir: string) {}
@@ -38,7 +47,7 @@ class ArchiveAnalyzer {
 
   private async runtimeAnalysis() {
     await executeCommand(
-      `npx @appland/scanner@latest scan  --appmap-dir . --all`,
+      `npx @appland/scanner@latest scan --appmap-dir . --config ${ScanConfigFile} --all`,
       true,
       true,
       true
