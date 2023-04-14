@@ -19,7 +19,7 @@ export function stripCodeObjectParents(codeObjectMatches: CodeObjectMatch[]): Co
 
 export async function indexDirectory(dir: string): Promise<void> {
   const now = new Date();
-  const fingerprinter = new Fingerprinter(true);
+  const fingerprinter = new Fingerprinter();
   await listAppMapFiles(dir, async (fileName) => {
     utimesSync(fileName, now, now);
     await fingerprinter.fingerprint(fileName);

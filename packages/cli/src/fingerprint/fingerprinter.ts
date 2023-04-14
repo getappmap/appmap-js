@@ -16,9 +16,14 @@ const renameFile = promisify(gracefulFs.rename);
 /**
  * CHANGELOG
  *
+ * # 1.2.0
+ *
+ * * Drop fingerprint fields, as these are no longer used by downstream tools.
+ *   Canonicalization via sequence diagram is now the preferred mechanism.
+ *
  * # 1.1.4
  *
- * Add missing status_code to normalized AppMaps.
+ * * Add missing status_code to normalized AppMaps.
  *
  * # 1.1.3
  *
@@ -40,7 +45,7 @@ const renameFile = promisify(gracefulFs.rename);
  * * Fix handling of parent assignment in normalization.
  * * sql can contain the analysis (action, tables, columns), and/or the normalized query string.
  */
-export const VERSION = '1.1.4';
+export const VERSION = '1.2.0';
 
 const MAX_APPMAP_SIZE = 50 * 1000 * 1000;
 
@@ -52,10 +57,6 @@ export type Fingerprint = {
 };
 
 class Fingerprinter extends EventEmitter {
-  constructor(private printCanonicalAppMaps: boolean) {
-    super();
-  }
-
   /**
    * Whether to check if the version of existing fingerprints is up to date.
    * When watching files for changes, it can be set to false after the initial
@@ -83,8 +84,8 @@ class Fingerprinter extends EventEmitter {
       return;
     }
 
-    if ((await index.appmapFileSize()) > MAX_APPMAP_SIZE)
-      throw new FileTooLargeError(appMapFileName, await index.appmapFileSize(), MAX_APPMAP_SIZE);
+    if (index.appmapFileSize() > MAX_APPMAP_SIZE)
+      throw new FileTooLargeError(appMapFileName, index.appmapFileSize(), MAX_APPMAP_SIZE);
 
     const appmapData = await index.loadAppMapData();
     if (!appmapData) return;
@@ -93,39 +94,10 @@ class Fingerprinter extends EventEmitter {
     if (!appmapDataWithoutMetadata) return;
 
     delete appmapDataWithoutMetadata.metadata;
-    const appmapDigest = createHash('sha256')
-      .update(JSON.stringify(appmapDataWithoutMetadata, null, 2))
-      .digest('hex');
-
-    const fingerprints: Fingerprint[] = [];
-    appmapData.metadata.fingerprints = fingerprints;
 
     const appmap = buildAppMap(appmapData).normalize().build();
 
     await index.mkdir_p();
-
-    await Promise.all(
-      Object.keys(algorithms).map(async (algorithmName) => {
-        const canonicalForm = canonicalize(algorithmName, appmap);
-        const canonicalJSON = JSON.stringify(canonicalForm, null, 2);
-
-        if (this.printCanonicalAppMaps) {
-          await index.writeFileAtomic(`canonical.${algorithmName}.json`, canonicalJSON);
-        }
-
-        const fingerprintDigest = createHash('sha256').update(canonicalJSON).digest('hex');
-        fingerprints.push({
-          appmap_digest: appmapDigest,
-          canonicalization_algorithm: algorithmName,
-          digest: fingerprintDigest,
-          fingerprint_algorithm: 'sha256',
-        });
-      })
-    );
-
-    appmapData.metadata.fingerprints.sort((a, b) =>
-      a.canonicalization_algorithm.localeCompare(b.canonicalization_algorithm)
-    );
 
     const tempAppMapFileName = joinPath(index.indexDir, 'appmap.tmp');
     await index.writeFileAtomic(basename(tempAppMapFileName), JSON.stringify(appmap, null, 2));
