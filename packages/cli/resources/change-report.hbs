@@ -2,11 +2,11 @@
 
 {{#*inline "api-change"}}
 {{title}} {{#each sourceSpecEntityDetails}}`{{location}}`{{/each}} {{#each destinationSpecEntityDetails}}`{{location}}`{{/each}}
-{{/inline}}
+{{~/inline}}
 
 {{#*inline "sequence-diagram-diff-link"}}
 {{#if sequenceDiagramDiff}}[{{sequenceDiagramDiff}}](./{{sequenceDiagramDiff}}){{/if}}{{#unless sequenceDiagramDiff}}No structural changes detected{{/unless}}
-{{/inline}}
+{{~/inline}}
 
 | Summary | Status |
 | --- | --- |
