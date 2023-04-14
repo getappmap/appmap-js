@@ -5,6 +5,8 @@ import { join } from 'path';
 import Report from './Report';
 import { ChangeReport } from '../compare/ChangeReport';
 import assert from 'assert';
+import { executeCommand } from '../../lib/executeCommand';
+import { verbose } from '../../utils';
 
 const TemplateFile = [
   '../../../resources/change-report.hbs', // As packaged
@@ -79,18 +81,45 @@ export default class MarkdownReport implements Report {
         }
       });
 
-    // Provide a simple count of the number of differences - since Handlebars can't do math.
-    changeReport.apiDiff.differenceCount =
-      changeReport.apiDiff?.breakingDifferences?.length +
-        changeReport.apiDiff?.nonBreakingDifferences?.length +
-        changeReport.apiDiff?.unclassifiedDifferences?.length || 0;
-    changeReport.apiDiff.breakingDifferenceCount =
-      changeReport.apiDiff?.breakingDifferences?.length || 0;
-    changeReport.apiDiff.nonBreakingDifferenceCount =
-      changeReport.apiDiff?.nonBreakingDifferences?.length || 0;
-    (changeReport as any).sequenceDiagramDiffSnippetCount = Object.keys(
-      changeReport.sequenceDiagramDiffSnippets || {}
-    ).length;
+    const wordify = (s: string) => s.replace(/([-_])/g, ' ').toLowerCase();
+    const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+    const explainAPIChange = (change: any) => {
+      const { action, entity } = change;
+      const entityTokens = entity.split('.');
+      change.title = [capitalize(wordify(action)), ...entityTokens.map(wordify)].join(' ');
+    };
+
+    if (changeReport.apiDiff) {
+      changeReport.apiDiff?.breakingDifferences?.forEach(explainAPIChange);
+      changeReport.apiDiff?.nonBreakingDifferences?.forEach(explainAPIChange);
+      changeReport.apiDiff?.unclassifiedDifferences?.forEach(explainAPIChange);
+
+      // Provide a simple count of the number of differences - since Handlebars can't do math.
+      changeReport.apiDiff.differenceCount =
+        changeReport.apiDiff?.breakingDifferences?.length +
+          changeReport.apiDiff?.nonBreakingDifferences?.length +
+          changeReport.apiDiff?.unclassifiedDifferences?.length || 0;
+      changeReport.apiDiff.breakingDifferenceCount =
+        changeReport.apiDiff?.breakingDifferences?.length || 0;
+      changeReport.apiDiff.nonBreakingDifferenceCount =
+        changeReport.apiDiff?.nonBreakingDifferences?.length || 0;
+      (changeReport as any).sequenceDiagramDiffSnippetCount = Object.keys(
+        changeReport.sequenceDiagramDiffSnippets || {}
+      ).length;
+
+      if (changeReport.apiDiff.differenceCount > 0) {
+        const sourceDiff = (
+          await executeCommand(
+            `diff -u base/openapi.yml head/openapi.yml`,
+            verbose(),
+            verbose(),
+            verbose(),
+            [0, 1]
+          )
+        ).trim();
+        changeReport.apiDiff.sourceDiff = sourceDiff;
+      }
+    }
 
     return Template(changeReport);
   }
