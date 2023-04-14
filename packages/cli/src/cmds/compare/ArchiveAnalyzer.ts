@@ -1,7 +1,6 @@
 import { executeCommand } from '../../lib/executeCommand';
 import { default as openAPICmd } from '../openapi';
 import { DefaultMaxAppMapSizeInMB } from '../../lib/fileSizeFilter';
-import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
 import { join } from 'node:path';
 import { existsSync } from 'node:fs';
 
@@ -23,7 +22,6 @@ class ArchiveAnalyzer {
   async analyze() {
     await this.checkout();
     await this.inWorkingDirectory(this.dir, async () => {
-      await this.index();
       await this.openAPI();
       await this.runtimeAnalysis();
     });
@@ -31,10 +29,6 @@ class ArchiveAnalyzer {
 
   private async checkout() {
     await executeCommand(`git checkout ${this.revision}`);
-  }
-
-  private async index() {
-    await new FingerprintDirectoryCommand('.').execute();
   }
 
   private async openAPI() {
