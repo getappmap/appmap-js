@@ -5,8 +5,8 @@
       <div class="sidebar-title">
         <h1 data-cy="title">Sign in</h1>
         <p>
-          Start visualizing your runtime code, identifying problems, and finding solutions. Sign in
-          via GitHub or GitLab to start automatically generating:
+          Start visualizing your runtime code, identifying problems, and finding solutions.
+          Automatically generate:
         </p>
       </div>
 
@@ -26,12 +26,34 @@
         </li>
         <li><a href="https://appmap.io/docs/openapi">OpenAPI definitions</a></li>
       </ul>
-      <a href="/" class="btn btn-primary" data-cy="sign-in-button" @click="signIn">Sign in</a>
+      <div class="signin-buttons">
+        <a href="/" class="btn btn-primary" data-cy="sign-in-button" @click="signIn"
+          ><githubLogo /> Sign in with GitHub</a
+        >
+        <a href="/" class="btn btn-primary" data-cy="sign-in-button" @click="signIn"
+          ><gitlabLogo /> Sign in with GitLab</a
+        >
+      </div>
+
+      <div class="signin-not-ready">
+        <span class="accordion-toggle open"
+          ><strong>Not ready to sign in?</strong> <chevronDown
+        /></span>
+        <p>Not ready to start making AppMaps? No problem! here are some suggestions:</p>
+        <ul>
+          <li><a href="/">Download a sample AppMap to explore</a></li>
+          <li><a href="/">Request a free trial license and manual install instructions</a></li>
+          <li><a href="/">Watch a demo video</a></li>
+          <li><a href="/">Get answers to questions you may have</a></li>
+        </ul>
+        <p>Come back and sign in when you are ready.</p>
+      </div>
+
       <div class="your-data">
         <shieldIcon />
         <p data-cy="your-data-text">
-          Authentication with GitHub or GitLab is used solely for issuing a license. AppMap runs in
-          your code editor, so your AppMaps and your source code stay on your machine.
+          Authentication is used solely for issuing a license. AppMap runs in your code editor, so
+          your AppMaps and your source code stay on your machine.
         </p>
       </div>
     </div>
@@ -41,12 +63,18 @@
 <script>
 import AppMapLogo from '@/assets/appmap-full-logo.svg';
 import shieldIcon from '@/assets/shield-icon.svg';
+import githubLogo from '@/assets/github-logo.svg';
+import gitlabLogo from '@/assets/gitlab-logo.svg';
+import chevronDown from '@/assets/chevron-down.svg';
 
 export default {
   name: 'v-sign-in',
   components: {
     AppMapLogo,
     shieldIcon,
+    githubLogo,
+    gitlabLogo,
+    chevronDown,
   },
 
   methods: {
@@ -87,8 +115,10 @@ export default {
     color: $white;
     text-decoration: none;
     text-align: center;
+    width: 80%;
+    justify-content: center;
     &.btn-primary {
-      background-color: desaturate($powderblue, 20); //$hotpink;
+      background-color: desaturate($powderblue, 20);
       font-weight: 600;
       margin: 0 1.25rem;
       &:hover {
@@ -98,17 +128,55 @@ export default {
   }
 }
 
-.signin-ctas {
+.signin-not-ready {
+  .accordion-toggle {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    &.closed svg {
+      transform: rotate(-90deg);
+    }
+    svg {
+      width: 1rem;
+      path {
+        fill: desaturate($powderblue, 20);
+      }
+    }
+  }
+  a {
+    color: desaturate($powderblue, 20);
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.signin-buttons {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
+  align-items: center;
+  a {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+  }
+}
+.signin-ctas {
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   list-style-type: none;
   font-family: $appland-text-font-family;
   padding: 0;
   margin: 0;
+  overflow: hidden;
   li {
     background-color: #091118;
-    border-radius: 0.25rem;
     padding: 0.8rem 1rem;
     font-weight: 600;
     transition: $transition;
