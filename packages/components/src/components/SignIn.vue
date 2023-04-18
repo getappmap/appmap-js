@@ -5,8 +5,8 @@
       <div class="sidebar-title">
         <h1 data-cy="title">Sign in</h1>
         <p>
-          Start visualizing your runtime code, identifying problems, and finding solutions.
-          Automatically generate:
+          Start visualizing your runtime code, identifying problems, and finding solutions. Sign in
+          via GitHub or GitLab to start automatically generating:
         </p>
       </div>
 
@@ -27,12 +27,7 @@
         <li><a href="https://appmap.io/docs/openapi">OpenAPI definitions</a></li>
       </ul>
       <div class="signin-buttons">
-        <a href="/" class="btn btn-primary" data-cy="sign-in-button" @click="signIn"
-          ><githubLogo /> Sign in with GitHub</a
-        >
-        <a href="/" class="btn btn-primary" data-cy="sign-in-button" @click="signIn"
-          ><gitlabLogo /> Sign in with GitLab</a
-        >
+        <a href="/" class="btn btn-primary" data-cy="sign-in-button" @click="signIn">Sign in</a>
       </div>
 
       <div class="signin-not-ready">
@@ -52,8 +47,8 @@
       <div class="your-data">
         <shieldIcon />
         <p data-cy="your-data-text">
-          Authentication is used solely for issuing a license. AppMap runs in your code editor, so
-          your AppMaps and your source code stay on your machine.
+          Authentication with GitHub or GitLab is used solely for issuing a license. AppMap runs in
+          your code editor, so your AppMaps and your source code stay on your machine.
         </p>
       </div>
     </div>
@@ -166,10 +161,9 @@ export default {
   }
 }
 .signin-ctas {
-  border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 0.25rem;
   list-style-type: none;
   font-family: $appland-text-font-family;
   padding: 0;
@@ -177,6 +171,7 @@ export default {
   overflow: hidden;
   li {
     background-color: #091118;
+    border-radius: 0.5rem;
     padding: 0.8rem 1rem;
     font-weight: 600;
     transition: $transition;
