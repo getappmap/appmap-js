@@ -43,7 +43,10 @@ async function parseClassMap(mapPath: string): Promise<ClassMap> {
     fs.createReadStream(mapPath).pipe(
       JSONStream.parse('events.*')
         .on('header', (obj: any) => {
-          classMap = new ClassMap(obj.classMap);
+          if (obj.classMap) classMap = new ClassMap(obj.classMap);
+        })
+        .on('footer', (obj: any) => {
+          if (obj.classMap) classMap = new ClassMap(obj.classMap);
         })
         .on('close', () => {
           resolve(classMap);
