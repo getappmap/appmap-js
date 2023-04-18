@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.75.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.75.0...@appland/appmap-v3.75.1) (2023-04-18)
+
+
+### Bug Fixes
+
+* handle arbitrary ordering of appmap fields ([7b11342](https://github.com/getappmap/appmap-js/commit/7b1134286d922e5bc072d082ca91282136963ecd))
+
 # [@appland/appmap-v3.75.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.74.0...@appland/appmap-v3.75.0) (2023-03-31)
 
 
