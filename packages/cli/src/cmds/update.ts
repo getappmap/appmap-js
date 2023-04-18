@@ -13,7 +13,7 @@ import { exists, verbose } from '../utils';
 import gitDeletedFiles from './archive/gitDeletedFiles';
 import gitModifiedFiles from './archive/gitModifiedFiles';
 import gitNewFiles from './archive/gitNewFiles';
-import { Metadata } from './archive/Metadata';
+import { ArchiveMetadata } from './archive/ArchiveMetadata';
 import runTests from './archive/runTests';
 import FingerprintDirectoryCommand from '../fingerprint/fingerprintDirectoryCommand';
 import gitAncestors from './archive/gitAncestors';
@@ -92,7 +92,7 @@ be included in the file arguments passed to the test runner.`)
     appmapConfig.preflight?.test_commands;
   const testCommands = testCommandsArgument() || testCommandsConfig();
 
-  const archiveMetadata = await Promise.all<Metadata>(
+  const archiveMetadata = await Promise.all<ArchiveMetadata>(
     (
       await promisify(glob)(join(baseAppmapDir, 'appmap_archive*.json'))
     ).map(async (metadataFile) => JSON.parse(await readFile(metadataFile, 'utf8')))

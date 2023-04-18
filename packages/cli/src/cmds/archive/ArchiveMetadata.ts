@@ -1,6 +1,6 @@
 import { AppMapConfig } from '../../lib/loadAppMapConfig';
 
-export type Metadata = {
+export type ArchiveMetadata = {
   versions: Record<string, string>;
   workingDirectory: string;
   appMapDir: string;
@@ -11,4 +11,5 @@ export type Metadata = {
   oversizedAppMaps: string[];
   deletedAppMaps?: string[];
   config: AppMapConfig;
+  appMapFilter: Record<string, any>;
 };

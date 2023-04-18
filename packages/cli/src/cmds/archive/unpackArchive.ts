@@ -1,7 +1,7 @@
 import { exec } from 'child_process';
-import { mkdir, readFile, rename, rmdir, unlink } from 'fs/promises';
+import { cp, mkdir, readFile, rename, rmdir, unlink } from 'fs/promises';
 import { basename, join, resolve } from 'path';
-import { Metadata } from './Metadata';
+import { ArchiveMetadata } from './ArchiveMetadata';
 
 export default async function unpackArchive(outputDir: any, archivePath: string) {
   await mkdir(outputDir, { recursive: true });
@@ -26,8 +26,8 @@ export default async function unpackArchive(outputDir: any, archivePath: string)
     });
     await unlink('appmaps.tar.gz');
 
-    const metadata: Metadata = JSON.parse(await readFile('appmap_archive.json', 'utf8'));
-    await rename('appmap_archive.json', `appmap_archive.${metadata.revision}.json`);
+    const metadata: ArchiveMetadata = JSON.parse(await readFile('appmap_archive.json', 'utf8'));
+    await cp('appmap_archive.json', `appmap_archive.${metadata.revision}.json`);
 
     const deletedAppMaps = metadata.deletedAppMaps || [];
     for (const deletedAppMap of deletedAppMaps) {
