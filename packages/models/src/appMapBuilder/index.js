@@ -215,15 +215,16 @@ class AppMapBuilder extends EventSource {
         const { callEvent } = e;
 
         // If there's no call event, there's no need to retain this event
-        if (!callEvent) {
-          return false;
-        }
+        if (!callEvent) return false;
 
-        if (callEvent.http_server_request || callEvent.http_client_request || callEvent.sql_query) {
+        if (callEvent.http_server_request || callEvent.http_client_request || callEvent.sql_query)
           return true;
-        }
 
         const codeObj = classMap.codeObjectFromEvent(callEvent);
+
+        // keep events where the code object cannot be found
+        if (!codeObj || !codeObj.fqid) return true;
+
         return !exclusions.has(codeObj.fqid);
       })
     );
