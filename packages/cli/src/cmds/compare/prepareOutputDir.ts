@@ -15,7 +15,9 @@ export async function prepareOutputDir(
 ): Promise<string> {
   let outputDir = outputDirArg;
   if (!outputDir) {
-    outputDir = `change-report/${sanitizeRevision(baseRevision)}-${sanitizeRevision(headRevision)}`;
+    outputDir = `.appmap/change-report/${sanitizeRevision(baseRevision)}-${sanitizeRevision(
+      headRevision
+    )}`;
   }
 
   for (const revision of [RevisionName.Base, RevisionName.Head]) {
