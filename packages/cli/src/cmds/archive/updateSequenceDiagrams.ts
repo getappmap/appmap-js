@@ -16,17 +16,17 @@ import { PreflightFilterConfig } from '../../lib/loadAppMapConfig';
 /**
  * Default filters for each language - plus a set of default filters that apply to all languages.
  */
-export const DefaultFilters = {
+export const DefaultFilters: Record<string, string[]> = {
   default: [
     'label:unstable',
     'label:serialize',
     'label:deserialize.safe',
     'label:log',
     /^external-service:.*\bhttp:\/\/127\.0\.0\.1:\d+\/session\/\[a-f0-9]{32,}\//.toString(),
-    /^query:.*\bPRAGMA\b/.toString(),
-    /^query:.*\bsqlite_master\b/.toString(),
+    /^query:[\s\S]*\bPRAGMA\b/.toString(),
+    /^query:[\s\S]*\bsqlite_master\b/.toString(),
   ],
-  ruby: ['label:mvc.template.resolver', 'package:ruby', 'package:activesupport'],
+  ruby: ['label:mvc.template.resolver', 'package:ruby', 'package:activesupport', 'package:openssl'],
   python: [],
   java: [],
   javascript: [],
