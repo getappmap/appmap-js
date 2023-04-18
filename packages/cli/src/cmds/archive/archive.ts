@@ -1,43 +1,28 @@
 import { exec } from 'child_process';
-import { basename, dirname, join, resolve } from 'path';
+import { join, resolve } from 'path';
 import yargs from 'yargs';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../lib/locateAppMapDir';
 import { exists, verbose } from '../../utils';
 import PackageConfig from '../../../package.json';
 import { mkdir, readFile, stat, unlink, writeFile } from 'fs/promises';
-import { glob } from 'glob';
-import { promisify } from 'util';
 import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
-import {
-  buildDiagram,
-  format,
-  FormatType,
-  SequenceDiagramOptions,
-  Specification,
-} from '@appland/sequence-diagram';
-import { queue } from 'async';
-import { AppMapFilter, buildAppMap, Filter } from '@appland/models';
 import { DefaultMaxAppMapSizeInMB } from '../../lib/fileSizeFilter';
 import loadAppMapConfig from '../../lib/loadAppMapConfig';
 import { VERSION as IndexVersion } from '../../fingerprint/fingerprinter';
 import chalk from 'chalk';
 import gitRevision from './gitRevision';
-import { Metadata } from './Metadata';
+import { ArchiveMetadata } from './ArchiveMetadata';
+import updateSequenceDiagrams, { buildAppMapFilter } from './updateSequenceDiagrams';
+import { serializeAppMapFilter } from './serializeAppMapFilter';
 
-const ArchiveVersion = '1.0';
-const { name: ApplandAppMapPackageName, version: ApplandAppMapPackageVersion } = PackageConfig;
+// ## 1.1
+//
+// Added appMapFilter to the archive metadata
+export const ArchiveVersion = '1.1';
 
-/**
- * Default filters for each language - plus a set of default filters that apply to all languages.
- */
-export const DefaultFilters = {
-  default: ['label:unstable', 'label:serialize', 'label:deserialize.safe', 'label:log'],
-  ruby: ['label:mvc.template.resolver', 'package:ruby', 'package:activesupport'],
-  python: [],
-  java: [],
-  javascript: [],
-};
+export const { name: ApplandAppMapPackageName, version: ApplandAppMapPackageVersion } =
+  PackageConfig;
 
 export const command = 'archive';
 export const describe = 'Build an AppMap archive from a directory containing AppMaps';
@@ -78,12 +63,6 @@ commit of the current git revision may not be the one that triggered the build.`
     alias: 'f',
   });
 
-  args.option('concurrency', {
-    describe: 'number of AppMap which will be processed in parallel',
-    type: 'number',
-    default: 5,
-  });
-
   args.option('max-size', {
     describe: 'maximum AppMap size that will be processed, in filesystem-reported MB',
     default: DefaultMaxAppMapSizeInMB,
@@ -103,13 +82,7 @@ export const handler = async (argv: any) => {
 
   const appMapDir = await locateAppMapDir();
 
-  const {
-    concurrency,
-    maxSize,
-    type: typeArg,
-    revision: revisionArg,
-    outputFile: outputFileNameArg,
-  } = argv;
+  const { maxSize, type: typeArg, revision: revisionArg, outputFile: outputFileNameArg } = argv;
   const { outputDirArg } = argv;
 
   const maxAppMapSizeInBytes = Math.round(parseFloat(maxSize) * 1024 * 1024);
@@ -130,69 +103,11 @@ export const handler = async (argv: any) => {
 
   console.log('Generating sequence diagrams');
 
-  const specOptions = {
-    loops: true,
-  } as SequenceDiagramOptions;
-
-  const filter = new AppMapFilter();
-  filter.declutter.hideMediaRequests.on = true;
-  filter.declutter.limitRootEvents.on = true;
-
   const preflightConfig = appmapConfig.preflight;
+  const appMapFilter = buildAppMapFilter(preflightConfig?.filter || {}, appmapConfig.language);
+  const { oversizedAppMaps } = await updateSequenceDiagrams('.', maxAppMapSizeInBytes, appMapFilter);
 
-  const defaultFilterGroups = (): string[] => {
-    const result = ['default'];
-    if (appmapConfig.language) result.push(appmapConfig.language);
-    return result;
-  };
-
-  const configuredFilterGroups = (): string[] | undefined => {
-    if (!preflightConfig?.filter) return;
-
-    return preflightConfig?.filter?.groups;
-  };
-
-  const filterGroups = configuredFilterGroups() || defaultFilterGroups();
-  const filterGroupNames = filterGroups.map((group) => DefaultFilters[group]).flat();
-  const filterNames = preflightConfig?.filter?.names || [];
-
-  if (filterGroupNames.length > 0 || filterNames.length > 0) {
-    filter.declutter.hideName.on = true;
-    filter.declutter.hideName.names = [...new Set([...filterGroupNames, ...filterNames])].sort();
-  }
-
-  const oversizedAppMaps = new Array<string>();
-  const sequenceDiagramQueue = queue(async (appmapFileName: string) => {
-    // Determine size of file appmapFileName in bytes
-    const stats = await stat(appmapFileName);
-    if (stats.size > maxAppMapSizeInBytes) {
-      console.log(
-        `Skipping, and removing, ${appmapFileName} because its size of ${stats.size} exceeds the maximum size of ${maxSize} MB`
-      );
-      oversizedAppMaps.push(appmapFileName);
-      await unlink(appmapFileName);
-      return;
-    }
-
-    const fullAppMap = buildAppMap()
-      .source(await readFile(appmapFileName, 'utf8'))
-      .build();
-    const filteredAppMap = filter.filter(fullAppMap, []);
-    const specification = Specification.build(filteredAppMap, specOptions);
-    const diagram = buildDiagram(appmapFileName, filteredAppMap, specification);
-    const diagramOutput = format(FormatType.JSON, diagram, appmapFileName);
-    const indexDir = join(dirname(appmapFileName), basename(appmapFileName, '.appmap.json'));
-    const diagramFileName = join(indexDir, 'sequence.json');
-    await writeFile(diagramFileName, diagramOutput.diagram);
-  }, concurrency);
-  sequenceDiagramQueue.error(console.warn);
-
-  (await promisify(glob)('**/*.appmap.json')).forEach((appmapFileName) =>
-    sequenceDiagramQueue.push(appmapFileName)
-  );
-  if (sequenceDiagramQueue.length()) await sequenceDiagramQueue.drain();
-
-  const metadata: Metadata = {
+  const metadata: ArchiveMetadata = {
     versions,
     workingDirectory,
     appMapDir,
@@ -201,6 +116,7 @@ export const handler = async (argv: any) => {
     timestamp: Date.now().toString(),
     oversizedAppMaps,
     config: appmapConfig,
+    appMapFilter: serializeAppMapFilter(appMapFilter),
   };
 
   let type: string;
