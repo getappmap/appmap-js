@@ -1,13 +1,12 @@
 import { readFile } from 'fs/promises';
 import { load } from 'js-yaml';
 
-interface PreflightFilterConfig {
+export interface PreflightFilterConfig {
   groups?: string[];
   names?: string[];
 }
 
-interface PreflightConfig {
-  base_branch?: string;
+export interface PreflightConfig {
   test_folders?: string[];
   test_commands?: Record<string, string>;
   filter?: PreflightFilterConfig;
