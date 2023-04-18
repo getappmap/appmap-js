@@ -1,3 +1,10 @@
+# [@appland/models-v2.4.3](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.4.2...@appland/models-v2.4.3) (2023-04-18)
+
+
+### Bug Fixes
+
+* more robust pruning ([8fb0366](https://github.com/getappmap/appmap-js/commit/8fb0366ae773d02f89e01df13320ffb747f55413))
+
 # [@appland/models-v2.4.2](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.4.1...@appland/models-v2.4.2) (2023-03-31)
 
 
