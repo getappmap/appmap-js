@@ -1,3 +1,15 @@
+# [@appland/models-v2.5.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.4.3...@appland/models-v2.5.0) (2023-04-19)
+
+
+### Bug Fixes
+
+* limitRootEvents filter should be a nop ([79bf3a1](https://github.com/getappmap/appmap-js/commit/79bf3a19ee2db9c73867bafb351dea478388c1f4))
+
+
+### Features
+
+* Support metadata.test_failure ([b4bf66e](https://github.com/getappmap/appmap-js/commit/b4bf66e10cfeff258cdbe7f4266ca5c3b2d95b00)), closes [/github.com/getappmap/appmap#v1120](https://github.com//github.com/getappmap/appmap/issues/v1120)
+
 # [@appland/models-v2.4.3](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.4.2...@appland/models-v2.4.3) (2023-04-18)
 
 
