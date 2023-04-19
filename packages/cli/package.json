@@ -79,6 +79,7 @@
     "@appland/sequence-diagram": "workspace:^1",
     "@sidvind/better-ajv-errors": "^0.9.1",
     "@types/moo": "^0.5.5",
+    "@zip.js/zip.js": "^2.6.75",
     "JSONStream": "^1.3.5",
     "ajv": "^8.6.3",
     "applicationinsights": "^2.1.4",

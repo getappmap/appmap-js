@@ -75,7 +75,6 @@ export default async function serveAndOpen(
       } else {
         serveStaticFile(baseDir, (pathname || '/').slice(1));
       }
-
     } catch (e: any) {
       console.log(e.stack);
       res.writeHead(500);
@@ -108,7 +107,7 @@ export async function serveAndOpenSequenceDiagram(
     serveAndOpen(
       'sequenceDiagram.html',
       {
-        diagram: diagramFile,
+        diagram: `/resource?${encodeURIComponent(diagramFile)}`,
       },
       verifyInSubdir,
       async (url) => {
@@ -127,7 +126,7 @@ export async function serveAndOpenAppMap(
     serveAndOpen(
       'appmap.html',
       {
-        appmap: appMapFile,
+        appmap: `/resource?${encodeURIComponent(appMapFile)}`,
       },
       verifyInSubdir,
       async (url) => {

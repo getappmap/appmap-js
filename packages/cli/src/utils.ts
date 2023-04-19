@@ -136,6 +136,16 @@ export function exists(path: PathLike): Promise<boolean> {
   });
 }
 
+// Shuffles an array in place, returning it for convenience.
+// https://stackoverflow.com/a/12646864/953770
+export function shuffleArray<T>(array: Array<T>): Array<T> {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
 /**
  * Append a prefix to each line in a string
  * @param str the string to be prefixed

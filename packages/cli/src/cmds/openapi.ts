@@ -1,128 +1,20 @@
 import { join } from 'path';
 
-import { existsSync, promises as fsp, Stats } from 'fs';
-import { readFile, stat } from 'fs/promises';
-import { queue } from 'async';
-import { glob } from 'glob';
+import { promises as fsp } from 'fs';
+import { readFile } from 'fs/promises';
 import yaml, { load } from 'js-yaml';
 import { OpenAPIV3 } from 'openapi-types';
-import {
-  Model,
-  parseHTTPServerRequests,
-  rpcRequestForEvent,
-  SecuritySchemes,
-  verbose,
-} from '@appland/openapi';
-import { Event } from '@appland/models';
+import { verbose } from '@appland/openapi';
 import { Arguments, Argv, number } from 'yargs';
-import { inspect } from 'util';
 
 import { locateAppMapDir } from '../lib/locateAppMapDir';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { locateAppMapConfigFile } from '../lib/locateAppMapConfigFile';
 import Telemetry, { Git, GitState } from '../telemetry';
 import { findRepository } from '../lib/git';
+import { DefaultMaxAppMapSizeInMB, fileSizeFilter } from '../lib/fileSizeFilter';
 
-type FilterFunction = (file: string) => Promise<{ enable: boolean; message?: string }>;
-
-// Skip files that are larger than a specified max size.
-export function fileSizeFilter(maxFileSize: number): FilterFunction {
-  return async (file: string): Promise<{ enable: boolean; message?: string }> => {
-    let fileStat: Stats;
-    try {
-      fileStat = await stat(file);
-    } catch {
-      return { enable: false, message: `File ${file} not found` };
-    }
-
-    if (fileStat.size <= maxFileSize) return { enable: true };
-    else
-      return {
-        enable: false,
-        message: `Skipping ${file} as its file size of ${fileStat.size} bytes is larger than the maximum configured file size of ${maxFileSize} bytes`,
-      };
-  };
-}
-
-class OpenAPICommand {
-  private readonly model = new Model();
-  private readonly securitySchemes = new SecuritySchemes();
-
-  public errors: string[] = [];
-  public filter: FilterFunction = async (file: string) => ({ enable: true });
-
-  constructor(private readonly appmapDir: string) {}
-
-  async execute(): Promise<
-    [
-      {
-        paths: OpenAPIV3.PathsObject;
-        securitySchemes: Record<string, OpenAPIV3.SecuritySchemeObject>;
-      },
-      number
-    ]
-  > {
-    const q = queue(this.collectAppMap.bind(this), 5);
-    q.pause();
-
-    // Make sure the directory exists -- if it doesn't, the glob below just returns nothing.
-    if (!existsSync(this.appmapDir)) {
-      throw new Error(`AppMap directory ${this.appmapDir} does not exist`);
-    }
-
-    const files = glob.sync(join(this.appmapDir, '**', '*.appmap.json'));
-    for (let index = 0; index < files.length; index++) {
-      const file = files[index];
-      const filterResult = await this.filter(file);
-      if (!filterResult.enable) {
-        if (filterResult.message) console.warn(filterResult.message);
-        continue;
-      }
-
-      q.push(file);
-    }
-
-    if (q.length() > 0) {
-      await new Promise<void>((resolve, reject) => {
-        q.drain(resolve);
-        q.error(reject);
-        q.resume();
-      });
-    }
-
-    return [
-      {
-        paths: this.model.openapi(),
-        securitySchemes: this.securitySchemes.openapi(),
-      },
-      files.length,
-    ];
-  }
-
-  async collectAppMap(file: string): Promise<void> {
-    try {
-      const data = await fsp.readFile(file, 'utf-8');
-      parseHTTPServerRequests(JSON.parse(data), (e: Event) => {
-        const request = rpcRequestForEvent(e);
-        if (request) {
-          this.model.addRpcRequest(request);
-          this.securitySchemes.addRpcRequest(request);
-        }
-      });
-    } catch (e) {
-      // Re-throwing this error crashes the whole process.
-      // So if there is a malformed AppMap, indicate it here but don't blow everything up.
-      // Do not write to stdout!
-      let errorString: string;
-      try {
-        errorString = inspect(e);
-      } catch (x) {
-        errorString = ((e as any) || '').toString();
-      }
-      this.errors.push(errorString);
-    }
-  }
-}
+export type FilterFunction = (file: string) => Promise<{ enable: boolean; message?: string }>;
 
 async function loadTemplate(fileName: string): Promise<any> {
   if (!fileName) {
@@ -148,7 +40,7 @@ export default {
     });
     args.option('max-size', {
       describe: 'maximum AppMap size that will be processed, in filesystem-reported MB',
-      default: '50',
+      default: `${DefaultMaxAppMapSizeInMB}mb`,
     });
     args.option('output-file', {
       alias: ['o'],
