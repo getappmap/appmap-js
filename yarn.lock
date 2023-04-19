@@ -181,6 +181,7 @@ __metadata:
     moo: ^0.5.1
     node-fetch: 2.6.7
     open: ^8.2.1
+    openapi-diff: ^0.23.6
     openapi-types: ^12.1.0
     ora: ^5.4.1
     pkg: ^5.8.0
@@ -10807,6 +10808,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"axios@npm:^0.24.0":
+  version: 0.24.0
+  resolution: "axios@npm:0.24.0"
+  dependencies:
+    follow-redirects: ^1.14.4
+  checksum: 468cf496c08a6aadfb7e699bebdac02851e3043d4e7d282350804ea8900e30d368daa6e3cd4ab83b8ddb5a3b1e17a5a21ada13fc9cebd27b74828f47a4236316
+  languageName: node
+  linkType: hard
+
 "axios@npm:^0.27.2":
   version: 0.27.2
   resolution: "axios@npm:0.27.2"
@@ -17431,6 +17441,16 @@ __metadata:
     debug:
       optional: true
   checksum: 40c67899c2e3149a27e8b6498a338ff27f39fe138fde8d7f0756cb44b073ba0bfec3d52af28f20c5bdd67263d564d0d8d7b5efefd431de95c18c42f7b4aef457
+  languageName: node
+  linkType: hard
+
+"follow-redirects@npm:^1.14.4":
+  version: 1.15.2
+  resolution: "follow-redirects@npm:1.15.2"
+  peerDependenciesMeta:
+    debug:
+      optional: true
+  checksum: faa66059b66358ba65c234c2f2a37fcec029dc22775f35d9ad6abac56003268baf41e55f9ee645957b32c7d9f62baf1f0b906e68267276f54ec4b4c597c2b190
   languageName: node
   linkType: hard
 
@@ -25713,6 +25733,25 @@ __metadata:
   bin:
     openapi-diff: bin/openapi-diff
   checksum: f7289b46006605a9ae1daae6f797012c3fb035fa26b0ac8c9b325dd20dae3a5727adbe970bb98ddda7b80f9a448f308bfe891b229685a011a71caa497c10a16f
+  languageName: node
+  linkType: hard
+
+"openapi-diff@npm:^0.23.6":
+  version: 0.23.6
+  resolution: "openapi-diff@npm:0.23.6"
+  dependencies:
+    axios: ^0.24.0
+    commander: ^8.2.0
+    js-yaml: ^4.0.0
+    json-schema-diff: ^0.17.1
+    jsonpointer: ^4.1.0
+    lodash: ^4.17.20
+    openapi3-ts: ^2.0.0
+    swagger-parser: ^10.0.2
+    verror: ^1.10.0
+  bin:
+    openapi-diff: bin/openapi-diff
+  checksum: 91fe37225af512b6417424bd16dde25de47f354d6521dad8f0cf97a7be5454d60ef87d73b9f0aa59bce21d092daadc7040db466141c5313128be60e8e847fb01
   languageName: node
   linkType: hard
 
