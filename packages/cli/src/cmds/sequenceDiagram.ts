@@ -3,7 +3,7 @@ import { basename, dirname, join } from 'path';
 import yargs from 'yargs';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { verbose } from '../utils';
-import { buildAppMap } from '@appland/models';
+import { AppMap, AppMapFilter, buildAppMap } from '@appland/models';
 import {
   buildDiagram,
   SequenceDiagramOptions,
@@ -11,10 +11,12 @@ import {
   format as formatDiagram,
   Formatters,
   FormatType,
+  Diagram,
 } from '@appland/sequence-diagram';
 import { serveAndOpenSequenceDiagram } from '../lib/serveAndOpen';
 import assert from 'assert';
 import BrowserRenderer from './sequenceDiagram/browserRenderer';
+import filterAppMap from '../lib/filterAppMap';
 
 export const command = 'sequence-diagram <appmap...>';
 export const describe = 'Generate a sequence diagram for an AppMap';
@@ -49,8 +51,13 @@ export const builder = (args: yargs.Argv) => {
     choices: ['png', 'plantuml', 'json'],
     default: 'png',
   });
+  args.option('filter', {
+    describe: 'Filter to use to prune the map',
+    type: 'string',
+  });
   args.option('exclude', {
     describe: 'code objects to exclude from the diagram',
+    deprecated: true,
   });
 
   return args.strict();
@@ -72,14 +79,16 @@ export const handler = async (argv: any) => {
     return;
   }
 
+  const { filter } = argv;
+
   let browserRender: BrowserRenderer | undefined;
   if (argv.format === 'png') {
     browserRender = new BrowserRenderer(argv.showBrowser);
   }
-
   const generateDiagram = async (appmapFileName: string): Promise<void> => {
     const appmapData = JSON.parse(await readFile(appmapFileName, 'utf-8'));
-    const appmap = buildAppMap().source(appmapData).build();
+    let appmap: AppMap = buildAppMap().source(appmapData).build();
+    if (filter) appmap = filterAppMap(appmap, filter);
 
     const specOptions = {
       loops: argv.loops,
@@ -109,11 +118,12 @@ export const handler = async (argv: any) => {
       return resultPath;
     };
 
+    let outputPath: string;
     if (argv.format === 'png') {
       // PNG rendering is performed by loading the sequence
       // diagram in a browser and taking a screenshot.
       const diagramPath = await printDiagram(FormatType.JSON);
-      const outputPath = await new Promise((resolve) =>
+      outputPath = await new Promise((resolve) =>
         serveAndOpenSequenceDiagram(diagramPath, false, async (url) => {
           if (verbose()) console.warn(`Rendering PNG`);
           assert(browserRender, 'Browser not initialized');
@@ -132,7 +142,7 @@ export const handler = async (argv: any) => {
     } else {
       // Other forms of output are produced directly by the
       // sequence diagram library.
-      const outputPath = await printDiagram(argv.format);
+      outputPath = await printDiagram(argv.format);
       console.log(`Printed diagram ${outputPath}`);
     }
   };
