@@ -33,6 +33,7 @@ const SequenceDiagramCommand = require('./cmds/sequenceDiagram');
 const SequenceDiagramDiffCommand = require('./cmds/sequenceDiagramDiff');
 const StatsCommand = require('./cmds/stats/stats');
 const ArchiveCommand = require('./cmds/archive/archive');
+const UpdateCommand = require('./cmds/update');
 import UploadCommand from './cmds/upload';
 
 class DiffCommand {
@@ -457,6 +458,7 @@ yargs(process.argv.slice(2))
   .command(PruneCommand)
   .command(UploadCommand)
   .command(ArchiveCommand)
+  .command(UpdateCommand)
   .strict()
   .demandCommand()
   .help().argv;
