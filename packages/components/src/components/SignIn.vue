@@ -58,8 +58,6 @@
 <script>
 import AppMapLogo from '@/assets/appmap-full-logo.svg';
 import shieldIcon from '@/assets/shield-icon.svg';
-import githubLogo from '@/assets/github-logo.svg';
-import gitlabLogo from '@/assets/gitlab-logo.svg';
 import chevronDown from '@/assets/chevron-down.svg';
 
 export default {
@@ -67,8 +65,6 @@ export default {
   components: {
     AppMapLogo,
     shieldIcon,
-    githubLogo,
-    gitlabLogo,
     chevronDown,
   },
 
