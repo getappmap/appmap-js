@@ -32,6 +32,7 @@ const InspectCommand = require('./cmds/inspect/inspect');
 const SequenceDiagramCommand = require('./cmds/sequenceDiagram');
 const SequenceDiagramDiffCommand = require('./cmds/sequenceDiagramDiff');
 const StatsCommand = require('./cmds/stats/stats');
+const ArchiveCommand = require('./cmds/archive/archive');
 import UploadCommand from './cmds/upload';
 
 // eslint-disable-next-line no-unused-expressions
@@ -223,6 +224,7 @@ yargs(process.argv.slice(2))
   .command(SequenceDiagramDiffCommand)
   .command(PruneCommand)
   .command(UploadCommand)
+  .command(ArchiveCommand)
   .strict()
   .demandCommand()
   .help().argv;
