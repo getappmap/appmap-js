@@ -13,4 +13,4 @@ yarn pkg \
   --compress GZip \
   -o release/appmap-preflight \
   $([ -n "${DESIRED_TARGET}" ] && echo "-t node16-${DESIRED_TARGET}-x64") \
-  built/src/cli.js
+  built/cli.js

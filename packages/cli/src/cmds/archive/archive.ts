@@ -4,7 +4,6 @@ import yargs from 'yargs';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../lib/locateAppMapDir';
 import { exists, verbose } from '../../utils';
-import PackageConfig from '../../../package.json';
 import { mkdir, readFile, stat, unlink, writeFile } from 'fs/promises';
 import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
 import { DefaultMaxAppMapSizeInMB } from '../../lib/fileSizeFilter';
@@ -21,8 +20,15 @@ import { serializeAppMapFilter } from './serializeAppMapFilter';
 // Added appMapFilter to the archive metadata
 export const ArchiveVersion = '1.1';
 
-export const { name: ApplandAppMapPackageName, version: ApplandAppMapPackageVersion } =
-  PackageConfig;
+export const PackageVersion = {
+  name: '@appland/appmap',
+  version: process.env.npm_package_version,
+};
+
+if (!process.env.npm_package_version)
+  console.log(
+    `Note: The AppMap archive won't contain the version of @appland/appmap because process.env.npm_package_version is not available.`
+  );
 
 export const command = 'archive';
 export const describe = 'Build an AppMap archive from a directory containing AppMaps';
@@ -93,7 +99,7 @@ export const handler = async (argv: any) => {
 
   console.log(`Building archive of revision ${revision}`);
   const versions = { archive: ArchiveVersion, index: IndexVersion };
-  versions[ApplandAppMapPackageName] = ApplandAppMapPackageVersion;
+  if (PackageVersion.version) versions[PackageVersion.name] = PackageVersion.version;
 
   process.chdir(appMapDir);
 
@@ -105,7 +111,11 @@ export const handler = async (argv: any) => {
 
   const preflightConfig = appmapConfig.preflight;
   const appMapFilter = buildAppMapFilter(preflightConfig?.filter || {}, appmapConfig.language);
-  const { oversizedAppMaps } = await updateSequenceDiagrams('.', maxAppMapSizeInBytes, appMapFilter);
+  const { oversizedAppMaps } = await updateSequenceDiagrams(
+    '.',
+    maxAppMapSizeInBytes,
+    appMapFilter
+  );
 
   const metadata: ArchiveMetadata = {
     versions,
