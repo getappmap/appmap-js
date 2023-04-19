@@ -90,7 +90,7 @@ function includeSubtrees(events, filterFn, applyIfEmpty) {
 
   events.forEach(markIncludedEvents);
 
-  if (applyIfEmpty || includedEvents.size()) return events.filter((e) => includedEvents.has(e));
+  if (applyIfEmpty || includedEvents.size) return events.filter((e) => includedEvents.has(e));
   else return events;
 }
 
@@ -109,7 +109,7 @@ export default class AppMapFilter {
     let { events } = appMap;
 
     if (this.declutter.limitRootEvents.on) {
-      events = includeSubtrees(events, (e) => e.httpServerRequest, true);
+      events = includeSubtrees(events, (e) => e.httpServerRequest, false);
     }
 
     if (this.rootObjects.length) {
