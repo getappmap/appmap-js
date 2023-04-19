@@ -33,6 +33,7 @@ const SequenceDiagramCommand = require('./cmds/sequenceDiagram');
 const SequenceDiagramDiffCommand = require('./cmds/sequenceDiagramDiff');
 const StatsCommand = require('./cmds/stats/stats');
 const ArchiveCommand = require('./cmds/archive/archive');
+const RestoreCommand = require('./cmds/archive/restore');
 const UpdateCommand = require('./cmds/update');
 import UploadCommand from './cmds/upload';
 
@@ -458,6 +459,7 @@ yargs(process.argv.slice(2))
   .command(PruneCommand)
   .command(UploadCommand)
   .command(ArchiveCommand)
+  .command(RestoreCommand)
   .command(UpdateCommand)
   .strict()
   .demandCommand()
