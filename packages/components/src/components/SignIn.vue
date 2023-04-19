@@ -36,12 +36,19 @@
         /></span>
         <p>Not ready to start making AppMaps? No problem! here are some suggestions:</p>
         <ul>
-          <li><a href="/">Download a sample AppMap to explore</a></li>
-          <li><a href="/">Request a free trial license and manual install instructions</a></li>
-          <li><a href="/">Watch a demo video</a></li>
-          <li><a href="/">Get answers to questions you may have</a></li>
+          <li>
+            <a href="/">Check out a sample AppMap to explore<VExternalLinkIcon /></a>
+          </li>
+          <!-- <li><a href="/">Request a free trial license and manual install instructions</a></li> -->
+          <li>
+            <a href="/">Watch a demo video<VExternalLinkIcon /></a>
+          </li>
+          <li>
+            <a href="https://appmap.io/slack" target="_blank"
+              >Join Slack to get answers to questions you may have<VExternalLinkIcon
+            /></a>
+          </li>
         </ul>
-        <p>Come back and sign in when you are ready.</p>
       </div>
 
       <div class="your-data">
@@ -59,6 +66,7 @@
 import AppMapLogo from '@/assets/appmap-full-logo.svg';
 import shieldIcon from '@/assets/shield-icon.svg';
 import chevronDown from '@/assets/chevron-down.svg';
+import VExternalLinkIcon from '@/assets/external-link.svg';
 
 export default {
   name: 'v-sign-in',
@@ -66,6 +74,7 @@ export default {
     AppMapLogo,
     shieldIcon,
     chevronDown,
+    VExternalLinkIcon,
   },
 
   methods: {
@@ -140,6 +149,12 @@ export default {
     text-decoration: none;
     &:hover {
       text-decoration: underline;
+    }
+    svg {
+      path {
+        fill: desaturate($powderblue, 20);
+      }
+      margin-left: 0.5rem;
     }
   }
 }
