@@ -11,20 +11,24 @@
       </div>
 
       <ul class="signin-ctas">
-        <li><a href="https://appmap.io/docs/diagrams/sequence-diagrams">Sequence diagrams</a></li>
-        <li>
+        <li @click="clickSignInLink('sequence-diagrams')">
+          <a href="https://appmap.io/docs/diagrams/sequence-diagrams">Sequence diagrams</a>
+        </li>
+        <li @click="clickSignInLink('trace-views')">
           <a
             href="https://appmap.io/docs/diagrams/how-to-use-appmaps.html#view-and-interact-with-the-trace-diagram"
             >Trace views</a
           >
         </li>
-        <li>
+        <li @click="clickSignInLink('dependency-maps')">
           <a
             href="https://appmap.io/docs/diagrams/how-to-use-appmaps.html#view-and-interact-with-the-dependency-map"
             >Dependency maps</a
           >
         </li>
-        <li><a href="https://appmap.io/docs/openapi">OpenAPI definitions</a></li>
+        <li @click="clickSignInLink('open-api')">
+          <a href="https://appmap.io/docs/openapi">OpenAPI definitions</a>
+        </li>
       </ul>
       <div class="signin-buttons">
         <a href="/" class="btn btn-primary" data-cy="sign-in-button" @click="signIn">Sign in</a>
@@ -91,6 +95,10 @@ export default {
 
     toggle() {
       this.expanded = !this.expanded;
+    },
+
+    clickSignInLink(linkType) {
+      this.$root.$emit('click-sign-in-link', linkType);
     },
   },
 };
