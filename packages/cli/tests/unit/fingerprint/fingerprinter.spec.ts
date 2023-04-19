@@ -23,7 +23,7 @@ describe(Fingerprinter, () => {
       const file = await open(filePath, 'w');
       await file.write('{}', 500 * 1000 * 1000);
       await file.close();
-      const fingerprinter = new Fingerprinter(false);
+      const fingerprinter = new Fingerprinter();
       await expect(fingerprinter.fingerprint(filePath)).rejects.toThrow(FileTooLargeError);
     })
   );

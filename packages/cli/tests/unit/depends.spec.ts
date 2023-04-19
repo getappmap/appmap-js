@@ -25,7 +25,7 @@ describe('Depends', () => {
 
     fs.copySync(fixtureDir, appMapDir);
 
-    const fingerprinter = new Fingerprinter(true);
+    const fingerprinter = new Fingerprinter();
     await listAppMapFiles(appMapDir, async (fileName) => {
       utimesSync(fileName, now, now);
       await fingerprinter.fingerprint(fileName);
