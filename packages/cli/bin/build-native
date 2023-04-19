@@ -11,6 +11,6 @@ echo "Building native binaries..."
 yarn pkg \
   --config package.json \
   --compress GZip \
-  -o release/appmap \
+  -o release/appmap-preflight \
   $([ -n "${DESIRED_TARGET}" ] && echo "-t node16-${DESIRED_TARGET}-x64") \
   built/cli.js
