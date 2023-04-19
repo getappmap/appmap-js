@@ -31,24 +31,25 @@
       </div>
 
       <div class="signin-not-ready">
-        <span class="accordion-toggle open"
+        <span @click="toggle" :class="['accordion-toggle', expanded ? 'open' : 'closed']"
           ><strong>Not ready to sign in?</strong> <chevronDown
         /></span>
-        <p>Not ready to start making AppMaps? No problem! here are some suggestions:</p>
-        <ul>
-          <li>
-            <a href="/">Check out a sample AppMap to explore<VExternalLinkIcon /></a>
-          </li>
-          <!-- <li><a href="/">Request a free trial license and manual install instructions</a></li> -->
-          <li>
-            <a href="/">Watch a demo video<VExternalLinkIcon /></a>
-          </li>
-          <li>
-            <a href="https://appmap.io/slack" target="_blank"
-              >Join Slack to get answers to questions you may have<VExternalLinkIcon
-            /></a>
-          </li>
-        </ul>
+        <div v-if="expanded">
+          <p>Not ready to start making AppMaps? No problem! here are some suggestions:</p>
+          <ul>
+            <li @click="clickSignInLink('sample-map')">
+              <a href="#">Check out a sample AppMap to explore<VExternalLinkIcon /></a>
+            </li>
+            <li @click="clickSignInLink('demo-video')">
+              <a href="#">Watch a demo video<VExternalLinkIcon /></a>
+            </li>
+            <li @click="clickSignInLink('join-slack')">
+              <a href="https://appmap.io/slack" target="_blank"
+                >Join Slack to get answers to questions you may have<VExternalLinkIcon
+              /></a>
+            </li>
+          </ul>
+        </div>
       </div>
 
       <div class="your-data">
@@ -77,9 +78,19 @@ export default {
     VExternalLinkIcon,
   },
 
+  data() {
+    return {
+      expanded: false,
+    };
+  },
+
   methods: {
     signIn() {
       this.$root.$emit('sign-in');
+    },
+
+    toggle() {
+      this.expanded = !this.expanded;
     },
   },
 };
@@ -129,6 +140,9 @@ export default {
 }
 
 .signin-not-ready {
+  &:hover {
+    cursor: pointer;
+  }
   .accordion-toggle {
     display: flex;
     align-items: center;
