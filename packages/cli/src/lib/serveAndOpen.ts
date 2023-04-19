@@ -68,14 +68,13 @@ export default async function serveAndOpen(
       const pathname = requestUrl.pathname;
       if (pathname === '/') {
         return serveStaticFile(baseDir, file, 'text/html');
-      } else if (pathname === '/resource') {
+      } else if (pathname && pathname.startsWith('/resource')) {
         const pathname = requestUrl.query;
         if (pathname) serveStaticFile(process.cwd(), decodeURIComponent(pathname));
         else send404();
       } else {
         serveStaticFile(baseDir, (pathname || '/').slice(1));
       }
-
     } catch (e: any) {
       console.log(e.stack);
       res.writeHead(500);
@@ -108,7 +107,7 @@ export async function serveAndOpenSequenceDiagram(
     serveAndOpen(
       'sequenceDiagram.html',
       {
-        diagram: diagramFile,
+        diagram: ['resource', encodeURIComponent(diagramFile)].join('?'),
       },
       verifyInSubdir,
       async (url) => {
@@ -127,7 +126,7 @@ export async function serveAndOpenAppMap(
     serveAndOpen(
       'appmap.html',
       {
-        appmap: appMapFile,
+        appmap: ['resource', encodeURIComponent(appMapFile)].join('?'),
       },
       verifyInSubdir,
       async (url) => {
