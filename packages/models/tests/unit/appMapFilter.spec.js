@@ -2,9 +2,11 @@ import buildAppMap from '../../src/appMapBuilder';
 import AppMapFilter from '../../src/appMapFilter';
 import checkoutUpdatePaymentData from './fixtures/checkout_update_payment.appmap.json';
 import petClinicData from './fixtures/org_springframework_samples_petclinic_web_VisitControllerTests_testShowVisits.appmap.json';
+import modelData from './fixtures/appland/DAO_Scenario_validation_fails_when_raw_data_is_larger_than_limit.appmap.json';
 
 const checkoutUpdatePaymentAppMap = buildAppMap().source(checkoutUpdatePaymentData).build();
 const petClinicAppMap = buildAppMap().source(petClinicData).build();
+const modelAppMap = buildAppMap().source(modelData).build();
 
 describe('appMapFilter', () => {
   let filter;
@@ -122,6 +124,13 @@ describe('appMapFilter', () => {
         expect(lastEvent.isReturn()).toBeTruthy();
         expect(lastEvent.httpServerResponse).toBeTruthy();
       }
+    });
+
+    it('is a nop if there are no HTTP server requests in the AppMap', () => {
+      const eventCount = modelAppMap.events.length;
+      filter.declutter.limitRootEvents.on = true;
+      const filteredAppMap = filter.filter(modelAppMap);
+      expect(filteredAppMap.events.length).toEqual(eventCount);
     });
   });
 });
