@@ -289,6 +289,11 @@ declare module '@appland/models' {
       /** Optional in AppMaps versions < 1.9.0. */
       type?: 'tests' | 'requests' | 'remote';
     }
+
+    export class TestFailure {
+      message: string;
+      location?: string;
+    }
   }
 
   export class Metadata {
@@ -302,6 +307,7 @@ declare module '@appland/models' {
     language?: Metadata.Language;
     recorder: Metadata.Recorder;
     test_status?: 'succeeded' | 'failed';
+    test_failure?: Metadata.TestFailure;
     source_location?: string;
     exception: Metadata.Exception;
   }
