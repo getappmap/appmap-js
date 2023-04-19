@@ -1,0 +1,30 @@
+➜  cli git:(feat/depends-performance) ✗ time node ./built/cli.js depends -d ~/source/land-of-apps/forem > forem.log
+node ./built/cli.js depends -d ~/source/land-of-apps/forem > forem.log  11.41s user 7.64s system 182% cpu 10.427 total
+
+➜  cli git:(feat/depends-performance) ✗ git stash pop
+On branch feat/depends-performance
+
+Dropped refs/stash@{0} (dab1349df038471c4b697d9464977f4f681fd61f)
+
+➜  cli git:(feat/depends-performance) ✗ time node ./built/cli.js depends -d ~/source/land-of-apps/forem > forem.log
+node ./built/cli.js depends -d ~/source/land-of-apps/forem > forem.log  6.41s user 3.12s system 124% cpu 7.687 total
+
+# Remove mtimes optimization
+➜  cli git:(feat/depends-performance) ✗ time node ./built/cli.js depends -d ~/source/land-of-apps/forem > forem.log
+node ./built/cli.js depends -d ~/source/land-of-apps/forem > forem.log  8.52s user 5.33s system 136% cpu 10.166 total
+
+# ClassMap digest
+node ./built/cli.js depends -d ~/source/land-of-apps/forem > forem.log  6.56s user 3.43s system 123% cpu 8.108 total
+
+# No ClassMap digest
+node ./built/cli.js depends -d ~/source/land-of-apps/forem > forem.log  5.98s user 3.37s system 123% cpu 7.552 total
+
+# Enumerate with glob
+node ./built/cli.js depends -d ~/source/land-of-apps/forem > forem.log  9.95s user 5.37s system 166% cpu 9.199 total
+
+# Enumerate with target file plucking
+node ./built/cli.js depends -d ~/source/land-of-apps/forem > forem.log  3.86s user 1.59s system 127% cpu 4.296 total
+
+# Back to basics
+node ./built/cli.js depends -d ~/source/land-of-apps/forem > forem.log  11.41s user 6.40s system 169% cpu 10.537 total
+
