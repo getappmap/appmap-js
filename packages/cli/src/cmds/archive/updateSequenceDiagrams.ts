@@ -22,11 +22,18 @@ export const DefaultFilters: Record<string, string[]> = {
     'label:serialize',
     'label:deserialize.safe',
     'label:log',
-    /^external-service:.*\bhttp:\/\/127\.0\.0\.1:\d+\/session\/\[a-f0-9]{32,}\//.toString(),
+    /^external-route:.*\bhttp:\/\/127\.0\.0\.1:\d+\/session\/[a-f0-9]{32,}\//.toString(), // Selenium
     /^query:[\s\S]*\bPRAGMA\b/.toString(),
-    /^query:[\s\S]*\bsqlite_master\b/.toString(),
+    /^query:[\s\S]*\bsqlite_master\b/.toString(), // SQLite schema table
+    /^query:[\s\S]*\bpg_attribute\b/.toString(), // PostgreSQL schema tables
   ],
-  ruby: ['label:mvc.template.resolver', 'package:ruby', 'package:activesupport', 'package:openssl'],
+  ruby: [
+    'label:mvc.template.resolver',
+    'package:ruby',
+    'package:logger',
+    'package:activesupport',
+    'package:openssl',
+  ],
   python: [],
   java: [],
   javascript: [],
