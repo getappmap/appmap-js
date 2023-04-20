@@ -36,14 +36,6 @@
   :wrench: {{sequenceDiagramDiffSnippetCount}} changes
   {{~/if}}
   |
-| [Changed AppMaps](#changed-appmaps) | 
-  {{~#unless changedAppMaps.length }}
-  :white_check_mark: No changes
-  {{~/unless}}
-  {{~#if changedAppMaps.length }}
-  :wrench: {{changedAppMaps.length}} changes
-  {{~/if}}
-  |
 
 {{#if testFailures.length}}
 <h2 id="test-failures">Test failures</h2>
@@ -164,16 +156,4 @@ The following code changes are related to this test:
 {{/each}}
 
 {{/each}}
-{{/if}}
-
-{{#if changedAppMaps.length }}
-
-<h2 id="changed-appmaps">Changed AppMaps</h2>
-
-{{#each changedAppMaps}}
-
-{{> sequence-diagram-diff-link }}
-
-{{/each}}
-
 {{/if}}
