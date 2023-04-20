@@ -38,7 +38,8 @@ export default async function buildChangeReport(
   baseRevision: string,
   headRevision: string,
   workingDir: string,
-  srcDir: string
+  srcDir: string,
+  deleteUnchanged: boolean
 ): Promise<ChangeReport> {
   const diffDiagrams = new DiffDiagrams();
 
@@ -122,7 +123,9 @@ export default async function buildChangeReport(
     }
   }
 
-  await deleteUnchangedAppMaps();
+  if (deleteUnchanged) {
+    await deleteUnchangedAppMaps();
+  }
 
   const baseAppMaps = new Set(await appmapData.appmaps(RevisionName.Base));
   const headAppMaps = new Set(await appmapData.appmaps(RevisionName.Head));
@@ -148,16 +151,19 @@ export default async function buildChangeReport(
         if (path.indexOf('.') && !path.startsWith('<') && !isAbsolute(path)) sourcePaths.add(path);
       });
 
-      const sourceDiff = await executeCommand(
-        `git diff ${baseRevision}..${headRevision} -- ${[...sourcePaths]
+      if (sourcePaths.size > 0) {
+        const paths = [...sourcePaths]
           .sort()
           .map((p) => [srcDir, p].join('/'))
-          .join(' ')}`,
-        false,
-        false,
-        false
-      );
-      if (sourceDiff) changedAppMap.sourceDiff = sourceDiff;
+          .join(' ');
+        const sourceDiff = await executeCommand(
+          `git diff ${baseRevision}..${headRevision} -- ${paths}`,
+          false,
+          false,
+          false
+        );
+        if (sourceDiff) changedAppMap.sourceDiff = sourceDiff;
+      }
 
       const baseDiagram = await loadSequenceDiagram(
         appmapData.sequenceDiagramPath(RevisionName.Base, appmap)
@@ -171,7 +177,7 @@ export default async function buildChangeReport(
         const path = appmapData.sequenceDiagramDiffPath(appmap);
         await mkdir(dirname(path), { recursive: true });
         await writeFile(path, diagramJSON.diagram);
-        changedAppMap.sequenceDiagramDiff = relative(workingDir, path);
+        changedAppMap.sequenceDiagramDiff = relative(join(workingDir, 'diff'), path);
 
         // Build a text snippet for each top level context.
         const allActions = [...diagramDiff.rootActions];
