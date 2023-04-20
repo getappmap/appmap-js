@@ -15,10 +15,14 @@ import { ArchiveMetadata } from './ArchiveMetadata';
 import updateSequenceDiagrams, { buildAppMapFilter } from './updateSequenceDiagrams';
 import { serializeAppMapFilter } from './serializeAppMapFilter';
 
+// ## 1.1.1
+//
+// * SQL actions in sequence diagram - digest is a fixed value if the SQL string is truncated.
+//
 // ## 1.1
 //
-// Added appMapFilter to the archive metadata
-export const ArchiveVersion = '1.1';
+// * Added appMapFilter to the archive metadata.
+export const ArchiveVersion = '1.1.1';
 
 export const PackageVersion = {
   name: '@appland/appmap',
