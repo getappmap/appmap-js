@@ -22,6 +22,7 @@ export function actionStyle(message: string): string {
 export function prominentStyle(message: string): string {
   return chalk.bold(message);
 }
+
 export function mutedStyle(message: string): string {
   return chalk.dim(message);
 }
