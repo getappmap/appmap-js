@@ -18,6 +18,7 @@ import { serializeAppMapFilter } from '../archive/serializeAppMapFilter';
 import { ArchiveVersion } from '../archive/archive';
 import { promisify } from 'util';
 import { glob } from 'glob';
+import { AppMapFilter } from '@appland/models';
 
 export const command = 'compare';
 export const describe = 'Compare runtime code behavior between base and head revisions';
@@ -105,7 +106,7 @@ export const handler = async (argv: any) => {
   console.log('Generating sequence diagrams');
 
   const preflightConfig = appmapConfig.preflight;
-  const appMapFilter = buildAppMapFilter(preflightConfig?.filter || {});
+  let appMapFilter = new AppMapFilter();
 
   for (const revisionName of [RevisionName.Base, RevisionName.Head]) {
     let rebuildBecauseArchiveVersionChanged = false,
@@ -126,6 +127,11 @@ export const handler = async (argv: any) => {
         );
         break;
       }
+
+      appMapFilter = buildAppMapFilter(
+        preflightConfig?.filter || {},
+        archiveMetadata.config.language
+      );
 
       if (!jsonEquals(serializeAppMapFilter(appMapFilter), archiveAppMapFilter)) {
         rebuildBecauseFilterChanged = true;
