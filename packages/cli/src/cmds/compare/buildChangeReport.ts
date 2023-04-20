@@ -292,10 +292,6 @@ export default async function buildChangeReport(
     resolvedFindings,
     apiDiff,
     sequenceDiagramDiffSnippets: mapToRecord(sequenceDiagramDiffSnippets),
-    scanConfiguration: {
-      [RevisionName.Base]: baseScanResults.configuration,
-      [RevisionName.Head]: headScanResults.configuration,
-    },
     appMapMetadata: {
       [RevisionName.Base]: mapToRecord(appMapMetadata[RevisionName.Base]),
       [RevisionName.Head]: mapToRecord(appMapMetadata[RevisionName.Head]),

@@ -1,5 +1,5 @@
 import { Metadata } from '@appland/models';
-import Configuration, { Finding } from '../../lib/findings';
+import { Finding } from '../../lib/findings';
 
 export type AppMapLink = string;
 export type SequenceDiagramLink = string;
@@ -30,10 +30,6 @@ export type ChangeReport = {
   newFindings: Finding[];
   resolvedFindings: Finding[];
   apiDiff: any;
-  scanConfiguration: {
-    base: Configuration;
-    head: Configuration;
-  };
   appMapMetadata: {
     base: Record<AppMapName, Metadata>;
     head: Record<AppMapName, Metadata>;
