@@ -38,8 +38,6 @@ export default async function buildChangeReport(
   const appmapData = new AppMapData(workingDir);
   const appmapIndex = new AppMapIndex(appmapData);
   await appmapIndex.build();
-  assert(appmapIndex.addedDigests);
-  assert(appmapIndex.removedDigests);
 
   const appMapMetadata = {
     base: new Map<AppMapName, Metadata>(),
@@ -87,8 +85,6 @@ export default async function buildChangeReport(
   }
 
   async function deleteUnchangedAppMaps() {
-    assert(appmapIndex.unchangedDigests);
-
     const deleteAppMap = async (revisionName: RevisionName, appmap: AppMapName) => {
       if (failedAppMaps.has(appmap)) {
         console.log(
@@ -109,11 +105,11 @@ export default async function buildChangeReport(
       await rm(path, { recursive: true });
     };
 
-    for (const digest of appmapIndex.unchangedDigests) {
-      for (const appmap of appmapIndex.appmapsByDigest[RevisionName.Base].get(digest) || []) {
+    for (const appmap of await appmapData.appmaps(RevisionName.Base)) {
+      const baseDigest = appmapIndex.appmapDigest(RevisionName.Base, appmap);
+      const headDigest = appmapIndex.appmapDigest(RevisionName.Head, appmap);
+      if (baseDigest === headDigest) {
         deleteAppMap(RevisionName.Base, appmap);
-      }
-      for (const appmap of appmapIndex.appmapsByDigest[RevisionName.Head].get(digest) || []) {
         deleteAppMap(RevisionName.Head, appmap);
       }
     }
