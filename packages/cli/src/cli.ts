@@ -36,6 +36,7 @@ const ArchiveCommand = require('./cmds/archive/archive');
 const RestoreCommand = require('./cmds/archive/restore');
 const UpdateCommand = require('./cmds/update');
 const CompareCommand = require('./cmds/compare/compare');
+const CompareReportCommand = require('./cmds/compare-report/compareReport');
 import UploadCommand from './cmds/upload';
 
 class DiffCommand {
@@ -463,6 +464,7 @@ yargs(process.argv.slice(2))
   .command(RestoreCommand)
   .command(UpdateCommand)
   .command(CompareCommand)
+  .command(CompareReportCommand)
   .strict()
   .demandCommand()
   .help().argv;
