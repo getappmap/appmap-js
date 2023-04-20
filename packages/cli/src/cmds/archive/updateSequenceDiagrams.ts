@@ -23,7 +23,7 @@ export const DefaultFilters: Record<string, string[]> = {
     'label:deserialize.safe',
     'label:log',
     /^external-route:.*\bhttp:\/\/127\.0\.0\.1:\d+\/session\/[a-f0-9]{32,}\//.toString(), // Selenium
-    /^query:[\s\S]*\bsqlite_master\b/.toString(),
+    /^query:[\s\S]*\bsqlite_master\b/.toString(), // SQLite schema table
     /^query:[\s\S]*\bpg_attribute\b/.toString(), // PostgreSQL schema tables
   ],
   ruby: [
