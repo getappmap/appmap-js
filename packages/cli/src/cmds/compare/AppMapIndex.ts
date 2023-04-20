@@ -21,13 +21,6 @@ export class AppMapIndex {
     [RevisionName.Head]: new Map<AppMapName, AppMapDigest>(),
   };
 
-  // Digests that are unchanged between the base and head revisions.
-  unchangedDigests?: Set<AppMapDigest>;
-  // Digests that are new in the head revision.
-  addedDigests?: Set<AppMapDigest>;
-  // Digests that are removed in the head revision.
-  removedDigests?: Set<AppMapDigest>;
-
   constructor(public appmapData: AppMapData) {}
 
   async build() {
@@ -52,21 +45,9 @@ export class AppMapIndex {
     baseAppMaps.forEach((appmap) => q.push({ revisionName: RevisionName.Base, appmap }));
     headAppMaps.forEach((appmap) => q.push({ revisionName: RevisionName.Head, appmap }));
     if (q.length()) await q.drain();
+  }
 
-    this.unchangedDigests = new Set(
-      [...this.digests[RevisionName.Base]].filter((digest) =>
-        this.digests[RevisionName.Head].has(digest)
-      )
-    );
-    this.addedDigests = new Set(
-      [...this.digests[RevisionName.Head]].filter(
-        (digest) => !this.digests[RevisionName.Base].has(digest)
-      )
-    );
-    this.removedDigests = new Set(
-      [...this.digests[RevisionName.Base]].filter(
-        (digest) => !this.digests[RevisionName.Head].has(digest)
-      )
-    );
+  appmapDigest(revisionName: RevisionName, appmap: AppMapName): AppMapDigest {
+    return this.digestsByAppMap[revisionName].get(appmap)!;
   }
 }
