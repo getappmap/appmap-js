@@ -81,12 +81,13 @@ export default function buildDiagram(
         eventIds: [callee.id],
       } as ClientRPC;
     } else if (callee?.sqlQuery) {
+      const truncatedQuery = callee.sqlQuery.endsWith('...');
       return {
         nodeType: NodeType.Query,
         caller: caller ? findOrCreateActor(caller) : undefined,
         callee: findOrCreateActor(callee),
         query: callee.sqlQuery,
-        digest: callee.hash,
+        digest: truncatedQuery ? 'truncatedQuery' : callee.hash,
         subtreeDigest: 'undefined',
         children: [],
         elapsed: callee.elapsedTime,
