@@ -99,6 +99,14 @@ class Fingerprinter extends EventEmitter {
 
     await index.mkdir_p();
 
+    await Promise.all(
+      Object.keys(algorithms).map(async (algorithmName) => {
+        const canonicalForm = canonicalize(algorithmName, appmap);
+        const canonicalJSON = JSON.stringify(canonicalForm, null, 2);
+        await index.writeFileAtomic(`canonical.${algorithmName}.json`, canonicalJSON);
+      })
+    );
+
     const tempAppMapFileName = joinPath(index.indexDir, 'appmap.tmp');
     await index.writeFileAtomic(basename(tempAppMapFileName), JSON.stringify(appmap, null, 2));
     const appMapIndexedAt = await mtime(tempAppMapFileName);
