@@ -11,19 +11,9 @@ import buildChangeReport from './buildChangeReport';
 import { readFile, writeFile } from 'fs/promises';
 import analyzeArchive from './ArchiveAnalyzer';
 import loadAppMapConfig from '../../lib/loadAppMapConfig';
-import updateSequenceDiagrams from '../archive/updateSequenceDiagrams';
-import { DefaultMaxAppMapSizeInMB } from '../../lib/fileSizeFilter';
-import { ArchiveMetadata } from '../archive/ArchiveMetadata';
-import { serializeAppMapFilter } from '../archive/serializeAppMapFilter';
-import { ArchiveVersion } from '../archive/archive';
-import { promisify } from 'util';
-import { glob } from 'glob';
-import { deserializeFilter } from '@appland/models';
 
 export const command = 'compare';
 export const describe = 'Compare runtime code behavior between base and head revisions';
-
-const jsonEquals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
 
 export const builder = (args: yargs.Argv) => {
   args.option('directory', {
@@ -59,11 +49,6 @@ export const builder = (args: yargs.Argv) => {
     default: '.',
   });
 
-  args.option('max-size', {
-    describe: 'maximum AppMap size that will be processed, in filesystem-reported MB',
-    default: DefaultMaxAppMapSizeInMB,
-  });
-
   args.option('delete-unchanged', {
     describe:
       'whether to delete AppMaps from base and head that are unchanged according to sequence diagram comparison',
@@ -86,7 +71,6 @@ export const handler = async (argv: any) => {
 
   const {
     directory,
-    maxSize,
     sourceDir: srcDir,
     baseRevision: baseRevisionArg,
     outputDir: outputDirArg,
@@ -106,8 +90,6 @@ export const handler = async (argv: any) => {
     console.debug(`Unable to load appmap-scanner.yml. Will use default scanner configuration.`);
   }
 
-  const maxAppMapSizeInBytes = Math.round(parseFloat(maxSize) * 1024 * 1024);
-
   const { baseRevision, headRevision } = await detectRevisions(baseRevisionArg, headRevisionArg);
 
   const outputDir = await prepareOutputDir(
@@ -117,53 +99,6 @@ export const handler = async (argv: any) => {
     argv.clobberOutputDir,
     rl
   );
-
-  console.log('Generating sequence diagrams');
-
-  const compareConfig = appmapConfig.compare;
-  const appMapFilter = deserializeFilter(compareConfig?.filter);
-
-  for (const revisionName of [RevisionName.Base, RevisionName.Head]) {
-    const appmapArchiveFiles = await promisify(glob)(
-      join(outputDir, revisionName, 'appmap_archive.*.json')
-    );
-
-    let rebuildBecauseArchiveVersionChanged = appmapArchiveFiles.length === 0,
-      rebuildBecauseFilterChanged = false;
-
-    // For each appmap_archive.json
-    for (const appmapArchiveFile of appmapArchiveFiles) {
-      const archiveMetadata = JSON.parse(
-        await readFile(appmapArchiveFile, 'utf-8')
-      ) as ArchiveMetadata;
-      const archiveAppMapFilter = archiveMetadata.appMapFilter;
-
-      if (archiveMetadata.versions.archive !== ArchiveVersion) {
-        rebuildBecauseArchiveVersionChanged = true;
-        console.log(
-          `Updating '${revisionName}' data because archive format version ${archiveMetadata.versions.archive} is out of date with current version ${ArchiveVersion}`
-        );
-        break;
-      }
-
-      if (!jsonEquals(serializeAppMapFilter(appMapFilter), archiveAppMapFilter)) {
-        rebuildBecauseFilterChanged = true;
-        console.log(`Updating '${revisionName}' data because AppMap filter changed`);
-        console.log(`Old filter: ${JSON.stringify(archiveAppMapFilter)}`);
-        console.log(`New filter: ${JSON.stringify(serializeAppMapFilter(appMapFilter))}`);
-        break;
-      }
-    }
-
-    const rebuild = rebuildBecauseArchiveVersionChanged || rebuildBecauseFilterChanged;
-    if (rebuild) {
-      await updateSequenceDiagrams(
-        join(outputDir, revisionName),
-        maxAppMapSizeInBytes,
-        appMapFilter
-      );
-    }
-  }
 
   for (const [revisionName, revision] of [
     [RevisionName.Base, baseRevision],

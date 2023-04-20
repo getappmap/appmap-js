@@ -1,4 +1,3 @@
-import updateSequenceDiagrams from './updateSequenceDiagrams';
 import generateOpenAPI from './generateOpenAPI';
 import { indexAppMaps } from './indexAppMaps';
 import { CompareFilter } from '../../lib/loadAppMapConfig';
