@@ -20,7 +20,7 @@ import { AppMapIndex } from './AppMapIndex';
 import { AppMapLink, AppMapName, ChangedAppMap, ChangeReport, TestFailure } from './ChangeReport';
 import mapToRecord from './mapToRecord';
 import { RevisionName } from './RevisionName';
-import { mutedStyle } from './ui';
+import { mutedStyle, prominentStyle } from './ui';
 
 export async function loadSequenceDiagram(path: string): Promise<SequenceDiagram> {
   const diagramData = JSON.parse(await readFile(path, 'utf-8'));
@@ -56,8 +56,6 @@ export default async function buildChangeReport(
         }
 
         const metadata = JSON.parse(await readFile(metadataPath, 'utf-8')) as Metadata;
-        // This is deprecated, AppMap canonical digest is computed from the sequence diagram now.
-        delete metadata['fingerprints'];
         appMapMetadata[appmap.revisionName].set(appmap.name, metadata);
       },
       5
@@ -78,7 +76,10 @@ export default async function buildChangeReport(
   {
     for (const appmap of await appmapData.appmaps(RevisionName.Head)) {
       const metadata = appMapMetadata[RevisionName.Head].get(appmap);
-      assert(metadata);
+      if (!metadata) {
+        console.log(prominentStyle(`Metadata for ${appmap} not found!`));
+        continue;
+      }
       if (metadata.test_status === 'failed') {
         failedAppMaps.add(appmap);
       }
