@@ -125,8 +125,14 @@ be included in the file arguments passed to the test runner.`)
 
   const indexAppMaps = async (dir: string) => {
     process.stdout.write(`Indexing AppMaps...`);
-    const numIndexed = await new FingerprintDirectoryCommand(dir).execute();
-    process.stdout.write(`done (${numIndexed})\n`);
+    const oldVerbose = verbose();
+    verbose(false);
+    try {
+      const numIndexed = await new FingerprintDirectoryCommand(dir).execute();
+      process.stdout.write(`done (${numIndexed})\n`);
+    } finally {
+      verbose(oldVerbose);
+    }
   };
 
   await indexAppMaps(baseAppmapDir);
