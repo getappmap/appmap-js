@@ -1,0 +1,148 @@
+# AppMap
+
+{{#*inline "api-change"}}
+{{title}} {{#each sourceSpecEntityDetails}}`{{location}}`{{/each}} {{#each destinationSpecEntityDetails}}`{{location}}`{{/each}}
+{{~/inline}}
+
+{{#*inline "sequence-diagram-diff-link"}}
+{{#if sequenceDiagramDiff}}[{{sequenceDiagramDiff}}](./{{sequenceDiagramDiff}}){{/if}}{{#unless sequenceDiagramDiff}}No structural changes detected{{/unless}}
+{{~/inline}}
+
+| Summary | Status |
+| --- | --- |
+| [Test failures](#test-failures) | {{#if testFailures.length}}:warning: {{testFailures.length}} failed{{/if}}{{#unless testFailures.length}}:white_check_mark: All tests passed{{/unless}} |
+| [API changes](#api-changes) | 
+  {{~#unless apiDiff.differenceCount }}
+  :white_check_mark: No API changes
+  {{~/unless}}
+  {{~#if apiDiff.differenceCount }}
+  {{~#if apiDiff.breakingDifferenceCount }}:warning: {{apiDiff.breakingDifferenceCount}} breaking{{~/if}}
+  {{~#if apiDiff.nonBreakingDifferenceCount }}{{#if apiDiff.breakingDifferenceCount }},&nbsp;{{~/if}}:wrench: {{apiDiff.nonBreakingDifferenceCount}} non-breaking{{~/if}}
+  {{~/if}}
+  |
+| [Changed AppMaps](#changed-appmaps) | 
+  {{~#unless changedAppMaps.length }}
+  :white_check_mark: No changes
+  {{~/unless}}
+  {{~#if changedAppMaps.length }}
+  :wrench: {{changedAppMaps.length}} changed
+  {{~/if}}
+  |
+| [Changed code behavior](#changed-code-behavior) |
+  {{~#unless sequenceDiagramDiffSnippetCount }}
+  :white_check_mark: No changes
+  {{~/unless}}
+  {{~#if sequenceDiagramDiffSnippetCount }}
+  :wrench: {{sequenceDiagramDiffSnippetCount}} changed
+  {{~/if}}
+  |
+
+{{#if testFailures.length}}
+<h2 id="test-failures">Test failures</h2>
+
+{{#each testFailures}}
+
+<details>
+<summary>
+{{testName}} - {{testLocation}}
+</summary>
+
+<p/>
+
+At line {{failureLine}}:
+
+```
+{{{failureMessage}}}
+```
+
+[{{testLocation}}]({{testPath}}#{{failureLine}}):
+
+{{#if testSnippet}}
+{{#with testSnippet}}
+```{{language}}
+{{{codeFragment}}}
+```
+{{/with}}
+{{/if}}
+
+{{#if changedAppMap}}
+{{#with changedAppMap}}
+
+The following code changes are related to this test:
+
+```diff
+{{{sourceDiff}}}
+```
+{{/with}}
+{{/if}}
+
+| Diagram | Link |
+| --- | --- |
+{{#if changedAppMap}}
+{{#with changedAppMap}}
+| Sequence diagram diff | {{> sequence-diagram-diff-link }} |
+{{/with}}
+{{/if}}
+| AppMap | [{{appmap}}](./head/{{appmap}}.appmap.json) |
+
+</details>
+
+{{/each}}
+{{/if}}
+
+{{#if apiDiff.differenceCount }}
+
+<h2 id="api-changes">API changes</h2>
+
+{{#if apiDiff.breakingDifferences}}
+### Breaking changes
+
+{{#each apiDiff.breakingDifferences}}
+  - {{> api-change }}
+{{/each}}
+{{/if}}
+
+{{#if apiDiff.nonBreakingDifferences}}
+### Non-breaking changes
+
+{{#each apiDiff.nonBreakingDifferences}}
+  - {{> api-change }}
+{{/each}}
+{{/if}}
+
+{{#if apiDiff.unclassifiedDifferences}}
+### Unclassified changes
+
+{{#each apiDiff.unclassifiedDifferences}}
+  - {{> api-change }}
+{{/each}}
+{{/if}}
+
+<details>
+<summary>
+  View detailed diff
+</summary>
+
+```diff
+{{{apiDiff.sourceDiff}}}
+```
+</details>
+
+
+{{/if}}
+
+{{#if sequenceDiagramDiffSnippetCount }}
+<h2 id="changed-code-behavior">Changed code behavior</h2>
+
+{{#each sequenceDiagramDiffSnippets}}
+
+```
+{{{@key}}}
+```
+
+{{#each this}}
+- [{{.}}](./diff/{{.}}.diff.sequence.json)
+{{/each}}
+
+{{/each}}
+{{/if}}
