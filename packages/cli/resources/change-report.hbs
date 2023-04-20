@@ -20,12 +20,12 @@
   {{~#if apiDiff.nonBreakingDifferenceCount }}{{#if apiDiff.breakingDifferenceCount }},&nbsp;{{~/if}}:wrench: {{apiDiff.nonBreakingDifferenceCount}} non-breaking{{~/if}}
   {{~/if}}
   |
-| [Changed AppMaps](#changed-appmaps) | 
-  {{~#unless changedAppMaps.length }}
-  :white_check_mark: No changes
+| [New AppMaps](#new-appmaps) | 
+  {{~#unless newAppMaps.length }}
+  :white_check_mark: None
   {{~/unless}}
-  {{~#if changedAppMaps.length }}
-  :wrench: {{changedAppMaps.length}} changed
+  {{~#if newAppMaps.length }}
+  :wrench: {{newAppMaps.length}} new
   {{~/if}}
   |
 | [Changed code behavior](#changed-code-behavior) |
@@ -33,7 +33,15 @@
   :white_check_mark: No changes
   {{~/unless}}
   {{~#if sequenceDiagramDiffSnippetCount }}
-  :wrench: {{sequenceDiagramDiffSnippetCount}} changed
+  :wrench: {{sequenceDiagramDiffSnippetCount}} changes
+  {{~/if}}
+  |
+| [Changed AppMaps](#changed-appmaps) | 
+  {{~#unless changedAppMaps.length }}
+  :white_check_mark: No changes
+  {{~/unless}}
+  {{~#if changedAppMaps.length }}
+  :wrench: {{changedAppMaps.length}} changes
   {{~/if}}
   |
 
@@ -128,6 +136,17 @@ The following code changes are related to this test:
 ```
 </details>
 
+{{/if}}
+
+{{#if newAppMaps.length }}
+
+<h2 id="new-appmaps">New AppMaps</h2>
+
+{{#each newAppMaps}}
+
+[{{this}}](./head/{{this}}.appmap.json)
+
+{{/each}}
 
 {{/if}}
 
@@ -145,4 +164,16 @@ The following code changes are related to this test:
 {{/each}}
 
 {{/each}}
+{{/if}}
+
+{{#if changedAppMaps.length }}
+
+<h2 id="changed-appmaps">Changed AppMaps</h2>
+
+{{#each changedAppMaps}}
+
+{{> sequence-diagram-diff-link }}
+
+{{/each}}
+
 {{/if}}
