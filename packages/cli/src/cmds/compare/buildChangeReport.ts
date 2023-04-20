@@ -144,16 +144,19 @@ export default async function buildChangeReport(
         if (path.indexOf('.') && !path.startsWith('<') && !isAbsolute(path)) sourcePaths.add(path);
       });
 
-      const sourceDiff = await executeCommand(
-        `git diff ${baseRevision}..${headRevision} -- ${[...sourcePaths]
+      if (sourcePaths.size > 0) {
+        const paths = [...sourcePaths]
           .sort()
           .map((p) => [srcDir, p].join('/'))
-          .join(' ')}`,
-        false,
-        false,
-        false
-      );
-      if (sourceDiff) changedAppMap.sourceDiff = sourceDiff;
+          .join(' ');
+        const sourceDiff = await executeCommand(
+          `git diff ${baseRevision}..${headRevision} -- ${paths}`,
+          false,
+          false,
+          false
+        );
+        if (sourceDiff) changedAppMap.sourceDiff = sourceDiff;
+      }
 
       const baseDiagram = await loadSequenceDiagram(
         appmapData.sequenceDiagramPath(RevisionName.Base, appmap)

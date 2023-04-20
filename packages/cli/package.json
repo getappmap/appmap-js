@@ -99,6 +99,7 @@
     "gitconfiglocal": "^2.1.0",
     "glob": "^7.2.3",
     "graceful-fs": "^4.2.10",
+    "handlebars": "^4.7.7",
     "inquirer": "^8.1.2",
     "js-yaml": "^4.0.3",
     "jsdom": "^16.6.0",
@@ -132,6 +133,7 @@
     "assets": [
       "package.json",
       "**/openapi-template.yaml",
+      "**/change-report.hbs",
       "built/appmap.html"
     ],
     "outputPath": "dist"
