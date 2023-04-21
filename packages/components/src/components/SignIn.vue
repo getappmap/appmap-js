@@ -34,34 +34,38 @@
         <a href="/" class="btn btn-primary" data-cy="sign-in-button" @click="signIn">Sign in</a>
       </div>
 
-      <div class="signin-not-ready">
-        <span @click="toggle" :class="['accordion-toggle', expanded ? 'open' : 'closed']"
-          ><strong>Not ready to sign in?</strong> <chevronDown
-        /></span>
-        <div v-if="expanded">
-          <p>Not ready to start making AppMaps? No problem! here are some suggestions:</p>
-          <ul>
-            <li @click="clickSignInLink('sample-map')">
-              <a href="#">Check out a sample AppMap to explore<VExternalLinkIcon /></a>
-            </li>
-            <li @click="clickSignInLink('demo-video')">
-              <a href="#">Watch a demo video<VExternalLinkIcon /></a>
-            </li>
-            <li @click="clickSignInLink('join-slack')">
-              <a href="https://appmap.io/slack" target="_blank"
-                >Join Slack to get answers to questions you may have<VExternalLinkIcon
-              /></a>
-            </li>
-          </ul>
-        </div>
-      </div>
-
       <div class="your-data">
         <shieldIcon />
         <p data-cy="your-data-text">
           Authentication with GitHub or GitLab is used solely for issuing a license. AppMap runs in
           your code editor, so your AppMaps and your source code stay on your machine.
         </p>
+      </div>
+
+      <div class="signin-not-ready">
+        <span @click="toggle" :class="['accordion-toggle', expanded ? 'open' : 'closed']"
+          ><strong>Not ready to sign in?</strong> <chevronDown
+        /></span>
+        <div v-if="expanded">
+          <p>
+            Not ready to start making AppMaps? No problem! here are some suggestions for learning
+            more about AppMap:
+          </p>
+          <ul>
+            <li @click="clickSignInLink('sample-map')">
+              <a href="#">Explore a sample AppMap<VExternalLinkIcon /></a>
+            </li>
+            <li @click="clickSignInLink('demo-video')">
+              <a href="#">Take a video tour of AppMap's key features.<VExternalLinkIcon /></a>
+            </li>
+            <li @click="clickSignInLink('join-slack')">
+              <a href="https://appmap.io/slack" target="_blank"
+                >Join us in Slack. We're here to answer to any questions you may
+                have.<VExternalLinkIcon
+              /></a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -156,6 +160,7 @@ export default {
     align-items: center;
     gap: 1rem;
     margin-bottom: 0.5rem;
+    justify-content: center;
     &.closed svg {
       transform: rotate(-90deg);
     }
