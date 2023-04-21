@@ -39,6 +39,7 @@ class Declutter {
   hideUnlabeled = new DeclutterProperty(false, false);
   hideElapsedTimeUnder = new DeclutterTimeProperty(false, false, 100);
   hideName = new DeclutterNamesProperty(false, false, []);
+  hideTree = new DeclutterNamesProperty(false, false, []);
 }
 
 const FilterRegExps = {};
@@ -179,6 +180,12 @@ export default class AppMapFilter {
       const excludeCodeObjects = matchCodeObjects(this.declutter.hideName.names);
       events = events.filter((e) => !excludeCodeObjects.has(e.codeObject));
     }
+
+    // Hide events from named, pattern-matched or labeled code objects. Hiding applies to
+    // sub-events as well.
+    if (this.declutter.hideTree.on && this.declutter.hideTree.names.length) {
+      const excludeCodeObjects = matchCodeObjects(this.declutter.hideTree.names);
+      events = excludeSubtrees(events, (e) => excludeCodeObjects.has(e.codeObject));
     }
 
     const eventIds = new Set(events.filter((e) => e.isCall()).map((e) => e.id));
