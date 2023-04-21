@@ -123,33 +123,22 @@ export default class CodeObject {
     );
   }
 
-  get allEvents() {
-    return [this, ...this.descendants()].map((obj) => obj.events).flat();
+  // Enumerate this code object and all its descendants, calling a function for each one. The
+  // traversal is depth-first.
+  visit(fn, stack = []) {
+    stack.push(this);
+    fn(this, stack);
+    this.children.forEach((child) => child.visit(fn, stack));
+    stack.pop();
   }
 
-  descendants() {
-    const queue = [...this.children];
-    const children = [];
-
-    while (queue.length) {
-      const child = queue.pop();
-      children.push(child);
-      queue.push(...child.children);
+  // Enumerate this code object and all its ancestors, calling a function for each one.
+  visitAncestors(fn) {
+    let ancestor = this;
+    while (ancestor) {
+      fn(ancestor);
+      ancestor = ancestor.parent;
     }
-
-    return children;
-  }
-
-  ancestors() {
-    let currentObject = this.parent;
-    const parents = [];
-
-    while (currentObject) {
-      parents.push(currentObject);
-      currentObject = currentObject.parent;
-    }
-
-    return parents;
   }
 
   /**
@@ -200,13 +189,6 @@ export default class CodeObject {
    */
   childLeafs() {
     return this.children.map((child) => child.leafs()).flat();
-  }
-
-  visit(fn, stack = []) {
-    stack.push(this);
-    fn(this, stack);
-    this.children.forEach((child) => child.visit(fn, stack));
-    stack.pop();
   }
 
   buildId(tokens = []) {
@@ -336,5 +318,45 @@ export default class CodeObject {
 
   get fqid() {
     return `${this.type}:${this.id}`;
+  }
+
+  // The zone of deprecation.
+  // ------------------------
+
+  // This function is deprecated, because it allocates all events of all descendants into a new
+  // array for each invocation.
+  // Use `CodeObject.visit()` and `CodeObject.events` instead. A functional style is both more
+  // idiomatic and more efficient.
+  get allEvents() {
+    return [this, ...this.descendants()].map((obj) => obj.events).flat();
+  }
+
+  // This function is deprecated, because it allocates all descendants into a new array for each invocation.
+  // Use `CodeObject.visit()` instead. A functional style is both more idiomatic and more efficient.
+  descendants() {
+    const queue = [...this.children];
+    const children = [];
+
+    while (queue.length) {
+      const child = queue.pop();
+      children.push(child);
+      queue.push(...child.children);
+    }
+
+    return children;
+  }
+
+  // This function is deprecated, because it allocates all descendants into a new array for each invocation.
+  // Use `CodeObject.visitAncestors()` instead. A functional style is both more idiomatic and more efficient.
+  ancestors() {
+    let currentObject = this.parent;
+    const parents = [];
+
+    while (currentObject) {
+      parents.push(currentObject);
+      currentObject = currentObject.parent;
+    }
+
+    return parents;
   }
 }
