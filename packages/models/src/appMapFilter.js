@@ -38,8 +38,8 @@ class Declutter {
   hideExternalPaths = new DeclutterProperty(false, false);
   hideUnlabeled = new DeclutterProperty(false, false);
   hideElapsedTimeUnder = new DeclutterTimeProperty(false, false, 1);
-  hideName = new DeclutterNamesProperty(false, false, []);
-  hideTree = new DeclutterNamesProperty(false, false, []);
+  hideName = new DeclutterNamesProperty(true, true, ['label:hide']);
+  hideTree = new DeclutterNamesProperty(true, true, ['label:hide.tree']);
 }
 
 const FilterRegExps = {};
@@ -127,10 +127,13 @@ export default class AppMapFilter {
 
     // Collect all code objects that match a filter expression. When a code object matches an
     // expression, the entire subtree rooted at that code object is included as well.
-    function matchCodeObjects(expressions) {
+    function matchCodeObjects(expressions, matchSelf) {
       return classMap.codeObjects.reduce((memo, codeObject) => {
-        if (expressions.some((expr) => AppMapFilter.codeObjectIsMatched(codeObject, expr)))
-          codeObject.visit((co) => memo.add(co));
+        if (expressions.some((expr) => AppMapFilter.codeObjectIsMatched(codeObject, expr))) {
+          codeObject.visit((co) => {
+            if (co !== codeObject || matchSelf) memo.add(co);
+          });
+        }
 
         return memo;
       }, new Set());
@@ -144,8 +147,15 @@ export default class AppMapFilter {
     // Include only subtrees of a specified root object. This could also be stored and managed
     // as a declutter filter, but it isn't, for some reason. It works the same way.
     if (this.rootObjects.length) {
-      const includeCodeObjects = matchCodeObjects(this.rootObjects);
+      const includeCodeObjects = matchCodeObjects(this.rootObjects, true);
       events = includeSubtrees(events, (e) => includeCodeObjects.has(e.codeObject), true);
+    }
+
+    // Hide descendent events from named, pattern-matched or labeled code objects. The matching
+    // event itself is not hidden. To accomplish that, add the same filter to `hideName`.
+    if (this.declutter.hideTree.on && this.declutter.hideTree.names.length) {
+      const excludeCodeObjects = matchCodeObjects(this.declutter.hideTree.names, false);
+      events = excludeSubtrees(events, (e) => excludeCodeObjects.has(e.codeObject));
     }
 
     // Hide HTTP server requests that fetch a known media type.
@@ -177,15 +187,8 @@ export default class AppMapFilter {
     // Hide events from named, pattern-matched or labeled code objects. Hiding does not apply to
     // sub-events of matching events.
     if (this.declutter.hideName.on && this.declutter.hideName.names.length) {
-      const excludeCodeObjects = matchCodeObjects(this.declutter.hideName.names);
+      const excludeCodeObjects = matchCodeObjects(this.declutter.hideName.names, true);
       events = events.filter((e) => !excludeCodeObjects.has(e.codeObject));
-    }
-
-    // Hide events from named, pattern-matched or labeled code objects. Hiding applies to
-    // sub-events as well.
-    if (this.declutter.hideTree.on && this.declutter.hideTree.names.length) {
-      const excludeCodeObjects = matchCodeObjects(this.declutter.hideTree.names);
-      events = excludeSubtrees(events, (e) => excludeCodeObjects.has(e.codeObject));
     }
 
     const eventIds = new Set(events.filter((e) => e.isCall()).map((e) => e.id));
