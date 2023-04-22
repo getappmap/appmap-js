@@ -371,6 +371,7 @@ declare module '@appland/models' {
       public hideExternalPaths: DeclutterProperty;
       public hideElapsedTimeUnder: DeclutterTimeProperty;
       public hideName: DeclutterNamesProperty;
+      public hideTree: DeclutterNamesProperty;
     }
   }
 
