@@ -37,7 +37,7 @@ class Declutter {
   hideMediaRequests = new DeclutterProperty();
   hideExternalPaths = new DeclutterProperty(false, false);
   hideUnlabeled = new DeclutterProperty(false, false);
-  hideElapsedTimeUnder = new DeclutterTimeProperty(false, false, 100);
+  hideElapsedTimeUnder = new DeclutterTimeProperty(false, false, 1);
   hideName = new DeclutterNamesProperty(false, false, []);
   hideTree = new DeclutterNamesProperty(false, false, []);
 }
