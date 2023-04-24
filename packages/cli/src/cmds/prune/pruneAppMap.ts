@@ -1,4 +1,5 @@
-import { AppMapFilter, buildAppMap, deserializeAppmapState } from '@appland/models';
+import { buildAppMap } from '@appland/models';
+import deserializeFilter from '../../lib/deserializeFilter';
 
 // Simplified AppMap interface, just for pruning
 export interface AppMap {
@@ -6,7 +7,7 @@ export interface AppMap {
   [key: string]: any;
 }
 
-type PruneFilter = {
+export type PruneFilter = {
   hideUnlabeled?: boolean;
   hideMediaRequests?: boolean;
   hideExternalPaths?: boolean;
@@ -61,15 +62,11 @@ export const pruneAppMap = (appMap: AppMap, size: number): any => {
 export const pruneWithFilter = (appMap: AppMap, serializedFilter: string): any => {
   // TODO: update type for AppMap
   const fullMap = buildAppMap().source(appMap).normalize().build() as any;
+
   const filterBefore = fullMap.data.pruneFilter || {};
-
-  const filterOrState = deserializeAppmapState(serializedFilter);
-  const filter = 'filters' in filterOrState ? filterOrState.filters : filterOrState;
-
-  const appmapFilter = new AppMapFilter();
-  appmapFilter.declutter.limitRootEvents.on = false;
-  appmapFilter.declutter.hideMediaRequests.on = false;
-  appmapFilter.apply(filter);
+  // Note: Preserving the default of these two options to false, even though I am not sure why
+  // that is done in the original implementation.
+  const { filter, appmapFilter } = deserializeFilter(serializedFilter, false, false);
 
   // TODO: update type for AppMap
   const prunedMap = appmapFilter.filter(fullMap, []) as any;
