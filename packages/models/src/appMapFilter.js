@@ -173,7 +173,9 @@ export default class AppMapFilter {
     // even for external code; and the location may be outside the project tree even for code
     // that the user considers to be part of the project.
     if (this.declutter.hideExternalPaths.on) {
-      events = events.filter((e) => isLocalPath(e.codeObject.location).isLocal);
+      events = events.filter(
+        (e) => e.codeObject.type !== 'function' || isLocalPath(e.codeObject.location).isLocal
+      );
     }
 
     // Hide code whose elapsed time is less than a specified threshold.
