@@ -1,4 +1,11 @@
-import { buildAppMap, deserializeFilter, filterStringToFilterState } from '@appland/models';
+import {
+  AppMapFilter,
+  buildAppMap,
+  deserializeFilter,
+  filterStringToFilterState,
+  mergeFilterState,
+  serializeFilter,
+} from '@appland/models';
 
 // Simplified AppMap interface, just for pruning
 export interface AppMap {
@@ -13,11 +20,18 @@ export const pruneAppMap = (appMap: AppMap, size: number): any => {
 export const pruneWithFilter = (appMap: AppMap, serializedFilter: string): any => {
   // TODO: update type for AppMap
   const fullMap = buildAppMap().source(appMap).normalize().build() as any;
+  const previousFilterState = fullMap.data.pruneFilter;
 
-  const appmapFilter = deserializeFilter(filterStringToFilterState(serializedFilter));
+  let previousFilter: AppMapFilter | undefined;
+  if (previousFilterState) previousFilter = deserializeFilter(previousFilterState);
+
+  let filterState = filterStringToFilterState(serializedFilter);
+  if (previousFilterState) filterState = mergeFilterState(filterState, previousFilterState);
+
+  const appmapFilter = deserializeFilter(filterState);
 
   // TODO: update type for AppMap
   const prunedMap = appmapFilter.filter(fullMap, []) as any;
-  prunedMap.data = { ...prunedMap.data, filter: appmapFilter };
+  prunedMap.data = { ...prunedMap.data, pruneFilter: serializeFilter(appmapFilter) };
   return prunedMap;
 };
