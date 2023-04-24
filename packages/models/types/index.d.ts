@@ -429,6 +429,7 @@ declare module '@appland/models' {
   export function buildAppMap(data?: string | Record<string, unknown>): AppMapBuilder;
 
   export function serializeFilter(filter: AppMapFilter): FilterState;
+  export function mergeFilterState(first: FilterState, second: FilterState): FilterState;
   export function filterStringToFilterState(stringInput: string): FilterState;
   export function deserializeFilter(filterState?: FilterState | string): AppMapFilter;
 
