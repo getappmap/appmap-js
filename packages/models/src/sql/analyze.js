@@ -15,7 +15,13 @@ export default function analyze(sql, errorCallback = () => {}) {
 
   function parseQuery(statement) {
     const tokens = ['type', 'variant']
-      .map((propertyName) => statement[propertyName])
+      .map((propertyName) => {
+        try {
+          return statement[propertyName];
+        } catch (e) {
+          console.warn(e);
+        }
+      })
       .filter((value) => value);
 
     const key = tokens.join('.');
@@ -34,9 +40,17 @@ export default function analyze(sql, errorCallback = () => {}) {
     const reservedWords = ['type', 'variant', 'name', 'value'];
     Object.keys(statement)
       .filter((property) => !reservedWords.includes(property))
-      .map((propertyName) => statement[propertyName])
+      .map((propertyName) => {
+        try {
+          return statement[propertyName];
+        } catch (e) {
+          console.warn(e);
+        }
+      })
       .forEach((property) => {
-        if (Array.isArray(property)) {
+        if (property === null || property === undefined) {
+          console.warn(`Unexpected null or undefined in ${JSON.stringify(statement)}`);
+        } else if (Array.isArray(property)) {
           property.forEach(parseQuery);
         } else if (typeof property === 'object') {
           parseQuery(property);
