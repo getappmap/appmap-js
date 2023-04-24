@@ -457,3 +457,31 @@ export function base64UrlEncode(text) {
   const buffer = Buffer.from(text, 'utf-8');
   return buffer.toString('base64').replace(/=/g, '').replace(/_/g, '/').replace(/-/g, '+');
 }
+
+function isAbsolute(path) {
+  if (!path) return false;
+
+  if (path.length === 0) return false;
+
+  if (['/', '\\'].includes(path.charAt(0))) return true;
+
+  if (/^[a-zA-Z]:[\\\/]/.test(path)) return true;
+
+  return false;
+}
+
+export function isLocalPath(location, disallowedFolders = []) {
+  if (!location) return { isLocal: false };
+
+  if (isAbsolute(location)) return { isLocal: false };
+
+  let path = location.split(':')[0];
+
+  if (/^\.[\/\\]/.test(path)) path = path.substring(2);
+
+  for (let folder of disallowedFolders) {
+    if (path.startsWith(`${folder}/`) || path.startsWith(`${folder}\\`)) return { isLocal: false };
+  }
+
+  return { isLocal: true, path };
+}
