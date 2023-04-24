@@ -389,6 +389,7 @@ declare module '@appland/models' {
     dependencyFolders?: Array<string>;
     hideElapsedTimeUnder?: number;
     hideName?: Array<string>;
+    hideTree?: Array<string>;
   };
 
   export class AppMapFilter {
