@@ -12,17 +12,22 @@ import { VERSION as IndexVersion } from '../../fingerprint/fingerprinter';
 import chalk from 'chalk';
 import gitRevision from './gitRevision';
 import { ArchiveMetadata } from './ArchiveMetadata';
-import updateSequenceDiagrams, { buildAppMapFilter } from './updateSequenceDiagrams';
+import updateSequenceDiagrams from './updateSequenceDiagrams';
 import { serializeAppMapFilter } from './serializeAppMapFilter';
+import { deserializeFilter } from '@appland/models';
 
+// ## 1.2.0
+//
+// * Update format of compare fliters.
+//
 // ## 1.1.1
 //
 // * SQL actions in sequence diagram - digest is a fixed value if the SQL string is truncated.
 //
-// ## 1.1
+// ## 1.1.0
 //
 // * Added appMapFilter to the archive metadata.
-export const ArchiveVersion = '1.1.1';
+export const ArchiveVersion = '1.2.0';
 
 export const PackageVersion = {
   name: '@appland/appmap',
@@ -113,8 +118,8 @@ export const handler = async (argv: any) => {
 
   console.log('Generating sequence diagrams');
 
-  const preflightConfig = appmapConfig.preflight;
-  const appMapFilter = buildAppMapFilter(preflightConfig?.filter || {}, appmapConfig.language);
+  const compareConfig = appmapConfig.compare;
+  const appMapFilter = deserializeFilter(compareConfig?.filter);
   const { oversizedAppMaps } = await updateSequenceDiagrams(
     '.',
     maxAppMapSizeInBytes,

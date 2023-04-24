@@ -11,13 +11,14 @@ import buildChangeReport from './buildChangeReport';
 import { readFile, writeFile } from 'fs/promises';
 import analyzeArchive from './ArchiveAnalyzer';
 import loadAppMapConfig from '../../lib/loadAppMapConfig';
-import updateSequenceDiagrams, { buildAppMapFilter } from '../archive/updateSequenceDiagrams';
+import updateSequenceDiagrams from '../archive/updateSequenceDiagrams';
 import { DefaultMaxAppMapSizeInMB } from '../../lib/fileSizeFilter';
 import { ArchiveMetadata } from '../archive/ArchiveMetadata';
 import { serializeAppMapFilter } from '../archive/serializeAppMapFilter';
 import { ArchiveVersion } from '../archive/archive';
 import { promisify } from 'util';
 import { glob } from 'glob';
+import { deserializeFilter } from '@appland/models';
 
 export const command = 'compare';
 export const describe = 'Compare runtime code behavior between base and head revisions';
@@ -104,8 +105,8 @@ export const handler = async (argv: any) => {
 
   console.log('Generating sequence diagrams');
 
-  const preflightConfig = appmapConfig.preflight;
-  let appMapFilter = buildAppMapFilter(preflightConfig?.filter || {}, undefined);
+  const compareConfig = appmapConfig.compare;
+  const appMapFilter = deserializeFilter(compareConfig?.filter);
 
   for (const revisionName of [RevisionName.Base, RevisionName.Head]) {
     let rebuildBecauseArchiveVersionChanged = false,
@@ -120,22 +121,17 @@ export const handler = async (argv: any) => {
       ) as ArchiveMetadata;
       const archiveAppMapFilter = archiveMetadata.appMapFilter;
 
-      appMapFilter = buildAppMapFilter(
-        preflightConfig?.filter || {},
-        archiveMetadata.config.language
-      );
-
       if (archiveMetadata.versions.archive !== ArchiveVersion) {
         rebuildBecauseArchiveVersionChanged = true;
         console.log(
-          `Rebuilding ${revisionName} because archive format version ${archiveMetadata.versions.archive} is out of date with current version ${ArchiveVersion}`
+          `Updating '${revisionName}' data because archive format version ${archiveMetadata.versions.archive} is out of date with current version ${ArchiveVersion}`
         );
         break;
       }
 
       if (!jsonEquals(serializeAppMapFilter(appMapFilter), archiveAppMapFilter)) {
         rebuildBecauseFilterChanged = true;
-        console.log(`Rebuilding ${revisionName} because AppMap filter changed`);
+        console.log(`Updating '${revisionName}' data because AppMap filter changed`);
         console.log(`Old filter: ${JSON.stringify(archiveAppMapFilter)}`);
         console.log(`New filter: ${JSON.stringify(serializeAppMapFilter(appMapFilter))}`);
         break;
