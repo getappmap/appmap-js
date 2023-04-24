@@ -64,22 +64,6 @@ function filterRegExp(filterExpression, regexpConstructorArgs) {
   return FilterRegExps[filterExpression];
 }
 
-export function isLocalPath(location) {
-  if (!location) return { isLocal: false };
-
-  if (!location.includes(':')) return { isLocal: false };
-
-  const path = location.split(':')[0];
-  if (isAbsolute(path)) return { isLocal: false };
-
-  let baseDir = dirname(path);
-  while (dirname(baseDir) && dirname(baseDir) !== '.') baseDir = dirname(baseDir);
-
-  if (DependencyFolders.includes(baseDir)) return { isLocal: false };
-
-  return { isLocal: true, path };
-}
-
 function markSubtrees(events, filterFn) {
   const matchEvents = new Set();
   const matchEventStack = [];
@@ -181,7 +165,10 @@ export default class AppMapFilter {
     // that the user considers to be part of the project.
     if (this.declutter.hideExternalPaths.on) {
       events = events.filter(
-        (e) => e.codeObject.type !== 'function' || isLocalPath(e.codeObject.location).isLocal
+        (e) =>
+          e.codeObject.type !== 'function' ||
+          isLocalPath(e.codeObject.location, this.declutter.hideExternalPaths.dependencyFolders)
+            .isLocal
       );
     }
 
