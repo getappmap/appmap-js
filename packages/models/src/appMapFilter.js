@@ -1,6 +1,7 @@
 import buildAppMap from './appMapBuilder';
 import AppMap from './appMap';
 import CodeObject from './codeObject';
+import { dirname, isAbsolute } from 'path';
 
 class DeclutterProperty {
   on = true;
@@ -32,10 +33,23 @@ class DeclutterNamesProperty extends DeclutterProperty {
   }
 }
 
+// Directories inside the project tree that may contain bundled dependencies.
+const DependencyFolders = ['vendor', 'node_modules'];
+
+class DeclutterExternalPathsProperty extends DeclutterProperty {
+  dependencyFolders = DependencyFolders;
+
+  constructor(on = false, defaultValue = false, dependencyFolders = DependencyFolders) {
+    super(on, defaultValue);
+
+    this.dependencyFolders = dependencyFolders || DependencyFolders;
+  }
+}
+
 class Declutter {
   limitRootEvents = new DeclutterProperty();
   hideMediaRequests = new DeclutterProperty();
-  hideExternalPaths = new DeclutterProperty(false, false);
+  hideExternalPaths = new DeclutterExternalPathsProperty();
   hideUnlabeled = new DeclutterProperty(false, false);
   hideElapsedTimeUnder = new DeclutterTimeProperty(false, false, 1);
   hideName = new DeclutterNamesProperty(true, true, ['label:hide']);
@@ -50,27 +64,20 @@ function filterRegExp(filterExpression, regexpConstructorArgs) {
   return FilterRegExps[filterExpression];
 }
 
-function isAbsolute(path) {
-  if (!path) return false;
-
-  if (path.length === 0) return false;
-
-  if (['/', '\\'].includes(path.charAt(0))) return true;
-
-  if (/^[a-zA-Z]:[\\/]/.test(path)) return true;
-
-  return false;
-}
-
 export function isLocalPath(location) {
   if (!location) return { isLocal: false };
 
   if (!location.includes(':')) return { isLocal: false };
 
   const path = location.split(':')[0];
-  if (path.match(/\.\w+$/) && !isAbsolute(path)) return { isLocal: true, path };
+  if (isAbsolute(path)) return { isLocal: false };
 
-  return { isLocal: false };
+  let baseDir = dirname(path);
+  while (dirname(baseDir) && dirname(baseDir) !== '.') baseDir = dirname(baseDir);
+
+  if (DependencyFolders.includes(baseDir)) return { isLocal: false };
+
+  return { isLocal: true, path };
 }
 
 function markSubtrees(events, filterFn) {
