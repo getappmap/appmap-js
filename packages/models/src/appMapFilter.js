@@ -52,8 +52,8 @@ class Declutter {
   hideExternalPaths = new DeclutterExternalPathsProperty();
   hideUnlabeled = new DeclutterProperty(false, false);
   hideElapsedTimeUnder = new DeclutterTimeProperty(false, false, 1);
-  hideName = new DeclutterNamesProperty(true, true, ['label:hide']);
-  hideTree = new DeclutterNamesProperty(true, true, ['label:hide.tree']);
+  hideName = new DeclutterNamesProperty(false, false, []);
+  hideTree = new DeclutterNamesProperty(false, false, []);
 }
 
 const FilterRegExps = {};
