@@ -13,4 +13,5 @@ export { default as analyzeSQL, abstractSqlAstJSON } from './sql/analyze';
 export { default as normalizeSQL } from './sql/normalize';
 export { default as parseSQL } from './sql/parse';
 export { default as AppMapFilter } from './appMapFilter';
+export { serializeFilter, deserializeFilter, filterStringToFilterState } from './serialize';
 export * from './util';

@@ -457,17 +457,3 @@ export function base64UrlEncode(text) {
   const buffer = Buffer.from(text, 'utf-8');
   return buffer.toString('base64').replace(/=/g, '').replace(/_/g, '/').replace(/-/g, '+');
 }
-
-export function deserializeAppmapState(stringInput) {
-  let json;
-  const isStringifiedJson = stringInput.trimStart().startsWith('{');
-  if (isStringifiedJson) {
-    // The old style of deserialization expected a raw stringified JSON object.
-    // To avoid introducing a breaking change, we'll support both for now.
-    json = stringInput;
-  } else {
-    json = base64UrlDecode(stringInput);
-  }
-
-  return JSON.parse(json);
-}
