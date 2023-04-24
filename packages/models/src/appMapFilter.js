@@ -1,7 +1,7 @@
 import buildAppMap from './appMapBuilder';
 import AppMap from './appMap';
 import CodeObject from './codeObject';
-import { dirname, isAbsolute } from 'path';
+import { isLocalPath } from './util';
 
 class DeclutterProperty {
   on = true;
