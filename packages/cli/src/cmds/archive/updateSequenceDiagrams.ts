@@ -11,67 +11,8 @@ import { readFile, stat, unlink, writeFile } from 'fs/promises';
 import { glob } from 'glob';
 import { basename, dirname, join } from 'path';
 import { promisify } from 'util';
-import { PreflightFilterConfig } from '../../lib/loadAppMapConfig';
-
-/**
- * Default filters for each language - plus a set of default filters that apply to all languages.
- */
-export const DefaultFilters: Record<string, string[]> = {
-  default: [
-    'label:unstable',
-    'label:serialize',
-    'label:deserialize.safe',
-    'label:log',
-    /^external-route:.*\bhttp:\/\/127\.0\.0\.1:\d+\/session\/[a-f0-9]{32,}\//.toString(), // Selenium
-    /^query:[\s\S]*\bPRAGMA\b/.toString(),
-    /^query:[\s\S]*\bsqlite_master\b/.toString(), // SQLite schema table
-    /^query:[\s\S]*\bpg_attribute\b/.toString(), // PostgreSQL schema tables
-  ],
-  ruby: [
-    'label:mvc.template.resolver',
-    'package:ruby',
-    'package:logger',
-    'package:activesupport',
-    'package:openssl',
-  ],
-  python: [],
-  java: [],
-  javascript: [],
-};
 
 const Concurrency = 5;
-
-export function buildAppMapFilter(
-  preflightFilter: PreflightFilterConfig,
-  language?: string
-): AppMapFilter {
-  const filter = new AppMapFilter();
-  filter.declutter.hideMediaRequests.on = true;
-  filter.declutter.limitRootEvents.on = true;
-
-  const defaultFilterGroups = (): string[] => {
-    const result = ['default'];
-    if (language) result.push(language);
-    return result;
-  };
-
-  const configuredFilterGroups = (): string[] | undefined => {
-    if (!preflightFilter) return;
-
-    return preflightFilter?.groups;
-  };
-
-  const filterGroups = configuredFilterGroups() || defaultFilterGroups();
-  const filterGroupNames = filterGroups.map((group) => DefaultFilters[group]).flat();
-  const filterNames = preflightFilter?.names || [];
-
-  if (filterGroupNames.length > 0 || filterNames.length > 0) {
-    filter.declutter.hideName.on = true;
-    filter.declutter.hideName.names = [...new Set([...filterGroupNames, ...filterNames])].sort();
-  }
-
-  return filter;
-}
 
 export default async function updateSequenceDiagrams(
   dir: string,
