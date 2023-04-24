@@ -1,9 +1,49 @@
 import AppMapFilter from './appMapFilter';
 import { base64UrlDecode } from './util';
 
+function mergeLists(a, b) {
+  if (a === false && b === false) return false;
+
+  const result = [...new Set([...(a || []), ...(b || [])])].sort((a, b) => a.localeCompare(b));
+  return result.length > 0 ? result : false;
+}
+
+function lowestNumber(...sequence) {
+  sequence = sequence.filter((t) => t !== undefined && t !== null && t !== false);
+
+  if (sequence.length === 0) return false;
+
+  return Math.min(
+    ...sequence
+      .map((t) => (typeof t === 'number' ? t : parseInt(t.toString(), 10)))
+      .filter((t) => !isNaN(t))
+  );
+}
+
+function coalesce(...sequence) {
+  return sequence.find((t) => t !== undefined && t !== null && t !== false);
+}
+
+export function mergeFilterState(first, second) {
+  return {
+    rootObjects: mergeLists(first.rootObjects, second.rootObjects),
+    limitRootEvents: coalesce(first.limitRootEvents, second.limitRootEvents),
+    hideMediaRequests: coalesce(first.hideMediaRequests, second.hideMediaRequests),
+    hideUnlabeled: coalesce(first.hideUnlabeled, second.hideUnlabeled),
+    hideExternal: coalesce(first.hideExternal, second.hideExternal),
+    dependencyFolders: mergeLists(first.dependencyFolders, second.dependencyFolders),
+    hideElapsedTimeUnder: lowestNumber(first.hideElapsedTimeUnder, second.hideElapsedTimeUnder),
+    hideName: mergeLists(first.hideName, second.hideName),
+  };
+}
+
 // Serialize the AppMapFilter to an object.
-export function serializeFilter(filters) {
-  const { declutter } = filters;
+export function serializeFilter(filter) {
+  if (!filter) return {};
+
+  let declutter = filter;
+  if ('declutter' in filter) declutter = filter.declutter;
+
   return Object.entries({
     rootObjects: declutter.rootObjects,
     limitRootEvents: declutter.limitRootEvents.on,
