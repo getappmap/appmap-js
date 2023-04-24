@@ -1,5 +1,6 @@
 import { buildAppMap } from '@appland/models';
 import { unparseDiagram } from '@appland/sequence-diagram';
+import assert from 'assert';
 import { existsSync, mkdirSync } from 'fs';
 import { readFile } from 'fs/promises';
 import path from 'path';
@@ -25,8 +26,27 @@ describe('sequence diagram command', () => {
       expect(existsSync(sequenceDiagramFile)).toBe(true);
       const diagramData = JSON.parse(await readFile(sequenceDiagramFile, 'utf8'));
       const diagram = unparseDiagram(diagramData);
+      expect(diagram.rootActions).toHaveLength(3);
       expect(diagram.actors).toHaveLength(5);
     });
+    it(
+      'can apply a filter',
+      async () => {
+        await buildDiagram({
+          format: 'json',
+          filter:
+            // hide root actions that are not HTTP server requests
+            'eyJjdXJyZW50VmlldyI6InZpZXdTZXF1ZW5jZSIsImZpbHRlcnMiOnsiaGlkZU5hbWUiOlsicGFja2FnZTphY3Rpb25wYWNrIl19fQ',
+          outputDir: OutputDir,
+          appmap: [appmapFile],
+        });
+
+        const diagramData = JSON.parse(await readFile(sequenceDiagramFile, 'utf8'));
+        const diagram = unparseDiagram(diagramData);
+        expect(diagram.rootActions).toHaveLength(2);
+      },
+      30 * 1000 // Allow time to install and run the headless browser
+    );
   });
   describe('PNG format', () => {
     it(
