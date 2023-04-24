@@ -92,7 +92,7 @@ describe('prune subcommand', () => {
         'function:activerecord/ActiveRecord::Relation#records',
         'function:actionpack/ActionDispatch::Request::Session#[]',
       ],
-      hideElapsedTimeUnder: '50',
+      hideElapsedTimeUnder: 50, // Numbers are accepted as well
       hideMediaRequests: true,
     };
 
@@ -102,16 +102,16 @@ describe('prune subcommand', () => {
     );
 
     const expectedFilter = {
+      hideElapsedTimeUnder: 10, // The lower of the two values
+      // hideMediaRequests: true, // Omitted because it's on by default
       hideName: [
-        'function:logger/Logger::LogDevice#write',
-        'function:activerecord/ActiveRecord::Relation#records',
-        'function:actionpack/ActionDispatch::Request::Session#[]',
         'fakeNameOne',
         'fakeNameTwo',
+        'function:actionpack/ActionDispatch::Request::Session#[]',
+        'function:activerecord/ActiveRecord::Relation#records',
+        'function:logger/Logger::LogDevice#write',
       ],
-      hideElapsedTimeUnder: '50',
       hideUnlabeled: true,
-      hideMediaRequests: true,
     };
 
     expect(prunedMapData.data.pruneFilter).toEqual(expectedFilter);
