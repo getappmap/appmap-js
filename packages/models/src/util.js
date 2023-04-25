@@ -3,6 +3,8 @@ import sha256 from 'crypto-js/sha256.js';
 import analyze from './sql/analyze';
 import { Buffer } from 'buffer';
 
+const LogPaths = process.env.APPMAP_LOG_EXTERNAL_PATH === 'true';
+
 export const hasProp = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop);
 
 export function isFalsey(valueObj) {
@@ -458,30 +460,65 @@ export function base64UrlEncode(text) {
   return buffer.toString('base64').replace(/=/g, '').replace(/_/g, '/').replace(/-/g, '+');
 }
 
-function isAbsolute(path) {
-  if (!path) return false;
+const SeenPaths = new Set();
+function logPath(path, status, reason) {
+  if (!LogPaths) return;
 
-  if (path.length === 0) return false;
-
-  if (['/', '\\'].includes(path.charAt(0))) return true;
-
-  if (/^[a-zA-Z]:[\\\/]/.test(path)) return true;
-
-  return false;
+  if (!SeenPaths.has(path)) {
+    SeenPaths.add(path);
+    process.stderr.write(`${status}: ${path}`);
+    if (reason) process.stderr.write(` (${reason})`);
+    process.stderr.write('\n');
+  }
 }
 
+// Use heuristic methods to determine if the code location is part of the project.
+// There are a lot of weird edge cases here. It would be better if the AppMap itself would
+// definitively report local (project) vs non-project code, but that isn't yet the case.
 export function isLocalPath(location, disallowedFolders = []) {
   if (!location) return { isLocal: false };
 
-  if (isAbsolute(location)) return { isLocal: false };
+  // Remove drive letter
+  if (/^[a-zA-Z]:[\\\/]/.test(location)) location = location.slice(2);
 
-  let path = location.split(':')[0];
+  // Split into path and line number
+  let [path, lineno] = location.split(':');
+
+  // <internal:pack>:308
+  if (location.includes('<')) {
+    logPath(location, 'remote', `includes <`);
+  }
+
+  if ((!lineno || isNaN(parseInt(lineno, 10))) && path.split(/[\\/]/).length === 1) {
+    logPath(location, 'remote', `no line number and no path separator chars`);
+    return { isLocal: false };
+  }
+
+  if (path.length === 0) {
+    logPath(location, 'remote', `zero-length`);
+    return { isLocal: false };
+  }
+
+  // Example: <internal:pack>:308
+  if (path.charAt(0) === '<') {
+    logPath(location, 'remote', `starts with <`);
+    return { isLocal: false };
+  }
+
+  if (['/', '\\'].includes(path.charAt(0))) {
+    logPath(location, 'remote', `starts with ${path.charAt(0)}`);
+    return { isLocal: false };
+  }
 
   if (/^\.[\/\\]/.test(path)) path = path.substring(2);
 
   for (let folder of disallowedFolders) {
-    if (path.startsWith(`${folder}/`) || path.startsWith(`${folder}\\`)) return { isLocal: false };
+    if (path.startsWith(`${folder}/`) || path.startsWith(`${folder}\\`)) {
+      logPath(location, 'remote', `starts with ${folder}`);
+      return { isLocal: false };
+    }
   }
 
+  logPath(location, 'local ');
   return { isLocal: true, path };
 }
