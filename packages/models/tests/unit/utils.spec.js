@@ -1,7 +1,8 @@
 import { isLocalPath } from '../../src/util';
 
 const Examples = {
-  'index.js': true,
+  'index.js': false,
+  'index.js:12': true,
   './index.js': true,
   'index.js:12': true,
   './index.js:10': true,
@@ -13,6 +14,8 @@ const Examples = {
   'c:\\tmp\\index.js': false,
   './vendor/index.js': false,
   'vendor/index.js': false,
+  '<internal:pack>': false,
+  '<internal:pack>:302': false,
 };
 
 describe('isLocalPath', () => {
