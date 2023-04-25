@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.76.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.75.1...@appland/appmap-v3.76.0) (2023-04-25)
+
+
+### Features
+
+* Apply filter string to sequence diagram ([551c781](https://github.com/getappmap/appmap-js/commit/551c781889f3fccdd89c54100cd80b22459ca872))
+* Change the format of the web viewer HTML files ([7d9b05c](https://github.com/getappmap/appmap-js/commit/7d9b05c29c800c79aed16c01884e132705492743))
+
 # [@appland/appmap-v3.75.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.75.0...@appland/appmap-v3.75.1) (2023-04-18)
 
 
