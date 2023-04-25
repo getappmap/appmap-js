@@ -58,8 +58,8 @@
                 assistance.<VExternalLinkIcon
               /></a>
             </li>
-            <li @click="clickSignInLink('sample-map')">
-              <a href="https://appmap.io/docs/your-first-15-minutes-with-appmap/"
+            <li @click="clickSignInLink('first-fifteen-minutes')">
+              <a href="https://appmap.io/docs/your-first-15-minutes-with-appmap/what-is-appmap.html"
                 >Your first 15 minutes with AppMap<VExternalLinkIcon
               /></a>
             </li>
@@ -168,6 +168,7 @@ export default {
       transform: rotate(-90deg);
     }
     svg {
+      transition: $transition;
       width: 1rem;
       path {
         fill: desaturate($powderblue, 20);
