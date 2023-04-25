@@ -52,17 +52,19 @@
             more about AppMap:
           </p>
           <ul>
-            <li @click="clickSignInLink('sample-map')">
-              <a href="#">Explore a sample AppMap<VExternalLinkIcon /></a>
-            </li>
-            <li @click="clickSignInLink('demo-video')">
-              <a href="#">Take a video tour of AppMap's key features.<VExternalLinkIcon /></a>
-            </li>
             <li @click="clickSignInLink('join-slack')">
               <a href="https://appmap.io/slack" target="_blank"
-                >Join us in Slack. We're here to answer to any questions you may
-                have.<VExternalLinkIcon
+                >If you are unable to login, contact us in Slack for license key
+                assistance.<VExternalLinkIcon
               /></a>
+            </li>
+            <li @click="clickSignInLink('sample-map')">
+              <a href="https://appmap.io/docs/your-first-15-minutes-with-appmap/"
+                >Your first 15 minutes with AppMap<VExternalLinkIcon
+              /></a>
+            </li>
+            <li @click="clickSignInLink('demo-video')">
+              <a href="#">Security FAQ<VExternalLinkIcon /></a>
             </li>
           </ul>
         </div>
@@ -111,6 +113,7 @@ export default {
 <style scoped lang="scss">
 .signin-sidebar {
   background-color: $black;
+  font-family: $appland-text-font-family;
   color: $white;
   width: auto;
   height: 100%;
