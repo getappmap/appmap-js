@@ -112,7 +112,7 @@ FROM users`);
   });
 
   Examples.forEach((example) => {
-    test(example.name, async () => {
+    test(example.name, () => {
       const normalized = normalize(example.sql);
       expect(normalized).toEqual(example.normalized);
     });

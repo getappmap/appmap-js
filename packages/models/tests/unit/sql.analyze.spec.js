@@ -8,7 +8,7 @@ const Examples = JSON.parse(
 
 describe('analyze SQL', () => {
   Examples.forEach((example) => {
-    test(example.name, async () => {
+    test(example.name, () => {
       const analyzed = analyze(example.sql);
       expect(analyzed).toEqual(example.analyzed);
     });
