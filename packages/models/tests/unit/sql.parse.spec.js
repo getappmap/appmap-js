@@ -1,6 +1,11 @@
-import analyze from '../../src/sql/analyze';
+import { readFileSync } from 'fs';
 import normalize from '../../src/sql/normalize';
 import parse from '../../src/sql/parse';
+import { join } from 'path';
+
+const Examples = JSON.parse(
+  readFileSync(join(__dirname, './fixtures/sql/sql_examples.json'), 'utf8')
+);
 
 describe('parse SQL', () => {
   test('produces a parse tree', () => {
@@ -105,15 +110,11 @@ FROM users`)
 
 FROM users`);
   });
-});
 
-describe('analyze SQL', () => {
-  test('extracts key SQL features', () => {
-    expect(analyze(`SELECT users.*, a.* FROM users JOIN addresses a ON a.user_id = ?`)).toEqual({
-      actions: ['select'],
-      columns: ['a.*', 'a.user_id', 'users.*'],
-      joinCount: 1,
-      tables: ['addresses', 'users'],
+  Examples.forEach((example) => {
+    test(example.name, async () => {
+      const normalized = normalize(example.sql);
+      expect(normalized).toEqual(example.normalized);
     });
   });
 });
