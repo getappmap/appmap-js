@@ -1,22 +1,22 @@
+import { FilterState } from '@appland/models';
 import { readFile } from 'fs/promises';
 import { load } from 'js-yaml';
 
-export interface PreflightFilterConfig {
-  groups?: string[];
-  names?: string[];
+export interface CompareConfig {
+  filter?: FilterState;
 }
 
-export interface PreflightConfig {
+export interface UpdateConfig {
   test_folders?: string[];
   test_commands?: Record<string, string>;
-  filter?: PreflightFilterConfig;
 }
 
 export interface AppMapConfig {
   name: string;
   language?: string;
   appmap_dir?: string;
-  preflight?: PreflightConfig;
+  compare?: CompareConfig;
+  update?: UpdateConfig;
 }
 
 export default async function loadAppMapConfig(): Promise<AppMapConfig | undefined> {
@@ -27,8 +27,22 @@ export default async function loadAppMapConfig(): Promise<AppMapConfig | undefin
     return;
   }
 
-  const appMapConfig = load(appMapConfigData) as any;
-  if (appMapConfig && typeof appMapConfig === 'object') {
-    return appMapConfig as AppMapConfig;
+  const appMapConfigAny = load(appMapConfigData) as any;
+  if (!appMapConfigAny && !(typeof appMapConfigAny === 'object')) return;
+
+  const appMapConfig = appMapConfigAny as AppMapConfig;
+  camelizeKeys(appMapConfig?.compare?.filter);
+
+  return appMapConfig;
+}
+
+function camelizeKeys(obj: Record<string, any> | undefined) {
+  if (!obj) return;
+
+  for (const key of Object.keys(obj)) {
+    const value = obj[key];
+    const camelizedKey = key.replace(/_([\w])/g, (_, letter) => letter.toUpperCase());
+    delete obj[key];
+    obj[camelizedKey] = value;
   }
 }
