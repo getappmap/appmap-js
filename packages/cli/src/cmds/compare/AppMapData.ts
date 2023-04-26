@@ -8,10 +8,10 @@ export class AppMapData {
   constructor(public workingDir: string) {}
 
   async appmaps(revisionName: RevisionName): Promise<AppMapName[]> {
-    const sequenceDiagramPaths = await promisify(glob)(
-      join(this.workingDir, revisionName, '**/sequence.json')
+    const metadataPaths = await promisify(glob)(
+      join(this.workingDir, revisionName, '**/metadata.json')
     );
-    return sequenceDiagramPaths.map((path) =>
+    return metadataPaths.map((path) =>
       relative(join(this.workingDir, revisionName), dirname(path))
     );
   }
