@@ -370,6 +370,7 @@ declare module '@appland/models' {
       public hideExternalPaths: DeclutterProperty;
       public hideElapsedTimeUnder: DeclutterTimeProperty;
       public hideName: DeclutterNamesProperty;
+      public hideTree: DeclutterNamesProperty;
     }
   }
 
@@ -379,6 +380,7 @@ declare module '@appland/models' {
     hideUnlabeled?: boolean;
     hideElapsedTimeUnder?: number;
     hideName?: Array<string>;
+    hideTree?: Array<string>;
   };
 
   export class AppMapFilter {
