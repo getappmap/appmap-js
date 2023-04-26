@@ -62,7 +62,7 @@ export const handler = async (argv: any) => {
   if (!appmapConfig) throw new Error(`Unable to load appmap.yml config file`);
 
   const testFoldersArgument = (): string[] | undefined => argv.testFolder;
-  const testFoldersConfig = (): string[] | undefined => appmapConfig.preflight?.test_folders;
+  const testFoldersConfig = (): string[] | undefined => appmapConfig.update?.test_folders;
 
   const testFolders = testFoldersArgument() || testFoldersConfig();
   if (!testFolders)
@@ -88,9 +88,7 @@ be included in the file arguments passed to the test runner.`)
       return memo;
     }, {});
   };
-  const testCommandsConfig = (): Record<string, string> | undefined =>
-    appmapConfig.preflight?.test_commands;
-  const testCommands = testCommandsArgument() || testCommandsConfig();
+  const testCommands = testCommandsArgument() || appmapConfig.update?.test_commands || {};
 
   const archiveMetadata = await Promise.all<ArchiveMetadata>(
     (
