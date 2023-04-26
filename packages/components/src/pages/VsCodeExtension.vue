@@ -411,7 +411,14 @@
 </template>
 
 <script>
-import { Event, AppMapFilter, deserializeAppmapState, base64UrlEncode } from '@appland/models';
+import {
+  Event,
+  AppMapFilter,
+  serializeFilter,
+  deserializeFilter,
+  filterStringToFilterState,
+  base64UrlEncode,
+} from '@appland/models';
 import CheckIcon from '@/assets/check.svg';
 import CopyIcon from '@/assets/copy-icon.svg';
 import CloseThinIcon from '@/assets/close-thin.svg';
@@ -914,28 +921,7 @@ export default {
         state.traceFilter = this.eventFilterText;
       }
 
-      const { declutter } = this.filters;
-
-      state.filters = Object.entries({
-        rootObjects: declutter.rootObjects,
-        limitRootEvents: declutter.limitRootEvents.on,
-        hideMediaRequests: declutter.hideMediaRequests.on,
-        hideUnlabeled: declutter.hideUnlabeled.on,
-        hideElapsedTimeUnder: declutter.hideElapsedTimeUnder.on
-          ? declutter.hideElapsedTimeUnder.time
-          : false,
-        hideName: declutter.hideName.on ? declutter.hideName.names : false,
-      }).reduce((memo, [k, v]) => {
-        // This could be cleaned up. The serialized data structure differs from
-        // what we use internally, which causes this to be a bit of a mess.
-        const filter = this.filters.declutter[k];
-        if (Array.isArray(v) && v.length !== 0) {
-          memo[k] = v;
-        } else if (filter && filter.default !== v) {
-          memo[k] = v;
-        }
-        return memo;
-      }, {});
+      state.filters = serializeFilter(this.filters);
 
       if (Object.keys(state.filters).length === 0) {
         delete state.filters;
@@ -991,7 +977,7 @@ export default {
           return;
         }
 
-        const state = deserializeAppmapState(serializedState);
+        const state = filterStringToFilterState(serializedState);
         if (state.selectedObject) {
           do {
             const fqid = state.selectedObject;
@@ -1041,7 +1027,7 @@ export default {
 
         const { filters } = state;
         if (filters) {
-          this.filters.apply(filters);
+          this.filters = deserializeFilter(filters);
         }
 
         this.$nextTick(() => {
@@ -1151,12 +1137,17 @@ export default {
     },
 
     resetFilters() {
+      const defaultFilter = new AppMapFilter();
+
       this.filters.rootObjects = [];
       Object.keys(this.filters.declutter).forEach((k) => {
-        this.filters.declutter[k].on = this.filters.declutter[k].default;
+        this.filters.declutter[k].on = defaultFilter.declutter[k].on;
       });
-      this.filters.declutter.hideElapsedTimeUnder.time = 100;
-      this.filters.declutter.hideName.names = [];
+      this.filters.declutter.hideElapsedTimeUnder.time =
+        defaultFilter.declutter.hideElapsedTimeUnder.time;
+      this.filters.declutter.hideExternalPaths.dependencyFolders =
+        defaultFilter.declutter.hideExternalPaths.dependencyFolders;
+      this.filters.declutter.hideName.names = defaultFilter.declutter.hideName.names;
     },
 
     addHiddenName(name) {

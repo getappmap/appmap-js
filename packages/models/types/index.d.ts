@@ -387,7 +387,6 @@ declare module '@appland/models' {
 
     // TODO: Define Finding type
     filter(appMap: AppMap, findings: any[]): AppMap;
-    apply(filterState: FilterState): void;
   }
 
   export type SQLAnalysis = {
@@ -418,8 +417,12 @@ declare module '@appland/models' {
   export function normalizeSQL(sql: string, databaseType: string): string;
 
   export function buildAppMap(data?: string | Record<string, unknown>): AppMapBuilder;
-  // TODO: define type for appmap state
-  export function deserializeAppmapState(stringInput: string): any;
+
+  export function serializeFilter(filter: AppMapFilter): FilterState;
+  export function mergeFilterState(first: FilterState, second: FilterState): FilterState;
+  export function filterStringToFilterState(stringInput: string): FilterState;
+  export function deserializeFilter(filterState?: FilterState | string): AppMapFilter;
+
   export function base64UrlEncode(text: string): string;
   export function base64UrlDecode(text: string): string;
 }
