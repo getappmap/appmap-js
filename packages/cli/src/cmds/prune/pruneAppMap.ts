@@ -1,5 +1,6 @@
 import {
   AppMapFilter,
+  FilterState,
   buildAppMap,
   deserializeFilter,
   filterStringToFilterState,
@@ -13,11 +14,15 @@ export interface AppMap {
   [key: string]: any;
 }
 
-export const pruneAppMap = (appMap: AppMap, size: number): any => {
-  return buildAppMap().source(appMap).prune(size).normalize().build();
+export type PruneResult = { appmap: AppMap; filter?: AppMapFilter };
+
+export const pruneAppMap = (appMap: AppMap, size: number): PruneResult => {
+  // I'm not sure what the purpose of the local AppMap interface is, but I'll maintain it for now.
+  const appmap = buildAppMap().source(appMap).prune(size).normalize().build() as any as AppMap;
+  return { appmap };
 };
 
-export const pruneWithFilter = (appMap: AppMap, serializedFilter: string): any => {
+export const pruneWithFilter = (appMap: AppMap, serializedFilter: string): PruneResult => {
   // TODO: update type for AppMap
   const fullMap = buildAppMap().source(appMap).normalize().build() as any;
   const previousFilterState = fullMap.data.pruneFilter;
@@ -30,8 +35,7 @@ export const pruneWithFilter = (appMap: AppMap, serializedFilter: string): any =
 
   const appmapFilter = deserializeFilter(filterState);
 
-  // TODO: update type for AppMap
-  const prunedMap = appmapFilter.filter(fullMap, []) as any;
+  const prunedMap = appmapFilter.filter(fullMap, []) as any as AppMap;
   prunedMap.data = { ...prunedMap.data, pruneFilter: serializeFilter(appmapFilter) };
-  return prunedMap;
+  return { appmap: prunedMap, filter: appmapFilter };
 };
