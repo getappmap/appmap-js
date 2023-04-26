@@ -12,15 +12,22 @@ import { dirname, isAbsolute, join, relative, resolve } from 'path';
 import { default as openapiDiff } from 'openapi-diff';
 
 import { executeCommand } from '../../lib/executeCommand';
-import { Finding } from '../../lib/findings';
+import { Finding, ImpactDomain } from '../../lib/findings';
 import { DiffDiagrams } from '../../sequenceDiagramDiff/DiffDiagrams';
 import { exists } from '../../utils';
 import { AppMapData } from './AppMapData';
 import { AppMapIndex } from './AppMapIndex';
-import { AppMapLink, AppMapName, ChangedAppMap, ChangeReport, TestFailure } from './ChangeReport';
+import {
+  AppMapLink,
+  AppMapName,
+  ChangedAppMap,
+  ChangeReport,
+  FindingUpdate,
+  TestFailure,
+} from './ChangeReport';
 import mapToRecord from './mapToRecord';
 import { RevisionName } from './RevisionName';
-import { mutedStyle } from './ui';
+import { mutedStyle, prominentStyle } from './ui';
 
 export async function loadSequenceDiagram(path: string): Promise<SequenceDiagram> {
   const diagramData = JSON.parse(await readFile(path, 'utf-8'));
@@ -38,8 +45,6 @@ export default async function buildChangeReport(
   const appmapData = new AppMapData(workingDir);
   const appmapIndex = new AppMapIndex(appmapData);
   await appmapIndex.build();
-  assert(appmapIndex.addedDigests);
-  assert(appmapIndex.removedDigests);
 
   const appMapMetadata = {
     base: new Map<AppMapName, Metadata>(),
@@ -56,8 +61,6 @@ export default async function buildChangeReport(
         }
 
         const metadata = JSON.parse(await readFile(metadataPath, 'utf-8')) as Metadata;
-        // This is deprecated, AppMap canonical digest is computed from the sequence diagram now.
-        delete metadata['fingerprints'];
         appMapMetadata[appmap.revisionName].set(appmap.name, metadata);
       },
       5
@@ -78,7 +81,10 @@ export default async function buildChangeReport(
   {
     for (const appmap of await appmapData.appmaps(RevisionName.Head)) {
       const metadata = appMapMetadata[RevisionName.Head].get(appmap);
-      assert(metadata);
+      if (!metadata) {
+        console.log(prominentStyle(`Metadata for ${appmap} not found!`));
+        continue;
+      }
       if (metadata.test_status === 'failed') {
         failedAppMaps.add(appmap);
       }
@@ -86,8 +92,6 @@ export default async function buildChangeReport(
   }
 
   async function deleteUnchangedAppMaps() {
-    assert(appmapIndex.unchangedDigests);
-
     const deleteAppMap = async (revisionName: RevisionName, appmap: AppMapName) => {
       if (failedAppMaps.has(appmap)) {
         console.log(
@@ -108,11 +112,11 @@ export default async function buildChangeReport(
       await rm(path, { recursive: true });
     };
 
-    for (const digest of appmapIndex.unchangedDigests) {
-      for (const appmap of appmapIndex.appmapsByDigest[RevisionName.Base].get(digest) || []) {
+    for (const appmap of await appmapData.appmaps(RevisionName.Base)) {
+      const baseDigest = appmapIndex.appmapDigest(RevisionName.Base, appmap);
+      const headDigest = appmapIndex.appmapDigest(RevisionName.Head, appmap);
+      if (baseDigest === headDigest) {
         deleteAppMap(RevisionName.Base, appmap);
-      }
-      for (const appmap of appmapIndex.appmapsByDigest[RevisionName.Head].get(digest) || []) {
         deleteAppMap(RevisionName.Head, appmap);
       }
     }
@@ -239,6 +243,7 @@ export default async function buildChangeReport(
 
   let newFindings: Finding[];
   let resolvedFindings: Finding[];
+  const impactDomains = new Set<ImpactDomain>();
   {
     const baseFindingHashes = (baseScanResults.findings as Finding[]).reduce(
       (memo, finding: Finding) => (memo.add(finding.hash_v2), memo),
@@ -258,6 +263,21 @@ export default async function buildChangeReport(
     resolvedFindings = (baseScanResults.findings as Finding[]).filter((finding) =>
       resolvedFindingHashes.includes(finding.hash_v2)
     );
+    [...newFindings, ...resolvedFindings].forEach((finding) => {
+      if (finding.impactDomain) impactDomains.add(finding.impactDomain);
+    });
+  }
+
+  const findingChanges = { new: newFindings, resolved: resolvedFindings };
+  const findingDiff = {} as Record<ImpactDomain, FindingUpdate>;
+  for (const impactDomain of impactDomains) {
+    const entry: FindingUpdate = { new: [] as Finding[], resolved: [] as Finding[] };
+    for (const findingType of Object.keys(findingChanges)) {
+      findingChanges[findingType as keyof typeof findingChanges]
+        .filter((finding) => finding.impactDomain === impactDomain)
+        .forEach((finding) => entry[findingType].push(finding));
+    }
+    findingDiff[impactDomain] = entry as FindingUpdate;
   }
 
   let apiDiff: any;
@@ -288,9 +308,8 @@ export default async function buildChangeReport(
     testFailures,
     newAppMaps,
     changedAppMaps,
-    newFindings,
-    resolvedFindings,
     apiDiff,
+    findingDiff,
     sequenceDiagramDiffSnippets: mapToRecord(sequenceDiagramDiffSnippets),
     appMapMetadata: {
       [RevisionName.Base]: mapToRecord(appMapMetadata[RevisionName.Base]),
