@@ -3,8 +3,17 @@ import sha256 from 'crypto-js/sha256.js';
 import analyze from './sql/analyze';
 import { Buffer } from 'buffer';
 
-const LogPaths = process.env.APPMAP_LOG_EXTERNAL_PATH === 'true';
+function isLogPathsEnabled() {
+  try {
+    return process.env.APPMAP_LOG_EXTERNAL_PATH === 'true';
+  } catch (e) {
+    if (e instanceof ReferenceError) return false;
 
+    console.warn(e);
+  }
+}
+
+const LogPaths = isLogPathsEnabled();
 export const hasProp = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop);
 
 export function isFalsey(valueObj) {
