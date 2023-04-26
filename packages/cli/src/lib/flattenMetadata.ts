@@ -2,7 +2,7 @@ import { Metadata } from '@appland/models';
 import sanitizeURL from './repositoryInfo';
 
 /** Flattens metadata into a string-string map suitable for use in telemetry.
- * Ignores git, exception and fingerprints.
+ * Ignores git and exception.
  */
 export default function flattenMetadata(metadata: Metadata): Map<string, string> {
   const result = new Map<string, string>();

@@ -58,7 +58,7 @@ export type Fingerprint = {
 
 class Fingerprinter extends EventEmitter {
   /**
-   * Whether to check if the version of existing fingerprints is up to date.
+   * Whether to check if the version of the existing index is up to date.
    * When watching files for changes, it can be set to false after the initial
    * pass to avoid re-reading the same 'version' files over and over.
    */
@@ -66,7 +66,7 @@ class Fingerprinter extends EventEmitter {
 
   async fingerprint(appMapFileName: string) {
     if (verbose()) {
-      console.log(`Fingerprinting ${appMapFileName}`);
+      console.log(`Indexing ${appMapFileName}`);
     }
 
     const index = new AppMapIndex(appMapFileName);
@@ -79,7 +79,7 @@ class Fingerprinter extends EventEmitter {
       (await index.indexUpToDate())
     ) {
       if (verbose()) {
-        console.log('Fingerprint is up to date. Skipping...');
+        console.log('Index is up to date. Skipping...');
       }
       return;
     }

@@ -301,7 +301,6 @@ declare module '@appland/models' {
     labels?: string[];
     app?: string;
     client: Metadata.Client;
-    fingerprints?: Metadata.Fingerprint[];
     frameworks?: Metadata.Framework[];
     git?: Metadata.Git;
     language?: Metadata.Language;
