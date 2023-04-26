@@ -1,4 +1,4 @@
-import { base64UrlEncode } from '@appland/models';
+import { FilterState, base64UrlEncode, deserializeFilter, serializeFilter } from '@appland/models';
 import fs from 'fs';
 import fse from 'fs-extra';
 import path from 'path';
@@ -7,6 +7,7 @@ import tmp from 'tmp';
 import yargs from 'yargs';
 import { fromFile } from '../../src/cmds/prune/prune';
 import * as PruneAppMap from '../../src/cmds/prune/pruneAppMap';
+import { readFile } from 'fs/promises';
 const fixtureDir = path.join(__dirname, 'fixtures', 'ruby');
 const cmd = require('../../src/cmds/prune/prune').default;
 tmp.setGracefulCleanup();
@@ -34,7 +35,9 @@ describe('prune subcommand', () => {
   it('works', async () => {
     const parser = yargs.command(cmd);
 
-    sinon.stub(PruneAppMap, 'pruneAppMap').returns({ events: [], data: { pruneFilter: [] } });
+    sinon
+      .stub(PruneAppMap, 'pruneAppMap')
+      .returns({ appmap: { events: [], data: { pruneFilter: [] } } });
 
     const appMapFile = path.join(projectDir, 'revoke_api_key.appmap.json');
     const cmdLine = `prune -o ${projectDir} ${appMapFile} 2MB`;
@@ -61,20 +64,25 @@ describe('prune subcommand', () => {
         'function:activerecord/ActiveRecord::Relation#records',
         'function:actionpack/ActionDispatch::Request::Session#[]',
       ],
-    };
+      limitRootEvents: false,
+      hideMediaRequests: false,
+    } as FilterState;
     const serializedFilterState = base64UrlEncode(JSON.stringify(filterState));
+
+    const baseAppMap = JSON.parse(await readFile(statsMapFile, 'utf8'));
+    expect(baseAppMap.events.length).toEqual(3526);
 
     const argv = {
       file: statsMapFile,
       filter: serializedFilterState,
       outputDir: projectDir,
     };
-    await cmd.handler(argv);
+    const pruneResult = await cmd.handler(argv);
 
     const outPath = path.join(projectDir, 'Microposts_interface_micropost_interface.appmap.json');
-    const fileStats = fs.lstatSync(outPath);
-    expect(fileStats.isFile()).toBe(true);
-    expect(fileStats.size).toEqual(740735);
+    const appmap = JSON.parse(await readFile(outPath, 'utf8'));
+    expect(appmap.events.length).toEqual(2184);
+    expect(serializeFilter(pruneResult.filter)).toEqual(filterState);
   });
 
   it('correctly combines pruneFilter data', async () => {
@@ -114,7 +122,7 @@ describe('prune subcommand', () => {
       hideUnlabeled: true,
     };
 
-    expect(prunedMapData.data.pruneFilter).toEqual(expectedFilter);
+    expect(prunedMapData.appmap.data.pruneFilter).toEqual(expectedFilter);
     delete statsMapData.pruneFilter;
   });
 
