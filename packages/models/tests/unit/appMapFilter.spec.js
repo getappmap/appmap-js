@@ -34,6 +34,16 @@ describe('appMapFilter', () => {
     });
   });
 
+  describe('hideTree', () => {
+    it('can be a package name', () => {
+      filter.declutter.hideTree.on = true;
+      filter.declutter.hideTree.names = ['package:actionpack'];
+      const filteredAppMap = filter.filter(checkoutUpdatePaymentAppMap);
+
+      expect(filteredAppMap.classMap.roots.map((co) => co.id)).not.toContain('openssl');
+    });
+  });
+
   describe('hideExternalPaths', () => {
     it('can be applied', () => {
       expect(
