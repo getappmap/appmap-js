@@ -488,7 +488,7 @@ export function isLocalPath(location, disallowedFolders = []) {
   if (!location) return { isLocal: false };
 
   // Remove drive letter
-  if (/^[a-zA-Z]:[\\\/]/.test(location)) location = location.slice(2);
+  if (/^[a-zA-Z]:[\\/]/.test(location)) location = location.slice(2);
 
   // Split into path and line number
   let [path, lineno] = location.split(':');
@@ -519,7 +519,7 @@ export function isLocalPath(location, disallowedFolders = []) {
     return { isLocal: false };
   }
 
-  if (/^\.[\/\\]/.test(path)) path = path.substring(2);
+  if (/^\.[/\\]/.test(path)) path = path.substring(2);
 
   for (let folder of disallowedFolders) {
     if (path.startsWith(`${folder}/`) || path.startsWith(`${folder}\\`)) {
