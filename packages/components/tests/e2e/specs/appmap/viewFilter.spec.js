@@ -151,6 +151,8 @@ context('AppMap view filter', () => {
       cy.get('.trace .trace-node').should('have.length', 4);
 
       cy.get('.tabs__controls .popper__button').click();
+
+      cy.get('.filters__elapsed input').type('00');
       cy.get('.filters__checkbox').eq(3).click();
 
       cy.get('.trace .trace-node').should('have.length', 3);
