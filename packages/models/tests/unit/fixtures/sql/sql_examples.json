@@ -1,0 +1,19 @@
+[
+  {
+    "name": "SELECT with JOIN",
+    "sql": "SELECT users.*, a.* FROM users JOIN addresses a ON a.user_id = ?",
+    "normalized": "SELECT users.*, a.* FROM users JOIN addresses a ON a.user_id = ?",
+    "analyzed": {
+      "actions": ["select"],
+      "columns": ["a.*", "a.user_id", "users.*"],
+      "joinCount": 1,
+      "tables": ["addresses", "users"]
+    }
+  },
+  {
+    "name": "SELECT with COALESCE",
+    "sql": "SELECT \"scanner_jobs\".\"id\", \"scanner_jobs\".\"mapset_id\", \"scanner_jobs\".\"created_at\", \"mapsets\".\"branch\", SUBSTRING(mapsets.commit, 1, 7) AS \"commit\", COALESCE((scanner_jobs.summary->>'numChecks')::integer, 0) as checks_count, COALESCE((SUM(check_findings_v.findings_count) FILTER (WHERE check_findings_v.status = 'new'))::integer, 0) as new_count, COALESCE((SUM(check_findings_v.findings_count) FILTER (WHERE check_findings_v.status = 'deferred'))::integer, 0) as deferred_count FROM \"scanner_jobs\" INNER JOIN \"mapsets\" ON ((\"mapsets\".\"id\" = \"scanner_jobs\".\"mapset_id\") AND (\"mapsets\".\"app_id\" = 1)) INNER JOIN \"apps\" ON (\"apps\".\"id\" = \"mapsets\".\"app_id\") INNER JOIN \"check_findings_v\" ON (\"check_findings_v\".\"scanner_job_id\" = \"scanner_jobs\".\"id\") WHERE (\"merge_key\" IS NULL) GROUP BY \"scanner_jobs\".\"id\", \"mapsets\".\"commit\", \"mapsets\".\"branch\" ORDER BY \"scanner_jobs\".\"created_at\" DESC LIMIT 2 OFFSET 2",
+    "normalized": "SELECT ?.?, ?.?, ?.?, ?.?, SUBSTRING(mapsets.commit, ?, ?) AS ?, COALESCE((scanner_jobs.summary->>?)::integer, ?) as checks_count, COALESCE((SUM(check_findings_v.findings_count) FILTER (WHERE check_findings_v.status = ?))::integer, ?) as new_count, COALESCE((SUM(check_findings_v.findings_count) FILTER (WHERE check_findings_v.status = ?))::integer, ?) as deferred_count FROM ? INNER JOIN ? ON ((?.? = ?.?) AND (?.? = ?)) INNER JOIN ? ON (?.? = ?.?) INNER JOIN ? ON (?.? = ?.?) WHERE (? IS ?) GROUP BY ?.?, ?.?, ?.? ORDER BY ?.? DESC LIMIT ? OFFSET ?",
+    "analyzed": null
+  }
+]

@@ -1,8 +1,9 @@
 /* eslint-disable no-inner-declarations */
+import { nopErrorCallback } from './nopErrorCallback';
 import normalize from './normalize';
 import parseAST from './parse';
 
-export default function analyze(sql, errorCallback = () => {}) {
+export default function analyze(sql, errorCallback = nopErrorCallback) {
   const ast = parseAST(sql, errorCallback);
   if (!ast) {
     return null;
@@ -14,15 +15,11 @@ export default function analyze(sql, errorCallback = () => {}) {
   let joins = 0;
 
   function parseQuery(statement) {
+    if (statement === null) return;
+
     const tokens = ['type', 'variant']
-      .map((propertyName) => {
-        try {
-          return statement[propertyName];
-        } catch (e) {
-          console.warn(e);
-        }
-      })
-      .filter((value) => value);
+      .map((propertyName) => statement[propertyName])
+      .filter(Boolean);
 
     const key = tokens.join('.');
     // eslint-disable-next-line no-use-before-define
@@ -37,20 +34,17 @@ export default function analyze(sql, errorCallback = () => {}) {
   }
 
   function parseStatement(statement) {
+    if (statement === null) {
+      console.warn(`Ignoring request to parse null statement in query ${sql}`);
+      return;
+    }
+
     const reservedWords = ['type', 'variant', 'name', 'value'];
     Object.keys(statement)
       .filter((property) => !reservedWords.includes(property))
-      .map((propertyName) => {
-        try {
-          return statement[propertyName];
-        } catch (e) {
-          console.warn(e);
-        }
-      })
+      .map((propertyName) => statement[propertyName])
       .forEach((property) => {
-        if (property === null || property === undefined) {
-          console.warn(`Unexpected null or undefined in ${JSON.stringify(statement)}`);
-        } else if (Array.isArray(property)) {
+        if (Array.isArray(property)) {
           property.forEach(parseQuery);
         } else if (typeof property === 'object') {
           parseQuery(property);
@@ -74,13 +68,16 @@ export default function analyze(sql, errorCallback = () => {}) {
       }
     });
   }
+
   const nop = () => {};
+
   function parseIdentifierExpression(statement) {
     if (statement.format === 'table') {
       tables.push(statement.name);
     }
     parseList(['columns'], statement);
   }
+
   function recordAction(action) {
     return () => {
       actions.push(action);
