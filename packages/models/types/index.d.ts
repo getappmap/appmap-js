@@ -363,11 +363,17 @@ declare module '@appland/models' {
       constructor(on: boolean, defaultValue: boolean, names: string[]);
     }
 
+    export class DeclutterExternalPathsProperty extends DeclutterProperty {
+      public dependencyFolders: string[];
+
+      constructor(on: boolean, defaultValue: boolean, dependencyFolders: string[]);
+    }
+
     export class Declutter {
       public limitRootEvents: DeclutterProperty;
       public hideMediaRequests: DeclutterProperty;
       public hideUnlabeled: DeclutterProperty;
-      public hideExternalPaths: DeclutterProperty;
+      public hideExternalPaths: DeclutterExternalPathsProperty;
       public hideElapsedTimeUnder: DeclutterTimeProperty;
       public hideName: DeclutterNamesProperty;
       public hideTree: DeclutterNamesProperty;
@@ -378,6 +384,8 @@ declare module '@appland/models' {
     limitRootEvents?: boolean;
     hideMediaRequests?: boolean;
     hideUnlabeled?: boolean;
+    hideExternal?: boolean;
+    dependencyFolders?: Array<string>;
     hideElapsedTimeUnder?: number;
     hideName?: Array<string>;
     hideTree?: Array<string>;

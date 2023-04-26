@@ -1,6 +1,7 @@
 import buildAppMap from './appMapBuilder';
 import AppMap from './appMap';
 import CodeObject from './codeObject';
+import { isLocalPath } from './util';
 
 class DeclutterProperty {
   on = true;
@@ -32,13 +33,27 @@ class DeclutterNamesProperty extends DeclutterProperty {
   }
 }
 
+// Directories inside the project tree that may contain bundled dependencies.
+const DependencyFolders = ['vendor', 'node_modules'];
+
+class DeclutterExternalPathsProperty extends DeclutterProperty {
+  dependencyFolders = DependencyFolders;
+
+  constructor(on = false, defaultValue = false, dependencyFolders = DependencyFolders) {
+    super(on, defaultValue);
+
+    this.dependencyFolders = dependencyFolders || DependencyFolders;
+  }
+}
+
 class Declutter {
   limitRootEvents = new DeclutterProperty();
   hideMediaRequests = new DeclutterProperty();
-  hideExternalPaths = new DeclutterProperty(false, false);
+  hideExternalPaths = new DeclutterExternalPathsProperty();
   hideUnlabeled = new DeclutterProperty(false, false);
-  hideElapsedTimeUnder = new DeclutterTimeProperty(false, false, 100);
+  hideElapsedTimeUnder = new DeclutterTimeProperty(false, false, 1);
   hideName = new DeclutterNamesProperty(false, false, []);
+  hideTree = new DeclutterNamesProperty(false, false, []);
 }
 
 const FilterRegExps = {};
@@ -49,27 +64,21 @@ function filterRegExp(filterExpression, regexpConstructorArgs) {
   return FilterRegExps[filterExpression];
 }
 
-function isAbsolute(path) {
-  if (!path) return false;
+function markSubtrees(events, filterFn) {
+  const matchEvents = new Set();
+  const matchEventStack = [];
+  const markEvents = (e) => {
+    if (e.isCall() && filterFn(e)) matchEventStack.push(e);
+    if (matchEventStack.length > 0) {
+      matchEvents.add(e);
+      if (e.returnEvent) matchEvents.add(e.returnEvent);
+    }
+    if (e.isReturn() && filterFn(e.callEvent)) matchEventStack.pop();
+  };
 
-  if (path.length === 0) return false;
+  events.forEach(markEvents);
 
-  if (['/', '\\'].includes(path.charAt(0))) return true;
-
-  if (/^[a-zA-Z]:[\\/]/.test(path)) return true;
-
-  return false;
-}
-
-export function isLocalPath(location) {
-  if (!location) return { isLocal: false };
-
-  if (!location.includes(':')) return { isLocal: false };
-
-  const path = location.split(':')[0];
-  if (path.match(/\.\w+$/) && !isAbsolute(path)) return { isLocal: true, path };
-
-  return { isLocal: false };
+  return matchEvents;
 }
 
 // Collect all code objects that match a filter expressions.
@@ -77,21 +86,20 @@ export function isLocalPath(location) {
 // Collect all marked events.
 // This filter should run in O(n), assuming set insertion and lookup is constant time.
 function includeSubtrees(events, filterFn, applyIfEmpty) {
-  const includedEvents = new Set();
-  const includedEventStack = [];
-  const markIncludedEvents = (e) => {
-    if (e.isCall() && filterFn(e)) includedEventStack.push(e);
-    if (includedEventStack.length > 0) {
-      includedEvents.add(e);
-      if (e.returnEvent) includedEvents.add(e.returnEvent);
-    }
-    if (e.isReturn() && filterFn(e.callEvent)) includedEventStack.pop();
-  };
-
-  events.forEach(markIncludedEvents);
+  const includedEvents = markSubtrees(events, filterFn);
 
   if (applyIfEmpty || includedEvents.size) return events.filter((e) => includedEvents.has(e));
   else return events;
+}
+
+// Collect all code objects that match a filter expressions.
+// Mark all events that are in a subtree whose root is one of the matched code objects.
+// Collect all unmarked events.
+// This filter should run in O(n), assuming set insertion and lookup is constant time.
+function excludeSubtrees(events, filterFn) {
+  const excludedEvents = markSubtrees(events, filterFn);
+
+  return events.filter((e) => !excludedEvents.has(e));
 }
 
 export default class AppMapFilter {
@@ -108,51 +116,75 @@ export default class AppMapFilter {
     const { classMap } = appMap;
     let { events } = appMap;
 
-    if (this.declutter.limitRootEvents.on) {
-      events = includeSubtrees(events, (e) => e.httpServerRequest, false);
-    }
-
-    if (this.rootObjects.length) {
-      const includeCodeObjects = classMap.codeObjects.reduce((memo, codeObject) => {
-        let ancestor = codeObject;
-        while (ancestor) {
-          if (this.rootObjects.some((expr) => AppMapFilter.codeObjectIsMatched(ancestor, expr)))
-            memo.add(codeObject);
-          ancestor = ancestor.parent;
+    // Collect all code objects that match a filter expression. When a code object matches an
+    // expression, the entire subtree rooted at that code object is included as well.
+    function matchCodeObjects(expressions, matchSelf) {
+      return classMap.codeObjects.reduce((memo, codeObject) => {
+        if (expressions.some((expr) => AppMapFilter.codeObjectIsMatched(codeObject, expr))) {
+          codeObject.visit((co) => {
+            if (co !== codeObject || matchSelf) memo.add(co);
+          });
         }
 
         return memo;
       }, new Set());
+    }
 
+    // Include only subtrees of an HTTP server request, unless there are no HTTP server requests.
+    if (this.declutter.limitRootEvents.on) {
+      events = includeSubtrees(events, (e) => e.httpServerRequest, false);
+    }
+
+    // Include only subtrees of a specified root object. This could also be stored and managed
+    // as a declutter filter, but it isn't, for some reason. It works the same way.
+    if (this.rootObjects.length) {
+      const includeCodeObjects = matchCodeObjects(this.rootObjects, true);
       events = includeSubtrees(events, (e) => includeCodeObjects.has(e.codeObject), true);
     }
 
+    // Hide descendent events from named, pattern-matched or labeled code objects. The matching
+    // event itself is not hidden. To accomplish that, add the same filter to `hideName`.
+    if (this.declutter.hideTree.on && this.declutter.hideTree.names.length) {
+      const excludeCodeObjects = matchCodeObjects(this.declutter.hideTree.names, false);
+      events = excludeSubtrees(events, (e) => excludeCodeObjects.has(e.codeObject));
+    }
+
+    // Hide HTTP server requests that fetch a known media type.
     if (this.declutter.hideMediaRequests.on) {
       events = AppMapFilter.filterMediaRequests(events);
     }
 
+    // Hide any unlabeled code object. This is rarely useful.
     if (this.declutter.hideUnlabeled.on) {
       events = events.filter((e) => e.labels.size > 0 || e.codeObject.type !== 'function');
     }
 
+    // Hide code that appears to be sourced from outside the local source tree.
+    // This isn't super reliable, because the location path may be inside the project tree
+    // even for external code; and the location may be outside the project tree even for code
+    // that the user considers to be part of the project.
     if (this.declutter.hideExternalPaths.on) {
-      events = events.filter((e) => isLocalPath(e.codeObject.location).isLocal);
+      events = events.filter(
+        (e) =>
+          e.codeObject.type !== 'function' ||
+          isLocalPath(e.codeObject.location, this.declutter.hideExternalPaths.dependencyFolders)
+            .isLocal
+      );
     }
 
+    // Hide code whose elapsed time is less than a specified threshold.
+    // This is useful for navigating down a call tree looking for expensive code.
     if (this.declutter.hideElapsedTimeUnder.on && this.declutter.hideElapsedTimeUnder.time > 0) {
       events = events.filter(
         (e) => e.elapsedTime && e.elapsedTime >= this.declutter.hideElapsedTimeUnder.time / 1000
       );
     }
 
+    // Hide events from named, pattern-matched or labeled code objects. Hiding does not apply to
+    // sub-events of matching events.
     if (this.declutter.hideName.on && this.declutter.hideName.names.length) {
-      classMap.codeObjects.forEach((codeObject) => {
-        this.declutter.hideName.names.forEach((fqid) => {
-          if (AppMapFilter.codeObjectIsMatched(codeObject, fqid)) {
-            events = events.filter((e) => !codeObject.allEvents.includes(e));
-          }
-        });
-      });
+      const excludeCodeObjects = matchCodeObjects(this.declutter.hideName.names, true);
+      events = events.filter((e) => !excludeCodeObjects.has(e.codeObject));
     }
 
     const eventIds = new Set(events.filter((e) => e.isCall()).map((e) => e.id));
@@ -268,6 +300,7 @@ export default class AppMapFilter {
       }
     });
 
+    // TODO It would be even better to exclude the whole subtree, in case the media request is handled by user code.
     return events.filter((e) => !excludedEvents.includes(e.id));
   }
 
