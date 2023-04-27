@@ -55,16 +55,17 @@
             <li @click="clickSignInLink('join-slack')">
               <a href="https://appmap.io/slack" target="_blank"
                 >If you are unable to login, contact us in Slack for license key
-                assistance.<VExternalLinkIcon
+                assistance<VExternalLinkIcon
               /></a>
             </li>
-            <li @click="clickSignInLink('first-fifteen-minutes')">
-              <a href="https://appmap.io/docs/your-first-15-minutes-with-appmap/what-is-appmap.html"
-                >Your first 15 minutes with AppMap<VExternalLinkIcon
+            <li @click="clickSignInLink('join-slack-codespaces-aws')">
+              <a href="https://appmap.io/slack" target="_blank"
+                >If using Codespaces or an AWS hosted dev environment, contact us in Slack for
+                license key assistance<VExternalLinkIcon
               /></a>
             </li>
-            <li @click="clickSignInLink('demo-video')">
-              <a href="#">Security FAQ<VExternalLinkIcon /></a>
+            <li @click="clickSignInLink('security-faq')">
+              <a href="https://appmap.io/security">Security FAQ<VExternalLinkIcon /></a>
             </li>
           </ul>
         </div>
