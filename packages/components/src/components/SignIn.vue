@@ -47,10 +47,7 @@
           ><strong>Not ready to sign in?</strong> <chevronDown
         /></span>
         <div v-if="expanded">
-          <p>
-            Not ready to start making AppMaps? No problem! here are some suggestions for learning
-            more about AppMap:
-          </p>
+          <p>Here are some suggestions for learning more about AppMap:</p>
           <ul>
             <li @click="clickSignInLink('join-slack')">
               <a href="https://appmap.io/slack" target="_blank"
