@@ -1,10 +1,9 @@
 /* eslint-disable no-inner-declarations */
-import { nopErrorCallback } from './nopErrorCallback';
 import normalize from './normalize';
 import parseAST from './parse';
 
-export default function analyze(sql, errorCallback = nopErrorCallback) {
-  const ast = parseAST(sql, errorCallback);
+export default function analyze(sql) {
+  const ast = parseAST(sql);
   if (!ast) {
     return null;
   }

@@ -406,7 +406,9 @@ declare module '@appland/models' {
     joinCount: number;
   };
 
-  export class ParseError extends Error {}
+  export class ParseError extends Error {
+    sql: string;
+  }
 
   export type OnSQLParseError = (error: ParseError) => void;
 
@@ -418,12 +420,10 @@ declare module '@appland/models' {
 
   export function codeObjectId(codeObject: IdentifiableCodeObject, tokens?: string[]): string[];
 
+  export function setSQLErrorHandler(handler: OnSQLParseError): void;
   export function abstractSqlAstJSON(sql: string, databaseType: string): string;
-  export function analyzeSQL(sql: string, errorCallback: OnSQLParseError): SQLAnalysis;
-  export function parseSQL(
-    sql: string,
-    errorCallback?: OnSQLParseError
-  ): SqliteParser.ListStatement | null;
+  export function analyzeSQL(sql: string): SQLAnalysis;
+  export function parseSQL(sql: string): SqliteParser.ListStatement | null;
   export function normalizeSQL(sql: string, databaseType: string): string;
 
   export function buildAppMap(data?: string | Record<string, unknown>): AppMapBuilder;
