@@ -7,15 +7,14 @@
 /* eslint-disable max-classes-per-file */
 
 const yargs = require('yargs');
-const { diffLines } = require('diff');
 const yaml = require('js-yaml');
 const { promises: fsp, readFileSync } = require('fs');
 const { queue } = require('async');
 const readline = require('readline');
 const { join } = require('path');
-const { algorithms, canonicalize } = require('./fingerprint');
-const { verbose, loadAppMap } = require('./utils');
-const appMapCatalog = require('./appMapCatalog');
+import { setSQLErrorHandler } from '@appland/models';
+
+const { verbose } = require('./utils');
 const FingerprintDirectoryCommand = require('./fingerprint/fingerprintDirectoryCommand');
 const FingerprintWatchCommand = require('./fingerprint/fingerprintWatchCommand').default;
 const Depends = require('./depends');
@@ -33,6 +32,9 @@ const SequenceDiagramCommand = require('./cmds/sequenceDiagram');
 const SequenceDiagramDiffCommand = require('./cmds/sequenceDiagramDiff');
 const StatsCommand = require('./cmds/stats/stats');
 import UploadCommand from './cmds/upload';
+import { default as sqlErrorLog } from './lib/sqlErrorLog';
+
+setSQLErrorHandler(sqlErrorLog);
 
 // eslint-disable-next-line no-unused-expressions
 yargs(process.argv.slice(2))

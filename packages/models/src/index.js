@@ -12,6 +12,7 @@ export { CodeObjectType } from './codeObjectType';
 export { default as analyzeSQL, abstractSqlAstJSON } from './sql/analyze';
 export { default as normalizeSQL } from './sql/normalize';
 export { default as parseSQL } from './sql/parse';
+export { setSQLErrorHandler } from './sql/sqlErrorHandler';
 export { default as AppMapFilter } from './appMapFilter';
 export {
   serializeFilter,

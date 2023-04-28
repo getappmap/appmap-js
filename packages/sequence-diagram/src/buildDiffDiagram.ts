@@ -73,7 +73,7 @@ export default function buildDiffDiagram(diff: Diff): Diagram {
 
         // Case b)
         const headEquivalentOfDeletedActionsParent = (): Action | undefined => {
-          if (!rAction.parent) return undefined;
+          if (!rAction?.parent) return undefined;
 
           return diffActionsByAction.get(rAction.parent);
         };

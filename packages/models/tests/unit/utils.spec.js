@@ -2,7 +2,6 @@ import { isLocalPath } from '../../src/util';
 
 const Examples = {
   'index.js': false,
-  'index.js:12': true,
   './index.js': true,
   './index.js:10': true,
   'src/index.js': true,
