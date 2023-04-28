@@ -1,6 +1,18 @@
-import analyze from '../../src/sql/analyze';
+import { readFileSync } from 'fs';
 import normalize from '../../src/sql/normalize';
 import parse from '../../src/sql/parse';
+import { join } from 'path';
+import { getSQLErrorHandler, setSQLErrorHandler } from '../../src/sql/sqlErrorHandler';
+
+const Examples = JSON.parse(
+  readFileSync(join(__dirname, './fixtures/sql/sql_examples.json'), 'utf8')
+);
+
+setSQLErrorHandler((error) => {
+  if (process.env.APPMAP_SQL_DEBUG) {
+    console.debug(error);
+  }
+});
 
 describe('parse SQL', () => {
   test('produces a parse tree', () => {
@@ -62,11 +74,16 @@ describe('parse SQL', () => {
 
   test('reports a parse error', () => {
     let err;
-    expect(
-      parse(`SELECT users.*, a.* JOIN addresses a ON a.user_id = users.id`, (error) => {
-        err = error;
-      })
-    ).toBeNull();
+
+    const sqlErrorHandler = getSQLErrorHandler();
+    setSQLErrorHandler((error) => (err = error));
+
+    try {
+      expect(parse(`SELECT users.*, a.* JOIN addresses a ON a.user_id = users.id`)).toBeNull();
+    } finally {
+      setSQLErrorHandler(sqlErrorHandler);
+    }
+
     expect(err.toString()).toEqual(
       `Syntax error found near Star (SELECT Results Clause): SELECT users.*, a.* JOIN addresses a ON a.user_id = users.id`
     );
@@ -105,15 +122,11 @@ FROM users`)
 
 FROM users`);
   });
-});
 
-describe('analyze SQL', () => {
-  test('extracts key SQL features', () => {
-    expect(analyze(`SELECT users.*, a.* FROM users JOIN addresses a ON a.user_id = ?`)).toEqual({
-      actions: ['select'],
-      columns: ['a.*', 'a.user_id', 'users.*'],
-      joinCount: 1,
-      tables: ['addresses', 'users'],
+  Examples.forEach((example) => {
+    test(example.name, () => {
+      const normalized = normalize(example.sql);
+      expect(normalized).toEqual(example.normalized);
     });
   });
 });

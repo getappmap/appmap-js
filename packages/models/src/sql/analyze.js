@@ -2,8 +2,8 @@
 import normalize from './normalize';
 import parseAST from './parse';
 
-export default function analyze(sql, errorCallback = () => {}) {
-  const ast = parseAST(sql, errorCallback);
+export default function analyze(sql) {
+  const ast = parseAST(sql);
   if (!ast) {
     return null;
   }
@@ -14,9 +14,11 @@ export default function analyze(sql, errorCallback = () => {}) {
   let joins = 0;
 
   function parseQuery(statement) {
+    if (statement === null) return;
+
     const tokens = ['type', 'variant']
       .map((propertyName) => statement[propertyName])
-      .filter((value) => value);
+      .filter(Boolean);
 
     const key = tokens.join('.');
     // eslint-disable-next-line no-use-before-define
@@ -31,6 +33,11 @@ export default function analyze(sql, errorCallback = () => {}) {
   }
 
   function parseStatement(statement) {
+    if (statement === null) {
+      console.warn(`Ignoring request to parse null statement in query ${sql}`);
+      return;
+    }
+
     const reservedWords = ['type', 'variant', 'name', 'value'];
     Object.keys(statement)
       .filter((property) => !reservedWords.includes(property))
@@ -60,13 +67,16 @@ export default function analyze(sql, errorCallback = () => {}) {
       }
     });
   }
+
   const nop = () => {};
+
   function parseIdentifierExpression(statement) {
     if (statement.format === 'table') {
       tables.push(statement.name);
     }
     parseList(['columns'], statement);
   }
+
   function recordAction(action) {
     return () => {
       actions.push(action);

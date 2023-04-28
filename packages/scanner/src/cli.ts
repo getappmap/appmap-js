@@ -10,6 +10,8 @@ import { AbortError, ValidationError } from './errors';
 import { ExitCode } from './cli/exitCode';
 import Telemetry from './telemetry';
 import { TelemetryData } from './telemetry';
+import { setSQLErrorHandler } from '@appland/models';
+import sqlWarning from './sqlWarning';
 
 function errorInfo(err: Error) {
   if (err instanceof ValidationError)
@@ -31,6 +33,8 @@ function handleError(err: Error) {
 
   Telemetry.sendEvent(telemetry);
 }
+
+setSQLErrorHandler(sqlWarning);
 
 yargs(process.argv.slice(2))
   .option('verbose', {

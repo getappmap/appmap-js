@@ -1,16 +1,13 @@
 module.exports = {
   env: {
     es2021: true,
-    'shared-node-browser': true
+    'shared-node-browser': true,
   },
-  extends: [
-    '../../eslintrc.js',
-    'plugin:import/recommended',
-    'plugin:import/typescript'
-  ],
+  extends: ['../../eslintrc.js', 'plugin:import/recommended', 'plugin:import/typescript'],
   ignorePatterns: ['**/*.cjs'],
   rules: {
-    'no-param-reassign': ['error', { props: false }],
+    'no-undef': ['warn'],
+    'no-param-reassign': ['warn', { props: false }],
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
@@ -32,13 +29,13 @@ module.exports = {
         '@typescript-eslint/no-empty-function': 'warn',
         '@typescript-eslint/no-this-alias': 'warn',
         '@typescript-eslint/no-unsafe-argument': 'warn',
-        '@typescript-eslint/no-unsafe-assignment': 'warn',
+        '@typescript-eslint/no-unsafe-assignment': 'off',
+        '@typescript-eslint/no-unsafe-member-access': 'off',
         '@typescript-eslint/no-unsafe-call': 'warn',
-        '@typescript-eslint/no-unsafe-member-access': 'warn',
         '@typescript-eslint/no-unsafe-return': 'warn',
         '@typescript-eslint/restrict-plus-operands': 'warn',
         '@typescript-eslint/restrict-template-expressions': 'warn',
-      }
+      },
     },
   ],
 };

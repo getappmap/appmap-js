@@ -301,7 +301,6 @@ declare module '@appland/models' {
     labels?: string[];
     app?: string;
     client: Metadata.Client;
-    fingerprints?: Metadata.Fingerprint[];
     frameworks?: Metadata.Framework[];
     git?: Metadata.Git;
     language?: Metadata.Language;
@@ -364,13 +363,20 @@ declare module '@appland/models' {
       constructor(on: boolean, defaultValue: boolean, names: string[]);
     }
 
+    export class DeclutterExternalPathsProperty extends DeclutterProperty {
+      public dependencyFolders: string[];
+
+      constructor(on: boolean, defaultValue: boolean, dependencyFolders: string[]);
+    }
+
     export class Declutter {
       public limitRootEvents: DeclutterProperty;
       public hideMediaRequests: DeclutterProperty;
       public hideUnlabeled: DeclutterProperty;
-      public hideExternalPaths: DeclutterProperty;
+      public hideExternalPaths: DeclutterExternalPathsProperty;
       public hideElapsedTimeUnder: DeclutterTimeProperty;
       public hideName: DeclutterNamesProperty;
+      public hideTree: DeclutterNamesProperty;
     }
   }
 
@@ -378,8 +384,11 @@ declare module '@appland/models' {
     limitRootEvents?: boolean;
     hideMediaRequests?: boolean;
     hideUnlabeled?: boolean;
+    hideExternal?: boolean;
+    dependencyFolders?: Array<string>;
     hideElapsedTimeUnder?: number;
     hideName?: Array<string>;
+    hideTree?: Array<string>;
   };
 
   export class AppMapFilter {
@@ -388,7 +397,6 @@ declare module '@appland/models' {
 
     // TODO: Define Finding type
     filter(appMap: AppMap, findings: any[]): AppMap;
-    apply(filterState: FilterState): void;
   }
 
   export type SQLAnalysis = {
@@ -398,7 +406,9 @@ declare module '@appland/models' {
     joinCount: number;
   };
 
-  export class ParseError extends Error {}
+  export class ParseError extends Error {
+    sql: string;
+  }
 
   export type OnSQLParseError = (error: ParseError) => void;
 
@@ -410,17 +420,19 @@ declare module '@appland/models' {
 
   export function codeObjectId(codeObject: IdentifiableCodeObject, tokens?: string[]): string[];
 
+  export function setSQLErrorHandler(handler: OnSQLParseError): void;
   export function abstractSqlAstJSON(sql: string, databaseType: string): string;
-  export function analyzeSQL(sql: string, errorCallback: OnSQLParseError): SQLAnalysis;
-  export function parseSQL(
-    sql: string,
-    errorCallback?: OnSQLParseError
-  ): SqliteParser.ListStatement | null;
+  export function analyzeSQL(sql: string): SQLAnalysis;
+  export function parseSQL(sql: string): SqliteParser.ListStatement | null;
   export function normalizeSQL(sql: string, databaseType: string): string;
 
   export function buildAppMap(data?: string | Record<string, unknown>): AppMapBuilder;
-  // TODO: define type for appmap state
-  export function deserializeAppmapState(stringInput: string): any;
+
+  export function serializeFilter(filter: AppMapFilter): FilterState;
+  export function mergeFilterState(first: FilterState, second: FilterState): FilterState;
+  export function filterStringToFilterState(stringInput: string): FilterState;
+  export function deserializeFilter(filterState?: FilterState | string): AppMapFilter;
+
   export function base64UrlEncode(text: string): string;
   export function base64UrlDecode(text: string): string;
 }

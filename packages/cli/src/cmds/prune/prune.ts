@@ -3,7 +3,7 @@ import JSONStream from 'JSONStream';
 import { basename } from 'path';
 import Yargs from 'yargs';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
-import { AppMap, pruneAppMap, pruneWithFilter } from './pruneAppMap';
+import { AppMap, PruneResult, pruneAppMap, pruneWithFilter } from './pruneAppMap';
 
 export async function fromFile(filePath: string): Promise<AppMap> {
   let data: AppMap = { events: [] };
@@ -119,28 +119,29 @@ export default {
     });
   },
 
-  handler: async (argv: any): Promise<void> => {
+  handler: async (argv: any): Promise<PruneResult> => {
     handleWorkingDirectory(argv.directory);
     const map = await fromFile(argv.file);
-    let appMap: AppMap;
 
+    let result: PruneResult;
     if (argv.filter) {
-      appMap = pruneWithFilter(map, argv.filter);
+      result = pruneWithFilter(map, argv.filter);
     } else if (argv.size) {
-      appMap = pruneAppMap(map, parseSize(argv.size));
+      result = pruneAppMap(map, parseSize(argv.size));
     } else {
       throw Error('Invalid usage');
     }
 
-    if (argv.auto) appMap.data.pruneFilter.auto = true;
+    if (argv.auto) result.appmap.data.pruneFilter.auto = true;
 
     if (argv.outputData) {
-      console.log(JSON.stringify(appMap));
+      console.log(JSON.stringify(result.appmap));
     } else {
       const outputPath = `${argv.outputDir}/${basename(argv.file)}`;
-      fs.writeFileSync(outputPath, JSON.stringify(appMap));
+      fs.writeFileSync(outputPath, JSON.stringify(result.appmap));
 
-      displayMessage(appMap, argv.format);
+      displayMessage(result.appmap, argv.format);
     }
+    return result;
   },
 };

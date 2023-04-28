@@ -11,9 +11,9 @@ export default class FingerprintQueue {
   private queue: QueueObject<string>;
   private pending = new Set<string>();
 
-  constructor(private size = 2, printCanonicalAppMaps = true) {
+  constructor(private size = 2) {
     // eslint-disable-next-line no-use-before-define
-    this.handler = new Fingerprinter(printCanonicalAppMaps);
+    this.handler = new Fingerprinter();
     this.queue = queue(async (appmapFileName) => {
       try {
         await this.handler.fingerprint(appmapFileName);
