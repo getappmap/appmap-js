@@ -11,28 +11,61 @@
       </div>
 
       <ul class="signin-ctas">
-        <li><a href="https://appmap.io/docs/diagrams/sequence-diagrams">Sequence diagrams</a></li>
-        <li>
+        <li @click="clickSignInLink('sequence-diagrams')">
+          <a href="https://appmap.io/docs/diagrams/sequence-diagrams">Sequence diagrams</a>
+        </li>
+        <li @click="clickSignInLink('trace-views')">
           <a
             href="https://appmap.io/docs/diagrams/how-to-use-appmaps.html#view-and-interact-with-the-trace-diagram"
             >Trace views</a
           >
         </li>
-        <li>
+        <li @click="clickSignInLink('dependency-maps')">
           <a
             href="https://appmap.io/docs/diagrams/how-to-use-appmaps.html#view-and-interact-with-the-dependency-map"
             >Dependency maps</a
           >
         </li>
-        <li><a href="https://appmap.io/docs/openapi">OpenAPI definitions</a></li>
+        <li @click="clickSignInLink('open-api')">
+          <a href="https://appmap.io/docs/openapi">OpenAPI definitions</a>
+        </li>
       </ul>
-      <a href="/" class="btn btn-primary" data-cy="sign-in-button" @click="signIn">Sign in</a>
+      <div class="signin-buttons">
+        <a href="/" class="btn btn-primary" data-cy="sign-in-button" @click="signIn">Sign in</a>
+      </div>
+
       <div class="your-data">
         <shieldIcon />
         <p data-cy="your-data-text">
           Authentication with GitHub or GitLab is used solely for issuing a license. AppMap runs in
           your code editor, so your AppMaps and your source code stay on your machine.
         </p>
+      </div>
+
+      <div class="signin-not-ready">
+        <span @click="toggle" :class="['accordion-toggle', expanded ? 'open' : 'closed']"
+          ><strong>Not ready to sign in?</strong> <chevronDown
+        /></span>
+        <div v-if="expanded">
+          <p>Here are some suggestions for learning more about AppMap:</p>
+          <ul>
+            <li @click="clickSignInLink('join-slack')">
+              <a href="https://appmap.io/slack" target="_blank"
+                >If you are unable to login, contact us in Slack for license key
+                assistance<VExternalLinkIcon
+              /></a>
+            </li>
+            <li @click="clickSignInLink('join-slack-codespaces-aws')">
+              <a href="https://appmap.io/slack" target="_blank"
+                >If using Codespaces or an AWS hosted dev environment, contact us in Slack for
+                license key assistance<VExternalLinkIcon
+              /></a>
+            </li>
+            <li @click="clickSignInLink('security-faq')">
+              <a href="https://appmap.io/security">Security FAQ<VExternalLinkIcon /></a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -41,17 +74,35 @@
 <script>
 import AppMapLogo from '@/assets/appmap-full-logo.svg';
 import shieldIcon from '@/assets/shield-icon.svg';
+import chevronDown from '@/assets/chevron-down.svg';
+import VExternalLinkIcon from '@/assets/external-link.svg';
 
 export default {
   name: 'v-sign-in',
   components: {
     AppMapLogo,
     shieldIcon,
+    chevronDown,
+    VExternalLinkIcon,
+  },
+
+  data() {
+    return {
+      expanded: false,
+    };
   },
 
   methods: {
     signIn() {
       this.$root.$emit('sign-in');
+    },
+
+    toggle() {
+      this.expanded = !this.expanded;
+    },
+
+    clickSignInLink(linkType) {
+      this.$root.$emit('click-sign-in-link', linkType);
     },
   },
 };
@@ -60,6 +111,7 @@ export default {
 <style scoped lang="scss">
 .signin-sidebar {
   background-color: $black;
+  font-family: $appland-text-font-family;
   color: $white;
   font-family: $appland-text-font-family;
   width: auto;
@@ -88,8 +140,10 @@ export default {
     color: $white;
     text-decoration: none;
     text-align: center;
+    width: 80%;
+    justify-content: center;
     &.btn-primary {
-      background-color: desaturate($powderblue, 20); //$hotpink;
+      background-color: desaturate($powderblue, 20);
       font-weight: 600;
       margin: 0 1.25rem;
       &:hover {
@@ -99,17 +153,66 @@ export default {
   }
 }
 
+.signin-not-ready {
+  &:hover {
+    cursor: pointer;
+  }
+  .accordion-toggle {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    justify-content: center;
+    &.closed svg {
+      transform: rotate(-90deg);
+    }
+    svg {
+      transition: $transition;
+      width: 1rem;
+      path {
+        fill: desaturate($powderblue, 20);
+      }
+    }
+  }
+  a {
+    color: desaturate($powderblue, 20);
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+    svg {
+      path {
+        fill: desaturate($powderblue, 20);
+      }
+      margin-left: 0.5rem;
+    }
+  }
+}
+
+.signin-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  a {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+  }
+}
 .signin-ctas {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.25rem;
   list-style-type: none;
   font-family: $appland-text-font-family;
   padding: 0;
   margin: 0;
+  overflow: hidden;
   li {
     background-color: #091118;
-    border-radius: 0.25rem;
+    border-radius: 0.5rem;
     padding: 0.8rem 1rem;
     font-weight: 600;
     transition: $transition;
