@@ -1,3 +1,10 @@
+# [@appland/components-v2.39.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.38.0...@appland/components-v2.39.0) (2023-04-28)
+
+
+### Features
+
+* add not ready to sign in links ([c032f51](https://github.com/getappmap/appmap-js/commit/c032f5191049150082ef5162f0b340b3c8513cc9))
+
 # [@appland/components-v2.38.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.37.0...@appland/components-v2.38.0) (2023-04-13)
 
 
