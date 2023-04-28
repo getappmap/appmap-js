@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.77.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.76.8...@appland/scanner-v1.77.0) (2023-04-28)
+
+
+### Features
+
+* Provide a global handler for SQL parse errors ([9f3a920](https://github.com/getappmap/appmap-js/commit/9f3a920347f7b29f07bfc2cdae33119edd62f5aa))
+
 # [@appland/scanner-v1.76.8](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.76.7...@appland/scanner-v1.76.8) (2023-03-10)
 
 
