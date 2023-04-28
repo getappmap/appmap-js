@@ -1,3 +1,11 @@
+# [@appland/sequence-diagram-v1.5.1](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.5.0...@appland/sequence-diagram-v1.5.1) (2023-04-28)
+
+
+### Bug Fixes
+
+* Don't try and parse truncated queries ([3c78ecd](https://github.com/getappmap/appmap-js/commit/3c78ecde4247ffe3e0381b0bad0099868aa8c6ae))
+* Null pointer in sequence diagram diff ([884ec6e](https://github.com/getappmap/appmap-js/commit/884ec6edb96460ee53e662afab78e01063c67fc4))
+
 # [@appland/sequence-diagram-v1.5.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.4.2...@appland/sequence-diagram-v1.5.0) (2023-03-16)
 
 
