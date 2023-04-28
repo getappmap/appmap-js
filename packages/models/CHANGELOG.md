@@ -1,3 +1,21 @@
+# [@appland/models-v2.6.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.5.0...@appland/models-v2.6.0) (2023-04-28)
+
+
+### Bug Fixes
+
+* Linter errors ([5353e0e](https://github.com/getappmap/appmap-js/commit/5353e0e6d09d07721a4c97575ce0f514b8270b56))
+* Linter errors ([33b814e](https://github.com/getappmap/appmap-js/commit/33b814e45f8fb9a07e6cbe7497b9989dde1d335d))
+* SQL parsing case where type is specified by variant is not ([d2456bf](https://github.com/getappmap/appmap-js/commit/d2456bfa069092d0bd5fbd482d2a8395ee1cfedf))
+
+
+### Features
+
+* Provide a global handler for SQL parse errors ([9f3a920](https://github.com/getappmap/appmap-js/commit/9f3a920347f7b29f07bfc2cdae33119edd62f5aa))
+* Provide dependencyFolders for hideExternal filter ([e6869c6](https://github.com/getappmap/appmap-js/commit/e6869c6aaf421ccd2d0001fc662ed69842098000))
+* Provide filter serialization in @appland/models ([35ed9c0](https://github.com/getappmap/appmap-js/commit/35ed9c0c5bf17e4239d6098ece5ea9b907472c3f))
+* Provide hideTree filter ([0629db1](https://github.com/getappmap/appmap-js/commit/0629db195af754c8138fdbc95275058ca0e28a72))
+* Write sql parse errors to a file ([a872190](https://github.com/getappmap/appmap-js/commit/a87219038c00227b5b7ce9bf1eb4c8fd5f5e7248))
+
 # [@appland/models-v2.5.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.4.3...@appland/models-v2.5.0) (2023-04-19)
 
 
