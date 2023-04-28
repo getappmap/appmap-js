@@ -1,3 +1,10 @@
+# [@appland/components-v2.40.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.39.0...@appland/components-v2.40.0) (2023-04-28)
+
+
+### Features
+
+* Provide filter serialization in @appland/models ([35ed9c0](https://github.com/getappmap/appmap-js/commit/35ed9c0c5bf17e4239d6098ece5ea9b907472c3f))
+
 # [@appland/components-v2.39.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.38.0...@appland/components-v2.39.0) (2023-04-28)
 
 
