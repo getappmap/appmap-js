@@ -1,3 +1,13 @@
+# [@appland/appmap-v3.77.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.76.0...@appland/appmap-v3.77.0) (2023-04-28)
+
+
+### Features
+
+* Provide a global handler for SQL parse errors ([9f3a920](https://github.com/getappmap/appmap-js/commit/9f3a920347f7b29f07bfc2cdae33119edd62f5aa))
+* Provide filter serialization in @appland/models ([35ed9c0](https://github.com/getappmap/appmap-js/commit/35ed9c0c5bf17e4239d6098ece5ea9b907472c3f))
+* Remove obsolete fingerprints from AppMap index ([4c53b92](https://github.com/getappmap/appmap-js/commit/4c53b927f8f702ac23ceb88c6bc4d663b6603e14))
+* Use appmap filter serialization in prune command ([04e8857](https://github.com/getappmap/appmap-js/commit/04e8857455cdb985b742ff16a3d40eb3bad7e3fd))
+
 # [@appland/appmap-v3.76.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.75.1...@appland/appmap-v3.76.0) (2023-04-25)
 
 
