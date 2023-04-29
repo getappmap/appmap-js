@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.77.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.77.0...@appland/scanner-v1.77.1) (2023-04-29)
+
+
+### Bug Fixes
+
+* Update @appland/models in scanner ([00ea775](https://github.com/getappmap/appmap-js/commit/00ea775592ff42290ef35192bf98a10fc1cbd077))
+
 # [@appland/scanner-v1.77.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.76.8...@appland/scanner-v1.77.0) (2023-04-28)
 
 
