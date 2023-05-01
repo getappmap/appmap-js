@@ -148,6 +148,7 @@ export const handler = async (argv: any) => {
 The base revision is ${baseRevision}.`
       );
     }
+
     if (typeArg === 'full') {
       console.warn(
         chalk.yellow(
@@ -156,10 +157,11 @@ that build on revision ${baseRevision}. However, you've specified --type=full. Y
 remove appmap_archive.json if your intention is to build a full archive. Otherwise, use --type=auto or --type=incremental.\n`
         )
       );
+      type = 'full';
     } else {
       metadata.baseRevision = baseRevision;
+      type = 'incremental';
     }
-    type = 'incremental';
   } else {
     if (typeArg === 'auto') {
       console.log(
