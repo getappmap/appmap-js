@@ -29,7 +29,11 @@ export async function prepareOutputDir(
 
   const diffDir = join(outputDir, RevisionName.Diff);
   if (await exists(diffDir)) {
-    if (!clobberOutputDir && !(await confirm(`Delete existing 'diff' in ${diffDir}?`, rl))) {
+    if (
+      !clobberOutputDir &&
+      process.stdout.isTTY &&
+      !(await confirm(`Delete existing 'diff' in ${diffDir}?`, rl))
+    ) {
       throw new ValidationError(
         `The 'diff' data directory ${diffDir} exists and you chose not to delete it`
       );
