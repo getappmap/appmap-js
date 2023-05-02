@@ -121,6 +121,20 @@ export default class MarkdownReport implements Report {
       }
     }
 
+    if (Object.keys(changeReport.findingDiff).length) {
+      const { findingDiff } = changeReport;
+
+      let newFindings = 0,
+        resolvedFindings = 0;
+      Object.keys(findingDiff).forEach((findingDomain) => {
+        newFindings += findingDiff[findingDomain].new.length;
+        resolvedFindings += findingDiff[findingDomain].resolved.length;
+      });
+      (findingDiff as any).newFindingCount = newFindings;
+      (findingDiff as any).resolvedFindingCount = resolvedFindings;
+      (findingDiff as any).findingChangeCount = newFindings + resolvedFindings;
+    }
+
     return Template(changeReport);
   }
 }
