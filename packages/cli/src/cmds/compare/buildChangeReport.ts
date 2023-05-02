@@ -38,7 +38,8 @@ export default async function buildChangeReport(
   baseRevision: string,
   headRevision: string,
   workingDir: string,
-  srcDir: string
+  srcDir: string,
+  deleteUnchanged: boolean
 ): Promise<ChangeReport> {
   const diffDiagrams = new DiffDiagrams();
 
@@ -122,7 +123,9 @@ export default async function buildChangeReport(
     }
   }
 
-  await deleteUnchangedAppMaps();
+  if (deleteUnchanged) {
+    await deleteUnchangedAppMaps();
+  }
 
   const baseAppMaps = new Set(await appmapData.appmaps(RevisionName.Base));
   const headAppMaps = new Set(await appmapData.appmaps(RevisionName.Head));
