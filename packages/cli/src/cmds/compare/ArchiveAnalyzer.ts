@@ -1,14 +1,26 @@
 import { executeCommand } from '../../lib/executeCommand';
 import { default as openAPICmd } from '../openapi';
 import { DefaultMaxAppMapSizeInMB } from '../../lib/fileSizeFilter';
+import { join } from 'path';
+import { tmpdir } from 'os';
+import { pid } from 'process';
+import { rm, writeFile } from 'fs/promises';
 
-export default async function analyzeArchive(revision: string, dir: string): Promise<void> {
-  const analyzer = new ArchiveAnalyzer(revision, dir);
+export default async function analyzeArchive(
+  revision: string,
+  dir: string,
+  scannerConfig: string | undefined
+): Promise<void> {
+  const analyzer = new ArchiveAnalyzer(revision, dir, scannerConfig);
   return analyzer.analyze();
 }
 
 class ArchiveAnalyzer {
-  constructor(public readonly revision: string, public readonly dir: string) {}
+  constructor(
+    public readonly revision: string,
+    public readonly dir: string,
+    public readonly scannerConfig?: string
+  ) {}
 
   async analyze() {
     await this.checkout();
@@ -31,7 +43,18 @@ class ArchiveAnalyzer {
   }
 
   private async runtimeAnalysis() {
-    await executeCommand(`npx @appland/scanner@latest scan --appmap-dir . --all`, true, true, true);
+    let command = `npx @appland/scanner@latest scan --appmap-dir . --all`;
+    let scannerConfigFile: string | undefined;
+    if (this.scannerConfig) {
+      scannerConfigFile = join(tmpdir(), `scanner-config-${pid}.yml`);
+      await writeFile(scannerConfigFile, this.scannerConfig, 'utf-8');
+      command += ` -c ${scannerConfigFile}`;
+    }
+    try {
+      await executeCommand(command, true, true, true);
+    } finally {
+      if (scannerConfigFile) await rm(scannerConfigFile, { force: true });
+    }
   }
 
   private async inWorkingDirectory<T>(dir: string, fn: () => Promise<T>) {

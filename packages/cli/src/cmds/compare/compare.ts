@@ -64,6 +64,12 @@ export const builder = (args: yargs.Argv) => {
     default: DefaultMaxAppMapSizeInMB,
   });
 
+  args.option('delete-unchanged', {
+    describe:
+      'whether to delete AppMaps from base and head that are unchanged according to sequence diagram comparison',
+    default: true,
+  });
+
   return args.strict();
 };
 
@@ -85,11 +91,20 @@ export const handler = async (argv: any) => {
     baseRevision: baseRevisionArg,
     outputDir: outputDirArg,
     headRevision: headRevisionArg,
+    deleteUnchanged,
   } = argv;
 
   handleWorkingDirectory(directory);
   const appmapConfig = await loadAppMapConfig();
   if (!appmapConfig) throw new Error(`Unable to load appmap.yml config file`);
+
+  let scannerConfig: string | undefined;
+  try {
+    scannerConfig = await readFile(join(srcDir, 'appmap-scanner.yml'), 'utf-8');
+    console.debug(`Using scanner configuration from appmap-scanner.yml`);
+  } catch (e) {
+    console.debug(`Unable to load appmap-scanner.yml. Will use default scanner configuration.`);
+  }
 
   const maxAppMapSizeInBytes = Math.round(parseFloat(maxSize) * 1024 * 1024);
 
@@ -109,13 +124,15 @@ export const handler = async (argv: any) => {
   const appMapFilter = deserializeFilter(compareConfig?.filter);
 
   for (const revisionName of [RevisionName.Base, RevisionName.Head]) {
-    let rebuildBecauseArchiveVersionChanged = false,
+    const appmapArchiveFiles = await promisify(glob)(
+      join(outputDir, revisionName, 'appmap_archive.*.json')
+    );
+
+    let rebuildBecauseArchiveVersionChanged = appmapArchiveFiles.length === 0,
       rebuildBecauseFilterChanged = false;
 
     // For each appmap_archive.json
-    for (const appmapArchiveFile of await promisify(glob)(
-      join(outputDir, revisionName, 'appmap_archive.*.json')
-    )) {
+    for (const appmapArchiveFile of appmapArchiveFiles) {
       const archiveMetadata = JSON.parse(
         await readFile(appmapArchiveFile, 'utf-8')
       ) as ArchiveMetadata;
@@ -153,10 +170,16 @@ export const handler = async (argv: any) => {
     [RevisionName.Head, headRevision],
   ] as [RevisionName, string][]) {
     // These need to be serialized, because a git checkout is performed.
-    await analyzeArchive(revision, join(outputDir, revisionName));
+    await analyzeArchive(revision, join(outputDir, revisionName), scannerConfig);
   }
 
-  const changeReport = await buildChangeReport(baseRevision, headRevision, outputDir, srcDir);
+  const changeReport = await buildChangeReport(
+    baseRevision,
+    headRevision,
+    outputDir,
+    srcDir,
+    deleteUnchanged
+  );
 
   await writeFile(join(outputDir, 'change-report.json'), JSON.stringify(changeReport, null, 2));
 
