@@ -8,6 +8,15 @@
 {{#if sequenceDiagramDiff}}[{{sequenceDiagramDiff}}](./{{sequenceDiagramDiff}}){{/if}}{{#unless sequenceDiagramDiff}}No structural changes detected{{/unless}}
 {{~/inline}}
 
+{{#*inline "finding"}}
+{{#each new }}
+New: {{ ruleTitle }} in [{{appMapFile}}](./head/{{appMapFile}})
+{{/each}}
+{{#each resolved }}
+Resolved: {{ ruleTitle }} in [{{appMapFile}}](./head/{{appMapFile}})
+{{/each}}
+{{~/inline}}
+
 | Summary | Status |
 | --- | --- |
 | [Test failures](#test-failures) | {{#if testFailures.length}}:warning: {{testFailures.length}} failed{{/if}}{{#unless testFailures.length}}:white_check_mark: All tests passed{{/unless}} |
@@ -20,12 +29,25 @@
   {{~#if apiDiff.nonBreakingDifferenceCount }}{{#if apiDiff.breakingDifferenceCount }},&nbsp;{{~/if}}:wrench: {{apiDiff.nonBreakingDifferenceCount}} non-breaking{{~/if}}
   {{~/if}}
   |
+| [Findings](#findings) |
+  {{~#with findingDiff}}
+  {{~#unless findingChangeCount }}
+  :white_check_mark: None
+  {{~/unless}}
+  {{~#if newFindingCount }}
+  :spider: {{newFindingCount}} new
+  {{~/if}}
+  {{~#if resolvedFindingCount }}
+  :ok: {{resolvedFindingCount}} resolved
+  {{~/if}}
+  {{~/with}}
+  |
 | [New AppMaps](#new-appmaps) | 
   {{~#unless newAppMaps.length }}
   :white_check_mark: None
   {{~/unless}}
   {{~#if newAppMaps.length }}
-  :wrench: {{newAppMaps.length}} new
+  :star: {{newAppMaps.length}} new
   {{~/if}}
   |
 | [Changed code behavior](#changed-code-behavior) |
@@ -33,7 +55,7 @@
   :white_check_mark: No changes
   {{~/unless}}
   {{~#if sequenceDiagramDiffSnippetCount }}
-  :wrench: {{sequenceDiagramDiffSnippetCount}} changes
+  :twisted_rightwards_arrows: {{sequenceDiagramDiffSnippetCount}} changes
   {{~/if}}
   |
 
@@ -128,6 +150,38 @@ The following code changes are related to this test:
 ```
 </details>
 
+{{/if}}
+
+{{#if findingDiff.findingChangeCount}}
+{{#with findingDiff}}
+
+<h2 id="findings">Findings</h2>
+
+{{#with Security}}
+_Security_
+
+{{> finding }}
+{{/with}}
+
+{{#with Performance}}
+_Performance_
+
+{{> finding }}
+{{/with}}
+
+{{#with Reliability}}
+_Reliability_
+
+{{> finding }}
+{{/with}}
+
+{{#with Maintainability}}
+_Maintainability_
+
+{{> finding }}
+{{/with}}
+
+{{/with}}
 {{/if}}
 
 {{#if newAppMaps.length }}
