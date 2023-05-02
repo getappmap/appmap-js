@@ -11,7 +11,6 @@ import {
   format as formatDiagram,
   Formatters,
   FormatType,
-  Diagram,
 } from '@appland/sequence-diagram';
 import { serveAndOpenSequenceDiagram } from '../lib/serveAndOpen';
 import assert from 'assert';
