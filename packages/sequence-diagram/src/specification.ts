@@ -8,6 +8,8 @@ export interface SequenceDiagramOptions {
   // default: []
   exclude?: CodeObjectId[];
   // default: []
+  include?: CodeObjectId[];
+  // default: []
   expand?: CodeObjectId[];
 
   // default: {}
@@ -55,7 +57,7 @@ export default class Specification {
   static build(appmap: AppMap, options: SequenceDiagramOptions): Specification {
     const excludeSet = new Set<string>(options.exclude || []);
     const expandSet = new Set<string>(options.expand || []);
-    const includedCodeObjectIds = new Set<string>();
+    const includedCodeObjectIds = new Set<string>(options.include || []);
 
     const hasNonPackageChildren = (co: AppMapCodeObject): boolean => {
       if (co.type !== 'package') return true;
