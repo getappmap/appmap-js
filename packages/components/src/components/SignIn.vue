@@ -39,33 +39,8 @@
         <p data-cy="your-data-text">
           Authentication with GitHub or GitLab is used solely for issuing a license. AppMap runs in
           your code editor, so your AppMaps and your source code stay on your machine.
+          <a href="https://appmap.io/security">Security FAQ<VExternalLinkIcon /></a>
         </p>
-      </div>
-
-      <div class="signin-not-ready">
-        <span @click="toggle" :class="['accordion-toggle', expanded ? 'open' : 'closed']"
-          ><strong>Not ready to sign in?</strong> <chevronDown
-        /></span>
-        <div v-if="expanded">
-          <p>Here are some suggestions for learning more about AppMap:</p>
-          <ul>
-            <li @click="clickSignInLink('join-slack')">
-              <a href="https://appmap.io/slack" target="_blank"
-                >If you are unable to login, contact us in Slack for license key
-                assistance<VExternalLinkIcon
-              /></a>
-            </li>
-            <li @click="clickSignInLink('join-slack-codespaces-aws')">
-              <a href="https://appmap.io/slack" target="_blank"
-                >If using Codespaces or an AWS hosted dev environment, contact us in Slack for
-                license key assistance<VExternalLinkIcon
-              /></a>
-            </li>
-            <li @click="clickSignInLink('security-faq')">
-              <a href="https://appmap.io/security">Security FAQ<VExternalLinkIcon /></a>
-            </li>
-          </ul>
-        </div>
       </div>
     </div>
   </div>
@@ -74,7 +49,6 @@
 <script>
 import AppMapLogo from '@/assets/appmap-full-logo.svg';
 import shieldIcon from '@/assets/shield-icon.svg';
-import chevronDown from '@/assets/chevron-down.svg';
 import VExternalLinkIcon from '@/assets/external-link.svg';
 
 export default {
@@ -82,23 +56,12 @@ export default {
   components: {
     AppMapLogo,
     shieldIcon,
-    chevronDown,
     VExternalLinkIcon,
-  },
-
-  data() {
-    return {
-      expanded: false,
-    };
   },
 
   methods: {
     signIn() {
       this.$root.$emit('sign-in');
-    },
-
-    toggle() {
-      this.expanded = !this.expanded;
     },
 
     clickSignInLink(linkType) {
@@ -247,6 +210,18 @@ export default {
   }
   p {
     margin: 0;
+  }
+  a {
+    color: $brightblue;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    svg {
+      width: 100%;
+      max-width: 14px;
+      height: 14px;
+      fill: $brightblue;
+    }
   }
 }
 
