@@ -1,3 +1,10 @@
+# [@appland/components-v2.41.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.40.0...@appland/components-v2.41.0) (2023-05-05)
+
+
+### Features
+
+* remove accordion and relocate security-faq link ([7d5ea81](https://github.com/getappmap/appmap-js/commit/7d5ea813aa487475bedb526543c36e0d63f95a53))
+
 # [@appland/components-v2.40.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.39.0...@appland/components-v2.40.0) (2023-04-28)
 
 
