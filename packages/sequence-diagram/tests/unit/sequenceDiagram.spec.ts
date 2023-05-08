@@ -132,4 +132,19 @@ describe('Sequence diagram', () => {
       });
     });
   });
+  describe('include', () => {
+    it('adds the correct classes', () => {
+      const include = ['class:lib/models/Post', 'class:lib/models/User'];
+      const diagram = loadDiagram(SHOW_USER_APPMAP, { loops: true, include });
+      const expectedActors = [
+        { id: 'package:lib/controllers', name: 'controllers', order: 1000 },
+        { id: 'class:lib/models/User', name: 'User', order: 2000 },
+        { id: 'package:lib/database', name: 'database', order: 3000 },
+        { id: 'package:lib/views/users', name: 'users', order: 4000 },
+        { id: 'class:lib/models/Post', name: 'Post', order: 5000 },
+        { id: 'package:lib/views/posts', name: 'posts', order: 6000 },
+      ];
+      assert.deepStrictEqual(diagram.actors, expectedActors);
+    });
+  });
 });
