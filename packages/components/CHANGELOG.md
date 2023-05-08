@@ -1,3 +1,10 @@
+# [@appland/components-v2.41.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.41.0...@appland/components-v2.41.1) (2023-05-08)
+
+
+### Bug Fixes
+
+* bump models to 2.6.0 in components ([c772134](https://github.com/getappmap/appmap-js/commit/c77213493900b7ebb5add01343ff54c0d4c1169d))
+
 # [@appland/components-v2.41.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.40.0...@appland/components-v2.41.0) (2023-05-05)
 
 
