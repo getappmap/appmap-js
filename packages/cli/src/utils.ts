@@ -102,8 +102,6 @@ export async function processFiles(
   if (q.length()) await q.drain();
 }
 
-
-
 /**
  * Finds all occurrances of `fileName` within a base directory. Each match must be a file, not a directory.
  * This is optimized compared to `processFiles` because it does not use `glob`, which is pretty slow for this use case.
@@ -124,11 +122,13 @@ export async function processNamedFiles(
     }
   };
 
+  let matchCount = 0;
   const processDir = async (dir: string) => {
     // If the directory contains the target fileName, add it to the process queue and return.
     const targetFileName = join(dir, fileName);
     const target = await stats(targetFileName);
     if (target && target.isFile()) {
+      matchCount += 1;
       q.push(targetFileName);
       return;
     }
@@ -143,7 +143,7 @@ export async function processNamedFiles(
   };
   await processDir(baseDir);
 
-  if (q.length()) await q.drain();
+  if (matchCount) await q.drain();
 }
 
 /**
