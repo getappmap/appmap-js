@@ -34,11 +34,6 @@ export const PackageVersion = {
   version: process.env.npm_package_version,
 };
 
-if (!process.env.npm_package_version)
-  console.log(
-    `Note: The AppMap archive won't contain the version of @appland/appmap because process.env.npm_package_version is not available.`
-  );
-
 export const command = 'archive';
 export const describe = 'Build an AppMap archive from a directory containing AppMaps';
 
@@ -88,6 +83,11 @@ commit of the current git revision may not be the one that triggered the build.`
 
 export const handler = async (argv: any) => {
   verbose(argv.verbose);
+
+  if (!process.env.npm_package_version)
+    console.log(
+      `Note: The AppMap archive won't contain the version of @appland/appmap because process.env.npm_package_version is not available.`
+    );
 
   handleWorkingDirectory(argv.directory);
   const workingDirectory = process.cwd();
