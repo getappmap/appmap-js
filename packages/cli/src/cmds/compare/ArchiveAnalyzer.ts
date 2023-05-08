@@ -24,10 +24,14 @@ class ArchiveAnalyzer {
 
   async analyze() {
     await this.checkout();
-    await this.inWorkingDirectory(this.dir, async () => {
-      await this.openAPI();
-      await this.runtimeAnalysis();
-    });
+    try {
+      await this.inWorkingDirectory(this.dir, async () => {
+        await this.openAPI();
+        await this.runtimeAnalysis();
+      });
+    } finally {
+      await executeCommand(`git checkout -`);
+    }
   }
 
   private async checkout() {
