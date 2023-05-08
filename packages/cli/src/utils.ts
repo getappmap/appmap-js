@@ -6,6 +6,7 @@ import { promisify } from 'util';
 import { join } from 'path';
 import assert from 'assert';
 import { Event, ReturnValueObject } from '@appland/models';
+import { readdir, stat } from 'fs/promises';
 
 const StartTime = Date.now();
 const renameFile = promisify(gracefulFs.rename);
@@ -92,15 +93,57 @@ export async function processFiles(
   fileCountFn = (count: number) => {}
 ): Promise<void> {
   const q = queue(fn, 5);
-  q.pause();
   const files = await promisify(glob)(pattern);
   if (fileCountFn) {
     fileCountFn(files.length);
   }
   if (files.length === 0) return;
   files.forEach((file) => q.push(file));
-  q.resume();
-  await q.drain();
+  if (q.length()) await q.drain();
+}
+
+
+
+/**
+ * Finds all occurrances of `fileName` within a base directory. Each match must be a file, not a directory.
+ * This is optimized compared to `processFiles` because it does not use `glob`, which is pretty slow for this use case.
+ * It also begins processing right away, rather than waiting for all files to be enumerated.
+ */
+export async function processNamedFiles(
+  baseDir: string,
+  fileName: string,
+  fn: AsyncWorker<string>
+): Promise<void> {
+  const q = queue(fn, 2);
+
+  const stats = async (fileName: string): Promise<Stats | undefined> => {
+    try {
+      return await stat(fileName);
+    } catch {
+      // Ignore
+    }
+  };
+
+  const processDir = async (dir: string) => {
+    // If the directory contains the target fileName, add it to the process queue and return.
+    const targetFileName = join(dir, fileName);
+    const target = await stats(targetFileName);
+    if (target && target.isFile()) {
+      q.push(targetFileName);
+      return;
+    }
+
+    // Otherwise, recurse on all subdirectories.
+    for (const childName of await readdir(dir)) {
+      const child = await stats(join(dir, childName));
+      if (child && child.isDirectory()) {
+        await processDir(join(dir, childName));
+      }
+    }
+  };
+  await processDir(baseDir);
+
+  if (q.length()) await q.drain();
 }
 
 /**
