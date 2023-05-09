@@ -1,3 +1,10 @@
+# [@appland/sequence-diagram-v1.5.2](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.5.1...@appland/sequence-diagram-v1.5.2) (2023-05-09)
+
+
+### Bug Fixes
+
+* seq diagram expand option includes child classes ([5febef8](https://github.com/getappmap/appmap-js/commit/5febef82a67a466e5eb0e52342c5788830a3bbde))
+
 # [@appland/sequence-diagram-v1.5.1](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.5.0...@appland/sequence-diagram-v1.5.1) (2023-04-28)
 
 
