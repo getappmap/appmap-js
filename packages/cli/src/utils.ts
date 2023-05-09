@@ -92,14 +92,15 @@ export async function processFiles(
   fn: AsyncWorker<string>,
   fileCountFn = (count: number) => {}
 ): Promise<void> {
-  const q = queue(fn, 5);
   const files = await promisify(glob)(pattern);
   if (fileCountFn) {
     fileCountFn(files.length);
   }
   if (files.length === 0) return;
+
+  const q = queue(fn, 2);
   files.forEach((file) => q.push(file));
-  if (q.length()) await q.drain();
+  await q.drain();
 }
 
 /**
