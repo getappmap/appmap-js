@@ -64,14 +64,14 @@ export default class Specification {
     };
 
     const includeCodeObjects = (co: AppMapCodeObject): void => {
+      if (co.type === 'class' && co.packageObject && expandSet.has(co.packageObject.fqid)) {
+        includedCodeObjectIds.add(co.fqid);
+        co.children.forEach((child) => includeCodeObjects(child));
+      }
+
       if (!this.DefaultActorTypes.includes(co.type)) return;
       if (excludeSet.has(co.fqid)) return;
-
-      if (co.parent && expandSet.has(co.parent.fqid)) {
-        includedCodeObjectIds.add(co.fqid);
-      } else if (!expandSet.has(co.fqid) && hasNonPackageChildren(co)) {
-        includedCodeObjectIds.add(co.fqid);
-      }
+      if (!expandSet.has(co.fqid) && hasNonPackageChildren(co)) includedCodeObjectIds.add(co.fqid);
 
       co.children.forEach((child) => includeCodeObjects(child));
     };
