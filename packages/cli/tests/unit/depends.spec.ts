@@ -20,7 +20,7 @@ describe('Depends', () => {
   beforeAll(async () => verbose(process.env.DEBUG === 'true'));
   beforeEach(async () => {
     appMapDir = tmp.dirSync().name;
-    expected = join(appMapDir, 'user_page_scenario').replace(/\\/g, '/');
+    expected = join(appMapDir, 'user_page_scenario');
     userModelFilePath = join(appMapDir, 'app/models/user.rb');
 
     fs.copySync(fixtureDir, appMapDir);
