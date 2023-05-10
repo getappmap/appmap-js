@@ -458,6 +458,8 @@ import {
   SELECT_LABEL,
   POP_SELECTION_STACK,
   CLEAR_SELECTION_STACK,
+  SET_EXPANDED_PACKAGES,
+  CLEAR_EXPANDED_PACKAGES,
 } from '../store/vsCode';
 
 export default {
@@ -783,6 +785,14 @@ export default {
       return this.$store.state.currentView;
     },
 
+    expandedPackages() {
+      return this.$store.state.expandedPackages;
+    },
+
+    baseActors() {
+      return this.$store.state.baseActors;
+    },
+
     isViewingComponent() {
       return this.currentView === VIEW_COMPONENT;
     },
@@ -910,6 +920,8 @@ export default {
       const state = {};
 
       state.currentView = this.currentView;
+      if (this.expandedPackages.length > 0)
+        state.expandedPackages = this.expandedPackages.map((expandedPackage) => expandedPackage.id);
 
       if (this.selectedObject && this.selectedObject.fqid) {
         state.selectedObject = this.selectedObject.fqid;
@@ -1025,9 +1037,16 @@ export default {
           } while (false);
         }
 
-        const { filters } = state;
+        const { filters, expandedPackages } = state;
         if (filters) {
           this.filters = deserializeFilter(filters);
+        }
+
+        if (expandedPackages) {
+          const codeObjects = expandedPackages.map((expandedPackageId) =>
+            this.filteredAppMap.classMap.codeObjectFromId(expandedPackageId)
+          );
+          this.$store.commit(SET_EXPANDED_PACKAGES, codeObjects);
         }
 
         this.$nextTick(() => {
@@ -1062,6 +1081,7 @@ export default {
     },
 
     resetDiagram() {
+      this.$store.commit(CLEAR_EXPANDED_PACKAGES);
       this.clearSelection();
       this.resetFilters();
       this.$root.$emit('resetDiagram');
@@ -1867,9 +1887,6 @@ code {
     padding: 0;
     span {
       display: none;
-    }
-    svg {
-      fill: $gray4;
     }
   }
 }

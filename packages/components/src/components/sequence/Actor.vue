@@ -5,13 +5,38 @@
       <div class="on-top">
         <div class="sequence-actor" :data-actor-id="actor.id">
           <div ref="label_container" :class="labelClasses" @click="selectCodeObject">
-            <span class="label"> {{ actor.name }} </span>
             <template v-if="interactive">
-              <span class="hide-container" @click.stop="hideCodeObject">
-                <XIcon />
-              </span>
+              <div class="control-wrap">
+                <span class="hide-container" @click.stop="hideCodeObject">
+                  <XIcon />
+                </span>
+                <v-popper
+                  class="hover-text-popper"
+                  text="Expand this package to its classes"
+                  placement="left"
+                  text-align="left"
+                  v-if="expandable"
+                >
+                  <div class="expand-actor" @click.stop="onExpand"><ExpandIcon /></div>
+                </v-popper>
+                <v-popper
+                  class="hover-text-popper"
+                  text="Collapse this class to its parent package"
+                  placement="left"
+                  text-align="left"
+                  v-if="isClass"
+                >
+                  <div class="collapse-actor" @click.stop="onCollapse"><CollapseIcon /></div>
+                </v-popper>
+              </div>
             </template>
+            <span :class="['label', type]">
+              {{ actor.name }}
+              <span v-if="expandable">({{ numClasses }})</span>
+            </span>
           </div>
+          <div v-if="expandable" class="label-container stack stack1"></div>
+          <div v-if="expandable" class="label-container stack stack2"></div>
         </div>
       </div>
     </div>
@@ -20,14 +45,20 @@
 
 <script lang="ts">
 // @ts-nocheck
-import { SELECT_CODE_OBJECT } from '@/store/vsCode';
+import { SELECT_CODE_OBJECT, ADD_EXPANDED_PACKAGE, REMOVE_EXPANDED_PACKAGE } from '@/store/vsCode';
 import { CodeObject } from '@appland/models';
 import XIcon from '@/assets/x-icon.svg';
+import VPopper from '@/components/Popper.vue';
+import ExpandIcon from '@/assets/expand-icon.svg';
+import CollapseIcon from '@/assets/collapse-icon.svg';
 
 export default {
   name: 'v-sequence-actor',
   components: {
     XIcon,
+    VPopper,
+    ExpandIcon,
+    CollapseIcon,
   },
 
   props: {
@@ -76,6 +107,27 @@ export default {
         interactive: this.interactive,
       };
     },
+    type() {
+      if (this.actor.id && this.actor.id.includes(':')) return this.actor.id.split(':')[0];
+      return '';
+    },
+    expandable() {
+      return this.isPackage && this.numClasses && this.numClasses > 1;
+    },
+    isPackage() {
+      return this.actor.id.includes('package');
+    },
+    isClass() {
+      return this.actor.id.includes('class');
+    },
+    numClasses() {
+      const match = this.actor.id.match(/:(?<id>.*)/);
+      if (match && match.groups && this.appMap) {
+        const codeObj = this.appMap.classMap.codeObjectFromId(match.groups.id);
+        if (codeObj) return codeObj.classes.length;
+      }
+      return 0;
+    },
   },
   methods: {
     hideCodeObject() {
@@ -88,6 +140,24 @@ export default {
         );
         if (codeObject) this.$store.commit(SELECT_CODE_OBJECT, codeObject);
       }
+    },
+    codeObjectFromActor() {
+      const match = this.actor.id.match(/:(?<id>.*)/);
+
+      if (match && match.groups) {
+        const codeObj = this.appMap.classMap.codeObjectFromId(match.groups.id);
+        if (codeObj) return codeObj;
+      }
+    },
+    onExpand() {
+      const codeObj = this.codeObjectFromActor();
+      if (codeObj) {
+        this.$store.commit(ADD_EXPANDED_PACKAGE, codeObj);
+      }
+    },
+    onCollapse() {
+      const codeObj = this.codeObjectFromActor();
+      if (codeObj) this.$store.commit(REMOVE_EXPANDED_PACKAGE, codeObj);
     },
   },
   watch: {
@@ -108,7 +178,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$min-width: 160px; // See: CallLabel .label wax-width
+$min-width: 175px; // See: CallLabel .label wax-width
 $min-height: 3rem;
 
 .offset {
@@ -131,6 +201,7 @@ $min-height: 3rem;
   text-overflow: ellipsis;
   overflow: visible;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.55);
+  z-index: 5;
 
   min-width: 145px;
   min-height: 60px;
@@ -144,24 +215,61 @@ $min-height: 3rem;
   background-color: $black;
   color: $white;
   font-size: 9pt;
-  border: 2px solid lighten($gray4, 15);
-  border-radius: 0.25rem;
-  display: flex;
+  border: 1px solid $gray4; //lighten($gray4, 15);
+  border-radius: 0;
+  display: grid;
+  grid-template-rows: 20px auto;
+  grid-template-columns: 100%;
   justify-content: center;
   align-items: center;
+  transition: $transition;
 
   &--selected {
-    background-color: #444e69;
+    background-color: $actor-highlight;
+    .label {
+      text-shadow: #181b24 0 0 12px;
+      &.http {
+        color: #bd64e1;
+      }
+
+      &.external-service {
+        color: $yellow;
+      }
+      &.package {
+        color: $teal;
+      }
+      &.class {
+        color: lighten($blue, 13);
+      }
+      &.database {
+        color: lighten($royal, 13);
+      }
+    }
   }
 
-  .hide-container {
-    position: absolute;
-    display: inline-block;
-    right: 0px;
-    top: 0px;
+  .label {
+    padding-bottom: 1rem;
+  }
+
+  .hover-text-popper {
     z-index: 99999;
-    padding: 5px;
-    border-radius: 4px;
+  }
+  .expand-actor,
+  .collapse-actor {
+    z-index: 99999;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: -1px;
+    transition: $transition;
+    color: #e3e5e854;
+    &:hover {
+      color: $white;
+      cursor: pointer;
+    }
+  }
+  .hide-container {
+    display: inline-block;
+    z-index: 99999;
 
     &:hover {
       color: blue;
@@ -177,14 +285,51 @@ $min-height: 3rem;
       }
     }
   }
+
+  .control-wrap {
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0.5rem;
+  }
+
+  .http {
+    color: #8e45aa;
+  }
+
+  .external-service {
+    color: $yellow;
+  }
+  .package {
+    color: $teal;
+  }
+  .class {
+    color: $blue;
+  }
+  .database {
+    color: $royal;
+  }
+}
+
+.label-container.stack {
+  //border: 2px solid $black;
+  border-radius: 0rem;
+  &.stack1 {
+    z-index: 4;
+    margin: 8px 0 0 6px;
+    border: 1px solid darken($gray4, 15);
+  }
+  &.stack2 {
+    z-index: 3;
+    margin: 14px 0 0 12px;
+    border: 1px solid darken($gray4, 30);
+  }
 }
 
 .interactive.label-container:hover {
   cursor: pointer;
-  background-color: #444e69;
-  .hide-container {
-    background-color: #444e69;
-  }
 }
 
 .lane {
