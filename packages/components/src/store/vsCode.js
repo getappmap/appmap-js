@@ -14,6 +14,8 @@ export const SET_FOCUSED_EVENT = 'setFocusedEvent';
 export const VIEW_COMPONENT = 'viewComponent';
 export const VIEW_SEQUENCE = 'viewSequence';
 export const VIEW_FLOW = 'viewFlow';
+export const ADD_EXPANDED_PACKAGE = 'addExpandedPackage';
+export const REMOVE_EXPANDED_PACKAGE = 'removeExpandedPackage';
 export const DEFAULT_VIEW = VIEW_COMPONENT;
 
 export function buildStore() {
@@ -24,6 +26,7 @@ export function buildStore() {
       currentView: DEFAULT_VIEW,
       selectedLabel: null,
       focusedEvent: null,
+      expandedPackages: [],
     },
 
     getters: {
@@ -43,6 +46,9 @@ export function buildStore() {
       },
       focusedEvent(state) {
         return state.focusedEvent;
+      },
+      expandedPackages(state) {
+        return state.expandedPackages;
       },
     },
 
@@ -94,6 +100,16 @@ export function buildStore() {
       // This action does not imply that the sidebar display should be changed.
       [SET_FOCUSED_EVENT](state, event) {
         state.focusedEvent = event;
+      },
+
+      [ADD_EXPANDED_PACKAGE](state, packageToAdd) {
+        state.expandedPackages.push(packageToAdd);
+      },
+
+      [REMOVE_EXPANDED_PACKAGE](state, subClass) {
+        state.expandedPackages = state.expandedPackages.filter(
+          (expandedPackage) => expandedPackage.fqid !== subClass.packageObject.fqid
+        );
       },
     },
   });

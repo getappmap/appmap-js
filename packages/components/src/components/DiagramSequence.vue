@@ -96,13 +96,47 @@ export default {
     isLoading() {
       return this.diagram === undefined;
     },
+    baseActors() {
+      let { appMap } = this.$store.state;
+      if (!appMap) appMap = this.appMap;
+
+      // TODO: optimize for performance building actor priority separately
+      const specification = Specification.build(appMap, { loops: true });
+      const diagram = buildDiagram('<an AppMap file>', appMap, specification);
+
+      return diagram.actors;
+    },
+    priority() {
+      const priority = {};
+
+      this.baseActors.forEach((actor) => (priority[actor.id] = actor.order));
+
+      this.$store.state.expandedPackages.forEach((expandedPackage) => {
+        const basePriority = priority[expandedPackage.fqid];
+        delete priority[expandedPackage.fqid];
+
+        expandedPackage.classes.forEach((subClass, index) => {
+          priority[subClass.fqid] = basePriority + index;
+        });
+      });
+
+      return priority;
+    },
+    expand() {
+      return this.$store.state.expandedPackages.map((expandedPackage) => expandedPackage.fqid);
+    },
     diagram() {
       let result: Diagram | undefined;
       if (this.serializedDiagram) {
         result = unparseDiagram(this.serializedDiagram as Diagram);
       } else if (this.appMap) {
         const appMapObj: AppMap | undefined = this.appMap as AppMap;
-        const specification = Specification.build(appMapObj, { loops: true });
+        const { priority, expand } = this;
+        const specification = Specification.build(appMapObj, {
+          loops: true,
+          priority,
+          expand,
+        });
         result = buildDiagram('<an AppMap file>', appMapObj, specification);
       }
       return result;

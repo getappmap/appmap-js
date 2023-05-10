@@ -5,12 +5,35 @@
       <div class="on-top">
         <div class="sequence-actor" :data-actor-id="actor.id">
           <div ref="label_container" :class="labelClasses" @click="selectCodeObject">
-            <span class="label"> {{ actor.name }} </span>
             <template v-if="interactive">
-              <span class="hide-container" @click.stop="hideCodeObject">
-                <XIcon />
-              </span>
+              <div class="control-wrap">
+                <span class="hide-container" @click.stop="hideCodeObject">
+                  <XIcon />
+                </span>
+                <v-popper
+                  class="hover-text-popper"
+                  text="Expand this package to its classes"
+                  placement="left"
+                  text-align="left"
+                  v-if="expandable"
+                >
+                  <div class="expand-actor" @click.stop="onExpand"><ExpandIcon /></div>
+                </v-popper>
+                <v-popper
+                  class="hover-text-popper"
+                  text="Collapse this class to its parent package"
+                  placement="left"
+                  text-align="left"
+                  v-if="isClass"
+                >
+                  <div class="collapse-actor" @click.stop="onCollapse"><CollapseIcon /></div>
+                </v-popper>
+              </div>
             </template>
+            <span class="label">
+              {{ actor.name }}
+              <span v-if="expandable">({{ numClasses }})</span>
+            </span>
           </div>
         </div>
       </div>
@@ -20,14 +43,20 @@
 
 <script lang="ts">
 // @ts-nocheck
-import { SELECT_CODE_OBJECT } from '@/store/vsCode';
+import { SELECT_CODE_OBJECT, ADD_EXPANDED_PACKAGE, REMOVE_EXPANDED_PACKAGE } from '@/store/vsCode';
 import { CodeObject } from '@appland/models';
 import XIcon from '@/assets/x-icon.svg';
+import VPopper from '@/components/Popper.vue';
+import ExpandIcon from '@/assets/expand-icon.svg';
+import CollapseIcon from '@/assets/collapse-icon.svg';
 
 export default {
   name: 'v-sequence-actor',
   components: {
     XIcon,
+    VPopper,
+    ExpandIcon,
+    CollapseIcon,
   },
 
   props: {
@@ -76,6 +105,23 @@ export default {
         interactive: this.interactive,
       };
     },
+    expandable() {
+      return this.isPackage && this.numClasses && this.numClasses > 1;
+    },
+    isPackage() {
+      return this.actor.id.includes('package');
+    },
+    isClass() {
+      return this.actor.id.includes('class');
+    },
+    numClasses() {
+      const match = this.actor.id.match(/:(?<id>.*)/);
+      if (match && match.groups) {
+        const codeObj = this.appMap.classMap.codeObjectFromId(match.groups.id);
+        if (codeObj) return codeObj.classes.length;
+      }
+      return 0;
+    },
   },
   methods: {
     hideCodeObject() {
@@ -88,6 +134,24 @@ export default {
         );
         if (codeObject) this.$store.commit(SELECT_CODE_OBJECT, codeObject);
       }
+    },
+    codeObjectFromActor() {
+      const match = this.actor.id.match(/:(?<id>.*)/);
+
+      if (match && match.groups) {
+        const codeObj = this.appMap.classMap.codeObjectFromId(match.groups.id);
+        if (codeObj) return codeObj;
+      }
+    },
+    onExpand() {
+      const codeObj = this.codeObjectFromActor();
+      if (codeObj) {
+        this.$store.commit(ADD_EXPANDED_PACKAGE, codeObj);
+      }
+    },
+    onCollapse() {
+      const codeObj = this.codeObjectFromActor();
+      if (codeObj) this.$store.commit(REMOVE_EXPANDED_PACKAGE, codeObj);
     },
   },
   watch: {
@@ -144,9 +208,9 @@ $min-height: 3rem;
   background-color: $black;
   color: $white;
   font-size: 9pt;
-  border: 2px solid lighten($gray4, 15);
-  border-radius: 0.25rem;
-  display: flex;
+  display: grid;
+  grid-template-rows: 20px auto;
+  grid-template-columns: 100%;
   justify-content: center;
   align-items: center;
 
@@ -154,14 +218,25 @@ $min-height: 3rem;
     background-color: #444e69;
   }
 
-  .hide-container {
-    position: absolute;
-    display: inline-block;
-    right: 0px;
-    top: 0px;
+  .hover-text-popper {
     z-index: 99999;
-    padding: 5px;
-    border-radius: 4px;
+  }
+  .expand-actor,
+  .collapse-actor {
+    z-index: 99999;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: -1px;
+    transition: $transition;
+    color: #e3e5e854;
+    &:hover {
+      color: $white;
+      cursor: pointer;
+    }
+  }
+  .hide-container {
+    display: inline-block;
+    z-index: 99999;
 
     &:hover {
       color: blue;
@@ -176,6 +251,15 @@ $min-height: 3rem;
         opacity: 93%;
       }
     }
+  }
+
+  .control-wrap {
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0.5rem;
   }
 }
 
