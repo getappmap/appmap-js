@@ -122,7 +122,7 @@ export default {
     },
     numClasses() {
       const match = this.actor.id.match(/:(?<id>.*)/);
-      if (match && match.groups) {
+      if (match && match.groups && this.appMap) {
         const codeObj = this.appMap.classMap.codeObjectFromId(match.groups.id);
         if (codeObj) return codeObj.classes.length;
       }
