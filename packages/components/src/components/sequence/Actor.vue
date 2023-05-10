@@ -35,6 +35,8 @@
               <span v-if="expandable">({{ numClasses }})</span>
             </span>
           </div>
+          <div v-if="expandable" class="label-container stack stack1"></div>
+          <div v-if="expandable" class="label-container stack stack2"></div>
         </div>
       </div>
     </div>
@@ -176,7 +178,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$min-width: 160px; // See: CallLabel .label wax-width
+$min-width: 175px; // See: CallLabel .label wax-width
 $min-height: 3rem;
 
 .offset {
@@ -308,6 +310,21 @@ $min-height: 3rem;
   }
   .database {
     color: $royal;
+  }
+}
+
+.label-container.stack {
+  //border: 2px solid $black;
+  border-radius: 0rem;
+  &.stack1 {
+    z-index: 4;
+    margin: 8px 0 0 6px;
+    border: 1px solid darken($gray4, 15);
+  }
+  &.stack2 {
+    z-index: 3;
+    margin: 14px 0 0 12px;
+    border: 1px solid darken($gray4, 30);
   }
 }
 
