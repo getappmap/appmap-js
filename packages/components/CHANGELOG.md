@@ -1,3 +1,10 @@
+# [@appland/components-v2.42.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.41.1...@appland/components-v2.42.0) (2023-05-10)
+
+
+### Features
+
+* expand packages to classes in seq diagram ([9c69ac7](https://github.com/getappmap/appmap-js/commit/9c69ac720dff099afc6f92d8ac45e38a9e1c11aa))
+
 # [@appland/components-v2.41.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.41.0...@appland/components-v2.41.1) (2023-05-08)
 
 
