@@ -18,6 +18,33 @@ context('AppMap sequence diagram', () => {
       cy.get('.tabs__controls .popper__button').click();
       cy.get('.filters .filters__hide-item').should('have.length', 1);
     });
+
+    it('expands packages to classes', () => {
+      cy.get('.sequence-diagram').children('.lane').should('have.length', 9);
+      cy.get('.sequence-actor[data-actor-id="package:openssl"] .expand-actor').click();
+
+      const children = cy.get('.sequence-diagram').children('.lane');
+      children.should('have.length', 10);
+      const expected = [
+        'HTTP server requests',
+        'app/controllers',
+        'Instance',
+        'Cipher',
+        'active_support',
+        'json',
+        'app/helpers',
+        'lib',
+        '127.0.0.1:9515',
+        'Database',
+      ];
+
+      children.each(($el, index) => {
+        cy.wrap($el).should('contain.text', expected[index]);
+      });
+
+      cy.get('.sequence-actor[data-actor-id="class:openssl/Digest::Instance"]').should('exist');
+      cy.get('.sequence-actor[data-actor-id="class:openssl/OpenSSL::Cipher"]').should('exist');
+    });
   });
 
   context('with no data provided', () => {
