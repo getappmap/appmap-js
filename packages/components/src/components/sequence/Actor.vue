@@ -30,7 +30,7 @@
                 </v-popper>
               </div>
             </template>
-            <span class="label">
+            <span :class="['label', type]">
               {{ actor.name }}
               <span v-if="expandable">({{ numClasses }})</span>
             </span>
@@ -104,6 +104,10 @@ export default {
         'label-container--selected': this.actor === this.selectedActor,
         interactive: this.interactive,
       };
+    },
+    type() {
+      if (this.actor.id && this.actor.id.includes(':')) return this.actor.id.split(':')[0];
+      return '';
     },
     expandable() {
       return this.isPackage && this.numClasses && this.numClasses > 1;
@@ -195,6 +199,7 @@ $min-height: 3rem;
   text-overflow: ellipsis;
   overflow: visible;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.55);
+  z-index: 5;
 
   min-width: 145px;
   min-height: 60px;
@@ -208,14 +213,40 @@ $min-height: 3rem;
   background-color: $black;
   color: $white;
   font-size: 9pt;
+  border: 1px solid $gray4; //lighten($gray4, 15);
+  border-radius: 0;
   display: grid;
   grid-template-rows: 20px auto;
   grid-template-columns: 100%;
   justify-content: center;
   align-items: center;
+  transition: $transition;
 
   &--selected {
-    background-color: #444e69;
+    background-color: $actor-highlight;
+    .label {
+      text-shadow: #181b24 0 0 12px;
+      &.http {
+        color: #bd64e1;
+      }
+
+      &.external-service {
+        color: $yellow;
+      }
+      &.package {
+        color: $teal;
+      }
+      &.class {
+        color: lighten($blue, 13);
+      }
+      &.database {
+        color: lighten($royal, 13);
+      }
+    }
+  }
+
+  .label {
+    padding-bottom: 1rem;
   }
 
   .hover-text-popper {
@@ -261,14 +292,27 @@ $min-height: 3rem;
     justify-content: space-between;
     padding: 0 0.5rem;
   }
+
+  .http {
+    color: #8e45aa;
+  }
+
+  .external-service {
+    color: $yellow;
+  }
+  .package {
+    color: $teal;
+  }
+  .class {
+    color: $blue;
+  }
+  .database {
+    color: $royal;
+  }
 }
 
 .interactive.label-container:hover {
   cursor: pointer;
-  background-color: #444e69;
-  .hide-container {
-    background-color: #444e69;
-  }
 }
 
 .lane {
