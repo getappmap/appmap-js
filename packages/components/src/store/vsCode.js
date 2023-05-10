@@ -16,6 +16,8 @@ export const VIEW_SEQUENCE = 'viewSequence';
 export const VIEW_FLOW = 'viewFlow';
 export const ADD_EXPANDED_PACKAGE = 'addExpandedPackage';
 export const REMOVE_EXPANDED_PACKAGE = 'removeExpandedPackage';
+export const SET_EXPANDED_PACKAGES = 'setExpandedPackage';
+export const CLEAR_EXPANDED_PACKAGES = 'clearExpandedPackage';
 export const DEFAULT_VIEW = VIEW_COMPONENT;
 
 export function buildStore() {
@@ -110,6 +112,14 @@ export function buildStore() {
         state.expandedPackages = state.expandedPackages.filter(
           (expandedPackage) => expandedPackage.fqid !== subClass.packageObject.fqid
         );
+      },
+
+      [SET_EXPANDED_PACKAGES](state, expandedPackages) {
+        state.expandedPackages = expandedPackages;
+      },
+
+      [CLEAR_EXPANDED_PACKAGES](state) {
+        state.expandedPackages = [];
       },
     },
   });
