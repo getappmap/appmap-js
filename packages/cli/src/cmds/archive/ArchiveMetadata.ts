@@ -8,7 +8,7 @@ export type ArchiveMetadata = {
   baseRevision?: string;
   revision: string;
   timestamp: string;
-  oversizedAppMaps: string[];
+  oversizedAppMaps?: string[];
   deletedAppMaps?: string[];
   config: AppMapConfig;
   appMapFilter: Record<string, any>;
