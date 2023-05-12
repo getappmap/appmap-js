@@ -73,6 +73,12 @@ commit of the current git revision may not be the one that triggered the build.`
     alias: 'f',
   });
 
+  args.option('index', {
+    describe: 'whether to index the AppMaps',
+    type: 'boolean',
+    default: true,
+  });
+
   args.option('max-size', {
     describe: 'maximum AppMap size that will be processed, in filesystem-reported MB',
     default: DefaultMaxAppMapSizeInMB,
@@ -97,7 +103,16 @@ export const handler = async (argv: any) => {
 
   const appMapDir = await locateAppMapDir();
 
-  const { maxSize, type: typeArg, revision: revisionArg, outputFile: outputFileNameArg } = argv;
+  const compareConfig = appmapConfig.compare;
+  const appMapFilter = deserializeFilter(compareConfig?.filter);
+
+  const {
+    maxSize,
+    index,
+    type: typeArg,
+    revision: revisionArg,
+    outputFile: outputFileNameArg,
+  } = argv;
   const { outputDirArg } = argv;
 
   const maxAppMapSizeInBytes = Math.round(parseFloat(maxSize) * 1024 * 1024);
@@ -112,19 +127,16 @@ export const handler = async (argv: any) => {
 
   process.chdir(appMapDir);
 
-  process.stdout.write(`Indexing AppMaps...`);
-  const numIndexed = await new FingerprintDirectoryCommand('.').execute();
-  process.stdout.write(`done (${numIndexed})\n`);
+  let oversizedAppMaps: string[] | undefined;
+  if (index) {
+    process.stdout.write(`Indexing AppMaps...`);
+    const numIndexed = await new FingerprintDirectoryCommand('.').execute();
+    process.stdout.write(`done (${numIndexed})\n`);
 
-  console.log('Generating sequence diagrams');
-
-  const compareConfig = appmapConfig.compare;
-  const appMapFilter = deserializeFilter(compareConfig?.filter);
-  const { oversizedAppMaps } = await updateSequenceDiagrams(
-    '.',
-    maxAppMapSizeInBytes,
-    appMapFilter
-  );
+    console.log('Generating sequence diagrams');
+    oversizedAppMaps = (await updateSequenceDiagrams('.', maxAppMapSizeInBytes, appMapFilter))
+      .oversizedAppMaps;
+  }
 
   const metadata: ArchiveMetadata = {
     versions,
