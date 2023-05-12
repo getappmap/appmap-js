@@ -62,6 +62,7 @@ commit of the current git revision may not be the one that triggered the build.`
     alias: 'r',
   });
 
+  // TODO: This option doesn't appear to be working
   args.option('output-dir', {
     describe: `directory in which to save the output file. By default, it's .appmap/archive/<type>.`,
     type: 'string',
@@ -119,7 +120,7 @@ export const handler = async (argv: any) => {
 
   console.log(`Building '${typeArg}' archive from ${appMapDir}`);
 
-  const revision = revisionArg || (await gitRevision());
+  const revision = revisionArg !== undefined ? revisionArg : await gitRevision();
 
   console.log(`Building archive of revision ${revision}`);
   const versions = { archive: ArchiveVersion, index: IndexVersion };
