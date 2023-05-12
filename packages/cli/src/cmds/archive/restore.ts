@@ -2,7 +2,7 @@ import assert from 'assert';
 import { existsSync } from 'fs';
 import { glob } from 'glob';
 import { basename, join } from 'path';
-import { promisify } from 'util';
+import { inspect, promisify } from 'util';
 import yargs from 'yargs';
 import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
@@ -24,6 +24,7 @@ export const builder = (args: yargs.Argv) => {
 
   args.option('revision', {
     describe: `revision to restore`,
+    type: 'string',
   });
 
   args.option('output-dir', {
@@ -59,13 +60,11 @@ export const handler = async (argv: any) => {
 
   const { revision: revisionArg, outputDir: outputDirArg, githubRepo, archiveDir, exact } = argv;
 
-  const revision = revisionArg || (await gitRevision());
+  const revision = revisionArg !== undefined ? revisionArg.toString() : await gitRevision();
   const outputDir = outputDirArg || join('.appmap', 'work', revision);
   if (existsSync(outputDir)) throw new Error(`Output directory ${outputDir} already exists`);
 
   console.log(`Restoring AppMaps of revision ${revision} to ${outputDir}`);
-
-  const ancestors = await gitAncestors(revision);
 
   let archiveStore: ArchiveStore;
   if (githubRepo) {
@@ -75,28 +74,37 @@ export const handler = async (argv: any) => {
   } else {
     archiveStore = new FileArchiveStore(archiveDir);
   }
+  const archivesAvailable = await archiveStore.revisionsAvailable();
+  console.debug(`Found ${inspect(archivesAvailable)} AppMap archives`);
 
-  let mostRecentArchiveAvailable: ArchiveEntry | undefined;
-  {
-    const archivesAvailable = await archiveStore.revisionsAvailable();
-    const ancestorIndex = ancestors.reduce(
-      (memo, revision, index) => ((memo[revision] = index), memo),
-      {} as Record<string, number>
-    );
-    let mostRecentAncestorIndex: number | undefined;
-    for (const archive of archivesAvailable.full.values()) {
-      const index = ancestorIndex[archive.revision];
-      if (
-        index !== undefined &&
-        (mostRecentAncestorIndex === undefined || index < mostRecentAncestorIndex)
-      ) {
-        mostRecentAncestorIndex = index;
-        mostRecentArchiveAvailable = archive;
+  let ancestors: string[] | undefined;
+  let mostRecentArchiveAvailable: ArchiveEntry | undefined = [
+    ...archivesAvailable.full.values(),
+  ].find((archive) => archive.revision === revision);
+  if (mostRecentArchiveAvailable) {
+    console.log(`Found exact match full AppMap archive ${revision}`);
+  } else {
+    ancestors = await gitAncestors(revision);
+    {
+      const ancestorIndex = ancestors.reduce(
+        (memo, revision, index) => ((memo[revision] = index), memo),
+        {} as Record<string, number>
+      );
+      let mostRecentAncestorIndex: number | undefined;
+      for (const archive of archivesAvailable.full.values()) {
+        const index = ancestorIndex[archive.revision];
+        if (
+          index !== undefined &&
+          (mostRecentAncestorIndex === undefined || index < mostRecentAncestorIndex)
+        ) {
+          mostRecentAncestorIndex = index;
+          mostRecentArchiveAvailable = archive;
+        }
       }
     }
+    if (!mostRecentArchiveAvailable)
+      throw new Error(`No full AppMap archive found in the ancestry of ${revision}`);
   }
-  if (!mostRecentArchiveAvailable)
-    throw new Error(`No full AppMap archive found in the ancestry of ${revision}`);
 
   console.log(`Using revision ${mostRecentArchiveAvailable.revision} as the baseline`);
 
@@ -112,6 +120,7 @@ export const handler = async (argv: any) => {
   const restoredRevisions = [restoredRevision];
 
   if (mostRecentArchiveAvailable.revision !== revision) {
+    assert(ancestors);
     const baseRevisionIndex = ancestors.indexOf(mostRecentArchiveAvailable.revision);
     assert(baseRevisionIndex !== -1);
     const ancestorsAfterBaseRevision = new Set<string>(ancestors.slice(0, baseRevisionIndex));
