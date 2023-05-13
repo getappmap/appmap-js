@@ -30,7 +30,9 @@ export function executeCommand(
   return new Promise<string>((resolve, reject) => {
     command.addListener('exit', (code, signal) => {
       if (signal || (code !== null && okCodes.includes(code))) {
-        if (signal) console.log(`Command killed by signal ${signal}`);
+        if (signal) {
+          console.log(`Command "${cmd}" killed by signal ${signal}, exited with code ${code}`);
+        }
         resolve(result.join(''));
       } else {
         if (!printCommand) console.log(commandStyle(cmd));
