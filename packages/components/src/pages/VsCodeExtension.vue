@@ -445,12 +445,12 @@ export default {
         this.$root.$emit('stateChanged', 'selectedObject');
       },
     },
-    '$store.getters.selectedLabel': {
+    '$store.state.selectedLabel': {
       handler() {
         this.$root.$emit('stateChanged', 'selectedObject');
       },
     },
-    '$store.getters.focusedEvent': {
+    '$store.state.focusedEvent': {
       handler(event) {
         if (event) {
           if (this.currentView === VIEW_COMPONENT) {
@@ -672,11 +672,11 @@ export default {
     },
 
     selectedLabel() {
-      return this.$store.getters.selectedLabel;
+      return this.$store.state.selectedLabel;
     },
 
     focusedEvent() {
-      return this.$store.getters.focusedEvent;
+      return this.$store.state.focusedEvent;
     },
 
     currentView() {
