@@ -181,114 +181,7 @@
               </v-popper>
             </template>
             <template v-slot:body>
-              <div class="filters">
-                <div class="filters__head">
-                  <FilterIcon class="filters__head-icon" />
-                  <h2 class="filters__head-text">Filters</h2>
-                  <button class="filters__head-reset" @click="resetFilters()">
-                    Reset all
-                    <ResetIcon />
-                  </button>
-                </div>
-                <div class="filters__block">
-                  <div class="filters__block-head">
-                    <h3 class="filters__block-title">Root</h3>
-                    <v-filters-form
-                      :onSubmit="addRootObject"
-                      placeholder="add new root..."
-                      :suggestions="rootObjectsSuggestions"
-                    />
-                  </div>
-                  <div
-                    class="filters__block-body filters__block-body--flex"
-                    v-if="filters.rootObjects.length"
-                  >
-                    <div class="filters__root" v-for="(id, index) in filters.rootObjects" :key="id">
-                      {{ id }}
-                      <CloseThinIcon
-                        class="filters__root-icon"
-                        @click.stop="removeRootObject(index)"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div class="filters__block">
-                  <div class="filters__block-head">
-                    <h3 class="filters__block-title">Declutter</h3>
-                  </div>
-                  <div class="filters__block-body">
-                    <div class="filters__block-row">
-                      <label class="filters__checkbox">
-                        <input type="checkbox" v-model="filters.declutter.limitRootEvents.on" />
-                        <CheckIcon class="filters__checkbox-icon" />
-                      </label>
-                      <div class="filters__block-row-content">Limit root events to HTTP</div>
-                    </div>
-                    <div class="filters__block-row">
-                      <label class="filters__checkbox">
-                        <input type="checkbox" v-model="filters.declutter.hideMediaRequests.on" />
-                        <CheckIcon class="filters__checkbox-icon" />
-                      </label>
-                      <div class="filters__block-row-content">Hide media HTTP requests</div>
-                    </div>
-                    <div class="filters__block-row">
-                      <label class="filters__checkbox">
-                        <input type="checkbox" v-model="filters.declutter.hideUnlabeled.on" />
-                        <CheckIcon class="filters__checkbox-icon" />
-                      </label>
-                      <div class="filters__block-row-content">Hide unlabeled</div>
-                    </div>
-                    <div class="filters__block-row">
-                      <label class="filters__checkbox">
-                        <input
-                          type="checkbox"
-                          v-model="filters.declutter.hideElapsedTimeUnder.on"
-                        />
-                        <CheckIcon class="filters__checkbox-icon" />
-                      </label>
-                      <div class="filters__block-row-content">
-                        Hide elapsed time under:
-                        <div class="filters__elapsed">
-                          <input
-                            type="text"
-                            class="filters__elapsed-input"
-                            v-model="filters.declutter.hideElapsedTimeUnder.time"
-                          />
-                          <span class="filters__elapsed-ms">ms</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="filters__block-row">
-                      <label class="filters__checkbox">
-                        <input type="checkbox" v-model="filters.declutter.hideName.on" />
-                        <CheckIcon class="filters__checkbox-icon" />
-                      </label>
-                      <div class="filters__block-row-content">
-                        Hide name:
-                        <v-filters-form
-                          :onSubmit="addHiddenName"
-                          placeholder="find names..."
-                          :suggestions="hideNamesSuggestions"
-                          suggestions-placement="top"
-                        />
-                        <div class="filters__hide" v-if="filters.declutter.hideName.names.length">
-                          <div
-                            class="filters__hide-item"
-                            v-for="(name, index) in filters.declutter.hideName.names"
-                            :key="name"
-                          >
-                            {{ name }}
-                            <CloseThinIcon
-                              class="filters__hide-item-icon"
-                              @click.stop="removeHiddenName(index)"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <v-filter-menu :filteredAppMap="filteredAppMap"></v-filter-menu>
             </template>
           </v-popper-menu>
           <v-popper class="hover-text-popper" text="Reload map" placement="left" text-align="left">
@@ -413,18 +306,14 @@
 <script>
 import {
   Event,
-  AppMapFilter,
   serializeFilter,
   deserializeFilter,
   filterStringToFilterState,
   base64UrlEncode,
 } from '@appland/models';
-import CheckIcon from '@/assets/check.svg';
 import CopyIcon from '@/assets/copy-icon.svg';
-import CloseThinIcon from '@/assets/close-thin.svg';
 import CloseIcon from '@/assets/close.svg';
 import ReloadIcon from '@/assets/reload.svg';
-import ResetIcon from '@/assets/reset.svg';
 import UploadIcon from '@/assets/link-icon.svg';
 import ExportIcon from '@/assets/export.svg';
 import FilterIcon from '@/assets/filter.svg';
@@ -438,7 +327,7 @@ import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramSequence from '../components/DiagramSequence.vue';
 import VDiagramTrace from '../components/DiagramTrace.vue';
 import VDownloadSequenceDiagram from '../components/sequence/DownloadSequenceDiagram.vue';
-import VFiltersForm from '../components/FiltersForm.vue';
+import VFilterMenu from '../components/FilterMenu.vue';
 import VInstructions from '../components/Instructions.vue';
 import VNotification from '../components/Notification.vue';
 import VPopperMenu from '../components/PopperMenu.vue';
@@ -460,18 +349,21 @@ import {
   CLEAR_SELECTION_STACK,
   SET_EXPANDED_PACKAGES,
   CLEAR_EXPANDED_PACKAGES,
+  SET_FILTER,
+  SET_DECLUTTER_ON,
+  SET_DECLUTTER_DEFAULT,
+  RESET_FILTERS,
+  ADD_ROOT_OBJECT,
+  REMOVE_ROOT_OBJECT,
 } from '../store/vsCode';
 
 export default {
   name: 'VSCodeExtension',
 
   components: {
-    CheckIcon,
-    CloseThinIcon,
     CloseIcon,
     CopyIcon,
     ReloadIcon,
-    ResetIcon,
     UploadIcon,
     ExportIcon,
     FilterIcon,
@@ -481,7 +373,7 @@ export default {
     VDiagramSequence,
     VDiagramTrace,
     VDownloadSequenceDiagram,
-    VFiltersForm,
+    VFilterMenu,
     VInstructions,
     VNotification,
     VPopperMenu,
@@ -510,7 +402,6 @@ export default {
       VIEW_COMPONENT,
       VIEW_SEQUENCE,
       VIEW_FLOW,
-      filters: new AppMapFilter(),
       eventFilterText: '',
       eventFilterMatchIndex: 0,
       showShareModal: false,
@@ -634,6 +525,10 @@ export default {
       return stats;
     },
 
+    filters() {
+      return this.$store.state.filters;
+    },
+
     filteredAppMap() {
       const { appMap } = this.$store.state;
       return this.filters.filter(appMap, this.findings);
@@ -721,7 +616,10 @@ export default {
                   const rootEvents = this.$store.state.appMap.rootEvents();
                   if (rootEvents.some((e) => e.id === eventId)) {
                     this.$nextTick(() => {
-                      this.filters.declutter.limitRootEvents.on = false;
+                      this.$store.commit(SET_DECLUTTER_ON, {
+                        declutterProperty: 'limitRootEvents',
+                        value: false,
+                      });
                     });
                   }
                 }
@@ -857,8 +755,16 @@ export default {
 
       const rootEvents = this.$store.state.appMap.rootEvents();
       const hasHttpRoot = rootEvents.some((e) => e.httpServerRequest);
-      this.filters.declutter.limitRootEvents.on = hasHttpRoot;
-      this.filters.declutter.limitRootEvents.default = hasHttpRoot;
+
+      this.$store.commit(SET_DECLUTTER_ON, {
+        declutterProperty: 'limitRootEvents',
+        value: hasHttpRoot,
+      });
+
+      this.$store.commit(SET_DECLUTTER_DEFAULT, {
+        declutterProperty: 'limitRootEvents',
+        value: hasHttpRoot,
+      });
 
       this.isLoading = false;
     },
@@ -1022,8 +928,8 @@ export default {
                 selectedObject = this.$store.state.appMap.events.find((e) => e.id === eventId);
 
                 if (selectedObject) {
-                  Object.keys(this.filters.declutter).forEach((k) => {
-                    this.filters.declutter[k].on = false;
+                  Object.keys(this.filters.declutter).forEach((declutterProperty) => {
+                    this.$store.commit(SET_DECLUTTER_ON, { declutterProperty, value: false });
                   });
                 }
               }
@@ -1038,9 +944,7 @@ export default {
         }
 
         const { filters, expandedPackages } = state;
-        if (filters) {
-          this.filters = deserializeFilter(filters);
-        }
+        if (filters) this.$store.commit(SET_FILTER, deserializeFilter(filters));
 
         if (expandedPackages) {
           const codeObjects = expandedPackages.map((expandedPackageId) =>
@@ -1083,7 +987,7 @@ export default {
     resetDiagram() {
       this.$store.commit(CLEAR_EXPANDED_PACKAGES);
       this.clearSelection();
-      this.resetFilters();
+      this.$store.commit(RESET_FILTERS);
       this.$root.$emit('resetDiagram');
 
       this.renderKey += 1;
@@ -1156,52 +1060,6 @@ export default {
       this.isPanelResizing = false;
     },
 
-    resetFilters() {
-      const defaultFilter = new AppMapFilter();
-
-      this.filters.rootObjects = [];
-      Object.keys(this.filters.declutter).forEach((k) => {
-        this.filters.declutter[k].on = defaultFilter.declutter[k].on;
-      });
-      this.filters.declutter.hideElapsedTimeUnder.time =
-        defaultFilter.declutter.hideElapsedTimeUnder.time;
-      this.filters.declutter.hideExternalPaths.dependencyFolders =
-        defaultFilter.declutter.hideExternalPaths.dependencyFolders;
-      this.filters.declutter.hideName.names = defaultFilter.declutter.hideName.names;
-    },
-
-    addHiddenName(name) {
-      const objectName = name.trim();
-
-      if (!objectName || this.filters.declutter.hideName.names.includes(objectName)) {
-        return;
-      }
-
-      this.filters.declutter.hideName.names.push(objectName);
-      this.filters.declutter.hideName.on = true;
-    },
-
-    removeHiddenName(index) {
-      this.filters.declutter.hideName.names.splice(index, 1);
-      if (this.filters.declutter.hideName.names.length === 0) {
-        this.filters.declutter.hideName.on = false;
-      }
-    },
-
-    addRootObject(fqid) {
-      const objectFqid = fqid.trim();
-
-      if (!objectFqid || this.filters.rootObjects.includes(objectFqid)) {
-        return;
-      }
-
-      this.filters.rootObjects.push(objectFqid);
-    },
-
-    removeRootObject(index) {
-      this.filters.rootObjects.splice(index, 1);
-    },
-
     prevTraceFilter() {
       if (this.eventFilterMatches.length === 0) {
         return;
@@ -1266,13 +1124,11 @@ export default {
 
   mounted() {
     this.$root.$on('makeRoot', (codeObject) => {
-      this.addRootObject(codeObject.fqid);
+      this.$store.commit(ADD_ROOT_OBJECT, codeObject.fqid);
     });
+
     this.$root.$on('removeRoot', (fqid) => {
-      this.removeRootObject(this.filters.rootObjects.indexOf(fqid));
-    });
-    this.$root.$on('addHiddenName', (objectId) => {
-      this.addHiddenName(objectId);
+      this.$store.commit(REMOVE_ROOT_OBJECT, this.filters.rootObjects.indexOf(fqid));
     });
   },
 
@@ -1618,229 +1474,6 @@ code {
         margin-left: -1rem;
         color: $royal;
         margin-bottom: 0.5rem;
-      }
-    }
-  }
-
-  .filters {
-    width: 390px;
-    font-size: 0.75rem;
-
-    &__head {
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid $gray2;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-
-      svg {
-        width: 1em;
-        height: 1em;
-        fill: currentColor;
-      }
-
-      &-icon {
-        margin-right: 0.75rem;
-        color: $light-purple;
-      }
-
-      &-text {
-        margin-bottom: 0;
-        color: $base01;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        font-weight: bold;
-      }
-
-      &-reset {
-        margin-left: auto;
-        border: none;
-        display: inline-flex;
-        align-items: center;
-        padding: 0.25rem;
-        background: transparent;
-        color: $lightgray2;
-        font: inherit;
-        outline: none;
-        line-height: 1;
-        appearance: none;
-        cursor: pointer;
-        transition: color 0.3s ease-in;
-
-        &:hover,
-        &:active {
-          color: $gray5;
-          transition-timing-function: ease-out;
-        }
-
-        svg {
-          margin-left: 0.5rem;
-        }
-      }
-    }
-
-    &__block {
-      &:not(:last-child) {
-        margin-bottom: 1rem;
-      }
-
-      &-head {
-        border-radius: 0.25rem 0.25rem 0 0;
-        margin-bottom: 1px;
-        display: flex;
-        padding: 0.5rem 0rem;
-        line-height: 1.25rem;
-        border-bottom: 1px solid lighten($gray2, 15);
-      }
-
-      &-title {
-        margin: 0 0.5rem 0 0;
-        display: inline-block;
-        font-size: 0.875rem;
-        font-weight: bold;
-        color: $base06;
-      }
-
-      &-body {
-        border-radius: 0 0 0.25rem 0.25rem;
-        padding: 1rem 0.75rem;
-        &--flex {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-        }
-      }
-
-      &-row {
-        display: flex;
-        justify-content: flex-start;
-        align-items: flex-start;
-
-        &:not(:last-child) {
-          margin-bottom: 1rem;
-        }
-
-        &-content {
-          margin-left: 1rem;
-          width: 100%;
-          display: flex;
-          flex-wrap: wrap;
-          line-height: 22px;
-        }
-      }
-    }
-
-    &__root {
-      border-radius: $border-radius;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.5rem;
-      background: $light-purple;
-      color: $gray6;
-      line-height: 1;
-
-      &-icon {
-        flex-shrink: 0;
-        margin-left: 1rem;
-        width: 1em;
-        height: 1em;
-        fill: currentColor;
-        cursor: pointer;
-      }
-    }
-
-    &__checkbox {
-      flex-shrink: 0;
-      margin: 3px 0;
-      border-radius: 2px;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      width: 1rem;
-      height: 1rem;
-      background: $light-purple;
-      cursor: pointer;
-
-      input {
-        position: absolute;
-        overflow: hidden;
-        clip: rect(1px, 1px, 1px, 1px);
-        height: 1px;
-        width: 1px;
-        margin: -1px;
-        padding: 0;
-        border: 0;
-
-        &:checked + .filters__checkbox-icon {
-          display: block;
-        }
-      }
-
-      &-icon {
-        display: none;
-        width: 0.5rem;
-        height: 0.5rem;
-        fill: $base03;
-      }
-    }
-
-    &__elapsed {
-      margin-left: 0.5rem;
-      border-radius: 0.25rem;
-      display: inline-block;
-      vertical-align: middle;
-      height: 22px;
-      padding: 0 0.25rem;
-      //border: 1px solid $gray2;
-      background: darken($gray4, 50);
-
-      &-input {
-        display: inline-block;
-        vertical-align: middle;
-        width: 2rem;
-        border: 0;
-        border-radius: 0;
-        box-shadow: none;
-        background: transparent;
-        font: inherit;
-        color: inherit;
-        outline: none;
-      }
-
-      &-ms {
-        color: $lightgray2;
-      }
-    }
-
-    &__hide {
-      margin-top: 0.75rem;
-      width: 100%;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-start;
-      align-items: flex-start;
-      gap: 0.5rem;
-
-      &-item {
-        border-radius: 0.25rem;
-        display: inline-flex;
-        justify-content: flex-start;
-        align-items: center;
-        padding: 5px 10px;
-        background: $light-purple;
-        color: $gray6;
-        line-height: 1;
-
-        &-icon {
-          flex-shrink: 0;
-          margin-left: 1rem;
-          width: 1em;
-          height: 1em;
-          fill: currentColor;
-          cursor: pointer;
-        }
       }
     }
   }
