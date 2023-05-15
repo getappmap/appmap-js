@@ -53,12 +53,6 @@ export function buildStore() {
           ? state.selectionStack[state.selectionStack.length - 2]
           : null;
       },
-      selectedLabel(state) {
-        return state.selectedLabel;
-      },
-      focusedEvent(state) {
-        return state.focusedEvent;
-      },
     },
 
     mutations: {
