@@ -23,6 +23,7 @@
 <script>
 import FilterIcon from '@/assets/filter.svg';
 import ResetIcon from '@/assets/reset.svg';
+import { ADD_HIDDEN_NAME } from '@/store/vsCode';
 
 export default {
   name: 'v-details-panel-filters',
@@ -77,7 +78,7 @@ export default {
         this.$root.$emit('makeRoot', this.object);
       }
       if (key === 'hide') {
-        this.$root.$emit('addHiddenName', this.object.fqid);
+        this.$store.commit(ADD_HIDDEN_NAME, this.object.fqid);
       }
     },
     resetFilters() {

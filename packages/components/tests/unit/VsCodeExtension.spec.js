@@ -3,6 +3,7 @@ import VsCodeExtension from '@/pages/VsCodeExtension.vue';
 import { VIEW_FLOW } from '@/store/vsCode';
 import data from './fixtures/user_page_scenario.appmap.json';
 import Vue from 'vue';
+import { RESET_FILTERS } from '../../src/store/vsCode';
 
 describe('VsCodeExtension.vue', () => {
   let wrapper; // Wrapper<Vue>
@@ -21,6 +22,7 @@ describe('VsCodeExtension.vue', () => {
     });
     rootWrapper = createWrapper(wrapper.vm.$root);
     wrapper.vm.loadData(data);
+    wrapper.vm.$store.commit(RESET_FILTERS);
   });
 
   it('sets the selected object by FQID', () => {

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { AppMap, buildAppMap, fullyQualifiedFunctionName } from '@appland/models';
+import { AppMap, buildAppMap, fullyQualifiedFunctionName, AppMapFilter } from '@appland/models';
 
 Vue.use(Vuex);
 
@@ -18,6 +18,15 @@ export const ADD_EXPANDED_PACKAGE = 'addExpandedPackage';
 export const REMOVE_EXPANDED_PACKAGE = 'removeExpandedPackage';
 export const SET_EXPANDED_PACKAGES = 'setExpandedPackage';
 export const CLEAR_EXPANDED_PACKAGES = 'clearExpandedPackage';
+export const SET_FILTER = 'setFilter';
+export const SET_DECLUTTER_ON = 'setFilterBoolean';
+export const SET_DECLUTTER_DEFAULT = 'setFilterDefault';
+export const SET_ELAPSED_TIME = 'setElapsedTime';
+export const RESET_FILTERS = 'resetFilters';
+export const ADD_ROOT_OBJECT = 'addRootObject';
+export const REMOVE_ROOT_OBJECT = 'removeRootObject';
+export const ADD_HIDDEN_NAME = 'addHiddenName';
+export const REMOVE_HIDDEN_NAME = 'removeHiddenName';
 export const DEFAULT_VIEW = VIEW_COMPONENT;
 
 export function buildStore() {
@@ -29,6 +38,7 @@ export function buildStore() {
       selectedLabel: null,
       focusedEvent: null,
       expandedPackages: [],
+      filters: new AppMapFilter(),
     },
 
     getters: {
@@ -48,9 +58,6 @@ export function buildStore() {
       },
       focusedEvent(state) {
         return state.focusedEvent;
-      },
-      expandedPackages(state) {
-        return state.expandedPackages;
       },
     },
 
@@ -120,6 +127,50 @@ export function buildStore() {
 
       [CLEAR_EXPANDED_PACKAGES](state) {
         state.expandedPackages = [];
+      },
+
+      [SET_FILTER](state, filter) {
+        state.filters = filter;
+      },
+
+      [SET_DECLUTTER_ON](state, { declutterProperty, value }) {
+        state.filters.declutter[declutterProperty].on = value;
+      },
+
+      [SET_DECLUTTER_DEFAULT](state, { declutterProperty, value }) {
+        state.filters.declutter[declutterProperty].default = value;
+      },
+
+      [SET_ELAPSED_TIME](state, elapsedTime) {
+        state.filters.declutter.hideElapsedTimeUnder.time = elapsedTime;
+      },
+
+      [RESET_FILTERS](state) {
+        state.filters = new AppMapFilter();
+      },
+
+      [ADD_ROOT_OBJECT](state, fqid) {
+        const objectFqid = fqid.trim();
+
+        if (!objectFqid || state.filters.rootObjects.includes(objectFqid)) return;
+
+        state.filters.rootObjects.push(objectFqid);
+      },
+
+      [REMOVE_ROOT_OBJECT](state, index) {
+        state.filters.rootObjects.splice(index, 1);
+      },
+
+      [ADD_HIDDEN_NAME](state, nameToRemove) {
+        const objectName = nameToRemove.trim();
+        if (!objectName || state.filters.declutter.hideName.names.includes(objectName)) return;
+
+        state.filters.declutter.hideName.names.push(objectName);
+        state.filters.declutter.hideName.on = true;
+      },
+
+      [REMOVE_HIDDEN_NAME](state, index) {
+        state.filters.declutter.hideName.names.splice(index, 1);
       },
     },
   });

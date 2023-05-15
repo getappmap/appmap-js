@@ -45,7 +45,12 @@
 
 <script lang="ts">
 // @ts-nocheck
-import { SELECT_CODE_OBJECT, ADD_EXPANDED_PACKAGE, REMOVE_EXPANDED_PACKAGE } from '@/store/vsCode';
+import {
+  SELECT_CODE_OBJECT,
+  ADD_EXPANDED_PACKAGE,
+  REMOVE_EXPANDED_PACKAGE,
+  ADD_HIDDEN_NAME,
+} from '@/store/vsCode';
 import { CodeObject } from '@appland/models';
 import XIcon from '@/assets/x-icon.svg';
 import VPopper from '@/components/Popper.vue';
@@ -131,7 +136,7 @@ export default {
   },
   methods: {
     hideCodeObject() {
-      this.$root.$emit('addHiddenName', this.actor.id);
+      this.$store.commit(ADD_HIDDEN_NAME, this.actor.id);
     },
     selectCodeObject() {
       if (this.appMap) {
