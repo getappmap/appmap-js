@@ -43,6 +43,13 @@
           </label>
           <div class="filters__block-row-content">Hide media HTTP requests</div>
         </div>
+        <div class="filters__block-row" v-if="hideExternalSupported">
+          <label class="filters__checkbox">
+            <input type="checkbox" v-model="hideExternal" />
+            <CheckIcon class="filters__checkbox-icon" />
+          </label>
+          <div class="filters__block-row-content">Hide external code</div>
+        </div>
         <div class="filters__block-row">
           <label class="filters__checkbox">
             <input type="checkbox" v-model="hideUnlabeled" />
@@ -158,6 +165,15 @@ export default {
       },
     },
 
+    hideExternal: {
+      get() {
+        return this.$store.state.filters.declutter.hideExternalPaths.on;
+      },
+      set(value) {
+        this.$store.commit(SET_DECLUTTER_ON, { declutterProperty: 'hideExternalPaths', value });
+      },
+    },
+
     hideElapsedTimeUnder: {
       get() {
         return this.$store.state.filters.declutter.hideElapsedTimeUnder.on;
@@ -199,6 +215,15 @@ export default {
       return this.filteredAppMap.classMap.codeObjects
         .map((co) => co.fqid)
         .filter((fqid) => !this.filters.declutter.hideName.names.includes(fqid));
+    },
+
+    hideExternalSupported() {
+      const { appMap } = this.$store.state;
+      return (
+        appMap.metadata &&
+        appMap.metadata.language &&
+        ['ruby', 'javascript'].includes(appMap.metadata.language.name)
+      );
     },
   },
 

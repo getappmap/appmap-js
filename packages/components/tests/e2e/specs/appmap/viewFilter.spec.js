@@ -136,7 +136,7 @@ context('AppMap view filter', () => {
       cy.get('.details-search__block--class .details-search__block-item').should('have.length', 11);
 
       cy.get('.tabs__controls .popper__button').click();
-      cy.get('.filters__checkbox').eq(2).click();
+      cy.get('.filters__checkbox').eq(3).click();
 
       cy.get('.details-search__block--package .details-search__block-item').should(
         'have.length',
@@ -153,7 +153,7 @@ context('AppMap view filter', () => {
       cy.get('.tabs__controls .popper__button').click();
 
       cy.get('.filters__elapsed input').type('00');
-      cy.get('.filters__checkbox').eq(3).click();
+      cy.get('.filters__checkbox').eq(4).click();
 
       cy.get('.trace .trace-node').should('have.length', 3);
     });
@@ -188,6 +188,44 @@ context('AppMap view filter', () => {
 
       cy.get('.trace-node[data-event-id="1"].highlight').should('exist');
     });
+
+    it('filters external code', () => {
+      cy.get('.tabs .tab-btn').eq(1).click();
+      cy.get('.sequence-actor').should('have.length', 9);
+
+      const expectedInitial = [
+        'HTTP server requests',
+        'app/controllers',
+        'openssl',
+        'active_support',
+        'json',
+        'app/helpers',
+        'lib',
+        '127.0.0.1:9515',
+        'Database',
+      ];
+
+      cy.get('.sequence-actor').each(($el, index) => {
+        cy.wrap($el).should('contain.text', expectedInitial[index]);
+      });
+
+      cy.get('.popper__button').click();
+      cy.get('.filters__checkbox').eq(2).click();
+      cy.get('.sequence-actor').should('have.length', 6);
+
+      const expectedFiltered = [
+        'HTTP server requests',
+        'app/controllers',
+        'app/helpers',
+        'lib',
+        '127.0.0.1:9515',
+        'Database',
+      ];
+
+      cy.get('.sequence-actor').each(($el, index) => {
+        cy.wrap($el).should('contain.text', expectedFiltered[index]);
+      });
+    });
   });
 
   context('without HTTP events', () => {
@@ -200,6 +238,22 @@ context('AppMap view filter', () => {
     it('"Limit root events to HTTP" filter is disabled', () => {
       cy.get('.popper__button').click();
       cy.get('.filters__checkbox input[type="checkbox"]').first().should('not.be.checked');
+    });
+  });
+
+  context('in a Java map', () => {
+    beforeEach(() => {
+      cy.visit(
+        'http://localhost:6006/iframe.html?args=&id=pages-vs-code--extension-java&viewMode=story'
+      );
+    });
+
+    it('does not show the hide external code checkbox', () => {
+      cy.get('.popper__button').click();
+      cy.get('.filters__block-row-content').should('have.length', 5);
+      cy.get('.filters__block-row-content').each(($el) =>
+        cy.wrap($el).should('not.contain.text', 'Hide external code')
+      );
     });
   });
 });
