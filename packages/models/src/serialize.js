@@ -49,8 +49,7 @@ export function serializeFilter(filter) {
     limitRootEvents: declutter.limitRootEvents.on,
     hideMediaRequests: declutter.hideMediaRequests.on,
     hideUnlabeled: declutter.hideUnlabeled.on,
-    hideExternal: declutter.hideExternalPaths.on,
-    dependencyFolders: declutter.hideExternalPaths.on
+    hideExternalPaths: declutter.hideExternalPaths.on
       ? declutter.hideExternalPaths.dependencyFolders
       : false,
     hideElapsedTimeUnder: declutter.hideElapsedTimeUnder.on
@@ -107,7 +106,8 @@ export function deserializeFilter(filterState) {
   }
   ['hideExternal', 'hideExternalPaths'].forEach((key) => {
     if (key in filterState) {
-      filter.declutter.hideExternalPaths.on = filterState[key];
+      filter.declutter.hideExternalPaths.on = true;
+      filter.declutter.hideExternalPaths.dependencyFolders = filterState[key];
     }
   });
   if ('dependencyFolders' in filterState && filterState.dependencyFolders !== false) {
