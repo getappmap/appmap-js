@@ -1,3 +1,10 @@
+# [@appland/components-v2.43.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.42.0...@appland/components-v2.43.0) (2023-05-16)
+
+
+### Features
+
+* add hide external code filter option ([4b44440](https://github.com/getappmap/appmap-js/commit/4b44440c5409058eb0eac8646a460d7447a0bfbc))
+
 # [@appland/components-v2.42.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.41.1...@appland/components-v2.42.0) (2023-05-10)
 
 
