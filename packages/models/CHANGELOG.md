@@ -1,3 +1,10 @@
+# [@appland/models-v2.6.1](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.6.0...@appland/models-v2.6.1) (2023-05-16)
+
+
+### Bug Fixes
+
+* serialize works for hide external ([145a64c](https://github.com/getappmap/appmap-js/commit/145a64c70a501d93097e637400986635bb038e31))
+
 # [@appland/models-v2.6.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.5.0...@appland/models-v2.6.0) (2023-04-28)
 
 
