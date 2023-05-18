@@ -25,6 +25,8 @@ function isURL(path: string): boolean {
 }
 
 export default class MarkdownReport implements Report {
+  constructor(public appmapURL: URL, public sourceURL: URL) {}
+
   async generateReport(changeReport: ChangeReport, baseDir: string): Promise<string> {
     assert(TemplateFile, "Report template file 'change-report.hbs' not found");
 
@@ -134,6 +136,39 @@ export default class MarkdownReport implements Report {
       (findingDiff as any).resolvedFindingCount = resolvedFindings;
       (findingDiff as any).findingChangeCount = newFindings + resolvedFindings;
     }
+
+    const self = this;
+    Handlebars.registerHelper('appmap_diff_url', function (diagram) {
+      const url = new URL(self.appmapURL.toString());
+      if (diagram.startsWith('./')) diagram = diagram.slice(2);
+      if (diagram.endsWith('.diff.sequence.json'))
+        diagram = diagram.slice(0, '.diff.sequence.json'.length * -1);
+      const path = ['diff', `${diagram}.diff.sequence.json`].join('/');
+      url.searchParams.append('path', path);
+      return new Handlebars.SafeString(url.toString());
+    });
+
+    Handlebars.registerHelper('appmap_url', function (dir, appmap) {
+      const url = new URL(self.appmapURL.toString());
+      if (appmap.startsWith('./')) appmap = appmap.slice(2);
+      if (appmap.endsWith('.appmap.json')) appmap = appmap.slice(0, '.appmap.json'.length * -1);
+      const path = [dir, `${appmap}.appmap.json`].join('/');
+      url.searchParams.append('path', path);
+      return new Handlebars.SafeString(url.toString());
+    });
+
+    Handlebars.registerHelper('source_url', function (location, separator) {
+      const url = new URL(self.sourceURL.toString());
+
+      const [path, lineno] = location.split(':');
+      if (separator) {
+        location = [path, lineno].join(separator);
+      }
+
+      url.pathname = join(url.pathname, path);
+      if (lineno) url.hash = `L${lineno}`;
+      return new Handlebars.SafeString(url.toString());
+    });
 
     return Template(changeReport);
   }

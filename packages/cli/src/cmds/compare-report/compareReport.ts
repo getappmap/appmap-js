@@ -16,6 +16,18 @@ export const builder = (args: yargs.Argv) => {
     demandOption: true,
   });
 
+  args.option('source-url', {
+    describe: `Base URL to link to a source file. The relative path to the source file will be added to the URL path.`,
+    type: 'string',
+    demandOption: true,
+  });
+
+  args.option('appmap-url', {
+    describe: `Base URL to link to AppMaps. A 'path' parameter will be added with the relative path from the report directory to the AppMap JSON file.`,
+    type: 'string',
+    demandOption: true,
+  });
+
   args.option('directory', {
     describe: 'program working directory',
     type: 'string',
@@ -32,10 +44,10 @@ export const handler = async (argv: any) => {
 
   const baseDir = process.cwd();
 
-  const { reportDirectory } = argv;
+  const { reportDirectory, sourceUrl, appmapUrl } = argv;
   process.chdir(reportDirectory);
 
   const report = JSON.parse(await readFile('change-report.json', 'utf-8')) as ChangeReport;
-  const reportMD = await new MarkdownReport().generateReport(report, baseDir);
+  const reportMD = await new MarkdownReport(appmapUrl, sourceUrl).generateReport(report, baseDir);
   await writeFile('report.md', reportMD);
 };
