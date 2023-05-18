@@ -19,13 +19,11 @@ export const builder = (args: yargs.Argv) => {
   args.option('source-url', {
     describe: `Base URL to link to a source file. The relative path to the source file will be added to the URL path.`,
     type: 'string',
-    demandOption: true,
   });
 
   args.option('appmap-url', {
     describe: `Base URL to link to AppMaps. A 'path' parameter will be added with the relative path from the report directory to the AppMap JSON file.`,
     type: 'string',
-    demandOption: true,
   });
 
   args.option('directory', {
