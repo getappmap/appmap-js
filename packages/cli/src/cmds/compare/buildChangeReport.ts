@@ -177,7 +177,7 @@ export default async function buildChangeReport(
         const path = appmapData.sequenceDiagramDiffPath(appmap);
         await mkdir(dirname(path), { recursive: true });
         await writeFile(path, diagramJSON.diagram);
-        changedAppMap.sequenceDiagramDiff = relative(workingDir, path);
+        changedAppMap.sequenceDiagramDiff = relative(join(workingDir, 'diff'), path);
 
         // Build a text snippet for each top level context.
         const allActions = [...diagramDiff.rootActions];
