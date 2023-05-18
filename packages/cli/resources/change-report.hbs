@@ -5,21 +5,23 @@
 {{~/inline}}
 
 {{#*inline "sequence-diagram-diff-link"}}
-{{#if sequenceDiagramDiff}}[{{sequenceDiagramDiff}}](./{{sequenceDiagramDiff}}){{/if}}{{#unless sequenceDiagramDiff}}No structural changes detected{{/unless}}
+{{#if sequenceDiagramDiff}}[{{sequenceDiagramDiff}}]({{ appmap_diff_url sequenceDiagramDiff}}){{/if}}{{#unless sequenceDiagramDiff}}No structural changes detected{{/unless}}
 {{~/inline}}
 
 {{#*inline "finding"}}
 {{#each new }}
-New: {{ ruleTitle }} in [{{appMapFile}}](./head/{{appMapFile}})
+New: {{ ruleTitle }} in [{{appMapFile}}]({{ appmap_url 'head' appMapFile }})
+
 {{/each}}
 {{#each resolved }}
-Resolved: {{ ruleTitle }} in [{{appMapFile}}](./head/{{appMapFile}})
+Resolved: {{ ruleTitle }} in [{{appMapFile}}]({{ appmap_url 'head' appMapFile }})
+
 {{/each}}
 {{~/inline}}
 
 | Summary | Status |
 | --- | --- |
-| [Test failures](#test-failures) | {{#if testFailures.length}}:warning: {{testFailures.length}} failed{{/if}}{{#unless testFailures.length}}:white_check_mark: All tests passed{{/unless}} |
+| [Test failures](#test-failures) | {{#if testFailures.length}}:warning: {{testFailures.length}} failed{{else}}:white_check_mark: All tests passed{{/if}} |
 | [API changes](#api-changes) | 
   {{~#unless apiDiff.differenceCount }}
   :white_check_mark: No API changes
@@ -45,18 +47,16 @@ Resolved: {{ ruleTitle }} in [{{appMapFile}}](./head/{{appMapFile}})
 | [New AppMaps](#new-appmaps) | 
   {{~#unless newAppMaps.length }}
   :white_check_mark: None
-  {{~/unless}}
-  {{~#if newAppMaps.length }}
+  {{~else}}
   :star: {{newAppMaps.length}} new
-  {{~/if}}
+  {{~/unless}}
   |
 | [Changed code behavior](#changed-code-behavior) |
   {{~#unless sequenceDiagramDiffSnippetCount }}
   :white_check_mark: No changes
-  {{~/unless}}
-  {{~#if sequenceDiagramDiffSnippetCount }}
+  {{~else}}
   :twisted_rightwards_arrows: {{sequenceDiagramDiffSnippetCount}} changes
-  {{~/if}}
+  {{~/unless}}
   |
 
 {{#if testFailures.length}}
@@ -66,26 +66,16 @@ Resolved: {{ ruleTitle }} in [{{appMapFile}}](./head/{{appMapFile}})
 
 <details>
 <summary>
-{{testName}} - {{testLocation}}
+{{ testLocation }}
 </summary>
 
 <p/>
 
-At line {{failureLine}}:
+Test [{{testLocation}}]({{ source_url testLocation }}) failed with error:
 
 ```
 {{{failureMessage}}}
 ```
-
-[{{testLocation}}]({{testPath}}#{{failureLine}}):
-
-{{#if testSnippet}}
-{{#with testSnippet}}
-```{{language}}
-{{{codeFragment}}}
-```
-{{/with}}
-{{/if}}
 
 {{#if changedAppMap}}
 {{#with changedAppMap}}
@@ -105,7 +95,17 @@ The following code changes are related to this test:
 | Sequence diagram diff | {{> sequence-diagram-diff-link }} |
 {{/with}}
 {{/if}}
-| AppMap | [{{appmap}}](./head/{{appmap}}.appmap.json) |
+| AppMap | [{{appmap}}]({{ appmap_url 'head' appmap }}) |
+
+Error occurred at [{{failureLocation}}]({{ source_url failureLocation }}):
+
+{{#if testSnippet}}
+{{#with testSnippet}}
+```{{language}}
+{{{codeFragment}}}
+```
+{{/with}}
+{{/if}}
 
 </details>
 
@@ -190,7 +190,7 @@ _Maintainability_
 
 {{#each newAppMaps}}
 
-[{{this}}](./head/{{this}}.appmap.json)
+[{{this}}]({{ appmap_url 'head' this }})
 
 {{/each}}
 
@@ -199,6 +199,12 @@ _Maintainability_
 {{#if sequenceDiagramDiffSnippetCount }}
 <h2 id="changed-code-behavior">Changed code behavior</h2>
 
+<details>
+
+<summary>
+Review {{ sequenceDiagramDiffSnippetCount }} changes
+</summary>
+
 {{#each sequenceDiagramDiffSnippets}}
 
 ```
@@ -206,8 +212,10 @@ _Maintainability_
 ```
 
 {{#each this}}
-- [{{.}}](./diff/{{.}}.diff.sequence.json)
+- [{{.}}]({{ appmap_diff_url . }})
 {{/each}}
 
 {{/each}}
+
+</details>
 {{/if}}
