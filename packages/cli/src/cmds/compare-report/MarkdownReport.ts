@@ -140,7 +140,8 @@ export default class MarkdownReport implements Report {
     const self = this;
     Handlebars.registerHelper('appmap_diff_url', function (diagram) {
       const url = new URL(self.appmapURL.toString());
-      if (diagram.startsWith('./')) diagram = diagram.slice(2);
+      if (diagram.startsWith('./')) diagram = diagram.slice('./'.length);
+      if (diagram.startsWith('diff/')) diagram = diagram.slice('diff/'.length);
       if (diagram.endsWith('.diff.sequence.json'))
         diagram = diagram.slice(0, '.diff.sequence.json'.length * -1);
       const path = ['diff', `${diagram}.diff.sequence.json`].join('/');
@@ -150,7 +151,7 @@ export default class MarkdownReport implements Report {
 
     Handlebars.registerHelper('appmap_url', function (dir, appmap) {
       const url = new URL(self.appmapURL.toString());
-      if (appmap.startsWith('./')) appmap = appmap.slice(2);
+      if (appmap.startsWith('./')) appmap = appmap.slice('./'.length);
       if (appmap.endsWith('.appmap.json')) appmap = appmap.slice(0, '.appmap.json'.length * -1);
       const path = [dir, `${appmap}.appmap.json`].join('/');
       url.searchParams.append('path', path);
