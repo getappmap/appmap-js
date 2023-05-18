@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'fs';
 import { readFile } from 'fs/promises';
 import Handlebars from 'handlebars';
-import { join } from 'path';
+import { join, relative } from 'path';
 import Report from './Report';
 import { ChangeReport } from '../compare/ChangeReport';
 import assert from 'assert';
@@ -139,36 +139,50 @@ export default class MarkdownReport implements Report {
 
     const self = this;
     Handlebars.registerHelper('appmap_diff_url', function (diagram) {
-      const url = new URL(self.appmapURL.toString());
       if (diagram.startsWith('./')) diagram = diagram.slice('./'.length);
       if (diagram.startsWith('diff/')) diagram = diagram.slice('diff/'.length);
       if (diagram.endsWith('.diff.sequence.json'))
         diagram = diagram.slice(0, '.diff.sequence.json'.length * -1);
       const path = ['diff', `${diagram}.diff.sequence.json`].join('/');
-      url.searchParams.append('path', path);
-      return new Handlebars.SafeString(url.toString());
+
+      if (self.appmapURL) {
+        const url = new URL(self.appmapURL.toString());
+        url.searchParams.append('path', path);
+        return new Handlebars.SafeString(url.toString());
+      } else {
+        return new Handlebars.SafeString(path);
+      }
     });
 
     Handlebars.registerHelper('appmap_url', function (dir, appmap) {
-      const url = new URL(self.appmapURL.toString());
       if (appmap.startsWith('./')) appmap = appmap.slice('./'.length);
       if (appmap.endsWith('.appmap.json')) appmap = appmap.slice(0, '.appmap.json'.length * -1);
       const path = [dir, `${appmap}.appmap.json`].join('/');
-      url.searchParams.append('path', path);
-      return new Handlebars.SafeString(url.toString());
+
+      if (self.appmapURL) {
+        const url = new URL(self.appmapURL.toString());
+        url.searchParams.append('path', path);
+        return new Handlebars.SafeString(url.toString());
+      } else {
+        return new Handlebars.SafeString(path);
+      }
     });
 
     Handlebars.registerHelper('source_url', function (location, separator) {
-      const url = new URL(self.sourceURL.toString());
-
-      const [path, lineno] = location.split(':');
-      if (separator) {
-        location = [path, lineno].join(separator);
+      if (self.sourceURL) {
+        const [path, lineno] = location.split(':');
+        const url = new URL(self.sourceURL.toString());
+        if (url.protocol === 'file:') {
+          const sourcePath = relative(process.cwd(), join(url.pathname, path));
+          return new Handlebars.SafeString([sourcePath, lineno].join('#'));
+        } else {
+          url.pathname = join(url.pathname, path);
+          if (lineno) url.hash = `L${lineno}`;
+          return new Handlebars.SafeString(url.toString());
+        }
+      } else {
+        return new Handlebars.SafeString(location);
       }
-
-      url.pathname = join(url.pathname, path);
-      if (lineno) url.hash = `L${lineno}`;
-      return new Handlebars.SafeString(url.toString());
     });
 
     return Template(changeReport);
