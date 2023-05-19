@@ -44,7 +44,7 @@ class OpenAPICommand {
       number
     ]
   > {
-    const q = queue(this.collectAppMap.bind(this), 5);
+    const q = queue(this.collectAppMap.bind(this), 2);
     q.pause();
 
     // Make sure the directory exists -- if it doesn't, the glob below just returns nothing.

@@ -19,7 +19,7 @@ export default async function buildDiagrams(
       appmapFile,
       diagram: buildDiagram([appmapFile, 'appmap.json'].join('.'), appmap, specification),
     });
-  }, 5);
+  }, 2);
   for (const appmap of appmaps) diagramQueue.push(appmap);
   diagramQueue.error((err) => console.warn(err));
   if (!diagramQueue.idle()) await diagramQueue.drain();
