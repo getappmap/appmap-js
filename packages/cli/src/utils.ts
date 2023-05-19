@@ -100,7 +100,7 @@ export async function processFiles(
 
   const q = queue(fn, 2);
   files.forEach((file) => q.push(file));
-  await q.drain();
+  if (!q.idle()) await q.drain();
 }
 
 /**
@@ -123,13 +123,11 @@ export async function processNamedFiles(
     }
   };
 
-  let matchCount = 0;
   const processDir = async (dir: string) => {
     // If the directory contains the target fileName, add it to the process queue and return.
     const targetFileName = join(dir, fileName);
     const target = await stats(targetFileName);
     if (target && target.isFile()) {
-      matchCount += 1;
       q.push(targetFileName);
       return;
     }
@@ -144,7 +142,7 @@ export async function processNamedFiles(
   };
   await processDir(baseDir);
 
-  if (matchCount) await q.drain();
+  if (!q.idle()) await q.drain();
 }
 
 /**

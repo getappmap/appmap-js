@@ -22,7 +22,7 @@ export default async function buildDiagrams(
   }, 5);
   for (const appmap of appmaps) diagramQueue.push(appmap);
   diagramQueue.error((err) => console.warn(err));
-  await diagramQueue.drain();
+  if (!diagramQueue.idle()) await diagramQueue.drain();
 
   return diagrams;
 }

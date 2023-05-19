@@ -111,7 +111,7 @@ export default async function create(
   });
   if (verbose()) console.log(`Uploading ${relevantFilePaths.length} AppMaps`);
   q.push(relevantFilePaths);
-  await q.drain();
+  if (!q.idle()) await q.drain();
 
   const mostFrequent = (counts: Record<string, number>): string | undefined => {
     if (Object.keys(counts).length === 0) return;
