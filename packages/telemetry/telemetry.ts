@@ -35,7 +35,11 @@ const INSTRUMENTATION_KEY = ['NTBjMWE1YzI', 'NDliNA', 'NDkxMw', 'YjdjYw', 'ODZhN
   .map((x) => Buffer.from(x, 'base64').toString('utf8'))
   .join('-');
 
-function getMachineId(): string {
+export function getMachineId(): string {
+  if (process.env.APPMAP_USER_ID) {
+    return process.env.APPMAP_USER_ID;
+  }
+
   const machineId = config.get('machineId') as string | undefined;
   if (machineId) {
     return machineId;
@@ -64,23 +68,37 @@ function getMachineId(): string {
   return machineIdHash;
 }
 
-class Session {
-  public id: string;
-  public expiration: number;
+interface SessionProvider {
+  id: string;
+  touch(): void;
+}
+
+export class EnvironmentSession implements SessionProvider {
+  public readonly id: string;
 
   constructor() {
-    const sessionId = config.get('sessionId') as string | undefined;
-    const sessionExpiration = config.get('sessionExpiration') as number | undefined;
-
-    if (sessionId && sessionExpiration && !Session.beyondExpiration(sessionExpiration)) {
-      this.id = sessionId;
-      this.expiration = sessionExpiration;
-    } else {
-      this.id = Session.newSessionId();
-      this.expiration = Session.expirationFromNow();
-      config.set('sessionId', this.id);
-      config.set('sessionExpiration', this.expiration);
+    const sessionId = process.env.APPMAP_SESSION_ID;
+    if (!sessionId) {
+      throw new Error('APPMAP_SESSION_ID is not set');
     }
+    this.id = sessionId;
+  }
+
+  touch(): void {
+    // Do nothing.
+    // The session is owned by the parent process.
+  }
+}
+
+export class TelemetrySession implements SessionProvider {
+  private sessionId?: string;
+  private expiration?: number;
+
+  private static readonly CONF_KEY_SESSION_ID = 'sessionId';
+  private static readonly CONF_KEY_SESSION_EXPIRATION = 'sessionExpiration';
+
+  constructor() {
+    this.load();
   }
 
   static beyondExpiration(expiration: number): boolean {
@@ -96,13 +114,54 @@ class Session {
   }
 
   touch(): void {
-    this.expiration = Session.expirationFromNow();
-    config.set('sessionExpiration', this.expiration);
+    if (this.expired) return;
+
+    this.expiration = TelemetrySession.expirationFromNow();
+    config.set(TelemetrySession.CONF_KEY_SESSION_EXPIRATION, this.expiration);
   }
 
-  get valid(): boolean {
-    return !Session.beyondExpiration(this.expiration);
+  private renew(): void {
+    this.sessionId = TelemetrySession.newSessionId();
+    this.expiration = TelemetrySession.expirationFromNow();
+    config.set(TelemetrySession.CONF_KEY_SESSION_ID, this.sessionId);
+    config.set(TelemetrySession.CONF_KEY_SESSION_EXPIRATION, this.expiration);
   }
+
+  private load(): void {
+    const sessionId = config.get(TelemetrySession.CONF_KEY_SESSION_ID) as string | undefined;
+    const sessionExpiration = config.get(TelemetrySession.CONF_KEY_SESSION_EXPIRATION) as
+      | number
+      | undefined;
+    this.sessionId = sessionId;
+    this.expiration = sessionExpiration;
+  }
+
+  get id(): string {
+    if (this.expired) {
+      this.renew();
+    }
+
+    if (!this.sessionId) {
+      // This should be impossible.
+      throw new Error('Failed to retreive session ID');
+    }
+
+    return this.sessionId;
+  }
+
+  get expired(): boolean {
+    return (
+      this.sessionId === undefined || this.expiration === undefined || this.expiration <= Date.now()
+    );
+  }
+}
+
+export function getSession(): SessionProvider {
+  if (process.env.APPMAP_SESSION_ID) {
+    return new EnvironmentSession();
+  }
+
+  return new TelemetrySession();
 }
 
 export interface TelemetryData {
@@ -138,21 +197,14 @@ export interface TelemetryOptions {
 }
 
 export default class Telemetry {
-  private static _session?: Session;
   private static _client?: TelemetryClient;
   private static debug = process.env.APPMAP_TELEMETRY_DEBUG !== undefined;
+
+  public static readonly session = getSession();
   public static readonly machineId = getMachineId();
 
   static get enabled(): boolean {
     return process.env.APPMAP_TELEMETRY_DISABLED === undefined;
-  }
-
-  static get session(): Session {
-    if (!this._session?.valid) {
-      this._session = new Session();
-    }
-
-    return this._session;
   }
 
   static get client(): TelemetryClient {
