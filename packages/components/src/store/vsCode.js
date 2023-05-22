@@ -14,6 +14,7 @@ export const SET_FOCUSED_EVENT = 'setFocusedEvent';
 export const VIEW_COMPONENT = 'viewComponent';
 export const VIEW_SEQUENCE = 'viewSequence';
 export const VIEW_FLOW = 'viewFlow';
+export const VIEW_FLAMEGRAPH = 'viewFlamegraph';
 export const ADD_EXPANDED_PACKAGE = 'addExpandedPackage';
 export const REMOVE_EXPANDED_PACKAGE = 'removeExpandedPackage';
 export const SET_EXPANDED_PACKAGES = 'setExpandedPackage';

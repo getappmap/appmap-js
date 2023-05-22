@@ -31,7 +31,7 @@ context('AppMap trace diagram', () => {
         .first()
         .click()
         .get('.tabs .tab-btn')
-        .last()
+        .contains('Trace View')
         .click();
 
       cy.get('.details-panel-header')
@@ -71,7 +71,7 @@ context('AppMap trace diagram', () => {
     });
 
     it('highlights and loop through events selected from the event filter', () => {
-      cy.get('.tabs .tab-btn').last().click();
+      cy.get('.tabs .tab-btn').contains('Trace View').click();
 
       cy.get('.trace-filter__suffix').should('not.exist');
       cy.get('.trace-filter__input').type('example');
@@ -138,7 +138,7 @@ context('AppMap trace diagram', () => {
     });
 
     it('HTTP events are properly named', () => {
-      cy.get('.tabs .tab-btn').last().click();
+      cy.get('.tabs .tab-btn').contains('Trace View').click();
       cy.get('.trace-node[data-event-id="1"]').should(
         'contain.text',
         'POST /owners/:ownerId/pets/:petId/visits/new'

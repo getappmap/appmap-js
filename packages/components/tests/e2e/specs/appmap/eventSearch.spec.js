@@ -4,7 +4,7 @@ context('AppMap event search', () => {
   });
 
   it('cycles through matches', () => {
-    cy.get('.tabs .tab-btn').last().click();
+    cy.get('.tabs .tab-btn').contains('Trace View').click();
     cy.get('.trace-filter__input').type('label:json').type('{enter}');
     cy.get('.trace-filter__arrows-text').contains('1 / 27 results');
     cy.get('.trace-filter__arrow').last().click();
@@ -39,7 +39,7 @@ context('AppMap event search', () => {
   });
 
   it('only activates after typing a minimum number of characters', () => {
-    cy.get('.tabs .tab-btn').last().click();
+    cy.get('.tabs .tab-btn').contains('Trace View').click();
 
     cy.get('.trace-filter__input').type('o');
     cy.get('.trace-node.filtered').should('not.exist');
@@ -55,7 +55,7 @@ context('AppMap event search', () => {
   });
 
   it('displays suggestions', () => {
-    cy.get('.tabs .tab-btn').last().click();
+    cy.get('.tabs .tab-btn').contains('Trace View').click();
 
     cy.get('.trace-filter__input').focus();
     cy.get('.trace-filter__suggestions').should('be.visible');
