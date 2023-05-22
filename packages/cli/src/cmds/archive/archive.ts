@@ -15,6 +15,10 @@ import { serializeAppMapFilter } from './serializeAppMapFilter';
 import { deserializeFilter } from '@appland/models';
 import analyze from './analyze';
 
+// ## 1.3.0
+//
+// * AppMap scanner is run on all AppMaps, with an appmap-findings.json file stored in each index directory.
+//
 // ## 1.2.0
 //
 // * Update format of compare fliters.
@@ -26,7 +30,7 @@ import analyze from './analyze';
 // ## 1.1.0
 //
 // * Added appMapFilter to the archive metadata.
-export const ArchiveVersion = '1.2.0';
+export const ArchiveVersion = '1.3.0';
 
 export const PackageVersion = {
   name: '@appland/appmap',
