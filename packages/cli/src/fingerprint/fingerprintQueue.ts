@@ -8,6 +8,7 @@ function isNodeError(error: unknown, code?: string): error is NodeJS.ErrnoExcept
 
 export default class FingerprintQueue {
   public handler: Fingerprinter;
+  public failOnError = true;
   private queue: QueueObject<string>;
   private pending = new Set<string>();
 
@@ -38,7 +39,11 @@ export default class FingerprintQueue {
           );
         } else if (isNodeError(error, 'ENOENT')) {
           console.warn(`Skipped: ${error.path}\nThe file does not exist.`);
-        } else reject(error);
+        } else if (this.failOnError) {
+          reject(error);
+        } else {
+          console.warn(`Skipped: ${error}`);
+        }
       });
       this.queue.resume();
     });

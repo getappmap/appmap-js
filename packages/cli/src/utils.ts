@@ -90,7 +90,11 @@ export async function writeFileAtomic(
 export async function processFiles(
   pattern: string,
   fn: AsyncWorker<string>,
-  fileCountFn = (count: number) => {}
+  fileCountFn = (_count: number) => {},
+  errorFn = (err: Error) => {
+    process.stderr.write(err.toString() + '\n');
+  },
+  workerCount = 2
 ): Promise<void> {
   const files = await promisify(glob)(pattern);
   if (fileCountFn) {
@@ -98,9 +102,10 @@ export async function processFiles(
   }
   if (files.length === 0) return;
 
-  const q = queue(fn, 2);
+  const q = queue(fn, workerCount);
+  q.error(errorFn);
   files.forEach((file) => q.push(file));
-  await q.drain();
+  if (!q.idle()) await q.drain();
 }
 
 /**
@@ -211,4 +216,44 @@ export function formatHttpServerRequest(event: Event): string {
         : '<none>',
   };
   return [data.method, data.path, `(${data.statusCode})`].join(' ');
+}
+
+export async function repeatUntil(
+  jobName: string,
+  trigger: () => Promise<void>,
+  condition: () => Promise<boolean>,
+  interval: number,
+  timeRemaining: number,
+  currentRetry = 0
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const retry = () => {
+      if (timeRemaining < 0) {
+        reject(new Error(`${jobName}: Exceeded maximum number of retries`));
+        return;
+      }
+
+      const backoffTime = Math.pow(2, currentRetry) * interval;
+      console.debug(`${jobName}: Retrying in ${backoffTime}ms`);
+      setTimeout(() => {
+        repeatUntil(
+          jobName,
+          trigger,
+          condition,
+          interval,
+          timeRemaining - backoffTime,
+          currentRetry + 1
+        )
+          .then(resolve)
+          .catch(reject);
+      }, backoffTime);
+    };
+
+    const check = () =>
+      condition()
+        .then((result) => (result ? resolve() : retry()))
+        .catch(retry);
+
+    trigger().then(check).catch(retry);
+  });
 }

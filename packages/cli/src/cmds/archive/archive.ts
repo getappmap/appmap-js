@@ -5,16 +5,15 @@ import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../lib/locateAppMapDir';
 import { exists, verbose } from '../../utils';
 import { mkdir, readFile, stat, unlink, writeFile } from 'fs/promises';
-import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
 import { DefaultMaxAppMapSizeInMB } from '../../lib/fileSizeFilter';
 import loadAppMapConfig from '../../lib/loadAppMapConfig';
 import { VERSION as IndexVersion } from '../../fingerprint/fingerprinter';
 import chalk from 'chalk';
 import gitRevision from './gitRevision';
 import { ArchiveMetadata } from './ArchiveMetadata';
-import updateSequenceDiagrams from './updateSequenceDiagrams';
 import { serializeAppMapFilter } from './serializeAppMapFilter';
 import { deserializeFilter } from '@appland/models';
+import analyze from './analyze';
 
 // ## 1.2.0
 //
@@ -74,9 +73,10 @@ commit of the current git revision may not be the one that triggered the build.`
     alias: 'f',
   });
 
-  args.option('index', {
-    describe: 'whether to index the AppMaps',
+  args.option('analyze', {
+    describe: 'whether to analyze the AppMaps',
     type: 'boolean',
+    alias: 'index',
     default: true,
   });
 
@@ -109,7 +109,7 @@ export const handler = async (argv: any) => {
 
   const {
     maxSize,
-    index,
+    analyze: doAnalyze,
     type: typeArg,
     revision: revisionArg,
     outputFile: outputFileNameArg,
@@ -129,14 +129,9 @@ export const handler = async (argv: any) => {
   process.chdir(appMapDir);
 
   let oversizedAppMaps: string[] | undefined;
-  if (index) {
-    process.stdout.write(`Indexing AppMaps...`);
-    const numIndexed = await new FingerprintDirectoryCommand('.').execute();
-    process.stdout.write(`done (${numIndexed})\n`);
-
-    console.log('Generating sequence diagrams');
-    oversizedAppMaps = (await updateSequenceDiagrams('.', maxAppMapSizeInBytes, appMapFilter))
-      .oversizedAppMaps;
+  if (doAnalyze) {
+    const analyzeResult = await analyze(maxAppMapSizeInBytes, appMapFilter);
+    oversizedAppMaps = analyzeResult.oversizedAppMaps;
   }
 
   const metadata: ArchiveMetadata = {

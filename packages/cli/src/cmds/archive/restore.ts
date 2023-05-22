@@ -4,7 +4,6 @@ import { glob } from 'glob';
 import { basename, join } from 'path';
 import { inspect, promisify } from 'util';
 import yargs from 'yargs';
-import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { verbose } from '../../utils';
 import { ArchiveEntry, ArchiveStore, FileArchiveStore, GitHubArchiveStore } from './archiveStore';
@@ -148,12 +147,6 @@ export const handler = async (argv: any) => {
       );
     }
   }
-
-  console.log(`Updating indexes`);
-
-  process.stdout.write(`Indexing AppMaps...`);
-  const numIndexed = await new FingerprintDirectoryCommand(outputDir).execute();
-  process.stdout.write(`done (${numIndexed})\n`);
 
   console.log(`Restore complete`);
 };

@@ -43,6 +43,8 @@ export default async function buildChangeReport(
 ): Promise<ChangeReport> {
   const diffDiagrams = new DiffDiagrams();
 
+  // TODO: Grab appmap.yml from the working dir and use it if the project doesn't have one of its own?
+
   const appmapData = new AppMapData(workingDir);
   const appmapIndex = new AppMapIndex(appmapData);
   await appmapIndex.build();
