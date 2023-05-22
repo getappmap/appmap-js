@@ -52,11 +52,6 @@ export const builder = (args: yargs.Argv) => {
     default: true,
   });
 
-  args.option('appmap-config-file', {
-    describe:
-      'appmap.yml file to use in place of the one in the project directory. Useful for overriding the default configuration.',
-  });
-
   return args.strict();
 };
 

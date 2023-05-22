@@ -16,8 +16,16 @@ export class AppMapData {
     );
   }
 
+  manifestPath(revisionName: RevisionName): string {
+    return join(this.revisionPath(revisionName), 'appmap_archive.json');
+  }
+
   findingsPath(revisionName: RevisionName): string {
     return join(this.workingDir, revisionName, 'appmap-findings.json');
+  }
+
+  revisionPath(revisionName: RevisionName): string {
+    return join(this.workingDir, revisionName);
   }
 
   openapiPath(revisionName: RevisionName): string {
@@ -43,8 +51,4 @@ export class AppMapData {
   sequenceDiagramDiffPath(appmap: string): string {
     return join(this.workingDir, RevisionName.Diff, [appmap, 'diff.sequence.json'].join('.'));
   }
-
-  async appmapDir() {}
-
-  async deleteUnchangedAppMaps() {}
 }

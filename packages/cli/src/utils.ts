@@ -117,7 +117,7 @@ export async function processNamedFiles(
   baseDir: string,
   fileName: string,
   fn: AsyncWorker<string>
-): Promise<void> {
+): Promise<number> {
   const q = queue(fn, 2);
 
   const stats = async (fileName: string): Promise<Stats | undefined> => {
@@ -150,6 +150,8 @@ export async function processNamedFiles(
   await processDir(baseDir);
 
   if (matchCount) await q.drain();
+
+  return matchCount;
 }
 
 /**
