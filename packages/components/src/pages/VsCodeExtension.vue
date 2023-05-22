@@ -112,6 +112,7 @@
         </v-tab>
 
         <v-tab
+          v-if="flamegraphEnabled"
           name="Flame Graph"
           :is-active="isViewingFlamegraph"
           :ref="VIEW_FLAMEGRAPH"
@@ -433,6 +434,10 @@ export default {
       default: VIEW_COMPONENT,
     },
     appMapUploadable: {
+      type: Boolean,
+      default: false,
+    },
+    flamegraphEnabled: {
       type: Boolean,
       default: false,
     },

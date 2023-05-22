@@ -44,6 +44,7 @@ export default {
   },
   args: {
     appMapUploadable: true,
+    flamegraphEnabled: true,
   },
 };
 
