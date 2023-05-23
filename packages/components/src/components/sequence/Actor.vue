@@ -344,7 +344,7 @@ $min-height: 3rem;
 }
 
 .sequence-actor-lane-separator {
-  border-left: 1px dashed $gray4;
+  border-left: 1px dashed #242c41; //$gray4;
   position: relative;
   height: 100%;
   width: 1px;

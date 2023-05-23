@@ -79,7 +79,7 @@ export default {
       width: 1.1rem;
       height: 4px;
       transform: translateY(-1px);
-      background-color: $gray4;
+      background-color: $gray4; //#242c41;
       z-index: -1;
     }
   }

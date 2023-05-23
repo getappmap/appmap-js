@@ -327,7 +327,7 @@ export default {
 
 .call.selected > .call-line-segment,
 .call.selected > .self-call {
-  background-color: #6fddbc94;
+  background-color: desaturate($hotpink, 20); //#f934b582; //#6fddbc94;
   border-top: 4px solid $black;
   &.arrow-base {
     border-radius: 0;
