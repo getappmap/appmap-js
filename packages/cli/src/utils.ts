@@ -149,7 +149,8 @@ export async function processNamedFiles(
   };
   await processDir(baseDir);
 
-  if (matchCount) await q.drain();
+  q.error(console.warn);
+  if (!q.idle()) await q.drain();
 
   return matchCount;
 }

@@ -130,13 +130,13 @@ export const handler = async (argv: any) => {
   const versions = { archive: ArchiveVersion, index: IndexVersion };
   if (PackageVersion.version) versions[PackageVersion.name] = PackageVersion.version;
 
-  process.chdir(appMapDir);
-
   let oversizedAppMaps: string[] | undefined;
   if (doAnalyze) {
-    const analyzeResult = await analyze(maxAppMapSizeInBytes, appMapFilter);
+    const analyzeResult = await analyze(maxAppMapSizeInBytes, appMapFilter, appMapDir);
     oversizedAppMaps = analyzeResult.oversizedAppMaps;
   }
+
+  process.chdir(appMapDir);
 
   const metadata: ArchiveMetadata = {
     versions,

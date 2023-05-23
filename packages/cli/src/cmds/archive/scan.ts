@@ -1,49 +1,52 @@
-import { exec } from 'child_process';
-import { CountNumProcessed } from './CountNumProcessed';
-import { processFiles, repeatUntil } from '../../utils';
-import { stat, utimes } from 'fs/promises';
-import { basename, dirname, join } from 'path';
-import reportAppMapProcessingError from './reportAppMapProcessingError';
+import { basename, dirname, join, relative, sep } from 'path';
+import { executeCommand } from '../../lib/executeCommand';
+import { readFile, rm, writeFile } from 'fs/promises';
+import { Finding } from '../../lib/findings';
+import { processNamedFiles } from '../../utils';
 
-export async function scan(appmapDir: string): Promise<number> {
-  let command = `npx @appland/scanner@latest scan --appmap-dir ${appmapDir} --watch`;
+export async function scan(appMapDir: string): Promise<number> {
+  await executeCommand(`npx @appland/scanner@latest scan --appmap-dir ${appMapDir} --all`);
 
-  const workerCount = 2;
-  let scanCount = 0;
-  const scanAppMap = async (appmapFile: string) => {
-    const indexDir = join(dirname(appmapFile), basename(appmapFile, '.appmap.json'));
-    const findingsFile = join(indexDir, 'appmap-findings.json');
+  const scanResultsData = await readFile('appmap-findings.json', 'utf8');
+  await rm('appmap-findings.json');
+  const scanResults = JSON.parse(scanResultsData);
+  const scanResultsTemplateJSON = JSON.parse(scanResultsData);
+  delete scanResultsTemplateJSON['findings'];
+  const appMapMetadata: Record<string, any> = scanResultsTemplateJSON['appMapMetadata'];
+  const scanResultsTemplate = JSON.stringify(scanResultsTemplateJSON);
 
-    const findingsExist = async (): Promise<boolean> => {
-      try {
-        await stat(findingsFile);
-        return true;
-      } catch {
-        return false;
-      }
-    };
+  const findings: Finding[] = scanResults['findings'];
+  const findingsByAppMap = findings.reduce<Map<string, Finding[]>>((memo, finding) => {
+    if (!memo.has(finding.appMapFile)) memo.set(finding.appMapFile, [finding]);
+    else memo.get(finding.appMapFile)!.push(finding);
+    return memo;
+  }, new Map<string, Finding[]>());
 
-    const touchFile = async (): Promise<void> => await utimes(appmapFile, new Date(), new Date());
-    // Give the first couple of maps a long time to scan, to give the process time to get running.
-    const timeout = scanCount < workerCount ? 60000 : 1000;
-    await repeatUntil(`Scan ${appmapFile}`, touchFile, findingsExist, 1, timeout);
-  };
+  return await processNamedFiles(appMapDir, 'metadata.json', async (metadataFile) => {
+    // TODO: This is hacky, but scanning everything at once is an efficient way to get it done,
+    // and the scanner code is not accessible from the CLI project.
 
-  const cmd = exec(command);
-  cmd.on('error', console.warn);
+    const indexDir = dirname(metadataFile);
+    const appmapFileName = join(
+      ...indexDir.split(sep).reverse().slice(1).reverse(),
+      basename(indexDir) + '.appmap.json'
+    );
 
-  const counter = new CountNumProcessed();
-  await processFiles(
-    `${appmapDir}/**/*.appmap.json`,
-    scanAppMap,
-    counter.setCount(),
-    reportAppMapProcessingError(`Scan`),
-    workerCount
-  );
+    const scanResults = JSON.parse(scanResultsTemplate);
+    const findings: Finding[] = findingsByAppMap.get(appmapFileName) || [];
 
-  cmd.kill();
+    const scanSummary: { numAppMaps: number; numChecks: number; numFindings: number } =
+      scanResults['summary'];
+    scanSummary.numChecks = scanSummary.numChecks / scanSummary.numAppMaps;
+    scanSummary.numAppMaps = 1;
+    scanSummary.numFindings = findings.length;
 
-  return new Promise((resolve) => {
-    cmd.on('exit', resolve);
+    scanResults['findings'] = findings;
+
+    const metadataEntry = appMapMetadata[appmapFileName];
+    if (metadataEntry) scanResults['appMapMetadata'] = { [appmapFileName]: metadataEntry };
+    else console.warn(`No appMapMetadata found for '${appmapFileName}' in scan results.`);
+
+    await writeFile(join(indexDir, 'appmap-findings.json'), JSON.stringify(scanResults, null, 2));
   });
 }

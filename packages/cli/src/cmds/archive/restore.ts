@@ -24,6 +24,7 @@ export const builder = (args: yargs.Argv) => {
   args.option('revision', {
     describe: `revision to restore`,
     type: 'string',
+    alias: 'r',
   });
 
   args.option('output-dir', {
@@ -74,7 +75,7 @@ export const handler = async (argv: any) => {
     archiveStore = new FileArchiveStore(archiveDir);
   }
   const archivesAvailable = await archiveStore.revisionsAvailable();
-  console.debug(`Found ${inspect(archivesAvailable)} AppMap archives`);
+  if (verbose()) console.debug(`Found ${inspect(archivesAvailable)} AppMap archives`);
 
   let ancestors: string[] | undefined;
   let mostRecentArchiveAvailable: ArchiveEntry | undefined = [
