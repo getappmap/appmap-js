@@ -225,7 +225,7 @@ $min-height: 3rem;
   transition: $transition;
 
   &--selected {
-    background-color: $actor-highlight;
+    background-color: $gray2; //$actor-highlight;
     .label {
       text-shadow: #181b24 0 0 12px;
       &.http {
