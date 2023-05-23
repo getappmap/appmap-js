@@ -190,7 +190,7 @@ The base revision cannot be determined, so either use --type=auto or --type=full
 
   await new Promise<void>((resolveCB, rejectCB) => {
     exec(
-      `tar czf appmaps.tar.gz --exclude appmaps.tar.gz --exclude appmap_archive.json *`,
+      `tar czf appmaps.tar.gz --exclude openapi.yml --exclude appmaps.tar.gz --exclude appmap_archive.json *`,
       (error) => {
         if (error) return rejectCB(error);
 
@@ -214,7 +214,7 @@ The base revision cannot be determined, so either use --type=auto or --type=full
       `tar cf ${join(
         resolve(workingDirectory, outputDir),
         outputFileName
-      )} appmap_archive.json appmaps.tar.gz`,
+      )} appmap_archive.json openapi.yml appmaps.tar.gz`,
       (error) => {
         if (error) return rejectCB(error);
 
