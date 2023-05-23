@@ -11748,7 +11748,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"conf@npm:<11":
+"conf@npm:<11, conf@npm:^10.0.2":
   version: 10.2.0
   resolution: "conf@npm:10.2.0"
   dependencies:
@@ -11763,24 +11763,6 @@ __metadata:
     pkg-up: ^3.1.0
     semver: ^7.3.5
   checksum: 27066f38a25411c1e72e81a5219e2c7ed675cd39d8aa2a2f1797bb2c9255725e92e335d639334177a23d488b22b1290bbe0708e9a005574e5d83d5432df72bd3
-  languageName: node
-  linkType: hard
-
-"conf@npm:^10.0.2":
-  version: 10.1.1
-  resolution: "conf@npm:10.1.1"
-  dependencies:
-    ajv: ^8.6.3
-    ajv-formats: ^2.1.1
-    atomically: ^1.7.0
-    debounce-fn: ^4.0.0
-    dot-prop: ^6.0.1
-    env-paths: ^2.2.1
-    json-schema-typed: ^7.0.3
-    onetime: ^5.1.2
-    pkg-up: ^3.1.0
-    semver: ^7.3.5
-  checksum: f67fd7b33b39b76e1b62316d4ed5943f9ac95a774f5a86a63aea2c594ff5b4ba7673bf6d42f806a23c07248e90f4699b24321640b1dffaf2d81d10d56476a203
   languageName: node
   linkType: hard
 
