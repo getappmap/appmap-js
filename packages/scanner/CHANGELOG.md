@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.77.2](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.77.1...@appland/scanner-v1.77.2) (2023-05-24)
+
+
+### Bug Fixes
+
+* Consistently check queue.idle before queue.drain ([41d6e24](https://github.com/getappmap/appmap-js/commit/41d6e246dbc3665a70c7eed17104872a508d2d2a))
+
 # [@appland/scanner-v1.77.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.77.0...@appland/scanner-v1.77.1) (2023-04-29)
 
 
