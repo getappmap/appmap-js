@@ -15,9 +15,7 @@ export default {
       diffThreshold: 1,
     },
   },
-  argTypes: {
-    theme: { control: { type: 'select', options: ['dark', 'light'] } },
-  },
+  argTypes: {},
   args: {
     appMap: store.state.appMap,
   },

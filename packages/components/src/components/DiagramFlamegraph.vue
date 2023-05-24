@@ -16,11 +16,6 @@ export default {
   name: 'v-diagram-flame',
 
   props: {
-    theme: {
-      type: String,
-      default: 'dark',
-      validator: (value) => ['dark', 'light'].includes(value),
-    },
     appMap: {
       type: Object,
     },
