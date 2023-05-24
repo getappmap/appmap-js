@@ -10,7 +10,8 @@ import { processNamedFiles } from '../../utils';
 
 export default async function loadFindings(
   appmapData: AppMapData,
-  revisionName: RevisionName
+  revisionName: RevisionName,
+  appMapDir: string
 ): Promise<Finding[]> {
   const manifest: ArchiveMetadata = JSON.parse(
     await readFile(appmapData.manifestPath(revisionName), 'utf-8')
@@ -49,5 +50,10 @@ export default async function loadFindings(
 
   console.info(`Found ${findings.length} findings for ${revisionName} revision`);
 
+  for (const finding of findings) {
+    if (finding.appMapFile.startsWith(appMapDir)) {
+      finding.appMapFile = finding.appMapFile.slice(appMapDir.length + 1);
+    }
+  }
   return findings;
 }

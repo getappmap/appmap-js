@@ -51,6 +51,13 @@ export default async function buildChangeReport(
   const appmapIndex = new AppMapIndex(appmapData);
   await appmapIndex.build();
 
+  const baseManifest: ArchiveMetadata = JSON.parse(
+    await readFile(appmapData.manifestPath(RevisionName.Base), 'utf-8')
+  );
+  const headManifest: ArchiveMetadata = JSON.parse(
+    await readFile(appmapData.manifestPath(RevisionName.Head), 'utf-8')
+  );
+
   const appMapMetadata = {
     base: new Map<AppMapName, Metadata>(),
     head: new Map<AppMapName, Metadata>(),
@@ -241,8 +248,8 @@ export default async function buildChangeReport(
     )
   ).filter(Boolean) as TestFailure[];
 
-  const baseFindings = await loadFindings(appmapData, RevisionName.Base);
-  const headFindings = await loadFindings(appmapData, RevisionName.Head);
+  const baseFindings = await loadFindings(appmapData, RevisionName.Base, baseManifest.appMapDir);
+  const headFindings = await loadFindings(appmapData, RevisionName.Head, headManifest.appMapDir);
 
   let newFindings: Finding[];
   let resolvedFindings: Finding[];
@@ -260,8 +267,8 @@ export default async function buildChangeReport(
     const resolvedFindingHashes = [...baseFindingHashes].filter(
       (hash) => !headFindingHashes.has(hash)
     );
-    newFindings = baseFindings.filter((finding) => newFindingHashes.includes(finding.hash_v2));
-    resolvedFindings = headFindings.filter((finding) =>
+    newFindings = headFindings.filter((finding) => newFindingHashes.includes(finding.hash_v2));
+    resolvedFindings = baseFindings.filter((finding) =>
       resolvedFindingHashes.includes(finding.hash_v2)
     );
     [...newFindings, ...resolvedFindings].forEach((finding) => {
