@@ -119,7 +119,10 @@
           :tabName="VIEW_FLAMEGRAPH"
           :allow-scroll="true"
         >
-          <v-diagram-flamegraph ref="viewFlamegraph_diagram" :app-map="filteredAppMap" />
+          <v-diagram-flamegraph
+            ref="viewFlamegraph_diagram"
+            :events="filteredAppMap.rootEvents()"
+          />
         </v-tab>
 
         <template v-slot:notification>
