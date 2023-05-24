@@ -107,9 +107,9 @@ yargs(process.argv.slice(2))
           } else {
             console.warn(`No ${field} in ${appMapBaseName}`);
           }
-        }, 5);
+        }, 2);
         appMapNames.forEach((name) => q.push(name));
-        await q.drain();
+        if (!q.idle()) await q.drain();
       } else {
         appMapNames.forEach((name) => values.push(name));
       }

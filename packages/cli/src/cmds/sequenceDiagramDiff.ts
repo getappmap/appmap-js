@@ -135,7 +135,7 @@ export const handler = async (argv: any) => {
             data.diagrams.set(relativePath, diagram);
           }, 2);
           matches.forEach((fileName) => loader.push(fileName));
-          await loader.drain();
+          if (!loader.idle()) await loader.drain();
         });
       })
     );

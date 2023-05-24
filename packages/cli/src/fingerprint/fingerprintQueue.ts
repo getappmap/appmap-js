@@ -40,6 +40,8 @@ export default class FingerprintQueue {
           console.warn(`Skipped: ${error.path}\nThe file does not exist.`);
         } else reject(error);
       });
+      // The queue will run continuously from here on out, which is what we want.
+      // Items will be added to the queue as they are discovered.
       this.queue.resume();
     });
   }

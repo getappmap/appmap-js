@@ -1,6 +1,6 @@
 const fsp = require('fs').promises;
 const { dirname, join: joinPath, isAbsolute, basename } = require('path');
-const { verbose, mtime, processFiles } = require('./utils');
+const { verbose, mtime, processNamedFiles } = require('./utils');
 
 // Gets the file path of a location. Location may include a line number or other info
 // in addition to the file path.
@@ -13,6 +13,8 @@ class Depends {
   constructor(appMapDir) {
     this.appMapDir = appMapDir;
     this.baseDir = '.';
+    this.mtimes = new Map();
+    this.mtimeCacheHitCount = 0;
   }
 
   /**
@@ -41,7 +43,7 @@ class Depends {
       // eslint-disable-next-line no-param-reassign
       files = [files];
     }
-    this.testLocations = new Set(files);
+    this.testLocations = new Set(files.filter(Boolean));
   }
 
   /**
@@ -88,6 +90,18 @@ class Depends {
         console.log(`Checking AppMap ${indexDir} with timestamp ${appmapUpdatedAt}`);
       }
 
+      const reportOutOfDate = (filePath) => {
+        if (verbose()) {
+          console.log(`${filePath} requires rebuild of AppMap ${indexDir}`);
+        }
+        if (!outOfDateNames.has(indexDir)) {
+          if (callback) {
+            callback(indexDir);
+          }
+          outOfDateNames.add(indexDir);
+        }
+      };
+
       const classMap = JSON.parse(await fsp.readFile(fileName));
       const codeLocations = new Set();
 
@@ -104,9 +118,15 @@ class Depends {
 
       const isClientProvidedFile = (filePath) => this.testLocations.has(filePath);
 
-      const isFileModifiedSince = async (filePath) => {
+      const modifiedTime = async (filePath) => {
+        const result = this.mtimes.get(filePath);
+        if (result || result === false) {
+          this.mtimeCacheHitCount += 1;
+          return result;
+        }
+
         const dependencyFilePath = this.makeAbsolutePath(filePath);
-        const dependencyModifiedAt = await mtime(dependencyFilePath);
+        let dependencyModifiedAt = await mtime(dependencyFilePath);
 
         // TODO: Actually, if the dependency file does not exist, we should return true.
         // However, at this time we can't tell the difference between a dependency file that has
@@ -114,50 +134,41 @@ class Depends {
         // mean? Well, unfortunately the Ruby agent (and perhaps others?) will write file locations
         // like 'JSON' for native functions that don't actually correspond to real files.
         if (!dependencyModifiedAt) {
+          dependencyModifiedAt = false;
           if (verbose()) console.log(`[depends] ${dependencyFilePath} does not exist`);
-          return false;
         }
 
+        this.mtimes.set(filePath, dependencyModifiedAt);
+        return dependencyModifiedAt;
+      };
+
+      const isFileModifiedSince = async (filePath) => {
+        const dependencyModifiedAt = await modifiedTime(filePath);
+        if (dependencyModifiedAt === false) return false;
+
         const uptodate = appmapUpdatedAt < dependencyModifiedAt;
-        if (verbose()) {
+        if (!uptodate && verbose()) {
           console.log(
-            `[depends] ${dependencyFilePath} timestamp is ${dependencyModifiedAt}, ${
-              uptodate ? 'up to date' : 'NOT up to date'
-            } with ${indexDir} (${appmapUpdatedAt})`
+            `[depends] ${filePath} timestamp is ${dependencyModifiedAt}, NOT up to date with ${indexDir} (${appmapUpdatedAt})`
           );
         }
 
         return uptodate;
       };
 
-      if (this.testLocations && verbose()) {
-        console.log(
-          `Checking whether AppMap contains any client-provided file: [ ${[...this.testLocations]
-            .sort()
-            .join(', ')} ]`
-        );
-      }
-
       const testFunction = this.testLocations ? isClientProvidedFile : isFileModifiedSince;
 
       await Promise.all(
         [...codeLocations].map(async (filePath) => {
           if (await testFunction(filePath)) {
-            if (verbose()) {
-              console.log(`${filePath} requires rebuild of AppMap ${indexDir}`);
-            }
-            if (!outOfDateNames.has(indexDir)) {
-              if (callback) {
-                callback(indexDir);
-              }
-              outOfDateNames.add(indexDir);
-            }
+            if (verbose()) console.debug(`[depends] ${indexDir} is out of date due to ${filePath}`);
+            reportOutOfDate(filePath, indexDir);
           }
         })
       );
     };
 
-    await processFiles(`${this.appMapDir}/**/classMap.json`, async (fileName) => {
+    await processNamedFiles(this.appMapDir, 'classMap.json', async (fileName) => {
       try {
         await checkClassMap(fileName);
       } catch (e) {
@@ -165,6 +176,11 @@ class Depends {
         console.warn(`Error checking uptodate ${fileName}: ${e}`);
       }
     });
+
+    if (verbose()) {
+      console.debug(`File mtime cache hit count: ${this.mtimeCacheHitCount}`);
+      console.debug(`Out of date count: ${outOfDateNames.size}`);
+    }
 
     return [...outOfDateNames].sort();
   }
