@@ -16,8 +16,8 @@ export default {
   name: 'v-diagram-flame',
 
   props: {
-    appMap: {
-      type: Object,
+    events: {
+      type: Array,
     },
   },
 
@@ -29,9 +29,7 @@ export default {
     const flamegraph = createFlamegraph();
     flamegraph.selfValue(false); // each node's value contains the sum of its children (as well as its own value)
     flamegraph.width(960);
-    d3.select(this.$refs.d3Container)
-      .datum(digestEventArray(this.appMap.rootEvents()))
-      .call(flamegraph);
+    d3.select(this.$refs.d3Container).datum(digestEventArray(this.events)).call(flamegraph);
   },
 };
 </script>

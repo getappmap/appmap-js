@@ -17,7 +17,7 @@ export default {
   },
   argTypes: {},
   args: {
-    appMap: store.state.appMap,
+    events: store.state.appMap.rootEvents(),
   },
 };
 
