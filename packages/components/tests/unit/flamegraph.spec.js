@@ -23,6 +23,11 @@ const validateNode = (node) => {
 describe('digestEventArray', () => {
   it('produce valid flamegraph tree', () => {
     const { events } = buildAppMap(scenario).normalize().build();
-    validateNode(digestEventArray(events));
+    const node = digestEventArray(events);
+    validateNode(node);
+    expect(node.name).toBe('root');
+    expect(node.children.length).toBeGreaterThan(2);
+    expect(node.children[0].name).toBe('GET /admin');
+    expect(node.children[1].name).toBe('Spree::Admin::RootController#index');
   });
 });

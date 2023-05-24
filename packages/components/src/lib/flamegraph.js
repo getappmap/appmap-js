@@ -8,7 +8,7 @@ const digestEvent = (event) => ({
   children: event.children.map(digestEvent),
 });
 
-const validateValue = (name, total, value) => {
+const toCompatibleValue = (name, total, value) => {
   if (value < 0) {
     console.warn(`found negative value ${value} for ${name}`);
     return total;
@@ -30,7 +30,7 @@ const validateNode = ({ name, value, children: children1 }) => {
   const children2 = children1.map(validateNode);
   return {
     name,
-    value: validateValue(name, value, children2.reduce(accumulateValue, 0)),
+    value: toCompatibleValue(name, value, children2.reduce(accumulateValue, 0)),
     children: children2,
   };
 };
@@ -47,7 +47,7 @@ const computeCommonFactor = (min) => {
 };
 
 const convertValueSample = (node) => {
-  const factor = computeCommonFactor(computeCommonFactor(Infinity, node));
+  const factor = computeCommonFactor(findMinValue(Infinity, node));
   const loop = ({ name, value, children }) => ({
     name,
     value: Math.round(value * factor),
