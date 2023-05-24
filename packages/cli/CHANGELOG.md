@@ -1,3 +1,17 @@
+# [@appland/appmap-v3.78.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.77.1...@appland/appmap-v3.78.0) (2023-05-24)
+
+
+### Bug Fixes
+
+* Change queue worker count from 5 to 2 ([f638298](https://github.com/getappmap/appmap-js/commit/f63829877e59d6f9d34be7f4dee767c960a9621c))
+* Consistently check queue.idle before queue.drain ([41d6e24](https://github.com/getappmap/appmap-js/commit/41d6e246dbc3665a70c7eed17104872a508d2d2a))
+
+
+### Features
+
+* Add optimized function processNamedFiles ([ac6d421](https://github.com/getappmap/appmap-js/commit/ac6d421fcd1ca73619c01cb723e03c8c12c070c8))
+* Optimize depends checking ([a86652d](https://github.com/getappmap/appmap-js/commit/a86652d28ddf5b74b914b3729752d21b41345a75))
+
 # [@appland/appmap-v3.77.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.77.0...@appland/appmap-v3.77.1) (2023-04-28)
 
 
