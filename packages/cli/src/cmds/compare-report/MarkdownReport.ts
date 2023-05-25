@@ -1,12 +1,13 @@
 import { existsSync, readFileSync } from 'fs';
 import { readFile } from 'fs/promises';
-import Handlebars from 'handlebars';
-import { join, relative } from 'path';
+import Handlebars, { SafeString } from 'handlebars';
+import { join, relative, resolve } from 'path';
 import Report from './Report';
-import { ChangeReport } from '../compare/ChangeReport';
+import { ChangeReport, FindingUpdate } from '../compare/ChangeReport';
 import assert from 'assert';
 import { executeCommand } from '../../lib/executeCommand';
 import { verbose } from '../../utils';
+import { Finding } from '../../lib/findings';
 
 const TemplateFile = [
   '../../../resources/change-report.hbs', // As packaged
@@ -33,7 +34,7 @@ export default class MarkdownReport implements Report {
     const Template = Handlebars.compile(readFileSync(TemplateFile, 'utf8'));
 
     // Remove the empty sequence diagram diff snippet - which can't be reasonably rendered.
-    delete changeReport.sequenceDiagramDiffSnippets[''];
+    delete changeReport.sequenceDiagramDiff[''];
 
     // Resolve changedAppMap entry for a test failure. Note that this will not help much
     // with new test cases that fail, but it will help with modified tests that fail.
@@ -106,7 +107,7 @@ export default class MarkdownReport implements Report {
       changeReport.apiDiff.nonBreakingDifferenceCount =
         changeReport.apiDiff?.nonBreakingDifferences?.length || 0;
       (changeReport as any).sequenceDiagramDiffSnippetCount = Object.keys(
-        changeReport.sequenceDiagramDiffSnippets || {}
+        changeReport.sequenceDiagramDiff || {}
       ).length;
 
       if (changeReport.apiDiff.differenceCount > 0) {
@@ -129,6 +130,13 @@ export default class MarkdownReport implements Report {
       let newFindings = 0,
         resolvedFindings = 0;
       Object.keys(findingDiff).forEach((findingDomain) => {
+        (findingDiff[findingDomain].new || []).forEach(
+          (finding: Finding) => ((finding as any).appmap = finding.appMapFile)
+        );
+        (findingDiff[findingDomain].resolved || []).forEach(
+          (finding: Finding) => ((finding as any).appmap = finding.appMapFile)
+        );
+
         newFindings += findingDiff[findingDomain].new.length;
         resolvedFindings += findingDiff[findingDomain].resolved.length;
       });
@@ -138,7 +146,22 @@ export default class MarkdownReport implements Report {
     }
 
     const self = this;
-    Handlebars.registerHelper('appmap_diff_url', function (diagram) {
+
+    Handlebars.registerHelper('has_source_diff', function (appmap): boolean {
+      if (appmap.endsWith('.appmap.json')) appmap = appmap.slice(0, '.appmap.json'.length * -1);
+      const changedAppMap = changeReport.changedAppMaps.find((change) => change.appmap === appmap);
+      return !!changedAppMap && !!changedAppMap.sourceDiff;
+    });
+
+    Handlebars.registerHelper('source_diff', function (appmap: string): SafeString | undefined {
+      if (appmap.endsWith('.appmap.json')) appmap = appmap.slice(0, '.appmap.json'.length * -1);
+      const diffText = changeReport.changedAppMaps.find(
+        (change) => change.appmap === appmap
+      )?.sourceDiff;
+      return diffText ? new Handlebars.SafeString(diffText) : undefined;
+    });
+
+    Handlebars.registerHelper('appmap_diff_url', function (diagram): SafeString {
       if (diagram.startsWith('./')) diagram = diagram.slice('./'.length);
       if (diagram.startsWith('diff/')) diagram = diagram.slice('diff/'.length);
       if (diagram.endsWith('.diff.sequence.json'))

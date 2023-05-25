@@ -35,5 +35,5 @@ export type ChangeReport = {
     base: Record<AppMapName, Metadata>;
     head: Record<AppMapName, Metadata>;
   };
-  sequenceDiagramDiffSnippets: Record<string, AppMapLink[]>;
+  sequenceDiagramDiff: Record<string, AppMapLink[]>;
 };

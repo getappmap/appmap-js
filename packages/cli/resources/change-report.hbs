@@ -8,13 +8,47 @@
 {{#if sequenceDiagramDiff}}[{{sequenceDiagramDiff}}]({{ appmap_diff_url sequenceDiagramDiff}}){{/if}}{{#unless sequenceDiagramDiff}}No structural changes detected{{/unless}}
 {{~/inline}}
 
+{{#*inline "finding-source-diff"}}
+{{#if (has_source_diff appmap) }}
+
+The following code changes are related to this finding:
+
+```diff
+{{{source_diff appmap}}}
+```
+{{else}}
+
+No relevant code changes found.
+{{/if}}
+{{~/inline}}
+
 {{#*inline "finding"}}
 {{#each new }}
-New: {{ ruleTitle }} in [{{appMapFile}}]({{ appmap_url 'head' appMapFile }})
+<details>
+<summary>
+New: {{ ruleTitle }}
+</summary>
 
+{{> finding-source-diff}}
+
+| Diagram | Link |
+| --- | --- |
+| AppMap | [{{appmap}}]({{ appmap_url 'head' appmap }}) |
+
+</details>
 {{/each}}
 {{#each resolved }}
-Resolved: {{ ruleTitle }} in [{{appMapFile}}]({{ appmap_url 'head' appMapFile }})
+<details>
+<summary>
+Resolved: {{ ruleTitle }}
+</summary>
+
+{{> finding-source-diff}}
+
+| Diagram | Link |
+| --- | --- |
+| AppMap | [{{appmap}}]({{ appmap_url 'head' appmap }}) |
+</details>
 
 {{/each}}
 {{~/inline}}
@@ -71,21 +105,22 @@ Resolved: {{ ruleTitle }} in [{{appMapFile}}]({{ appmap_url 'head' appMapFile }}
 
 <p/>
 
-Test [{{testLocation}}]({{ source_url testLocation }}) failed with error:
+[{{testLocation}}]({{ source_url testLocation }}) failed with error:
 
 ```
 {{{failureMessage}}}
 ```
 
-{{#if changedAppMap}}
-{{#with changedAppMap}}
+{{#if (has_source_diff appmap)}}
 
-The following code changes are related to this test:
+The following code changes may be related to this test failure:
 
 ```diff
-{{{sourceDiff}}}
+{{{source_diff appmap}}}
 ```
-{{/with}}
+{{else}}
+
+No relevant code changes found.
 {{/if}}
 
 | Diagram | Link |
@@ -142,7 +177,7 @@ Error occurred at [{{failureLocation}}]({{ source_url failureLocation }}):
 
 <details>
 <summary>
-  View detailed diff
+  Detailed OpenAPI diff
 </summary>
 
 ```diff
@@ -205,7 +240,7 @@ _Maintainability_
 Review {{ sequenceDiagramDiffSnippetCount }} changes
 </summary>
 
-{{#each sequenceDiagramDiffSnippets}}
+{{#each sequenceDiagramDiff}}
 
 ```
 {{{@key}}}
