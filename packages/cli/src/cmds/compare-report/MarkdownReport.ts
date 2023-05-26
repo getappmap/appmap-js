@@ -1,9 +1,9 @@
 import { existsSync, readFileSync } from 'fs';
 import { readFile } from 'fs/promises';
 import Handlebars, { SafeString } from 'handlebars';
-import { join, relative, resolve } from 'path';
+import { isAbsolute, join, relative, resolve } from 'path';
 import Report from './Report';
-import { ChangeReport, FindingUpdate } from '../compare/ChangeReport';
+import { ChangeReport } from '../compare/ChangeReport';
 import assert from 'assert';
 import { executeCommand } from '../../lib/executeCommand';
 import { verbose } from '../../utils';
@@ -110,6 +110,12 @@ export default class MarkdownReport implements Report {
         changeReport.sequenceDiagramDiff || {}
       ).length;
 
+      Object.keys(changeReport.findingDiff).forEach((key) => {
+        changeReport.findingDiff[key].forEach(
+          (finding: Finding) => ((finding as any).appmap = finding.appMapFile)
+        );
+      });
+
       if (changeReport.apiDiff.differenceCount > 0) {
         const sourceDiff = (
           await executeCommand(
@@ -124,28 +130,22 @@ export default class MarkdownReport implements Report {
       }
     }
 
-    if (Object.keys(changeReport.findingDiff).length) {
-      const { findingDiff } = changeReport;
-
-      let newFindings = 0,
-        resolvedFindings = 0;
-      Object.keys(findingDiff).forEach((findingDomain) => {
-        (findingDiff[findingDomain].new || []).forEach(
-          (finding: Finding) => ((finding as any).appmap = finding.appMapFile)
-        );
-        (findingDiff[findingDomain].resolved || []).forEach(
-          (finding: Finding) => ((finding as any).appmap = finding.appMapFile)
-        );
-
-        newFindings += findingDiff[findingDomain].new.length;
-        resolvedFindings += findingDiff[findingDomain].resolved.length;
-      });
-      (findingDiff as any).newFindingCount = newFindings;
-      (findingDiff as any).resolvedFindingCount = resolvedFindings;
-      (findingDiff as any).findingChangeCount = newFindings + resolvedFindings;
-    }
-
     const self = this;
+
+    Handlebars.registerHelper('inspect', function (value: any) {
+      return new Handlebars.SafeString(JSON.stringify(value, null, 2));
+    });
+
+    Handlebars.registerHelper('length', function (...list): number {
+      let result = 0;
+      for (const item of list) {
+        if (Array.isArray(item)) {
+          result += item.length;
+        }
+      }
+
+      return result;
+    });
 
     Handlebars.registerHelper('has_source_diff', function (appmap): boolean {
       if (appmap.endsWith('.appmap.json')) appmap = appmap.slice(0, '.appmap.json'.length * -1);
@@ -191,13 +191,23 @@ export default class MarkdownReport implements Report {
       }
     });
 
-    Handlebars.registerHelper('source_url', function (location, separator) {
+    Handlebars.registerHelper('source_url', function (location, fileLinenoSeparator = '#L') {
+      if (typeof fileLinenoSeparator === 'object') {
+        fileLinenoSeparator = '#L';
+      }
+
+      const [path, lineno] = location.split(':');
+
+      if (isAbsolute(path)) return;
+      if (path.startsWith('vendor/') || path.startsWith('node_modules/')) return;
+
       if (self.sourceURL) {
-        const [path, lineno] = location.split(':');
         const url = new URL(self.sourceURL.toString());
         if (url.protocol === 'file:') {
           const sourcePath = relative(process.cwd(), join(url.pathname, path));
-          return new Handlebars.SafeString([sourcePath, lineno].join('#'));
+          return new Handlebars.SafeString(
+            [sourcePath, lineno].filter(Boolean).join(fileLinenoSeparator)
+          );
         } else {
           url.pathname = join(url.pathname, path);
           if (lineno) url.hash = `L${lineno}`;

@@ -11,14 +11,7 @@ import { ArchiveMetadata } from '../archive/ArchiveMetadata';
 import { AppMapData } from './AppMapData';
 import { AppMapIndex } from './AppMapIndex';
 import { RevisionName } from './RevisionName';
-import {
-  AppMapLink,
-  AppMapName,
-  ChangeReport,
-  ChangedAppMap,
-  FindingUpdate,
-  TestFailure,
-} from './ChangeReport';
+import { AppMapLink, AppMapName, ChangeReport, ChangedAppMap, TestFailure } from './ChangeReport';
 import { exists } from '../../utils';
 import mapToRecord from './mapToRecord';
 import { mutedStyle, prominentStyle } from './ui';
@@ -345,7 +338,7 @@ class ReportGenerator {
     return mapToRecord(sequenceDiagramDiff);
   }
 
-  async findingDiff(): Promise<Record<ImpactDomain, FindingUpdate>> {
+  async findingDiff(): Promise<Record<'new' & 'resolved', Finding[]>> {
     assert(this.reporter.baseManifest);
     assert(this.reporter.headManifest);
 
@@ -362,44 +355,28 @@ class ReportGenerator {
 
     let newFindings: Finding[];
     let resolvedFindings: Finding[];
-    const impactDomains = new Set<ImpactDomain>();
-    {
-      const baseFindingHashes = baseFindings.reduce(
-        (memo, finding: Finding) => (memo.add(finding.hash_v2), memo),
-        new Set<string>()
-      );
-      const headFindingHashes = headFindings.reduce(
-        (memo, finding: Finding) => (memo.add(finding.hash_v2), memo),
-        new Set<string>()
-      );
-      const newFindingHashes = [...headFindingHashes].filter(
-        (hash) => !baseFindingHashes.has(hash)
-      );
-      const resolvedFindingHashes = [...baseFindingHashes].filter(
-        (hash) => !headFindingHashes.has(hash)
-      );
-      newFindings = headFindings.filter((finding) => newFindingHashes.includes(finding.hash_v2));
-      resolvedFindings = baseFindings.filter((finding) =>
-        resolvedFindingHashes.includes(finding.hash_v2)
-      );
-      [...newFindings, ...resolvedFindings].forEach((finding) => {
-        if (finding.impactDomain) impactDomains.add(finding.impactDomain);
-      });
-    }
 
-    const findingChanges = { new: newFindings, resolved: resolvedFindings };
-    const findingDiff = {} as Record<ImpactDomain, FindingUpdate>;
-    for (const impactDomain of impactDomains) {
-      const entry: FindingUpdate = { new: [] as Finding[], resolved: [] as Finding[] };
-      for (const findingType of Object.keys(findingChanges)) {
-        findingChanges[findingType as keyof typeof findingChanges]
-          .filter((finding) => finding.impactDomain === impactDomain)
-          .forEach((finding) => entry[findingType].push(finding));
-      }
-      findingDiff[impactDomain] = entry as FindingUpdate;
-    }
+    const baseFindingHashes = baseFindings.reduce(
+      (memo, finding: Finding) => (memo.add(finding.hash_v2), memo),
+      new Set<string>()
+    );
+    const headFindingHashes = headFindings.reduce(
+      (memo, finding: Finding) => (memo.add(finding.hash_v2), memo),
+      new Set<string>()
+    );
+    const newFindingHashes = [...headFindingHashes].filter((hash) => !baseFindingHashes.has(hash));
+    const resolvedFindingHashes = [...baseFindingHashes].filter(
+      (hash) => !headFindingHashes.has(hash)
+    );
+    newFindings = headFindings.filter((finding) => newFindingHashes.includes(finding.hash_v2));
+    resolvedFindings = baseFindings.filter((finding) =>
+      resolvedFindingHashes.includes(finding.hash_v2)
+    );
 
-    return findingDiff;
+    const result: Record<'new' & 'resolved', Finding[]> = {};
+    if (newFindings.length > 0) result['new'] = newFindings;
+    if (resolvedFindings.length > 0) result['resolved'] = resolvedFindings;
+    return result;
   }
 
   async apiDiff(): Promise<any> {
