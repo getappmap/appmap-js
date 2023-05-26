@@ -49,7 +49,7 @@ export default class InstallerUI {
   }
 
   async attemptUnsupportedProjectType(message: string): Promise<boolean> {
-    if (this.interactive) return true;
+    if (!this.interactive) return true;
 
     const { willContinue } = await UI.prompt([
       {
