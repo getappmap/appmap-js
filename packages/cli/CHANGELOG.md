@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.78.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.78.0...@appland/appmap-v3.78.1) (2023-05-29)
+
+
+### Bug Fixes
+
+* Make sure non-interactive mode doesn't ask questions ([e9263c7](https://github.com/getappmap/appmap-js/commit/e9263c7c7eaaf5c9b5f6a85b243c12b2f5b921b0)), closes [#1146](https://github.com/getappmap/appmap-js/issues/1146)
+
 # [@appland/appmap-v3.78.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.77.1...@appland/appmap-v3.78.0) (2023-05-24)
 
 
