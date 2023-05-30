@@ -210,7 +210,7 @@ $min-height: 3rem;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.55);
   z-index: 5;
 
-  min-width: 145px;
+  min-width: 155px;
   min-height: 60px;
   max-width: $min-width - 6;
   width: fit-content;
@@ -287,7 +287,7 @@ $min-height: 3rem;
   .label {
     letter-spacing: -0.5px;
     height: 100%;
-    padding-top: 0.5rem;
+    padding-top: 0.25rem;
   }
 
   .hover-text-popper {
@@ -335,6 +335,7 @@ $min-height: 3rem;
     align-items: center;
     justify-content: space-between;
     padding: 0 0.5rem;
+    margin-bottom: 0.125rem;
   }
 
   .http {
