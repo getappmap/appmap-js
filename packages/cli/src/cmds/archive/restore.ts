@@ -4,7 +4,6 @@ import { glob } from 'glob';
 import { basename, join } from 'path';
 import { inspect, promisify } from 'util';
 import yargs from 'yargs';
-import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { verbose } from '../../utils';
 import { ArchiveEntry, ArchiveStore, FileArchiveStore, GitHubArchiveStore } from './archiveStore';
@@ -25,6 +24,7 @@ export const builder = (args: yargs.Argv) => {
   args.option('revision', {
     describe: `revision to restore`,
     type: 'string',
+    alias: 'r',
   });
 
   args.option('output-dir', {
@@ -75,7 +75,7 @@ export const handler = async (argv: any) => {
     archiveStore = new FileArchiveStore(archiveDir);
   }
   const archivesAvailable = await archiveStore.revisionsAvailable();
-  console.debug(`Found ${inspect(archivesAvailable)} AppMap archives`);
+  if (verbose()) console.debug(`Found ${inspect(archivesAvailable)} AppMap archives`);
 
   let ancestors: string[] | undefined;
   let mostRecentArchiveAvailable: ArchiveEntry | undefined = [
@@ -148,12 +148,6 @@ export const handler = async (argv: any) => {
       );
     }
   }
-
-  console.log(`Updating indexes`);
-
-  process.stdout.write(`Indexing AppMaps...`);
-  const numIndexed = await new FingerprintDirectoryCommand(outputDir).execute();
-  process.stdout.write(`done (${numIndexed})\n`);
 
   console.log(`Restore complete`);
 };
