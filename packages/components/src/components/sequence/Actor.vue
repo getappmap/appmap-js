@@ -5,35 +5,35 @@
       <div class="on-top">
         <div class="sequence-actor" :data-actor-id="actor.id">
           <div ref="label_container" :class="labelClasses" @click="selectCodeObject">
-            <template v-if="interactive">
-              <div class="control-wrap">
-                <span class="hide-container" @click.stop="hideCodeObject">
-                  <XIcon />
-                </span>
-                <v-popper
-                  class="hover-text-popper"
-                  text="Expand this package to its classes"
-                  placement="left"
-                  text-align="left"
-                  v-if="expandable"
-                >
-                  <div class="expand-actor" @click.stop="onExpand"><ExpandIcon /></div>
-                </v-popper>
-                <v-popper
-                  class="hover-text-popper"
-                  text="Collapse this class to its parent package"
-                  placement="left"
-                  text-align="left"
-                  v-if="isClass"
-                >
-                  <div class="collapse-actor" @click.stop="onCollapse"><CollapseIcon /></div>
-                </v-popper>
-              </div>
-            </template>
-            <span :class="['label', type]">
+            <div :class="['label', type]">
+              <template v-if="interactive">
+                <div class="control-wrap">
+                  <span class="hide-container" @click.stop="hideCodeObject">
+                    <XIcon />
+                  </span>
+                  <v-popper
+                    class="hover-text-popper"
+                    text="Expand this package to its classes"
+                    placement="left"
+                    text-align="left"
+                    v-if="expandable"
+                  >
+                    <div class="expand-actor" @click.stop="onExpand"><ExpandIcon /></div>
+                  </v-popper>
+                  <v-popper
+                    class="hover-text-popper"
+                    text="Collapse this class to its parent package"
+                    placement="left"
+                    text-align="left"
+                    v-if="isClass"
+                  >
+                    <div class="collapse-actor" @click.stop="onCollapse"><CollapseIcon /></div>
+                  </v-popper>
+                </div>
+              </template>
               {{ actor.name }}
               <span v-if="expandable">({{ numClasses }})</span>
-            </span>
+            </div>
           </div>
           <div v-if="expandable" class="label-container stack stack1"></div>
           <div v-if="expandable" class="label-container stack stack2"></div>
@@ -181,6 +181,12 @@ export default {
 $min-width: 175px; // See: CallLabel .label wax-width
 $min-height: 3rem;
 
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: local('IBM Plex Mono'),
+    url(../../assets/fonts/IBM_Plex_Mono/IBMPlexMono-Regular.ttf) format('truetype');
+}
+
 .offset {
   position: relative;
   height: 100%;
@@ -192,6 +198,7 @@ $min-height: 3rem;
   position: sticky;
   top: 10px;
   z-index: 5; // Overlay the swim lane dashed lines
+  font-family: 'IBM Plex Mono', monospace;
 }
 
 .label-container {
@@ -215,40 +222,72 @@ $min-height: 3rem;
   background-color: $black;
   color: $white;
   font-size: 9pt;
-  border: 1px solid $gray4; //lighten($gray4, 15);
+  border: 3px solid #ffffff00;
   border-radius: 0;
   display: grid;
-  grid-template-rows: 20px auto;
+  grid-template-rows: 100%;
   grid-template-columns: 100%;
   justify-content: center;
   align-items: center;
   transition: $transition;
 
+  .label {
+    text-shadow: #ffffff21 0 0 20px;
+    &.http {
+      background-color: #bd64e1;
+      color: $black;
+    }
+
+    &.external-service {
+      background-color: $yellow;
+      color: $black;
+    }
+    &.package {
+      background-color: $teal;
+      color: $black;
+    }
+    &.class {
+      background-color: lighten($blue, 13);
+      color: $black;
+    }
+    &.database {
+      background-color: lighten($royal, 05);
+      color: $black;
+    }
+  }
+
   &--selected {
-    background-color: $gray2; //$actor-highlight;
+    border: 3px solid $hotpink;
     .label {
-      text-shadow: #181b24 0 0 12px;
+      text-shadow: #ffffff21 0 0 12px;
       &.http {
-        color: #bd64e1;
+        background-color: lighten(#bd64e1, 15);
+        color: $black;
       }
 
       &.external-service {
-        color: $yellow;
+        background-color: lighten($yellow, 15);
+        color: $black;
       }
       &.package {
-        color: $teal;
+        background-color: lighten($teal, 15);
+        color: $black;
       }
       &.class {
-        color: lighten($blue, 13);
+        background-color: lighten($blue, 20);
+        color: $black;
       }
       &.database {
-        color: lighten($royal, 13);
+        background-color: lighten($royal, 18);
+        color: $black;
       }
     }
   }
 
   .label {
-    padding-bottom: 1rem;
+    letter-spacing: -0.5px;
+    height: 100%;
+    padding-top: 0.5rem;
   }
 
   .hover-text-popper {
@@ -265,6 +304,9 @@ $min-height: 3rem;
     &:hover {
       color: $white;
       cursor: pointer;
+      svg {
+        opacity: 50%;
+      }
     }
   }
   .hide-container {
@@ -278,10 +320,10 @@ $min-height: 3rem;
     }
 
     svg {
-      fill: $white;
-      opacity: 33%;
+      fill: $black;
+      opacity: 100%;
       &:hover {
-        opacity: 93%;
+        opacity: 50%;
       }
     }
   }

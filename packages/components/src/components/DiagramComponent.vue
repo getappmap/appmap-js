@@ -152,6 +152,10 @@ export default {
   height: 100%;
   .appmap.appmap--theme-dark {
     overflow: hidden;
+
+    .appmap__component-diagram .node .label {
+      fill: $black;
+    }
   }
 }
 </style>
