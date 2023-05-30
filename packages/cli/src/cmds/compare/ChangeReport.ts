@@ -23,17 +23,15 @@ export type TestFailure = {
   failureLocation?: string;
 };
 
-export type FindingUpdate = Record<'new' | 'resolved', Finding[]>;
-
 export type ChangeReport = {
   testFailures: TestFailure[];
   newAppMaps: AppMapLink[];
   changedAppMaps: ChangedAppMap[];
   apiDiff: any;
-  findingDiff: Record<ImpactDomain, FindingUpdate>;
+  findingDiff: Record<'new' & 'resolved', Finding[]>;
   appMapMetadata: {
     base: Record<AppMapName, Metadata>;
     head: Record<AppMapName, Metadata>;
   };
-  sequenceDiagramDiffSnippets: Record<string, AppMapLink[]>;
+  sequenceDiagramDiff: Record<string, AppMapLink[]>;
 };
