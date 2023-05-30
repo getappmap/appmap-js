@@ -8,16 +8,57 @@
 {{#if sequenceDiagramDiff}}[{{sequenceDiagramDiff}}]({{ appmap_diff_url sequenceDiagramDiff}}){{/if}}{{#unless sequenceDiagramDiff}}No structural changes detected{{/unless}}
 {{~/inline}}
 
+{{#*inline "finding-source-diff"}}
+{{#if (has_source_diff appmap) }}
+
+The following code changes are related to this finding:
+
+```diff
+{{{source_diff appmap}}}
+```
+{{else}}
+
+No relevant code changes found.
+{{/if}}
+{{/inline}}
+
+{{#*inline "finding-stack" }}
+{{#with stack }}
+{{#each this }}
+{{#if (source_url this)}}
+* [{{this}}]({{ source_url this }})
+{{else}}
+* {{ this }}
+{{/if}}
+{{/each}}
+{{/with}}
+
+{{/inline}}
+
 {{#*inline "finding"}}
-{{#each new }}
-New: {{ ruleTitle }} in [{{appMapFile}}]({{ appmap_url 'head' appMapFile }})
 
-{{/each}}
-{{#each resolved }}
-Resolved: {{ ruleTitle }} in [{{appMapFile}}]({{ appmap_url 'head' appMapFile }})
+### {{ ruleTitle }}
 
-{{/each}}
-{{~/inline}}
+<details>
+<summary>
+  Finding details
+</summary>
+
+| Field | Value |
+| --- | --- |
+| Message | {{ message }} |
+| AppMap | [{{appmap}}]({{~ appmap_url 'head' appmap }}) |
+
+##### Related code changes
+
+{{~> finding-source-diff}}
+
+##### Stack trace
+
+{{> finding-stack}}
+
+</details>
+{{/inline}}
 
 | Summary | Status |
 | --- | --- |
@@ -27,20 +68,20 @@ Resolved: {{ ruleTitle }} in [{{appMapFile}}]({{ appmap_url 'head' appMapFile }}
   :white_check_mark: No API changes
   {{~/unless}}
   {{~#if apiDiff.differenceCount }}
-  {{~#if apiDiff.breakingDifferenceCount }}:warning: {{apiDiff.breakingDifferenceCount}} breaking{{~/if}}
+  {{~#if apiDiff.breakingDifferenceCount }}🚧 {{apiDiff.breakingDifferenceCount}} breaking{{~/if}}
   {{~#if apiDiff.nonBreakingDifferenceCount }}{{#if apiDiff.breakingDifferenceCount }},&nbsp;{{~/if}}:wrench: {{apiDiff.nonBreakingDifferenceCount}} non-breaking{{~/if}}
   {{~/if}}
   |
 | [Findings](#findings) |
   {{~#with findingDiff}}
-  {{~#unless findingChangeCount }}
+  {{~#unless (length new resolved) }}
   :white_check_mark: None
   {{~/unless}}
-  {{~#if newFindingCount }}
-  :beetle: {{newFindingCount}} new
+  {{~#if (length new) }}
+  :beetle: {{length new}} new
   {{~/if}}
-  {{~#if resolvedFindingCount }}
-  :tada: {{resolvedFindingCount}} resolved
+  {{~#if (length resolved) }}
+  :tada: {{length resolved}} resolved
   {{~/if}}
   {{~/with}}
   |
@@ -60,7 +101,7 @@ Resolved: {{ ruleTitle }} in [{{appMapFile}}]({{ appmap_url 'head' appMapFile }}
   |
 
 {{#if testFailures.length}}
-<h2 id="test-failures">Test failures</h2>
+## :warning: Test failures
 
 {{#each testFailures}}
 
@@ -71,21 +112,32 @@ Resolved: {{ ruleTitle }} in [{{appMapFile}}]({{ appmap_url 'head' appMapFile }}
 
 <p/>
 
-Test [{{testLocation}}]({{ source_url testLocation }}) failed with error:
+[{{testLocation}}]({{ source_url testLocation }}) failed with error:
 
 ```
 {{{failureMessage}}}
 ```
 
-{{#if changedAppMap}}
-{{#with changedAppMap}}
+The error occurred at [{{failureLocation}}]({{ source_url failureLocation }}):
 
-The following code changes are related to this test:
-
-```diff
-{{{sourceDiff}}}
+{{#if testSnippet}}
+{{#with testSnippet}}
+```{{language}}
+{{{codeFragment}}}
 ```
 {{/with}}
+{{/if}}
+
+{{#if (has_source_diff appmap)}}
+
+The following code changes may be related to this test failure:
+
+```diff
+{{{source_diff appmap}}}
+```
+{{else}}
+
+No relevant code changes found.
 {{/if}}
 
 | Diagram | Link |
@@ -97,16 +149,6 @@ The following code changes are related to this test:
 {{/if}}
 | AppMap | [{{appmap}}]({{ appmap_url 'head' appmap }}) |
 
-Error occurred at [{{failureLocation}}]({{ source_url failureLocation }}):
-
-{{#if testSnippet}}
-{{#with testSnippet}}
-```{{language}}
-{{{codeFragment}}}
-```
-{{/with}}
-{{/if}}
-
 </details>
 
 {{/each}}
@@ -114,10 +156,10 @@ Error occurred at [{{failureLocation}}]({{ source_url failureLocation }}):
 
 {{#if apiDiff.differenceCount }}
 
-<h2 id="api-changes">API changes</h2>
+## 🔄 API changes
 
 {{#if apiDiff.breakingDifferences}}
-### Breaking changes
+### 🚧 Breaking changes
 
 {{#each apiDiff.breakingDifferences}}
   - {{> api-change }}
@@ -125,7 +167,7 @@ Error occurred at [{{failureLocation}}]({{ source_url failureLocation }}):
 {{/if}}
 
 {{#if apiDiff.nonBreakingDifferences}}
-### Non-breaking changes
+### :wrench: Non-breaking changes
 
 {{#each apiDiff.nonBreakingDifferences}}
   - {{> api-change }}
@@ -142,7 +184,7 @@ Error occurred at [{{failureLocation}}]({{ source_url failureLocation }}):
 
 <details>
 <summary>
-  View detailed diff
+  Detailed OpenAPI diff
 </summary>
 
 ```diff
@@ -152,37 +194,31 @@ Error occurred at [{{failureLocation}}]({{ source_url failureLocation }}):
 
 {{/if}}
 
-{{#if findingDiff.findingChangeCount}}
 {{#with findingDiff}}
+{{#if (length new resolved)}}
 
 <h2 id="findings">Findings</h2>
 
-{{#with Security}}
-_Security_
+{{#with new}}
+### :beetle: New findings ({{ length this}})
 
-{{> finding }}
-{{/with}}
-
-{{#with Performance}}
-_Performance_
-
-{{> finding }}
-{{/with}}
-
-{{#with Reliability}}
-_Reliability_
-
-{{> finding }}
-{{/with}}
-
-{{#with Maintainability}}
-_Maintainability_
-
-{{> finding }}
-{{/with}}
+{{#each this}}
+{{> finding}}
+{{/each}}
 
 {{/with}}
+
+{{#with resolved}}
+### :tada: Resolved findings ({{ length this}})
+
+{{#each this}}
+{{> finding}}
+{{/each}}
+
+{{/with}}
+
 {{/if}}
+{{/with}}
 
 {{#if newAppMaps.length }}
 
@@ -197,7 +233,7 @@ _Maintainability_
 {{/if}}
 
 {{#if sequenceDiagramDiffSnippetCount }}
-<h2 id="changed-code-behavior">Changed code behavior</h2>
+## :twisted_rightwards_arrows: Changed code behavior
 
 <details>
 
@@ -205,7 +241,7 @@ _Maintainability_
 Review {{ sequenceDiagramDiffSnippetCount }} changes
 </summary>
 
-{{#each sequenceDiagramDiffSnippets}}
+{{#each sequenceDiagramDiff}}
 
 ```
 {{{@key}}}
