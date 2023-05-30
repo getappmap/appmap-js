@@ -5,17 +5,20 @@ import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../lib/locateAppMapDir';
 import { exists, verbose } from '../../utils';
 import { mkdir, readFile, stat, unlink, writeFile } from 'fs/promises';
-import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
 import { DefaultMaxAppMapSizeInMB } from '../../lib/fileSizeFilter';
 import loadAppMapConfig from '../../lib/loadAppMapConfig';
 import { VERSION as IndexVersion } from '../../fingerprint/fingerprinter';
 import chalk from 'chalk';
 import gitRevision from './gitRevision';
 import { ArchiveMetadata } from './ArchiveMetadata';
-import updateSequenceDiagrams from './updateSequenceDiagrams';
 import { serializeAppMapFilter } from './serializeAppMapFilter';
 import { deserializeFilter } from '@appland/models';
+import analyze from './analyze';
 
+// ## 1.3.0
+//
+// * AppMap scanner is run on all AppMaps, with an appmap-findings.json file stored in each index directory.
+//
 // ## 1.2.0
 //
 // * Update format of compare fliters.
@@ -27,7 +30,7 @@ import { deserializeFilter } from '@appland/models';
 // ## 1.1.0
 //
 // * Added appMapFilter to the archive metadata.
-export const ArchiveVersion = '1.2.0';
+export const ArchiveVersion = '1.3.0';
 
 export const PackageVersion = {
   name: '@appland/appmap',
@@ -74,9 +77,10 @@ commit of the current git revision may not be the one that triggered the build.`
     alias: 'f',
   });
 
-  args.option('index', {
-    describe: 'whether to index the AppMaps',
+  args.option('analyze', {
+    describe: 'whether to analyze the AppMaps',
     type: 'boolean',
+    alias: 'index',
     default: true,
   });
 
@@ -109,7 +113,7 @@ export const handler = async (argv: any) => {
 
   const {
     maxSize,
-    index,
+    analyze: doAnalyze,
     type: typeArg,
     revision: revisionArg,
     outputFile: outputFileNameArg,
@@ -126,18 +130,13 @@ export const handler = async (argv: any) => {
   const versions = { archive: ArchiveVersion, index: IndexVersion };
   if (PackageVersion.version) versions[PackageVersion.name] = PackageVersion.version;
 
-  process.chdir(appMapDir);
-
   let oversizedAppMaps: string[] | undefined;
-  if (index) {
-    process.stdout.write(`Indexing AppMaps...`);
-    const numIndexed = await new FingerprintDirectoryCommand('.').execute();
-    process.stdout.write(`done (${numIndexed})\n`);
-
-    console.log('Generating sequence diagrams');
-    oversizedAppMaps = (await updateSequenceDiagrams('.', maxAppMapSizeInBytes, appMapFilter))
-      .oversizedAppMaps;
+  if (doAnalyze) {
+    const analyzeResult = await analyze(maxAppMapSizeInBytes, appMapFilter, appMapDir);
+    oversizedAppMaps = analyzeResult.oversizedAppMaps;
   }
+
+  process.chdir(appMapDir);
 
   const metadata: ArchiveMetadata = {
     versions,
@@ -191,7 +190,7 @@ The base revision cannot be determined, so either use --type=auto or --type=full
 
   await new Promise<void>((resolveCB, rejectCB) => {
     exec(
-      `tar czf appmaps.tar.gz --exclude appmaps.tar.gz --exclude appmap_archive.json *`,
+      `tar czf appmaps.tar.gz --exclude openapi.yml --exclude appmaps.tar.gz --exclude appmap_archive.json *`,
       (error) => {
         if (error) return rejectCB(error);
 
@@ -215,7 +214,7 @@ The base revision cannot be determined, so either use --type=auto or --type=full
       `tar cf ${join(
         resolve(workingDirectory, outputDir),
         outputFileName
-      )} appmap_archive.json appmaps.tar.gz`,
+      )} appmap_archive.json openapi.yml appmaps.tar.gz`,
       (error) => {
         if (error) return rejectCB(error);
 

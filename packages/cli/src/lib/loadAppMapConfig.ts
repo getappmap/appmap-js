@@ -19,10 +19,12 @@ export interface AppMapConfig {
   update?: UpdateConfig;
 }
 
-export default async function loadAppMapConfig(): Promise<AppMapConfig | undefined> {
+export default async function loadAppMapConfig(
+  fileName = 'appmap.yml'
+): Promise<AppMapConfig | undefined> {
   let appMapConfigData: string | undefined;
   try {
-    appMapConfigData = await readFile('appmap.yml', 'utf-8');
+    appMapConfigData = await readFile(fileName, 'utf-8');
   } catch (e) {
     return;
   }

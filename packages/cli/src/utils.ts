@@ -4,7 +4,7 @@ import { AsyncWorker, queue } from 'async';
 import glob from 'glob';
 import { promisify } from 'util';
 import { join } from 'path';
-import assert from 'assert';
+import assert, { match } from 'assert';
 import { Event, ReturnValueObject } from '@appland/models';
 import { readdir, stat } from 'fs/promises';
 
@@ -90,7 +90,11 @@ export async function writeFileAtomic(
 export async function processFiles(
   pattern: string,
   fn: AsyncWorker<string>,
-  fileCountFn = (count: number) => {}
+  fileCountFn = (_count: number) => {},
+  errorFn = (err: Error) => {
+    process.stderr.write(err.toString() + '\n');
+  },
+  workerCount = 2
 ): Promise<void> {
   const files = await promisify(glob)(pattern);
   if (fileCountFn) {
@@ -98,7 +102,8 @@ export async function processFiles(
   }
   if (files.length === 0) return;
 
-  const q = queue(fn, 2);
+  const q = queue(fn, workerCount);
+  q.error(errorFn);
   files.forEach((file) => q.push(file));
   if (!q.idle()) await q.drain();
 }
@@ -112,7 +117,7 @@ export async function processNamedFiles(
   baseDir: string,
   fileName: string,
   fn: AsyncWorker<string>
-): Promise<void> {
+): Promise<number> {
   const q = queue(fn, 2);
 
   const stats = async (fileName: string): Promise<Stats | undefined> => {
@@ -123,11 +128,13 @@ export async function processNamedFiles(
     }
   };
 
+  let matchCount = 0;
   const processDir = async (dir: string) => {
     // If the directory contains the target fileName, add it to the process queue and return.
     const targetFileName = join(dir, fileName);
     const target = await stats(targetFileName);
     if (target && target.isFile()) {
+      matchCount += 1;
       q.push(targetFileName);
       return;
     }
@@ -142,7 +149,10 @@ export async function processNamedFiles(
   };
   await processDir(baseDir);
 
+  q.error(console.warn);
   if (!q.idle()) await q.drain();
+
+  return matchCount;
 }
 
 /**

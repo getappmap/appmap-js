@@ -1,7 +1,7 @@
 import { AppMapConfig } from '../../lib/loadAppMapConfig';
 
 export type ArchiveMetadata = {
-  versions: Record<string, string>;
+  versions: Record<'archive' | 'index' | string, string>;
   workingDirectory: string;
   appMapDir: string;
   commandArguments: Record<string, string | string[]>;

@@ -14,7 +14,7 @@ import { default as openapiDiff } from 'openapi-diff';
 import { executeCommand } from '../../lib/executeCommand';
 import { Finding, ImpactDomain } from '../../lib/findings';
 import { DiffDiagrams } from '../../sequenceDiagramDiff/DiffDiagrams';
-import { exists } from '../../utils';
+import { exists, processNamedFiles } from '../../utils';
 import { AppMapData } from './AppMapData';
 import { AppMapIndex } from './AppMapIndex';
 import {
@@ -28,6 +28,10 @@ import {
 import mapToRecord from './mapToRecord';
 import { RevisionName } from './RevisionName';
 import { mutedStyle, prominentStyle } from './ui';
+import { existsSync } from 'fs';
+import { ArchiveMetadata } from '../archive/ArchiveMetadata';
+import { SemVer } from 'semver';
+import loadFindings from './loadFindings';
 
 export async function loadSequenceDiagram(path: string): Promise<SequenceDiagram> {
   const diagramData = JSON.parse(await readFile(path, 'utf-8'));
@@ -46,6 +50,13 @@ export default async function buildChangeReport(
   const appmapData = new AppMapData(workingDir);
   const appmapIndex = new AppMapIndex(appmapData);
   await appmapIndex.build();
+
+  const baseManifest: ArchiveMetadata = JSON.parse(
+    await readFile(appmapData.manifestPath(RevisionName.Base), 'utf-8')
+  );
+  const headManifest: ArchiveMetadata = JSON.parse(
+    await readFile(appmapData.manifestPath(RevisionName.Head), 'utf-8')
+  );
 
   const appMapMetadata = {
     base: new Map<AppMapName, Metadata>(),
@@ -237,22 +248,18 @@ export default async function buildChangeReport(
     )
   ).filter(Boolean) as TestFailure[];
 
-  const baseScanResults = JSON.parse(
-    await readFile(appmapData.findingsPath(RevisionName.Base), 'utf-8')
-  );
-  const headScanResults = JSON.parse(
-    await readFile(appmapData.findingsPath(RevisionName.Head), 'utf-8')
-  );
+  const baseFindings = await loadFindings(appmapData, RevisionName.Base, baseManifest.appMapDir);
+  const headFindings = await loadFindings(appmapData, RevisionName.Head, headManifest.appMapDir);
 
   let newFindings: Finding[];
   let resolvedFindings: Finding[];
   const impactDomains = new Set<ImpactDomain>();
   {
-    const baseFindingHashes = (baseScanResults.findings as Finding[]).reduce(
+    const baseFindingHashes = baseFindings.reduce(
       (memo, finding: Finding) => (memo.add(finding.hash_v2), memo),
       new Set<string>()
     );
-    const headFindingHashes = (headScanResults.findings as Finding[]).reduce(
+    const headFindingHashes = headFindings.reduce(
       (memo, finding: Finding) => (memo.add(finding.hash_v2), memo),
       new Set<string>()
     );
@@ -260,10 +267,8 @@ export default async function buildChangeReport(
     const resolvedFindingHashes = [...baseFindingHashes].filter(
       (hash) => !headFindingHashes.has(hash)
     );
-    newFindings = (headScanResults.findings as Finding[]).filter((finding) =>
-      newFindingHashes.includes(finding.hash_v2)
-    );
-    resolvedFindings = (baseScanResults.findings as Finding[]).filter((finding) =>
+    newFindings = headFindings.filter((finding) => newFindingHashes.includes(finding.hash_v2));
+    resolvedFindings = baseFindings.filter((finding) =>
       resolvedFindingHashes.includes(finding.hash_v2)
     );
     [...newFindings, ...resolvedFindings].forEach((finding) => {

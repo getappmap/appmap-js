@@ -6,30 +6,29 @@ import {
   SequenceDiagramOptions,
   Specification,
 } from '@appland/sequence-diagram';
-import { readFile, stat, unlink, writeFile } from 'fs/promises';
+import { readFile, stat, writeFile } from 'fs/promises';
 import { basename, dirname, join } from 'path';
-import { promisify } from 'util';
+import { processFiles } from '../../utils';
+import FileTooLargeError from '../../fingerprint/fileTooLargeError';
+import { CountNumProcessed } from './CountNumProcessed';
+import reportAppMapProcessingError from './reportAppMapProcessingError';
 
 export default async function updateSequenceDiagrams(
   dir: string,
   maxAppMapSizeInBytes: number,
   filter: AppMapFilter
-): Promise<{ oversizedAppMaps: string[] }> {
+): Promise<{ numGenerated: number; oversizedAppMaps: string[] }> {
   const specOptions = {
     loops: true,
   } as SequenceDiagramOptions;
 
   const oversizedAppMaps = new Array<string>();
-  const sequenceDiagramQueue = queue(async (appmapFileName: string) => {
+
+  const generateDiagram = async (appmapFileName: string) => {
     // Determine size of file appmapFileName in bytes
     const stats = await stat(appmapFileName);
     if (stats.size > maxAppMapSizeInBytes) {
-      console.log(
-        `Skipping, and removing, ${appmapFileName} because its size of ${stats.size} exceeds the maximum size of ${maxAppMapSizeInBytes} MB`
-      );
-      oversizedAppMaps.push(appmapFileName);
-      await unlink(appmapFileName);
-      return;
+      throw new FileTooLargeError(appmapFileName, stats.size, maxAppMapSizeInBytes);
     }
 
     const fullAppMap = buildAppMap()
@@ -42,13 +41,15 @@ export default async function updateSequenceDiagrams(
     const indexDir = join(dirname(appmapFileName), basename(appmapFileName, '.appmap.json'));
     const diagramFileName = join(indexDir, 'sequence.json');
     await writeFile(diagramFileName, diagramOutput.diagram);
-  }, Concurrency);
-  sequenceDiagramQueue.error(console.warn);
+  };
 
-  (await promisify(glob)(join(dir, '**', '*.appmap.json'))).forEach((appmapFileName) =>
-    sequenceDiagramQueue.push(appmapFileName)
+  const counter = new CountNumProcessed();
+  await processFiles(
+    join(dir, '**', '*.appmap.json'),
+    generateDiagram,
+    counter.setCount(),
+    reportAppMapProcessingError('Sequence diagram')
   );
-  if (sequenceDiagramQueue.length()) await sequenceDiagramQueue.drain();
 
-  return { oversizedAppMaps };
+  return { numGenerated: counter.count, oversizedAppMaps };
 }
