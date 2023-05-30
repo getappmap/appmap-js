@@ -3,14 +3,12 @@ import readline from 'readline';
 
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { join } from 'path';
-import { RevisionName } from './RevisionName';
 import detectRevisions from './detectRevisions';
 import { prepareOutputDir } from './prepareOutputDir';
 import { verbose } from '../../utils';
-import buildChangeReport from './buildChangeReport';
 import { readFile, writeFile } from 'fs/promises';
-import analyzeArchive from './ArchiveAnalyzer';
 import loadAppMapConfig from '../../lib/loadAppMapConfig';
+import ChangeReporter from './ChangeReporter';
 
 export const command = 'compare';
 export const describe = 'Compare runtime code behavior between base and head revisions';
@@ -49,10 +47,11 @@ export const builder = (args: yargs.Argv) => {
     default: '.',
   });
 
-  args.option('delete-unchanged', {
+  args.option('delete-unreferenced', {
     describe:
-      'whether to delete AppMaps from base and head that are unchanged according to sequence diagram comparison',
+      'whether to delete AppMaps from base and head that are unreferenced by the change report',
     default: true,
+    alias: 'delete-unchanged',
   });
 
   return args.strict();
@@ -75,7 +74,7 @@ export const handler = async (argv: any) => {
     baseRevision: baseRevisionArg,
     outputDir: outputDirArg,
     headRevision: headRevisionArg,
-    deleteUnchanged,
+    deleteUnreferenced,
   } = argv;
 
   handleWorkingDirectory(directory);
@@ -100,23 +99,16 @@ export const handler = async (argv: any) => {
     rl
   );
 
-  for (const [revisionName, revision] of [
-    [RevisionName.Base, baseRevision],
-    [RevisionName.Head, headRevision],
-  ] as [RevisionName, string][]) {
-    // These need to be serialized, because a git checkout is performed.
-    await analyzeArchive(revision, join(outputDir, revisionName), scannerConfig);
+  const changeReporter = new ChangeReporter(baseRevision, headRevision, outputDir, srcDir);
+  await changeReporter.initialize();
+
+  const report = await changeReporter.report();
+
+  if (deleteUnreferenced) {
+    await changeReporter.deleteUnreferencedAppMaps();
   }
 
-  const changeReport = await buildChangeReport(
-    baseRevision,
-    headRevision,
-    outputDir,
-    srcDir,
-    deleteUnchanged
-  );
-
-  await writeFile(join(outputDir, 'change-report.json'), JSON.stringify(changeReport, null, 2));
+  await writeFile(join(outputDir, 'change-report.json'), JSON.stringify(report, null, 2));
 
   rl.close();
 };

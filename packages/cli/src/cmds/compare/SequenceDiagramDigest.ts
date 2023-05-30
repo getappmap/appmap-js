@@ -1,7 +1,7 @@
 import { createHash } from 'crypto';
 import { RevisionName } from './RevisionName';
-import { loadSequenceDiagram } from './buildChangeReport';
 import { AppMapData } from './AppMapData';
+import { loadSequenceDiagram } from './loadSequenceDiagram';
 
 export class SequenceDiagramDigest {
   constructor(
