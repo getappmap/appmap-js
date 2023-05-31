@@ -2,7 +2,7 @@
   <v-quickstart-layout>
     <section>
       <header>
-        <h1 data-cy="title">Runtime Analysis</h1>
+        <h1 data-cy="title">AppMap Runtime Analysis</h1>
       </header>
       <main>
         <article v-if="!(analysisEnabled && scanned)" class="subheading">
