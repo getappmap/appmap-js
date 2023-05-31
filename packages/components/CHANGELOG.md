@@ -1,3 +1,12 @@
+# [@appland/components-v2.44.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.43.0...@appland/components-v2.44.0) (2023-05-31)
+
+
+### Features
+
+* add flame graph tab to main view ([7e60136](https://github.com/getappmap/appmap-js/commit/7e6013680e9ca7e2e22b96baabdde350f11d6eb8))
+* hide flame graph tab behind a flag ([fc9fea2](https://github.com/getappmap/appmap-js/commit/fc9fea2066571890192c2199dee11d84e9847479))
+* implement basic flame graph diagram ([c699891](https://github.com/getappmap/appmap-js/commit/c6998918a403342c06deda35d2cffad136c70941))
+
 # [@appland/components-v2.43.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.42.0...@appland/components-v2.43.0) (2023-05-16)
 
 
