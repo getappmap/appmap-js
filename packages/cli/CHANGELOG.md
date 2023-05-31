@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.79.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.78.1...@appland/appmap-v3.79.0) (2023-05-31)
+
+
+### Features
+
+* hide flame graph tab behind a flag ([fc9fea2](https://github.com/getappmap/appmap-js/commit/fc9fea2066571890192c2199dee11d84e9847479))
+
 # [@appland/appmap-v3.78.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.78.0...@appland/appmap-v3.78.1) (2023-05-29)
 
 
