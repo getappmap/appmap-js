@@ -15,6 +15,7 @@ async function initializeApp() {
         ref: 'ui',
         props: {
           appMapUploadable: true,
+          flamegraphEnabled: false,
         },
       }),
     async mounted() {

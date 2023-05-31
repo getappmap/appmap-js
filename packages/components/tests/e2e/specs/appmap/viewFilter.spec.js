@@ -5,7 +5,7 @@ context('AppMap view filter', () => {
 
   context('with HTTP events', () => {
     it('disables "Limit root events to HTTP" filter when searching for root event which is hidden', () => {
-      cy.get('.tabs .tab-btn').last().click();
+      cy.get('.tabs .tab-btn').contains('Trace View').click();
 
       cy.get('.trace .trace-node').should('have.length', 4);
 
@@ -46,7 +46,7 @@ context('AppMap view filter', () => {
       cy.get('.filters .filters__root .filters__root-icon').click();
       cy.get('.nodes .node').should('have.length', 9);
 
-      cy.get('.tabs .tab-btn').last().click();
+      cy.get('.tabs .tab-btn').contains('Trace View').click();
       cy.get('.trace .trace-node').should('have.length', 4);
       cy.get('.tabs__controls .popper__button').click();
       cy.get('.filters__checkbox').eq(0).click();
@@ -107,7 +107,7 @@ context('AppMap view filter', () => {
     });
 
     it('limits root events', () => {
-      cy.get('.tabs .tab-btn').last().click();
+      cy.get('.tabs .tab-btn').contains('Trace View').click();
 
       cy.get('.trace .trace-node').should('have.length', 4);
 
@@ -118,7 +118,7 @@ context('AppMap view filter', () => {
     });
 
     it('hides media HTTP requests', () => {
-      cy.get('.tabs .tab-btn').last().click();
+      cy.get('.tabs .tab-btn').contains('Trace View').click();
 
       cy.get('.trace .trace-node').should('have.length', 4);
 
@@ -146,7 +146,7 @@ context('AppMap view filter', () => {
     });
 
     it('hides by elapsed time', () => {
-      cy.get('.tabs .tab-btn').last().click();
+      cy.get('.tabs .tab-btn').contains('Trace View').click();
 
       cy.get('.trace .trace-node').should('have.length', 4);
 
@@ -174,7 +174,7 @@ context('AppMap view filter', () => {
     });
 
     it('retains object selection when changing filters', () => {
-      cy.get('.tabs .tab-btn').last().click();
+      cy.get('.tabs .tab-btn').contains('Trace View').click();
       cy.get('.trace-node[data-event-id="1"]').click();
 
       cy.get('.tabs__controls .popper__button').click();

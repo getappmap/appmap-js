@@ -110,6 +110,21 @@
             />
           </div>
         </v-tab>
+
+        <v-tab
+          v-if="flamegraphEnabled"
+          name="Flame Graph"
+          :is-active="isViewingFlamegraph"
+          :ref="VIEW_FLAMEGRAPH"
+          :tabName="VIEW_FLAMEGRAPH"
+          :allow-scroll="true"
+        >
+          <v-diagram-flamegraph
+            ref="viewFlamegraph_diagram"
+            :events="filteredAppMap.rootEvents()"
+          />
+        </v-tab>
+
         <template v-slot:notification>
           <v-notification
             v-if="version"
@@ -325,6 +340,7 @@ import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramSequence from '../components/DiagramSequence.vue';
+import VDiagramFlamegraph from '../components/DiagramFlamegraph.vue';
 import VDiagramTrace from '../components/DiagramTrace.vue';
 import VDownloadSequenceDiagram from '../components/sequence/DownloadSequenceDiagram.vue';
 import VFilterMenu from '../components/FilterMenu.vue';
@@ -343,6 +359,7 @@ import {
   VIEW_COMPONENT,
   VIEW_SEQUENCE,
   VIEW_FLOW,
+  VIEW_FLAMEGRAPH,
   SELECT_CODE_OBJECT,
   SELECT_LABEL,
   POP_SELECTION_STACK,
@@ -372,6 +389,7 @@ export default {
     VDiagramComponent,
     VDiagramSequence,
     VDiagramTrace,
+    VDiagramFlamegraph,
     VDownloadSequenceDiagram,
     VFilterMenu,
     VInstructions,
@@ -402,6 +420,7 @@ export default {
       VIEW_COMPONENT,
       VIEW_SEQUENCE,
       VIEW_FLOW,
+      VIEW_FLAMEGRAPH,
       eventFilterText: '',
       eventFilterMatchIndex: 0,
       showShareModal: false,
@@ -418,6 +437,10 @@ export default {
       default: VIEW_COMPONENT,
     },
     appMapUploadable: {
+      type: Boolean,
+      default: false,
+    },
+    flamegraphEnabled: {
       type: Boolean,
       default: false,
     },
@@ -701,6 +724,10 @@ export default {
 
     isViewingFlow() {
       return this.currentView === VIEW_FLOW;
+    },
+
+    isViewingFlamegraph() {
+      return this.currentView === VIEW_FLAMEGRAPH;
     },
 
     showDownload() {
