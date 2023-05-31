@@ -234,8 +234,8 @@ $min-height: 3rem;
   .label {
     text-shadow: #ffffff21 0 0 20px;
     &.http {
-      background-color: #bd64e1;
-      color: $black;
+      background-color: #542168;
+      color: $white;
     }
 
     &.external-service {
@@ -247,12 +247,12 @@ $min-height: 3rem;
       color: $black;
     }
     &.class {
-      background-color: lighten($blue, 13);
-      color: $black;
+      background-color: $blue;
+      color: $white;
     }
     &.database {
-      background-color: lighten($royal, 05);
-      color: $black;
+      background-color: $royal;
+      color: $white;
     }
   }
 
@@ -260,27 +260,6 @@ $min-height: 3rem;
     border: 3px solid $hotpink;
     .label {
       text-shadow: #ffffff21 0 0 12px;
-      &.http {
-        background-color: lighten(#bd64e1, 15);
-        color: $black;
-      }
-
-      &.external-service {
-        background-color: lighten($yellow, 15);
-        color: $black;
-      }
-      &.package {
-        background-color: lighten($teal, 15);
-        color: $black;
-      }
-      &.class {
-        background-color: lighten($blue, 20);
-        color: $black;
-      }
-      &.database {
-        background-color: lighten($royal, 18);
-        color: $black;
-      }
     }
   }
 
@@ -357,7 +336,6 @@ $min-height: 3rem;
 }
 
 .label-container.stack {
-  //border: 2px solid $black;
   border-radius: 0rem;
   &.stack1 {
     z-index: 4;
@@ -387,7 +365,7 @@ $min-height: 3rem;
 }
 
 .sequence-actor-lane-separator {
-  border-left: 1px dashed #242c41; //$gray4;
+  border-left: 1px dashed #242c41;
   position: relative;
   height: 100%;
   width: 1px;
