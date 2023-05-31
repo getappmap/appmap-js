@@ -250,7 +250,7 @@ context('AppMap view filter', () => {
 
     it('does not show the hide external code checkbox', () => {
       cy.get('.popper__button').click();
-      cy.get('.filters__block-row-content').should('have.length', 5);
+      cy.get('.filters__block-row-content').should('have.length', 6);
       cy.get('.filters__block-row-content').each(($el) =>
         cy.wrap($el).should('not.contain.text', 'Hide external code')
       );

@@ -94,6 +94,16 @@
             </div>
           </div>
         </div>
+        <div class="filters__block-row">
+          <div class="filters__block-row-content">
+            <v-popper text="Copy to clipboard" placement="top" text-align="right">
+              <button class="filters__button" data-cy="copy-filter-button" @click="copyFilterState">
+                Copy filter state
+              </button>
+            </v-popper>
+            <div v-if="copied" class="copied">Copied!</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -101,6 +111,7 @@
 
 <script>
 import VFiltersForm from './FiltersForm.vue';
+import VPopper from './Popper.vue';
 import CheckIcon from '@/assets/check.svg';
 import CloseThinIcon from '@/assets/close-thin.svg';
 import FilterIcon from '@/assets/filter.svg';
@@ -114,16 +125,24 @@ import {
   ADD_HIDDEN_NAME,
   REMOVE_HIDDEN_NAME,
 } from '@/store/vsCode';
+import { serializeFilter, base64UrlEncode } from '@appland/models';
 
 export default {
   name: 'v-filter-menu',
 
   components: {
     VFiltersForm,
+    VPopper,
     CheckIcon,
     CloseThinIcon,
     FilterIcon,
     ResetIcon,
+  },
+
+  data() {
+    return {
+      copied: false,
+    };
   },
 
   props: {
@@ -250,6 +269,15 @@ export default {
       if (this.filters.declutter.hideName.names.length === 0)
         this.$store.commit(SET_DECLUTTER_ON, { declutterProperty: 'hideName', value: false });
     },
+
+    async copyFilterState() {
+      const serializedFilter = serializeFilter(this.filters, { explicit: true });
+      const state = base64UrlEncode(JSON.stringify({ filters: serializedFilter }));
+      await navigator.clipboard.writeText(state);
+
+      this.copied = true;
+      setTimeout(() => (this.copied = false), 2500);
+    },
   },
 };
 </script>
@@ -258,6 +286,26 @@ export default {
 .filters {
   width: 390px;
   font-size: 0.75rem;
+
+  .copied {
+    margin-left: 20px;
+    color: $alert-success;
+  }
+
+  &__button {
+    background: $light-purple;
+    color: white;
+    border-radius: 5px;
+    border: 0px;
+    margin: 5px;
+    padding: 5px;
+    width: 130px;
+    transition: all 0.4s ease-in;
+    &:hover {
+      background: $dark-purple;
+      cursor: pointer;
+    }
+  }
 
   &__head {
     margin-bottom: 1rem;
@@ -359,6 +407,7 @@ export default {
         width: 100%;
         display: flex;
         flex-wrap: wrap;
+        align-items: center;
         line-height: 22px;
       }
     }
