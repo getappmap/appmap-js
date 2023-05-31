@@ -71,6 +71,7 @@
     "vuex"
   ],
   "dependencies": {
+    "@appland/appmap-agent-js": "^13.9.0",
     "@appland/client": "workspace:^1",
     "@appland/components": "workspace:^2",
     "@appland/diagrams": "workspace:^1",
@@ -102,6 +103,7 @@
     "jsdom": "^16.6.0",
     "minimatch": "^5.1.2",
     "moo": "^0.5.1",
+    "node-fetch": "^2.6.7",
     "open": "^8.2.1",
     "ora": "^5.4.1",
     "pkg": "^5.8.0",

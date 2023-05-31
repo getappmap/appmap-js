@@ -32,6 +32,7 @@ const SequenceDiagramCommand = require('./cmds/sequenceDiagram');
 const SequenceDiagramDiffCommand = require('./cmds/sequenceDiagramDiff');
 const StatsCommand = require('./cmds/stats/stats');
 import UploadCommand from './cmds/upload';
+import ExecCommand from './cmds/exec';
 import { default as sqlErrorLog } from './lib/sqlErrorLog';
 
 setSQLErrorHandler(sqlErrorLog);
@@ -225,6 +226,7 @@ yargs(process.argv.slice(2))
   .command(SequenceDiagramDiffCommand)
   .command(PruneCommand)
   .command(UploadCommand)
+  .command(ExecCommand)
   .strict()
   .demandCommand()
   .help().argv;
