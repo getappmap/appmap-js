@@ -1,4 +1,5 @@
-import { serializeFilter, deserializeFilter, AppMapFilter } from '@appland/models';
+import { serializeFilter, deserializeFilter } from '../../src/serialize';
+import AppMapFilter from '../../src/appMapFilter';
 
 const TEST_STATE = {
   hideElapsedTimeUnder: 1,
