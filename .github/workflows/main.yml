@@ -10,8 +10,38 @@ env:
   APPMAP_TELEMETRY_DISABLED: 'true'
 
 jobs:
+  yarn_install:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Look up if node_module cache exist
+        id: cache
+        uses: actions/cache/restore@v3
+        with:
+          lookup-only: true
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-node-modules-
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-node-modules-
+        if: steps.cache.outputs.cache-hit != 'true'
+      - uses: actions/setup-node@v3
+        if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          node-version: 16
+          cache: yarn
+      - run: yarn install --immutable
+        if: steps.cache.outputs.cache-hit != 'true'
+
   test:
     runs-on: ubuntu-latest
+
+    needs: [yarn_install]
 
     steps:
       - name: Checkout
@@ -19,13 +49,17 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
 
+      - name: Restore node_modules
+        uses: actions/cache/restore@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-node-modules-
+
       - uses: actions/setup-node@v3
         with:
           node-version: 16
           cache: 'yarn'
-
-      - name: Yarn install
-        run: yarn install
 
       - name: Install AppMap tools
         run: |
