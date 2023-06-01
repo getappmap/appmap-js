@@ -9,12 +9,11 @@
     "access": "public"
   },
   "scripts": {
-    "appmap": "appmap-agent-js -- jest --no-cache",
     "build": "tsup",
     "lint": "eslint 'src/**/*.[jt]s' 'tests/**/*.[jt]s'",
     "lint:fix": "eslint 'src/**/*.[jt]s' 'tests/**/*.[jt]s' --fix",
     "pre-commit": "lint-staged",
-    "test": "jest",
+    "test": "appmap-agent-js",
     "watch": "tsup --watch"
   },
   "lint-staged": {

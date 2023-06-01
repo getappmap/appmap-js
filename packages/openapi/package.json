@@ -9,8 +9,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "[ -n \"${APPMAP:-}\" ] && appmap-agent-js || jest",
-    "appmap": "appmap-agent-js",
+    "test": "appmap-agent-js",
     "build": "tsc -p tsconfig.build.json",
     "watch": "tsc -p tsconfig.build.json --watch",
     "lint": "eslint src"

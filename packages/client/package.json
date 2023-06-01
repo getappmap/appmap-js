@@ -7,10 +7,9 @@
     "dist"
   ],
   "scripts": {
-    "appmap": "appmap-agent-js -- jest --no-cache",
     "build": "tsc",
     "lint": "eslint",
-    "test": "jest"
+    "test": "appmap-agent-js"
   },
   "publishConfig": {
     "access": "public"

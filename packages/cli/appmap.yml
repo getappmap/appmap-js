@@ -1,5 +1,5 @@
 ordering: chronological
-command: yarn exec jest --no-cache -t ^(?!.*@appmap-fixme)
+command: yarn exec jest --no-cache -t ^(?!.*@appmap-fixme) --filter=./tests/testFilter.js
 recorder: jest
 exclude:
   - \[anonymous\]
