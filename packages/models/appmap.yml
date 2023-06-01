@@ -1,3 +1,6 @@
+name: appmap-js/packages/models
+language: javascript
+appmap_dir: tmp/appmap
 ordering: chronological
 command: yarn exec jest --no-cache
 command-options:
