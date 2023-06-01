@@ -1,6 +1,13 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { AppMap, buildAppMap, fullyQualifiedFunctionName, AppMapFilter } from '@appland/models';
+import {
+  AppMap,
+  buildAppMap,
+  fullyQualifiedFunctionName,
+  AppMapFilter,
+  deserializeFilter,
+  base64UrlDecode,
+} from '@appland/models';
 
 Vue.use(Vuex);
 
@@ -21,14 +28,29 @@ export const SET_EXPANDED_PACKAGES = 'setExpandedPackage';
 export const CLEAR_EXPANDED_PACKAGES = 'clearExpandedPackage';
 export const SET_FILTER = 'setFilter';
 export const SET_DECLUTTER_ON = 'setFilterBoolean';
-export const SET_DECLUTTER_DEFAULT = 'setFilterDefault';
 export const SET_ELAPSED_TIME = 'setElapsedTime';
 export const RESET_FILTERS = 'resetFilters';
 export const ADD_ROOT_OBJECT = 'addRootObject';
 export const REMOVE_ROOT_OBJECT = 'removeRootObject';
 export const ADD_HIDDEN_NAME = 'addHiddenName';
 export const REMOVE_HIDDEN_NAME = 'removeHiddenName';
+export const SET_SAVED_FILTERS = 'setSavedFilters';
+export const SET_SELECTED_FILTER = 'setSelectedFilter';
 export const DEFAULT_VIEW = VIEW_COMPONENT;
+export const DEFAULT_FILTER_NAME = 'AppMap default';
+
+// Always have the AppMap default filter as the top option
+function savedFiltersSorter(a, b) {
+  // default filter goes on top
+  if (a.default) return -1;
+  if (b.default) return 1;
+
+  // AppMap default filter goes next
+  if (a.filterName === DEFAULT_FILTER_NAME) return -1;
+  if (b.filterName === DEFAULT_FILTER_NAME) return 1;
+
+  return a.filterName.localeCompare(b.filterName);
+}
 
 export function buildStore() {
   return new Vuex.Store({
@@ -40,6 +62,9 @@ export function buildStore() {
       focusedEvent: null,
       expandedPackages: [],
       filters: new AppMapFilter(),
+      savedFilters: [],
+      selectedFilter: null,
+      defaultFilter: null,
     },
 
     getters: {
@@ -132,16 +157,25 @@ export function buildStore() {
         state.filters.declutter[declutterProperty].on = value;
       },
 
-      [SET_DECLUTTER_DEFAULT](state, { declutterProperty, value }) {
-        state.filters.declutter[declutterProperty].default = value;
-      },
-
       [SET_ELAPSED_TIME](state, elapsedTime) {
         state.filters.declutter.hideElapsedTimeUnder.time = elapsedTime;
       },
 
       [RESET_FILTERS](state) {
-        state.filters = new AppMapFilter();
+        let newDefault;
+        const defaultFilter = state.savedFilters.find((savedFilter) => savedFilter.default);
+
+        if (defaultFilter) {
+          const filterStateString = base64UrlDecode(defaultFilter.state);
+          const parsedState = JSON.parse(filterStateString);
+
+          newDefault = deserializeFilter(parsedState.filters);
+          state.selectedFilter = defaultFilter;
+        } else {
+          newDefault = new AppMapFilter();
+        }
+
+        state.filters = newDefault;
       },
 
       [ADD_ROOT_OBJECT](state, fqid) {
@@ -166,6 +200,23 @@ export function buildStore() {
 
       [REMOVE_HIDDEN_NAME](state, index) {
         state.filters.declutter.hideName.names.splice(index, 1);
+      },
+
+      [SET_SAVED_FILTERS](state, savedFilters) {
+        state.savedFilters = savedFilters;
+        state.savedFilters.sort(savedFiltersSorter);
+
+        const selectedFilter = state.selectedFilter;
+        if (selectedFilter) {
+          const newSelectedFilter = state.savedFilters.find(
+            (savedFilter) => savedFilter.filterName === selectedFilter.filterName
+          );
+          if (newSelectedFilter) state.selectedFilter = newSelectedFilter;
+        }
+      },
+
+      [SET_SELECTED_FILTER](state, selectedFilter) {
+        state.selectedFilter = selectedFilter;
       },
     },
   });

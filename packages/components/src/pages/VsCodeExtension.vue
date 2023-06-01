@@ -196,7 +196,11 @@
               </v-popper>
             </template>
             <template v-slot:body>
-              <v-filter-menu :filteredAppMap="filteredAppMap"></v-filter-menu>
+              <v-filter-menu
+                :filteredAppMap="filteredAppMap"
+                :initialSavedFilters="savedFilters"
+                @setState="(stateString) => setState(stateString)"
+              ></v-filter-menu>
             </template>
           </v-popper-menu>
           <v-popper class="hover-text-popper" text="Reload map" placement="left" text-align="left">
@@ -368,10 +372,11 @@ import {
   CLEAR_EXPANDED_PACKAGES,
   SET_FILTER,
   SET_DECLUTTER_ON,
-  SET_DECLUTTER_DEFAULT,
   RESET_FILTERS,
   ADD_ROOT_OBJECT,
   REMOVE_ROOT_OBJECT,
+  SET_SAVED_FILTERS,
+  SET_SELECTED_FILTER,
 } from '../store/vsCode';
 
 export default {
@@ -443,6 +448,10 @@ export default {
     flamegraphEnabled: {
       type: Boolean,
       default: false,
+    },
+    savedFilters: {
+      type: Array,
+      default: () => [],
     },
   },
 
@@ -748,7 +757,7 @@ export default {
       const hasClassMap =
         Array.isArray(appMap.classMap.codeObjects) && appMap.classMap.codeObjects.length;
 
-      return !this.filtersChanged && !this.eventFilterText && (!hasEvents || !hasClassMap);
+      return !this.eventFilterText && (!hasEvents || !hasClassMap);
     },
 
     isGiantAppMap() {
@@ -779,19 +788,20 @@ export default {
   methods: {
     loadData(data) {
       this.$store.commit(SET_APPMAP_DATA, data);
+      this.initializeSavedFilters();
 
       const rootEvents = this.$store.state.appMap.rootEvents();
       const hasHttpRoot = rootEvents.some((e) => e.httpServerRequest);
+      const isUsingAppMapDefault = this.$store.state.savedFilters.some(
+        (savedFilter) => savedFilter.filterName === 'AppMap default' && savedFilter.default
+      );
 
-      this.$store.commit(SET_DECLUTTER_ON, {
-        declutterProperty: 'limitRootEvents',
-        value: hasHttpRoot,
-      });
-
-      this.$store.commit(SET_DECLUTTER_DEFAULT, {
-        declutterProperty: 'limitRootEvents',
-        value: hasHttpRoot,
-      });
+      if (isUsingAppMapDefault && !hasHttpRoot) {
+        this.$store.commit(SET_DECLUTTER_ON, {
+          declutterProperty: 'limitRootEvents',
+          value: hasHttpRoot,
+        });
+      }
 
       this.isLoading = false;
     },
@@ -973,6 +983,14 @@ export default {
         const { filters, expandedPackages } = state;
         if (filters) this.$store.commit(SET_FILTER, deserializeFilter(filters));
 
+        const base64EncodedFilters = base64UrlEncode(JSON.stringify({ filters }));
+        const selectedFilter =
+          this.$store.state.savedFilters &&
+          this.$store.state.savedFilters.find(
+            (savedFilter) => savedFilter.state === base64EncodedFilters
+          );
+        if (selectedFilter) this.$store.commit(SET_SELECTED_FILTER, selectedFilter);
+
         if (expandedPackages) {
           const codeObjects = expandedPackages.map((expandedPackageId) =>
             this.filteredAppMap.classMap.codeObjectFromId(expandedPackageId)
@@ -1146,6 +1164,21 @@ export default {
       if (this.eventFilterMatch) {
         this.$store.commit(SELECT_CODE_OBJECT, this.eventFilterMatch);
       }
+    },
+
+    initializeSavedFilters() {
+      const savedFilters = this.savedFilters;
+      this.$store.commit(SET_SAVED_FILTERS, savedFilters);
+
+      const defaultFilter = savedFilters.find((savedFilter) => savedFilter.default);
+      if (defaultFilter) {
+        this.$store.commit(SET_SELECTED_FILTER, defaultFilter);
+        this.setState(defaultFilter.state);
+      }
+    },
+
+    updateFilters(updatedFilters) {
+      this.$store.commit(SET_SAVED_FILTERS, updatedFilters);
     },
   },
 

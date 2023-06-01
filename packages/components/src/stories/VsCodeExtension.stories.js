@@ -1,5 +1,5 @@
 import VVsCodeExtension from '@/pages/VsCodeExtension.vue';
-import { VIEW_SEQUENCE } from '@/store/vsCode';
+import { VIEW_SEQUENCE, DEFAULT_FILTER_NAME } from '@/store/vsCode';
 import defaultScenario from './data/scenario.json';
 import pruned from './data/scenario_pruned.json';
 import giant from './data/giant_map.json';
@@ -45,6 +45,13 @@ export default {
   args: {
     appMapUploadable: true,
     flamegraphEnabled: true,
+    savedFilters: [
+      {
+        filterName: DEFAULT_FILTER_NAME,
+        state: 'eyJmaWx0ZXJzIjp7fX0',
+        default: true,
+      },
+    ],
   },
 };
 

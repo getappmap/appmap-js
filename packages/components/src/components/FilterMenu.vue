@@ -4,18 +4,24 @@
       <FilterIcon class="filters__head-icon" />
       <h2 class="filters__head-text">Filters</h2>
       <button class="filters__head-reset" @click="resetFilters">
-        Reset all
+        Reset
         <ResetIcon />
       </button>
     </div>
     <div class="filters__block">
       <div class="filters__block-head">
         <h3 class="filters__block-title">Root</h3>
-        <v-filters-form
-          :onSubmit="addRootObject"
-          placeholder="add new root..."
-          :suggestions="rootObjectsSuggestions"
-        />
+      </div>
+      <div class="filters__block-body">
+        <div class="filters__block-row">
+          <div class="filters__block-row-content">
+            <v-filters-form
+              :onSubmit="addRootObject"
+              placeholder="add new root..."
+              :suggestions="rootObjectsSuggestions"
+            />
+          </div>
+        </div>
       </div>
       <div class="filters__block-body filters__block-body--flex" v-if="filters.rootObjects.length">
         <div class="filters__root" v-for="(id, index) in filters.rootObjects" :key="id">
@@ -26,7 +32,7 @@
     </div>
     <div class="filters__block">
       <div class="filters__block-head">
-        <h3 class="filters__block-title">Declutter</h3>
+        <h3 class="filters__block-title">Filter</h3>
       </div>
       <div class="filters__block-body">
         <div class="filters__block-row">
@@ -94,6 +100,59 @@
             </div>
           </div>
         </div>
+        <div class="filters__block-row">
+          <input
+            class="filters__input"
+            placeholder="save current filter as..."
+            v-model="newFilterName"
+          />
+          <button class="filters__button" data-cy="save-filter-button" @click="saveFilter">
+            Save Filter
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="filters__block">
+      <div class="filters__block-head">
+        <h3 class="filters__block-title">Saved Filters</h3>
+      </div>
+      <div class="filters__block-body filters__block-body">
+        <div class="filters__block-row">
+          <div class="filters__block-row-content">
+            Filter:
+            <select class="filters__select" v-model="selectedFilter">
+              <option
+                v-for="savedFilter in savedFilters"
+                :value="savedFilter"
+                :key="savedFilter.filterName"
+                :style="optionStyle(savedFilter)"
+              >
+                {{ savedFilter.filterName }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="filters__block-row">
+          <div class="filters__block-row-content">
+            <button class="filters__button" data-cy="apply-filter-button" @click="applyFilter">
+              Apply
+            </button>
+            <button :class="deleteButtonClass" data-cy="delete-filter-button" @click="deleteFilter">
+              Delete
+            </button>
+            <button
+              :class="defaultButtonClass"
+              data-cy="default-filter-button"
+              @click="setAsDefault"
+            >
+              Set as default
+            </button>
+            <button class="filters__button" data-cy="copy-filter-button" @click="copyFilterState">
+              Copy
+            </button>
+            <div v-if="copied" class="copied">Copied!</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -113,7 +172,10 @@ import {
   REMOVE_ROOT_OBJECT,
   ADD_HIDDEN_NAME,
   REMOVE_HIDDEN_NAME,
+  SET_SELECTED_FILTER,
+  DEFAULT_FILTER_NAME,
 } from '@/store/vsCode';
+import { serializeFilter, base64UrlEncode } from '@appland/models';
 
 export default {
   name: 'v-filter-menu',
@@ -133,9 +195,29 @@ export default {
     },
   },
 
+  data() {
+    return {
+      copied: false,
+      newFilterName: '',
+    };
+  },
+
   computed: {
     filters() {
       return this.$store.state.filters;
+    },
+
+    savedFilters() {
+      return this.$store.state.savedFilters;
+    },
+
+    selectedFilter: {
+      get() {
+        return this.$store.state.selectedFilter;
+      },
+      set(value) {
+        this.$store.commit(SET_SELECTED_FILTER, value);
+      },
     },
 
     limitRootEvents: {
@@ -225,6 +307,19 @@ export default {
         ['ruby', 'javascript'].includes(appMap.metadata.language.name)
       );
     },
+
+    defaultButtonClass() {
+      const suffix = this.selectedFilter && this.selectedFilter.default ? '-disabled' : '';
+      return 'filters__button' + suffix;
+    },
+
+    deleteButtonClass() {
+      const suffix =
+        this.selectedFilter && this.selectedFilter.filterName === DEFAULT_FILTER_NAME
+          ? '-disabled'
+          : '';
+      return 'filters__button' + suffix;
+    },
   },
 
   methods: {
@@ -250,6 +345,46 @@ export default {
       if (this.filters.declutter.hideName.names.length === 0)
         this.$store.commit(SET_DECLUTTER_ON, { declutterProperty: 'hideName', value: false });
     },
+
+    saveFilter() {
+      const filterName = this.newFilterName.trim();
+      if (this.newFilterName.trim() === '') return;
+
+      const serializedFilter = serializeFilter(this.filters);
+      const state = base64UrlEncode(JSON.stringify({ filters: serializedFilter }));
+      const filterToSave = { filterName, state, default: false };
+
+      this.$store.commit(SET_SELECTED_FILTER, filterToSave);
+      this.$root.$emit('saveFilter', filterToSave);
+
+      this.newFilterName = '';
+    },
+
+    applyFilter() {
+      this.$emit('setState', this.selectedFilter.state);
+    },
+
+    deleteFilter() {
+      if (this.selectedFilter.filterName === DEFAULT_FILTER_NAME) return;
+      this.$root.$emit('deleteFilter', this.selectedFilter);
+    },
+
+    setAsDefault() {
+      this.$root.$emit('defaultFilter', this.selectedFilter);
+    },
+
+    copyFilterState() {
+      const state = this.$store.state.selectedFilter && this.$store.state.selectedFilter.state;
+      if (!state) return;
+      navigator.clipboard.writeText(state);
+
+      this.copied = true;
+      setTimeout(() => (this.copied = false), 2500);
+    },
+
+    optionStyle(savedFilter) {
+      return savedFilter.default ? { fontWeight: 'bold' } : { color: '#c8c8c8' };
+    },
   },
 };
 </script>
@@ -259,8 +394,69 @@ export default {
   width: 390px;
   font-size: 0.75rem;
 
+  .copied {
+    color: $alert-success;
+    margin-left: 0.25rem;
+  }
+
+  &__button {
+    background: $light-purple;
+    color: white;
+    border-radius: 5px;
+    border: 0px;
+    margin: 5px;
+    padding: 10px;
+    transition: all 0.4s ease-in;
+
+    &:hover {
+      background: $dark-purple;
+      cursor: pointer;
+    }
+
+    &-disabled {
+      background-color: $gray3;
+      color: $gray4;
+      border-radius: 5px;
+      border: 0px;
+      margin: 5px;
+      padding: 10px;
+    }
+  }
+
+  &__input {
+    flex: 1;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+    padding: 3px 8px;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: black;
+    font: inherit;
+    color: white;
+    outline: none;
+  }
+
+  &__select {
+    flex: 1;
+    padding: 2px;
+    margin-left: 7px;
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+    border: 0;
+    border-radius: 5px;
+    font: inherit;
+    box-shadow: none;
+    background: black;
+    color: $gray6;
+    outline: none;
+  }
+
   &__head {
-    margin-bottom: 1rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid $gray2;
     display: flex;
@@ -279,7 +475,6 @@ export default {
     }
 
     &-text {
-      margin-bottom: 0;
       color: $base01;
       text-transform: uppercase;
       font-size: 0.75rem;
@@ -348,7 +543,7 @@ export default {
     &-row {
       display: flex;
       justify-content: flex-start;
-      align-items: flex-start;
+      align-items: center;
 
       &:not(:last-child) {
         margin-bottom: 1rem;
@@ -359,7 +554,18 @@ export default {
         width: 100%;
         display: flex;
         flex-wrap: wrap;
+        align-items: center;
         line-height: 22px;
+
+        .default-option {
+          color: green;
+        }
+
+        &__centered {
+          width: 100%;
+          display: flex;
+          justify-content: space-evenly;
+        }
       }
     }
   }
