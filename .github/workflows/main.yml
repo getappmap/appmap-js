@@ -66,13 +66,13 @@ jobs:
           curl -o /usr/local/bin/appmap -L https://github.com/getappmap/appmap-js/releases/download/%40appland%2Fappmap-preflight-v1.0-pre.26/appmap-preflight-linux-x64
           chmod a+x /usr/local/bin/appmap
 
-      - name: Run tests
+      - name: Build
         id: build
         run: |
           cd packages/models
           yarn build
 
-      - name: Run tests
+      - name: Test
         id: test
         run: |
           set +e
@@ -81,7 +81,7 @@ jobs:
           exit_status=$?
           echo "exit-status=$exit_status" >> $GITHUB_OUTPUT
 
-      - name: Build AppMap archive
+      - name: Create AppMap archive
         uses: getappmap/archive-appmap-action@v1-pre.13
 
       - name: Report the exit status
