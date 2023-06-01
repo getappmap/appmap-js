@@ -1,2 +1,3 @@
 name: appmap-js
-appmap_dir: dummy
+language: javascript
+appmap_dir: tmp/appmap
