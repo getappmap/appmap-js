@@ -1,3 +1,10 @@
+# [@appland/models-v2.6.2](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.6.1...@appland/models-v2.6.2) (2023-06-01)
+
+
+### Bug Fixes
+
+* can deserialize when hideExternal is a bool ([8596396](https://github.com/getappmap/appmap-js/commit/8596396b0123dc3251d610e8aedbb06f7f9da68c))
+
 # [@appland/models-v2.6.1](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.6.0...@appland/models-v2.6.1) (2023-05-16)
 
 
