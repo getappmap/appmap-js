@@ -1,0 +1,51 @@
+name: CI
+
+# TODO: Change to pull_request
+on: [push]
+
+permissions:
+  contents: read
+
+env:
+  APPMAP_TELEMETRY_DISABLED: 'true'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'yarn'
+
+      - name: Yarn install
+        run: yarn install
+
+      - name: Install AppMap tools
+        run: |
+          curl -o /usr/local/bin/appmap -L https://github.com/getappmap/appmap-js/releases/download/%40appland%2Fappmap-preflight-v1.0-pre.26/appmap-preflight-linux-x64
+          chmod a+x /usr/local/bin/appmap
+
+      - name: Run tests
+        id: test
+        run: |
+          set +e
+          cd packages/models
+          yarn test
+          exit_status=$?
+          echo "exit-status=$exit_status" >> $GITHUB_OUTPUT
+
+      - name: Build AppMap archive
+        uses: getappmap/archive-appmap-action@v1-pre.13
+        with:
+          archive-id: ${{ matrix.ci_node_index }}
+
+      - name: Report the exit status
+        if: steps.test.outputs.exit-status != 0
+        run: exit ${{ steps.test.outputs.exit-status }}
