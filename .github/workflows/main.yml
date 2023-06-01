@@ -67,6 +67,12 @@ jobs:
           chmod a+x /usr/local/bin/appmap
 
       - name: Run tests
+        id: build
+        run: |
+          cd packages/models
+          yarn build
+
+      - name: Run tests
         id: test
         run: |
           set +e
@@ -77,8 +83,6 @@ jobs:
 
       - name: Build AppMap archive
         uses: getappmap/archive-appmap-action@v1-pre.13
-        with:
-          archive-id: ${{ matrix.ci_node_index }}
 
       - name: Report the exit status
         if: steps.test.outputs.exit-status != 0
