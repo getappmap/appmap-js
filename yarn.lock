@@ -503,6 +503,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/telemetry@workspace:packages/telemetry"
   dependencies:
+    "@appland/appmap-agent-js": ^13.9.0
     "@types/jest": ^29.4.1
     "@typescript-eslint/eslint-plugin": ^5.7.0
     "@typescript-eslint/parser": ^5.7.0
