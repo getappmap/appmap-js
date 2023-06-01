@@ -77,6 +77,9 @@ jobs:
         run: |
           set +e
           cd packages/models
+          # TODO: Try and fix error
+          # APPMAP-ERROR Could not resolve jest preset at "ts-jest/presets/js-with-ts"
+          yarn install
           yarn test
           exit_status=$?
           echo "exit-status=$exit_status" >> $GITHUB_OUTPUT
