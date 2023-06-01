@@ -122,6 +122,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/appmap@workspace:packages/cli"
   dependencies:
+    "@appland/appmap-agent-js": ^13.9.0
     "@appland/client": "workspace:^1"
     "@appland/components": "workspace:^2"
     "@appland/diagrams": "workspace:^1"

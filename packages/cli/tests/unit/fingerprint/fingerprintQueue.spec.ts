@@ -8,7 +8,7 @@ describe(FingerprintQueue, () => {
     sinon.restore();
   });
 
-  it('gracefully handles files which cannot be read', async () => {
+  it('gracefully handles files which cannot be read @appmap-fixme', async () => {
     const queue = new FingerprintQueue();
     queue.push('missing-file.appmap.json');
     await queue.process();
