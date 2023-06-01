@@ -385,6 +385,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/openapi@workspace:packages/openapi"
   dependencies:
+    "@appland/appmap-agent-js": ^13.9.0
     "@appland/models": "workspace:^2.2.0"
     "@types/jest": ^29.4.1
     "@types/js-yaml": ^4.0.5
