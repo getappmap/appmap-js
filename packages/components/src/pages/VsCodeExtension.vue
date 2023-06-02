@@ -757,7 +757,7 @@ export default {
       const hasClassMap =
         Array.isArray(appMap.classMap.codeObjects) && appMap.classMap.codeObjects.length;
 
-      return !this.eventFilterText && (!hasEvents || !hasClassMap);
+      return !this.filtersChanged && !this.eventFilterText && (!hasEvents || !hasClassMap);
     },
 
     isGiantAppMap() {
@@ -767,11 +767,18 @@ export default {
     filtersChanged() {
       return (
         this.filters.rootObjects.length > 0 ||
-        Object.values(this.filters.declutter).some(
-          (f) =>
-            (typeof f.on === 'boolean' && f.on !== f.default) ||
-            (typeof on === 'function' && f.on() !== f.default)
-        )
+        Object.keys(this.filters.declutter).some((declutterPropertyName) => {
+          // This might get set to a non-default value if the map does not have an HTTP root
+          if (declutterPropertyName === 'limitRootEvents') return false;
+
+          const declutterProperty = this.filters.declutter[declutterPropertyName];
+          const on = declutterProperty.on;
+
+          return (
+            (typeof on === 'boolean' && on !== declutterProperty.default) ||
+            (typeof on === 'function' && on() !== declutterProperty.default)
+          );
+        })
       );
     },
 
