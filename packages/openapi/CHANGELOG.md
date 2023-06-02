@@ -1,3 +1,10 @@
+# [@appland/openapi-v1.5.0](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.4.4...@appland/openapi-v1.5.0) (2023-06-02)
+
+
+### Features
+
+* user can save filter settings ([763c246](https://github.com/getappmap/appmap-js/commit/763c246297d1a1c6516577d9a6d4f49295c36b70))
+
 # [@appland/openapi-v1.4.4](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.4.3...@appland/openapi-v1.4.4) (2023-02-25)
 
 
