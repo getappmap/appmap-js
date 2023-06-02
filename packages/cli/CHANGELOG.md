@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.80.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.79.0...@appland/appmap-v3.80.0) (2023-06-02)
+
+
+### Features
+
+* user can save filter settings ([763c246](https://github.com/getappmap/appmap-js/commit/763c246297d1a1c6516577d9a6d4f49295c36b70))
+
 # [@appland/appmap-v3.79.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.78.1...@appland/appmap-v3.79.0) (2023-05-31)
 
 
