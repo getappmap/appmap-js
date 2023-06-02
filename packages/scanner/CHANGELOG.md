@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.78.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.77.2...@appland/scanner-v1.78.0) (2023-06-02)
+
+
+### Features
+
+* user can save filter settings ([763c246](https://github.com/getappmap/appmap-js/commit/763c246297d1a1c6516577d9a6d4f49295c36b70))
+
 # [@appland/scanner-v1.77.2](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.77.1...@appland/scanner-v1.77.2) (2023-05-24)
 
 
