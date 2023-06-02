@@ -10,31 +10,19 @@
           maintainability. Our runtime code analysis can find the problems that static code
           analyzers miss — and that cause serious production issues.
         </article>
-        <article v-if="!(analysisEnabled && scanned)" class="subheading">
-          To unlock this feature you will authenticate to the AppMap server with your GitHub or
-          GitLab account. AppMap does not upload your AppMaps. AppMap does not read the contents of
-          your AppMaps. AppMap does not have read or write access to your repo.
-        </article>
         <div v-if="analysisEnabled">
           <article v-if="!scanned">
-            <p>
+            <h2>
               <strong>This project has not been scanned yet.</strong>
-            </p>
-            <p>AppMap will scan your project and report findings automatically if you have:</p>
-
-            <ol>
-              <li>
-                <a href="#" @click.prevent="$root.$emit('open-instruction', 'project-picker')"
-                  >The AppMap Agent installed</a
-                >
-              </li>
-              <li>
-                <a href="#" @click.prevent="$root.$emit('open-instruction', 'record-appmaps')">
-                  AppMaps in your project</a
-                >
-              </li>
-            </ol>
-            <p>If you need help getting set up, we are happy to help open a support ticket.</p>
+            </h2>
+            <article class="subheading">
+              <a href="#" @click.prevent="$root.$emit('open-instruction', 'record-appmaps')"
+                >Go back and record AppMaps.</a
+              >
+              Once you have done that, AppMap will automatically scan your project and report
+              findings.
+            </article>
+            <br />
           </article>
           <article v-else-if="numFindings > 0">
             <p>
