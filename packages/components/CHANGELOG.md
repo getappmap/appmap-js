@@ -1,3 +1,10 @@
+# [@appland/components-v2.45.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.44.0...@appland/components-v2.45.0) (2023-06-02)
+
+
+### Features
+
+* user can save filter settings ([763c246](https://github.com/getappmap/appmap-js/commit/763c246297d1a1c6516577d9a6d4f49295c36b70))
+
 # [@appland/components-v2.44.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.43.0...@appland/components-v2.44.0) (2023-05-31)
 
 
