@@ -1,5 +1,5 @@
 import VVsCodeExtension from '@/pages/VsCodeExtension.vue';
-import { VIEW_SEQUENCE, DEFAULT_FILTER_NAME } from '@/store/vsCode';
+import { VIEW_SEQUENCE } from '@/store/vsCode';
 import defaultScenario from './data/scenario.json';
 import pruned from './data/scenario_pruned.json';
 import giant from './data/giant_map.json';
@@ -11,6 +11,7 @@ import mapWithFindings from './data/appmap_with_finding.json';
 import mapWithTwoFindings from './data/appmap_with_two_findings.json';
 import patchNotes from './data/patch_notes_html';
 import bindResolvePath from './support/resolvePath';
+import savedFilters from './data/saved_filters.js';
 import './scss/fullscreen.scss';
 
 const scenarioData = {
@@ -45,13 +46,7 @@ export default {
   args: {
     appMapUploadable: true,
     flamegraphEnabled: true,
-    savedFilters: [
-      {
-        filterName: DEFAULT_FILTER_NAME,
-        state: 'eyJmaWx0ZXJzIjp7fX0',
-        default: true,
-      },
-    ],
+    savedFilters: [savedFilters[0]],
   },
 };
 
@@ -79,24 +74,7 @@ extensionWithDefaultSequenceView.args = {
 export const extensionWithSavedFilters = Template.bind({});
 extensionWithSavedFilters.args = {
   defaultView: VIEW_SEQUENCE,
-  savedFilters: [
-    {
-      filterName: DEFAULT_FILTER_NAME,
-      state: 'eyJmaWx0ZXJzIjp7fX0',
-      default: true,
-    },
-    {
-      filterName: 'another test',
-      state: 'eyJmaWx0ZXJzIjp7ImxpbWl0Um9vdEV2ZW50cyI6ZmFsc2UsImhpZGVVbmxhYmVsZWQiOnRydWV9fQ',
-      default: false,
-    },
-    {
-      filterName: 'filter',
-      state:
-        'eyJmaWx0ZXJzIjp7ImxpbWl0Um9vdEV2ZW50cyI6ZmFsc2UsImhpZGVNZWRpYVJlcXVlc3RzIjpmYWxzZSwiaGlkZUVsYXBzZWRUaW1lVW5kZXIiOjF9fQ',
-      default: false,
-    },
-  ],
+  savedFilters,
 };
 
 export const extensionWithNotification = (args, { argTypes }) => ({
