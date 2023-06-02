@@ -1,6 +1,11 @@
 import { mount, createWrapper } from '@vue/test-utils';
 import FilterMenu from '@/components/FilterMenu.vue';
-import { store, SET_SAVED_FILTERS, SET_SELECTED_FILTER, DEFAULT_FILTER_NAME } from '@/store/vsCode';
+import {
+  store,
+  SET_SAVED_FILTERS,
+  SET_SELECTED_SAVED_FILTER,
+  DEFAULT_FILTER_NAME,
+} from '@/store/vsCode';
 import data from './fixtures/user_page_scenario.appmap.json';
 import { buildAppMap, AppMapFilter } from '@appland/models';
 
@@ -54,7 +59,7 @@ describe('FilterMenu.vue', () => {
     const appMap = buildAppMap().source(data).normalize().build();
     const propsData = { filteredAppMap: filter.filter(appMap) };
     const mocks = { navigator };
-    store.commit(SET_SELECTED_FILTER, defaultFilter);
+    store.commit(SET_SELECTED_SAVED_FILTER, defaultFilter);
     wrapper = mount(FilterMenu, { propsData, store, mocks });
     rootWrapper = createWrapper(wrapper.vm.$root);
   });

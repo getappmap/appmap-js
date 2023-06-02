@@ -3,7 +3,7 @@ import {
   buildStore,
   SET_APPMAP_DATA,
   SET_SAVED_FILTERS,
-  SET_SELECTED_FILTER,
+  SET_SELECTED_SAVED_FILTER,
 } from '@/store/vsCode';
 import scenario from './data/scenario.json';
 import savedFilters from './data/saved_filters.js';
@@ -11,7 +11,7 @@ import savedFilters from './data/saved_filters.js';
 const store = buildStore();
 store.commit(SET_APPMAP_DATA, scenario);
 store.commit(SET_SAVED_FILTERS, savedFilters);
-store.commit(SET_SELECTED_FILTER, savedFilters[0]);
+store.commit(SET_SELECTED_SAVED_FILTER, savedFilters[0]);
 const filteredAppMap = store.state.appMap;
 
 export default {

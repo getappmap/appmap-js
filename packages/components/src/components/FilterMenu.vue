@@ -120,7 +120,7 @@
         <div class="filters__block-row">
           <div class="filters__block-row-content">
             Filter:
-            <select class="filters__select" v-model="selectedFilter">
+            <select class="filters__select" v-model="selectedSavedFilter">
               <option
                 v-for="savedFilter in savedFilters"
                 :value="savedFilter"
@@ -172,7 +172,7 @@ import {
   REMOVE_ROOT_OBJECT,
   ADD_HIDDEN_NAME,
   REMOVE_HIDDEN_NAME,
-  SET_SELECTED_FILTER,
+  SET_SELECTED_SAVED_FILTER,
   DEFAULT_FILTER_NAME,
 } from '@/store/vsCode';
 import { serializeFilter, base64UrlEncode } from '@appland/models';
@@ -211,12 +211,12 @@ export default {
       return this.$store.state.savedFilters;
     },
 
-    selectedFilter: {
+    selectedSavedFilter: {
       get() {
-        return this.$store.state.selectedFilter;
+        return this.$store.state.selectedSavedFilter;
       },
       set(value) {
-        this.$store.commit(SET_SELECTED_FILTER, value);
+        this.$store.commit(SET_SELECTED_SAVED_FILTER, value);
       },
     },
 
@@ -309,13 +309,14 @@ export default {
     },
 
     defaultButtonClass() {
-      const suffix = this.selectedFilter && this.selectedFilter.default ? '-disabled' : '';
+      const suffix =
+        this.selectedSavedFilter && this.selectedSavedFilter.default ? '-disabled' : '';
       return 'filters__button' + suffix;
     },
 
     deleteButtonClass() {
       const suffix =
-        this.selectedFilter && this.selectedFilter.filterName === DEFAULT_FILTER_NAME
+        this.selectedSavedFilter && this.selectedSavedFilter.filterName === DEFAULT_FILTER_NAME
           ? '-disabled'
           : '';
       return 'filters__button' + suffix;
@@ -348,33 +349,37 @@ export default {
 
     saveFilter() {
       const filterName = this.newFilterName.trim();
-      if (this.newFilterName.trim() === '') return;
+      if (this.newFilterName.trim() === '' || this.newFilterName === DEFAULT_FILTER_NAME) {
+        this.newFilterName = '';
+        return;
+      }
 
       const serializedFilter = serializeFilter(this.filters);
       const state = base64UrlEncode(JSON.stringify({ filters: serializedFilter }));
       const filterToSave = { filterName, state, default: false };
 
-      this.$store.commit(SET_SELECTED_FILTER, filterToSave);
+      this.$store.commit(SET_SELECTED_SAVED_FILTER, filterToSave);
       this.$root.$emit('saveFilter', filterToSave);
 
       this.newFilterName = '';
     },
 
     applyFilter() {
-      this.$emit('setState', this.selectedFilter.state);
+      this.$emit('setState', this.selectedSavedFilter.state);
     },
 
     deleteFilter() {
-      if (this.selectedFilter.filterName === DEFAULT_FILTER_NAME) return;
-      this.$root.$emit('deleteFilter', this.selectedFilter);
+      if (this.selectedSavedFilter.filterName === DEFAULT_FILTER_NAME) return;
+      this.$root.$emit('deleteFilter', this.selectedSavedFilter);
     },
 
     setAsDefault() {
-      this.$root.$emit('defaultFilter', this.selectedFilter);
+      this.$root.$emit('defaultFilter', this.selectedSavedFilter);
     },
 
     copyFilterState() {
-      const state = this.$store.state.selectedFilter && this.$store.state.selectedFilter.state;
+      const state =
+        this.$store.state.selectedSavedFilter && this.$store.state.selectedSavedFilter.state;
       if (!state) return;
       navigator.clipboard.writeText(state);
 

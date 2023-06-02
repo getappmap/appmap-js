@@ -376,7 +376,7 @@ import {
   ADD_ROOT_OBJECT,
   REMOVE_ROOT_OBJECT,
   SET_SAVED_FILTERS,
-  SET_SELECTED_FILTER,
+  SET_SELECTED_SAVED_FILTER,
 } from '../store/vsCode';
 
 export default {
@@ -989,7 +989,7 @@ export default {
           this.$store.state.savedFilters.find(
             (savedFilter) => savedFilter.state === base64EncodedFilters
           );
-        if (selectedFilter) this.$store.commit(SET_SELECTED_FILTER, selectedFilter);
+        if (selectedFilter) this.$store.commit(SET_SELECTED_SAVED_FILTER, selectedFilter);
 
         if (expandedPackages) {
           const codeObjects = expandedPackages.map((expandedPackageId) =>
@@ -1172,7 +1172,7 @@ export default {
 
       const defaultFilter = savedFilters.find((savedFilter) => savedFilter.default);
       if (defaultFilter) {
-        this.$store.commit(SET_SELECTED_FILTER, defaultFilter);
+        this.$store.commit(SET_SELECTED_SAVED_FILTER, defaultFilter);
         this.setState(defaultFilter.state);
       }
     },

@@ -35,7 +35,7 @@ export const REMOVE_ROOT_OBJECT = 'removeRootObject';
 export const ADD_HIDDEN_NAME = 'addHiddenName';
 export const REMOVE_HIDDEN_NAME = 'removeHiddenName';
 export const SET_SAVED_FILTERS = 'setSavedFilters';
-export const SET_SELECTED_FILTER = 'setSelectedFilter';
+export const SET_SELECTED_SAVED_FILTER = 'setselectedSavedFilter';
 export const DEFAULT_VIEW = VIEW_COMPONENT;
 export const DEFAULT_FILTER_NAME = 'AppMap default';
 
@@ -63,7 +63,7 @@ export function buildStore() {
       expandedPackages: [],
       filters: new AppMapFilter(),
       savedFilters: [],
-      selectedFilter: null,
+      selectedSavedFilter: null,
       defaultFilter: null,
     },
 
@@ -170,7 +170,7 @@ export function buildStore() {
           const parsedState = JSON.parse(filterStateString);
 
           newDefault = deserializeFilter(parsedState.filters);
-          state.selectedFilter = defaultFilter;
+          state.selectedSavedFilter = defaultFilter;
         } else {
           newDefault = new AppMapFilter();
         }
@@ -206,17 +206,17 @@ export function buildStore() {
         state.savedFilters = savedFilters;
         state.savedFilters.sort(savedFiltersSorter);
 
-        const selectedFilter = state.selectedFilter;
-        if (selectedFilter) {
-          const newSelectedFilter = state.savedFilters.find(
-            (savedFilter) => savedFilter.filterName === selectedFilter.filterName
+        const selectedSavedFilter = state.selectedSavedFilter;
+        if (selectedSavedFilter) {
+          const newselectedSavedFilter = state.savedFilters.find(
+            (savedFilter) => savedFilter.filterName === selectedSavedFilter.filterName
           );
-          if (newSelectedFilter) state.selectedFilter = newSelectedFilter;
+          if (newselectedSavedFilter) state.selectedSavedFilter = newselectedSavedFilter;
         }
       },
 
-      [SET_SELECTED_FILTER](state, selectedFilter) {
-        state.selectedFilter = selectedFilter;
+      [SET_SELECTED_SAVED_FILTER](state, selectedSavedFilter) {
+        state.selectedSavedFilter = selectedSavedFilter;
       },
     },
   });
