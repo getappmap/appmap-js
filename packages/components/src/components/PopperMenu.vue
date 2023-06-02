@@ -101,7 +101,7 @@ export default {
     width: max-content;
     height: max-content;
     max-width: 70vw;
-    max-height: 70vh;
+    max-height: 85vh;
     margin-top: 1.5rem;
     padding: 1rem;
     font-family: $appland-text-font-family;

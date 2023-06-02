@@ -11,6 +11,7 @@ import mapWithFindings from './data/appmap_with_finding.json';
 import mapWithTwoFindings from './data/appmap_with_two_findings.json';
 import patchNotes from './data/patch_notes_html';
 import bindResolvePath from './support/resolvePath';
+import savedFilters from './data/saved_filters.js';
 import './scss/fullscreen.scss';
 
 const scenarioData = {
@@ -45,6 +46,7 @@ export default {
   args: {
     appMapUploadable: true,
     flamegraphEnabled: true,
+    savedFilters: [savedFilters[0]],
   },
 };
 
@@ -67,6 +69,12 @@ export const extension = Template.bind({});
 export const extensionWithDefaultSequenceView = Template.bind({});
 extensionWithDefaultSequenceView.args = {
   defaultView: VIEW_SEQUENCE,
+};
+
+export const extensionWithSavedFilters = Template.bind({});
+extensionWithSavedFilters.args = {
+  defaultView: VIEW_SEQUENCE,
+  savedFilters,
 };
 
 export const extensionWithNotification = (args, { argTypes }) => ({
