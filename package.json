@@ -13,6 +13,7 @@
   "scripts": {
     "lint": "yarn workspaces foreach --exclude root -v run lint",
     "test": "yarn workspaces foreach --exclude '{root}' -v run test",
+    "test:no-appmap": "yarn workspaces foreach --exclude '{root}' -v run test:no-appmap",
     "build": "yarn workspaces foreach -t --exclude root -v run build",
     "build-native": "yarn workspaces foreach -t --exclude root -v run build-native",
     "codesign": "yarn workspaces foreach -t --exclude root -v run codesign",
