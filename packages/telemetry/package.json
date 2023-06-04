@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "test": "[ -n \"${APPMAP:-}\" ] && appmap-agent-js || jest",
-    "appmap": "appmap-agent-js",
+    "test": "appmap-agent-js",
+    "test:no-appmap": "jest",
     "lint": "eslint telemetry.ts",
     "pre-commit": "lint-staged"
   },
