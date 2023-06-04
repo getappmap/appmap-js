@@ -1,10 +1,5 @@
 import analyze from '../../src/sql/analyze';
-import { join } from 'path';
-import { readFileSync } from 'fs';
-
-const Examples = JSON.parse(
-  readFileSync(join(__dirname, './fixtures/sql/sql_examples.json'), 'utf8')
-);
+import Examples from './fixtures/sql/sql_examples.json';
 
 describe('analyze SQL', () => {
   Examples.forEach((example) => {
