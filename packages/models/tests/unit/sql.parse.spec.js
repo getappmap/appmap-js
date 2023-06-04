@@ -1,12 +1,7 @@
-import { readFileSync } from 'fs';
 import normalize from '../../src/sql/normalize';
 import parse from '../../src/sql/parse';
-import { join } from 'path';
 import { getSQLErrorHandler, setSQLErrorHandler } from '../../src/sql/sqlErrorHandler';
-
-const Examples = JSON.parse(
-  readFileSync(join(__dirname, './fixtures/sql/sql_examples.json'), 'utf8')
-);
+import Examples from './fixtures/sql/sql_examples.json';
 
 setSQLErrorHandler((error) => {
   if (process.env.APPMAP_SQL_DEBUG) {
