@@ -54,6 +54,12 @@ export const builder = (args: yargs.Argv) => {
     alias: 'delete-unchanged',
   });
 
+  args.option('report-removed', {
+    describe:
+      'whether to report removed findings, such as removed API routes, resolved findings, etc',
+    default: true,
+  });
+
   return args.strict();
 };
 
@@ -75,6 +81,7 @@ export const handler = async (argv: any) => {
     outputDir: outputDirArg,
     headRevision: headRevisionArg,
     deleteUnreferenced,
+    reportRemoved,
   } = argv;
 
   handleWorkingDirectory(directory);
@@ -100,6 +107,7 @@ export const handler = async (argv: any) => {
   );
 
   const changeReporter = new ChangeReporter(baseRevision, headRevision, outputDir, srcDir);
+  if (!reportRemoved) changeReporter.reportRemoved = false;
   await changeReporter.initialize();
 
   const report = await changeReporter.report();
