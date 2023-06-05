@@ -15,7 +15,7 @@ store.commit(SET_SELECTED_SAVED_FILTER, savedFilters[0]);
 const filteredAppMap = store.state.appMap;
 
 export default {
-  title: 'Pages/VS Code',
+  title: 'AppLand/Diagrams/Filter Menu',
   component: VFilterMenu,
 };
 
