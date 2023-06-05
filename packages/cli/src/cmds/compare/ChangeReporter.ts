@@ -98,6 +98,8 @@ class SourceDiff {
 }
 
 export default class ChangeReporter {
+  reportRemoved: boolean = true;
+
   appmapData: AppMapData;
   appmapIndex: AppMapIndex;
   baseManifest?: ArchiveMetadata;
@@ -374,9 +376,13 @@ class ReportGenerator {
       (hash) => !headFindingHashes.has(hash)
     );
     newFindings = headFindings.filter((finding) => newFindingHashes.includes(finding.hash_v2));
-    resolvedFindings = baseFindings.filter((finding) =>
-      resolvedFindingHashes.includes(finding.hash_v2)
-    );
+    if (this.reporter.reportRemoved) {
+      resolvedFindings = baseFindings.filter((finding) =>
+        resolvedFindingHashes.includes(finding.hash_v2)
+      );
+    } else {
+      resolvedFindings = [];
+    }
 
     const result: Record<'new' & 'resolved', Finding[]> = {};
     if (newFindings.length > 0) result['new'] = newFindings;
@@ -413,6 +419,12 @@ class ReportGenerator {
           format: 'openapi3',
         },
       });
+
+      if (!this.reporter.reportRemoved && result.breakingDifferencesFound) {
+        const diffOutcomeFailure = result as any;
+        diffOutcomeFailure.breakingDifferencesFound = false;
+        delete diffOutcomeFailure['breakingDifferences'];
+      }
 
       if (result.breakingDifferencesFound) {
         console.log('Breaking change found!');
