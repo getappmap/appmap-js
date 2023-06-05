@@ -1,3 +1,10 @@
+# [@appland/components-v2.45.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.45.0...@appland/components-v2.45.1) (2023-06-05)
+
+
+### Bug Fixes
+
+* Remove deprecated install-guide SignIn view ([750139d](https://github.com/getappmap/appmap-js/commit/750139d330a3813e0559cc9f93c229bec321b893))
+
 # [@appland/components-v2.45.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.44.0...@appland/components-v2.45.0) (2023-06-02)
 
 
