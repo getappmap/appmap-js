@@ -161,13 +161,8 @@ export default {
     isJetBrains() {
       return this.editor === 'jetbrains';
     },
-    supported() {
-      return isProjectSupported(this.project);
-    },
     automaticRecordingLanguages() {
-      const languages = ['ruby'];
-      if (this.featureFlags.has(PYTHON_RECORD_BY_DEFAULT)) languages.push('python');
-      return languages;
+      return ['ruby', 'python'];
     },
     automaticRecording() {
       return (
