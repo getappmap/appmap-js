@@ -5,7 +5,7 @@
 
       <ol>
         <li>
-          Your project doesn't use <i>requirements.txt</i>, <i>Pipfile</i>, or <i>Poetry.lock</i>.
+          Your project doesn't use <i>requirements.txt</i>, <i>Pipfile</i>, or <i>poetry.lock</i>.
         </li>
         <li>You want to install <tt>appmap</tt> from outside of the code editor.</li>
       </ol>
