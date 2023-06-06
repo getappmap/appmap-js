@@ -11,17 +11,16 @@
               Use the <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap"
               button to start your run configurations with AppMap enabled.
             </p>
-            <template v-if="remoteRecordingPrompts.length === 1">
+            <template v-if="intelliJRecordingPrompts.length === 1">
               <p class="mb20" data-cy="automatic-recording-single">
-                To perform your first runtime analysis {{ firstPrompt(remoteRecordingPrompts) }}
+                To perform your first runtime analysis {{ firstPrompt(intelliJRecordingPrompts) }}
               </p>
             </template>
-
             <template v-else>
-              There are {{ numberOfRecordingMethods }} methods of performing runtime analysis with
-              AppMap in this project:
+              There are {{ intelliJRecordingPrompts.length }} methods of performing runtime analysis
+              with AppMap in this project:
               <ol data-cy="automatic-recording-multi">
-                <li v-for="(text, index) in remoteRecordingPrompts" :key="index">
+                <li v-for="(text, index) in intelliJRecordingPrompts" :key="index">
                   {{ text }}
                 </li>
               </ol>
@@ -41,8 +40,8 @@
             </template>
 
             <template v-else>
-              There are {{ numberOfRecordingMethods }} methods of performing runtime analysis with
-              AppMap in this project:
+              There are {{ automaticRecordingPrompts.length }} methods of performing runtime
+              analysis with AppMap in this project:
               <ol data-cy="automatic-recording-multi">
                 <li v-for="(text, index) in automaticRecordingPrompts" :key="index">
                   {{ text }}
@@ -56,7 +55,7 @@
               </a>
             </p>
           </template>
-          <template v-else-if="!supported">
+          <template v-else-if="!webFrameworkSupported && !testFrameworkSupported">
             <p class="mb20">
               For instructions on recording your first AppMaps, refer to our
               <a href="https://appmap.io/docs/recording-methods.html" data-cy="documentation-link">
@@ -179,8 +178,11 @@ export default {
     applicationName() {
       return [this.webFramework.name, 'application'].filter((word) => Boolean(word)).join(' ');
     },
+    testFramework() {
+      return this.project.testFramework || { score: 0 };
+    },
     testFrameworkSupported() {
-      return isFeatureSupported(this.project.testFramework);
+      return isFeatureSupported(this.testFramework);
     },
     automaticRecordingPrompts() {
       const prompts = [];
@@ -194,7 +196,7 @@ export default {
         );
       return prompts;
     },
-    remoteRecordingPrompts() {
+    intelliJRecordingPrompts() {
       const prompts = [];
       if (this.webFrameworkSupported)
         prompts.push(
@@ -205,28 +207,6 @@ export default {
           `Run your ${this.project.testFramework.name} tests. Each test case will emit an AppMap.`
         );
       return prompts;
-    },
-    numberOfRecordingMethods() {
-      switch (this.automaticRecordingPrompts.length) {
-        case 2:
-          return 'two';
-        case 3:
-          return 'three';
-        case 4:
-          return 'four';
-        case 5:
-          return 'five';
-        case 6:
-          return 'six';
-        case 7:
-          return 'seven';
-        case 8:
-          return 'eight';
-        case 9:
-          return 'nine';
-        default:
-          return this.automaticRecordingPrompts.length;
-      }
     },
     pendingMessage() {
       if (this.complete) {
