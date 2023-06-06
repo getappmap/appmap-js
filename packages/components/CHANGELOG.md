@@ -1,3 +1,10 @@
+# [@appland/components-v2.46.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.45.1...@appland/components-v2.46.0) (2023-06-06)
+
+
+### Features
+
+* consistent map color palette ([19ef694](https://github.com/getappmap/appmap-js/commit/19ef694e0449469700d81ab2bdd7065349c5409c))
+
 # [@appland/components-v2.45.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.45.0...@appland/components-v2.45.1) (2023-06-05)
 
 
