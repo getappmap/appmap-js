@@ -89,7 +89,7 @@ __metadata:
   dependencies:
     "@appland/client": "workspace:^1"
     "@appland/components": "workspace:^2"
-    "@appland/diagrams": "workspace:^1"
+    "@appland/diagrams": "workspace:^1.7.0"
     "@appland/models": "workspace:^2.6.2"
     "@appland/openapi": "workspace:^1.4.3"
     "@appland/sequence-diagram": "workspace:^1"
@@ -212,7 +212,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/components@workspace:packages/components"
   dependencies:
-    "@appland/diagrams": "workspace:^1.6.2"
+    "@appland/diagrams": "workspace:^1.7.0"
     "@appland/models": "workspace:^2.6.2"
     "@appland/sequence-diagram": "workspace:^1.5.2"
     "@babel/core": ^7.13.1
@@ -290,7 +290,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/diagrams@workspace:^1, @appland/diagrams@workspace:^1.6.2, @appland/diagrams@workspace:packages/diagrams":
+"@appland/diagrams@workspace:^1.7.0, @appland/diagrams@workspace:packages/diagrams":
   version: 0.0.0-use.local
   resolution: "@appland/diagrams@workspace:packages/diagrams"
   dependencies:
