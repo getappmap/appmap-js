@@ -1,4 +1,3 @@
-import { event as d3Event } from 'd3-selection';
 import Momentum from './momentum';
 
 export default function momentum(zoom, selection) {
@@ -26,14 +25,14 @@ export default function momentum(zoom, selection) {
     m.cancel();
   };
 
-  zoom.on('zoom', () => {
+  zoom.on('zoom', (d3Event) => {
     if (!d3Event) {
       return;
     }
 
     m.updateTransform(d3Event.transform);
     if (onZoom) {
-      onZoom();
+      onZoom(d3Event);
     }
   });
 
