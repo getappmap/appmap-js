@@ -154,6 +154,7 @@ $bg-fade: rgba(0, 0, 0, 0.8);
 .label {
   display: inline-block;
   font-size: 9pt;
+  font-family: 'IBM Plex Mono', monospace;
   margin-left: 0.5rem;
   white-space: nowrap;
   max-width: 160px;
@@ -166,10 +167,10 @@ $bg-fade: rgba(0, 0, 0, 0.8);
   }
 
   .name {
-    display: inline-block;
-    padding: 2px 4px;
     border-radius: 3px;
     color: lighten($gray4, 20);
+    display: inline-block;
+    padding: 2px 4px;
   }
 
   .name.static {

@@ -27,6 +27,7 @@ export default {
 .label {
   display: inline-block;
   font-size: 9pt;
+  font-family: 'IBM Plex Mono', monospace;
   margin-left: 1em;
   white-space: nowrap;
   max-width: 160px;
