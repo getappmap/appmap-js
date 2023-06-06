@@ -1,3 +1,10 @@
+# [@appland/diagrams-v1.6.4](https://github.com/getappmap/appmap-js/compare/@appland/diagrams-v1.6.3...@appland/diagrams-v1.6.4) (2023-06-06)
+
+
+### Bug Fixes
+
+* update d3 dependencies to dedup d3-selection ([d3b22b9](https://github.com/getappmap/appmap-js/commit/d3b22b969424920237124065ccc4aba18920054a))
+
 # [@appland/diagrams-v1.6.3](https://github.com/getappmap/appmap-js/compare/@appland/diagrams-v1.6.2...@appland/diagrams-v1.6.3) (2023-02-25)
 
 
