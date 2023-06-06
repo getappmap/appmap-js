@@ -190,10 +190,10 @@
       .edgePath {
         &.highlight {
           path {
-            stroke: #768a91; //$highlight;
+            stroke: $highlight;
           }
           marker {
-            fill: #768a91; //$highlight;
+            fill: $highlight;
           }
         }
 
