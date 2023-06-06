@@ -1,3 +1,10 @@
+# [@appland/components-v2.46.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.46.0...@appland/components-v2.46.1) (2023-06-06)
+
+
+### Bug Fixes
+
+* update diagrams to 1.7.0 ([c4baced](https://github.com/getappmap/appmap-js/commit/c4baced2fbceeeda58fe01777604ce8a70c3a09d))
+
 # [@appland/components-v2.46.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.45.1...@appland/components-v2.46.0) (2023-06-06)
 
 
