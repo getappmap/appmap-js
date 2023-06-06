@@ -27,8 +27,8 @@
 
     <section>
       <p>
-        <tt>appmap.yml</tt> will be created the first time you run your application with AppMap
-        enabled.
+        A default configuration file, <tt>appmap.yml</tt>, will be created the first time you run
+        your application with AppMap enabled.
       </p>
     </section>
   </div>

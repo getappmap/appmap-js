@@ -11,7 +11,9 @@
       />
       <p>Update your bundle.</p>
       <v-code-snippet clipboard-text="bundle install" />
-      <i>appmap.yml</i> will be created the first time you run your application with AppMap enabled.
+
+      A default configuration file, <tt>appmap.yml</tt>, will be created the first time you run your
+      application with AppMap enabled.
     </section>
   </div>
 </template>
