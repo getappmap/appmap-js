@@ -143,7 +143,7 @@ export default {
       return !this.featureFlags.has(DISABLE_PENDING_RECORD_STATE);
     },
     command() {
-      const baseCommand = 'npx @appland/appmap record test';
+      const baseCommand = 'npx @appland/appmap@latest record';
 
       if (this.project && this.project.path) {
         return `${baseCommand} -d ${this.escapePath(this.project.path)}`;
