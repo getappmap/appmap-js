@@ -98,9 +98,9 @@
             plugin.
           </p>
           <p class="mb20">
-            ✓ Run configurations called "Start with AppMap" have been added to your IntelliJ menus.
+            ✓ Run configurations called <component :is="runConfigIcon" class="run-config-icon" /><b>"Start with AppMap"</b> have been added to your IntelliJ menus.
+            In the next step, you'll use them to create AppMaps.
           </p>
-          <p class="mb20">✓ <tt>appmap.yml</tt> has been created in your project directory.</p>
           <div class="page-control-wrap">
             <p></p>
             <v-navigation-buttons :first="true" :last="!supported" />
@@ -173,6 +173,8 @@ import VRuby from '@/components/install-guide/install-instructions/Ruby.vue';
 import VPython from '@/components/install-guide/install-instructions/Python.vue';
 import VJavaScript from '@/components/install-guide/install-instructions/JavaScript.vue';
 import VIconChevron from '@/assets/fa-solid_chevron-down.svg';
+import VRunConfigDark from '@/assets/jetbrains_run_config_execute_dark.svg';
+import VRunConfigLight from '@/assets/jetbrains_run_config_execute.svg';
 
 import { isFeatureSupported, isProjectSupported } from '@/lib/project';
 import { getAgentDocumentationUrl } from '@/lib/documentation';
@@ -285,6 +287,9 @@ export default {
     isJS() {
       return this.language.name.toLowerCase() === 'javascript';
     },
+    runConfigIcon() {
+      return this.theme === 'dark' ? VRunConfigDark : VRunConfigLight;
+    }
   },
   methods: {
     performInstall() {
