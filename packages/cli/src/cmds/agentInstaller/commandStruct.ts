@@ -6,6 +6,7 @@ export default class CommandStruct {
   readonly args: string[];
 
   constructor(
+    readonly explanation: string,
     readonly program: string,
     args: readonly string[],
     readonly path: PathLike,

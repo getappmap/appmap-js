@@ -55,7 +55,12 @@ export default class GradleInstaller extends JavaBuildToolInstaller {
   }
 
   async printJarPathCommand(): Promise<CommandStruct> {
-    return new CommandStruct(await this.runCommand(), ['appmap-print-jar-path'], this.path);
+    return new CommandStruct(
+      'Printing the location of the appmap-agent JAR',
+      await this.runCommand(),
+      ['appmap-print-jar-path'],
+      this.path
+    );
   }
 
   async available(): Promise<boolean> {
@@ -81,6 +86,7 @@ export default class GradleInstaller extends JavaBuildToolInstaller {
 
   async verifyCommand(): Promise<CommandStruct> {
     return new CommandStruct(
+      'Veryfing the installation of the appmap-agent JAR',
       await this.runCommand(),
       [
         'dependencyInsight',
@@ -129,7 +135,7 @@ export default class GradleInstaller extends JavaBuildToolInstaller {
     if (!javaPresent) {
       const userWillContinue = await ui.continueWithoutJavaPlugin();
       if (!userWillContinue) {
-        throw new AbortError('no java plugin found');
+        throw new AbortError('No java plugin found');
       }
     }
 

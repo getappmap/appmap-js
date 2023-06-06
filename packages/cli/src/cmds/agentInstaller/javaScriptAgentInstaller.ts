@@ -28,8 +28,14 @@ abstract class JavaScriptInstaller extends AgentInstaller {
     return 'https://appland.com/docs/reference/appmap-agent-js';
   }
 
-  async environment(): Promise<Record<string, string>> {
-    const version = await getOutput('node', ['--version'], this.path);
+  async environment(ui: InstallerUI): Promise<Record<string, string>> {
+    const version = await getOutput(
+      ui,
+      `Detect the Node.js version to ensure it's compatible with AppMap`,
+      'node',
+      ['--version'],
+      this.path
+    );
 
     return {
       'Node version': version.ok ? version.output.split(/\s/)[1] : chalk.red(version.output),
@@ -37,11 +43,21 @@ abstract class JavaScriptInstaller extends AgentInstaller {
   }
 
   async initCommand(): Promise<CommandStruct> {
-    return new CommandStruct('npx', ['@appland/appmap-agent-js', 'init', this.path], this.path);
+    return new CommandStruct(
+      'Initializing the appmap-agent-js configuration',
+      'npx',
+      ['@appland/appmap-agent-js', 'init', this.path],
+      this.path
+    );
   }
 
   async validateAgentCommand(): Promise<CommandStruct> {
-    return new CommandStruct('npx', ['@appland/appmap-agent-js', 'status', this.path], this.path);
+    return new CommandStruct(
+      'Validating that the appmap-agent-js is successfully installed and configured',
+      'npx',
+      ['@appland/appmap-agent-js', 'status', this.path],
+      this.path
+    );
   }
 }
 
@@ -65,17 +81,23 @@ export class NpmInstaller extends JavaScriptInstaller {
   }
 
   async checkConfigCommand(_ui: InstallerUI): Promise<CommandStruct | undefined> {
-    return new CommandStruct('npm', ['install', '--dry-run'], this.path);
+    return new CommandStruct(
+      'Verify that the npm project is valid',
+      'npm',
+      ['install', '--dry-run'],
+      this.path
+    );
   }
 
-  async installAgent(_ui: InstallerUI): Promise<void> {
+  async installAgent(ui: InstallerUI): Promise<void> {
     const cmd = new CommandStruct(
+      'Add the appmap package to your project using npm',
       'npm',
       ['install', '--saveDev', process.env.APPMAP_AGENT_PACKAGE || AGENT_PACKAGE],
       this.path
     );
 
-    await run(cmd);
+    await run(ui, cmd);
   }
 
   async verifyCommand() {
@@ -103,27 +125,39 @@ export class YarnInstaller extends JavaScriptInstaller {
   }
 
   async checkConfigCommand(_ui: InstallerUI): Promise<CommandStruct | undefined> {
-    return new CommandStruct('yarn', ['install', '--immutable'], this.path);
+    return new CommandStruct(
+      'Verify that the yarn project is valid',
+      'yarn',
+      ['install', '--immutable'],
+      this.path
+    );
   }
 
-  async installAgent(_ui: InstallerUI): Promise<void> {
+  async installAgent(ui: InstallerUI): Promise<void> {
     const cmd = new CommandStruct(
+      'Add the appmap package to your project using yarn',
       'yarn',
       ['add', '--dev', process.env.APPMAP_AGENT_PACKAGE || AGENT_PACKAGE],
       this.path
     );
 
-    await run(cmd);
+    await run(ui, cmd);
   }
 
   async verifyCommand() {
     return undefined;
   }
 
-  async isYarnVersionOne(): Promise<boolean> {
+  async isYarnVersionOne(ui: InstallerUI): Promise<boolean> {
     let isVersionOne: boolean;
     try {
-      const versionOutput = await getOutput('yarn', ['--version'], this.path);
+      const versionOutput = await getOutput(
+        ui,
+        `Detect the yarn version to ensure it's compatible with AppMap`,
+        'yarn',
+        ['--version'],
+        this.path
+      );
       const version = semver.coerce(versionOutput.output);
 
       if (!version) {

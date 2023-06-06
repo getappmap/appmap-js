@@ -18,7 +18,7 @@ export default class AgentInstallerProcedure extends AgentProcedure {
     const confirm = ui.confirm(
       [
         `AppMap is about to be installed. Confirm the details below.`,
-        await this.getEnvironmentForDisplay(),
+        await this.getEnvironmentForDisplay(ui),
         '',
         '  Is this correct?',
       ]
@@ -34,7 +34,7 @@ export default class AgentInstallerProcedure extends AgentProcedure {
           `Use ${chalk.blue('--help')} for more information.`,
         ].join('\n')
       );
-      throw new AbortError('aborted while confirming installation environment');
+      throw new AbortError('Aborted while confirming installation environment');
     }
 
     let useExistingAppMapYml = false;
@@ -61,7 +61,7 @@ export default class AgentInstallerProcedure extends AgentProcedure {
     ui.status('Installing AppMap...');
 
     try {
-      const filesBeforeGitStatus: GitStatus[] = await this.gitStatus();
+      const filesBeforeGitStatus: GitStatus[] = await this.gitStatus(ui);
       const filesBefore: string[] = [];
       for (const file of filesBeforeGitStatus) {
         filesBefore.push(file.file);
@@ -69,11 +69,11 @@ export default class AgentInstallerProcedure extends AgentProcedure {
       await this.installer.checkCurrentConfig(ui);
       await this.installer.installAgent(ui);
 
-      await this.verifyProject();
+      await this.verifyProject(ui);
 
       if (!useExistingAppMapYml) {
-        const initCommand = await this.installer.initCommand();
-        const { stdout } = await run(initCommand);
+        const initCommand = await this.installer.initCommand(ui);
+        const { stdout } = await run(ui, initCommand);
         const initCommandOutput = JSON.parse(stdout);
         const recommendedConfig = (load(initCommandOutput.configuration.contents) as any) || {};
 
@@ -115,11 +115,21 @@ export default class AgentInstallerProcedure extends AgentProcedure {
         for (const warning of result.errors.filter((e) => e.level === 'warning'))
           ui.warn(formatValidationError(warning));
     } catch (e) {
+      if (e instanceof AbortError) throw e;
+
       const error = e as Error;
       console.log(error?.message);
       if (this.installer.name === 'Bundler') {
         if (error?.message.includes('but is an incompatible architecture')) {
-          await run(new CommandStruct('gem', ['uninstall', 'appmap', '-x', '--force'], this.path));
+          await run(
+            ui,
+            new CommandStruct(
+              'Uninstall the appmap gem due to incompatible architecture',
+              'gem',
+              ['uninstall', 'appmap', '-x', '--force'],
+              this.path
+            )
+          );
 
           const incompatibleArchitectureMessage = [
             '\n',

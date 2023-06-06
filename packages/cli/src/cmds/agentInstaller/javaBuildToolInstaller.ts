@@ -7,6 +7,7 @@ import { run } from './commandRunner';
 import { getOutput } from './commandUtil';
 import { findIntelliJHome } from './jetBrainsSupport';
 import AgentInstaller from './agentInstaller';
+import InstallerUI from './installerUI';
 
 export function addJetBrainsEnv() {
   const jbHome = findIntelliJHome();
@@ -40,26 +41,28 @@ export default abstract class JavaBuildToolInstaller extends AgentInstaller {
     return 'https://appland.com/docs/reference/appmap-java';
   }
 
-  async initCommand(): Promise<CommandStruct> {
+  async initCommand(ui: InstallerUI): Promise<CommandStruct> {
     return new CommandStruct(
+      'Initializing the appmap-agent JAR configuration',
       'java',
-      ['-jar', await this.agentJar(), '-d', this.path, 'init'],
+      ['-jar', await this.agentJar(ui), '-d', this.path, 'init'],
       this.path
     );
   }
 
-  async validateAgentCommand(): Promise<CommandStruct> {
+  async validateAgentCommand(ui: InstallerUI): Promise<CommandStruct> {
     return new CommandStruct(
+      'Validating that the appmap-agent JAR is successfully installed and configured',
       'java',
-      ['-jar', await this.agentJar(), '-d', this.path, 'validate'],
+      ['-jar', await this.agentJar(ui), '-d', this.path, 'validate'],
       this.path
     );
   }
 
-  private async agentJar(): Promise<string> {
+  private async agentJar(ui: InstallerUI): Promise<string> {
     if (!this._agentJar) {
       const cmd = await this.printJarPathCommand();
-      const { stdout } = await run(cmd);
+      const { stdout } = await run(ui, cmd);
 
       this._agentJar = stdout
         .split('\n')
@@ -70,10 +73,16 @@ export default abstract class JavaBuildToolInstaller extends AgentInstaller {
     return this._agentJar!.trim();
   }
 
-  async environment(): Promise<Record<string, string>> {
+  async environment(ui: InstallerUI): Promise<Record<string, string>> {
     // JDK version is returned as a string similar to:
     // javac 1.8.0_212-internal (build 1.8.0_212-internal+11)
-    const version = await getOutput('javac', ['-version'], this.path);
+    const version = await getOutput(
+      ui,
+      `Detect the Java version to ensure it's compatible with AppMap`,
+      'javac',
+      ['-version'],
+      this.path
+    );
     return {
       JAVA_HOME: process.env['JAVA_HOME'] || chalk.yellow('Unspecified'),
       'JDK Version': version.ok ? version.output.split(/\s/)[1] : chalk.red(version.output),

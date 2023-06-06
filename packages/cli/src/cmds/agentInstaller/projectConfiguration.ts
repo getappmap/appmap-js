@@ -113,15 +113,23 @@ function yarn1Workspaces(info: unknown): [string, string][] {
 //   }
 //   Done in 0.02s.
 async function getYarnSubprojectsVersionOne(
+  ui: InstallerUI,
   dir: string,
   installer: YarnInstaller,
   subprojects: ProjectConfiguration[]
 ) {
-  const cmd = new CommandStruct('yarn', ['workspaces', 'info', '--json'], installer.path);
+  const cmd = new CommandStruct(
+    'Listing yarn workspaces to detect subprojects',
+    'yarn',
+    ['workspaces', 'info', '--json'],
+    installer.path
+  );
   let output: CommandReturn;
   try {
-    output = await run(cmd);
+    output = await run(ui, cmd);
   } catch (e) {
+    if (e instanceof AbortError) throw e;
+
     if (ChildProcessError.check(e)) return;
     throw e;
   }
@@ -146,12 +154,18 @@ async function getYarnSubprojectsVersionOne(
 }
 
 async function getYarnSubprojectsVersionAboveOne(
+  ui: InstallerUI,
   dir: string,
   installer: YarnInstaller,
   subprojects: ProjectConfiguration[]
 ) {
-  const cmd = new CommandStruct('yarn', ['workspaces', 'list', '--json'], installer.path);
-  const output = await run(cmd);
+  const cmd = new CommandStruct(
+    'Listing yarn workspaces to detect subprojects',
+    'yarn',
+    ['workspaces', 'list', '--json'],
+    installer.path
+  );
+  const output = await run(ui, cmd);
 
   for (const line of output.stdout.split('\n')) {
     if (line !== '') {
@@ -170,6 +184,7 @@ async function getYarnSubprojectsVersionAboveOne(
 }
 
 export async function getYarnSubprojects(
+  ui: InstallerUI,
   dir: string,
   availableInstallers: AgentInstaller[]
 ): Promise<ProjectConfiguration[]> {
@@ -178,10 +193,10 @@ export async function getYarnSubprojects(
   for (const installer of availableInstallers) {
     if (installer.name === 'yarn') {
       const yarnInstaller = installer as YarnInstaller;
-      if (await yarnInstaller.isYarnVersionOne()) {
-        await getYarnSubprojectsVersionOne(dir, yarnInstaller, subprojects);
+      if (await yarnInstaller.isYarnVersionOne(ui)) {
+        await getYarnSubprojectsVersionOne(ui, dir, yarnInstaller, subprojects);
       } else {
-        await getYarnSubprojectsVersionAboveOne(dir, yarnInstaller, subprojects);
+        await getYarnSubprojectsVersionAboveOne(ui, dir, yarnInstaller, subprojects);
       }
     }
   }
@@ -206,6 +221,7 @@ async function getSubprojects(
 ): Promise<ProjectConfiguration[] | undefined> {
   let subprojects: ProjectConfiguration[] = [];
   const yarnSubprojects: ProjectConfiguration[] = await getYarnSubprojects(
+    ui,
     dir,
     availableInstallers
   );

@@ -50,12 +50,23 @@ export class BundleInstaller extends AgentInstaller {
   }
 
   async checkConfigCommand(_ui: InstallerUI): Promise<CommandStruct | undefined> {
-    return new CommandStruct('bundle', ['check', '--dry-run'], this.path);
+    return new CommandStruct(
+      'Verify that the bundler configuration is OK',
+      'bundle',
+      ['check', '--dry-run'],
+      this.path
+    );
   }
 
-  async checkBundlerConfig(): Promise<void> {
+  async checkBundlerConfig(ui: InstallerUI): Promise<void> {
     const bundleConfig = await run(
-      new CommandStruct('bundle', ['config', 'get', 'without'], this.path)
+      ui,
+      new CommandStruct(
+        'Verify that bundler is configured to install test and development gems',
+        'bundle',
+        ['config', 'get', 'without'],
+        this.path
+      )
     );
 
     const activeConfig = bundleConfig.stdout.split('\n')[1];
@@ -66,8 +77,8 @@ export class BundleInstaller extends AgentInstaller {
     }
   }
 
-  async installAgent(_ui: InstallerUI): Promise<void> {
-    await this.checkBundlerConfig();
+  async installAgent(ui: InstallerUI): Promise<void> {
+    await this.checkBundlerConfig(ui);
     const encodedFile: EncodedFile = new EncodedFile(this.buildFilePath);
     let gemfile = encodedFile.toString();
     const index = gemfile.search(REGEX_GEM_DECLARATION);
@@ -90,22 +101,41 @@ export class BundleInstaller extends AgentInstaller {
       encodedFile.write(`${gemfile}${os.EOL}${GEM_DEPENDENCY}${os.EOL}`);
     }
 
-    await run(new CommandStruct('bundle', ['install'], this.path));
+    await run(
+      ui,
+      new CommandStruct('Install the configured gems', 'bundle', ['install'], this.path)
+    );
   }
 
   async initCommand(): Promise<CommandStruct> {
-    return new CommandStruct('bundle', ['exec', 'appmap-agent-init'], this.path);
+    return new CommandStruct(
+      'Initialize the appmap gem installation',
+      'bundle',
+      ['exec', 'appmap-agent-init'],
+      this.path
+    );
   }
 
   async validateAgentCommand(): Promise<CommandStruct> {
-    return new CommandStruct('bundle', ['exec', 'appmap-agent-validate'], this.path);
+    return new CommandStruct(
+      'Validate that the appmap gem installation is successful',
+      'bundle',
+      ['exec', 'appmap-agent-validate'],
+      this.path
+    );
   }
 
-  async environment(): Promise<Record<string, string>> {
+  async environment(ui: InstallerUI): Promise<Record<string, string>> {
     // Ruby version is returned as a string similar to:
     // ruby 3.0.0p0 (2020-12-25 revision 95aff21468) [x86_64-linux]
-    const version = await getOutput('ruby', ['--version'], this.path);
-    const gemHome = await getOutput('gem', ['env', 'home'], this.path);
+    const version = await getOutput(
+      ui,
+      `Detect the Ruby version to verify that it's compatible with AppMap`,
+      'ruby',
+      ['--version'],
+      this.path
+    );
+    const gemHome = await getOutput(ui, `Identify the GEM_HOME`, 'gem', ['env', 'home'], this.path);
 
     return {
       'Ruby version': version.ok ? version.output.split(/\s/)[1] : chalk.red(version.output),

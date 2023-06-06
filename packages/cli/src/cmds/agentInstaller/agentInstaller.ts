@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import { UserConfigError } from '../errors';
+import { AbortError, UserConfigError } from '../errors';
 import { run } from './commandRunner';
 import CommandStruct from './commandStruct';
 import InstallerUI from './installerUI';
@@ -26,15 +26,16 @@ export default abstract class AgentInstaller {
     }
 
     try {
-      await run(cmd);
+      await run(ui, cmd);
     } catch (err) {
-      throw new UserConfigError(err as string);
+      if (err instanceof AbortError) throw err;
+      else throw new UserConfigError(err as string);
     }
   }
 
-  abstract validateAgentCommand(): Promise<CommandStruct | undefined>;
-  abstract initCommand(): Promise<CommandStruct>;
+  abstract validateAgentCommand(ui: InstallerUI): Promise<CommandStruct | undefined>;
+  abstract initCommand(ui: InstallerUI): Promise<CommandStruct>;
   abstract verifyCommand(): Promise<CommandStruct | undefined>;
-  abstract environment(): Promise<Record<string, string>>;
+  abstract environment(ui: InstallerUI): Promise<Record<string, string>>;
   abstract available(): Promise<boolean>;
 }

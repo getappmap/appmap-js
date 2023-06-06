@@ -5,10 +5,10 @@ import { formatValidationError } from './ValidationResult';
 export default class AgentStatusProcedure extends AgentProcedure {
   async run(ui: InstallerUI): Promise<void> {
     console.log('\nAgent environment:');
-    const env = await this.getEnvironmentForDisplay();
+    const env = await this.getEnvironmentForDisplay(ui);
     console.log(`${env.join('\n')}\n`);
 
-    await this.verifyProject();
+    await this.verifyProject(ui);
     const result = await this.validateProject(ui, true);
 
     ui.success('Success!');

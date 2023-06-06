@@ -36,11 +36,19 @@ abstract class PythonInstaller extends AgentInstaller {
     return 'https://appland.com/docs/reference/appmap-python';
   }
 
-  async environment(): Promise<Record<string, string>> {
+  async environment(ui: InstallerUI): Promise<Record<string, string>> {
     // Python version is returned as a string similar to:
     // Python 3.7.0
-    const version = await getOutput('python3', ['--version'], this.path);
+    const version = await getOutput(
+      ui,
+      `Identify the Python version to ensure it's compatible with AppMap`,
+      'python3',
+      ['--version'],
+      this.path
+    );
     const pythonPath = await getOutput(
+      ui,
+      `Detect the Python package directory`,
       'python3',
       ['-c', 'import sys; print(sys.prefix)'],
       this.path
@@ -73,21 +81,32 @@ export class PoetryInstaller extends PythonInstaller {
   }
 
   async initCommand(): Promise<CommandStruct> {
-    return new CommandStruct('poetry', ['run', 'appmap-agent-init'], this.path);
+    return new CommandStruct(
+      'Initializing the appmap package',
+      'poetry',
+      ['run', 'appmap-agent-init'],
+      this.path
+    );
   }
 
   async checkConfigCommand(_ui: InstallerUI): Promise<CommandStruct | undefined> {
-    return new CommandStruct('poetry', ['install', '--dry-run'], this.path);
+    return new CommandStruct(
+      'Checking the poetry configuration',
+      'poetry',
+      ['install', '--dry-run'],
+      this.path
+    );
   }
 
-  async installAgent(): Promise<void> {
+  async installAgent(ui: InstallerUI): Promise<void> {
     const cmd = new CommandStruct(
+      'Installing the appmap package with poetry',
       'poetry',
       ['add', '--dev', '--allow-prereleases', 'appmap'],
       this.path
     );
 
-    await run(cmd);
+    await run(ui, cmd);
   }
 
   async verifyCommand() {
@@ -124,17 +143,32 @@ export class PipenvInstaller extends PythonInstaller {
   }
 
   async initCommand(): Promise<CommandStruct> {
-    return new CommandStruct('pipenv', ['run', 'appmap-agent-init'], this.path);
+    return new CommandStruct(
+      'Initializing the appmap package',
+      'pipenv',
+      ['run', 'appmap-agent-init'],
+      this.path
+    );
   }
 
   async checkConfigCommand(_ui: InstallerUI): Promise<CommandStruct | undefined> {
-    return new CommandStruct('pipenv', ['install', '--dev'], this.path);
+    return new CommandStruct(
+      'Checking the pipenv configuration',
+      'pipenv',
+      ['install', '--dev'],
+      this.path
+    );
   }
 
-  async installAgent(_ui: InstallerUI): Promise<void> {
-    const cmd = new CommandStruct('pipenv', ['install', '--dev', '--pre', 'appmap'], this.path);
+  async installAgent(ui: InstallerUI): Promise<void> {
+    const cmd = new CommandStruct(
+      'Installing the appmap package with pipenv',
+      'pipenv',
+      ['install', '--dev', '--pre', 'appmap'],
+      this.path
+    );
 
-    await run(cmd);
+    await run(ui, cmd);
   }
 
   async verifyCommand() {
@@ -206,7 +240,13 @@ environment.
     let supportsDryRun: boolean;
 
     try {
-      const pipVersionOutput = await getOutput('python3', ['-m', 'pip', '--version'], this.path);
+      const pipVersionOutput = await getOutput(
+        ui,
+        `Identify the pip version to ensure it's compatible with AppMap`,
+        'python3',
+        ['-m', 'pip', '--version'],
+        this.path
+      );
       const pipVersion = semver.coerce(pipVersionOutput.output);
 
       if (!pipVersion) {
@@ -222,10 +262,10 @@ environment.
       commandArgs.push('--dry-run');
     }
 
-    return new CommandStruct('python3', commandArgs, this.path);
+    return new CommandStruct('Checking the pip install status', 'python3', commandArgs, this.path);
   }
 
-  async installAgent(_ui: InstallerUI): Promise<void> {
+  async installAgent(ui: InstallerUI): Promise<void> {
     const encodedFile: EncodedFile = new EncodedFile(this.buildFilePath);
     let requirements = encodedFile.toString();
 
@@ -243,15 +283,21 @@ environment.
     encodedFile.write(requirements);
 
     const cmd = new CommandStruct(
+      'Install the appmap package using pip',
       'python3',
       ['-m', 'pip', 'install', '-r', this.buildFile],
       this.path
     );
-    await run(cmd);
+    await run(ui, cmd);
   }
 
   async initCommand(): Promise<CommandStruct> {
-    return new CommandStruct('python3', ['-m', 'appmap.command.appmap_agent_init'], this.path);
+    return new CommandStruct(
+      'Initialize the appmap package',
+      'python3',
+      ['-m', 'appmap.command.appmap_agent_init'],
+      this.path
+    );
   }
 
   async verifyCommand() {

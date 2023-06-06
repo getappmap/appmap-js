@@ -2,7 +2,7 @@ import fs from 'fs';
 import { join, resolve } from 'path';
 import yaml from 'js-yaml';
 import chalk from 'chalk';
-import { ValidationError } from '../errors';
+import { AbortError, ValidationError } from '../errors';
 import AgentInstaller from './agentInstaller';
 import InstallerUI from './installerUI';
 import { run, runSync } from './commandRunner';
@@ -15,7 +15,7 @@ import { GitStatus } from './types/state';
 export default abstract class AgentProcedure {
   constructor(readonly installer: AgentInstaller, readonly path: string) {}
 
-  async getEnvironmentForDisplay(): Promise<string[]> {
+  async getEnvironmentForDisplay(ui: InstallerUI): Promise<string[]> {
     // TS is ok with this written as let env:[name: string]: string = {...}, but
     // babel doesn't like it. Splitting it up this way keeps them both happy:
     let env;
@@ -32,7 +32,15 @@ export default abstract class AgentProcedure {
 
     let gitRemote;
     try {
-      const stdout = runSync(new CommandStruct('git', ['remote', '-v'], this.installer.path));
+      const stdout = await runSync(
+        ui,
+        new CommandStruct(
+          'Detecting the git remote, if any',
+          'git',
+          ['remote', '-v'],
+          this.installer.path
+        )
+      );
       if (stdout.length > 0) {
         gitRemote = stdout.split('\n')[0];
       } else {
@@ -46,24 +54,26 @@ export default abstract class AgentProcedure {
     env['Git remote'] = gitRemote;
 
     if (this.installer.environment) {
-      env = { ...env, ...(await this.installer.environment()) };
+      env = { ...env, ...(await this.installer.environment(ui)) };
     }
     return Object.entries(env)
       .filter(([_, value]) => Boolean(value))
       .map(([key, value]) => `  ${chalk.blue(key)}: ${(value as string).trim()}`);
   }
 
-  async verifyProject() {
+  async verifyProject(ui: InstallerUI) {
     const verifyCommand = await this.installer.verifyCommand();
     if (verifyCommand) {
-      await run(verifyCommand);
+      await run(ui, verifyCommand);
     }
   }
 
   async validateAgent(ui: InstallerUI, cmd: CommandStruct) {
     try {
-      return run(cmd);
+      return run(ui, cmd);
     } catch (e) {
+      if (e instanceof AbortError) throw e;
+
       ui.error('Failed to validate the installation.');
       throw e;
     }
@@ -73,7 +83,7 @@ export default abstract class AgentProcedure {
     ui: InstallerUI,
     checkSyntax: boolean
   ): Promise<ValidationResult | undefined> {
-    const validateCmd = await this.installer.validateAgentCommand();
+    const validateCmd = await this.installer.validateAgentCommand(ui);
     if (!validateCmd) {
       return;
     }
@@ -110,7 +120,7 @@ export default abstract class AgentProcedure {
     return validationResult;
   }
 
-  async gitStatus(file?: string): Promise<GitStatus[]> {
+  async gitStatus(ui: InstallerUI, file?: string): Promise<GitStatus[]> {
     let files: GitStatus[] = [];
     let params: string[] = ['status', '-s'];
     if (file !== undefined) {
@@ -118,7 +128,15 @@ export default abstract class AgentProcedure {
     }
     let stdout = '';
     try {
-      stdout = runSync(new CommandStruct('git', params, this.installer.path));
+      stdout = await runSync(
+        ui,
+        new CommandStruct(
+          `Checking whether ${file ? file + ' has' : 'any files have'} been modified`,
+          'git',
+          params,
+          this.installer.path
+        )
+      );
     } catch (e) {
       const gitError = (e as Error).message.split('\n')[1];
       const gitStatus = `[git status failed, ${gitError}]`;
@@ -144,13 +162,16 @@ export default abstract class AgentProcedure {
     return files;
   }
 
-  async gitAdd(files: string[]): Promise<any> {
+  async gitAdd(ui: InstallerUI, files: string[]): Promise<any> {
     let params: string[] = ['add'];
     for (const file of files) {
       params.push(file);
     }
     try {
-      const stdout = runSync(new CommandStruct('git', params, this.installer.path));
+      const stdout = await runSync(
+        ui,
+        new CommandStruct(`Staging changed files in Git`, 'git', params, this.installer.path)
+      );
       return {
         success: true,
         errorMessage: '',
@@ -166,13 +187,16 @@ export default abstract class AgentProcedure {
     }
   }
 
-  async gitCommit(files: string[], commitMessage: string): Promise<any> {
+  async gitCommit(ui: InstallerUI, files: string[], commitMessage: string): Promise<any> {
     let params: string[] = ['commit', '-m', commitMessage];
     for (const file of files) {
       params.push(file);
     }
     try {
-      const stdout = runSync(new CommandStruct('git', params, this.installer.path));
+      const stdout = await runSync(
+        ui,
+        new CommandStruct(`Commit file changes to Git`, 'git', params, this.installer.path)
+      );
       return {
         success: true,
         errorMessage: '',
@@ -194,7 +218,7 @@ export default abstract class AgentProcedure {
       properties: {},
     });
 
-    const filesAfterGitStatus: GitStatus[] = await this.gitStatus();
+    const filesAfterGitStatus: GitStatus[] = await this.gitStatus(ui);
     const filesAfter: string[] = [];
     for (const file of filesAfterGitStatus) {
       filesAfter.push(file.file);
@@ -248,12 +272,13 @@ export default abstract class AgentProcedure {
 
       // gitAdd is idempotent, and necessary to add to git appmap.yml,
       // Gemfile.lock etc. when the installer runs for the first time
-      const addGitReturn = await this.gitAdd(filesDiff);
+      const addGitReturn = await this.gitAdd(ui, filesDiff);
       if (!addGitReturn.success) {
         ui.error(addGitReturn.errorMessage);
       }
 
       const commitGitReturn = await this.gitCommit(
+        ui,
         filesDiff,
         `Configure AppMap for this project
 

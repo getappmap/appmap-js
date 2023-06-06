@@ -155,6 +155,28 @@ const _handler = async (
   const interactive = interactiveArg !== undefined ? interactiveArg : process.stdout.isTTY;
   const ui = new InstallerUI(interactive, { overwriteAppMapConfig, installerName, buildFile });
 
+  ui.message(`Welcome to AppMap!
+  
+This installer will setup a project to make AppMaps. Essentially, it does three things:
+
+1. Verify that your project and environment are compatible with AppMap
+2. Add the AppMap dependency to your project
+3. Generate a configuration file called appmap.yml
+
+While these two steps are simple, there are subtleties that can make it difficult to get exactly
+right. So, even though you already know how to add a dependency and create a YAML file, you may
+still want to use this installer to make the process as easy as possible.
+
+As part of the installation process, the installer will request to run some commands in your
+terminal. Before it runs any command, the installer will tell you why it wants to run the command,
+and it will give you chance to approve the command, skip the command, or abort the installation.
+
+Note that if you skip a command, you should run an equivalent command yourself (for example, in a 
+separate terminal), otherwise the rest of the installation steps are probably not going to work.
+  
+Here we go!
+`);
+
   try {
     const projects = await getProjects(ui, installers, directory, true, projectType);
 

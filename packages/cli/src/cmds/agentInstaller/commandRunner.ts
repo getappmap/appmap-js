@@ -4,6 +4,7 @@ import chalk from 'chalk';
 import CommandStruct, { CommandReturn } from './commandStruct';
 import { verbose } from '../../utils';
 import { ChildProcessError } from '../errors';
+import InstallerUI from './installerUI';
 
 export class ProcessLog {
   public static buffer: string = '';
@@ -61,7 +62,9 @@ class CommandOutput {
   }
 }
 
-export async function run(command: CommandStruct): Promise<CommandReturn> {
+export async function run(ui: InstallerUI, command: CommandStruct): Promise<CommandReturn> {
+  if (!(await ui.confirmCommand(command))) return { stdout: '', stderr: '' };
+
   return new Promise((resolve, reject) => {
     const cp = spawn(command.program, command.args, {
       shell: true,
@@ -126,7 +129,9 @@ export async function run(command: CommandStruct): Promise<CommandReturn> {
   });
 }
 
-export function runSync(command: CommandStruct) {
+export async function runSync(ui: InstallerUI, command: CommandStruct): Promise<string> {
+  if (!(await ui.confirmCommand(command))) return '';
+
   const ret = execSync(command.toString(), {
     env: command.environment,
     cwd: command.path as string,

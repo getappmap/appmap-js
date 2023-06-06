@@ -1,6 +1,7 @@
 import UI from '../userInteraction';
 import chalk from 'chalk';
-import { Answers } from 'inquirer';
+import CommandStruct from './commandStruct';
+import { AbortError } from '../errors';
 
 export enum OverwriteOption {
   USE_EXISTING = 'Use existing',
@@ -15,6 +16,8 @@ export interface InstallerOptions {
 }
 
 export default class InstallerUI {
+  confirmAllCommands = false;
+
   constructor(public interactive: boolean, public options: InstallerOptions) {}
 
   message(message: string) {
@@ -35,6 +38,36 @@ export default class InstallerUI {
 
   error(message?: string) {
     UI.error(message);
+  }
+
+  async confirmCommand(command: CommandStruct): Promise<boolean> {
+    if (!this.interactive) return true;
+
+    if (this.confirmAllCommands) return true;
+
+    console.log();
+    this.message(
+      [
+        `AppMap wants to run a command: ${chalk.yellow(command.toString())}`,
+        `The purpose of the command is: ${chalk.yellow(command.explanation)}`,
+      ].join('\n')
+    );
+
+    const { choice } = await UI.prompt({
+      type: 'list',
+      name: 'choice',
+      message: 'OK?',
+      default: 'Continue',
+      choices: ['Continue', 'Skip', `Continue and don't ask again`, 'Abort'],
+    });
+    console.log();
+
+    if (choice === 'Abort')
+      throw new AbortError('User elected to abort rather than execute the proposed command');
+    if (choice === 'Skip') return false;
+    if (choice === `Continue and don't ask again`) this.confirmAllCommands = true;
+
+    return true;
   }
 
   async confirm(message: string): Promise<boolean> {

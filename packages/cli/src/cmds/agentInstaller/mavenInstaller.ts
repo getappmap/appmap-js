@@ -56,6 +56,7 @@ export default class MavenInstaller extends JavaBuildToolInstaller {
 
   async verifyCommand(): Promise<CommandStruct> {
     return new CommandStruct(
+      'Verifying the installation of the appmap-agent JAR',
       this.runCommand(),
       ['-Dplugin=com.appland:appmap-maven-plugin', 'help:describe'],
       this.path
@@ -63,7 +64,12 @@ export default class MavenInstaller extends JavaBuildToolInstaller {
   }
 
   async printJarPathCommand(): Promise<CommandStruct> {
-    return new CommandStruct(this.runCommand(), ['appmap:print-jar-path'], this.path);
+    return new CommandStruct(
+      'Printing the location of the appmap-agent JAR',
+      this.runCommand(),
+      ['appmap:print-jar-path'],
+      this.path
+    );
   }
 
   // TODO: validate the user's project before adding AppMap
