@@ -1,3 +1,10 @@
+# [@appland/diagrams-v1.7.0](https://github.com/getappmap/appmap-js/compare/@appland/diagrams-v1.6.4...@appland/diagrams-v1.7.0) (2023-06-06)
+
+
+### Features
+
+* consistent map color palette ([19ef694](https://github.com/getappmap/appmap-js/commit/19ef694e0449469700d81ab2bdd7065349c5409c))
+
 # [@appland/diagrams-v1.6.4](https://github.com/getappmap/appmap-js/compare/@appland/diagrams-v1.6.3...@appland/diagrams-v1.6.4) (2023-06-06)
 
 
