@@ -88,8 +88,8 @@ $sequence-elapsed-time-color: lighten($gray4, 18);
 $sequence-activation-gutter-width: 4px;
 
 // Lines that indicate call or return from one actor to another.
-$sequence-call-line-width: 2px;
-$sequence-call-line-color: #6fddbc;
+$sequence-call-line-width: 3px;
+$sequence-call-line-color: $gray4; //#959faa; //#242c41; //$gray4; #808b98; #6fddbc; #7f8a97;
 
 // Border around a group element, e.g. a loop.
 $sequence-group-border-width: 2px;

@@ -1,9 +1,9 @@
 $themes: (
   'dark': (
     'background': #010306,
-    'edge': #242c41,
-    'highlight': #ff07aa,
-    'highlight-inbound': #6fddd6,
+    'edge': #808b98,
+    'highlight': #ff27b6c4,
+    'highlight-inbound': #ff27b6c4,
     'label-light': lighten(#808b98, 35),
     'label-dark': #010306,
     'color-http': #542168,
@@ -57,7 +57,7 @@ $themes: (
 
 $gray1: #010306;
 $black: #010306;
-$gray2: #242c41; //#171e2f;
+$gray2: #242c41;
 $gray3: #343742;
 $gray4: #808b98;
 $gray5: #e1e2e2;

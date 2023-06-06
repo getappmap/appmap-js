@@ -149,7 +149,7 @@ $bg-color: $gray2;
   }
 
   &.highlight {
-    outline: 4px solid $hotpink;
+    outline: 4px solid #ff27b6c4;
   }
 
   &.focused {
