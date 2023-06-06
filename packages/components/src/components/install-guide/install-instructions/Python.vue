@@ -1,18 +1,35 @@
 <template>
   <div>
     <section>
-      <h4>Installation via <code class="inline">pip</code></h4>
-      <v-code-snippet clipboard-text="pip install appmap" />
+      Manual installation is a good option if:
+
+      <ol>
+        <li>
+          Your project doesn't use <i>requirements.txt</i>, <i>Pipfile</i>, or <i>Poetry.lock</i>.
+        </li>
+        <li>You want to install <tt>appmap</tt> from outside of the code editor.</li>
+      </ol>
+    </section>
+    <section>
+      <h3>Add the <tt>appmap</tt> package to your project</h3>
+      <div>
+        <v-code-snippet clipboard-text="pip install appmap" />
+      </div>
+      <div>
+        <div class="center-block">or</div>
+        <v-code-snippet clipboard-text="pipenv install --dev appmap" />
+      </div>
+      <div>
+        <div class="center-block">or</div>
+        <v-code-snippet clipboard-text="poetry add --dev appmap" />
+      </div>
     </section>
 
     <section>
-      <h4>Installation via <code class="inline">poetry</code></h4>
-      <v-code-snippet clipboard-text="poetry add --dev appmap" />
-    </section>
-
-    <section>
-      <h4>Installation via <code class="inline">pipenv</code></h4>
-      <v-code-snippet clipboard-text="pipenv install --dev appmap" />
+      <p>
+        <tt>appmap.yml</tt> will be created the first time you run your application with AppMap
+        enabled.
+      </p>
     </section>
   </div>
 </template>
@@ -25,3 +42,10 @@ export default {
   components: { VCodeSnippet },
 };
 </script>
+<style lang="scss" scoped>
+.center-block {
+  display: flex;
+  justify-content: center;
+  margin: 1em;
+}
+</style>

@@ -153,8 +153,48 @@ FourProjects.args = {
   ],
 };
 
-export const IntelliJ = Template.bind({});
-IntelliJ.args = {
+export const RubyVSCode = Template.bind({});
+RubyVSCode.args = {
+  projects: [
+    {
+      name: 'myapp',
+      score: 2,
+      path: '/home/user/myapp',
+      language: {
+        name: 'Ruby',
+        score: 2,
+      },
+      webFramework: {
+        name: 'Rails',
+        score: 2,
+      },
+    },
+  ],
+  editor: 'vscode',
+};
+
+export const PythonVSCode = Template.bind({});
+PythonVSCode.args = {
+  projects: [
+    {
+      name: 'myapp',
+      score: 2,
+      path: '/home/user/myapp',
+      language: {
+        name: 'Python',
+        score: 2,
+      },
+      webFramework: {
+        name: 'Flask',
+        score: 2,
+      },
+    },
+  ],
+  editor: 'vscode',
+};
+
+export const JavaIntelliJ = Template.bind({});
+JavaIntelliJ.args = {
   projects: [
     {
       name: 'my_java_project',
@@ -171,4 +211,40 @@ IntelliJ.args = {
     },
   ],
   editor: 'jetbrains',
+};
+
+export const JavaVSCode = Template.bind({});
+JavaVSCode.args = {
+  projects: [
+    {
+      name: 'my_java_project',
+      score: 2,
+      path: '/home/user/my_java_project',
+      language: {
+        name: 'Java',
+        score: 2,
+      },
+      webFramework: {
+        name: 'Spring',
+        score: 2,
+      },
+    },
+  ],
+  editor: 'vscode',
+};
+
+export const JavaScriptVSCode = Template.bind({});
+JavaScriptVSCode.args = {
+  projects: [
+    {
+      name: 'my-js-project',
+      score: 2,
+      path: '/home/user/my_js_project',
+      language: {
+        name: 'JavaScript',
+        score: 2,
+      },
+    },
+  ],
+  editor: 'vscode',
 };
