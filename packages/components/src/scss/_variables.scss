@@ -18,8 +18,10 @@ $blue: #4362b1;
 $lightblue: #768ecb;
 $brightblue: #3794ff;
 $powderblue: #2a84ef;
+$success: #3bf804;
 $teal: #6fddd6;
 $yellow: #ebdf90;
+$darkyellow: #ecd228;
 $appland-text: $gray4;
 $deep-purple: rgba(17, 1, 38, 1);
 $light-purple: #7f6be6;
@@ -27,20 +29,16 @@ $light-purple2: #5a43ca;
 $white: lighten($appland-text, 35);
 $almost-white: lighten($appland-text, 35);
 $red2: #fd3055;
-$appland-gradient-1: linear-gradient(
-  90deg,
-  rgba(0, 1, 104, 1) 0%,
-  rgba(197, 12, 228, 1) 48%,
-  rgba(255, 7, 170, 1) 100%
-);
+$appland-gradient-1: linear-gradient(90deg,
+    rgba(0, 1, 104, 1) 0%,
+    rgba(197, 12, 228, 1) 48%,
+    rgba(255, 7, 170, 1) 100%);
 $appland-gradient-2: linear-gradient(90deg, rgba(255, 7, 170, 1) 0%, rgba(156, 47, 186, 1) 100%);
 $appland-gradient-3: linear-gradient(0deg, rgba(156, 47, 186, 1) 0%, rgba(255, 7, 170, 1) 100%);
-$appland-gradient-4: linear-gradient(
-  90deg,
-  rgba(255, 7, 170, 1) 0%,
-  rgba(156, 47, 186, 1) 50%,
-  rgba(67, 98, 177, 1) 100%
-);
+$appland-gradient-4: linear-gradient(90deg,
+    rgba(255, 7, 170, 1) 0%,
+    rgba(156, 47, 186, 1) 50%,
+    rgba(67, 98, 177, 1) 100%);
 $deep-purple-gradient: linear-gradient(180deg, rgba(17, 1, 38, 1) 37%, rgba(110, 14, 114, 1) 110%);
 $alert-danger: #cd1414;
 
@@ -61,9 +59,7 @@ $appland-code: $white;
 $appmap-labels: $white;
 $appmap-bg: $gray1;
 $form-border: $gray2;
-$scrollHeight: calc(
-  100% - 65px
-); // a magic number that compensates for header and footer in forcing scrollbars
+$scrollHeight: calc(100% - 65px); // a magic number that compensates for header and footer in forcing scrollbars
 
 $box-shadow: 0px -13px 13px 13px rgba(0, 0, 0, 0.41);
 $box-shadow-min: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);
