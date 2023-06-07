@@ -5,28 +5,7 @@ import chalk from 'chalk';
 import CommandStruct from './commandStruct';
 import { run } from './commandRunner';
 import { getOutput } from './commandUtil';
-import { findIntelliJHome } from './jetBrainsSupport';
 import AgentInstaller from './agentInstaller';
-
-export function addJetBrainsEnv() {
-  const jbHome = findIntelliJHome();
-  if (!jbHome) {
-    return;
-  }
-
-  const javaHome = path.join(jbHome, 'jbr');
-  const mvnBin = path.join(jbHome, 'plugins/maven/lib/maven3/bin');
-
-  // Make sure we don't override the user's settings: append to path, use the
-  // existing JAVA_HOME if it's set.
-  if (!process.env['JAVA_HOME']) {
-    process.env['JAVA_HOME'] = javaHome;
-  }
-  process.env['PATH'] = [process.env['PATH'], path.join(javaHome, 'bin'), mvnBin].join(
-    path.delimiter
-  );
-}
-addJetBrainsEnv();
 
 export default abstract class JavaBuildToolInstaller extends AgentInstaller {
   private _agentJar?: string;
