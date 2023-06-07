@@ -170,7 +170,7 @@ export default {
       );
     },
     webFramework() {
-      return this.project?.webFramework || { score: 0 };
+      return (this.project || {}).webFramework || { score: 0 };
     },
     webFrameworkSupported() {
       return isFeatureSupported(this.webFramework);
@@ -179,7 +179,7 @@ export default {
       return [this.webFramework.name, 'application'].filter(Boolean).join(' ');
     },
     testFramework() {
-      return this.project?.testFramework || { score: 0 };
+      return (this.project || {}).testFramework || { score: 0 };
     },
     testFrameworkSupported() {
       return isFeatureSupported(this.testFramework);
