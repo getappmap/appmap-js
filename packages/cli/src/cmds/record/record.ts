@@ -15,7 +15,7 @@ import openTicket from '../../lib/ticket/openTicket';
 import UI from '../userInteraction';
 import { RemoteRecordingError } from './makeRequest';
 import chalk from 'chalk';
-import { existsSync as fsExistsSync, constants as fsConstants, statSync as fsStatSync } from 'fs';
+import { existsSync as fsExistsSync, statSync as fsStatSync } from 'fs';
 
 export default {
   command: 'record [mode]',

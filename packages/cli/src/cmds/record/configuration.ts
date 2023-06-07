@@ -1,5 +1,4 @@
 import assert from 'assert';
-import { existsSync } from 'fs';
 import { readFile, writeFile } from 'fs/promises';
 import { RequestOptions } from 'http';
 import { dump, load } from 'js-yaml';

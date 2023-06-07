@@ -1,6 +1,5 @@
 import UI from '../userInteraction';
 import chalk from 'chalk';
-import { Answers } from 'inquirer';
 
 export enum OverwriteOption {
   USE_EXISTING = 'Use existing',

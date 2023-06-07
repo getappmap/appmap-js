@@ -1,6 +1,3 @@
-import glob from 'glob';
-import os from 'os';
-import path from 'path';
 import chalk from 'chalk';
 import CommandStruct from './commandStruct';
 import { run } from './commandRunner';

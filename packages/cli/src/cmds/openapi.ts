@@ -14,7 +14,7 @@ import {
   verbose,
 } from '@appland/openapi';
 import { Event } from '@appland/models';
-import { Arguments, Argv, number } from 'yargs';
+import { Arguments, Argv } from 'yargs';
 import { inspect } from 'util';
 
 import { locateAppMapDir } from '../lib/locateAppMapDir';

@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import CommandStruct from './commandStruct';
 import { verbose, exists } from '../../utils';
 import InstallerUI from './installerUI';
-import { getColumn, getWhitespace, Whitespace } from './sourceUtil';
+import { getWhitespace, Whitespace } from './sourceUtil';
 import { AbortError } from '../errors';
 import JavaBuildToolInstaller from './javaBuildToolInstaller';
 import { GradleParser, GradleParseResult } from './gradleParser';

@@ -1,4 +1,4 @@
-import { ChildProcess, execSync, spawn, ExecException } from 'child_process';
+import { ChildProcess, execSync, spawn } from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
 import CommandStruct, { CommandReturn } from './commandStruct';

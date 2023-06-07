@@ -1,5 +1,4 @@
-import { cwd } from 'process';
-import { exists, verbose } from '../../../utils';
+import { exists } from '../../../utils';
 import { TestCommand } from '../configuration';
 
 const RubyEnv = { APPMAP: 'true', DISABLE_SPRING: 'true' };

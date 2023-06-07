@@ -11,7 +11,6 @@ import CommandStruct from './commandStruct';
 import { formatValidationError } from './ValidationResult';
 import { GitStatus } from './types/state';
 import { dump, load } from 'js-yaml';
-import { readFile } from 'fs/promises';
 
 export default class AgentInstallerProcedure extends AgentProcedure {
   async run(ui: InstallerUI): Promise<void> {

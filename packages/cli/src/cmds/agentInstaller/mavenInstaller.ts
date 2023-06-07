@@ -1,6 +1,6 @@
 import { existsSync } from 'fs';
 import os from 'os';
-import { join, sep, delimiter as pathDelimiter } from 'path';
+import { join, sep } from 'path';
 import { JSDOM } from 'jsdom';
 import xmlSerializer from 'w3c-xmlserializer';
 import chalk from 'chalk';

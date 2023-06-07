@@ -1,6 +1,5 @@
 import {
   AppMapFilter,
-  FilterState,
   buildAppMap,
   deserializeFilter,
   filterStringToFilterState,

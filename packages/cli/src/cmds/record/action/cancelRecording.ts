@@ -1,4 +1,3 @@
-import { RequestOptions } from 'http';
 import UI from '../../userInteraction';
 import RecordContext from '../recordContext';
 import RemoteRecording from '../remoteRecording';

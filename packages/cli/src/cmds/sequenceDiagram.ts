@@ -3,7 +3,7 @@ import { basename, dirname, join } from 'path';
 import yargs from 'yargs';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { verbose } from '../utils';
-import { AppMap, AppMapFilter, buildAppMap } from '@appland/models';
+import { AppMap, buildAppMap } from '@appland/models';
 import {
   buildDiagram,
   SequenceDiagramOptions,
@@ -11,7 +11,6 @@ import {
   format as formatDiagram,
   Formatters,
   FormatType,
-  Diagram,
 } from '@appland/sequence-diagram';
 import { serveAndOpenSequenceDiagram } from '../lib/serveAndOpen';
 import assert from 'assert';
