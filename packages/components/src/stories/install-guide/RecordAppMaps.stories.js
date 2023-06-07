@@ -12,8 +12,8 @@ const Template = (args, { argTypes }) => ({
   template: '<v-record-app-maps v-bind="$props" />',
 });
 
-export const automatedRecording = Template.bind({});
-automatedRecording.args = {
+export const railsRspec = Template.bind({});
+railsRspec.args = {
   project: {
     name: 'MyOtherProject',
     score: 3,
@@ -35,8 +35,8 @@ automatedRecording.args = {
   complete: true,
 };
 
-export const noTestFramework = Template.bind({});
-noTestFramework.args = {
+export const railsOnly = Template.bind({});
+railsOnly.args = {
   project: {
     name: 'MyOtherProject',
     score: 3,
@@ -58,8 +58,8 @@ noTestFramework.args = {
   complete: true,
 };
 
-export const noWebFramework = Template.bind({});
-noWebFramework.args = {
+export const rspecOnly = Template.bind({});
+rspecOnly.args = {
   project: {
     name: 'MyOtherProject',
     score: 3,
@@ -81,22 +81,14 @@ noWebFramework.args = {
   complete: true,
 };
 
-export const javascriptOrJava = Template.bind({});
-javascriptOrJava.args = {
+export const rubyOnly = Template.bind({});
+rubyOnly.args = {
   project: {
     name: 'MyOtherProject',
     score: 3,
     path: '/home/user/my_other_project',
     language: {
-      name: 'JavaScript',
-      score: 2,
-    },
-    testFramework: {
-      name: 'Mocha',
-      score: 3,
-    },
-    webFramework: {
-      name: 'Express',
+      name: 'Ruby',
       score: 3,
     },
   },
@@ -104,8 +96,8 @@ javascriptOrJava.args = {
   complete: true,
 };
 
-export const intellijJava = Template.bind({});
-intellijJava.args = {
+export const intellijJUnitSpring = Template.bind({});
+intellijJUnitSpring.args = {
   project: {
     name: 'MyOtherProject',
     score: 3,
@@ -125,6 +117,80 @@ intellijJava.args = {
   },
   editor: 'jetbrains',
   complete: true,
+};
+
+export const intellijJUnit = Template.bind({});
+intellijJUnit.args = {
+  project: {
+    name: 'MyOtherProject',
+    score: 3,
+    path: '/home/user/my_other_project',
+    language: {
+      name: 'Java',
+      score: 2,
+    },
+    testFramework: {
+      name: 'JUnit',
+      score: 2,
+    },
+  },
+  editor: 'jetbrains',
+  complete: true,
+};
+
+export const intellijSpring = Template.bind({});
+intellijSpring.args = {
+  project: {
+    name: 'MyOtherProject',
+    score: 3,
+    path: '/home/user/my_other_project',
+    language: {
+      name: 'Java',
+      score: 2,
+    },
+    webFramework: {
+      name: 'Spring',
+      score: 2,
+    },
+  },
+  editor: 'jetbrains',
+  complete: true,
+};
+
+export const flaskUnittest = Template.bind({});
+flaskUnittest.args = {
+  project: {
+    name: 'MyProject',
+    score: 3,
+    path: '/home/user/my_project',
+    language: {
+      name: 'Python',
+      score: 2,
+    },
+    testFramework: {
+      name: 'unittest',
+      score: 2,
+    },
+    webFramework: {
+      name: 'Flask',
+      score: 2,
+    },
+  },
+  editor: 'vscode',
+};
+
+export const pythonOnly = Template.bind({});
+pythonOnly.args = {
+  project: {
+    name: 'MyProject',
+    score: 3,
+    path: '/home/user/my_project',
+    language: {
+      name: 'Python',
+      score: 2,
+    },
+  },
+  editor: 'vscode',
 };
 
 export const noWebOrTestFramework = Template.bind({});

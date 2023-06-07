@@ -26,10 +26,12 @@
     </section>
 
     <section>
-      <p>
-        A default configuration file, <tt>appmap.yml</tt>, will be created the first time you run
-        your application with AppMap enabled.
-      </p>
+      <h3>Generate configuration file <i>appmap.yml</i></h3>
+      <div>
+        Linux, MacOS:
+
+        <v-code-snippet clipboard-text="python $HOME/.appmap/bin/validate_install.py" />
+      </div>
     </section>
   </div>
 </template>
