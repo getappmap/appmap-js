@@ -37,5 +37,12 @@ export default {
 <style scoped lang="scss">
 .diagram-flame {
   padding: 20px 20px 20px 20px;
+  color: $white;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 </style>
