@@ -100,8 +100,8 @@ import VPending from '@/components/Pending.vue';
 import VRunConfigDark from '@/assets/jetbrains_run_config_execute_dark.svg';
 import VRunConfigLight from '@/assets/jetbrains_run_config_execute.svg';
 
-import { isProjectSupported, isFeatureSupported } from '@/lib/project';
-import { DISABLE_PENDING_RECORD_STATE, PYTHON_RECORD_BY_DEFAULT } from '@/lib/featureFlags';
+import { isFeatureSupported } from '@/lib/project';
+import { DISABLE_PENDING_RECORD_STATE } from '@/lib/featureFlags';
 
 export default {
   name: 'RecordAppMaps',
