@@ -52,40 +52,44 @@
           enabled.
         </template>
         <template v-if="isRuby">
-          <p>
-            To make AppMaps of your Ruby project, you need to add the <tt>appmap</tt> gem 
-            to your "test" and "development" bundles. We provide an open source installer to do this, 
-            or you can install manually. Advantages of using the installer include:
-            <ol>
-              <li>Verifies that your Ruby version is supported by AppMap.</li>
-              <li>Verifies that your Rails version (if present) is supported by AppMap.</li>
-              <li>Creates the configuration file <i>appmap.yml</i>.</li>
-              <li>Has built-in support if you encounter any problems.</li>
-            </ol>
-          </p>
+          To make AppMaps of your Ruby project, you need to add the <tt>appmap</tt> gem to your
+          "test" and "development" bundles. We provide an open source installer to do this, or you
+          can install manually. Advantages of using the installer include:
+          <ol>
+            <li>Verifies that your Ruby version is supported by AppMap.</li>
+            <li>Verifies that your Rails version (if present) is supported by AppMap.</li>
+            <li>Creates the configuration file <i>appmap.yml</i>.</li>
+            <li>Has built-in support if you encounter any problems.</li>
+          </ol>
         </template>
         <template v-if="isPython">
-          <p>
-            To make AppMaps of your Python project, you need to install the <tt>appmap</tt> package
-            and configure your project to use it. We provide an open source installer, or you can
-            install manually. Advantages of using the installer include:
-            <ol>
-              <li>Verifies that your Python version is supported by AppMap.</li>
-              <li>Verifies that your Django and Flask versions (if present) are supported by AppMap.</li>
-              <li>Detects and supports <tt>pip</tt>, <tt>pipenv</tt>, and <tt>poetry</tt>.</li>
-              <li>Creates the configuration file <i>appmap.yml</i>.</li>
-              <li>Has built-in support if you encounter any problems.</li>
-            </ol>
-          </p>
+          To make AppMaps of your Python project, you need to install the <tt>appmap</tt> package
+          and configure your project to use it. We provide an open source installer, or you can
+          install manually. Advantages of using the installer include:
+          <ol>
+            <li>Verifies that your Python version is supported by AppMap.</li>
+            <li>
+              Verifies that your Django and Flask versions (if present) are supported by AppMap.
+            </li>
+            <li>Detects and supports <tt>pip</tt>, <tt>pipenv</tt>, and <tt>poetry</tt>.</li>
+            <li>Creates the configuration file <i>appmap.yml</i>.</li>
+            <li>Has built-in support if you encounter any problems.</li>
+          </ol>
         </template>
         <template v-if="isJS">
-          To make AppMaps of your JavaScript project, you need to install the <tt>appmap-agent-js</tt>
-          package from NPM and configure your project to use it.
-          We provide an open source installer, or you can install manually. Advantages of using the installer include:
+          To make AppMaps of your JavaScript project, you need to install the
+          <tt>appmap-agent-js</tt>
+          package from NPM and configure your project to use it. We provide an open source
+          installer, or you can install manually. Advantages of using the installer include:
           <ol>
             <li>Verifies that your Node.js version is supported by AppMap.</li>
-            <li>Verify that your Express, Jest and Mocha versions (if present) are supported by AppMap.</li>
-            <li>Detects and supports <i>package-lock.json</i> (npm) and <i>yarn.lock</i> (yarn).</li>
+            <li>
+              Verify that your Express, Jest and Mocha versions (if present) are supported by
+              AppMap.
+            </li>
+            <li>
+              Detects and supports <i>package-lock.json</i> (npm) and <i>yarn.lock</i> (yarn).
+            </li>
             <li>Creates the configuration file <i>appmap.yml</i>.</li>
             <li>Has built-in support if you encounter any problems.</li>
           </ol>
@@ -98,8 +102,11 @@
             plugin.
           </p>
           <p class="mb20">
-            ✓ Run configurations called <component :is="runConfigIcon" class="run-config-icon" /><b>"Start with AppMap"</b> have been added to your IntelliJ menus.
-            In the next step, you'll use them to create AppMaps.
+            ✓ Run configurations called <component :is="runConfigIcon" class="run-config-icon" /><b
+              >"Start with AppMap"</b
+            >
+            have been added to your IntelliJ menus. In the next step, you'll use them to create
+            AppMaps.
           </p>
           <div class="page-control-wrap">
             <p></p>
@@ -289,7 +296,7 @@ export default {
     },
     runConfigIcon() {
       return this.theme === 'dark' ? VRunConfigDark : VRunConfigLight;
-    }
+    },
   },
   methods: {
     performInstall() {
