@@ -84,7 +84,7 @@
     <br />
     <section class="recording-method">
       <h3>
-        <i class="header-icon"><CodeBlockIcon /></i>Code block recording
+        <i class="header-icon"><CodeBlockIcon /></i>Block recording
       </h3>
       <p>
         You can use the AppMap Ruby gem directly to record a specific span of code. With this
