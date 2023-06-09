@@ -208,6 +208,18 @@ i.header-icon {
   }
 }
 
+.recommended-badge {
+  background-color: #435089;
+  padding: 1px 12px;
+  color: white;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+}
+
 @media (max-width: 900px) {
   .recording-method {
     padding-left: 1rem;

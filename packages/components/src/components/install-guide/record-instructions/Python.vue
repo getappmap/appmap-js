@@ -64,7 +64,10 @@
     <template v-else> <VWebFrameworkPrompt frameworks="Django or Flask" /> </template><br />
     <section class="recording-method">
       <h3>
-        <i class="header-icon"><CodeIcon /></i>Context manager recording
+        <i class="header-icon"><CodeIcon /></i>Context manager recording<span
+          class="recommended-badge"
+          >recommended</span
+        >
       </h3>
       <p>
         You can use the AppMap Python package directly to record a specific span of code. With this
