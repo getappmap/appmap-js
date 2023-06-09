@@ -370,7 +370,7 @@ $min-height: 3rem;
 }
 
 .sequence-actor-lane-separator {
-  border-left: 1px dashed #242c41;
+  border-left: 1px dashed darken($gray4, 20);
   position: relative;
   height: 100%;
   width: 1px;
