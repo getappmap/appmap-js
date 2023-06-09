@@ -1,9 +1,10 @@
 <template>
   <section>
-    <p class="mb20 bold">
+    <p>
       Use the <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap" button
       to start your run configurations with AppMap enabled.
     </p>
+    <br />
     <p>
       Using "Start with AppMap" ensures that your Java code runs with the JVM option
       <code class="inline">-Djavaagent=appmap-agent.jar</code>. This option is required to enable
@@ -20,8 +21,8 @@
           >
         </h3>
         <p>
-          When you run your JUnit tests with the AppMap <tt>javaagent</tt> JVM argument, an AppMap
-          will be created for each test.
+          When you run your JUnit tests with the AppMap <code class="inline">javaagent</code> JVM
+          argument, an AppMap will be created for each test.
         </p>
         <p>
           Right-click on any test class or package, and choose
@@ -46,8 +47,8 @@
         </h3>
         <p>
           When your application uses {{ this.webFramework.name }}, and you run your application with
-          the AppMap <tt>javaagent</tt> JVM argument, remote recording is enabled. To make a remote
-          recording, run your application using
+          the AppMap <code class="inline">javaagent</code> JVM argument, remote recording is
+          enabled. To make a remote recording, run your application using
           <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap". Then use
           the "Record" button to start recording. Interact with your application, through its user
           interface and/or by making API requests using a tool such as Postman. When you are done,
