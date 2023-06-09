@@ -37,11 +37,19 @@ abstract class JavaScriptInstaller extends AgentInstaller {
   }
 
   async initCommand(): Promise<CommandStruct> {
-    return new CommandStruct('npx', ['@appland/appmap-agent-js', 'init', this.path], this.path);
+    return new CommandStruct(
+      'npx',
+      ['--prefer-online', '@appland/appmap-agent-js@latest', 'init', this.path],
+      this.path
+    );
   }
 
   async validateAgentCommand(): Promise<CommandStruct> {
-    return new CommandStruct('npx', ['@appland/appmap-agent-js', 'status', this.path], this.path);
+    return new CommandStruct(
+      'npx',
+      ['--prefer-online', '@appland/appmap-agent-js@latest', 'status', this.path],
+      this.path
+    );
   }
 }
 
