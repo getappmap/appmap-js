@@ -86,7 +86,7 @@
     "jest-extended": "^0.11.5",
     "lint-staged": "^10.5.3",
     "mathjs": "^9.0.0",
-    "minimist": "^1.2.5",
+    "minimist": "^1.2.6",
     "prettier": "^2.7.1",
     "rollup": "^2.7.3",
     "rollup-plugin-babel": "^4.4.0",
