@@ -28597,7 +28597,6 @@ resolve@1.1.7:
     eslint-config-airbnb-base: ^14.2.1
     eslint-config-prettier: ^8.3.0
     eslint-plugin-prettier: ^3.4.0
-    husky: ^4.3.8
     node-gyp: ^8.3.0
     prettier: ^2.7.1
     puppeteer: ^19.7.2
