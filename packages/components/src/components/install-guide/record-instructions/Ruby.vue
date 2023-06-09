@@ -7,9 +7,9 @@
     </p>
     <br />
     <p>
-      Before you run your app with AppMap, be sure and stop or disable Spring. You can stop Spring
-      with the command <code class="inline">spring stop</code>, or you can run your Ruby program
-      with the environment variable <code class="inline">DISABLE_SPRING=true</code>.
+      Before you run your app with AppMap, stop or disable Spring. You can stop Spring with the
+      command <code class="inline">spring stop</code>, or you can run your Ruby program with the
+      environment variable <code class="inline">DISABLE_SPRING=true</code>.
     </p>
     <br />
     <h2>Choose the best recording method for this project</h2>
@@ -56,8 +56,8 @@
         </h3>
         <p>
           When your application uses {{ this.webFramework.name }}, and you run your application with
-          AppMap enabled, HTTP server requests recording is enabled. To record requests, first run
-          your application:
+          AppMap enabled, HTTP server request recording will be enabled. To record requests, first
+          run your application:
         </p>
         <p>
           Start your Rails server:
@@ -84,7 +84,7 @@
     <br />
     <section class="recording-method">
       <h3>
-        <i class="header-icon"><CodeBlockIcon /></i>Block recording
+        <i class="header-icon"><CodeBlockIcon /></i>Code block recording
       </h3>
       <p>
         You can use the AppMap Ruby gem directly to record a specific span of code. With this
