@@ -26,7 +26,8 @@
         </p>
         <p>
           Right-click on any test class or package, and choose
-          <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap".
+          <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap". This will
+          add the required JVM argument to enable AppMap recording.
         </p>
         <p>
           For more information, visit
