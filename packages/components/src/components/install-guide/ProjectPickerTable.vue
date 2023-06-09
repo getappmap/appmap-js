@@ -8,9 +8,12 @@
       :score="project.score"
       :path="project.path"
       :language="project.language"
+      :install-complete="project.agentInstalled"
       :test-framework="project.testFramework"
       :web-framework="project.webFramework"
+      :num-app-maps="project.numAppMaps"
       :editor="editor"
+      :status-states="statusStates"
       @click.native="selectProject(project)"
     />
   </div>
@@ -18,6 +21,7 @@
 
 <script>
 import VProjectPickerRow from '@/components/install-guide/ProjectPickerRow.vue';
+import StatusState from '@/components/mixins/statusState';
 
 export default {
   name: 'project-picker-table',
@@ -26,6 +30,8 @@ export default {
     projects: Array,
     editor: String,
   },
+
+  mixins: [StatusState],
 
   data() {
     return {

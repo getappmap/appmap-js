@@ -3,12 +3,23 @@ import OpenAppMaps from '@/pages/install-guide/OpenAppMaps.vue';
 export default {
   title: 'Pages/VS Code/Install Guide Pages/Explore Appmaps',
   component: OpenAppMaps,
+  argTypes: {
+    projectName: {
+      control: { type: 'text' },
+      defaultValue: 'MyProject',
+    },
+  },
 };
 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { OpenAppMaps },
-  template: '<OpenAppMaps v-bind="$props" />',
+  computed: {
+    statusStates() {
+      return [2, 2, this.complete ? 2 : 1, this.complete ? 1 : 0, 0, 0];
+    },
+  },
+  template: '<OpenAppMaps v-bind="$props" :status-states="statusStates" />',
 });
 
 export const EmptyPage = Template.bind({});

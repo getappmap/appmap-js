@@ -3,12 +3,18 @@ import VInvestigateFindings from '@/pages/install-guide/InvestigateFindings.vue'
 export default {
   title: 'Pages/VS Code/Install Guide Pages/Investigate Findings',
   component: VInvestigateFindings,
+  argTypes: {
+    projectName: {
+      control: { type: 'text' },
+      defaultValue: 'MyProject',
+    },
+  },
 };
 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VInvestigateFindings },
-  template: '<v-investigate-findings v-bind="$props" />',
+  template: '<v-investigate-findings v-bind="$props" :status-states="[2, 2, 2, 2, 2]"/>',
 });
 
 export const WithFindings = Template.bind({});

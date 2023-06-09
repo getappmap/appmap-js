@@ -6,6 +6,26 @@
       </header>
       <main>
         <article>
+          <v-status
+            next-step="Explore AppMaps"
+            :status-states="statusStates"
+            :project-name="projectName"
+            :num-app-maps="numAppMaps"
+            :current-step="0"
+            :viewing-step="1"
+            class="mb20"
+          >
+            <template #header>
+              <template v-if="complete">
+                {{ numAppMaps }} AppMaps have been recorded for {{ projectName }}
+              </template>
+              <template v-else> No AppMaps have been recorded yet for {{ projectName }} </template>
+            </template>
+            <template #subheader>
+              <template v-if="complete">Next step: Choose an AppMap to open and explore</template>
+              <template v-else>Record AppMaps using one of the suggested methods</template>
+            </template>
+          </v-status>
           <template v-if="isJava">
             <VRecordInstructions_IntelliJ
               v-if="isJetBrains"
@@ -65,6 +85,10 @@ import VRecordInstructions_Python from '@/components/install-guide/record-instru
 import VRecordInstructions_Java from '@/components/install-guide/record-instructions/Java.vue';
 import Navigation from '@/components/mixins/navigation';
 import VPending from '@/components/Pending.vue';
+import VRunConfigDark from '@/assets/jetbrains_run_config_execute_dark.svg';
+import VRunConfigLight from '@/assets/jetbrains_run_config_execute.svg';
+import VStatus from '@/components/install-guide/Status.vue';
+import StatusState from '@/components/mixins/statusState.js';
 
 import { isFeatureSupported } from '@/lib/project';
 import { DISABLE_PENDING_RECORD_STATE } from '@/lib/featureFlags';
@@ -80,9 +104,12 @@ export default {
     VRecordInstructions_Python,
     VRecordInstructions_Java,
     VPending,
+    VRunConfigDark,
+    VRunConfigLight,
+    VStatus,
   },
 
-  mixins: [Navigation],
+  mixins: [Navigation, StatusState],
 
   props: {
     clipboardSuccess: {
@@ -138,6 +165,12 @@ export default {
     },
     isJetBrains() {
       return this.editor === 'jetbrains';
+    },
+    projectName() {
+      return this.project?.name || '';
+    },
+    numAppMaps() {
+      return this.project?.appMaps?.length || 0;
     },
     automaticRecordingLanguages() {
       return ['ruby', 'python'];

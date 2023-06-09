@@ -19,10 +19,6 @@ context('Record AppMaps', () => {
     it('shows back button', () => {
       cy.get('[data-cy="back-button"]').should('be.visible');
     });
-
-    it('displays a status indicator', () => {
-      cy.get('[data-cy="status-message"]').should('be.visible');
-    });
   });
 
   function testUnsupported() {
@@ -40,10 +36,6 @@ context('Record AppMaps', () => {
 
     it('shows back button', () => {
       cy.get('[data-cy="back-button"]').should('be.visible');
-    });
-
-    it('displays a status indicator', () => {
-      cy.get('[data-cy="status-message"]').should('be.visible');
     });
   }
 

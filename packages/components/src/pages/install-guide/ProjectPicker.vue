@@ -3,27 +3,6 @@
     <section class="project-picker">
       <header>
         <h1 data-cy="title">Add AppMap to your project</h1>
-        <div class="status-message">
-          <div class="status-message__progress-indicator">
-            <ProgressIndicator />
-          </div>
-          <div class="status-message__body">
-            <p class="status-message__heading status-message--warning">
-              <!-- TODO {{ name }} doesnt work in this view  -->
-              The AppMap dependencies have not been added to {{ name }}
-            </p>
-            <p class="status-message__prompt">Add them manually or with the installer</p>
-          </div>
-          <!-- TODO theNextStep is not a real function -->
-          <v-button
-            class="status-message__next-step"
-            kind="primary"
-            @click.native="theNextStep"
-            :timeout="2000"
-          >
-            Next step: The next thing
-          </v-button>
-        </div>
       </header>
       <main>
         <article class="empty-state" data-cy="empty-state-article" v-if="projects.length === 0">
@@ -41,6 +20,7 @@
           <v-project-picker-table
             :projects="projects"
             :editor="editor"
+            :status-states="statusStates"
             @select-project="selectProject($event)"
             ref="projectTable"
           />
@@ -56,6 +36,7 @@
               :projects="projects"
               @select-project="selectProject($event)"
               :editor="editor"
+              :status-states="statusStates"
               ref="projectTable"
             />
           </div>
@@ -70,25 +51,22 @@
 </template>
 
 <script>
-import VButton from '@/components/Button.vue';
 import QuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
 import VProjectPickerTable from '@/components/install-guide/ProjectPickerTable.vue';
 import Navigation from '@/components/mixins/navigation';
+import StatusState from '@/components/mixins/statusState.js';
 import EmptyIcon from '@/assets/patch-question.svg';
-import ProgressIndicator from '@/assets/progress-indicator.svg';
 
 export default {
   name: 'ProjectPicker',
 
   components: {
-    VButton,
     QuickstartLayout,
     VProjectPickerTable,
     EmptyIcon,
-    ProgressIndicator,
   },
 
-  mixins: [Navigation],
+  mixins: [Navigation, StatusState],
 
   props: {
     messageSuccess: {
@@ -136,39 +114,6 @@ h2 {
   counter-increment: step;
   border-bottom: 1px solid $gray-secondary;
   margin-bottom: 0.5rem;
-}
-
-.status-message {
-  margin-top: 1rem;
-  background-color: black;
-  display: flex;
-  &__next-step {
-    margin: 0.75rem 1rem 0.75rem auto;
-  }
-  &__heading {
-    font-size: 1.125rem;
-    font-weight: bold;
-    margin-bottom: 0px;
-    padding-bottom: 0px;
-  }
-  &__prompt {
-    margin-top: 0px;
-    color: $gray4;
-  }
-  &__progress-indicator {
-    display: grid;
-    align-items: center;
-    padding: 0 1rem 0 0.5rem;
-    path.completed {
-      fill: #3bf804;
-    }
-    path.in-progress {
-      fill: #ecd228;
-    }
-  }
-  &--warning {
-    color: $darkyellow;
-  }
 }
 
 .project-picker {
