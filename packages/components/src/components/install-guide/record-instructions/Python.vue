@@ -11,6 +11,7 @@
     <template class="recording-method" v-if="testFramework">
       <section class="recording-method">
         <h3>
+          <!--TODO make recommended tag dynamic-->
           <i class="header-icon"><TestsIcon /></i>Tests recording<span class="recommended-badge"
             >recommended</span
           >
@@ -70,7 +71,6 @@
     <template v-else> <VWebFrameworkPrompt frameworks="Django or Flask" /> </template><br />
     <section class="recording-method">
       <h3>
-        <!--TODO make reccomended tag dynamic-->
         <i class="header-icon"><CodeIcon /></i>Context manager recording
       </h3>
       <p>

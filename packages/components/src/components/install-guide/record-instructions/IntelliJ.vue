@@ -14,7 +14,11 @@
     <br />
     <template v-if="testFramework">
       <section class="recording-method">
-        <h3>Tests recording</h3>
+        <h3>
+          <i class="header-icon"><TestsIcon /></i>Tests recording<span class="recommended-badge"
+            >recommended</span
+          >
+        </h3>
         <p>
           When you run your JUnit tests with the AppMap <tt>javaagent</tt> JVM argument, an AppMap
           will be created for each test.
@@ -58,19 +62,18 @@
           >.
         </p>
       </section>
-      <br />
     </template>
     <template v-else>
-      <div class="recording-method disabled">
-        >
+      <div class="recording-method recording-method--disabled">
         <h3>
           <i class="header-icon header-icon--disabled"><RemoteRecordingIcon /></i>Remote recording
         </h3>
-
-        Did you know? When you run a Spring app, you can make AppMaps of all the HTTP requests
-        served by your app. Spring wasn't detected in this project, though.
-      </div>
-    </template>
+        <p>
+          Did you know? When you run a Spring app, you can make AppMaps of all the HTTP requests
+          served by your app. Spring wasn't detected in this project, though.
+        </p>
+      </div> </template
+    ><br />
     <section class="recording-method">
       <h3>
         <i class="header-icon"><ProcessIcon /></i>Process recording
@@ -110,6 +113,7 @@
   </section>
 </template>
 <script>
+import TestsIcon from '@/assets/tests-icon.svg';
 import RemoteRecordingIcon from '@/assets/remote-recording-icon.svg';
 import ProcessIcon from '@/assets/process-icon.svg';
 import PlayIcon from '@/assets/play-icon.svg';
@@ -133,6 +137,7 @@ export default {
     PlayIcon,
     ProcessIcon,
     RemoteRecordingIcon,
+    TestsIcon,
   },
 
   computed: {
