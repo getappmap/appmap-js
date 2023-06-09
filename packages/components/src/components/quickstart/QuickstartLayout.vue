@@ -184,7 +184,7 @@ article {
 }
 
 .recording-method {
-  padding-left: 3rem;
+  padding-left: 2rem;
   &--disabled {
     color: #999;
   }
