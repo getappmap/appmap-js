@@ -51,7 +51,8 @@
       </p>
     </template>
     <template v-else>
-      <div style="color: #999">
+      <div class="recording-method disabled">
+        >
         <h3>Remote recording</h3>
 
         Did you know? When you run a Spring app, you can make AppMaps of all the HTTP requests
