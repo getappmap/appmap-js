@@ -9,7 +9,12 @@ export default {
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VRecordAppMaps },
-  template: '<v-record-app-maps v-bind="$props" />',
+  computed: {
+    statusStates() {
+      return [2, this.complete ? 2 : 1, this.complete ? 1 : 0, 0, 0];
+    },
+  },
+  template: '<v-record-app-maps v-bind="$props" :status-states="statusStates"/>',
 });
 
 export const railsRspec = Template.bind({});

@@ -5,6 +5,29 @@
         <h1>Generate OpenAPI</h1>
       </header>
       <main>
+        <v-status
+          next-step="Generate OpenAPI"
+          :status-states="statusStates"
+          :current-status="statusStates[3]"
+          :project-name="projectName"
+          :num-app-maps="numAppMaps"
+          :current-step="0"
+          :viewing-step="3"
+          class="mb20"
+        >
+          <template #header>
+            <template v-if="complete"> {{ projectName }} has OpenAPI definitions </template>
+            <template v-else> {{ projectName }} has {{ numAppMaps }} AppMaps </template>
+          </template>
+          <template #subheader>
+            <template v-if="complete">
+              Next step: View runtime analysis report for {{ projectName }}
+            </template>
+            <template v-else>
+              Automatically generate OpenAPI definitions for {{ projectName }}
+            </template>
+          </template>
+        </v-status>
         <article v-if="numAppMaps === 0">
           No AppMaps have been found in your project. Try
           <a
@@ -42,8 +65,10 @@
 <script>
 import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import VQuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
+import VStatus from '@/components/install-guide/Status.vue';
 import VButton from '@/components/Button.vue';
 import Navigation from '@/components/mixins/navigation';
+import StatusState from '@/components/mixins/statusState.js';
 
 export default {
   name: 'OpenApi',
@@ -52,13 +77,22 @@ export default {
     VQuickstartLayout,
     VNavigationButtons,
     VButton,
+    VStatus,
   },
 
-  mixins: [Navigation],
+  mixins: [Navigation, StatusState],
 
   props: {
     numHttpRequests: Number,
     numAppMaps: Number,
+    projectName: {
+      type: String,
+      default: '',
+    },
+    complete: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   methods: {

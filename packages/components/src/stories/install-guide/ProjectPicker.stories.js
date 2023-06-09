@@ -3,12 +3,23 @@ import ProjectPicker from '@/pages/install-guide/ProjectPicker.vue';
 export default {
   title: 'Pages/VS Code/Install Guide Pages/Project Picker',
   component: ProjectPicker,
+  argTypes: {
+    currentStatus: {
+      control: { type: 'range', min: 0, max: 2 },
+      defaultValue: 0,
+    },
+  },
 };
 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
+  computed: {
+    statusStates() {
+      return [this.currentStatus, this.currentStatus == 2 ? 1 : 0, 0, 0, 0];
+    },
+  },
   components: { ProjectPicker },
-  template: '<ProjectPicker v-bind="$props" ref="installAgent" />',
+  template: '<ProjectPicker v-bind="$props" :status-states="statusStates" ref="installAgent" />',
 });
 
 export const Empty = Template.bind({});

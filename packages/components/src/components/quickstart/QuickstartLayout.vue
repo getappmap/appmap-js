@@ -84,14 +84,14 @@ body {
   p {
     margin: 0;
     line-height: 1.75;
+  }
 
-    &.mb10 {
-      margin-bottom: 10px;
-    }
+  .mb10 {
+    margin-bottom: 10px;
+  }
 
-    &.mb20 {
-      margin-bottom: 20px;
-    }
+  .mb20 {
+    margin-bottom: 20px;
   }
 
   a {
