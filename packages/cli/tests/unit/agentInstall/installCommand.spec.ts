@@ -843,7 +843,12 @@ appmap_dir: tmp/appmap
     const initAgent = (cmdStruct: CommandStruct) => {
       expect(cmdStruct.program).toEqual('npx');
       const args = cmdStruct.args;
-      expect(args).toEqual(['@appland/appmap-agent-js', 'init', projectDir]);
+      expect(args).toEqual([
+        '--prefer-online',
+        '@appland/appmap-agent-js@latest',
+        'init',
+        projectDir,
+      ]);
       const fakeConfig = `
     {
        "configuration": {
@@ -857,7 +862,12 @@ appmap_dir: tmp/appmap
     const validateAgent = (cmdStruct: CommandStruct) => {
       expect(cmdStruct.program).toEqual('npx');
       const args = cmdStruct.args;
-      expect(args).toEqual(['@appland/appmap-agent-js', 'status', projectDir]);
+      expect(args).toEqual([
+        '--prefer-online',
+        '@appland/appmap-agent-js@latest',
+        'status',
+        projectDir,
+      ]);
       const ret = { stdout: '[]', stderr: '' };
       return Promise.resolve(ret);
     };
