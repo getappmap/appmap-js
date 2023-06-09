@@ -182,4 +182,40 @@ article {
 .fit {
   width: fit-content;
 }
+
+.recording-method {
+  padding-left: 3rem;
+  &--disabled {
+    color: #999;
+  }
+  h3 {
+    display: flex;
+  }
+  p {
+    margin-left: 2.5rem;
+  }
+  &:last-child {
+    margin-bottom: 2rem;
+  }
+}
+i.header-icon {
+  width: 1.75rem;
+  margin-right: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  &--disabled {
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: 900px) {
+  .recording-method {
+    padding-left: 1rem;
+  }
+}
+@media (max-width: 450px) {
+  .recording-method {
+    padding-left: 0rem;
+  }
+}
 </style>
