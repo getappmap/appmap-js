@@ -1,4 +1,5 @@
 import InstallGuide from '@/pages/InstallGuide.vue';
+import { InstructionStep } from '@/components/install-guide/Status.vue';
 
 export default {
   title: 'Pages/VS Code',
@@ -7,19 +8,19 @@ export default {
     projects: [
       {
         name: 'TestApp',
-        score: 1,
+        score: 0,
         path: '/home/user/test_app',
         language: {
           name: 'Go',
-          score: 1,
+          score: 0,
         },
         testFramework: {
           name: 'MSTest',
-          score: 1,
+          score: 0,
         },
         webFramework: {
           name: 'ASP.NET',
-          score: 1,
+          score: 0,
         },
       },
       {
@@ -63,6 +64,12 @@ export default {
     ],
     editor: 'vscode',
     appMapsDir: 'tmp/appmap',
+  },
+  argTypes: {
+    currentStep: {
+      control: { type: 'range', min: 0, max: InstructionStep.NumSteps },
+      defaultValue: 0,
+    },
   },
 };
 

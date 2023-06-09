@@ -5,6 +5,24 @@
         <h1 data-cy="title">Explore AppMaps</h1>
       </header>
       <main>
+        <v-status
+          next-step="Generate OpenAPI"
+          :status-states="statusStates"
+          :current-status="statusStates[2]"
+          :project-name="projectName"
+          :num-app-maps="numAppMaps"
+          :current-step="0"
+          :viewing-step="2"
+          class="mb20"
+        >
+          <template #header> {{ projectName }} has {{ appMaps.length }} AppMaps </template>
+          <template #subheader>
+            <template v-if="complete">
+              Next step: Generate OpenAPI definitions from AppMap data
+            </template>
+            <template v-else>Open an AppMap from the selected AppMaps list</template>
+          </template>
+        </v-status>
         <article v-if="appMaps.length">
           <p>
             AppMaps have been recorded for this project! <br />
@@ -92,7 +110,9 @@
 <script>
 import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import VQuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
+import VStatus from '@/components/install-guide/Status.vue';
 import Navigation from '@/components/mixins/navigation';
+import StatusState from '@/components/mixins/statusState.js';
 
 export default {
   name: 'OpenAppMaps',
@@ -100,9 +120,10 @@ export default {
   components: {
     VQuickstartLayout,
     VNavigationButtons,
+    VStatus,
   },
 
-  mixins: [Navigation],
+  mixins: [Navigation, StatusState],
 
   props: {
     appMaps: {
@@ -112,6 +133,18 @@ export default {
     sampleCodeObjects: {
       type: Object,
       default: () => ({}),
+    },
+    projectName: {
+      type: String,
+      default: '',
+    },
+    complete: {
+      type: Boolean,
+      default: false,
+    },
+    numAppMaps: {
+      type: Number,
+      required: true,
     },
   },
 

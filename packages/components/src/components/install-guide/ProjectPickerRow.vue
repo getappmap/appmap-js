@@ -33,8 +33,15 @@
         </div>
       </div>
     </template>
-
     <div class="project-picker-row__body">
+      <v-status
+        v-if="supported"
+        :status-states="statusStates"
+        :project-name="name"
+        :num-app-maps="numAppMaps"
+        :viewing-step="0"
+        class="mb20"
+      />
       <p class="mb20">
         <template v-if="isJava">
           Two things are required to make AppMaps of your Java project:
@@ -189,6 +196,8 @@ import VJavaScript from '@/components/install-guide/install-instructions/JavaScr
 import VIconChevron from '@/assets/fa-solid_chevron-down.svg';
 import VRunConfigDark from '@/assets/jetbrains_run_config_execute_dark.svg';
 import VRunConfigLight from '@/assets/jetbrains_run_config_execute.svg';
+import VStatus from '@/components/install-guide/Status.vue';
+import StatusState from '@/components/mixins/statusState';
 
 import { isFeatureSupported, isProjectSupported } from '@/lib/project';
 import { getAgentDocumentationUrl } from '@/lib/documentation';
@@ -213,7 +222,9 @@ export default {
     VPopper,
     VNavigationButtons,
     VIconChevron,
+    VStatus,
   },
+  mixins: [StatusState],
   props: {
     selected: Boolean,
     name: String,
@@ -222,7 +233,9 @@ export default {
     language: Object,
     testFramework: Object,
     webFramework: Object,
+    installComplete: Boolean,
     editor: String,
+    numAppMaps: Number,
   },
   data() {
     return {
@@ -354,12 +367,6 @@ $brightblue: rgba(255, 255, 255, 0.1);
   &__body {
     padding: 1rem 0;
     border-top: 1px solid lighten($gray2, 15);
-
-    .status-message {
-      border-radius: 0.5rem;
-      background-color: #69ad34;
-      padding: 0.5rem;
-    }
   }
   &__nav {
     display: flex;

@@ -5,6 +5,7 @@
       :projects="projects"
       :message-success="messageCopiedCommand"
       :editor="editor"
+      :status-states="statusStates"
     />
     <v-record-app-maps
       id="record-appmaps"
@@ -13,13 +14,23 @@
       :complete="hasRecorded"
       :feature-flags="featureFlags"
       :theme="theme"
+      :status-states="statusStates"
     />
     <v-open-app-maps
       id="open-appmaps"
       :app-maps="appMaps"
       :sample-code-objects="sampleCodeObjects"
+      :status-states="statusStates"
+      :project-name="projectName"
+      :num-app-maps="numAppMaps"
     />
-    <v-open-api id="openapi" :num-http-requests="numHttpRequests" :num-app-maps="numAppMaps" />
+    <v-open-api
+      id="openapi"
+      :num-http-requests="numHttpRequests"
+      :num-app-maps="numAppMaps"
+      :status-states="statusStates"
+      :project-name="projectName"
+    />
     <v-investigate-findings
       id="investigate-findings"
       :scanned="hasFindings"
@@ -28,6 +39,9 @@
       :findingsDomainCounts="findingsDomainCounts"
       :user-authenticated="userAuthenticated"
       :analysis-enabled="analysisEnabled"
+      :status-states="statusStates"
+      :project-name="projectName"
+      :num-app-maps="numAppMaps"
     />
   </v-multi-page>
 </template>
@@ -39,6 +53,14 @@ import VRecordAppMaps from '@/pages/install-guide/RecordAppMaps.vue';
 import VOpenAppMaps from '@/pages/install-guide/OpenAppMaps.vue';
 import VOpenApi from '@/pages/install-guide/OpenApi.vue';
 import VInvestigateFindings from '@/pages/install-guide/InvestigateFindings.vue';
+import { InstructionStep, StepStatus } from '@/components/install-guide/Status.vue';
+
+const boolToStepStatus = (stepComplete, previousStepComplete) => {
+  if (stepComplete) return StepStatus.Completed;
+  if (typeof previousStepComplete === 'boolean' && previousStepComplete)
+    return StepStatus.NotStarted;
+  return StepStatus.InProgress;
+};
 
 export default {
   name: 'install-guide',
@@ -122,6 +144,28 @@ export default {
     sampleCodeObjects() {
       return this.selectedProject && this.selectedProject.sampleCodeObjects;
     },
+    projectName() {
+      return this.selectedProject?.name || '';
+    },
+    currentStep() {
+      return this.statusStates.findIndex((step) => step === StepStatus.InProgress);
+    },
+    statusStates() {
+      return [
+        this.selectedProject?.agentInstalled,
+        this.hasRecorded,
+        this.selectedProject?.appMapOpened,
+        this.selectedProject?.generatedOpenApi,
+        this.selectedProject?.generatedOpenApi,
+      ].map((stepComplete, index, statuses) => {
+        if (stepComplete) return StepStatus.Completed;
+
+        const previousStepComplete = Boolean(index > 0 ? statuses[index - 1] : true);
+        if (previousStepComplete) return StepStatus.InProgress;
+
+        return StepStatus.NotStarted;
+      });
+    },
   },
 
   components: {
@@ -134,15 +178,24 @@ export default {
   },
 
   methods: {
-    jumpTo(pageIndex) {
-      this.$refs.page.jumpTo(pageIndex);
+    jumpToIndex(pageIndex) {
+      const pages = this.$refs.page.$children;
+      const pageId = pages[pageIndex]?.$attrs.id;
+      if (pageId) this.jumpTo(pageId);
+    },
+    jumpTo(pageId) {
+      this.$refs.page.jumpTo(pageId);
     },
   },
 
   mounted() {
-    this.$root.$on('select-project', (project) => {
-      this.selectedProject = project;
-    });
+    this.$root
+      .$on('select-project', (project) => {
+        this.selectedProject = project;
+      })
+      .$on('status-jump', (pageIndex) => {
+        this.jumpToIndex(pageIndex);
+      });
   },
 };
 </script>

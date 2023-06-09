@@ -5,6 +5,17 @@
         <h1 data-cy="title">AppMap Runtime Analysis</h1>
       </header>
       <main>
+        <v-status
+          :status-states="statusStates"
+          :current-status="statusStates[4]"
+          :project-name="projectName"
+          :num-app-maps="numAppMaps"
+          :current-step="0"
+          :viewing-step="4"
+          class="mb20"
+        >
+          <template #header> AppMap setup is complete for {{ projectName }} </template>
+        </v-status>
         <article v-if="!(analysisEnabled && scanned)" class="subheading">
           Find software design flaws that impact security, performance, stability, and
           maintainability. Our runtime code analysis can find the problems that static code
@@ -107,8 +118,10 @@
 import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import VQuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
 import VButton from '@/components/Button.vue';
+import VStatus from '@/components/install-guide/Status.vue';
 import Navigation from '@/components/mixins/navigation';
 import VAppmapLogo from '@/assets/appmap-logomark.svg';
+import StatusState from '@/components/mixins/statusState.js';
 
 export default {
   name: 'InvestigateFindings',
@@ -118,9 +131,10 @@ export default {
     VNavigationButtons,
     VButton,
     VAppmapLogo,
+    VStatus,
   },
 
-  mixins: [Navigation],
+  mixins: [Navigation, StatusState],
 
   props: {
     scanned: Boolean,
@@ -137,6 +151,14 @@ export default {
     },
     analysisEnabled: Boolean,
     userAuthenticated: Boolean,
+    projectName: {
+      type: String,
+      default: '',
+    },
+    numAppMaps: {
+      type: Number,
+      required: true,
+    },
   },
 
   methods: {
