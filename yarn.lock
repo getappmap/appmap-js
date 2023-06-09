@@ -33548,12 +33548,12 @@ typescript@~4.4.3:
   linkType: hard
 
 "url-parse@npm:^1.5.3":
-  version: 1.5.5
-  resolution: "url-parse@npm:1.5.5"
+  version: 1.5.10
+  resolution: "url-parse@npm:1.5.10"
   dependencies:
     querystringify: ^2.1.1
     requires-port: ^1.0.0
-  checksum: b0a2921a3fa0dffd3cdbff5be34f6499a778dd4dde5a6c40f31d57213e2649b758d82e6751cccc12abafe1536739296ccde427b47a3f335e87b44408cd0d86a1
+  checksum: fbdba6b1d83336aca2216bbdc38ba658d9cfb8fc7f665eb8b17852de638ff7d1a162c198a8e4ed66001ddbf6c9888d41e4798912c62b4fd777a31657989f7bdf
   languageName: node
   linkType: hard
 
