@@ -16,6 +16,7 @@ import tmp from 'tmp-promise';
 import assert from 'assert';
 import { FSWatcher } from 'chokidar';
 import { mkdir, chmod } from 'fs/promises';
+import { asyncify, retry } from 'async';
 
 process.env['APPMAP_TELEMETRY_DISABLED'] = 'true';
 delete process.env.APPLAND_API_KEY;
@@ -224,7 +225,7 @@ describe('scan', () => {
 
     async function createIndex(mapPath: string): Promise<void> {
       const index = indexPath(mapPath);
-      await fsextra.mkdir(index, { recursive: true });
+      await retry(asyncify(() => fsextra.mkdir(index, { recursive: true })));
       await writeFile(join(index, 'mtime'), Date.now().toString());
     }
 
