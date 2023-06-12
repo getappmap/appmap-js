@@ -1,8 +1,8 @@
 <template>
   <section>
     <p>
-      Use the <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap" button
-      to start your run configurations with AppMap enabled.
+      Use the <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap" option
+      from the "Run" menu to start your run configurations with AppMap enabled.
     </p>
     <br />
     <p>
