@@ -20,9 +20,7 @@ describe('git.ts', () => {
       { origin: 'git@github.com:getappmap/appmap-server.git' },
       'ssh://github.com/getappmap/appmap-server.git',
     ],
-    process.platform === 'win32'
-      ? [{ origin: '/some/local/path' }, 'file:///C:/some/local/path']
-      : [{ origin: '/some/local/path' }, 'file:///some/local/path'],
+    [{ origin: '/some/local/path' }, 'file:///some/local/path'],
   ])('.findRepository() with %o', (config, expected) => {
     expect.assertions(1);
     return tmp.withDir(
@@ -31,7 +29,11 @@ describe('git.ts', () => {
           await mkdir(join(path, '.git'));
           await writeFile(join(path, '.git', 'config'), makeGitConfig(config));
         }
-        return expect(findRepository(path)).resolves.toEqual(expected);
+
+        // remove the drive letter if present
+        const result = (await findRepository(path))?.replace(/file:\/\/\/\w:\//, 'file:///');
+
+        expect(result).toEqual(expected);
       },
       { unsafeCleanup: true }
     );
