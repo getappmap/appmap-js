@@ -74,7 +74,6 @@ export default {
     VRecordInstructions_IntelliJ,
     VRecordInstructions_Ruby,
     VRecordInstructions_Python,
-    VCodeSnippet,
     VPending,
   },
 
