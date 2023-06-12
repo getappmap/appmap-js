@@ -208,6 +208,17 @@ i.header-icon {
   }
 }
 
+#IntelliJ-screenshot {
+  max-width: 100%;
+  padding: 1rem;
+  border-radius: 10px;
+  background-color: #343e5a;
+  img {
+    max-width: 100%;
+    box-shadow: #000 5px 5px 9px;
+  }
+}
+
 .recommended-badge {
   background-color: #435089;
   padding: 1px 12px;
@@ -228,6 +239,9 @@ i.header-icon {
 @media (max-width: 450px) {
   .recording-method {
     padding-left: 0rem;
+  }
+  div#IntelliJ-screenshot {
+    display: none;
   }
 }
 </style>

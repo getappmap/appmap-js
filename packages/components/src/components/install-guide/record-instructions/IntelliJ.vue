@@ -1,8 +1,8 @@
 <template>
   <section>
     <p>
-      Use the <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap" button
-      to start your run configurations with AppMap enabled.
+      Select the <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap"
+      option from the "Run" menu to start your run configurations with AppMap enabled.
     </p>
     <br />
     <p>
@@ -10,6 +10,8 @@
       <code class="inline">-Djavaagent=appmap-agent.jar</code>. This option is required to enable
       AppMap recording.
     </p>
+    <br />
+    <div id="IntelliJ-screenshot"><img src="../../../assets/run-with-appmap-menu-item.png" /></div>
     <br />
     <h2>Choose the best recording method for this project</h2>
     <br />
