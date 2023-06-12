@@ -4,7 +4,7 @@ import RecordAppMaps from '@/pages/install-guide/RecordAppMaps.vue';
 describe('RecordAppMaps.vue', () => {
   it('contains a link to the documentation by default', () => {
     const wrapper = shallowMount(RecordAppMaps, {
-      propsData: { editor: 'vscode' },
+      propsData: { editor: 'vscode', project: { language: 'java' } },
     });
     expect(wrapper.find('a[href]').text()).toBe('documentation.');
   });

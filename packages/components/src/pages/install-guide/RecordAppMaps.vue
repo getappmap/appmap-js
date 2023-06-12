@@ -31,7 +31,7 @@
           </template>
           <template v-else>
             <p class="mb20">
-              For instructions on recording {{ language.name }} AppMaps, refer to our
+              For instructions on recording {{ language }} AppMaps, refer to our
               <a href="https://appmap.io/docs/recording-methods.html" data-cy="documentation-link">
                 documentation.
               </a>
@@ -150,9 +150,6 @@ export default {
     webFrameworkSupported() {
       return isFeatureSupported(this.webFramework);
     },
-    applicationName() {
-      return [this.webFramework.name, 'application'].filter(Boolean).join(' ');
-    },
     testFramework() {
       return (this.project || {}).testFramework || { score: 0 };
     },
@@ -167,7 +164,7 @@ export default {
         );
       if (this.testFrameworkSupported)
         prompts.push(
-          `Run your ${this.project.testFramework.name} tests. Each test case will emit an AppMap.`
+          `Run your ${this.testFramework.name} tests. Each test case will emit an AppMap.`
         );
       return prompts;
     },
