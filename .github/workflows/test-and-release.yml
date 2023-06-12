@@ -7,7 +7,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        node: [18, 16, 14]
+        node: [18, 16]
         os: [ubuntu-latest]
         include:
           - node: 18
