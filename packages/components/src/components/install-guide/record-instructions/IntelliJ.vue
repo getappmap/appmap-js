@@ -11,6 +11,8 @@
       AppMap recording.
     </p>
     <br />
+    <div id="IntelliJ-screenshot"><img src="../../../assets/run-with-appmap-menu-item.png" /></div>
+    <br />
     <h2>Choose the best recording method for this project</h2>
     <br />
     <template v-if="testFramework">

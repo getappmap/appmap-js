@@ -219,7 +219,16 @@ i.header-icon {
   display: inline-flex;
   align-items: center;
 }
-
+#IntelliJ-screenshot {
+  max-width: 100%;
+  padding: 1rem;
+  border-radius: 10px;
+  background-color: #343e5a;
+  img {
+    max-width: 100%;
+    box-shadow: #000 5px 5px 9px;
+  }
+}
 @media (max-width: 900px) {
   .recording-method {
     padding-left: 1rem;
@@ -228,6 +237,9 @@ i.header-icon {
 @media (max-width: 450px) {
   .recording-method {
     padding-left: 0rem;
+  }
+  div#IntelliJ-screenshot {
+    display: none;
   }
 }
 </style>
