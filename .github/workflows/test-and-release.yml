@@ -1,0 +1,145 @@
+on: [push]
+
+concurrency: ci-${{ github.ref_name }}
+
+jobs:
+  test:
+    strategy:
+      fail-fast: true
+      matrix:
+        node: [18, 16, 14]
+        os: [ubuntu-latest]
+        include:
+          - node: 18
+            os: ubuntu-latest
+            build: true
+          - node: 18
+            os: windows-latest
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - if: ${{ runner.os == 'Windows' }}
+        name: Use GNU tar
+        shell: cmd
+        run: |
+          echo "Adding GNU tar to PATH"
+          echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
+      - name: Check out
+        uses: actions/checkout@v3
+      - name: Setup node ${{ matrix.node }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Restore node_modules cache
+        uses: actions/cache/restore@v3
+        id: node-modules-cache
+        with:
+          path: |
+            node_modules
+            packages/*/node_modules
+          key: node_modules-all-${{ runner.os }}-${{ matrix.node }}-${{ hashFiles('yarn.lock') }}
+
+      - name: Install dependencies
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
+        run: yarn install --immutable
+      - name: Store node_modules cache
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v3
+        with:
+          path: |
+            node_modules
+            packages/*/node_modules
+          key: node_modules-all-${{ runner.os }}-${{ matrix.node }}-${{ hashFiles('yarn.lock') }}
+
+      - name: Build
+        run: yarn run build
+
+      - name: Test
+        run: yarn run test
+      - name: Smoke test
+        run: ./smoketest.sh
+        if: ${{ matrix.os != 'windows-latest' }}
+
+      - name: Lint
+        run: yarn run lint
+        if: ${{ matrix.build }}
+
+      - name: Archive built code
+        if: ${{ matrix.build }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: |
+            packages/*/dist
+            packages/*/built
+
+  chromatic:
+    runs-on: ubuntu-latest
+    needs: test
+
+    if: ${{ github.ref_name != 'main' }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Restore node_modules
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            node_modules
+            packages/*/node_modules
+          key: node_modules-all-${{ runner.os }}-18-${{ hashFiles('yarn.lock') }}
+
+      - name: Restore built code
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+
+      - name: Run chromatic
+        run: yarn run chromatic
+        env:
+          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+
+  release:
+    runs-on: ubuntu-latest
+    needs: test
+    if: ${{ github.ref_name == 'main' }}
+
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Restore node_modules
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            node_modules
+            packages/*/node_modules
+          key: node_modules-all-${{ runner.os }}-18-${{ hashFiles('yarn.lock') }}
+
+      - name: Restore built code
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+
+      - name: Upload and approve chromatic changes
+        run: yarn run chromatic --auto-accept-changes
+        env:
+          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+
+      - name: Build native packages
+        run: yarn run build-native
+
+      - name: Run semantic-release
+        run: yarn run semantic-release
+        env:
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.YARN_NPM_AUTH_TOKEN }}
