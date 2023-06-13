@@ -7,11 +7,13 @@
         <li>
           Your project doesn't use <i>requirements.txt</i>, <i>Pipfile</i>, or <i>poetry.lock</i>.
         </li>
-        <li>You want to install <tt>appmap</tt> from outside of the code editor.</li>
+        <li>
+          You want to install <code class="inline">appmap</code> from outside of the code editor.
+        </li>
       </ol>
     </section>
     <section>
-      <h3>Add the <tt>appmap</tt> package to your project</h3>
+      <h3>Add the <code class="inline">appmap</code> package to your project</h3>
       <div>
         <v-code-snippet clipboard-text="pip install appmap" />
       </div>
@@ -26,8 +28,8 @@
     </section>
 
     <section>
-      A default configuration file, <tt>appmap.yml</tt>, will be created the first time you run your
-      application with AppMap enabled.
+      A default configuration file, <code class="inline">appmap.yml</code>, will be created the
+      first time you run your application with AppMap enabled.
     </section>
   </div>
 </template>

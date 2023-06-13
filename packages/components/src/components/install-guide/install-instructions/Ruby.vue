@@ -1,8 +1,8 @@
 <template>
   <div>
     <section>
-      Manual installation is a good option if you want to install <tt>appmap</tt> from outside of
-      the code editor.
+      Manual installation is a good option if you want to install<code class="inline">appmap</code>
+      from outside of the code editor.
     </section>
     <section>
       <p>Add the following line of code to the <strong>top of your Gemfile</strong>.</p>
@@ -12,8 +12,8 @@
       <p>Update your bundle.</p>
       <v-code-snippet clipboard-text="bundle install" />
 
-      A default configuration file, <tt>appmap.yml</tt>, will be created the first time you run your
-      application with AppMap enabled.
+      A default configuration file, <code class="inline">appmap.yml</code>, will be created the
+      first time you run your application with AppMap enabled.
     </section>
   </div>
 </template>
