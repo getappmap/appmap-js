@@ -40,10 +40,10 @@
           Two things are required to make AppMaps of your Java project:
 
           <ol>
-            <li>The <tt>appmap.jar</tt> must be available on your machine.</li>
+            <li>The <code class="inline">appmap.jar</code> must be available on your machine.</li>
             <li>
               Application code and test cases use the JVM flag
-              <tt>-Djavaagent=appmap.jar</tt>.
+              <code class="inline">-Djavaagent=appmap.jar</code>.
             </li>
           </ol>
 
@@ -52,9 +52,12 @@
           enabled.
         </template>
         <template v-if="isRuby">
-          To make AppMaps of your Ruby project, you need to add the <tt>appmap</tt> gem to your
-          "test" and "development" bundles. We provide an open source installer to do this, or you
-          can install manually. Advantages of using the installer include:
+          <h3>Run the AppMap Installer</h3>
+          <br />
+          To make AppMaps of your Ruby project, you need to add the
+          <code class="inline">appmap</code> gem to your "test" and "development" bundles. We
+          provide an open source installer to do this, or you can install manually. Advantages of
+          using the installer include:
           <ol>
             <li>Verifies that your Ruby version is supported by AppMap.</li>
             <li>Verifies that your Rails version (if present) is supported by AppMap.</li>
@@ -63,22 +66,30 @@
           </ol>
         </template>
         <template v-if="isPython">
-          To make AppMaps of your Python project, you need to install the <tt>appmap</tt> package
-          and configure your project to use it. We provide an open source installer, or you can
-          install manually. Advantages of using the installer include:
+          <h3>Run the AppMap Installer</h3>
+          <br />
+          To make AppMaps of your Python project, you need to install the
+          <code class="inline">appmap</code> package and configure your project to use it. We
+          provide an open source installer, or you can install manually. Advantages of using the
+          installer include:
           <ol>
             <li>Verifies that your Python version is supported by AppMap.</li>
             <li>
               Verifies that your Django and Flask versions (if present) are supported by AppMap.
             </li>
-            <li>Detects and supports <tt>pip</tt>, <tt>pipenv</tt>, and <tt>poetry</tt>.</li>
+            <li>
+              Detects and supports <code class="inline">pip</code>,
+              <code class="inline">pipenv</code>, and <code class="inline">poetry</code>.
+            </li>
             <li>Creates the configuration file <i>appmap.yml</i>.</li>
             <li>Has built-in support if you encounter any problems.</li>
           </ol>
         </template>
         <template v-if="isJS">
+          <h3>Run the AppMap Installer</h3>
+          <br />
           To make AppMaps of your JavaScript project, you need to install the
-          <tt>appmap-agent-js</tt>
+          <code class="inline">appmap-agent-js</code>
           package from NPM and configure your project to use it. We provide an open source
           installer, or you can install manually. Advantages of using the installer include:
           <ol>
@@ -98,8 +109,8 @@
       <template v-if="supported">
         <template v-if="isJetBrains && isJava">
           <p class="mb20">
-            ✓ <tt>appmap.jar</tt> has been downloaded and saved to your machine by the AppMap
-            plugin.
+            ✓ <code class="inline">appmap.jar</code> has been downloaded and saved to your machine
+            by the AppMap plugin.
           </p>
           <p class="mb20">
             ✓ Run configurations called <component :is="runConfigIcon" class="run-config-icon" /><b
@@ -127,9 +138,10 @@
 
             <div class="separator">OR</div>
 
-            <div style="margin: 0px auto 1em auto; width: 18ex">
-              <h3>Install manually</h3>
+            <div>
+              <h3>Install AppMap manually</h3>
             </div>
+            <br />
 
             <p>
               <component :is="manualInstructions" data-cy="manual-install" /></p
