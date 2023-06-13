@@ -82,7 +82,7 @@
     "js-yaml": "^4.1.0",
     "lru-cache": "^6.0.0",
     "minimatch": "^5.1.2",
-    "octokat": "^0.10.0",
+    "octokit": "^2.0.19",
     "openapi-diff": "^0.23.5",
     "ora": "~5",
     "pretty-format": "^27.4.6",
