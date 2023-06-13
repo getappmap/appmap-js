@@ -40,10 +40,10 @@
           Two things are required to make AppMaps of your Java project:
 
           <ol>
-            <li>The <tt>appmap-agent.jar</tt> must be available on your machine.</li>
+            <li>The <tt>appmap.jar</tt> must be available on your machine.</li>
             <li>
               Application code and test cases use the JVM flag
-              <tt>-Djavaagent=appmap-agent.jar</tt>.
+              <tt>-Djavaagent=appmap.jar</tt>.
             </li>
           </ol>
 
@@ -98,7 +98,7 @@
       <template v-if="supported">
         <template v-if="isJetBrains && isJava">
           <p class="mb20">
-            ✓ <tt>appmap-agent.jar</tt> has been downloaded and saved to your machine by the AppMap
+            ✓ <tt>appmap.jar</tt> has been downloaded and saved to your machine by the AppMap
             plugin.
           </p>
           <p class="mb20">
