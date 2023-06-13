@@ -52,8 +52,7 @@
           enabled.
         </template>
         <template v-if="isRuby">
-          <h3>Run the AppMap Installer</h3>
-          <br />
+          <h3 class="install-heading">Run the AppMap Installer</h3>
           To make AppMaps of your Ruby project, you need to add the
           <code class="inline">appmap</code> gem to your "test" and "development" bundles. We
           provide an open source installer to do this, or you can install manually. Advantages of
@@ -66,8 +65,7 @@
           </ol>
         </template>
         <template v-if="isPython">
-          <h3>Run the AppMap Installer</h3>
-          <br />
+          <h3 class="install-heading">Run the AppMap Installer</h3>
           To make AppMaps of your Python project, you need to install the
           <code class="inline">appmap</code> package and configure your project to use it. We
           provide an open source installer, or you can install manually. Advantages of using the
@@ -86,8 +84,7 @@
           </ol>
         </template>
         <template v-if="isJS">
-          <h3>Run the AppMap Installer</h3>
-          <br />
+          <h3 class="install-heading">Run the AppMap Installer</h3>
           To make AppMaps of your JavaScript project, you need to install the
           <code class="inline">appmap-agent-js</code>
           package from NPM and configure your project to use it. We provide an open source
@@ -139,10 +136,8 @@
             <div class="separator">OR</div>
 
             <div>
-              <h3>Install AppMap manually</h3>
+              <h3 class="install-heading">Install AppMap manually</h3>
             </div>
-            <br />
-
             <p>
               <component :is="manualInstructions" data-cy="manual-install" /></p
           ></template>
@@ -341,6 +336,12 @@ $brightblue: rgba(255, 255, 255, 0.1);
   align-items: center;
   justify-content: space-between;
 }
+
+.install-heading {
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+}
+
 .project-picker-row {
   border-bottom: 1px solid lighten($gray2, 15);
   padding: 0;
