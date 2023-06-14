@@ -1,3 +1,10 @@
+# [@appland/components-v2.46.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.46.1...@appland/components-v2.46.2) (2023-06-14)
+
+
+### Bug Fixes
+
+* self-call and lane-separator colors ([a3ea368](https://github.com/getappmap/appmap-js/commit/a3ea36828e6c89175b0cde3197f6e50f1bd479bc))
+
 # [@appland/components-v2.46.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.46.0...@appland/components-v2.46.1) (2023-06-06)
 
 
