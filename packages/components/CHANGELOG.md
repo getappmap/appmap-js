@@ -1,3 +1,23 @@
+# [@appland/components-v2.47.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.46.2...@appland/components-v2.47.0) (2023-06-14)
+
+
+### Bug Fixes
+
+* Cleanup per lint ([bccc3d7](https://github.com/getappmap/appmap-js/commit/bccc3d7c81b5af6041cff569f74742f3d6a1be63))
+* Fix appmap record prompt ([a6366c5](https://github.com/getappmap/appmap-js/commit/a6366c5779294e2b2e604dbc53a018d3f2de4e7b))
+* gsub appmap-agent.jar to appmap.jar ([a3e8ba2](https://github.com/getappmap/appmap-js/commit/a3e8ba290cb8b6e9fc6dbd66b9afe93204429f3e))
+* Remove instructions to run non-existant Python script ([3cbde9f](https://github.com/getappmap/appmap-js/commit/3cbde9f46e8417fe33f7ecfb60e8f6d2c1ebe1aa))
+
+
+### Features
+
+* formatting for install instructions ([#1227](https://github.com/getappmap/appmap-js/issues/1227)) ([c27afb9](https://github.com/getappmap/appmap-js/commit/c27afb931d55276a32dfa044a6f3b9df65b4d9f0))
+* Project supported if language supported ([4a8f19a](https://github.com/getappmap/appmap-js/commit/4a8f19af9f799cc5b6c3c6df97770b70edf26b79))
+* Record instructions styling ([#1222](https://github.com/getappmap/appmap-js/issues/1222)) ([c259715](https://github.com/getappmap/appmap-js/commit/c259715bddac4d78b93843573b92dd14a911afa8))
+* Remove feature flag for Python record-by-default ([0f7712c](https://github.com/getappmap/appmap-js/commit/0f7712c586e96aa963e82b1f3c65f3872f8e4399))
+* Update install instructions ([fcbbba4](https://github.com/getappmap/appmap-js/commit/fcbbba49d2153c986ddc230e4f1efe0c6680ba74))
+* Update Record AppMaps instructions content ([cf3041b](https://github.com/getappmap/appmap-js/commit/cf3041bb3f4e630be7cb0f033de6fec53dd05b33))
+
 # [@appland/components-v2.46.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.46.1...@appland/components-v2.46.2) (2023-06-14)
 
 
