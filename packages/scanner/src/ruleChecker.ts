@@ -1,8 +1,8 @@
-import { Event } from '@appland/models';
+import { Event, EventNavigator } from '@appland/models';
 import Check from './check';
 import { AbortError } from './errors';
 import { AppMapIndex, Finding } from './types';
-import { verbose } from './rules/lib/util';
+import { fileExists, verbose } from './rules/lib/util';
 import ScopeIterator from './scope/scopeIterator';
 import RootScope from './scope/rootScope';
 import HTTPServerRequestScope from './scope/httpServerRequestScope';
@@ -14,6 +14,21 @@ import { cloneEvent } from './eventUtil';
 import HashV1 from './algorithms/hash/hashV1';
 import HashV2 from './algorithms/hash/hashV2';
 import ProgressReporter from './progressReporter';
+import { dirname, isAbsolute, join, resolve } from 'path';
+import lastGitOrFSModifiedDate from './lastGitOrFSModifiedDate';
+import { warn } from 'console';
+import assert from 'assert';
+
+function locationToFilePath(location: string): string | undefined {
+  const [file] = location.split(':');
+
+  let filePath = file;
+  if (isAbsolute(file) && file.startsWith(process.cwd())) {
+    filePath = file.slice(process.cwd().length + 1);
+  }
+
+  return filePath;
+}
 
 export default class RuleChecker {
   private scopes: Record<string, ScopeIterator> = {
@@ -115,7 +130,39 @@ export default class RuleChecker {
       return;
     }
 
-    const buildFinding = (
+    let appmapConfigDir: string | undefined;
+    {
+      let searchDir: string | undefined = dirname(resolve(appMapFileName));
+      while (!appmapConfigDir) {
+        if (await fileExists(join(searchDir, 'appmap.yml'))) {
+          appmapConfigDir = searchDir;
+        } else {
+          if (dirname(searchDir) === searchDir) break;
+
+          searchDir = dirname(searchDir);
+        }
+      }
+    }
+
+    const resolvePath = async (path: string): Promise<string | undefined> => {
+      const candidates = [path];
+      if (appmapConfigDir) candidates.push(join(appmapConfigDir, path));
+      for (const candidate of candidates) if (await fileExists(candidate)) return candidate;
+    };
+
+    const mostRecentModifiedDate = async (filePaths: string[]): Promise<Date | undefined> => {
+      const dates = new Array<Date>();
+      for (const filePath of filePaths) {
+        const resolvedPath = await resolvePath(filePath);
+        if (!resolvedPath) continue;
+
+        const date = await lastGitOrFSModifiedDate(resolvedPath);
+        if (date) dates.push(date);
+      }
+      return dates.sort((a, b) => (a && b ? b.getTime() - a.getTime() : 0))[0];
+    };
+
+    const buildFinding = async (
       matchEvent: Event,
       participatingEvents: Record<string, Event>,
       message?: string,
@@ -124,7 +171,7 @@ export default class RuleChecker {
       // matchEvent will be added to additionalEvents and participatingEvents.values
       // to create the relatedEvents array
       additionalEvents?: Event[]
-    ): Finding => {
+    ): Promise<Finding> => {
       const findingEvent = matchEvent || event;
       // Fixes:
       // TypeError: Cannot read property 'forEach' of undefined
@@ -145,19 +192,69 @@ export default class RuleChecker {
         additionalEvents || []
       );
 
+      let scopeModifiedDate: Date | undefined;
+      {
+        const scopeNavigator = new EventNavigator(scope);
+        const scopeFiles = new Set<string>();
+        const collectScope = (event: Event) => {
+          if (!event.codeObject.location) return;
+
+          const filePath = locationToFilePath(event.codeObject.location);
+          if (!filePath) return;
+
+          scopeFiles.add(filePath);
+        };
+
+        collectScope(scope);
+        for (const descendant of scopeNavigator.descendants()) {
+          const { event } = descendant;
+          collectScope(event);
+        }
+
+        const localScopeFiles = [...scopeFiles].filter(
+          (filePath) => (assert(filePath), !isAbsolute(filePath))
+        ) as string[];
+        scopeModifiedDate = await mostRecentModifiedDate(localScopeFiles);
+      }
+
       const hashV2 = new HashV2(checkInstance.ruleId, findingEvent, participatingEvents);
 
       const uniqueEvents = new Set<number>();
       const relatedEvents: Array<Event> = [];
-      [findingEvent, ...(additionalEvents || []), ...Object.values(participatingEvents)]
-        .map(cloneEvent)
-        .forEach((event) => {
+      const relatedEventFiles = new Set<string>();
+
+      const collectEventFile = (event: Event) => {
+        if (!event.codeObject.location) return;
+
+        const filePath = locationToFilePath(event.codeObject.location);
+        if (!filePath) return;
+        if (isAbsolute(filePath)) return;
+
+        relatedEventFiles.add(filePath);
+      };
+
+      [findingEvent, ...(additionalEvents || []), ...Object.values(participatingEvents)].forEach(
+        (event) => {
           if (uniqueEvents.has(event.id)) {
             return;
           }
+
+          collectEventFile(event);
+          for (const ancestor of new EventNavigator(event).ancestors()) {
+            collectEventFile(ancestor.event);
+          }
+
           uniqueEvents.add(event.id);
           relatedEvents.push(cloneEvent(event));
-        });
+        }
+      );
+
+      const eventsModifiedDate = await mostRecentModifiedDate([...relatedEventFiles]);
+
+      if (verbose()) {
+        warn(`Scope modified date: ${scopeModifiedDate}`);
+        warn(`Events modified date: ${eventsModifiedDate}`);
+      }
 
       return {
         appMapFile: appMapFileName,
@@ -177,6 +274,8 @@ export default class RuleChecker {
         participatingEvents: Object.fromEntries(
           Object.entries(participatingEvents).map(([k, v]) => [k, cloneEvent(v)])
         ),
+        scopeModifiedDate,
+        eventsModifiedDate,
       } as Finding;
     };
 
@@ -189,21 +288,21 @@ export default class RuleChecker {
     if (this.progress) await this.progress.matchResult(event, matchResult);
     const numFindings = findings.length;
     if (matchResult === true) {
-      let finding;
+      let finding: Finding;
       if (checkInstance.ruleLogic.message) {
         const message = checkInstance.ruleLogic.message(scope, event);
-        finding = buildFinding(event, {}, message);
+        finding = await buildFinding(event, {}, message);
       } else {
-        finding = buildFinding(event, {});
+        finding = await buildFinding(event, {});
       }
       findings.push(finding);
     } else if (typeof matchResult === 'string') {
-      const finding = buildFinding(event, {}, matchResult as string);
+      const finding = await buildFinding(event, {}, matchResult as string);
       finding.message = matchResult as string;
       findings.push(finding);
     } else if (matchResult) {
-      matchResult.forEach((mr) => {
-        const finding = buildFinding(
+      for (const mr of matchResult) {
+        const finding = await buildFinding(
           mr.event,
           mr.participatingEvents || {},
           mr.message,
@@ -212,7 +311,7 @@ export default class RuleChecker {
           mr.relatedEvents
         );
         findings.push(finding);
-      });
+      }
     }
     if (verbose()) {
       if (findings.length > numFindings) {

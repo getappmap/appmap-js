@@ -116,6 +116,8 @@ interface Finding {
   impactDomain?: ImpactDomain;
   // Map of events by functional role name; for example, logEvent, secret, scope, etc.
   participatingEvents?: Record<string, Event>;
+  scopeModifiedDate?: Date;
+  eventsModifiedDate?: Date;
 }
 
 interface RuleLogic {

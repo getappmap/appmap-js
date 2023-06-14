@@ -6,7 +6,7 @@ it('deprecated crypto algorithm', async () => {
   const rule = await loadRule('deprecated-crypto-algorithm');
   const { findings } = await scan(
     new Check(rule),
-    './ruby/fixture/tmp/appmap/minitest/Crypt_crypt_aes_128_cbc.appmap.json'
+    'test/fixtures/ruby/fixture/tmp/appmap/minitest/Crypt_crypt_aes_128_cbc.appmap.json'
   );
   expect(findings).toHaveLength(1);
   const finding1 = findings[0];
@@ -14,4 +14,6 @@ it('deprecated crypto algorithm', async () => {
   expect(finding1.event.id).toEqual(2);
   expect(finding1.message).toEqual(`Deprecated crypto algorithm: AES-128-CBC`);
   expect(finding1.relatedEvents).toHaveLength(1);
+  expect(finding1.eventsModifiedDate).not.toBeUndefined();
+  expect(finding1.scopeModifiedDate).not.toBeUndefined();
 });

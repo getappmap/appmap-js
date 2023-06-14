@@ -10,7 +10,7 @@ import {
   UploadAppMapResponse,
 } from '@appland/client/dist/src';
 
-import { verbose } from '../rules/lib/util';
+import { fileExists, verbose } from '../rules/lib/util';
 import { ScanResults } from '../report/scanResults';
 import {
   create as createScannerJob,
@@ -18,19 +18,8 @@ import {
 } from '../integration/appland/scannerJob/create';
 import { RetryOptions } from '../integration/appland/retryOptions';
 import { branch as branchFromEnv, sha as commitFromEnv } from '../integration/vars';
-import { stat } from 'fs/promises';
 import { join } from 'path';
 import { buildAppMap, maxAppMapSize, pruneAppMap } from './upload/pruneAppMap';
-import assert from 'assert';
-
-async function fileExists(file: string): Promise<boolean> {
-  try {
-    await stat(file);
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
 
 export default async function create(
   scanResults: ScanResults,
