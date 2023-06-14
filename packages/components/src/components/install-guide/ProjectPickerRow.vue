@@ -35,32 +35,118 @@
     </template>
 
     <div class="project-picker-row__body">
-      <template v-if="supported && isJetBrains && isJava">
-        <p class="mb20 status-message">
-          <strong>Success!</strong> By using the AppMap plugin for IntelliJ, you don't need to
-          install any additional dependencies to your project.
-        </p>
-        <div class="page-control-wrap">
-          <p>Continue on to the next step.</p>
-          <v-navigation-buttons :first="true" :last="!supported" />
-        </div>
-      </template>
-      <template v-else-if="supported">
-        You're almost done! Install AppMap as a development dependency in your project. Click the
-        button below to perform an automated installation.
-        <div class="center-block" data-cy="automated-install">
-          <v-button kind="primary" @click.native="performInstall" :timeout="2000">
-            Automated install via AppMap CLI
-          </v-button>
-        </div>
-        <template v-if="manualInstructions">
-          <div class="separator">OR</div>
-          <component :is="manualInstructions" data-cy="manual-install" />
+      <p class="mb20">
+        <template v-if="isJava">
+          Two things are required to make AppMaps of your Java project:
+
+          <ol>
+            <li>The <code class="inline">appmap.jar</code> must be available on your machine.</li>
+            <li>
+              Application code and test cases use the JVM flag
+              <code class="inline">-Djavaagent=appmap.jar</code>.
+            </li>
+          </ol>
+
+          AppMap also uses a configuration file called <i>appmap.yml</i>. A default configuration
+          file will be created automatically the first time you run your application with AppMap
+          enabled.
         </template>
-        <div class="project-picker-row__nav">
-          <p>Finished the installation? Proceed to the next step.</p>
-          <v-navigation-buttons :first="true" :last="!supported" />
-        </div>
+        <template v-if="isRuby">
+          <h3 class="install-heading">Run the AppMap Installer</h3>
+          To make AppMaps of your Ruby project, you need to add the
+          <code class="inline">appmap</code> gem to your "test" and "development" bundles. We
+          provide an open source installer to do this, or you can install manually. Advantages of
+          using the installer include:
+          <ol>
+            <li>Verifies that your Ruby version is supported by AppMap.</li>
+            <li>Verifies that your Rails version (if present) is supported by AppMap.</li>
+            <li>Creates the configuration file <i>appmap.yml</i>.</li>
+            <li>Has built-in support if you encounter any problems.</li>
+          </ol>
+        </template>
+        <template v-if="isPython">
+          <h3 class="install-heading">Run the AppMap Installer</h3>
+          To make AppMaps of your Python project, you need to install the
+          <code class="inline">appmap</code> package and configure your project to use it. We
+          provide an open source installer, or you can install manually. Advantages of using the
+          installer include:
+          <ol>
+            <li>Verifies that your Python version is supported by AppMap.</li>
+            <li>
+              Verifies that your Django and Flask versions (if present) are supported by AppMap.
+            </li>
+            <li>
+              Detects and supports <code class="inline">pip</code>,
+              <code class="inline">pipenv</code>, and <code class="inline">poetry</code>.
+            </li>
+            <li>Creates the configuration file <i>appmap.yml</i>.</li>
+            <li>Has built-in support if you encounter any problems.</li>
+          </ol>
+        </template>
+        <template v-if="isJS">
+          <h3 class="install-heading">Run the AppMap Installer</h3>
+          To make AppMaps of your JavaScript project, you need to install the
+          <code class="inline">appmap-agent-js</code>
+          package from NPM and configure your project to use it. We provide an open source
+          installer, or you can install manually. Advantages of using the installer include:
+          <ol>
+            <li>Verifies that your Node.js version is supported by AppMap.</li>
+            <li>
+              Verify that your Express, Jest and Mocha versions (if present) are supported by
+              AppMap.
+            </li>
+            <li>
+              Detects and supports <i>package-lock.json</i> (npm) and <i>yarn.lock</i> (yarn).
+            </li>
+            <li>Creates the configuration file <i>appmap.yml</i>.</li>
+            <li>Has built-in support if you encounter any problems.</li>
+          </ol>
+        </template>
+      </p>
+      <template v-if="supported">
+        <template v-if="isJetBrains && isJava">
+          <p class="mb20">
+            ✓ <code class="inline">appmap.jar</code> has been downloaded and saved to your machine
+            by the AppMap plugin.
+          </p>
+          <p class="mb20">
+            ✓ Run configurations called <component :is="runConfigIcon" class="run-config-icon" /><b
+              >"Start with AppMap"</b
+            >
+            have been added to your IntelliJ menus. In the next step, you'll use them to create
+            AppMaps.
+          </p>
+          <div class="page-control-wrap">
+            <p></p>
+            <v-navigation-buttons :first="true" :last="!supported" />
+          </div>
+        </template>
+        <template v-else>
+          <div class="center-block" data-cy="automated-install">
+            <v-button kind="primary" @click.native="performInstall" :timeout="2000">
+              Run the installer
+            </v-button>
+          </div>
+          <template v-if="manualInstructions">
+            <div class="page-control-wrap">
+              <p></p>
+              <v-navigation-buttons :first="true" :last="!supported" />
+            </div>
+
+            <div class="separator">OR</div>
+
+            <div>
+              <h3 class="install-heading">Install AppMap manually</h3>
+            </div>
+            <p>
+              <component :is="manualInstructions" data-cy="manual-install" /></p
+          ></template>
+
+          <div class="project-picker-row__nav">
+            <p></p>
+            <v-navigation-buttons :first="true" :last="!supported" />
+          </div>
+        </template>
       </template>
       <template v-else>
         <template v-if="!languageSupported">
@@ -99,12 +185,19 @@ import VPopper from '@/components/Popper.vue';
 import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import VRuby from '@/components/install-guide/install-instructions/Ruby.vue';
 import VPython from '@/components/install-guide/install-instructions/Python.vue';
+import VJavaScript from '@/components/install-guide/install-instructions/JavaScript.vue';
 import VIconChevron from '@/assets/fa-solid_chevron-down.svg';
+import VRunConfigDark from '@/assets/jetbrains_run_config_execute_dark.svg';
+import VRunConfigLight from '@/assets/jetbrains_run_config_execute.svg';
 
 import { isFeatureSupported, isProjectSupported } from '@/lib/project';
 import { getAgentDocumentationUrl } from '@/lib/documentation';
 
-const manualInstructionComponents = { ruby: VRuby, python: VPython };
+const manualInstructionComponents = {
+  ruby: VRuby,
+  python: VPython,
+  javascript: VJavaScript,
+};
 
 export default {
   name: 'project-picker-row',
@@ -196,8 +289,20 @@ export default {
     isJetBrains() {
       return this.editor === 'jetbrains';
     },
+    isPython() {
+      return this.language.name.toLowerCase() === 'python';
+    },
+    isRuby() {
+      return this.language.name.toLowerCase() === 'ruby';
+    },
     isJava() {
       return this.language.name.toLowerCase() === 'java';
+    },
+    isJS() {
+      return this.language.name.toLowerCase() === 'javascript';
+    },
+    runConfigIcon() {
+      return this.theme === 'dark' ? VRunConfigDark : VRunConfigLight;
     },
   },
   methods: {
@@ -231,6 +336,12 @@ $brightblue: rgba(255, 255, 255, 0.1);
   align-items: center;
   justify-content: space-between;
 }
+
+.install-heading {
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+}
+
 .project-picker-row {
   border-bottom: 1px solid lighten($gray2, 15);
   padding: 0;
