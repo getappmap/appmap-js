@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.80.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.80.1...@appland/appmap-v3.80.2) (2023-06-14)
+
+
+### Bug Fixes
+
+* Make sure AppMap JS agent is up to date before running it ([720bdbb](https://github.com/getappmap/appmap-js/commit/720bdbba665a91feda89d32a8f57a2fbab75dcda))
+
 # [@appland/appmap-v3.80.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.80.0...@appland/appmap-v3.80.1) (2023-06-06)
 
 
