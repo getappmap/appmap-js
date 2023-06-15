@@ -13,6 +13,12 @@
         <v-details-button v-if="shouldDisplayViewInTrace" @click.native="viewEventInTrace">
           Show in Trace
         </v-details-button>
+        <v-details-button
+          v-if="shouldDisplayViewInFlamegraph"
+          @click.native="viewEventInFlamegraph"
+        >
+          Show in Flamegraph
+        </v-details-button>
       </template>
     </v-details-panel-header>
 
@@ -108,7 +114,7 @@ import VDetailsButton from '@/components/DetailsButton.vue';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 import VSqlCode from '@/components/SqlCode.vue';
-import { SET_VIEW, VIEW_FLOW, VIEW_SEQUENCE } from '@/store/vsCode';
+import { SET_VIEW, VIEW_FLAMEGRAPH, VIEW_FLOW, VIEW_SEQUENCE } from '@/store/vsCode';
 import toListItem from '@/lib/finding';
 
 export default {
@@ -123,6 +129,10 @@ export default {
     object: {
       type: Object,
       required: true,
+    },
+    flamegraphEnabled: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
@@ -198,6 +208,10 @@ export default {
       return this.$store.state.currentView !== VIEW_FLOW;
     },
 
+    shouldDisplayViewInFlamegraph() {
+      return this.flamegraphEnabled && this.$store.state.currentView !== VIEW_FLAMEGRAPH;
+    },
+
     caller() {
       return this.object.parent ? [this.object.parent] : null;
     },
@@ -213,6 +227,9 @@ export default {
     },
     viewEventInTrace() {
       this.$store.commit(SET_VIEW, VIEW_FLOW);
+    },
+    viewEventInFlamegraph() {
+      this.$store.commit(SET_VIEW, VIEW_FLAMEGRAPH);
     },
   },
 };

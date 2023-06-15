@@ -66,6 +66,7 @@
         :object="selectedObject"
         :is-root-object="isRootObject"
         :filters-root-objects="filtersRootObjects"
+        :flamegraphEnabled="flamegraphEnabled"
         :appMap="appMap"
       />
       <v-details-panel-labels
@@ -147,6 +148,10 @@ export default {
       default: false,
     },
     isGiantAppMap: {
+      type: Boolean,
+      default: false,
+    },
+    flamegraphEnabled: {
       type: Boolean,
       default: false,
     },
