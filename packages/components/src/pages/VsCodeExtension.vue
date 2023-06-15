@@ -17,6 +17,7 @@
         :findings="findings"
         :wasAutoPruned="wasAutoPruned"
         :isGiantAppMap="isGiantAppMap"
+        :flamegraphEnabled="flamegraphEnabled"
         @onChangeFilter="
           (value) => {
             this.eventFilterText = value;
