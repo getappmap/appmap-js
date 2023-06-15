@@ -146,4 +146,26 @@ describe('Status.vue', () => {
     );
     expect(wrapper.findAll('[data-cy="next-step"]').length).toBe(0);
   });
+
+  it('prompts the user to go back if a previous step changes to be incomplete', async () => {
+    await wrapper.setProps({
+      statusStates: [2, 1, 2, 2, 2],
+      viewingStep: InstructionStep.ExploreAppMaps,
+    });
+
+    expect(wrapper.find('.status-message__prompt').text()).toMatch(/Go\s+back\s+and\s+record/gm);
+  });
+
+  it('uses proper pluralization', async () => {
+    await wrapper.setProps({
+      statusStates: [2, 2, 0, 0, 0],
+      viewingStep: InstructionStep.RecordAppMaps,
+    });
+    expect(wrapper.text()).toContain(`${numAppMaps} AppMaps have been recorded for ${projectName}`);
+
+    await wrapper.setProps({
+      numAppMaps: 1,
+    });
+    expect(wrapper.text()).toContain(`1 AppMap has been recorded for ${projectName}`);
+  });
 });

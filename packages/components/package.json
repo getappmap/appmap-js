@@ -71,6 +71,7 @@
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.2",
+    "babel-plugin-module-resolver": "^5.0.0",
     "chromatic": "^6.4.3",
     "core-js": "^3.11.2",
     "cross-env": "^7.0.2",

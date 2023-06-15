@@ -5,8 +5,7 @@
     </div>
     <div class="status-message__body">
       <p :class="headerClasses" data-cy="header">
-        <template v-if="allComplete"> {{ allCompleteMessage }} </template>
-        <template v-else> {{ header }} </template>
+        <component :is="header" />
       </p>
       <p class="status-message__prompt" v-if="prompt && !allComplete" data-cy="prompt">
         <template v-if="currentStepComplete && !shouldGoBack"> Next step: </template>
@@ -16,7 +15,7 @@
           </a>
           and
         </template>
-        {{ prompt }}
+        <component :is="prompt" />
       </p>
     </div>
     <transition name="fade">
@@ -99,7 +98,7 @@ export default {
       [InstructionStep.RecordAppMaps]: {
         button: 'Record AppMaps',
         complete: {
-          header: '{{numAppMaps}} AppMaps have been recorded for {{projectName}}',
+          header: `{{numAppMaps}} AppMap{{numAppMaps == 1 ? ' has' : 's have'}} been recorded for {{projectName}}`,
           prompt: 'Choose an AppMap to open and explore',
         },
         incomplete: {
@@ -110,11 +109,11 @@ export default {
       [InstructionStep.ExploreAppMaps]: {
         button: 'Explore AppMaps',
         complete: {
-          header: '{{projectName}} has {{numAppMaps}} AppMaps',
+          header: `{{projectName}} has {{numAppMaps}} AppMap{{numAppMaps == 1 ? '' : 's'}}`,
           prompt: 'Generate OpenAPI Definitions from AppMap data',
         },
         incomplete: {
-          header: '{{projectName}} has {{numAppMaps}} AppMaps',
+          header: `{{projectName}} has {{numAppMaps}} AppMap{{numAppMaps == 1 ? '' : 's'}}`,
           prompt: 'Open an AppMap from the selected AppMaps list',
         },
       },
@@ -125,7 +124,7 @@ export default {
           prompt: 'View runtime analysis report for {{projectName}}',
         },
         incomplete: {
-          header: '{{projectName}} has {{numAppMaps}} AppMaps',
+          header: `{{projectName}} has {{numAppMaps}} AppMap{{numAppMaps == 1 ? '' : 's'}}`,
           prompt: 'Automatically generate OpenAPI definitions for {{projectName}}',
         },
       },
@@ -135,11 +134,12 @@ export default {
           header: 'AppMap setup is complete for {{projectName}}',
         },
         incomplete: {
-          header: '{{projectName}} has {{numAppMaps}} AppMaps',
+          header: `{{projectName}} has {{numAppMaps}} AppMap{{numAppMaps == 1 ? '' : 's'}}`,
           prompt: 'View the runtime analysis report for {{projectName}}',
         },
       },
     },
+    allCompleteMessage: 'AppMap setup is complete for {{projectName}}',
   }),
 
   watch: {
@@ -192,17 +192,42 @@ export default {
       return this.templates[this.nextStep].incomplete;
     },
     shouldGoBack() {
-      return !this.currentStepComplete && this.viewingStep !== this.nextStep;
+      return this.nextStep < this.viewingStep;
     },
     header() {
-      return this.renderTemplateString(this.currentContent.header);
+      const template = this.allComplete ? this.allCompleteMessage : this.currentContent.header;
+      // Referencing the dynamic props directly in this block
+      // is required to maintain reactivity
+      const projectName = this.projectName;
+      const numAppMaps = this.numAppMaps;
+      return {
+        template: `<span>${template}</span>`,
+        data: () => ({
+          projectName,
+          numAppMaps,
+        }),
+      };
     },
     prompt() {
-      if (this.currentStepComplete && this.nextStepContent)
-        return this.renderTemplateString(this.nextStepContent.prompt);
+      const prompt = this.currentStepComplete
+        ? this.nextStepContent?.prompt
+        : this.currentContent.prompt;
+      const template = this.shouldGoBack
+        ? prompt.charAt(0).toLowerCase() + prompt.slice(1)
+        : prompt;
 
-      const prompt = this.renderTemplateString(this.currentContent.prompt);
-      return this.shouldGoBack ? prompt.charAt(0).toLowerCase() + prompt.slice(1) : prompt;
+      // Referencing the dynamic props directly in this block
+      // is required to maintain reactivity
+      const projectName = this.projectName;
+      const numAppMaps = this.numAppMaps;
+
+      return {
+        template: `<span>${template}</span>`,
+        data: () => ({
+          projectName,
+          numAppMaps,
+        }),
+      };
     },
     button() {
       const buttonContent = this.templates[this.nextStep].button;
@@ -212,10 +237,6 @@ export default {
     },
     allComplete() {
       return this.statusStates.every((status) => status === StepStatus.Completed);
-    },
-    allCompleteMessage() {
-      const header = this.templates[InstructionStep.RuntimeAnalysis].complete.header;
-      return this.renderTemplateString(header);
     },
   },
 
