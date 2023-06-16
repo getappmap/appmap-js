@@ -177,6 +177,7 @@ article {
 
 .center {
   margin: auto;
+  text-align: center;
 }
 
 .fit {
