@@ -86,7 +86,10 @@
         AppMap can record an entire Java process from start to finish. To use process recording, run
         your application using
         <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap". When your
-        application exits, the AppMap will be saved and opened. Visit
+        application exits, the AppMap will be saved and opened.
+      </p>
+      <p>
+        Visit
         <a
           href="https://appmap.io/docs/reference/appmap-java.html#process-recording"
           target="_blank"
@@ -105,7 +108,10 @@
         method, you can control exactly what code is recorded, and where the recording is saved. To
         use runnable recording, add an AppMap code snippet to the section of code you want to
         record, then run your application using
-        <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap". Visit
+        <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap".
+      </p>
+      <p>
+        Visit
         <a
           href="https://appmap.io/docs/reference/appmap-java.html#runnable-recording"
           target="_blank"
