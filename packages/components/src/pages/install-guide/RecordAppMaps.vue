@@ -17,7 +17,7 @@
           >
             <template #header>
               <template v-if="complete">
-                {{ numAppMaps }} AppMaps have been recorded for {{ projectName }}
+                AppMaps have been recorded for {{ projectName }}
               </template>
               <template v-else> No AppMaps have been recorded yet for {{ projectName }} </template>
             </template>
