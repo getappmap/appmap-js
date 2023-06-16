@@ -2,8 +2,7 @@
   <section>
     <p>
       When you run your Python code with the <code class="inline"> appmap </code> package, AppMap
-      will be enabled for recording. The best way to run with AppMap is to add the
-      <code class="inline">appmap</code> package using Pip, Pipenv, or Poetry.
+      will be enabled for recording.
     </p>
     <br />
     <h2>Choose the best recording method for this project</h2>
@@ -41,10 +40,11 @@
           <i class="header-icon"><RequestsIcon /></i>Requests recording
         </h3>
         <p>
-          When your application uses {{ this.webFramework.name }}, and you run your application with
-          AppMap enabled, HTTP server requests recording is enabled. To record requests, first run
-          your application:
+          When your application uses Django or Flask, and you run your application with AppMap
+          enabled, HTTP server requests recording is enabled. To record requests, first run your
+          application:
         </p>
+        <br />
         <p>
           Start your Django server:
           <v-code-snippet clipboard-text="python manage.py runserver" />
@@ -53,10 +53,11 @@
           Start your Flask server:
           <v-code-snippet clipboard-text="flask run" />
         </p>
+        <br />
         <p>
-          Interact with your application, through its user interface and/or by making API requests
-          using a tool such as Postman. An AppMap will be created for each HTTP server request
-          that's served by your app.
+          Then, interact with your application through its user interface and/or by making API
+          requests using a tool such as Postman. An AppMap will be created for each HTTP server
+          request that's served by your app.
         </p>
         <p>
           For more information, visit

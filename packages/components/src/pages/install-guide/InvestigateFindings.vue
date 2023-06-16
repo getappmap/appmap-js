@@ -48,8 +48,8 @@
           </article>
           <article v-else>
             <p class="success-message">
-              <strong>Success!</strong> AppMap has scanned your application and found no flaws.
-              We'll continue scanning for flaws automatically.
+              AppMap has scanned your application and found no flaws. We'll continue scanning for
+              flaws automatically.
             </p>
           </article>
         </div>
