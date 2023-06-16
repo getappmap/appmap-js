@@ -29,8 +29,39 @@
             We've identified some interesting AppMaps and Code Objects that you may want to check
             out.
           </p>
+          <div class="table-wrap">
+            <table class="qs-appmaps-table" data-cy="appmaps">
+              <colgroup>
+                <col width="70%" />
+                <col width="10%" />
+                <col width="10%" />
+                <col width="10%" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th><h2 class="subhead">AppMaps</h2></th>
+                  <th>Requests</th>
+                  <th>SQL</th>
+                  <th>Functions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="appMap in appMaps"
+                  :key="appMap.path"
+                  @click="openAppmap(appMap.path)"
+                  data-cy="appmap"
+                >
+                  <td>{{ appMap.name }}</td>
+                  <td>{{ appMap.requests }}</td>
+                  <td>{{ appMap.sqlQueries }}</td>
+                  <td>{{ appMap.functions }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <div class="qs-explore-code-objects" data-cy="code-objects">
-            <h2 class="subhead">Selected Code objects</h2>
+            <h2 class="subhead">Code objects</h2>
             <ul class="code-object-list">
               <div class="collapse-expand">
                 <div class="accordion-toggle">
@@ -61,37 +92,6 @@
                 <a href="#">{{ query.name }}</a>
               </li>
             </ul>
-          </div>
-          <div class="table-wrap">
-            <table class="qs-appmaps-table" data-cy="appmaps">
-              <colgroup>
-                <col width="70%" />
-                <col width="10%" />
-                <col width="10%" />
-                <col width="10%" />
-              </colgroup>
-              <thead>
-                <tr>
-                  <th><h2 class="subhead">Selected AppMaps</h2></th>
-                  <th>Requests</th>
-                  <th>SQL</th>
-                  <th>Functions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="appMap in appMaps"
-                  :key="appMap.path"
-                  @click="openAppmap(appMap.path)"
-                  data-cy="appmap"
-                >
-                  <td>{{ appMap.name }}</td>
-                  <td>{{ appMap.requests }}</td>
-                  <td>{{ appMap.sqlQueries }}</td>
-                  <td>{{ appMap.functions }}</td>
-                </tr>
-              </tbody>
-            </table>
           </div>
         </article>
         <article v-else data-cy="no-appmaps">
