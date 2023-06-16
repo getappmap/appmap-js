@@ -40,7 +40,10 @@
           Two things are required to make AppMaps of your Java project:
 
           <ol>
-            <li>The <code class="inline">appmap.jar</code> must be available on your machine.</li>
+            <li>
+              The <i>appmap.jar</i> must be available on your machine. This file will be installed
+              automatically for you.
+            </li>
             <li>
               Application code and test cases use the JVM flag
               <code class="inline">-Djavaagent=appmap.jar</code>.
