@@ -114,7 +114,7 @@ export default {
         },
         incomplete: {
           header: `{{projectName}} has {{numAppMaps}} AppMap{{numAppMaps == 1 ? '' : 's'}}`,
-          prompt: 'Open an AppMap from the selected AppMaps list',
+          prompt: 'Open an AppMap',
         },
       },
       [InstructionStep.GenerateOpenApi]: {
