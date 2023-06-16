@@ -20,7 +20,7 @@
             <template v-if="complete">
               Next step: Generate OpenAPI definitions from AppMap data
             </template>
-            <template v-else>Open an AppMap from the selected AppMaps list</template>
+            <template v-else>Open an AppMap</template>
           </template>
         </v-status>
         <article v-if="appMaps.length">
