@@ -96,6 +96,29 @@ rubyOnly.args = {
   complete: true,
 };
 
+export const vscodeJUnitSpring = Template.bind({});
+vscodeJUnitSpring.args = {
+  project: {
+    name: 'MyOtherProject',
+    score: 3,
+    path: '/home/user/my_other_project',
+    language: {
+      name: 'Java',
+      score: 2,
+    },
+    testFramework: {
+      name: 'JUnit',
+      score: 2,
+    },
+    webFramework: {
+      name: 'Spring',
+      score: 2,
+    },
+  },
+  editor: 'vscode',
+  complete: true,
+};
+
 export const intellijJUnitSpring = Template.bind({});
 intellijJUnitSpring.args = {
   project: {

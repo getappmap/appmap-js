@@ -7,13 +7,17 @@
       <main>
         <article>
           <template v-if="isJava">
-            <template v-if="isJetBrains">
-              <VRecordInstructions_IntelliJ
-                :theme="theme"
-                :web-framework="webFrameworkSupported ? webFramework : undefined"
-                :test-framework="testFrameworkSupported ? testFramework : undefined"
-              />
-            </template>
+            <VRecordInstructions_IntelliJ
+              v-if="isJetBrains"
+              :theme="theme"
+              :web-framework="webFrameworkSupported ? webFramework : undefined"
+              :test-framework="testFrameworkSupported ? testFramework : undefined"
+            />
+            <VRecordInstructions_Java
+              v-else
+              :web-framework="webFrameworkSupported ? webFramework : undefined"
+              :test-framework="testFrameworkSupported ? testFramework : undefined"
+            />
           </template>
           <template v-else-if="isRuby">
             <VRecordInstructions_Ruby
@@ -58,7 +62,7 @@ import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue
 import VRecordInstructions_IntelliJ from '@/components/install-guide/record-instructions/IntelliJ.vue';
 import VRecordInstructions_Ruby from '@/components/install-guide/record-instructions/Ruby.vue';
 import VRecordInstructions_Python from '@/components/install-guide/record-instructions/Python.vue';
-import VCodeSnippet from '@/components/CodeSnippet.vue';
+import VRecordInstructions_Java from '@/components/install-guide/record-instructions/Java.vue';
 import Navigation from '@/components/mixins/navigation';
 import VPending from '@/components/Pending.vue';
 
@@ -74,6 +78,7 @@ export default {
     VRecordInstructions_IntelliJ,
     VRecordInstructions_Ruby,
     VRecordInstructions_Python,
+    VRecordInstructions_Java,
     VPending,
   },
 
