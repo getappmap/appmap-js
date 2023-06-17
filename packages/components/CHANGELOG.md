@@ -1,3 +1,10 @@
+# [@appland/components-v2.48.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.47.0...@appland/components-v2.48.0) (2023-06-17)
+
+
+### Features
+
+* Add instructions for Java in VSCode ([#1233](https://github.com/getappmap/appmap-js/issues/1233)) ([2173c38](https://github.com/getappmap/appmap-js/commit/2173c38254f167a8693df48518531b126ec75b2b))
+
 # [@appland/components-v2.47.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.46.2...@appland/components-v2.47.0) (2023-06-14)
 
 
