@@ -26,7 +26,6 @@
       :num-findings="numFindings"
       :project-path="path"
       :findingsDomainCounts="findingsDomainCounts"
-      :findings-enabled="findingsEnabled"
       :user-authenticated="userAuthenticated"
       :analysis-enabled="analysisEnabled"
     />
@@ -66,10 +65,6 @@ export default {
     featureFlags: {
       type: Set,
       default: () => new Set(),
-    },
-    findingsEnabled: {
-      type: Boolean,
-      default: false,
     },
     analysisEnabled: {
       type: Boolean,
