@@ -392,7 +392,7 @@ __metadata:
     chalk: ^4.1.2
     chokidar: ^3.5.1
     cli-progress: ^3.11.0
-    conf: ^10.0.2
+    conf: ^10.1.2
     crypto-js: ^4.0.0
     eslint: ^7.32.0
     eslint-config-prettier: ^8.3.0
@@ -11748,7 +11748,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"conf@npm:<11, conf@npm:^10.0.2":
+"conf@npm:<11, conf@npm:^10.1.2":
   version: 10.2.0
   resolution: "conf@npm:10.2.0"
   dependencies:
