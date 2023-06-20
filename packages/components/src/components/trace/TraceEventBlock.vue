@@ -54,7 +54,7 @@ import VTraceSummary from './TraceSummary.vue';
 export default {
   name: 'v-trace-event-block',
   components: {
-    'v-trace': () => import('./Trace.vue'),
+    VTrace: async () => (await import('./Trace.vue')).default,
     VTraceNode,
     VTraceSummary,
   },
