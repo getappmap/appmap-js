@@ -14,6 +14,7 @@ const argv = minimist(process.argv.slice(2));
 const baseConfig = {
   input: 'src/index.js',
   external: Object.keys(pkg.dependencies),
+  inlineDynamicImports: true,
   plugins: {
     preVue: [
       alias({
