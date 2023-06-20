@@ -135,7 +135,6 @@ export default {
         maintainability: 0,
       }),
     },
-    findingsEnabled: Boolean,
     analysisEnabled: Boolean,
     userAuthenticated: Boolean,
   },

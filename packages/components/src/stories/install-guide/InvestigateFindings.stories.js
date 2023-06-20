@@ -24,7 +24,6 @@ WithFindings.args = {
   },
   analysisEnabled: true,
   userAuthenticated: true,
-  findingsEnabled: true,
 };
 
 export const Empty = Template.bind({});
@@ -40,7 +39,6 @@ Empty.args = {
   },
   analysisEnabled: true,
   userAuthenticated: true,
-  findingsEnabled: true,
 };
 
 export const Disabled = Template.bind({});
@@ -56,7 +54,6 @@ Disabled.args = {
   },
   analysisEnabled: false,
   userAuthenticated: false,
-  findingsEnabled: false,
 };
 
 export const NotScanned = Template.bind({});
@@ -64,5 +61,4 @@ NotScanned.args = {
   scanned: false,
   analysisEnabled: true,
   userAuthenticated: true,
-  findingsEnabled: true,
 };
