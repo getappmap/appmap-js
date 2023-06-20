@@ -1,3 +1,6 @@
+name: '@appland/models'
+language: javascript
+appmap_dir: tmp/appmap
 ordering: chronological
 command: yarn exec jest
 command-options:
