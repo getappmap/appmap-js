@@ -16,6 +16,10 @@ const renameFile = promisify(gracefulFs.rename);
 /**
  * CHANGELOG
  *
+ * * # 1.3.0
+ *
+ * * Include exceptions in the index.
+ *
  * # 1.2.0
  *
  * * Drop fingerprint fields, as these are no longer used by downstream tools.

@@ -4,7 +4,10 @@ function notNull(event) {
 }
 
 function makeUnique(events) {
-  const eventsJSON = events.flat().map((e) => JSON.stringify(e));
+  const eventsJSON = events
+    .filter((item) => item !== undefined)
+    .flat()
+    .map((e) => JSON.stringify(e));
   return [...new Set(eventsJSON)].sort().map((json) => JSON.parse(json));
 }
 
