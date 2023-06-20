@@ -1,0 +1,24 @@
+// It is ugly that the font url is relative to where the css is imported and not where to this
+// file is located. Anyway this font is declared in multiple places we should centralize it.
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: local('IBM Plex Mono'),
+    url(../../assets/fonts/IBM_Plex_Mono/IBMPlexMono-Regular.ttf) format('truetype');
+}
+
+.flamegraph-common {
+  display: block;
+  text-align: left;
+  font-family: 'IBM Plex Mono', monospace;
+  border-style: solid;
+  margin: 0px;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.flamegraph-popper {
+  font-size: 0.8rem;
+  font-family: 'IBM Plex Mono', monospace;
+}

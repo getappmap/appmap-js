@@ -1,68 +1,92 @@
-const PRECISION = 10e6;
+export const add = (x, y) => x + y;
 
-// TODO aggregate with codeObject.fqid
+//////////////
+// Constant //
+//////////////
 
-const digestEvent = (event) => ({
-  name: String(event.toString()),
-  value: Number(event.elapsedTime),
-  children: event.children.map(digestEvent),
-});
+export const PADDING = 10;
+export const BORDER = 1;
+export const CONTENT_THRESHOLD = 2 * (PADDING + BORDER) + 10;
+export const FONT_SIZE = 12;
+export const HEIGHT = 2 * (BORDER + PADDING) + FONT_SIZE;
 
-const toCompatibleValue = (name, total, value) => {
-  if (value < 0) {
-    console.warn(`found negative value ${value} for ${name}`);
-    return total;
-  } else if (total > value) {
-    // This happens a lot, not sure why...
-    //
-    // console.warn(
-    //   `had to increase value of ${name} from ${value} to ${total} to match children's total`
-    // );
-    return total;
-  } else {
-    return value;
+//////////////
+// Duration //
+//////////////
+
+export const isEventDurationValid = ({ elapsedTime }) =>
+  typeof elapsedTime === 'number' && elapsedTime >= 0;
+
+export const getEventDuration = (event) => (isEventDurationValid(event) ? event.elapsedTime : 0);
+
+///////////
+// Style //
+///////////
+
+export const styleDimension = ({ width, height }, { border, padding }) => {
+  if (height < 2 * (padding + border)) {
+    throw new Error('height is too small');
   }
-};
-
-const accumulateValue = (sum, { value }) => sum + value;
-
-const validateNode = ({ name, value, children: children1 }) => {
-  const children2 = children1.map(validateNode);
+  const half_width = Math.floor(width / 2);
+  const side_border_width = Math.min(border, half_width);
+  const side_padding = Math.min(padding, half_width - side_border_width);
   return {
-    name,
-    value: toCompatibleValue(name, value, children2.reduce(accumulateValue, 0)),
-    children: children2,
+    width: `${width}px`,
+    height: `${height}px`,
+    'padding-left': `${side_padding}px`,
+    'padding-right': `${side_padding}px`,
+    'padding-bottom': `${padding}px`,
+    'padding-top': `${padding}px`,
+    'border-left-width': side_border_width === 0 && width === 1 ? '1px' : `${side_border_width}px`,
+    'border-right-width': `${side_border_width}px`,
+    'border-top-width': `${border}px`,
+    'border-bottom-width': `${border}px`,
   };
 };
 
-const findMinValue = (min, { value, children }) =>
-  children.reduce(findMinValue, value > 0 ? Math.min(min, value) : min);
+// This was the original implementation of budgeting. It was inlined into the flamegraph components
+// to improve performance by letting vue not recomputing needless stuff on property change.
 
-const computeCommonFactor = (min) => {
-  let factor = 1;
-  while (min * factor < PRECISION) {
-    factor *= 10;
-  }
-  return factor;
-};
+// export const budgetDuration = (duration, total, budget) =>
+//   Math.min(budget, Math.floor(budget * (duration / total)));
 
-const convertValueSample = (node) => {
-  const factor = computeCommonFactor(findMinValue(Infinity, node));
-  const loop = ({ name, value, children }) => ({
-    name,
-    value: Math.round(value * factor),
-    children: children.map(loop),
-  });
-  return loop(node);
-};
+// export const budgetEvent = (event, total, budget) =>
+//   budgetDuration(getEventDuration(event), total, budget);
 
-export const digestEventArray = (events) => {
-  const children = events.map(digestEvent);
-  return convertValueSample(
-    validateNode({
-      name: 'root',
-      value: children.reduce(accumulateValue, 0),
-      children,
-    })
-  );
-};
+// export const budgetEventArray = (events, total, budget) =>
+//   budgetDuration(events.map(getEventDuration).reduce(add, 0), total, budget);
+
+// export const budgetEventChildren = (event, budget) => {
+//   const duration = getEventDuration(event);
+//   if (duration === 0) {
+//     return budget;
+//   } else {
+//     return budgetEventArray(event.children, duration, budget);
+//   }
+// };
+
+// export const compileBudgetEvent = (focus, events, budget) => {
+//   if (focus) {
+//     const ancestors = new Set(focus.ancestors());
+//     ancestors.add(focus);
+//     return (event) => (ancestors.has(event) ? budget : 0);
+//   } else {
+//     const total = events.map(getEventDuration).reduce(add, 0);
+//     if (total === 0) {
+//       const default_budget = Math.floor(budget / events.length);
+//       return (_event) => default_budget;
+//     } else {
+//       const valid_event_count = events.filter(isEventDurationValid).length;
+//       const invalid_event_count = events.length - valid_event_count;
+//       const valid_budget = Math.floor((budget * valid_event_count) / events.length);
+//       const invalid_budget = Math.floor((budget * invalid_event_count) / events.length);
+//       const default_invalid_budget = Math.floor(
+//         (invalid_budget * invalid_event_count) / events.length
+//       );
+//       return (event) =>
+//         isEventDurationValid(event)
+//           ? budgetEvent(event, total, valid_budget)
+//           : default_invalid_budget;
+//     }
+//   }
+// };

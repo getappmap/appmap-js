@@ -6,10 +6,10 @@ context('Flamegraph', () => {
   });
 
   it('renders root', () => {
-    cy.get('.d3-flame-graph').contains('root');
+    cy.get('.flamegraph-root').contains('default title');
   });
 
   it('renders GET /admin/orders', () => {
-    cy.get('.d3-flame-graph').contains('GET /admin/orders');
+    cy.get('.flamegraph-item').contains('GET /admin/orders');
   });
 });
