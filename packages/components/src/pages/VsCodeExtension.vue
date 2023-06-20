@@ -123,6 +123,10 @@
           <v-diagram-flamegraph
             ref="viewFlamegraph_diagram"
             :events="filteredAppMap.rootEvents()"
+            :selected-events="selectedEvent"
+            :title="filteredAppMap.name"
+            @selectEvent="onClickTraceEvent"
+            @clearSelectEvent="clearSelection"
           />
         </v-tab>
 

@@ -1,41 +1,88 @@
 <template>
-  <div class="diagram-flame">
-    <div ref="d3Container"></div>
+  <div class="diagram-flamegraph">
+    <v-flamegraph-branch
+      v-if="events.length > 0"
+      :events="events"
+      :budget="budget"
+      :focus="focus"
+      @selectEvent="propagateSelectEvent"
+    ></v-flamegraph-branch>
+    <v-flamegraph-root
+      :budget="budget"
+      :title="title"
+      @clearSelectEvent="propagateClearSelectEvent"
+    ></v-flamegraph-root>
+    <v-slider :value="this.zoom" @slide="updateZoom" />
   </div>
 </template>
 
 <script>
-// namespace import to better support commonjs
-import * as d3 from 'd3';
-import * as Flamegraph from 'd3-flame-graph';
-import { digestEventArray } from '../lib/flamegraph';
-
-const { flamegraph: createFlamegraph } = Flamegraph;
-
+import VFlamegraphBranch from '@/components/flamegraph/FlamegraphBranch.vue';
+import VFlamegraphRoot from '@/components/flamegraph/FlamegraphRoot.vue';
+import VSlider from '@/components/Slider.vue';
 export default {
-  name: 'v-diagram-flame',
-
+  name: 'v-diagram-flamegraph',
+  emits: ['selectEvent', 'clearSelectEvent'],
+  components: {
+    VFlamegraphBranch,
+    VFlamegraphRoot,
+    VSlider,
+  },
   props: {
     events: {
       type: Array,
+      required: true,
+    },
+    selectedEvents: {
+      type: Array,
+      required: true,
+    },
+    title: {
+      type: String,
+      default: 'root',
     },
   },
-
   data() {
-    return {};
+    return { zoom: 0.5 };
   },
-
-  mounted() {
-    const flamegraph = createFlamegraph();
-    flamegraph.selfValue(false); // each node's value contains the sum of its children (as well as its own value)
-    flamegraph.width(960);
-    d3.select(this.$refs.d3Container).datum(digestEventArray(this.events)).call(flamegraph);
+  methods: {
+    updateZoom(zoom) {
+      this.zoom = zoom;
+    },
+    propagateSelectEvent(event) {
+      this.$emit('selectEvent', event);
+    },
+    propagateClearSelectEvent() {
+      this.$emit('clearSelectEvent');
+    },
+  },
+  computed: {
+    budget() {
+      return 460 + this.zoom * 1000;
+    },
+    focus() {
+      if (this.selectedEvents.length === 0) {
+        return null;
+      } else {
+        if (this.selectedEvents.length > 1) {
+          console.warn('Ignoring additional selected events');
+        }
+        return this.selectedEvents[0];
+      }
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
-.diagram-flame {
+.diagram-flamegraph {
+  height: 100%;
+  overflow: scroll;
   padding: 20px 20px 20px 20px;
+  margin: 0px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 </style>

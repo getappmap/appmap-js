@@ -5,6 +5,7 @@ import './scss/fullscreen.scss';
 
 const store = buildStore();
 store.commit(SET_APPMAP_DATA, scenario);
+const events = store.state.appMap.rootEvents();
 
 export default {
   title: 'AppLand/Diagrams/Flamegraph',
@@ -15,15 +16,30 @@ export default {
       diffThreshold: 1,
     },
   },
-  argTypes: {},
   args: {
-    events: store.state.appMap.rootEvents(),
+    events,
+    title: 'default title',
   },
+  argTypes: {},
 };
 
 export const flamegraph = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VDiagramFlamegraph },
-  template: '<v-diagram-flamegraph v-bind="$props" />',
-  store,
+  template: `
+    <v-diagram-flamegraph
+      v-bind="$props"
+      :selected-events="selectedEventArray"
+      @selectEvent="(e) => { selectedEvent = e; }"
+      @clearSelectEvent="() => { selectedEvent = null; }"
+    />
+  `,
+  data() {
+    return { selectedEvent: null };
+  },
+  computed: {
+    selectedEventArray() {
+      return this.selectedEvent ? [this.selectedEvent] : [];
+    },
+  },
 });
