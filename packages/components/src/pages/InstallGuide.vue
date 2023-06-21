@@ -136,7 +136,7 @@ export default {
       return this.selectedProject?.numFindings;
     },
     numAppMaps() {
-      return this.selectedProject?.numAppMaps;
+      return this.selectedProject?.numAppMaps || 0;
     },
     numHttpRequests() {
       return this.selectedProject?.numHttpRequests;
@@ -145,7 +145,7 @@ export default {
       return this.selectedProject?.agentInstalled;
     },
     hasRecorded() {
-      return this.selectedProject?.numAppMaps > 0;
+      return this.numAppMaps > 0;
     },
     hasExplored() {
       return this.selectedProject?.appMapOpened;
