@@ -162,7 +162,7 @@ export default {
       return this.project?.name || '';
     },
     numAppMaps() {
-      return this.project?.appMaps?.length || 0;
+      return this.project?.numAppMaps || 0;
     },
     automaticRecordingLanguages() {
       return ['ruby', 'python'];
