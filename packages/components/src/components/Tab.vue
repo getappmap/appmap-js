@@ -51,6 +51,5 @@ export default {
 
 .tab-content.tab-content-scroll {
   overflow: auto;
-  padding-bottom: 2rem;
 }
 </style>
