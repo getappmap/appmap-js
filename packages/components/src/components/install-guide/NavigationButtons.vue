@@ -9,7 +9,7 @@
     />
     <v-button
       c
-      kind="ghost"
+      :kind="nextButtonType"
       label="Next"
       data-cy="next-button"
       @click.native="$root.$emit('page-next')"
@@ -35,6 +35,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    complete: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
@@ -43,6 +47,9 @@ export default {
         buttons: true,
         'buttons--right': this.first,
       };
+    },
+    nextButtonType() {
+      return this.complete ? 'primary' : 'ghost';
     },
   },
 };

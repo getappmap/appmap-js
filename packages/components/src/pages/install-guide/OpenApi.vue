@@ -57,7 +57,7 @@
           AppMap was unable to detect any HTTP request handlers in your application.
         </article>
       </main>
-      <v-navigation-buttons :first="first" :last="last" />
+      <v-navigation-buttons :first="first" :last="last" :complete="complete" />
     </section>
   </v-quickstart-layout>
 </template>

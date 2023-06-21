@@ -44,6 +44,7 @@
               :theme="theme"
               :web-framework="webFrameworkSupported ? webFramework : undefined"
               :test-framework="testFrameworkSupported ? testFramework : undefined"
+              :complete="complete"
             />
           </template>
           <template v-else-if="isPython">
@@ -51,6 +52,7 @@
               :theme="theme"
               :web-framework="webFrameworkSupported ? webFramework : undefined"
               :test-framework="testFrameworkSupported ? testFramework : undefined"
+              :complete="complete"
             />
           </template>
           <template v-else>
@@ -61,17 +63,9 @@
               </a>
             </p>
           </template>
-
-          <v-pending
-            class="mb20 status-message"
-            :is-pending="!complete"
-            :message="pendingMessage"
-            v-if="showPendingState"
-            data-cy="status-message"
-          />
         </article>
       </main>
-      <v-navigation-buttons :first="first" :last="last" />
+      <v-navigation-buttons :first="first" :last="last" :complete="complete" />
     </section>
   </QuickstartLayout>
 </template>
@@ -84,7 +78,6 @@ import VRecordInstructions_Ruby from '@/components/install-guide/record-instruct
 import VRecordInstructions_Python from '@/components/install-guide/record-instructions/Python.vue';
 import VRecordInstructions_Java from '@/components/install-guide/record-instructions/Java.vue';
 import Navigation from '@/components/mixins/navigation';
-import VPending from '@/components/Pending.vue';
 import VRunConfigDark from '@/assets/jetbrains_run_config_execute_dark.svg';
 import VRunConfigLight from '@/assets/jetbrains_run_config_execute.svg';
 import VStatus from '@/components/install-guide/Status.vue';
@@ -103,7 +96,6 @@ export default {
     VRecordInstructions_Ruby,
     VRecordInstructions_Python,
     VRecordInstructions_Java,
-    VPending,
     VRunConfigDark,
     VRunConfigLight,
     VStatus,

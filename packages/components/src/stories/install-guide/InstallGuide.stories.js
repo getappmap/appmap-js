@@ -5,6 +5,21 @@ export default {
   title: 'Pages/VS Code',
   component: InstallGuide,
   args: {
+    editor: 'vscode',
+    appMapsDir: 'tmp/appmap',
+  },
+  argTypes: {
+    currentStep: {
+      control: { type: 'range', min: 0, max: InstructionStep.NumSteps },
+      defaultValue: 0,
+    },
+  },
+};
+
+export const installGuide = (args, { argTypes }) => ({
+  props: Object.keys(argTypes).filter((key) => key !== 'projects'),
+  components: { InstallGuide },
+  data: () => ({
     projects: [
       {
         name: 'TestApp',
@@ -27,7 +42,7 @@ export default {
         name: 'DjangoTest',
         score: 2,
         path: '/home/user/django_test',
-        agentInstalled: true,
+        agentInstalled: false,
         appMapsRecorded: true,
         language: {
           name: 'Python',
@@ -64,17 +79,12 @@ export default {
     ],
     editor: 'vscode',
     appMapsDir: 'tmp/appmap',
+  }),
+  template: '<InstallGuide v-bind="$props" :projects="projects" />',
+  mounted() {
+    this.$root.$on('perform-install', (path) => {
+      const project = this.projects.find((p) => p.path === path);
+      if (project) project.agentInstalled = true;
+    });
   },
-  argTypes: {
-    currentStep: {
-      control: { type: 'range', min: 0, max: InstructionStep.NumSteps },
-      defaultValue: 0,
-    },
-  },
-};
-
-export const installGuide = (args, { argTypes }) => ({
-  props: Object.keys(argTypes),
-  components: { InstallGuide },
-  template: '<InstallGuide v-bind="$props" />',
 });
