@@ -56,7 +56,7 @@ export default {
       }
     },
     class_() {
-      return ['flamegraph-common', 'flamegraph-item', `flamegraph-item-${this.eventType}`];
+      return ['flamegraph-item', `flamegraph-item-${this.eventType}`];
     },
     style() {
       return {
@@ -84,14 +84,19 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/scss/flamegraph.scss';
-
 $sql-color: #9c2fba;
 $http-color: #542168;
 $default-color: #4362b1;
 $text-color: #e3e5e8;
 
 .flamegraph-item {
+  text-align: left;
+  font-family: 'IBM Plex Mono', monospace;
+  border-style: solid;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: $text-color;
   cursor: pointer;
   transition: all 1s linear;

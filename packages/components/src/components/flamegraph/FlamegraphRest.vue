@@ -1,5 +1,5 @@
 <template>
-  <div class="flamegraph-common flamegraph-rest" :style="style"></div>
+  <div class="flamegraph-rest" :style="style"></div>
 </template>
 
 <script>
@@ -25,7 +25,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/scss/flamegraph.scss';
 $color: #ebdf90;
 
 .flamegraph-rest {
