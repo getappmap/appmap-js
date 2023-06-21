@@ -26,9 +26,11 @@ export default {
 
 <style scoped lang="scss">
 @import '@/scss/flamegraph.scss';
+$color: #ebdf90;
+
 .flamegraph-rest {
-  background: #ebdf90;
-  border-color: #beaf4e;
+  background: $color;
+  border-color: darken($color, 10%);
   transition: all 1s ease;
 }
 </style>

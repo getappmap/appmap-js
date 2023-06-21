@@ -35,21 +35,23 @@ export default {
 </script>
 
 <style scoped lang="scss">
+$background-color: #6fddd6;
+$text-color: #010306;
 .flamegraph-root {
   font-family: 'IBM Plex Mono', monospace;
-  border: 1px solid #681f7c;
+  border: 1px solid darken($background-color, 10%);
   box-sizing: border-box;
   padding: 10px;
   font-size: 12px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  background: #9c2fba;
-  color: #eaeaea;
+  background: $background-color;
+  color: $text-color;
   cursor: pointer;
   transition: all 1s linear;
   &:hover {
-    color: #ffffff;
+    color: lighten($text-color, 20%);
   }
 }
 </style>
