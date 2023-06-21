@@ -75,7 +75,11 @@ export default {
   },
   computed: {
     budget() {
-      return 460 + this.zoom * 1000;
+      // Exponential budget:
+      // - {zoom = 0, budget = 480}
+      // - {zoom = 1/2, budget = 980}
+      // - {zoom = 1, budget = 1960}
+      return 480 * 2 ** (2 * this.zoom);
     },
     selection() {
       return this.selectedEvents.length > 0;
