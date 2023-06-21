@@ -5,14 +5,10 @@
       :events="events"
       :budget="budget"
       :focus="focus"
-      @selectEvent="propagateSelectEvent"
-      @hoverEvent="handleHoverEvent"
+      @select="propagateSelect"
+      @hover="onHover"
     ></v-flamegraph-branch>
-    <v-flamegraph-root
-      :budget="budget"
-      :title="title"
-      @clearSelectEvent="propagateClearSelectEvent"
-    ></v-flamegraph-root>
+    <v-flamegraph-root :budget="budget" :title="title" @clear="propagateClear"></v-flamegraph-root>
     <v-flamegraph-hover :event="hoverEvent" />
     <v-slider :value="zoom" @slide="updateZoom" />
   </div>
@@ -25,7 +21,7 @@ import VFlamegraphHover from '@/components/flamegraph/FlamegraphHover.vue';
 import VSlider from '@/components/Slider.vue';
 export default {
   name: 'v-diagram-flamegraph',
-  emits: ['selectEvent', 'clearSelectEvent'],
+  emits: ['select', 'clear'],
   components: {
     VFlamegraphBranch,
     VFlamegraphRoot,
@@ -50,12 +46,12 @@ export default {
     return { zoom: 0.5, hoverEvent: null };
   },
   methods: {
-    handleHoverEvent({ type, event }) {
+    onHover({ type, target }) {
       if (type === 'enter') {
-        this.hoverEvent = event;
+        this.hoverEvent = target;
       } else if (type === 'leave') {
         // Protects against against the case where the enter event is fired before the leave event.
-        if (this.hoverEvent === event) {
+        if (this.hoverEvent === target) {
           this.hoverEvent = null;
         }
       } else {
@@ -65,11 +61,11 @@ export default {
     updateZoom(zoom) {
       this.zoom = zoom;
     },
-    propagateSelectEvent(event) {
-      this.$emit('selectEvent', event);
+    propagateSelect(target) {
+      this.$emit('select', target);
     },
-    propagateClearSelectEvent() {
-      this.$emit('clearSelectEvent');
+    propagateClear() {
+      this.$emit('clear');
     },
   },
   computed: {

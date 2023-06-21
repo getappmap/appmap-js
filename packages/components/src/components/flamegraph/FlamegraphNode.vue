@@ -5,15 +5,15 @@
       :events="children"
       :budget="childrenBudget"
       :focus="childrenFocus"
-      @selectEvent="propagateSelectEvent"
-      @hoverEvent="propagateHoverEvent"
+      @select="propagateSelect"
+      @hover="propagateHover"
     />
     <v-flamegraph-item
       :event="event"
       :budget="budget"
       :focused="focused"
-      @selectEvent="propagateSelectEvent"
-      @hoverEvent="propagateHoverEvent"
+      @select="propagateSelect"
+      @hover="propagateHover"
     />
   </div>
 </template>
@@ -25,7 +25,7 @@ import VFlamegraphItem from './FlamegraphItem.vue';
 import { add, getEventDuration } from '../../lib/flamegraph';
 export default {
   name: 'v-flamegraph-node',
-  emits: ['selectEvent', 'hoverEvent'],
+  emits: ['select', 'hover'],
   components: {
     VFlamegraphBranch,
     VFlamegraphItem,
@@ -47,11 +47,11 @@ export default {
     },
   },
   methods: {
-    propagateSelectEvent(event) {
-      this.$emit('selectEvent', event);
+    propagateSelect(target) {
+      this.$emit('select', target);
     },
-    propagateHoverEvent(event) {
-      this.$emit('hoverEvent', event);
+    propagateHover(event) {
+      this.$emit('hover', event);
     },
   },
   computed: {

@@ -6,8 +6,8 @@
       :event="event"
       :budget="budget"
       :focus="focus"
-      @selectEvent="propagateSelectEvent"
-      @hoverEvent="propagateHoverEvent"
+      @select="propagateSelect"
+      @hover="propagateHover"
     />
     <v-flamegraph-rest :budget="rest" />
   </div>
@@ -20,7 +20,7 @@ const getBudget = ({ budget }) => budget;
 const empty = new Set();
 export default {
   name: 'v-flamegraph-branch',
-  emits: ['selectEvent', 'hoverEvent'],
+  emits: ['select', 'hover'],
   components: {
     VFlamegraphNode: async () => (await import('./FlamegraphNode.vue')).default,
     VFlamegraphRest,
@@ -116,11 +116,11 @@ export default {
     },
   },
   methods: {
-    propagateSelectEvent(event) {
-      this.$emit('selectEvent', event);
+    propagateSelect(target) {
+      this.$emit('select', target);
     },
-    propagateHoverEvent(event) {
-      this.$emit('hoverEvent', event);
+    propagateHover(event) {
+      this.$emit('hover', event);
     },
   },
 };

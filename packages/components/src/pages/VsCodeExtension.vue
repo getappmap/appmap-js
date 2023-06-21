@@ -125,8 +125,8 @@
             :events="filteredAppMap.rootEvents()"
             :selected-events="selectedEvent"
             :title="filteredAppMap.name"
-            @selectEvent="onClickTraceEvent"
-            @clearSelectEvent="clearSelection"
+            @select="onClickTraceEvent"
+            @clear="clearSelection"
           />
         </v-tab>
 
