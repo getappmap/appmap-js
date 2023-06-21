@@ -28,6 +28,7 @@ export default {
 $color: #ebdf90;
 
 .flamegraph-rest {
+  opacity: 0.2;
   background: $color;
   border-color: darken($color, 10%);
   transition: all 1s ease;
