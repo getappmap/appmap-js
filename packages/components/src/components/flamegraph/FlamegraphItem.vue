@@ -1,7 +1,7 @@
 <template>
   <div
     ref="inner"
-    class="flamegraph-common flamegraph-item"
+    :class="class_"
     :style="style"
     @click="onClick"
     @mouseenter="onEnter"
@@ -41,11 +41,27 @@ export default {
     },
   },
   computed: {
+    eventType() {
+      if (this.event.sql) {
+        return 'sql';
+      } else if (
+        this.event.httpClientRequest ||
+        this.event.httpClientResponse ||
+        this.event.httpServerRequest ||
+        this.event.httpServerResponse
+      ) {
+        return 'http';
+      } else {
+        return 'default';
+      }
+    },
+    class_() {
+      return ['flamegraph-common', 'flamegraph-item', `flamegraph-item-${this.eventType}`];
+    },
     style() {
       return {
         ...styleDimension({ width: this.budget, height: HEIGHT }, options),
-        'border-color': this.focused ? '#ff07aa' : '#6FDDD6',
-        // 'border-color': this.focused ? '#ff07aa' : '#010306',
+        ...(this.focused ? { 'border-color': '#ff07aa' } : {}),
         'font-size': `${FONT_SIZE}px`,
       };
     },
@@ -69,13 +85,33 @@ export default {
 
 <style scoped lang="scss">
 @import '@/scss/flamegraph.scss';
+
+$sql-color: #9c2fba;
+$http-color: #542168;
+$default-color: #4362b1;
+$text-color: #e3e5e8;
+
 .flamegraph-item {
-  background: #4362b1;
-  color: #eaeaea;
+  color: $text-color;
   cursor: pointer;
   transition: all 1s linear;
   &:hover {
-    color: #fc8cd5;
+    color: darken($text-color, 20%);
   }
+}
+
+.flamegraph-item-sql {
+  background-color: $sql-color;
+  border-color: darken($sql-color, 10%);
+}
+
+.flamegraph-item-http {
+  background-color: $http-color;
+  border-color: darken($http-color, 10%);
+}
+
+.flamegraph-item-default {
+  background-color: $default-color;
+  border-color: darken($default-color, 10%);
 }
 </style>
