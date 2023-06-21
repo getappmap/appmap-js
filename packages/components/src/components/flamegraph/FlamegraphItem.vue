@@ -19,6 +19,8 @@ import {
   FONT_SIZE,
   HEIGHT,
   styleDimension,
+  printDuration,
+  getEventDuration,
 } from '../../lib/flamegraph';
 import { Event } from '@appland/models';
 const options = { padding: PADDING, border: BORDER };
@@ -66,7 +68,16 @@ export default {
       };
     },
     content() {
-      return this.budget < CONTENT_THRESHOLD ? '' : this.event.toString();
+      if (this.budget < CONTENT_THRESHOLD) {
+        return '';
+      } else {
+        const duration = getEventDuration(this.event);
+        if (duration > 0) {
+          return `[${printDuration(duration, 3)}] ${this.event.toString()}`;
+        } else {
+          return this.event.toString();
+        }
+      }
     },
   },
   methods: {

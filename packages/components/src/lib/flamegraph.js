@@ -44,6 +44,24 @@ export const styleDimension = ({ width, height }, { border, padding }) => {
   };
 };
 
+/////////////
+// Display //
+/////////////
+
+export const printDuration = (duration, precision) => {
+  if (duration === 0) {
+    return '0 s';
+  } else if (duration >= 1) {
+    return `${duration.toPrecision(precision)} s`;
+  } else if (duration >= 1e-3) {
+    return `${(1e3 * duration).toPrecision(precision)} ms`;
+  } else if (duration >= 1e-6) {
+    return `${(1e6 * duration).toPrecision(precision)} µs`;
+  } else {
+    return `${(1e9 * duration).toPrecision(precision)} ns`;
+  }
+};
+
 // This was the original implementation of budgeting. It was inlined into the flamegraph components
 // to improve performance by letting vue not recomputing needless stuff on property change.
 

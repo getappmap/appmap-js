@@ -1,4 +1,9 @@
-import { isEventDurationValid, getEventDuration, styleDimension } from '@/lib/flamegraph.js';
+import {
+  isEventDurationValid,
+  getEventDuration,
+  styleDimension,
+  printDuration,
+} from '@/lib/flamegraph.js';
 
 describe('isEventDurationValid', () => {
   it('returns true for event with positive duration', () => {
@@ -61,5 +66,23 @@ describe('styleDimension', () => {
       'border-top-width': '2px',
       'border-bottom-width': '2px',
     });
+  });
+});
+
+describe('printDuration', () => {
+  it('prints 0 s for 0', () => {
+    expect(printDuration(0, 2)).toBe('0 s');
+  });
+  it('prints in second if >= 1', () => {
+    expect(printDuration(1.2345, 2)).toBe('1.2 s');
+  });
+  it('prints in millisecond if >= 1e-3', () => {
+    expect(printDuration(0.0012345, 2)).toBe('1.2 ms');
+  });
+  it('prints in microsecond if >= 1e-6', () => {
+    expect(printDuration(0.0000012345, 2)).toBe('1.2 µs');
+  });
+  it('prints in nanosecond if < 1e-6 ', () => {
+    expect(printDuration(0.0000000012345, 2)).toBe('1.2 ns');
   });
 });
