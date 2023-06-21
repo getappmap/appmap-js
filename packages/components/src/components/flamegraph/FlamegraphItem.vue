@@ -37,9 +37,10 @@ export default {
       type: Number,
       required: true,
     },
-    focused: {
-      type: Boolean,
-      default: false,
+    status: {
+      type: String,
+      required: true,
+      validator: (value) => ['trunc', 'crown', 'branch'].includes(value),
     },
   },
   computed: {
@@ -58,12 +59,15 @@ export default {
       }
     },
     class_() {
-      return ['flamegraph-item', `flamegraph-item-${this.eventType}`];
+      return [
+        'flamegraph-item',
+        `flamegraph-item-${this.eventType}`,
+        `flamegraph-item-${this.status}`,
+      ];
     },
     style() {
       return {
         ...styleDimension({ width: this.budget, height: HEIGHT }, options),
-        ...(this.focused ? { 'border-color': '#ff07aa' } : {}),
         'font-size': `${FONT_SIZE}px`,
       };
     },
@@ -95,11 +99,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$sql-color: #9c2fba;
-$http-color: #542168;
-$default-color: #4362b1;
 $text-color: #e3e5e8;
-
 .flamegraph-item {
   text-align: left;
   font-family: 'IBM Plex Mono', monospace;
@@ -116,6 +116,14 @@ $text-color: #e3e5e8;
   }
 }
 
+//////////
+// type //
+//////////
+
+$sql-color: #9c2fba;
+$http-color: #542168;
+$default-color: #4362b1;
+
 .flamegraph-item-sql {
   background-color: $sql-color;
   border-color: darken($sql-color, 10%);
@@ -129,5 +137,17 @@ $text-color: #e3e5e8;
 .flamegraph-item-default {
   background-color: $default-color;
   border-color: darken($default-color, 10%);
+}
+
+////////////
+// status //
+////////////
+
+.flamegraph-item-crown {
+  border-color: #ff07aa;
+}
+
+.flamegraph-item-trunc {
+  opacity: 0.5;
 }
 </style>

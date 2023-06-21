@@ -13,6 +13,10 @@ export default {
       type: Number,
       required: true,
     },
+    selection: {
+      type: Boolean,
+      required: true,
+    },
     title: {
       type: String,
       default: 'root',
@@ -28,7 +32,10 @@ export default {
       return typeof this.title === 'string' ? this.title : 'root';
     },
     style() {
-      return { width: `${this.budget}px` };
+      return {
+        width: `${this.budget}px`,
+        opacity: this.selection ? '0.5' : '1',
+      };
     },
   },
 };

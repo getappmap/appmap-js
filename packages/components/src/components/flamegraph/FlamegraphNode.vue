@@ -11,7 +11,7 @@
     <v-flamegraph-item
       :event="event"
       :budget="budget"
-      :focused="focused"
+      :status="status"
       @select="propagateSelect"
       @hover="propagateHover"
     />
@@ -61,8 +61,16 @@ export default {
     areChildrenVisible() {
       return this.event.children.length > 0;
     },
-    focused() {
-      return this.event === this.focus;
+    status() {
+      if (this.focus) {
+        if (this.event === this.focus) {
+          return 'crown';
+        } else {
+          return 'trunc';
+        }
+      } else {
+        return 'branch';
+      }
     },
     childrenFocus() {
       return this.event === this.focus ? null : this.focus;
