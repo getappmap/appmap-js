@@ -27,10 +27,15 @@
       </div>
     </section>
 
-    <section>
-      A default configuration file, <code class="inline">appmap.yml</code>, will be created the
-      first time you run your application with AppMap enabled.
-    </section>
+    <p>
+      Finally, run the following script to automatically create an
+      <code class="inline">appmap.yml</code> configuration file. This configuration will also be
+      created the first time your application is run.
+    </p>
+    <v-code-snippet
+      clipboard-text="python ~/.appmap/bin/validate_install.py"
+      :kind="ctaButtonType"
+    />
   </div>
 </template>
 
