@@ -1214,6 +1214,29 @@ export default {
 </script>
 
 <style lang="scss">
+// This is not be the best place to declare font-face.
+// The best options would be something like:
+//
+// import Vue from 'vue';
+// import App from './App.vue';
+// import './assets/scss/fonts.scss';
+// new Vue({
+//   render: (h) => h(App),
+// }).$mount('#app');
+//
+// But I don't think it is possible with the current setup.
+// And we do not want to add font-face declaration in scss/vue.scss.
+// It will cause the font-face to be redeclared in each component.
+// Finally, we can redeclare font-face in components on need-basis.
+// But that leads to a lot of repetition. I still prefer this.
+// I aslo tried to declare font-face in a separate file.
+// But scss does not update url(...) when the file is imported.
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: local('IBM Plex Mono'),
+    url(../assets/fonts/IBM_Plex_Mono/IBMPlexMono-Regular.ttf) format('truetype');
+}
+
 html,
 body {
   width: 100%;
