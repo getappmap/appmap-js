@@ -24,7 +24,7 @@ import { Event } from '@appland/models';
 const options = { padding: PADDING, border: BORDER };
 export default {
   name: 'v-flamegraph-item',
-  emits: ['selectEvent', 'hoverEvent'],
+  emits: ['select', 'hover'],
   props: {
     event: {
       type: Object,
@@ -71,13 +71,13 @@ export default {
   },
   methods: {
     onClick() {
-      this.$emit('selectEvent', this.event);
+      this.$emit('select', this.event);
     },
     onEnter() {
-      this.$emit('hoverEvent', { type: 'enter', event: this.event });
+      this.$emit('hover', { type: 'enter', target: this.event });
     },
     onLeave() {
-      this.$emit('hoverEvent', { type: 'leave', event: this.event });
+      this.$emit('hover', { type: 'leave', target: this.event });
     },
   },
 };

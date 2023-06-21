@@ -1,5 +1,5 @@
 <template>
-  <div class="flamegraph-root" @click="clearSelectEvent" :style="style">
+  <div class="flamegraph-root" @click="onClick" :style="style">
     {{ sanitizedTitle }}
   </div>
 </template>
@@ -7,7 +7,7 @@
 <script>
 export default {
   name: 'v-flamegraph-root',
-  emits: ['clearSelectEvent'],
+  emits: ['clear'],
   props: {
     budget: {
       type: Number,
@@ -19,8 +19,8 @@ export default {
     },
   },
   methods: {
-    clearSelectEvent() {
-      this.$emit('clearSelectEvent');
+    onClick() {
+      this.$emit('clear');
     },
   },
   computed: {
