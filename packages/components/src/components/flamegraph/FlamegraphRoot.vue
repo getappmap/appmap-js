@@ -1,12 +1,10 @@
 <template>
-  <div class="flamegraph-common flamegraph-root" :style="style" @click="clearSelectEvent">
+  <div class="flamegraph-root" @click="clearSelectEvent" :style="style">
     {{ sanitizedTitle }}
   </div>
 </template>
 
 <script>
-import { BORDER, PADDING, HEIGHT, FONT_SIZE, styleDimension } from '../../lib/flamegraph';
-const options = { padding: PADDING, border: BORDER };
 export default {
   name: 'v-flamegraph-root',
   emits: ['clearSelectEvent'],
@@ -30,23 +28,26 @@ export default {
       return typeof this.title === 'string' ? this.title : 'root';
     },
     style() {
-      return {
-        ...styleDimension({ width: this.budget, height: HEIGHT }, options),
-        'font-size': `${FONT_SIZE}px`,
-      };
+      return { width: `${this.budget}px` };
     },
   },
 };
 </script>
 
 <style scoped lang="scss">
-@import '@/scss/flamegraph.scss';
 .flamegraph-root {
+  font-family: 'IBM Plex Mono', monospace;
+  border: 1px solid #681f7c;
+  box-sizing: border-box;
+  padding: 10px;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   background: #9c2fba;
   color: #eaeaea;
-  border-color: #681f7c;
   cursor: pointer;
-  transition: all 1s ease;
+  transition: all 1s linear;
   &:hover {
     color: #ffffff;
   }
