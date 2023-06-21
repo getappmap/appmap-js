@@ -13,15 +13,16 @@
       </div>
     </span>
     <v-popper placement="top" ref="popper">
-      <button
+      <v-button
         class="code-snippet__btn"
         type="button"
+        :kind="kind"
         data-cy="code-snippet-button"
-        @click="copyToClipboard"
+        @click.prevent="copyToClipboard"
         :disabled="!hasClipboardAPI"
       >
         <ClipboardIcon class="code-snippet__btn-icon" />
-      </button>
+      </v-button>
     </v-popper>
   </div>
 </template>
@@ -29,12 +30,14 @@
 <script>
 import ClipboardIcon from '@/assets/clipboard.svg';
 import VPopper from './Popper.vue';
+import VButton from '@/components/Button.vue';
 
 export default {
   name: 'VCodeSnippet',
   components: {
     ClipboardIcon,
     VPopper,
+    VButton,
   },
   props: {
     clipboardText: {
@@ -46,6 +49,12 @@ export default {
       type: String,
       required: false,
       default: 'Copied to clipboard!',
+    },
+    kind: {
+      type: String,
+      required: false,
+      default: 'primary',
+      validator: (value) => ['primary', 'secondary', 'ghost'].includes(value),
     },
   },
   data() {
@@ -115,10 +124,7 @@ export default {
     height: 100%;
     padding: 0 1rem;
     margin: 0;
-    border: none;
     border-radius: 0 6px 6px 0;
-    color: #fff;
-    background-color: $powderblue;
     opacity: 1;
     outline: none;
     appearance: none;
@@ -128,14 +134,6 @@ export default {
     &[disabled] {
       opacity: 0.5;
       pointer-events: none;
-    }
-
-    &:hover {
-      opacity: 0.5;
-    }
-
-    &:active {
-      color: rgba(255, 255, 255, 0.65);
     }
 
     &-icon {

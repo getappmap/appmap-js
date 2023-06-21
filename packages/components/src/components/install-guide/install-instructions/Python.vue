@@ -15,15 +15,15 @@
     <section>
       <h3>Add the <code class="inline">appmap</code> package to your project</h3>
       <div>
-        <v-code-snippet clipboard-text="pip install appmap" />
+        <v-code-snippet clipboard-text="pip install appmap" :kind="ctaButtonType" />
       </div>
       <div>
         <div class="center-block">or</div>
-        <v-code-snippet clipboard-text="pipenv install --dev appmap" />
+        <v-code-snippet clipboard-text="pipenv install --dev appmap" :kind="ctaButtonType" />
       </div>
       <div>
         <div class="center-block">or</div>
-        <v-code-snippet clipboard-text="poetry add --dev appmap" />
+        <v-code-snippet clipboard-text="poetry add --dev appmap" :kind="ctaButtonType" />
       </div>
     </section>
 
@@ -40,8 +40,10 @@ import VCodeSnippet from '@/components/CodeSnippet.vue';
 export default {
   name: 'Python',
   components: { VCodeSnippet },
+  props: { ctaButtonType: { type: String, default: 'primary' } },
 };
 </script>
+
 <style lang="scss" scoped>
 .center-block {
   display: flex;

@@ -21,7 +21,7 @@
         </p>
         <template class="recording-method" v-if="testFramework.name.toLowerCase() == 'pytest'">
           Run Pytest tests:
-          <v-code-snippet clipboard-text="pytest" />
+          <v-code-snippet clipboard-text="pytest" :kind="codeSnippetType" />
         </template>
         <p>
           For more information, visit
@@ -47,11 +47,11 @@
         <br />
         <p>
           Start your Django server:
-          <v-code-snippet clipboard-text="python manage.py runserver" />
+          <v-code-snippet clipboard-text="python manage.py runserver" :kind="codeSnippetType" />
         </p>
         <p>
           Start your Flask server:
-          <v-code-snippet clipboard-text="flask run" />
+          <v-code-snippet clipboard-text="flask run" :kind="codeSnippetType" />
         </p>
         <br />
         <p>
@@ -100,12 +100,6 @@ import VWebFrameworkPrompt from './WebFrameworkPrompt.vue';
 export default {
   name: 'Python',
 
-  props: {
-    webFramework: Object,
-    testFramework: Object,
-    theme: String,
-  },
-
   components: {
     VCodeSnippet,
     VTestsPrompt,
@@ -115,6 +109,17 @@ export default {
     RequestsIcon,
   },
 
-  computed: {},
+  props: {
+    webFramework: Object,
+    testFramework: Object,
+    theme: String,
+    complete: Boolean,
+  },
+
+  computed: {
+    codeSnippetType() {
+      return this.complete ? 'ghost' : 'primary';
+    },
+  },
 };
 </script>
