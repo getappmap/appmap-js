@@ -39,7 +39,7 @@ const DependencyFolders = ['vendor', 'node_modules'];
 class DeclutterExternalPathsProperty extends DeclutterProperty {
   dependencyFolders = DependencyFolders;
 
-  constructor(on = false, defaultValue = false, dependencyFolders = DependencyFolders) {
+  constructor(on = true, defaultValue = true, dependencyFolders = DependencyFolders) {
     super(on, defaultValue);
 
     this.dependencyFolders = dependencyFolders || DependencyFolders;
