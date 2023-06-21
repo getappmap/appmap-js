@@ -8,7 +8,12 @@
       @select="propagateSelect"
       @hover="onHover"
     ></v-flamegraph-branch>
-    <v-flamegraph-root :budget="budget" :title="title" @clear="propagateClear"></v-flamegraph-root>
+    <v-flamegraph-root
+      :budget="budget"
+      :title="title"
+      :selection="selection"
+      @clear="propagateClear"
+    ></v-flamegraph-root>
     <v-flamegraph-hover :event="hoverEvent" />
     <v-slider :value="zoom" @slide="updateZoom" />
   </div>
@@ -71,6 +76,9 @@ export default {
   computed: {
     budget() {
       return 460 + this.zoom * 1000;
+    },
+    selection() {
+      return this.selectedEvents.length > 0;
     },
     focus() {
       if (this.selectedEvents.length === 0) {
