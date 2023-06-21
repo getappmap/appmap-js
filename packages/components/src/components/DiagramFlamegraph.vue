@@ -92,9 +92,10 @@ export default {
 
 <style scoped lang="scss">
 .diagram-flamegraph {
-  height: 100%;
-  overflow: scroll;
-  padding: 20px 20px 20px 20px;
+  width: fit-content;
+  min-height: 100%;
+  height: fit-content;
+  padding: 20px;
   margin: 0px;
   box-sizing: border-box;
   display: flex;
