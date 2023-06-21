@@ -186,12 +186,6 @@ export default {
 $min-width: 175px; // See: CallLabel .label wax-width
 $min-height: 3rem;
 
-@font-face {
-  font-family: 'IBM Plex Mono';
-  src: local('IBM Plex Mono'),
-    url(../../assets/fonts/IBM_Plex_Mono/IBMPlexMono-Regular.ttf) format('truetype');
-}
-
 .offset {
   position: relative;
   height: 100%;
