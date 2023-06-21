@@ -6,19 +6,22 @@
       :budget="budget"
       :focus="focus"
       @selectEvent="propagateSelectEvent"
+      @hoverEvent="handleHoverEvent"
     ></v-flamegraph-branch>
     <v-flamegraph-root
       :budget="budget"
       :title="title"
       @clearSelectEvent="propagateClearSelectEvent"
     ></v-flamegraph-root>
-    <v-slider :value="this.zoom" @slide="updateZoom" />
+    <v-flamegraph-hover :event="hoverEvent" />
+    <v-slider :value="zoom" @slide="updateZoom" />
   </div>
 </template>
 
 <script>
 import VFlamegraphBranch from '@/components/flamegraph/FlamegraphBranch.vue';
 import VFlamegraphRoot from '@/components/flamegraph/FlamegraphRoot.vue';
+import VFlamegraphHover from '@/components/flamegraph/FlamegraphHover.vue';
 import VSlider from '@/components/Slider.vue';
 export default {
   name: 'v-diagram-flamegraph',
@@ -26,6 +29,7 @@ export default {
   components: {
     VFlamegraphBranch,
     VFlamegraphRoot,
+    VFlamegraphHover,
     VSlider,
   },
   props: {
@@ -43,9 +47,21 @@ export default {
     },
   },
   data() {
-    return { zoom: 0.5 };
+    return { zoom: 0.5, hoverEvent: null };
   },
   methods: {
+    handleHoverEvent({ type, event }) {
+      if (type === 'enter') {
+        this.hoverEvent = event;
+      } else if (type === 'leave') {
+        // Protects against against the case where the enter event is fired before the leave event.
+        if (this.hoverEvent === event) {
+          this.hoverEvent = null;
+        }
+      } else {
+        console.warn('Unknown hover event type');
+      }
+    },
     updateZoom(zoom) {
       this.zoom = zoom;
     },

@@ -1,9 +1,14 @@
 <template>
-  <v-popper :placement="'bottom'" :text="popperContent" class="flamegraph-popper">
-    <div ref="inner" class="flamegraph-common flamegraph-item" :style="style" @click="selectEvent">
-      {{ content }}
-    </div>
-  </v-popper>
+  <div
+    ref="inner"
+    class="flamegraph-common flamegraph-item"
+    :style="style"
+    @click="onClick"
+    @mouseenter="onEnter"
+    @mouseleave="onLeave"
+  >
+    {{ content }}
+  </div>
 </template>
 
 <script>
@@ -16,14 +21,10 @@ import {
   styleDimension,
 } from '../../lib/flamegraph';
 import { Event } from '@appland/models';
-import VPopper from '@/components/Popper.vue';
 const options = { padding: PADDING, border: BORDER };
 export default {
   name: 'v-flamegraph-item',
-  emits: ['selectEvent'],
-  components: {
-    VPopper,
-  },
+  emits: ['selectEvent', 'hoverEvent'],
   props: {
     event: {
       type: Object,
@@ -40,10 +41,6 @@ export default {
     },
   },
   computed: {
-    // hasOverflow() {
-    //   // Not sure why this.$refs is empty here...
-    //   return this.$refs.inner.scrollWidth > this.$refs.inner.clientWidth;
-    // },
     style() {
       return {
         ...styleDimension({ width: this.budget, height: HEIGHT }, options),
@@ -52,17 +49,19 @@ export default {
         'font-size': `${FONT_SIZE}px`,
       };
     },
-    popperContent() {
-      return this.event.toString();
-      // return this.hasOverflow ? this.event.toString() : '';
-    },
     content() {
       return this.budget < CONTENT_THRESHOLD ? '' : this.event.toString();
     },
   },
   methods: {
-    selectEvent() {
+    onClick() {
       this.$emit('selectEvent', this.event);
+    },
+    onEnter() {
+      this.$emit('hoverEvent', { type: 'enter', event: this.event });
+    },
+    onLeave() {
+      this.$emit('hoverEvent', { type: 'leave', event: this.event });
     },
   },
 };
