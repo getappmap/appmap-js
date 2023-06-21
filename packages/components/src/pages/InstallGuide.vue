@@ -23,6 +23,7 @@
       :status-states="statusStates"
       :project-name="projectName"
       :num-app-maps="numAppMaps"
+      :complete="hasExplored"
     />
     <v-open-api
       id="openapi"
@@ -30,6 +31,7 @@
       :num-app-maps="numAppMaps"
       :status-states="statusStates"
       :project-name="projectName"
+      :complete="hasGeneratedOpenApi"
     />
     <v-investigate-findings
       id="investigate-findings"
@@ -53,17 +55,19 @@ import VRecordAppMaps from '@/pages/install-guide/RecordAppMaps.vue';
 import VOpenAppMaps from '@/pages/install-guide/OpenAppMaps.vue';
 import VOpenApi from '@/pages/install-guide/OpenApi.vue';
 import VInvestigateFindings from '@/pages/install-guide/InvestigateFindings.vue';
-import { InstructionStep, StepStatus } from '@/components/install-guide/Status.vue';
-
-const boolToStepStatus = (stepComplete, previousStepComplete) => {
-  if (stepComplete) return StepStatus.Completed;
-  if (typeof previousStepComplete === 'boolean' && previousStepComplete)
-    return StepStatus.NotStarted;
-  return StepStatus.InProgress;
-};
+import { StepStatus } from '@/components/install-guide/Status.vue';
 
 export default {
   name: 'install-guide',
+
+  components: {
+    VMultiPage,
+    VProjectPicker,
+    VRecordAppMaps,
+    VInvestigateFindings,
+    VOpenAppMaps,
+    VOpenApi,
+  },
 
   props: {
     disabledPages: {
@@ -118,31 +122,43 @@ export default {
 
   computed: {
     hasFindings() {
-      return this.selectedProject && this.selectedProject.analysisPerformed;
+      return this.selectedProject?.analysisPerformed;
     },
     appMaps() {
-      return (this.selectedProject && this.selectedProject.appMaps) || [];
+      return this.selectedProject?.appMaps || [];
     },
     numFindings() {
-      return this.selectedProject && this.selectedProject.numFindings;
+      return this.selectedProject?.numFindings;
     },
     numAppMaps() {
-      return this.selectedProject && this.selectedProject.numAppMaps;
+      return this.selectedProject?.numAppMaps;
     },
     numHttpRequests() {
-      return this.selectedProject && this.selectedProject.numHttpRequests;
+      return this.selectedProject?.numHttpRequests;
+    },
+    hasInstalled() {
+      return this.selectedProject?.agentInstalled;
     },
     hasRecorded() {
-      return this.selectedProject && this.selectedProject.numAppMaps > 0;
+      return this.selectedProject?.numAppMaps > 0;
+    },
+    hasExplored() {
+      return this.selectedProject?.appMapOpened;
+    },
+    hasGeneratedOpenApi() {
+      return this.selectedProject?.generatedOpenApi;
+    },
+    hasInvestigatedFindings() {
+      return this.selectedProject?.investigatedFindings;
     },
     path() {
-      return this.selectedProject && this.selectedProject.path;
+      return this.selectedProject?.path;
     },
     findingsDomainCounts() {
-      return this.selectedProject && this.selectedProject.findingsDomainCounts;
+      return this.selectedProject?.findingsDomainCounts;
     },
     sampleCodeObjects() {
-      return this.selectedProject && this.selectedProject.sampleCodeObjects;
+      return this.selectedProject?.sampleCodeObjects;
     },
     projectName() {
       return this.selectedProject?.name || '';
@@ -152,11 +168,11 @@ export default {
     },
     statusStates() {
       return [
-        this.selectedProject?.agentInstalled,
+        this.hasInstalled,
         this.hasRecorded,
-        this.selectedProject?.appMapOpened,
-        this.selectedProject?.generatedOpenApi,
-        this.selectedProject?.generatedOpenApi,
+        this.hasExplored,
+        this.hasGeneratedOpenApi,
+        this.hasInvestigatedFindings,
       ].map((stepComplete, index, statuses) => {
         if (stepComplete) return StepStatus.Completed;
 
@@ -166,15 +182,6 @@ export default {
         return StepStatus.NotStarted;
       });
     },
-  },
-
-  components: {
-    VMultiPage,
-    VProjectPicker,
-    VRecordAppMaps,
-    VInvestigateFindings,
-    VOpenAppMaps,
-    VOpenApi,
   },
 
   methods: {

@@ -28,11 +28,14 @@
         <p>
           <template v-if="testFramework.name.toLowerCase() == 'minitest'">
             Run Minitest tests:
-            <v-code-snippet clipboard-text="DISABLE_SPRING=true rails test" />
+            <v-code-snippet
+              clipboard-text="DISABLE_SPRING=true rails test"
+              :kind="codeSnippetType"
+            />
           </template>
           <template v-if="testFramework.name.toLowerCase() == 'rspec'">
             Run Rspec tests:
-            <v-code-snippet clipboard-text="DISABLE_SPRING=true rspec" />
+            <v-code-snippet clipboard-text="DISABLE_SPRING=true rspec" :kind="codeSnippetType" />
           </template>
         </p>
         <p>
@@ -61,7 +64,10 @@
         </p>
         <p>
           Start your Rails server:
-          <v-code-snippet clipboard-text="DISABLE_SPRING=true rails server" />
+          <v-code-snippet
+            clipboard-text="DISABLE_SPRING=true rails server"
+            :kind="codeSnippetType"
+          />
         </p>
         <p>
           Interact with your application, through its user interface and/or by making API requests
@@ -110,12 +116,6 @@ import VWebFrameworkPrompt from './WebFrameworkPrompt.vue';
 export default {
   name: 'Ruby',
 
-  props: {
-    webFramework: Object,
-    testFramework: Object,
-    theme: String,
-  },
-
   components: {
     VCodeSnippet,
     VTestsPrompt,
@@ -125,6 +125,17 @@ export default {
     CodeBlockIcon,
   },
 
-  computed: {},
+  props: {
+    webFramework: Object,
+    testFramework: Object,
+    theme: String,
+    complete: Boolean,
+  },
+
+  computed: {
+    codeSnippetType() {
+      return this.complete ? 'ghost' : 'primary';
+    },
+  },
 };
 </script>

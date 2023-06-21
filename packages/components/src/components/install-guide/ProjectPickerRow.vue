@@ -125,19 +125,19 @@
           </p>
           <div class="page-control-wrap">
             <p></p>
-            <v-navigation-buttons :first="true" :last="!supported" />
+            <v-navigation-buttons :first="true" :last="!supported" :complete="installComplete" />
           </div>
         </template>
         <template v-else>
           <div class="center-block" data-cy="automated-install">
-            <v-button kind="primary" @click.native="performInstall" :timeout="2000">
+            <v-button :kind="installButtonType" @click.native="performInstall" :timeout="2000">
               Run the installer
             </v-button>
           </div>
           <template v-if="manualInstructions">
             <div class="page-control-wrap">
               <p></p>
-              <v-navigation-buttons :first="true" :last="!supported" />
+              <v-navigation-buttons :first="true" :last="!supported" :complete="installComplete" />
             </div>
 
             <div class="separator">OR</div>
@@ -146,12 +146,16 @@
               <h3 class="install-heading">Install AppMap manually</h3>
             </div>
             <p>
-              <component :is="manualInstructions" data-cy="manual-install" /></p
+              <component
+                :is="manualInstructions"
+                data-cy="manual-install"
+                :cta-button-type="installButtonType"
+              /></p
           ></template>
 
           <div class="project-picker-row__nav">
             <p></p>
-            <v-navigation-buttons :first="true" :last="!supported" />
+            <v-navigation-buttons :first="true" :last="!supported" :complete="installComplete" />
           </div>
         </template>
       </template>
@@ -316,6 +320,9 @@ export default {
     },
     runConfigIcon() {
       return this.theme === 'dark' ? VRunConfigDark : VRunConfigLight;
+    },
+    installButtonType() {
+      return this.installComplete ? 'ghost' : 'primary';
     },
   },
   methods: {
