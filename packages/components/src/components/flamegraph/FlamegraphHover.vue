@@ -4,6 +4,7 @@
   </div>
 </template>
 <script>
+import { getEventDuration, isEventDurationValid, printDuration } from '@/lib/flamegraph';
 import { Event } from '@appland/models';
 export default {
   name: 'v-flamegraph-hover',
@@ -16,7 +17,15 @@ export default {
   },
   computed: {
     content() {
-      return this.event ? this.event.toString() : '';
+      if (this.event) {
+        if (isEventDurationValid(this.event)) {
+          return `[${printDuration(getEventDuration(this.event), 6)}] ${this.event.toString()}`;
+        } else {
+          return this.event.toString();
+        }
+      } else {
+        return '';
+      }
     },
   },
 };
