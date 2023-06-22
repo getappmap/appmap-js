@@ -27,7 +27,7 @@ export type ChangeReport = {
   testFailures: TestFailure[];
   newAppMaps: AppMapLink[];
   changedAppMaps: ChangedAppMap[];
-  apiDiff: any;
+  apiDiff?: any;
   findingDiff: Record<'new' & 'resolved', Finding[]>;
   appMapMetadata: {
     base: Record<AppMapName, Metadata>;
