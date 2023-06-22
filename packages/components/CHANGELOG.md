@@ -1,3 +1,21 @@
+# [@appland/components-v2.49.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.48.0...@appland/components-v2.49.0) (2023-06-22)
+
+
+### Bug Fixes
+
+* Allow 'Copied to clipboard!' messages to overflow ([28bb34a](https://github.com/getappmap/appmap-js/commit/28bb34a3da12ff5309f131438835f3bcb84078c2))
+* Move AppMaps to the top of Explore AppMaps ([5b54bff](https://github.com/getappmap/appmap-js/commit/5b54bff2a48d323b53224e2d85738fe4b36ddd67))
+* Only expand projects when clicking headers ([1c3f593](https://github.com/getappmap/appmap-js/commit/1c3f5930cbddd12323b860191af8cef0566bdd03))
+* Record AppMaps displays the total number of AppMaps ([430fbbc](https://github.com/getappmap/appmap-js/commit/430fbbcf512c58613acc918168e41cf63d0830ec))
+
+
+### Features
+
+* Add a status component ([60e35e9](https://github.com/getappmap/appmap-js/commit/60e35e9f0d7ce58e58a76fefd79c6388d052f0db))
+* Integrate the status bar into the instructions ([a54addc](https://github.com/getappmap/appmap-js/commit/a54addc4814d25d68c994e10eb755b6afdf5c425))
+* Re-style the primary button ([e2041f8](https://github.com/getappmap/appmap-js/commit/e2041f892ba0287ebb9e591e0ec425a5f5296ed4))
+* Rework primary actions in instructions ([d8009bd](https://github.com/getappmap/appmap-js/commit/d8009bdafcbc7b8e8a1562b4453ae3a99773700a))
+
 # [@appland/components-v2.48.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.47.0...@appland/components-v2.48.0) (2023-06-17)
 
 
