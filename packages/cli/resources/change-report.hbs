@@ -118,7 +118,9 @@ No relevant code changes found.
 {{{failureMessage}}}
 ```
 
+{{#if failureLocation}}
 The error occurred at [{{failureLocation}}]({{ source_url failureLocation }}):
+{{/if}}
 
 {{#if testSnippet}}
 {{#with testSnippet}}
