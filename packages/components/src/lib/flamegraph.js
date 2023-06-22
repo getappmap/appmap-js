@@ -1,3 +1,5 @@
+import { formatNumberExponential, formatNumberMetric } from './metric';
+
 export const add = (x, y) => x + y;
 
 //////////////
@@ -44,21 +46,23 @@ export const styleDimension = ({ width, height }, { border, padding }) => {
   };
 };
 
-/////////////
-// Display //
-/////////////
+//////////////
+// Duration //
+//////////////
 
-export const printDuration = (duration, precision) => {
-  if (duration === 0) {
-    return '0 s';
-  } else if (duration >= 1) {
-    return `${duration.toPrecision(precision)} s`;
-  } else if (duration >= 1e-3) {
-    return `${(1e3 * duration).toPrecision(precision)} ms`;
-  } else if (duration >= 1e-6) {
-    return `${(1e6 * duration).toPrecision(precision)} µs`;
+export const formatDurationMillisecond = (duration, precision) => {
+  if (duration > 0) {
+    return `${formatNumberExponential(1e3 * duration, precision)} ms`;
   } else {
-    return `${(1e9 * duration).toPrecision(precision)} ns`;
+    return 'unknown';
+  }
+};
+
+export const formatDuration = (duration, precision) => {
+  if (duration > 0) {
+    return `${formatNumberMetric(duration, precision)}s`;
+  } else {
+    return 'unknown';
   }
 };
 

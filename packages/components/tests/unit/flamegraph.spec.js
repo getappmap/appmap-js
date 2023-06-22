@@ -1,8 +1,9 @@
 import {
   isEventDurationValid,
   getEventDuration,
+  formatDurationMillisecond,
+  formatDuration,
   styleDimension,
-  printDuration,
 } from '@/lib/flamegraph.js';
 
 describe('isEventDurationValid', () => {
@@ -31,6 +32,37 @@ describe('getEventDuration', () => {
   });
   it('returns the duration for event with valid duration', () => {
     expect(getEventDuration({ elapsedTime: 123 })).toBe(123);
+  });
+});
+
+describe('formatDurationMillisecond', () => {
+  it('returns "unknown" for invalid duration', () => {
+    expect(formatDurationMillisecond(-123, 2)).toBe('unknown');
+    expect(formatDurationMillisecond(0, 2)).toBe('unknown');
+    expect(formatDurationMillisecond(NaN, 2)).toBe('unknown');
+  });
+  it('returns a decimal format for nearby range', () => {
+    expect(formatDurationMillisecond(1e-3 * 1.234e-3, 2)).toBe('0.0012 ms');
+    expect(formatDurationMillisecond(1e-3 * 1.234, 2)).toBe('1.2 ms');
+    expect(formatDurationMillisecond(1e-3 * 1.234e3, 2)).toBe('1200 ms');
+  });
+  it('returns an exponential format for distant range', () => {
+    expect(formatDurationMillisecond(1e-3 * 1.234e6, 2)).toBe('1.2e6 ms');
+    expect(formatDurationMillisecond(1e-3 * 1.234e-6, 2)).toBe('1.2e-6 ms');
+  });
+});
+
+describe('formatDuration', () => {
+  it('returns "unknown" for invalid duration', () => {
+    expect(formatDuration(-123)).toBe('unknown');
+    expect(formatDuration(0)).toBe('unknown');
+    expect(formatDuration(NaN)).toBe('unknown');
+  });
+  it('returns a metric format', () => {
+    expect(formatDuration(1.234e-6, 2)).toBe('1.2 µs');
+    expect(formatDuration(1.234e-3, 2)).toBe('1.2 ms');
+    expect(formatDuration(1.234, 2)).toBe('1.2 s');
+    expect(formatDuration(1.234e3, 2)).toBe('1.2 ks');
   });
 });
 
@@ -66,23 +98,5 @@ describe('styleDimension', () => {
       'border-top-width': '2px',
       'border-bottom-width': '2px',
     });
-  });
-});
-
-describe('printDuration', () => {
-  it('prints 0 s for 0', () => {
-    expect(printDuration(0, 2)).toBe('0 s');
-  });
-  it('prints in second if >= 1', () => {
-    expect(printDuration(1.2345, 2)).toBe('1.2 s');
-  });
-  it('prints in millisecond if >= 1e-3', () => {
-    expect(printDuration(0.0012345, 2)).toBe('1.2 ms');
-  });
-  it('prints in microsecond if >= 1e-6', () => {
-    expect(printDuration(0.0000012345, 2)).toBe('1.2 µs');
-  });
-  it('prints in nanosecond if < 1e-6 ', () => {
-    expect(printDuration(0.0000000012345, 2)).toBe('1.2 ns');
   });
 });

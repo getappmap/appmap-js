@@ -19,7 +19,7 @@ import {
   FONT_SIZE,
   HEIGHT,
   styleDimension,
-  printDuration,
+  formatDurationMillisecond,
   getEventDuration,
 } from '../../lib/flamegraph';
 import { Event } from '@appland/models';
@@ -77,7 +77,7 @@ export default {
       } else {
         const duration = getEventDuration(this.event);
         if (duration > 0) {
-          return `[${printDuration(duration, 3)}] ${this.event.toString()}`;
+          return `[${formatDurationMillisecond(duration, 3)}] ${this.event.toString()}`;
         } else {
           return this.event.toString();
         }
