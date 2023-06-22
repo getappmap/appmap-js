@@ -45,7 +45,10 @@ export default {
       return this.events.filter(isEventDurationValid);
     },
     totalDuration() {
-      return this.validDurationEventArray.map(getEventDuration).reduce(add, 0);
+      // In the case where the children all have a valid duration of 0,
+      // we use an arbitrary non-zero total to avoid creating NaN by
+      // performing 0/0 while computing the child budgets.
+      return this.validDurationEventArray.map(getEventDuration).reduce(add, 0) || 1;
     },
     ancestors() {
       if (this.focus) {
@@ -83,21 +86,10 @@ export default {
         });
       } else {
         return this.events.map((event) => {
-          if (isEventDurationValid(event)) {
-            return {
-              key: event.id,
-              event,
-              budget: Math.floor(this.validBudget * (getEventDuration(event) / this.totalDuration)),
-              focus: null,
-            };
-          } else {
-            return {
-              key: event.id,
-              event,
-              budget: this.singleInvalidBudget,
-              focus: null,
-            };
-          }
+          const budget = isEventDurationValid(event)
+            ? Math.floor(this.validBudget * (getEventDuration(event) / this.totalDuration))
+            : this.singleInvalidBudget;
+          return { key: event.id, event, budget, focus: null };
         });
       }
     },
