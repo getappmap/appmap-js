@@ -93,19 +93,19 @@ export default class MarkdownReport implements Report {
     };
 
     if (changeReport.apiDiff) {
-      changeReport.apiDiff?.breakingDifferences?.forEach(explainAPIChange);
-      changeReport.apiDiff?.nonBreakingDifferences?.forEach(explainAPIChange);
-      changeReport.apiDiff?.unclassifiedDifferences?.forEach(explainAPIChange);
+      changeReport.apiDiff.breakingDifferences?.forEach(explainAPIChange);
+      changeReport.apiDiff.nonBreakingDifferences?.forEach(explainAPIChange);
+      changeReport.apiDiff.unclassifiedDifferences?.forEach(explainAPIChange);
 
       // Provide a simple count of the number of differences - since Handlebars can't do math.
       changeReport.apiDiff.differenceCount =
-        (changeReport.apiDiff?.breakingDifferences?.length || 0) +
-        (changeReport.apiDiff?.nonBreakingDifferences?.length || 0) +
-        (changeReport.apiDiff?.unclassifiedDifferences?.length || 0);
+        (changeReport.apiDiff.breakingDifferences?.length || 0) +
+        (changeReport.apiDiff.nonBreakingDifferences?.length || 0) +
+        (changeReport.apiDiff.unclassifiedDifferences?.length || 0);
       changeReport.apiDiff.breakingDifferenceCount =
-        changeReport.apiDiff?.breakingDifferences?.length || 0;
+        changeReport.apiDiff.breakingDifferences?.length || 0;
       changeReport.apiDiff.nonBreakingDifferenceCount =
-        changeReport.apiDiff?.nonBreakingDifferences?.length || 0;
+        changeReport.apiDiff.nonBreakingDifferences?.length || 0;
       (changeReport as any).sequenceDiagramDiffSnippetCount = Object.keys(
         changeReport.sequenceDiagramDiff || {}
       ).length;
