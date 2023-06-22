@@ -6,9 +6,10 @@
     class="project-picker-row"
     :open="selected"
     :data-supported="supported"
+    @toggle="$emit('toggle', path)"
   >
     <template #header>
-      <div class="header">
+      <div class="header" data-cy="project-header">
         <div class="header__title">
           {{ name }}
         </div>
@@ -33,7 +34,7 @@
         </div>
       </div>
     </template>
-    <div class="project-picker-row__body">
+    <div class="project-picker-row__body" data-cy="project-body">
       <v-status
         v-if="supported"
         :status-states="statusStates"
@@ -339,7 +340,7 @@ export default {
   mounted() {
     const { accordion } = this.$refs;
     this.$root.$on('select-project', (project) => {
-      if (project.path === this.path) {
+      if (project?.path === this.path) {
         window.scrollTo(250, accordion.$el.offsetTop);
       }
     });

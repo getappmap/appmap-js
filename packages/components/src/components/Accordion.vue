@@ -1,6 +1,6 @@
 <template>
   <div :class="classes">
-    <div class="accordion__header">
+    <div class="accordion__header" @click="$emit('toggle')">
       <slot name="header" />
     </div>
     <div class="accordion__body" v-show="open">

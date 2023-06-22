@@ -85,7 +85,7 @@ export default {
 
   mounted() {
     if (this.projects.length === 1) {
-      this.$refs.projectTable.selectProject(this.projects[0]);
+      this.$refs.projectTable.selectProject(this.projects[0]?.path);
     }
   },
 

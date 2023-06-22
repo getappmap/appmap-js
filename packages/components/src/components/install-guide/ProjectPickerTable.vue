@@ -14,7 +14,7 @@
       :num-app-maps="project.numAppMaps"
       :editor="editor"
       :status-states="statusStates"
-      @click.native="selectProject(project)"
+      @toggle="selectProject"
     />
   </div>
 </template>
@@ -60,9 +60,9 @@ export default {
   },
 
   methods: {
-    selectProject(project) {
-      this.selectedProject = project;
-      this.$emit('select-project', project);
+    selectProject(projectPath) {
+      this.selectedProject = this.projects.find(({ path }) => path === projectPath);
+      this.$emit('select-project', this.selectedProject);
     },
   },
 };

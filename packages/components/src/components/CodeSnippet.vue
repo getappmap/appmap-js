@@ -18,7 +18,7 @@
         type="button"
         :kind="kind"
         data-cy="code-snippet-button"
-        @click.prevent="copyToClipboard"
+        @click.native="copyToClipboard"
         :disabled="!hasClipboardAPI"
       >
         <ClipboardIcon class="code-snippet__btn-icon" />
