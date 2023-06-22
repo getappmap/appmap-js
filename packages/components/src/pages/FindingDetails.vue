@@ -209,6 +209,8 @@ export default {
     li {
       padding: 0.5rem 2rem;
       border-bottom: 1px solid lighten($gray2, 15);
+      list-style-type: none;
+
       a {
         color: $white;
       }
