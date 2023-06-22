@@ -171,15 +171,20 @@ export default class ChangeReporter {
 
   async report(): Promise<ChangeReport> {
     const generator = new ReportGenerator(this);
-    return {
+    const apiDiff = await generator.apiDiff();
+
+    const result: ChangeReport = {
       testFailures: await generator.testFailures(),
       newAppMaps: this.newAppMaps || [],
       changedAppMaps: this.changedAppMaps || [],
-      apiDiff: await generator.apiDiff(),
       findingDiff: await generator.findingDiff(),
       sequenceDiagramDiff: await generator.sequenceDiagramDiff(),
       appMapMetadata: await generator.appMapMetadata(),
     };
+
+    if (apiDiff) result.apiDiff = apiDiff;
+
+    return result;
   }
 
   private async loadMetadata() {
@@ -385,18 +390,23 @@ class ReportGenerator {
     return result;
   }
 
-  async apiDiff(): Promise<any> {
+  async apiDiff(): Promise<any | undefined> {
+    const readOpenAPI = async (revision: RevisionName) => {
+      const openapiPath = this.reporter.appmapData.openapiPath(revision);
+      try {
+        return await readFile(openapiPath, 'utf-8');
+      } catch (e) {
+        if ((e as any).code === 'ENOENT') return undefined;
+        throw e;
+      }
+    };
+
+    const baseDefinitions = await readOpenAPI(RevisionName.Base);
+    const headDefinitions = await readOpenAPI(RevisionName.Head);
+    if (!baseDefinitions || !headDefinitions) return;
+
     let apiDiff: any;
     {
-      const baseDefinitions = await readFile(
-        this.reporter.appmapData.openapiPath(RevisionName.Base),
-        'utf-8'
-      );
-      const headDefinitions = await readFile(
-        this.reporter.appmapData.openapiPath(RevisionName.Head),
-        'utf-8'
-      );
-
       const result = await openapiDiff.diffSpecs({
         sourceSpec: {
           content: baseDefinitions,
