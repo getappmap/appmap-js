@@ -36,6 +36,7 @@ export default {
     budget: {
       type: Number,
       required: true,
+      validator: (value) => value >= 0,
     },
     status: {
       type: String,
