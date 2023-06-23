@@ -3,6 +3,7 @@ import { isAbsolute } from 'path';
 import { promisify } from 'util';
 import { glob as globCallback } from 'glob';
 import assert from 'assert';
+import { stat } from 'fs/promises';
 
 export async function collectAppMapFiles(
   appmapFile?: string | string[],
@@ -159,10 +160,20 @@ function pluralize(word: string, count: number): string {
   return count === 1 ? word : [word, 's'].join('');
 }
 
+async function fileExists(file: string): Promise<boolean> {
+  try {
+    await stat(file);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 export {
   appMapDir,
   capitalize,
   emptyValue,
+  fileExists,
   isFalsey,
   isTruthy,
   ideLink,

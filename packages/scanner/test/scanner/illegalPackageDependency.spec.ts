@@ -13,7 +13,7 @@ it('illegal package dependency', async () => {
   options.calleePackages = [{ equal: 'lib/circular/pkg_b' } as MatchPatternConfig];
   const { appMap, findings } = await scan(
     new Check(rule, options),
-    'ruby/fixture/tmp/appmap/minitest/Circular_cycle.appmap.json'
+    'test/fixtures/ruby/fixture/tmp/appmap/minitest/Circular_cycle.appmap.json'
   );
   expect(findings).toHaveLength(1);
   const finding = findings[0];
@@ -42,4 +42,6 @@ stack[3].raises_exception=false`);
   expect(finding.message).toEqual(
     `Code object lib/circular/pkg_a/PkgA::A#cycle was invoked from lib/circular/pkg_b, not from lib/circular/pkg_a or lib/circular`
   );
+  expect(finding.eventsModifiedDate).not.toBeUndefined();
+  expect(finding.scopeModifiedDate).not.toBeUndefined();
 });
