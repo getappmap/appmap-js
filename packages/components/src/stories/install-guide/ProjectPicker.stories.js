@@ -8,18 +8,49 @@ export default {
       control: { type: 'range', min: 0, max: 2 },
       defaultValue: 0,
     },
+    debugConfigurationStatus: {
+      control: { type: 'range', min: 0, max: 2 },
+      defaultValue: 0,
+    },
+    javaAgentStatus: {
+      control: { type: 'range', min: 0, max: 3 },
+      defaultValue: 0,
+    },
   },
 };
 
 const Template = (args, { argTypes }) => ({
-  props: Object.keys(argTypes),
+  props: Object.keys(argTypes).filter((key) => key !== 'projects'),
   computed: {
     statusStates() {
       return [this.currentStatus, this.currentStatus == 2 ? 1 : 0, 0, 0, 0];
     },
   },
+  data: () => ({
+    projects: args.projects.map((project) => ({
+      ...project,
+      debugConfigurationStatus: args.debugConfigurationStatus,
+      javaAgentStatus: args.javaAgentStatus,
+    })),
+  }),
+  watch: {
+    debugConfigurationStatus(val) {
+      for (let i = 0; i < this.projects.length; i++) {
+        this.$set(this.projects, i, {
+          ...this.projects[i],
+          debugConfigurationStatus: val,
+        });
+      }
+    },
+    javaAgentStatus(val) {
+      for (let i = 0; i < this.projects.length; i++) {
+        this.$set(this.projects, i, { ...this.projects[i], javaAgentStatus: val });
+      }
+    },
+  },
   components: { ProjectPicker },
-  template: '<ProjectPicker v-bind="$props" :status-states="statusStates" ref="installAgent" />',
+  template:
+    '<ProjectPicker v-bind="$props" :projects="projects" :status-states="statusStates" ref="installAgent" />',
 });
 
 export const Empty = Template.bind({});

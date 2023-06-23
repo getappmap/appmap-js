@@ -48,7 +48,10 @@
           Two things are required to make AppMaps of your Java project:
 
           <ol>
-            <li>The <code class="inline">appmap.jar</code> must be available on your machine.</li>
+            <li>
+              The AppMap agent JAR (<code class="inline">appmap.jar</code>) must be available on
+              your machine.
+            </li>
             <li>
               Application code and test cases use the JVM flag
               <code class="inline">-Djavaagent=appmap.jar</code>.
@@ -129,6 +132,71 @@
             <v-navigation-buttons :first="true" :last="!supported" :complete="installComplete" />
           </div>
         </template>
+        <template v-else-if="isVsCode && isJava">
+          <p class="mb20" data-cy="status-agent-download" :data-status="javaAgentStatus">
+            <template v-if="javaAgentStatus === 'success'">
+              <v-flash-message type="info">
+                <v-success-icon class="status-icon" />
+                The AppMap agent JAR is up to date. You can find it at
+                <code class="inline">~/.appmap/lib/appmap.jar</code>.
+              </v-flash-message>
+            </template>
+            <template v-else-if="javaAgentStatus === 'pending'">
+              <v-flash-message type="info">
+                <v-spinner><v-loader-icon class="status-icon" /></v-spinner>
+                The AppMap agent JAR is being downloaded for the first time. This may take a minute.
+              </v-flash-message>
+            </template>
+            <template v-else-if="javaAgentStatus === 'failure'">
+              <v-flash-message type="error">
+                <v-failure-icon class="status-icon status-icon--failure" />
+                An error occurred while downloading the AppMap agent JAR. You may need to update it
+                manually. Download the latest version of the JAR from
+                <a href="https://github.com/getappmap/appmap-java/releases/latest">
+                  GitHub Releases
+                </a>
+                and save it as <code class="inline">~/.appmap/lib/java/appmap.jar</code>. For more
+                information on what happened
+                <a href="#" @click.stop.prevent="$root.$emit('view-output')" data-cy="view-output">
+                  check the output window.
+                </a>
+              </v-flash-message>
+            </template>
+          </p>
+          <p class="mb20" data-cy="status-debug-config" :data-status="debugConfigurationStatus">
+            <template v-if="debugConfigurationStatus === 'success'">
+              <v-flash-message type="info">
+                <v-success-icon class="status-icon" />
+                Test and debug configurations have been added to the workspace. In the next step,
+                you'll use them to create AppMaps.
+              </v-flash-message>
+            </template>
+            <template v-else-if="debugConfigurationStatus === 'pending'">
+              <v-flash-message type="info">
+                <v-spinner><v-loader-icon class="status-icon" /></v-spinner>
+                Test and debug configurations are being added to this project.
+              </v-flash-message>
+            </template>
+            <template v-else-if="debugConfigurationStatus === 'failure'">
+              <v-flash-message type="error">
+                <v-failure-icon class="status-icon status-icon--failure" />
+                Test and debug configurations couldn't be located for this project. To try adding
+                them again,
+                <a
+                  href="#"
+                  @click.stop.prevent="$root.$emit('add-java-configs', path)"
+                  data-cy="add-java-configs"
+                >
+                  click here.
+                </a>
+              </v-flash-message>
+            </template>
+          </p>
+          <div class="page-control-wrap">
+            <p></p>
+            <v-navigation-buttons :first="true" :last="!supported" :complete="installComplete" />
+          </div>
+        </template>
         <template v-else>
           <div class="center-block" data-cy="automated-install">
             <v-button :kind="installButtonType" @click.native="performInstall" :timeout="2000">
@@ -202,6 +270,12 @@ import VIconChevron from '@/assets/fa-solid_chevron-down.svg';
 import VRunConfigDark from '@/assets/jetbrains_run_config_execute_dark.svg';
 import VRunConfigLight from '@/assets/jetbrains_run_config_execute.svg';
 import VStatus from '@/components/install-guide/Status.vue';
+import VSpinner from '@/components/Spinner.vue';
+import VLoaderIcon from '@/assets/eva_loader-outline.svg';
+import VFailureIcon from '@/assets/exclamation-circle.svg';
+import VSuccessIcon from '@/assets/check.svg';
+import VFlashMessage from '@/components/FlashMessage.vue';
+
 import StatusState from '@/components/mixins/statusState';
 
 import { isFeatureSupported, isProjectSupported } from '@/lib/project';
@@ -228,6 +302,11 @@ export default {
     VNavigationButtons,
     VIconChevron,
     VStatus,
+    VSpinner,
+    VLoaderIcon,
+    VFailureIcon,
+    VSuccessIcon,
+    VFlashMessage,
   },
   mixins: [StatusState],
   props: {
@@ -241,6 +320,14 @@ export default {
     installComplete: Boolean,
     editor: String,
     numAppMaps: Number,
+    enumDebugConfigurationStatus: {
+      type: Number,
+      default: 0,
+    },
+    enumJavaAgentStatus: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
@@ -275,6 +362,29 @@ export default {
     };
   },
   computed: {
+    javaAgentStatus() {
+      switch (this.enumJavaAgentStatus) {
+        case 0:
+        case 1:
+        default:
+          return 'pending';
+        case 2:
+          return 'success';
+        case 3:
+          return 'failure';
+      }
+    },
+    debugConfigurationStatus() {
+      switch (this.enumDebugConfigurationStatus) {
+        case 0:
+        default:
+          return 'pending';
+        case 1:
+          return 'success';
+        case 2:
+          return 'failure';
+      }
+    },
     rows() {
       return [this.language, this.testFramework, this.webFramework];
     },
@@ -306,6 +416,9 @@ export default {
     },
     isJetBrains() {
       return this.editor === 'jetbrains';
+    },
+    isVsCode() {
+      return this.editor === 'vscode';
     },
     isPython() {
       return this.language.name.toLowerCase() === 'python';
@@ -497,6 +610,25 @@ $brightblue: rgba(255, 255, 255, 0.1);
   }
   strong {
     color: #939fb1;
+  }
+}
+
+.setup-status {
+  display: block;
+}
+
+.status-icon {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin: -4px 0.5em -4px 0.5em;
+
+  path {
+    fill: $lightblue;
+  }
+
+  &--failure path {
+    fill: $bad-status;
   }
 }
 </style>

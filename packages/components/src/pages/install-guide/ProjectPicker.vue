@@ -20,6 +20,7 @@
           <v-project-picker-table
             :projects="projects"
             :editor="editor"
+            :java-agent-status="javaAgentStatus"
             :status-states="statusStates"
             @select-project="selectProject($event)"
             ref="projectTable"
@@ -36,6 +37,7 @@
               :projects="projects"
               @select-project="selectProject($event)"
               :editor="editor"
+              :java-agent-status="javaAgentStatus"
               :status-states="statusStates"
               ref="projectTable"
             />
@@ -81,6 +83,7 @@ export default {
       type: String,
       validator: (value) => ['vscode', 'jetbrains'].indexOf(value) !== -1,
     },
+    javaAgentStatus: Number,
   },
 
   mounted() {

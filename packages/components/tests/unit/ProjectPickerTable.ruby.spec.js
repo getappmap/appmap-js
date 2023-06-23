@@ -1,7 +1,7 @@
-import { mount, createWrapper } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import ProjectPickerTable from '@/components/install-guide/ProjectPickerTable.vue';
 
-describe('ProjectPickerTable.vue', () => {
+describe('ProjectPickerTable.vue (Ruby)', () => {
   let wrapper;
   const project = Object.freeze({
     selected: false,
