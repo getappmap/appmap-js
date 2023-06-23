@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.79.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.78.0...@appland/scanner-v1.79.0) (2023-06-23)
+
+
+### Features
+
+* Modified dates on Finding ([b67d766](https://github.com/getappmap/appmap-js/commit/b67d766722f7d9101f295c7e5fddad5b83e9e032))
+
 # [@appland/scanner-v1.78.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.77.2...@appland/scanner-v1.78.0) (2023-06-02)
 
 
