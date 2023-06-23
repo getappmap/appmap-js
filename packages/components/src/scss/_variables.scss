@@ -43,9 +43,17 @@ $deep-purple-gradient: linear-gradient(180deg, rgba(17, 1, 38, 1) 37%, rgba(110,
 $alert-danger: #cd1414;
 
 // Alerts
-$success: linear-gradient(90deg, rgba(113, 149, 41, 1) 0%, rgba(143, 196, 19, 1) 100%);
-$danger: linear-gradient(90deg, rgba(222, 25, 50, 1) 0%, rgba(196, 19, 92, 1) 100%);
-$general: linear-gradient(90deg, rgba(67, 98, 177, 1) 0%, rgba(84, 10, 159, 1) 100%);
+$success-from: rgba(113, 149, 41, 1);
+$success-to: rgba(143, 196, 19, 1);
+$success: linear-gradient(90deg, $success-from 0%, $success-to 100%);
+
+$danger-from: rgba(222, 25, 50, 1);
+$danger-to: rgba(196, 19, 92, 1);
+$danger: linear-gradient(90deg, $danger-from 0%, $danger-to 100%);
+
+$general-from: rgba(67, 98, 177, 1);
+$general-to: rgba(84, 10, 159, 1);
+$general: linear-gradient(90deg, $general-from 0%, $general-to 100%);
 
 $col-int: #f92672;
 $col-string: #a6e22e;

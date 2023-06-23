@@ -116,7 +116,7 @@ body {
     &.inline {
       display: inline-block;
       padding: 0 5px;
-      margin: 0 5px;
+      margin: 0;
       border: none;
       color: $base07;
       background-color: rgba(0, 0, 0, 0.25);

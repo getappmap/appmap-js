@@ -3,6 +3,7 @@
     <v-project-picker
       id="project-picker"
       :projects="projects"
+      :java-agent-status="javaAgentStatus"
       :message-success="messageCopiedCommand"
       :editor="editor"
       :status-states="statusStates"
@@ -105,6 +106,7 @@ export default {
       default: 'dark',
       validator: (value) => ['dark', 'light'].indexOf(value) !== -1,
     },
+    javaAgentStatus: Number,
   },
 
   watch: {

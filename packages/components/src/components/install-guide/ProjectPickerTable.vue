@@ -12,6 +12,8 @@
       :test-framework="project.testFramework"
       :web-framework="project.webFramework"
       :num-app-maps="project.numAppMaps"
+      :enum-debug-configuration-status="project.debugConfigurationStatus"
+      :enum-java-agent-status="javaAgentStatus"
       :editor="editor"
       :status-states="statusStates"
       @toggle="selectProject"
@@ -29,6 +31,7 @@ export default {
   props: {
     projects: Array,
     editor: String,
+    javaAgentStatus: Number,
   },
 
   mixins: [StatusState],
