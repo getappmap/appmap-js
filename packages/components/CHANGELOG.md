@@ -1,3 +1,24 @@
+# [@appland/components-v2.50.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.49.0...@appland/components-v2.50.0) (2023-06-23)
+
+
+### Bug Fixes
+
+* handle 0 sum children in flamegraph ([c36f300](https://github.com/getappmap/appmap-js/commit/c36f3000b8fafdda4b2dd3c184bf5809d55ef8fd))
+
+
+### Features
+
+* add 'show in flamegraph' button ([510fc01](https://github.com/getappmap/appmap-js/commit/510fc015991287747231b7d274c530cb5113dae1))
+* add duration to flamegraph items ([3e964d7](https://github.com/getappmap/appmap-js/commit/3e964d773de423415aa39e9106667ab22bb608c2))
+* differentiate events type in flamegraph ([e5de00e](https://github.com/getappmap/appmap-js/commit/e5de00e5c360c4e6d03c33504854bc9899f9abf9))
+* exponential zoom ([6906847](https://github.com/getappmap/appmap-js/commit/6906847c2799ef3f2bdef0593babe62ac805fe5e))
+* flamegraph uses tab scroll instead of its own ([361bd67](https://github.com/getappmap/appmap-js/commit/361bd671fef1083031dfd1b18bf2451540701ea6))
+* grey out rest box ([10e0c89](https://github.com/getappmap/appmap-js/commit/10e0c89f7d100b2a9eeb152b4b233b71b0d07b99))
+* grey out the trunc of the flamegraph ([b58191e](https://github.com/getappmap/appmap-js/commit/b58191e49ce76e249a482238cbbeeb5ae8b9df7b))
+* implement flamegraph as vue components ([646dea1](https://github.com/getappmap/appmap-js/commit/646dea1975d86c1e514f7de8cf94d85e38ba8c37))
+* label hovered event ([c63a6e3](https://github.com/getappmap/appmap-js/commit/c63a6e3e695565f27ba43d29d36c7010981af038))
+* metric and exponential duration format ([07ca5f2](https://github.com/getappmap/appmap-js/commit/07ca5f27159cef12c29a9358b7ecddfadfe6f0f5))
+
 # [@appland/components-v2.49.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.48.0...@appland/components-v2.49.0) (2023-06-22)
 
 
