@@ -12,7 +12,7 @@
       :budget="budget"
       :title="title"
       :selection="selection"
-      @clear="propagateClear"
+      @select="propagateSelect"
     ></v-flamegraph-root>
     <v-flamegraph-hover :event="hoverEvent" />
     <v-slider :value="zoom" @slide="updateZoom" />
@@ -28,7 +28,7 @@ import VFlamegraphHover from '@/components/flamegraph/FlamegraphHover.vue';
 import VSlider from '@/components/Slider.vue';
 export default {
   name: 'v-diagram-flamegraph',
-  emits: ['select', 'clear'],
+  emits: ['select'],
   components: {
     VFlamegraphBranch,
     VFlamegraphRoot,
@@ -70,9 +70,6 @@ export default {
     },
     propagateSelect(target) {
       this.$emit('select', target);
-    },
-    propagateClear() {
-      this.$emit('clear');
     },
     pullBaseWidth() {
       const newBaseWidth = Math.max(MIN_WIDTH, this.$el.clientWidth);

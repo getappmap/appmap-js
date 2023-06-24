@@ -125,8 +125,7 @@
             :events="filteredAppMap.rootEvents()"
             :selected-events="selectedEvent"
             :title="filteredAppMap.name"
-            @select="onClickTraceEvent"
-            @clear="clearSelection"
+            @select="onFlamegraphSelect"
           />
         </v-tab>
 
@@ -1086,6 +1085,14 @@ export default {
 
     copyToClipboard(input) {
       this.$root.$emit('copyToClipboard', input);
+    },
+
+    onFlamegraphSelect(event) {
+      if (event) {
+        this.onClickTraceEvent(event);
+      } else {
+        this.clearSelection();
+      }
     },
 
     onClickTraceEvent(e) {
