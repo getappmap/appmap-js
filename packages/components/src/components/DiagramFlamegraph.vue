@@ -1,5 +1,5 @@
 <template>
-  <div class="diagram-flamegraph">
+  <div class="diagram-flamegraph" :style="style">
     <v-flamegraph-branch
       v-if="events.length > 0"
       :events="events"
@@ -20,6 +20,8 @@
 </template>
 
 <script>
+const MIN_WIDTH = 480;
+const PADDING = 20;
 import VFlamegraphBranch from '@/components/flamegraph/FlamegraphBranch.vue';
 import VFlamegraphRoot from '@/components/flamegraph/FlamegraphRoot.vue';
 import VFlamegraphHover from '@/components/flamegraph/FlamegraphHover.vue';
@@ -48,7 +50,7 @@ export default {
     },
   },
   data() {
-    return { zoom: 0.5, hoverEvent: null };
+    return { zoom: 0, hoverEvent: null, baseWidth: MIN_WIDTH, interval: null };
   },
   methods: {
     onHover({ type, target }) {
@@ -72,14 +74,30 @@ export default {
     propagateClear() {
       this.$emit('clear');
     },
+    pullBaseWidth() {
+      const newBaseWidth = Math.max(MIN_WIDTH, this.$el.clientWidth);
+      // I'm not 100% sure that vue does not propagate data assignements it
+      // it actually did not changed. So I guard it for performance reason.
+      if (newBaseWidth !== this.baseWidth) {
+        this.baseWidth = newBaseWidth;
+      }
+    },
   },
   computed: {
+    style() {
+      return { padding: `${PADDING}px` };
+    },
+    width() {
+      // Exponential zoom:
+      // - {zoom = 0, width = baseWidth}
+      // - {zoom = 0.1, width = 2 * baseWidth}
+      // - {zoom = 0.2, width = 4 * baseWidth}
+      // ...
+      // - {zoom = 1, width = 1024 * baseWidth}
+      return this.baseWidth * 2 ** (10 * this.zoom);
+    },
     budget() {
-      // Exponential budget:
-      // - {zoom = 0, budget = 480}
-      // - {zoom = 1/2, budget = 980}
-      // - {zoom = 1, budget = 1960}
-      return 480 * 2 ** (2 * this.zoom);
+      return this.width - 2 * PADDING;
     },
     selection() {
       return this.selectedEvents.length > 0;
@@ -95,16 +113,28 @@ export default {
       }
     },
   },
+  mounted() {
+    this.pullBaseWidth();
+    // This is quick and dirty way to react to width changes.
+    // I tried to listen to window resize event and main column drag in the main page.
+    // I could compute the left column width and deduce the width of the right column.
+    // However this was brittle because it did not consider the context of the main page.
+    // On the actual vscode extension there is a padding that does not appear in storybook.
+    // The other option is to relay on `vue-resize`.
+    // But I would prefer to not introduce a new dependency for this.
+    // Also reacting late to this change event is fine and maybe even desirable for performance.
+    this.interval = setInterval(this.pullBaseWidth, 1000);
+  },
+  beforeUnmount() {
+    clearInterval(this.interval);
+  },
 };
 </script>
 
 <style scoped lang="scss">
 .diagram-flamegraph {
-  width: fit-content;
+  width: 100%;
   min-height: 100%;
-  height: fit-content;
-  padding: 20px;
-  margin: 0px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
