@@ -7,7 +7,7 @@
 <script>
 export default {
   name: 'v-flamegraph-root',
-  emits: ['clear'],
+  emits: ['select'],
   props: {
     budget: {
       type: Number,
@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     onClick() {
-      this.$emit('clear');
+      this.$emit('select', null);
     },
   },
   computed: {

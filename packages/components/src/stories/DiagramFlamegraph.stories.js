@@ -31,7 +31,6 @@ export const flamegraph = (args, { argTypes }) => ({
       v-bind="$props"
       :selected-events="selectedEventArray"
       @select="(e) => { selectedEvent = e; }"
-      @clear="() => { selectedEvent = null; }"
     />
   `,
   data() {
