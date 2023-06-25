@@ -1,5 +1,5 @@
 <template>
-  <div class="diagram-flamegraph">
+  <div class="diagram-flamegraph" @wheel="handleMouseWheel">
     <v-flamegraph-main
       ref="main"
       :events="events"
@@ -18,6 +18,8 @@
 import VFlamegraphMain from '@/components/flamegraph/FlamegraphMain.vue';
 import VFlamegraphHover from '@/components/flamegraph/FlamegraphHover.vue';
 import VSlider from '@/components/Slider.vue';
+const WHEEL_SENSITIVITY = 1e-3;
+const clamp = (val) => (val < 0 ? 0 : val > 1 ? 1 : val);
 export default {
   name: 'v-diagram-flamegraph',
   emits: ['select'],
@@ -44,6 +46,10 @@ export default {
     return { zoom: 0, hoverEvent: null };
   },
   methods: {
+    handleMouseWheel(event) {
+      event.preventDefault();
+      this.zoom = clamp(this.zoom - WHEEL_SENSITIVITY * event.deltaY);
+    },
     onHover({ type, target }) {
       if (type === 'enter') {
         this.hoverEvent = target;
