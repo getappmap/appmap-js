@@ -31,6 +31,5 @@ $color: #ebdf90;
   opacity: 0.2;
   background: $color;
   border-color: darken($color, 10%);
-  transition: all 1s ease;
 }
 </style>

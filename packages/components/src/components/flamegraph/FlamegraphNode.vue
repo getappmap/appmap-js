@@ -1,5 +1,5 @@
 <template>
-  <div class="flamegraph-node">
+  <div>
     <v-flamegraph-branch
       v-if="areChildrenVisible"
       :events="children"
@@ -91,11 +91,3 @@ export default {
   },
 };
 </script>
-
-<style scoped lang="scss">
-.flamegraph-node {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
-</style>
