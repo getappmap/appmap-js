@@ -1,5 +1,5 @@
 <!--
-  This is re-implementation of:
+  This component is a re-implementation of:
   https://github.com/getappmap/appmap-js/blob/main/packages/diagrams/src/helpers/container/zoom.js
   The problem with reusing the original implementation is that it is tangled with functionalities
   like drag and drop panel, which we don't need here. Also it is not a vue component, so it is less
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-const clamp = (val, { min, max }) => Math.min(Math.max(val, min), max);
+const clamp = (val) => (val > 1 ? 1 : val < 0 ? 0 : val);
 export default {
   name: 'v-slider',
   emits: ['slide'],
@@ -28,9 +28,13 @@ export default {
       type: Number,
       required: true,
     },
-    step: {
+    stepButton: {
       type: Number,
       default: 0.1,
+    },
+    stepWheel: {
+      type: Number,
+      default: 0.0001,
     },
   },
   data() {
@@ -41,23 +45,20 @@ export default {
   computed: {
     grabStyle() {
       return {
-        bottom: `${100 * this.value}%`,
+        bottom: `${100 * clamp(this.value)}%`,
       };
     },
   },
   methods: {
     set(event) {
       const rect = this.$refs.handle.getBoundingClientRect();
-      this.$emit(
-        'slide',
-        1 - (clamp(event.clientY, { min: rect.top, max: rect.bottom }) - rect.top) / rect.height
-      );
+      this.$emit('slide', clamp(1 - (event.clientY - rect.top) / rect.height));
     },
     increase() {
-      this.$emit('slide', Math.min(1, this.value + this.step));
+      this.$emit('slide', clamp(this.value + this.stepButton));
     },
     decrease() {
-      this.$emit('slide', Math.max(0, this.value - this.step));
+      this.$emit('slide', clamp(this.value - this.stepButton));
     },
     startDragging() {
       this.dragging = true;
