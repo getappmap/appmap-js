@@ -40,6 +40,8 @@ export default {
 $background-color: #6fddd6;
 $text-color: #010306;
 .flamegraph-root {
+  position: sticky;
+  left: 0px;
   font-family: 'IBM Plex Mono', monospace;
   border: 1px solid darken($background-color, 10%);
   box-sizing: border-box;

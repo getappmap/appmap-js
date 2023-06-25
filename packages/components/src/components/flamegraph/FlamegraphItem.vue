@@ -111,7 +111,6 @@ $text-color: #e3e5e8;
   white-space: nowrap;
   color: $text-color;
   cursor: pointer;
-  transition: all 1s linear;
   &:hover {
     color: darken($text-color, 20%);
   }

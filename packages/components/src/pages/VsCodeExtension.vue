@@ -118,7 +118,7 @@
           :is-active="isViewingFlamegraph"
           :ref="VIEW_FLAMEGRAPH"
           :tabName="VIEW_FLAMEGRAPH"
-          :allow-scroll="true"
+          :allow-scroll="false"
         >
           <v-diagram-flamegraph
             ref="viewFlamegraph_diagram"

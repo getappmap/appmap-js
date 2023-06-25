@@ -120,6 +120,7 @@ export default {
 
 <style scoped lang="scss">
 .flamegraph-branch {
+  flex-grow: 1; // this is only used by the root branch to move the flamegraph to the bottom
   display: flex;
   flex-direction: row;
   align-items: flex-end;
