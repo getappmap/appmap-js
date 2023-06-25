@@ -9,10 +9,6 @@ export default {
   name: 'v-flamegraph-root',
   emits: ['select'],
   props: {
-    budget: {
-      type: Number,
-      required: true,
-    },
     selection: {
       type: Boolean,
       required: true,
@@ -33,7 +29,6 @@ export default {
     },
     style() {
       return {
-        width: `${this.budget}px`,
         opacity: this.selection ? '0.5' : '1',
       };
     },
@@ -56,7 +51,6 @@ $text-color: #010306;
   background: $background-color;
   color: $text-color;
   cursor: pointer;
-  transition: all 1s linear;
   &:hover {
     color: lighten($text-color, 20%);
   }

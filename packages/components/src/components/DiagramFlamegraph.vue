@@ -9,7 +9,6 @@
       @hover="onHover"
     ></v-flamegraph-branch>
     <v-flamegraph-root
-      :budget="budget"
       :title="title"
       :selection="selection"
       @select="propagateSelect"
