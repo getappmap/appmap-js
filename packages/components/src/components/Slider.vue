@@ -85,16 +85,13 @@ export default {
 
 <style scoped lang="css">
 .slider {
-  position: absolute;
-  top: 50%;
-  right: 0px;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  height: fit-content;
+  width: fit-content;
 }
+
 .button {
   border: none;
+  user-select: none;
   border-radius: 0.5rem;
   padding: 0.25rem 0.5rem;
   appearance: none;
@@ -106,32 +103,29 @@ export default {
 }
 
 .handle {
-  margin: 3px 6px;
-  position: relative;
   width: 20px;
-  height: 90px;
+  height: 96px;
+  margin: auto;
+  position: relative;
   cursor: pointer;
 }
 
 .bar {
-  position: absolute;
-  top: -3px;
-  left: 50%;
-  bottom: -3px;
-  margin-left: -3px;
   width: 6px;
+  height: 100%;
+  margin: auto;
   background: #242c41;
   opacity: 0.8;
 }
 
 .grab {
-  transform: translateY(3px);
-  position: absolute;
-  border-radius: 3px;
-  left: 0;
   width: 100%;
   height: 6px;
+  position: absolute;
+  transform: translateY(3px);
+  border-radius: 3px;
   background: #808b98;
   cursor: grab;
+  z-index: 10;
 }
 </style>

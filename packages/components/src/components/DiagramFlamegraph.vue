@@ -1,16 +1,20 @@
 <template>
-  <div class="diagram-flamegraph" @wheel="handleMouseWheel" @mousedown="handleMouseDown">
-    <v-flamegraph-main
-      ref="main"
-      :events="events"
-      :focus="focus"
-      :zoom="smoothZoom"
-      :title="title"
-      @select="propagateSelect"
-      @hover="onHover"
-    />
-    <v-flamegraph-hover :event="hoverEvent" />
-    <v-slider :value="smoothZoom" @slide="updateZoom" ref="slider" />
+  <div class="diagram-flamegraph-main" @mousedown="handleMouseDown" @wheel="handleMouseWheel">
+    <div class="diagram-flamegraph-main-left">
+      <v-flamegraph-main
+        ref="main"
+        :events="events"
+        :focus="focus"
+        :zoom="smoothZoom"
+        :title="title"
+        @select="propagateSelect"
+        @hover="onHover"
+      />
+      <v-flamegraph-hover :event="hoverEvent" />
+    </div>
+    <div class="diagram-flamegraph-main-right">
+      <v-slider :value="smoothZoom" @slide="updateZoom" ref="slider" />
+    </div>
   </div>
 </template>
 
@@ -115,11 +119,24 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.diagram-flamegraph {
+.diagram-flamegraph-main {
+  display: flex;
   padding: 20px;
-  padding-right: 60px;
+  flex-direction: row;
+  flex-wrap: nowrap;
   height: 100%;
+}
+
+.diagram-flamegraph-main-left {
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+
+.diagram-flamegraph-main-right {
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 10px;
 }
 </style>
