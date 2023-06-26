@@ -18,7 +18,6 @@ import VFlamegraphBranch from '@/components/flamegraph/FlamegraphBranch.vue';
 import VFlamegraphRoot from '@/components/flamegraph/FlamegraphRoot.vue';
 const toCoordinate = ({ scroll, offset, budget }) => (scroll + offset) / budget;
 const toScroll = ({ coordinate, offset, budget }) => coordinate * budget - offset;
-const MIN_BASE_BUDGET = 400;
 export default {
   name: 'v-flamegraph-main',
   emits: ['select', 'hover'],
@@ -131,12 +130,10 @@ export default {
         const width = this.$el.clientWidth;
         // When tabbing out flamegraph clientWidth becomes 0.
         if (width > 0) {
-          // We use main's clientWidth to take its scroll and this padding into account.
-          const newBaseBudget = Math.max(MIN_BASE_BUDGET, width);
           // I'm not 100% sure that vue does not propagate data assignements if
           // it actually did not changed. So I guard it for performance reason.
-          if (newBaseBudget !== this.baseBudget) {
-            this.baseBudget = newBaseBudget;
+          if (this.baseBudget !== width) {
+            this.baseBudget = width;
           }
         }
       }
