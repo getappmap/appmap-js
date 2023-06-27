@@ -1,5 +1,11 @@
 <template>
-  <div :class="classes" @mouseleave="handleMouseLeave" @mousemove="handleMouseMove">
+  <div
+    :class="classes"
+    @mouseleave="handleMouseLeave"
+    @mouseup="handleMouseUp"
+    @mousedown="handleMouseDown"
+    @mousemove="handleMouseMove"
+  >
     <v-flamegraph-branch
       :events="events"
       :factor="1"
@@ -18,6 +24,8 @@ import { nextTick } from 'vue';
 import { Event } from '@appland/models';
 import VFlamegraphBranch from '@/components/flamegraph/FlamegraphBranch.vue';
 import VFlamegraphRoot from '@/components/flamegraph/FlamegraphRoot.vue';
+const FRICTION = 0.99;
+const MIN_INERTIA = 1;
 const toCoordinate = ({ scroll, offset, budget }) => (scroll + offset) / budget;
 const toScroll = ({ coordinate, offset, budget }) => coordinate * budget - offset;
 export default {
@@ -33,6 +41,7 @@ export default {
       mouse: null,
       interval: null,
       focusing: 0,
+      inertia: null,
     };
   },
   props: {
@@ -118,6 +127,12 @@ export default {
     },
   },
   methods: {
+    handleMouseDown() {
+      this.inertia = null;
+    },
+    handleMouseUp() {
+      this.up = true;
+    },
     startFocusing() {
       this.focusing += 1;
     },
@@ -125,14 +140,24 @@ export default {
       this.focusing -= 1;
     },
     handleMouseLeave() {
+      this.up = false;
       this.mouse = null;
     },
     handleMouseMove(event) {
       const { left } = event.currentTarget.getBoundingClientRect();
       this.mouse = event.clientX - left;
-      if (this.$el && event.buttons === 1) {
-        this.$el.scrollLeft -= event.movementX;
-        this.$el.scrollTop -= event.movementY;
+      if (this.$el) {
+        if (event.buttons === 1) {
+          this.$el.scrollLeft -= event.movementX;
+          this.$el.scrollTop -= event.movementY;
+        } else if (this.up) {
+          this.up = false;
+          this.inertia = {
+            x: event.movementX,
+            y: event.movementY,
+          };
+          this.stepInertia();
+        }
       }
     },
     propagateSelect(target) {
@@ -151,6 +176,19 @@ export default {
           if (this.baseBudget !== width) {
             this.baseBudget = width;
           }
+        }
+      }
+    },
+    stepInertia() {
+      if (this.inertia) {
+        this.$el.scrollLeft -= this.inertia.x;
+        this.$el.scrollTop -= this.inertia.y;
+        this.inertia.x *= FRICTION;
+        this.inertia.y *= FRICTION;
+        if (Math.abs(this.inertia.x) < MIN_INERTIA && Math.abs(this.inertia.y) < MIN_INERTIA) {
+          this.inertia = null;
+        } else {
+          requestAnimationFrame(this.stepInertia);
         }
       }
     },
