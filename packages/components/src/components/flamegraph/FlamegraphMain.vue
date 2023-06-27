@@ -9,7 +9,7 @@
       @select="propagateSelect"
       @hover="propagateHover"
     ></v-flamegraph-branch>
-    <v-flamegraph-root :title="title" :selection="selection" @select="propagateSelect" />
+    <v-flamegraph-root :title="title" :pruned="pruned" @select="propagateSelect" />
   </div>
 </template>
 
@@ -70,7 +70,7 @@ export default {
     origin() {
       return this.mouse || this.center;
     },
-    selection() {
+    pruned() {
       return this.focusEvent !== null;
     },
     zoomBudget() {

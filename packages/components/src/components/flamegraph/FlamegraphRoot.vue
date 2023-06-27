@@ -1,5 +1,5 @@
 <template>
-  <div class="flamegraph-root" @click="onClick" :style="style">
+  <div :class="classes" @click="onClick">
     {{ sanitizedTitle }}
   </div>
 </template>
@@ -9,9 +9,9 @@ export default {
   name: 'v-flamegraph-root',
   emits: ['select'],
   props: {
-    selection: {
+    pruned: {
       type: Boolean,
-      required: true,
+      default: false,
     },
     title: {
       type: String,
@@ -24,13 +24,11 @@ export default {
     },
   },
   computed: {
+    classes() {
+      return { 'flamegraph-root': true, 'flamegraph-root-pruned': this.pruned };
+    },
     sanitizedTitle() {
       return typeof this.title === 'string' ? this.title : 'root';
-    },
-    style() {
-      return {
-        opacity: this.selection ? '0.5' : '1',
-      };
     },
   },
 };
@@ -54,9 +52,13 @@ $text-color: #010306;
   white-space: nowrap;
   background: $background-color;
   color: $text-color;
+}
+
+.flamegraph-root-pruned {
+  opacity: 0.5;
   cursor: pointer;
   &:hover {
-    color: lighten($text-color, 20%);
+    color: lighten($text-color, 40%);
   }
 }
 </style>
