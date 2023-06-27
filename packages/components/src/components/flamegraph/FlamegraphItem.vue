@@ -12,18 +12,14 @@
 </template>
 
 <script>
-import {
-  PADDING,
-  BORDER,
-  CONTENT_THRESHOLD,
-  FONT_SIZE,
-  HEIGHT,
-  styleDimension,
-  formatDurationMillisecond,
-  getEventDuration,
-} from '../../lib/flamegraph';
+import { formatDurationMillisecond, getEventDuration } from '../../lib/flamegraph';
 import { Event } from '@appland/models';
-const options = { padding: PADDING, border: BORDER };
+const PADDING = 10;
+const BORDER = 1;
+const FONT_SIZE = 12;
+const TEXT_MIN_WIDTH = 30;
+const HEIGHT = FONT_SIZE + 2 * (BORDER + PADDING);
+const CONTENT_THRESHOLD = TEXT_MIN_WIDTH + 2 * (BORDER + PADDING);
 export default {
   name: 'v-flamegraph-item',
   emits: ['select', 'hover'],
@@ -67,10 +63,41 @@ export default {
       ];
     },
     style() {
-      return {
-        ...styleDimension({ width: this.budget, height: HEIGHT }, options),
-        'font-size': `${FONT_SIZE}px`,
-      };
+      if (this.status === 'branch') {
+        if (this.budget === 0) {
+          return {
+            display: 'none',
+          };
+        } else if (this.budget <= 2 * BORDER) {
+          return {
+            'border-left-width': `${this.budget}px`,
+            width: `${this.budget}px`,
+            height: `${HEIGHT}px`,
+          };
+        } else if (this.budget < CONTENT_THRESHOLD) {
+          return {
+            'border-width': `${BORDER}px`,
+            width: `${this.budget}px`,
+            height: `${HEIGHT}px`,
+          };
+        } else {
+          return {
+            'border-width': `${BORDER}px`,
+            width: `${this.budget}px`,
+            height: `${HEIGHT}px`,
+            padding: `${PADDING}px`,
+            'font-size': `${FONT_SIZE}px`,
+          };
+        }
+      } else {
+        return {
+          padding: `${PADDING}px`,
+          width: `${this.budget}px`,
+          height: `${HEIGHT}px`,
+          'border-width': `${BORDER}px`,
+          'font-size': `${FONT_SIZE}px`,
+        };
+      }
     },
     content() {
       if (this.budget < CONTENT_THRESHOLD) {
