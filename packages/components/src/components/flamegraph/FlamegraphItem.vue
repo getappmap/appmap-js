@@ -128,23 +128,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.flamegraph-item {
-  cursor: pointer;
-  border-style: solid;
-  box-sizing: border-box;
-}
-
 //////////
 // Text //
 //////////
 
-$text-color: #e3e5e8;
+$text-color: #d3d3d3;
 $font-size: 12px;
 .flamegraph-item-text {
   user-select: none;
   font-size: $font-size;
   line-height: 1;
-  cursor: pointer;
   border-style: solid;
   box-sizing: border-box;
   text-align: left;
@@ -154,13 +147,21 @@ $font-size: 12px;
   text-overflow: ellipsis;
   white-space: nowrap;
   color: $text-color;
+}
+
+///////////////
+// Clickable //
+///////////////
+
+.flamegraph-item-clickable {
+  cursor: pointer;
   &:hover {
-    color: darken($text-color, 20%);
+    color: white;
   }
 }
 
 ///////////////
-// dimension //
+// Dimension //
 ///////////////
 
 $padding: 10px;
@@ -168,25 +169,30 @@ $border: 1px;
 $height: $font-size + 2 * ($border + $padding);
 
 .flamegraph-item-borderless {
+  box-sizing: border-box;
   height: $height;
   border-width: 0px;
 }
 
 .flamegraph-item-textless {
+  box-sizing: border-box;
   height: $height;
+  border-style: solid;
   border-width: $border;
 }
 
 .flamegraph-item-normal {
   @extend .flamegraph-item-text;
+  box-sizing: border-box;
   height: $height;
+  border-style: solid;
   border-width: $border;
   padding: $padding;
 }
 
-//////////
-// type //
-//////////
+////////////////
+// Event Type //
+////////////////
 
 $sql-color: #9c2fba;
 $sql-border-color: darken($sql-color, 10%);
@@ -223,8 +229,12 @@ $default-border-color: darken($default-color, 10%);
 }
 
 ////////////
-// status //
+// Status //
 ////////////
+
+.flamegraph-item-branch {
+  @extend .flamegraph-item-clickable;
+}
 
 .flamegraph-item-crown {
   position: sticky;
@@ -233,6 +243,7 @@ $default-border-color: darken($default-color, 10%);
 }
 
 .flamegraph-item-trunk {
+  @extend .flamegraph-item-clickable;
   position: sticky;
   left: 0px;
   opacity: 0.5;
