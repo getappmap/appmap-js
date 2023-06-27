@@ -1,7 +1,7 @@
 <template>
   <div
     ref="inner"
-    :class="class_"
+    :class="classes"
     :style="style"
     @click="onClick"
     @mouseenter="onEnter"
@@ -14,12 +14,8 @@
 <script>
 import { formatDurationMillisecond, getEventDuration } from '../../lib/flamegraph';
 import { Event } from '@appland/models';
-const PADDING = 10;
-const BORDER = 1;
-const FONT_SIZE = 12;
-const TEXT_MIN_WIDTH = 30;
-const HEIGHT = FONT_SIZE + 2 * (BORDER + PADDING);
-const CONTENT_THRESHOLD = TEXT_MIN_WIDTH + 2 * (BORDER + PADDING);
+const MIN_BORDER_WIDTH = 2;
+const MIN_TEXT_WIDTH = 50;
 export default {
   name: 'v-flamegraph-item',
   emits: ['select', 'hover'],
@@ -55,52 +51,28 @@ export default {
         return 'default';
       }
     },
-    class_() {
+    dimension() {
+      if (this.budget < MIN_BORDER_WIDTH) {
+        return 'borderless';
+      } else if (this.budget < MIN_TEXT_WIDTH) {
+        return 'textless';
+      } else {
+        return 'normal';
+      }
+    },
+    classes() {
       return [
         'flamegraph-item',
         `flamegraph-item-${this.eventType}`,
         `flamegraph-item-${this.status}`,
+        `flamegraph-item-${this.dimension}`,
       ];
     },
     style() {
-      if (this.status === 'branch') {
-        if (this.budget === 0) {
-          return {
-            display: 'none',
-          };
-        } else if (this.budget <= 2 * BORDER) {
-          return {
-            'border-left-width': `${this.budget}px`,
-            width: `${this.budget}px`,
-            height: `${HEIGHT}px`,
-          };
-        } else if (this.budget < CONTENT_THRESHOLD) {
-          return {
-            'border-width': `${BORDER}px`,
-            width: `${this.budget}px`,
-            height: `${HEIGHT}px`,
-          };
-        } else {
-          return {
-            'border-width': `${BORDER}px`,
-            width: `${this.budget}px`,
-            height: `${HEIGHT}px`,
-            padding: `${PADDING}px`,
-            'font-size': `${FONT_SIZE}px`,
-          };
-        }
-      } else {
-        return {
-          padding: `${PADDING}px`,
-          width: `${this.budget}px`,
-          height: `${HEIGHT}px`,
-          'border-width': `${BORDER}px`,
-          'font-size': `${FONT_SIZE}px`,
-        };
-      }
+      return { width: `${this.budget}px` };
     },
     content() {
-      if (this.budget < CONTENT_THRESHOLD) {
+      if (this.budget < MIN_TEXT_WIDTH) {
         return '';
       } else {
         const duration = getEventDuration(this.event);
@@ -127,20 +99,59 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$text-color: #e3e5e8;
 .flamegraph-item {
+  cursor: pointer;
+  border-style: solid;
+  box-sizing: border-box;
+}
+
+//////////
+// Text //
+//////////
+
+$text-color: #e3e5e8;
+$font-size: 12px;
+.flamegraph-item-text {
+  font-size: $font-size;
+  line-height: 1;
+  cursor: pointer;
+  border-style: solid;
+  box-sizing: border-box;
   text-align: left;
   font-family: 'IBM Plex Mono', monospace;
-  border-style: solid;
   box-sizing: border-box;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   color: $text-color;
-  cursor: pointer;
   &:hover {
     color: darken($text-color, 20%);
   }
+}
+
+///////////////
+// dimension //
+///////////////
+
+$padding: 10px;
+$border: 1px;
+$height: $font-size + 2 * ($border + $padding);
+
+.flamegraph-item-borderless {
+  height: $height;
+  border-width: 0px;
+}
+
+.flamegraph-item-textless {
+  height: $height;
+  border-width: $border;
+}
+
+.flamegraph-item-normal {
+  @extend .flamegraph-item-text;
+  height: $height;
+  border-width: $border;
+  padding: $padding;
 }
 
 //////////
@@ -148,22 +159,37 @@ $text-color: #e3e5e8;
 //////////
 
 $sql-color: #9c2fba;
+$sql-border-color: darken($sql-color, 10%);
 $http-color: #542168;
+$http-border-color: darken($http-color, 10%);
 $default-color: #4362b1;
+$default-border-color: darken($default-color, 10%);
 
 .flamegraph-item-sql {
   background-color: $sql-color;
-  border-color: darken($sql-color, 10%);
+  border-color: $sql-border-color;
 }
 
 .flamegraph-item-http {
   background-color: $http-color;
-  border-color: darken($http-color, 10%);
+  border-color: $http-border-color;
 }
 
 .flamegraph-item-default {
   background-color: $default-color;
-  border-color: darken($default-color, 10%);
+  border-color: $default-border-color;
+}
+
+.flamegraph-item-sql.flamegraph-item-borderless {
+  background-color: $sql-border-color;
+}
+
+.flamegraph-item-http.flamegraph-item-borderless {
+  background-color: $http-border-color;
+}
+
+.flamegraph-item-default.flamegraph-item-borderless {
+  background-color: $default-border-color;
 }
 
 ////////////
