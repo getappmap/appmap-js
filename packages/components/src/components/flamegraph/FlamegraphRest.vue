@@ -3,8 +3,6 @@
 </template>
 
 <script>
-import { BORDER, PADDING, HEIGHT, styleDimension, FONT_SIZE } from '../../lib/flamegraph';
-const options = { padding: PADDING, border: BORDER };
 export default {
   name: 'v-flamegraph-rest',
   props: {
@@ -16,8 +14,7 @@ export default {
   computed: {
     style() {
       return {
-        ...styleDimension({ width: this.budget, height: HEIGHT }, options),
-        'font-size': `${FONT_SIZE}px`,
+        width: `${this.budget}px`,
       };
     },
   },
@@ -25,11 +22,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$color: #ebdf90;
-
 .flamegraph-rest {
-  opacity: 0.2;
-  background: $color;
-  border-color: darken($color, 10%);
+  align-self: stretch;
+  background-color: #fff;
+  opacity: 0.05;
 }
 </style>
