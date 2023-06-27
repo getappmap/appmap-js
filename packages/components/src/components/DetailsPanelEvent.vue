@@ -17,7 +17,7 @@
           v-if="shouldDisplayViewInFlamegraph"
           @click.native="viewEventInFlamegraph"
         >
-          Show in Flamegraph
+          Show in Flame Graph
         </v-details-button>
       </template>
     </v-details-panel-header>
