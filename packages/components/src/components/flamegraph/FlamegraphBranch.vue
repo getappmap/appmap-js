@@ -6,6 +6,7 @@
       :event="event"
       :budget="budget"
       :focus="focus"
+      :base-budget="baseBudget"
       @select="propagateSelect"
       @hover="propagateHover"
     />
@@ -30,14 +31,19 @@ export default {
       type: Array,
       required: true,
     },
-    budget: {
-      type: Number,
-      required: true,
-    },
     focus: {
       type: Object,
       required: false,
       default: null,
+    },
+    budget: {
+      type: Number,
+      required: true,
+    },
+    baseBudget: {
+      type: Number,
+      required: true,
+      validator: (value) => value >= 0,
     },
   },
   computed: {

@@ -4,6 +4,7 @@
       v-if="areChildrenVisible"
       :events="children"
       :budget="childrenBudget"
+      :base-budget="baseBudget"
       :focus="childrenFocus"
       @select="propagateSelect"
       @hover="propagateHover"
@@ -11,6 +12,7 @@
     <v-flamegraph-item
       :event="event"
       :budget="budget"
+      :base-budget="baseBudget"
       :status="status"
       @select="propagateSelect"
       @hover="propagateHover"
@@ -44,6 +46,11 @@ export default {
       type: Object,
       required: false,
       default: null,
+    },
+    baseBudget: {
+      type: Number,
+      required: true,
+      validator: (value) => value >= 0,
     },
   },
   methods: {

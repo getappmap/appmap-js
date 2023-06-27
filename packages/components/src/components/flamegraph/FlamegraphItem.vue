@@ -1,12 +1,5 @@
 <template>
-  <div
-    ref="inner"
-    :class="classes"
-    :style="style"
-    @click="onClick"
-    @mouseenter="onEnter"
-    @mouseleave="onLeave"
-  >
+  <div :class="classes" :style="style" @click="onClick" @mouseenter="onEnter" @mouseleave="onLeave">
     {{ content }}
   </div>
 </template>
@@ -26,6 +19,11 @@ export default {
       validator: (value) => value instanceof Event,
     },
     budget: {
+      type: Number,
+      required: true,
+      validator: (value) => value >= 0,
+    },
+    baseBudget: {
       type: Number,
       required: true,
       validator: (value) => value >= 0,
@@ -69,7 +67,7 @@ export default {
       ];
     },
     style() {
-      return { width: `${this.budget}px` };
+      return { width: `${this.status === 'branch' ? this.budget : this.baseBudget}px` };
     },
     content() {
       if (this.budget < MIN_TEXT_WIDTH) {
@@ -197,10 +195,14 @@ $default-border-color: darken($default-color, 10%);
 ////////////
 
 .flamegraph-item-crown {
+  position: sticky;
+  left: 0px;
   border-color: #ff07aa;
 }
 
 .flamegraph-item-trunc {
+  position: sticky;
+  left: 0px;
   opacity: 0.5;
 }
 </style>

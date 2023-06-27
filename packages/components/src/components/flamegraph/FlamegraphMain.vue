@@ -3,6 +3,7 @@
     <v-flamegraph-branch
       :events="events"
       :budget="budget"
+      :base-budget="baseBudget"
       :focus="focus"
       @select="propagateSelect"
       @hover="propagateHover"
@@ -27,7 +28,7 @@ export default {
   },
   data() {
     return {
-      baseBudget: NaN,
+      baseBudget: 0,
       mouse: null,
       interval: null,
       focusing: 0,
