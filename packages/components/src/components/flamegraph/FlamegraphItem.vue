@@ -1,5 +1,12 @@
 <template>
-  <div :class="classes" :style="style" @click="onClick" @mouseenter="onEnter" @mouseleave="onLeave">
+  <div
+    :class="classes"
+    :style="style"
+    @mousedown="handleMouseDown"
+    @mouseup="handleMouseUp"
+    @mouseenter="handleMouseEnter"
+    @mouseleave="handleMouseLeave"
+  >
     {{ content }}
   </div>
 </template>
@@ -39,6 +46,9 @@ export default {
       required: true,
       validator: (value) => value >= 0,
     },
+  },
+  data() {
+    return { timer: 0 };
   },
   computed: {
     eventType() {
@@ -98,13 +108,19 @@ export default {
     },
   },
   methods: {
-    onClick() {
-      this.$emit('select', this.event);
+    handleMouseDown() {
+      this.timer = Date.now();
     },
-    onEnter() {
+    handleMouseUp() {
+      // We want to differentiate between clicking and dragging
+      if (Date.now() - this.timer < 200) {
+        this.$emit('select', this.event);
+      }
+    },
+    handleMouseEnter() {
       this.$emit('hover', { type: 'enter', target: this.event });
     },
-    onLeave() {
+    handleMouseLeave() {
       this.$emit('hover', { type: 'leave', target: this.event });
     },
   },
@@ -125,6 +141,7 @@ export default {
 $text-color: #e3e5e8;
 $font-size: 12px;
 .flamegraph-item-text {
+  user-select: none;
   font-size: $font-size;
   line-height: 1;
   cursor: pointer;

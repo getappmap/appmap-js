@@ -1,5 +1,5 @@
 <template>
-  <div :class="class_" @mouseleave="handleMouseLeave" @mousemove="handleMouseMove">
+  <div :class="classes" @mouseleave="handleMouseLeave" @mousemove="handleMouseMove">
     <v-flamegraph-branch
       :events="events"
       :factor="1"
@@ -68,7 +68,7 @@ export default {
       return this.baseBudget / 2;
     },
     origin() {
-      return this.mouse ?? this.center;
+      return this.mouse || this.center;
     },
     selection() {
       return this.focusEvent !== null;
@@ -84,7 +84,7 @@ export default {
       // Math.round to avoid floating point errors.
       return Math.round(this.baseBudget * 2 ** (10 * this.zoom));
     },
-    class_() {
+    classes() {
       return {
         'flamegraph-main': true,
         'flamegraph-main-focusing': this.focusing > 0,
@@ -130,6 +130,10 @@ export default {
     handleMouseMove(event) {
       const { left } = event.currentTarget.getBoundingClientRect();
       this.mouse = event.clientX - left;
+      if (this.$el && event.buttons === 1) {
+        this.$el.scrollLeft -= event.movementX;
+        this.$el.scrollTop -= event.movementY;
+      }
     },
     propagateSelect(target) {
       this.$emit('select', target);
@@ -171,6 +175,7 @@ export default {
 
 <style lang="scss">
 .flamegraph-main {
+  cursor: grab;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
