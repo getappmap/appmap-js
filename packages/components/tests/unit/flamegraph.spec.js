@@ -3,7 +3,6 @@ import {
   getEventDuration,
   formatDurationMillisecond,
   formatDuration,
-  styleDimension,
 } from '@/lib/flamegraph.js';
 
 describe('isEventDurationValid', () => {
@@ -63,40 +62,5 @@ describe('formatDuration', () => {
     expect(formatDuration(1.234e-3, 2)).toBe('1.2 ms');
     expect(formatDuration(1.234, 2)).toBe('1.2 s');
     expect(formatDuration(1.234e3, 2)).toBe('1.2 ks');
-  });
-});
-
-describe('styleDimension', () => {
-  it('throws an error if height is too small', () => {
-    expect(() => styleDimension({ width: 10, height: 20 }, { border: 0, padding: 15 })).toThrow();
-    expect(() => styleDimension({ width: 10, height: 20 }, { border: 15, padding: 0 })).toThrow();
-  });
-  it('honor border and padding when possible', () => {
-    expect(styleDimension({ width: 10, height: 20 }, { border: 2, padding: 3 })).toEqual({
-      width: '10px',
-      height: '20px',
-      'padding-left': '3px',
-      'padding-right': '3px',
-      'padding-bottom': '3px',
-      'padding-top': '3px',
-      'border-left-width': '2px',
-      'border-right-width': '2px',
-      'border-top-width': '2px',
-      'border-bottom-width': '2px',
-    });
-  });
-  it('shrink border and padding when restricted', () => {
-    expect(styleDimension({ width: 1, height: 20 }, { border: 2, padding: 3 })).toEqual({
-      width: '1px',
-      height: '20px',
-      'padding-left': '0px',
-      'padding-right': '0px',
-      'padding-bottom': '3px',
-      'padding-top': '3px',
-      'border-left-width': '1px',
-      'border-right-width': '0px',
-      'border-top-width': '2px',
-      'border-bottom-width': '2px',
-    });
   });
 });

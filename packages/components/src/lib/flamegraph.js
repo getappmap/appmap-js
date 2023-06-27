@@ -3,16 +3,6 @@ import { formatNumberExponential, formatNumberMetric } from './metric';
 export const add = (x, y) => x + y;
 
 //////////////
-// Constant //
-//////////////
-
-export const PADDING = 10;
-export const BORDER = 1;
-export const CONTENT_THRESHOLD = 2 * (PADDING + BORDER) + 10;
-export const FONT_SIZE = 12;
-export const HEIGHT = 2 * (BORDER + PADDING) + FONT_SIZE;
-
-//////////////
 // Duration //
 //////////////
 
@@ -20,31 +10,6 @@ export const isEventDurationValid = ({ elapsedTime }) =>
   typeof elapsedTime === 'number' && elapsedTime >= 0;
 
 export const getEventDuration = (event) => (isEventDurationValid(event) ? event.elapsedTime : 0);
-
-///////////
-// Style //
-///////////
-
-export const styleDimension = ({ width, height }, { border, padding }) => {
-  if (height < 2 * (padding + border)) {
-    throw new Error('height is too small');
-  }
-  const half_width = Math.floor(width / 2);
-  const side_border_width = Math.min(border, half_width);
-  const side_padding = Math.min(padding, half_width - side_border_width);
-  return {
-    width: `${width}px`,
-    height: `${height}px`,
-    'padding-left': `${side_padding}px`,
-    'padding-right': `${side_padding}px`,
-    'padding-bottom': `${padding}px`,
-    'padding-top': `${padding}px`,
-    'border-left-width': side_border_width === 0 && width === 1 ? '1px' : `${side_border_width}px`,
-    'border-right-width': `${side_border_width}px`,
-    'border-top-width': `${border}px`,
-    'border-bottom-width': `${border}px`,
-  };
-};
 
 //////////////
 // Duration //
