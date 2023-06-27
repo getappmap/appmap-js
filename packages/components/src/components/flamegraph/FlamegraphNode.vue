@@ -3,17 +3,19 @@
     <v-flamegraph-branch
       v-if="areChildrenVisible"
       :events="children"
-      :budget="childrenBudget"
+      :factor="childrenFactor"
+      :focus="focus"
       :base-budget="baseBudget"
-      :focus="childrenFocus"
+      :zoom-budget="childrenZoomBudget"
       @select="propagateSelect"
       @hover="propagateHover"
     />
     <v-flamegraph-item
       :event="event"
-      :budget="budget"
-      :base-budget="baseBudget"
+      :factor="factor"
       :status="status"
+      :base-budget="baseBudget"
+      :zoom-budget="zoomBudget"
       @select="propagateSelect"
       @hover="propagateHover"
     />
@@ -24,7 +26,7 @@
 import { Event } from '@appland/models';
 import VFlamegraphBranch from './FlamegraphBranch.vue';
 import VFlamegraphItem from './FlamegraphItem.vue';
-import { add, getEventDuration } from '../../lib/flamegraph';
+import { add, getEventDuration, isEventDurationValid } from '../../lib/flamegraph';
 export default {
   name: 'v-flamegraph-node',
   emits: ['select', 'hover'],
@@ -38,9 +40,10 @@ export default {
       required: true,
       validator: (value) => value instanceof Event,
     },
-    budget: {
+    factor: {
       type: Number,
       required: true,
+      validator: (value) => value >= 0 && value <= 1,
     },
     focus: {
       type: Object,
@@ -48,6 +51,11 @@ export default {
       default: null,
     },
     baseBudget: {
+      type: Number,
+      required: true,
+      validator: (value) => value >= 0,
+    },
+    zoomBudget: {
       type: Number,
       required: true,
       validator: (value) => value >= 0,
@@ -62,37 +70,41 @@ export default {
     },
   },
   computed: {
+    childrenZoomBudget() {
+      return this.status === 'crown' ? this.zoomBudget / this.factor : this.zoomBudget;
+    },
+    status() {
+      if (this.focus === null) {
+        return 'branch';
+      } else {
+        if (this.event === this.focus) {
+          return 'crown';
+        } else if (this.focus.ancestors().includes(this.event)) {
+          return 'trunk';
+        } else if (this.event.ancestors().includes(this.focus)) {
+          return 'branch';
+        } else {
+          return 'pruned';
+        }
+      }
+    },
     children() {
       return this.event.children;
     },
     areChildrenVisible() {
       return this.event.children.length > 0;
     },
-    status() {
-      if (this.focus) {
-        if (this.event === this.focus) {
-          return 'crown';
-        } else {
-          return 'trunc';
-        }
-      } else {
-        return 'branch';
-      }
-    },
-    childrenFocus() {
-      return this.event === this.focus ? null : this.focus;
-    },
-    childrenBudget() {
-      const duration = getEventDuration(this.event);
-      if (duration === 0 || (this.focus && this.focus !== this.event)) {
-        return this.budget;
-      } else {
-        return Math.min(
-          this.budget,
-          Math.floor(
-            (this.budget * this.event.children.map(getEventDuration).reduce(add, 0)) / duration
+    childrenFactor() {
+      if (isEventDurationValid(this.event)) {
+        return (
+          this.factor *
+          Math.min(
+            1,
+            this.children.map(getEventDuration).reduce(add, 0) / getEventDuration(this.event)
           )
         );
+      } else {
+        return this.factor;
       }
     },
   },

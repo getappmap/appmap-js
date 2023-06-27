@@ -2,9 +2,10 @@
   <div :class="class_" @mouseleave="handleMouseLeave" @mousemove="handleMouseMove">
     <v-flamegraph-branch
       :events="events"
-      :budget="budget"
-      :base-budget="baseBudget"
+      :factor="1"
       :focus="focus"
+      :zoom-budget="zoomBudget"
+      :base-budget="baseBudget"
       @select="propagateSelect"
       @hover="propagateHover"
     ></v-flamegraph-branch>
@@ -64,7 +65,7 @@ export default {
     selection() {
       return this.focus !== null;
     },
-    budget() {
+    zoomBudget() {
       // Exponential zoom:
       // - {zoom = 0, width = baseBudget}
       // - {zoom = 0.1, width = 2 * baseBudget}
@@ -81,7 +82,7 @@ export default {
     },
   },
   watch: {
-    budget(newBudget, oldBudget) {
+    zoomBudget(newBudget, oldBudget) {
       if (this.$el) {
         const oldScroll = this.$el.scrollLeft;
         const coordinate = toCoordinate({
@@ -168,8 +169,7 @@ export default {
 }
 
 .flamegraph-main-focusing {
-  .flamegraph-item,
-  .flamegraph-rest {
+  .flamegraph-item {
     transition: width 0.5s linear;
   }
 }

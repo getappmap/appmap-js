@@ -9,6 +9,7 @@ import { formatDurationMillisecond, getEventDuration } from '../../lib/flamegrap
 import { Event } from '@appland/models';
 const MIN_BORDER_WIDTH = 2;
 const MIN_TEXT_WIDTH = 50;
+const statuses = new Set(['trunk', 'crown', 'branch', 'pruned']);
 export default {
   name: 'v-flamegraph-item',
   emits: ['select', 'hover'],
@@ -18,20 +19,25 @@ export default {
       required: true,
       validator: (value) => value instanceof Event,
     },
-    budget: {
+    factor: {
       type: Number,
       required: true,
-      validator: (value) => value >= 0,
+      validator: (value) => value >= 0 && value <= 1,
+    },
+    status: {
+      type: String,
+      default: null,
+      validator: (value) => statuses.has(value),
     },
     baseBudget: {
       type: Number,
       required: true,
       validator: (value) => value >= 0,
     },
-    status: {
-      type: String,
+    zoomBudget: {
+      type: Number,
       required: true,
-      validator: (value) => ['trunc', 'crown', 'branch'].includes(value),
+      validator: (value) => value >= 0,
     },
   },
   computed: {
@@ -50,9 +56,9 @@ export default {
       }
     },
     dimension() {
-      if (this.budget < MIN_BORDER_WIDTH) {
+      if (this.width < MIN_BORDER_WIDTH) {
         return 'borderless';
-      } else if (this.budget < MIN_TEXT_WIDTH) {
+      } else if (this.width < MIN_TEXT_WIDTH) {
         return 'textless';
       } else {
         return 'normal';
@@ -66,19 +72,28 @@ export default {
         `flamegraph-item-${this.dimension}`,
       ];
     },
+    width() {
+      if (this.status === 'pruned') {
+        return 0;
+      } else if (this.status === 'branch') {
+        return this.factor * this.zoomBudget;
+      } else {
+        return this.baseBudget;
+      }
+    },
     style() {
-      return { width: `${this.status === 'branch' ? this.budget : this.baseBudget}px` };
+      return { width: `${this.width}px` };
     },
     content() {
-      if (this.budget < MIN_TEXT_WIDTH) {
-        return '';
-      } else {
+      if (this.dimension === 'normal') {
         const duration = getEventDuration(this.event);
         if (duration > 0) {
           return `[${formatDurationMillisecond(duration, 3)}] ${this.event.toString()}`;
         } else {
           return this.event.toString();
         }
+      } else {
+        return '';
       }
     },
   },
@@ -200,7 +215,7 @@ $default-border-color: darken($default-color, 10%);
   border-color: #ff07aa;
 }
 
-.flamegraph-item-trunc {
+.flamegraph-item-trunk {
   position: sticky;
   left: 0px;
   opacity: 0.5;
