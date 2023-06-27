@@ -40,6 +40,7 @@ export default {
 $background-color: #6fddd6;
 $text-color: #010306;
 .flamegraph-root {
+  user-select: none;
   position: sticky;
   left: 0px;
   font-family: 'IBM Plex Mono', monospace;
