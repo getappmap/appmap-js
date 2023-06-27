@@ -47,6 +47,7 @@ $text-color: #010306;
   box-sizing: border-box;
   padding: 10px;
   font-size: 12px;
+  line-height: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

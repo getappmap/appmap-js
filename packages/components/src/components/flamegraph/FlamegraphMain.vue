@@ -169,7 +169,7 @@ export default {
 .flamegraph-main-focusing {
   .flamegraph-item,
   .flamegraph-rest {
-    transition: all 0.5s linear;
+    transition: width 0.5s linear;
   }
 }
 </style>
