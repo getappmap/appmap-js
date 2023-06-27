@@ -5,6 +5,7 @@
     @mouseup="handleMouseUp"
     @mousedown="handleMouseDown"
     @mousemove="handleMouseMove"
+    @wheel="handleWheel"
   >
     <v-flamegraph-branch
       :events="events"
@@ -26,6 +27,7 @@ import VFlamegraphBranch from '@/components/flamegraph/FlamegraphBranch.vue';
 import VFlamegraphRoot from '@/components/flamegraph/FlamegraphRoot.vue';
 const FRICTION = 0.99;
 const MIN_INERTIA = 1;
+const isMouseWheelEvent = ({ deltaX, deltaY }) => deltaX === 0 && Math.abs(deltaY) > 5;
 const toCoordinate = ({ scroll, offset, budget }) => (scroll + offset) / budget;
 const toScroll = ({ coordinate, offset, budget }) => coordinate * budget - offset;
 export default {
@@ -142,6 +144,13 @@ export default {
     handleMouseLeave() {
       this.up = false;
       this.mouse = null;
+    },
+    handleWheel(event) {
+      // This is a quick and dirty way to check whether the wheel event comes from the trackpad.
+      // Nice to have: handle zoom gestures on trackpad.
+      if (!isMouseWheelEvent(event)) {
+        event.stopPropagation();
+      }
     },
     handleMouseMove(event) {
       const { left } = event.currentTarget.getBoundingClientRect();
