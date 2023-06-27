@@ -40,7 +40,7 @@ export default {
       type: Array,
       required: true,
     },
-    focus: {
+    focusEvent: {
       type: Object,
       default: null,
       validator: (value) => value === null || value instanceof Event,
@@ -56,6 +56,14 @@ export default {
     },
   },
   computed: {
+    focus() {
+      return this.focusEvent === null
+        ? null
+        : {
+            target: this.focusEvent,
+            ancestors: new Set(this.focusEvent.ancestors()),
+          };
+    },
     center() {
       return this.baseBudget / 2;
     },
@@ -63,7 +71,7 @@ export default {
       return this.mouse ?? this.center;
     },
     selection() {
-      return this.focus !== null;
+      return this.focusEvent !== null;
     },
     zoomBudget() {
       // Exponential zoom:
@@ -102,7 +110,7 @@ export default {
         });
       }
     },
-    focus() {
+    focusEvent() {
       this.startFocusing();
       setTimeout(this.stopFocusing, 500);
     },

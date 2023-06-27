@@ -4,7 +4,7 @@
       <v-flamegraph-main
         ref="main"
         :events="events"
-        :focus="focus"
+        :focus-event="focusEvent"
         :zoom="smoothZoom"
         :title="title"
         @select="propagateSelect"
@@ -104,7 +104,7 @@ export default {
     },
   },
   computed: {
-    focus() {
+    focusEvent() {
       if (this.selectedEvents.length === 0) {
         return null;
       } else {

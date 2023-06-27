@@ -47,8 +47,9 @@ export default {
     },
     focus: {
       type: Object,
-      required: false,
       default: null,
+      validator: (value) =>
+        value === null || (value.target instanceof Event && value.ancestors instanceof Set),
     },
     baseBudget: {
       type: Number,
@@ -70,6 +71,9 @@ export default {
     },
   },
   computed: {
+    ancestors() {
+      return new Set(this.event.ancestors());
+    },
     childrenZoomBudget() {
       return this.status === 'crown' ? this.zoomBudget / this.factor : this.zoomBudget;
     },
@@ -77,11 +81,11 @@ export default {
       if (this.focus === null) {
         return 'branch';
       } else {
-        if (this.event === this.focus) {
+        if (this.event === this.focus.target) {
           return 'crown';
-        } else if (this.focus.ancestors().includes(this.event)) {
+        } else if (this.focus.ancestors.has(this.event)) {
           return 'trunk';
-        } else if (this.event.ancestors().includes(this.focus)) {
+        } else if (this.ancestors.has(this.focus.target)) {
           return 'branch';
         } else {
           return 'pruned';

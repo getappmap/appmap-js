@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { Event } from '@appland/models';
 import { isEventDurationValid, getEventDuration, add } from '../../lib/flamegraph';
 export default {
   name: 'v-flamegraph-branch',
@@ -34,8 +35,9 @@ export default {
     },
     focus: {
       type: Object,
-      required: false,
       default: null,
+      validator: (value) =>
+        value === null || (value.target instanceof Event && value.ancestors instanceof Set),
     },
     baseBudget: {
       type: Number,
