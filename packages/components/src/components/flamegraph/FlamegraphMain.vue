@@ -80,6 +80,8 @@ export default {
       // - {zoom = 0.2, width = 4 * baseBudget}
       // ...
       // - {zoom = 1, width = 1024 * baseBudget}
+      //
+      // Math.round to avoid floating point errors.
       return Math.round(this.baseBudget * 2 ** (10 * this.zoom));
     },
     class_() {
