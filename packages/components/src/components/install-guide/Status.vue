@@ -179,7 +179,7 @@ export default {
     },
     nextStep() {
       const next = this.statusStates.findIndex((status) => status !== StepStatus.Completed);
-      return next >= 0 ? next : InstructionStep.NumSteps - 1;
+      return next >= 0 ? next : Math.min(this.viewingStep + 1, InstructionStep.NumSteps - 1);
     },
     currentStatus() {
       return this.statusStates[this.nextStep];
