@@ -132,7 +132,7 @@ describe('Status.vue', () => {
     expect(wrapper.find('[data-cy="header"]').text()).toBe(
       `AppMap setup is complete for ${projectName}`
     );
-    expect(wrapper.find('[data-cy="next-step"]').text()).toBe('Next step: Runtime Analysis');
+    expect(wrapper.find('[data-cy="next-step"]').text()).toBe('Next step: Explore AppMaps');
   });
 
   it('does not show a next step when everything is complete and the page is runtime analysis', async () => {
