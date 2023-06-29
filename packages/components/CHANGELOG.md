@@ -1,3 +1,27 @@
+# [@appland/components-v2.51.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.50.0...@appland/components-v2.51.0) (2023-06-29)
+
+
+### Features
+
+* add drag to flamegraph ([2552d16](https://github.com/getappmap/appmap-js/commit/2552d165f4a57503512e5d73e72a838ee64ada4a))
+* add ineratia to grab scroll in flamegraph ([bd0d9fe](https://github.com/getappmap/appmap-js/commit/bd0d9fe3dd9f70af8255e9bab5286a0d0a33f258))
+* enable mouse wheel zoom ([109b6e9](https://github.com/getappmap/appmap-js/commit/109b6e975a53b629cb0ed4ceb22502e61c28126f))
+* enable scroll flamegraph with trackpad ([8925f6a](https://github.com/getappmap/appmap-js/commit/8925f6a05c97ede1465e6e7b8ac0b874a3c8b69e))
+* make the trunk flamegraph sticky ([cdf4202](https://github.com/getappmap/appmap-js/commit/cdf4202d0cf08b2ba707b9c63b6cb8a5b9309c52))
+* min zoom to available width ([a53abf4](https://github.com/getappmap/appmap-js/commit/a53abf4e402b305abe3deeec17f74caebf82cc2b))
+* show when flamegraph items are clickable ([e794dbf](https://github.com/getappmap/appmap-js/commit/e794dbf1b61e176fc8cc11ffd718b12aea3f3e21))
+* show when flamegraph root is clickable ([f90b83a](https://github.com/getappmap/appmap-js/commit/f90b83aa5976bee3cfba856d605d22f2620b946f))
+* smooth flamegraph zoom ([b132e26](https://github.com/getappmap/appmap-js/commit/b132e268e3ddb761bf3c767a30d3c029ebdf3ec8))
+* update show flamegraph button ([5e3709c](https://github.com/getappmap/appmap-js/commit/5e3709cc26fb9469bbc5ec5af07540bca45ccbd8))
+* zoom centering and partial scrolling ([32f6194](https://github.com/getappmap/appmap-js/commit/32f61942a967b6d4bcd8693abec7c67baf4d66a1))
+
+
+### Performance Improvements
+
+* class-based FlamegraphItem dimensions ([5bf4d30](https://github.com/getappmap/appmap-js/commit/5bf4d30c3f632390fd0c3f66cff1092a07648346))
+* faster focus-related update in flamegraph ([06c7029](https://github.com/getappmap/appmap-js/commit/06c702904884fe3ae264e1293e8b5e07546434aa))
+* static flamegraph factor ([771fb6c](https://github.com/getappmap/appmap-js/commit/771fb6cbb0b53f8b863932b9dbf9df99147bd438))
+
 # [@appland/components-v2.50.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.49.0...@appland/components-v2.50.0) (2023-06-23)
 
 
