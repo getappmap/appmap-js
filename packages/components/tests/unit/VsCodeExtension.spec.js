@@ -4,6 +4,7 @@ import { VIEW_FLOW } from '@/store/vsCode';
 import data from './fixtures/user_page_scenario.appmap.json';
 import Vue from 'vue';
 import { RESET_FILTERS } from '../../src/store/vsCode';
+import { AppMapFilter, serializeFilter, base64UrlEncode } from '@appland/models';
 
 describe('VsCodeExtension.vue', () => {
   let wrapper; // Wrapper<Vue>
@@ -162,5 +163,21 @@ describe('VsCodeExtension.vue', () => {
 
     wrapper.vm.onChangeTab(wrapper.vm.$refs[VIEW_FLOW]);
     expect(rootWrapper.emitted().changeTab[1]).toContain(VIEW_FLOW);
+  });
+
+  it('creates a default filter', () => {
+    const defaultFilter = new AppMapFilter();
+    const serialized = serializeFilter(defaultFilter);
+    const base64encoded = base64UrlEncode(JSON.stringify({ filters: serialized }));
+
+    const expectedFilterObject = {
+      filterName: 'AppMap default',
+      state: base64encoded,
+      default: true,
+    };
+
+    const actual = rootWrapper.emitted().saveFilter;
+    expect(actual).toBeArrayOfSize(1);
+    expect(actual[0][0]).toEqual(expectedFilterObject);
   });
 });
