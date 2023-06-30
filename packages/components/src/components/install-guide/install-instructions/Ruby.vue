@@ -1,7 +1,7 @@
 <template>
   <div>
     <section>
-      Manual installation is a good option if you want to install<code class="inline">appmap</code>
+      Manual installation is a good option if you want to install <code class="inline">appmap</code>
       from outside of the code editor.
     </section>
     <section>
