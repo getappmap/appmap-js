@@ -202,7 +202,6 @@
             <template v-slot:body>
               <v-filter-menu
                 :filteredAppMap="filteredAppMap"
-                :initialSavedFilters="savedFilters"
                 @setState="(stateString) => setState(stateString)"
               ></v-filter-menu>
             </template>
@@ -333,6 +332,7 @@ import {
   deserializeFilter,
   filterStringToFilterState,
   base64UrlEncode,
+  AppMapFilter,
 } from '@appland/models';
 import CopyIcon from '@/assets/copy-icon.svg';
 import CloseIcon from '@/assets/close.svg';
@@ -1187,6 +1187,22 @@ export default {
 
     initializeSavedFilters() {
       const savedFilters = this.savedFilters;
+
+      if (this.savedFilters.length === 0) {
+        const defaultFilter = new AppMapFilter();
+        const serialized = serializeFilter(defaultFilter);
+        const base64encoded = base64UrlEncode(JSON.stringify({ filters: serialized }));
+
+        const filterObject = {
+          filterName: 'AppMap default',
+          state: base64encoded,
+          default: true,
+        };
+
+        this.$root.$emit('saveFilter', filterObject);
+        savedFilters.push(filterObject);
+      }
+
       this.$store.commit(SET_SAVED_FILTERS, savedFilters);
 
       const defaultFilter = savedFilters.find((savedFilter) => savedFilter.default);
