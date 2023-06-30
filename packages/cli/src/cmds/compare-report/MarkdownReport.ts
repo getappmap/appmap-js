@@ -110,12 +110,6 @@ export default class MarkdownReport implements Report {
         changeReport.sequenceDiagramDiff || {}
       ).length;
 
-      Object.keys(changeReport.findingDiff).forEach((key) => {
-        changeReport.findingDiff[key].forEach(
-          (finding: Finding) => ((finding as any).appmap = finding.appMapFile)
-        );
-      });
-
       if (changeReport.apiDiff.differenceCount > 0) {
         const sourceDiff = (
           await executeCommand(
@@ -129,6 +123,12 @@ export default class MarkdownReport implements Report {
         changeReport.apiDiff.sourceDiff = sourceDiff;
       }
     }
+
+    Object.keys(changeReport.findingDiff).forEach((key) => {
+      changeReport.findingDiff[key].forEach(
+        (finding: Finding) => ((finding as any).appmap = finding.appMapFile)
+      );
+    });
 
     const self = this;
 
