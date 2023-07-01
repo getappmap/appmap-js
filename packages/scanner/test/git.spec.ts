@@ -44,9 +44,7 @@ describe(lastGitOrFSModifiedDate, () => {
     beforeEach(() => (newFileName = join(workDir, randomUUID())));
     beforeEach(async () => {
       createdAfter = new Date();
-      await new Promise<void>((resolve) => setTimeout(resolve, 5));
       await writeFile(newFileName, 'initial state');
-      await new Promise<void>((resolve) => setTimeout(resolve, 5));
       createdBefore = new Date();
     });
 
@@ -55,10 +53,10 @@ describe(lastGitOrFSModifiedDate, () => {
     });
     it('file modified date checks out', async () => {
       expect((await fileModifiedDate(newFileName))?.getTime()).toBeGreaterThanOrEqual(
-        createdAfter.getTime()
+        createdAfter.getTime() - 1000 // timestamp precision can be down to a second depending on the filesystem
       );
       expect((await fileModifiedDate(newFileName))?.getTime()).toBeLessThanOrEqual(
-        createdBefore.getTime()
+        createdBefore.getTime() + 1000
       );
     });
     it('last git or fs modified date is the fs modified date', async () => {
