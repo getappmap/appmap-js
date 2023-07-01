@@ -2,7 +2,7 @@ name: '@appland/scanner'
 language: javascript
 appmap_dir: tmp/appmap
 ordering: chronological
-command: yarn exec jest -t ^(?!.*@appmap-fixme) --filter=./test/testFilter.js
+command: yarn exec jest --detectOpenHandles -t ^(?!.*@appmap-fixme) --filter=./test/testFilter.js
 recorder: jest
 exclude:
   - \[anonymous\]
