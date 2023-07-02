@@ -171,8 +171,8 @@ export class Watcher {
 
     if (
       reportStats &&
-      reportStats.mtimeMs > appmapStats.mtimeMs &&
-      reportStats.mtimeMs > this.config.timestampMs
+      reportStats.mtimeMs > appmapStats.mtimeMs - 1000 &&
+      reportStats.mtimeMs > this.config.timestampMs - 1000
     )
       return; // report is up to date
 
