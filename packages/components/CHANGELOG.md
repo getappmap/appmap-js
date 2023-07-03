@@ -1,3 +1,16 @@
+# [@appland/components-v2.52.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.51.0...@appland/components-v2.52.0) (2023-07-03)
+
+
+### Bug Fixes
+
+* Add a missing space ([2615952](https://github.com/getappmap/appmap-js/commit/261595250c54b8205cd58785725e83fa9062296f))
+
+
+### Features
+
+* add default AppMap filter if none exists ([2de2374](https://github.com/getappmap/appmap-js/commit/2de23748e998af4664f554f3a6de2cba5e88938a))
+* Update install instructions for AppMap Java in VS Code ([2ff2c40](https://github.com/getappmap/appmap-js/commit/2ff2c40906058a6042b563bde318905c259867e3))
+
 # [@appland/components-v2.51.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.50.0...@appland/components-v2.51.0) (2023-06-29)
 
 
