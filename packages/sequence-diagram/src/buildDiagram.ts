@@ -113,11 +113,20 @@ export default function buildDiagram(
 
   function buildReturnValue(callee: Event): ReturnValue | undefined {
     const { returnEvent } = callee;
+
     if (!returnEvent) return;
-    if (!(returnEvent.returnValue || returnEvent.exceptions.length > 0)) return;
+
+    const voidReturn = {
+      returnValueType: {
+        name: 'void',
+      },
+      raisesException: false,
+    } as ReturnValue;
 
     let returnValueType: Type | undefined;
     const raisesException = returnEvent.exceptions?.length > 0;
+
+    if (!returnEvent.returnValue && !raisesException) return voidReturn;
 
     if (returnEvent.returnValue) {
       let propertyNames: string[] | undefined;
@@ -130,6 +139,7 @@ export default function buildDiagram(
       const typeName =
         classNameToOpenAPIType(returnEvent.returnValue.class, { strict: true }) ||
         returnEvent.returnValue.class;
+
       returnValueType = {
         name: typeName,
         properties: propertyNames,

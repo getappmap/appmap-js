@@ -154,6 +154,8 @@ export const nodeResult = (action: Action | undefined): string | undefined => {
       return action.status ? action.status.toString() : '<unknown-status>';
     case NodeType.ClientRPC:
       return action.status ? action.status.toString() : '<unknown-status>';
+    case NodeType.Query:
+      return 'void';
   }
 };
 
