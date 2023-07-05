@@ -52,18 +52,10 @@ export default {
   },
   computed: {
     eventType() {
-      if (this.event.sql) {
-        return 'sql';
-      } else if (
-        this.event.httpClientRequest ||
-        this.event.httpClientResponse ||
-        this.event.httpServerRequest ||
-        this.event.httpServerResponse
-      ) {
-        return 'http';
-      } else {
-        return 'default';
-      }
+      const type =
+        this.event.codeObject && this.event.codeObject.data && this.event.codeObject.type;
+
+      return type ? type : 'default';
     },
     dimension() {
       if (this.width < MIN_BORDER_WIDTH) {
@@ -160,6 +152,13 @@ $font-size: 12px;
   }
 }
 
+.flamegraph-item-clickable.flamegraph-item-external-route {
+  cursor: pointer;
+  &:hover {
+    color: $gray4;
+  }
+}
+
 ///////////////
 // Dimension //
 ///////////////
@@ -198,20 +197,29 @@ $sql-color: #9c2fba;
 $sql-border-color: darken($sql-color, 10%);
 $http-color: #542168;
 $http-border-color: darken($http-color, 10%);
+$external-route-color: #ebdf90;
+$external-route-border-color: darken($external-route-color, 10%);
 $default-color: #4362b1;
 $default-border-color: darken($default-color, 10%);
 
-.flamegraph-item-sql {
+.flamegraph-item-query {
   background-color: $sql-color;
   border-color: $sql-border-color;
 }
 
-.flamegraph-item-http {
+.flamegraph-item-external-route {
+  color: black;
+  background-color: $external-route-color;
+  border-color: $external-route-border-color;
+}
+
+.flamegraph-item-route {
   background-color: $http-color;
   border-color: $http-border-color;
 }
 
-.flamegraph-item-default {
+.flamegraph-item-default,
+.flamegraph-item-function {
   background-color: $default-color;
   border-color: $default-border-color;
 }
