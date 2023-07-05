@@ -10,9 +10,15 @@ participant posts as "posts"
     controllers->models: <u>list</u> <color:gray> 0.351 ms</color>
     activate models
       models->database: <u>query</u> <color:gray> 0.002 ms</color>
+      activate database
+      models<--database: void
+      deactivate database
       models->models: <u>find_for_users</u> <color:gray> 0.042 ms</color>
       activate models
         models->database: <u>query</u> <color:gray> 0.001 ms</color>
+        activate database
+        models<--database: void
+        deactivate database
       models<--models: object
       deactivate models
     controllers<--models: array

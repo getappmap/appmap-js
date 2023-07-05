@@ -1,10 +1,10 @@
 <template>
   <div class="label">
-    <span class="name">{{ actionSpec.nodeResult }}</span>
+    <span class="name">{{ label }}</span>
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { ActionSpec } from './ActionSpec';
 
 export default {
@@ -17,6 +17,13 @@ export default {
       type: ActionSpec,
       required: true,
       readonly: true,
+    },
+  },
+
+  computed: {
+    label() {
+      const { nodeResult } = this.actionSpec;
+      return !nodeResult || nodeResult === 'void' ? '' : nodeResult;
     },
   },
 };

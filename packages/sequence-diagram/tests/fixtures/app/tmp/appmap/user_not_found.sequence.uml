@@ -8,6 +8,9 @@ participant database as "database"
     controllers->models: <u>find</u> <color:gray> 0.119 ms</color>
     activate models
       models->database: <u>query</u> <color:gray> 0.001 ms</color>
+      activate database
+      models<--database: void
+      deactivate database
     controllers<--models: <i>exception!</i>
     deactivate models
   [<--controllers: array

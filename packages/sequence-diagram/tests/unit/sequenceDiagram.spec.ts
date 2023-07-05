@@ -59,10 +59,16 @@ describe('Sequence diagram', () => {
 
   describe('response', () => {
     describe('null-ish', () => {
-      it('is omitted', () => {
+      it('is not omitted', () => {
+        const expected = {
+          returnValueType: {
+            name: 'void',
+          },
+          raisesException: false,
+        };
         const action = findActionById(SHOW_USER_APPMAP, 'lib/database/Database.query');
         assert(isFunction(action));
-        assert.strictEqual(action.returnValue, undefined);
+        assert.deepStrictEqual(action.returnValue, expected);
       });
     });
     describe('object instance', () => {
