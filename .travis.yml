@@ -27,11 +27,6 @@ jobs:
 
     - node_js: 16
 
-    - node_js: 14
-      # appmapping doesn't work on node 14
-      # https://github.com/getappmap/appmap-agent-js/issues/229
-      script: yarn test:no-appmap
-
     - os: windows
       node_js: 18
       env:
