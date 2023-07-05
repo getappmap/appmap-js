@@ -7,7 +7,7 @@
     <br />
     <p>
       This ensures that your Java code runs with the JVM option
-      <code class="inline">-Djavaagent=appmap.jar</code>. This option is required to enable AppMap
+      <code class="inline">-javaagent:appmap.jar</code>. This option is required to enable AppMap
       recording.
     </p>
     <br />

@@ -138,7 +138,7 @@
               <v-flash-message type="info">
                 <v-success-icon class="status-icon" />
                 The AppMap agent JAR is up to date. You can find it at
-                <code class="inline">~/.appmap/lib/appmap.jar</code>.
+                <code class="inline">~/.appmap/lib/java/appmap.jar</code>.
               </v-flash-message>
             </template>
             <template v-else-if="javaAgentStatus === 'pending'">
