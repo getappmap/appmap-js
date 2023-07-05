@@ -113,7 +113,6 @@
     "read-pkg-up": "^7.0.1",
     "semver": "^7.3.5",
     "strip-ansi": "^6.0.0",
-    "supports-hyperlinks": "^2.2.0",
     "validator": "^13.7.0",
     "w3c-xmlserializer": "^2.0.0",
     "yargs": "^17.1.1"

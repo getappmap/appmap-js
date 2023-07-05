@@ -1,6 +1,6 @@
 import { spawn } from 'child_process';
 import UI from '../userInteraction';
-import { abspath, openInBrowser, openInTool, openInVSCode } from './openers';
+import { abspath, openInBrowser } from './openers';
 
 export default async function showAppMap(appMapFile: string) {
   const termProgram = process.env.TERM_PROGRAM;
