@@ -1,3 +1,10 @@
+# [@appland/components-v2.52.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.52.0...@appland/components-v2.52.1) (2023-07-05)
+
+
+### Bug Fixes
+
+* VS Code Java doc updates ([68f6241](https://github.com/getappmap/appmap-js/commit/68f6241eec2ba8c0cd5abaae239ec147144ab338))
+
 # [@appland/components-v2.52.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.51.0...@appland/components-v2.52.0) (2023-07-03)
 
 
