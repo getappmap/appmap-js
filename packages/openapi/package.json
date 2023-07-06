@@ -10,7 +10,6 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "appmap-agent-js",
-    "test:no-appmap": "jest",
     "build": "tsc -p tsconfig.build.json",
     "watch": "tsc -p tsconfig.build.json --watch",
     "lint": "eslint src"

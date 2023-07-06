@@ -9,8 +9,7 @@
   "scripts": {
     "build": "tsc",
     "lint": "eslint",
-    "test": "appmap-agent-js",
-    "test:no-appmap": "jest"
+    "test": "appmap-agent-js"
   },
   "publishConfig": {
     "access": "public"

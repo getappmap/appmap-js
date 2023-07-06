@@ -14,7 +14,6 @@
     "lint": "eslint src --ext .ts",
     "ci": "yarn lint && yarn build && yarn test",
     "test": "jest",
-    "test:no-appmap": "yarn test",
     "semantic-release": "semantic-release"
   },
   "author": "AppLand, Inc.",
