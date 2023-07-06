@@ -1,3 +1,10 @@
+# [@appland/components-v2.52.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.52.1...@appland/components-v2.52.2) (2023-07-06)
+
+
+### Bug Fixes
+
+* external routes are yellow in flame graph ([8988c78](https://github.com/getappmap/appmap-js/commit/8988c78d5e33d640b03783d9835c415c19e72ae1))
+
 # [@appland/components-v2.52.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.52.0...@appland/components-v2.52.1) (2023-07-05)
 
 
