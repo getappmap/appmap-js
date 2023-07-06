@@ -1,3 +1,10 @@
+# [@appland/sequence-diagram-v1.6.1](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.6.0...@appland/sequence-diagram-v1.6.1) (2023-07-06)
+
+
+### Bug Fixes
+
+* loop boxes surround calls ([69e0e14](https://github.com/getappmap/appmap-js/commit/69e0e1454b0ff7cba8bcb4b095ae7af55e745cef))
+
 # [@appland/sequence-diagram-v1.6.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.5.2...@appland/sequence-diagram-v1.6.0) (2023-06-02)
 
 
