@@ -14,7 +14,6 @@
     "lint:fix": "eslint 'src/**/*.[jt]s' 'tests/**/*.[jt]s' --fix",
     "pre-commit": "lint-staged",
     "test": "appmap-agent-js",
-    "test:no-appmap": "jest",
     "watch": "tsup --watch"
   },
   "lint-staged": {

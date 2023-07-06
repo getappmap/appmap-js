@@ -20,7 +20,6 @@
     "lint": "eslint src --ext .ts",
     "ci": "yarn lint && yarn build && yarn schema-up-to-date && yarn doc-up-to-date && yarn test",
     "test": "appmap-agent-js && jest -t @appmap-fixme --filter=./test/testFilter.js",
-    "test:no-appmap": "yarn jest",
     "jest": "jest --filter=./test/testFilter.js",
     "semantic-release": "semantic-release",
     "watch": "node bin/preBuild.js && tsc -p tsconfig.build.json --watch"

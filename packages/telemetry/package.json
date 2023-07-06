@@ -5,7 +5,6 @@
   "license": "MIT",
   "scripts": {
     "test": "appmap-agent-js",
-    "test:no-appmap": "jest",
     "lint": "eslint telemetry.ts",
     "pre-commit": "lint-staged"
   },
