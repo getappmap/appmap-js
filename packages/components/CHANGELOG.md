@@ -1,3 +1,15 @@
+# [@appland/components-v2.52.3](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.52.2...@appland/components-v2.52.3) (2023-07-06)
+
+
+### Bug Fixes
+
+* loop boxes surround calls ([69e0e14](https://github.com/getappmap/appmap-js/commit/69e0e1454b0ff7cba8bcb4b095ae7af55e745cef))
+
+
+### Reverts
+
+* Revert "fix: correct loop box height" ([76ae018](https://github.com/getappmap/appmap-js/commit/76ae01825f14a491efc06969528287df1dd11271))
+
 # [@appland/components-v2.52.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.52.1...@appland/components-v2.52.2) (2023-07-06)
 
 
