@@ -1,3 +1,4 @@
+import process from 'node:process';
 import { serveAndOpenAppMap } from '../../lib/serveAndOpen';
 import { join, resolve } from 'path';
 

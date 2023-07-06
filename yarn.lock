@@ -134,7 +134,7 @@ __metadata:
     "@types/fs-extra": ^9.0.13
     "@types/gitconfiglocal": ^2.0.1
     "@types/inquirer": ^9.0.3
-    "@types/jest": ^29.4.1
+    "@types/jest": ^29.5.2
     "@types/jest-sinon": ^1.0.2
     "@types/jsdom": ^16.2.13
     "@types/moo": ^0.5.5
@@ -7688,16 +7688,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:^27.4.1":
-  version: 27.4.1
-  resolution: "@types/jest@npm:27.4.1"
-  dependencies:
-    jest-matcher-utils: ^27.0.0
-    pretty-format: ^27.0.0
-  checksum: 5184f3eef4832d01ee8f59bed15eec45ccc8e29c724a5e6ce37bf74396b37bdf04f557000f45ba4fc38ae6075cf9cfcce3d7a75abc981023c61ceb27230a93e4
-  languageName: node
-  linkType: hard
-
 "@types/jest@npm:^29.4.1":
   version: 29.4.1
   resolution: "@types/jest@npm:29.4.1"
@@ -7705,6 +7695,16 @@ __metadata:
     expect: ^29.0.0
     pretty-format: ^29.0.0
   checksum: 75cdd1804615b663b88844eef61cb7c8104d65baf718190a1cd88ce199412dbe2ee136df3698604cc258a9a62ba7cbd7bd7712a17d8cb748909263ef56d6aac3
+  languageName: node
+  linkType: hard
+
+"@types/jest@npm:^29.5.2":
+  version: 29.5.2
+  resolution: "@types/jest@npm:29.5.2"
+  dependencies:
+    expect: ^29.0.0
+    pretty-format: ^29.0.0
+  checksum: 7d205599ea3cccc262bad5cc173d3242d6bf8138c99458509230e4ecef07a52d6ddcde5a1dbd49ace655c0af51d2dbadef3748697292ea4d86da19d9e03e19c0
   languageName: node
   linkType: hard
 
@@ -21254,7 +21254,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-matcher-utils@npm:^27.0.0, jest-matcher-utils@npm:^27.5.1":
+"jest-matcher-utils@npm:^27.5.1":
   version: 27.5.1
   resolution: "jest-matcher-utils@npm:27.5.1"
   dependencies:
@@ -29353,7 +29353,7 @@ resolve@1.1.7:
     "@storybook/builder-webpack5": ^6.5.14
     "@storybook/manager-webpack5": ^6.5.14
     "@tsconfig/recommended": ^1.0.1
-    "@types/jest": ^27.4.1
+    "@types/jest": ^29.5.2
     "@types/node": ^17.0.2
     eslint: ^7.25.0
     eslint-config-airbnb-base: ^14.2.1
