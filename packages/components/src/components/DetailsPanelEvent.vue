@@ -130,10 +130,6 @@ export default {
       type: Object,
       required: true,
     },
-    flamegraphEnabled: {
-      type: Boolean,
-      default: false,
-    },
   },
   computed: {
     title() {
@@ -209,7 +205,7 @@ export default {
     },
 
     shouldDisplayViewInFlamegraph() {
-      return this.flamegraphEnabled && this.$store.state.currentView !== VIEW_FLAMEGRAPH;
+      return this.$store.state.currentView !== VIEW_FLAMEGRAPH;
     },
 
     caller() {

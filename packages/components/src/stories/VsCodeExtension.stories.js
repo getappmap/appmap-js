@@ -45,7 +45,6 @@ export default {
   },
   args: {
     appMapUploadable: true,
-    flamegraphEnabled: true,
     savedFilters: [savedFilters[0]],
   },
 };
