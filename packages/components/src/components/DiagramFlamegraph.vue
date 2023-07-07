@@ -4,7 +4,6 @@
       <v-flamegraph-main
         ref="main"
         :events="events"
-        :focus-event="focusEvent"
         :zoom="smoothZoom"
         :title="title"
         @select="propagateSelect"
@@ -39,10 +38,6 @@ export default {
   },
   props: {
     events: {
-      type: Array,
-      required: true,
-    },
-    selectedEvents: {
       type: Array,
       required: true,
     },
@@ -101,18 +96,6 @@ export default {
     },
     propagateSelect(target) {
       this.$emit('select', target);
-    },
-  },
-  computed: {
-    focusEvent() {
-      if (this.selectedEvents.length === 0) {
-        return null;
-      } else {
-        if (this.selectedEvents.length > 1) {
-          console.warn('Ignoring additional selected events');
-        }
-        return this.selectedEvents[0];
-      }
     },
   },
 };
