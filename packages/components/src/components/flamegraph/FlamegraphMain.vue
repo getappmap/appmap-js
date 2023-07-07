@@ -25,11 +25,13 @@ import { nextTick } from 'vue';
 import { Event } from '@appland/models';
 import VFlamegraphBranch from '@/components/flamegraph/FlamegraphBranch.vue';
 import VFlamegraphRoot from '@/components/flamegraph/FlamegraphRoot.vue';
+
 const FRICTION = 0.99;
 const MIN_INERTIA = 1;
 const isMouseWheelEvent = ({ deltaX, deltaY }) => deltaX === 0 && Math.abs(deltaY) > 5;
 const toCoordinate = ({ scroll, offset, budget }) => (scroll + offset) / budget;
 const toScroll = ({ coordinate, offset, budget }) => coordinate * budget - offset;
+
 export default {
   name: 'v-flamegraph-main',
   emits: ['select', 'hover'],
@@ -51,11 +53,6 @@ export default {
       type: Array,
       required: true,
     },
-    focusEvent: {
-      type: Object,
-      default: null,
-      validator: (value) => value === null || value instanceof Event,
-    },
     zoom: {
       type: Number,
       required: true,
@@ -68,12 +65,16 @@ export default {
   },
   computed: {
     focus() {
-      return this.focusEvent === null
+      return this.selectedEvent === null
         ? null
         : {
-            target: this.focusEvent,
-            ancestors: new Set(this.focusEvent.ancestors()),
+            target: this.selectedEvent,
+            ancestors: new Set(this.selectedEvent.ancestors()),
           };
+    },
+    selectedEvent() {
+      const selectedObj = this.$store.getters.selectedObject;
+      return selectedObj instanceof Event ? selectedObj : null;
     },
     center() {
       return this.baseBudget / 2;
@@ -82,7 +83,7 @@ export default {
       return this.mouse || this.center;
     },
     pruned() {
-      return this.focusEvent !== null;
+      return this.selectedEvent !== null;
     },
     zoomBudget() {
       // Exponential zoom:
@@ -123,7 +124,7 @@ export default {
         });
       }
     },
-    focusEvent() {
+    selectedEvent() {
       this.startFocusing();
       setTimeout(this.stopFocusing, 500);
     },

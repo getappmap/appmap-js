@@ -121,7 +121,6 @@
           <v-diagram-flamegraph
             ref="viewFlamegraph_diagram"
             :events="filteredAppMap.rootEvents()"
-            :selected-events="selectedEvent"
             :title="filteredAppMap.name"
             @select="onFlamegraphSelect"
           />

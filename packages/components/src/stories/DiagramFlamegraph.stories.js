@@ -26,6 +26,7 @@ export default {
 export const flamegraph = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VDiagramFlamegraph },
+  store,
   template: `
     <v-diagram-flamegraph
       v-bind="$props"
