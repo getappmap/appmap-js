@@ -1,3 +1,10 @@
+# [@appland/components-v2.53.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.52.3...@appland/components-v2.53.0) (2023-07-07)
+
+
+### Features
+
+* remove flame graph feature flag ([ee48f88](https://github.com/getappmap/appmap-js/commit/ee48f88b783eba164bc2cf9392a1b8a3ec00f4d7))
+
 # [@appland/components-v2.52.3](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.52.2...@appland/components-v2.52.3) (2023-07-06)
 
 
