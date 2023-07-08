@@ -15,6 +15,9 @@ import Telemetry from '../../telemetry';
 import EventEmitter from 'events';
 import { WatchScanTelemetry } from './watchScanTelemetry';
 import isAncestorPath from '../../util/isAncestorPath';
+import { debuglog } from 'util';
+
+const debug = debuglog('scanner:watch');
 
 export type WatchScanOptions = {
   appId?: string;
@@ -168,6 +171,15 @@ export class Watcher {
     );
 
     if (!appmapStats) return;
+
+    const cut = (str: string) => str.substring(str.length - 8);
+    debug(
+      '%s: %s, findings: %s, config: %s',
+      appmapFile,
+      cut(appmapStats.mtimeMs.toFixed(3)),
+      reportStats && cut(reportStats.mtimeMs.toFixed(3)),
+      cut(this.config.timestampMs.toFixed(3))
+    );
 
     if (
       reportStats &&
