@@ -175,7 +175,6 @@ export default {
     actionKey(action: ActionSpec): string {
       return ['action', this.diagramSpec.uniqueId, action.index].join(':');
     },
-    // TODO: Determine if this is necessary/unused
     showFocusEffect() {
       setTimeout(() => {
         const element = this.$el.querySelector(

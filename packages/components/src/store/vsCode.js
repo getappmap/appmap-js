@@ -36,6 +36,7 @@ export const ADD_HIDDEN_NAME = 'addHiddenName';
 export const REMOVE_HIDDEN_NAME = 'removeHiddenName';
 export const SET_SAVED_FILTERS = 'setSavedFilters';
 export const SET_SELECTED_SAVED_FILTER = 'setselectedSavedFilter';
+export const SET_HIGHLIGHTED_EVENTS = 'setHighlightedEvents';
 export const DEFAULT_VIEW = VIEW_COMPONENT;
 export const DEFAULT_FILTER_NAME = 'AppMap default';
 
@@ -65,6 +66,7 @@ export function buildStore() {
       savedFilters: [],
       selectedSavedFilter: null,
       defaultFilter: null,
+      highlightedEvents: [],
     },
 
     getters: {
@@ -101,22 +103,28 @@ export function buildStore() {
         state.selectionStack.push(...selectionStack);
         state.selectedLabel = null;
         state.focusedEvent = null;
+        state.highlightedEvents = [];
       },
 
       [POP_SELECTION_STACK](state) {
         state.selectionStack.pop();
+        state.selectedLabel = null;
+        state.focusedEvent = null;
+        state.highlightedEvents = [];
       },
 
       [CLEAR_SELECTION_STACK](state) {
         state.selectionStack = [];
         state.selectedLabel = null;
         state.focusedEvent = null;
+        state.highlightedEvents = [];
       },
 
       [SELECT_LABEL](state, label) {
         state.selectionStack = [];
         state.selectedLabel = label;
         state.focusedEvent = null;
+        state.highlightedEvents = [];
       },
 
       [SET_VIEW](state, view) {
@@ -217,6 +225,10 @@ export function buildStore() {
 
       [SET_SELECTED_SAVED_FILTER](state, selectedSavedFilter) {
         state.selectedSavedFilter = selectedSavedFilter;
+      },
+
+      [SET_HIGHLIGHTED_EVENTS](state, highlightedEvents) {
+        state.highlightedEvents = highlightedEvents;
       },
     },
   });
