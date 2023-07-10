@@ -378,6 +378,8 @@ import {
   REMOVE_ROOT_OBJECT,
   SET_SAVED_FILTERS,
   SET_SELECTED_SAVED_FILTER,
+  SET_HIGHLIGHTED_EVENTS,
+  SET_FOCUSED_EVENT,
 } from '../store/vsCode';
 
 export default {
@@ -467,6 +469,9 @@ export default {
 
             this.eventFilterMatchIndex = highlightedIndex >= 0 ? highlightedIndex : undefined;
           }
+
+          if (selectedObject.type === 'analysis-finding')
+            this.analysisFindingSelection(selectedObject);
         } else {
           this.eventFilterMatchIndex = undefined;
         }
@@ -1208,6 +1213,25 @@ export default {
 
     updateFilters(updatedFilters) {
       this.$store.commit(SET_SAVED_FILTERS, updatedFilters);
+    },
+
+    analysisFindingSelection(findingObject) {
+      const finding = findingObject.resolvedFinding && findingObject.resolvedFinding.finding;
+      if (!finding) return;
+
+      if (finding.relatedEvents) this.$store.commit(SET_HIGHLIGHTED_EVENTS, finding.relatedEvents);
+
+      if (finding.impactDomain === 'Performance') {
+        this.$store.commit(SET_VIEW, VIEW_FLAMEGRAPH);
+      } else {
+        this.$store.commit(SET_VIEW, VIEW_SEQUENCE);
+      }
+
+      const eventToFocus = finding.participatingEvents?.commonAncestor || finding.event;
+      if (!eventToFocus) return;
+
+      const event = this.filteredAppMap.eventsById[eventToFocus.id];
+      this.$store.commit(SET_FOCUSED_EVENT, event);
     },
   },
 

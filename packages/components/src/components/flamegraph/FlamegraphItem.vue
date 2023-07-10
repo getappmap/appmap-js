@@ -67,12 +67,15 @@ export default {
       }
     },
     classes() {
-      return [
+      const result = [
         'flamegraph-item',
         `flamegraph-item-${this.eventType}`,
         `flamegraph-item-${this.status}`,
         `flamegraph-item-${this.dimension}`,
       ];
+
+      if (this.isHighlighted) result.push('highlighted');
+      return result;
     },
     width() {
       if (this.status === 'pruned') {
@@ -97,6 +100,11 @@ export default {
       } else {
         return '';
       }
+    },
+    isHighlighted() {
+      return this.$store.state.highlightedEvents.some(
+        (highlightedEvent) => highlightedEvent.id === this.event.id
+      );
     },
   },
   methods: {
@@ -255,5 +263,9 @@ $default-border-color: darken($default-color, 10%);
   position: sticky;
   left: 0px;
   opacity: 0.5;
+}
+
+.highlighted {
+  border-color: white;
 }
 </style>

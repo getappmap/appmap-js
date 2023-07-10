@@ -65,16 +65,27 @@ export default {
   },
   computed: {
     focus() {
-      return this.selectedEvent === null
-        ? null
-        : {
-            target: this.selectedEvent,
-            ancestors: new Set(this.selectedEvent.ancestors()),
-          };
+      if (this.focusedEvent)
+        return {
+          target: this.focusedEvent,
+          ancestors: new Set(this.focusedEvent.ancestors()),
+        };
+
+      if (this.selectedEvent)
+        return {
+          target: this.selectedEvent,
+          ancestors: new Set(this.selectedEvent.ancestors()),
+        };
+
+      return null;
     },
     selectedEvent() {
       const selectedObj = this.$store.getters.selectedObject;
       return selectedObj instanceof Event ? selectedObj : null;
+    },
+    focusedEvent() {
+      const { focusedEvent } = this.$store.state;
+      return focusedEvent instanceof Event ? focusedEvent : null;
     },
     center() {
       return this.baseBudget / 2;
@@ -125,6 +136,10 @@ export default {
       }
     },
     selectedEvent() {
+      this.startFocusing();
+      setTimeout(this.stopFocusing, 500);
+    },
+    focusedEvent() {
       this.startFocusing();
       setTimeout(this.stopFocusing, 500);
     },
