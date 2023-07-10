@@ -1040,6 +1040,7 @@ export default {
       this.$root.$emit('resetDiagram');
 
       this.renderKey += 1;
+      this.eventFilterText = '';
     },
 
     toggleShareModal() {
