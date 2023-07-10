@@ -487,7 +487,7 @@ export default {
           }
           this.$nextTick(() => {
             Object.keys(this.$refs)
-              .filter((ref) => ref.endsWith('_diagram'))
+              .filter((ref) => ref.endsWith('_diagram') && ref !== 'viewFlamegraph_diagram')
               .forEach((ref) => this.$refs[ref].showFocusEffect());
           });
         }
