@@ -38,14 +38,14 @@
           <article v-else-if="numFindings > 0">
             <p>
               AppMap has identified
-              <badge
+              <span
                 v-for="domain in ['security', 'performance', 'stability', 'maintainability']"
                 :key="domain"
                 :data-cy="domain"
                 :class="domain"
               >
                 {{ findingsDomainCounts[domain] }} {{ domain }}
-              </badge>
+              </span>
               findings.
             </p>
             <br />
