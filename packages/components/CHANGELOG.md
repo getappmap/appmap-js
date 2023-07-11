@@ -1,3 +1,17 @@
+# [@appland/components-v2.54.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.53.1...@appland/components-v2.54.0) (2023-07-11)
+
+
+### Bug Fixes
+
+* focused element is centered ([1bafb79](https://github.com/getappmap/appmap-js/commit/1bafb790b70a1091c39e0e3371b56e080070cefc))
+* focusedEvent does not call non-existant function ([aacd78a](https://github.com/getappmap/appmap-js/commit/aacd78ac0c02420b7239b8928444e8ad50bb9a8c))
+* resetting diagram resets trace filter ([823c2d7](https://github.com/getappmap/appmap-js/commit/823c2d7c1be3834ec8e186588670afecaf715217))
+
+
+### Features
+
+* highlight events when finding is selected ([be86e9a](https://github.com/getappmap/appmap-js/commit/be86e9a0c8e4924460da7c05d5d5cc1ba9432ca8))
+
 # [@appland/components-v2.53.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.53.0...@appland/components-v2.53.1) (2023-07-11)
 
 
