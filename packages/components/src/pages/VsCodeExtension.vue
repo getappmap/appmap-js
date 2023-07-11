@@ -980,7 +980,9 @@ export default {
                 }
               }
             } else {
-              selectedObject = classMap.codeObjects.find((obj) => obj.fqid === fqid);
+              selectedObject = classMap.codeObjects.find(
+                (obj) => obj.fqid.includes(type) && obj.fqid.includes(object)
+              );
             }
 
             if (selectedObject) {
