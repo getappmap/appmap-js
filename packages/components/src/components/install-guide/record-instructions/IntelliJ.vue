@@ -42,7 +42,7 @@
       </section>
       <br />
     </template>
-    <template v-else> <VTestsPrompt frameworks="JUnit" /><br /> </template>
+    <template v-else> <VTestsPrompt framework="JUnit or TestNG" /><br /> </template>
     <template v-if="webFramework">
       <section class="recording-method">
         <h3>

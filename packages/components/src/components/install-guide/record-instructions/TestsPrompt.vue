@@ -4,8 +4,8 @@
       <i class="header-icon header-icon--disabled"><TestsIcon /></i>Tests recording
     </h3>
     <p>
-      Did you know? If you use a test framework such as {{ this.frameworks }}, you can make AppMaps
-      of all your test cases. Tests weren't detected in this project, though.
+      Did you know? If you use a test framework such as {{ framework }}, you can make AppMaps of all
+      your test cases. Tests weren't detected in this project, though.
     </p>
   </div>
 </template>
@@ -16,7 +16,7 @@ export default {
   name: 'TestsPrompt',
 
   props: {
-    frameworks: Array,
+    framework: String,
   },
   components: { TestsIcon },
 };

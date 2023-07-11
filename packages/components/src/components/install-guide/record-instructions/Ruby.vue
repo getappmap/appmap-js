@@ -49,7 +49,7 @@
       </section>
     </template>
     <template v-else>
-      <VTestsPrompt frameworks="RSpec or Minitest" />
+      <VTestsPrompt framework="RSpec or Minitest" />
     </template>
     <br />
     <template v-if="webFramework">
