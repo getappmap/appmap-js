@@ -47,7 +47,7 @@
       <br />
     </template>
     <template v-else>
-      <VTestsPrompt frameworks="JUnit" />
+      <VTestsPrompt framework="JUnit or TestNG" />
       <br />
     </template>
     <template v-if="webFramework">

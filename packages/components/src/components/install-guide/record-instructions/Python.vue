@@ -33,7 +33,7 @@
         </p>
       </section>
     </template>
-    <template v-else> <VTestsPrompt frameworks="pytest or unittest" /> </template><br />
+    <template v-else> <VTestsPrompt framework="pytest or unittest" /> </template><br />
     <template v-if="webFramework">
       <section class="recording-method">
         <h3>
