@@ -1,3 +1,11 @@
+# [@appland/components-v2.53.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.53.0...@appland/components-v2.53.1) (2023-07-11)
+
+
+### Bug Fixes
+
+* IntelliJ test framework property is of the expected type ([123d36d](https://github.com/getappmap/appmap-js/commit/123d36dbb33014e3da76bc3315c52f79c702403f))
+* Remove usage of unknown component ([20e41d0](https://github.com/getappmap/appmap-js/commit/20e41d0aac594ba2402ed6c75cda9da13cd8bde5))
+
 # [@appland/components-v2.53.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.52.3...@appland/components-v2.53.0) (2023-07-07)
 
 
