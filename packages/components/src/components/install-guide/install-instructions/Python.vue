@@ -28,8 +28,12 @@
     </section>
 
     <section>
-      A default configuration file, <code class="inline">appmap.yml</code>, will be created the
-      first time you run your application with AppMap enabled.
+      <h3>Configure AppMap</h3>
+      <p>
+        Finalize the installation by running the command below. An <i>appmap.yml</i> configuration
+        file will automatically be created in the current working directory.
+      </p>
+      <v-code-snippet clipboard-text="python -c 'import appmap'" :kind="ctaButtonType" />
     </section>
   </div>
 </template>
