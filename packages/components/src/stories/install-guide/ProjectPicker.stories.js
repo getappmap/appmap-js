@@ -29,7 +29,7 @@ const Template = (args, { argTypes }) => ({
   data: () => ({
     projects: args.projects.map((project) => ({
       ...project,
-      debugConfigurationStatus: args.debugConfigurationStatus,
+      debugConfigurationStatus: project.debugConfigurationStatus || args.debugConfigurationStatus,
       javaAgentStatus: args.javaAgentStatus,
     })),
   }),
@@ -270,8 +270,10 @@ JavaVSCode.args = {
         name: 'Spring',
         score: 2,
       },
+      debugConfigurationStatus: 1,
     },
   ],
+  javaAgentStatus: 2,
   editor: 'vscode',
 };
 

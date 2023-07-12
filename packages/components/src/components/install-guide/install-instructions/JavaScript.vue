@@ -10,26 +10,30 @@
     <section>
       <h3>Add the <code class="inline">appmap</code> package to your project</h3>
 
-      <div>
-        <v-code-snippet clipboard-text="npm install --save-dev appmap-agent-js" />
-      </div>
-      <div>
-        <div>OR</div>
-        <v-code-snippet clipboard-text="yarn add --dev appmap-agent-js" />
-      </div>
+      <p>
+        <span class="subheading">Install with NPM</span>
+        <v-code-snippet
+          clipboard-text="npm install --save-dev @appland/appmap-agent-js"
+          class="mt-0"
+        />
+      </p>
+      <p>
+        <span class="subheading">Install with Yarn</span>
+        <v-code-snippet clipboard-text="yarn add --dev @appland/appmap-agent-js" class="mt-0" />
+      </p>
     </section>
 
     <section>
-      <h3>Create <code class="inline">appmap.yml</code></h3>
-      <br />
-      <div>
-        Follow the
+      <h3>Configure AppMap</h3>
+      <p>
+        Lastly, create an <i>appmap.yml</i> configuration file by following the
         <a
           href="https://appmap.io/docs/reference/appmap-agent-js.html#configuration"
           target="_blank"
-          >appmap-agent-js Configuration guide</a
-        >.
-      </div>
+        >
+          AppMap Agent for JavaScript configuration guide.
+        </a>
+      </p>
     </section>
   </div>
 </template>
@@ -47,5 +51,15 @@ export default {
   display: flex;
   justify-content: center;
   margin: 1em;
+}
+
+.mt-0 {
+  margin-top: 0;
+}
+
+.subheading {
+  font-size: 90%;
+  font-weight: 400;
+  color: $gray4;
 }
 </style>
