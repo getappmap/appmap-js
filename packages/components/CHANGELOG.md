@@ -1,3 +1,10 @@
+# [@appland/components-v2.55.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.54.0...@appland/components-v2.55.0) (2023-07-12)
+
+
+### Features
+
+* bump sequence diagram version in components ([e9fd7d2](https://github.com/getappmap/appmap-js/commit/e9fd7d298f1cdca1a99a38d1beb50a8b69b1ccd8))
+
 # [@appland/components-v2.54.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.53.1...@appland/components-v2.54.0) (2023-07-11)
 
 
