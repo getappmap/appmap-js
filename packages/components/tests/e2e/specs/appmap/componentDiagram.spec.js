@@ -156,10 +156,7 @@ context('AppMap component diagram', () => {
 
       // Go back to the component diagram
       cy.get('.tabs .tab-btn').first().click();
-      cy.get(`.node[data-id="HTTP server requests->GET /admin/orders"]`).should(
-        'have.class',
-        'highlight'
-      );
+      cy.get(`.node[data-id="GET /admin/orders"]`).should('have.class', 'highlight');
 
       // Go back to Trace view and select event with exceptions
       cy.get('.tabs .tab-btn').contains('Trace View').click();
