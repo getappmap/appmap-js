@@ -49,7 +49,7 @@ describe('FindCodeObjects', () => {
             codeObject: {
               type: 'external-route',
               name: 'POST https://api.stripe.com/v1/customers',
-              fqid: 'external-route:api.stripe.com->POST https://api.stripe.com/v1/customers',
+              fqid: 'external-route:POST https://api.stripe.com/v1/customers',
             },
           },
         ],

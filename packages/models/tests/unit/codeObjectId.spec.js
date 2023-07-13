@@ -82,6 +82,53 @@ describe('codeObjectId', () => {
         ).join('')
       ).toEqual('foo/Foo.gloat');
     });
+    it('database', () => {
+      expect(
+        codeObjectId(buildCodeObject([{ type: 'database', name: 'Database' }])).join('')
+      ).toEqual('Database');
+    });
+    it('query', () => {
+      expect(
+        codeObjectId(
+          buildCodeObject([
+            { type: 'database', name: 'Database' },
+            { type: 'query', name: 'SELECT * FROM fake' },
+          ])
+        ).join('')
+      ).toEqual('SELECT * FROM fake');
+    });
+    it('http', () => {
+      expect(
+        codeObjectId(buildCodeObject([{ type: 'http', name: 'HTTP server requests' }])).join('')
+      ).toEqual('HTTP server requests');
+    });
+    it('route', () => {
+      expect(
+        codeObjectId(
+          buildCodeObject([
+            { type: 'http', name: 'HTTP server requests' },
+            { type: 'route', name: 'GET /' },
+          ])
+        ).join('')
+      ).toEqual('GET /');
+    });
+    it('external service', () => {
+      expect(
+        codeObjectId(buildCodeObject([{ type: 'external-service', name: '127.0.0.1:9515' }])).join(
+          ''
+        )
+      ).toEqual('127.0.0.1:9515');
+    });
+    it('external route', () => {
+      expect(
+        codeObjectId(
+          buildCodeObject([
+            { type: 'external-service', name: '127.0.0.1:9515' },
+            { type: 'external-route', name: 'POST http://127.0.0.1:9515/session/1234567890' },
+          ])
+        ).join('')
+      ).toEqual('POST http://127.0.0.1:9515/session/1234567890');
+    });
     it('other type', () => {
       expect(
         codeObjectId(

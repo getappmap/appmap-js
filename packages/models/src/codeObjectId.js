@@ -1,8 +1,19 @@
 import { CodeObjectType } from './codeObjectType';
 
+function isExcludedParentType(type) {
+  return [CodeObjectType.HTTP, CodeObjectType.DATABASE, CodeObjectType.EXTERNAL_SERVICE].includes(
+    type
+  );
+}
+
 export default function codeObjectId(codeObject, tokens = []) {
-  if (codeObject.parent) {
-    codeObjectId(codeObject.parent, tokens);
+  const { parent } = codeObject;
+
+  // If it's a route, query, or external service we don't need to include the parent name
+  //  because it's always the same ('HTTP server requests' for route and 'Database' for queries).
+  // This mirrors the VS Code implementation.
+  if (parent && !isExcludedParentType(parent.type)) {
+    codeObjectId(parent, tokens);
 
     let separator;
     switch (codeObject.parent.type) {

@@ -50,11 +50,7 @@ context('AppMap view filter', () => {
       cy.get('.trace .trace-node').should('have.length', 4);
       cy.get('.tabs__controls .popper__button').click();
       cy.get('.filters__checkbox').first().click();
-      cy.get('.filters__form-input')
-        .first()
-        .type('route:HTTP server requests->GET /admin/orders')
-        .parent()
-        .submit();
+      cy.get('.filters__form-input').first().type('route:GET /admin/orders').parent().submit();
       cy.get('.trace .trace-node').should('have.length', 2);
       cy.get('.filters .filters__root .filters__root-icon').click();
 
