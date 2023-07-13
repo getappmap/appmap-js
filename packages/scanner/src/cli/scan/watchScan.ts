@@ -155,8 +155,11 @@ export class Watcher {
   // passing plain async function doesn't work (?)
   private queue = queue<string>(callbackify(this.scan.bind(this)), 2);
 
+  private processing = new Set<string>();
+
   protected enqueue(mtimePath: string): void {
-    if ([...this.queue].includes(mtimePath)) return;
+    if (this.processing.has(mtimePath)) return;
+    this.processing.add(mtimePath);
     this.queue.push(mtimePath);
   }
 
@@ -197,6 +200,8 @@ export class Watcher {
 
     // Always report the raw data
     await writeFile(reportFile, formatReport(rawScanResults));
+
+    this.processing.delete(mtimePath);
   }
 
   protected async reloadConfig(): Promise<void> {
