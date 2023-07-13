@@ -106,6 +106,26 @@ BadProject.args = {
   ],
 };
 
+export const UnsupportedProjectWithNoLanguage = Template.bind({});
+UnsupportedProjectWithNoLanguage.args = {
+  projects: [
+    {
+      name: 'pgvector',
+      path: '/home/ahtrotta/projects/test-apps/pgvector',
+      agentInstalled: false,
+      appMapsRecorded: false,
+      investigatedFindings: false,
+      appMapOpened: false,
+      generatedOpenApi: false,
+      appMaps: [],
+      numHttpRequests: 0,
+      numAppMaps: 0,
+      hasNode: false,
+      languages: [],
+    },
+  ],
+};
+
 export const OkProject = Template.bind({});
 OkProject.args = {
   projects: [
