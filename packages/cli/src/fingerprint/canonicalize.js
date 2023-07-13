@@ -5,6 +5,7 @@ const algorithms = {
   httpClientRequests: require('./canonicalize/httpClientRequests'),
   httpServerRequests: require('./canonicalize/httpServerRequests'),
   labels: require('./canonicalize/labels'),
+  exceptions: require('./canonicalize/exceptions'),
   packages: require('./canonicalize/packages'),
   packageDependencies: require('./canonicalize/packageDependencies'),
   sqlNormalized: require('./canonicalize/sqlNormalized'),
