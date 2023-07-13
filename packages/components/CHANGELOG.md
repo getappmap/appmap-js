@@ -1,3 +1,16 @@
+# [@appland/components-v2.56.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.55.0...@appland/components-v2.56.0) (2023-07-13)
+
+
+### Bug Fixes
+
+* consistent fqids for queries and (external) routes ([5f3e40e](https://github.com/getappmap/appmap-js/commit/5f3e40ead971f7a161890e7fd4c1c6da1fc192d9))
+* unsupported projects show helpful information ([7fcbe19](https://github.com/getappmap/appmap-js/commit/7fcbe19a4ebb1f3cd3d5dd45ad3f3adb4d04fb35))
+
+
+### Features
+
+* Manual instructions instruct the user to create appmap.yml ([5b3bd0c](https://github.com/getappmap/appmap-js/commit/5b3bd0c007bf9c8eddd90f4b41b43a0e153e42d0))
+
 # [@appland/components-v2.55.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.54.0...@appland/components-v2.55.0) (2023-07-12)
 
 
