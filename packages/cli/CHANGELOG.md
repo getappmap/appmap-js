@@ -1,3 +1,15 @@
+# [@appland/appmap-v3.81.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.80.2...@appland/appmap-v3.81.0) (2023-07-13)
+
+
+### Bug Fixes
+
+* consistent fqids for queries and (external) routes ([5f3e40e](https://github.com/getappmap/appmap-js/commit/5f3e40ead971f7a161890e7fd4c1c6da1fc192d9))
+
+
+### Features
+
+* Add exceptions to the index ([a0508e9](https://github.com/getappmap/appmap-js/commit/a0508e94dad63dff5732cfdc20f33b8502a62ca0))
+
 # [@appland/appmap-v3.80.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.80.1...@appland/appmap-v3.80.2) (2023-06-14)
 
 
