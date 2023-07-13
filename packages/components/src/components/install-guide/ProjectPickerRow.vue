@@ -421,16 +421,16 @@ export default {
       return this.editor === 'vscode';
     },
     isPython() {
-      return this.language.name.toLowerCase() === 'python';
+      return this.language?.name.toLowerCase() === 'python';
     },
     isRuby() {
-      return this.language.name.toLowerCase() === 'ruby';
+      return this.language?.name.toLowerCase() === 'ruby';
     },
     isJava() {
-      return this.language.name.toLowerCase() === 'java';
+      return this.language?.name.toLowerCase() === 'java';
     },
     isJS() {
-      return this.language.name.toLowerCase() === 'javascript';
+      return this.language?.name.toLowerCase() === 'javascript';
     },
     runConfigIcon() {
       return this.theme === 'dark' ? VRunConfigDark : VRunConfigLight;
