@@ -96,10 +96,9 @@ export const handler = async (argv: any) => {
   );
 
   const changeReporter = new ChangeReporter(baseRevision, headRevision, outputDir, srcDir);
-  if (!reportRemoved) changeReporter.reportRemoved = false;
   await changeReporter.initialize();
 
-  const report = await changeReporter.report();
+  const report = await changeReporter.report(reportRemoved);
 
   if (deleteUnreferenced) {
     await changeReporter.deleteUnreferencedAppMaps();
