@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { Finding } from '../../lib/findings';
 import { ArchiveMetadata } from '../archive/ArchiveMetadata';
-import { AppMapData } from './AppMapData';
+import { Paths } from './Paths';
 import { RevisionName } from './RevisionName';
 import { SemVer } from 'semver';
 import { executeCommand } from '../../lib/executeCommand';
@@ -9,12 +9,12 @@ import { readFile } from 'fs/promises';
 import { processNamedFiles } from '../../utils';
 
 export default async function loadFindings(
-  appmapData: AppMapData,
+  paths: Paths,
   revisionName: RevisionName,
   appMapDir: string
 ): Promise<Finding[]> {
   const manifest: ArchiveMetadata = JSON.parse(
-    await readFile(appmapData.manifestPath(revisionName), 'utf-8')
+    await readFile(paths.manifestPath(revisionName), 'utf-8')
   );
 
   const findings = new Array<Finding>();
@@ -30,7 +30,7 @@ export default async function loadFindings(
   assert(archiveVersion);
   if (archiveVersion.split('.').length === 2) archiveVersion += '.0';
   if (new SemVer(archiveVersion).compare('1.3.0') < 0) {
-    const workingDir = appmapData.revisionPath(revisionName);
+    const workingDir = paths.revisionPath(revisionName);
     console.info(
       `Scanning ${revisionName} revision for findings (archive version: ${archiveVersion}).`
     );
@@ -38,11 +38,11 @@ export default async function loadFindings(
     await executeCommand(command);
 
     // Pre-1.3.0 archive. Scan and load findings the old way.
-    const scanResults = JSON.parse(await readFile(appmapData.findingsPath(revisionName), 'utf-8'));
+    const scanResults = JSON.parse(await readFile(paths.findingsPath(revisionName), 'utf-8'));
     findings.push(...(scanResults.findings || []));
   } else {
     await processNamedFiles(
-      appmapData.revisionPath(revisionName),
+      paths.revisionPath(revisionName),
       'appmap-findings.json',
       collectFindings(findings)
     );
