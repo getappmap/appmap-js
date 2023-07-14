@@ -27,7 +27,7 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "@appland/models": "workspace:^2.6.2",
+    "@appland/models": "workspace:^2.6.3",
     "js-yaml": "^4.1.0"
   },
   "publishConfig": {
