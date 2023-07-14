@@ -19,6 +19,7 @@ import { executeCommand } from '../../lib/executeCommand';
 import { Finding, ImpactDomain } from '../../lib/findings';
 import loadFindings from './loadFindings';
 import { loadSequenceDiagram } from './loadSequenceDiagram';
+import { debug } from 'console';
 
 export type BaseOrHead = RevisionName.Base | RevisionName.Head;
 
@@ -94,17 +95,17 @@ class SourceDiff {
   }
 }
 
-export default class ChangeReporter {
-  reportRemoved = true;
+export type AppMapMetadata = { [K in BaseOrHead]: Map<AppMapName, Metadata> };
 
+export default class ChangeReporter {
   paths: Paths;
   digests: Digests;
   baseManifest?: ArchiveMetadata;
   headManifest?: ArchiveMetadata;
-  appMapMetadata?: { [K in BaseOrHead]: Map<string, Metadata> };
-  failedAppMaps?: Set<string>;
-  newAppMaps?: string[];
-  changedAppMaps?: { appmap: AppMapName }[];
+  baseAppMaps?: Set<AppMapName>;
+  headAppMaps?: Set<AppMapName>;
+  appMapMetadata?: AppMapMetadata;
+  failedAppMaps?: Set<AppMapName>;
   referencedAppMaps = new ReferencedAppMaps();
   sourceDiff = new SourceDiff(this);
 
@@ -128,22 +129,10 @@ export default class ChangeReporter {
       await readFile(this.paths.manifestPath(RevisionName.Head), 'utf-8')
     );
 
+    this.baseAppMaps = new Set(await this.paths.appmaps(RevisionName.Base));
+    this.headAppMaps = new Set(await this.paths.appmaps(RevisionName.Head));
+
     await this.loadMetadata();
-
-    const baseAppMaps = new Set(await this.paths.appmaps(RevisionName.Base));
-    const headAppMaps = new Set(await this.paths.appmaps(RevisionName.Head));
-    this.newAppMaps = [...headAppMaps].filter((appmap) => !baseAppMaps.has(appmap));
-    this.changedAppMaps = [...headAppMaps]
-      .filter((appmap) => baseAppMaps.has(appmap))
-      .map((appmap) => ({ appmap }));
-
-    this.changedAppMaps.forEach(
-      ({ appmap }) => (
-        this.referencedAppMaps.add(RevisionName.Base, appmap),
-        this.referencedAppMaps.add(RevisionName.Head, appmap)
-      )
-    );
-
     await this.loadFailedAppMaps();
   }
 
@@ -166,16 +155,34 @@ export default class ChangeReporter {
     }
   }
 
-  async report(): Promise<ChangeReport> {
-    const generator = new ReportGenerator(this);
-    const apiDiff = await generator.apiDiff();
+  async report(reportRemoved: boolean): Promise<ChangeReport> {
+    const { appMapMetadata, baseAppMaps, headAppMaps } = this;
+    assert(appMapMetadata);
+    assert(baseAppMaps);
+    assert(headAppMaps);
+
+    const generator = new ReportFieldCalculator(this);
+    const apiDiff = await generator.apiDiff(reportRemoved);
+
+    const isNewFn = isNew(baseAppMaps, isTest(appMapMetadata));
+    const isChangedFn = isChanged(baseAppMaps, isTest(appMapMetadata), this.digests);
+
+    const newAppMaps = [...headAppMaps].filter(isNewFn);
+    const changedAppMaps = [...headAppMaps].filter(isChangedFn).map((appmap) => ({ appmap }));
+
+    changedAppMaps.forEach(
+      ({ appmap }) => (
+        this.referencedAppMaps.add(RevisionName.Base, appmap),
+        this.referencedAppMaps.add(RevisionName.Head, appmap)
+      )
+    );
 
     const result: ChangeReport = {
       testFailures: await generator.testFailures(),
-      newAppMaps: this.newAppMaps || [],
-      changedAppMaps: this.changedAppMaps || [],
-      findingDiff: await generator.findingDiff(),
-      sequenceDiagramDiff: await generator.sequenceDiagramDiff(),
+      newAppMaps: newAppMaps,
+      changedAppMaps,
+      findingDiff: await generator.findingDiff(reportRemoved),
+      sequenceDiagramDiff: await generator.sequenceDiagramDiff(changedAppMaps),
       appMapMetadata: await generator.appMapMetadata(),
     };
 
@@ -235,7 +242,36 @@ export default class ChangeReporter {
   }
 }
 
-class ReportGenerator {
+// Gets a function that returns true if the given appmap is a test.
+function isTest(appMapMetadata: AppMapMetadata): (appmap: AppMapName) => boolean {
+  return (appmap: AppMapName): boolean => {
+    const metadata = appMapMetadata[RevisionName.Head].get(appmap);
+    return !!(metadata && metadata.recorder.type === 'tests');
+  };
+}
+
+// Selects AppMaps that have stable names, and are in the head revision but not in the base revision.
+export function isNew(
+  baseAppMaps: Set<AppMapName>,
+  isTestFn: (appmap: AppMapName) => boolean
+): (appmap: AppMapName) => boolean {
+  return (appmap: AppMapName) => isTestFn(appmap) && !baseAppMaps.has(appmap);
+}
+
+// Selects AppMaps that are present in both the base and head revisions, and have different digests.
+export function isChanged(
+  baseAppMaps: Set<AppMapName>,
+  isTestFn: (appmap: AppMapName) => boolean,
+  digests: Digests
+): (appmap: AppMapName) => boolean {
+  return (appmap: AppMapName) =>
+    isTestFn(appmap) &&
+    baseAppMaps.has(appmap) &&
+    digests.appmapDigest(RevisionName.Base, appmap) !==
+      digests.appmapDigest(RevisionName.Head, appmap);
+}
+
+export class ReportFieldCalculator {
   constructor(public reporter: ChangeReporter) {}
 
   async appMapMetadata(): Promise<{
@@ -292,9 +328,7 @@ class ReportGenerator {
     ).filter(Boolean) as TestFailure[];
   }
 
-  async sequenceDiagramDiff(): Promise<Record<string, string[]>> {
-    assert(this.reporter.changedAppMaps);
-
+  async sequenceDiagramDiff(changedAppMaps: ChangedAppMap[]): Promise<Record<string, string[]>> {
     const diffDiagrams = new DiffDiagrams();
     const sequenceDiagramDiff = new Map<string, AppMapLink[]>();
     {
@@ -336,13 +370,13 @@ class ReportGenerator {
         }
       }, 2);
       q.error(console.warn);
-      this.reporter.changedAppMaps.forEach((appmap) => q.push(appmap));
+      changedAppMaps.forEach((appmap) => q.push(appmap));
       if (!q.idle()) await q.drain();
     }
     return mapToRecord(sequenceDiagramDiff);
   }
 
-  async findingDiff(): Promise<Record<'new' & 'resolved', Finding[]>> {
+  async findingDiff(reportRemoved: boolean): Promise<Record<'new' & 'resolved', Finding[]>> {
     assert(this.reporter.baseManifest);
     assert(this.reporter.headManifest);
 
@@ -373,7 +407,7 @@ class ReportGenerator {
       (hash) => !headFindingHashes.has(hash)
     );
     newFindings = headFindings.filter((finding) => newFindingHashes.includes(finding.hash_v2));
-    if (this.reporter.reportRemoved) {
+    if (reportRemoved) {
       resolvedFindings = baseFindings.filter((finding) =>
         resolvedFindingHashes.includes(finding.hash_v2)
       );
@@ -387,7 +421,7 @@ class ReportGenerator {
     return result;
   }
 
-  async apiDiff(): Promise<any | undefined> {
+  async apiDiff(reportRemoved: boolean): Promise<any | undefined> {
     const readOpenAPI = async (revision: RevisionName) => {
       const openapiPath = this.reporter.paths.openapiPath(revision);
       try {
@@ -417,7 +451,7 @@ class ReportGenerator {
         },
       });
 
-      if (!this.reporter.reportRemoved && result.breakingDifferencesFound) {
+      if (!reportRemoved && result.breakingDifferencesFound) {
         const diffOutcomeFailure = result as any;
         diffOutcomeFailure.breakingDifferencesFound = false;
         delete diffOutcomeFailure['breakingDifferences'];
