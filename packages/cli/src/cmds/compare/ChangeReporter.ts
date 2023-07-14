@@ -1,6 +1,6 @@
 import { mkdir, readFile, rm, writeFile } from 'fs/promises';
 import { default as openapiDiff } from 'openapi-diff';
-import { dirname, isAbsolute, join, relative } from 'path';
+import { dirname, isAbsolute, join, relative, resolve } from 'path';
 import { ClassMap, Metadata } from '@appland/models';
 import { FormatType, format } from '@appland/sequence-diagram';
 import { queue } from 'async';
@@ -12,16 +12,18 @@ import { Paths } from './Paths';
 import { Digests } from './Digests';
 import { RevisionName } from './RevisionName';
 import { AppMapLink, AppMapName, ChangeReport, ChangedAppMap, TestFailure } from './ChangeReport';
-import { exists } from '../../utils';
+import { exists, verbose } from '../../utils';
 import mapToRecord from './mapToRecord';
 import { mutedStyle, prominentStyle } from './ui';
 import { executeCommand } from '../../lib/executeCommand';
 import { Finding, ImpactDomain } from '../../lib/findings';
 import loadFindings from './loadFindings';
 import { loadSequenceDiagram } from './loadSequenceDiagram';
-import { debug } from 'console';
+import { warn } from 'console';
 
 export type BaseOrHead = RevisionName.Base | RevisionName.Head;
+
+export const DEFAULT_SNIPPET_WIDTH = 10;
 
 class ReferencedAppMaps {
   private referencedAppMaps = new Set<AppMapName>();
@@ -97,6 +99,11 @@ class SourceDiff {
 
 export type AppMapMetadata = { [K in BaseOrHead]: Map<AppMapName, Metadata> };
 
+export class ChangeReportOptions {
+  reportRemoved = true;
+  snippetWidth = DEFAULT_SNIPPET_WIDTH;
+}
+
 export default class ChangeReporter {
   paths: Paths;
   digests: Digests;
@@ -138,50 +145,82 @@ export default class ChangeReporter {
 
   async deleteUnreferencedAppMaps() {
     const deleteAppMap = async (revisionName: RevisionName, appmap: AppMapName) => {
-      console.log(
-        mutedStyle(`AppMap ${revisionName}/${appmap} is unreferenced so it will be deleted.`)
-      );
+      if (verbose())
+        console.log(
+          mutedStyle(`AppMap ${revisionName}/${appmap} is unreferenced so it will be deleted.`)
+        );
       const path = this.paths.appmapPath(revisionName, appmap);
       const fileName = [path, 'appmap.json'].join('.');
-      assert(await exists(fileName));
       await rm(fileName);
       await rm(path, { recursive: true });
     };
 
     for (const revisionName of [RevisionName.Base, RevisionName.Head]) {
-      (await this.paths.appmaps(revisionName)).forEach((appmap) => {
-        if (!this.referencedAppMaps.test(revisionName, appmap)) deleteAppMap(revisionName, appmap);
-      });
+      for (const appmap of await this.paths.appmaps(revisionName)) {
+        if (!this.referencedAppMaps.test(revisionName, appmap))
+          try {
+            await deleteAppMap(revisionName, appmap);
+          } catch (err) {
+            warn(
+              `Failed to delete unreferenced AppMap ${revisionName}/${appmap}. Will continue...`
+            );
+          }
+      }
     }
   }
 
-  async report(reportRemoved: boolean): Promise<ChangeReport> {
-    const { appMapMetadata, baseAppMaps, headAppMaps } = this;
+  async report(options: ChangeReportOptions): Promise<ChangeReport> {
+    const { appMapMetadata, baseAppMaps, headAppMaps, failedAppMaps } = this;
     assert(appMapMetadata);
     assert(baseAppMaps);
     assert(headAppMaps);
+    assert(failedAppMaps);
 
     const generator = new ReportFieldCalculator(this);
-    const apiDiff = await generator.apiDiff(reportRemoved);
+    const apiDiff = await generator.apiDiff(options.reportRemoved);
 
     const isNewFn = isNew(baseAppMaps, isTest(appMapMetadata));
     const isChangedFn = isChanged(baseAppMaps, isTest(appMapMetadata), this.digests);
+    const referenceAppMapFn = (appmap: AppMapName) =>
+      [RevisionName.Base, RevisionName.Head].forEach((revisionName) =>
+        this.referencedAppMaps.add(revisionName, appmap)
+      );
+    const referenceFindingAppMapFn = async (revisionName: RevisionName, finding: Finding) => {
+      const { appMapFile } = finding;
+      const appmap = appMapFile.slice(0, -'.appmap.json'.length);
+      const path = [this.paths.appmapPath(revisionName, appmap), 'appmap.json'].join('.');
+      // A sanity check
+      if (!(await exists(path)))
+        warn(`AppMap ${path}, referenced by finding ${finding.hash_v2}, does not exist.`);
+      referenceAppMapFn(appmap);
+    };
 
     const newAppMaps = [...headAppMaps].filter(isNewFn);
     const changedAppMaps = [...headAppMaps].filter(isChangedFn).map((appmap) => ({ appmap }));
 
-    changedAppMaps.forEach(
-      ({ appmap }) => (
-        this.referencedAppMaps.add(RevisionName.Base, appmap),
-        this.referencedAppMaps.add(RevisionName.Head, appmap)
-      )
-    );
+    changedAppMaps.forEach(({ appmap }) => referenceAppMapFn(appmap));
+
+    const failureFn = buildFailure(appMapMetadata, options.snippetWidth);
+    const testFailures = new Array<TestFailure>();
+    for (const appmap of failedAppMaps) {
+      const testFailure = await failureFn(appmap);
+      if (testFailure) {
+        testFailures.push(testFailure);
+        referenceAppMapFn(appmap);
+      }
+    }
+
+    const findingDiff = await generator.findingDiff(options.reportRemoved);
+    for (const finding of findingDiff.new || [])
+      referenceFindingAppMapFn(RevisionName.Head, finding);
+    for (const finding of findingDiff.resolved || [])
+      referenceFindingAppMapFn(RevisionName.Base, finding);
 
     const result: ChangeReport = {
-      testFailures: await generator.testFailures(),
-      newAppMaps: newAppMaps,
+      testFailures,
+      newAppMaps,
       changedAppMaps,
-      findingDiff: await generator.findingDiff(reportRemoved),
+      findingDiff,
       sequenceDiagramDiff: await generator.sequenceDiagramDiff(changedAppMaps),
       appMapMetadata: await generator.appMapMetadata(),
     };
@@ -232,10 +271,7 @@ export default class ChangeReporter {
           console.log(prominentStyle(`Metadata for ${appmap} not found!`));
           continue;
         }
-        if (metadata.test_status === 'failed') {
-          this.referencedAppMaps.add(RevisionName.Head, appmap);
-          failedAppMaps.add(appmap);
-        }
+        if (metadata.test_status === 'failed') failedAppMaps.add(appmap);
       }
     }
     this.failedAppMaps = failedAppMaps;
@@ -271,6 +307,48 @@ export function isChanged(
       digests.appmapDigest(RevisionName.Head, appmap);
 }
 
+export function buildFailure(
+  appMapMetadata: AppMapMetadata,
+  snippetWidth = DEFAULT_SNIPPET_WIDTH
+): (appmap: AppMapName) => Promise<TestFailure | undefined> {
+  return async (appmap: AppMapName) => {
+    const metadata = appMapMetadata[RevisionName.Head].get(appmap);
+    if (!metadata) {
+      warn(`No AppMap metadata available for failed test ${appmap}`);
+      return;
+    }
+    const testFailure = {
+      appmap,
+      name: metadata.name,
+    } as TestFailure;
+    if (metadata.source_location) {
+      testFailure.testLocation = isAbsolute(metadata.source_location)
+        ? relative(process.cwd(), metadata.source_location)
+        : metadata.source_location;
+    }
+    if (metadata.test_failure) {
+      testFailure.failureMessage = metadata.test_failure.message;
+      const location = metadata.test_failure.location;
+      if (location) {
+        testFailure.failureLocation = location;
+        const [path, linenoStr] = location.split(':');
+        if (linenoStr && (await exists(path))) {
+          const lineno = parseInt(linenoStr, 10);
+          const testCode = (await readFile(path, 'utf-8')).split('\n');
+          const minIndex = Math.max(lineno - snippetWidth, 0);
+          const maxIndex = Math.min(lineno + snippetWidth, testCode.length);
+          testFailure.testSnippet = {
+            codeFragment: testCode.slice(minIndex, maxIndex).join('\n'),
+            startLine: minIndex + 1,
+            language: metadata.language?.name,
+          };
+        }
+      }
+    }
+    return testFailure;
+  };
+}
+
 export class ReportFieldCalculator {
   constructor(public reporter: ChangeReporter) {}
 
@@ -282,50 +360,6 @@ export class ReportFieldCalculator {
       [RevisionName.Base]: mapToRecord(this.reporter.appMapMetadata[RevisionName.Base]),
       [RevisionName.Head]: mapToRecord(this.reporter.appMapMetadata[RevisionName.Head]),
     };
-  }
-
-  async testFailures(): Promise<TestFailure[]> {
-    assert(this.reporter.failedAppMaps);
-    assert(this.reporter.appMapMetadata);
-    const { failedAppMaps, appMapMetadata } = this.reporter;
-
-    return (
-      await Promise.all(
-        [...failedAppMaps].map(async (appmap) => {
-          const metadata = appMapMetadata[RevisionName.Head].get(appmap);
-          if (!metadata) {
-            console.log(`No Appmap metadata available for failed test ${appmap}`);
-            return;
-          }
-          const testFailure = {
-            appmap,
-            name: metadata.name,
-          } as TestFailure;
-          if (metadata.source_location)
-            testFailure.testLocation = relative(process.cwd(), metadata.source_location);
-          if (metadata.test_failure) {
-            testFailure.failureMessage = metadata.test_failure.message;
-            const location = metadata.test_failure.location;
-            if (location) {
-              testFailure.failureLocation = location;
-              const [path, linenoStr] = location.split(':');
-              if (linenoStr && (await exists(path))) {
-                const lineno = parseInt(linenoStr, 10);
-                const testCode = (await readFile(path, 'utf-8')).split('\n');
-                const minIndex = Math.max(lineno - 10, 0);
-                const maxIndex = Math.min(lineno + 10, testCode.length);
-                testFailure.testSnippet = {
-                  codeFragment: testCode.slice(minIndex, maxIndex).join('\n'),
-                  startLine: minIndex + 1,
-                  language: metadata.language?.name,
-                };
-              }
-            }
-          }
-          return testFailure;
-        })
-      )
-    ).filter(Boolean) as TestFailure[];
   }
 
   async sequenceDiagramDiff(changedAppMaps: ChangedAppMap[]): Promise<Record<string, string[]>> {
@@ -376,7 +410,7 @@ export class ReportFieldCalculator {
     return mapToRecord(sequenceDiagramDiff);
   }
 
-  async findingDiff(reportRemoved: boolean): Promise<Record<'new' & 'resolved', Finding[]>> {
+  async findingDiff(reportRemoved: boolean): Promise<Record<'new' | 'resolved', Finding[]>> {
     assert(this.reporter.baseManifest);
     assert(this.reporter.headManifest);
 
@@ -415,10 +449,10 @@ export class ReportFieldCalculator {
       resolvedFindings = [];
     }
 
-    const result: Record<'new' & 'resolved', Finding[]> = {};
-    if (newFindings.length > 0) result['new'] = newFindings;
-    if (resolvedFindings.length > 0) result['resolved'] = resolvedFindings;
-    return result;
+    return {
+      new: newFindings,
+      resolved: resolvedFindings,
+    };
   }
 
   async apiDiff(reportRemoved: boolean): Promise<any | undefined> {
