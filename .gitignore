@@ -36,3 +36,7 @@ pnpm-debug.log*
 .pnp.*
 
 release
+
+# AppMaps
+packages/*/tmp/appmap
+
