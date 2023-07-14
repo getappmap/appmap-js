@@ -1,10 +1,10 @@
 import { queue } from 'async';
-import { AppMapData } from './AppMapData';
+import { Paths } from './Paths';
 import { AppMapDigest, AppMapName } from './ChangeReport';
 import { RevisionName } from './RevisionName';
 import { SequenceDiagramDigest } from './SequenceDiagramDigest';
 
-export class AppMapIndex {
+export class Digests {
   // All digests for the base and head revisions.
   digests = {
     [RevisionName.Base]: new Set<AppMapDigest>(),
@@ -21,19 +21,15 @@ export class AppMapIndex {
     [RevisionName.Head]: new Map<AppMapName, AppMapDigest>(),
   };
 
-  constructor(public appmapData: AppMapData) {}
+  constructor(public paths: Paths) {}
 
   async build() {
-    const baseAppMaps = await this.appmapData.appmaps(RevisionName.Base);
-    const headAppMaps = await this.appmapData.appmaps(RevisionName.Head);
+    const baseAppMaps = await this.paths.appmaps(RevisionName.Base);
+    const headAppMaps = await this.paths.appmaps(RevisionName.Head);
     if (baseAppMaps.length === 0 && headAppMaps.length === 0) return;
 
     const q = queue(async ({ revisionName, appmap }) => {
-      const digest = await new SequenceDiagramDigest(
-        this.appmapData,
-        revisionName,
-        appmap
-      ).digest();
+      const digest = await new SequenceDiagramDigest(this.paths, revisionName, appmap).digest();
       this.digests[revisionName].add(digest);
 
       if (!this.appmapsByDigest[revisionName].has(digest))
