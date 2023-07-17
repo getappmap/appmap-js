@@ -2,7 +2,7 @@ import { mkdir, readFile, rm, writeFile } from 'fs/promises';
 import { default as openapiDiff } from 'openapi-diff';
 import { dirname, isAbsolute, join, relative, resolve } from 'path';
 import { ClassMap, Metadata } from '@appland/models';
-import { FormatType, format } from '@appland/sequence-diagram';
+import { FormatType, format } from '@sequence-diagram';
 import { queue } from 'async';
 import assert from 'assert';
 
@@ -150,15 +150,21 @@ export default class ChangeReporter {
       );
       const path = this.paths.appmapPath(revisionName, appmap);
       const fileName = [path, 'appmap.json'].join('.');
-      assert(await exists(fileName));
       await rm(fileName);
       await rm(path, { recursive: true });
     };
 
     for (const revisionName of [RevisionName.Base, RevisionName.Head]) {
-      (await this.paths.appmaps(revisionName)).forEach((appmap) => {
-        if (!this.referencedAppMaps.test(revisionName, appmap)) deleteAppMap(revisionName, appmap);
-      });
+      for (const appmap of await this.paths.appmaps(revisionName)) {
+        if (!this.referencedAppMaps.test(revisionName, appmap))
+          try {
+            await deleteAppMap(revisionName, appmap);
+          } catch (err) {
+            warn(
+              `Failed to delete unreferenced AppMap ${revisionName}/${appmap}. Will continue...`
+            );
+          }
+      }
     }
   }
 
