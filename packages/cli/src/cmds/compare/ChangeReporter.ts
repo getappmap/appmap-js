@@ -1,15 +1,15 @@
 import { mkdir, readFile, rm, writeFile } from 'fs/promises';
 import { default as openapiDiff } from 'openapi-diff';
-import { dirname, isAbsolute, join, relative } from 'path';
+import { dirname, isAbsolute, join, relative, resolve } from 'path';
 import { ClassMap, Metadata } from '@appland/models';
-import { FormatType, format } from '@appland/sequence-diagram';
+import { FormatType, format } from '@sequence-diagram';
 import { queue } from 'async';
 import assert from 'assert';
 
 import { DiffDiagrams } from '../../sequenceDiagramDiff/DiffDiagrams';
 import { ArchiveMetadata } from '../archive/ArchiveMetadata';
-import { AppMapData } from './AppMapData';
-import { AppMapIndex } from './AppMapIndex';
+import { Paths } from './Paths';
+import { Digests } from './Digests';
 import { RevisionName } from './RevisionName';
 import { AppMapLink, AppMapName, ChangeReport, ChangedAppMap, TestFailure } from './ChangeReport';
 import { exists } from '../../utils';
@@ -19,8 +19,11 @@ import { executeCommand } from '../../lib/executeCommand';
 import { Finding, ImpactDomain } from '../../lib/findings';
 import loadFindings from './loadFindings';
 import { loadSequenceDiagram } from './loadSequenceDiagram';
+import { warn } from 'console';
 
 export type BaseOrHead = RevisionName.Base | RevisionName.Head;
+
+export const DEFAULT_SNIPPET_WIDTH = 10;
 
 class ReferencedAppMaps {
   private referencedAppMaps = new Set<AppMapName>();
@@ -65,10 +68,7 @@ class SourceDiff {
   async loadDiff(appmap: string): Promise<string> {
     const loadClassMap = async (): Promise<ClassMap> => {
       const classMapData = JSON.parse(
-        await readFile(
-          join(this.reporter.appmapData.classMapPath(RevisionName.Head, appmap)),
-          'utf-8'
-        )
+        await readFile(join(this.reporter.paths.classMapPath(RevisionName.Head, appmap)), 'utf-8')
       );
       return new ClassMap(classMapData);
     };
@@ -97,17 +97,22 @@ class SourceDiff {
   }
 }
 
-export default class ChangeReporter {
-  reportRemoved: boolean = true;
+export type AppMapMetadata = { [K in BaseOrHead]: Map<AppMapName, Metadata> };
 
-  appmapData: AppMapData;
-  appmapIndex: AppMapIndex;
+export class ChangeReportOptions {
+  reportRemoved = true;
+  snippetWidth = DEFAULT_SNIPPET_WIDTH;
+}
+
+export default class ChangeReporter {
+  paths: Paths;
+  digests: Digests;
   baseManifest?: ArchiveMetadata;
   headManifest?: ArchiveMetadata;
-  appMapMetadata?: { [K in BaseOrHead]: Map<string, Metadata> };
-  failedAppMaps?: Set<string>;
-  newAppMaps?: string[];
-  changedAppMaps?: { appmap: AppMapName }[];
+  baseAppMaps?: Set<AppMapName>;
+  headAppMaps?: Set<AppMapName>;
+  appMapMetadata?: AppMapMetadata;
+  failedAppMaps?: Set<AppMapName>;
   referencedAppMaps = new ReferencedAppMaps();
   sourceDiff = new SourceDiff(this);
 
@@ -117,36 +122,24 @@ export default class ChangeReporter {
     public workingDir: string,
     public srcDir: string
   ) {
-    this.appmapData = new AppMapData(workingDir);
-    this.appmapIndex = new AppMapIndex(this.appmapData);
+    this.paths = new Paths(workingDir);
+    this.digests = new Digests(this.paths);
   }
 
   async initialize() {
-    await this.appmapIndex.build();
+    await this.digests.build();
 
     this.baseManifest = JSON.parse(
-      await readFile(this.appmapData.manifestPath(RevisionName.Base), 'utf-8')
+      await readFile(this.paths.manifestPath(RevisionName.Base), 'utf-8')
     );
     this.headManifest = JSON.parse(
-      await readFile(this.appmapData.manifestPath(RevisionName.Head), 'utf-8')
+      await readFile(this.paths.manifestPath(RevisionName.Head), 'utf-8')
     );
+
+    this.baseAppMaps = new Set(await this.paths.appmaps(RevisionName.Base));
+    this.headAppMaps = new Set(await this.paths.appmaps(RevisionName.Head));
 
     await this.loadMetadata();
-
-    const baseAppMaps = new Set(await this.appmapData.appmaps(RevisionName.Base));
-    const headAppMaps = new Set(await this.appmapData.appmaps(RevisionName.Head));
-    this.newAppMaps = [...headAppMaps].filter((appmap) => !baseAppMaps.has(appmap));
-    this.changedAppMaps = [...headAppMaps]
-      .filter((appmap) => baseAppMaps.has(appmap))
-      .map((appmap) => ({ appmap }));
-
-    this.changedAppMaps.forEach(
-      ({ appmap }) => (
-        this.referencedAppMaps.add(RevisionName.Base, appmap),
-        this.referencedAppMaps.add(RevisionName.Head, appmap)
-      )
-    );
-
     await this.loadFailedAppMaps();
   }
 
@@ -155,30 +148,79 @@ export default class ChangeReporter {
       console.log(
         mutedStyle(`AppMap ${revisionName}/${appmap} is unreferenced so it will be deleted.`)
       );
-      const path = this.appmapData.appmapPath(revisionName, appmap);
+      const path = this.paths.appmapPath(revisionName, appmap);
       const fileName = [path, 'appmap.json'].join('.');
-      assert(await exists(fileName));
       await rm(fileName);
       await rm(path, { recursive: true });
     };
 
     for (const revisionName of [RevisionName.Base, RevisionName.Head]) {
-      (await this.appmapData.appmaps(revisionName)).forEach((appmap) => {
-        if (!this.referencedAppMaps.test(revisionName, appmap)) deleteAppMap(revisionName, appmap);
-      });
+      for (const appmap of await this.paths.appmaps(revisionName)) {
+        if (!this.referencedAppMaps.test(revisionName, appmap))
+          try {
+            await deleteAppMap(revisionName, appmap);
+          } catch (err) {
+            warn(
+              `Failed to delete unreferenced AppMap ${revisionName}/${appmap}. Will continue...`
+            );
+          }
+      }
     }
   }
 
-  async report(): Promise<ChangeReport> {
-    const generator = new ReportGenerator(this);
-    const apiDiff = await generator.apiDiff();
+  async report(options: ChangeReportOptions): Promise<ChangeReport> {
+    const { appMapMetadata, baseAppMaps, headAppMaps, failedAppMaps } = this;
+    assert(appMapMetadata);
+    assert(baseAppMaps);
+    assert(headAppMaps);
+    assert(failedAppMaps);
+
+    const generator = new ReportFieldCalculator(this);
+    const apiDiff = await generator.apiDiff(options.reportRemoved);
+
+    const isNewFn = isNew(baseAppMaps, isTest(appMapMetadata));
+    const isChangedFn = isChanged(baseAppMaps, isTest(appMapMetadata), this.digests);
+    const referenceAppMapFn = (appmap: AppMapName) =>
+      [RevisionName.Base, RevisionName.Head].forEach((revisionName) =>
+        this.referencedAppMaps.add(revisionName, appmap)
+      );
+    const referenceFindingAppMapFn = async (revisionName: RevisionName, finding: Finding) => {
+      const { appMapFile } = finding;
+      const appmap = appMapFile.slice(0, -'.appmap.json'.length);
+      const path = [this.paths.appmapPath(revisionName, appmap), 'appmap.json'].join('.');
+      // A sanity check
+      if (!(await exists(path)))
+        warn(`AppMap ${path}, referenced by finding ${finding.hash_v2}, does not exist.`);
+      referenceAppMapFn(appmap);
+    };
+
+    const newAppMaps = [...headAppMaps].filter(isNewFn);
+    const changedAppMaps = [...headAppMaps].filter(isChangedFn).map((appmap) => ({ appmap }));
+
+    changedAppMaps.forEach(({ appmap }) => referenceAppMapFn(appmap));
+
+    const failureFn = buildFailure(appMapMetadata, options.snippetWidth);
+    const testFailures = new Array<TestFailure>();
+    for (const appmap of failedAppMaps) {
+      const testFailure = await failureFn(appmap);
+      if (testFailure) {
+        testFailures.push(testFailure);
+        referenceAppMapFn(appmap);
+      }
+    }
+
+    const findingDiff = await generator.findingDiff(options.reportRemoved);
+    for (const finding of findingDiff.new || [])
+      referenceFindingAppMapFn(RevisionName.Head, finding);
+    for (const finding of findingDiff.resolved || [])
+      referenceFindingAppMapFn(RevisionName.Base, finding);
 
     const result: ChangeReport = {
-      testFailures: await generator.testFailures(),
-      newAppMaps: this.newAppMaps || [],
-      changedAppMaps: this.changedAppMaps || [],
-      findingDiff: await generator.findingDiff(),
-      sequenceDiagramDiff: await generator.sequenceDiagramDiff(),
+      testFailures,
+      newAppMaps,
+      changedAppMaps,
+      findingDiff,
+      sequenceDiagramDiff: await generator.sequenceDiagramDiff(changedAppMaps),
       appMapMetadata: await generator.appMapMetadata(),
     };
 
@@ -194,7 +236,7 @@ export default class ChangeReporter {
     };
     const q = queue(
       async (appmap: { revisionName: RevisionName.Base | RevisionName.Head; name: string }) => {
-        const metadataPath = this.appmapData.metadataPath(appmap.revisionName, appmap.name);
+        const metadataPath = this.paths.metadataPath(appmap.revisionName, appmap.name);
         if (!(await exists(metadataPath))) {
           console.warn(`Metadata file ${metadataPath} does not exist!`);
           return;
@@ -207,7 +249,7 @@ export default class ChangeReporter {
     );
     q.error(console.warn);
     for (const revisionName of [RevisionName.Base, RevisionName.Head]) {
-      (await this.appmapData.appmaps(revisionName)).forEach((appmap) =>
+      (await this.paths.appmaps(revisionName)).forEach((appmap) =>
         q.push({
           revisionName: revisionName as RevisionName.Base | RevisionName.Head,
           name: appmap,
@@ -222,23 +264,91 @@ export default class ChangeReporter {
     assert(this.appMapMetadata);
     const failedAppMaps = new Set<AppMapName>();
     {
-      for (const appmap of await this.appmapData.appmaps(RevisionName.Head)) {
+      for (const appmap of await this.paths.appmaps(RevisionName.Head)) {
         const metadata = this.appMapMetadata[RevisionName.Head].get(appmap);
         if (!metadata) {
           console.log(prominentStyle(`Metadata for ${appmap} not found!`));
           continue;
         }
-        if (metadata.test_status === 'failed') {
-          this.referencedAppMaps.add(RevisionName.Head, appmap);
-          failedAppMaps.add(appmap);
-        }
+        if (metadata.test_status === 'failed') failedAppMaps.add(appmap);
       }
     }
     this.failedAppMaps = failedAppMaps;
   }
 }
 
-class ReportGenerator {
+// Gets a function that returns true if the given appmap is a test.
+function isTest(appMapMetadata: AppMapMetadata): (appmap: AppMapName) => boolean {
+  return (appmap: AppMapName): boolean => {
+    const metadata = appMapMetadata[RevisionName.Head].get(appmap);
+    return !!(metadata && metadata.recorder.type === 'tests');
+  };
+}
+
+// Selects AppMaps that have stable names, and are in the head revision but not in the base revision.
+export function isNew(
+  baseAppMaps: Set<AppMapName>,
+  isTestFn: (appmap: AppMapName) => boolean
+): (appmap: AppMapName) => boolean {
+  return (appmap: AppMapName) => isTestFn(appmap) && !baseAppMaps.has(appmap);
+}
+
+// Selects AppMaps that are present in both the base and head revisions, and have different digests.
+export function isChanged(
+  baseAppMaps: Set<AppMapName>,
+  isTestFn: (appmap: AppMapName) => boolean,
+  digests: Digests
+): (appmap: AppMapName) => boolean {
+  return (appmap: AppMapName) =>
+    isTestFn(appmap) &&
+    baseAppMaps.has(appmap) &&
+    digests.appmapDigest(RevisionName.Base, appmap) !==
+      digests.appmapDigest(RevisionName.Head, appmap);
+}
+
+export function buildFailure(
+  appMapMetadata: AppMapMetadata,
+  snippetWidth = DEFAULT_SNIPPET_WIDTH
+): (appmap: AppMapName) => Promise<TestFailure | undefined> {
+  return async (appmap: AppMapName) => {
+    const metadata = appMapMetadata[RevisionName.Head].get(appmap);
+    if (!metadata) {
+      warn(`No AppMap metadata available for failed test ${appmap}`);
+      return;
+    }
+    const testFailure = {
+      appmap,
+      name: metadata.name,
+    } as TestFailure;
+    if (metadata.source_location) {
+      testFailure.testLocation = isAbsolute(metadata.source_location)
+        ? relative(process.cwd(), metadata.source_location)
+        : metadata.source_location;
+    }
+    if (metadata.test_failure) {
+      testFailure.failureMessage = metadata.test_failure.message;
+      const location = metadata.test_failure.location;
+      if (location) {
+        testFailure.failureLocation = location;
+        const [path, linenoStr] = location.split(':');
+        if (linenoStr && (await exists(path))) {
+          const lineno = parseInt(linenoStr, 10);
+          const testCode = (await readFile(path, 'utf-8')).split('\n');
+          const minIndex = Math.max(lineno - snippetWidth, 0);
+          const maxIndex = Math.min(lineno + snippetWidth, testCode.length);
+          testFailure.testSnippet = {
+            codeFragment: testCode.slice(minIndex, maxIndex).join('\n'),
+            startLine: minIndex + 1,
+            language: metadata.language?.name,
+          };
+        }
+      }
+    }
+    return testFailure;
+  };
+}
+
+export class ReportFieldCalculator {
   constructor(public reporter: ChangeReporter) {}
 
   async appMapMetadata(): Promise<{
@@ -251,53 +361,7 @@ class ReportGenerator {
     };
   }
 
-  async testFailures(): Promise<TestFailure[]> {
-    assert(this.reporter.failedAppMaps);
-    assert(this.reporter.appMapMetadata);
-    const { failedAppMaps, appMapMetadata } = this.reporter;
-
-    return (
-      await Promise.all(
-        [...failedAppMaps].map(async (appmap) => {
-          const metadata = appMapMetadata[RevisionName.Head].get(appmap);
-          if (!metadata) {
-            console.log(`No Appmap metadata available for failed test ${appmap}`);
-            return;
-          }
-          const testFailure = {
-            appmap,
-            name: metadata.name,
-          } as TestFailure;
-          if (metadata.source_location)
-            testFailure.testLocation = relative(process.cwd(), metadata.source_location);
-          if (metadata.test_failure) {
-            testFailure.failureMessage = metadata.test_failure.message;
-            const location = metadata.test_failure.location;
-            if (location) {
-              testFailure.failureLocation = location;
-              const [path, linenoStr] = location.split(':');
-              if (linenoStr && (await exists(path))) {
-                const lineno = parseInt(linenoStr, 10);
-                const testCode = (await readFile(path, 'utf-8')).split('\n');
-                const minIndex = Math.max(lineno - 10, 0);
-                const maxIndex = Math.min(lineno + 10, testCode.length);
-                testFailure.testSnippet = {
-                  codeFragment: testCode.slice(minIndex, maxIndex).join('\n'),
-                  startLine: minIndex + 1,
-                  language: metadata.language?.name,
-                };
-              }
-            }
-          }
-          return testFailure;
-        })
-      )
-    ).filter(Boolean) as TestFailure[];
-  }
-
-  async sequenceDiagramDiff(): Promise<Record<string, string[]>> {
-    assert(this.reporter.changedAppMaps);
-
+  async sequenceDiagramDiff(changedAppMaps: ChangedAppMap[]): Promise<Record<string, string[]>> {
     const diffDiagrams = new DiffDiagrams();
     const sequenceDiagramDiff = new Map<string, AppMapLink[]>();
     {
@@ -308,15 +372,15 @@ class ReportGenerator {
         if (sourceDiff) changedAppMap.sourceDiff = sourceDiff;
 
         const baseDiagram = await loadSequenceDiagram(
-          this.reporter.appmapData.sequenceDiagramPath(RevisionName.Base, appmap)
+          this.reporter.paths.sequenceDiagramPath(RevisionName.Base, appmap)
         );
         const headDiagram = await loadSequenceDiagram(
-          this.reporter.appmapData.sequenceDiagramPath(RevisionName.Head, appmap)
+          this.reporter.paths.sequenceDiagramPath(RevisionName.Head, appmap)
         );
         const diagramDiff = diffDiagrams.diff(baseDiagram, headDiagram);
         if (diagramDiff) {
           const diagramJSON = format(FormatType.JSON, diagramDiff, 'diff');
-          const path = this.reporter.appmapData.sequenceDiagramDiffPath(appmap);
+          const path = this.reporter.paths.sequenceDiagramDiffPath(appmap);
           await mkdir(dirname(path), { recursive: true });
           await writeFile(path, diagramJSON.diagram);
           changedAppMap.sequenceDiagramDiff = relative(
@@ -339,23 +403,23 @@ class ReportGenerator {
         }
       }, 2);
       q.error(console.warn);
-      this.reporter.changedAppMaps.forEach((appmap) => q.push(appmap));
+      changedAppMaps.forEach((appmap) => q.push(appmap));
       if (!q.idle()) await q.drain();
     }
     return mapToRecord(sequenceDiagramDiff);
   }
 
-  async findingDiff(): Promise<Record<'new' & 'resolved', Finding[]>> {
+  async findingDiff(reportRemoved: boolean): Promise<Record<'new' | 'resolved', Finding[]>> {
     assert(this.reporter.baseManifest);
     assert(this.reporter.headManifest);
 
     const baseFindings = await loadFindings(
-      this.reporter.appmapData,
+      this.reporter.paths,
       RevisionName.Base,
       this.reporter.baseManifest.appMapDir
     );
     const headFindings = await loadFindings(
-      this.reporter.appmapData,
+      this.reporter.paths,
       RevisionName.Head,
       this.reporter.headManifest.appMapDir
     );
@@ -376,7 +440,7 @@ class ReportGenerator {
       (hash) => !headFindingHashes.has(hash)
     );
     newFindings = headFindings.filter((finding) => newFindingHashes.includes(finding.hash_v2));
-    if (this.reporter.reportRemoved) {
+    if (reportRemoved) {
       resolvedFindings = baseFindings.filter((finding) =>
         resolvedFindingHashes.includes(finding.hash_v2)
       );
@@ -384,15 +448,15 @@ class ReportGenerator {
       resolvedFindings = [];
     }
 
-    const result: Record<'new' & 'resolved', Finding[]> = {};
-    if (newFindings.length > 0) result['new'] = newFindings;
-    if (resolvedFindings.length > 0) result['resolved'] = resolvedFindings;
-    return result;
+    return {
+      new: newFindings,
+      resolved: resolvedFindings,
+    };
   }
 
-  async apiDiff(): Promise<any | undefined> {
+  async apiDiff(reportRemoved: boolean): Promise<any | undefined> {
     const readOpenAPI = async (revision: RevisionName) => {
-      const openapiPath = this.reporter.appmapData.openapiPath(revision);
+      const openapiPath = this.reporter.paths.openapiPath(revision);
       try {
         return await readFile(openapiPath, 'utf-8');
       } catch (e) {
@@ -420,7 +484,7 @@ class ReportGenerator {
         },
       });
 
-      if (!this.reporter.reportRemoved && result.breakingDifferencesFound) {
+      if (!reportRemoved && result.breakingDifferencesFound) {
         const diffOutcomeFailure = result as any;
         diffOutcomeFailure.breakingDifferencesFound = false;
         delete diffOutcomeFailure['breakingDifferences'];

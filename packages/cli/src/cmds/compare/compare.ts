@@ -7,7 +7,7 @@ import detectRevisions from './detectRevisions';
 import { prepareOutputDir } from './prepareOutputDir';
 import { verbose } from '../../utils';
 import { writeFile } from 'fs/promises';
-import ChangeReporter from './ChangeReporter';
+import ChangeReporter, { ChangeReportOptions } from './ChangeReporter';
 
 export const command = 'compare';
 export const describe = 'Compare runtime code behavior between base and head revisions';
@@ -96,10 +96,11 @@ export const handler = async (argv: any) => {
   );
 
   const changeReporter = new ChangeReporter(baseRevision, headRevision, outputDir, srcDir);
-  if (!reportRemoved) changeReporter.reportRemoved = false;
   await changeReporter.initialize();
 
-  const report = await changeReporter.report();
+  const options = new ChangeReportOptions();
+  options.reportRemoved = reportRemoved;
+  const report = await changeReporter.report(options);
 
   if (deleteUnreferenced) {
     await changeReporter.deleteUnreferencedAppMaps();

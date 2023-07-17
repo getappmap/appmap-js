@@ -4,7 +4,7 @@ import { promisify } from 'util';
 import { AppMapName } from './ChangeReport';
 import { RevisionName } from './RevisionName';
 
-export class AppMapData {
+export class Paths {
   constructor(public workingDir: string) {}
 
   async appmaps(revisionName: RevisionName): Promise<AppMapName[]> {
