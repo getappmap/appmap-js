@@ -3,12 +3,54 @@ import ProjectPicker from '@/pages/install-guide/ProjectPicker.vue';
 export default {
   title: 'Pages/VS Code/Install Guide Pages/Project Picker',
   component: ProjectPicker,
+  argTypes: {
+    currentStatus: {
+      control: { type: 'range', min: 0, max: 2 },
+      defaultValue: 0,
+    },
+    debugConfigurationStatus: {
+      control: { type: 'range', min: 0, max: 2 },
+      defaultValue: 0,
+    },
+    javaAgentStatus: {
+      control: { type: 'range', min: 0, max: 3 },
+      defaultValue: 0,
+    },
+  },
 };
 
 const Template = (args, { argTypes }) => ({
-  props: Object.keys(argTypes),
+  props: Object.keys(argTypes).filter((key) => key !== 'projects'),
+  computed: {
+    statusStates() {
+      return [this.currentStatus, this.currentStatus == 2 ? 1 : 0, 0, 0, 0];
+    },
+  },
+  data: () => ({
+    projects: args.projects.map((project) => ({
+      ...project,
+      debugConfigurationStatus: project.debugConfigurationStatus || args.debugConfigurationStatus,
+      javaAgentStatus: args.javaAgentStatus,
+    })),
+  }),
+  watch: {
+    debugConfigurationStatus(val) {
+      for (let i = 0; i < this.projects.length; i++) {
+        this.$set(this.projects, i, {
+          ...this.projects[i],
+          debugConfigurationStatus: val,
+        });
+      }
+    },
+    javaAgentStatus(val) {
+      for (let i = 0; i < this.projects.length; i++) {
+        this.$set(this.projects, i, { ...this.projects[i], javaAgentStatus: val });
+      }
+    },
+  },
   components: { ProjectPicker },
-  template: '<ProjectPicker v-bind="$props" ref="installAgent" />',
+  template:
+    '<ProjectPicker v-bind="$props" :projects="projects" :status-states="statusStates" ref="installAgent" />',
 });
 
 export const Empty = Template.bind({});
@@ -60,6 +102,26 @@ BadProject.args = {
         score: 0,
         text: 'web framework text',
       },
+    },
+  ],
+};
+
+export const UnsupportedProjectWithNoLanguage = Template.bind({});
+UnsupportedProjectWithNoLanguage.args = {
+  projects: [
+    {
+      name: 'pgvector',
+      path: '/home/ahtrotta/projects/test-apps/pgvector',
+      agentInstalled: false,
+      appMapsRecorded: false,
+      investigatedFindings: false,
+      appMapOpened: false,
+      generatedOpenApi: false,
+      appMaps: [],
+      numHttpRequests: 0,
+      numAppMaps: 0,
+      hasNode: false,
+      languages: [],
     },
   ],
 };
@@ -153,8 +215,48 @@ FourProjects.args = {
   ],
 };
 
-export const IntelliJ = Template.bind({});
-IntelliJ.args = {
+export const RubyVSCode = Template.bind({});
+RubyVSCode.args = {
+  projects: [
+    {
+      name: 'myapp',
+      score: 2,
+      path: '/home/user/myapp',
+      language: {
+        name: 'Ruby',
+        score: 2,
+      },
+      webFramework: {
+        name: 'Rails',
+        score: 2,
+      },
+    },
+  ],
+  editor: 'vscode',
+};
+
+export const PythonVSCode = Template.bind({});
+PythonVSCode.args = {
+  projects: [
+    {
+      name: 'myapp',
+      score: 2,
+      path: '/home/user/myapp',
+      language: {
+        name: 'Python',
+        score: 2,
+      },
+      webFramework: {
+        name: 'Flask',
+        score: 2,
+      },
+    },
+  ],
+  editor: 'vscode',
+};
+
+export const JavaIntelliJ = Template.bind({});
+JavaIntelliJ.args = {
   projects: [
     {
       name: 'my_java_project',
@@ -171,4 +273,42 @@ IntelliJ.args = {
     },
   ],
   editor: 'jetbrains',
+};
+
+export const JavaVSCode = Template.bind({});
+JavaVSCode.args = {
+  projects: [
+    {
+      name: 'my_java_project',
+      score: 2,
+      path: '/home/user/my_java_project',
+      language: {
+        name: 'Java',
+        score: 2,
+      },
+      webFramework: {
+        name: 'Spring',
+        score: 2,
+      },
+      debugConfigurationStatus: 1,
+    },
+  ],
+  javaAgentStatus: 2,
+  editor: 'vscode',
+};
+
+export const JavaScriptVSCode = Template.bind({});
+JavaScriptVSCode.args = {
+  projects: [
+    {
+      name: 'my-js-project',
+      score: 2,
+      path: '/home/user/my_js_project',
+      language: {
+        name: 'JavaScript',
+        score: 2,
+      },
+    },
+  ],
+  editor: 'vscode',
 };

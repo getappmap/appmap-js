@@ -1,6 +1,6 @@
 {
   "name": "@appland/models",
-  "version": "2.6.1",
+  "version": "2.6.3",
   "description": "",
   "module": "dist/index.js",
   "main": "dist/index.cjs",
@@ -13,7 +13,7 @@
     "lint": "eslint 'src/**/*.[jt]s' 'tests/**/*.[jt]s'",
     "lint:fix": "eslint 'src/**/*.[jt]s' 'tests/**/*.[jt]s' --fix",
     "pre-commit": "lint-staged",
-    "test": "jest",
+    "test": "appmap-agent-js",
     "watch": "tsup --watch"
   },
   "lint-staged": {
@@ -29,6 +29,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@appland/appmap-agent-js": "^13.9.0",
     "@types/crypto-js": "^4.1.1",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "@typescript-eslint/parser": "^5.43.0",

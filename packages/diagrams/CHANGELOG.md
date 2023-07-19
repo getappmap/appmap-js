@@ -1,3 +1,17 @@
+# [@appland/diagrams-v1.7.0](https://github.com/getappmap/appmap-js/compare/@appland/diagrams-v1.6.4...@appland/diagrams-v1.7.0) (2023-06-06)
+
+
+### Features
+
+* consistent map color palette ([19ef694](https://github.com/getappmap/appmap-js/commit/19ef694e0449469700d81ab2bdd7065349c5409c))
+
+# [@appland/diagrams-v1.6.4](https://github.com/getappmap/appmap-js/compare/@appland/diagrams-v1.6.3...@appland/diagrams-v1.6.4) (2023-06-06)
+
+
+### Bug Fixes
+
+* update d3 dependencies to dedup d3-selection ([d3b22b9](https://github.com/getappmap/appmap-js/commit/d3b22b969424920237124065ccc4aba18920054a))
+
 # [@appland/diagrams-v1.6.3](https://github.com/getappmap/appmap-js/compare/@appland/diagrams-v1.6.2...@appland/diagrams-v1.6.3) (2023-02-25)
 
 

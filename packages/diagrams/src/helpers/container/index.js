@@ -1,4 +1,4 @@
-import { select, event as d3Event } from 'd3-selection';
+import { select } from 'd3-selection';
 import { zoomIdentity, zoomTransform, zoom } from 'd3-zoom';
 import { interpolate } from 'd3-interpolate';
 import deepmerge from 'deepmerge';
@@ -86,7 +86,7 @@ export default class Container extends EventSource {
       this.zoom = zoom()
         .scaleExtent([this.options.zoom.minRatio, this.options.zoom.maxRatio])
         .interpolate(interpolate)
-        .filter(() => {
+        .filter((d3Event) => {
           if (d3Event.type === 'wheel') {
             return this.active || !this.options.zoom.requireActive;
           }
@@ -99,7 +99,7 @@ export default class Container extends EventSource {
 
           return true;
         })
-        .on('zoom', () => {
+        .on('zoom', (d3Event) => {
           const { transform } = d3Event;
 
           const { offsetHeight, offsetWidth } = parentElement;

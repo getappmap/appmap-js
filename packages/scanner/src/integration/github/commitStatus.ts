@@ -1,3 +1,5 @@
+import { Octokit } from 'octokit';
+
 import {
   owner,
   repo,
@@ -21,10 +23,12 @@ export default function postCommitStatus(
   validateSha();
 
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const octokat = require('octokat');
-  const octo = new octokat({ token: token() });
+  const octo = new Octokit({ auth: token() });
 
-  return octo.repos(owner(), repo()).statuses(sha()).create({
+  return octo.rest.repos.createCommitStatus({
+    owner: owner()!,
+    repo: repo()!,
+    sha: sha()!,
     state: state,
     context: 'appland/scanner',
     description: description,

@@ -136,9 +136,7 @@ export default class ClassMap {
         e.codeObject = codeObject;
         codeObject.events.push(e);
 
-        const ancestors = codeObject.ancestors();
-        validCodeObjects.add(codeObject);
-        ancestors.forEach((obj) => validCodeObjects.add(obj));
+        codeObject.visitAncestors((obj) => validCodeObjects.add(obj));
       });
 
     this.codeObjects = this.codeObjects.filter((obj) => validCodeObjects.has(obj));

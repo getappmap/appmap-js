@@ -126,12 +126,13 @@ export default {
   }
 
   &--primary {
-    border: 1px solid $brightblue;
-    color: $white;
+    border: 2px solid $brightblue;
+    color: white;
     background: none;
+    background-color: $brightblue;
 
     &:hover {
-      background-color: $brightblue;
+      border-color: white;
     }
 
     &:active {

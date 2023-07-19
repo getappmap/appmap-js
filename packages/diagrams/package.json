@@ -1,6 +1,6 @@
 {
   "name": "@appland/diagrams",
-  "version": "1.6.3",
+  "version": "1.7.0",
   "description": "",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -30,10 +30,10 @@
   ],
   "dependencies": {
     "@appland/models": "workspace:^2.2.0",
-    "d3-interpolate": "^1.4.0",
-    "d3-selection": "^1.4.2",
-    "d3-shape": "^1.3.7",
-    "d3-zoom": "^1.8.3",
+    "d3-interpolate": "^3.0.1",
+    "d3-selection": "^3.0.0",
+    "d3-shape": "^3.2.0",
+    "d3-zoom": "^3.0.0",
     "dagre": "^0.8.5",
     "deepmerge": "^4.2.2"
   },

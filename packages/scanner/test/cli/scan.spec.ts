@@ -16,6 +16,7 @@ import tmp from 'tmp-promise';
 import assert from 'assert';
 import { FSWatcher } from 'chokidar';
 import { mkdir, chmod } from 'fs/promises';
+import { asyncify, retry } from 'async';
 
 process.env['APPMAP_TELEMETRY_DISABLED'] = 'true';
 delete process.env.APPLAND_API_KEY;
@@ -214,8 +215,8 @@ describe('scan', () => {
     }
 
     function copyAppMap(source: string, targetName?: string): Promise<void> {
-      targetName ||= basename(source);
-      return fsextra.copy(source, join(tmpDir, targetName));
+      targetName ||= source;
+      return fsextra.copy(source, join(tmpDir, basename(targetName)));
     }
 
     function indexPath(mapPath: string): string {
@@ -224,7 +225,7 @@ describe('scan', () => {
 
     async function createIndex(mapPath: string): Promise<void> {
       const index = indexPath(mapPath);
-      await fsextra.mkdir(index, { recursive: true });
+      await retry(asyncify(() => fsextra.mkdir(index, { recursive: true })));
       await writeFile(join(index, 'mtime'), Date.now().toString());
     }
 
@@ -300,7 +301,7 @@ describe('scan', () => {
       await chmod(permissionDeniedDir, 0o777); // else the next testcase fails
     });
 
-    it('reloads the scanner configuration automatically', async () => {
+    it('reloads the scanner configuration automatically @appmap-fixme', async () => {
       await createWatcher();
       await createIndex(secretInLogMap);
 
@@ -336,28 +337,37 @@ describe('scan', () => {
       await waitForSingleFinding();
     });
 
-    it('does not rescan when not needed, but scans every new file', async () => {
+    it('does not rescan when not needed, but scans every new file @appmap-fixme', async () => {
+      const debugTimes: (number | undefined)[][] = [];
       /* Note, this test also makes sure we continue scanning after
        * we skip some files due to them being up to date. */
       await createWatcher();
       const src = secretInLogMap;
+      const other = join(tmpDir, 'other.appmap.json');
+
+      await probeDebugTimes();
 
       // first, scan two appmaps
-      await createIndex(secretInLogMap);
-      await expectScan(secretInLogMap);
+      await createIndex(src);
+      await probeDebugTimes();
+      await expectScan(src);
+      await probeDebugTimes();
 
-      const other = 'other.appmap.json';
       await copyAppMap(src, other);
+      await probeDebugTimes();
       await createIndex(other);
+      await probeDebugTimes();
       await expectScan(other);
+      await probeDebugTimes();
 
       // store the finding file mtimes, we'll check later if they aren't rescanned
-      const getTimes = (...paths: string[]) =>
-        Promise.all(paths.map((f) => stat(findingsPath(f)).then((s) => s.mtimeMs)));
-      const times = await getTimes(src, other);
+      const getScanTimes = (...paths: string[]) => Promise.all(paths.map(findingsPath).map(getMs));
+      const times = await getScanTimes(src, other);
 
       // touch both
       await Promise.all([src, other].map(createIndex));
+
+      await probeDebugTimes();
 
       // now scan some unrelated maps
       const names = [...Array(5).keys()].map((i) => `test-${i}.appmap.json`);
@@ -365,8 +375,46 @@ describe('scan', () => {
       await Promise.all(names.map(createIndex));
       await Promise.all(names.map(expectScan));
 
+      await probeDebugTimes();
+
+      printDebugTimes();
+
       // check the previous ones to make sure they haven't been rescanned
-      expect(await getTimes(src, other)).toStrictEqual(times);
+      expect(await getScanTimes(src, other)).toStrictEqual(times);
+
+      async function getMs(path: string) {
+        try {
+          return (await stat(path)).mtimeMs;
+        } catch {
+          return undefined;
+        }
+      }
+
+      function getDebugTimes() {
+        const paths = [
+          src,
+          join(indexPath(src), 'mtime'),
+          findingsPath(src),
+          other,
+          join(indexPath(other), 'mtime'),
+          findingsPath(other),
+        ];
+        return Promise.all(paths.map(getMs));
+      }
+
+      async function probeDebugTimes() {
+        debugTimes.push(await getDebugTimes());
+      }
+
+      function printDebugTimes() {
+        const result = ['\tsrc  \tindex\tfndings\tother\tindex\tfndings\n'];
+        const cut = (str: string) => str.substring(str.length - 7);
+        for (const times of debugTimes) {
+          result.push(times.map((t) => (t ? cut(t.toFixed(3)) : '—    ')).join('\t'));
+        }
+
+        console.debug(result.join('\n\t'));
+      }
     });
   });
 });

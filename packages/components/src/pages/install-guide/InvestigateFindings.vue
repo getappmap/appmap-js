@@ -5,48 +5,47 @@
         <h1 data-cy="title">AppMap Runtime Analysis</h1>
       </header>
       <main>
+        <v-status
+          :status-states="statusStates"
+          :current-status="statusStates[4]"
+          :project-name="projectName"
+          :num-app-maps="numAppMaps"
+          :current-step="0"
+          :viewing-step="4"
+          class="mb20"
+        >
+          <template #header> AppMap setup is complete for {{ projectName }} </template>
+        </v-status>
         <article v-if="!(analysisEnabled && scanned)" class="subheading">
           Find software design flaws that impact security, performance, stability, and
           maintainability. Our runtime code analysis can find the problems that static code
           analyzers miss — and that cause serious production issues.
         </article>
-        <article v-if="!(analysisEnabled && scanned)" class="subheading">
-          To unlock this feature you will authenticate to the AppMap server with your GitHub or
-          GitLab account. AppMap does not upload your AppMaps. AppMap does not read the contents of
-          your AppMaps. AppMap does not have read or write access to your repo.
-        </article>
         <div v-if="analysisEnabled">
           <article v-if="!scanned">
-            <p>
+            <h2>
               <strong>This project has not been scanned yet.</strong>
-            </p>
-            <p>AppMap will scan your project and report findings automatically if you have:</p>
-
-            <ol>
-              <li>
-                <a href="#" @click.prevent="$root.$emit('open-instruction', 'project-picker')"
-                  >The AppMap Agent installed</a
-                >
-              </li>
-              <li>
-                <a href="#" @click.prevent="$root.$emit('open-instruction', 'record-appmaps')">
-                  AppMaps in your project</a
-                >
-              </li>
-            </ol>
-            <p>If you need help getting set up, we are happy to help open a support ticket.</p>
+            </h2>
+            <article class="subheading">
+              <a href="#" @click.prevent="$root.$emit('open-instruction', 'record-appmaps')"
+                >Go back and record AppMaps.</a
+              >
+              Once you have done that, AppMap will automatically scan your project and report
+              findings.
+            </article>
+            <br />
           </article>
           <article v-else-if="numFindings > 0">
             <p>
               AppMap has identified
-              <badge
+              <span
                 v-for="domain in ['security', 'performance', 'stability', 'maintainability']"
                 :key="domain"
                 :data-cy="domain"
                 :class="domain"
               >
                 {{ findingsDomainCounts[domain] }} {{ domain }}
-              </badge>
+              </span>
               findings.
             </p>
             <br />
@@ -60,8 +59,8 @@
           </article>
           <article v-else>
             <p class="success-message">
-              <strong>Success!</strong> AppMap has scanned your application and found no flaws.
-              We'll continue scanning for flaws automatically.
+              AppMap has scanned your application and found no flaws. We'll continue scanning for
+              flaws automatically.
             </p>
           </article>
         </div>
@@ -119,8 +118,10 @@
 import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import VQuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
 import VButton from '@/components/Button.vue';
+import VStatus from '@/components/install-guide/Status.vue';
 import Navigation from '@/components/mixins/navigation';
 import VAppmapLogo from '@/assets/appmap-logomark.svg';
+import StatusState from '@/components/mixins/statusState.js';
 
 export default {
   name: 'InvestigateFindings',
@@ -130,9 +131,10 @@ export default {
     VNavigationButtons,
     VButton,
     VAppmapLogo,
+    VStatus,
   },
 
-  mixins: [Navigation],
+  mixins: [Navigation, StatusState],
 
   props: {
     scanned: Boolean,
@@ -147,9 +149,16 @@ export default {
         maintainability: 0,
       }),
     },
-    findingsEnabled: Boolean,
     analysisEnabled: Boolean,
     userAuthenticated: Boolean,
+    projectName: {
+      type: String,
+      default: '',
+    },
+    numAppMaps: {
+      type: Number,
+      required: true,
+    },
   },
 
   methods: {

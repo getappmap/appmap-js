@@ -26,7 +26,6 @@ jobs:
         - yarn run ci
 
     - node_js: 16
-    - node_js: 14
 
     - os: windows
       node_js: 18

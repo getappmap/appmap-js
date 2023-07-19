@@ -22,7 +22,6 @@
 
 <script>
 import { Event } from '@appland/models';
-import { CLEAR_SELECTION_STACK, SELECT_CODE_OBJECT } from '@/store/vsCode';
 import NodeConnection from '@/assets/node_connection.svg';
 import VTraceNodeBodyDefault from './TraceNodeBodyDefault.vue';
 import VTraceNodeBodyHttp from './TraceNodeBodyHttp.vue';
@@ -118,15 +117,6 @@ export default {
       };
     },
   },
-
-  methods: {
-    selectNode() {
-      if (this.$store) {
-        this.$store.commit(CLEAR_SELECTION_STACK);
-        this.$store.commit(SELECT_CODE_OBJECT, this.event);
-      }
-    },
-  },
 };
 </script>
 
@@ -149,7 +139,7 @@ $bg-color: $gray2;
   }
 
   &.highlight {
-    outline: 4px solid $hotpink;
+    outline: 4px solid #ff27b6c4;
   }
 
   &.focused {

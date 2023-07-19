@@ -1,3 +1,237 @@
+# [@appland/components-v2.57.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.56.0...@appland/components-v2.57.0) (2023-07-19)
+
+
+### Bug Fixes
+
+* 'next' button goes to the next step if setup complete ([007043c](https://github.com/getappmap/appmap-js/commit/007043cd1beedcee2fe15e76fa28f8e4897ead5f)), closes [#1245](https://github.com/getappmap/appmap-js/issues/1245)
+
+
+### Features
+
+* upgrade @appland/models to 2.6.3 ([6e31f9c](https://github.com/getappmap/appmap-js/commit/6e31f9cc179ac0edfcde2861b937cd104ed4c687))
+
+# [@appland/components-v2.56.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.55.0...@appland/components-v2.56.0) (2023-07-13)
+
+
+### Bug Fixes
+
+* consistent fqids for queries and (external) routes ([5f3e40e](https://github.com/getappmap/appmap-js/commit/5f3e40ead971f7a161890e7fd4c1c6da1fc192d9))
+* unsupported projects show helpful information ([7fcbe19](https://github.com/getappmap/appmap-js/commit/7fcbe19a4ebb1f3cd3d5dd45ad3f3adb4d04fb35))
+
+
+### Features
+
+* Manual instructions instruct the user to create appmap.yml ([5b3bd0c](https://github.com/getappmap/appmap-js/commit/5b3bd0c007bf9c8eddd90f4b41b43a0e153e42d0))
+
+# [@appland/components-v2.55.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.54.0...@appland/components-v2.55.0) (2023-07-12)
+
+
+### Features
+
+* bump sequence diagram version in components ([e9fd7d2](https://github.com/getappmap/appmap-js/commit/e9fd7d298f1cdca1a99a38d1beb50a8b69b1ccd8))
+
+# [@appland/components-v2.54.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.53.1...@appland/components-v2.54.0) (2023-07-11)
+
+
+### Bug Fixes
+
+* focused element is centered ([1bafb79](https://github.com/getappmap/appmap-js/commit/1bafb790b70a1091c39e0e3371b56e080070cefc))
+* focusedEvent does not call non-existant function ([aacd78a](https://github.com/getappmap/appmap-js/commit/aacd78ac0c02420b7239b8928444e8ad50bb9a8c))
+* resetting diagram resets trace filter ([823c2d7](https://github.com/getappmap/appmap-js/commit/823c2d7c1be3834ec8e186588670afecaf715217))
+
+
+### Features
+
+* highlight events when finding is selected ([be86e9a](https://github.com/getappmap/appmap-js/commit/be86e9a0c8e4924460da7c05d5d5cc1ba9432ca8))
+
+# [@appland/components-v2.53.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.53.0...@appland/components-v2.53.1) (2023-07-11)
+
+
+### Bug Fixes
+
+* IntelliJ test framework property is of the expected type ([123d36d](https://github.com/getappmap/appmap-js/commit/123d36dbb33014e3da76bc3315c52f79c702403f))
+* Remove usage of unknown component ([20e41d0](https://github.com/getappmap/appmap-js/commit/20e41d0aac594ba2402ed6c75cda9da13cd8bde5))
+
+# [@appland/components-v2.53.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.52.3...@appland/components-v2.53.0) (2023-07-07)
+
+
+### Features
+
+* remove flame graph feature flag ([ee48f88](https://github.com/getappmap/appmap-js/commit/ee48f88b783eba164bc2cf9392a1b8a3ec00f4d7))
+
+# [@appland/components-v2.52.3](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.52.2...@appland/components-v2.52.3) (2023-07-06)
+
+
+### Bug Fixes
+
+* loop boxes surround calls ([69e0e14](https://github.com/getappmap/appmap-js/commit/69e0e1454b0ff7cba8bcb4b095ae7af55e745cef))
+
+
+### Reverts
+
+* Revert "fix: correct loop box height" ([76ae018](https://github.com/getappmap/appmap-js/commit/76ae01825f14a491efc06969528287df1dd11271))
+
+# [@appland/components-v2.52.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.52.1...@appland/components-v2.52.2) (2023-07-06)
+
+
+### Bug Fixes
+
+* external routes are yellow in flame graph ([8988c78](https://github.com/getappmap/appmap-js/commit/8988c78d5e33d640b03783d9835c415c19e72ae1))
+
+# [@appland/components-v2.52.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.52.0...@appland/components-v2.52.1) (2023-07-05)
+
+
+### Bug Fixes
+
+* VS Code Java doc updates ([68f6241](https://github.com/getappmap/appmap-js/commit/68f6241eec2ba8c0cd5abaae239ec147144ab338))
+
+# [@appland/components-v2.52.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.51.0...@appland/components-v2.52.0) (2023-07-03)
+
+
+### Bug Fixes
+
+* Add a missing space ([2615952](https://github.com/getappmap/appmap-js/commit/261595250c54b8205cd58785725e83fa9062296f))
+
+
+### Features
+
+* add default AppMap filter if none exists ([2de2374](https://github.com/getappmap/appmap-js/commit/2de23748e998af4664f554f3a6de2cba5e88938a))
+* Update install instructions for AppMap Java in VS Code ([2ff2c40](https://github.com/getappmap/appmap-js/commit/2ff2c40906058a6042b563bde318905c259867e3))
+
+# [@appland/components-v2.51.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.50.0...@appland/components-v2.51.0) (2023-06-29)
+
+
+### Features
+
+* add drag to flamegraph ([2552d16](https://github.com/getappmap/appmap-js/commit/2552d165f4a57503512e5d73e72a838ee64ada4a))
+* add ineratia to grab scroll in flamegraph ([bd0d9fe](https://github.com/getappmap/appmap-js/commit/bd0d9fe3dd9f70af8255e9bab5286a0d0a33f258))
+* enable mouse wheel zoom ([109b6e9](https://github.com/getappmap/appmap-js/commit/109b6e975a53b629cb0ed4ceb22502e61c28126f))
+* enable scroll flamegraph with trackpad ([8925f6a](https://github.com/getappmap/appmap-js/commit/8925f6a05c97ede1465e6e7b8ac0b874a3c8b69e))
+* make the trunk flamegraph sticky ([cdf4202](https://github.com/getappmap/appmap-js/commit/cdf4202d0cf08b2ba707b9c63b6cb8a5b9309c52))
+* min zoom to available width ([a53abf4](https://github.com/getappmap/appmap-js/commit/a53abf4e402b305abe3deeec17f74caebf82cc2b))
+* show when flamegraph items are clickable ([e794dbf](https://github.com/getappmap/appmap-js/commit/e794dbf1b61e176fc8cc11ffd718b12aea3f3e21))
+* show when flamegraph root is clickable ([f90b83a](https://github.com/getappmap/appmap-js/commit/f90b83aa5976bee3cfba856d605d22f2620b946f))
+* smooth flamegraph zoom ([b132e26](https://github.com/getappmap/appmap-js/commit/b132e268e3ddb761bf3c767a30d3c029ebdf3ec8))
+* update show flamegraph button ([5e3709c](https://github.com/getappmap/appmap-js/commit/5e3709cc26fb9469bbc5ec5af07540bca45ccbd8))
+* zoom centering and partial scrolling ([32f6194](https://github.com/getappmap/appmap-js/commit/32f61942a967b6d4bcd8693abec7c67baf4d66a1))
+
+
+### Performance Improvements
+
+* class-based FlamegraphItem dimensions ([5bf4d30](https://github.com/getappmap/appmap-js/commit/5bf4d30c3f632390fd0c3f66cff1092a07648346))
+* faster focus-related update in flamegraph ([06c7029](https://github.com/getappmap/appmap-js/commit/06c702904884fe3ae264e1293e8b5e07546434aa))
+* static flamegraph factor ([771fb6c](https://github.com/getappmap/appmap-js/commit/771fb6cbb0b53f8b863932b9dbf9df99147bd438))
+
+# [@appland/components-v2.50.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.49.0...@appland/components-v2.50.0) (2023-06-23)
+
+
+### Bug Fixes
+
+* handle 0 sum children in flamegraph ([c36f300](https://github.com/getappmap/appmap-js/commit/c36f3000b8fafdda4b2dd3c184bf5809d55ef8fd))
+
+
+### Features
+
+* add 'show in flamegraph' button ([510fc01](https://github.com/getappmap/appmap-js/commit/510fc015991287747231b7d274c530cb5113dae1))
+* add duration to flamegraph items ([3e964d7](https://github.com/getappmap/appmap-js/commit/3e964d773de423415aa39e9106667ab22bb608c2))
+* differentiate events type in flamegraph ([e5de00e](https://github.com/getappmap/appmap-js/commit/e5de00e5c360c4e6d03c33504854bc9899f9abf9))
+* exponential zoom ([6906847](https://github.com/getappmap/appmap-js/commit/6906847c2799ef3f2bdef0593babe62ac805fe5e))
+* flamegraph uses tab scroll instead of its own ([361bd67](https://github.com/getappmap/appmap-js/commit/361bd671fef1083031dfd1b18bf2451540701ea6))
+* grey out rest box ([10e0c89](https://github.com/getappmap/appmap-js/commit/10e0c89f7d100b2a9eeb152b4b233b71b0d07b99))
+* grey out the trunc of the flamegraph ([b58191e](https://github.com/getappmap/appmap-js/commit/b58191e49ce76e249a482238cbbeeb5ae8b9df7b))
+* implement flamegraph as vue components ([646dea1](https://github.com/getappmap/appmap-js/commit/646dea1975d86c1e514f7de8cf94d85e38ba8c37))
+* label hovered event ([c63a6e3](https://github.com/getappmap/appmap-js/commit/c63a6e3e695565f27ba43d29d36c7010981af038))
+* metric and exponential duration format ([07ca5f2](https://github.com/getappmap/appmap-js/commit/07ca5f27159cef12c29a9358b7ecddfadfe6f0f5))
+
+# [@appland/components-v2.49.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.48.0...@appland/components-v2.49.0) (2023-06-22)
+
+
+### Bug Fixes
+
+* Allow 'Copied to clipboard!' messages to overflow ([28bb34a](https://github.com/getappmap/appmap-js/commit/28bb34a3da12ff5309f131438835f3bcb84078c2))
+* Move AppMaps to the top of Explore AppMaps ([5b54bff](https://github.com/getappmap/appmap-js/commit/5b54bff2a48d323b53224e2d85738fe4b36ddd67))
+* Only expand projects when clicking headers ([1c3f593](https://github.com/getappmap/appmap-js/commit/1c3f5930cbddd12323b860191af8cef0566bdd03))
+* Record AppMaps displays the total number of AppMaps ([430fbbc](https://github.com/getappmap/appmap-js/commit/430fbbcf512c58613acc918168e41cf63d0830ec))
+
+
+### Features
+
+* Add a status component ([60e35e9](https://github.com/getappmap/appmap-js/commit/60e35e9f0d7ce58e58a76fefd79c6388d052f0db))
+* Integrate the status bar into the instructions ([a54addc](https://github.com/getappmap/appmap-js/commit/a54addc4814d25d68c994e10eb755b6afdf5c425))
+* Re-style the primary button ([e2041f8](https://github.com/getappmap/appmap-js/commit/e2041f892ba0287ebb9e591e0ec425a5f5296ed4))
+* Rework primary actions in instructions ([d8009bd](https://github.com/getappmap/appmap-js/commit/d8009bdafcbc7b8e8a1562b4453ae3a99773700a))
+
+# [@appland/components-v2.48.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.47.0...@appland/components-v2.48.0) (2023-06-17)
+
+
+### Features
+
+* Add instructions for Java in VSCode ([#1233](https://github.com/getappmap/appmap-js/issues/1233)) ([2173c38](https://github.com/getappmap/appmap-js/commit/2173c38254f167a8693df48518531b126ec75b2b))
+
+# [@appland/components-v2.47.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.46.2...@appland/components-v2.47.0) (2023-06-14)
+
+
+### Bug Fixes
+
+* Cleanup per lint ([bccc3d7](https://github.com/getappmap/appmap-js/commit/bccc3d7c81b5af6041cff569f74742f3d6a1be63))
+* Fix appmap record prompt ([a6366c5](https://github.com/getappmap/appmap-js/commit/a6366c5779294e2b2e604dbc53a018d3f2de4e7b))
+* gsub appmap-agent.jar to appmap.jar ([a3e8ba2](https://github.com/getappmap/appmap-js/commit/a3e8ba290cb8b6e9fc6dbd66b9afe93204429f3e))
+* Remove instructions to run non-existant Python script ([3cbde9f](https://github.com/getappmap/appmap-js/commit/3cbde9f46e8417fe33f7ecfb60e8f6d2c1ebe1aa))
+
+
+### Features
+
+* formatting for install instructions ([#1227](https://github.com/getappmap/appmap-js/issues/1227)) ([c27afb9](https://github.com/getappmap/appmap-js/commit/c27afb931d55276a32dfa044a6f3b9df65b4d9f0))
+* Project supported if language supported ([4a8f19a](https://github.com/getappmap/appmap-js/commit/4a8f19af9f799cc5b6c3c6df97770b70edf26b79))
+* Record instructions styling ([#1222](https://github.com/getappmap/appmap-js/issues/1222)) ([c259715](https://github.com/getappmap/appmap-js/commit/c259715bddac4d78b93843573b92dd14a911afa8))
+* Remove feature flag for Python record-by-default ([0f7712c](https://github.com/getappmap/appmap-js/commit/0f7712c586e96aa963e82b1f3c65f3872f8e4399))
+* Update install instructions ([fcbbba4](https://github.com/getappmap/appmap-js/commit/fcbbba49d2153c986ddc230e4f1efe0c6680ba74))
+* Update Record AppMaps instructions content ([cf3041b](https://github.com/getappmap/appmap-js/commit/cf3041bb3f4e630be7cb0f033de6fec53dd05b33))
+
+# [@appland/components-v2.46.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.46.1...@appland/components-v2.46.2) (2023-06-14)
+
+
+### Bug Fixes
+
+* self-call and lane-separator colors ([a3ea368](https://github.com/getappmap/appmap-js/commit/a3ea36828e6c89175b0cde3197f6e50f1bd479bc))
+
+# [@appland/components-v2.46.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.46.0...@appland/components-v2.46.1) (2023-06-06)
+
+
+### Bug Fixes
+
+* update diagrams to 1.7.0 ([c4baced](https://github.com/getappmap/appmap-js/commit/c4baced2fbceeeda58fe01777604ce8a70c3a09d))
+
+# [@appland/components-v2.46.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.45.1...@appland/components-v2.46.0) (2023-06-06)
+
+
+### Features
+
+* consistent map color palette ([19ef694](https://github.com/getappmap/appmap-js/commit/19ef694e0449469700d81ab2bdd7065349c5409c))
+
+# [@appland/components-v2.45.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.45.0...@appland/components-v2.45.1) (2023-06-05)
+
+
+### Bug Fixes
+
+* Remove deprecated install-guide SignIn view ([750139d](https://github.com/getappmap/appmap-js/commit/750139d330a3813e0559cc9f93c229bec321b893))
+
+# [@appland/components-v2.45.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.44.0...@appland/components-v2.45.0) (2023-06-02)
+
+
+### Features
+
+* user can save filter settings ([763c246](https://github.com/getappmap/appmap-js/commit/763c246297d1a1c6516577d9a6d4f49295c36b70))
+
+# [@appland/components-v2.44.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.43.0...@appland/components-v2.44.0) (2023-05-31)
+
+
+### Features
+
+* add flame graph tab to main view ([7e60136](https://github.com/getappmap/appmap-js/commit/7e6013680e9ca7e2e22b96baabdde350f11d6eb8))
+* hide flame graph tab behind a flag ([fc9fea2](https://github.com/getappmap/appmap-js/commit/fc9fea2066571890192c2199dee11d84e9847479))
+* implement basic flame graph diagram ([c699891](https://github.com/getappmap/appmap-js/commit/c6998918a403342c06deda35d2cffad136c70941))
+
 # [@appland/components-v2.43.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.42.0...@appland/components-v2.43.0) (2023-05-16)
 
 

@@ -5,14 +5,63 @@
         <h1 data-cy="title">Explore AppMaps</h1>
       </header>
       <main>
+        <v-status
+          next-step="Generate OpenAPI"
+          :status-states="statusStates"
+          :current-status="statusStates[2]"
+          :project-name="projectName"
+          :num-app-maps="numAppMaps"
+          :current-step="0"
+          :viewing-step="2"
+          class="mb20"
+        >
+          <template #header> {{ projectName }} has {{ appMaps.length }} AppMaps </template>
+          <template #subheader>
+            <template v-if="complete">
+              Next step: Generate OpenAPI definitions from AppMap data
+            </template>
+            <template v-else>Open an AppMap</template>
+          </template>
+        </v-status>
         <article v-if="appMaps.length">
           <p>
             AppMaps have been recorded for this project! <br />
             We've identified some interesting AppMaps and Code Objects that you may want to check
             out.
           </p>
+          <div class="table-wrap">
+            <table class="qs-appmaps-table" data-cy="appmaps">
+              <colgroup>
+                <col width="70%" />
+                <col width="10%" />
+                <col width="10%" />
+                <col width="10%" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th><h2 class="subhead">AppMaps</h2></th>
+                  <th>Requests</th>
+                  <th>SQL</th>
+                  <th>Functions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="appMap in appMaps"
+                  :key="appMap.path"
+                  @click="openAppmap(appMap.path)"
+                  data-cy="appmap"
+                >
+                  <td>{{ appMap.name }}</td>
+                  <td>{{ appMap.requests }}</td>
+                  <td>{{ appMap.sqlQueries }}</td>
+                  <td>{{ appMap.functions }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <div class="qs-explore-code-objects" data-cy="code-objects">
-            <h2 class="subhead">Selected Code objects</h2>
+            <h2 class="subhead">Code objects</h2>
             <ul class="code-object-list">
               <div class="collapse-expand">
                 <div class="accordion-toggle">
@@ -44,37 +93,6 @@
               </li>
             </ul>
           </div>
-          <div class="table-wrap">
-            <table class="qs-appmaps-table" data-cy="appmaps">
-              <colgroup>
-                <col width="70%" />
-                <col width="10%" />
-                <col width="10%" />
-                <col width="10%" />
-              </colgroup>
-              <thead>
-                <tr>
-                  <th><h2 class="subhead">Selected AppMaps</h2></th>
-                  <th>Requests</th>
-                  <th>SQL</th>
-                  <th>Functions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="appMap in appMaps"
-                  :key="appMap.path"
-                  @click="openAppmap(appMap.path)"
-                  data-cy="appmap"
-                >
-                  <td>{{ appMap.name }}</td>
-                  <td>{{ appMap.requests }}</td>
-                  <td>{{ appMap.sqlQueries }}</td>
-                  <td>{{ appMap.functions }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
         </article>
         <article v-else data-cy="no-appmaps">
           No AppMaps have been found in your project. Try
@@ -84,7 +102,7 @@
           first.
         </article>
       </main>
-      <v-navigation-buttons :first="first" :last="last" />
+      <v-navigation-buttons :first="first" :last="last" :complete="complete" />
     </section>
   </v-quickstart-layout>
 </template>
@@ -92,7 +110,9 @@
 <script>
 import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import VQuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
+import VStatus from '@/components/install-guide/Status.vue';
 import Navigation from '@/components/mixins/navigation';
+import StatusState from '@/components/mixins/statusState.js';
 
 export default {
   name: 'OpenAppMaps',
@@ -100,9 +120,10 @@ export default {
   components: {
     VQuickstartLayout,
     VNavigationButtons,
+    VStatus,
   },
 
-  mixins: [Navigation],
+  mixins: [Navigation, StatusState],
 
   props: {
     appMaps: {
@@ -112,6 +133,18 @@ export default {
     sampleCodeObjects: {
       type: Object,
       default: () => ({}),
+    },
+    projectName: {
+      type: String,
+      default: '',
+    },
+    complete: {
+      type: Boolean,
+      default: false,
+    },
+    numAppMaps: {
+      type: Number,
+      required: true,
     },
   },
 

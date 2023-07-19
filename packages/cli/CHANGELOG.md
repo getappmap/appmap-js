@@ -1,3 +1,55 @@
+# [@appland/appmap-v3.82.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.81.0...@appland/appmap-v3.82.0) (2023-07-19)
+
+
+### Bug Fixes
+
+* Fall back to browser when opening AppMap on Darwin in VSCode ([23147af](https://github.com/getappmap/appmap-js/commit/23147af419aaadd4f3123a065d9085757ee8db71)), closes [#1250](https://github.com/getappmap/appmap-js/issues/1250)
+
+
+### Features
+
+* upgrade @appland/models to 2.6.3 ([6e31f9c](https://github.com/getappmap/appmap-js/commit/6e31f9cc179ac0edfcde2861b937cd104ed4c687))
+
+# [@appland/appmap-v3.81.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.80.2...@appland/appmap-v3.81.0) (2023-07-13)
+
+
+### Bug Fixes
+
+* consistent fqids for queries and (external) routes ([5f3e40e](https://github.com/getappmap/appmap-js/commit/5f3e40ead971f7a161890e7fd4c1c6da1fc192d9))
+
+
+### Features
+
+* Add exceptions to the index ([a0508e9](https://github.com/getappmap/appmap-js/commit/a0508e94dad63dff5732cfdc20f33b8502a62ca0))
+
+# [@appland/appmap-v3.80.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.80.1...@appland/appmap-v3.80.2) (2023-06-14)
+
+
+### Bug Fixes
+
+* Make sure AppMap JS agent is up to date before running it ([720bdbb](https://github.com/getappmap/appmap-js/commit/720bdbba665a91feda89d32a8f57a2fbab75dcda))
+
+# [@appland/appmap-v3.80.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.80.0...@appland/appmap-v3.80.1) (2023-06-06)
+
+
+### Bug Fixes
+
+* update diagrams to 1.7.0 ([c4baced](https://github.com/getappmap/appmap-js/commit/c4baced2fbceeeda58fe01777604ce8a70c3a09d))
+
+# [@appland/appmap-v3.80.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.79.0...@appland/appmap-v3.80.0) (2023-06-02)
+
+
+### Features
+
+* user can save filter settings ([763c246](https://github.com/getappmap/appmap-js/commit/763c246297d1a1c6516577d9a6d4f49295c36b70))
+
+# [@appland/appmap-v3.79.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.78.1...@appland/appmap-v3.79.0) (2023-05-31)
+
+
+### Features
+
+* hide flame graph tab behind a flag ([fc9fea2](https://github.com/getappmap/appmap-js/commit/fc9fea2066571890192c2199dee11d84e9847479))
+
 # [@appland/appmap-v3.78.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.78.0...@appland/appmap-v3.78.1) (2023-05-29)
 
 

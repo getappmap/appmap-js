@@ -1,32 +1,48 @@
 import InstallGuide from '@/pages/InstallGuide.vue';
+import { InstructionStep } from '@/components/install-guide/Status.vue';
 
 export default {
   title: 'Pages/VS Code',
   component: InstallGuide,
   args: {
+    editor: 'vscode',
+    appMapsDir: 'tmp/appmap',
+  },
+  argTypes: {
+    currentStep: {
+      control: { type: 'range', min: 0, max: InstructionStep.NumSteps },
+      defaultValue: 0,
+    },
+  },
+};
+
+export const installGuide = (args, { argTypes }) => ({
+  props: Object.keys(argTypes).filter((key) => key !== 'projects'),
+  components: { InstallGuide },
+  data: () => ({
     projects: [
       {
         name: 'TestApp',
-        score: 1,
+        score: 0,
         path: '/home/user/test_app',
         language: {
           name: 'Go',
-          score: 1,
+          score: 0,
         },
         testFramework: {
           name: 'MSTest',
-          score: 1,
+          score: 0,
         },
         webFramework: {
           name: 'ASP.NET',
-          score: 1,
+          score: 0,
         },
       },
       {
         name: 'DjangoTest',
         score: 2,
         path: '/home/user/django_test',
-        agentInstalled: true,
+        agentInstalled: false,
         appMapsRecorded: true,
         language: {
           name: 'Python',
@@ -47,6 +63,7 @@ export default {
         path: '/home/user/my_other_project',
         numHttpRequests: 283,
         numAppMaps: 109,
+        agentInstalled: true,
         language: {
           name: 'Ruby',
           score: 3,
@@ -59,15 +76,15 @@ export default {
           name: 'Rails',
           score: 3,
         },
+        appMaps: [{ name: 'This is an example', requests: 1, sqlQueries: 4, functions: 87 }],
       },
     ],
-    editor: 'vscode',
-    appMapsDir: 'tmp/appmap',
+  }),
+  template: '<InstallGuide v-bind="$props" :projects="projects" />',
+  mounted() {
+    this.$root.$on('perform-install', (path) => {
+      const project = this.projects.find((p) => p.path === path);
+      if (project) project.agentInstalled = true;
+    });
   },
-};
-
-export const installGuide = (args, { argTypes }) => ({
-  props: Object.keys(argTypes),
-  components: { InstallGuide },
-  template: '<InstallGuide v-bind="$props" />',
 });

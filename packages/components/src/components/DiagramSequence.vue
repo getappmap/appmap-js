@@ -62,6 +62,8 @@ import VActor from '@/components/sequence/Actor.vue';
 import DiagramSpec from './sequence/DiagramSpec';
 import { ActionSpec } from './sequence/ActionSpec';
 
+const SCROLL_OPTIONS = { behavior: 'smooth', block: 'center', inline: 'center' };
+
 export default {
   name: 'v-diagram-sequence',
 
@@ -175,7 +177,6 @@ export default {
     actionKey(action: ActionSpec): string {
       return ['action', this.diagramSpec.uniqueId, action.index].join(':');
     },
-    // TODO: Determine if this is necessary/unused
     showFocusEffect() {
       setTimeout(() => {
         const element = this.$el.querySelector(
@@ -185,7 +186,7 @@ export default {
           return;
         }
 
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        element.scrollIntoView(SCROLL_OPTIONS);
       });
     },
     focusHighlighted() {
@@ -194,11 +195,7 @@ export default {
 
         const selected = this.$el.querySelector('.selected');
         if (selected && selected.firstElementChild) {
-          selected.firstElementChild.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center',
-            inline: 'center',
-          });
+          selected.firstElementChild.scrollIntoView(SCROLL_OPTIONS);
         }
       }, 16);
     },

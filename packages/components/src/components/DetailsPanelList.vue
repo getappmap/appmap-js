@@ -16,7 +16,7 @@
           class="list-item__event-quickview"
           v-if="eventQuickview"
           @click.stop="selectTraceEvent(item)"
-          title="View event in Trace view"
+          title="View event in diagram"
         >
           <EyeIcon />
         </span>

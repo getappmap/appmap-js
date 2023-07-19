@@ -1,3 +1,29 @@
+# [@appland/scanner-v1.80.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.79.0...@appland/scanner-v1.80.0) (2023-07-19)
+
+
+### Bug Fixes
+
+* Make sure to not process the same appmap multiple times ([da0a0d8](https://github.com/getappmap/appmap-js/commit/da0a0d8826844b4bd92bb671a3ea1b74a5563cb1))
+
+
+### Features
+
+* upgrade @appland/models to 2.6.3 ([6e31f9c](https://github.com/getappmap/appmap-js/commit/6e31f9cc179ac0edfcde2861b937cd104ed4c687))
+
+# [@appland/scanner-v1.79.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.78.0...@appland/scanner-v1.79.0) (2023-06-23)
+
+
+### Features
+
+* Modified dates on Finding ([b67d766](https://github.com/getappmap/appmap-js/commit/b67d766722f7d9101f295c7e5fddad5b83e9e032))
+
+# [@appland/scanner-v1.78.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.77.2...@appland/scanner-v1.78.0) (2023-06-02)
+
+
+### Features
+
+* user can save filter settings ([763c246](https://github.com/getappmap/appmap-js/commit/763c246297d1a1c6516577d9a6d4f49295c36b70))
+
 # [@appland/scanner-v1.77.2](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.77.1...@appland/scanner-v1.77.2) (2023-05-24)
 
 

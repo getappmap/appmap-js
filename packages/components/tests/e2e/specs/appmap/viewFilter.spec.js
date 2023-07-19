@@ -5,7 +5,7 @@ context('AppMap view filter', () => {
 
   context('with HTTP events', () => {
     it('disables "Limit root events to HTTP" filter when searching for root event which is hidden', () => {
-      cy.get('.tabs .tab-btn').last().click();
+      cy.get('.tabs .tab-btn').contains('Trace View').click();
 
       cy.get('.trace .trace-node').should('have.length', 4);
 
@@ -41,20 +41,16 @@ context('AppMap view filter', () => {
       cy.get('.filters__form-input').first().type('{enter}');
       cy.get('.filters__form-suggestions').should('be.visible');
       cy.get('.nodes .node').should('have.length', 9);
-      cy.get('.filters__form-suggestions-item').eq(1).click();
+      cy.get('.filters__form-suggestions-item').first().click();
       cy.get('.nodes .node').should('have.length', 3);
       cy.get('.filters .filters__root .filters__root-icon').click();
       cy.get('.nodes .node').should('have.length', 9);
 
-      cy.get('.tabs .tab-btn').last().click();
+      cy.get('.tabs .tab-btn').contains('Trace View').click();
       cy.get('.trace .trace-node').should('have.length', 4);
       cy.get('.tabs__controls .popper__button').click();
-      cy.get('.filters__checkbox').eq(0).click();
-      cy.get('.filters__form-input')
-        .first()
-        .type('route:HTTP server requests->GET /admin/orders')
-        .parent()
-        .submit();
+      cy.get('.filters__checkbox').first().click();
+      cy.get('.filters__form-input').first().type('route:GET /admin/orders').parent().submit();
       cy.get('.trace .trace-node').should('have.length', 2);
       cy.get('.filters .filters__root .filters__root-icon').click();
 
@@ -107,7 +103,7 @@ context('AppMap view filter', () => {
     });
 
     it('limits root events', () => {
-      cy.get('.tabs .tab-btn').last().click();
+      cy.get('.tabs .tab-btn').contains('Trace View').click();
 
       cy.get('.trace .trace-node').should('have.length', 4);
 
@@ -118,7 +114,7 @@ context('AppMap view filter', () => {
     });
 
     it('hides media HTTP requests', () => {
-      cy.get('.tabs .tab-btn').last().click();
+      cy.get('.tabs .tab-btn').contains('Trace View').click();
 
       cy.get('.trace .trace-node').should('have.length', 4);
 
@@ -146,7 +142,7 @@ context('AppMap view filter', () => {
     });
 
     it('hides by elapsed time', () => {
-      cy.get('.tabs .tab-btn').last().click();
+      cy.get('.tabs .tab-btn').contains('Trace View').click();
 
       cy.get('.trace .trace-node').should('have.length', 4);
 
@@ -174,7 +170,7 @@ context('AppMap view filter', () => {
     });
 
     it('retains object selection when changing filters', () => {
-      cy.get('.tabs .tab-btn').last().click();
+      cy.get('.tabs .tab-btn').contains('Trace View').click();
       cy.get('.trace-node[data-event-id="1"]').click();
 
       cy.get('.tabs__controls .popper__button').click();
@@ -228,6 +224,54 @@ context('AppMap view filter', () => {
     });
   });
 
+  context('with savedFilters', () => {
+    beforeEach(() => {
+      cy.visit(
+        'http://localhost:6006/iframe.html?args=&id=pages-vs-code--extension-with-saved-filters&viewMode=story'
+      );
+    });
+
+    it('disables the delete and default buttons for AppMap default filter', () => {
+      cy.get('.tabs .tab-btn').contains('Trace View').click();
+      cy.get('.trace .trace-node').should('have.length', 4);
+      cy.get('.tabs__controls .popper__button').click();
+
+      cy.get('.filters__select').find(':selected').should('contain.text', 'AppMap default');
+      cy.get('.filters__button').eq(1).should('contain.text', 'Apply');
+      cy.get('.filters__button').eq(2).should('contain.text', 'Copy');
+      cy.get('.filters__button-disabled').first().should('contain.text', 'Delete');
+      cy.get('.filters__button-disabled').eq(1).should('contain.text', 'Set as default');
+    });
+
+    it('enables all buttons for a non-default filter', () => {
+      cy.get('.tabs .tab-btn').contains('Trace View').click();
+      cy.get('.trace .trace-node').should('have.length', 4);
+      cy.get('.tabs__controls .popper__button').click();
+
+      cy.get('.filters__select').select('filter');
+      cy.get('.filters__select').find(':selected').should('contain.text', 'filter');
+      cy.get('.filters__button').eq(1).should('contain.text', 'Apply');
+      cy.get('.filters__button').eq(2).should('contain.text', 'Delete');
+      cy.get('.filters__button').eq(3).should('contain.text', 'Set as default');
+      cy.get('.filters__button').eq(4).should('contain.text', 'Copy');
+      cy.get('.filters__button-disabled').should('not.exist');
+    });
+
+    it('correctly applies a saved filter', () => {
+      cy.get('.tabs .tab-btn').first().click();
+      cy.get('.nodes .node').should('have.length', 9);
+
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters__select').select('filter');
+      cy.get('[data-cy="apply-filter-button"]').click();
+      cy.get('.nodes .node').should('have.length', 5);
+
+      cy.get('.filters__select').select('another test');
+      cy.get('[data-cy="apply-filter-button"]').click();
+      cy.get('.nodes .node').should('have.length', 6);
+    });
+  });
+
   context('without HTTP events', () => {
     beforeEach(() => {
       cy.visit(
@@ -250,7 +294,7 @@ context('AppMap view filter', () => {
 
     it('does not show the hide external code checkbox', () => {
       cy.get('.popper__button').click();
-      cy.get('.filters__block-row-content').should('have.length', 5);
+      cy.get('.filters__block-row-content').should('have.length', 8);
       cy.get('.filters__block-row-content').each(($el) =>
         cy.wrap($el).should('not.contain.text', 'Hide external code')
       );

@@ -18,8 +18,10 @@ $blue: #4362b1;
 $lightblue: #768ecb;
 $brightblue: #3794ff;
 $powderblue: #2a84ef;
+$success-indicator: #3bf804;
 $teal: #6fddd6;
 $yellow: #ebdf90;
+$darkyellow: #ecd228;
 $appland-text: $gray4;
 $deep-purple: rgba(17, 1, 38, 1);
 $light-purple: #7f6be6;
@@ -27,27 +29,31 @@ $light-purple2: #5a43ca;
 $white: lighten($appland-text, 35);
 $almost-white: lighten($appland-text, 35);
 $red2: #fd3055;
-$appland-gradient-1: linear-gradient(
-  90deg,
-  rgba(0, 1, 104, 1) 0%,
-  rgba(197, 12, 228, 1) 48%,
-  rgba(255, 7, 170, 1) 100%
-);
+$appland-gradient-1: linear-gradient(90deg,
+    rgba(0, 1, 104, 1) 0%,
+    rgba(197, 12, 228, 1) 48%,
+    rgba(255, 7, 170, 1) 100%);
 $appland-gradient-2: linear-gradient(90deg, rgba(255, 7, 170, 1) 0%, rgba(156, 47, 186, 1) 100%);
 $appland-gradient-3: linear-gradient(0deg, rgba(156, 47, 186, 1) 0%, rgba(255, 7, 170, 1) 100%);
-$appland-gradient-4: linear-gradient(
-  90deg,
-  rgba(255, 7, 170, 1) 0%,
-  rgba(156, 47, 186, 1) 50%,
-  rgba(67, 98, 177, 1) 100%
-);
+$appland-gradient-4: linear-gradient(90deg,
+    rgba(255, 7, 170, 1) 0%,
+    rgba(156, 47, 186, 1) 50%,
+    rgba(67, 98, 177, 1) 100%);
 $deep-purple-gradient: linear-gradient(180deg, rgba(17, 1, 38, 1) 37%, rgba(110, 14, 114, 1) 110%);
 $alert-danger: #cd1414;
 
 // Alerts
-$success: linear-gradient(90deg, rgba(113, 149, 41, 1) 0%, rgba(143, 196, 19, 1) 100%);
-$danger: linear-gradient(90deg, rgba(222, 25, 50, 1) 0%, rgba(196, 19, 92, 1) 100%);
-$general: linear-gradient(90deg, rgba(67, 98, 177, 1) 0%, rgba(84, 10, 159, 1) 100%);
+$success-from: rgba(113, 149, 41, 1);
+$success-to: rgba(143, 196, 19, 1);
+$success: linear-gradient(90deg, $success-from 0%, $success-to 100%);
+
+$danger-from: rgba(222, 25, 50, 1);
+$danger-to: rgba(196, 19, 92, 1);
+$danger: linear-gradient(90deg, $danger-from 0%, $danger-to 100%);
+
+$general-from: rgba(67, 98, 177, 1);
+$general-to: rgba(84, 10, 159, 1);
+$general: linear-gradient(90deg, $general-from 0%, $general-to 100%);
 
 $col-int: #f92672;
 $col-string: #a6e22e;
@@ -61,9 +67,7 @@ $appland-code: $white;
 $appmap-labels: $white;
 $appmap-bg: $gray1;
 $form-border: $gray2;
-$scrollHeight: calc(
-  100% - 65px
-); // a magic number that compensates for header and footer in forcing scrollbars
+$scrollHeight: calc(100% - 65px); // a magic number that compensates for header and footer in forcing scrollbars
 
 $box-shadow: 0px -13px 13px 13px rgba(0, 0, 0, 0.41);
 $box-shadow-min: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);
@@ -88,8 +92,8 @@ $sequence-elapsed-time-color: lighten($gray4, 18);
 $sequence-activation-gutter-width: 4px;
 
 // Lines that indicate call or return from one actor to another.
-$sequence-call-line-width: 2px;
-$sequence-call-line-color: #6fddbc;
+$sequence-call-line-width: 3px;
+$sequence-call-line-color: $gray4;
 
 // Border around a group element, e.g. a loop.
 $sequence-group-border-width: 2px;

@@ -15,6 +15,9 @@ import Telemetry from '../../telemetry';
 import EventEmitter from 'events';
 import { WatchScanTelemetry } from './watchScanTelemetry';
 import isAncestorPath from '../../util/isAncestorPath';
+import { debuglog } from 'util';
+
+const debug = debuglog('scanner:watch');
 
 export type WatchScanOptions = {
   appId?: string;
@@ -152,8 +155,11 @@ export class Watcher {
   // passing plain async function doesn't work (?)
   private queue = queue<string>(callbackify(this.scan.bind(this)), 2);
 
+  private processing = new Set<string>();
+
   protected enqueue(mtimePath: string): void {
-    if ([...this.queue].includes(mtimePath)) return;
+    if (this.processing.has(mtimePath)) return;
+    this.processing.add(mtimePath);
     this.queue.push(mtimePath);
   }
 
@@ -169,10 +175,19 @@ export class Watcher {
 
     if (!appmapStats) return;
 
+    const cut = (str: string) => str.substring(str.length - 8);
+    debug(
+      '%s: %s, findings: %s, config: %s',
+      appmapFile,
+      cut(appmapStats.mtimeMs.toFixed(3)),
+      reportStats && cut(reportStats.mtimeMs.toFixed(3)),
+      cut(this.config.timestampMs.toFixed(3))
+    );
+
     if (
       reportStats &&
-      reportStats.mtimeMs > appmapStats.mtimeMs &&
-      reportStats.mtimeMs > this.config.timestampMs
+      reportStats.mtimeMs > appmapStats.mtimeMs - 1000 &&
+      reportStats.mtimeMs > this.config.timestampMs - 1000
     )
       return; // report is up to date
 
@@ -185,6 +200,8 @@ export class Watcher {
 
     // Always report the raw data
     await writeFile(reportFile, formatReport(rawScanResults));
+
+    this.processing.delete(mtimePath);
   }
 
   protected async reloadConfig(): Promise<void> {

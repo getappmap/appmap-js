@@ -8,16 +8,22 @@
       :score="project.score"
       :path="project.path"
       :language="project.language"
+      :install-complete="project.agentInstalled"
       :test-framework="project.testFramework"
       :web-framework="project.webFramework"
+      :num-app-maps="project.numAppMaps"
+      :enum-debug-configuration-status="project.debugConfigurationStatus"
+      :enum-java-agent-status="javaAgentStatus"
       :editor="editor"
-      @click.native="selectProject(project)"
+      :status-states="statusStates"
+      @toggle="selectProject"
     />
   </div>
 </template>
 
 <script>
 import VProjectPickerRow from '@/components/install-guide/ProjectPickerRow.vue';
+import StatusState from '@/components/mixins/statusState';
 
 export default {
   name: 'project-picker-table',
@@ -25,7 +31,10 @@ export default {
   props: {
     projects: Array,
     editor: String,
+    javaAgentStatus: Number,
   },
+
+  mixins: [StatusState],
 
   data() {
     return {
@@ -54,9 +63,9 @@ export default {
   },
 
   methods: {
-    selectProject(project) {
-      this.selectedProject = project;
-      this.$emit('select-project', project);
+    selectProject(projectPath) {
+      this.selectedProject = this.projects.find(({ path }) => path === projectPath);
+      this.$emit('select-project', this.selectedProject);
     },
   },
 };

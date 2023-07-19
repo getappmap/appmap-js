@@ -1,10 +1,10 @@
 <template>
   <div class="label">
-    <span class="name">{{ actionSpec.nodeResult }}</span>
+    <span class="name">{{ label }}</span>
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { ActionSpec } from './ActionSpec';
 
 export default {
@@ -19,6 +19,13 @@ export default {
       readonly: true,
     },
   },
+
+  computed: {
+    label() {
+      const { nodeResult } = this.actionSpec;
+      return !nodeResult || nodeResult === 'void' ? '' : nodeResult;
+    },
+  },
 };
 </script>
 
@@ -27,6 +34,7 @@ export default {
 .label {
   display: inline-block;
   font-size: 9pt;
+  font-family: 'IBM Plex Mono', monospace;
   margin-left: 1em;
   white-space: nowrap;
   max-width: 160px;

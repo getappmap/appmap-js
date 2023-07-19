@@ -125,7 +125,7 @@ context('AppMap component diagram', () => {
     it('clicking an event displays the correct data', () => {
       cy.get('.details-search').should('be.visible');
 
-      cy.get('.tabs .tab-btn').last().click();
+      cy.get('.tabs .tab-btn').contains('Trace View').click();
 
       // Verify the trace view renders as expected
       cy.get('.trace').should('be.visible');
@@ -156,13 +156,10 @@ context('AppMap component diagram', () => {
 
       // Go back to the component diagram
       cy.get('.tabs .tab-btn').first().click();
-      cy.get(`.node[data-id="HTTP server requests->GET /admin/orders"]`).should(
-        'have.class',
-        'highlight'
-      );
+      cy.get(`.node[data-id="GET /admin/orders"]`).should('have.class', 'highlight');
 
       // Go back to Trace view and select event with exceptions
-      cy.get('.tabs .tab-btn').last().click();
+      cy.get('.tabs .tab-btn').contains('Trace View').click();
       cy.get('.trace-node[data-event-id="11"]').next().click();
       cy.get('.trace-node[data-event-id="18"]').click();
 

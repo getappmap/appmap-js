@@ -1,3 +1,17 @@
+# [@appland/models-v2.6.3](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.6.2...@appland/models-v2.6.3) (2023-07-13)
+
+
+### Bug Fixes
+
+* consistent fqids for queries and (external) routes ([5f3e40e](https://github.com/getappmap/appmap-js/commit/5f3e40ead971f7a161890e7fd4c1c6da1fc192d9))
+
+# [@appland/models-v2.6.2](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.6.1...@appland/models-v2.6.2) (2023-06-01)
+
+
+### Bug Fixes
+
+* can deserialize when hideExternal is a bool ([8596396](https://github.com/getappmap/appmap-js/commit/8596396b0123dc3251d610e8aedbb06f7f9da68c))
+
 # [@appland/models-v2.6.1](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.6.0...@appland/models-v2.6.1) (2023-05-16)
 
 

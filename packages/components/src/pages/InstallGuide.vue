@@ -3,8 +3,10 @@
     <v-project-picker
       id="project-picker"
       :projects="projects"
+      :java-agent-status="javaAgentStatus"
       :message-success="messageCopiedCommand"
       :editor="editor"
+      :status-states="statusStates"
     />
     <v-record-app-maps
       id="record-appmaps"
@@ -13,22 +15,36 @@
       :complete="hasRecorded"
       :feature-flags="featureFlags"
       :theme="theme"
+      :status-states="statusStates"
     />
     <v-open-app-maps
       id="open-appmaps"
       :app-maps="appMaps"
       :sample-code-objects="sampleCodeObjects"
+      :status-states="statusStates"
+      :project-name="projectName"
+      :num-app-maps="numAppMaps"
+      :complete="hasExplored"
     />
-    <v-open-api id="openapi" :num-http-requests="numHttpRequests" :num-app-maps="numAppMaps" />
+    <v-open-api
+      id="openapi"
+      :num-http-requests="numHttpRequests"
+      :num-app-maps="numAppMaps"
+      :status-states="statusStates"
+      :project-name="projectName"
+      :complete="hasGeneratedOpenApi"
+    />
     <v-investigate-findings
       id="investigate-findings"
       :scanned="hasFindings"
       :num-findings="numFindings"
       :project-path="path"
       :findingsDomainCounts="findingsDomainCounts"
-      :findings-enabled="findingsEnabled"
       :user-authenticated="userAuthenticated"
       :analysis-enabled="analysisEnabled"
+      :status-states="statusStates"
+      :project-name="projectName"
+      :num-app-maps="numAppMaps"
     />
   </v-multi-page>
 </template>
@@ -40,9 +56,19 @@ import VRecordAppMaps from '@/pages/install-guide/RecordAppMaps.vue';
 import VOpenAppMaps from '@/pages/install-guide/OpenAppMaps.vue';
 import VOpenApi from '@/pages/install-guide/OpenApi.vue';
 import VInvestigateFindings from '@/pages/install-guide/InvestigateFindings.vue';
+import { StepStatus } from '@/components/install-guide/Status.vue';
 
 export default {
   name: 'install-guide',
+
+  components: {
+    VMultiPage,
+    VProjectPicker,
+    VRecordAppMaps,
+    VInvestigateFindings,
+    VOpenAppMaps,
+    VOpenApi,
+  },
 
   props: {
     disabledPages: {
@@ -67,10 +93,6 @@ export default {
       type: Set,
       default: () => new Set(),
     },
-    findingsEnabled: {
-      type: Boolean,
-      default: false,
-    },
     analysisEnabled: {
       type: Boolean,
       default: false,
@@ -84,6 +106,7 @@ export default {
       default: 'dark',
       validator: (value) => ['dark', 'light'].indexOf(value) !== -1,
     },
+    javaAgentStatus: Number,
   },
 
   watch: {
@@ -101,53 +124,87 @@ export default {
 
   computed: {
     hasFindings() {
-      return this.selectedProject && this.selectedProject.analysisPerformed;
+      return this.selectedProject?.analysisPerformed;
     },
     appMaps() {
-      return (this.selectedProject && this.selectedProject.appMaps) || [];
+      return this.selectedProject?.appMaps || [];
     },
     numFindings() {
-      return this.selectedProject && this.selectedProject.numFindings;
+      return this.selectedProject?.numFindings;
     },
     numAppMaps() {
-      return this.selectedProject && this.selectedProject.numAppMaps;
+      return this.selectedProject?.numAppMaps || 0;
     },
     numHttpRequests() {
-      return this.selectedProject && this.selectedProject.numHttpRequests;
+      return this.selectedProject?.numHttpRequests;
+    },
+    hasInstalled() {
+      return this.selectedProject?.agentInstalled;
     },
     hasRecorded() {
-      return this.selectedProject && this.selectedProject.numAppMaps > 0;
+      return this.numAppMaps > 0;
+    },
+    hasExplored() {
+      return this.selectedProject?.appMapOpened;
+    },
+    hasGeneratedOpenApi() {
+      return this.selectedProject?.generatedOpenApi;
+    },
+    hasInvestigatedFindings() {
+      return this.selectedProject?.investigatedFindings;
     },
     path() {
-      return this.selectedProject && this.selectedProject.path;
+      return this.selectedProject?.path;
     },
     findingsDomainCounts() {
-      return this.selectedProject && this.selectedProject.findingsDomainCounts;
+      return this.selectedProject?.findingsDomainCounts;
     },
     sampleCodeObjects() {
-      return this.selectedProject && this.selectedProject.sampleCodeObjects;
+      return this.selectedProject?.sampleCodeObjects;
     },
-  },
+    projectName() {
+      return this.selectedProject?.name || '';
+    },
+    currentStep() {
+      return this.statusStates.findIndex((step) => step === StepStatus.InProgress);
+    },
+    statusStates() {
+      return [
+        this.hasInstalled,
+        this.hasRecorded,
+        this.hasExplored,
+        this.hasGeneratedOpenApi,
+        this.hasInvestigatedFindings,
+      ].map((stepComplete, index, statuses) => {
+        if (stepComplete) return StepStatus.Completed;
 
-  components: {
-    VMultiPage,
-    VProjectPicker,
-    VRecordAppMaps,
-    VInvestigateFindings,
-    VOpenAppMaps,
-    VOpenApi,
+        const previousStepComplete = Boolean(index > 0 ? statuses[index - 1] : true);
+        if (previousStepComplete) return StepStatus.InProgress;
+
+        return StepStatus.NotStarted;
+      });
+    },
   },
 
   methods: {
-    jumpTo(pageIndex) {
-      this.$refs.page.jumpTo(pageIndex);
+    jumpToIndex(pageIndex) {
+      const pages = this.$refs.page.$children;
+      const pageId = pages[pageIndex]?.$attrs.id;
+      if (pageId) this.jumpTo(pageId);
+    },
+    jumpTo(pageId) {
+      this.$refs.page.jumpTo(pageId);
     },
   },
 
   mounted() {
-    this.$root.$on('select-project', (project) => {
-      this.selectedProject = project;
-    });
+    this.$root
+      .$on('select-project', (project) => {
+        this.selectedProject = project;
+      })
+      .$on('status-jump', (pageIndex) => {
+        this.jumpToIndex(pageIndex);
+      });
   },
 };
 </script>

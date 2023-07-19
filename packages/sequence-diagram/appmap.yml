@@ -1,0 +1,49 @@
+name: '@appland/sequence-diagram'
+language: javascript
+appmap_dir: tmp/appmap
+ordering: chronological
+command: yarn exec jest
+recorder: jest
+exclude:
+  - \[anonymous\]
+packages:
+  - path: src/types.ts
+    enabled: true
+    exclude:
+      - isClientRPC
+      - isFunction
+  - path: src/specification.ts
+    enabled: true
+    exclude:
+      - isIncludedCodeObject
+      - matchCodeObject
+      - priorityOf
+  - path: src/mergeWindow.ts
+    enabled: true
+    exclude:
+      - buildDigest
+  - path: src/formatter/plantUML.ts
+    enabled: true
+    exclude:
+      - alias
+      - print
+  - path: src/selectEvents.ts
+    enabled: true
+    exclude:
+      - isIncludedCodeObject
+  - path: src/priority.ts
+    enabled: true
+    exclude:
+      - priorityOf
+  - path: src/buildDiagram.ts
+    enabled: true
+    exclude:
+      - findOrCreateActor
+  - path: tests/util.ts
+    enabled: false
+  - regexp: (^|/)node_modules/
+    enabled: false
+  - regexp: ^../
+    enabled: false
+  - regexp: ^
+    enabled: true

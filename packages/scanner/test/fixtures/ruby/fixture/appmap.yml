@@ -1,3 +1,5 @@
 name: scanner/ruby-fixture
+language: ruby
+appmap_dir: tmp/appmap
 packages:
   - path: lib

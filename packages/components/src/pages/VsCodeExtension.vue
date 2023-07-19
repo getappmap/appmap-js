@@ -110,6 +110,22 @@
             />
           </div>
         </v-tab>
+
+        <v-tab
+          name="Flame Graph"
+          :is-active="isViewingFlamegraph"
+          :ref="VIEW_FLAMEGRAPH"
+          :tabName="VIEW_FLAMEGRAPH"
+          :allow-scroll="false"
+        >
+          <v-diagram-flamegraph
+            ref="viewFlamegraph_diagram"
+            :events="filteredAppMap.rootEvents()"
+            :title="filteredAppMap.name"
+            @select="onFlamegraphSelect"
+          />
+        </v-tab>
+
         <template v-slot:notification>
           <v-notification
             v-if="version"
@@ -181,7 +197,10 @@
               </v-popper>
             </template>
             <template v-slot:body>
-              <v-filter-menu :filteredAppMap="filteredAppMap"></v-filter-menu>
+              <v-filter-menu
+                :filteredAppMap="filteredAppMap"
+                @setState="(stateString) => setState(stateString)"
+              ></v-filter-menu>
             </template>
           </v-popper-menu>
           <v-popper class="hover-text-popper" text="Reload map" placement="left" text-align="left">
@@ -310,6 +329,7 @@ import {
   deserializeFilter,
   filterStringToFilterState,
   base64UrlEncode,
+  AppMapFilter,
 } from '@appland/models';
 import CopyIcon from '@/assets/copy-icon.svg';
 import CloseIcon from '@/assets/close.svg';
@@ -325,6 +345,7 @@ import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramSequence from '../components/DiagramSequence.vue';
+import VDiagramFlamegraph from '../components/DiagramFlamegraph.vue';
 import VDiagramTrace from '../components/DiagramTrace.vue';
 import VDownloadSequenceDiagram from '../components/sequence/DownloadSequenceDiagram.vue';
 import VFilterMenu from '../components/FilterMenu.vue';
@@ -343,6 +364,7 @@ import {
   VIEW_COMPONENT,
   VIEW_SEQUENCE,
   VIEW_FLOW,
+  VIEW_FLAMEGRAPH,
   SELECT_CODE_OBJECT,
   SELECT_LABEL,
   POP_SELECTION_STACK,
@@ -351,10 +373,13 @@ import {
   CLEAR_EXPANDED_PACKAGES,
   SET_FILTER,
   SET_DECLUTTER_ON,
-  SET_DECLUTTER_DEFAULT,
   RESET_FILTERS,
   ADD_ROOT_OBJECT,
   REMOVE_ROOT_OBJECT,
+  SET_SAVED_FILTERS,
+  SET_SELECTED_SAVED_FILTER,
+  SET_HIGHLIGHTED_EVENTS,
+  SET_FOCUSED_EVENT,
 } from '../store/vsCode';
 
 export default {
@@ -372,6 +397,7 @@ export default {
     VDiagramComponent,
     VDiagramSequence,
     VDiagramTrace,
+    VDiagramFlamegraph,
     VDownloadSequenceDiagram,
     VFilterMenu,
     VInstructions,
@@ -402,6 +428,7 @@ export default {
       VIEW_COMPONENT,
       VIEW_SEQUENCE,
       VIEW_FLOW,
+      VIEW_FLAMEGRAPH,
       eventFilterText: '',
       eventFilterMatchIndex: 0,
       showShareModal: false,
@@ -421,6 +448,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    savedFilters: {
+      type: Array,
+      default: () => [],
+    },
   },
 
   watch: {
@@ -438,6 +469,9 @@ export default {
 
             this.eventFilterMatchIndex = highlightedIndex >= 0 ? highlightedIndex : undefined;
           }
+
+          if (selectedObject.type === 'analysis-finding')
+            this.analysisFindingSelection(selectedObject);
         } else {
           this.eventFilterMatchIndex = undefined;
         }
@@ -458,7 +492,7 @@ export default {
           }
           this.$nextTick(() => {
             Object.keys(this.$refs)
-              .filter((ref) => ref.endsWith('_diagram'))
+              .filter((ref) => ref.endsWith('_diagram') && ref !== 'viewFlamegraph_diagram')
               .forEach((ref) => this.$refs[ref].showFocusEffect());
           });
         }
@@ -703,6 +737,10 @@ export default {
       return this.currentView === VIEW_FLOW;
     },
 
+    isViewingFlamegraph() {
+      return this.currentView === VIEW_FLAMEGRAPH;
+    },
+
     showDownload() {
       return this.isViewingSequence;
     },
@@ -731,11 +769,18 @@ export default {
     filtersChanged() {
       return (
         this.filters.rootObjects.length > 0 ||
-        Object.values(this.filters.declutter).some(
-          (f) =>
-            (typeof f.on === 'boolean' && f.on !== f.default) ||
-            (typeof on === 'function' && f.on() !== f.default)
-        )
+        Object.keys(this.filters.declutter).some((declutterPropertyName) => {
+          // This might get set to a non-default value if the map does not have an HTTP root
+          if (declutterPropertyName === 'limitRootEvents') return false;
+
+          const declutterProperty = this.filters.declutter[declutterPropertyName];
+          const on = declutterProperty.on;
+
+          return (
+            (typeof on === 'boolean' && on !== declutterProperty.default) ||
+            (typeof on === 'function' && on() !== declutterProperty.default)
+          );
+        })
       );
     },
 
@@ -752,19 +797,20 @@ export default {
   methods: {
     loadData(data) {
       this.$store.commit(SET_APPMAP_DATA, data);
+      this.initializeSavedFilters();
 
       const rootEvents = this.$store.state.appMap.rootEvents();
       const hasHttpRoot = rootEvents.some((e) => e.httpServerRequest);
+      const isUsingAppMapDefault = this.$store.state.savedFilters.some(
+        (savedFilter) => savedFilter.filterName === 'AppMap default' && savedFilter.default
+      );
 
-      this.$store.commit(SET_DECLUTTER_ON, {
-        declutterProperty: 'limitRootEvents',
-        value: hasHttpRoot,
-      });
-
-      this.$store.commit(SET_DECLUTTER_DEFAULT, {
-        declutterProperty: 'limitRootEvents',
-        value: hasHttpRoot,
-      });
+      if (isUsingAppMapDefault && !hasHttpRoot) {
+        this.$store.commit(SET_DECLUTTER_ON, {
+          declutterProperty: 'limitRootEvents',
+          value: hasHttpRoot,
+        });
+      }
 
       this.isLoading = false;
     },
@@ -946,6 +992,14 @@ export default {
         const { filters, expandedPackages } = state;
         if (filters) this.$store.commit(SET_FILTER, deserializeFilter(filters));
 
+        const base64EncodedFilters = base64UrlEncode(JSON.stringify({ filters }));
+        const selectedFilter =
+          this.$store.state.savedFilters &&
+          this.$store.state.savedFilters.find(
+            (savedFilter) => savedFilter.state === base64EncodedFilters
+          );
+        if (selectedFilter) this.$store.commit(SET_SELECTED_SAVED_FILTER, selectedFilter);
+
         if (expandedPackages) {
           const codeObjects = expandedPackages.map((expandedPackageId) =>
             this.filteredAppMap.classMap.codeObjectFromId(expandedPackageId)
@@ -991,6 +1045,7 @@ export default {
       this.$root.$emit('resetDiagram');
 
       this.renderKey += 1;
+      this.eventFilterText = '';
     },
 
     toggleShareModal() {
@@ -1029,6 +1084,14 @@ export default {
 
     copyToClipboard(input) {
       this.$root.$emit('copyToClipboard', input);
+    },
+
+    onFlamegraphSelect(event) {
+      if (event) {
+        this.onClickTraceEvent(event);
+      } else {
+        this.clearSelection();
+      }
     },
 
     onClickTraceEvent(e) {
@@ -1120,6 +1183,56 @@ export default {
         this.$store.commit(SELECT_CODE_OBJECT, this.eventFilterMatch);
       }
     },
+
+    initializeSavedFilters() {
+      const savedFilters = this.savedFilters;
+
+      if (this.savedFilters.length === 0) {
+        const defaultFilter = new AppMapFilter();
+        const serialized = serializeFilter(defaultFilter);
+        const base64encoded = base64UrlEncode(JSON.stringify({ filters: serialized }));
+
+        const filterObject = {
+          filterName: 'AppMap default',
+          state: base64encoded,
+          default: true,
+        };
+
+        this.$root.$emit('saveFilter', filterObject);
+        savedFilters.push(filterObject);
+      }
+
+      this.$store.commit(SET_SAVED_FILTERS, savedFilters);
+
+      const defaultFilter = savedFilters.find((savedFilter) => savedFilter.default);
+      if (defaultFilter) {
+        this.$store.commit(SET_SELECTED_SAVED_FILTER, defaultFilter);
+        this.setState(defaultFilter.state);
+      }
+    },
+
+    updateFilters(updatedFilters) {
+      this.$store.commit(SET_SAVED_FILTERS, updatedFilters);
+    },
+
+    analysisFindingSelection(findingObject) {
+      const finding = findingObject.resolvedFinding && findingObject.resolvedFinding.finding;
+      if (!finding) return;
+
+      if (finding.relatedEvents) this.$store.commit(SET_HIGHLIGHTED_EVENTS, finding.relatedEvents);
+
+      if (finding.impactDomain === 'Performance') {
+        this.$store.commit(SET_VIEW, VIEW_FLAMEGRAPH);
+      } else {
+        this.$store.commit(SET_VIEW, VIEW_SEQUENCE);
+      }
+
+      const eventToFocus = finding.participatingEvents?.commonAncestor || finding.event;
+      if (!eventToFocus) return;
+
+      const event = this.filteredAppMap.eventsById[eventToFocus.id];
+      this.$store.commit(SET_FOCUSED_EVENT, event);
+    },
   },
 
   mounted() {
@@ -1142,6 +1255,29 @@ export default {
 </script>
 
 <style lang="scss">
+// This is not be the best place to declare font-face.
+// The best options would be something like:
+//
+// import Vue from 'vue';
+// import App from './App.vue';
+// import './assets/scss/fonts.scss';
+// new Vue({
+//   render: (h) => h(App),
+// }).$mount('#app');
+//
+// But I don't think it is possible with the current setup.
+// And we do not want to add font-face declaration in scss/vue.scss.
+// It will cause the font-face to be redeclared in each component.
+// Finally, we can redeclare font-face in components on need-basis.
+// But that leads to a lot of repetition. I still prefer this.
+// I aslo tried to declare font-face in a separate file.
+// But scss does not update url(...) when the file is imported.
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: local('IBM Plex Mono'),
+    url(../assets/fonts/IBM_Plex_Mono/IBMPlexMono-Regular.ttf) format('truetype');
+}
+
 html,
 body {
   width: 100%;

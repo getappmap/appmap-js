@@ -6,88 +6,66 @@
       </header>
       <main>
         <article>
-          <template v-if="isJava && isJetBrains">
-            <p class="mb20 bold">
-              Use the <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap"
-              button to start your run configurations with AppMap enabled.
-            </p>
-            <template v-if="remoteRecordingPrompts.length === 1">
-              <p class="mb20" data-cy="automatic-recording-single">
-                To perform your first runtime analysis {{ firstPrompt(remoteRecordingPrompts) }}
-              </p>
+          <v-status
+            next-step="Explore AppMaps"
+            :status-states="statusStates"
+            :project-name="projectName"
+            :num-app-maps="numAppMaps"
+            :current-step="0"
+            :viewing-step="1"
+            class="mb20"
+          >
+            <template #header>
+              <template v-if="complete">
+                {{ numAppMaps }} AppMaps have been recorded for {{ projectName }}
+              </template>
+              <template v-else> No AppMaps have been recorded yet for {{ projectName }} </template>
             </template>
-
-            <template v-else>
-              There are {{ numberOfRecordingMethods }} methods of performing runtime analysis with
-              AppMap in this project:
-              <ol data-cy="automatic-recording-multi">
-                <li v-for="(text, index) in remoteRecordingPrompts" :key="index">
-                  {{ text }}
-                </li>
-              </ol>
+            <template #subheader>
+              <template v-if="complete">Next step: Choose an AppMap to open and explore</template>
+              <template v-else>Record AppMaps using one of the suggested methods</template>
             </template>
-            <p class="mb20">
-              Looking for more information? Visit our
-              <a href="https://appmap.io/docs/recording-methods.html" data-cy="documentation-link">
-                documentation for recording AppMaps in {{ language }}.
-              </a>
-            </p>
+          </v-status>
+          <template v-if="isJava">
+            <VRecordInstructions_IntelliJ
+              v-if="isJetBrains"
+              :theme="theme"
+              :web-framework="webFrameworkSupported ? webFramework : undefined"
+              :test-framework="testFrameworkSupported ? testFramework : undefined"
+            />
+            <VRecordInstructions_Java
+              v-else
+              :web-framework="webFrameworkSupported ? webFramework : undefined"
+              :test-framework="testFrameworkSupported ? testFramework : undefined"
+            />
           </template>
-          <template v-else-if="automaticRecording">
-            <template v-if="automaticRecordingPrompts.length === 1">
-              <p class="mb20" data-cy="automatic-recording-single">
-                To perform your first runtime analysis {{ firstPrompt(automaticRecordingPrompts) }}
-              </p>
-            </template>
-
-            <template v-else>
-              There are {{ numberOfRecordingMethods }} methods of performing runtime analysis with
-              AppMap in this project:
-              <ol data-cy="automatic-recording-multi">
-                <li v-for="(text, index) in automaticRecordingPrompts" :key="index">
-                  {{ text }}
-                </li>
-              </ol>
-            </template>
-            <p class="mb20">
-              Looking for more information? Visit our
-              <a href="https://appmap.io/docs/recording-methods.html" data-cy="documentation-link">
-                documentation for recording AppMaps in {{ language }}.
-              </a>
-            </p>
+          <template v-else-if="isRuby">
+            <VRecordInstructions_Ruby
+              :theme="theme"
+              :web-framework="webFrameworkSupported ? webFramework : undefined"
+              :test-framework="testFrameworkSupported ? testFramework : undefined"
+              :complete="complete"
+            />
           </template>
-          <template v-else-if="!supported">
+          <template v-else-if="isPython">
+            <VRecordInstructions_Python
+              :theme="theme"
+              :web-framework="webFrameworkSupported ? webFramework : undefined"
+              :test-framework="testFrameworkSupported ? testFramework : undefined"
+              :complete="complete"
+            />
+          </template>
+          <template v-else>
             <p class="mb20">
-              For instructions on recording your first AppMaps, refer to our
+              For instructions on recording {{ language }} AppMaps, refer to our
               <a href="https://appmap.io/docs/recording-methods.html" data-cy="documentation-link">
                 documentation.
               </a>
             </p>
           </template>
-          <template v-else>
-            <div class="mb20">
-              Use our CLI to perform your first runtime analysis while exercising your test cases.
-              If you do not have Node.js installed or would prefer to perform the recording
-              manually, visit our
-              <a href="https://appmap.io/docs/recording-methods.html" data-cy="documentation-link">
-                documentation for recording AppMaps in {{ language }}.
-              </a>
-              <div class="center fit">
-                <v-code-snippet :clipboard-text="command" :message-success="clipboardSuccess" />
-              </div>
-            </div>
-          </template>
-
-          <v-pending
-            class="mb20 status-message"
-            :is-pending="!complete"
-            :message="pendingMessage"
-            v-if="showPendingState"
-            data-cy="status-message"
-          />
         </article>
       </main>
-      <v-navigation-buttons :first="first" :last="last" />
+      <v-navigation-buttons :first="first" :last="last" :complete="complete" />
     </section>
   </QuickstartLayout>
 </template>
@@ -95,14 +73,16 @@
 <script>
 import QuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
 import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
-import VCodeSnippet from '@/components/CodeSnippet.vue';
+import VRecordInstructions_IntelliJ from '@/components/install-guide/record-instructions/IntelliJ.vue';
+import VRecordInstructions_Ruby from '@/components/install-guide/record-instructions/Ruby.vue';
+import VRecordInstructions_Python from '@/components/install-guide/record-instructions/Python.vue';
+import VRecordInstructions_Java from '@/components/install-guide/record-instructions/Java.vue';
 import Navigation from '@/components/mixins/navigation';
-import VPending from '@/components/Pending.vue';
-import VRunConfigDark from '@/assets/jetbrains_run_config_execute_dark.svg';
-import VRunConfigLight from '@/assets/jetbrains_run_config_execute.svg';
+import VStatus from '@/components/install-guide/Status.vue';
+import StatusState from '@/components/mixins/statusState.js';
 
-import { isProjectSupported, isFeatureSupported } from '@/lib/project';
-import { DISABLE_PENDING_RECORD_STATE, PYTHON_RECORD_BY_DEFAULT } from '@/lib/featureFlags';
+import { isFeatureSupported } from '@/lib/project';
+import { DISABLE_PENDING_RECORD_STATE } from '@/lib/featureFlags';
 
 export default {
   name: 'RecordAppMaps',
@@ -110,13 +90,14 @@ export default {
   components: {
     QuickstartLayout,
     VNavigationButtons,
-    VCodeSnippet,
-    VPending,
-    VRunConfigDark,
-    VRunConfigLight,
+    VRecordInstructions_IntelliJ,
+    VRecordInstructions_Ruby,
+    VRecordInstructions_Python,
+    VRecordInstructions_Java,
+    VStatus,
   },
 
-  mixins: [Navigation],
+  mixins: [Navigation, StatusState],
 
   props: {
     clipboardSuccess: {
@@ -143,7 +124,7 @@ export default {
       return !this.featureFlags.has(DISABLE_PENDING_RECORD_STATE);
     },
     command() {
-      const baseCommand = 'npx @appland/appmap record test';
+      const baseCommand = 'npx @appland/appmap@latest record';
 
       if (this.project && this.project.path) {
         return `${baseCommand} -d ${this.escapePath(this.project.path)}`;
@@ -158,16 +139,29 @@ export default {
       if (!this.language) return false;
       return this.language.toLowerCase() === 'java';
     },
+    isRuby() {
+      if (!this.language) return false;
+      return this.language.toLowerCase() === 'ruby';
+    },
+    isPython() {
+      if (!this.language) return false;
+      return this.language.toLowerCase() === 'python';
+    },
+    isJavaScript() {
+      if (!this.language) return false;
+      return this.language.toLowerCase() === 'javascript';
+    },
     isJetBrains() {
       return this.editor === 'jetbrains';
     },
-    supported() {
-      return isProjectSupported(this.project);
+    projectName() {
+      return this.project?.name || '';
+    },
+    numAppMaps() {
+      return this.project?.numAppMaps || 0;
     },
     automaticRecordingLanguages() {
-      const languages = ['ruby'];
-      if (this.featureFlags.has(PYTHON_RECORD_BY_DEFAULT)) languages.push('python');
-      return languages;
+      return ['ruby', 'python'];
     },
     automaticRecording() {
       return (
@@ -176,16 +170,16 @@ export default {
       );
     },
     webFramework() {
-      return this.project.webFramework || { score: 0 };
+      return (this.project || {}).webFramework || { score: 0 };
     },
     webFrameworkSupported() {
       return isFeatureSupported(this.webFramework);
     },
-    applicationName() {
-      return [this.webFramework.name, 'application'].filter((word) => Boolean(word)).join(' ');
+    testFramework() {
+      return (this.project || {}).testFramework || { score: 0 };
     },
     testFrameworkSupported() {
-      return isFeatureSupported(this.project.testFramework);
+      return isFeatureSupported(this.testFramework);
     },
     automaticRecordingPrompts() {
       const prompts = [];
@@ -195,52 +189,15 @@ export default {
         );
       if (this.testFrameworkSupported)
         prompts.push(
-          `Run your ${this.project.testFramework.name} tests. Each test case will emit an AppMap.`
+          `Run your ${this.testFramework.name} tests. Each test case will emit an AppMap.`
         );
       return prompts;
-    },
-    remoteRecordingPrompts() {
-      const prompts = [];
-      if (this.webFrameworkSupported)
-        prompts.push(
-          `Start your ${this.webFramework.name} server. Inbound requests can be captured by starting a remote recording. Click the record button in the top right of the AppMap panel to begin.`
-        );
-      if (this.testFrameworkSupported)
-        prompts.push(
-          `Run your ${this.project.testFramework.name} tests. Each test case will emit an AppMap.`
-        );
-      return prompts;
-    },
-    numberOfRecordingMethods() {
-      switch (this.automaticRecordingPrompts.length) {
-        case 2:
-          return 'two';
-        case 3:
-          return 'three';
-        case 4:
-          return 'four';
-        case 5:
-          return 'five';
-        case 6:
-          return 'six';
-        case 7:
-          return 'seven';
-        case 8:
-          return 'eight';
-        case 9:
-          return 'nine';
-        default:
-          return this.automaticRecordingPrompts.length;
-      }
     },
     pendingMessage() {
       if (this.complete) {
         return 'Success! AppMaps have been created. Continue to the next step.';
       }
       return 'Waiting for AppMaps to be created.';
-    },
-    runConfigIcon() {
-      return this.theme === 'dark' ? VRunConfigDark : VRunConfigLight;
     },
   },
 

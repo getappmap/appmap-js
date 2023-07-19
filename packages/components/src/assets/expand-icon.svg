@@ -1,4 +1,4 @@
-<svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M7 3H6V6H3V7H6V10H7V7H10V6H7V3Z" fill="#E3E5E8" fill-opacity="0.33"/>
-<rect x="0.5" y="0.5" width="12" height="12" stroke="#E3E5E8" stroke-opacity="0.33"/>
+<svg class="expand-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M7 3H6V6H3V7H6V10H7V7H10V6H7V3Z" fill="#010306" fill-opacity="1"/>
+<rect x="0.5" y="0.5" width="12" height="12" stroke="#010306" stroke-opacity="1"/>
 </svg>

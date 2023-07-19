@@ -106,8 +106,14 @@ export function deserializeFilter(filterState) {
   }
   ['hideExternal', 'hideExternalPaths'].forEach((key) => {
     if (key in filterState) {
-      filter.declutter.hideExternalPaths.on = true;
-      filter.declutter.hideExternalPaths.dependencyFolders = filterState[key];
+      const value = filterState[key];
+
+      if (value && Array.isArray(value)) {
+        filter.declutter.hideExternalPaths.on = true;
+        filter.declutter.hideExternalPaths.dependencyFolders = filterState[key];
+      } else {
+        filter.declutter.hideExternalPaths.on = filterState[key];
+      }
     }
   });
   if ('dependencyFolders' in filterState && filterState.dependencyFolders !== false) {

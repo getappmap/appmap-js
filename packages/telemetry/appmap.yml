@@ -1,0 +1,15 @@
+name: '@appland/telemetry'
+language: javascript
+appmap_dir: tmp/appmap
+ordering: chronological
+command: yarn exec jest
+recorder: jest
+exclude:
+  - \[anonymous\]
+packages:
+  - regexp: (^|/)node_modules/
+    enabled: false
+  - regexp: ^../
+    enabled: false
+  - regexp: ^
+    enabled: true

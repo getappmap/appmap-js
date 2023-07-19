@@ -20,6 +20,8 @@
           <v-project-picker-table
             :projects="projects"
             :editor="editor"
+            :java-agent-status="javaAgentStatus"
+            :status-states="statusStates"
             @select-project="selectProject($event)"
             ref="projectTable"
           />
@@ -35,6 +37,8 @@
               :projects="projects"
               @select-project="selectProject($event)"
               :editor="editor"
+              :java-agent-status="javaAgentStatus"
+              :status-states="statusStates"
               ref="projectTable"
             />
           </div>
@@ -52,6 +56,7 @@
 import QuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
 import VProjectPickerTable from '@/components/install-guide/ProjectPickerTable.vue';
 import Navigation from '@/components/mixins/navigation';
+import StatusState from '@/components/mixins/statusState.js';
 import EmptyIcon from '@/assets/patch-question.svg';
 
 export default {
@@ -63,7 +68,7 @@ export default {
     EmptyIcon,
   },
 
-  mixins: [Navigation],
+  mixins: [Navigation, StatusState],
 
   props: {
     messageSuccess: {
@@ -78,11 +83,12 @@ export default {
       type: String,
       validator: (value) => ['vscode', 'jetbrains'].indexOf(value) !== -1,
     },
+    javaAgentStatus: Number,
   },
 
   mounted() {
     if (this.projects.length === 1) {
-      this.$refs.projectTable.selectProject(this.projects[0]);
+      this.$refs.projectTable.selectProject(this.projects[0]?.path);
     }
   },
 

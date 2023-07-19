@@ -2,12 +2,12 @@ import { AppMap, buildAppMap } from '@appland/models';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import RuleChecker from '../src/ruleChecker';
-import { verbose } from '../src/rules/lib/util';
+import { fileExists, verbose } from '../src/rules/lib/util';
 import { Finding } from '../src/types';
 import Check from '../src/check';
 import AppMapIndex from '../src/appMapIndex';
 
-if (process.env.VERBOSE_SCAN === 'true') {
+if (process.env.VERBOSE_SCAN === 'true' || process.env.DEBUG === 'true') {
   verbose(true);
 }
 
@@ -20,7 +20,11 @@ const fixtureAppMapFileName = (file: string): string => {
 };
 
 const fixtureAppMap = async (file: string): Promise<AppMap> => {
-  const appMapBytes = await readFile(fixtureAppMapFileName(file), 'utf8');
+  let fileName: string;
+  if (await fileExists(file)) fileName = file;
+  else fileName = fixtureAppMapFileName(file);
+
+  const appMapBytes = await readFile(fileName, 'utf8');
   return buildAppMap(appMapBytes).normalize().build();
 };
 

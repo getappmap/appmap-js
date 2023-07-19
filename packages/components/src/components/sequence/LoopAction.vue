@@ -54,16 +54,7 @@ export default {
     },
 
     gridRows(): string {
-      const gridEndFactor =
-        this.actionSpec.action.children.reduce((accumulator, child) => {
-          // add an extra grid row if the loop has a single child with no return value
-          if (!child.returnValue && child.children.length === 0) {
-            return accumulator + 1;
-          }
-          return accumulator;
-        }, 2) || 2;
-
-      return [this.actionSpec.index + 2, this.actionSpec.returnIndex! + gridEndFactor].join(' / ');
+      return [this.actionSpec.index + 2, this.actionSpec.returnIndex! + 2].join(' / ');
     },
     gridColumns(): string {
       const [min, max] = this.columnIndexSpan;
@@ -76,7 +67,7 @@ export default {
 <style scoped lang="scss">
 .loop {
   margin: 15px -20px 10px -20px;
-  border: 2px solid $actor-highlight; //#444e69;
+  border: 2px solid $gray2; //$actor-highlight; //#444e69;
   position: relative;
   display: inline-block;
   font-weight: bold;
@@ -84,7 +75,7 @@ export default {
   border-radius: 0;
   .label-container {
     white-space: nowrap;
-    background-color: $actor-highlight; // #444e69;
+    background-color: $gray2; //$actor-highlight; // #444e69;
     div {
       display: inline-block;
     }
@@ -94,7 +85,7 @@ export default {
       height: 28px;
       background-color: $actor-highlight; // #444e69;
       color: $white;
-      border-bottom: 2px solid $actor-highlight; // #444e69;
+      border-bottom: 2px solid $gray2; //$actor-highlight; // #444e69;
       position: relative;
 
       .rhs-effect {
