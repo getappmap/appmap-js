@@ -1,3 +1,15 @@
+# [@appland/components-v2.57.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.56.0...@appland/components-v2.57.0) (2023-07-19)
+
+
+### Bug Fixes
+
+* 'next' button goes to the next step if setup complete ([007043c](https://github.com/getappmap/appmap-js/commit/007043cd1beedcee2fe15e76fa28f8e4897ead5f)), closes [#1245](https://github.com/getappmap/appmap-js/issues/1245)
+
+
+### Features
+
+* upgrade @appland/models to 2.6.3 ([6e31f9c](https://github.com/getappmap/appmap-js/commit/6e31f9cc179ac0edfcde2861b937cd104ed4c687))
+
 # [@appland/components-v2.56.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.55.0...@appland/components-v2.56.0) (2023-07-13)
 
 
