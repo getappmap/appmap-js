@@ -1,3 +1,10 @@
+# [@appland/sequence-diagram-v1.7.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.6.1...@appland/sequence-diagram-v1.7.0) (2023-07-19)
+
+
+### Features
+
+* upgrade @appland/models to 2.6.3 ([6e31f9c](https://github.com/getappmap/appmap-js/commit/6e31f9cc179ac0edfcde2861b937cd104ed4c687))
+
 # [@appland/sequence-diagram-v1.6.1](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.6.0...@appland/sequence-diagram-v1.6.1) (2023-07-06)
 
 
