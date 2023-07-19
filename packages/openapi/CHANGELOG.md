@@ -1,3 +1,10 @@
+# [@appland/openapi-v1.6.0](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.5.0...@appland/openapi-v1.6.0) (2023-07-19)
+
+
+### Features
+
+* upgrade @appland/models to 2.6.3 ([6e31f9c](https://github.com/getappmap/appmap-js/commit/6e31f9cc179ac0edfcde2861b937cd104ed4c687))
+
 # [@appland/openapi-v1.5.0](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.4.4...@appland/openapi-v1.5.0) (2023-06-02)
 
 
