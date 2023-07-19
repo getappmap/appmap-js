@@ -1,3 +1,15 @@
+# [@appland/appmap-v3.82.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.81.0...@appland/appmap-v3.82.0) (2023-07-19)
+
+
+### Bug Fixes
+
+* Fall back to browser when opening AppMap on Darwin in VSCode ([23147af](https://github.com/getappmap/appmap-js/commit/23147af419aaadd4f3123a065d9085757ee8db71)), closes [#1250](https://github.com/getappmap/appmap-js/issues/1250)
+
+
+### Features
+
+* upgrade @appland/models to 2.6.3 ([6e31f9c](https://github.com/getappmap/appmap-js/commit/6e31f9cc179ac0edfcde2861b937cd104ed4c687))
+
 # [@appland/appmap-v3.81.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.80.2...@appland/appmap-v3.81.0) (2023-07-13)
 
 
