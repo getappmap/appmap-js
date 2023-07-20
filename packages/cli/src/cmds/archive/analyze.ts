@@ -31,9 +31,11 @@ export default async function analyze(
     console.log(`Generated OpenAPI in ${elapsed}ms`);
   }
   {
+    const startTime = new Date().getTime();
     console.log('Scanning...');
     const result = await scan(appMapDir);
-    process.stdout.write(`done (${result})\n`);
+    const elapsed = new Date().getTime() - startTime;
+    console.log(`Scanned ${result} AppMaps in ${elapsed}ms`);
   }
 
   return { oversizedAppMaps };
