@@ -6,17 +6,12 @@ import {
   SequenceDiagramOptions,
   Specification,
 } from '@appland/sequence-diagram';
-import { queue } from 'async';
 import { readFile, stat, unlink, writeFile } from 'fs/promises';
-import { glob } from 'glob';
 import { basename, dirname, join } from 'path';
-import { promisify } from 'util';
 import { processFiles } from '../../utils';
 import FileTooLargeError from '../../fingerprint/fileTooLargeError';
 import { CountNumProcessed } from './CountNumProcessed';
 import reportAppMapProcessingError from './reportAppMapProcessingError';
-
-const Concurrency = 5;
 
 export default async function updateSequenceDiagrams(
   dir: string,
