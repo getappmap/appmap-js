@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.80.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.80.0...@appland/scanner-v1.80.1) (2023-07-20)
+
+
+### Bug Fixes
+
+* Prevent `git status` from potentially hanging ([41f4a08](https://github.com/getappmap/appmap-js/commit/41f4a087d382e1f3ef7d942c4dd83df1cd75585f))
+
 # [@appland/scanner-v1.80.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.79.0...@appland/scanner-v1.80.0) (2023-07-19)
 
 
