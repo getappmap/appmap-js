@@ -7,7 +7,8 @@ import { scan } from './scan';
 export default async function analyze(
   maxAppMapSizeInBytes: number,
   appMapFilter: AppMapFilter,
-  appMapDir: string
+  appMapDir: string,
+  scannerVersion: string
 ): Promise<{ oversizedAppMaps: string[] }> {
   let oversizedAppMaps: string[];
   {
@@ -27,7 +28,7 @@ export default async function analyze(
   }
   {
     console.log('Scanning...');
-    const result = await scan(appMapDir);
+    const result = await scan(appMapDir, scannerVersion);
     process.stdout.write(`done (${result})\n`);
   }
 

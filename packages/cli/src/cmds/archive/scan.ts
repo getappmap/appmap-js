@@ -4,8 +4,8 @@ import { readFile, rm, writeFile } from 'fs/promises';
 import { Finding } from '../../lib/findings';
 import { processNamedFiles } from '../../utils';
 
-export async function scan(appMapDir: string): Promise<number> {
-  await executeCommand(`npx @appland/scanner@latest scan --appmap-dir ${appMapDir} --all`);
+export async function scan(appMapDir: string, version: string): Promise<number> {
+  await executeCommand(`npx @appland/scanner@${version} scan --appmap-dir ${appMapDir} --all`);
 
   const scanResultsData = await readFile('appmap-findings.json', 'utf8');
   await rm('appmap-findings.json');

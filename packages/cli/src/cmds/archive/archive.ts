@@ -89,6 +89,11 @@ commit of the current git revision may not be the one that triggered the build.`
     default: DefaultMaxAppMapSizeInMB,
   });
 
+  args.option('scanner-version', {
+    describe: 'version of the AppMap scanner to use',
+    default: '1.79.0',
+  });
+
   return args.strict();
 };
 
@@ -117,6 +122,7 @@ export const handler = async (argv: any) => {
     type: typeArg,
     revision: revisionArg,
     outputFile: outputFileNameArg,
+    scannerVersion,
   } = argv;
   const { outputDirArg } = argv;
 
@@ -132,7 +138,12 @@ export const handler = async (argv: any) => {
 
   let oversizedAppMaps: string[] | undefined;
   if (doAnalyze) {
-    const analyzeResult = await analyze(maxAppMapSizeInBytes, appMapFilter, appMapDir);
+    const analyzeResult = await analyze(
+      maxAppMapSizeInBytes,
+      appMapFilter,
+      appMapDir,
+      scannerVersion
+    );
     oversizedAppMaps = analyzeResult.oversizedAppMaps;
   }
 
