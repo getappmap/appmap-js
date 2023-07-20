@@ -297,8 +297,10 @@ class GitProperties {
         const commandProcess = spawn('git', ['status'], {
           shell: true,
           cwd: cwd?.toString(),
+          stdio: 'ignore',
+          timeout: 2000,
         });
-        commandProcess.on('close', (code) => {
+        commandProcess.on('exit', (code) => {
           switch (code) {
             case 127:
               return resolve(GitState.NotInstalled);
