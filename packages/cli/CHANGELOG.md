@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.82.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.82.0...@appland/appmap-v3.82.1) (2023-07-20)
+
+
+### Bug Fixes
+
+* Bump version ([aa73cc2](https://github.com/getappmap/appmap-js/commit/aa73cc25a271d83c3334c501ca2f9c722a130327))
+* Prevent `git status` from potentially hanging ([41f4a08](https://github.com/getappmap/appmap-js/commit/41f4a087d382e1f3ef7d942c4dd83df1cd75585f))
+
 # [@appland/appmap-v3.82.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.81.0...@appland/appmap-v3.82.0) (2023-07-19)
 
 
