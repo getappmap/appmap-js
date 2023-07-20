@@ -26,11 +26,11 @@ export default async function analyze(
     console.log('Generating OpenAPI...');
     await generateOpenAPI(appMapDir, maxAppMapSizeInBytes);
   }
-  {
-    console.log('Scanning...');
-    const result = await scan(appMapDir, scannerVersion);
-    process.stdout.write(`done (${result})\n`);
-  }
+  // {
+  //   console.log('Scanning...');
+  //   const result = await scan(appMapDir, scannerVersion);
+  //   process.stdout.write(`done (${result})\n`);
+  // }
 
   return { oversizedAppMaps };
 }
