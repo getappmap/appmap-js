@@ -145,9 +145,10 @@ export default class ChangeReporter {
 
   async deleteUnreferencedAppMaps() {
     const deleteAppMap = async (revisionName: RevisionName, appmap: AppMapName) => {
-      console.log(
-        mutedStyle(`AppMap ${revisionName}/${appmap} is unreferenced so it will be deleted.`)
-      );
+      if (verbose())
+        console.log(
+          mutedStyle(`AppMap ${revisionName}/${appmap} is unreferenced so it will be deleted.`)
+        );
       const path = this.paths.appmapPath(revisionName, appmap);
       const fileName = [path, 'appmap.json'].join('.');
       await rm(fileName);
