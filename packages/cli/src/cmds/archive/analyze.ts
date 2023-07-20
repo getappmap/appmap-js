@@ -11,9 +11,11 @@ export default async function analyze(
 ): Promise<{ oversizedAppMaps: string[] }> {
   let oversizedAppMaps: string[];
   {
-    process.stdout.write(`Indexing AppMaps...`);
+    const startTime = new Date().getTime();
+    console.log(`Indexing AppMaps...`);
     const numIndexed = await indexAppMaps(appMapDir, maxAppMapSizeInBytes);
-    process.stdout.write(`done (${numIndexed})\n`);
+    const elapsed = new Date().getTime() - startTime;
+    console.log(`Indexed ${numIndexed} AppMaps in ${elapsed}ms`);
   }
   {
     console.log('Generating sequence diagrams...');
@@ -22,13 +24,18 @@ export default async function analyze(
     oversizedAppMaps = result.oversizedAppMaps;
   }
   {
+    const startTime = new Date().getTime();
     console.log('Generating OpenAPI...');
     await generateOpenAPI(appMapDir, maxAppMapSizeInBytes);
+    const elapsed = new Date().getTime() - startTime;
+    console.log(`Generated OpenAPI in ${elapsed}ms`);
   }
   {
+    const startTime = new Date().getTime();
     console.log('Scanning...');
     const result = await scan(appMapDir);
-    process.stdout.write(`done (${result})\n`);
+    const elapsed = new Date().getTime() - startTime;
+    console.log(`Scanned ${result} AppMaps in ${elapsed}ms`);
   }
 
   return { oversizedAppMaps };
