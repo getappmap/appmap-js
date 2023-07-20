@@ -110,7 +110,6 @@
     "open": "^8.2.1",
     "openapi-diff": "^0.23.6",
     "ora": "^5.4.1",
-    "piscina": "^4.0.0",
     "pkg": "^5.8.0",
     "port-pid": "^0.0.7",
     "pretty-bytes": "^5.6.0",
