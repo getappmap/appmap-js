@@ -5,6 +5,7 @@ import { Octokit } from '@octokit/rest';
 import { mkdtemp, rm, rmdir, unlink } from 'fs/promises';
 import { createWriteStream } from 'fs';
 import { tmpdir } from 'os';
+import nodeFetch from 'node-fetch';
 import { executeCommand } from '../../lib/executeCommand';
 import assert from 'assert';
 import { get } from 'https';
@@ -76,6 +77,9 @@ export class GitHubArchiveStore implements ArchiveStore {
     this.repo = tokens.pop()!.split('.')[0]!;
     this.owner = tokens.pop()!;
     this.octokit = new Octokit({
+      request: {
+        fetch: nodeFetch,
+      },
       auth: this.token,
     });
   }
