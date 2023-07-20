@@ -1,32 +1,21 @@
-import { open, write } from 'fs';
 import { ParseError } from '@appland/models';
+import { open } from 'fs/promises';
 
-let SqlWarningFileName: string | null = 'sql_warning.txt';
-let messages: string[] | null = [];
-let writeMessage: (msg: string) => void = (msg: string) => (messages ? messages.push(msg) : null);
+const SqlErrors = new Set();
+const SqlParseErrorFileName = 'sql_warning.txt';
+let SqlParseErrorFileOpened = false;
 
-process.on('exit', () => {
-  if (!messages) return;
+async function writeErrorToFile(error: ParseError) {
+  const flags = SqlParseErrorFileOpened ? 'a' : 'w';
+  SqlParseErrorFileOpened = true;
+  open(SqlParseErrorFileName, flags).then((handle) => {
+    handle.write([error.toString(), ''].join('\n')).finally(handle.close.bind(handle));
+  });
+}
 
-  [...new Set(messages)].forEach((msg) => console.warn(msg));
-});
-
-export default function sqlWarning(error: ParseError): void {
-  if (SqlWarningFileName) {
-    open(SqlWarningFileName, 'w', (err, fd) => {
-      if (err || !fd) return;
-
-      writeMessage = (msg) => {
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        write(fd, [msg, '\n'].join(''), () => {});
-      };
-
-      if (messages) messages.forEach(writeMessage);
-      messages = null;
-    });
-    // Try only once
-    SqlWarningFileName = null;
+export default function sqlWarning(parseError: ParseError): void {
+  if (!SqlErrors.has(parseError.sql)) {
+    writeErrorToFile(parseError);
+    SqlErrors.add(parseError.sql);
   }
-
-  writeMessage(error.toString());
 }
