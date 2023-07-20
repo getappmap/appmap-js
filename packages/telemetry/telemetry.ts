@@ -297,6 +297,7 @@ class GitProperties {
         const commandProcess = spawn('git', ['status'], {
           shell: true,
           cwd: cwd?.toString(),
+          timeout: 100,
         });
         commandProcess.on('close', (code) => {
           switch (code) {
