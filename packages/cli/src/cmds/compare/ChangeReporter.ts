@@ -2,7 +2,7 @@ import { mkdir, readFile, rm, writeFile } from 'fs/promises';
 import { default as openapiDiff } from 'openapi-diff';
 import { dirname, isAbsolute, join, relative, resolve } from 'path';
 import { ClassMap, Metadata } from '@appland/models';
-import { FormatType, format } from '@sequence-diagram';
+import { FormatType, format } from '@appland/sequence-diagram';
 import { queue } from 'async';
 import assert from 'assert';
 
@@ -12,7 +12,7 @@ import { Paths } from './Paths';
 import { Digests } from './Digests';
 import { RevisionName } from './RevisionName';
 import { AppMapLink, AppMapName, ChangeReport, ChangedAppMap, TestFailure } from './ChangeReport';
-import { exists } from '../../utils';
+import { exists, verbose } from '../../utils';
 import mapToRecord from './mapToRecord';
 import { mutedStyle, prominentStyle } from './ui';
 import { executeCommand } from '../../lib/executeCommand';
