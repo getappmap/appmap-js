@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.80.2](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.80.1...@appland/scanner-v1.80.2) (2023-07-20)
+
+
+### Bug Fixes
+
+* Bump version ([aa73cc2](https://github.com/getappmap/appmap-js/commit/aa73cc25a271d83c3334c501ca2f9c722a130327))
+
 # [@appland/scanner-v1.80.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.80.0...@appland/scanner-v1.80.1) (2023-07-20)
 
 
