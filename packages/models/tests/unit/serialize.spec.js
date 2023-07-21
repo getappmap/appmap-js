@@ -29,21 +29,105 @@ describe('serializeFilter', () => {
     expect(serialized).toStrictEqual({});
   });
 
-  it('handles non-default values', () => {
-    const filter = new AppMapFilter();
+  describe('non-default values', () => {
+    function testFilter(
+      description,
+      expectedState,
+      prepareFilterFn,
+      prepareDeserializedExpectationFn
+    ) {
+      return it(description, () => {
+        const filter = new AppMapFilter();
+        prepareFilterFn(filter);
+        const serialized = serializeFilter(filter);
+        expect(serialized).toStrictEqual(expectedState);
 
-    filter.declutter.limitRootEvents.on = false;
-    filter.declutter.hideMediaRequests.on = false;
-    filter.declutter.hideUnlabeled.on = true;
-    filter.declutter.hideElapsedTimeUnder.on = true;
-    filter.declutter.hideElapsedTimeUnder.time = 1;
-    filter.declutter.hideName.on = true;
-    filter.declutter.hideName.names = ['package:activesupport'];
-    filter.declutter.hideExternalPaths.on = true;
-    filter.declutter.hideExternalPaths.dependencyFolders = ['vendor', 'node_modules'];
+        const restored = deserializeFilter(serialized);
+        const expectedRestored = prepareDeserializedExpectationFn
+          ? prepareDeserializedExpectationFn(new AppMapFilter())
+          : filter;
+        expect(restored).toStrictEqual(expectedRestored);
+      });
+    }
 
-    const serialized = serializeFilter(filter);
-    expect(serialized).toStrictEqual(TEST_STATE);
+    testFilter(
+      'limitRootEvents can be disabled',
+      { limitRootEvents: false },
+      (filter) => (filter.declutter.limitRootEvents.on = false)
+    );
+
+    testFilter(
+      'hideMediaRequests can be disabled',
+      { hideMediaRequests: false },
+      (filter) => (filter.declutter.hideMediaRequests.on = false)
+    );
+
+    testFilter(
+      'hideUnlabeled can be enabled',
+      { hideUnlabeled: true },
+      (filter) => (filter.declutter.hideUnlabeled.on = true)
+    );
+
+    testFilter(
+      'hideElapsedTimeUnder can be enabled',
+      { hideElapsedTimeUnder: 1 },
+      (filter) => (filter.declutter.hideElapsedTimeUnder.on = true)
+    );
+
+    testFilter(
+      'hideElapsedTimeUnder can have a different time threshold',
+      { hideElapsedTimeUnder: 10 },
+      (filter) => (
+        (filter.declutter.hideElapsedTimeUnder.on = true),
+        (filter.declutter.hideElapsedTimeUnder.time = 10)
+      )
+    );
+
+    testFilter(
+      'hideElapsedTimeUnder can have a different time threshold but still be disabled',
+      {},
+      (filter) => (filter.declutter.hideElapsedTimeUnder.time = 10),
+      (filter) => filter
+    );
+
+    testFilter(
+      'hideName can be enabled',
+      { hideName: ['foo'] },
+      (filter) => (
+        (filter.declutter.hideName.on = true), (filter.declutter.hideName.names = ['foo'])
+      )
+    );
+
+    testFilter(
+      'hideName can be enabled with an empty name list',
+      { hideName: [] },
+      (filter) => ((filter.declutter.hideName.on = true), (filter.declutter.hideName.names = []))
+    );
+
+    testFilter(
+      'hideName is ignored if disabled with an non-empty name list',
+      {},
+      (filter) => (filter.declutter.hideName.names = ['foo']),
+      (filter) => filter
+    );
+
+    testFilter(
+      'hideExternalPaths can be disabled',
+      { hideExternalPaths: false },
+      (filter) => (filter.declutter.hideExternalPaths.on = false)
+    );
+
+    testFilter(
+      'hideExternalPaths can be enabled and the dependency folder list can be different',
+      { hideExternalPaths: ['foo'] },
+      (filter) => (filter.declutter.hideExternalPaths.dependencyFolders = ['foo'])
+    );
+
+    testFilter(
+      'hideExternalPaths can be enabled and the dependency folder list can be empty',
+      { hideExternalPaths: [] },
+      (filter) => (filter.declutter.hideExternalPaths.dependencyFolders = [])
+    );
   });
 });
 

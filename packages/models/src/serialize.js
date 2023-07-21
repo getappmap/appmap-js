@@ -1,4 +1,4 @@
-import AppMapFilter from './appMapFilter';
+import AppMapFilter, { DEFAULT_DEPENDENCY_FOLDERS } from './appMapFilter';
 import { base64UrlDecode } from './util';
 
 function mergeLists(a, b) {
@@ -44,27 +44,66 @@ export function serializeFilter(filter) {
   let declutter = filter;
   if ('declutter' in filter) declutter = filter.declutter;
 
-  return Object.entries({
-    rootObjects: declutter.rootObjects,
-    limitRootEvents: declutter.limitRootEvents.on,
-    hideMediaRequests: declutter.hideMediaRequests.on,
-    hideUnlabeled: declutter.hideUnlabeled.on,
-    hideExternalPaths: declutter.hideExternalPaths.on
-      ? declutter.hideExternalPaths.dependencyFolders
-      : false,
-    hideElapsedTimeUnder: declutter.hideElapsedTimeUnder.on
-      ? declutter.hideElapsedTimeUnder.time
-      : false,
-    hideName: declutter.hideName.on ? declutter.hideName.names : false,
-  }).reduce((memo, [k, v]) => {
-    const filter = declutter[k];
-    if (Array.isArray(v) && v.length !== 0) {
-      memo[k] = v;
-    } else if (filter && filter.default !== v) {
-      memo[k] = v;
-    }
+  const onSerializer = (item) => (item.on !== item.default ? item.on : undefined);
+
+  const configurableListSerializer = (propertyName, defaultPropertyValue) => {
+    return (item) => {
+      // Disabled by default and disabled, omit the key
+      if (!item.default && !item.on) return;
+      // Enabled by default and disabled, key = false
+      if (item.default && !item.on) return false;
+
+      const propertyValue = item[propertyName] || [];
+
+      // Disabled by default and enabled (disabled case was handled above).
+      // Return the property value
+      if (!item.default) return propertyValue;
+
+      const propertyIsModified =
+        JSON.stringify(propertyValue) !== JSON.stringify(defaultPropertyValue);
+
+      // Enabled by default and enabled (disabled case was handled above).
+      // Return the property value if it's different from the default.
+      if (propertyIsModified) return propertyValue;
+    };
+  };
+
+  const hideElapsedTimeUnderSerializer = (item) => {
+    if (item.on === item.default) return;
+
+    return item.time;
+  };
+
+  const serializers = {
+    hideExternalPaths: configurableListSerializer('dependencyFolders', DEFAULT_DEPENDENCY_FOLDERS),
+    hideName: configurableListSerializer('names', []),
+    hideElapsedTimeUnder: hideElapsedTimeUnderSerializer,
+  };
+
+  const result = {};
+  if (declutter.rootObjects) result.rootObjects = declutter.rootObjects;
+
+  return [
+    'limitRootEvents',
+    'hideMediaRequests',
+    'hideUnlabeled',
+    'hideExternalPaths',
+    'hideElapsedTimeUnder',
+    'hideName',
+  ].reduce((memo, key) => {
+    const item = declutter[key];
+    const serializer = serializers[key] || onSerializer;
+    const serializedValue = serializer(item);
+
+    // console.warn(
+    //   [key, JSON.stringify(item), serializer.name, serializedValue, JSON.stringify(serializedValue)]
+    //     .map((i) => (i !== undefined ? i.toString() : 'undefined'))
+    //     .join('\t')
+    // );
+
+    if (serializedValue !== undefined) memo[key] = serializedValue;
     return memo;
-  }, {});
+  }, result);
 }
 
 // If stringInput is a base64 URL encoded string, decode it. Parse as JSON into a FilterState object.

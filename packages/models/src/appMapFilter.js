@@ -3,6 +3,11 @@ import AppMap from './appMap';
 import CodeObject from './codeObject';
 import { isLocalPath } from './util';
 
+export const DEFAULT_DECLUTTER_TIME = 1;
+
+// Directories inside the project tree that may contain bundled dependencies.
+export const DEFAULT_DEPENDENCY_FOLDERS = ['vendor', 'node_modules'];
+
 class DeclutterProperty {
   on = true;
   default = true;
@@ -14,9 +19,9 @@ class DeclutterProperty {
 }
 
 class DeclutterTimeProperty extends DeclutterProperty {
-  time = 100;
+  time = DEFAULT_DECLUTTER_TIME;
 
-  constructor(on = true, defaultValue = true, time = 100) {
+  constructor(on = true, defaultValue = true, time = DEFAULT_DECLUTTER_TIME) {
     super(on, defaultValue);
 
     this.time = time;
@@ -33,16 +38,13 @@ class DeclutterNamesProperty extends DeclutterProperty {
   }
 }
 
-// Directories inside the project tree that may contain bundled dependencies.
-const DependencyFolders = ['vendor', 'node_modules'];
-
 class DeclutterExternalPathsProperty extends DeclutterProperty {
-  dependencyFolders = DependencyFolders;
+  dependencyFolders = DEFAULT_DEPENDENCY_FOLDERS;
 
-  constructor(on = true, defaultValue = true, dependencyFolders = DependencyFolders) {
+  constructor(on = true, defaultValue = true, dependencyFolders = DEFAULT_DEPENDENCY_FOLDERS) {
     super(on, defaultValue);
 
-    this.dependencyFolders = dependencyFolders || DependencyFolders;
+    this.dependencyFolders = dependencyFolders || DEFAULT_DEPENDENCY_FOLDERS;
   }
 }
 
@@ -51,7 +53,7 @@ class Declutter {
   hideMediaRequests = new DeclutterProperty();
   hideExternalPaths = new DeclutterExternalPathsProperty();
   hideUnlabeled = new DeclutterProperty(false, false);
-  hideElapsedTimeUnder = new DeclutterTimeProperty(false, false, 1);
+  hideElapsedTimeUnder = new DeclutterTimeProperty(false, false, DEFAULT_DECLUTTER_TIME);
   hideName = new DeclutterNamesProperty(false, false, []);
   hideTree = new DeclutterNamesProperty(false, false, []);
 }

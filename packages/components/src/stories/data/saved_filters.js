@@ -3,18 +3,21 @@ import { DEFAULT_FILTER_NAME } from '@/store/vsCode';
 export default [
   {
     filterName: DEFAULT_FILTER_NAME,
-    state: 'eyJmaWx0ZXJzIjp7fX0',
+    // {filters:{hideExternal:false}} for backwards compatibility with tests
+    state: 'eyJmaWx0ZXJzIjp7ImhpZGVFeHRlcm5hbCI6ZmFsc2V9fQ==',
     default: true,
   },
   {
     filterName: 'another test',
-    state: 'eyJmaWx0ZXJzIjp7ImxpbWl0Um9vdEV2ZW50cyI6ZmFsc2UsImhpZGVVbmxhYmVsZWQiOnRydWV9fQ',
+    // {"filters":{"limitRootEvents":false,"hideUnlabeled":true,"hideExternal":false}}
+    state: 'eyJmaWx0ZXJzIjp7ImxpbWl0Um9vdEV2ZW50cyI6ZmFsc2UsImhpZGVVbmxhYmVsZWQiOnRydWUsImhpZGVFeHRlcm5hbCI6ZmFsc2V9fQ==',
     default: false,
   },
   {
     filterName: 'filter',
+    // {"filters":{"limitRootEvents":false,"hideMediaRequests":false,"hideElapsedTimeUnder":1,"hideExternal":false}}
     state:
-      'eyJmaWx0ZXJzIjp7ImxpbWl0Um9vdEV2ZW50cyI6ZmFsc2UsImhpZGVNZWRpYVJlcXVlc3RzIjpmYWxzZSwiaGlkZUVsYXBzZWRUaW1lVW5kZXIiOjF9fQ',
+      'eyJmaWx0ZXJzIjp7ImxpbWl0Um9vdEV2ZW50cyI6ZmFsc2UsImhpZGVNZWRpYVJlcXVlc3RzIjpmYWxzZSwiaGlkZUVsYXBzZWRUaW1lVW5kZXIiOjEsImhpZGVFeHRlcm5hbCI6ZmFsc2V9fQ==',
     default: false,
   },
 ];

@@ -64,6 +64,7 @@ describe('prune subcommand', () => {
         'function:activerecord/ActiveRecord::Relation#records',
         'function:actionpack/ActionDispatch::Request::Session#[]',
       ],
+      hideExternalPaths: false,
       limitRootEvents: false,
       hideMediaRequests: false,
     } as FilterState;
@@ -90,6 +91,7 @@ describe('prune subcommand', () => {
 
     statsMapData.pruneFilter = {
       hideName: ['fakeNameOne', 'fakeNameTwo'],
+      hideExternal: false,
       hideUnlabeled: true,
       hideElapsedTimeUnder: '10',
     };
@@ -100,6 +102,8 @@ describe('prune subcommand', () => {
         'function:activerecord/ActiveRecord::Relation#records',
         'function:actionpack/ActionDispatch::Request::Session#[]',
       ],
+      hideExternal: true,
+      dependencyPaths: ['vendor', 'node_modules'],
       hideElapsedTimeUnder: 50, // Numbers are accepted as well
       hideMediaRequests: true,
     };
