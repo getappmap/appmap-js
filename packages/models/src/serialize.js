@@ -93,7 +93,10 @@ export function deserializeFilter(filterState) {
   if (!filterState) return filter;
 
   for (const property in filterState) {
-    if (filterState.hasOwnProperty(property) && filterState[property] === undefined)
+    if (
+      Object.prototype.hasOwnProperty.call(filterState, property) &&
+      filterState[property] === undefined
+    )
       delete filterState[property];
   }
 
