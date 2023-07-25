@@ -1,9 +1,26 @@
-import { FilterState } from '@appland/models';
 import { readFile } from 'fs/promises';
 import { load } from 'js-yaml';
 
+export type HideOption =
+  | 'pragma'
+  | 'savepoint'
+  | 'pg_metadata'
+  | 'sqlite_metadata'
+  | 'selenium'
+  | 'ruby_included';
+
+// This type is similar to FilterState in @appland/models, but only contains the
+// fields that are likely to be used for creating a canonical sequence diagram.
+export type CompareFilter = {
+  hide_external?: boolean;
+  dependency_folders?: Array<string>;
+  hide_name?: Array<string>;
+  hide?: Array<HideOption>;
+  reveal?: Array<HideOption>;
+};
+
 export interface CompareConfig {
-  filter?: FilterState;
+  filter?: CompareFilter;
 }
 
 export interface UpdateConfig {
