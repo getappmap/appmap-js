@@ -1,4 +1,4 @@
-import { AppMapFilter, buildAppMap } from '@appland/models';
+import { buildAppMap } from '@appland/models';
 import {
   buildDiagram,
   format,
@@ -6,17 +6,19 @@ import {
   SequenceDiagramOptions,
   Specification,
 } from '@appland/sequence-diagram';
-import { readFile, stat, unlink, writeFile } from 'fs/promises';
+import { readFile, stat, writeFile } from 'fs/promises';
 import { basename, dirname, join } from 'path';
 import { processFiles } from '../../utils';
 import FileTooLargeError from '../../fingerprint/fileTooLargeError';
 import { CountNumProcessed } from './CountNumProcessed';
 import reportAppMapProcessingError from './reportAppMapProcessingError';
+import buildFilter, { Language } from './buildFilter';
+import { CompareFilter } from '../../lib/loadAppMapConfig';
 
 export default async function updateSequenceDiagrams(
   dir: string,
   maxAppMapSizeInBytes: number,
-  filter: AppMapFilter
+  compareFilter: CompareFilter
 ): Promise<{ numGenerated: number; oversizedAppMaps: string[] }> {
   const specOptions = {
     loops: true,
@@ -34,6 +36,9 @@ export default async function updateSequenceDiagrams(
     const fullAppMap = buildAppMap()
       .source(await readFile(appmapFileName, 'utf8'))
       .build();
+
+    const language = fullAppMap.metadata?.language?.name || 'unknown';
+    const filter = buildFilter(language as Language, compareFilter);
     const filteredAppMap = filter.filter(fullAppMap, []);
     const specification = Specification.build(filteredAppMap, specOptions);
     const diagram = buildDiagram(appmapFileName, filteredAppMap, specification);

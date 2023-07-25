@@ -11,8 +11,6 @@ import { VERSION as IndexVersion } from '../../fingerprint/fingerprinter';
 import chalk from 'chalk';
 import gitRevision from './gitRevision';
 import { ArchiveMetadata } from './ArchiveMetadata';
-import { serializeAppMapFilter } from './serializeAppMapFilter';
-import { deserializeFilter } from '@appland/models';
 import analyze from './analyze';
 
 // ## 1.3.0
@@ -109,7 +107,7 @@ export const handler = async (argv: any) => {
   const appMapDir = await locateAppMapDir();
 
   const compareConfig = appmapConfig.compare;
-  const appMapFilter = deserializeFilter(compareConfig?.filter);
+  const compareFilter = compareConfig?.filter || {};
 
   const {
     maxSize,
@@ -132,7 +130,7 @@ export const handler = async (argv: any) => {
 
   let oversizedAppMaps: string[] | undefined;
   if (doAnalyze) {
-    const analyzeResult = await analyze(maxAppMapSizeInBytes, appMapFilter, appMapDir);
+    const analyzeResult = await analyze(maxAppMapSizeInBytes, compareFilter, appMapDir);
     oversizedAppMaps = analyzeResult.oversizedAppMaps;
   }
 
@@ -147,7 +145,6 @@ export const handler = async (argv: any) => {
     timestamp: Date.now().toString(),
     oversizedAppMaps,
     config: appmapConfig,
-    appMapFilter: serializeAppMapFilter(appMapFilter),
   };
 
   let type: string;
