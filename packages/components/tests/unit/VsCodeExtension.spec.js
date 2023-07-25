@@ -43,7 +43,7 @@ describe('VsCodeExtension.vue', () => {
 
     wrapper.vm.setState(appState);
 
-    expect(wrapper.vm.filters.declutter.rootObjects).toContain('package:app/controllers');
+    expect(wrapper.vm.filters.rootObjects).toContain('package:app/controllers');
     expect(wrapper.vm.filters.declutter.limitRootEvents.on).toBe(false);
     expect(wrapper.vm.filters.declutter.hideMediaRequests.on).toBe(false);
     expect(wrapper.vm.filters.declutter.hideUnlabeled.on).toBe(true);
@@ -73,7 +73,7 @@ describe('VsCodeExtension.vue', () => {
   it('serializes rootObjects state', async () => {
     const state = { filters: { rootObjects: ['package:app/controllers'] } };
     await wrapper.vm.setState(JSON.stringify(state));
-    expect(wrapper.vm.filters.declutter.rootObjects).toContain('package:app/controllers');
+    expect(wrapper.vm.filters.rootObjects).toContain('package:app/controllers');
     expect(wrapper.vm.getState()).toEqual(
       stateObjectToBase64({ ...{ currentView: 'viewComponent' }, ...state })
     );
