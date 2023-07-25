@@ -92,8 +92,9 @@ export function deserializeFilter(filterState) {
   const filter = new AppMapFilter();
   if (!filterState) return filter;
 
-  if ('rootObjects' in filterState) {
-    filter.declutter.rootObjects = filterState.rootObjects;
+
+  if ('rootObjects' in filterState && filterState.rootObjects !== false) {
+    filter.rootObjects = filterState.rootObjects;
   }
   if ('limitRootEvents' in filterState) {
     filter.declutter.limitRootEvents.on = filterState.limitRootEvents;

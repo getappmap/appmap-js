@@ -54,6 +54,13 @@ describe('deserializeFilter', () => {
     expect(deserialized).toStrictEqual(expectedFilter);
   });
 
+  it('handles rootObjects', () => {
+    const deserialized = deserializeFilter({ rootObjects: ['a', 'b'] });
+    const expectedFilter = new AppMapFilter();
+    expectedFilter.rootObjects = ['a', 'b'];
+    expect(deserialized).toStrictEqual(expectedFilter);
+  });
+
   it('handles non-default values', () => {
     const deserialized = deserializeFilter(TEST_STATE);
 
