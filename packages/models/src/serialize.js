@@ -4,7 +4,7 @@ import { base64UrlDecode } from './util';
 function mergeLists(a, b) {
   if (a === false && b === false) return false;
 
-  const result = [...new Set([...(a || []), ...(b || [])])].sort((a, b) => a.localeCompare(b));
+  const result = [...new Set([...(a || []), ...(b || [])])].sort();
   return result.length > 0 ? result : false;
 }
 
