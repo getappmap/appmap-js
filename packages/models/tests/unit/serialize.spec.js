@@ -61,6 +61,24 @@ describe('deserializeFilter', () => {
     expect(deserialized).toStrictEqual(expectedFilter);
   });
 
+  it(`doesn't treat undefined as false`, () => {
+    {
+      const deserialized = deserializeFilter({ limitRootEvents: false, hideMediaRequests: false });
+      const expectedFilter = new AppMapFilter();
+      expectedFilter.declutter.limitRootEvents.on = false;
+      expectedFilter.declutter.hideMediaRequests.on = false;
+      expect(deserialized).toStrictEqual(expectedFilter);
+    }
+    {
+      const deserialized = deserializeFilter({
+        limitRootEvents: undefined,
+        hideMediaRequests: undefined,
+      });
+      const expectedFilter = new AppMapFilter();
+      expect(deserialized).toStrictEqual(expectedFilter);
+    }
+  });
+
   it('handles non-default values', () => {
     const deserialized = deserializeFilter(TEST_STATE);
 

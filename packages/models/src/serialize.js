@@ -92,6 +92,10 @@ export function deserializeFilter(filterState) {
   const filter = new AppMapFilter();
   if (!filterState) return filter;
 
+  for (const property in filterState) {
+    if (filterState.hasOwnProperty(property) && filterState[property] === undefined)
+      delete filterState[property];
+  }
 
   if ('rootObjects' in filterState && filterState.rootObjects !== false) {
     filter.rootObjects = filterState.rootObjects;
