@@ -1,3 +1,10 @@
+# [@appland/components-v2.57.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.57.0...@appland/components-v2.57.1) (2023-07-26)
+
+
+### Bug Fixes
+
+* Fix problems in filter deserialization ([b5e0785](https://github.com/getappmap/appmap-js/commit/b5e0785e7d63fdc729518658ba7a4c8a17304fc7))
+
 # [@appland/components-v2.57.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.56.0...@appland/components-v2.57.0) (2023-07-19)
 
 
