@@ -4,7 +4,7 @@ import { base64UrlDecode } from './util';
 function mergeLists(a, b) {
   if (a === false && b === false) return false;
 
-  const result = [...new Set([...(a || []), ...(b || [])])].sort((a, b) => a.localeCompare(b));
+  const result = [...new Set([...(a || []), ...(b || [])])].sort();
   return result.length > 0 ? result : false;
 }
 
@@ -42,10 +42,11 @@ export function serializeFilter(filter) {
   if (!filter) return {};
 
   let declutter = filter;
+  const rootObjects = filter.rootObjects;
   if ('declutter' in filter) declutter = filter.declutter;
 
   return Object.entries({
-    rootObjects: declutter.rootObjects,
+    rootObjects: rootObjects,
     limitRootEvents: declutter.limitRootEvents.on,
     hideMediaRequests: declutter.hideMediaRequests.on,
     hideUnlabeled: declutter.hideUnlabeled.on,
@@ -92,8 +93,16 @@ export function deserializeFilter(filterState) {
   const filter = new AppMapFilter();
   if (!filterState) return filter;
 
-  if ('rootObjects' in filterState) {
-    filter.declutter.rootObjects = filterState.rootObjects;
+  for (const property in filterState) {
+    if (
+      Object.prototype.hasOwnProperty.call(filterState, property) &&
+      filterState[property] === undefined
+    )
+      delete filterState[property];
+  }
+
+  if ('rootObjects' in filterState && filterState.rootObjects !== false) {
+    filter.rootObjects = filterState.rootObjects;
   }
   if ('limitRootEvents' in filterState) {
     filter.declutter.limitRootEvents.on = filterState.limitRootEvents;
