@@ -190,6 +190,18 @@ const updateEventArray = (events, updates) => {
   );
 };
 
+const normalizeVersion = (version) => {
+  if (/^[0-9]+$/.test(version)) {
+    return `${version}.0.0`;
+  } else if (/^[0-9]+\.[0-9]+$/.test(version)) {
+    return `${version}.0`;
+  } else if (/^[0-9]+\.[0-9]+\.[0-9]+$/.test(version)) {
+    return version;
+  } else {
+    throw InputError(`invalid version format: ${version}`);
+  }
+};
+
 exports.AppmapError = AppmapError;
 
 exports.InputError = InputError;
@@ -210,6 +222,7 @@ exports.validate = (data, options) => {
     );
     options.version = data.version;
   }
+  options.version = normalizeVersion(options.version);
   assert(
     versions.has(options.version),
     InputError,
