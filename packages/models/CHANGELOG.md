@@ -1,3 +1,11 @@
+# [@appland/models-v2.6.4](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.6.3...@appland/models-v2.6.4) (2023-07-26)
+
+
+### Bug Fixes
+
+* Fix problems in filter deserialization ([b5e0785](https://github.com/getappmap/appmap-js/commit/b5e0785e7d63fdc729518658ba7a4c8a17304fc7))
+* Use sort() instead of localeCompare() ([f904763](https://github.com/getappmap/appmap-js/commit/f9047635c1a1282fbb819efddc136855314f10e0))
+
 # [@appland/models-v2.6.3](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.6.2...@appland/models-v2.6.3) (2023-07-13)
 
 
