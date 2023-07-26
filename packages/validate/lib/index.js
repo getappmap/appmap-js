@@ -29,7 +29,7 @@ const versions = new Map([
 
 const keys = Array.from(versions.keys());
 
-const makeDesignator = JSON.stringify;
+const digest = JSON.stringify;
 
 /* c8 ignore start */
 const hasOwnProperty =
@@ -83,29 +83,15 @@ const checkSchema = (data, options) => {
   }
 };
 
-const collectDesignator = (designators, entity, parent, path1) => {
+const collectDesignator = (designators, entity) => {
   if (entity.type === 'function') {
-    assert(parent !== null, Error, 'top-level function should not have satisfied the schema');
     if (hasOwnProperty(entity, 'location') && entity.location !== null) {
-      let path2 = entity.location;
+      let path = entity.location;
       let lineno = null;
-      if (path2 !== null && /:[0-9]+$/u.test(path2)) {
-        [, path2, lineno] = /^([\s\S]*):([0-9]+)$/.exec(entity.location);
+      if (path !== null && /:[0-9]+$/u.test(path)) {
+        [, path, lineno] = /^([\s\S]*):([0-9]+)$/.exec(entity.location);
       }
-      // assert(
-      //   path1.toLowerCase().startsWith(path2.toLowerCase()),
-      //   AppmapError,
-      //   "path should be a prefix of %o for function code object %o",
-      //   path1,
-      //   entity
-      // );
-      const designator = makeDesignator([
-        parent.name,
-        path2,
-        parseInt(lineno),
-        entity.static,
-        entity.name,
-      ]);
+      const designator = JSON.stringify([entity.name, path, parseInt(lineno), entity.static]);
       assert(
         !designators.has(designator),
         AppmapError,
@@ -115,17 +101,9 @@ const collectDesignator = (designators, entity, parent, path1) => {
       designators.add(designator);
     }
   } else {
-    const path2 = `${path1}${entity.name}/`;
     for (let child of entity.children) {
-      collectDesignator(designators, child, entity, path2);
+      collectDesignator(designators, child);
     }
-  }
-};
-
-const checkClassMapConflict = (classmap) => {
-  const designators = new Set();
-  for (let entity of classmap) {
-    collectDesignator(designators, entity, null, '');
   }
 };
 
@@ -202,6 +180,13 @@ const normalizeVersion = (version) => {
   }
 };
 
+const checkClassmapFunction = (event, designators) => {
+  if (event.event === 'call' && hasOwnProperty(event, 'method_id')) {
+    const designator = digest([event.method_id, event.path, event.lineno, event.static]);
+    assert(designators.has(designator), AppmapError, 'missing function in classmap: %o', event);
+  }
+};
+
 exports.AppmapError = AppmapError;
 
 exports.InputError = InputError;
@@ -231,7 +216,13 @@ exports.validate = (data, options) => {
     keys
   );
   checkSchema(data, options);
-  checkClassMapConflict(data.classMap);
+  const designators = new Set();
+  for (const entity of data.classMap) {
+    collectDesignator(designators, entity, null, '');
+  }
+  for (const event of data.events) {
+    checkClassmapFunction(event, designators);
+  }
   checkPerThreadFifoOrdering(data.events);
   if (hasOwnProperty(data, 'eventUpdates')) {
     checkPerThreadFifoOrdering(updateEventArray(data.events, data.eventUpdates));
