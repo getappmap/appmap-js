@@ -12,6 +12,7 @@ import chalk from 'chalk';
 import gitRevision from './gitRevision';
 import { ArchiveMetadata } from './ArchiveMetadata';
 import analyze from './analyze';
+import parseFilterArgs from './parseFilterArgs';
 
 // ## 1.3.0
 //
@@ -86,6 +87,12 @@ commit of the current git revision may not be the one that triggered the build.`
     default: DefaultMaxAppMapSizeInMB,
   });
 
+  args.option('filter', {
+    describe: 'filter to apply to AppMaps when normalizing them into sequence diagrams',
+    type: 'string',
+    multiple: true,
+  });
+
   return args.strict();
 };
 
@@ -97,18 +104,6 @@ export const handler = async (argv: any) => {
       `Note: The AppMap archive won't contain the version of @appland/appmap because process.env.npm_package_version is not available.`
     );
 
-  handleWorkingDirectory(argv.directory);
-  const workingDirectory = process.cwd();
-
-  const appmapConfig = await loadAppMapConfig();
-  if (!appmapConfig) throw new Error(`Unable to load appmap.yml config file`);
-
-  const suppliedAppMapDir = await locateAppMapDir();
-  const appMapDir = resolve(workingDirectory, suppliedAppMapDir);
-
-  const compareConfig = appmapConfig.compare;
-  const compareFilter = compareConfig?.filter || {};
-
   const {
     maxSize,
     analyze: doAnalyze,
@@ -116,7 +111,22 @@ export const handler = async (argv: any) => {
     revision: revisionArg,
     outputFile: outputFileNameArg,
     outputDir: outputDirArg,
+    filter: filterArg,
   } = argv;
+
+  handleWorkingDirectory(argv.directory);
+  const workingDirectory = process.cwd();
+
+  const appmapConfig = await loadAppMapConfig();
+  if (!appmapConfig) throw new Error(`Unable to load appmap.yml config file`);
+
+  const appMapDir = await locateAppMapDir();
+
+  const compareConfig = appmapConfig.compare;
+  const compareFilter = compareConfig?.filter || {};
+
+  if (filterArg)
+    parseFilterArgs(compareFilter, typeof filterArg === 'string' ? [filterArg] : filterArg);
 
   const maxAppMapSizeInBytes = Math.round(parseFloat(maxSize) * 1024 * 1024);
 
