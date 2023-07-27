@@ -1,21 +1,17 @@
 import { ParseError } from '@appland/models';
-import { FileHandle, open } from 'fs/promises';
+import { open } from 'fs/promises';
 
 const SqlErrors = new Set();
 const SqlParseErrorFileName = 'sql_warning.txt';
-let SqlParseErrorFile: FileHandle | undefined;
+let SqlParseErrorFileOpened = false;
 
 async function writeErrorToFile(error: ParseError) {
-  if (!SqlParseErrorFile) SqlParseErrorFile = await open(SqlParseErrorFileName, 'w');
-
-  SqlParseErrorFile.write([error.toString(), ''].join('\n'));
+  const flags = SqlParseErrorFileOpened ? 'a' : 'w';
+  SqlParseErrorFileOpened = true;
+  open(SqlParseErrorFileName, flags).then((handle) => {
+    handle.write([error.toString(), ''].join('\n')).finally(handle.close.bind(handle));
+  });
 }
-
-process.on('exit', () => {
-  if (SqlParseErrorFile) SqlParseErrorFile.close();
-
-  SqlParseErrorFile = undefined;
-});
 
 export default function sqlErrorLog(parseError: ParseError) {
   if (!SqlErrors.has(parseError.sql)) {
