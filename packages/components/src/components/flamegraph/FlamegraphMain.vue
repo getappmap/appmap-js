@@ -237,13 +237,22 @@ export default {
 </script>
 
 <style lang="scss">
+.github-artifact {
+  background-color: #000;
+
+  #app {
+    height: 95vh;
+  }
+}
+
 .flamegraph-main {
   cursor: grab;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   flex-shrink: 1;
-  overflow: scroll;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .flamegraph-main-focusing {
