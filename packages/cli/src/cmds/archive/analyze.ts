@@ -11,16 +11,18 @@ export default async function analyze(
 ): Promise<{ oversizedAppMaps: string[] }> {
   let oversizedAppMaps: string[];
   {
-    const startTime = new Date().getTime();
     console.log(`Indexing AppMaps...`);
+    const startTime = new Date().getTime();
     const numIndexed = await indexAppMaps(appMapDir, maxAppMapSizeInBytes);
     const elapsed = new Date().getTime() - startTime;
     console.log(`Indexed ${numIndexed} AppMaps in ${elapsed}ms`);
   }
   {
     console.log('Generating sequence diagrams...');
+    const startTime = new Date().getTime();
     const result = await updateSequenceDiagrams(appMapDir, maxAppMapSizeInBytes, compareFilter);
-    process.stdout.write(`done (${result.numGenerated})\n`);
+    const elapsed = new Date().getTime() - startTime;
+    console.log(`Generated ${result.numGenerated} sequence diagrams in ${elapsed}ms`);
     oversizedAppMaps = result.oversizedAppMaps;
   }
   {
