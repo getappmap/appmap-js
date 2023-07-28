@@ -3,7 +3,7 @@ import Ajv from 'ajv';
 import yaml from 'js-yaml';
 import { exists, promises as fs } from 'fs';
 
-import { Rule, ScopeName } from '../types';
+import { ScopeName } from '../index';
 import Check from '../check';
 
 import { camelize, capitalize, dasherize, verbose } from '../rules/lib/util';
@@ -18,11 +18,12 @@ import CheckConfig from './types/checkConfig';
 import { URL } from 'url';
 import { promisify } from 'util';
 import { join } from 'path';
+import RuleInstance from '../ruleInstance';
 
 const ajv = new Ajv();
 ajv.addSchema(match_pattern_config_schema);
 
-function loadFromFile(ruleName: string): () => Promise<Rule | undefined> {
+function loadFromFile(ruleName: string): () => Promise<RuleInstance | undefined> {
   return async () => {
     let ruleSpec;
     try {
@@ -34,10 +35,10 @@ function loadFromFile(ruleName: string): () => Promise<Rule | undefined> {
   };
 }
 
-function loadFromDir(ruleName: string): () => Promise<Rule | undefined> {
+function loadFromDir(ruleName: string): () => Promise<RuleInstance | undefined> {
   return async () => {
     let metadata: Metadata;
-    let rule: Rule['build'];
+    let rule: RuleInstance['build'];
     let options: unknown;
     try {
       metadata = (await import(`../rules/${ruleName}/metadata`)).default;
@@ -81,7 +82,7 @@ function loadFromDir(ruleName: string): () => Promise<Rule | undefined> {
       references,
       Options: options,
       build: rule,
-    } as Rule;
+    } as RuleInstance;
   };
 }
 
@@ -152,9 +153,9 @@ const validate = (validator: ValidateFunction, data: unknown, context: string): 
   }
 };
 
-export async function loadRule(ruleName: string): Promise<Rule> {
+export async function loadRule(ruleName: string): Promise<RuleInstance> {
   const ruleId = dasherize(ruleName);
-  const rules: (Rule | undefined)[] = await Promise.all(
+  const rules: (RuleInstance | undefined)[] = await Promise.all(
     [
       loadFromDir(ruleId),
       loadFromFile(ruleId),

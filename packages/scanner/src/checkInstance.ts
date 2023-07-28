@@ -1,7 +1,8 @@
 import { Event } from '@appland/models';
 import Check from './check';
 import { verbose } from './rules/lib/util';
-import { AppMapIndex, ImpactDomain, RuleLogic, ScopeName } from './types';
+import { AppMapIndex, RuleLogic } from './types';
+import { ImpactDomain, ScopeName } from './index';
 
 export default class CheckInstance {
   check: Check;

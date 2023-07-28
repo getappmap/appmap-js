@@ -2,13 +2,13 @@
 
 import { readFile } from 'fs/promises';
 import { exit } from 'process';
-import { Rule } from '../src/types';
 import { allRules } from './util';
+import RuleInstance from '../src/ruleInstance';
 
 (async function () {
   const noDocRules: string[] = [];
   Promise.all(
-    (await allRules()).map(async (rule: Rule) => {
+    (await allRules()).map(async (rule: RuleInstance) => {
       const name = rule.id;
       const docFileName = `./doc/rules/${name}.md`;
       try {

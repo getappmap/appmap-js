@@ -1,5 +1,5 @@
 import { Event } from '@appland/models';
-import { MatchResult, Rule, RuleLogic, StringFilter } from '../types';
+import { MatchResult, RuleLogic, StringFilter } from '../types';
 import GraphEdge from '../algorithms/dataStructures/graph/GraphEdge';
 import GraphVertex from '../algorithms/dataStructures/graph/GraphVertex';
 import Graph from '../algorithms/dataStructures/graph/Graph';
@@ -11,6 +11,7 @@ import MatchPatternConfig from '../configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
+import RuleInstance from '../ruleInstance';
 
 type PackageName = string;
 
@@ -227,7 +228,7 @@ function build(options: Options): RuleLogic {
   };
 }
 
-export default {
+const RULE: RuleInstance = {
   id: 'circular-dependency',
   title: 'Circular package dependency',
   Options,
@@ -239,4 +240,5 @@ export default {
   description: parseRuleDescription('circularDependency'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#circular-dependency',
   build,
-} as Rule;
+};
+export default RULE;

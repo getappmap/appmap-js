@@ -1,6 +1,7 @@
-import { MatchResult, Rule, RuleLogic } from '../types';
+import { MatchResult, RuleLogic } from '../types';
 import parseRuleDescription from './lib/parseRuleDescription';
 import { Event, EventNavigator, ParameterObject } from '@appland/models';
+import RuleInstance from '../ruleInstance';
 
 export enum Labels {
   SignatureVerify = 'jwt.signature.verify',
@@ -78,7 +79,7 @@ class JwtUnverifiedSignatureLogic implements RuleLogic {
   }
 }
 
-class JwtUnverifiedSignature implements Rule {
+class JwtUnverifiedSignature implements RuleInstance {
   public readonly id = 'jwt-unverified-signature';
   public readonly title = 'Unverified signature';
   public readonly impactDomain = 'Security';

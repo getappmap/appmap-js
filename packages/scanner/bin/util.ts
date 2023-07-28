@@ -1,9 +1,9 @@
 import { lstatSync, readdir } from 'fs';
 import { join } from 'path';
 import { promisify } from 'util';
-import { Rule } from '../src/types';
+import RuleInstance from '../src/ruleInstance';
 
-export async function allRules(): Promise<Rule[]> {
+export async function allRules(): Promise<RuleInstance[]> {
   const fileRules = await Promise.all(
     (await promisify(readdir)('./src/rules'))
       .filter(isRuleFile)

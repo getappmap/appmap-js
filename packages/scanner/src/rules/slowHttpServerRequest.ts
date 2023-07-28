@@ -1,6 +1,7 @@
-import { Rule, RuleLogic } from '../types';
+import { RuleLogic } from '../types';
 import * as types from './types';
 import parseRuleDescription from './lib/parseRuleDescription';
+import RuleInstance from '../ruleInstance';
 
 class Options implements types.SlowHTTPServerRequest.Options {
   public timeAllowed = 1;
@@ -14,7 +15,7 @@ function build(options: Options): RuleLogic {
   };
 }
 
-export default {
+const RULE: RuleInstance = {
   id: 'slow-http-server-request',
   title: 'Slow HTTP server request',
   scope: 'http_server_request',
@@ -24,4 +25,5 @@ export default {
   url: 'https://appland.com/docs/analysis/rules-reference.html#slow-http-server-request',
   Options,
   build,
-} as Rule;
+};
+export default RULE;

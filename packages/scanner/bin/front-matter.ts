@@ -3,8 +3,8 @@
 import { readFile, writeFile } from 'fs/promises';
 import { dump } from 'js-yaml';
 
-import { Rule } from '../src/types';
 import { allRules } from './util';
+import RuleInstance from '../src/ruleInstance';
 
 function toTitleWord(word: string): string {
   if (['http', 'rpc', 'sql'].includes(word.toLowerCase())) {
@@ -36,11 +36,11 @@ async function writeFrontMatter(docFileName: string, frontMatter: any) {
   writeFile(docFileName, newDocBody);
 }
 
-const labelRules: Record<string, Rule[]> = {};
+const labelRules: Record<string, RuleInstance[]> = {};
 
 (async function () {
   Promise.all(
-    (await allRules()).map(async (rule: Rule) => {
+    (await allRules()).map(async (rule: RuleInstance) => {
       (rule.labels || []).forEach((label) => {
         if (!labelRules[label]) labelRules[label] = [];
 

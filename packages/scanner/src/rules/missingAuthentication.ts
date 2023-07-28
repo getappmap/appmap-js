@@ -1,12 +1,13 @@
 import { Event, EventNavigator } from '@appland/models';
 import { rpcRequestForEvent } from '@appland/openapi';
 import * as types from './types';
-import { MatchResult, Rule, RuleLogic, StringFilter } from '../types';
+import { MatchResult, RuleLogic, StringFilter } from '../types';
 import { providesAuthentication } from './lib/util';
 import MatchPatternConfig from '../configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
+import RuleInstance from '../ruleInstance';
 
 function isPublic(event: Event): boolean {
   return event.labels.has(AccessPublic);
@@ -76,7 +77,7 @@ function build(options: Options = new Options()): RuleLogic {
 const AccessPublic = 'access.public';
 const SecurityAuthentication = 'security.authentication';
 
-export default {
+const RULE: RuleInstance = {
   id: 'missing-authentication',
   title: 'Unauthenticated HTTP server request',
   scope: 'http_server_request',
@@ -90,4 +91,5 @@ export default {
   url: 'https://appland.com/docs/analysis/rules-reference.html#missing-authentication',
   Options,
   build,
-} as Rule;
+};
+export default RULE;

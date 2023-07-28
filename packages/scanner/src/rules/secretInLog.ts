@@ -1,10 +1,11 @@
 import { Event } from '@appland/models';
-import { MatchResult, Rule, RuleLogic } from '../types';
+import { MatchResult, RuleLogic } from '../types';
 import SecretsRegexes, { looksSecret } from '../analyzer/secretsRegexes';
 import { emptyValue } from './lib/util';
 import recordSecrets, { Secret } from '../analyzer/recordSecrets';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
+import RuleInstance from '../ruleInstance';
 
 class Match {
   private constructor(
@@ -86,7 +87,7 @@ function build(): RuleLogic {
 const Secret = 'secret';
 const Log = 'log';
 
-export default {
+const RULE: RuleInstance = {
   id: 'secret-in-log',
   title: 'Secret in log',
   labels: [Secret, Log],
@@ -99,4 +100,5 @@ export default {
   description: parseRuleDescription('secretInLog'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#secret-in-log',
   build,
-} as Rule;
+};
+export default RULE;

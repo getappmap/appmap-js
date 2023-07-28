@@ -1,9 +1,10 @@
 import { Event, EventNavigator } from '@appland/models';
 import { URL } from 'url';
-import { MatchResult, Rule, RuleLogic } from '../types';
+import { MatchResult, RuleLogic } from '../types';
 import parseRuleDescription from './lib/parseRuleDescription';
 import precedingEvents from './lib/precedingEvents';
 import sanitizesData from './lib/sanitizesData';
+import RuleInstance from '../ruleInstance';
 
 function allArgumentsSanitized(rootEvent: Event, event: Event): boolean {
   return (event.parameters || [])
@@ -48,7 +49,7 @@ const Exec = 'system.exec';
 const ExecSafe = 'system.exec.safe';
 const ExecSanitize = 'system.exec.sanitize';
 
-export default {
+const RULE: RuleInstance = {
   id: 'exec-of-untrusted-command',
   title: 'Execution of untrusted system command',
   labels: [Exec, ExecSafe, ExecSanitize],
@@ -60,4 +61,5 @@ export default {
   description: parseRuleDescription('execOfUntrustedCommand'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#exec-of-untrusted-command',
   build,
-} as Rule;
+};
+export default RULE;

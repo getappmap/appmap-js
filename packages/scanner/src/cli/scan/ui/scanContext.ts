@@ -5,7 +5,7 @@ import { readFile } from 'fs/promises';
 import AppMapIndex from '../../../appMapIndex';
 import Check from '../../../check';
 import RuleChecker from '../../../ruleChecker';
-import { Finding } from '../../../types';
+import { Finding } from '../../../index';
 import { Breakpoint } from '../breakpoint';
 import InteractiveProgress from './interactiveProgess';
 

@@ -1,6 +1,7 @@
-import { Rule, RuleLogic } from '../types';
+import { RuleLogic } from '../types';
 import * as types from './types';
 import parseRuleDescription from './lib/parseRuleDescription';
+import RuleInstance from '../ruleInstance';
 
 class Options implements types.SlowQuery.Options {
   public timeAllowed = 1;
@@ -13,7 +14,7 @@ function build(options: Options = new Options()): RuleLogic {
   };
 }
 
-export default {
+const RULE: RuleInstance = {
   id: 'slow-query',
   title: 'Slow SQL query',
   Options,
@@ -22,4 +23,5 @@ export default {
   description: parseRuleDescription('slowQuery'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#slow-query',
   build,
-} as Rule;
+};
+export default RULE;

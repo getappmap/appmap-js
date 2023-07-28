@@ -1,8 +1,9 @@
 import { Event } from '@appland/models';
-import { Rule, RuleLogic } from '../types';
+import { RuleLogic } from '../types';
 import { toRegExpArray } from './lib/util';
 import parseRuleDescription from './lib/parseRuleDescription';
 import assert from 'assert';
+import RuleInstance from '../ruleInstance';
 
 class Options {
   private _queryInclude: RegExp[];
@@ -70,7 +71,7 @@ function build(options: Options = new Options()): RuleLogic {
 
 const Audit = 'audit';
 
-export default {
+const RULE: RuleInstance = {
   id: 'update-in-get-request',
   title: 'Data update performed in GET or HEAD request',
   scope: 'http_server_request',
@@ -81,4 +82,5 @@ export default {
   url: 'https://appland.com/docs/analysis/rules-reference.html#update-in-get-request',
   Options,
   build,
-} as Rule;
+};
+export default RULE;

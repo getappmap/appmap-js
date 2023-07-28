@@ -1,6 +1,8 @@
 import { Event } from '@appland/models';
 import { verbose } from './rules/lib/util';
-import { AppMapIndex, EventFilter, ImpactDomain, Rule, ScopeName } from './types';
+import { ImpactDomain, ScopeName } from './index';
+import { AppMapIndex, EventFilter } from './types';
+import RuleInstance from './ruleInstance';
 
 export default class Check {
   public id: string;
@@ -12,7 +14,7 @@ export default class Check {
   public includeEvent: EventFilter[];
   public excludeEvent: EventFilter[];
 
-  constructor(public rule: Rule, options?: Record<string, unknown>) {
+  constructor(public rule: RuleInstance, options?: Record<string, unknown>) {
     function makeOptions() {
       return rule.Options ? new rule.Options() : {};
     }

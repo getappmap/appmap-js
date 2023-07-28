@@ -1,8 +1,9 @@
-import { Rule, RuleLogic } from '../types';
+import { RuleLogic } from '../types';
 import * as types from './types';
 import MatchPatternConfig from '../configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
 import parseRuleDescription from './lib/parseRuleDescription';
+import RuleInstance from '../ruleInstance';
 
 class Options implements types.SlowFunctionCall.Options {
   public functions: MatchPatternConfig[] = [];
@@ -28,7 +29,7 @@ function build(options: Options): RuleLogic {
   };
 }
 
-export default {
+const RULE: RuleInstance = {
   id: 'slow-function-call',
   title: 'Slow function call',
   impactDomain: 'Performance',
@@ -37,4 +38,5 @@ export default {
   url: 'https://appland.com/docs/analysis/rules-reference.html#slow-function-call',
   Options,
   build,
-} as Rule;
+};
+export default RULE;

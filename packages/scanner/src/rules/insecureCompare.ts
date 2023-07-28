@@ -2,8 +2,9 @@ import { Event } from '@appland/models';
 import { URL } from 'url';
 import recordSecrets, { Secret } from '../analyzer/recordSecrets';
 import { looksSecret } from '../analyzer/secretsRegexes';
-import { Rule, RuleLogic } from '../types.d';
+import { RuleLogic } from '../types.d';
 import parseRuleDescription from './lib/parseRuleDescription';
+import RuleInstance from '../ruleInstance';
 
 const BCRYPT_REGEXP = /^[$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][./0-9a-zA-Z]{53}$/;
 
@@ -59,7 +60,7 @@ function build(): RuleLogic {
 const Secret = 'secret';
 const StringEquals = 'string.equals';
 
-export default {
+const RULE: RuleInstance = {
   id: 'insecure-compare',
   title: 'Insecure comparison of secrets',
   labels: [Secret, StringEquals],
@@ -71,4 +72,5 @@ export default {
   description: parseRuleDescription('insecureCompare'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#insecure-compare',
   build,
-} as Rule;
+};
+export default RULE;

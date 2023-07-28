@@ -1,0 +1,144 @@
+import LRUCache from 'lru-cache';
+import assert from 'assert';
+import { readFile } from 'fs/promises';
+import { warn } from 'console';
+import { buildAppMap } from '@appland/models';
+
+import { loadConfig, parseConfigFile } from './configuration/configurationProvider';
+import Configuration from './configuration/types/configuration';
+import { default as CheckImpl } from './check';
+import { verbose } from './rules/lib/util';
+import RuleChecker from './ruleChecker';
+import { AppMap, Event } from '@appland/models';
+import { MatchResult } from './types';
+import { Finding, ScanResults, ScopeName } from './index';
+import ProgressReporter from './progressReporter';
+import AppMapIndex from './appMapIndex';
+
+const ConfigurationByFileName = new LRUCache<string, Configuration>({ max: 10 });
+const ChecksByFileName = new LRUCache<string, CheckImpl[]>({ max: 10 });
+
+class StatsProgressReporter implements ProgressReporter {
+  checkStartTime?: Date;
+  ruleId?: string;
+
+  parseTime = new Array<number>();
+  elapsedByRuleId = new Map<string, number[]>();
+
+  printSummary() {
+    const keys = Array.from(this.elapsedByRuleId.keys()).sort();
+    console.warn(
+      `Average parse time: ${
+        this.parseTime.reduce((memo, val) => memo + val, 0) / this.parseTime.length
+      }ms`
+    );
+    for (const key of keys) {
+      const elapsed = this.elapsedByRuleId.get(key)!;
+      const average = elapsed.reduce((memo, val) => memo + val, 0) / elapsed.length;
+      console.warn(`Average check time for ${key}: ${average}ms`);
+    }
+  }
+
+  addParseTime(elapsed: number) {
+    this.parseTime.push(elapsed);
+  }
+
+  async beginAppMap(appMapFileName: string, appMap: AppMap) {}
+  async beginCheck(check: CheckImpl) {
+    this.ruleId = check.rule.id;
+    this.checkStartTime = new Date();
+  }
+  async filterScope(scopeName: ScopeName, scope: Event) {}
+  async enterScope(scope: Event) {}
+  async filterEvent(event: Event) {}
+  async matchResult(event: Event, matchResult: string | boolean | MatchResult[] | undefined) {}
+  async matchEvent(event: Event, appMapIndex: AppMapIndex) {}
+  async leaveScope() {}
+  async endCheck() {
+    assert(this.ruleId);
+    assert(this.checkStartTime);
+    const checkEndTime = new Date();
+    const elapsed = checkEndTime.getTime() - this.checkStartTime!.getTime();
+    if (!this.elapsedByRuleId.has(this.ruleId)) this.elapsedByRuleId.set(this.ruleId, []);
+    this.elapsedByRuleId.get(this.ruleId)!.push(elapsed);
+  }
+  async endAppMap() {}
+}
+
+const STATS_REPORTER = new StatsProgressReporter();
+
+process.on('exit', () => {
+  STATS_REPORTER.printSummary();
+});
+
+setInterval(() => STATS_REPORTER.printSummary(), 3000);
+
+/**
+ * Perform all configured checks on a single AppMap file.
+ */
+export default async function scan(
+  appmapFile: string,
+  configurationFile: string
+): Promise<ScanResults> {
+  let configuration = ConfigurationByFileName.get(configurationFile);
+  if (!configuration) {
+    if (verbose()) warn(`Loading configuration from ${configurationFile}`);
+    configuration = await parseConfigFile(configurationFile);
+    ConfigurationByFileName.set(configurationFile, configuration);
+  }
+
+  let checks = ChecksByFileName.get(configurationFile);
+  if (!checks) {
+    if (verbose()) warn(`Loading checks from ${configurationFile}`);
+    checks = await loadConfig(configuration);
+    ChecksByFileName.set(configurationFile, checks);
+  }
+
+  const checker = new RuleChecker(STATS_REPORTER);
+
+  const findings: Finding[] = [];
+
+  const startTime = new Date();
+  const appMapData = await readFile(appmapFile, 'utf8');
+  const appMap = buildAppMap(appMapData).normalize().build();
+  const parseTime = new Date();
+  STATS_REPORTER.addParseTime(parseTime.getTime() - startTime.getTime());
+  console.warn(`Event count: ${appMap.events.length}`);
+  console.warn(`Parse time: ${parseTime.getTime() - startTime.getTime()}ms`);
+  const appMapIndex = new AppMapIndex(appMap);
+
+  for (const check of checks) {
+    await STATS_REPORTER.beginCheck(check);
+    await checker.check(appmapFile, appMapIndex, check, findings);
+    await STATS_REPORTER.endCheck();
+  }
+
+  const scanTime = new Date();
+  console.warn(`Scan time: ${scanTime.getTime() - parseTime.getTime()}ms`);
+
+  // Rules: Distinct set of Rules for which a Check is configured
+  const ruleIds = [...new Set<string>(checks.map((check) => check.rule.id))].sort();
+  const rules = ruleIds.map((ruleId) => {
+    assert(checks);
+    const check = checks.find((check) => check.rule.id === ruleId)!;
+    assert(check);
+    return {
+      id: ruleId,
+      title: check.rule.title,
+      description: check.rule.description,
+      url: check.rule.url,
+      labels: check.rule.labels || [],
+      scope: check.rule.scope,
+      enumerateScope: check.rule.enumerateScope,
+      impactDomain: check.rule.impactDomain,
+      references: check.rule.references || {},
+    };
+  });
+
+  return {
+    configuration,
+    appMapMetadata: { appmapFile: appMap.metadata },
+    findings,
+    rules,
+  };
+}
