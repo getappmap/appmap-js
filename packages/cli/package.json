@@ -14,7 +14,7 @@
     "lint": "eslint 'src/**/*.js' 'tests/**/*.js'",
     "lint:fix": "eslint 'src/**/*.js' 'tests/**/*.js' --fix",
     "pre-commit": "lint-staged",
-    "test": "appmap-agent-js && jest -t @appmap-fixme",
+    "test": "jest --filter=./tests/testFilter.js",
     "jest": "jest --filter=./tests/testFilter.js",
     "build": "tsc && yarn build:html",
     "watch": "tsc --watch",
