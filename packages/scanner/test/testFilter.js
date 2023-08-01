@@ -5,7 +5,7 @@ function filterTests(testPath) {
     return true;
   }
 
-  return FILTERED_TESTS.some((filteredTest) => !testPath.includes(filteredTest));
+  return FILTERED_TESTS.every((filteredTest) => !testPath.includes(filteredTest));
 }
 
 module.exports = (testPaths) => {
