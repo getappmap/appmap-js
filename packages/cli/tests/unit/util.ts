@@ -3,6 +3,7 @@ import Fingerprinter from '../../src/fingerprint/fingerprinter';
 import { CodeObject, CodeObjectMatch } from '../../src/search/types';
 import { listAppMapFiles, verbose } from '../../src/utils';
 import path from 'path';
+import { exec } from 'child_process';
 
 if (process.env.DEBUG) {
   verbose(true);
@@ -27,4 +28,28 @@ export async function indexDirectory(dir: string): Promise<void> {
     utimesSync(fileName, now, now);
     await fingerprinter.fingerprint(fileName);
   });
+}
+
+async function executeWorkspaceOSCommand(cmd: string, workingDirectory: string): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    exec(cmd, { cwd: workingDirectory }, (err, stdout, stderr) => {
+      if (err) {
+        console.log(stdout);
+        console.warn(stderr);
+        return reject(err);
+      }
+      resolve();
+    });
+  });
+}
+
+export async function cleanProject(workingDirectory: string) {
+  const commands = [`git checkout HEAD .`, `git clean -f -d .`];
+  for (const command of commands) {
+    try {
+      await executeWorkspaceOSCommand(command, workingDirectory);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 }
