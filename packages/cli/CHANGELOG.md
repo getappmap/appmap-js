@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.83.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.82.1...@appland/appmap-v3.83.0) (2023-08-01)
+
+
+### Features
+
+* archive command ([9064e7c](https://github.com/getappmap/appmap-js/commit/9064e7c654c9a1c63c525a9a408c2b02f110e8e4))
+* include exceptions in the index ([252cc12](https://github.com/getappmap/appmap-js/commit/252cc12c97c50d436c8c09366f1b796f89457198))
+
 # [@appland/appmap-v3.82.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.82.0...@appland/appmap-v3.82.1) (2023-07-20)
 
 
