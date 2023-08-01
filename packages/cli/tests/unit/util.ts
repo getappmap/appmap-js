@@ -2,10 +2,13 @@ import { utimesSync } from 'fs';
 import Fingerprinter from '../../src/fingerprint/fingerprinter';
 import { CodeObject, CodeObjectMatch } from '../../src/search/types';
 import { listAppMapFiles, verbose } from '../../src/utils';
+import path from 'path';
 
 if (process.env.DEBUG) {
   verbose(true);
 }
+
+export const fixtureDir = path.join(__dirname, 'fixtures');
 
 export function stripCodeObjectParents(codeObjectMatches: CodeObjectMatch[]): CodeObjectMatch[] {
   const strip = (codeObject: CodeObject): void => {
