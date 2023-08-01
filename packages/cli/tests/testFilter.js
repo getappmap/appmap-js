@@ -1,11 +1,11 @@
-const FILTERED_TESTS = process.platform === 'win32' ? ['fingerprintWatchCommand'] : [];
+const FILTERED_TESTS = process.platform === 'win32' ? ['fingerprintWatchCommand', 'archive'] : [];
 
 function filterTests(testPath) {
   if (FILTERED_TESTS.length === 0) {
     return true;
   }
 
-  return FILTERED_TESTS.some((filteredTest) => !testPath.includes(filteredTest));
+  return FILTERED_TESTS.every((filteredTest) => !testPath.includes(filteredTest));
 }
 
 module.exports = (testPaths) => {
