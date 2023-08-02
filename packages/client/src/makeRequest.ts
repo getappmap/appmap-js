@@ -1,6 +1,7 @@
 import { IncomingHttpHeaders } from 'http';
 import buildRequest from './buildRequest';
 import { RetryOptions } from './retryOptions';
+import { ServiceEndpoint } from './configuration';
 
 export const RetryCondition = Object.freeze({
   Timeout(_response?: Response, error?: unknown) {
@@ -23,6 +24,7 @@ export interface Response {
 }
 
 export interface RequestOptions {
+  readonly service?: ServiceEndpoint;
   readonly path: string;
   readonly method?: string;
   readonly query?: ReadonlyArray<[string, string]>;
@@ -63,7 +65,10 @@ function performRequest(options: RequestOptions): Promise<Response> {
     query = `?${searchParameters.toString()}`;
   }
 
-  const requestBuilder = buildRequest(requestOptions.path + query, requestOptions.authenticate);
+  const requestBuilder = buildRequest(requestOptions.path + query, {
+    service: options.service || ServiceEndpoint.AppLandApi,
+    requireApiKey: requestOptions.authenticate,
+  });
   return new Promise((resolve, reject) => {
     let bodyContent = '';
     const additionalHeaders = {};
@@ -89,7 +94,7 @@ function performRequest(options: RequestOptions): Promise<Response> {
     const request = requestBuilder.requestFunction(
       requestBuilder.url,
       {
-        headers: { ...additionalHeaders, ...requestOptions.headers },
+        headers: { ...additionalHeaders, ...requestOptions.headers, ...requestBuilder.headers },
         method: requestOptions.method,
       },
       (response) => {

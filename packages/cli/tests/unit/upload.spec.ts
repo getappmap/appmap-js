@@ -125,7 +125,9 @@ beforeEach(() => {
   jest.spyOn(appNameFromConfig, 'appNameFromConfig').mockResolvedValue('sample_app_6th_ed');
 
   const idsIter = mapIds[Symbol.iterator]();
-  jest.mocked(client.loadConfiguration).mockReturnValue({ baseURL: 'https://appmap.test' });
+  jest
+    .mocked(client.loadConfiguration)
+    .mockReturnValue({ baseURL: 'https://appmap.test', apiURL: 'https://appmap-api.test' });
 
   AppMap.create.mockImplementation(async () => ({ uuid: idsIter.next().value }));
   Mapset.create.mockResolvedValue({
