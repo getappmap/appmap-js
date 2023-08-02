@@ -2,6 +2,7 @@ import { request as httpRequest, ClientRequest, RequestOptions, IncomingMessage 
 import { request as httpsRequest } from 'https';
 import { URL } from 'url';
 import loadConfiguration from './loadConfiguration';
+import { ServiceEndpoint, getServiceUrl } from './configuration';
 
 export type Request = {
   requestFunction: (
@@ -13,16 +14,24 @@ export type Request = {
   headers: Record<string, string>;
 };
 
-export default function buildRequest(requestPath: string, requireApiKey = true): Request {
-  const configuration = loadConfiguration(requireApiKey);
-  const url = new URL([configuration.baseURL, requestPath].join('/'));
+export interface BuildRequestOptions {
+  readonly requireApiKey?: boolean;
+  readonly service?: ServiceEndpoint;
+}
+
+export default function buildRequest(
+  requestPath: string,
+  options: BuildRequestOptions = {}
+): Request {
+  const configuration = loadConfiguration(options.requireApiKey);
+  const serviceUrl = getServiceUrl(configuration, options.service || ServiceEndpoint.AppLandApi);
+  const url = new URL(requestPath, serviceUrl);
   const requestFunction = url.protocol === 'https:' ? httpsRequest : httpRequest;
-  const headers = {
+  const headers: Record<string, string> = {
     Accept: 'application/json',
   };
   if (configuration.apiKey) {
-    // eslint-disable-next-line @typescript-eslint/dot-notation
-    headers['Authorization'] = `Bearer ${configuration.apiKey}`;
+    headers.authorization = `Bearer ${configuration.apiKey}`;
   }
 
   return { requestFunction, url, headers };

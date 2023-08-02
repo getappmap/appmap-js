@@ -1,15 +1,21 @@
 import Configuration from './configuration';
 
 export const DefaultURL = 'https://app.land';
+export const DefaultApiURL = 'https://api.getappmap.com';
 
 class Settings {
   baseURL = DefaultURL;
+  apiURL = DefaultApiURL;
   apiKey?: string;
 }
 
 function loadFromEnvironment(): Settings {
   const settings = new Settings();
 
+  ['APPLAND_API_URL', 'APPMAP_API_URL'].forEach((key) => {
+    const value = process.env[key];
+    if (value) settings.apiURL = value;
+  });
   ['APPLAND_URL', 'APPMAP_URL'].forEach((key) => {
     const value = process.env[key];
     if (value) settings.baseURL = value;
@@ -40,6 +46,6 @@ export default function loadConfiguration(requireApiKey = true): Configuration {
     );
   }
 
-  configuration = { baseURL: settings.baseURL, apiKey: settings.apiKey };
+  configuration = { baseURL: settings.baseURL, apiURL: settings.apiURL, apiKey: settings.apiKey };
   return configuration;
 }

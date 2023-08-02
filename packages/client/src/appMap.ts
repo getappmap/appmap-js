@@ -96,7 +96,9 @@ export default class AppMap {
       if (options.public) {
         form.append('link_sharing', 'true');
       }
-      const request = await buildRequest(performOptions.path, performOptions.requireApiKey);
+      const request = buildRequest(performOptions.path, {
+        requireApiKey: performOptions.requireApiKey,
+      });
       return new Promise<IncomingMessage>((resolve, reject) => {
         const interaction = request.requestFunction(
           request.url,
