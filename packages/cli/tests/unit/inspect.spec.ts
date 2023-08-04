@@ -23,7 +23,7 @@ describe('Inspect', () => {
       JSON.stringify(
         [
           {
-            appmap: `${appMapDir}/revoke_api_key`,
+            appmap: join(appMapDir, 'revoke_api_key'),
             codeObject: {
               name: 'issue',
               type: 'function',
@@ -47,7 +47,7 @@ describe('Inspect', () => {
       JSON.stringify(
         [
           {
-            appmap: `${appMapDir}/revoke_api_key`,
+            appmap: join(appMapDir, 'revoke_api_key'),
             codeObject: {
               name: 'ApiKey',
               type: 'class',
@@ -70,7 +70,7 @@ describe('Inspect', () => {
       JSON.stringify(
         [
           {
-            appmap: `${appMapDir}/revoke_api_key`,
+            appmap: join(appMapDir, 'revoke_api_key'),
             codeObject: {
               name: 'app/models',
               type: 'package',
@@ -78,7 +78,7 @@ describe('Inspect', () => {
             },
           },
           {
-            appmap: `${appMapDir}/user_page_scenario`,
+            appmap: join(appMapDir, 'user_page_scenario'),
             codeObject: {
               name: 'app/models',
               type: 'package',

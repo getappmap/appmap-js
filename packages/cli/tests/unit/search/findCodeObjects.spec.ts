@@ -23,7 +23,7 @@ describe('FindCodeObjects', () => {
       JSON.stringify(
         [
           {
-            appmap: `${appMapDir}/checkout_update_payment`,
+            appmap: join(appMapDir, 'checkout_update_payment'),
             codeObject: {
               type: 'external-service',
               name: 'api.stripe.com',
@@ -43,7 +43,7 @@ describe('FindCodeObjects', () => {
       JSON.stringify(
         [
           {
-            appmap: `${appMapDir}/checkout_update_payment`,
+            appmap: join(appMapDir, 'checkout_update_payment'),
             codeObject: {
               type: 'external-route',
               name: 'POST https://api.stripe.com/v1/customers',
