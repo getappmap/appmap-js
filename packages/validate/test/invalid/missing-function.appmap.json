@@ -1,0 +1,136 @@
+{
+  "version": "1.8.0",
+  "metadata": {
+    "name": "main",
+    "labels": [],
+    "language": {
+      "name": "javascript",
+      "version": "ES.Next",
+      "engine": "node@18.16.0"
+    },
+    "frameworks": [],
+    "client": {
+      "name": "@appland/appmap-agent-js",
+      "version": "13.9.0",
+      "url": "https://github.com/getappmap/appmap-agent-js.git/#readme"
+    },
+    "recorder": {
+      "name": "process"
+    }
+  },
+  "classMap": [
+    {
+      "type": "package",
+      "name": ".",
+      "children": [
+        {
+          "type": "class",
+          "name": "main",
+          "children": [
+            {
+              "type": "function",
+              "name": "mainAsync",
+              "static": false,
+              "location": "./main.mjs:4",
+              "source": null,
+              "comment": null,
+              "labels": []
+            },
+            {
+              "type": "class",
+              "name": "mainAsync",
+              "children": [
+                {
+                  "type": "function",
+                  "name": "promiseCallback",
+                  "static": false,
+                  "location": "./main.mjs:6",
+                  "source": null,
+                  "comment": null,
+                  "labels": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "event": "call",
+      "thread_id": 0,
+      "id": 1,
+      "path": "./main.mjs#0",
+      "lineno": 4,
+      "defined_class": "main",
+      "static": false,
+      "method_id": "mainAsync",
+      "receiver": {
+        "name": "this",
+        "class": "undefined",
+        "value": "undefined"
+      },
+      "parameters": [
+        {
+          "name": "x",
+          "class": "number",
+          "value": "123"
+        }
+      ]
+    },
+    {
+      "event": "call",
+      "thread_id": 0,
+      "id": 2,
+      "path": "./main.mjs#0",
+      "lineno": 6,
+      "defined_class": "mainAsync",
+      "static": false,
+      "method_id": "promiseCallback",
+      "receiver": {
+        "name": "this",
+        "class": "undefined",
+        "value": "undefined"
+      },
+      "parameters": [
+        {
+          "name": "resolve",
+          "class": "Function",
+          "object_id": 1,
+          "value": "(...) => { ... }"
+        },
+        {
+          "name": "_reject",
+          "class": "Function",
+          "object_id": 2,
+          "value": "(...) => { ... }"
+        }
+      ]
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 3,
+      "parent_id": 2,
+      "elapsed": 0.00009300000000000352,
+      "return_value": {
+        "name": "return",
+        "class": "undefined",
+        "value": "undefined"
+      }
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 4,
+      "parent_id": 1,
+      "elapsed": 0.00026900000000000545,
+      "return_value": {
+        "name": "return",
+        "class": "number",
+        "value": "456"
+      }
+    }
+  ]
+}
