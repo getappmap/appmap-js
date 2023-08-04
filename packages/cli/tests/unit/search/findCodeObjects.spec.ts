@@ -1,9 +1,7 @@
-import { copySync } from 'fs-extra';
 import { copyFile } from 'fs/promises';
 import { basename, join } from 'path';
 import tmp from 'tmp';
 import FindCodeObjects from '../../../src/search/findCodeObjects';
-import { verbose } from '../../../src/utils';
 import { indexDirectory, stripCodeObjectParents } from '../util';
 
 const checkoutDataFile = join(
@@ -25,7 +23,7 @@ describe('FindCodeObjects', () => {
       JSON.stringify(
         [
           {
-            appmap: `${appMapDir}/checkout_update_payment`,
+            appmap: join(appMapDir, 'checkout_update_payment'),
             codeObject: {
               type: 'external-service',
               name: 'api.stripe.com',
@@ -45,7 +43,7 @@ describe('FindCodeObjects', () => {
       JSON.stringify(
         [
           {
-            appmap: `${appMapDir}/checkout_update_payment`,
+            appmap: join(appMapDir, 'checkout_update_payment'),
             codeObject: {
               type: 'external-route',
               name: 'POST https://api.stripe.com/v1/customers',

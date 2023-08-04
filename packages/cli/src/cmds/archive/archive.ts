@@ -11,9 +11,8 @@ import { VERSION as IndexVersion } from '../../fingerprint/fingerprinter';
 import chalk from 'chalk';
 import gitRevision from './gitRevision';
 import { ArchiveMetadata } from './ArchiveMetadata';
-import { serializeAppMapFilter } from './serializeAppMapFilter';
-import { deserializeFilter } from '@appland/models';
 import analyze from './analyze';
+import parseFilterArgs from './parseFilterArgs';
 
 // ## 1.3.0
 //
@@ -88,6 +87,12 @@ commit of the current git revision may not be the one that triggered the build.`
     default: DefaultMaxAppMapSizeInMB,
   });
 
+  args.option('filter', {
+    describe: 'filter to apply to AppMaps when normalizing them into sequence diagrams',
+    type: 'string',
+    multiple: true,
+  });
+
   return args.strict();
 };
 
@@ -99,18 +104,6 @@ export const handler = async (argv: any) => {
       `Note: The AppMap archive won't contain the version of @appland/appmap because process.env.npm_package_version is not available.`
     );
 
-  handleWorkingDirectory(argv.directory);
-  const workingDirectory = process.cwd();
-
-  const appmapConfig = await loadAppMapConfig();
-  if (!appmapConfig) throw new Error(`Unable to load appmap.yml config file`);
-
-  const suppliedAppMapDir = await locateAppMapDir();
-  const appMapDir = resolve(workingDirectory, suppliedAppMapDir);
-
-  const compareConfig = appmapConfig.compare;
-  const appMapFilter = deserializeFilter(compareConfig?.filter);
-
   const {
     maxSize,
     analyze: doAnalyze,
@@ -118,7 +111,22 @@ export const handler = async (argv: any) => {
     revision: revisionArg,
     outputFile: outputFileNameArg,
     outputDir: outputDirArg,
+    filter: filterArg,
   } = argv;
+
+  handleWorkingDirectory(argv.directory);
+  const workingDirectory = process.cwd();
+
+  const appmapConfig = await loadAppMapConfig();
+  if (!appmapConfig) throw new Error(`Unable to load appmap.yml config file`);
+
+  const appMapDir = await locateAppMapDir();
+
+  const compareConfig = appmapConfig.compare;
+  const compareFilter = compareConfig?.filter || {};
+
+  if (filterArg)
+    parseFilterArgs(compareFilter, typeof filterArg === 'string' ? [filterArg] : filterArg);
 
   const maxAppMapSizeInBytes = Math.round(parseFloat(maxSize) * 1024 * 1024);
 
@@ -132,7 +140,7 @@ export const handler = async (argv: any) => {
 
   let oversizedAppMaps: string[] | undefined;
   if (doAnalyze) {
-    const analyzeResult = await analyze(maxAppMapSizeInBytes, appMapFilter, appMapDir);
+    const analyzeResult = await analyze(maxAppMapSizeInBytes, compareFilter, appMapDir);
     oversizedAppMaps = analyzeResult.oversizedAppMaps;
   }
 
@@ -147,7 +155,6 @@ export const handler = async (argv: any) => {
     timestamp: Date.now().toString(),
     oversizedAppMaps,
     config: appmapConfig,
-    appMapFilter: serializeAppMapFilter(appMapFilter),
   };
 
   let type: string;

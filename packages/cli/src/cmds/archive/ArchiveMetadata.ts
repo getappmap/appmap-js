@@ -1,4 +1,4 @@
-import { AppMapConfig } from '../../lib/loadAppMapConfig';
+import { AppMapConfig, CompareFilter } from '../../lib/loadAppMapConfig';
 
 export type ArchiveMetadata = {
   versions: Record<'archive' | 'index' | string, string>;
@@ -11,5 +11,4 @@ export type ArchiveMetadata = {
   oversizedAppMaps?: string[];
   deletedAppMaps?: string[];
   config: AppMapConfig;
-  appMapFilter: Record<string, any>;
 };

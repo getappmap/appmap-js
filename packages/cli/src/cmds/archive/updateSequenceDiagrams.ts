@@ -1,4 +1,4 @@
-import { AppMapFilter, buildAppMap } from '@appland/models';
+import { buildAppMap } from '@appland/models';
 import {
   buildDiagram,
   format,
@@ -8,15 +8,17 @@ import {
 } from '@appland/sequence-diagram';
 import { readFile, stat, writeFile } from 'fs/promises';
 import { basename, dirname, join } from 'path';
-import { processFiles } from '../../utils';
+import { ProcessFileOptions, processFiles } from '../../utils';
 import FileTooLargeError from '../../fingerprint/fileTooLargeError';
 import { CountNumProcessed } from './CountNumProcessed';
 import reportAppMapProcessingError from './reportAppMapProcessingError';
+import buildFilter, { Language } from './buildFilter';
+import { CompareFilter } from '../../lib/loadAppMapConfig';
 
 export default async function updateSequenceDiagrams(
   dir: string,
   maxAppMapSizeInBytes: number,
-  filter: AppMapFilter
+  compareFilter: CompareFilter
 ): Promise<{ numGenerated: number; oversizedAppMaps: string[] }> {
   const specOptions = {
     loops: true,
@@ -35,6 +37,9 @@ export default async function updateSequenceDiagrams(
     const fullAppMap = buildAppMap()
       .source(await readFile(appmapFileName, 'utf8'))
       .build();
+
+    const language = fullAppMap.metadata?.language?.name || 'unknown';
+    const filter = buildFilter(language as Language, compareFilter);
     const filteredAppMap = filter.filter(fullAppMap, []);
     const specification = Specification.build(filteredAppMap, specOptions);
     const diagram = buildDiagram(appmapFileName, filteredAppMap, specification);
@@ -45,12 +50,10 @@ export default async function updateSequenceDiagrams(
   };
 
   const counter = new CountNumProcessed();
-  await processFiles(
-    join(dir, '**', '*.appmap.json'),
-    generateDiagram,
-    counter.setCount(),
-    reportAppMapProcessingError('Sequence diagram')
-  );
+  const options = new ProcessFileOptions(dir);
+  options.fileCountFn = counter.setCount();
+  options.errorFn = reportAppMapProcessingError('Sequence diagram');
+  await processFiles('**/*.appmap.json', generateDiagram, options);
 
   return { numGenerated: counter.count, oversizedAppMaps };
 }
