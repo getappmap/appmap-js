@@ -29,7 +29,6 @@ describe('archive command', () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    process.chdir(originalWorkingDir);
     // Currently, scanning takes too long for these tests, so we'll stub it
     sandbox.stub(scanFile, 'scan').resolves();
   });
@@ -56,7 +55,7 @@ describe('archive command', () => {
     it('creates the expectecd appmap_archive.json', async () => {
       const expectedArchive = {
         workingDirectory: rubyFixturePath,
-        appMapDir: rubyFixturePath,
+        appMapDir: '.',
         commandArguments: {
           directory: rubyFixturePath,
           analyze: true,
@@ -94,7 +93,7 @@ describe('archive command', () => {
   it('fails when no appmaps are found', async () => {
     let err = {} as Error;
     try {
-      await handler({});
+      await handler({ directory: 'no/such/dir' });
     } catch (e) {
       err = e as Error;
     }
@@ -142,9 +141,7 @@ describe('archive command', () => {
 
     assert(existsSync(appmapArchiveJsonPath));
     const archive = JSON.parse(String(readFileSync(appmapArchiveJsonPath)));
-    const expectedOversized = ['revoke_api_key.appmap.json', 'user_page_scenario.appmap.json'].map(
-      (appmapName) => path.join(rubyFixturePath, appmapName)
-    );
-    assert.deepEqual(archive.oversizedAppMaps, expectedOversized);
+    const expectedOversized = ['revoke_api_key.appmap.json', 'user_page_scenario.appmap.json'];
+    assert.deepEqual(archive.oversizedAppMaps.sort(), expectedOversized);
   });
 });

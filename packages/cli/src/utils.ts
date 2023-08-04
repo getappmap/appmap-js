@@ -1,12 +1,12 @@
 import { constants as fsConstants, PathLike, promises as fsp, Stats } from 'fs';
 import gracefulFs from 'graceful-fs';
 import { AsyncWorker, queue } from 'async';
-import glob from 'glob';
 import { promisify } from 'util';
-import { join } from 'path';
-import assert, { match } from 'assert';
+import { isAbsolute, join } from 'path';
+import assert from 'assert';
 import { Event, ReturnValueObject } from '@appland/models';
 import { readdir, stat } from 'fs/promises';
+import { IOptions, glob } from 'glob';
 
 const StartTime = Date.now();
 const renameFile = promisify(gracefulFs.rename);
@@ -83,6 +83,16 @@ export async function writeFileAtomic(
   await renameFile(tempFilePath, join(dirName, fileName));
 }
 
+export class ProcessFileOptions {
+  public fileCountFn = (_count: number) => {};
+  public errorFn = (err: Error) => {
+    process.stderr.write(err.toString() + '\n');
+  };
+  public workerCount = 2;
+
+  constructor(public root: string) {}
+}
+
 /**
  * Call a function with each matching file. No guarantee is given that
  * files will be processed in any particular order.
@@ -90,20 +100,22 @@ export async function writeFileAtomic(
 export async function processFiles(
   pattern: string,
   fn: AsyncWorker<string>,
-  fileCountFn = (_count: number) => {},
-  errorFn = (err: Error) => {
-    process.stderr.write(err.toString() + '\n');
-  },
-  workerCount = 2
+  options: ProcessFileOptions
 ): Promise<void> {
-  const files = await promisify(glob)(pattern);
-  if (fileCountFn) {
-    fileCountFn(files.length);
+  // cwd is explicitly required; the doc says that process.cwd() is used by default, but I am not
+  // seeing that to be the case.
+  const globOptions: IOptions = {};
+  if (isAbsolute(options.root)) {
+    globOptions.cwd = options.root;
+  } else {
+    globOptions.cwd = join(process.cwd(), options.root);
   }
+  const files = (await promisify(glob)(pattern, globOptions)).map((f) => join(options.root, f));
+  options.fileCountFn(files.length);
   if (files.length === 0) return;
 
-  const q = queue(fn, workerCount);
-  q.error(errorFn);
+  const q = queue(fn, options.workerCount);
+  q.error(options.errorFn);
   files.forEach((file) => q.push(file));
   if (!q.idle()) await q.drain();
 }
@@ -168,11 +180,15 @@ export async function listAppMapFiles(
     console.warn(`Scanning ${directory} for AppMaps`);
   }
 
-  const opts = {
-    strict: false,
-    silent: !printDebug,
-  };
-  await Promise.all((await promisify(glob)(`${directory}/**/*.appmap.json`, opts)).map(fn));
+  const options: IOptions = { debug: printDebug };
+  if (isAbsolute(directory)) {
+    options.cwd = directory;
+  } else {
+    options.cwd = join(process.cwd(), directory);
+  }
+  await Promise.all(
+    (await promisify(glob)('**/*.appmap.json', options)).map((f) => join(directory, f)).map(fn)
+  );
 }
 
 export function exists(path: PathLike): Promise<boolean> {

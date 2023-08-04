@@ -8,7 +8,7 @@ import {
 } from '@appland/sequence-diagram';
 import { readFile, stat, writeFile } from 'fs/promises';
 import { basename, dirname, join } from 'path';
-import { processFiles } from '../../utils';
+import { ProcessFileOptions, processFiles } from '../../utils';
 import FileTooLargeError from '../../fingerprint/fileTooLargeError';
 import { CountNumProcessed } from './CountNumProcessed';
 import reportAppMapProcessingError from './reportAppMapProcessingError';
@@ -50,12 +50,10 @@ export default async function updateSequenceDiagrams(
   };
 
   const counter = new CountNumProcessed();
-  await processFiles(
-    join(dir, '**', '*.appmap.json'),
-    generateDiagram,
-    counter.setCount(),
-    reportAppMapProcessingError('Sequence diagram')
-  );
+  const options = new ProcessFileOptions(dir);
+  options.fileCountFn = counter.setCount();
+  options.errorFn = reportAppMapProcessingError('Sequence diagram');
+  await processFiles('**/*.appmap.json', generateDiagram, options);
 
   return { numGenerated: counter.count, oversizedAppMaps };
 }

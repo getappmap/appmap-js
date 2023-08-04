@@ -1,5 +1,5 @@
 import Fingerprinter from '../../fingerprint/fingerprinter';
-import { processFiles } from '../../utils';
+import { ProcessFileOptions, processFiles } from '../../utils';
 import { CountNumProcessed } from './CountNumProcessed';
 import reportAppMapProcessingError from './reportAppMapProcessingError';
 
@@ -11,11 +11,13 @@ export async function indexAppMaps(
   handler.maxFileSizeInBytes = maxAppMapSizeInBytes;
 
   const counter = new CountNumProcessed();
+  const options = new ProcessFileOptions(appmapDir);
+  options.fileCountFn = counter.setCount();
+  options.errorFn = reportAppMapProcessingError('Index');
   await processFiles(
-    `${appmapDir}/**/*.appmap.json`,
+    '**/*.appmap.json',
     async (appmapFile) => await handler.fingerprint(appmapFile),
-    counter.setCount(),
-    reportAppMapProcessingError('Index')
+    options
   );
 
   return counter.count;

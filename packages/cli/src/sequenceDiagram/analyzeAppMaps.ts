@@ -1,6 +1,6 @@
 import FindCodeObjects from '../search/findCodeObjects';
 import { CodeObject } from '../search/types';
-import { processFiles } from '../utils';
+import { ProcessFileOptions, processFiles } from '../utils';
 import Specification from '@appland/sequence-diagram/dist/specification';
 import Priority from '@appland/sequence-diagram/dist/priority';
 
@@ -78,10 +78,15 @@ export default async function analyzeAppMaps(
       }
     }
   } else {
-    await processFiles(`${appmapDir}/**/*.appmap.json`, (file: string, cb: () => void) => {
-      appmaps?.add(file.slice(0, file.length - '.appmap.json'.length));
-      cb();
-    });
+    const options = new ProcessFileOptions(appmapDir);
+    await processFiles(
+      '**/*.appmap.json',
+      (file: string, cb: () => void) => {
+        appmaps?.add(file.slice(0, file.length - '.appmap.json'.length));
+        cb();
+      },
+      options
+    );
   }
 
   return {

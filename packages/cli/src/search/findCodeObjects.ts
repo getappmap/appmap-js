@@ -7,7 +7,7 @@ import { codeObjectId } from '@appland/models';
 import { readFile } from 'fs/promises';
 import { basename, dirname } from 'path';
 import { inspect } from 'util';
-import { processFiles, verbose } from '../utils';
+import { ProcessFileOptions, processFiles, verbose } from '../utils';
 import DescentCodeObjectMatcher from './descentCodeObjectMatcher';
 import IterateCodeObjectMatcher from './iterateCodeObjectMatcher';
 import {
@@ -234,7 +234,9 @@ export default class FindCodeObjects {
       progressFn();
     };
 
-    await processFiles(`${this.appMapDir}/**/classMap.json`, checkClassMap.bind(this), fileCountFn);
+    const options = new ProcessFileOptions(this.appMapDir);
+    options.fileCountFn = fileCountFn;
+    await processFiles('**/classMap.json', checkClassMap.bind(this), options);
     return matches;
   }
 }
