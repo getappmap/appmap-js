@@ -2,7 +2,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import sinon, { SinonSpy } from 'sinon';
 import Conf from 'conf';
-import Telemetry, { Git, GitState } from './telemetry';
+import Telemetry, {
+  Git,
+  GitBranchEnvKeys,
+  GitCommitEnvKeys,
+  GitRepositoryEnvKeys,
+  GitState,
+} from './telemetry';
 import { name as appName, version } from './package.json';
 import child_process, { ChildProcess } from 'node:child_process';
 import { nextTick } from 'node:process';
@@ -204,6 +210,73 @@ describe('telemetry', () => {
         });
 
         return expect(Git.state()).resolves.toEqual(GitState.NotInstalled);
+      });
+    });
+
+    const originalEnv = process.env;
+    const ciEnvKeys = [...GitRepositoryEnvKeys, ...GitBranchEnvKeys, ...GitCommitEnvKeys];
+    function cleanEnv() {
+      jest.resetModules();
+      process.env = { ...originalEnv };
+      ciEnvKeys.forEach((key) => delete process.env[key]);
+    }
+
+    describe('repository', () => {
+      beforeEach(() => {
+        cleanEnv();
+        Git.clearCache();
+      });
+      afterEach(() => {
+        process.env = originalEnv;
+      });
+
+      it('returns the git repository', () => {
+        return expect(Git.repository()).resolves.toMatch(/appmap-js/);
+      });
+
+      it('retrieves the git repository from the environment when available', () => {
+        process.env.GITHUB_REPOSITORY = 'test/example';
+        return expect(Git.repository()).resolves.toBe(process.env.GITHUB_REPOSITORY);
+      });
+    });
+
+    describe('branch', () => {
+      beforeEach(() => {
+        cleanEnv();
+        Git.clearCache();
+      });
+      afterEach(() => {
+        process.env = originalEnv;
+      });
+
+      it('returns a git branch', async () => {
+        const branch = await Git.branch();
+        expect(typeof branch).toBe('string');
+        expect(branch?.length).toBeGreaterThan(0);
+      });
+
+      it('retrieves the branch name from the environment when available', () => {
+        process.env.GITHUB_REF_NAME = '00-test';
+        return expect(Git.branch()).resolves.toBe(process.env.GITHUB_REF_NAME);
+      });
+    });
+
+    describe('commit', () => {
+      beforeEach(() => {
+        cleanEnv();
+        Git.clearCache();
+      });
+      afterEach(() => {
+        process.env = originalEnv;
+      });
+
+      it('returns a git commit', () => {
+        return expect(Git.commit()).resolves.toMatch(/^[0-9a-f]{40}$/);
+      });
+
+      it('retrieves the commit SHA from the environment when available', () => {
+        process.env.GITHUB_SHA = '00-test';
+        return expect(Git.commit()).resolves.toBe(process.env.GITHUB_SHA);
       });
     });
   });

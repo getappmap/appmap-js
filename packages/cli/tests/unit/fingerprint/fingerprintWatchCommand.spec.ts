@@ -7,6 +7,7 @@ import { dirSync } from 'tmp';
 import FingerprintWatchCommand from '../../../src/fingerprint/fingerprintWatchCommand';
 import { verbose } from '../../../src/utils';
 import OriginalTelemetry from '../../../src/telemetry';
+import * as client from '@appland/client';
 import { once } from 'events';
 import Fingerprinter from '../../../src/fingerprint/fingerprinter';
 import { MaxMSBetween } from '../../../src/lib/eventAggregator';
@@ -15,8 +16,6 @@ import { FSWatcher } from 'chokidar';
 
 jest.mock('../../../src/telemetry', () => {
   const originalModule = jest.requireActual('../../../src/telemetry');
-
-  //Mock the default export and named export 'foo'
   return {
     __esModule: true,
     ...originalModule,
@@ -27,18 +26,22 @@ jest.mock('../../../src/telemetry', () => {
 });
 const Telemetry = jest.mocked(OriginalTelemetry);
 
+jest.mock('@appland/client');
+const Usage = jest.mocked(client.Usage);
+
 describe(FingerprintWatchCommand, () => {
   let cmd: FingerprintWatchCommand | null;
   let appMapDir: string;
 
   beforeEach(() => {
+    Usage.update.mockResolvedValue();
     verbose(process.env.DEBUG === 'true');
     appMapDir = dirSync({ unsafeCleanup: true }).name;
   });
 
   afterEach(async () => {
     if (cmd) {
-      cmd.close();
+      await cmd.close();
       cmd = null;
     }
     restore();
@@ -237,6 +240,15 @@ describe(FingerprintWatchCommand, () => {
         for (const [data] of Telemetry.sendEvent.mock.calls) {
           expect(data).toMatchObject({ name: 'appmap:index', metrics: { appmaps: 1 } });
         }
+      });
+    });
+
+    describe('usage', () => {
+      const sendTelemetry = FingerprintWatchCommand.prototype['sendTelemetry'];
+
+      it('sends usage data', async () => {
+        await sendTelemetry([], '', 128);
+        expect(Usage.update).toHaveBeenCalled();
       });
     });
   });

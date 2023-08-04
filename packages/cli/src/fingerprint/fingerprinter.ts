@@ -100,6 +100,7 @@ class Fingerprinter extends EventEmitter {
     delete appmapDataWithoutMetadata.metadata;
 
     const appmap = buildAppMap(appmapData).normalize().build();
+    const numEvents = appmap.events.length;
 
     // This field is deprecated, because for some change sets the Git status may be large and unweildy.
     // It's also not used anywhere else in the system, so we can just drop it.
@@ -137,13 +138,14 @@ class Fingerprinter extends EventEmitter {
     // determine that the index is up-to-date.
     await renameFile(tempAppMapFileName, appMapFileName);
 
-    this.emit('index', { path: appMapFileName, metadata: appmap.metadata });
+    this.emit('index', { path: appMapFileName, metadata: appmap.metadata, numEvents });
   }
 }
 
 export type FingerprintEvent = {
   path: string;
   metadata: Metadata;
+  numEvents: number;
 };
 
 interface Fingerprinter {
