@@ -29,8 +29,6 @@ const versions = new Map([
 
 const keys = Array.from(versions.keys());
 
-const digest = JSON.stringify;
-
 /* c8 ignore start */
 const hasOwnProperty =
   Reflect.getOwnPropertyDescriptor(Object, 'hasOwn') !== undefined
@@ -182,7 +180,7 @@ const normalizeVersion = (version) => {
 
 const checkClassmapFunction = (event, designators) => {
   if (event.event === 'call' && hasOwnProperty(event, 'method_id')) {
-    const designator = digest([event.method_id, event.path, event.lineno, event.static]);
+    const designator = JSON.stringify([event.method_id, event.path, event.lineno, event.static]);
     assert(designators.has(designator), AppmapError, 'missing function in classmap: %o', event);
   }
 };
