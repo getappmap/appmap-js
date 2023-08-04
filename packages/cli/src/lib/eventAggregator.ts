@@ -10,15 +10,10 @@ export const MaxMSBetween = 10 * 1000;
 
 export default class EventAggregator {
   constructor(
-    private callback: (events: PendingEvent[]) => void,
+    private callback: (events: PendingEvent[]) => Promise<void> | void,
     private maxMsBetween = MaxMSBetween
   ) {
-    process.on('exit', () => {
-      if (this.timeout) {
-        clearTimeout(this.timeout);
-        this.emitPending();
-      }
-    });
+    process.on('beforeExit', () => this.dispose());
   }
 
   private pending: PendingEvent[] = [];
@@ -33,13 +28,22 @@ export default class EventAggregator {
     this.timeout = setTimeout(this.emitPending.bind(this), this.maxMsBetween);
   }
 
-  private emitPending() {
-    this.callback(this.pending);
+  private async emitPending() {
     this.timeout = undefined;
-    this.pending = [];
+    if (this.pending.length) {
+      const pendingEvents = this.pending.splice(0, this.pending.length);
+      await this.callback(pendingEvents);
+    }
   }
 
   attach(emitter: EventEmitter, event: string) {
     emitter.on(event, (...args) => this.push(emitter, event, args));
+  }
+
+  async dispose() {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+      await this.emitPending();
+    }
   }
 }

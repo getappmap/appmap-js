@@ -18,6 +18,7 @@ export default class FingerprintWatchCommand {
   private poller?: Globber;
   private _numProcessed = 0;
   private pendingTelemetry?: Promise<void>;
+  private eventAggregator: EventAggregator;
   public unreadableFiles = new Set<string>();
   public symlinkLoopFiles = new Set<string>();
 
@@ -32,15 +33,16 @@ export default class FingerprintWatchCommand {
   constructor(private directory: string) {
     this.pidfilePath = process.env.APPMAP_WRITE_PIDFILE && join(this.directory, 'index.pid');
     this.fpQueue = new FingerprintQueue();
-
-    new EventAggregator((events) => {
+    this.eventAggregator = new EventAggregator(async (events) => {
       const indexEvents = events.map(({ args: [event] }) => event) as FingerprintEvent[];
       this.pendingTelemetry = this.sendTelemetry(
         indexEvents.map(({ metadata }) => metadata),
         directory
       );
       this.numProcessed += events.length;
-    }).attach(this.fpQueue.handler, 'index');
+      await this.pendingTelemetry;
+    });
+    this.eventAggregator.attach(this.fpQueue.handler, 'index');
   }
 
   removePidfile() {
@@ -204,7 +206,11 @@ export default class FingerprintWatchCommand {
   }
 
   async close() {
-    await Promise.all([this.watcher, this.poller].map((ch) => ch?.close()));
+    await Promise.all([
+      this.watcher?.close(),
+      this.poller?.close(),
+      this.eventAggregator.dispose(),
+    ]);
     this.removePidfile();
     this.watcher = undefined;
     this.poller = undefined;
