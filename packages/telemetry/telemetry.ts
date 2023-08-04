@@ -262,6 +262,29 @@ export enum GitState {
   Ok, // Git is installed, a repository is present.
 }
 
+export const GitRepositoryEnvKeys = [
+  'GITHUB_REPOSITORY', // GitHub
+  'CIRCLE_REPOSITORY_URL', // CircleCI
+  'GIT_URL', // Jenkins
+  'CI_REPOSITORY_URL', // GitLab
+] as const;
+
+export const GitBranchEnvKeys = [
+  'GITHUB_REF_NAME', // GitHub
+  'CIRCLE_BRANCH', // CircleCI
+  'GIT_BRANCH', // Jenkins
+  'TRAVIS_BRANCH', // TravisCI
+  'CI_COMMIT_REF_NAME', // GitLab
+] as const;
+
+export const GitCommitEnvKeys = [
+  'GITHUB_SHA', // GitHub
+  'CIRCLE_SHA1', // CircleCI
+  'GIT_COMMIT', // Jenkins
+  'TRAVIS_COMMIT', // TravisCI
+  'CI_COMMIT_SHA', // GitLab
+] as const;
+
 class GitProperties {
   static async contributors(sinceDaysAgo: number, cwd?: PathLike): Promise<Array<string>> {
     const unixTimeNow = Math.floor(Number(new Date()) / 1000);
@@ -291,6 +314,54 @@ class GitProperties {
     }
   }
 
+  // Returns the repository URL, first by checking the environment, then by
+  // shelling out to git.
+  static async repository(cwd?: PathLike): Promise<string | undefined> {
+    const envKey = GitRepositoryEnvKeys.find((key) => process.env[key]);
+    if (envKey) return process.env[envKey];
+
+    try {
+      const { stdout } = await exec(
+        ['git', cwd && `-C ${cwd.toString()}`, 'config', '--get', 'remote.origin.url'].join(' ')
+      );
+      return stdout.trim();
+    } catch {
+      return undefined;
+    }
+  }
+
+  // Returns the branch, first by checking the environment, then by
+  // shelling out to git.
+  static async branch(cwd?: PathLike): Promise<string | undefined> {
+    const envKey = GitBranchEnvKeys.find((key) => process.env[key]);
+    if (envKey) return process.env[envKey];
+
+    try {
+      const { stdout } = await exec(
+        ['git', cwd && `-C ${cwd.toString()}`, 'rev-parse', '--abbrev-ref', 'HEAD'].join(' ')
+      );
+      return stdout.trim();
+    } catch {
+      return undefined;
+    }
+  }
+
+  // Returns the commit SHA, first by checking the environment, then by
+  // shelling out to git.
+  static async commit(cwd?: PathLike): Promise<string | undefined> {
+    const envKey = GitCommitEnvKeys.find((key) => process.env[key]);
+    if (envKey) return process.env[envKey];
+
+    try {
+      const { stdout } = await exec(
+        ['git', cwd && `-C ${cwd.toString()}`, 'rev-parse', 'HEAD'].join(' ')
+      );
+      return stdout.trim();
+    } catch {
+      return undefined;
+    }
+  }
+
   static async state(cwd?: PathLike): Promise<GitState> {
     return new Promise<GitState>((resolve) => {
       try {
@@ -315,6 +386,10 @@ class GitProperties {
         resolve(GitState.NotInstalled);
       }
     });
+  }
+
+  static clearCache(): void {
+    gitCache.clear();
   }
 }
 

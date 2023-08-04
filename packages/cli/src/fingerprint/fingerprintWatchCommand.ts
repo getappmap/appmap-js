@@ -10,6 +10,8 @@ import { verbose } from '../utils';
 import { FingerprintEvent } from './fingerprinter';
 import FingerprintQueue from './fingerprintQueue';
 import Globber from './globber';
+import { Usage } from '@appland/client';
+import emitUsage from '../lib/emitUsage';
 
 export default class FingerprintWatchCommand {
   private pidfilePath: string | undefined;
@@ -35,11 +37,15 @@ export default class FingerprintWatchCommand {
     this.fpQueue = new FingerprintQueue();
     this.eventAggregator = new EventAggregator(async (events) => {
       const indexEvents = events.map(({ args: [event] }) => event) as FingerprintEvent[];
-      this.pendingTelemetry = this.sendTelemetry(
-        indexEvents.map(({ metadata }) => metadata),
-        directory
+      const { metadata, numEvents } = indexEvents.reduce(
+        (acc, { metadata, numEvents }) => ({
+          metadata: [...acc.metadata, metadata],
+          numEvents: acc.numEvents + numEvents,
+        }),
+        { metadata: [] as Metadata[], numEvents: 0 }
       );
       this.numProcessed += events.length;
+      this.pendingTelemetry = this.sendTelemetry(metadata, this.directory, numEvents);
       await this.pendingTelemetry;
     });
     this.eventAggregator.attach(this.fpQueue.handler, 'index');
@@ -252,9 +258,9 @@ export default class FingerprintWatchCommand {
     this.fpQueue.push(file);
   }
 
-  private async sendTelemetry(metadata: Metadata[], appmapDir: string) {
+  private async sendTelemetry(metadata: Metadata[], appmapDir: string, numEvents: number) {
+    const usage = await emitUsage(appmapDir, numEvents, metadata.length, metadata[0]);
     const gitState = GitState[await Git.state(appmapDir)];
-    const contributors = (await Git.contributors(60, appmapDir)).length;
     const properties = Object.fromEntries(
       intersectMaps(...metadata.map(flattenMetadata)).entries()
     );
@@ -262,8 +268,9 @@ export default class FingerprintWatchCommand {
       name: 'appmap:index',
       properties: { ...properties, git_state: gitState },
       metrics: {
-        appmaps: metadata.length,
-        contributors: contributors,
+        appmaps: usage.appmaps,
+        events: usage.events,
+        contributors: usage.contributors,
       },
     });
   }
