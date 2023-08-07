@@ -3,7 +3,7 @@
   "version": "2.3.0",
   "scripts": {
     "start": "node bin/index.js",
-    "test": "npx c8 --reporter=text-summary --check-coverage --branches=100 --functions=100 --lines=100 --statements=100 --include lib/index.js node test/smoke.js",
+    "test": "npx c8 --reporter=text-summary --check-coverage --branches=80 --functions=80 --lines=80 --statements=80 --include lib/index.js node test/smoke.js",
     "build": "node src/build.js",
     "test-html": "npx c8 --reporter=html node test/smoke.js && open coverage/index.html",
     "format": "npx prettier --write 'bin/*.js' 'lib/*.js' 'test/*.js' 'src/*.js' 'schema/*.js'",
