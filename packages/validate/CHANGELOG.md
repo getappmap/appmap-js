@@ -1,3 +1,11 @@
+# [@appland/appmap-validate-v2.4.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-validate-v2.3.0...@appland/appmap-validate-v2.4.0) (2023-08-07)
+
+
+### Features
+
+* detect function missing from classmap ([e6cede9](https://github.com/getappmap/appmap-js/commit/e6cede95b277fbda4fd70c71e27a9da0b5e07e10))
+* support partial version number ([21dc1ba](https://github.com/getappmap/appmap-js/commit/21dc1ba7425081796452010ddcbe8a6f7c5356c5))
+
 # [@appland/appmap-validate-v2.3.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-validate-v2.2.0...@appland/appmap-validate-v2.3.0) (2022-07-07)
 
 ### Features
