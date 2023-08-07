@@ -28,6 +28,7 @@ import { locateAppMapDir } from './lib/locateAppMapDir';
 const InventoryCommand = require('./inventoryCommand');
 const OpenCommand = require('./cmds/open/open');
 const InspectCommand = require('./cmds/inspect/inspect');
+import { default as Scan } from './cmds/scan/scan';
 const SequenceDiagramCommand = require('./cmds/sequenceDiagram');
 const SequenceDiagramDiffCommand = require('./cmds/sequenceDiagramDiff');
 const StatsCommand = require('./cmds/stats/stats');
@@ -229,6 +230,7 @@ yargs(process.argv.slice(2))
   .command(UploadCommand)
   .command(ArchiveCommand)
   .command(RestoreCommand)
+  .command(Scan)
   .strict()
   .demandCommand()
   .help().argv;
