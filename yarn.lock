@@ -179,6 +179,7 @@ __metadata:
     memfs: ^3.4.13
     minimatch: ^5.1.2
     moo: ^0.5.1
+    node-fetch: 2.6.7
     open: ^8.2.1
     openapi-types: ^12.1.0
     ora: ^5.4.1
@@ -29445,6 +29446,7 @@ resolve@1.1.7:
     eslint-config-airbnb-base: ^14.2.1
     eslint-config-prettier: ^8.3.0
     eslint-plugin-prettier: ^3.4.0
+    node-fetch: 2.6.7
     node-gyp: ^8.3.0
     prettier: ^2.7.1
     puppeteer: ^19.7.2

@@ -1,8 +1,8 @@
 import { glob } from 'glob';
-import { join } from 'path';
+import { join, resolve } from 'path';
 import { promisify } from 'util';
 import { Octokit } from '@octokit/rest';
-import { mkdtemp, rm, rmdir, unlink } from 'fs/promises';
+import { mkdtemp, rm, unlink } from 'fs/promises';
 import { createWriteStream } from 'fs';
 import { tmpdir } from 'os';
 import { executeCommand } from '../../lib/executeCommand';
@@ -44,7 +44,8 @@ export class FileArchiveStore implements ArchiveStore {
     };
 
     const loadDirectory = async (directory: string): Promise<Map<ArchiveId, ArchiveEntry>> => {
-      return (await promisify(glob)(join(directory, '*.tar')))
+      const resolvedDir = resolve(process.cwd(), directory);
+      return (await promisify(glob)(join(resolvedDir, '*.tar')))
         .map(parseArchivePath)
         .reduce(
           (memo, entry) => (memo.set(entry.id, parseArchivePath(entry.id)), memo),
