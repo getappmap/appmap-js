@@ -1,3 +1,17 @@
+# [@appland/appmap-v3.84.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.83.0...@appland/appmap-v3.84.0) (2023-08-07)
+
+
+### Bug Fixes
+
+* remove fetch implementation for Octokit ([f9dda6e](https://github.com/getappmap/appmap-js/commit/f9dda6e439c55e55dd88fcbd9b499153d662e96e))
+
+
+### Features
+
+* Configure compare filters ([89b74b8](https://github.com/getappmap/appmap-js/commit/89b74b8c55a81f7e3d21778ba866be3f17236d86))
+* Enable filter configuration via --filter options ([4c37936](https://github.com/getappmap/appmap-js/commit/4c37936598334c827a4be90cfbc45d62894e6c56))
+* restore command ([b64a876](https://github.com/getappmap/appmap-js/commit/b64a87690a76ae81910b1f3ed717cd9cf6412cc8))
+
 # [@appland/appmap-v3.83.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.82.1...@appland/appmap-v3.83.0) (2023-08-01)
 
 
