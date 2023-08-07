@@ -1,4 +1,3 @@
-import { createHash } from 'crypto';
 import { join as joinPath, basename } from 'path';
 import gracefulFs from 'graceful-fs';
 import { promisify } from 'util';

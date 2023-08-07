@@ -171,10 +171,7 @@ export async function processNamedFiles(
  * Lists all appmap.json files in a directory, and passes them to a function.
  * With `await`, `listAppMapFiles` blocks until all the files have been processed.
  */
-export async function listAppMapFiles(
-  directory: string,
-  fn: (path: string) => Promise<void> | void
-) {
+export async function listAppMapFiles(directory: string, fn: (path: string) => Promise<any> | any) {
   const printDebug = verbose();
   if (printDebug) {
     console.warn(`Scanning ${directory} for AppMaps`);
