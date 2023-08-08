@@ -29,6 +29,10 @@ class StatsProgressReporter implements ProgressReporter {
   elapsedByRuleId = new Map<string, number[]>();
 
   printSummary() {
+    if (!verbose()) return;
+
+    if (this.parseTime.length === 0) return;
+
     const keys = Array.from(this.elapsedByRuleId.keys()).sort();
     console.warn(
       `Average parse time: ${
@@ -70,10 +74,6 @@ class StatsProgressReporter implements ProgressReporter {
 
 const STATS_REPORTER = new StatsProgressReporter();
 
-process.on('exit', () => {
-  STATS_REPORTER.printSummary();
-});
-
 setInterval(() => STATS_REPORTER.printSummary(), 3000);
 
 /**
@@ -92,7 +92,7 @@ export default async function scan(
 
   let checkImpls = ChecksByFileName.get(configurationFile);
   if (!checkImpls) {
-    if (verbose()) warn(`Loading checks from ${configurationFile}`);
+    if (verbose()) warn(`[scan] Loading checks from ${configurationFile}`);
     checkImpls = await loadConfig(configuration);
     ChecksByFileName.set(configurationFile, checkImpls);
   }
@@ -105,9 +105,11 @@ export default async function scan(
   const appMapData = await readFile(appmapFile, 'utf8');
   const appMap = buildAppMap(appMapData).normalize().build();
   const parseTime = new Date();
+
   STATS_REPORTER.addParseTime(parseTime.getTime() - startTime.getTime());
-  console.warn(`Event count: ${appMap.events.length}`);
-  console.warn(`Parse time: ${parseTime.getTime() - startTime.getTime()}ms`);
+  if (verbose()) console.warn(`[scan] Event count: ${appMap.events.length}`);
+  if (verbose()) console.warn(`[scan] Parse time: ${parseTime.getTime() - startTime.getTime()}ms`);
+
   const appMapIndex = new AppMapIndex(appMap);
 
   for (const check of checkImpls) {
@@ -117,7 +119,7 @@ export default async function scan(
   }
 
   const scanTime = new Date();
-  console.warn(`Scan time: ${scanTime.getTime() - parseTime.getTime()}ms`);
+  if (verbose()) console.warn(`[scan] Scan time: ${scanTime.getTime() - parseTime.getTime()}ms`);
 
   const checks: Check[] = checkImpls.map((check) => ({
     id: check.id,
