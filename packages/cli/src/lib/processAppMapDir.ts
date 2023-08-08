@@ -15,15 +15,15 @@ export type TaskResult<V> = {
 
 export type TaskFunction<T extends Task> = (appmapFile: string) => T;
 
-export type TaskResultHandler<V> = (appmapFile: string, result: V) => Promise<void>;
+export type TaskResultHandler<V> = (appmapFile: string, result: V) => void | Promise<void>;
 
 export default async function processAppMapDir<T extends Task, V>(
   name: string,
   pool: WorkerPool,
   taskFunction: TaskFunction<T>,
   appmapDir: string,
-  resultHandler: TaskResultHandler<V>
-): Promise<void> {
+  resultHandler: TaskResultHandler<TaskResult<V>>
+): Promise<number> {
   const files = new Array<string>();
   await listAppMapFiles(appmapDir, (file) => files.push(file));
 
@@ -44,7 +44,7 @@ export default async function processAppMapDir<T extends Task, V>(
             }
 
             try {
-              await resultHandler(file, result.result);
+              await resultHandler(file, result);
             } catch (err) {
               warn(
                 `${name} failed to handle processed result from ${file}: ${(err as Error).message}`
@@ -55,5 +55,7 @@ export default async function processAppMapDir<T extends Task, V>(
           })
         )
     )
-  ).finally(() => pool.close());
+  );
+
+  return files.length;
 }
