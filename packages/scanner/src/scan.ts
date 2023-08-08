@@ -14,7 +14,7 @@ import { verbose } from './rules/lib/util';
 import RuleChecker from './ruleChecker';
 import { AppMap, Event } from '@appland/models';
 import { MatchResult } from './types';
-import { Finding, ScanResults, ScopeName } from './index';
+import { Check, Finding, ScanResults, ScopeName } from './index';
 import ProgressReporter from './progressReporter';
 import AppMapIndex from './appMapIndex';
 
@@ -90,11 +90,11 @@ export default async function scan(
     ConfigurationByFileName.set(configurationFile, configuration);
   }
 
-  let checks = ChecksByFileName.get(configurationFile);
-  if (!checks) {
+  let checkImpls = ChecksByFileName.get(configurationFile);
+  if (!checkImpls) {
     if (verbose()) warn(`Loading checks from ${configurationFile}`);
-    checks = await loadConfig(configuration);
-    ChecksByFileName.set(configurationFile, checks);
+    checkImpls = await loadConfig(configuration);
+    ChecksByFileName.set(configurationFile, checkImpls);
   }
 
   const checker = new RuleChecker(STATS_REPORTER);
@@ -110,7 +110,7 @@ export default async function scan(
   console.warn(`Parse time: ${parseTime.getTime() - startTime.getTime()}ms`);
   const appMapIndex = new AppMapIndex(appMap);
 
-  for (const check of checks) {
+  for (const check of checkImpls) {
     await STATS_REPORTER.beginCheck(check);
     await checker.check(appmapFile, appMapIndex, check, findings);
     await STATS_REPORTER.endCheck();
@@ -119,29 +119,25 @@ export default async function scan(
   const scanTime = new Date();
   console.warn(`Scan time: ${scanTime.getTime() - parseTime.getTime()}ms`);
 
-  // Rules: Distinct set of Rules for which a Check is configured
-  const ruleIds = [...new Set<string>(checks.map((check) => check.rule.id))].sort();
-  const rules = ruleIds.map((ruleId) => {
-    assert(checks);
-    const check = checks.find((check) => check.rule.id === ruleId)!;
-    assert(check);
-    return {
-      id: ruleId,
+  const checks: Check[] = checkImpls.map((check) => ({
+    id: check.id,
+    scope: check.rule.scope || 'command',
+    impactDomain: check.rule.impactDomain || 'Stability',
+    rule: {
+      id: check.rule.id,
       title: check.rule.title,
       description: check.rule.description,
       url: check.rule.url,
       labels: check.rule.labels || [],
-      scope: check.rule.scope,
       enumerateScope: check.rule.enumerateScope,
-      impactDomain: check.rule.impactDomain,
       references: check.rule.references || {},
-    };
-  });
+    },
+  }));
 
   return {
     configuration,
     appMapMetadata: { appmapFile: appMap.metadata },
     findings,
-    rules,
+    checks,
   };
 }

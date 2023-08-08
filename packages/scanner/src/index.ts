@@ -81,11 +81,18 @@ export interface Rule {
   references?: Record<string, URL>;
 }
 
+export interface Check {
+  id: string;
+  scope: ScopeName;
+  impactDomain: ImpactDomain;
+  rule: Rule;
+}
+
 export interface ScanResults {
   configuration: Configuration;
   appMapMetadata: Record<string, Metadata>;
   findings: Finding[];
-  rules: Rule[];
+  checks: Check[];
 }
 
 export { default as scan } from './scan';
