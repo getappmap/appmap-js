@@ -6,6 +6,7 @@ import { EventEmitter } from 'events';
 import { Worker } from 'worker_threads';
 import assert from 'assert';
 import { warn } from 'console';
+import { verbose } from '../utils';
 
 const kTaskInfo = Symbol('kTaskInfo');
 const kWorkerFreedEvent = Symbol('kWorkerFreedEvent');
@@ -88,7 +89,7 @@ export default class WorkerPool extends EventEmitter {
     const worker = this.freeWorkers.pop();
     assert(worker);
     worker[kTaskInfo] = new WorkerPoolTaskInfo(callback);
-    warn(`Assigning ${JSON.stringify(task)} to worker thread ${worker.threadId}`);
+    if (verbose()) warn(`Assigning ${JSON.stringify(task)} to worker thread ${worker.threadId}`);
     worker.postMessage(task);
   }
 
@@ -101,7 +102,8 @@ export default class WorkerPool extends EventEmitter {
         .filter((info) => info.firstTask)
         .map((info) => info.firstTask!.getTime() - info.created.getTime())
         .reduce((sum, time) => sum + time, 0) / this.workerInfoByThreadId.size;
-    warn(`Worker average time to first task completion: ${averageTimeToFirstTask}ms`);
+    if (verbose())
+      warn(`Worker average time to first task completion: ${averageTimeToFirstTask}ms`);
 
     for (const worker of this.workers) await worker.terminate();
   }
@@ -119,14 +121,14 @@ export default class WorkerPool extends EventEmitter {
   }
 
   protected addNewWorker() {
-    warn(`Adding new worker thread`);
+    if (verbose()) warn(`Adding new worker thread`);
     const worker = new Worker(this.taskFile);
     this.enrollWorker(worker);
     worker.on('message', (result) => {
       // In case of success: Call the callback that was passed to `runTask`,
       // remove the `TaskInfo` associated with the Worker, and mark it as free
       // again.
-      warn(`Worker thread ${worker.threadId} finished task`);
+      if (verbose()) warn(`Worker thread ${worker.threadId} finished task`);
       this.workerTask(worker);
       worker[kTaskInfo].done(null, result);
       worker[kTaskInfo] = null;

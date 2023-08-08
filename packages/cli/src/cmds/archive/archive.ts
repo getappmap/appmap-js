@@ -13,6 +13,7 @@ import gitRevision from './gitRevision';
 import { ArchiveMetadata } from './ArchiveMetadata';
 import analyze from './analyze';
 import parseFilterArgs from './parseFilterArgs';
+import { cpus } from 'os';
 
 // ## 1.3.0
 //
@@ -93,6 +94,11 @@ commit of the current git revision may not be the one that triggered the build.`
     multiple: true,
   });
 
+  args.option('thread-count', {
+    describe: 'Number of worker threads to use when analyzing AppMaps',
+    type: 'number',
+  });
+
   return args.strict();
 };
 
@@ -112,6 +118,7 @@ export const handler = async (argv: any) => {
     outputFile: outputFileNameArg,
     outputDir: outputDirArg,
     filter: filterArg,
+    threadCount: threadCountArg,
   } = argv;
 
   handleWorkingDirectory(argv.directory);
@@ -121,6 +128,8 @@ export const handler = async (argv: any) => {
   if (!appmapConfig) throw new Error(`Unable to load appmap.yml config file`);
 
   const appMapDir = await locateAppMapDir();
+
+  const threadCount = threadCountArg || cpus().length;
 
   const compareConfig = appmapConfig.compare;
   const compareFilter = compareConfig?.filter || {};
@@ -140,7 +149,12 @@ export const handler = async (argv: any) => {
 
   let oversizedAppMaps: string[] | undefined;
   if (doAnalyze) {
-    const analyzeResult = await analyze(maxAppMapSizeInBytes, compareFilter, appMapDir);
+    const analyzeResult = await analyze(
+      threadCount,
+      maxAppMapSizeInBytes,
+      compareFilter,
+      appMapDir
+    );
     oversizedAppMaps = analyzeResult.oversizedAppMaps;
   }
 
