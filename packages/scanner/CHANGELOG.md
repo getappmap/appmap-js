@@ -1,3 +1,11 @@
+# [@appland/scanner-v1.81.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.80.2...@appland/scanner-v1.81.0) (2023-08-09)
+
+
+### Features
+
+* Move scanner logging behind verbose() flag ([2df8863](https://github.com/getappmap/appmap-js/commit/2df88632d4a97d4b65cadf83b9c11ec701d7e6fb))
+* Refactor types into index.ts ([322596b](https://github.com/getappmap/appmap-js/commit/322596bbc8492dd032a4c47e62c5d730f4596e56))
+
 # [@appland/scanner-v1.80.2](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.80.1...@appland/scanner-v1.80.2) (2023-07-20)
 
 
