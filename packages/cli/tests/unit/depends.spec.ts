@@ -5,7 +5,7 @@ import fs from 'fs-extra';
 
 import Fingerprinter from '../../src/fingerprint/fingerprinter';
 import Depends from '../../src/depends';
-import { listAppMapFiles, verbose } from '../../src/utils';
+import { findFiles, verbose } from '../../src/utils';
 
 if (process.env.DEBUG !== 'true') tmp.setGracefulCleanup();
 
@@ -26,7 +26,7 @@ describe('Depends', () => {
     fs.copySync(fixtureDir, appMapDir);
 
     const fingerprinter = new Fingerprinter();
-    await listAppMapFiles(appMapDir, async (fileName) => {
+    await findFiles(appMapDir, '.appmap.json', async (fileName) => {
       utimesSync(fileName, now, now);
       await fingerprinter.fingerprint(fileName);
     });

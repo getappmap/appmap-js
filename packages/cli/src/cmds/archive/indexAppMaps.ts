@@ -11,11 +11,12 @@ export async function indexAppMaps(
   handler.maxFileSizeInBytes = maxAppMapSizeInBytes;
 
   const counter = new CountNumProcessed();
-  const options = new ProcessFileOptions(appmapDir);
+  const options = new ProcessFileOptions();
   options.fileCountFn = counter.setCount();
   options.errorFn = reportAppMapProcessingError('Index');
   await processFiles(
-    '**/*.appmap.json',
+    appmapDir,
+    '.appmap.json',
     async (appmapFile) => await handler.fingerprint(appmapFile),
     options
   );

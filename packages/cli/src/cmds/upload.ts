@@ -1,15 +1,15 @@
 import { CommandModule } from 'yargs';
 import { App, AppMap, loadConfiguration, Mapset, UploadAppMapResponse } from '@appland/client';
-import { listAppMapFiles, verbose } from '../utils';
+import { findFiles, verbose } from '../utils';
 import { readFile, stat } from 'fs/promises';
 import assert from 'assert';
 import UI from './userInteraction';
 import { ValidationError } from './errors';
-import { Stats } from 'fs';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../lib/locateAppMapDir';
 import { warn } from 'console';
 import { appNameFromConfig } from '../lib/appNameFromConfig';
+import { checkSize } from './checkSize';
 
 interface Arguments {
   verbose?: boolean;
@@ -25,7 +25,7 @@ type Metadata = {
   commit?: string;
 };
 
-const MAX_APPMAP_SIZE = 2 * 1024 * 1024;
+export const MAX_APPMAP_SIZE = 2 * 1024 * 1024;
 
 function applyOrCheck(data: { [x: string]: string | undefined }, key: string, input?: string) {
   if (!input) return;
@@ -56,7 +56,7 @@ async function collect(appmapDir: string, force: boolean): Promise<[string[], Me
   const metadata: Metadata = {};
   const paths: string[] = [];
 
-  await listAppMapFiles(appmapDir, (path) => {
+  await findFiles(appmapDir, '.appmap.json', (path) => {
     paths.push(path);
   });
 
@@ -121,18 +121,6 @@ export async function handler(argv: Arguments): Promise<void> {
 
   const url = [baseURL, 'applications', mapset.app_id, 'mapsets', mapset.id].join('/');
   UI.success(`Created mapset ${url} with ${total} AppMaps`);
-}
-
-function checkSize({ size }: Stats) {
-  if (size > MAX_APPMAP_SIZE)
-    throw new ValidationError(
-      [
-        `File size is ${size / 1024} KiB which is greater than the size limit of ${
-          MAX_APPMAP_SIZE / 1024
-        } KiB.`,
-        'Use --force if you want to upload it anyway.',
-      ].join('\n')
-    );
 }
 
 const command: CommandModule<{}, Arguments> = {

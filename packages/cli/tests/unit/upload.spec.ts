@@ -1,3 +1,4 @@
+import * as checkSizeExports from '../../src/cmds/checkSize';
 import { handler } from '../../src/cmds/upload';
 
 import path from 'node:path';
@@ -6,9 +7,9 @@ import fs from 'node:fs/promises';
 import * as client from '@appland/client';
 import UI_ from '../../src/cmds/userInteraction';
 import * as utils from '../../src/utils';
-import { Stats } from 'node:fs';
 import * as appNameFromConfig from '../../src/lib/appNameFromConfig';
 import * as locateAppMapDir from '../../src/lib/locateAppMapDir';
+import { ValidationError } from '../../src/cmds/errors';
 
 const AppMapDir = path.join(__dirname, 'fixtures', 'stats');
 
@@ -62,7 +63,7 @@ describe('upload command', () => {
     it('aborts in case no appmaps found', async () => {
       expect.assertions(4);
 
-      jest.spyOn(utils, 'listAppMapFiles').mockResolvedValue();
+      jest.spyOn(utils, 'findFiles').mockResolvedValue([]);
 
       await expect(handler({})).rejects.toThrowError();
 
@@ -72,30 +73,30 @@ describe('upload command', () => {
     });
 
     it('skips files that are too large', async () => {
-      expect.assertions(4);
+      expect.assertions(5);
 
-      jest.spyOn(fs, 'stat').mockImplementationOnce(async (path, opts) => {
-        const stat = await fs.stat(path, opts);
-        return { ...stat, size: 128 * 1024 * 1024 } as Stats;
+      const checkSize = jest.spyOn(checkSizeExports, 'checkSize').mockImplementation(() => {
+        throw new ValidationError('File too large');
       });
 
       await expect(handler({})).rejects.toThrowError();
 
+      expect(checkSize).toHaveBeenCalled();
       expect(UI.success).not.toHaveBeenCalled();
       expect(AppMap.create).not.toHaveBeenCalled();
       expect(Mapset.create).not.toHaveBeenCalled();
     });
 
     it('can force oversize upload', async () => {
-      expect.assertions(3);
+      expect.assertions(4);
 
-      jest.spyOn(fs, 'stat').mockImplementationOnce(async (path, opts) => {
-        const stat = await fs.stat(path, opts);
-        return { ...stat, size: 128 * 1024 * 1024 } as Stats;
+      const checkSize = jest.spyOn(checkSizeExports, 'checkSize').mockImplementation(() => {
+        throw new ValidationError('File too large');
       });
 
       await handler({ force: true });
 
+      expect(checkSize).not.toHaveBeenCalled();
       expect(UI.success).toHaveBeenCalled();
       expect(AppMap.create).toHaveBeenCalledTimes(3);
       expect(Mapset.create).toHaveBeenCalled();
@@ -137,6 +138,7 @@ beforeEach(() => {
 });
 afterEach(() => {
   if (cwd) process.chdir(cwd);
+  jest.restoreAllMocks();
 });
 
 jest.mock('../../src/telemetry');

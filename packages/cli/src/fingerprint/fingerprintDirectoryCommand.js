@@ -1,4 +1,4 @@
-const { verbose, listAppMapFiles } = require('../utils');
+const { verbose, findFiles } = require('../utils');
 const FingerprintQueue = require('./fingerprintQueue').default;
 
 class FingerprintDirectoryCommand {
@@ -23,7 +23,7 @@ class FingerprintDirectoryCommand {
   }
 
   async files(fn) {
-    return listAppMapFiles(this.directory, fn);
+    return findFiles(this.directory, '*.appmap.json', fn);
   }
 }
 

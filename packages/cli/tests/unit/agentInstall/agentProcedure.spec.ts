@@ -1,7 +1,7 @@
 import AgentProcedure from '../../../src/cmds/agentInstaller/agentProcedure';
 import { TestAgentProcedure } from './TestAgentProcedure';
 import UI from '../../../src/cmds/userInteraction';
-import sinon, { SinonStub } from 'sinon';
+import sinon from 'sinon';
 import { withStubbedTelemetry } from '../../helper';
 import InstallerUI from '../../../src/cmds/agentInstaller/installerUI';
 

@@ -1,7 +1,7 @@
 import { utimesSync } from 'fs';
 import Fingerprinter from '../../src/fingerprint/fingerprinter';
 import { CodeObject, CodeObjectMatch } from '../../src/search/types';
-import { listAppMapFiles, verbose } from '../../src/utils';
+import { findFiles, verbose } from '../../src/utils';
 import path from 'path';
 import { exec } from 'child_process';
 
@@ -24,7 +24,7 @@ export function stripCodeObjectParents(codeObjectMatches: CodeObjectMatch[]): Co
 export async function indexDirectory(dir: string): Promise<void> {
   const now = new Date();
   const fingerprinter = new Fingerprinter();
-  await listAppMapFiles(dir, async (fileName) => {
+  await findFiles(dir, '.appmap.json', async (fileName) => {
     utimesSync(fileName, now, now);
     await fingerprinter.fingerprint(fileName);
   });

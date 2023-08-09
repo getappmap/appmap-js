@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import UI from '../../userInteraction';
 import Telemetry from '../../../telemetry';
-import { listAppMapFiles, verbose } from '../../../utils';
+import { findFiles, verbose } from '../../../utils';
 import { Event, buildAppMap } from '@appland/models';
 import { AppMapSizeTable, SortedAppMapSize } from '../types/appMapSize';
 import { FunctionExecutionTime, SlowestExecutionTime } from '../types/functionExecutionTime';
@@ -26,7 +26,7 @@ export async function statsForDirectory(
     // This function is too verbose to be useful in this context.
     const v = verbose();
     verbose(false);
-    await listAppMapFiles(appMapDir, (fileName: string) => {
+    await findFiles(appMapDir, '.appmap.json', (fileName: string) => {
       const stats = fs.statSync(fileName);
       appMapSizes[fileName] = {
         path: relative(appMapDir, fileName),
@@ -71,7 +71,7 @@ export async function statsForDirectory(
     // Note that event#elapsed time does NOT include instrumentation overhead.
     // So, instrumentation / elapsed can theoretically be greater than 1.
     let totalTime = 0;
-    await listAppMapFiles(appMapDir, (fileName: string) => {
+    await findFiles(appMapDir, '.appmap.json', (fileName: string) => {
       const file = fs.readFileSync(fileName, 'utf-8');
       const appmapData = JSON.parse(file.toString());
       const appmap = buildAppMap(appmapData).build();
