@@ -30,7 +30,8 @@ parentPort.on('message', async (task: ScanTask | SequenceDiagramTask) => {
   try {
     const stats = await stat(task.appmapFile);
     if (stats.size > task.maxSize) {
-      return { oversized: true };
+      parentPort.postMessage({ oversized: true });
+      return;
     }
 
     let result: ScanResult | SequenceDiagramResult;

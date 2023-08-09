@@ -1,5 +1,5 @@
 import { warn } from 'console';
-import { listAppMapFiles } from '../utils';
+import { findFiles } from '../utils';
 import WorkerPool from './workerPool';
 
 export type Task = {
@@ -17,16 +17,23 @@ export type TaskFunction<T extends Task> = (appmapFile: string) => T;
 
 export type TaskResultHandler<V> = (appmapFile: string, result: V) => void | Promise<void>;
 
+export type ProcessResult = {
+  oversized: Set<string>;
+  errors: Array<Error>;
+  numProcessed: number;
+};
+
 export default async function processAppMapDir<T extends Task, V>(
   name: string,
   pool: WorkerPool,
   taskFunction: TaskFunction<T>,
   appmapDir: string,
-  resultHandler: TaskResultHandler<TaskResult<V>>
-): Promise<number> {
-  const files = new Array<string>();
-  await listAppMapFiles(appmapDir, (file) => files.push(file));
+  resultHandler?: TaskResultHandler<TaskResult<V>>
+): Promise<ProcessResult> {
+  const files = await findFiles(appmapDir, '.appmap.json');
 
+  const oversized = new Set<string>();
+  const errors = new Array<Error>();
   await Promise.all(
     files.map(
       async (file) =>
@@ -36,19 +43,22 @@ export default async function processAppMapDir<T extends Task, V>(
 
             if (result.oversized) {
               warn(`Skipping oversized AppMap ${file}`);
-              return resolve();
-            }
-            if (result.error) {
+              oversized.add(file);
+            } else if (result.error) {
               warn(`${name} failed to process ${file}: ${(result.error as Error).message}`);
-              return resolve();
-            }
-
-            try {
-              await resultHandler(file, result);
-            } catch (err) {
-              warn(
-                `${name} failed to handle processed result from ${file}: ${(err as Error).message}`
-              );
+              errors.push(result.error);
+            } else {
+              if (resultHandler) {
+                try {
+                  await resultHandler(file, result);
+                } catch (err) {
+                  warn(
+                    `${name} failed to handle processed result from ${file}: ${
+                      (err as Error).message
+                    }`
+                  );
+                }
+              }
             }
 
             resolve();
@@ -57,5 +67,5 @@ export default async function processAppMapDir<T extends Task, V>(
     )
   );
 
-  return files.length;
+  return { oversized, errors, numProcessed: files.length };
 }
