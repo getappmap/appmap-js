@@ -437,7 +437,7 @@ export default {
     width: 100%;
     height: 100%;
     border: 0;
-    border-radius: 0;
+    border-radius: 2px;
     box-shadow: none;
     background: black;
     font: inherit;
@@ -453,7 +453,7 @@ export default {
     vertical-align: middle;
     width: 100%;
     border: 0;
-    border-radius: 5px;
+    border-radius: 2px;
     font: inherit;
     box-shadow: none;
     background: black;
@@ -632,13 +632,12 @@ export default {
 
   &__elapsed {
     margin-left: 0.5rem;
-    border-radius: 0.25rem;
+    border-radius: 2px;
     display: inline-block;
     vertical-align: middle;
     height: 22px;
     padding: 0 0.25rem;
-    //border: 1px solid $gray2;
-    background: darken($gray4, 50);
+    background: $black;
 
     &-input {
       display: inline-block;

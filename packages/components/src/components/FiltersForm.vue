@@ -189,7 +189,7 @@ export default {
   height: 22px;
   padding: 0 0.5rem;
   border: 1px solid $gray2;
-  background: darken($gray4, 50);
+  background: $black;
 
   &--show-suggestions {
     border-radius: 0.25rem 0.25rem 0 0;
@@ -205,7 +205,7 @@ export default {
     vertical-align: middle;
     width: 100%;
     border: 0;
-    border-radius: 0;
+    border-radius: 2px;
     box-shadow: none;
     background: transparent;
     font: inherit;
@@ -261,8 +261,7 @@ export default {
       &--selected,
       &:hover,
       &:active {
-        color: $gray6;
-        background-color: $gray2;
+        color: $white;
       }
     }
   }
