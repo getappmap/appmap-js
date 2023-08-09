@@ -30,12 +30,6 @@ export default async function analyze(
   warn(`Analyzing AppMaps using ${threadCount} worker threads`);
 
   const oversizedAppMaps = new Set<string>();
-  const collectOversizedAppMaps = (
-    appmapFile: string,
-    result: ScanResult | SequenceDiagramResult
-  ) => {
-    if (result.oversized) oversizedAppMaps.add(appmapFile);
-  };
 
   // This could be done in worker threads as well, but the timing data indicates that it's not currently a bottleneck.
   {
@@ -71,16 +65,16 @@ export default async function analyze(
     console.log('Generating sequence diagrams...');
     const startTime = new Date().getTime();
 
-    const fileCount = await processAppMapDir<SequenceDiagramTask, SequenceDiagramResult>(
+    const result = await processAppMapDir<SequenceDiagramTask, SequenceDiagramResult>(
       'Generate sequence diagrams',
       workerPool,
       task,
-      appMapDir,
-      collectOversizedAppMaps
+      appMapDir
     );
 
     const elapsed = new Date().getTime() - startTime;
-    console.log(`Generated ${fileCount} sequence diagrams in ${elapsed}ms`);
+    console.log(`Generated ${result.numProcessed} sequence diagrams in ${elapsed}ms`);
+    for (const file of result.oversized) oversizedAppMaps.add(file);
   };
 
   const scan = async () => {
@@ -95,19 +89,21 @@ export default async function analyze(
       maxSize: maxAppMapSizeInBytes,
     });
 
-    const fileCount = await processAppMapDir<ScanTask, ScanResult>(
+    const result = await processAppMapDir<ScanTask, ScanResult>(
       'Scanning',
       workerPool,
       task,
       appMapDir,
-      (appmapFile: string, result: ScanResult) => {
-        collectOversizedAppMaps(appmapFile, result);
+      (_appmapFile: string, result: ScanResult) => {
         if (result.findingsCount) findingsCount += result.findingsCount;
       }
     );
 
     const elapsed = new Date().getTime() - startTime;
-    console.log(`Scanned ${fileCount} AppMaps in ${elapsed}ms, found ${findingsCount} findings`);
+    console.log(
+      `Scanned ${result.numProcessed} AppMaps in ${elapsed}ms, found ${findingsCount} findings`
+    );
+    for (const file of result.oversized) oversizedAppMaps.add(file);
   };
 
   assert(WORKER_FILE);
