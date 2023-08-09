@@ -1,8 +1,9 @@
 import { Event, EventNavigator } from '@appland/models';
-import { MatchResult, Rule, RuleLogic } from '../types';
+import { MatchResult, RuleLogic } from '../types';
 import { URL } from 'url';
 import * as types from './types';
 import parseRuleDescription from './lib/parseRuleDescription';
+import RuleInstance from '../ruleInstance';
 
 // TODO: Use the Query AST for this.
 const QueryIncludes: RegExp[] = [/\bINSERT\b/i, /\bUPDATE\b/i];
@@ -62,7 +63,7 @@ function build(options: Options): RuleLogic {
   };
 }
 
-export default {
+const RULE: RuleInstance = {
   id: 'too-many-updates',
   title: 'Too many SQL and RPC updates performed in one command',
   scope: 'command',
@@ -75,4 +76,5 @@ export default {
   url: 'https://appland.com/docs/analysis/rules-reference.html#too-many-updates',
   Options,
   build,
-} as Rule;
+};
+export default RULE;

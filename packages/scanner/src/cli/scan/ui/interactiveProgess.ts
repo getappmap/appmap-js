@@ -4,7 +4,8 @@ import EventEmitter from 'events';
 import AppMapIndex from '../../../appMapIndex';
 import Check from '../../../check';
 import ProgressReporter from '../../../progressReporter';
-import { MatchResult, ScopeName } from '../../../types';
+import { MatchResult } from '../../../types';
+import { ScopeName } from '../../../index';
 import { Breakpoint, ExecutionContext } from '../breakpoint';
 
 type ContextVariables = {

@@ -1,10 +1,11 @@
 import { Event } from '@appland/models';
-import { MatchResult, Rule, RuleLogic } from '../types';
+import { MatchResult, RuleLogic } from '../types';
 import * as types from './types';
 import MatchPatternConfig from '../configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
+import RuleInstance from '../ruleInstance';
 
 // TODO: Use the Query AST for this.
 const WHITELIST = [/\bBEGIN\b/i, /\bCOMMIT\b/i, /\bROLLBACK\b/i, /\bRELEASE\b/i, /\bSAVEPOINT\b/i];
@@ -45,7 +46,7 @@ function build(options: Options): RuleLogic {
   };
 }
 
-export default {
+const RULE: RuleInstance = {
   id: 'query-from-invalid-package',
   title: 'Queries from invalid packages',
   Options,
@@ -57,4 +58,5 @@ export default {
   description: parseRuleDescription('queryFromInvalidPackage'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#query-from-invalid-package',
   build,
-} as Rule;
+};
+export default RULE;

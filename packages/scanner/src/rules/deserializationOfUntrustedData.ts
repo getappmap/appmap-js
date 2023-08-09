@@ -1,8 +1,9 @@
 import { Event } from '@appland/models';
-import { MatchResult, Rule } from '../types';
+import { MatchResult } from '../types';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
 import analyzeDataFlow, { TrackedValue } from './lib/analyzeDataFlow';
+import RuleInstance from '../ruleInstance';
 
 function valueHistory(value: TrackedValue): Event[] {
   const events: Event[] = [];
@@ -75,7 +76,7 @@ const DeserializeUnsafe = 'deserialize.unsafe';
 const DeserializeSafe = 'deserialize.safe';
 const DeserializeSanitize = 'deserialize.sanitize';
 
-export default {
+const RULE: RuleInstance = {
   id: 'deserialization-of-untrusted-data',
   title: 'Deserialization of untrusted data',
   labels: [DeserializeUnsafe, DeserializeSafe, DeserializeSanitize],
@@ -89,4 +90,5 @@ export default {
   description: parseRuleDescription('deserializationOfUntrustedData'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#deserialization-of-untrusted-data',
   build: () => ({ matcher }),
-} as Rule;
+};
+export default RULE;

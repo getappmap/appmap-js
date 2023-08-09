@@ -2,14 +2,14 @@
 
 import { readFile } from 'fs/promises';
 import { exit } from 'process';
-import { Rule } from '../src/types';
 import { allRules } from './util';
+import RuleInstance from '../src/ruleInstance';
 
 const labels = new Set<string>();
 const noDocLabels: string[] = [];
 (async function () {
   Promise.all(
-    (await allRules()).map(async (rule: Rule) => {
+    (await allRules()).map(async (rule: RuleInstance) => {
       (rule.labels || []).forEach((label) => labels.add(label));
     })
   )

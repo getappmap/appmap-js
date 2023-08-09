@@ -1,5 +1,5 @@
 import { FindingStatusListItem } from '@appland/client/dist/src';
-import { Finding } from './types';
+import { Finding } from './index';
 
 export function newFindings(
   findings: Finding[],

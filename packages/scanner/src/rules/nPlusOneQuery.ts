@@ -1,9 +1,10 @@
 import { Event } from '@appland/models';
-import { AppMapIndex, EventFilter, Level, MatchResult, Rule, RuleLogic } from '../types';
+import { AppMapIndex, EventFilter, Level, MatchResult, RuleLogic } from '../types';
 import * as types from './types';
 import { SQLEvent, sqlStrings } from '../database';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
+import RuleInstance from '../ruleInstance';
 
 class Options implements types.NPlusOneQuery.Options {
   public warningLimit = 5;
@@ -86,7 +87,7 @@ function build(options: Options): RuleLogic {
   };
 }
 
-export default {
+const RULE: RuleInstance = {
   id: 'n-plus-one-query',
   title: 'N plus 1 SQL query',
   scope: 'command',
@@ -99,4 +100,5 @@ export default {
   description: parseRuleDescription('nPlusOneQuery'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#n-plus-one-query',
   build,
-} as Rule;
+};
+export default RULE;

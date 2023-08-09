@@ -5,7 +5,7 @@ import { buildAppMap, Metadata } from '@appland/models';
 
 import Check from '../check';
 import RuleChecker from '../ruleChecker';
-import { Finding } from '../types';
+import { Finding } from '../index';
 
 import AppMapIndex from '../appMapIndex';
 import assert from 'node:assert';

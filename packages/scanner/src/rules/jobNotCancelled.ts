@@ -1,9 +1,10 @@
 import type { Event } from '@appland/models';
-import type { MatchResult, Rule, RuleLogic } from '../types';
+import type { MatchResult, RuleLogic } from '../types';
 import Labels from '../wellKnownLabels';
 import { hasTransactionDetails } from '../scope/sqlTransactionScope';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
+import RuleInstance from '../ruleInstance';
 
 function build(): RuleLogic {
   function matcher(event: Event): MatchResult[] | undefined {
@@ -36,7 +37,7 @@ function build(): RuleLogic {
   };
 }
 
-export default {
+const RULE: RuleInstance = {
   id: 'job-not-cancelled',
   title: 'Job created in a rolled back transaction and not cancelled',
   scope: 'transaction',
@@ -49,4 +50,5 @@ export default {
   description: parseRuleDescription('jobNotCancelled'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#job-not-cancelled',
   build,
-} as Rule;
+};
+export default RULE;

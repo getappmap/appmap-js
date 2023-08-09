@@ -1,12 +1,13 @@
 import { Event } from '@appland/models';
 import { forClientRequest, breakingChanges } from '../openapi';
-import { MatchResult, Rule, RuleLogic } from '../types';
+import { MatchResult, RuleLogic } from '../types';
 import * as types from './types';
 import OpenApiDiff from 'openapi-diff';
 import { OpenAPIV3 } from 'openapi-types';
 import parseRuleDescription from './lib/parseRuleDescription';
 import openapiProvider from './lib/openapiProvider';
 import assert from 'assert';
+import RuleInstance from '../ruleInstance';
 
 class Options implements types.IncompatibleHttpClientRequest.Options {
   public schemata: Record<string, string> = {};
@@ -51,7 +52,7 @@ function build(options: Options): RuleLogic {
   };
 }
 
-export default {
+const RULE: RuleInstance = {
   id: 'incompatible-http-client-request',
   title: 'Incompatible HTTP client request',
   // scope: //http_client_request
@@ -62,4 +63,5 @@ export default {
   url: 'https://appland.com/docs/analysis/rules-reference.html#incompatible-http-client-request',
   Options,
   build,
-} as Rule;
+};
+export default RULE;

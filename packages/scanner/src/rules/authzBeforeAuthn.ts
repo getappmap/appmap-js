@@ -1,8 +1,9 @@
 import { Event, EventNavigator } from '@appland/models';
 import { isTruthy, providesAuthentication } from './lib/util';
-import { MatcherResult, Rule, RuleLogic } from '../types.d';
+import { MatcherResult, RuleLogic } from '../types.d';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
+import RuleInstance from '../ruleInstance';
 
 function containsAuthentication(events: Generator<EventNavigator>) {
   for (const iter of events) {
@@ -42,7 +43,7 @@ function build(): RuleLogic {
 const SecurityAuthentication = 'security.authentication';
 const SecurityAuthorization = 'security.authorization';
 
-export default {
+const RULE: RuleInstance = {
   id: 'authz-before-authn',
   title: 'Authorization performed before authentication',
   labels: [SecurityAuthorization, SecurityAuthentication],
@@ -55,4 +56,5 @@ export default {
   description: parseRuleDescription('authzBeforeAuthn'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#authz-before-authn',
   build,
-} as Rule;
+};
+export default RULE;

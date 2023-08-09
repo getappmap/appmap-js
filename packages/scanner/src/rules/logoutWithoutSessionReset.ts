@@ -1,7 +1,8 @@
 import { Event, EventNavigator } from '@appland/models';
-import { MatchResult, Rule, RuleLogic } from '../types';
+import { MatchResult, RuleLogic } from '../types';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
+import RuleInstance from '../ruleInstance';
 
 function containsSessionClear(events: Generator<EventNavigator>) {
   for (const iter of events) {
@@ -41,7 +42,7 @@ function build(): RuleLogic {
 const SecurityLogout = 'security.logout';
 const HTTPSessionClear = 'http.session.clear';
 
-export default {
+const RULE: RuleInstance = {
   id: 'logout-without-session-reset',
   title: 'Logout without session reset',
   scope: 'http_server_request',
@@ -58,4 +59,5 @@ export default {
   description: parseRuleDescription('logoutWithoutSessionReset'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#logout-without-session-reset',
   build,
-} as Rule;
+};
+export default RULE;

@@ -1,7 +1,8 @@
 import { Event, EventNavigator } from '@appland/models';
 import { URL } from 'url';
-import { Rule, RuleLogic } from '../types';
+import { RuleLogic } from '../types';
 import parseRuleDescription from './lib/parseRuleDescription';
+import RuleInstance from '../ruleInstance';
 
 const validatedBy = (iterator: Iterator<EventNavigator>): boolean => {
   let i: IteratorResult<EventNavigator> = iterator.next();
@@ -25,7 +26,7 @@ function build(): RuleLogic {
   };
 }
 
-export default {
+const RULE: RuleInstance = {
   id: 'save-without-validation',
   title: 'Save without validation',
   enumerateScope: true,
@@ -36,4 +37,5 @@ export default {
   description: parseRuleDescription('saveWithoutValidation'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#save-without-validation',
   build,
-} as Rule;
+};
+export default RULE;

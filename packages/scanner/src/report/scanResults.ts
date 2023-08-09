@@ -1,7 +1,7 @@
 import { Metadata } from '@appland/models';
 import Check from '../check';
 import Configuration from '../configuration/types/configuration';
-import { Finding } from '../types';
+import { Finding } from '../index';
 import { AppMapMetadata, ScanSummary } from './scanSummary';
 import Telemetry, { Git, GitState } from '../telemetry';
 

@@ -1,8 +1,9 @@
 import { Event, EventNavigator } from '@appland/models';
 import * as types from './types';
 import { RPCWithoutProtectionOptions, rpcWithoutProtection } from './lib/rpcWithoutProtection';
-import { Rule, RuleLogic } from '../types';
+import { RuleLogic } from '../types';
 import parseRuleDescription from './lib/parseRuleDescription';
+import RuleInstance from '../ruleInstance';
 
 class Options implements RPCWithoutProtectionOptions, types.RPCWithoutCircuitBreaker.Options {
   public expectedLabel: string = RPCCircuitBreaker;
@@ -21,7 +22,7 @@ function build(options: Options = new Options()): RuleLogic {
 
 const RPCCircuitBreaker = 'rpc.circuit_breaker';
 
-export default {
+const RULE: RuleInstance = {
   id: 'rpc-without-circuit-breaker',
   title: 'RPC without circuit breaker',
   Options,
@@ -31,4 +32,5 @@ export default {
   description: parseRuleDescription('rpcWithoutCircuitBreaker'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#rpc-without-circuit-breaker',
   build,
-} as Rule;
+};
+export default RULE;

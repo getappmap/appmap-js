@@ -1,8 +1,9 @@
 import { Event, Label } from '@appland/models';
 import * as types from './types';
-import { Rule, RuleLogic } from '../types';
+import { RuleLogic } from '../types';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
+import RuleInstance from '../ruleInstance';
 
 class Options implements types.QueryFromView.Options {
   public forbiddenLabel: Label = 'mvc.template';
@@ -33,7 +34,7 @@ function build(options: Options = new Options()): RuleLogic {
   };
 }
 
-export default {
+const RULE: RuleInstance = {
   id: 'query-from-view',
   title: 'Queries from view',
   Options,
@@ -45,4 +46,5 @@ export default {
   description: parseRuleDescription('queryFromView'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#query-from-view',
   build,
-} as Rule;
+};
+export default RULE;

@@ -1,8 +1,9 @@
 import { Event } from '@appland/models';
-import { AppMapIndex, MatchResult, Rule, RuleLogic } from '../types';
+import { AppMapIndex, MatchResult, RuleLogic } from '../types';
 import { visit } from '../database/visit';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
+import RuleInstance from '../ruleInstance';
 
 function isMaterialized(e: Event): boolean {
   return e.ancestors().some(({ labels }) => labels.has(DAOMaterialize));
@@ -74,7 +75,7 @@ function build(): RuleLogic {
 // Example: ActiveRecord::Relation#records
 const DAOMaterialize = 'dao.materialize';
 
-export default {
+const RULE: RuleInstance = {
   id: 'unbatched-materialized-query',
   title: 'Unbatched materialized SQL query',
   labels: [DAOMaterialize],
@@ -86,4 +87,5 @@ export default {
   description: parseRuleDescription('unbatchedMaterializedQuery'),
   url: 'https://appland.com/docs/analysis/rules-reference.html#unbatched-materialized-query',
   build,
-} as Rule;
+};
+export default RULE;

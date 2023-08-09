@@ -1,10 +1,11 @@
 import { Event } from '@appland/models';
 import types from './types';
-import { MatchResult, Rule, RuleLogic } from '../types';
+import { MatchResult, RuleLogic } from '../types';
 import MatchPatternConfig from '../configuration/types/matchPatternConfig';
 import { buildFilter, buildFilters } from './lib/matchPattern';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
+import RuleInstance from '../ruleInstance';
 
 class Options implements types.IllegalPackageDependency.Options {
   public callerPackages: MatchPatternConfig[] = [];
@@ -48,7 +49,7 @@ function build(options: Options): RuleLogic {
   return { where, matcher };
 }
 
-export default {
+const RULE: RuleInstance = {
   id: 'illegal-package-dependency',
   title: 'Illegal use of code by a non-whitelisted package',
   // scope: //*[@command]
@@ -63,4 +64,5 @@ export default {
   url: 'https://appland.com/docs/analysis/rules-reference.html#illegal-package-dependency',
   Options,
   build,
-} as Rule;
+};
+export default RULE;

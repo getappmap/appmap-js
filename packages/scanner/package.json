@@ -3,12 +3,13 @@
   "version": "1.80.2",
   "description": "Analyze AppMaps for code flaws",
   "bin": "built/cli.js",
+  "main": "built/index.js",
   "files": [
     "built",
     "doc",
     "src/types.d.ts"
   ],
-  "types": "src/types.d.ts",
+  "types": "src/index.ts",
   "scripts": {
     "build": "node bin/preBuild.js && tsc -p tsconfig.build.json && yarn schema && yarn doc",
     "build-native": "yarn build && ./bin/build-native",

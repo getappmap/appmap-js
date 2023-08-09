@@ -1,7 +1,8 @@
-import { MatchResult, Rule, RuleLogic } from '../types';
+import { MatchResult, RuleLogic } from '../types';
 import parseRuleDescription from './lib/parseRuleDescription';
 import { Event } from '@appland/models';
 import { URL } from 'url';
+import RuleInstance from '../ruleInstance';
 
 export enum Labels {
   JwtEncode = 'jwt.encode',
@@ -40,7 +41,7 @@ class JwtAlgoritmNoneLogic implements RuleLogic {
   }
 }
 
-class JwtAlgoritmNone implements Rule {
+class JwtAlgoritmNone implements RuleInstance {
   public readonly id = 'jwt-algorithm-none';
   public readonly title = "JWT 'none' algorithm";
   public readonly impactDomain = 'Security';

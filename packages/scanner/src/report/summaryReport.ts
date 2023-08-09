@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 
-import { Finding } from '../types';
+import { Finding } from '../index';
 import { pluralize } from '../rules/lib/util';
 
 import { FindingSummary } from './findingSummary';

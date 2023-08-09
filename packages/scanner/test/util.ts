@@ -3,9 +3,9 @@ import { readFile } from 'fs/promises';
 import { join } from 'path';
 import RuleChecker from '../src/ruleChecker';
 import { fileExists, verbose } from '../src/rules/lib/util';
-import { Finding } from '../src/types';
 import Check from '../src/check';
 import AppMapIndex from '../src/appMapIndex';
+import { Finding } from '../src';
 
 if (process.env.VERBOSE_SCAN === 'true' || process.env.DEBUG === 'true') {
   verbose(true);
