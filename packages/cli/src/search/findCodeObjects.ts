@@ -234,9 +234,14 @@ export default class FindCodeObjects {
       progressFn();
     };
 
-    const options = new ProcessFileOptions(this.appMapDir);
+    const options = new ProcessFileOptions();
     options.fileCountFn = fileCountFn;
-    await processFiles('**/classMap.json', checkClassMap.bind(this), options);
+    await processFiles(
+      this.appMapDir,
+      (file) => basename(file) === 'classMap.json',
+      checkClassMap.bind(this),
+      options
+    );
     return matches;
   }
 }

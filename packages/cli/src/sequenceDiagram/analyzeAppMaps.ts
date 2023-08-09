@@ -78,14 +78,14 @@ export default async function analyzeAppMaps(
       }
     }
   } else {
-    const options = new ProcessFileOptions(appmapDir);
     await processFiles(
-      '**/*.appmap.json',
+      appmapDir,
+      '.appmap.json',
       (file: string, cb: () => void) => {
         appmaps?.add(file.slice(0, file.length - '.appmap.json'.length));
         cb();
       },
-      options
+      new ProcessFileOptions()
     );
   }
 
