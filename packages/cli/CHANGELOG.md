@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.84.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.84.0...@appland/appmap-v3.84.1) (2023-08-10)
+
+
+### Bug Fixes
+
+* Pin @appland/sequence-diagram to ^1.7.0 ([4d29524](https://github.com/getappmap/appmap-js/commit/4d29524ccfecc78239665453966e10d89b3a5c10))
+
 # [@appland/appmap-v3.84.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.83.0...@appland/appmap-v3.84.0) (2023-08-07)
 
 
