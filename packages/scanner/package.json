@@ -91,6 +91,9 @@
     "tar-stream": "^2.2.0",
     "yargs": "^17.1.1"
   },
+  "engines": {
+    "node": ">15"
+  },
   "publishConfig": {
     "access": "public"
   },

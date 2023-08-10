@@ -3,6 +3,9 @@
   "version": "3.84.1",
   "description": "",
   "bin": "built/cli.js",
+  "engines": {
+    "node": ">15"
+  },
   "publishConfig": {
     "access": "public"
   },
