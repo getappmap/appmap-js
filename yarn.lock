@@ -128,7 +128,7 @@ __metadata:
     "@appland/diagrams": "workspace:^1.7.0"
     "@appland/models": "workspace:^2.6.3"
     "@appland/openapi": "workspace:^1.4.3"
-    "@appland/sequence-diagram": "workspace:^1"
+    "@appland/sequence-diagram": "workspace:^1.7.0"
     "@craftamap/esbuild-plugin-html": ^0.4.0
     "@octokit/rest": ^20.0.1
     "@octokit/types": ^11.1.0
@@ -471,7 +471,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/sequence-diagram@workspace:^1, @appland/sequence-diagram@workspace:^1.6.1, @appland/sequence-diagram@workspace:packages/sequence-diagram":
+"@appland/sequence-diagram@workspace:^1.6.1, @appland/sequence-diagram@workspace:^1.7.0, @appland/sequence-diagram@workspace:packages/sequence-diagram":
   version: 0.0.0-use.local
   resolution: "@appland/sequence-diagram@workspace:packages/sequence-diagram"
   dependencies:
