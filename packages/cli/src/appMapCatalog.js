@@ -1,5 +1,5 @@
 const fsp = require('fs').promises;
-const { baseName, listAppMapFiles } = require('./utils');
+const { baseName, findFiles } = require('./utils');
 
 /**
  * appMapCatalog creates a lookup table of all the AppMap metadata in a directory (recursively).
@@ -9,10 +9,7 @@ const { baseName, listAppMapFiles } = require('./utils');
  */
 async function appMapCatalog(directory) {
   const appMapsByName = {};
-  const appMapFiles = [];
-  await listAppMapFiles(directory, (file) => {
-    appMapFiles.push(file);
-  });
+  const appMapFiles = await findFiles(directory, '*.appmap.json');
 
   await Promise.all(
     // eslint-disable-next-line prefer-arrow-callback
