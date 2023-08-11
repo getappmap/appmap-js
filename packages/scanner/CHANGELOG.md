@@ -1,3 +1,15 @@
+# [@appland/scanner-v1.82.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.81.1...@appland/scanner-v1.82.0) (2023-08-11)
+
+
+### Bug Fixes
+
+* Fix caching of unparseable SQL ([e81db08](https://github.com/getappmap/appmap-js/commit/e81db08d6f6a7b661f77aa3aead5e800e15a7358))
+
+
+### Features
+
+* Analyze in worker threads ([612da06](https://github.com/getappmap/appmap-js/commit/612da06532e765469094aaeaaf614a52e75e46d2))
+
 # [@appland/scanner-v1.81.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.81.0...@appland/scanner-v1.81.1) (2023-08-11)
 
 
