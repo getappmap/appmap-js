@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.84.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.84.1...@appland/appmap-v3.84.2) (2023-08-11)
+
+
+### Bug Fixes
+
+* Specify node version requirements for user-facing packages ([ca55a25](https://github.com/getappmap/appmap-js/commit/ca55a256e5fb79b990eff87a753980de549a4b88))
+
 # [@appland/appmap-v3.84.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.84.0...@appland/appmap-v3.84.1) (2023-08-10)
 
 
