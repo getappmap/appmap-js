@@ -3,7 +3,7 @@ import { QueryAST } from './types';
 import LRUCache from 'lru-cache';
 
 const NormalizedSQLBySQLString = new LRUCache<string, string>({ max: 10000 });
-const ASTBySQLString = new LRUCache<string, QueryAST>({ max: 1000 });
+const ASTBySQLString = new LRUCache<string, QueryAST | 'parse-error'>({ max: 1000 });
 
 export default class AppMapIndex {
   constructor(public appMap: AppMap) {}
@@ -12,12 +12,17 @@ export default class AppMapIndex {
     if (!event.sql) throw new Error(`${event.fqid} is not a SQL query`);
 
     const sql = this.sqlNormalized(event);
-    let ast = ASTBySQLString.get(sql);
-    if (!ast) {
-      ast = parseSQL(sql);
-      ast ? ASTBySQLString.set(sql, ast) : ASTBySQLString.set(sql, null);
+    let result: QueryAST | undefined;
+    const cachedAST = ASTBySQLString.get(sql);
+    if (cachedAST === 'parse-error') {
+      result = undefined;
+    } else if (cachedAST) {
+      result = cachedAST;
+    } else {
+      result = parseSQL(sql);
+      ASTBySQLString.set(sql, result ? result : 'parse-error');
     }
-    return ast;
+    return result;
   }
 
   sqlNormalized(event: Event): string {

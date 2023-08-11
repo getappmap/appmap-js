@@ -1,6 +1,6 @@
 const { join: joinPath } = require('path');
 const { promises: fsp } = require('fs');
-const { verbose, listAppMapFiles, baseName } = require('./utils');
+const { verbose, findFiles, baseName } = require('./utils');
 
 class InventoryCommand {
   constructor(directory) {
@@ -48,7 +48,7 @@ class InventoryCommand {
   }
 
   async files(fn) {
-    return listAppMapFiles(this.directory, fn);
+    return findFiles(this.directory, '*.appmap.json', fn);
   }
 }
 

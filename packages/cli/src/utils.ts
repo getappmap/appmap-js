@@ -2,11 +2,10 @@ import { constants as fsConstants, PathLike, promises as fsp, Stats } from 'fs';
 import gracefulFs from 'graceful-fs';
 import { AsyncWorker, queue } from 'async';
 import { promisify } from 'util';
-import { isAbsolute, join } from 'path';
+import { join } from 'path';
 import assert from 'assert';
 import { Event, ReturnValueObject } from '@appland/models';
 import { readdir, stat } from 'fs/promises';
-import { IOptions, glob } from 'glob';
 
 const StartTime = Date.now();
 const renameFile = promisify(gracefulFs.rename);
@@ -89,28 +88,21 @@ export class ProcessFileOptions {
     process.stderr.write(err.toString() + '\n');
   };
   public workerCount = 2;
-
-  constructor(public root: string) {}
 }
+
+export type FilePredicate = (file: string) => boolean;
 
 /**
  * Call a function with each matching file. No guarantee is given that
  * files will be processed in any particular order.
  */
 export async function processFiles(
-  pattern: string,
+  dir: string,
+  extensionOrPredicate: string | FilePredicate,
   fn: AsyncWorker<string>,
   options: ProcessFileOptions
 ): Promise<void> {
-  // cwd is explicitly required; the doc says that process.cwd() is used by default, but I am not
-  // seeing that to be the case.
-  const globOptions: IOptions = {};
-  if (isAbsolute(options.root)) {
-    globOptions.cwd = options.root;
-  } else {
-    globOptions.cwd = join(process.cwd(), options.root);
-  }
-  const files = (await promisify(glob)(pattern, globOptions)).map((f) => join(options.root, f));
+  const files = await findFiles(dir, extensionOrPredicate);
   options.fileCountFn(files.length);
   if (files.length === 0) return;
 
@@ -168,27 +160,61 @@ export async function processNamedFiles(
 }
 
 /**
- * Lists all appmap.json files in a directory, and passes them to a function.
- * With `await`, `listAppMapFiles` blocks until all the files have been processed.
+ * Lists all matching files in a directory, and passes them to an optional function.
  */
-export async function listAppMapFiles(
+export async function findFiles(
   directory: string,
-  fn: (path: string) => Promise<void> | void
-) {
+  extensionOrPredicate: string | FilePredicate,
+  fn?: ((path: string) => Promise<any> | any) | undefined
+): Promise<string[]> {
   const printDebug = verbose();
   if (printDebug) {
     console.warn(`Scanning ${directory} for AppMaps`);
   }
 
-  const options: IOptions = { debug: printDebug };
-  if (isAbsolute(directory)) {
-    options.cwd = directory;
-  } else {
-    options.cwd = join(process.cwd(), directory);
-  }
-  await Promise.all(
-    (await promisify(glob)('**/*.appmap.json', options)).map((f) => join(directory, f)).map(fn)
-  );
+  const matchFile = (file: string): boolean => {
+    if (typeof extensionOrPredicate === 'string') {
+      return file.endsWith(extensionOrPredicate);
+    } else {
+      return extensionOrPredicate(file);
+    }
+  };
+
+  const traverseDirectory = async (
+    dir: string,
+    result = new Array<string>()
+  ): Promise<string[]> => {
+    let files: string[];
+    try {
+      files = await readdir(dir);
+    } catch (err) {
+      const code = (err as any).code;
+      if (code === 'ENOENT') return result;
+
+      throw err;
+    }
+
+    for (const file of files) {
+      const path = join(dir, file);
+      let stat: Stats;
+      try {
+        stat = await fsp.stat(path);
+      } catch (err) {
+        const code = (err as any).code;
+        if (code === 'ENOENT') return result;
+
+        throw err;
+      }
+      if (stat.isDirectory()) {
+        await traverseDirectory(path, result);
+      } else if (stat.isFile() && matchFile(file)) {
+        if (fn) await fn(path);
+        result.push(path);
+      }
+    }
+    return result;
+  };
+  return await traverseDirectory(directory);
 }
 
 export function exists(path: PathLike): Promise<boolean> {

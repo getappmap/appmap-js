@@ -104,6 +104,7 @@ export default async function scan(
   const startTime = new Date();
   const appMapData = await readFile(appmapFile, 'utf8');
   const appMap = buildAppMap(appMapData).normalize().build();
+
   const parseTime = new Date();
 
   STATS_REPORTER.addParseTime(parseTime.getTime() - startTime.getTime());

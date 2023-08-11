@@ -50,10 +50,10 @@ export default async function updateSequenceDiagrams(
   };
 
   const counter = new CountNumProcessed();
-  const options = new ProcessFileOptions(dir);
+  const options = new ProcessFileOptions();
   options.fileCountFn = counter.setCount();
   options.errorFn = reportAppMapProcessingError('Sequence diagram');
-  await processFiles('**/*.appmap.json', generateDiagram, options);
+  await processFiles(dir, '.appmap.json', generateDiagram, options);
 
   return { numGenerated: counter.count, oversizedAppMaps };
 }

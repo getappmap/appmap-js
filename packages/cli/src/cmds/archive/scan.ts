@@ -1,7 +1,8 @@
-import { basename, dirname, join, relative, sep } from 'path';
+import { basename, dirname, join, sep } from 'path';
+import { Finding } from '@appland/scanner';
+
 import { executeCommand } from '../../lib/executeCommand';
 import { readFile, rm, writeFile } from 'fs/promises';
-import { Finding } from '../../lib/findings';
 import { processNamedFiles } from '../../utils';
 
 export async function scan(appMapDir: string): Promise<number> {

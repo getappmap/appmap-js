@@ -1,4 +1,3 @@
-import { createHash } from 'crypto';
 import { join as joinPath, basename } from 'path';
 import gracefulFs from 'graceful-fs';
 import { promisify } from 'util';
@@ -101,6 +100,14 @@ class Fingerprinter extends EventEmitter {
     delete appmapDataWithoutMetadata.metadata;
 
     const appmap = buildAppMap(appmapData).normalize().build();
+
+    // This field is deprecated, because for some change sets the Git status may be large and unweildy.
+    // It's also not used anywhere else in the system, so we can just drop it.
+    // Because the Git status field is optional anyway, the index version is not being changed for this.
+    if (appmap?.metadata?.git?.status) {
+      const git = appmap.metadata.git;
+      delete (git as any)['status'];
+    }
 
     await index.mkdir_p();
 
