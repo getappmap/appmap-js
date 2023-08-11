@@ -1,3 +1,19 @@
+# [@appland/appmap-v3.85.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.84.2...@appland/appmap-v3.85.0) (2023-08-11)
+
+
+### Bug Fixes
+
+* Fix enumeration of oversized appmaps ([22c7346](https://github.com/getappmap/appmap-js/commit/22c7346726ff02d8fdb304a0cb704512b19510db))
+
+
+### Features
+
+* Analyze in worker threads ([612da06](https://github.com/getappmap/appmap-js/commit/612da06532e765469094aaeaaf614a52e75e46d2))
+* Build sequence diagrams in web worker ([8df2d92](https://github.com/getappmap/appmap-js/commit/8df2d925dcee56f62a752f19b4980e39654d18a4))
+* Report start and end time generating sequence diagrams ([f28a509](https://github.com/getappmap/appmap-js/commit/f28a509b3b50777048f59a330ddc80ec85cb9b1e))
+* Scan in worker threads ([168f27e](https://github.com/getappmap/appmap-js/commit/168f27e181cb1c4061c50432b40fa1c5f0d54241))
+* Update packaged binaries to Node 18 ([85d84fd](https://github.com/getappmap/appmap-js/commit/85d84fd989b44d2677b8133cefd5ddc6f1912c7a))
+
 # [@appland/appmap-v3.84.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.84.1...@appland/appmap-v3.84.2) (2023-08-11)
 
 
