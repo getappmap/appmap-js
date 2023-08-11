@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.81.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.81.0...@appland/scanner-v1.81.1) (2023-08-11)
+
+
+### Bug Fixes
+
+* Specify node version requirements for user-facing packages ([ca55a25](https://github.com/getappmap/appmap-js/commit/ca55a256e5fb79b990eff87a753980de549a4b88))
+
 # [@appland/scanner-v1.81.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.80.2...@appland/scanner-v1.81.0) (2023-08-09)
 
 
