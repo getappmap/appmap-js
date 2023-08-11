@@ -1,5 +1,7 @@
 import assert from 'assert';
 import { parentPort } from 'worker_threads';
+assert(parentPort);
+
 import { buildAppMap, setSQLErrorHandler } from '@appland/models';
 
 import sqlErrorLog from '../../lib/sqlErrorLog';
@@ -13,8 +15,6 @@ import { scan } from '@appland/scanner';
 import { basename, dirname, join } from 'path';
 import buildFilter, { Language } from './buildFilter';
 import { FormatType, Specification, buildDiagram, format } from '@appland/sequence-diagram';
-
-if (!parentPort) throw new Error('parentPort is not defined');
 
 setSQLErrorHandler(sqlErrorLog);
 

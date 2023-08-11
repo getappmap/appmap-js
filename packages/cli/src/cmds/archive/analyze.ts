@@ -12,14 +12,16 @@ import { SequenceDiagramResult } from '../sequenceDiagram/SequenceDiagramResult'
 import { ScanResult } from '../scan/ScanResult';
 import { ScanTask } from '../scan/ScanTask';
 import { warn } from 'console';
-import { existsSync } from 'fs';
 import assert from 'assert';
+import { existsSync } from 'fs';
 
-const WORKER_FILE = [
-  join(__dirname, 'analyzeWorker.js'),
-  join(__dirname, '../../../built/cmds/archive', 'analyzeWorker.js'),
-].find((file) => existsSync(file));
-if (!WORKER_FILE) throw new Error('analyzeWorker.js not found');
+// This import is used to ensure that the packaging follows the dependency.
+require('./analyzeWorkerWrapper');
+
+const TEST_ENV_WORKER_FILE = join(__dirname, '../../../built/cmds/archive/analyzeWorkerWrapper.js');
+const WORKER_FILE = existsSync(TEST_ENV_WORKER_FILE)
+  ? TEST_ENV_WORKER_FILE
+  : join(__dirname, 'analyzeWorkerWrapper.js');
 
 export default async function analyze(
   threadCount: number,
