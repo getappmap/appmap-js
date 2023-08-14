@@ -1,3 +1,10 @@
+# [@appland/components-v2.58.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.57.1...@appland/components-v2.58.0) (2023-08-14)
+
+
+### Features
+
+* release new version of components ([4999044](https://github.com/getappmap/appmap-js/commit/49990441f56a7e21d94a7adeb01df743ef036c78))
+
 # [@appland/components-v2.57.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.57.0...@appland/components-v2.57.1) (2023-07-26)
 
 
