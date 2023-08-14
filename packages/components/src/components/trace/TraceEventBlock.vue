@@ -254,7 +254,7 @@ export default {
   left: -74px;
   width: 74px;
   height: 4px;
-  background-color: $gray4; //#242c41;
+  background-color: $gray4;
   z-index: -1;
 }
 
@@ -266,7 +266,7 @@ export default {
   width: 37px;
   height: 37px;
   border-radius: 0 25px 0 0;
-  border: 4px solid $gray4; //#242c41;
+  border: 4px solid $gray4;
   border-bottom: 0;
   border-left: 0;
   z-index: -1;
@@ -285,7 +285,7 @@ export default {
     width: 33px;
     height: 37px;
     border-radius: 0 0 0 25px;
-    border: 4px solid $gray4; //#242c41;
+    border: 4px solid $gray4;
     border-top: 0;
     border-right: 0;
     z-index: -1;
@@ -298,7 +298,7 @@ export default {
   right: 100%;
   width: 37px;
   border-radius: 0 0 0 25px;
-  border: 4px solid $gray4; //#242c41;
+  border: 4px solid $gray4;
   border-top: 0;
   border-right: 0;
   z-index: -1;

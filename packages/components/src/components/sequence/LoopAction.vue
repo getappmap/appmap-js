@@ -67,7 +67,7 @@ export default {
 <style scoped lang="scss">
 .loop {
   margin: 15px -20px 10px -20px;
-  border: 2px solid $gray2; //$actor-highlight; //#444e69;
+  border: 2px solid $gray2;
   position: relative;
   display: inline-block;
   font-weight: bold;
@@ -75,7 +75,7 @@ export default {
   border-radius: 0;
   .label-container {
     white-space: nowrap;
-    background-color: $gray2; //$actor-highlight; // #444e69;
+    background-color: $gray2;
     div {
       display: inline-block;
     }
@@ -83,9 +83,9 @@ export default {
     .label {
       padding: 5px;
       height: 28px;
-      background-color: $actor-highlight; // #444e69;
+      background-color: $actor-highlight;
       color: $white;
-      border-bottom: 2px solid $gray2; //$actor-highlight; // #444e69;
+      border-bottom: 2px solid $gray2;
       position: relative;
 
       .rhs-effect {

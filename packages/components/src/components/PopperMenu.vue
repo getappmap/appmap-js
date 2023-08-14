@@ -96,7 +96,6 @@ export default {
 
   &__body {
     border-radius: 0.5rem;
-    //border: 1px solid $light-purple;
     position: absolute;
     width: max-content;
     height: max-content;

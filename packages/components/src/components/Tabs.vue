@@ -12,9 +12,6 @@
         >
         </v-tab-button>
       </div>
-      <!-- <div class="tabs__notification">
-        <slot name="notification" />
-      </div> -->
       <div class="tabs__controls">
         <slot name="controls" />
       </div>
