@@ -66,7 +66,7 @@ class Fingerprinter extends EventEmitter {
    * pass to avoid re-reading the same 'version' files over and over.
    */
   public checkVersion = true;
-  public maxFileSizeInBytes = MAX_APPMAP_SIZE;
+  public maxFileSizeInBytes: number | undefined = MAX_APPMAP_SIZE;
 
   async fingerprint(appMapFileName: string) {
     if (verbose()) {
@@ -88,7 +88,7 @@ class Fingerprinter extends EventEmitter {
       return;
     }
 
-    if (index.appmapFileSize() > this.maxFileSizeInBytes)
+    if (this.maxFileSizeInBytes && index.appmapFileSize() > this.maxFileSizeInBytes)
       throw new FileTooLargeError(appMapFileName, index.appmapFileSize(), this.maxFileSizeInBytes);
 
     const appmapData = await index.loadAppMapData();

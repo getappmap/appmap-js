@@ -15,10 +15,13 @@ import { scan } from '@appland/scanner';
 import { basename, dirname, join } from 'path';
 import buildFilter, { Language } from './buildFilter';
 import { FormatType, Specification, buildDiagram, format } from '@appland/sequence-diagram';
+import { IndexTask, isIndexTask } from '../index/IndexTask';
+import { IndexResult } from '../index/IndexResult';
+import Fingerprinter from '../../fingerprint/fingerprinter';
 
 setSQLErrorHandler(sqlErrorLog);
 
-parentPort.on('message', async (task: ScanTask | SequenceDiagramTask) => {
+parentPort.on('message', async (task: IndexTask | ScanTask | SequenceDiagramTask) => {
   assert(parentPort);
   if (task.verbose) verbose(task.verbose);
 
@@ -34,8 +37,13 @@ parentPort.on('message', async (task: ScanTask | SequenceDiagramTask) => {
       return;
     }
 
-    let result: ScanResult | SequenceDiagramResult;
-    if (isScanTask(task)) {
+    let result: IndexResult | ScanResult | SequenceDiagramResult;
+    if (isIndexTask(task)) {
+      const handler = new Fingerprinter();
+      handler.maxFileSizeInBytes = undefined; // This has already been checked
+      await handler.fingerprint(task.appmapFile);
+      result = {};
+    } else if (isScanTask(task)) {
       const scanResults = await scan(task.appmapFile, 'appmap-scanner.yml');
       await writeIndexFile(JSON.stringify(scanResults, null, 2), 'appmap-findings.json');
       result = { findingsCount: scanResults.findings.length };
