@@ -30,6 +30,8 @@ export default async function processAppMapDir<T extends Task, V>(
   appmapDir: string,
   resultHandler?: TaskResultHandler<TaskResult<V>>
 ): Promise<ProcessResult> {
+  console.log([name, '...'].join(''));
+
   const files = await findFiles(appmapDir, '.appmap.json');
 
   const oversized = new Set<string>();
