@@ -116,8 +116,6 @@ export const handler = async (argv: any) => {
     }
 
     await writeFile(join(outputDir, 'change-report.json'), JSON.stringify(report, null, 2));
-  } catch (e) {
-    throw e as Error;
   } finally {
     rl.close();
   }

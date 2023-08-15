@@ -1,88 +1,20 @@
 import generateOpenAPI from './generateOpenAPI';
 import { CompareFilter } from '../../lib/loadAppMapConfig';
 import WorkerPool from '../../lib/workerPool';
-import { join } from 'path';
-import { SequenceDiagramOptions } from '@appland/sequence-diagram';
 import processAppMapDir from '../../lib/processAppMapDir';
 import { verbose } from '../../utils';
-import { SequenceDiagramTask } from '../sequenceDiagram/SequenceDiagramTask';
-import { SequenceDiagramResult } from '../sequenceDiagram/SequenceDiagramResult';
 import { ScanResult } from '../scan/ScanResult';
 import { ScanTask } from '../scan/ScanTask';
-import { warn } from 'console';
-import assert from 'assert';
-import { existsSync } from 'fs';
-import { IndexTask } from '../index/IndexTask';
-import { IndexResult } from '../index/IndexResult';
+import { generateSequenceDiagrams } from './generateSequenceDiagrams';
 
-// This import is used to ensure that the packaging follows the dependency.
-require('./analyzeWorkerWrapper');
-
-const TEST_ENV_WORKER_FILE = join(__dirname, '../../../built/cmds/archive/analyzeWorkerWrapper.js');
-const WORKER_FILE = existsSync(TEST_ENV_WORKER_FILE)
-  ? TEST_ENV_WORKER_FILE
-  : join(__dirname, 'analyzeWorkerWrapper.js');
-
+// Performs scan, sequence diagram generation, and OpenAPI generation for all AppMaps.
 export default async function analyze(
-  threadCount: number,
+  workerPool: WorkerPool,
   maxAppMapSizeInBytes: number,
   compareFilter: CompareFilter,
-  appMapDir: string
-): Promise<{ oversizedAppMaps: string[] }> {
-  warn(`Analyzing AppMaps using ${threadCount} worker threads`);
-
-  const oversizedAppMaps = new Set<string>();
-
-  const index = async () => {
-    const task = (file: string): IndexTask => ({
-      name: 'index',
-      verbose: verbose(),
-      appmapFile: file,
-      maxSize: maxAppMapSizeInBytes,
-    });
-
-    const startTime = new Date().getTime();
-
-    const result = await processAppMapDir<IndexTask, IndexResult>(
-      'Indexing AppMaps',
-      workerPool,
-      task,
-      appMapDir
-    );
-
-    const elapsed = new Date().getTime() - startTime;
-    console.log(`Indexed ${result.numProcessed} AppMaps in ${elapsed}ms`);
-    for (const file of result.oversized) oversizedAppMaps.add(file);
-  };
-
-  const generateSequenceDiagrams = async () => {
-    const specOptions = {
-      loops: true,
-    } as SequenceDiagramOptions;
-
-    const task = (file: string): SequenceDiagramTask => ({
-      name: 'sequence-diagram',
-      verbose: verbose(),
-      appmapFile: file,
-      maxSize: maxAppMapSizeInBytes,
-      compareFilter,
-      specOptions,
-    });
-
-    const startTime = new Date().getTime();
-
-    const result = await processAppMapDir<SequenceDiagramTask, SequenceDiagramResult>(
-      'Generate sequence diagrams',
-      workerPool,
-      task,
-      appMapDir
-    );
-
-    const elapsed = new Date().getTime() - startTime;
-    console.log(`Generated ${result.numProcessed} sequence diagrams in ${elapsed}ms`);
-    for (const file of result.oversized) oversizedAppMaps.add(file);
-  };
-
+  appMapDir: string,
+  oversizedAppMaps: Set<string>
+): Promise<void> {
   const scan = async () => {
     let findingsCount = 0;
     const startTime = new Date().getTime();
@@ -99,6 +31,7 @@ export default async function analyze(
       workerPool,
       task,
       appMapDir,
+      undefined,
       (_appmapFile: string, result: ScanResult) => {
         if (result.findingsCount) findingsCount += result.findingsCount;
       }
@@ -111,15 +44,14 @@ export default async function analyze(
     for (const file of result.oversized) oversizedAppMaps.add(file);
   };
 
-  assert(WORKER_FILE);
-  const workerPool = new WorkerPool(WORKER_FILE, threadCount);
-  try {
-    await index();
-    await generateSequenceDiagrams();
-    await scan();
-  } finally {
-    workerPool.close();
-  }
+  await generateSequenceDiagrams(
+    workerPool,
+    maxAppMapSizeInBytes,
+    compareFilter,
+    oversizedAppMaps,
+    appMapDir
+  );
+  await scan();
 
   {
     const startTime = new Date().getTime();
@@ -128,6 +60,4 @@ export default async function analyze(
     const elapsed = new Date().getTime() - startTime;
     console.log(`Generated OpenAPI in ${elapsed}ms`);
   }
-
-  return { oversizedAppMaps: [...oversizedAppMaps].sort() };
 }

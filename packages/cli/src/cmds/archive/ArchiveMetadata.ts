@@ -8,6 +8,7 @@ export type ArchiveMetadata = {
   baseRevision?: string;
   revision: string;
   timestamp: string;
+  failedTests?: string[];
   oversizedAppMaps?: string[];
   deletedAppMaps?: string[];
   config: AppMapConfig;

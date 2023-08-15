@@ -63,6 +63,7 @@ No relevant code changes found.
 | Summary | Status |
 | --- | --- |
 | [Test failures](#test-failures) | {{#if testFailures.length}}:warning: {{testFailures.length}} failed{{else}}:white_check_mark: All tests passed{{/if}} |
+{{#if (defined apiDiff) }}
 | [API changes](#api-changes) | 
   {{~#unless apiDiff.differenceCount }}
   :white_check_mark: No API changes
@@ -72,6 +73,8 @@ No relevant code changes found.
   {{~#if apiDiff.nonBreakingDifferenceCount }}{{#if apiDiff.breakingDifferenceCount }},&nbsp;{{~/if}}:wrench: {{apiDiff.nonBreakingDifferenceCount}} non-breaking{{~/if}}
   {{~/if}}
   |
+{{/if}}
+{{#if (defined findingDiff) }}
 | [Findings](#findings) |
   {{~#with findingDiff}}
   {{~#unless (length new resolved) }}
@@ -85,6 +88,7 @@ No relevant code changes found.
   {{~/if}}
   {{~/with}}
   |
+{{/if}}
 | [New AppMaps](#new-appmaps) | 
   {{~#unless newAppMaps.length }}
   :white_check_mark: None
