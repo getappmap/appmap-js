@@ -106,9 +106,6 @@ export default class MarkdownReport implements Report {
         changeReport.apiDiff.breakingDifferences?.length || 0;
       changeReport.apiDiff.nonBreakingDifferenceCount =
         changeReport.apiDiff.nonBreakingDifferences?.length || 0;
-      (changeReport as any).sequenceDiagramDiffSnippetCount = Object.keys(
-        changeReport.sequenceDiagramDiff || {}
-      ).length;
 
       if (changeReport.apiDiff.differenceCount > 0) {
         const sourceDiff = (
@@ -124,11 +121,9 @@ export default class MarkdownReport implements Report {
       }
     }
 
-    Object.keys(changeReport.findingDiff).forEach((key) => {
-      changeReport.findingDiff[key].forEach(
-        (finding: Finding) => ((finding as any).appmap = finding.appMapFile)
-      );
-    });
+    (changeReport as any).sequenceDiagramDiffSnippetCount = Object.keys(
+      changeReport.sequenceDiagramDiff || {}
+    ).length;
 
     const self = this;
 
