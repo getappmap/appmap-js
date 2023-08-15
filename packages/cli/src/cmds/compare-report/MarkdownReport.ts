@@ -125,6 +125,15 @@ export default class MarkdownReport implements Report {
       changeReport.sequenceDiagramDiff || {}
     ).length;
 
+    if (changeReport.findingDiff) {
+      Object.keys(changeReport.findingDiff).forEach((key) => {
+        assert(changeReport.findingDiff);
+        changeReport.findingDiff[key].forEach(
+          (finding: Finding) => ((finding as any).appmap = finding.appMapFile)
+        );
+      });
+    }
+
     const self = this;
 
     Handlebars.registerHelper('inspect', function (value: any) {

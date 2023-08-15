@@ -1,6 +1,7 @@
 import { warn } from 'console';
 import { findFiles } from '../utils';
 import WorkerPool from './workerPool';
+import assert from 'assert';
 
 export type Task = {
   verbose: boolean;
@@ -27,12 +28,19 @@ export default async function processAppMapDir<T extends Task, V>(
   name: string,
   pool: WorkerPool,
   taskFunction: TaskFunction<T>,
-  appmapDir: string,
+  appmapDir?: string,
+  appmapFiles?: string[],
   resultHandler?: TaskResultHandler<TaskResult<V>>
 ): Promise<ProcessResult> {
   console.log([name, '...'].join(''));
 
-  const files = await findFiles(appmapDir, '.appmap.json');
+  let files: string[];
+  if (appmapFiles) {
+    files = appmapFiles;
+  } else {
+    assert(appmapDir, 'appmapDir must be specified if appmapFiles is not specified');
+    files = await findFiles(appmapDir, '.appmap.json');
+  }
 
   const oversized = new Set<string>();
   const errors = new Array<Error>();

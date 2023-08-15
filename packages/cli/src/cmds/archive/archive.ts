@@ -14,6 +14,11 @@ import { ArchiveMetadata } from './ArchiveMetadata';
 import analyze from './analyze';
 import parseFilterArgs from './parseFilterArgs';
 import { cpus } from 'os';
+import { log, warn } from 'console';
+import buildWorkerPool from './buildWorkerPool';
+import { index } from '.';
+import { generateSequenceDiagrams } from './generateSequenceDiagrams';
+import { existsSync } from 'fs';
 
 // ## 1.3.0
 //
@@ -76,13 +81,6 @@ commit of the current git revision may not be the one that triggered the build.`
     alias: 'f',
   });
 
-  args.option('analyze', {
-    describe: 'whether to analyze the AppMaps',
-    type: 'boolean',
-    alias: 'index',
-    default: true,
-  });
-
   args.option('max-size', {
     describe: 'maximum AppMap size that will be processed, in filesystem-reported MB',
     default: DefaultMaxAppMapSizeInMB,
@@ -112,7 +110,6 @@ export const handler = async (argv: any) => {
 
   const {
     maxSize,
-    analyze: doAnalyze,
     type: typeArg,
     revision: revisionArg,
     outputFile: outputFileNameArg,
@@ -147,15 +144,36 @@ export const handler = async (argv: any) => {
   const versions = { archive: ArchiveVersion, index: IndexVersion };
   if (PackageVersion.version) versions[PackageVersion.name] = PackageVersion.version;
 
-  let oversizedAppMaps: string[] | undefined;
-  if (doAnalyze) {
-    const analyzeResult = await analyze(
-      threadCount,
-      maxAppMapSizeInBytes,
-      compareFilter,
-      appMapDir
-    );
-    oversizedAppMaps = analyzeResult.oversizedAppMaps;
+  const failedTests = new Set<string>();
+  const oversizedAppMaps = new Set<string>();
+  warn(`Analyzing AppMaps using ${threadCount} worker threads`);
+
+  const workerPool = buildWorkerPool(threadCount);
+  // Index all AppMaps first, so that we can determine which AppMaps are failed tests.
+  // If there are test failures, perform a limited analysis that only includes sequence diagrams
+  // of the failed tests. Otherwise, perform a full analysis.
+  //
+  // API changes and scanner findings are not meaningful for failed tests, so we skip doing that
+  // work and avoid misleading or confusing the user.
+  try {
+    await index(workerPool, maxAppMapSizeInBytes, appMapDir, oversizedAppMaps, failedTests);
+
+    if (failedTests.size > 0) {
+      warn(`${failedTests.size} AppMaps are failed tests. Only these AppMaps will be analyzed.`);
+      await generateSequenceDiagrams(
+        workerPool,
+        maxAppMapSizeInBytes,
+        compareFilter,
+        oversizedAppMaps,
+        undefined,
+        [...failedTests].sort()
+      );
+    } else {
+      log(`No AppMaps are failed tests, so all AppMaps will be analyzed.`);
+      await analyze(workerPool, maxAppMapSizeInBytes, compareFilter, appMapDir, oversizedAppMaps);
+    }
+  } finally {
+    workerPool.close();
   }
 
   process.chdir(appMapDir);
@@ -167,7 +185,8 @@ export const handler = async (argv: any) => {
     commandArguments: argv,
     revision,
     timestamp: Date.now().toString(),
-    oversizedAppMaps,
+    failedTests: [...failedTests].sort(),
+    oversizedAppMaps: [...oversizedAppMaps].sort(),
     config: appmapConfig,
   };
 
@@ -230,18 +249,20 @@ The base revision cannot be determined, so either use --type=auto or --type=full
   const outputDir = outputDirArg || defaultOutputDir();
   await mkdir(resolve(workingDirectory, outputDir), { recursive: true });
 
-  await new Promise<void>((resolveCB, rejectCB) => {
-    exec(
-      `tar cf ${join(
-        resolve(workingDirectory, outputDir),
-        outputFileName
-      )} appmap_archive.json openapi.yml appmaps.tar.gz`,
-      (error) => {
+  {
+    let tarCommand = `tar cf ${join(
+      resolve(workingDirectory, outputDir),
+      outputFileName
+    )} appmap_archive.json appmaps.tar.gz`;
+    if (existsSync('openapi.yml')) tarCommand += ' openapi.yml';
+
+    await new Promise<void>((resolveCB, rejectCB) => {
+      exec(tarCommand, (error) => {
         if (error) return rejectCB(error);
 
         resolveCB();
-      }
-    );
-  });
+      });
+    });
+  }
   console.log(`Created AppMap archive ${join(outputDir, outputFileName)}`);
 };

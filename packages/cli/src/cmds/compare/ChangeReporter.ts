@@ -210,21 +210,24 @@ export default class ChangeReporter {
       }
     }
 
-    const findingDiff = await generator.findingDiff(options.reportRemoved);
-    for (const finding of findingDiff.new || [])
-      referenceFindingAppMapFn(RevisionName.Head, finding);
-    for (const finding of findingDiff.resolved || [])
-      referenceFindingAppMapFn(RevisionName.Base, finding);
+    let findingDiff: Record<'new' | 'resolved', Finding[]> | undefined;
+    if (testFailures.length === 0) {
+      findingDiff = await generator.findingDiff(options.reportRemoved);
+      for (const finding of findingDiff.new || [])
+        referenceFindingAppMapFn(RevisionName.Head, finding);
+      for (const finding of findingDiff.resolved || [])
+        referenceFindingAppMapFn(RevisionName.Base, finding);
+    }
 
     const result: ChangeReport = {
       testFailures,
       newAppMaps,
       changedAppMaps,
-      findingDiff,
       sequenceDiagramDiff: await generator.sequenceDiagramDiff(changedAppMaps),
       appMapMetadata: await generator.appMapMetadata(),
     };
 
+    if (findingDiff) result.findingDiff = findingDiff;
     if (apiDiff) result.apiDiff = apiDiff;
 
     return result;
@@ -303,6 +306,8 @@ export function isChanged(
   return (appmap: AppMapName) =>
     isTestFn(appmap) &&
     baseAppMaps.has(appmap) &&
+    !!digests.appmapDigest(RevisionName.Base, appmap) &&
+    !!digests.appmapDigest(RevisionName.Head, appmap) &&
     digests.appmapDigest(RevisionName.Base, appmap) !==
       digests.appmapDigest(RevisionName.Head, appmap);
 }
