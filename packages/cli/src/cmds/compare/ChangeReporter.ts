@@ -219,12 +219,29 @@ export default class ChangeReporter {
         referenceFindingAppMapFn(RevisionName.Base, finding);
     }
 
+    const sequenceDiagramExists = async (revisionName: RevisionName, appmap: AppMapName) => {
+      const path = this.paths.sequenceDiagramPath(revisionName, appmap);
+      return await exists(path);
+    };
+
+    // Limit AppMap metadata to only those AppMaps that have a sequence diagram.
+    for (const revisionName of [RevisionName.Base, RevisionName.Head]) {
+      const metadataByPath = appMapMetadata[revisionName];
+      for (const appmap of metadataByPath.keys()) {
+        if (!(await sequenceDiagramExists(revisionName as RevisionName, appmap)))
+          metadataByPath.delete(appmap);
+      }
+    }
+
     const result: ChangeReport = {
       testFailures,
       newAppMaps,
       changedAppMaps,
       sequenceDiagramDiff: await generator.sequenceDiagramDiff(changedAppMaps),
-      appMapMetadata: await generator.appMapMetadata(),
+      appMapMetadata: {
+        [RevisionName.Base]: mapToRecord(appMapMetadata[RevisionName.Base]),
+        [RevisionName.Head]: mapToRecord(appMapMetadata[RevisionName.Head]),
+      },
     };
 
     if (findingDiff) result.findingDiff = findingDiff;
@@ -356,16 +373,6 @@ export function buildFailure(
 
 export class ReportFieldCalculator {
   constructor(public reporter: ChangeReporter) {}
-
-  async appMapMetadata(): Promise<{
-    [K in BaseOrHead]: Record<AppMapName, Metadata>;
-  }> {
-    assert(this.reporter.appMapMetadata);
-    return {
-      [RevisionName.Base]: mapToRecord(this.reporter.appMapMetadata[RevisionName.Base]),
-      [RevisionName.Head]: mapToRecord(this.reporter.appMapMetadata[RevisionName.Head]),
-    };
-  }
 
   async sequenceDiagramDiff(changedAppMaps: ChangedAppMap[]): Promise<Record<string, string[]>> {
     const diffDiagrams = new DiffDiagrams();
