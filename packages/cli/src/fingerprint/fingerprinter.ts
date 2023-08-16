@@ -1,4 +1,4 @@
-import { join as joinPath, basename } from 'path';
+import { join as joinPath, basename, resolve } from 'path';
 import gracefulFs from 'graceful-fs';
 import { promisify } from 'util';
 import { buildAppMap, Metadata } from '@appland/models';
@@ -9,6 +9,7 @@ import { verbose, mtime } from '../utils';
 import { algorithms, canonicalize } from './canonicalize';
 import AppMapIndex from './appmapIndex';
 import EventEmitter from 'events';
+import quotePath from '../lib/quotePath';
 
 const renameFile = promisify(gracefulFs.rename);
 
@@ -137,6 +138,10 @@ class Fingerprinter extends EventEmitter {
     // But the mtime will match the file modification time, so the algorithm will
     // determine that the index is up-to-date.
     await renameFile(tempAppMapFileName, appMapFileName);
+
+    // Note: don't remove or modify the output below,
+    // it's machine-readable (see doc/index-verbose.md)
+    if (verbose()) console.log(`Indexed ${quotePath(resolve(appMapFileName))}`);
 
     this.emit('index', { path: appMapFileName, metadata: appmap.metadata, numEvents });
   }
