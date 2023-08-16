@@ -55,7 +55,7 @@ parentPort.on('message', async (task: IndexTask | ScanTask | SequenceDiagramTask
       const filter = buildFilter(language as Language, task.compareFilter);
       const filteredAppMap = filter.filter(appmap, []);
       const specification = Specification.build(filteredAppMap, task.specOptions);
-      const diagram = buildDiagram(task.appmapFile, appmap, specification);
+      const diagram = buildDiagram(task.appmapFile, filteredAppMap, specification);
       const diagramData = format(FormatType.JSON, diagram, task.appmapFile).diagram;
       writeIndexFile(diagramData, 'sequence.json');
       result = {};
