@@ -45,7 +45,7 @@ parentPort.on('message', async (task: IndexTask | ScanTask | SequenceDiagramTask
       result = {};
     } else if (isScanTask(task)) {
       const scanResults = await scan(task.appmapFile, 'appmap-scanner.yml');
-      writeIndexFile(JSON.stringify(scanResults, null, 2), 'appmap-findings.json');
+      await writeIndexFile(JSON.stringify(scanResults, null, 2), 'appmap-findings.json');
       result = { findingsCount: scanResults.findings.length };
     } else if (isSequenceDiagramTask(task)) {
       const appmap = buildAppMap()
@@ -57,7 +57,7 @@ parentPort.on('message', async (task: IndexTask | ScanTask | SequenceDiagramTask
       const specification = Specification.build(filteredAppMap, task.specOptions);
       const diagram = buildDiagram(task.appmapFile, filteredAppMap, specification);
       const diagramData = format(FormatType.JSON, diagram, task.appmapFile).diagram;
-      writeIndexFile(diagramData, 'sequence.json');
+      await writeIndexFile(diagramData, 'sequence.json');
       result = {};
     } else {
       throw new Error(`Unknown task`);
