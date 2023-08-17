@@ -49,6 +49,7 @@ describe('archive command', () => {
     it('creates the expected files', async () => {
       await handler({
         directory: rubyFixturePath,
+        analyze: true,
         threadCount: 3,
       });
 
@@ -57,6 +58,7 @@ describe('archive command', () => {
         appMapDir: '.',
         commandArguments: {
           directory: rubyFixturePath,
+          analyze: true,
           threadCount: 3,
         },
         revision: currentCommit,
@@ -105,6 +107,7 @@ describe('archive command', () => {
       it('analyzes only the failed test', async () => {
         await handler({
           directory: rubyFixturePath,
+          analyze: true,
           threadCount: 1,
         });
 
@@ -123,7 +126,7 @@ describe('archive command', () => {
   it('fails when no appmaps are found', async () => {
     let err = {} as Error;
     try {
-      await handler({ directory: 'no/such/dir', threadCount: 1 });
+      await handler({ directory: 'no/such/dir', analyze: true, threadCount: 1 });
     } catch (e) {
       err = e as Error;
     }
@@ -137,6 +140,7 @@ describe('archive command', () => {
 
     await handler({
       directory: rubyFixturePath,
+      analyze: true,
       outputDir: testOutputDirName,
       threadCount: 1,
     });
@@ -153,6 +157,7 @@ describe('archive command', () => {
 
     await handler({
       directory: rubyFixturePath,
+      analyze: true,
       outputFile: testFileName,
       threadCount: 1,
     });
@@ -165,6 +170,7 @@ describe('archive command', () => {
   it('correctly handles the max-size option', async () => {
     await handler({
       directory: rubyFixturePath,
+      analyze: true,
       maxSize: 0,
       threadCount: 1,
     });
