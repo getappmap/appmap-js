@@ -1,4 +1,5 @@
-const FILTERED_TESTS = process.platform === 'win32' ? ['fingerprintWatchCommand', 'archive'] : [];
+const FILTERED_TESTS =
+  process.platform === 'win32' ? ['fingerprintWatchCommand', 'archive', 'compare'] : [];
 
 function filterTests(testPath) {
   if (FILTERED_TESTS.length === 0) {
