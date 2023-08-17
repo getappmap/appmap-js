@@ -1,0 +1,58 @@
+[
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "DELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = ?"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "PRAGMA table_info(\"active_storage_attachments\")"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "SELECT 1 AS one FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "SELECT \"relationships\".* FROM \"relationships\" WHERE \"relationships\".\"followed_id\" = ?"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "SELECT \"relationships\".* FROM \"relationships\" WHERE \"relationships\".\"follower_id\" = ?"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "SELECT sql FROM\n  (SELECT * FROM sqlite_master UNION ALL\n   SELECT * FROM sqlite_temp_master)\nWHERE type = 'table' AND name = 'active_storage_attachments'\n"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "app/models/User"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "app/models/User",
+    "callee": "ruby/Array"
+  },
+  {
+    "caller": "ruby/Kernel",
+    "callee": "SELECT COUNT(*) FROM \"microposts\""
+  },
+  {
+    "caller": "ruby/Kernel",
+    "callee": "logger/Logger"
+  }
+]

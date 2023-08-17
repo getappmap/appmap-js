@@ -1,0 +1,216 @@
+[
+  {
+    "name": "activesupport",
+    "type": "package",
+    "children": [
+      {
+        "name": "ActiveSupport",
+        "type": "class",
+        "children": [
+          {
+            "name": "Callbacks",
+            "type": "class",
+            "children": [
+              {
+                "name": "CallbackSequence",
+                "type": "class",
+                "children": [
+                  {
+                    "name": "invoke_before",
+                    "type": "function",
+                    "labels": [
+                      "mvc.before_action"
+                    ],
+                    "static": false,
+                    "location": "/home/ahtrotta/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/activesupport-7.0.4/lib/active_support/callbacks.rb:594"
+                  },
+                  {
+                    "name": "invoke_after",
+                    "type": "function",
+                    "labels": [
+                      "mvc.after_action"
+                    ],
+                    "static": false,
+                    "location": "/home/ahtrotta/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/activesupport-7.0.4/lib/active_support/callbacks.rb:598"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "logger",
+    "type": "package",
+    "children": [
+      {
+        "name": "Logger",
+        "type": "class",
+        "children": [
+          {
+            "name": "LogDevice",
+            "type": "class",
+            "children": [
+              {
+                "name": "write",
+                "type": "function",
+                "labels": [
+                  "log"
+                ],
+                "static": false,
+                "location": "/home/ahtrotta/.rbenv/versions/3.1.2/lib/ruby/3.1.0/logger/log_device.rb:31"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "openssl",
+    "type": "package",
+    "children": [
+      {
+        "name": "OpenSSL",
+        "type": "class",
+        "children": [
+          {
+            "name": "Random",
+            "type": "class",
+            "children": [
+              {
+                "name": "random_bytes",
+                "type": "function",
+                "labels": [
+                  "random.secure"
+                ],
+                "static": true,
+                "location": "OpenSSL::Random.random_bytes"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "app/models",
+    "type": "package",
+    "children": [
+      {
+        "name": "User",
+        "type": "class",
+        "children": [
+          {
+            "name": "new_token",
+            "type": "function",
+            "static": true,
+            "location": "app/models/user.rb:30"
+          },
+          {
+            "name": "digest",
+            "type": "function",
+            "static": true,
+            "location": "app/models/user.rb:23"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ruby",
+    "type": "package",
+    "children": [
+      {
+        "name": "Array",
+        "type": "class",
+        "children": [
+          {
+            "name": "pack",
+            "type": "function",
+            "labels": [
+              "array.pack"
+            ],
+            "static": false,
+            "location": "<internal:pack>:143"
+          }
+        ]
+      },
+      {
+        "name": "Kernel",
+        "type": "class",
+        "children": [
+          {
+            "name": "eval",
+            "type": "function",
+            "labels": [
+              "lang.eval"
+            ],
+            "static": false,
+            "location": "Kernel#eval"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "begin transaction"
+      },
+      {
+        "type": "query",
+        "name": "SAVEPOINT active_record_1"
+      },
+      {
+        "type": "query",
+        "name": "SELECT 1 AS one FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"users\" (\"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"remember_digest\", \"admin\", \"activation_digest\", \"activated\", \"activated_at\", \"reset_digest\", \"reset_sent_at\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+      },
+      {
+        "type": "query",
+        "name": "RELEASE SAVEPOINT active_record_1"
+      },
+      {
+        "type": "query",
+        "name": "INSERT INTO \"microposts\" (\"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (?, ?, ?, ?)"
+      },
+      {
+        "type": "query",
+        "name": "SELECT COUNT(*) FROM \"microposts\""
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC"
+      },
+      {
+        "type": "query",
+        "name": "DELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"relationships\".* FROM \"relationships\" WHERE \"relationships\".\"follower_id\" = ?"
+      },
+      {
+        "type": "query",
+        "name": "SELECT \"relationships\".* FROM \"relationships\" WHERE \"relationships\".\"followed_id\" = ?"
+      },
+      {
+        "type": "query",
+        "name": "DELETE FROM \"users\" WHERE \"users\".\"id\" = ?"
+      },
+      {
+        "type": "query",
+        "name": "rollback transaction"
+      }
+    ]
+  }
+]

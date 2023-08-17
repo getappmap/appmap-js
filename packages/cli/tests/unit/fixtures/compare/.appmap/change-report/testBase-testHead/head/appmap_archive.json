@@ -1,0 +1,41 @@
+{
+  "versions": {
+    "archive": "1.3.0",
+    "index": "1.2.0"
+  },
+  "workingDirectory": "/home/ahtrotta/projects/land-of-apps/rails_tutorial_sample_app_7th_ed",
+  "appMapDir": "tmp/appmap",
+  "commandArguments": {
+    "_": [
+      "archive"
+    ],
+    "type": "full",
+    "t": "full",
+    "analyze": true,
+    "index": true,
+    "max-size": 50,
+    "maxSize": 50,
+    "$0": "../../appmap/appmap-js/packages/cli/built/cli.js"
+  },
+  "revision": "testHead",
+  "timestamp": "1692289733464",
+  "oversizedAppMaps": [],
+  "config": {
+    "name": "rails_tutorial_sample_app_7th_ed",
+    "packages": [
+      {
+        "path": "app"
+      },
+      {
+        "path": "lib"
+      }
+    ],
+    "language": "ruby",
+    "appmap_dir": "tmp/appmap",
+    "compare": {
+      "filter": {
+        "hideExternal": true
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "route": "GET /users/{id}",
+    "parameters": "()",
+    "status": 200
+  },
+  {
+    "route": "POST /login",
+    "parameters": "(session)",
+    "status": 302
+  }
+]

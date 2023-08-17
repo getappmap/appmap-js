@@ -1,0 +1,110 @@
+[
+  {
+    "caller": "POST /login",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "POST /login",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "POST /login",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "POST /login",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "POST /login",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "POST /login",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "ruby/Array"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "app/models"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/models",
+    "callee": "RELEASE SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/models",
+    "callee": "SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/models",
+    "callee": "UPDATE \"users\" SET \"updated_at\" = ?, \"remember_digest\" = ? WHERE \"users\".\"id\" = ?"
+  },
+  {
+    "caller": "app/models",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "app/models",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/models",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "app/models",
+    "callee": "ruby/Array"
+  }
+]

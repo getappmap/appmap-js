@@ -1,0 +1,19 @@
+[
+  "array.pack",
+  "crypto.encrypt",
+  "crypto.final",
+  "crypto.set_auth_data",
+  "crypto.set_iv",
+  "crypto.set_key",
+  "format.json.generate",
+  "http.session.clear",
+  "http.session.read",
+  "http.session.write",
+  "log",
+  "mvc.after_action",
+  "mvc.before_action",
+  "mvc.controller",
+  "random.secure",
+  "serialize",
+  "string.unpack"
+]

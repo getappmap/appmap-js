@@ -1,0 +1,226 @@
+[
+  {
+    "caller": "GET /",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "GET /",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "GET /",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "GET /",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "GET /",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "GET /",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "POST /login",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "POST /login",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "POST /login",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "POST /login",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "POST /login",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "POST /login",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/views"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "psych/Psych"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "ruby/Array"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "ruby/ERB"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "app/models"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "app/models"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/models",
+    "callee": "RELEASE SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/models",
+    "callee": "SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/models",
+    "callee": "UPDATE \"users\" SET \"updated_at\" = ?, \"remember_digest\" = ? WHERE \"users\".\"id\" = ?"
+  },
+  {
+    "caller": "app/models",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "app/models",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/models",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "app/models",
+    "callee": "ruby/Array"
+  },
+  {
+    "caller": "app/views",
+    "callee": "PRAGMA table_info(\"active_storage_attachments\")"
+  },
+  {
+    "caller": "app/views",
+    "callee": "SELECT COUNT(*) FROM \"microposts\" WHERE (user_id IN (SELECT followed_id FROM relationships\n                     WHERE  follower_id = 762146111)\n                     OR user_id = 762146111)"
+  },
+  {
+    "caller": "app/views",
+    "callee": "SELECT COUNT(*) FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ?"
+  },
+  {
+    "caller": "app/views",
+    "callee": "SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"followed_id\" WHERE \"relationships\".\"follower_id\" = ?"
+  },
+  {
+    "caller": "app/views",
+    "callee": "SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"follower_id\" WHERE \"relationships\".\"followed_id\" = ?"
+  },
+  {
+    "caller": "app/views",
+    "callee": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? AND \"active_storage_attachments\".\"record_id\" IN (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+  },
+  {
+    "caller": "app/views",
+    "callee": "SELECT \"microposts\".* FROM \"microposts\" WHERE (user_id IN (SELECT followed_id FROM relationships\n                     WHERE  follower_id = 762146111)\n                     OR user_id = 762146111) ORDER BY \"microposts\".\"created_at\" DESC LIMIT ? OFFSET ?"
+  },
+  {
+    "caller": "app/views",
+    "callee": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" IN (?, ?)"
+  },
+  {
+    "caller": "app/views",
+    "callee": "SELECT sql FROM\n  (SELECT * FROM sqlite_master UNION ALL\n   SELECT * FROM sqlite_temp_master)\nWHERE type = 'table' AND name = 'active_storage_attachments'\n"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "app/views",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "app/views",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "ruby/ERB",
+    "callee": "ruby/Kernel"
+  }
+]

@@ -1,0 +1,304 @@
+{
+  "actors": [
+    {
+      "id": "package:app/models",
+      "name": "app/models",
+      "order": 1000
+    },
+    {
+      "id": "database:Database",
+      "name": "Database",
+      "order": 3000
+    }
+  ],
+  "rootActions": [
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "begin transaction",
+      "digest": "a837869ea3eec93baf679bf3bcd19a57204f99bafd58814b1d74682ae25c5c53",
+      "subtreeDigest": "0baedb63988fa07b8440439cc4301c26eb244276ea82cee730ba76fba5c41be4",
+      "children": [],
+      "elapsed": 0.000160395,
+      "eventIds": [
+        7
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SAVEPOINT active_record_1",
+      "digest": "9204ccc0e7b1b9257760d6bc97d958f8bb891d8bd86b7124a5709527238f5800",
+      "subtreeDigest": "b26a980e87d13841bcdec8661db1c2f8d324f369a3b69a440f96ac96ee40da6a",
+      "children": [],
+      "elapsed": 0.00024464,
+      "eventIds": [
+        22
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT 1 AS one FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?",
+      "digest": "f32f8599c602ac29ea8b85fba70f7e5e79cbdc531e5c71456fbb3f91fdc0deec",
+      "subtreeDigest": "2c58a04823fed352741be38081b8f02a3dc6032a3ef0f4ec341c9e5482b9e66b",
+      "children": [],
+      "elapsed": 0.000278478,
+      "eventIds": [
+        26
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "new_token",
+      "static": true,
+      "digest": "d2f9da8f05427c0b44b55c87d45cc37b26abe21d7de28fcb3a07cf899b055bc8",
+      "subtreeDigest": "7018a65fbad93365c6af68b603a1df50f60098e831710e136aa46934a5137049",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.new_token",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "string"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.00007308599742827937,
+      "eventIds": [
+        38
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.001112436002586037,
+      "eventIds": [
+        42
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "INSERT INTO \"users\" (\"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"remember_digest\", \"admin\", \"activation_digest\", \"activated\", \"activated_at\", \"reset_digest\", \"reset_sent_at\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "digest": "900d6ed47c27425894232542ff363b85eebca269cd6c06dcc8c460ea64606e44",
+      "subtreeDigest": "c719bb8ac658c275e71662b0fc4486f4c7790691c35bc4030851616dc13ecea6",
+      "children": [],
+      "elapsed": 0.000644923,
+      "eventIds": [
+        49
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "RELEASE SAVEPOINT active_record_1",
+      "digest": "e7e1c01d2140c94a165b06c7c0e9565734901d82f4d8458089d942ddaf02e913",
+      "subtreeDigest": "16b81ad4c8f244d75c1796415a3cf17b72c48af075f47ce91726c0072bfc006b",
+      "children": [],
+      "elapsed": 0.000369725,
+      "eventIds": [
+        59
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SAVEPOINT active_record_1",
+      "digest": "9204ccc0e7b1b9257760d6bc97d958f8bb891d8bd86b7124a5709527238f5800",
+      "subtreeDigest": "b26a980e87d13841bcdec8661db1c2f8d324f369a3b69a440f96ac96ee40da6a",
+      "children": [],
+      "elapsed": 0.00033568,
+      "eventIds": [
+        68
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "PRAGMA table_info(\"active_storage_attachments\")",
+      "digest": "4fca6223da8e9b82f1b5e3bd295835c077bf71ffb97438956076f251728d773f",
+      "subtreeDigest": "669f25e26a8c5dee87910499174184c45ad0dc33fc8400fb07458f8205b80ca2",
+      "children": [],
+      "elapsed": 0.00010624,
+      "eventIds": [
+        70
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT sql FROM\n  (SELECT * FROM sqlite_master UNION ALL\n   SELECT * FROM sqlite_temp_master)\nWHERE type = 'table' AND name = 'active_storage_attachments'\n",
+      "digest": "f200a9548040ccdab6df25d600aa2b30c97ec0a03e80fec12869d8caf6d1e661",
+      "subtreeDigest": "ec4ed9e1217df6e915ce53c4644579872eae0911088bcb958f6a8c40ce6a6d8c",
+      "children": [],
+      "elapsed": 0.000131056,
+      "eventIds": [
+        72
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "INSERT INTO \"microposts\" (\"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (?, ?, ?, ?)",
+      "digest": "c28a12694ee63f794275592ba5d9004f1801a80b0deb9cb3ec235a3edc816ac6",
+      "subtreeDigest": "69db05929b8ebbfcc3708afbee54d97468bfd93222a35dfa0dce655d5a3da5de",
+      "children": [],
+      "elapsed": 0.000424305,
+      "eventIds": [
+        83
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "RELEASE SAVEPOINT active_record_1",
+      "digest": "e7e1c01d2140c94a165b06c7c0e9565734901d82f4d8458089d942ddaf02e913",
+      "subtreeDigest": "16b81ad4c8f244d75c1796415a3cf17b72c48af075f47ce91726c0072bfc006b",
+      "children": [],
+      "elapsed": 0.000217171,
+      "eventIds": [
+        91
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT COUNT(*) FROM \"microposts\"",
+      "digest": "aa3e8259b5dc0900e7c9bb71d05dfc10eb34ac77ffa23169e896177f29f83636",
+      "subtreeDigest": "f4bb63ec060adb5a3f512e340b780d6e49adc83ae44f87bb5d16c87752afbbd7",
+      "children": [],
+      "elapsed": 0.000225895,
+      "eventIds": [
+        100
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SAVEPOINT active_record_1",
+      "digest": "9204ccc0e7b1b9257760d6bc97d958f8bb891d8bd86b7124a5709527238f5800",
+      "subtreeDigest": "b26a980e87d13841bcdec8661db1c2f8d324f369a3b69a440f96ac96ee40da6a",
+      "children": [],
+      "elapsed": 0.000206829,
+      "eventIds": [
+        106
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC",
+      "digest": "833a5142aaf740b5d94df11838d6c5963d9ab6e9dd3e37d9d624acdc585c3b18",
+      "subtreeDigest": "49f4b4d58ffae544e66c50ed3989398de7abda331f6e15cc0e6b5b9b23a8c453",
+      "children": [],
+      "elapsed": 0.000289833,
+      "eventIds": [
+        110
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "DELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = ?",
+      "digest": "82bbabf8231f55349425c6cf9c6b7674b10df2f95a92438ae9e5bd608e19fa6b",
+      "subtreeDigest": "351dc1e855c568f2d4551ed33b29e201472331d56829d5480c59396c694d2e16",
+      "children": [],
+      "elapsed": 0.000298197,
+      "eventIds": [
+        116
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT \"relationships\".* FROM \"relationships\" WHERE \"relationships\".\"follower_id\" = ?",
+      "digest": "df7cc65852d5407ced3332d5e5faa7dd2a8174dc4f880a0c6c2883deec13899c",
+      "subtreeDigest": "70fedca1c974803dab93a010427c92e5026a00922d933469a82209c29206f52b",
+      "children": [],
+      "elapsed": 0.00031664,
+      "eventIds": [
+        122
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT \"relationships\".* FROM \"relationships\" WHERE \"relationships\".\"followed_id\" = ?",
+      "digest": "bb6a2987f9e49761d75271de4a549a500326aaf144e8dc174085cb98a282a698",
+      "subtreeDigest": "3ed962d099564c617ac899dc5c4ee58dbfef55eae02fa8c9a3bfb62d2397fe8a",
+      "children": [],
+      "elapsed": 0.0002716,
+      "eventIds": [
+        126
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "DELETE FROM \"users\" WHERE \"users\".\"id\" = ?",
+      "digest": "682af0ec2a35c8df567cd8cb0a97ea19106ddd77de48e617d3491dcc1d7b2a2c",
+      "subtreeDigest": "43332678005527ea09d357572aa2cdd5beab235e976ff3cc271bbb56880cf593",
+      "children": [],
+      "elapsed": 0.000291387,
+      "eventIds": [
+        131
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "RELEASE SAVEPOINT active_record_1",
+      "digest": "e7e1c01d2140c94a165b06c7c0e9565734901d82f4d8458089d942ddaf02e913",
+      "subtreeDigest": "16b81ad4c8f244d75c1796415a3cf17b72c48af075f47ce91726c0072bfc006b",
+      "children": [],
+      "elapsed": 0.000212042,
+      "eventIds": [
+        137
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT COUNT(*) FROM \"microposts\"",
+      "digest": "aa3e8259b5dc0900e7c9bb71d05dfc10eb34ac77ffa23169e896177f29f83636",
+      "subtreeDigest": "f4bb63ec060adb5a3f512e340b780d6e49adc83ae44f87bb5d16c87752afbbd7",
+      "children": [],
+      "elapsed": 0.000225575,
+      "eventIds": [
+        146
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "rollback transaction",
+      "digest": "c25f313099f39b61256e62b3c06095337f86af3e57d02a9e570db7412687ab65",
+      "subtreeDigest": "0c8f838a33893115ed65139cde4d941f82a7583ebf84bba5a8dfc8ae85f567f6",
+      "children": [],
+      "elapsed": 0.00028143,
+      "eventIds": [
+        151
+      ]
+    }
+  ]
+}

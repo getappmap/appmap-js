@@ -1,0 +1,9 @@
+[
+  "activesupport/ActiveSupport::Callbacks::CallbackSequence",
+  "activesupport/ActiveSupport::LazyLoadHooks",
+  "app/models/User",
+  "logger/Logger::LogDevice",
+  "openssl/OpenSSL::Random",
+  "ruby/Array",
+  "ruby/Kernel"
+]

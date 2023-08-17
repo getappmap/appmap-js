@@ -1,0 +1,18 @@
+[
+  {
+    "class": "ActionView::Template::Error",
+    "message": "undefined method `micropost_path' for #<ActionView::Base:0x00000000028410>\n\n              target.pub (...87 more characters)",
+    "stack": [
+      "/home/ahtrotta/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/actionpack-7.0.4/lib/action_controller/metal/renderers.rb:140"
+    ]
+  },
+  {
+    "class": "NoMethodError",
+    "message": "undefined method `micropost_path' for #<ActionView::Base:0x00000000028410>\n\n              target.pub (...87 more characters)",
+    "stack": [
+      "/home/ahtrotta/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/actionpack-7.0.4/lib/action_dispatch/routing/polymorphic_routes.rb:280",
+      "/home/ahtrotta/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/actionpack-7.0.4/lib/action_controller/metal/renderers.rb:140"
+    ],
+    "location": "/home/ahtrotta/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/actionpack-7.0.4/lib/action_dispatch/routing/polymorphic_routes.rb:280"
+  }
+]

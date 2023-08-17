@@ -1,0 +1,7 @@
+[
+  "activesupport",
+  "app/models",
+  "logger",
+  "openssl",
+  "ruby"
+]
