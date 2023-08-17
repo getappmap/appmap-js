@@ -1,0 +1,17 @@
+[
+  "DELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = ?",
+  "DELETE FROM \"users\" WHERE \"users\".\"id\" = ?",
+  "INSERT INTO \"microposts\" (\"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (?, ?, ?, ?)",
+  "INSERT INTO \"users\" (\"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"remember_digest\", \"admin\", \"activation_digest\", \"activated\", \"activated_at\", \"reset_digest\", \"reset_sent_at\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+  "PRAGMA table_info(\"active_storage_attachments\")",
+  "RELEASE SAVEPOINT active_record_1",
+  "SAVEPOINT active_record_1",
+  "SELECT ? AS one FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?",
+  "SELECT COUNT(*) FROM \"microposts\"",
+  "SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC",
+  "SELECT \"relationships\".* FROM \"relationships\" WHERE \"relationships\".\"followed_id\" = ?",
+  "SELECT \"relationships\".* FROM \"relationships\" WHERE \"relationships\".\"follower_id\" = ?",
+  "SELECT sql FROM\n  (SELECT * FROM sqlite_master UNION ALL\n   SELECT * FROM sqlite_temp_master)\nWHERE type = ? AND name = ?\n",
+  "begin transaction",
+  "rollback transaction"
+]

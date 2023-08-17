@@ -1,0 +1,10 @@
+[
+  "array.pack",
+  "deserialize.safe",
+  "lang.eval",
+  "lang.eval.safe",
+  "log",
+  "mvc.after_action",
+  "mvc.before_action",
+  "random.secure"
+]

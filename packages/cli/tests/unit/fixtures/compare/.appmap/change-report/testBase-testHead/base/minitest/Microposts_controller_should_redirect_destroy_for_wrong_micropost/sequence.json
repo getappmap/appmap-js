@@ -1,0 +1,1657 @@
+{
+  "actors": [
+    {
+      "id": "http:HTTP server requests",
+      "name": "HTTP server requests",
+      "order": 0
+    },
+    {
+      "id": "package:app/models",
+      "name": "models",
+      "order": 1000
+    },
+    {
+      "id": "package:app/controllers",
+      "name": "controllers",
+      "order": 2000
+    },
+    {
+      "id": "package:app/helpers",
+      "name": "helpers",
+      "order": 3000
+    },
+    {
+      "id": "database:Database",
+      "name": "Database",
+      "order": 6000
+    }
+  ],
+  "rootActions": [
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "PRAGMA foreign_keys = ON",
+      "digest": "e8b8f7d06470722f35fac0bd80d52125ba24294b3517ca3dd515125313afc81b",
+      "subtreeDigest": "a636c6f880f8799654cb6258ab03b5916e694168b7f938468e9835b82988e9d2",
+      "children": [],
+      "elapsed": 0.000405947,
+      "eventIds": [
+        6
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT sqlite_version(*)",
+      "digest": "b3ecade1b2433fef40787881e4dff2def9d192dc66205ff4e0aff99cf75203b4",
+      "subtreeDigest": "fa3900c2e45f163d478cc931076cbd14b799517cb8c14b3f9697b917539c3bed",
+      "children": [],
+      "elapsed": 0.00007922,
+      "eventIds": [
+        8
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT name FROM sqlite_master WHERE name <> 'sqlite_sequence' AND type IN ('table','view')",
+      "digest": "d9cd88f1c0e81d0185c0ec658203d6d2733e64e67f3ea897ba4a3a190bf9192c",
+      "subtreeDigest": "2837c1e5c7b8960e82e495d7eae08116fa60edc94b255679359353562a0586cc",
+      "children": [],
+      "elapsed": 0.00016057,
+      "eventIds": [
+        14
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "PRAGMA table_info(\"microposts\")",
+      "digest": "4fca6223da8e9b82f1b5e3bd295835c077bf71ffb97438956076f251728d773f",
+      "subtreeDigest": "669f25e26a8c5dee87910499174184c45ad0dc33fc8400fb07458f8205b80ca2",
+      "children": [],
+      "elapsed": 0.000080851,
+      "eventIds": [
+        16
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT sql FROM\n  (SELECT * FROM sqlite_master UNION ALL\n   SELECT * FROM sqlite_temp_master)\nWHERE type = 'table' AND name = 'microposts'\n",
+      "digest": "f200a9548040ccdab6df25d600aa2b30c97ec0a03e80fec12869d8caf6d1e661",
+      "subtreeDigest": "ec4ed9e1217df6e915ce53c4644579872eae0911088bcb958f6a8c40ce6a6d8c",
+      "children": [],
+      "elapsed": 0.000146279,
+      "eventIds": [
+        18
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "PRAGMA table_info(\"relationships\")",
+      "digest": "4fca6223da8e9b82f1b5e3bd295835c077bf71ffb97438956076f251728d773f",
+      "subtreeDigest": "669f25e26a8c5dee87910499174184c45ad0dc33fc8400fb07458f8205b80ca2",
+      "children": [],
+      "elapsed": 0.000124381,
+      "eventIds": [
+        30
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT sql FROM\n  (SELECT * FROM sqlite_master UNION ALL\n   SELECT * FROM sqlite_temp_master)\nWHERE type = 'table' AND name = 'relationships'\n",
+      "digest": "f200a9548040ccdab6df25d600aa2b30c97ec0a03e80fec12869d8caf6d1e661",
+      "subtreeDigest": "ec4ed9e1217df6e915ce53c4644579872eae0911088bcb958f6a8c40ce6a6d8c",
+      "children": [],
+      "elapsed": 0.000112402,
+      "eventIds": [
+        32
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "PRAGMA table_info(\"users\")",
+      "digest": "4fca6223da8e9b82f1b5e3bd295835c077bf71ffb97438956076f251728d773f",
+      "subtreeDigest": "669f25e26a8c5dee87910499174184c45ad0dc33fc8400fb07458f8205b80ca2",
+      "children": [],
+      "elapsed": 0.000188414,
+      "eventIds": [
+        42
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT sql FROM\n  (SELECT * FROM sqlite_master UNION ALL\n   SELECT * FROM sqlite_temp_master)\nWHERE type = 'table' AND name = 'users'\n",
+      "digest": "f200a9548040ccdab6df25d600aa2b30c97ec0a03e80fec12869d8caf6d1e661",
+      "subtreeDigest": "ec4ed9e1217df6e915ce53c4644579872eae0911088bcb958f6a8c40ce6a6d8c",
+      "children": [],
+      "elapsed": 0.000146657,
+      "eventIds": [
+        44
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.003913481999916257,
+      "eventIds": [
+        48
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009933159999491181,
+      "eventIds": [
+        52
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009554330008541001,
+      "eventIds": [
+        56
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009517519993096357,
+      "eventIds": [
+        60
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009493039997323649,
+      "eventIds": [
+        64
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0010624160004226724,
+      "eventIds": [
+        68
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009247529997082893,
+      "eventIds": [
+        72
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009410319999005878,
+      "eventIds": [
+        76
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009885880008368986,
+      "eventIds": [
+        80
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0008967429985204944,
+      "eventIds": [
+        84
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0008783150005911011,
+      "eventIds": [
+        88
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0008998929988592863,
+      "eventIds": [
+        92
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009253770003851969,
+      "eventIds": [
+        96
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009212099994329037,
+      "eventIds": [
+        100
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0008968530000856845,
+      "eventIds": [
+        104
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009310690002166666,
+      "eventIds": [
+        108
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0010126990000571823,
+      "eventIds": [
+        112
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009521560004941421,
+      "eventIds": [
+        116
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009254600008716807,
+      "eventIds": [
+        120
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009993510011554463,
+      "eventIds": [
+        124
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009139960002357839,
+      "eventIds": [
+        128
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.000892356998519972,
+      "eventIds": [
+        132
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009837569996307138,
+      "eventIds": [
+        136
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0008584469997003907,
+      "eventIds": [
+        140
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0008669029994052835,
+      "eventIds": [
+        144
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009275510001316434,
+      "eventIds": [
+        148
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009149540001089917,
+      "eventIds": [
+        152
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0008919629999581957,
+      "eventIds": [
+        156
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009022409994940972,
+      "eventIds": [
+        160
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009054959991772193,
+      "eventIds": [
+        164
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009174490005534608,
+      "eventIds": [
+        168
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009082579999812879,
+      "eventIds": [
+        172
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009172010013571708,
+      "eventIds": [
+        176
+      ]
+    },
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "digest",
+      "static": true,
+      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/User.digest",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "BCrypt::Password"
+        },
+        "raisesException": false
+      },
+      "children": [],
+      "elapsed": 0.0009025710005516885,
+      "eventIds": [
+        180
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "PRAGMA table_info(\"microposts\")",
+      "digest": "4fca6223da8e9b82f1b5e3bd295835c077bf71ffb97438956076f251728d773f",
+      "subtreeDigest": "669f25e26a8c5dee87910499174184c45ad0dc33fc8400fb07458f8205b80ca2",
+      "children": [],
+      "elapsed": 0.000122578,
+      "eventIds": [
+        190
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT sql FROM\n  (SELECT * FROM sqlite_master UNION ALL\n   SELECT * FROM sqlite_temp_master)\nWHERE type = 'table' AND name = 'microposts'\n",
+      "digest": "f200a9548040ccdab6df25d600aa2b30c97ec0a03e80fec12869d8caf6d1e661",
+      "subtreeDigest": "ec4ed9e1217df6e915ce53c4644579872eae0911088bcb958f6a8c40ce6a6d8c",
+      "children": [],
+      "elapsed": 0.000106823,
+      "eventIds": [
+        192
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "PRAGMA table_info(\"users\")",
+      "digest": "4fca6223da8e9b82f1b5e3bd295835c077bf71ffb97438956076f251728d773f",
+      "subtreeDigest": "669f25e26a8c5dee87910499174184c45ad0dc33fc8400fb07458f8205b80ca2",
+      "children": [],
+      "elapsed": 0.000091641,
+      "eventIds": [
+        194
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT sql FROM\n  (SELECT * FROM sqlite_master UNION ALL\n   SELECT * FROM sqlite_temp_master)\nWHERE type = 'table' AND name = 'users'\n",
+      "digest": "f200a9548040ccdab6df25d600aa2b30c97ec0a03e80fec12869d8caf6d1e661",
+      "subtreeDigest": "ec4ed9e1217df6e915ce53c4644579872eae0911088bcb958f6a8c40ce6a6d8c",
+      "children": [],
+      "elapsed": 0.000077176,
+      "eventIds": [
+        196
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "PRAGMA table_info(\"relationships\")",
+      "digest": "4fca6223da8e9b82f1b5e3bd295835c077bf71ffb97438956076f251728d773f",
+      "subtreeDigest": "669f25e26a8c5dee87910499174184c45ad0dc33fc8400fb07458f8205b80ca2",
+      "children": [],
+      "elapsed": 0.000059498,
+      "eventIds": [
+        198
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT sql FROM\n  (SELECT * FROM sqlite_master UNION ALL\n   SELECT * FROM sqlite_temp_master)\nWHERE type = 'table' AND name = 'relationships'\n",
+      "digest": "f200a9548040ccdab6df25d600aa2b30c97ec0a03e80fec12869d8caf6d1e661",
+      "subtreeDigest": "ec4ed9e1217df6e915ce53c4644579872eae0911088bcb958f6a8c40ce6a6d8c",
+      "children": [],
+      "elapsed": 0.000083159,
+      "eventIds": [
+        200
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "PRAGMA foreign_keys",
+      "digest": "dbd5ca5e795e085e4a728232d0c2b15c8e74dc08ff5af66e215c3f0125f1d19c",
+      "subtreeDigest": "02a699f7d3a3b8f7808beac8e1d1bf328a31c7b96b345e956448b601d58a75f6",
+      "children": [],
+      "elapsed": 0.000306347,
+      "eventIds": [
+        204
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "PRAGMA defer_foreign_keys",
+      "digest": "fd5d71904713c2b22d3fdc44cc6cdd32bd07b4a90d7a6d245738cd789e02d651",
+      "subtreeDigest": "ac68e27fa9fa1c5516e394861a49facdebacc40c16c06298a866db5c95d779a6",
+      "children": [],
+      "elapsed": 0.000161994,
+      "eventIds": [
+        208
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "PRAGMA defer_foreign_keys = ON",
+      "digest": "41d59a1b4ccacdc1ccffdf9349eacc9e510a28853fb4aac13f334648149e8a2b",
+      "subtreeDigest": "c77cfe562aacdb5e181950bdf0f99522cb5ff980b0581e25b1621ceafeec8f54",
+      "children": [],
+      "elapsed": 0.000197396,
+      "eventIds": [
+        212
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "PRAGMA foreign_keys = OFF",
+      "digest": "e8b8f7d06470722f35fac0bd80d52125ba24294b3517ca3dd515125313afc81b",
+      "subtreeDigest": "a636c6f880f8799654cb6258ab03b5916e694168b7f938468e9835b82988e9d2",
+      "children": [],
+      "elapsed": 0.000207825,
+      "eventIds": [
+        216
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "begin transaction",
+      "digest": "a837869ea3eec93baf679bf3bcd19a57204f99bafd58814b1d74682ae25c5c53",
+      "subtreeDigest": "0baedb63988fa07b8440439cc4301c26eb244276ea82cee730ba76fba5c41be4",
+      "children": [],
+      "elapsed": 0.000136964,
+      "eventIds": [
+        220
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "DELETE FROM \"microposts\";\nDELETE FROM \"relationships\";\nDELETE FROM \"users\";\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (499495288, 'I just ate an orange!', 762146111, '2023-08-17 16:13:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (517500819, 'Check out the @tauday site by @mhartl: https://tauday.com', 762146111, '2020-08-17 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (12348100, 'Sad cats are sad: https://youtu.be/PKffm2uI4dk', 762146111, '2023-08-17 14:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (941832919, 'Writing a short test', 762146111, '2023-08-17 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (177734013, 'Iste fugiat eligendi ut velit.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (1033843180, 'Aperiam laboriosam eveniet accusantium reiciendis.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (613834836, 'Sed adipisci praesentium repellat iusto.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (328290505, 'Dolor labore repudiandae dolorem debitis.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (234210660, 'Nihil accusantium doloribus quia debitis.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (989001203, 'Voluptas qui cumque architecto dolorum.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (603694155, 'Eveniet et in aperiam incidunt.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (352097504, 'Vero aut assumenda asperiores aut.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (71534927, 'Harum id veritatis explicabo perferendis.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (860142042, 'Qui veniam suscipit id numquam.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (58620899, 'Voluptatem fugit qui veritatis minus.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (880364408, 'At officia animi porro sit.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (762321612, 'Est dolores corporis omnis harum.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (444017243, 'Illum assumenda dolores tempora accusantium.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (68403196, 'Quam reprehenderit repellat accusamus nobis.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (856985457, 'Cupiditate voluptas sed omnis odit.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (706600661, 'Et saepe ea nam nisi.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (488304196, 'Velit quaerat hic doloribus ut.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (228979669, 'Qui pariatur omnis consectetur rerum.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (983745350, 'Perspiciatis corrupti dolorum totam enim.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (676538406, 'Esse sint sit ex molestiae.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (525605047, 'Placeat eum qui molestiae magni.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (106776847, 'Quia amet autem architecto totam.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (828012954, 'Dignissimos voluptate sit porro quisquam.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (792652861, 'Accusamus numquam voluptatum ratione ut.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (406445230, 'Aliquid aut ut adipisci necessitatibus.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (19959062, 'Fugiat numquam est quia facilis.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (909622657, 'Quo odio iusto maiores natus.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (646488084, 'Provident itaque qui rerum exercitationem.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (294621321, 'Commodi omnis quia mollitia ducimus.', 762146111, '2023-07-06 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (583546149, 'Oh, is that what you want? Because that''s how you get ants!', 950961012, '2021-08-17 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (552321033, 'Danger zone!', 950961012, '2023-08-14 16:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (3454773, 'I''m sorry. Your words made sense, but your sarcastic tone did not.', 409608538, '2023-08-17 16:13:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"microposts\" (\"id\", \"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (970054474, 'Dude, this van''s, like, rolling probable cause.', 409608538, '2023-08-17 12:23:20', '2023-08-17 16:23:20.890827');\nINSERT INTO \"relationships\" (\"id\", \"follower_id\", \"followed_id\", \"created_at\", \"updated_at\") VALUES (980190962, 762146111, 409608538, '2023-08-17 16:23:20.892184', '2023-08-17 16:23:20.892184');\nINSERT INTO \"relationships\" (\"id\", \"follower_id\", \"followed_id\", \"created_at\", \"updated_at\") VALUES (298486374, 762146111, 659682706, '2023-08-17 16:23:20.892184', '2023-08-17 16:23:20.892184');\nINSERT INTO \"relationships\" (\"id\", \"follower_id\", \"followed_id\", \"created_at\", \"updated_at\") VALUES (113629430, 409608538, 762146111, '2023-08-17 16:23:20.892184', '2023-08-17 16:23:20.892184');\nINSERT INTO \"relationships\" (\"id\", \"follower_id\", \"followed_id\", \"created_at\", \"updated_at\") VALUES (281110143, 950961012, 762146111, '2023-08-17 16:23:20.892184', '2023-08-17 16:23:20.892184');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"admin\", \"activated\", \"activated_at\") VALUES (762146111, 'Michael Example', 'michael@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$1XlLKCAhPomXraZ7t3RYaeTtXoc1hMaS9Z5WmWsJT8K0EMVumwS16', 1, 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (950961012, 'Sterling Archer', 'duchess@example.gov', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$fm1uWJre6XsLEu5yOZo.yO52dQGyKS6voEN3h3QoJYfGhjnmcmW0C', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (409608538, 'Lana Kane', 'hands@example.gov', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$Ril9eim.BqcF/biybObqHesCa6PCkc75NL5cZ6fK60RTnaJPWHgUa', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (659682706, 'Malory Archer', 'boss@example.gov', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$7pn8Af1hb.KTxUyICOl7WeVvhyQTKO.KCgtfISJi6jbse3qXaUe8q', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (338193910, 'User 0', 'user-0@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$2Dmg6MFPLMJpXlv2UJhlk.LXX8UZHBuRTvqP9.b42cYIXbas1ldFy', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (590306657, 'User 1', 'user-1@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$4BlDZ/2X4HF0oCGmGGue6.T6Fh5d7pbnyedL0.e.SJ57zMdy7IaTm', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (975572189, 'User 2', 'user-2@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$Hd10KH5rw7BRJLNpMjtOEu38PyNPvQ3PgBf7nVMwrHQieK/0ZkZL.', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (220281934, 'User 3', 'user-3@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$gScykTaBajZfHSzv3OAUsOL9hyIJbyj3Jh29rMZLG9cPlJUGvWwkW', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (323332591, 'User 4', 'user-4@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$RcZHRMgjs5VZAY.r5CU5nu1IjImswIBCbYgjzBlFpAWuuQKhsFxzC', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (608344442, 'User 5', 'user-5@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$sj8Tk6dk5jpYUQde764TFeucL/zw1yL9Hw2h4.AOufNt/3sKAyQEa', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (1028376774, 'User 6', 'user-6@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$LcRBYuECabKR4P6ih7qgYeNErd2emC3veaD8VAFXn/TTCIFuarkmy', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (172816471, 'User 7', 'user-7@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$9.XBPJpnc/3QVaT3/wuOse7HlJVRpy.h0Jmk.GLbxEEQQbpk3h4Le', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (452191684, 'User 8', 'user-8@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$iL11O.g4k6jzb7fOVVgIIehGTep3xNXPHPdTxSLOfmntqDU.SCXNu', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (771020115, 'User 9', 'user-9@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$Nd4RTG/TTVMB0sdOHE0n4O77YADhOjmNxzRsAF3yauzlMSN7WR4t6', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (956993830, 'User 10', 'user-10@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$N4ACBP5Z7IPdyJLAegxfZOOqq.F1Cvc8vPYBuI8DMldqDlOH3ummO', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (235774389, 'User 11', 'user-11@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$ALU5WIN/yqKvftSY4NT/tuqX2z1yWFO.JfQvVYEzWdWs6uhd2r58O', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (386199561, 'User 12', 'user-12@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$uLLsJ4p1amPs9IO2YwJEWuM89j78pnE/uj8Ph76Lidbw6YRp.pZzW', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (537116830, 'User 13', 'user-13@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$hoTdJwD7nuCQgYfRDvR48.3vmJuODolrdveOp3Ht4yqGrjcnBcoMS', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (1046959423, 'User 14', 'user-14@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$eveY6moyOqN9byv1E2dgPOKH8Fc1EPuI5.iwokzTWWCAiRfZSQhfK', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (157312430, 'User 15', 'user-15@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$FMCIUk0T3CqIifFqRmTKUeRhocu2DvJiT2lVuhTDgxx/Vz5uY90JG', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (275330066, 'User 16', 'user-16@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$rbDLUG9zFzYb0zFqFGKvzeyEFoXLVjsWDpa131UyrOyq2py8/KUQK', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (661521543, 'User 17', 'user-17@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$xuyAc1JUR4ihC5JZAaWFjujya5CrDvxjDZLIgTQ5pe69plZCzadQm', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (936450328, 'User 18', 'user-18@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$G3z8H.6NMJbIoSJbBZ7nB.EfVk75EWCxejv8o34nNfXCGQWYF/E1C', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (14035331, 'User 19', 'user-19@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$dXOb.XmfXPBBhULyA8UQ8OofqjQL/byWClDzjERn0tySYza4TFXwi', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (304595689, 'User 20', 'user-20@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$cmMEgw8EDwnjjug/3bvn5Oqbg08uHs6TObNeq9KHb7vNppIGsz1pi', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (622916212, 'User 21', 'user-21@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$cilSD/hX7lm5NgSbyqk.jOIQuiRcfaNJx7MBtjcfgyF6gh9pg/KeG', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (1009361868, 'User 22', 'user-22@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$cRWKL.sPPbcvTInG06VTXeETpLfnNeaZTxHq2HmlzDqcrkGZDF/Yy', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (187601757, 'User 23', 'user-23@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$H2eo.wFfGHTZc9o9D6ulwuqcUVxIX4yoD6CzuxB.bLkc3/W.UO1Ee', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (357172992, 'User 24', 'user-24@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$jjeHnbHmf8ERA5EtImLloO4lX3z6b4PXLiFVYz1sjtKFpVqI9vNSq', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (575485547, 'User 25', 'user-25@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$YkvaNcp0fbnFfLm54wA7TOrFfzXOdkJmNDjY8hPgTTmwfjuuW3SxO', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (994338771, 'User 26', 'user-26@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$mp4Kaqk1JA9BcPytfob27OjZeon6.zMDUUy/jqESGLqssvsA.U.Uy', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (205739844, 'User 27', 'user-27@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$BwvcI7h8XJRfMlAMKxO09eC/3Sz4KECzo1dAunkAi7VjLb096ETN.', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (486296279, 'User 28', 'user-28@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$FiSg4wogGT6qaYtEK6RbPOjRvjti8E8IvUmMHowB0iPG4c74p42Ku', 1, '2023-08-17 16:23:20');\nINSERT INTO \"users\" (\"id\", \"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"activated\", \"activated_at\") VALUES (737901126, 'User 29', 'user-29@example.com', '2023-08-17 16:23:20.892697', '2023-08-17 16:23:20.892697', '$2a$04$PJbefGIfxdhUQjCihHl4JeU8kZZxGh4oKG2DX7CVSH7.ZDGKS4kvu', 1, '2023-08-17 16:23:20')",
+      "digest": "440d2678f81dcfd13956c930c4b14611ed2e8e349c820c91a3eeb2fc39a16378",
+      "subtreeDigest": "9cb054a43c03e95e66747597b17f5d240900c444e4f0c9bcb30ecc4589eef064",
+      "children": [],
+      "elapsed": 0.001314361,
+      "eventIds": [
+        224
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "commit transaction",
+      "digest": "2e74b63cebb54e4a3356b2bfc5822b1b50d0841d2c60d7eed093c684ff025de5",
+      "subtreeDigest": "b9e95215cf5c46be6879bffda31203f33f62c0f14f4173c7433b1f700fda90fa",
+      "children": [],
+      "elapsed": 0.008852104,
+      "eventIds": [
+        228
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "PRAGMA defer_foreign_keys = 0",
+      "digest": "41d59a1b4ccacdc1ccffdf9349eacc9e510a28853fb4aac13f334648149e8a2b",
+      "subtreeDigest": "c77cfe562aacdb5e181950bdf0f99522cb5ff980b0581e25b1621ceafeec8f54",
+      "children": [],
+      "elapsed": 0.000178577,
+      "eventIds": [
+        232
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "PRAGMA foreign_keys = 1",
+      "digest": "e8b8f7d06470722f35fac0bd80d52125ba24294b3517ca3dd515125313afc81b",
+      "subtreeDigest": "a636c6f880f8799654cb6258ab03b5916e694168b7f938468e9835b82988e9d2",
+      "children": [],
+      "elapsed": 0.00017703,
+      "eventIds": [
+        236
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "PRAGMA foreign_key_check",
+      "digest": "d090153e357849f3b38dcd5d45f1c3bfd9157c2891f7369d2c9656fc92f93166",
+      "subtreeDigest": "5ed1b7b52e18324a415e9ecdf20ccc6f92788ef7df80d598ceec79cd11ec681f",
+      "children": [],
+      "elapsed": 0.000192717,
+      "eventIds": [
+        240
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "begin transaction",
+      "digest": "a837869ea3eec93baf679bf3bcd19a57204f99bafd58814b1d74682ae25c5c53",
+      "subtreeDigest": "0baedb63988fa07b8440439cc4301c26eb244276ea82cee730ba76fba5c41be4",
+      "children": [],
+      "elapsed": 0.000147367,
+      "eventIds": [
+        244
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"id\" = ? LIMIT ?",
+      "digest": "08ed46f852a746e2bf3ce7013b3de76fe132270e845496c7c88308608498ec63",
+      "subtreeDigest": "a9c5ff5662aad63959bfbb8f3732e7089b3a3ad73d4808b2237fbc574656c137",
+      "children": [],
+      "elapsed": 0.0004862,
+      "eventIds": [
+        261
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?",
+      "digest": "d3215148ca0ab75b7a269bcfb8bbf9e50385569eb0fba0fdbcca10da78011030",
+      "subtreeDigest": "cff7d0dfa71e51580d152a25a9f26530c0ab1ed3356a77247851221b6b3081dc",
+      "children": [],
+      "elapsed": 0.000422271,
+      "eventIds": [
+        265
+      ]
+    },
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "POST /login",
+      "status": 302,
+      "digest": "5ec376a640bd7a1e4e68e1532c88708d569b32126c5ae179c437147e2980ee3f",
+      "subtreeDigest": "65ae0cd6ba8d0ed97fc354a9807ced266779491d305385bbf4c9100120137da4",
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:app/controllers",
+          "name": "create",
+          "static": false,
+          "digest": "51948b2ba89c904474b66816d6e7045c6ad3cf6dbc94e6dbc916a012603e190a",
+          "subtreeDigest": "ff7f6482a1cd9da66132cdb07580804122d2d9235cb64ad028bd641fab76683e",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/controllers/SessionsController#create",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "string"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 6,
+              "caller": "package:app/controllers",
+              "callee": "database:Database",
+              "query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?",
+              "digest": "c14580bfbb4cbea2223956999abb2da07223fba57b1827a35152c7788d944313",
+              "subtreeDigest": "0dca967d63a879ead2e79eb0c84688d1d474cf732f25ad3a2ff5593cdaac7cdd",
+              "children": [],
+              "elapsed": 0.000424916,
+              "eventIds": [
+                289
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/controllers",
+              "callee": "package:app/helpers",
+              "name": "remember",
+              "static": false,
+              "digest": "05bca8c3c6e15609768fceb0a63c65edbc9cbf73f1fce161d68428c24c07db1a",
+              "subtreeDigest": "434729eaa7f45739aefc193cd71502d2bbe850cc87bfc615343716714bbbfc19",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/helpers/SessionsHelper#remember",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "string"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/helpers",
+                  "callee": "package:app/models",
+                  "name": "remember",
+                  "static": false,
+                  "digest": "6cfad1384daef8058ded7184368af45373ced4ac797fca9f61832c069cee3603",
+                  "subtreeDigest": "558dea24ab30f8ed0d8cdac15c3a7b345fc542110dec501bf8f9fd1c4b44364c",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/models/User#remember",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "string"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/models",
+                      "callee": "package:app/models",
+                      "name": "new_token",
+                      "static": true,
+                      "digest": "d2f9da8f05427c0b44b55c87d45cc37b26abe21d7de28fcb3a07cf899b055bc8",
+                      "subtreeDigest": "7018a65fbad93365c6af68b603a1df50f60098e831710e136aa46934a5137049",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "app/models/User.new_token",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "string"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.0001655710002523847,
+                      "eventIds": [
+                        313
+                      ]
+                    },
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/models",
+                      "callee": "package:app/models",
+                      "name": "digest",
+                      "static": true,
+                      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+                      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "app/models/User.digest",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "BCrypt::Password"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.0011110209998150822,
+                      "eventIds": [
+                        317
+                      ]
+                    },
+                    {
+                      "nodeType": 6,
+                      "caller": "package:app/models",
+                      "callee": "database:Database",
+                      "query": "SAVEPOINT active_record_1",
+                      "digest": "9204ccc0e7b1b9257760d6bc97d958f8bb891d8bd86b7124a5709527238f5800",
+                      "subtreeDigest": "b26a980e87d13841bcdec8661db1c2f8d324f369a3b69a440f96ac96ee40da6a",
+                      "children": [],
+                      "elapsed": 0.000291041,
+                      "eventIds": [
+                        329
+                      ]
+                    },
+                    {
+                      "nodeType": 6,
+                      "caller": "package:app/models",
+                      "callee": "database:Database",
+                      "query": "UPDATE \"users\" SET \"updated_at\" = ?, \"remember_digest\" = ? WHERE \"users\".\"id\" = ?",
+                      "digest": "c8fdf82897e017ea707be9d5bdd05362719e2c76efb11416778f45a740899bca",
+                      "subtreeDigest": "0b815650b2b69b5f1b7b312052f44cbfa864461ff2e15db772191bf455f53ea5",
+                      "children": [],
+                      "elapsed": 0.000374902,
+                      "eventIds": [
+                        333
+                      ]
+                    },
+                    {
+                      "nodeType": 6,
+                      "caller": "package:app/models",
+                      "callee": "database:Database",
+                      "query": "RELEASE SAVEPOINT active_record_1",
+                      "digest": "e7e1c01d2140c94a165b06c7c0e9565734901d82f4d8458089d942ddaf02e913",
+                      "subtreeDigest": "16b81ad4c8f244d75c1796415a3cf17b72c48af075f47ce91726c0072bfc006b",
+                      "children": [],
+                      "elapsed": 0.000190442,
+                      "eventIds": [
+                        343
+                      ]
+                    }
+                  ],
+                  "elapsed": 0.004959371999575524,
+                  "eventIds": [
+                    312
+                  ]
+                }
+              ],
+              "elapsed": 0.007703100000071572,
+              "eventIds": [
+                311
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/controllers",
+              "callee": "package:app/helpers",
+              "name": "log_in",
+              "static": false,
+              "digest": "57684fbe3c025e0766d2336960175e61687ad9a419ac585f151f7bc55c8f75a9",
+              "subtreeDigest": "63060a1ed090de8192c5b4b654e475965e098fcd2a28a2f90e373aa980b07ef2",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/helpers/SessionsHelper#log_in",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "string"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/helpers",
+                  "callee": "package:app/models",
+                  "name": "session_token",
+                  "static": false,
+                  "digest": "30ebde5c067231cbeea400bb7112cfb5503377e1c61f6e17e2add694ba30992d",
+                  "subtreeDigest": "fa6e20897390646311b25bbd87154a4ef6e7f7d35a0b3427572bd0d455a39e2d",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/models/User#session_token",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "string"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [],
+                  "elapsed": 0.000005296999006532133,
+                  "eventIds": [
+                    384
+                  ]
+                }
+              ],
+              "elapsed": 0.0003133409991278313,
+              "eventIds": [
+                381
+              ]
+            }
+          ],
+          "elapsed": 0.017943666998689878,
+          "eventIds": [
+            286
+          ]
+        }
+      ],
+      "elapsed": 0.030551957999705337,
+      "eventIds": [
+        267
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"id\" = ? LIMIT ?",
+      "digest": "08ed46f852a746e2bf3ce7013b3de76fe132270e845496c7c88308608498ec63",
+      "subtreeDigest": "a9c5ff5662aad63959bfbb8f3732e7089b3a3ad73d4808b2237fbc574656c137",
+      "children": [],
+      "elapsed": 0.000440688,
+      "eventIds": [
+        439
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT COUNT(*) FROM \"microposts\"",
+      "digest": "aa3e8259b5dc0900e7c9bb71d05dfc10eb34ac77ffa23169e896177f29f83636",
+      "subtreeDigest": "f4bb63ec060adb5a3f512e340b780d6e49adc83ae44f87bb5d16c87752afbbd7",
+      "children": [],
+      "elapsed": 0.000440793,
+      "eventIds": [
+        444
+      ]
+    },
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "DELETE /microposts/{id}",
+      "status": 303,
+      "digest": "e14680df6715a69feeedfa56cb8209ccc8ff7c1c5300410d469ab319dbf89e83",
+      "subtreeDigest": "9cb8f9c4294d974b55421c34c7c4e3919f5f6d94adb70882a34d3df3f57dd6b7",
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:app/helpers",
+          "name": "logged_in?",
+          "static": false,
+          "digest": "77ba104e4ac11aaffbd62768cc00961bc71badb260963485b9897fbad354a39c",
+          "subtreeDigest": "53f13677ac6ebb4cff2166b7bc9e609d29333153a7eb189266b4a5659644f986",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/helpers/SessionsHelper#logged_in?",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "boolean"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 3,
+              "caller": "package:app/helpers",
+              "callee": "package:app/helpers",
+              "name": "current_user",
+              "static": false,
+              "digest": "f2fde231b0994ff4256ad0e5188d0308c1a6148f09070dc9de9afaa808d8cd73",
+              "subtreeDigest": "1e604002d0d24b43ceedc3c440842952d17a738308606416a3f858e7930fac23",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/helpers/SessionsHelper#current_user",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "User"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 6,
+                  "caller": "package:app/helpers",
+                  "callee": "database:Database",
+                  "query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?",
+                  "digest": "d3215148ca0ab75b7a269bcfb8bbf9e50385569eb0fba0fdbcca10da78011030",
+                  "subtreeDigest": "cff7d0dfa71e51580d152a25a9f26530c0ab1ed3356a77247851221b6b3081dc",
+                  "children": [],
+                  "elapsed": 0.0003481,
+                  "eventIds": [
+                    501
+                  ]
+                },
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/helpers",
+                  "callee": "package:app/models",
+                  "name": "session_token",
+                  "static": false,
+                  "digest": "30ebde5c067231cbeea400bb7112cfb5503377e1c61f6e17e2add694ba30992d",
+                  "subtreeDigest": "fa6e20897390646311b25bbd87154a4ef6e7f7d35a0b3427572bd0d455a39e2d",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/models/User#session_token",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "string"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [],
+                  "elapsed": 0.0000120189997687703,
+                  "eventIds": [
+                    505
+                  ]
+                }
+              ],
+              "elapsed": 0.004238182998960838,
+              "eventIds": [
+                464
+              ]
+            }
+          ],
+          "elapsed": 0.0043771170003310544,
+          "eventIds": [
+            463
+          ]
+        },
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:app/helpers",
+          "name": "current_user",
+          "static": false,
+          "digest": "f2fde231b0994ff4256ad0e5188d0308c1a6148f09070dc9de9afaa808d8cd73",
+          "subtreeDigest": "1e604002d0d24b43ceedc3c440842952d17a738308606416a3f858e7930fac23",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/helpers/SessionsHelper#current_user",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "User"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 6,
+              "caller": "package:app/helpers",
+              "callee": "database:Database",
+              "query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?",
+              "digest": "d3215148ca0ab75b7a269bcfb8bbf9e50385569eb0fba0fdbcca10da78011030",
+              "subtreeDigest": "cff7d0dfa71e51580d152a25a9f26530c0ab1ed3356a77247851221b6b3081dc",
+              "children": [],
+              "elapsed": 0.000202499,
+              "eventIds": [
+                514
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/helpers",
+              "callee": "package:app/models",
+              "name": "session_token",
+              "static": false,
+              "digest": "30ebde5c067231cbeea400bb7112cfb5503377e1c61f6e17e2add694ba30992d",
+              "subtreeDigest": "fa6e20897390646311b25bbd87154a4ef6e7f7d35a0b3427572bd0d455a39e2d",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/models/User#session_token",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "string"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.000007501999789383262,
+              "eventIds": [
+                518
+              ]
+            }
+          ],
+          "elapsed": 0.0007441640009346884,
+          "eventIds": [
+            509
+          ]
+        },
+        {
+          "nodeType": 6,
+          "caller": "http:HTTP server requests",
+          "callee": "database:Database",
+          "query": "SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? AND \"microposts\".\"id\" = ? ORDER BY \"microposts\".\"created_at\" DESC LIMIT ?",
+          "digest": "a42a2d5b3cedc86933334b8c3d2ff39a8225fd081a018fa728326f10a88f74c2",
+          "subtreeDigest": "4a62e44b8936b69295b370a23f2592fae87e6db73b903b3964bd59d8542826e7",
+          "children": [],
+          "elapsed": 0.000558657,
+          "eventIds": [
+            523
+          ]
+        }
+      ],
+      "elapsed": 0.023645531999136438,
+      "eventIds": [
+        447
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT COUNT(*) FROM \"microposts\"",
+      "digest": "aa3e8259b5dc0900e7c9bb71d05dfc10eb34ac77ffa23169e896177f29f83636",
+      "subtreeDigest": "f4bb63ec060adb5a3f512e340b780d6e49adc83ae44f87bb5d16c87752afbbd7",
+      "children": [],
+      "elapsed": 0.000179879,
+      "eventIds": [
+        578
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "rollback transaction",
+      "digest": "c25f313099f39b61256e62b3c06095337f86af3e57d02a9e570db7412687ab65",
+      "subtreeDigest": "0c8f838a33893115ed65139cde4d941f82a7583ebf84bba5a8dfc8ae85f567f6",
+      "children": [],
+      "elapsed": 0.000313826,
+      "eventIds": [
+        587
+      ]
+    }
+  ]
+}

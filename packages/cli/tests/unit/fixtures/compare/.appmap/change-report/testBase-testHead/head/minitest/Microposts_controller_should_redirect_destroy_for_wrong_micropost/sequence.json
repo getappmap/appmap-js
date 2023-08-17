@@ -1,0 +1,348 @@
+{
+  "actors": [
+    {
+      "id": "http:HTTP server requests",
+      "name": "HTTP server requests",
+      "order": 0
+    },
+    {
+      "id": "package:app/controllers",
+      "name": "controllers",
+      "order": 1000
+    },
+    {
+      "id": "package:app/helpers",
+      "name": "helpers",
+      "order": 2000
+    },
+    {
+      "id": "package:app/models",
+      "name": "models",
+      "order": 3000
+    },
+    {
+      "id": "database:Database",
+      "name": "Database",
+      "order": 6000
+    }
+  ],
+  "rootActions": [
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "begin transaction",
+      "digest": "a837869ea3eec93baf679bf3bcd19a57204f99bafd58814b1d74682ae25c5c53",
+      "subtreeDigest": "0baedb63988fa07b8440439cc4301c26eb244276ea82cee730ba76fba5c41be4",
+      "children": [],
+      "elapsed": 0.000247533,
+      "eventIds": [
+        8
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"id\" = ? LIMIT ?",
+      "digest": "08ed46f852a746e2bf3ce7013b3de76fe132270e845496c7c88308608498ec63",
+      "subtreeDigest": "a9c5ff5662aad63959bfbb8f3732e7089b3a3ad73d4808b2237fbc574656c137",
+      "children": [],
+      "elapsed": 0.000298404,
+      "eventIds": [
+        23
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?",
+      "digest": "d3215148ca0ab75b7a269bcfb8bbf9e50385569eb0fba0fdbcca10da78011030",
+      "subtreeDigest": "cff7d0dfa71e51580d152a25a9f26530c0ab1ed3356a77247851221b6b3081dc",
+      "children": [],
+      "elapsed": 0.000255401,
+      "eventIds": [
+        27
+      ]
+    },
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "POST /login",
+      "status": 302,
+      "digest": "5ec376a640bd7a1e4e68e1532c88708d569b32126c5ae179c437147e2980ee3f",
+      "subtreeDigest": "65ae0cd6ba8d0ed97fc354a9807ced266779491d305385bbf4c9100120137da4",
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:app/controllers",
+          "name": "create",
+          "static": false,
+          "digest": "51948b2ba89c904474b66816d6e7045c6ad3cf6dbc94e6dbc916a012603e190a",
+          "subtreeDigest": "ff7f6482a1cd9da66132cdb07580804122d2d9235cb64ad028bd641fab76683e",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/controllers/SessionsController#create",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "string"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 6,
+              "caller": "package:app/controllers",
+              "callee": "database:Database",
+              "query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?",
+              "digest": "c14580bfbb4cbea2223956999abb2da07223fba57b1827a35152c7788d944313",
+              "subtreeDigest": "0dca967d63a879ead2e79eb0c84688d1d474cf732f25ad3a2ff5593cdaac7cdd",
+              "children": [],
+              "elapsed": 0.000438128,
+              "eventIds": [
+                49
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/controllers",
+              "callee": "package:app/helpers",
+              "name": "remember",
+              "static": false,
+              "digest": "05bca8c3c6e15609768fceb0a63c65edbc9cbf73f1fce161d68428c24c07db1a",
+              "subtreeDigest": "434729eaa7f45739aefc193cd71502d2bbe850cc87bfc615343716714bbbfc19",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/helpers/SessionsHelper#remember",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "string"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/helpers",
+                  "callee": "package:app/models",
+                  "name": "remember",
+                  "static": false,
+                  "digest": "6cfad1384daef8058ded7184368af45373ced4ac797fca9f61832c069cee3603",
+                  "subtreeDigest": "558dea24ab30f8ed0d8cdac15c3a7b345fc542110dec501bf8f9fd1c4b44364c",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/models/User#remember",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "string"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/models",
+                      "callee": "package:app/models",
+                      "name": "new_token",
+                      "static": true,
+                      "digest": "d2f9da8f05427c0b44b55c87d45cc37b26abe21d7de28fcb3a07cf899b055bc8",
+                      "subtreeDigest": "7018a65fbad93365c6af68b603a1df50f60098e831710e136aa46934a5137049",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "app/models/User.new_token",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "string"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.0001374790008412674,
+                      "eventIds": [
+                        67
+                      ]
+                    },
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/models",
+                      "callee": "package:app/models",
+                      "name": "digest",
+                      "static": true,
+                      "digest": "b60be0c684731794f7d19409f7c5f459d8fa14f74c3279251684e2ee4b838427",
+                      "subtreeDigest": "13c4c305ddcaa2fc7bd8c64a837ab858f2d807600096de7dd1b19e2091541fa0",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "app/models/User.digest",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "BCrypt::Password"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.001338051002676366,
+                      "eventIds": [
+                        71
+                      ]
+                    },
+                    {
+                      "nodeType": 6,
+                      "caller": "package:app/models",
+                      "callee": "database:Database",
+                      "query": "SAVEPOINT active_record_1",
+                      "digest": "9204ccc0e7b1b9257760d6bc97d958f8bb891d8bd86b7124a5709527238f5800",
+                      "subtreeDigest": "b26a980e87d13841bcdec8661db1c2f8d324f369a3b69a440f96ac96ee40da6a",
+                      "children": [],
+                      "elapsed": 0.000374847,
+                      "eventIds": [
+                        83
+                      ]
+                    },
+                    {
+                      "nodeType": 6,
+                      "caller": "package:app/models",
+                      "callee": "database:Database",
+                      "query": "UPDATE \"users\" SET \"updated_at\" = ?, \"remember_digest\" = ? WHERE \"users\".\"id\" = ?",
+                      "digest": "c8fdf82897e017ea707be9d5bdd05362719e2c76efb11416778f45a740899bca",
+                      "subtreeDigest": "0b815650b2b69b5f1b7b312052f44cbfa864461ff2e15db772191bf455f53ea5",
+                      "children": [],
+                      "elapsed": 0.000514361,
+                      "eventIds": [
+                        87
+                      ]
+                    },
+                    {
+                      "nodeType": 6,
+                      "caller": "package:app/models",
+                      "callee": "database:Database",
+                      "query": "RELEASE SAVEPOINT active_record_1",
+                      "digest": "e7e1c01d2140c94a165b06c7c0e9565734901d82f4d8458089d942ddaf02e913",
+                      "subtreeDigest": "16b81ad4c8f244d75c1796415a3cf17b72c48af075f47ce91726c0072bfc006b",
+                      "children": [],
+                      "elapsed": 0.000406067,
+                      "eventIds": [
+                        97
+                      ]
+                    }
+                  ],
+                  "elapsed": 0.006036701000994071,
+                  "eventIds": [
+                    66
+                  ]
+                }
+              ],
+              "elapsed": 0.007867102998716291,
+              "eventIds": [
+                65
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/controllers",
+              "callee": "package:app/helpers",
+              "name": "log_in",
+              "static": false,
+              "digest": "57684fbe3c025e0766d2336960175e61687ad9a419ac585f151f7bc55c8f75a9",
+              "subtreeDigest": "63060a1ed090de8192c5b4b654e475965e098fcd2a28a2f90e373aa980b07ef2",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/helpers/SessionsHelper#log_in",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "string"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/helpers",
+                  "callee": "package:app/models",
+                  "name": "session_token",
+                  "static": false,
+                  "digest": "30ebde5c067231cbeea400bb7112cfb5503377e1c61f6e17e2add694ba30992d",
+                  "subtreeDigest": "fa6e20897390646311b25bbd87154a4ef6e7f7d35a0b3427572bd0d455a39e2d",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/models/User#session_token",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "string"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [],
+                  "elapsed": 0.000003240998921683058,
+                  "eventIds": [
+                    138
+                  ]
+                }
+              ],
+              "elapsed": 0.00017619299978832714,
+              "eventIds": [
+                135
+              ]
+            }
+          ],
+          "elapsed": 0.01188054500016733,
+          "eventIds": [
+            46
+          ]
+        }
+      ],
+      "elapsed": 0.0178122200013604,
+      "eventIds": [
+        29
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"id\" = ? LIMIT ?",
+      "digest": "08ed46f852a746e2bf3ce7013b3de76fe132270e845496c7c88308608498ec63",
+      "subtreeDigest": "a9c5ff5662aad63959bfbb8f3732e7089b3a3ad73d4808b2237fbc574656c137",
+      "children": [],
+      "elapsed": 0.000360762,
+      "eventIds": [
+        193
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT COUNT(*) FROM \"microposts\"",
+      "digest": "aa3e8259b5dc0900e7c9bb71d05dfc10eb34ac77ffa23169e896177f29f83636",
+      "subtreeDigest": "f4bb63ec060adb5a3f512e340b780d6e49adc83ae44f87bb5d16c87752afbbd7",
+      "children": [],
+      "elapsed": 0.000307026,
+      "eventIds": [
+        198
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "rollback transaction",
+      "digest": "c25f313099f39b61256e62b3c06095337f86af3e57d02a9e570db7412687ab65",
+      "subtreeDigest": "0c8f838a33893115ed65139cde4d941f82a7583ebf84bba5a8dfc8ae85f567f6",
+      "children": [],
+      "elapsed": 0.000312232,
+      "eventIds": [
+        209
+      ]
+    }
+  ]
+}

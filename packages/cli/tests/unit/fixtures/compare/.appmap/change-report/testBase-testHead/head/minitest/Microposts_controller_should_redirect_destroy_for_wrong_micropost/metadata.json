@@ -1,0 +1,42 @@
+{
+  "app": "rails_tutorial_sample_app_7th_ed",
+  "language": {
+    "name": "ruby",
+    "engine": "ruby",
+    "version": "3.1.2"
+  },
+  "client": {
+    "name": "appmap",
+    "url": "https://github.com/applandinc/appmap-ruby",
+    "version": "0.99.4"
+  },
+  "frameworks": [
+    {
+      "name": "rails",
+      "version": "7.0.4"
+    },
+    {
+      "name": "minitest",
+      "version": "5.15.0"
+    }
+  ],
+  "git": {
+    "repository": "git@github.com:land-of-apps/rails_tutorial_sample_app_7th_ed.git",
+    "branch": "main",
+    "commit": "a9a602d6c8ef85143ca903b3a74daec1a92d5286",
+    "git_last_annotated_tag": null,
+    "git_last_tag": null,
+    "git_commits_since_last_annotated_tag": null,
+    "git_commits_since_last_tag": null
+  },
+  "name": "Microposts_controller should redirect destroy for wrong micropost",
+  "source_location": "test/controllers/microposts_controller_test.rb:24",
+  "recorder": {
+    "name": "minitest",
+    "type": "tests"
+  },
+  "test_status": "failed",
+  "test_failure": {
+    "message": "NoMethodError: undefined method `micropost_path' for #<MicropostsControllerTest:0x00007f311d97a068>\nDid you mean?  microposts\n    test/controllers/microposts_controller_test.rb:28:in `block (2 levels) in <class:MicropostsControllerTest>'\n    test/controllers/microposts_controller_test.rb:27:in `block in <class:MicropostsControllerTest>'"
+  }
+}

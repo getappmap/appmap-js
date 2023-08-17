@@ -1,0 +1,7 @@
+[
+  {
+    "route": "POST /login",
+    "parameters": "(session)",
+    "status": 302
+  }
+]

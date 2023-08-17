@@ -1,0 +1,12 @@
+[
+  {
+    "route": "DELETE /microposts/{id}",
+    "parameters": "()",
+    "status": 303
+  },
+  {
+    "route": "POST /login",
+    "parameters": "(session)",
+    "status": 302
+  }
+]

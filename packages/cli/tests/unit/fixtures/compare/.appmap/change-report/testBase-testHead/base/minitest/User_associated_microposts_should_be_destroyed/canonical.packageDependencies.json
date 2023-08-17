@@ -1,0 +1,30 @@
+[
+  {
+    "caller": "activesupport",
+    "callee": "Database"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "app/models"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "logger"
+  },
+  {
+    "caller": "app/models",
+    "callee": "openssl"
+  },
+  {
+    "caller": "app/models",
+    "callee": "ruby"
+  },
+  {
+    "caller": "ruby",
+    "callee": "Database"
+  },
+  {
+    "caller": "ruby",
+    "callee": "logger"
+  }
+]
