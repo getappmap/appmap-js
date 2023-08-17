@@ -140,14 +140,21 @@ export default class MarkdownReport implements Report {
       return new Handlebars.SafeString(JSON.stringify(value, null, 2));
     });
 
+    Handlebars.registerHelper('defined', function (...list): boolean {
+      const _fn = list.pop();
+      let result = false;
+      for (const item of list) if (item !== undefined) result = true;
+      return result;
+    });
+
     Handlebars.registerHelper('length', function (...list): number {
+      const _fn = list.pop();
       let result = 0;
       for (const item of list) {
         if (Array.isArray(item)) {
           result += item.length;
         }
       }
-
       return result;
     });
 
