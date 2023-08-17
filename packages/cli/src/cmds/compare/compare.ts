@@ -70,9 +70,6 @@ export const handler = async (argv: any) => {
     input: process.stdin,
     output: process.stdout,
   });
-  rl.on('close', function () {
-    yargs.exit(0, new Error());
-  });
 
   const {
     directory,
@@ -84,40 +81,44 @@ export const handler = async (argv: any) => {
     reportRemoved,
   } = argv;
 
-  handleWorkingDirectory(directory);
-  const appmapConfig = await loadAppMapConfig();
-  if (!appmapConfig) throw new Error(`Unable to load appmap.yml config file`);
-
-  let scannerConfig: string | undefined;
   try {
-    scannerConfig = await readFile(join(srcDir, 'appmap-scanner.yml'), 'utf-8');
-    console.debug(`Using scanner configuration from appmap-scanner.yml`);
+    handleWorkingDirectory(directory);
+    const appmapConfig = await loadAppMapConfig();
+    if (!appmapConfig) throw new Error(`Unable to load appmap.yml config file`);
+
+    let scannerConfig: string | undefined;
+    try {
+      scannerConfig = await readFile(join(srcDir, 'appmap-scanner.yml'), 'utf-8');
+      console.debug(`Using scanner configuration from appmap-scanner.yml`);
+    } catch (e) {
+      console.debug(`Unable to load appmap-scanner.yml. Will use default scanner configuration.`);
+    }
+
+    const { baseRevision, headRevision } = await detectRevisions(baseRevisionArg, headRevisionArg);
+
+    const outputDir = await prepareOutputDir(
+      outputDirArg,
+      baseRevision,
+      headRevision,
+      argv.clobberOutputDir,
+      rl
+    );
+
+    const changeReporter = new ChangeReporter(baseRevision, headRevision, outputDir, srcDir);
+    await changeReporter.initialize();
+
+    const options = new ChangeReportOptions();
+    options.reportRemoved = reportRemoved;
+    const report = await changeReporter.report(options);
+
+    if (deleteUnreferenced) {
+      await changeReporter.deleteUnreferencedAppMaps();
+    }
+
+    await writeFile(join(outputDir, 'change-report.json'), JSON.stringify(report, null, 2));
   } catch (e) {
-    console.debug(`Unable to load appmap-scanner.yml. Will use default scanner configuration.`);
+    throw e as Error;
+  } finally {
+    rl.close();
   }
-
-  const { baseRevision, headRevision } = await detectRevisions(baseRevisionArg, headRevisionArg);
-
-  const outputDir = await prepareOutputDir(
-    outputDirArg,
-    baseRevision,
-    headRevision,
-    argv.clobberOutputDir,
-    rl
-  );
-
-  const changeReporter = new ChangeReporter(baseRevision, headRevision, outputDir, srcDir);
-  await changeReporter.initialize();
-
-  const options = new ChangeReportOptions();
-  options.reportRemoved = reportRemoved;
-  const report = await changeReporter.report(options);
-
-  if (deleteUnreferenced) {
-    await changeReporter.deleteUnreferencedAppMaps();
-  }
-
-  await writeFile(join(outputDir, 'change-report.json'), JSON.stringify(report, null, 2));
-
-  rl.close();
 };
