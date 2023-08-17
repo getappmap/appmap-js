@@ -320,13 +320,17 @@ export function isChanged(
   isTestFn: (appmap: AppMapName) => boolean,
   digests: Digests
 ): (appmap: AppMapName) => boolean {
-  return (appmap: AppMapName) =>
-    isTestFn(appmap) &&
-    baseAppMaps.has(appmap) &&
-    !!digests.appmapDigest(RevisionName.Base, appmap) &&
-    !!digests.appmapDigest(RevisionName.Head, appmap) &&
-    digests.appmapDigest(RevisionName.Base, appmap) !==
-      digests.appmapDigest(RevisionName.Head, appmap);
+  return (appmap: AppMapName) => {
+    const baseDigest = digests.appmapDigest(RevisionName.Base, appmap);
+    const headDigest = digests.appmapDigest(RevisionName.Head, appmap);
+    return (
+      isTestFn(appmap) &&
+      baseAppMaps.has(appmap) &&
+      !!baseDigest &&
+      !!headDigest &&
+      baseDigest !== headDigest
+    );
+  };
 }
 
 export function buildFailure(
