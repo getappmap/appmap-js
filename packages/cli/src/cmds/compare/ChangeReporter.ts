@@ -176,8 +176,9 @@ export default class ChangeReporter {
     assert(headAppMaps);
     assert(failedAppMaps);
 
+    let apiDiff: any;
+
     const generator = new ReportFieldCalculator(this);
-    const apiDiff = await generator.apiDiff(options.reportRemoved);
 
     const isNewFn = isNew(baseAppMaps, isTest(appMapMetadata));
     const isChangedFn = isChanged(baseAppMaps, isTest(appMapMetadata), this.digests);
@@ -212,6 +213,8 @@ export default class ChangeReporter {
 
     let findingDiff: Record<'new' | 'resolved', Finding[]> | undefined;
     if (testFailures.length === 0) {
+      apiDiff = await generator.apiDiff(options.reportRemoved);
+
       findingDiff = await generator.findingDiff(options.reportRemoved);
       for (const finding of findingDiff.new || [])
         referenceFindingAppMapFn(RevisionName.Head, finding);
