@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.86.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.86.0...@appland/appmap-v3.86.1) (2023-08-18)
+
+
+### Bug Fixes
+
+* `appmap compare` retains new AppMaps ([1983144](https://github.com/getappmap/appmap-js/commit/19831441f05adf310d0acaf583939a568c649135))
+
 # [@appland/appmap-v3.86.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.85.0...@appland/appmap-v3.86.0) (2023-08-18)
 
 
