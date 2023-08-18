@@ -1,3 +1,18 @@
+# [@appland/appmap-v3.86.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.85.0...@appland/appmap-v3.86.0) (2023-08-18)
+
+
+### Bug Fixes
+
+* Build diagram from filtered AppMap ([d6f2edc](https://github.com/getappmap/appmap-js/commit/d6f2edcf0d76a146a53a3d90693d436b5c645e74))
+* Processing of sequenceDiagramDiffSnippetCount ([d20965d](https://github.com/getappmap/appmap-js/commit/d20965d0692510a8f96c8fe8ae8c83261616758b))
+* Wait for index file update ([4b7f558](https://github.com/getappmap/appmap-js/commit/4b7f5582451097e43c52d544b6280dc902acef43))
+
+
+### Features
+
+* compare command ([584d648](https://github.com/getappmap/appmap-js/commit/584d648718800478a9337962cdc33b62b33d03dc))
+* compare-report command ([267d63a](https://github.com/getappmap/appmap-js/commit/267d63a33c88b4cde213623b3941443117ee80de))
+
 # [@appland/appmap-v3.85.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.84.2...@appland/appmap-v3.85.0) (2023-08-11)
 
 
