@@ -1,6 +1,6 @@
 import sinon, { SinonSandbox } from 'sinon';
 import assert from 'assert';
-import { existsSync, readFileSync } from 'fs';
+import { existsSync, readFileSync, write } from 'fs';
 import path from 'path';
 
 import { handler } from '../../../src/cmds/compare/compare';
@@ -8,6 +8,9 @@ import { cleanProject, fixtureDir } from '../util';
 import * as executeCmd from '../../../src/lib/executeCommand';
 import { Paths } from '../../../src/cmds/compare/Paths';
 import expectedReport from '../fixtures/compare/expected-change-report.json';
+import { glob } from 'glob';
+import { promisify } from 'util';
+import { readFile, writeFile } from 'fs/promises';
 
 const originalWorkingDir = process.cwd();
 const expectedBaseAppmaps = [
@@ -54,19 +57,54 @@ describe('compare command', () => {
     process.chdir(originalWorkingDir);
   });
 
-  it('creates the expected change report', async () => {
-    await handler({
-      directory: compareFixturePath,
-      baseRevision,
-      headRevision,
-      sourceDir: '.',
-      deleteUnreferenced: true,
-      reportRemoved: true,
-      clobberOutputDir: false,
-    });
-    assert(existsSync(changeReportPath));
+  describe('when some tests failed', () => {
+    it('creates the expected change report', async () => {
+      await handler({
+        directory: compareFixturePath,
+        baseRevision,
+        headRevision,
+        sourceDir: '.',
+        deleteUnreferenced: true,
+        reportRemoved: true,
+        clobberOutputDir: false,
+      });
+      assert(existsSync(changeReportPath));
 
-    const actualReport = JSON.parse(String(readFileSync(changeReportPath)));
-    assert.deepStrictEqual(actualReport, expectedReport);
+      const actualReport = JSON.parse(String(readFileSync(changeReportPath)));
+      delete (expectedReport as any)['apiDiff'];
+      delete (expectedReport as any)['findingDiff'];
+      assert.deepStrictEqual(actualReport, expectedReport);
+    });
+  });
+  describe('when all tests passed', () => {
+    beforeEach(async () => {
+      const metadataFiles = await promisify(glob)('**/*.metadata.json', {
+        cwd: compareFixturePath,
+      });
+      for (const metadataFile of metadataFiles) {
+        const metadata = await JSON.parse(
+          String(await readFile(path.join(compareFixturePath, metadataFile)))
+        );
+        if (metadata.test_status === 'failed') {
+          metadata.test_status = 'succeeded';
+          await writeFile(path.join(compareFixturePath, metadataFile), JSON.stringify(metadata));
+        }
+      }
+    });
+    it('creates the expected change report', async () => {
+      await handler({
+        directory: compareFixturePath,
+        baseRevision,
+        headRevision,
+        sourceDir: '.',
+        deleteUnreferenced: true,
+        reportRemoved: true,
+        clobberOutputDir: false,
+      });
+      assert(existsSync(changeReportPath));
+
+      const actualReport = JSON.parse(String(readFileSync(changeReportPath)));
+      assert.deepStrictEqual(actualReport, expectedReport);
+    });
   });
 });

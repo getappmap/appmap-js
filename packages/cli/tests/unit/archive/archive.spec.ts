@@ -115,7 +115,7 @@ describe('archive command', () => {
         assert.deepEqual(appmapArchive.failedTests, ['revoke_api_key.appmap.json']);
 
         expect(indexFileExists('revoke_api_key', 'sequence.json')).toBe(true);
-        expect(indexFileExists('user_page_scenario', 'sequence.json')).toBe(false);
+        expect(indexFileExists('user_page_scenario', 'sequence.json')).toBe(true);
 
         expect(indexFileExists('revoke_api_key', 'appmap-findings.json')).toBe(false);
         expect(indexFileExists('user_page_scenario', 'appmap-findings.json')).toBe(false);

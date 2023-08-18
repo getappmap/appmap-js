@@ -11,8 +11,7 @@ export async function generateSequenceDiagrams(
   maxAppMapSizeInBytes: number,
   compareFilter: CompareFilter,
   oversizedAppMaps: Set<string>,
-  appMapDir?: string,
-  appMapFiles?: string[]
+  appMapDir: string
 ) {
   const specOptions = {
     loops: true,
@@ -33,8 +32,7 @@ export async function generateSequenceDiagrams(
     'Generating sequence diagrams',
     workerPool,
     task,
-    appMapDir,
-    appMapFiles
+    appMapDir
   );
 
   const elapsed = new Date().getTime() - startTime;

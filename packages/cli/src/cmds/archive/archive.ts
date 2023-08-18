@@ -17,8 +17,8 @@ import { cpus } from 'os';
 import { log, warn } from 'console';
 import buildWorkerPool from './buildWorkerPool';
 import { index } from '.';
-import { generateSequenceDiagrams } from './generateSequenceDiagrams';
 import { existsSync } from 'fs';
+import generateOpenAPI from './generateOpenAPI';
 
 // ## 1.3.0
 //
@@ -162,28 +162,33 @@ export const handler = async (argv: any) => {
     // If there are test failures, perform a limited analysis that only includes sequence diagrams
     // of the failed tests. Otherwise, perform a full analysis.
     //
-    // API changes and scanner findings are not meaningful for failed tests, so we skip doing that
+    // Scanner findings are not meaningful for failed tests, so we skip doing that
     // work and avoid misleading or confusing the user.
     try {
       await index(workerPool, maxAppMapSizeInBytes, appMapDir, oversizedAppMaps, failedTests);
 
+      let doScan = true;
       if (failedTests.size > 0) {
-        warn(`${failedTests.size} AppMaps are failed tests. Only these AppMaps will be analyzed.`);
-        await generateSequenceDiagrams(
-          workerPool,
-          maxAppMapSizeInBytes,
-          compareFilter,
-          oversizedAppMaps,
-          undefined,
-          [...failedTests].sort()
+        warn(
+          `${failedTests.size} AppMaps are failed tests. Analysis which depends on all tests passing will be skipped.`
         );
+        doScan = false;
       } else {
         log(`No AppMaps are failed tests, so all AppMaps will be analyzed.`);
-        await analyze(workerPool, maxAppMapSizeInBytes, compareFilter, appMapDir, oversizedAppMaps);
       }
+      await analyze(
+        workerPool,
+        maxAppMapSizeInBytes,
+        compareFilter,
+        appMapDir,
+        oversizedAppMaps,
+        doScan
+      );
     } finally {
       workerPool.close();
     }
+  } else {
+    await generateOpenAPI(appMapDir, maxAppMapSizeInBytes);
   }
 
   process.chdir(appMapDir);
