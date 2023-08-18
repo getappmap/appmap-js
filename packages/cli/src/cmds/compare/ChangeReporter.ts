@@ -198,6 +198,9 @@ export default class ChangeReporter {
     const newAppMaps = [...headAppMaps].filter(isNewFn);
     const changedAppMaps = [...headAppMaps].filter(isChangedFn).map((appmap) => ({ appmap }));
 
+    newAppMaps.forEach((appmap) => {
+      this.referencedAppMaps.add(RevisionName.Head, appmap);
+    });
     changedAppMaps.forEach(({ appmap }) => referenceAppMapFn(appmap));
 
     const failureFn = buildFailure(appMapMetadata, options.snippetWidth);
