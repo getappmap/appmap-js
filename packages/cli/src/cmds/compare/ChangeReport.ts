@@ -28,7 +28,7 @@ export type ChangeReport = {
   newAppMaps: AppMapLink[];
   changedAppMaps: ChangedAppMap[];
   apiDiff?: any;
-  findingDiff: Record<'new' & 'resolved', Finding[]>;
+  findingDiff?: Record<'new' & 'resolved', Finding[]>;
   appMapMetadata: {
     base: Record<AppMapName, Metadata>;
     head: Record<AppMapName, Metadata>;

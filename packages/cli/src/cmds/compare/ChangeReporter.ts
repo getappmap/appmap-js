@@ -176,8 +176,9 @@ export default class ChangeReporter {
     assert(headAppMaps);
     assert(failedAppMaps);
 
+    let apiDiff: any;
+
     const generator = new ReportFieldCalculator(this);
-    const apiDiff = await generator.apiDiff(options.reportRemoved);
 
     const isNewFn = isNew(baseAppMaps, isTest(appMapMetadata));
     const isChangedFn = isChanged(baseAppMaps, isTest(appMapMetadata), this.digests);
@@ -213,21 +214,43 @@ export default class ChangeReporter {
       }
     }
 
-    const findingDiff = await generator.findingDiff(options.reportRemoved);
-    for (const finding of findingDiff.new || [])
-      referenceFindingAppMapFn(RevisionName.Head, finding);
-    for (const finding of findingDiff.resolved || [])
-      referenceFindingAppMapFn(RevisionName.Base, finding);
+    let findingDiff: Record<'new' | 'resolved', Finding[]> | undefined;
+    if (testFailures.length === 0) {
+      apiDiff = await generator.apiDiff(options.reportRemoved);
+
+      findingDiff = await generator.findingDiff(options.reportRemoved);
+      for (const finding of findingDiff.new || [])
+        referenceFindingAppMapFn(RevisionName.Head, finding);
+      for (const finding of findingDiff.resolved || [])
+        referenceFindingAppMapFn(RevisionName.Base, finding);
+    }
+
+    const sequenceDiagramExists = async (revisionName: RevisionName, appmap: AppMapName) => {
+      const path = this.paths.sequenceDiagramPath(revisionName, appmap);
+      return await exists(path);
+    };
+
+    // Limit AppMap metadata to only those AppMaps that have a sequence diagram.
+    for (const revisionName of [RevisionName.Base, RevisionName.Head]) {
+      const metadataByPath = appMapMetadata[revisionName];
+      for (const appmap of metadataByPath.keys()) {
+        if (!(await sequenceDiagramExists(revisionName as RevisionName, appmap)))
+          metadataByPath.delete(appmap);
+      }
+    }
 
     const result: ChangeReport = {
       testFailures,
       newAppMaps,
       changedAppMaps,
-      findingDiff,
       sequenceDiagramDiff: await generator.sequenceDiagramDiff(changedAppMaps),
-      appMapMetadata: await generator.appMapMetadata(),
+      appMapMetadata: {
+        [RevisionName.Base]: mapToRecord(appMapMetadata[RevisionName.Base]),
+        [RevisionName.Head]: mapToRecord(appMapMetadata[RevisionName.Head]),
+      },
     };
 
+    if (findingDiff) result.findingDiff = findingDiff;
     if (apiDiff) result.apiDiff = apiDiff;
 
     return result;
@@ -303,11 +326,17 @@ export function isChanged(
   isTestFn: (appmap: AppMapName) => boolean,
   digests: Digests
 ): (appmap: AppMapName) => boolean {
-  return (appmap: AppMapName) =>
-    isTestFn(appmap) &&
-    baseAppMaps.has(appmap) &&
-    digests.appmapDigest(RevisionName.Base, appmap) !==
-      digests.appmapDigest(RevisionName.Head, appmap);
+  return (appmap: AppMapName) => {
+    const baseDigest = digests.appmapDigest(RevisionName.Base, appmap);
+    const headDigest = digests.appmapDigest(RevisionName.Head, appmap);
+    return (
+      isTestFn(appmap) &&
+      baseAppMaps.has(appmap) &&
+      !!baseDigest &&
+      !!headDigest &&
+      baseDigest !== headDigest
+    );
+  };
 }
 
 export function buildFailure(
@@ -354,16 +383,6 @@ export function buildFailure(
 
 export class ReportFieldCalculator {
   constructor(public reporter: ChangeReporter) {}
-
-  async appMapMetadata(): Promise<{
-    [K in BaseOrHead]: Record<AppMapName, Metadata>;
-  }> {
-    assert(this.reporter.appMapMetadata);
-    return {
-      [RevisionName.Base]: mapToRecord(this.reporter.appMapMetadata[RevisionName.Base]),
-      [RevisionName.Head]: mapToRecord(this.reporter.appMapMetadata[RevisionName.Head]),
-    };
-  }
 
   async sequenceDiagramDiff(changedAppMaps: ChangedAppMap[]): Promise<Record<string, string[]>> {
     const diffDiagrams = new DiffDiagrams();

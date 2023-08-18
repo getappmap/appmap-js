@@ -1,7 +1,7 @@
 import yargs from 'yargs';
 import readline from 'readline';
 import { join } from 'path';
-import { readFile, writeFile } from 'fs/promises';
+import { writeFile } from 'fs/promises';
 
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import detectRevisions from './detectRevisions';
@@ -86,14 +86,6 @@ export const handler = async (argv: any) => {
     const appmapConfig = await loadAppMapConfig();
     if (!appmapConfig) throw new Error(`Unable to load appmap.yml config file`);
 
-    let scannerConfig: string | undefined;
-    try {
-      scannerConfig = await readFile(join(srcDir, 'appmap-scanner.yml'), 'utf-8');
-      console.debug(`Using scanner configuration from appmap-scanner.yml`);
-    } catch (e) {
-      console.debug(`Unable to load appmap-scanner.yml. Will use default scanner configuration.`);
-    }
-
     const { baseRevision, headRevision } = await detectRevisions(baseRevisionArg, headRevisionArg);
 
     const outputDir = await prepareOutputDir(
@@ -116,8 +108,6 @@ export const handler = async (argv: any) => {
     }
 
     await writeFile(join(outputDir, 'change-report.json'), JSON.stringify(report, null, 2));
-  } catch (e) {
-    throw e as Error;
   } finally {
     rl.close();
   }

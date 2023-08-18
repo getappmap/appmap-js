@@ -1,17 +1,21 @@
 import sinon, { SinonSandbox } from 'sinon';
 import { handler } from '../../../src/cmds/archive/archive';
 import assert from 'assert';
-import path from 'path';
+import path, { join } from 'path';
 import { cleanProject, fixtureDir } from '../util';
-import { existsSync, lstatSync, readFileSync, rm, rmSync } from 'fs';
+import { existsSync, readFileSync, rmSync } from 'fs';
 import gitRevision from '../../../src/cmds/archive/gitRevision';
-import * as scanFile from '../../../src/cmds/archive/scan';
+import { readFile, writeFile } from 'fs/promises';
 
 const originalWorkingDir = process.cwd();
 const rubyFixturePath = path.join(fixtureDir, 'ruby');
+const revokeApiKeyAppMapPath = join(rubyFixturePath, 'revoke_api_key.appmap.json');
 const indexFolders = ['revoke_api_key', 'user_page_scenario'].map((folderName) =>
   path.join(rubyFixturePath, folderName)
 );
+
+const indexFileExists = (appmapFile: string, indexFile: string): boolean =>
+  existsSync(join(join(rubyFixturePath, appmapFile, indexFile)));
 
 describe('archive command', () => {
   let sandbox: SinonSandbox;
@@ -29,8 +33,6 @@ describe('archive command', () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    // Currently, scanning takes too long for these tests, so we'll stub it
-    sandbox.stub(scanFile, 'scan').resolves();
   });
 
   afterEach(async () => {
@@ -44,23 +46,25 @@ describe('archive command', () => {
   });
 
   describe('with a valid project with no previously created archive', () => {
-    beforeEach(async () => {
-      const argv = {
+    it('creates the expected files', async () => {
+      await handler({
         directory: rubyFixturePath,
         analyze: true,
-      };
-      await handler(argv);
-    });
+        threadCount: 3,
+      });
 
-    it('creates the expectecd appmap_archive.json', async () => {
       const expectedArchive = {
         workingDirectory: rubyFixturePath,
         appMapDir: '.',
         commandArguments: {
           directory: rubyFixturePath,
           analyze: true,
+          threadCount: 3,
         },
         revision: currentCommit,
+        failedTests: [],
+        oversizedAppMaps: [],
+        deletedAppMaps: undefined,
         config: {
           name: 'fixture-config',
           appmap_dir: '.',
@@ -70,30 +74,59 @@ describe('archive command', () => {
       const actual = JSON.parse(String(readFileSync(appmapArchiveJsonPath)));
 
       Object.keys(expectedArchive).forEach((key) => {
-        assert.deepEqual(actual[key], expectedArchive[key]);
+        assert.deepEqual(
+          actual[key],
+          expectedArchive[key],
+          `Expected ${key} to be ${JSON.stringify(expectedArchive[key])}, but got ${JSON.stringify(
+            actual[key]
+          )}`
+        );
       });
-    });
 
-    it('generates the openapi file', () => {
+      expect(indexFileExists('revoke_api_key', 'sequence.json')).toBe(true);
+      expect(indexFileExists('user_page_scenario', 'sequence.json')).toBe(true);
+
+      expect(indexFileExists('revoke_api_key', 'appmap-findings.json')).toBe(true);
+      expect(indexFileExists('user_page_scenario', 'appmap-findings.json')).toBe(true);
+
       assert(existsSync(openApiPath));
-    });
-
-    it('creates a tarball of appmaps', () => {
       assert(existsSync(appmapTarballPath));
-    });
-
-    it('creates the default .appmap folder and the full archive', async () => {
       assert(existsSync(archiveFolderPath));
-
       const fullArchivePath = path.join(archiveFolderPath, 'full', currentCommit + '.tar');
       assert(existsSync(fullArchivePath));
+    });
+
+    describe('when a test has failed', () => {
+      beforeEach(async () => {
+        // Update the test_status to 'failed'
+        const appmap = JSON.parse(await readFile(revokeApiKeyAppMapPath, 'utf-8'));
+        appmap.metadata.test_status = 'failed';
+        await writeFile(revokeApiKeyAppMapPath, JSON.stringify(appmap, null, 2));
+      });
+
+      it('analyzes only the failed test', async () => {
+        await handler({
+          directory: rubyFixturePath,
+          analyze: true,
+          threadCount: 1,
+        });
+
+        const appmapArchive = JSON.parse(String(readFileSync(appmapArchiveJsonPath)));
+        assert.deepEqual(appmapArchive.failedTests, ['revoke_api_key.appmap.json']);
+
+        expect(indexFileExists('revoke_api_key', 'sequence.json')).toBe(true);
+        expect(indexFileExists('user_page_scenario', 'sequence.json')).toBe(true);
+
+        expect(indexFileExists('revoke_api_key', 'appmap-findings.json')).toBe(false);
+        expect(indexFileExists('user_page_scenario', 'appmap-findings.json')).toBe(false);
+      });
     });
   });
 
   it('fails when no appmaps are found', async () => {
     let err = {} as Error;
     try {
-      await handler({ directory: 'no/such/dir' });
+      await handler({ directory: 'no/such/dir', analyze: true, threadCount: 1 });
     } catch (e) {
       err = e as Error;
     }
@@ -107,8 +140,9 @@ describe('archive command', () => {
 
     await handler({
       directory: rubyFixturePath,
-      outputDir: testOutputDirName,
       analyze: true,
+      outputDir: testOutputDirName,
+      threadCount: 1,
     });
 
     const expectedArchiveFolderPath = path.join(rubyFixturePath, testOutputDirName);
@@ -118,13 +152,14 @@ describe('archive command', () => {
     rmSync(expectedArchiveFolderPath, { force: true, recursive: true });
   });
 
-  it('correclty handles the output-file option', async () => {
+  it('correctly handles the output-file option', async () => {
     const testFileName = 'testFile.test';
 
     await handler({
       directory: rubyFixturePath,
-      outputFile: testFileName,
       analyze: true,
+      outputFile: testFileName,
+      threadCount: 1,
     });
 
     const expectedFilePath = path.join(archiveFolderPath, 'full', testFileName);
@@ -135,8 +170,9 @@ describe('archive command', () => {
   it('correctly handles the max-size option', async () => {
     await handler({
       directory: rubyFixturePath,
-      maxSize: 0,
       analyze: true,
+      maxSize: 0,
+      threadCount: 1,
     });
 
     assert(existsSync(appmapArchiveJsonPath));

@@ -3,6 +3,7 @@ import { Paths } from './Paths';
 import { AppMapDigest, AppMapName } from './ChangeReport';
 import { RevisionName } from './RevisionName';
 import { SequenceDiagramDigest } from './SequenceDiagramDigest';
+import { exists } from '../../utils';
 
 export class Digests {
   // All digests for the base and head revisions.
@@ -29,6 +30,8 @@ export class Digests {
     if (baseAppMaps.length === 0 && headAppMaps.length === 0) return;
 
     const q = queue(async ({ revisionName, appmap }) => {
+      if (!(await exists(this.paths.sequenceDiagramPath(revisionName, appmap)))) return;
+
       const digest = await new SequenceDiagramDigest(this.paths, revisionName, appmap).digest();
       this.digests[revisionName].add(digest);
 
