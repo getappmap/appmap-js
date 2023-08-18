@@ -49,12 +49,12 @@
 
           <ol>
             <li>
-              The AppMap agent JAR (<code class="inline">appmap.jar</code>) must be available on
-              your machine.
+              The AppMap agent JAR (<code class="inline">~/.appmap/lib/java/appmap.jar</code>) must
+              be available on your machine.
             </li>
             <li>
               Application code and test cases use the JVM flag
-              <code class="inline">-Djavaagent=appmap.jar</code>.
+              <code class="inline">-javaagent:~/.appmap/lib/java/appmap.jar</code>.
             </li>
           </ol>
 

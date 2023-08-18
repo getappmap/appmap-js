@@ -7,8 +7,8 @@
     <br />
     <p>
       Using "Start with AppMap" ensures that your Java code runs with the JVM option
-      <code class="inline">-Djavaagent=appmap.jar</code>. This option is required to enable AppMap
-      recording.
+      <code class="inline">-javaagent:~/.appmap/lib/java/appmap.jar</code>. This option is required
+      to enable AppMap recording.
     </p>
     <br />
     <div id="IntelliJ-screenshot"><img src="../../../assets/run-with-appmap-menu-item.png" /></div>
