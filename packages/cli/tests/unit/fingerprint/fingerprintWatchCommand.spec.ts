@@ -1,6 +1,6 @@
 import { retry } from 'async';
 import { existsSync, copyFileSync } from 'fs';
-import { stat } from 'fs/promises';
+import { access, rm, stat } from 'fs/promises';
 import { basename, join } from 'path';
 import { restore, stub } from 'sinon';
 import { dirSync } from 'tmp';
@@ -65,7 +65,9 @@ describe(FingerprintWatchCommand, () => {
   describe('indexing', () => {
     function placeMap(path = '../fixtures/ruby/revoke_api_key.appmap.json', name?: string) {
       name ||= basename(path);
-      copyFileSync(join(__dirname, path), join(appMapDir, name));
+      const target = join(appMapDir, name);
+      copyFileSync(join(__dirname, path), target);
+      return target;
     }
 
     async function verifyIndexSuccess(interval = 100, times = 10) {
@@ -79,6 +81,24 @@ describe(FingerprintWatchCommand, () => {
       await cmd.execute();
       return verifyIndexSuccess();
     }, 11000);
+
+    it('removes index when appmap is removed', async () => {
+      const appMapPath = placeMap();
+      const indexPath = join(appMapDir, 'revoke_api_key', 'mtime');
+      cmd = new FingerprintWatchCommand(appMapDir);
+
+      await cmd.execute();
+      await verifyIndexSuccess();
+      await rm(appMapPath);
+      return retry({ interval: 100, times: 10 }, async () => {
+        try {
+          await access(indexPath);
+        } catch {
+          return;
+        }
+        throw new Error('still exists');
+      });
+    });
 
     it('works eventually even if watching files is flaky', async () => {
       cmd = new FingerprintWatchCommand(appMapDir);
