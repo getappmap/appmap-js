@@ -1,3 +1,14 @@
+# [@appland/appmap-v3.87.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.86.1...@appland/appmap-v3.87.0) (2023-08-21)
+
+
+### Features
+
+* Adjust and test analysis with failed tests ([f1bd786](https://github.com/getappmap/appmap-js/commit/f1bd78696f55997c94932a9795da334420e55c1f))
+* Index appmaps in worker threads ([6451d37](https://github.com/getappmap/appmap-js/commit/6451d3730e764bd574076a0f2539660f0930a249))
+* Limit analysis when there are test failures ([c53982a](https://github.com/getappmap/appmap-js/commit/c53982a6b6c3dce7d2068a9108a401b5854f1363))
+* Limit metadata in report ([7e4d76d](https://github.com/getappmap/appmap-js/commit/7e4d76d47be0969a22f643f05a031641f8f08bad))
+* Skip apiDiff if there are test failures ([a623c2f](https://github.com/getappmap/appmap-js/commit/a623c2ff75ff1005748179f6c788e49067c64985))
+
 # [@appland/appmap-v3.86.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.86.0...@appland/appmap-v3.86.1) (2023-08-18)
 
 
