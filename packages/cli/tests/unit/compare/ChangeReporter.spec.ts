@@ -1,5 +1,4 @@
 import type { AppMapName } from '../../../src/cmds/compare/ChangeReport';
-import type { AppMapMetadata } from '../../../src/cmds/compare/ChangeReporter';
 import ChangeReporter, {
   ChangeReportOptions,
   ReportFieldCalculator,
@@ -14,10 +13,6 @@ describe('ChangeReporter', () => {
         .mockResolvedValue({ new: [], resolved: [] });
       jest.spyOn(ReportFieldCalculator.prototype, 'apiDiff').mockResolvedValue(undefined);
       jest.spyOn(ReportFieldCalculator.prototype, 'sequenceDiagramDiff').mockResolvedValue({});
-      jest.spyOn(ReportFieldCalculator.prototype, 'appMapMetadata').mockResolvedValue({
-        base: {},
-        head: {},
-      });
 
       const changeReporter = new ChangeReporter('base', 'head', 'outputDir', 'srcDir');
       changeReporter.appMapMetadata = {
