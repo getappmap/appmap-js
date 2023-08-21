@@ -35,7 +35,7 @@
 <script lang="ts">
 //@ts-nocheck
 import VButton from '@/components/Button.vue';
-import ProgressIndicator from '@/assets/progress-indicator.svg';
+import ProgressIndicator from '@/assets/progress-indicator-4-segments.svg';
 
 export enum StepStatus {
   NotStarted = 0,
@@ -48,7 +48,6 @@ export enum InstructionStep {
   ProjectPicker = 0,
   RecordAppMaps,
   ExploreAppMaps,
-  GenerateOpenApi,
   RuntimeAnalysis,
   NumSteps,
 }
@@ -115,17 +114,6 @@ export default {
         incomplete: {
           header: `{{projectName}} has {{numAppMaps}} AppMap{{numAppMaps == 1 ? '' : 's'}}`,
           prompt: 'Open an AppMap',
-        },
-      },
-      [InstructionStep.GenerateOpenApi]: {
-        button: 'Generate OpenAPI',
-        complete: {
-          header: '{{projectName}} has OpenAPI definitions',
-          prompt: 'View runtime analysis report for {{projectName}}',
-        },
-        incomplete: {
-          header: `{{projectName}} has {{numAppMaps}} AppMap{{numAppMaps == 1 ? '' : 's'}}`,
-          prompt: 'Automatically generate OpenAPI definitions for {{projectName}}',
         },
       },
       [InstructionStep.RuntimeAnalysis]: {
