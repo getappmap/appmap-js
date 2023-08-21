@@ -1,3 +1,10 @@
+# [@appland/components-v2.58.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.58.0...@appland/components-v2.58.1) (2023-08-21)
+
+
+### Bug Fixes
+
+* update java agent jar instructions ([234035d](https://github.com/getappmap/appmap-js/commit/234035d3cd2bd3e51866d2a1d2379a8dca21c519))
+
 # [@appland/components-v2.58.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.57.1...@appland/components-v2.58.0) (2023-08-14)
 
 
