@@ -6,7 +6,6 @@
       </header>
       <main>
         <v-status
-          next-step="Generate OpenAPI"
           :status-states="statusStates"
           :current-status="statusStates[2]"
           :project-name="projectName"
@@ -18,7 +17,7 @@
           <template #header> {{ projectName }} has {{ appMaps.length }} AppMaps </template>
           <template #subheader>
             <template v-if="complete">
-              Next step: Generate OpenAPI definitions from AppMap data
+              Next step: View runtime analysis report for {{ projectName }}
             </template>
             <template v-else>Open an AppMap</template>
           </template>

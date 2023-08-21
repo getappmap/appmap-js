@@ -116,7 +116,6 @@ UnsupportedProjectWithNoLanguage.args = {
       appMapsRecorded: false,
       investigatedFindings: false,
       appMapOpened: false,
-      generatedOpenApi: false,
       appMaps: [],
       numHttpRequests: 0,
       numAppMaps: 0,

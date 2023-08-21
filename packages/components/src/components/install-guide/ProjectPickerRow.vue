@@ -259,7 +259,6 @@ import VButton from '@/components/Button.vue';
 import VAccordion from '@/components/Accordion.vue';
 import VAnalysisIcon from '@/assets/fa-solid_crosshairs.svg';
 import VVisualizationIcon from '@/assets/fa-solid_map.svg';
-import VOpenApiIcon from '@/assets/file-icons_openapi.svg';
 import VUnsupportedIcon from '@/assets/info.svg';
 import VPopper from '@/components/Popper.vue';
 import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
@@ -296,7 +295,6 @@ export default {
     VPython,
     VAnalysisIcon,
     VVisualizationIcon,
-    VOpenApiIcon,
     VUnsupportedIcon,
     VPopper,
     VNavigationButtons,
@@ -345,12 +343,6 @@ export default {
           condition: () => this.webFrameworkSupported,
           description:
             "AppMap will automatically identify software design flaws that impact performance, stability, security and maintainability. This runtime code analysis can find the problems that static code analyzers miss - and that cause 90% of today's most serious production issues.",
-        },
-        {
-          name: 'Generate OpenAPI',
-          icon: VOpenApiIcon,
-          condition: () => this.webFrameworkSupported,
-          description: 'AppMap will use runtime data to generate OpenAPI specifications.',
         },
         {
           name: 'Unsupported',

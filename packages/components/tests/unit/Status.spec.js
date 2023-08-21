@@ -11,7 +11,7 @@ describe('Status.vue', () => {
       propsData: {
         currentStep: 0,
         viewingStep: InstructionStep.RecordAppMaps,
-        statusStates: [0, 0, 0, 0, 0],
+        statusStates: [0, 0, 0, 0],
         projectName,
         numAppMaps,
       },
@@ -30,7 +30,7 @@ describe('Status.vue', () => {
 
         await wrapper.setProps({ statusStates });
 
-        expect(wrapper.findAll('path.segment').length).toBe(5);
+        expect(wrapper.findAll('path.segment').length).toBe(4);
         expect(wrapper.findAll('path.segment.completed').length).toBe(
           stepIndex + (state == StepStatus.Completed ? 1 : 0)
         );
@@ -46,7 +46,7 @@ describe('Status.vue', () => {
 
   it('renders dynamic props correctly', async () => {
     await wrapper.setProps({
-      statusStates: [2, 2, 0, 0, 0],
+      statusStates: [2, 2, 0, 0],
       viewingStep: InstructionStep.RecordAppMaps,
     });
     expect(wrapper.text()).toContain(`${numAppMaps} AppMaps have been recorded for ${projectName}`);
@@ -54,15 +54,15 @@ describe('Status.vue', () => {
 
   it('informs the user to go back to a previous step if ahead', async () => {
     await wrapper.setProps({
-      statusStates: [2, 1, 0, 0, 0],
-      viewingStep: InstructionStep.GenerateOpenApi,
+      statusStates: [2, 1, 0, 0],
+      viewingStep: InstructionStep.RuntimeAnalysis,
     });
     expect(wrapper.find('.status-message__prompt').text()).toMatch(/Go\s+back\s+and\s+record/gm);
   });
 
   it('emits an event when the user clicks the next step button', async () => {
     await wrapper.setProps({
-      statusStates: [2, 2, 0, 0, 0],
+      statusStates: [2, 2, 0, 0],
       viewingStep: InstructionStep.RecordAppMaps,
     });
 
@@ -75,8 +75,8 @@ describe('Status.vue', () => {
 
   it('emits an event when the user clicks "go back"', async () => {
     await wrapper.setProps({
-      statusStates: [2, 1, 0, 0, 0],
-      viewingStep: InstructionStep.GenerateOpenApi,
+      statusStates: [2, 1, 0, 0],
+      viewingStep: InstructionStep.ExploreAppMaps,
     });
 
     wrapper.find('a').trigger('click');
@@ -88,8 +88,8 @@ describe('Status.vue', () => {
 
   it('displays the current in progress step if looking ahead', async () => {
     await wrapper.setProps({
-      statusStates: [2, 1, 0, 0, 0],
-      viewingStep: InstructionStep.GenerateOpenApi,
+      statusStates: [2, 1, 0, 0],
+      viewingStep: InstructionStep.ExploreAppMaps,
     });
     expect(wrapper.find('.status-message__heading.status-message--warning').text()).toBe(
       `No AppMaps have been recorded yet for ${projectName}`
@@ -98,7 +98,7 @@ describe('Status.vue', () => {
 
   it('displays the next step when viewing a complete step', async () => {
     await wrapper.setProps({
-      statusStates: [2, 2, 0, 0, 0],
+      statusStates: [2, 2, 0, 0],
       viewingStep: InstructionStep.RecordAppMaps,
     });
 
@@ -149,7 +149,7 @@ describe('Status.vue', () => {
 
   it('prompts the user to go back if a previous step changes to be incomplete', async () => {
     await wrapper.setProps({
-      statusStates: [2, 1, 2, 2, 2],
+      statusStates: [2, 1, 2, 2],
       viewingStep: InstructionStep.ExploreAppMaps,
     });
 
@@ -158,7 +158,7 @@ describe('Status.vue', () => {
 
   it('uses proper pluralization', async () => {
     await wrapper.setProps({
-      statusStates: [2, 2, 0, 0, 0],
+      statusStates: [2, 2, 0, 0],
       viewingStep: InstructionStep.RecordAppMaps,
     });
     expect(wrapper.text()).toContain(`${numAppMaps} AppMaps have been recorded for ${projectName}`);

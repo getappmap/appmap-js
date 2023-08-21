@@ -7,11 +7,11 @@
       <main>
         <v-status
           :status-states="statusStates"
-          :current-status="statusStates[4]"
+          :current-status="statusStates[3]"
           :project-name="projectName"
           :num-app-maps="numAppMaps"
           :current-step="0"
-          :viewing-step="4"
+          :viewing-step="3"
           class="mb20"
         >
           <template #header> AppMap setup is complete for {{ projectName }} </template>

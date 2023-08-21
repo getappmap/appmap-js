@@ -26,14 +26,6 @@
       :num-app-maps="numAppMaps"
       :complete="hasExplored"
     />
-    <v-open-api
-      id="openapi"
-      :num-http-requests="numHttpRequests"
-      :num-app-maps="numAppMaps"
-      :status-states="statusStates"
-      :project-name="projectName"
-      :complete="hasGeneratedOpenApi"
-    />
     <v-investigate-findings
       id="investigate-findings"
       :scanned="hasFindings"
@@ -54,7 +46,6 @@ import VMultiPage from '@/pages/MultiPage.vue';
 import VProjectPicker from '@/pages/install-guide/ProjectPicker.vue';
 import VRecordAppMaps from '@/pages/install-guide/RecordAppMaps.vue';
 import VOpenAppMaps from '@/pages/install-guide/OpenAppMaps.vue';
-import VOpenApi from '@/pages/install-guide/OpenApi.vue';
 import VInvestigateFindings from '@/pages/install-guide/InvestigateFindings.vue';
 import { StepStatus } from '@/components/install-guide/Status.vue';
 
@@ -67,7 +58,6 @@ export default {
     VRecordAppMaps,
     VInvestigateFindings,
     VOpenAppMaps,
-    VOpenApi,
   },
 
   props: {
@@ -147,9 +137,6 @@ export default {
     hasExplored() {
       return this.selectedProject?.appMapOpened;
     },
-    hasGeneratedOpenApi() {
-      return this.selectedProject?.generatedOpenApi;
-    },
     hasInvestigatedFindings() {
       return this.selectedProject?.investigatedFindings;
     },
@@ -173,7 +160,6 @@ export default {
         this.hasInstalled,
         this.hasRecorded,
         this.hasExplored,
-        this.hasGeneratedOpenApi,
         this.hasInvestigatedFindings,
       ].map((stepComplete, index, statuses) => {
         if (stepComplete) return StepStatus.Completed;
