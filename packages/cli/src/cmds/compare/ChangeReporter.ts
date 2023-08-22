@@ -462,10 +462,22 @@ export class ReportFieldCalculator {
     const resolvedFindingHashes = [...baseFindingHashes].filter(
       (hash) => !headFindingHashes.has(hash)
     );
-    newFindings = headFindings.filter((finding) => newFindingHashes.includes(finding.hash_v2));
+    newFindings = Object.values(
+      headFindings
+        .filter((finding) => newFindingHashes.includes(finding.hash_v2))
+        .reduce((memo, finding) => {
+          if (!(finding.hash_v2 in memo)) memo[finding.hash_v2] = finding;
+          return memo;
+        }, {})
+    );
     if (reportRemoved) {
-      resolvedFindings = baseFindings.filter((finding) =>
-        resolvedFindingHashes.includes(finding.hash_v2)
+      resolvedFindings = Object.values(
+        baseFindings
+          .filter((finding) => resolvedFindingHashes.includes(finding.hash_v2))
+          .reduce((memo, finding) => {
+            if (!(finding.hash_v2 in memo)) memo[finding.hash_v2] = finding;
+            return memo;
+          }, {})
       );
     } else {
       resolvedFindings = [];
