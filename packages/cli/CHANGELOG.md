@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.87.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.87.0...@appland/appmap-v3.87.1) (2023-08-22)
+
+
+### Bug Fixes
+
+* Deduplicate findings in `change-report.json` ([#1327](https://github.com/getappmap/appmap-js/issues/1327)) ([e22f644](https://github.com/getappmap/appmap-js/commit/e22f644a151da3eca3e11fa85bbbfef0be5b0754))
+
 # [@appland/appmap-v3.87.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.86.1...@appland/appmap-v3.87.0) (2023-08-21)
 
 
