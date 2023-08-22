@@ -294,7 +294,7 @@ class GitProperties {
   static async state(cwd?: PathLike): Promise<GitState> {
     return new Promise<GitState>((resolve) => {
       try {
-        const commandProcess = spawn('git', ['status'], {
+        const commandProcess = spawn('git', ['status', '--porcelain'], {
           shell: true,
           cwd: cwd?.toString(),
           stdio: 'ignore',

@@ -196,14 +196,16 @@ describe('telemetry', () => {
     });
 
     describe('state', () => {
-      it('returns NotInstalled on error', () => {
-        jest.spyOn(child_process, 'spawn').mockImplementation(() => {
+      it('returns NotInstalled on error', async () => {
+        const spawn = jest.spyOn(child_process, 'spawn').mockImplementation(() => {
           const cp = new ChildProcess();
           nextTick(() => cp.emit('error', new Error('test error')));
           return cp;
         });
 
-        return expect(Git.state()).resolves.toEqual(GitState.NotInstalled);
+        const state = await Git.state();
+        expect(state).toEqual(GitState.NotInstalled);
+        expect(spawn).toBeCalledWith('git', ['status', '--porcelain'], expect.any(Object));
       });
     });
   });
