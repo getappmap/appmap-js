@@ -35,4 +35,8 @@ context('Investigate Findings (10 findings)', () => {
   it('does not show runtime analysis info', () => {
     cy.get('[data-cy="runtime-analysis-info"]').should('not.exist');
   });
+
+  it('does not show the Next Step button', () => {
+    cy.get('[data-cy="next-step"]').should('not.exist');
+  });
 });
