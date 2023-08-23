@@ -1,3 +1,10 @@
+# [@appland/components-v2.59.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.58.1...@appland/components-v2.59.0) (2023-08-23)
+
+
+### Features
+
+* Drop OpenAPI from the onboarding flow ([2dbee5d](https://github.com/getappmap/appmap-js/commit/2dbee5dff12a2888bd3637926fcbcf8ff394b25f))
+
 # [@appland/components-v2.58.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.58.0...@appland/components-v2.58.1) (2023-08-21)
 
 
