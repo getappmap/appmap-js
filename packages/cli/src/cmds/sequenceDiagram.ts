@@ -58,6 +58,9 @@ export const builder = (args: yargs.Argv) => {
     describe: 'code objects to exclude from the diagram',
     deprecated: true,
   });
+  args.option('expand', {
+    describe: 'code objects to expand in the diagram',
+  });
 
   return args.strict();
 };
@@ -78,7 +81,7 @@ export const handler = async (argv: any) => {
     return;
   }
 
-  const { filter } = argv;
+  const { filter, expand } = argv;
 
   let browserRender: BrowserRenderer | undefined;
   if (argv.format === 'png') {
@@ -92,6 +95,7 @@ export const handler = async (argv: any) => {
     const specOptions = {
       loops: argv.loops,
     } as SequenceDiagramOptions;
+    if (expand) specOptions.expand = Array.isArray(expand) ? expand : [expand];
     if (argv.exclude)
       specOptions.exclude = Array.isArray(argv.exclude) ? argv.exclude : [argv.exclude];
 

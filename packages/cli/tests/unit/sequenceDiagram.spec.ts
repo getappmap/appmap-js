@@ -63,6 +63,54 @@ describe('sequence diagram command', () => {
       30 * 1000 // Allow time to install and run the headless browser
     );
   });
+  describe('PlantUML format', () => {
+    it('is generated', async () => {
+      await buildDiagram({
+        format: 'plantuml',
+        outputDir: OutputDir,
+        appmap: [appmapFile],
+      });
+
+      const pumlFile = path.join(OutputDir, 'revoke_api_key.sequence.uml');
+      expect(existsSync(pumlFile)).toBe(true);
+      const puml = (await readFile(pumlFile, 'utf8')).split('\n');
+      expect(puml).toContain(`participant app_models as "app/models"`);
+      expect(puml).toContain(`participant app_controllers as "app/controllers"`);
+      expect(puml).not.toContain(`participant ApiKey as "ApiKey"`);
+      expect(puml).not.toContain(`participant APIKeysController as "APIKeysController"`);
+    });
+
+    it('package can be expanded', async () => {
+      await buildDiagram({
+        format: 'plantuml',
+        outputDir: OutputDir,
+        appmap: [appmapFile],
+        expand: 'package:app/models',
+      });
+      const pumlFile = path.join(OutputDir, 'revoke_api_key.sequence.uml');
+      expect(existsSync(pumlFile)).toBe(true);
+      const puml = (await readFile(pumlFile, 'utf8')).split('\n');
+      expect(puml).not.toContain(`participant app_models as "app/models"`);
+      expect(puml).toContain(`participant app_controllers as "app/controllers"`);
+      expect(puml).toContain(`participant ApiKey as "ApiKey"`);
+      expect(puml).not.toContain(`participant APIKeysController as "APIKeysController"`);
+    });
+    it('package names can be expanded', async () => {
+      await buildDiagram({
+        format: 'plantuml',
+        outputDir: OutputDir,
+        appmap: [appmapFile],
+        expand: ['package:app/models', 'package:app/controllers'],
+      });
+      const pumlFile = path.join(OutputDir, 'revoke_api_key.sequence.uml');
+      expect(existsSync(pumlFile)).toBe(true);
+      const puml = (await readFile(pumlFile, 'utf8')).split('\n');
+      expect(puml).not.toContain(`participant app_models as "app/models"`);
+      expect(puml).not.toContain(`participant app_controllers as "app/controllers"`);
+      expect(puml).toContain(`participant ApiKey as "ApiKey"`);
+      expect(puml).toContain(`participant APIKeysController as "APIKeysController"`);
+    });
+  });
 });
 
 let cwd: string | undefined;
