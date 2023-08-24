@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.88.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.87.1...@appland/appmap-v3.88.0) (2023-08-24)
+
+
+### Features
+
+* sequence-diagram --expand option ([3add469](https://github.com/getappmap/appmap-js/commit/3add4691d46a2c994f924618bb3223d457cbe2c1))
+
 # [@appland/appmap-v3.87.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.87.0...@appland/appmap-v3.87.1) (2023-08-22)
 
 
