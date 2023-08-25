@@ -1,0 +1,36 @@
+{
+  "name": "postcss-modules-sync",
+  "version": "1.0.0",
+  "description": "A PostCSS plugin to use CSS Modules synchronously in js",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/schiehll/postcss-modules-sync.git"
+  },
+  "keywords": [
+    "PostCSS",
+    "CSS Modules"
+  ],
+  "author": "schiehll <rn.schiehll@gmail.com> (http://github.com/schiehll)",
+  "license": "MIT",
+  "scripts": {
+    "build": "babel ./src --out-dir ./lib"
+  },
+  "dependencies": {
+    "generic-names": "^1.0.2",
+    "icss-replace-symbols": "^1.0.2",
+    "postcss": "^5.2.5",
+    "postcss-modules-local-by-default": "^1.1.1",
+    "postcss-modules-scope": "^1.0.2",
+    "string-hash": "^1.1.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-plugin-transform-class-properties": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0"
+  },
+  "babel": {
+    "presets": ["es2015"],
+    "plugins": ["transform-class-properties"]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "name": "@craftamap/esbuild-plugin-html",
+  "version": "0.4.0",
+  "main": "./lib/cjs/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/craftamap/esbuild-plugin-html"
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint src/**"
+  },
+  "author": "Fabian Siegel <fabians1999@gmail.com>",
+  "license": "MIT",
+  "files": [
+    "lib/"
+  ],
+  "peerDependencies": {
+    "esbuild": ">=0.12.28"
+  },
+  "devDependencies": {
+    "@tsconfig/node12": "^1.0.9",
+    "@types/jsdom": "^16.2.13",
+    "@types/lodash.template": "^4.5.0",
+    "@types/node": "^16.9.1",
+    "@typescript-eslint/eslint-plugin": "^5.10.1",
+    "@typescript-eslint/parser": "^5.10.1",
+    "esbuild": "^0.12.28",
+    "eslint": "^8.8.0",
+    "typescript": "^4.5.5"
+  },
+  "engines": {
+    "node": ">13"
+  },
+  "dependencies": {
+    "jsdom": "^17.0.0",
+    "lodash.template": "^4.5.0"
+  }
+}

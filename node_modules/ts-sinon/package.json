@@ -1,0 +1,56 @@
+{
+  "name": "ts-sinon",
+  "version": "2.0.2",
+  "description": "sinon library extension to stub whole object and interfaces",
+  "author": {
+    "name": "Tomasz Tarnowski",
+    "email": "t.tarnowski90@gmail.com",
+    "url": "https://github.com/ttarnowski"
+  },
+  "bugs": {
+    "url": "https://github.com/ttarnowski/ts-sinon/issues"
+  },
+  "homepage": "https://github.com/ttarnowski/ts-sinon",
+  "license": "MIT",
+  "keywords": [
+    "typescript",
+    "node",
+    "sinon",
+    "ts-sinon",
+    "interface stub",
+    "interface mock",
+    "typescript stub",
+    "stub",
+    "typescript sinon"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ttarnowski/ts-sinon.git"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build",
+    "test": "./node_modules/.bin/mocha -r ts-node/register ./src/index.spec.ts"
+  },
+  "dependencies": {
+    "@types/node": "^14.6.1",
+    "@types/sinon": "^9.0.5",
+    "@types/sinon-chai": "^3.2.4",
+    "sinon": "^9.0.3"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.12",
+    "@types/mocha": "^8.0.3",
+    "chai": "^4.2.0",
+    "mocha": "^8.1.2",
+    "rimraf": "^3.0.2",
+    "sinon-chai": "^3.5.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.2"
+  }
+}
