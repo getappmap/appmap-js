@@ -1,0 +1,199 @@
+{
+    "$id": "https://appland.com/schemas/scanner/options.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "TimeAllowed": {
+            "type": "object",
+            "properties": {
+                "timeAllowed": {
+                    "type": "number"
+                }
+            },
+            "additionalProperties": false
+        },
+        "WarningLimit": {
+            "type": "object",
+            "properties": {
+                "warningLimit": {
+                    "type": "number"
+                }
+            },
+            "additionalProperties": false
+        },
+        "IllegalPackageDependency.Options": {
+            "type": "object",
+            "properties": {
+                "callerPackages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
+                    }
+                },
+                "calleePackage": {
+                    "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
+                }
+            },
+            "required": [
+                "callerPackages",
+                "calleePackage"
+            ],
+            "additionalProperties": false
+        },
+        "CircularDependency.Options": {
+            "type": "object",
+            "properties": {
+                "ignoredPackages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
+                    }
+                },
+                "depth": {
+                    "type": "number"
+                }
+            },
+            "additionalProperties": false
+        },
+        "IncompatibleHttpClientRequest.Options": {
+            "type": "object",
+            "properties": {
+                "schemata": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [
+                "schemata"
+            ],
+            "additionalProperties": false
+        },
+        "MissingAuthentication.Options": {
+            "type": "object",
+            "properties": {
+                "includeContentTypes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
+                    }
+                },
+                "excludeContentTypes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "NPlusOneQuery.Options": {
+            "type": "object",
+            "properties": {
+                "warningLimit": {
+                    "type": "number"
+                },
+                "errorLimit": {
+                    "type": "number"
+                }
+            },
+            "additionalProperties": false
+        },
+        "QueryFromInvalidPackage.Options": {
+            "type": "object",
+            "properties": {
+                "allowedPackages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
+                    }
+                },
+                "allowedQueries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
+                    }
+                }
+            },
+            "required": [
+                "allowedPackages"
+            ],
+            "additionalProperties": false
+        },
+        "QueryFromView.Options": {
+            "type": "object",
+            "properties": {
+                "forbiddenLabel": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "RPCWithoutCircuitBreaker.Options": {
+            "type": "object",
+            "properties": {
+                "expectedLabel": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "SlowFunctionCall.Options": {
+            "type": "object",
+            "properties": {
+                "timeAllowed": {
+                    "type": "number"
+                },
+                "functions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "SlowHTTPServerRequest.Options": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "timeAllowed": {
+                    "type": "number"
+                }
+            }
+        },
+        "SlowQuery.Options": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "timeAllowed": {
+                    "type": "number"
+                }
+            }
+        },
+        "TooManyJoins.Options": {
+            "type": "object",
+            "properties": {
+                "warningLimit": {
+                    "type": "number"
+                },
+                "excludeTables": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://appland.com/schemas/scanner/match-pattern-config.json"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "TooManyUpdates.Options": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "warningLimit": {
+                    "type": "number"
+                }
+            }
+        }
+    }
+}

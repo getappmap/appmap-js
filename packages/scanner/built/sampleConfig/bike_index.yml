@@ -1,0 +1,10 @@
+checks:
+  - rule: http500
+  - rule: missingContentType
+  - rule: missingAuthentication
+  - rule: nPlusOneQuery
+  - rule: saveWithoutValidation
+  - rule: secretInLog
+  - rule: slowHttpServerRequest
+  - rule: slowQuery
+  - rule: tooManyUpdates
