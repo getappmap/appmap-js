@@ -86,8 +86,10 @@ export const handler = async (argv: any) => {
     const appmapConfig = await loadAppMapConfig();
     if (!appmapConfig) throw new Error(`Unable to load appmap.yml config file`);
 
-    const { baseRevision, headRevision } = await detectRevisions(baseRevisionArg, headRevisionArg);
-
+    const { baseRevision, headRevision } = await detectRevisions(
+      String(baseRevisionArg),
+      String(headRevisionArg)
+    );
     const outputDir = await prepareOutputDir(
       outputDirArg,
       baseRevision,

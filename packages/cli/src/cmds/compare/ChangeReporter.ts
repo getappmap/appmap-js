@@ -117,7 +117,7 @@ export default class ChangeReporter {
   sourceDiff = new SourceDiff(this);
 
   constructor(
-    public baseRevision: string,
+    public baseRevision: string | undefined,
     public headRevision: string,
     public workingDir: string,
     public srcDir: string
@@ -129,9 +129,13 @@ export default class ChangeReporter {
   async initialize() {
     await this.digests.build();
 
-    this.baseManifest = JSON.parse(
-      await readFile(this.paths.manifestPath(RevisionName.Base), 'utf-8')
-    );
+    try {
+      this.baseManifest = JSON.parse(
+        await readFile(this.paths.manifestPath(RevisionName.Base), 'utf-8')
+      );
+    } catch (err) {
+      if (err instanceof Error && 'code' in err && err.code !== 'ENOENT') throw err;
+    }
     this.headManifest = JSON.parse(
       await readFile(this.paths.manifestPath(RevisionName.Head), 'utf-8')
     );
@@ -433,14 +437,15 @@ export class ReportFieldCalculator {
   }
 
   async findingDiff(reportRemoved: boolean): Promise<Record<'new' | 'resolved', Finding[]>> {
-    assert(this.reporter.baseManifest);
     assert(this.reporter.headManifest);
 
-    const baseFindings = await loadFindings(
-      this.reporter.paths,
-      RevisionName.Base,
-      this.reporter.baseManifest.appMapDir
-    );
+    const baseFindings = this.reporter.baseManifest
+      ? await loadFindings(
+          this.reporter.paths,
+          RevisionName.Base,
+          this.reporter.baseManifest.appMapDir
+        )
+      : [];
     const headFindings = await loadFindings(
       this.reporter.paths,
       RevisionName.Head,

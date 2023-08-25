@@ -15,16 +15,27 @@ export async function prepareOutputDir(
 ): Promise<string> {
   let outputDir = outputDirArg;
   if (!outputDir) {
-    outputDir = `.appmap/change-report/${sanitizeRevision(baseRevision)}-${sanitizeRevision(
-      headRevision
-    )}`;
+    outputDir = join(
+      '.appmap',
+      'change-report',
+      [sanitizeRevision(baseRevision), sanitizeRevision(headRevision)].join('-')
+    );
   }
 
-  for (const revision of [RevisionName.Base, RevisionName.Head]) {
-    if (!(await exists(join(outputDir, revision))))
-      throw new ValidationError(
-        `${revision} revision data (${join(outputDir, revision)}) does not exist`
-      );
+  const headExists = await exists(join(outputDir, RevisionName.Head));
+  if (!headExists) {
+    const msg = `Head revision directory (${join(outputDir, RevisionName.Head)}) does not exist`;
+    throw new ValidationError(msg);
+  }
+
+  const baseExists = await exists(join(outputDir, RevisionName.Base));
+  if (!baseExists) {
+    const msg = [
+      'Warning:',
+      `Base revision directory (${join(outputDir, RevisionName.Base)}) does not exist.`,
+      'No baseline data will be available.',
+    ].join(' ');
+    console.warn(msg);
   }
 
   const diffDir = join(outputDir, RevisionName.Diff);

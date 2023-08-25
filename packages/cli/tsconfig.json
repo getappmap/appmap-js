@@ -2,7 +2,7 @@
   "compilerOptions": {
     "allowJs": true,
     "esModuleInterop": true,
-    "lib": ["ES2019", "DOM"],
+    "lib": ["ES2019"],
     "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitAny": false,
@@ -14,5 +14,5 @@
     "types": ["node", "jest"]
   },
   "include": ["src/**/*"],
-  "exclude": ["**/node_modules", "src/html"]
+  "exclude": ["src/html"]
 }
