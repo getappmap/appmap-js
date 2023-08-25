@@ -16,6 +16,7 @@ import EventEmitter from 'events';
 import { WatchScanTelemetry } from './watchScanTelemetry';
 import isAncestorPath from '../../util/isAncestorPath';
 import { debuglog } from 'util';
+import { warn } from 'console';
 
 const debug = debuglog('scanner:watch');
 
@@ -166,42 +167,54 @@ export class Watcher {
   protected async scan(mtimePath: string): Promise<void> {
     assert(this.config, `config should always be loaded before appmapWatcher triggers a scan`);
 
-    const appmapFile = [path.dirname(mtimePath), 'appmap.json'].join('.');
-    const reportFile = mtimePath.replace(/mtime$/, 'appmap-findings.json');
+    const perform = async () => {
+      const appmapFile = [path.dirname(mtimePath), 'appmap.json'].join('.');
+      const reportFile = mtimePath.replace(/mtime$/, 'appmap-findings.json');
 
-    const [appmapStats, reportStats] = await Promise.all(
-      [appmapFile, reportFile].map((f) => stat(f).catch(() => null))
-    );
+      const [appmapStats, reportStats] = await Promise.all(
+        [appmapFile, reportFile].map((f) => stat(f).catch(() => null))
+      );
 
-    if (!appmapStats) return;
+      if (!appmapStats) {
+        warn(`[scan] AppMap file ${appmapFile} does not exist`);
+        return;
+      }
 
-    const cut = (str: string) => str.substring(str.length - 8);
-    debug(
-      '%s: %s, findings: %s, config: %s',
-      appmapFile,
-      cut(appmapStats.mtimeMs.toFixed(3)),
-      reportStats && cut(reportStats.mtimeMs.toFixed(3)),
-      cut(this.config.timestampMs.toFixed(3))
-    );
+      const cut = (str: string) => str.substring(str.length - 8);
+      assert(this.config);
+      debug(
+        '%s: %s, findings: %s, config: %s',
+        appmapFile,
+        cut(appmapStats.mtimeMs.toFixed(3)),
+        reportStats && cut(reportStats.mtimeMs.toFixed(3)),
+        cut(this.config.timestampMs.toFixed(3))
+      );
 
-    if (
-      reportStats &&
-      reportStats.mtimeMs > appmapStats.mtimeMs - 1000 &&
-      reportStats.mtimeMs > this.config.timestampMs - 1000
-    )
-      return; // report is up to date
+      if (
+        reportStats &&
+        reportStats.mtimeMs > appmapStats.mtimeMs - 1000 &&
+        reportStats.mtimeMs > this.config.timestampMs - 1000
+      ) {
+        warn(`[scan] Report file ${reportFile} is already up to date`);
+        return;
+      }
 
-    const startTime = Date.now();
-    const scanner = await buildScanner(true, this.config, [appmapFile]);
+      const startTime = Date.now();
+      const scanner = await buildScanner(true, this.config, [appmapFile]);
 
-    const rawScanResults = await scanner.scan();
-    const elapsed = Date.now() - startTime;
-    this.scanEventEmitter.emit('scan', { scanResults: rawScanResults, elapsed });
+      const rawScanResults = await scanner.scan();
+      const elapsed = Date.now() - startTime;
+      this.scanEventEmitter.emit('scan', { scanResults: rawScanResults, elapsed });
 
-    // Always report the raw data
-    await writeFile(reportFile, formatReport(rawScanResults));
+      // Always report the raw data
+      await writeFile(reportFile, formatReport(rawScanResults));
+    };
 
-    this.processing.delete(mtimePath);
+    try {
+      await perform();
+    } finally {
+      this.processing.delete(mtimePath);
+    }
   }
 
   protected async reloadConfig(): Promise<void> {
