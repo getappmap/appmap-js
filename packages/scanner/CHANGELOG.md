@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.82.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.82.0...@appland/scanner-v1.82.1) (2023-08-25)
+
+
+### Bug Fixes
+
+* Ensure that AppMaps are un-marked as being scanned ([e051d8d](https://github.com/getappmap/appmap-js/commit/e051d8db4e7d7b6b8ad8420573f0f02939d9e3bc))
+
 # [@appland/scanner-v1.82.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.81.1...@appland/scanner-v1.82.0) (2023-08-11)
 
 
