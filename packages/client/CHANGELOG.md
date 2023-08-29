@@ -1,3 +1,10 @@
+# [@appland/client-v1.8.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.7.0...@appland/client-v1.8.0) (2023-08-29)
+
+
+### Features
+
+* Add usage API ([5c5f111](https://github.com/getappmap/appmap-js/commit/5c5f1114fff36a01e67f629ed0dbb1617b4b5140))
+
 # [@appland/client-v1.7.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.6.0...@appland/client-v1.7.0) (2023-03-10)
 
 
