@@ -1,3 +1,16 @@
+# [@appland/appmap-v3.89.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.88.0...@appland/appmap-v3.89.0) (2023-08-29)
+
+
+### Bug Fixes
+
+* Allow telemetry to be sent on exit ([372b2d1](https://github.com/getappmap/appmap-js/commit/372b2d14124674bc849bba9889c295ceb6836d33))
+
+
+### Features
+
+* Add event usage updates to `appmap index` ([dd5dfdb](https://github.com/getappmap/appmap-js/commit/dd5dfdb10c906546bf750a382a1387ccaf14df14))
+* Add usage API ([5c5f111](https://github.com/getappmap/appmap-js/commit/5c5f1114fff36a01e67f629ed0dbb1617b4b5140))
+
 # [@appland/appmap-v3.88.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.87.1...@appland/appmap-v3.88.0) (2023-08-24)
 
 
