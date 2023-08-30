@@ -264,14 +264,6 @@ export async function statsForDirectory(
           executionTime.path;
         telemetryMetricsCounter += 1;
       });
-
-      Telemetry.sendEvent({
-        name: `stats:${handlerCaller}:success`,
-        properties: {
-          path: appMapDir,
-        },
-        metrics: telemetryMetrics,
-      });
     } catch (err) {
       let errorMessage: string | undefined = (err as any).toString();
       if (err instanceof Error) {

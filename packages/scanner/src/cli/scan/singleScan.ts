@@ -7,8 +7,6 @@ import { newFindings } from '../../findings';
 import findingsReport from '../../report/findingsReport';
 import summaryReport from '../../report/summaryReport';
 import { formatReport } from './formatReport';
-import Telemetry from '../../telemetry';
-import { sendScanResultsTelemetry } from '../../report/scanResults';
 import { collectAppMapFiles } from '../../rules/lib/util';
 import validateFile from '../validateFile';
 
@@ -25,12 +23,6 @@ type SingleScanOptions = {
 export default async function singleScan(options: SingleScanOptions): Promise<void> {
   const { appmapFile, appmapDir, configuration, reportAllFindings, appId, ide, reportFile } =
     options;
-  Telemetry.sendEvent({
-    name: 'scan:started',
-    properties: {
-      ide,
-    },
-  });
 
   const skipErrors = appmapDir !== undefined;
 
@@ -74,12 +66,4 @@ export default async function singleScan(options: SingleScanOptions): Promise<vo
       numChecks / (elapsed / 1000.0)
     )} checks/sec)`
   );
-
-  sendScanResultsTelemetry({
-    ruleIds: scanResults.summary.rules,
-    numAppMaps: scanResults.summary.numAppMaps,
-    numFindings: scanResults.summary.numFindings,
-    elapsedMs: elapsed,
-    appmapDir: options.appmapDir,
-  });
 }

@@ -1108,7 +1108,7 @@ appmap_dir: tmp/appmap
     });
 
     it('fails if no supported project is found', async () => {
-      expect.assertions(5);
+      expect.assertions(3);
       const installProcedureStub = sinon
         .stub(AgentInstallerProcedure.prototype, 'run')
         .callThrough();
@@ -1119,13 +1119,7 @@ appmap_dir: tmp/appmap
 
       expect(installProcedureStub).not.toBeCalled();
       const sendEventStub = Telemetry.sendEvent as sinon.SinonStub;
-      expect(sendEventStub).toBeCalledTwice();
-      expect(sendEventStub.getCall(0)).toBeCalledWithMatch({
-        name: 'install-agent:start',
-      });
-      expect(sendEventStub.getCall(1)).toBeCalledWithMatch({
-        name: 'install-agent:soft_failure',
-      });
+      expect(sendEventStub).toBeCalledTimes(0);
     });
 
     describe('ticket handling', () => {
@@ -1317,7 +1311,7 @@ appmap_dir: tmp/appmap
     });
 
     it('installs as expected', async () => {
-      expect.assertions(17);
+      expect.assertions(14);
       const projectFixture = path.join(fixtureDir, 'java', 'multi-project');
       fse.copySync(projectFixture, projectDir);
 
@@ -1342,18 +1336,7 @@ appmap_dir: tmp/appmap
 
       expectedStubs.forEach((stub) => expect(stub.called).toBe(true));
       const sendEventStub = Telemetry.sendEvent as sinon.SinonStub;
-      expect(sendEventStub).toBeCalledTimes(7);
-      expect(sendEventStub.getCall(0)).toBeCalledWithMatch({
-        name: 'install-agent:start',
-      });
-      expect(sendEventStub.getCall(3)).toBeCalledWithMatch({
-        name: 'install-agent:success',
-        properties: { installer: 'Maven' },
-      });
-      expect(sendEventStub.getCall(6)).toBeCalledWithMatch({
-        name: 'install-agent:success',
-        properties: { installer: 'Gradle' },
-      });
+      expect(sendEventStub).toBeCalledTimes(0);
 
       expect(openTicketStub).not.toBeCalled();
     });

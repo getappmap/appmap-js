@@ -128,23 +128,20 @@ describe('openTicket', () => {
     describe('telemetry event', () => {
       [
         {
-          example: 'gets sent when the user opens a ticket',
+          example: 'is not sent when the user opens a ticket',
           condition: { openTicket: true },
-          expectation: { name: 'open-ticket:success' },
         },
         {
-          example: 'gets sent when the user declines to open a ticket',
+          example: 'is not sent the user declines to open a ticket',
           condition: { openTicket: false },
-          expectation: { name: 'open-ticket:declined' },
         },
       ].forEach((e) => {
-        const { example, condition, expectation } = e;
+        const { example, condition } = e;
 
         it(example, async () => {
           prompt.resolves(condition);
           await openTicket('error');
-          expect(Telemetry.sendEvent).toBeCalledOnce();
-          expect(getNthCallArgs(Telemetry.sendEvent, 0)).toMatchObject(expectation);
+          expect(Telemetry.sendEvent).toBeCalledTimes(0);
         });
       });
 
