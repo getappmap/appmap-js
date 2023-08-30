@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.89.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.89.0...@appland/appmap-v3.89.1) (2023-08-30)
+
+
+### Bug Fixes
+
+* Upgrade @appland/client to v1.8.0 ([e230480](https://github.com/getappmap/appmap-js/commit/e2304802b8f191df4fed8676ad147d8ef2156218))
+
 # [@appland/appmap-v3.89.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.88.0...@appland/appmap-v3.89.0) (2023-08-29)
 
 
