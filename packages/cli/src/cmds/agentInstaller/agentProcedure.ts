@@ -190,7 +190,7 @@ export default abstract class AgentProcedure {
     let filesDiff: string[] = [];
     filesDiff = filesAfter.filter((file) => !filesBefore.includes(file));
     filesDiff.sort();
-    let filesDiffText = filesDiff.flat().join(',');
+    if (filesDiff.length == 0) return false;
 
     let filesMessages: string[] = [];
     for (const file of filesDiff) {

@@ -1,11 +1,14 @@
 import { FSWatcher } from 'chokidar';
 import { outputFileSync, removeSync } from 'fs-extra';
 import path, { join, resolve } from 'path';
-import EventAggregator from '../lib/eventAggregator';
+import EventAggregator, { PendingEvent } from '../lib/eventAggregator';
 import { verbose } from '../utils';
 import FingerprintQueue from './fingerprintQueue';
 import Globber from './globber';
 import Telemetry from '../telemetry';
+import emitUsage from '../lib/emitUsage';
+import { FingerprintEvent } from './fingerprinter';
+import { Metadata } from '@appland/models';
 
 export default class FingerprintWatchCommand {
   private pidfilePath: string | undefined;
@@ -16,6 +19,7 @@ export default class FingerprintWatchCommand {
   private eventAggregator: EventAggregator;
   public unreadableFiles = new Set<string>();
   public symlinkLoopFiles = new Set<string>();
+  public doReportUsage = false;
 
   public get numProcessed() {
     return this._numProcessed;
@@ -28,7 +32,8 @@ export default class FingerprintWatchCommand {
   constructor(private directory: string) {
     this.pidfilePath = process.env.APPMAP_WRITE_PIDFILE && join(this.directory, 'index.pid');
     this.fpQueue = new FingerprintQueue();
-    this.eventAggregator = new EventAggregator((events) => {
+    this.eventAggregator = new EventAggregator(async (events) => {
+      if (this.doReportUsage) await this.reportUsage(events);
       this.numProcessed += events.length;
     });
     this.eventAggregator.attach(this.fpQueue.handler, 'index');
@@ -239,5 +244,17 @@ export default class FingerprintWatchCommand {
       return;
     }
     this.fpQueue.push(file);
+  }
+
+  private async reportUsage(events: PendingEvent[]) {
+    const indexEvents = events.map(({ args: [event] }) => event) as FingerprintEvent[];
+    const { metadata, numEvents } = indexEvents.reduce(
+      (acc, { metadata, numEvents }) => ({
+        metadata: [...acc.metadata, metadata],
+        numEvents: acc.numEvents + numEvents,
+      }),
+      { metadata: [] as Metadata[], numEvents: 0 }
+    );
+    await emitUsage(this.directory, numEvents, metadata.length, metadata[0]);
   }
 }
