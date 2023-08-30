@@ -1,17 +1,11 @@
-import { Metadata } from '@appland/models';
 import { FSWatcher } from 'chokidar';
 import { outputFileSync, removeSync } from 'fs-extra';
 import path, { join, resolve } from 'path';
 import EventAggregator from '../lib/eventAggregator';
-import flattenMetadata from '../lib/flattenMetadata';
-import { intersectMaps } from '../lib/intersectMaps';
-import Telemetry, { Git, GitState } from '../telemetry';
 import { verbose } from '../utils';
-import { FingerprintEvent } from './fingerprinter';
 import FingerprintQueue from './fingerprintQueue';
 import Globber from './globber';
-import { Usage } from '@appland/client';
-import emitUsage from '../lib/emitUsage';
+import Telemetry from '../telemetry';
 
 export default class FingerprintWatchCommand {
   private pidfilePath: string | undefined;
@@ -19,7 +13,6 @@ export default class FingerprintWatchCommand {
   public watcher?: FSWatcher;
   private poller?: Globber;
   private _numProcessed = 0;
-  private pendingTelemetry?: Promise<void>;
   private eventAggregator: EventAggregator;
   public unreadableFiles = new Set<string>();
   public symlinkLoopFiles = new Set<string>();
@@ -35,18 +28,8 @@ export default class FingerprintWatchCommand {
   constructor(private directory: string) {
     this.pidfilePath = process.env.APPMAP_WRITE_PIDFILE && join(this.directory, 'index.pid');
     this.fpQueue = new FingerprintQueue();
-    this.eventAggregator = new EventAggregator(async (events) => {
-      const indexEvents = events.map(({ args: [event] }) => event) as FingerprintEvent[];
-      const { metadata, numEvents } = indexEvents.reduce(
-        (acc, { metadata, numEvents }) => ({
-          metadata: [...acc.metadata, metadata],
-          numEvents: acc.numEvents + numEvents,
-        }),
-        { metadata: [] as Metadata[], numEvents: 0 }
-      );
+    this.eventAggregator = new EventAggregator((events) => {
       this.numProcessed += events.length;
-      this.pendingTelemetry = this.sendTelemetry(metadata, this.directory, numEvents);
-      await this.pendingTelemetry;
     });
     this.eventAggregator.attach(this.fpQueue.handler, 'index');
   }
@@ -256,29 +239,5 @@ export default class FingerprintWatchCommand {
       return;
     }
     this.fpQueue.push(file);
-  }
-
-  private async sendTelemetry(metadata: Metadata[], appmapDir: string, numEvents: number) {
-    const usage = await emitUsage(appmapDir, numEvents, metadata.length, metadata[0]);
-    const gitState = GitState[await Git.state(appmapDir)];
-    const properties = Object.fromEntries(
-      intersectMaps(...metadata.map(flattenMetadata)).entries()
-    );
-    Telemetry.sendEvent({
-      name: 'appmap:index',
-      properties: { ...properties, git_state: gitState },
-      metrics: {
-        appmaps: usage.appmaps,
-        events: usage.events,
-        contributors: usage.contributors,
-      },
-    });
-  }
-
-  async telemetrySent(): Promise<void> {
-    if (this.pendingTelemetry) {
-      await this.pendingTelemetry;
-      this.pendingTelemetry = undefined;
-    }
   }
 }

@@ -4,7 +4,7 @@ import * as CommandRunner from '../../../src/cmds/agentInstaller/commandRunner';
 import fs from 'fs';
 import { TestAgentInstaller } from './TestAgentProcedure';
 import UI from '../../../src/cmds/userInteraction';
-import sinon, { SinonStub } from 'sinon';
+import sinon from 'sinon';
 import { withStubbedTelemetry } from '../../helper';
 import InstallerUI from '../../../src/cmds/agentInstaller/installerUI';
 
