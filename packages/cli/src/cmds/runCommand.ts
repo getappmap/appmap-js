@@ -12,32 +12,14 @@ export default async function runCommand(
   try {
     const ret = await fn();
 
-    Telemetry.sendEvent({
-      name: `${commandPrefix}:exit-ok`,
-    });
-
     process.exitCode = 0;
     return ret;
   } catch (err) {
     if (err instanceof ValidationError) {
       console.warn(err.message);
 
-      Telemetry.sendEvent({
-        name: `${commandPrefix}:validation-error`,
-        properties: {
-          error: err.message,
-        },
-      });
-
       process.exitCode = ExitCode.Error;
     } else if (err instanceof AbortError) {
-      Telemetry.sendEvent({
-        name: `${commandPrefix}:abort`,
-        properties: {
-          error: err.message,
-        },
-      });
-
       process.exitCode = ExitCode.Quit;
     } else if (err instanceof Error) {
       Telemetry.sendEvent({

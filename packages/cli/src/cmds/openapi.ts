@@ -20,8 +20,7 @@ import { inspect } from 'util';
 import { locateAppMapDir } from '../lib/locateAppMapDir';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { locateAppMapConfigFile } from '../lib/locateAppMapConfigFile';
-import Telemetry, { Git, GitState } from '../telemetry';
-import { findRepository } from '../lib/git';
+import { Git, GitState } from '../telemetry';
 import { DefaultMaxAppMapSizeInMB, fileSizeFilter } from '../lib/fileSizeFilter';
 
 export type FilterFunction = (file: string) => Promise<{ enable: boolean; message?: string }>;
@@ -233,21 +232,6 @@ ${yaml.dump(template)}
 async function sendTelemetry(paths: OpenAPIV3.PathsObject, numAppMaps: number, appmapDir: string) {
   const gitState = GitState[await Git.state(appmapDir)];
   const contributors = (await Git.contributors(60, appmapDir)).length;
-  Telemetry.sendEvent(
-    {
-      name: 'appmap:openapi',
-      properties: {
-        git_state: gitState,
-        'appmap.version_control.repository': await warnCatch(findRepository(appmapDir)),
-      },
-      metrics: {
-        paths: Object.keys(paths).length,
-        contributors,
-        numAppMaps,
-      },
-    },
-    { includeEnvironment: true }
-  );
 }
 
 function sortProperties(values: Record<string, any>): void {

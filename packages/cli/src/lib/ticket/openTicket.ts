@@ -45,10 +45,6 @@ If you change your mind, you can always reach us by email: support@appmap.io
         ].join('\n')
       );
 
-      Telemetry.sendEvent({
-        name: 'open-ticket:declined',
-      });
-
       return;
     }
   }
@@ -70,9 +66,6 @@ If you change your mind, you can always reach us by email: support@appmap.io
 
   try {
     const id = await createZendeskRequest(errors, name, email);
-    Telemetry.sendEvent({
-      name: 'open-ticket:success',
-    });
     UI.success(
       `Thank you very much for reporting this problem.
 

@@ -8,7 +8,6 @@ import InstallerUI from './installerUI';
 import { run, runSync } from './commandRunner';
 import { validateConfig } from '../../service/config/validator';
 import CommandStruct from './commandStruct';
-import Telemetry from '../../telemetry';
 import { formatValidationError, parseValidationResult, ValidationResult } from './ValidationResult';
 import { GitStatus } from './types/state';
 
@@ -23,12 +22,6 @@ export default abstract class AgentProcedure {
       'Project type': this.installer.name,
       'Project directory': resolve(this.path),
     };
-    if (!Telemetry.enabled) {
-      env = {
-        '!!! Telemetry disabled !!!': 'true',
-        ...env,
-      };
-    }
 
     let gitRemote;
     try {
@@ -189,11 +182,6 @@ export default abstract class AgentProcedure {
   }
 
   async commitConfiguration(ui: InstallerUI, filesBefore: string[]) {
-    Telemetry.sendEvent({
-      name: `install-agent:commit_config:commit_start`,
-      properties: {},
-    });
-
     const filesAfterGitStatus: GitStatus[] = await this.gitStatus();
     const filesAfter: string[] = [];
     for (const file of filesAfterGitStatus) {
@@ -203,23 +191,6 @@ export default abstract class AgentProcedure {
     filesDiff = filesAfter.filter((file) => !filesBefore.includes(file));
     filesDiff.sort();
     let filesDiffText = filesDiff.flat().join(',');
-    if (filesDiff.length == 0) {
-      Telemetry.sendEvent({
-        name: `install-agent:commit_config:should_not_commit`,
-        properties: {
-          filesDiffText,
-        },
-      });
-
-      return false;
-    }
-
-    Telemetry.sendEvent({
-      name: `install-agent:commit_config:should_commit`,
-      properties: {
-        filesDiffText,
-      },
-    });
 
     let filesMessages: string[] = [];
     for (const file of filesDiff) {
@@ -239,13 +210,6 @@ export default abstract class AgentProcedure {
     );
 
     if (commit) {
-      Telemetry.sendEvent({
-        name: `install-agent:commit_config:commit_yes`,
-        properties: {
-          filesDiffText,
-        },
-      });
-
       // gitAdd is idempotent, and necessary to add to git appmap.yml,
       // Gemfile.lock etc. when the installer runs for the first time
       const addGitReturn = await this.gitAdd(filesDiff);
@@ -268,23 +232,7 @@ installer tool:
         ui.error(commitGitReturn.errorMessage);
       }
 
-      Telemetry.sendEvent({
-        name: commitGitReturn.success
-          ? `install-agent:commit_config:commit_success`
-          : `install-agent:commit_config:commit_failure`,
-        properties: {
-          filesDiffText,
-        },
-      });
-
       return commitGitReturn.success;
-    } else {
-      Telemetry.sendEvent({
-        name: `install-agent:commit_config:commit_no`,
-        properties: {
-          filesDiffText,
-        },
-      });
     }
 
     return false;

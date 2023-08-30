@@ -6,12 +6,10 @@ import { AbortError } from '../errors';
 import { run } from './commandRunner';
 import InstallerUI, { OverwriteOption } from './installerUI';
 import AgentProcedure from './agentProcedure';
-import Telemetry from '../../telemetry';
 import CommandStruct from './commandStruct';
 import { formatValidationError } from './ValidationResult';
 import { GitStatus } from './types/state';
 import { dump, load } from 'js-yaml';
-import { readFile } from 'fs/promises';
 
 export default class AgentInstallerProcedure extends AgentProcedure {
   async run(ui: InstallerUI): Promise<void> {
@@ -131,15 +129,6 @@ export default class AgentInstallerProcedure extends AgentProcedure {
             '\n',
           ];
 
-          Telemetry.sendEvent({
-            name: 'install-agent:architecture-mismatch-error',
-            properties: {
-              error: error?.message,
-              directory: this.path,
-              installer: this.installer.name,
-            },
-          });
-
           ui.error(incompatibleArchitectureMessage.join('\n'));
         } else if (error?.message.includes('without the test and development groups')) {
           const bundlerConfigErrorMessage = [
@@ -156,15 +145,6 @@ export default class AgentInstallerProcedure extends AgentProcedure {
               'https://bundler.io/man/bundle-install.1.html',
             '',
           ];
-
-          Telemetry.sendEvent({
-            name: 'install-agent:bundler-config-error',
-            properties: {
-              error: error?.message,
-              directory: this.path,
-              installer: this.installer.name,
-            },
-          });
 
           ui.error(bundlerConfigErrorMessage.join('\n'));
         } else {

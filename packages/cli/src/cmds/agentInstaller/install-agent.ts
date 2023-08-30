@@ -12,7 +12,6 @@ import AgentInstallerProcedure from './agentInstallerProcedure';
 import chalk from 'chalk';
 import Telemetry from '../../telemetry';
 import { INSTALLERS, INSTALLER_NAMES } from './installers';
-import { getDirectoryProperty } from './telemetryUtil';
 import { getProjects, ProjectConfiguration } from './projectConfiguration';
 import AgentInstaller from './agentInstaller';
 import { ProcessLog } from './commandRunner';
@@ -54,45 +53,13 @@ class InstallerError {
     const installersAvailable = this.project?.availableInstallers.map((i) => i.name).join(', ');
 
     if (this.error instanceof AbortError) {
-      Telemetry.sendEvent({
-        name: 'install-agent:abort',
-        properties: {
-          installer: this.project?.selectedInstaller?.name,
-          installers_available: installersAvailable,
-          reason: this.error.message,
-          path: this.project?.path,
-        },
-        metrics: {
-          duration: this.duration,
-        },
-      });
-
       ui.error(`${chalk.yellow('!')} Installation has been aborted.`);
       return true;
     } else if (this.error instanceof InvalidPathError) {
-      Telemetry.sendEvent({
-        name: 'install-agent:soft_failure',
-        properties: {
-          error: this.error.message,
-          directory: this.project?.path ? await getDirectoryProperty(this.project.path) : undefined,
-        },
-      });
-
       ui.error(`${chalk.red('!')} ${this.error.message}`);
       return true;
     } else if (this.error instanceof UserConfigError) {
       ui.error(`${chalk.red('!')} Error in project configuration:\n\n${this.error?.message}`);
-
-      Telemetry.sendEvent({
-        name: 'install-agent:user-config-error',
-        properties: {
-          installer: this.project?.selectedInstaller?.name,
-          installers_available: installersAvailable,
-          error: this.error?.message,
-          log: this.log,
-          directory: this.project?.path ? await getDirectoryProperty(this.project.path) : undefined,
-        },
-      });
       return true;
     } else {
       let exception: string | undefined;
@@ -114,22 +81,6 @@ class InstallerError {
           }
         }
       }
-
-      Telemetry.sendEvent({
-        name: 'install-agent:failure',
-        properties: {
-          installer: this.project?.selectedInstaller?.name,
-          installers_available: installersAvailable,
-          exception_type: (this.error as any)?.constructor?.name,
-          log: this.log,
-          exception,
-          directory: directoryContents,
-          path: this.project?.path,
-        },
-        metrics: {
-          duration: this.duration,
-        },
-      });
     }
     return false;
   }
@@ -169,17 +120,6 @@ const _handler = async (
 
       try {
         await installProcedure.run(ui);
-
-        Telemetry.sendEvent({
-          name: 'install-agent:success',
-          properties: {
-            installer: project.selectedInstaller!.name,
-            path: project.path,
-          },
-          metrics: {
-            duration: endTime(),
-          },
-        });
       } catch (e) {
         let installerError = new InstallerError(e, endTime(), project);
         const handled = await installerError.handle(ui);
@@ -275,10 +215,6 @@ export default {
   },
 
   async handler(args: InstallCommandOptions): Promise<void> {
-    Telemetry.sendEvent({
-      name: 'install-agent:start',
-    });
-
     const { exitCode, err } = await _handler(args);
 
     Telemetry.flush(() => {
