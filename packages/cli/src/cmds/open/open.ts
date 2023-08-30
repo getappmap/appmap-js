@@ -4,7 +4,6 @@ import UI from '../userInteraction';
 import runCommand from '../runCommand';
 import showAppMap from './showAppMap';
 import { ValidationError } from '../errors';
-import Telemetry from '../../telemetry';
 
 export const command = 'open [appmap-file]';
 export const describe = 'Open an AppMap in the system default browser';
@@ -35,10 +34,6 @@ export const handler = async (argv) => {
 
     await showAppMap(appmapFile);
   };
-
-  Telemetry.sendEvent({
-    name: `open:open`,
-  });
 
   return runCommand('open', commandFn);
 };

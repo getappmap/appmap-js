@@ -3,7 +3,6 @@ import Check from '../check';
 import Configuration from '../configuration/types/configuration';
 import { Finding } from '../index';
 import { AppMapMetadata, ScanSummary } from './scanSummary';
-import Telemetry, { Git, GitState } from '../telemetry';
 
 class DistinctItems<T> {
   private members: Record<string, T> = {};
@@ -93,34 +92,4 @@ export class ScanResults {
     // we don't need sourceScanResults.summary.appMetadata
     // appMapMetadata.Git may also contain secrets we don't want to transmit.
   }
-}
-
-export type ScanTelemetry = {
-  ruleIds: string[];
-  numAppMaps: number;
-  numFindings: number;
-  elapsedMs: number;
-  appmapDir?: string;
-};
-
-export async function sendScanResultsTelemetry(telemetry: ScanTelemetry): Promise<void> {
-  const gitState = GitState[await Git.state(telemetry.appmapDir)];
-  const contributors = (await Git.contributors(60, telemetry.appmapDir)).length;
-  Telemetry.sendEvent(
-    {
-      name: 'scan:completed',
-      properties: {
-        rules: telemetry.ruleIds.sort().join(', '),
-        git_state: gitState,
-      },
-      metrics: {
-        duration: telemetry.elapsedMs / 1000,
-        numRules: telemetry.ruleIds.length,
-        numAppMaps: telemetry.numAppMaps,
-        numFindings: telemetry.numFindings,
-        contributors: contributors,
-      },
-    },
-    { includeEnvironment: true }
-  );
 }

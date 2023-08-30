@@ -13,7 +13,6 @@ import {
 } from '../../configuration/configurationProvider';
 import Telemetry from '../../telemetry';
 import EventEmitter from 'events';
-import { WatchScanTelemetry } from './watchScanTelemetry';
 import isAncestorPath from '../../util/isAncestorPath';
 import { debuglog } from 'util';
 import { warn } from 'console';
@@ -57,15 +56,11 @@ export class Watcher {
   scanEventEmitter = new EventEmitter();
 
   constructor(private options: WatchScanOptions) {
-    WatchScanTelemetry.watch(this.scanEventEmitter, options.appmapDir);
     this.queue.error((error, task) => console.warn(`Problem processing ${task}:\n`, error));
   }
 
   async watch(): Promise<void> {
     await this.reloadConfig();
-    Telemetry.sendEvent({
-      name: 'scan:started',
-    });
 
     this.configWatcher = chokidar.watch(this.options.configFile, {
       ignoreInitial: true,

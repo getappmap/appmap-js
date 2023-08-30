@@ -8,9 +8,6 @@ import FingerprintWatchCommand from '../../../src/fingerprint/fingerprintWatchCo
 import { verbose } from '../../../src/utils';
 import OriginalTelemetry from '../../../src/telemetry';
 import * as client from '@appland/client';
-import { once } from 'events';
-import Fingerprinter from '../../../src/fingerprint/fingerprinter';
-import { MaxMSBetween } from '../../../src/lib/eventAggregator';
 import { mkdir } from 'fs/promises';
 import { FSWatcher } from 'chokidar';
 
@@ -187,67 +184,11 @@ describe(FingerprintWatchCommand, () => {
       mockWarn.mockRestore();
     });
 
-    describe('telemetry', () => {
-      let handler: Fingerprinter;
-
-      beforeEach(async () => {
-        cmd = new FingerprintWatchCommand(appMapDir);
-        handler = cmd.fpQueue.handler;
-        await cmd.execute();
-        jest.useFakeTimers();
-        Telemetry.sendEvent.mockClear();
-      });
-
-      afterEach(() => {
-        jest.runAllTimers();
-        jest.useRealTimers();
-      });
-
-      it('aggregates indexes that occur less than one second apart', async () => {
-        placeMap();
-        await once(handler, 'index');
-        jest.advanceTimersByTime(MaxMSBetween / 2.0);
-        placeMap('../fixtures/ruby/user_page_scenario.appmap.json');
-        await once(handler, 'index');
-        jest.advanceTimersByTime(MaxMSBetween * 2.0);
-
-        await cmd?.telemetrySent();
-
-        expect(Telemetry.sendEvent).toHaveBeenCalledTimes(1);
-        const data = Telemetry.sendEvent.mock.calls[0][0];
-        expect(data).toMatchObject({
-          name: 'appmap:index',
-          properties: {
-            app: 'appland/AppLand',
-            'language.name': 'ruby',
-          },
-          metrics: { appmaps: 2 },
-        });
-        expect(data.properties?.name).toBeUndefined();
-      });
-
-      it('send separate events for indexes that occur more than one second apart', async () => {
-        placeMap();
-        await once(handler, 'index');
-        jest.advanceTimersByTime(MaxMSBetween * 1.1);
-        placeMap('../fixtures/ruby/user_page_scenario.appmap.json');
-        await once(handler, 'index');
-        jest.advanceTimersByTime(MaxMSBetween * 2);
-
-        await cmd?.telemetrySent();
-
-        expect(Telemetry.sendEvent).toHaveBeenCalledTimes(2);
-        for (const [data] of Telemetry.sendEvent.mock.calls) {
-          expect(data).toMatchObject({ name: 'appmap:index', metrics: { appmaps: 1 } });
-        }
-      });
-    });
-
     describe('usage', () => {
-      const sendTelemetry = FingerprintWatchCommand.prototype['sendTelemetry'];
+      const reportUsage = FingerprintWatchCommand.prototype['reportUsage'];
 
       it('sends usage data', async () => {
-        await sendTelemetry([], '', 128);
+        await reportUsage.call({ directory: '/home/joe/work' }, []);
         expect(Usage.update).toHaveBeenCalled();
       });
     });

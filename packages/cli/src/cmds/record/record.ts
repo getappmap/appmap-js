@@ -1,4 +1,4 @@
-import { endTime, verbose } from '../../utils';
+import { verbose } from '../../utils';
 import runCommand from '../runCommand';
 import showAppMap from '../open/showAppMap';
 import yargs from 'yargs';
@@ -7,7 +7,6 @@ import { FileName } from './types/fileName';
 import { chdir } from 'process';
 
 import initial, { createState as createInitialState } from './state/initial';
-import Telemetry from '../../telemetry';
 import RecordContext from './recordContext';
 import Configuration from './configuration';
 const StatsCommand = require('../stats/stats');
@@ -103,32 +102,12 @@ export default {
           if (errorMessage) {
             properties.errorMessage = errorMessage;
           }
-          Telemetry.sendEvent({
-            name: `record:${state.name}`,
-            properties,
-            metrics: Object.assign(
-              {
-                duration: endTime(),
-              },
-              recordContext.metrics()
-            ),
-          });
         }
 
         state = newState;
       }
 
       if (typeof state === 'string') {
-        Telemetry.sendEvent({
-          name: `record:showAppMap`,
-          properties: {
-            fileName: state as FileName,
-          },
-          metrics: {
-            duration: endTime(),
-          },
-        });
-
         await showAppMap(state as FileName);
       }
 
