@@ -13,6 +13,7 @@
             :row="1"
             :index="index"
             :height="diagramSpec.actions.length"
+            :filter-disabled="filterDisabled"
             :interactive="interactive"
             :selected-actor="selectedActor"
             :appMap="appMap"
@@ -54,7 +55,13 @@
 <script lang="ts">
 // @ts-nocheck
 import { AppMap, CodeObject } from '@appland/models';
-import { buildDiagram, unparseDiagram, Diagram, Specification } from '@appland/sequence-diagram';
+import {
+  buildDiagram,
+  unparseDiagram,
+  Diagram,
+  Specification,
+  Action,
+} from '@appland/sequence-diagram';
 import VLoopAction from '@/components/sequence/LoopAction.vue';
 import VCallAction from '@/components/sequence/CallAction.vue';
 import VReturnAction from '@/components/sequence/ReturnAction.vue';
@@ -79,6 +86,10 @@ export default {
     focusedEvent: {
       type: Object,
       default: null,
+    },
+    filterDisabled: {
+      type: Boolean,
+      default: false,
     },
     interactive: {
       type: Boolean,
@@ -131,6 +142,8 @@ export default {
       let result: Diagram | undefined;
       if (this.serializedDiagram) {
         result = unparseDiagram(this.serializedDiagram as Diagram);
+      } else if (this.$store?.state?.precomputedSequenceDiagram) {
+        result = this.$store.state.precomputedSequenceDiagram;
       } else if (this.appMap) {
         const appMapObj: AppMap | undefined = this.appMap as AppMap;
         const { priority, expand } = this;

@@ -6,7 +6,7 @@
         <div class="sequence-actor" :data-actor-id="actor.id">
           <div ref="label_container" :class="labelClasses" @click="selectCodeObject">
             <div :class="['label', type]">
-              <template v-if="interactive">
+              <template v-if="interactive && !filterDisabled">
                 <div class="control-wrap">
                   <span class="hide-container" @click.stop="hideCodeObject">
                     <XIcon />
@@ -90,10 +90,14 @@ export default {
       required: true,
       readonly: true,
     },
+    filterDisabled: {
+      type: Boolean,
+      default: false,
+      readonly: true,
+    },
     interactive: {
       type: Boolean,
-      required: true,
-      readonly: true,
+      default: true,
     },
     appMap: {
       type: Object,

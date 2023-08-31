@@ -57,6 +57,7 @@ export function buildStore() {
   return new Vuex.Store({
     state: {
       appMap: new AppMap(),
+      precomputedSequenceDiagram: null,
       selectionStack: [],
       currentView: DEFAULT_VIEW,
       selectedLabel: null,
@@ -88,6 +89,7 @@ export function buildStore() {
       [SET_APPMAP_DATA](state, data) {
         state.selectionStack = [];
         state.appMap = buildAppMap().source(data).normalize().build();
+        if (data.sequenceDiagram) state.precomputedSequenceDiagram = data.sequenceDiagram;
 
         state.appMap.callTree.rootEvent.forEach((e) => {
           e.displayName = fullyQualifiedFunctionName(e.input);

@@ -75,6 +75,7 @@
           <v-diagram-sequence
             ref="viewSequence_diagram"
             :app-map="filteredAppMap"
+            :filter-enabled="isFilterEnabled"
             :focused-event="focusedEvent"
             :selected-events="selectedEvent"
           />
@@ -181,7 +182,10 @@
               <StatsIcon class="control-button__icon" />
             </button>
           </v-popper>
-          <v-popper-menu v-if="!isGiantAppMap" :isHighlight="filtersChanged">
+          <v-popper-menu
+            v-if="!isPrecomputedSequenceDiagram && !isGiantAppMap"
+            :isHighlight="filtersChanged"
+          >
             <template v-slot:icon>
               <v-popper
                 class="hover-text-popper"
@@ -331,6 +335,8 @@ import {
   base64UrlEncode,
   AppMapFilter,
 } from '@appland/models';
+import { unparseDiagram } from '@appland/sequence-diagram';
+
 import CopyIcon from '@/assets/copy-icon.svg';
 import CloseIcon from '@/assets/close.svg';
 import ReloadIcon from '@/assets/reload.svg';
@@ -754,6 +760,10 @@ export default {
       return this.$store.getters.canPopStack;
     },
 
+    isPrecomputedSequenceDiagram() {
+      return !!this.$store.state.precomputedSequenceDiagram;
+    },
+
     isEmptyAppMap() {
       const appMap = this.filteredAppMap;
       const hasEvents = Array.isArray(appMap.events) && appMap.events.length;
@@ -796,8 +806,13 @@ export default {
   },
 
   methods: {
-    loadData(data) {
-      this.$store.commit(SET_APPMAP_DATA, data);
+    loadData(appMap, sequenceDiagram) {
+      if (sequenceDiagram) {
+        appMap['sequenceDiagram'] = unparseDiagram(sequenceDiagram);
+      }
+
+      this.$store.commit(SET_APPMAP_DATA, appMap);
+
       this.initializeSavedFilters();
 
       const rootEvents = this.$store.state.appMap.rootEvents();
