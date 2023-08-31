@@ -357,6 +357,7 @@ import VStatsPanel from '../components/StatsPanel.vue';
 import VTabs from '../components/Tabs.vue';
 import VTab from '../components/Tab.vue';
 import VTraceFilter from '../components/trace/TraceFilter.vue';
+import toListItem from '@/lib/finding';
 import {
   store,
   SET_APPMAP_DATA,
@@ -945,7 +946,7 @@ export default {
         if (state.selectedObject) {
           do {
             const fqid = state.selectedObject;
-            const [match, type, object] = fqid.match(/^([a-z]+):(.+)/);
+            const [match, type, object] = fqid.match(/^([a-z\-]+):(.+)/);
 
             if (!match) {
               break;
@@ -979,6 +980,10 @@ export default {
                   });
                 }
               }
+            } else if (type === 'analysis-finding') {
+              const hash_v2 = object;
+              const finding = this.findings.find(({ finding }) => finding.hash_v2 === hash_v2);
+              if (finding) this.$store.commit(SELECT_CODE_OBJECT, toListItem(finding));
             } else {
               selectedObject = classMap.codeObjects.find((obj) => obj.fqid === fqid);
             }
