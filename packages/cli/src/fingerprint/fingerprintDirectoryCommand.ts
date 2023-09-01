@@ -35,7 +35,7 @@ class FingerprintDirectoryCommand {
   }
 
   async files(fn) {
-    return findFiles(this.directory, '*.appmap.json', fn);
+    return findFiles(this.directory, '.appmap.json', fn);
   }
 }
 
