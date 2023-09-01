@@ -15,7 +15,7 @@ const { join } = require('path');
 import { setSQLErrorHandler } from '@appland/models';
 
 const { verbose } = require('./utils');
-const FingerprintDirectoryCommand = require('./fingerprint/fingerprintDirectoryCommand');
+const FingerprintDirectoryCommand = require('./fingerprint/fingerprintDirectoryCommand').default;
 const FingerprintWatchCommand = require('./fingerprint/fingerprintWatchCommand').default;
 const Depends = require('./depends');
 import InstallCommand from './cmds/agentInstaller/install-agent';
