@@ -9,7 +9,7 @@ const { baseName, findFiles } = require('./utils');
  */
 async function appMapCatalog(directory) {
   const appMapsByName = {};
-  const appMapFiles = await findFiles(directory, '*.appmap.json');
+  const appMapFiles = await findFiles(directory, '.appmap.json');
 
   await Promise.all(
     // eslint-disable-next-line prefer-arrow-callback
