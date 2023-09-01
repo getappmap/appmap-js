@@ -36,6 +36,9 @@ describe('VsCodeExtension.vue', () => {
     wrapper.vm.setState('{"selectedObject":"class:app/models/User"}');
     expect(wrapper.vm.selectedObject.id).toMatch('app/models/User');
 
+    wrapper.vm.setState('{"selectedObject":"analysis-finding:fakeHash"}');
+    expect(wrapper.vm.selectedObject.id).toMatch('fakeHash');
+
     wrapper.vm.clearSelection();
 
     const appState =
