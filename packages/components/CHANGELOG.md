@@ -1,3 +1,10 @@
+# [@appland/components-v2.60.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.59.0...@appland/components-v2.60.0) (2023-09-01)
+
+
+### Features
+
+* select finding when map opened from findings webview ([e68dd48](https://github.com/getappmap/appmap-js/commit/e68dd48499fe8ccf94c3b0359350b6c2fb3d5ae9))
+
 # [@appland/components-v2.59.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.58.1...@appland/components-v2.59.0) (2023-08-23)
 
 
