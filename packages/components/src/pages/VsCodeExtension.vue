@@ -75,7 +75,7 @@
           <v-diagram-sequence
             ref="viewSequence_diagram"
             :app-map="filteredAppMap"
-            :filter-enabled="isFilterEnabled"
+            :filter-disabled="isPrecomputedSequenceDiagram"
             :focused-event="focusedEvent"
             :selected-events="selectedEvent"
           />
@@ -495,7 +495,10 @@ export default {
       handler(event) {
         if (event) {
           if (this.currentView === VIEW_COMPONENT) {
-            this.setView(this.defaultView === VIEW_SEQUENCE ? VIEW_SEQUENCE : VIEW_FLOW);
+            let { defaultView } = this;
+            if (this.isPrecomputedSequenceDiagram) defaultView = VIEW_SEQUENCE;
+
+            this.setView(defaultView === VIEW_SEQUENCE ? VIEW_SEQUENCE : VIEW_FLOW);
           }
           this.$nextTick(() => {
             Object.keys(this.$refs)
