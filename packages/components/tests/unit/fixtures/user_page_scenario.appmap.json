@@ -1696,5 +1696,16 @@
         "object_id": 70301279735240
       }
     }
+  ],
+  "findings": [
+    {
+      "finding": {
+        "hash_v2": "fakeHash",
+        "message": "fake finding message"
+      },
+      "rule": {
+        "title": "fakeFindingTitle"
+      }
+    }
   ]
 }
