@@ -15,13 +15,19 @@ context('Sequence Diagram', () => {
   });
 
   it('unchanged calls are collapsed', () => {
-    cy.get('.sequence-diagram [data-event-ids=42]').should('exist');
-    cy.get('.sequence-diagram [data-event-ids=42]').contains('show').should('exist');
+    cy.get('.sequence-diagram [data-event-ids="42"]').should('exist');
+    cy.get('.sequence-diagram [data-event-ids="42"]').contains('show').should('exist');
 
-    cy.get('.sequence-diagram [data-event-ids=42] .collapse-expand').should('exist');
-    cy.get('.sequence-diagram [data-event-ids=42] .collapse-expand').should(
+    cy.get('.sequence-diagram [data-event-ids="42"] .collapse-expand').should('exist');
+    cy.get('.sequence-diagram [data-event-ids="42"] .collapse-expand').should(
       'have.class',
       'collapsed'
     );
+  });
+
+  it('first diff element is selected', () => {
+    cy.get('.sequence-diagram [data-event-ids="108"]').should('exist');
+    cy.get('.sequence-diagram [data-event-ids="108"]').should('have.class', 'diff-delete');
+    cy.get('.sequence-diagram [data-event-ids="108"]').should('have.class', 'focused');
   });
 });

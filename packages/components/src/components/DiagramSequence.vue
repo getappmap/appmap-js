@@ -68,6 +68,7 @@ import VReturnAction from '@/components/sequence/ReturnAction.vue';
 import VActor from '@/components/sequence/Actor.vue';
 import DiagramSpec from './sequence/DiagramSpec';
 import { ActionSpec } from './sequence/ActionSpec';
+import { SET_FOCUSED_EVENT } from '../store/vsCode';
 
 const SCROLL_OPTIONS = { behavior: 'smooth', block: 'center', inline: 'center' };
 
@@ -189,6 +190,13 @@ export default {
 
       for (let index = 0; index < result.actions.length; index++)
         this.$set(this.collapsedActions, index, !shouldExpand(result.actions[index]));
+
+      if (firstDiffAction && this.$store?.state) {
+        const eventId = eventIds(firstDiffAction).filter(Boolean)[0];
+        const { appMap } = this.$store.state;
+        const event = appMap.eventsById[eventId];
+        this.$store.commit(SET_FOCUSED_EVENT, event);
+      }
 
       return result;
     },
