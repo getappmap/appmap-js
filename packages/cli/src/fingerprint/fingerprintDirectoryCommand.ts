@@ -39,4 +39,4 @@ class FingerprintDirectoryCommand {
   }
 }
 
-module.exports = FingerprintDirectoryCommand;
+export default FingerprintDirectoryCommand;
