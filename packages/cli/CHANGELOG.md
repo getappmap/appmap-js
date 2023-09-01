@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.90.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.89.1...@appland/appmap-v3.90.0) (2023-09-01)
+
+
+### Features
+
+* Clean up telemetry ([c7d0a92](https://github.com/getappmap/appmap-js/commit/c7d0a928661351bc10e51c0531689caa3ff98b1f))
+
 # [@appland/appmap-v3.89.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.89.0...@appland/appmap-v3.89.1) (2023-08-30)
 
 
