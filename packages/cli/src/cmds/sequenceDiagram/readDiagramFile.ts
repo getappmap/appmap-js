@@ -1,7 +1,21 @@
 import { readFile } from 'fs/promises';
-import { Diagram, unparseDiagram } from '@appland/sequence-diagram';
+import {
+  Diagram,
+  unparseDiagram,
+  validateDiagram,
+  ValidationResult,
+  Result,
+} from '@appland/sequence-diagram';
 
-export async function readDiagramFile(fileName: string): Promise<Diagram> {
+export async function readDiagramFile(fileName: string): Promise<Result> {
   const jsonData = JSON.parse(await readFile(fileName, 'utf-8')) as any;
-  return unparseDiagram(jsonData);
+
+  const validate = validateDiagram(jsonData);
+  if (validate !== ValidationResult.Valid) {
+    console.error(`Invalid Diagram data in file: ${fileName}`);
+    return { diagram: null, validationResult: validate };
+  }
+
+  const diagram = unparseDiagram(jsonData);
+  return { diagram: diagram, validationResult: ValidationResult.Valid };
 }

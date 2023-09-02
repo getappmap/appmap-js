@@ -10,9 +10,10 @@ import {
   Formatters,
   Diagram,
   FormatType,
+  ValidationResult,
 } from '@appland/sequence-diagram';
 import { verbose } from '../utils';
-import { join } from 'path';
+import { basename, join } from 'path';
 import { DiffDiagrams } from '../sequenceDiagramDiff/DiffDiagrams';
 import { readDiagramFile } from './sequenceDiagram/readDiagramFile';
 
@@ -99,10 +100,31 @@ export const handler = async (argv: any) => {
   });
 
   const compareFiles = async (): Promise<void> => {
-    const baseDiagram = await readDiagramFile(baseDiagramFile);
-    const headDiagram = await readDiagramFile(headDiagramFile);
+    const baseResult = await readDiagramFile(baseDiagramFile);
+    const headResult = await readDiagramFile(headDiagramFile);
 
-    const diffDiagram = diffDiagrams.diff(baseDiagram, headDiagram);
+    if (baseResult.diagram === null || headResult.diagram === null) {
+      if (
+        baseResult.validationResult === ValidationResult.AppMap &&
+        headResult.validationResult === ValidationResult.AppMap
+      ) {
+        console.error(
+          'You have passed AppMap files. To compare diagrams, run the following commands:'
+        );
+        console.error(`appmap sequence-diagram -f json ${baseDiagramFile}`);
+        console.error(`appmap sequence-diagram -f json ${headDiagramFile}`);
+        console.error(
+          `appmap sequence-diagram-diff ${basename(
+            baseDiagramFile,
+            '.appmap.json'
+          )}.sequence.json ${basename(headDiagramFile, '.appmap.json')}.sequence.json`
+        );
+      }
+
+      return;
+    }
+
+    const diffDiagram = diffDiagrams.diff(baseResult.diagram, headResult.diagram);
     if (!diffDiagram) {
       console.log(`${baseDiagramFile} and ${headDiagramFile} are identical`);
       return;
@@ -132,7 +154,11 @@ export const handler = async (argv: any) => {
           const loader = queue(async (matchName: string) => {
             const diagram = await readDiagramFile(matchName);
             const relativePath = matchName.slice(dirName.length + 1);
-            data.diagrams.set(relativePath, diagram);
+            if (diagram.diagram === null) {
+              console.error(`Invalid diagram ${relativePath}`);
+              return;
+            }
+            data.diagrams.set(relativePath, diagram.diagram);
           }, 2);
           matches.forEach((fileName) => loader.push(fileName));
           if (!loader.idle()) await loader.drain();

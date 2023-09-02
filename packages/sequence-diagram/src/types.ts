@@ -190,12 +190,23 @@ export interface Diagram {
   rootActions: Action[];
 }
 
+export enum ValidationResult {
+  Invalid = 0,
+  Valid = 1,
+  AppMap = 2,
+}
+
+export interface Result {
+  diagram: Diagram | null;
+  validationResult: ValidationResult;
+}
+
 import buildDiagram from './buildDiagram';
 import buildDiffDiagram from './buildDiffDiagram';
 import diff from './diff';
 import unparseDiagram from './unparseDiagram';
-
-export { buildDiagram, buildDiffDiagram, diff, unparseDiagram };
+import validateDiagram from './validateDiagram';
+export { buildDiagram, buildDiffDiagram, diff, unparseDiagram, validateDiagram };
 
 export enum FormatType {
   JSON = 'json',
