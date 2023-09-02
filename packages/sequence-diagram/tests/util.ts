@@ -19,9 +19,20 @@ export type AppMapDiagram = {
 };
 
 export const SHOW_USER_APPMAP_FILE = 'show_user.appmap.json';
-export const SHOW_USER_APPMAP = buildAppMap()
-  .source(JSON.parse(readFileSync(join(APP_APPMAP_DIR, SHOW_USER_APPMAP_FILE), 'utf-8')))
-  .build();
+export const SHOW_USER_APPMAP_DATA = JSON.parse(
+  readFileSync(join(APP_APPMAP_DIR, SHOW_USER_APPMAP_FILE), 'utf-8')
+);
+export const SHOW_USER_APPMAP = buildAppMap().source(SHOW_USER_APPMAP_DATA).build();
+
+export const SHOW_USER_DIAGRAM_FILE = 'show_user.sequence.json';
+export const SHOW_USER_DIAGRAM_DATA = JSON.parse(
+  readFileSync(join(APP_APPMAP_DIR, SHOW_USER_DIAGRAM_FILE), 'utf-8')
+);
+
+export const INVALID_DIAGRAM_FILE = 'invalid.sequence.json';
+export const INVALID_DIAGRAM_DATA = JSON.parse(
+  readFileSync(join(APP_APPMAP_DIR, INVALID_DIAGRAM_FILE), 'utf-8')
+);
 
 export const USER_NOT_FOUND_APPMAP_FILE = 'user_not_found.appmap.json';
 export const USER_NOT_FOUND_APPMAP = buildAppMap()

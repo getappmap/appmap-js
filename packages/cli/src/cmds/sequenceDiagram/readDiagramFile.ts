@@ -1,6 +1,5 @@
 import { readFile } from 'fs/promises';
 import {
-  Diagram,
   unparseDiagram,
   validateDiagram,
   ValidationResult,

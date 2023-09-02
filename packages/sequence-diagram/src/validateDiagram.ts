@@ -11,20 +11,18 @@ import {
 } from './types';
 
 export default function validateDiagram(diagramData: any): ValidationResult {
+  // Check if it's likely an AppMap object
+  if (
+    diagramData &&
+    diagramData.hasOwnProperty('metadata') &&
+    diagramData.hasOwnProperty('classMap') &&
+    diagramData.hasOwnProperty('events')
+  ) {
+    return ValidationResult.AppMap;
+  }
+
   if (!Array.isArray(diagramData.actors) || !Array.isArray(diagramData.rootActions)) {
     console.error('Invalid Diagram: actors and rootActions must be arrays.');
-
-    // Check if it's likely an AppMap object
-    if (
-      diagramData &&
-      diagramData.hasOwnProperty('version') &&
-      diagramData.hasOwnProperty('metadata') &&
-      diagramData.hasOwnProperty('classMap') &&
-      diagramData.hasOwnProperty('events')
-    ) {
-      return ValidationResult.AppMap;
-    }
-
     return ValidationResult.Invalid;
   }
 
