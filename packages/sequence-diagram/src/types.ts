@@ -196,11 +196,6 @@ export enum ValidationResult {
   AppMap = 2,
 }
 
-export interface Result {
-  diagram: Diagram | null;
-  validationResult: ValidationResult;
-}
-
 import buildDiagram from './buildDiagram';
 import buildDiffDiagram from './buildDiffDiagram';
 import diff from './diff';
