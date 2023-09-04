@@ -10,7 +10,7 @@ import {
   isQuery,
 } from './types';
 
-export default function validateDiagram(diagramData: any): ValidationResult {
+export default async function validateDiagram(diagramData: any): Promise<ValidationResult> {
   // Check if it's likely an AppMap object
   if (
     diagramData &&

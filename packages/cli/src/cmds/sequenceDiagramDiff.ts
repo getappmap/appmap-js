@@ -11,11 +11,13 @@ import {
   Diagram,
   FormatType,
   ValidationResult,
+  validateDiagram,
 } from '@appland/sequence-diagram';
 import { verbose } from '../utils';
 import { basename, join } from 'path';
 import { DiffDiagrams } from '../sequenceDiagramDiff/DiffDiagrams';
 import { readDiagramFile } from './sequenceDiagram/readDiagramFile';
+import { readFile } from 'fs/promises';
 
 export const command = 'sequence-diagram-diff base-diagram head-diagram';
 export const describe = 'Diff sequence diagrams that are represented as JSON';
@@ -49,6 +51,12 @@ export const builder = (args: yargs.Argv) => {
   });
   args.option('exclude', {
     describe: 'code objects to exclude from the diagram',
+  });
+
+  args.option('skip-validation', {
+    describe: 'skip diagram validation',
+    type: 'boolean',
+    default: false,
   });
 
   return args.strict();
@@ -100,31 +108,51 @@ export const handler = async (argv: any) => {
   });
 
   const compareFiles = async (): Promise<void> => {
-    const baseResult = await readDiagramFile(baseDiagramFile);
-    const headResult = await readDiagramFile(headDiagramFile);
+    if (!argv.skipValidation) {
+      const baseValidation = await validateDiagram(
+        JSON.parse(await readFile(baseDiagramFile, 'utf-8')) as any
+      );
+      const headValidation = await validateDiagram(
+        JSON.parse(await readFile(headDiagramFile, 'utf-8')) as any
+      );
 
-    if (baseResult.diagram === null || headResult.diagram === null) {
-      if (
-        baseResult.validationResult === ValidationResult.AppMap &&
-        headResult.validationResult === ValidationResult.AppMap
-      ) {
+      if (baseValidation !== ValidationResult.Valid || headValidation !== ValidationResult.Valid) {
         console.error(
-          'You have passed AppMap files. To compare diagrams, run the following commands:'
+          `Base File: ${baseDiagramFile} is ${
+            baseValidation === ValidationResult.AppMap ? 'an AppMap' : 'an invalid file'
+          }`
         );
-        console.error(`appmap sequence-diagram -f json ${baseDiagramFile}`);
-        console.error(`appmap sequence-diagram -f json ${headDiagramFile}`);
         console.error(
-          `appmap sequence-diagram-diff ${basename(
-            baseDiagramFile,
-            '.appmap.json'
-          )}.sequence.json ${basename(headDiagramFile, '.appmap.json')}.sequence.json`
+          `Head File: ${headDiagramFile} is ${
+            headValidation === ValidationResult.AppMap ? 'an AppMap' : 'an invalid file'
+          }`
         );
+
+        if (
+          baseValidation === ValidationResult.AppMap &&
+          headValidation === ValidationResult.AppMap
+        ) {
+          console.error(
+            'You have passed AppMap files. To compare diagrams, run the following commands:'
+          );
+          console.error(`appmap sequence-diagram -f json ${baseDiagramFile}`);
+          console.error(`appmap sequence-diagram -f json ${headDiagramFile}`);
+          console.error(
+            `appmap sequence-diagram-diff ${basename(
+              baseDiagramFile,
+              '.appmap.json'
+            )}.sequence.json ${basename(headDiagramFile, '.appmap.json')}.sequence.json`
+          );
+        }
+
+        return;
       }
-
-      return;
     }
 
-    const diffDiagram = diffDiagrams.diff(baseResult.diagram, headResult.diagram);
+    const baseDiagram = await readDiagramFile(baseDiagramFile);
+    const headDiagram = await readDiagramFile(headDiagramFile);
+
+    const diffDiagram = diffDiagrams.diff(baseDiagram, headDiagram);
     if (!diffDiagram) {
       console.log(`${baseDiagramFile} and ${headDiagramFile} are identical`);
       return;
@@ -154,11 +182,7 @@ export const handler = async (argv: any) => {
           const loader = queue(async (matchName: string) => {
             const diagram = await readDiagramFile(matchName);
             const relativePath = matchName.slice(dirName.length + 1);
-            if (diagram.diagram === null) {
-              console.error(`Invalid diagram ${relativePath}`);
-              return;
-            }
-            data.diagrams.set(relativePath, diagram.diagram);
+            data.diagrams.set(relativePath, diagram);
           }, 2);
           matches.forEach((fileName) => loader.push(fileName));
           if (!loader.idle()) await loader.drain();
