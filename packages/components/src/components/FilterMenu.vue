@@ -106,7 +106,7 @@
             placeholder="save current filter as..."
             v-model="newFilterName"
           />
-          <button class="filters__button" data-cy="save-filter-button" @click="saveFilter">
+          <button :class="saveFilterButtonClass" data-cy="save-filter-button" @click="saveFilter">
             Save Filter
           </button>
         </div>
@@ -134,7 +134,7 @@
         </div>
         <div class="filters__block-row">
           <div class="filters__block-row-content">
-            <button class="filters__button" data-cy="apply-filter-button" @click="applyFilter">
+            <button :class="applyButtonClass" data-cy="apply-filter-button" @click="applyFilter">
               Apply
             </button>
             <button :class="deleteButtonClass" data-cy="delete-filter-button" @click="deleteFilter">
@@ -174,6 +174,13 @@ import {
   REMOVE_HIDDEN_NAME,
   SET_SELECTED_SAVED_FILTER,
   DEFAULT_FILTER_NAME,
+  SET_LIMIT_ROOT,
+  SET_HIDE_MEDIA,
+  SET_HIDE_EXTERNAL_CODE,
+  SET_HIDE_UNLABELED,
+  SET_HIDE_ELAPSED_TIME_UNDER,
+  SET_HIDE_NAME,
+  SET_CLEAR_FILTERS,
 } from '@/store/vsCode';
 import { serializeFilter, base64UrlEncode } from '@appland/models';
 
@@ -197,9 +204,16 @@ export default {
 
   data() {
     return {
+      initFilterName: '',
+      selectedFilter: this.$store.state.selectedSavedFilter,
+
       copied: false,
       newFilterName: '',
     };
+  },
+
+  mounted() {
+    this.initFilterName = this.$store.state.selectedSavedFilter.filterName;
   },
 
   computed: {
@@ -213,10 +227,10 @@ export default {
 
     selectedSavedFilter: {
       get() {
-        return this.$store.state.selectedSavedFilter;
+        return this.selectedFilter;
       },
       set(value) {
-        this.$store.commit(SET_SELECTED_SAVED_FILTER, value);
+        this.selectedFilter = value;
       },
     },
 
@@ -226,6 +240,7 @@ export default {
       },
       set(value) {
         this.$store.commit(SET_DECLUTTER_ON, { declutterProperty: 'limitRootEvents', value });
+        this.$store.commit(SET_LIMIT_ROOT);
       },
     },
 
@@ -235,6 +250,7 @@ export default {
       },
       set(value) {
         this.$store.commit(SET_DECLUTTER_ON, { declutterProperty: 'hideMediaRequests', value });
+        this.$store.commit(SET_HIDE_MEDIA);
       },
     },
 
@@ -244,6 +260,7 @@ export default {
       },
       set(value) {
         this.$store.commit(SET_DECLUTTER_ON, { declutterProperty: 'hideUnlabeled', value });
+        this.$store.commit(SET_HIDE_UNLABELED);
       },
     },
 
@@ -253,6 +270,7 @@ export default {
       },
       set(value) {
         this.$store.commit(SET_DECLUTTER_ON, { declutterProperty: 'hideExternalPaths', value });
+        this.$store.commit(SET_HIDE_EXTERNAL_CODE);
       },
     },
 
@@ -262,6 +280,7 @@ export default {
       },
       set(value) {
         this.$store.commit(SET_DECLUTTER_ON, { declutterProperty: 'hideElapsedTimeUnder', value });
+        this.$store.commit(SET_HIDE_ELAPSED_TIME_UNDER);
       },
     },
 
@@ -280,6 +299,7 @@ export default {
       },
       set(value) {
         this.$store.commit(SET_DECLUTTER_ON, { declutterProperty: 'hideName', value });
+        this.$store.commit(SET_HIDE_NAME);
       },
     },
 
@@ -306,6 +326,24 @@ export default {
         appMap.metadata.language &&
         ['ruby', 'javascript'].includes(appMap.metadata.language.name)
       );
+    },
+
+    saveFilterButtonClass() {
+      const suffix =
+        (this.$store.state.limitRoot ||
+          this.$store.state.hideMedia ||
+          this.$store.state.hideExternalCode ||
+          this.$store.state.hideUnlabeled ||
+          this.$store.state.hideElapsedTimeUnder ||
+          this.$store.state.hideName) === false
+          ? '-disabled'
+          : '';
+      return 'filters__button' + suffix;
+    },
+
+    applyButtonClass() {
+      const suffix = this.initFilterName === this.selectedFilter.filterName ? '-disabled' : '';
+      return 'filters__button' + suffix;
     },
 
     defaultButtonClass() {
@@ -362,10 +400,16 @@ export default {
       this.$root.$emit('saveFilter', filterToSave);
 
       this.newFilterName = '';
+
+      this.selectedFilter = this.$store.state.selectedSavedFilter;
+      this.initFilterName = this.$store.state.selectedSavedFilter.filterName;
+      this.$store.commit(SET_CLEAR_FILTERS);
     },
 
     applyFilter() {
       this.$emit('setState', this.selectedSavedFilter.state);
+      this.initFilterName = this.selectedFilter.filterName;
+      this.$store.commit(SET_SELECTED_SAVED_FILTER, this.selectedFilter);
     },
 
     deleteFilter() {

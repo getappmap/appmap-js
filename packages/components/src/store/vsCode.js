@@ -40,6 +40,14 @@ export const SET_HIGHLIGHTED_EVENTS = 'setHighlightedEvents';
 export const DEFAULT_VIEW = VIEW_COMPONENT;
 export const DEFAULT_FILTER_NAME = 'AppMap default';
 
+export const SET_LIMIT_ROOT = 'setLimitRoot';
+export const SET_HIDE_MEDIA = 'setHideMedia';
+export const SET_HIDE_EXTERNAL_CODE = 'setHideExternalCode';
+export const SET_HIDE_UNLABELED = 'setHideUnlabeled';
+export const SET_HIDE_ELAPSED_TIME_UNDER = 'setHideElapsedTimeUnder';
+export const SET_HIDE_NAME = 'setHideName';
+export const SET_CLEAR_FILTERS = 'setClearFilters';
+
 // Always have the AppMap default filter as the top option
 function savedFiltersSorter(a, b) {
   // default filter goes on top
@@ -67,6 +75,13 @@ export function buildStore() {
       selectedSavedFilter: null,
       defaultFilter: null,
       highlightedEvents: [],
+
+      limitRoot: false,
+      hideMedia: false,
+      hideExternalCode: false,
+      hideUnlabeled: false,
+      hideElapsedTimeUnder: false,
+      hideName: false,
     },
 
     getters: {
@@ -229,6 +244,34 @@ export function buildStore() {
 
       [SET_HIGHLIGHTED_EVENTS](state, highlightedEvents) {
         state.highlightedEvents = highlightedEvents;
+      },
+
+      [SET_LIMIT_ROOT](state) {
+        state.limitRoot = !state.limitRoot;
+      },
+      [SET_HIDE_MEDIA](state) {
+        state.hideMedia = !state.hideMedia;
+      },
+      [SET_HIDE_EXTERNAL_CODE](state) {
+        state.hideExternalCode = !state.hideExternalCode;
+      },
+      [SET_HIDE_UNLABELED](state) {
+        state.hideUnlabeled = !state.hideUnlabeled;
+      },
+      [SET_HIDE_ELAPSED_TIME_UNDER](state) {
+        state.hideElapsedTimeUnder = !state.hideElapsedTimeUnder;
+      },
+      [SET_HIDE_NAME](state) {
+        state.hideName = !state.hideName;
+      },
+      [SET_CLEAR_FILTERS](state) {
+        state.limitRoot =
+          state.hideMedia =
+          state.hideExternalCode =
+          state.hideUnlabeled =
+          state.hideElapsedTimeUnder =
+          state.hideName =
+            false;
       },
     },
   });
