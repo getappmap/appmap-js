@@ -130,13 +130,13 @@
                 {{ savedFilter.filterName }}
               </option>
             </select>
+            <button class="filters__button" data-cy="apply-filter-button" @click="applyFilter">
+              Load
+            </button>
           </div>
         </div>
         <div class="filters__block-row">
           <div class="filters__block-row-content">
-            <button class="filters__button" data-cy="apply-filter-button" @click="applyFilter">
-              Apply
-            </button>
             <button :class="deleteButtonClass" data-cy="delete-filter-button" @click="deleteFilter">
               Delete
             </button>
@@ -449,6 +449,7 @@ export default {
     flex: 1;
     padding: 2px;
     margin-left: 7px;
+    margin-right: 10px;
     display: inline-block;
     vertical-align: middle;
     width: 100%;
