@@ -25,4 +25,27 @@ describe('ReportFieldCalculator', () => {
       });
     });
   });
+
+  describe('formatEndpoint', () => {
+    it('should format endpoints correctly', async () => {
+      const changeReporter = new ChangeReporter('base', 'head', 'outputDir', 'srcDir');
+      const reportFieldCalculator = new ReportFieldCalculator(changeReporter);
+
+      const result1 = await reportFieldCalculator.formatEndpoint(
+        'paths./microposts.post.responses.302'
+      );
+      expect(result1).toEqual('302 POST /microposts');
+
+      const result2 = await reportFieldCalculator.formatEndpoint(
+        'paths./microposts.post.responses.422'
+      );
+      expect(result2).toEqual('422 POST /microposts');
+
+      const result3 = await reportFieldCalculator.formatEndpoint('paths./microposts/{id}');
+      expect(result3).toEqual('/microposts/{id}');
+
+      const result4 = await reportFieldCalculator.formatEndpoint('randomString');
+      expect(result4).toEqual('randomString');
+    });
+  });
 });
