@@ -6,7 +6,7 @@
         <div class="sequence-actor" :data-actor-id="actor.id">
           <div ref="label_container" :class="labelClasses" @click="selectCodeObject">
             <div :class="['label', type]">
-              <template v-if="interactive && !filterDisabled">
+              <template v-if="interactive && !isPrecomputedSequenceDiagram">
                 <div class="control-wrap">
                   <span class="hide-container" @click.stop="hideCodeObject">
                     <XIcon />
@@ -56,6 +56,7 @@ import XIcon from '@/assets/x-icon.svg';
 import VPopper from '@/components/Popper.vue';
 import ExpandIcon from '@/assets/expand-icon.svg';
 import CollapseIcon from '@/assets/collapse-icon.svg';
+import isPrecomputedSequenceDiagram from '@/lib/isPrecomputedSequenceDiagram';
 
 export default {
   name: 'v-sequence-actor',
@@ -104,6 +105,7 @@ export default {
     },
   },
   computed: {
+    isPrecomputedSequenceDiagram,
     inlineStyle(): { [key: string]: string } {
       return {
         'grid-area': `1 / ${this.index + 1} / ${this.height + 2} / auto`,

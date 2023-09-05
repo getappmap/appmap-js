@@ -75,7 +75,6 @@
           <v-diagram-sequence
             ref="viewSequence_diagram"
             :app-map="filteredAppMap"
-            :filter-disabled="isPrecomputedSequenceDiagram"
             :focused-event="focusedEvent"
             :selected-events="selectedEvent"
           />
@@ -388,6 +387,7 @@ import {
   SET_HIGHLIGHTED_EVENTS,
   SET_FOCUSED_EVENT,
 } from '../store/vsCode';
+import isPrecomputedSequenceDiagram from '@/lib/isPrecomputedSequenceDiagram';
 
 export default {
   name: 'VSCodeExtension',
@@ -537,6 +537,7 @@ export default {
   },
 
   computed: {
+    isPrecomputedSequenceDiagram,
     classes() {
       return this.isLoading ? 'app--loading' : '';
     },
@@ -761,10 +762,6 @@ export default {
 
     canGoBack() {
       return this.$store.getters.canPopStack;
-    },
-
-    isPrecomputedSequenceDiagram() {
-      return !!this.$store.state.precomputedSequenceDiagram;
     },
 
     isEmptyAppMap() {

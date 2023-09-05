@@ -13,7 +13,6 @@
             :row="1"
             :index="index"
             :height="diagramSpec.actions.length"
-            :filter-disabled="filterDisabled"
             :interactive="interactive"
             :selected-actor="selectedActor"
             :appMap="appMap"
@@ -87,10 +86,6 @@ export default {
     focusedEvent: {
       type: Object,
       default: null,
-    },
-    filterDisabled: {
-      type: Boolean,
-      default: false,
     },
     interactive: {
       type: Boolean,

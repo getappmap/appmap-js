@@ -1,5 +1,5 @@
 <template>
-  <div class="details-panel-filters">
+  <div v-if="!isPrecomputedSequenceDiagram" class="details-panel-filters">
     <div class="details-panel-filters__head">
       <FilterIcon class="details-panel-filters__head-icon" />
       <span class="details-panel-filters__head-text">Filters</span>
@@ -23,6 +23,7 @@
 <script>
 import FilterIcon from '@/assets/filter.svg';
 import ResetIcon from '@/assets/reset.svg';
+import isPrecomputedSequenceDiagram from '@/lib/isPrecomputedSequenceDiagram';
 import { ADD_HIDDEN_NAME } from '@/store/vsCode';
 
 export default {
@@ -43,6 +44,11 @@ export default {
       required: false,
       default: false,
     },
+    filterDisabled: {
+      type: Boolean,
+      default: false,
+      readonly: true,
+    },
   },
 
   data() {
@@ -61,6 +67,7 @@ export default {
   },
 
   computed: {
+    isPrecomputedSequenceDiagram,
     filters() {
       const { filterItems } = this;
 

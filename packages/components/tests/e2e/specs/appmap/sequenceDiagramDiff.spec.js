@@ -30,4 +30,18 @@ context('Sequence Diagram', () => {
     cy.get('.sequence-diagram [data-event-ids="108"]').should('have.class', 'diff-delete');
     cy.get('.sequence-diagram [data-event-ids="108"]').should('have.class', 'focused');
   });
+
+  it('exanding a package actor is disabled', () => {
+    cy.get('.sequence-actor[data-actor-id="package:app/views"]').should('exist');
+    cy.get('.sequence-actor[data-actor-id="package:app/views"]')
+      .contains('.expand-actor')
+      .should('not.exist');
+  });
+
+  it('hiding an actor is disabled', () => {
+    cy.get('.sequence-actor[data-actor-id="package:app/views"]').should('exist');
+    cy.get('.sequence-actor[data-actor-id="package:app/views"]')
+      .contains('.hide-container')
+      .should('not.exist');
+  });
 });
