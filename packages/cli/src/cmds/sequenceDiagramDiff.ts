@@ -53,10 +53,10 @@ export const builder = (args: yargs.Argv) => {
     describe: 'code objects to exclude from the diagram',
   });
 
-  args.option('skip-validation', {
-    describe: 'skip diagram validation',
+  args.option('validate', {
+    describe: 'enable diagram validation',
     type: 'boolean',
-    default: false,
+    default: true,
   });
 
   return args.strict();
@@ -108,7 +108,7 @@ export const handler = async (argv: any) => {
   });
 
   const compareFiles = async (): Promise<void> => {
-    if (!argv.skipValidation) {
+    if (argv.validate) {
       const baseValidation = await validateDiagram(
         JSON.parse(await readFile(baseDiagramFile, 'utf-8')) as any
       );
