@@ -203,14 +203,5 @@ describe(FingerprintWatchCommand, () => {
       ).toBe(false);
       mockWarn.mockRestore();
     });
-
-    describe('usage', () => {
-      const reportUsage = FingerprintWatchCommand.prototype['reportUsage'];
-
-      it('sends usage data', async () => {
-        await reportUsage.call({ directory: '/home/joe/work' }, []);
-        expect(Usage.update).toHaveBeenCalled();
-      });
-    });
   });
 });

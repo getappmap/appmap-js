@@ -3,7 +3,8 @@ import { Metadata } from '@appland/models';
 import { Git } from '../telemetry';
 import type { UsageUpdateDto } from '@appland/client';
 import sanitizeURL from './repositoryInfo';
-import { verbose } from '../utils';
+import { mkdir, stat, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
 async function buildMetadata(appmapDir: string, metadata?: Metadata): Promise<string> {
   const repository = await Git.repository(appmapDir);
@@ -29,25 +30,27 @@ export default async function emitUsage(
   numEvents: number,
   numAppMaps: number,
   sampleMetadata?: Metadata
-): Promise<UsageUpdateDto> {
-  const contributors = await Git.contributors(90);
+): Promise<string | undefined> {
   const dto: UsageUpdateDto = {
     events: numEvents,
     appmaps: numAppMaps,
-    contributors: contributors.length,
     metadata: await buildMetadata(appmapDir, sampleMetadata),
     ci: process.env.CI !== undefined,
   };
 
-  Usage.update(dto).catch((e) => {
-    // If this fails, it's not a big deal.
-    // In the future, we may want to cache and aggregate numEvents on
-    // disk and try again at a later date. The client will retry on its
-    // own, so we don't need to do it here.
-    if (verbose()) {
-      console.warn('Failed to update usage', e);
-    }
-  });
+  try {
+    const stats = await stat('.appmap');
+    if (stats.isDirectory()) {
+      const runStatsDirectory = join('.appmap', 'run-stats');
+      await mkdir(runStatsDirectory, { recursive: true });
 
-  return dto;
+      const statsFilePath = join(runStatsDirectory, `${Date.now().toString()}.json`);
+      await writeFile(statsFilePath, JSON.stringify(dto));
+      return statsFilePath;
+    }
+  } catch (e) {
+    if (e instanceof Error && 'code' in e && e.code !== 'ENOENT') {
+      console.warn(`Unable to write run stats: ${e}`);
+    }
+  }
 }
