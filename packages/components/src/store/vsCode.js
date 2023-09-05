@@ -265,13 +265,12 @@ export function buildStore() {
         state.hideName = !state.hideName;
       },
       [SET_CLEAR_FILTERS](state) {
-        state.limitRoot =
-          state.hideMedia =
-          state.hideExternalCode =
-          state.hideUnlabeled =
-          state.hideElapsedTimeUnder =
-          state.hideName =
-            false;
+          state.limitRoot = false;
+          state.hideMedia = false;
+          state.hideExternalCode = false;
+          state.hideUnlabeled = false;
+          state.hideElapsedTimeUnder = false;
+          state.hideName = false;
       },
     },
   });
