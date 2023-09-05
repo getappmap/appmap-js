@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.91.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.90.0...@appland/appmap-v3.91.0) (2023-09-05)
+
+
+### Features
+
+* Hide SQL SHOW from compare ([5d0a563](https://github.com/getappmap/appmap-js/commit/5d0a563ddfee0106e03d58034aafdf9646b4ac22))
+
 # [@appland/appmap-v3.90.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.89.1...@appland/appmap-v3.90.0) (2023-09-01)
 
 
