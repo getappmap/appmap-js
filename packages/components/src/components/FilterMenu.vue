@@ -410,6 +410,7 @@ export default {
       this.$emit('setState', this.selectedSavedFilter.state);
       this.initFilterName = this.selectedFilter.filterName;
       this.$store.commit(SET_SELECTED_SAVED_FILTER, this.selectedFilter);
+      this.$store.commit(SET_CLEAR_FILTERS);
     },
 
     deleteFilter() {
