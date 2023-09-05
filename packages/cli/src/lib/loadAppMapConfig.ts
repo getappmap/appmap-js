@@ -2,8 +2,9 @@ import { readFile } from 'fs/promises';
 import { load } from 'js-yaml';
 
 export type HideOption =
-  | 'pragma'
-  | 'savepoint'
+  | 'sql_pragma'
+  | 'sql_savepoint'
+  | 'sql_show'
   | 'pg_metadata'
   | 'sqlite_metadata'
   | 'selenium'
