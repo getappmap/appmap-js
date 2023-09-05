@@ -3,7 +3,8 @@ import { Metadata } from '@appland/models';
 import { Git } from '../telemetry';
 import type { UsageUpdateDto } from '@appland/client';
 import sanitizeURL from './repositoryInfo';
-import { stat, writeFile } from 'node:fs/promises';
+import { mkdir, stat, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
 async function buildMetadata(appmapDir: string, metadata?: Metadata): Promise<string> {
   const repository = await Git.repository(appmapDir);
@@ -40,7 +41,11 @@ export default async function emitUsage(
   try {
     const stats = await stat('.appmap');
     if (stats.isDirectory()) {
-      await writeFile('.appmap/appmap-metadata.json', JSON.stringify(dto));
+      const runStatsDirectory = join('.appmap', 'run-stats');
+      await mkdir(runStatsDirectory, { recursive: true });
+
+      const statsFilePath = join(runStatsDirectory, `${Date.now().toString()}.json`);
+      await writeFile(statsFilePath, JSON.stringify(dto));
     }
   } catch (e) {
     if (e instanceof Error && 'code' in e && e.code !== 'ENOENT') {
