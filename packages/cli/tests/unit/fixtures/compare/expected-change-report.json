@@ -1542,7 +1542,7 @@
         "source": "openapi-diff",
         "sourceSpecEntityDetails": [
           {
-            "location": "paths./microposts/{id}",
+            "location": "/microposts/{id}",
             "value": {
               "delete": {
                 "responses": {
@@ -1567,7 +1567,7 @@
         "source": "openapi-diff",
         "sourceSpecEntityDetails": [
           {
-            "location": "paths./microposts.post.responses.302",
+            "location": "302 POST /microposts",
             "value": {
               "content": {
                 "text/html": {}
@@ -1586,7 +1586,7 @@
         "source": "openapi-diff",
         "sourceSpecEntityDetails": [
           {
-            "location": "paths./microposts.post.responses.303",
+            "location": "303 POST /microposts",
             "value": {
               "content": {
                 "text/html": {}
@@ -1605,7 +1605,7 @@
         "source": "openapi-diff",
         "sourceSpecEntityDetails": [
           {
-            "location": "paths./microposts.post.responses.422",
+            "location": "422 POST /microposts",
             "value": {
               "content": {
                 "text/html": {}
@@ -1624,7 +1624,7 @@
         "code": "response.status-code.add",
         "destinationSpecEntityDetails": [
           {
-            "location": "paths./microposts.post.responses.200",
+            "location": "200 POST /microposts",
             "value": {
               "content": {},
               "description": "OK"
