@@ -83,7 +83,7 @@
     "lru-cache": "^6.0.0",
     "minimatch": "^5.1.2",
     "octokit": "^2.0.19",
-    "openapi-diff": "^0.23.5",
+    "openapi-diff": "^0.23.6",
     "ora": "~5",
     "pretty-format": "^27.4.6",
     "read-pkg-up": "^7.0.1",

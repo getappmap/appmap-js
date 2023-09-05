@@ -451,7 +451,7 @@ __metadata:
     minimatch: ^5.1.2
     nock: ^13.2.2
     octokit: ^2.0.19
-    openapi-diff: ^0.23.5
+    openapi-diff: ^0.23.6
     openapi-types: ^9.3.0
     ora: ~5
     pkg: ^5.5.2
@@ -26500,25 +26500,6 @@ __metadata:
     is-docker: ^2.1.1
     is-wsl: ^2.2.0
   checksum: e9545bec64cdbf30a0c35c1bdc310344adf8428a117f7d8df3c0af0a0a24c513b304916a6d9b11db0190ff7225c2d578885080b761ed46a3d5f6f1eebb98b63c
-  languageName: node
-  linkType: hard
-
-"openapi-diff@npm:^0.23.5":
-  version: 0.23.5
-  resolution: "openapi-diff@npm:0.23.5"
-  dependencies:
-    commander: ^8.2.0
-    js-yaml: ^4.0.0
-    json-schema-diff: ^0.17.1
-    jsonpointer: ^4.1.0
-    lodash: ^4.17.20
-    openapi3-ts: ^2.0.0
-    request: ^2.88.2
-    swagger-parser: ^10.0.2
-    verror: ^1.10.0
-  bin:
-    openapi-diff: bin/openapi-diff
-  checksum: f7289b46006605a9ae1daae6f797012c3fb035fa26b0ac8c9b325dd20dae3a5727adbe970bb98ddda7b80f9a448f308bfe891b229685a011a71caa497c10a16f
   languageName: node
   linkType: hard
 
