@@ -342,7 +342,16 @@ export default {
     },
 
     applyButtonClass() {
-      const suffix = this.initFilterName === this.selectedFilter.filterName ? '-disabled' : '';
+      const suffix =
+        this.initFilterName === this.selectedFilter.filterName &&
+        (this.$store.state.limitRoot ||
+          this.$store.state.hideMedia ||
+          this.$store.state.hideExternalCode ||
+          this.$store.state.hideUnlabeled ||
+          this.$store.state.hideElapsedTimeUnder ||
+          this.$store.state.hideName) === false
+          ? '-disabled'
+          : '';
       return 'filters__button' + suffix;
     },
 
