@@ -237,10 +237,10 @@ context('AppMap view filter', () => {
       cy.get('.tabs__controls .popper__button').click();
 
       cy.get('.filters__select').find(':selected').should('contain.text', 'AppMap default');
-      cy.get('.filters__button').eq(1).should('contain.text', 'Apply');
-      cy.get('.filters__button').eq(2).should('contain.text', 'Copy');
-      cy.get('.filters__button-disabled').first().should('contain.text', 'Delete');
-      cy.get('.filters__button-disabled').eq(1).should('contain.text', 'Set as default');
+      cy.get('.filters__button-disabled').first().should('contain.text', 'Load');
+      cy.get('.filters__button').eq(1).should('contain.text', 'Copy');
+      cy.get('.filters__button-disabled').eq(1).should('contain.text', 'Delete');
+      cy.get('.filters__button-disabled').eq(2).should('contain.text', 'Set as default');
     });
 
     it('enables all buttons for a non-default filter', () => {
@@ -250,7 +250,7 @@ context('AppMap view filter', () => {
 
       cy.get('.filters__select').select('filter');
       cy.get('.filters__select').find(':selected').should('contain.text', 'filter');
-      cy.get('.filters__button').eq(1).should('contain.text', 'Apply');
+      cy.get('.filters__button').eq(1).should('contain.text', 'Load');
       cy.get('.filters__button').eq(2).should('contain.text', 'Delete');
       cy.get('.filters__button').eq(3).should('contain.text', 'Set as default');
       cy.get('.filters__button').eq(4).should('contain.text', 'Copy');

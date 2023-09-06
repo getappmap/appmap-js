@@ -130,13 +130,13 @@
                 {{ savedFilter.filterName }}
               </option>
             </select>
-            <button class="filters__button" data-cy="apply-filter-button" @click="applyFilter">
-              Load
-            </button>
           </div>
         </div>
         <div class="filters__block-row">
           <div class="filters__block-row-content">
+            <button :class="applyButtonClass" data-cy="apply-filter-button" @click="applyFilter">
+              Load
+            </button>
             <button :class="deleteButtonClass" data-cy="delete-filter-button" @click="deleteFilter">
               Delete
             </button>
@@ -308,6 +308,15 @@ export default {
       );
     },
 
+    applyButtonClass() {
+      const serializedFilter = serializeFilter(this.filters);
+      const state = base64UrlEncode(JSON.stringify({ filters: serializedFilter }));
+
+      const suffix =
+        this.selectedSavedFilter && this.selectedSavedFilter.state === state ? '-disabled' : '';
+      return 'filters__button' + suffix;
+    },
+
     defaultButtonClass() {
       const suffix =
         this.selectedSavedFilter && this.selectedSavedFilter.default ? '-disabled' : '';
@@ -449,7 +458,6 @@ export default {
     flex: 1;
     padding: 2px;
     margin-left: 7px;
-    margin-right: 10px;
     display: inline-block;
     vertical-align: middle;
     width: 100%;
