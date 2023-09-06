@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.91.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.91.0...@appland/appmap-v3.91.1) (2023-09-06)
+
+
+### Bug Fixes
+
+* Resolve some cases where locating AppMap files fails ([0f8fc8d](https://github.com/getappmap/appmap-js/commit/0f8fc8def801f73be46f3b87275cd799ca546cfd))
+
 # [@appland/appmap-v3.91.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.90.0...@appland/appmap-v3.91.0) (2023-09-05)
 
 
