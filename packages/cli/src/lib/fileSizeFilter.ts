@@ -1,6 +1,6 @@
 import { Stats } from 'fs';
 import { stat } from 'fs/promises';
-import { FilterFunction } from '../cmds/openapi';
+import { FilterFunction } from '../cmds/openapi/openapi';
 
 export const DefaultMaxAppMapSizeInMB = 50;
 
