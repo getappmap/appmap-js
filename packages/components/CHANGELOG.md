@@ -1,3 +1,10 @@
+# [@appland/components-v2.60.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.60.0...@appland/components-v2.60.1) (2023-09-06)
+
+
+### Bug Fixes
+
+* Apply button in filter dialog is confusing ([5329172](https://github.com/getappmap/appmap-js/commit/53291721aeecf1dd367050b7623cb8683ed7ceb5))
+
 # [@appland/components-v2.60.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.59.0...@appland/components-v2.60.0) (2023-09-01)
 
 
