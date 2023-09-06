@@ -22,8 +22,13 @@ export default {
 
   computed: {
     label() {
+      function extractSimpleName(fullName) {
+        const segments = fullName.split('.');
+        return segments[segments.length - 1];
+      }
+
       const { nodeResult } = this.actionSpec;
-      return !nodeResult || nodeResult === 'void' ? '' : nodeResult;
+      return !nodeResult || nodeResult === 'void' ? '' : extractSimpleName(nodeResult);
     },
   },
 };

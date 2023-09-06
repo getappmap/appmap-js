@@ -1,0 +1,261 @@
+{
+  "events": [
+    {
+      "event": "call",
+      "http_server_request": {
+        "headers": {
+          "sec-fetch-mode": "navigate",
+          "referer": "http://localhost:8080/vets.html",
+          "sec-fetch-site": "same-origin",
+          "accept-language": "en-US,en;q=0.9",
+          "cookie": "guest_token=eyJfcmFpbHMiOnsibWVzc2FnZSI6IklrWnFkMlIxTm5sWFNFaENYMEY1VW1jM1psUlNMVUVpIiwiZXhwIjpudWxsLCJwdXIiOiJjb29raWUuZ3Vlc3RfdG9rZW4ifX0%3D--5e6a7ee1ebd19cdba410e3b8729540ecc4a832b8; _ga=GA1.1.1163438987.1667305503; _session_id=eyJfcmFpbHMiOnsibWVzc2FnZSI6IklqSTBPVGN3WVRrM1pXSmlNREUwWlRVNU16bGpPVGhqTlRGbE1qVTFaVGxsSWc9PSIsImV4cCI6IjIwMjMtMTEtMDdUMTc6NTg6MDguMjk3WiIsInB1ciI6ImNvb2tpZS5fc2Vzc2lvbl9pZCJ9fQ%3D%3D--4a8b1d76a44ed08c3da2d6345b53d4bf5ae8017d; _sample_app_session=d9RcfeHd41oljDmgs3yy7pbO35Yf76nWu8KTyCrL%2BenXvV6S3xJwyXhmLcy0fxWJQZe%2Bqv9M1mvgeS2r701cn73GRF8xAqwl4FW12vqsZqXOWE5dBTJKqgWqejaX6xRAP6sUbvuVCr%2FNo4j4rBK9LCqsxHW3P9bHGsFoGeVmF%2BnEi7RaY4LAGL%2FPKq5MbxpUVjLXjkl69nL%2FvQy06tfALb1nbKt85vBDM2UEmWuRacremSomhUPShF%2BGzFu91m1qo%2FAvHA%2FZHVcuCfDFK13iBxIT9X5UryMJ4qt0--IYl1w6C5HvMyIQhs--Dfl1el1hLh61R1LqfXqLbw%3D%3D; visited=yes; _solidus_demo_session=rFYS0d2Fcr3Zuy7RdpTA3XbUK2CS01wzWk2v3LSoNx3WPyte2wAWuQ5A35UjYI55ed%2F8w0pPxagwivZdR0Nl2KQa2ZQxcp0o32xVAaMSO9xSFjQKZQ60pvzGCWeNaf5euOJRMV%2BimqcyVULbOEAV3XmkHtscz9hJwSTmzbBsrneJXc1L9o1KymGjULyjRNt5AWpAa6pGnyQVqXc7NCdlwgEDypqmeWCanDbrehLXDYKc7iF2uOC%2FuBEWc4aDbm9kT9XtujVgDvaHA4eJ6u3cLIKa7iOJCEprRyZou3cVi8G1yd7qwkSLLuyK08w%2FT1CWdQ%3D%3D--kdrLDo5JQMTO0ZQF--1W2I4%2FUkvoDx7bnl0Tj3VQ%3D%3D; _ga_JV359KDXJW=GS1.1.1690572528.64.0.1690572528.0.0.0",
+          "sec-fetch-user": "?1",
+          "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+          "sec-ch-ua": "\"Chromium\";v=\"116\", \"Not)A;Brand\";v=\"24\", \"Google Chrome\";v=\"116\"",
+          "sec-ch-ua-mobile": "?0",
+          "sec-ch-ua-platform": "\"macOS\"",
+          "host": "localhost:8080",
+          "upgrade-insecure-requests": "1",
+          "connection": "keep-alive",
+          "accept-encoding": "gzip, deflate, br",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36",
+          "sec-fetch-dest": "document"
+        },
+        "normalized_path_info": "/owners/find",
+        "path_info": "/owners/find",
+        "protocol": "HTTP/1.1",
+        "request_method": "GET"
+      },
+      "id": 1,
+      "thread_id": 31
+    },
+    {
+      "defined_class": "org.springframework.samples.petclinic.owner.OwnerController",
+      "event": "call",
+      "id": 2,
+      "lineno": 57,
+      "method_id": "setAllowedFields",
+      "parameters": [
+        {
+          "class": "org.springframework.web.servlet.mvc.method.annotation.ExtendedServletRequestDataBinder",
+          "kind": "req",
+          "name": "dataBinder",
+          "object_id": 53430134,
+          "value": "org.springframework.web.servlet.mvc.method.annotation.ExtendedServletRequestDataBinder@32f4776"
+        }
+      ],
+      "path": "org/springframework/samples/petclinic/owner/OwnerController.java",
+      "receiver": {
+        "class": "org.springframework.samples.petclinic.owner.OwnerController",
+        "object_id": 162040466,
+        "value": "org.springframework.samples.petclinic.owner.OwnerController@9a88a92"
+      },
+      "static": false,
+      "thread_id": 31
+    },
+    {
+      "elapsed": 0.0000501,
+      "event": "return",
+      "id": 3,
+      "parent_id": 2,
+      "thread_id": 31
+    },
+    {
+      "defined_class": "org.springframework.samples.petclinic.owner.OwnerController",
+      "event": "call",
+      "id": 4,
+      "lineno": 62,
+      "method_id": "findOwner",
+      "parameters": [
+        {
+          "class": "java.lang.Integer",
+          "kind": "req",
+          "name": "ownerId",
+          "object_id": 0
+        }
+      ],
+      "path": "org/springframework/samples/petclinic/owner/OwnerController.java",
+      "receiver": {
+        "class": "org.springframework.samples.petclinic.owner.OwnerController",
+        "object_id": 162040466,
+        "value": "org.springframework.samples.petclinic.owner.OwnerController@9a88a92"
+      },
+      "static": false,
+      "thread_id": 31
+    },
+    {
+      "elapsed": 0.0000455,
+      "event": "return",
+      "id": 5,
+      "parent_id": 4,
+      "return_value": {
+        "class": "org.springframework.samples.petclinic.owner.Owner",
+        "object_id": 1657689382,
+        "value": "[Owner@62ce5526 id = [null], new = true, lastName = [null], firstName = [null], address = [null], city = [null], telephone = [null]]"
+      },
+      "thread_id": 31
+    },
+    {
+      "defined_class": "org.springframework.samples.petclinic.owner.OwnerController",
+      "event": "call",
+      "id": 6,
+      "lineno": 84,
+      "method_id": "initFindForm",
+      "path": "org/springframework/samples/petclinic/owner/OwnerController.java",
+      "receiver": {
+        "class": "org.springframework.samples.petclinic.owner.OwnerController",
+        "object_id": 162040466,
+        "value": "org.springframework.samples.petclinic.owner.OwnerController@9a88a92"
+      },
+      "static": false,
+      "thread_id": 31
+    },
+    {
+      "elapsed": 0.0000212,
+      "event": "return",
+      "id": 7,
+      "parent_id": 6,
+      "return_value": {
+        "class": "java.lang.String",
+        "object_id": 2072230318,
+        "value": "owners/findOwners"
+      },
+      "thread_id": 31
+    },
+    {
+      "defined_class": "org.springframework.samples.petclinic.owner.OwnerController",
+      "event": "call",
+      "id": 8,
+      "lineno": 57,
+      "method_id": "setAllowedFields",
+      "parameters": [
+        {
+          "class": "org.springframework.web.servlet.mvc.method.annotation.ExtendedServletRequestDataBinder",
+          "kind": "req",
+          "name": "dataBinder",
+          "object_id": 845546519,
+          "value": "org.springframework.web.servlet.mvc.method.annotation.ExtendedServletRequestDataBinder@32660417"
+        }
+      ],
+      "path": "org/springframework/samples/petclinic/owner/OwnerController.java",
+      "receiver": {
+        "class": "org.springframework.samples.petclinic.owner.OwnerController",
+        "object_id": 162040466,
+        "value": "org.springframework.samples.petclinic.owner.OwnerController@9a88a92"
+      },
+      "static": false,
+      "thread_id": 31
+    },
+    {
+      "elapsed": 0.0000172,
+      "event": "return",
+      "id": 9,
+      "parent_id": 8,
+      "thread_id": 31
+    },
+    {
+      "elapsed": 0.0017843,
+      "event": "return",
+      "http_server_response": {
+        "headers": {
+          "Transfer-Encoding": "chunked",
+          "Keep-Alive": "timeout=60",
+          "Connection": "keep-alive",
+          "Content-Language": "en-US",
+          "Date": "Fri, 01 Sep 2023 22:13:13 GMT",
+          "Content-Type": "text/html;charset=UTF-8"
+        },
+        "status": 200
+      },
+      "id": 10,
+      "parent_id": 1,
+      "thread_id": 31
+    }
+  ],
+  "version": "1.2",
+  "metadata": {
+    "name": "GET /owners/find (200) - 18:13:13.658",
+    "app": "spring-petclinic-Sep-01",
+    "language": {
+      "name": "java",
+      "version": "17.0.6+10",
+      "engine": "OpenJDK 64-Bit Server VM"
+    },
+    "client": {
+      "name": "appmap-java",
+      "url": "https://github.com/appland/appmap-java"
+    },
+    "recorder": {
+      "name": "request_recording",
+      "type": "request"
+    },
+    "recording": {},
+    "framework": {}
+  },
+  "classMap": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "name": "setAllowedFields",
+                              "type": "function",
+                              "static": false,
+                              "location": "org/springframework/samples/petclinic/owner/OwnerController.java:57"
+                            },
+                            {
+                              "name": "findOwner",
+                              "type": "function",
+                              "static": false,
+                              "location": "org/springframework/samples/petclinic/owner/OwnerController.java:62"
+                            },
+                            {
+                              "name": "initFindForm",
+                              "type": "function",
+                              "static": false,
+                              "location": "org/springframework/samples/petclinic/owner/OwnerController.java:84"
+                            }
+                          ],
+                          "name": "OwnerController",
+                          "type": "class"
+                        }
+                      ],
+                      "name": "owner",
+                      "type": "package"
+                    }
+                  ],
+                  "name": "petclinic",
+                  "type": "package"
+                }
+              ],
+              "name": "samples",
+              "type": "package"
+            }
+          ],
+          "name": "springframework",
+          "type": "package"
+        }
+      ],
+      "name": "org",
+      "type": "package"
+    },
+    {
+      "type": "http",
+      "name": "HTTP server requests",
+      "children": [
+        {
+          "type": "route",
+          "name": "GET /owners/find"
+        }
+      ]
+    }
+  ]
+}
