@@ -483,7 +483,10 @@
       ],
       "diffMode": 3,
       "formerName": "POST /api/api_keys",
-      "formerResult": "201"
+      "formerResult": "201",
+      "eventIds": [
+        1
+      ]
     },
     {
       "nodeType": 4,

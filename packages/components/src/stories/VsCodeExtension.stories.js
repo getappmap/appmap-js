@@ -7,6 +7,8 @@ import petClinicScenario from './data/java_scenario.json';
 import diffScenario from './data/diff_base.json';
 import appland1 from './data/Application_page_component_diagram_highlights_node_connections_upon_selection.appmap.json';
 import appland2 from './data/ApplicationsController_scenarios_list_when_the_user_is_anonymous_is_not_found.appmap.json';
+import diffAppMap from './data/sequence-diff/Users_profile_profile_display.appmap.json';
+import diffSequenceDiagram from './data/sequence-diff/Users_profile_profile_display.diff.sequence.json';
 import mapWithFindings from './data/appmap_with_finding.json';
 import mapWithTwoFindings from './data/appmap_with_two_findings.json';
 import patchNotes from './data/patch_notes_html';
@@ -21,8 +23,13 @@ const scenarioData = {
   'pet-clinic': petClinicScenario,
   appland1,
   appland2,
+  mapWithDiff: diffAppMap,
   mapWithFindings,
   mapWithTwoFindings,
+};
+
+const sequenceDiagramData = {
+  mapWithDiff: diffSequenceDiagram,
 };
 
 export default {
@@ -55,8 +62,9 @@ const Template = (args, { argTypes }) => ({
   template: '<v-vs-code-extension v-bind="$props" ref="vsCode" />',
   mounted() {
     const scenario = scenarioData[args.scenario];
+    const sequenceDiagram = sequenceDiagramData[args.scenario];
     if (scenario) {
-      this.$refs.vsCode.loadData(scenario);
+      this.$refs.vsCode.loadData(scenario, sequenceDiagram);
     }
 
     bindResolvePath(this);
@@ -68,6 +76,13 @@ export const extension = Template.bind({});
 export const extensionWithDefaultSequenceView = Template.bind({});
 extensionWithDefaultSequenceView.args = {
   defaultView: VIEW_SEQUENCE,
+};
+
+export const extensionWithSequenceDiff = Template.bind({});
+extensionWithSequenceDiff.args = {
+  defaultView: VIEW_SEQUENCE,
+  scenario: 'mapWithDiff',
+  interactive: false,
 };
 
 export const extensionWithSavedFilters = Template.bind({});
