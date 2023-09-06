@@ -9,6 +9,7 @@ import appland1 from './data/Application_page_component_diagram_highlights_node_
 import appland2 from './data/ApplicationsController_scenarios_list_when_the_user_is_anonymous_is_not_found.appmap.json';
 import diffAppMap from './data/sequence-diff/Users_profile_profile_display.appmap.json';
 import diffSequenceDiagram from './data/sequence-diff/Users_profile_profile_display.diff.sequence.json';
+import longPackage from './data/long-package.appmap.json';
 import mapWithFindings from './data/appmap_with_finding.json';
 import mapWithTwoFindings from './data/appmap_with_two_findings.json';
 import patchNotes from './data/patch_notes_html';
@@ -24,6 +25,7 @@ const scenarioData = {
   appland1,
   appland2,
   mapWithDiff: diffAppMap,
+  longPackage,
   mapWithFindings,
   mapWithTwoFindings,
 };
