@@ -1,3 +1,14 @@
+# [@appland/components-v2.61.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.60.1...@appland/components-v2.61.0) (2023-09-06)
+
+
+### Features
+
+* Collapse non-diff-participating Actions ([8525318](https://github.com/getappmap/appmap-js/commit/852531831e072ac3a554405a48b3829065272dd0))
+* Enable sequence diagram diff in AppMap ([885239e](https://github.com/getappmap/appmap-js/commit/885239e28dd92db741e76ee6a40247ee15681aa4))
+* Scroll to first 'diff' action in SD ([4a79587](https://github.com/getappmap/appmap-js/commit/4a795872a73c744f9b63f33968739f0d308888c7))
+* Set default view for precomputed seq diagram ([cb5093d](https://github.com/getappmap/appmap-js/commit/cb5093d4bcd7a8b6e3b994c6eb203d1fb3398c84))
+* Suppress hide and expand Actor for SD diff ([293a24f](https://github.com/getappmap/appmap-js/commit/293a24fabf23bc3cd451a4617db8b871a3bbe186))
+
 # [@appland/components-v2.60.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.60.0...@appland/components-v2.60.1) (2023-09-06)
 
 
