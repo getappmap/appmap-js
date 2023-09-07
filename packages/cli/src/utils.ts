@@ -90,7 +90,7 @@ export class ProcessFileOptions {
   public workerCount = 2;
 }
 
-export type FilePredicate = (file: string) => boolean;
+export type FilePredicate = (file: string) => boolean | Promise<boolean>;
 
 /**
  * Call a function with each matching file. No guarantee is given that
@@ -100,16 +100,17 @@ export async function processFiles(
   dir: string,
   extensionOrPredicate: string | FilePredicate,
   fn: AsyncWorker<string>,
-  options: ProcessFileOptions
-): Promise<void> {
+  options = new ProcessFileOptions()
+): Promise<number> {
   const files = await findFiles(dir, extensionOrPredicate);
   options.fileCountFn(files.length);
-  if (files.length === 0) return;
+  if (files.length === 0) return 0;
 
   const q = queue(fn, options.workerCount);
   q.error(options.errorFn);
   files.forEach((file) => q.push(file));
   if (!q.idle()) await q.drain();
+  return files.length;
 }
 
 /**
@@ -172,11 +173,11 @@ export async function findFiles(
     console.warn(`Scanning ${directory} for AppMaps`);
   }
 
-  const matchFile = (file: string): boolean => {
+  const matchFile = async (file: string): Promise<boolean> => {
     if (typeof extensionOrPredicate === 'string') {
       return file.endsWith(extensionOrPredicate);
     } else {
-      return extensionOrPredicate(file);
+      return await extensionOrPredicate(file);
     }
   };
 
@@ -207,7 +208,7 @@ export async function findFiles(
       }
       if (stat.isDirectory()) {
         await traverseDirectory(path, result);
-      } else if (stat.isFile() && matchFile(file)) {
+      } else if (stat.isFile() && (await matchFile(path))) {
         if (fn) await fn(path);
         result.push(path);
       }

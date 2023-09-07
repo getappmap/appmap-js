@@ -20,7 +20,7 @@ const FingerprintWatchCommand = require('./fingerprint/fingerprintWatchCommand')
 const Depends = require('./depends');
 import InstallCommand from './cmds/agentInstaller/install-agent';
 import StatusCommand from './cmds/agentInstaller/status';
-import { default as OpenAPICommand } from './cmds/openapi';
+import { default as OpenAPICommand } from './cmds/openapi/openapi';
 import PruneCommand from './cmds/prune/prune';
 import RecordCommand from './cmds/record/record';
 import { handleWorkingDirectory } from './lib/handleWorkingDirectory';
