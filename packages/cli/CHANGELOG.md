@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.93.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.92.1...@appland/appmap-v3.93.0) (2023-09-07)
+
+
+### Features
+
+* **ChangeReporter.ts:** add import statements for DiffOutcome and DiffResult ([1e9ce9d](https://github.com/getappmap/appmap-js/commit/1e9ce9defab93fc4e86a66d8ea52322d9514d543))
+
 # [@appland/appmap-v3.92.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.92.0...@appland/appmap-v3.92.1) (2023-09-07)
 
 
