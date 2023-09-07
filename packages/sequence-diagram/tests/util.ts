@@ -12,6 +12,7 @@ export const VERBOSE = process.env.DEBUG === 'true';
 
 export const FIXTURE_DIR = path.join(__dirname, 'fixtures');
 export const APP_APPMAP_DIR = path.join(FIXTURE_DIR, 'app', 'tmp', 'appmap');
+export const SEQUENCE_DIAGRAMS_DIR = path.join(FIXTURE_DIR, 'sequenceDiagrams');
 
 export type AppMapDiagram = {
   appmap: AppMap;
@@ -26,12 +27,17 @@ export const SHOW_USER_APPMAP = buildAppMap().source(SHOW_USER_APPMAP_DATA).buil
 
 export const SHOW_USER_DIAGRAM_FILE = 'show_user.sequence.json';
 export const SHOW_USER_DIAGRAM_DATA = JSON.parse(
-  readFileSync(join(APP_APPMAP_DIR, SHOW_USER_DIAGRAM_FILE), 'utf-8')
+  readFileSync(join(SEQUENCE_DIAGRAMS_DIR, SHOW_USER_DIAGRAM_FILE), 'utf-8')
 );
 
-export const INVALID_DIAGRAM_FILE = 'invalid.sequence.json';
-export const INVALID_DIAGRAM_DATA = JSON.parse(
-  readFileSync(join(APP_APPMAP_DIR, INVALID_DIAGRAM_FILE), 'utf-8')
+export const LVL_PREFETCH_DIAGRAM_FILE = 'listVsListWithPrefetch.sequence.json';
+export const LVL_PREFETCH_DIAGRAM_DATA = JSON.parse(
+  readFileSync(join(SEQUENCE_DIAGRAMS_DIR, LVL_PREFETCH_DIAGRAM_FILE), 'utf-8')
+);
+
+export const USER_FVNF_DIAGRAM_FILE = 'listVsListWithPrefetch.sequence.json';
+export const USER_FVNF_DIAGRAM_DATA = JSON.parse(
+  readFileSync(join(SEQUENCE_DIAGRAMS_DIR, USER_FVNF_DIAGRAM_FILE), 'utf-8')
 );
 
 export const USER_NOT_FOUND_APPMAP_FILE = 'user_not_found.appmap.json';

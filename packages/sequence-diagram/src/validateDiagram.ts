@@ -8,15 +8,16 @@ import {
   isServerRPC,
   isClientRPC,
   isQuery,
+  Diagram,
 } from './types';
 
-export default async function validateDiagram(diagramData: any): Promise<ValidationResult> {
+export default async function validateDiagram(diagramData: Diagram): Promise<ValidationResult> {
   // Check if it's likely an AppMap object
   if (
     diagramData &&
-    diagramData.hasOwnProperty('metadata') &&
-    diagramData.hasOwnProperty('classMap') &&
-    diagramData.hasOwnProperty('events')
+    Object.prototype.hasOwnProperty.call(diagramData, 'metadata') &&
+    Object.prototype.hasOwnProperty.call(diagramData, 'classMap') &&
+    Object.prototype.hasOwnProperty.call(diagramData, 'events')
   ) {
     return ValidationResult.AppMap;
   }
@@ -26,7 +27,7 @@ export default async function validateDiagram(diagramData: any): Promise<Validat
     return ValidationResult.Invalid;
   }
 
-  const validateActor = (actor: any): actor is Actor => {
+  const validateActor = (actor: Actor): actor is Actor => {
     if (
       typeof actor.id !== 'string' ||
       typeof actor.name !== 'string' ||
@@ -38,11 +39,12 @@ export default async function validateDiagram(diagramData: any): Promise<Validat
     return true;
   };
 
-  const validateAction = (action: any): action is Action => {
+  const validateAction = (action: Action): action is Action => {
     if (
       !action ||
       !Object.values(NodeType).includes(action.nodeType) ||
       typeof action.digest !== 'string' ||
+      typeof action.subtreeDigest !== 'string' ||
       !Array.isArray(action.children) ||
       !Array.isArray(action.eventIds)
     ) {
