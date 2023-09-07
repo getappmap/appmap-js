@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.92.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.92.0...@appland/appmap-v3.92.1) (2023-09-07)
+
+
+### Bug Fixes
+
+* Stage requests into files ([e42e7c2](https://github.com/getappmap/appmap-js/commit/e42e7c2753c23c44e6fe813caca460548a3983e7))
+
 # [@appland/appmap-v3.92.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.91.1...@appland/appmap-v3.92.0) (2023-09-07)
 
 
