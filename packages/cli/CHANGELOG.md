@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.92.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.91.1...@appland/appmap-v3.92.0) (2023-09-07)
+
+
+### Features
+
+* Sequence diagram validation ([e88ab44](https://github.com/getappmap/appmap-js/commit/e88ab44791a994f4102903e8141e538db481d23a))
+
 # [@appland/appmap-v3.91.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.91.0...@appland/appmap-v3.91.1) (2023-09-06)
 
 
