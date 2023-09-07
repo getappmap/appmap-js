@@ -7,8 +7,8 @@
     <br />
     <p>
       This ensures that your Java code runs with the JVM option
-      <code class="inline">-javaagent:~/.appmap/lib/java/appmap.jar</code>. This option is required
-      to enable AppMap recording.
+      <code class="inline">-javaagent:$HOME/.appmap/lib/java/appmap.jar</code>. This option is
+      required to enable AppMap recording.
     </p>
     <br />
     <div class="vscode-screenshot">
