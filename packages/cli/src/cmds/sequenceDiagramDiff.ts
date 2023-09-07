@@ -10,11 +10,14 @@ import {
   Formatters,
   Diagram,
   FormatType,
+  ValidationResult,
+  validateDiagram,
 } from '@appland/sequence-diagram';
 import { verbose } from '../utils';
-import { join } from 'path';
+import { basename, join } from 'path';
 import { DiffDiagrams } from '../sequenceDiagramDiff/DiffDiagrams';
 import { readDiagramFile } from './sequenceDiagram/readDiagramFile';
+import { readFile } from 'fs/promises';
 
 export const command = 'sequence-diagram-diff base-diagram head-diagram';
 export const describe = 'Diff sequence diagrams that are represented as JSON';
@@ -48,6 +51,12 @@ export const builder = (args: yargs.Argv) => {
   });
   args.option('exclude', {
     describe: 'code objects to exclude from the diagram',
+  });
+
+  args.option('validate', {
+    describe: 'enable diagram validation',
+    type: 'boolean',
+    default: true,
   });
 
   return args.strict();
@@ -99,6 +108,47 @@ export const handler = async (argv: any) => {
   });
 
   const compareFiles = async (): Promise<void> => {
+    if (argv.validate) {
+      const baseValidation = await validateDiagram(
+        JSON.parse(await readFile(baseDiagramFile, 'utf-8')) as any
+      );
+      const headValidation = await validateDiagram(
+        JSON.parse(await readFile(headDiagramFile, 'utf-8')) as any
+      );
+
+      if (baseValidation !== ValidationResult.Valid || headValidation !== ValidationResult.Valid) {
+        console.error(
+          `Base File: ${baseDiagramFile} is ${
+            baseValidation === ValidationResult.AppMap ? 'an AppMap' : 'an invalid file'
+          }`
+        );
+        console.error(
+          `Head File: ${headDiagramFile} is ${
+            headValidation === ValidationResult.AppMap ? 'an AppMap' : 'an invalid file'
+          }`
+        );
+
+        if (
+          baseValidation === ValidationResult.AppMap &&
+          headValidation === ValidationResult.AppMap
+        ) {
+          console.error(
+            'You have passed AppMap files. To compare diagrams, run the following commands:'
+          );
+          console.error(`appmap sequence-diagram -f json ${baseDiagramFile}`);
+          console.error(`appmap sequence-diagram -f json ${headDiagramFile}`);
+          console.error(
+            `appmap sequence-diagram-diff ${basename(
+              baseDiagramFile,
+              '.appmap.json'
+            )}.sequence.json ${basename(headDiagramFile, '.appmap.json')}.sequence.json`
+          );
+        }
+
+        return;
+      }
+    }
+
     const baseDiagram = await readDiagramFile(baseDiagramFile);
     const headDiagram = await readDiagramFile(headDiagramFile);
 
