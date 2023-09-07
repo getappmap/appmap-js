@@ -41,8 +41,12 @@ parentPort.on('message', async (task: IndexTask | ScanTask | SequenceDiagramTask
     if (isIndexTask(task)) {
       const handler = new Fingerprinter();
       handler.maxFileSizeInBytes = undefined; // This has already been checked
-      await handler.fingerprint(task.appmapFile);
-      result = {};
+      result = await new Promise<IndexResult>((resolve) => {
+        handler.on('index', ({ metadata, numEvents }) => {
+          resolve({ metadata, numEvents });
+        });
+        handler.fingerprint(task.appmapFile);
+      });
     } else if (isScanTask(task)) {
       const scanResults = await scan(task.appmapFile, 'appmap-scanner.yml');
       await writeIndexFile(JSON.stringify(scanResults, null, 2), 'appmap-findings.json');
@@ -63,7 +67,7 @@ parentPort.on('message', async (task: IndexTask | ScanTask | SequenceDiagramTask
       throw new Error(`Unknown task`);
     }
 
-    parentPort.postMessage(result);
+    parentPort.postMessage({ result });
   } catch (err) {
     parentPort.postMessage({ error: err });
   }
