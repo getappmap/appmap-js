@@ -1,3 +1,10 @@
+# [@appland/components-v2.61.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.61.0...@appland/components-v2.61.1) (2023-09-08)
+
+
+### Bug Fixes
+
+* Long package names are clipped ([71c89ba](https://github.com/getappmap/appmap-js/commit/71c89ba39e3c2e44cd728ffa31d74d763ae34eb1))
+
 # [@appland/components-v2.61.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.60.1...@appland/components-v2.61.0) (2023-09-06)
 
 
