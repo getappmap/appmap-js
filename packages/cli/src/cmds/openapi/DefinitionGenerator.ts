@@ -37,6 +37,9 @@ export default class DefinitionGenerator {
       for (const [path, pathItem] of Object.entries(openapi)) {
         if (pathItem) paths[path] = pathItem;
       }
+      for (const error of model.errors) {
+        console.warn(`Warning: ${error}`);
+      }
     }
     return {
       paths: Object.keys(paths)
