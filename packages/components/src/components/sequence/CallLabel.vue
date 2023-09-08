@@ -5,7 +5,35 @@
     </template>
     <div :class="nameClasses">
       <template v-for="text in name">
-        <span @click="selectEvent" :class="text.class" :key="text.text">{{ text.text }}</span>
+        <div
+          :key="text.text"
+          :style="{
+            overflow: 'hidden',
+            // Text baseline changes when overflow: hidden, so we need next two properties
+            // https://stackoverflow.com/a/37427386
+            display: 'inline-block',
+            verticalAlign: 'bottom',
+            textOverflow: 'ellipsis',
+            // Constrain maxWidth with number_of_lanes * max_lane_width
+            // 160 comes from the style rule .label { max-width: 160px; ... } below
+            maxWidth:
+              Math.max(1, Math.abs(actionSpec.calleeActionIndex - actionSpec.callerActionIndex)) *
+                160 +
+              'px',
+          }"
+        >
+          <span
+            @click="selectEvent"
+            :class="text.class"
+            :key="text.text"
+            :title="
+              text.text +
+              (actionSpec.elapsedTimeMs ? '\n\n' + actionSpec.elapsedTimeMs + ' ms' : '')
+            "
+          >
+            {{ text.text }}
+          </span>
+        </div>
       </template>
     </div>
     <template v-if="actionSpec.hasElapsed">
