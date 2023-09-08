@@ -35,6 +35,7 @@
               :actionSpec="action"
               :collapsed-actions="collapsedActions"
               :key="actionKey(action)"
+              :return-value="returnValue(action)"
             />
           </template>
         </template>
@@ -198,6 +199,26 @@ export default {
           selected.firstElementChild.scrollIntoView(SCROLL_OPTIONS);
         }
       }, 16);
+    },
+    returnValue(action: ActionSpec): string {
+      if (!action.eventIds || !this.appMap || !this.appMap.eventsById) {
+        return '';
+      }
+      const eventId = action.eventIds[0];
+      const event = this.appMap.eventsById[eventId];
+
+      if (!event) return '';
+
+      if (event.returnValue?.value) {
+        return event.returnValue.value;
+      }
+
+      if (event.exceptions?.length) {
+        const exception = event.exceptions[0];
+        return `${exception.class} ${exception.message}`;
+      }
+
+      return '';
     },
   },
 
