@@ -1,5 +1,5 @@
 import { join } from 'path';
-import openapi from '../openapi';
+import openapi from '../openapi/openapi';
 
 export default async function generateOpenAPI(appMapDir: string, maxAppMapSizeInBytes: number) {
   const startTime = new Date().getTime();

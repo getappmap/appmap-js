@@ -1,5 +1,5 @@
 import { executeCommand } from '../../lib/executeCommand';
-import { default as openAPICmd } from '../openapi';
+import { default as openAPICmd } from '../openapi/openapi';
 import { DefaultMaxAppMapSizeInMB } from '../../lib/fileSizeFilter';
 import { join } from 'path';
 import { tmpdir } from 'os';

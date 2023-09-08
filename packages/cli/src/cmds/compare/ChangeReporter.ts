@@ -1,5 +1,11 @@
 import { mkdir, readFile, rm, writeFile } from 'fs/promises';
-import { default as openapiDiff } from 'openapi-diff';
+import {
+  DiffOutcomeFailure,
+  DiffOutcomeSuccess,
+  DiffResult,
+  DiffResultType,
+  default as openapiDiff,
+} from 'openapi-diff';
 import { dirname, isAbsolute, join, relative, resolve } from 'path';
 import { ClassMap, Metadata } from '@appland/models';
 import { FormatType, format } from '@appland/sequence-diagram';
@@ -489,6 +495,36 @@ export class ReportFieldCalculator {
     };
   }
 
+  async formatEndpoint(input: string) {
+    if (input.startsWith('paths.')) {
+      const parts = input.split('.');
+
+      // Check if the input only has the 'paths.' and endpoint
+      if (parts.length === 2) {
+        return parts[1];
+      }
+
+      const statusCode = parts[parts.length - 1];
+      const method = parts[parts.length - 3].toUpperCase();
+      const path = parts[1];
+
+      return `${statusCode} ${method} ${path}`;
+    }
+    return input;
+  }
+
+  async processDifferences(diffArray: Array<DiffResult<DiffResultType>>) {
+    for (const diffResult of diffArray) {
+      for (const details of diffResult.destinationSpecEntityDetails) {
+        details.location = await this.formatEndpoint(details.location);
+      }
+
+      for (const details of diffResult.sourceSpecEntityDetails) {
+        details.location = await this.formatEndpoint(details.location);
+      }
+    }
+  }
+
   async apiDiff(reportRemoved: boolean): Promise<any | undefined> {
     const readOpenAPI = async (revision: RevisionName) => {
       const openapiPath = this.reporter.paths.openapiPath(revision);
@@ -518,6 +554,19 @@ export class ReportFieldCalculator {
           format: 'openapi3',
         },
       });
+
+      if (result.breakingDifferencesFound) {
+        const diffOutcomeFailure = result as DiffOutcomeFailure; // Type narrowing
+
+        await this.processDifferences(diffOutcomeFailure.breakingDifferences);
+        await this.processDifferences(diffOutcomeFailure.nonBreakingDifferences);
+        await this.processDifferences(diffOutcomeFailure.unclassifiedDifferences);
+      } else {
+        const diffOutcomeSuccess = result as DiffOutcomeSuccess; // Type narrowing
+
+        await this.processDifferences(diffOutcomeSuccess.nonBreakingDifferences);
+        await this.processDifferences(diffOutcomeSuccess.unclassifiedDifferences);
+      }
 
       if (!reportRemoved && result.breakingDifferencesFound) {
         const diffOutcomeFailure = result as any;

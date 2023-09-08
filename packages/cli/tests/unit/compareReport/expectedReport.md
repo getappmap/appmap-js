@@ -116,14 +116,14 @@ No relevant code changes found.
 
 ### 🚧 Breaking changes
 
-  - Remove path `paths./microposts/{id}` 
-  - Remove response status code `paths./microposts.post.responses.302` 
-  - Remove response status code `paths./microposts.post.responses.303` 
-  - Remove response status code `paths./microposts.post.responses.422` 
+  - Remove path `/microposts/{id}` 
+  - Remove response status code `302 POST /microposts` 
+  - Remove response status code `303 POST /microposts` 
+  - Remove response status code `422 POST /microposts` 
 
 ### :wrench: Non-breaking changes
 
-  - Add response status code  `paths./microposts.post.responses.200`
+  - Add response status code  `200 POST /microposts`
 
 
 <details>

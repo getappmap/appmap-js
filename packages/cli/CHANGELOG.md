@@ -1,3 +1,24 @@
+# [@appland/appmap-v3.93.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.92.1...@appland/appmap-v3.93.0) (2023-09-07)
+
+
+### Features
+
+* **ChangeReporter.ts:** add import statements for DiffOutcome and DiffResult ([1e9ce9d](https://github.com/getappmap/appmap-js/commit/1e9ce9defab93fc4e86a66d8ea52322d9514d543))
+
+# [@appland/appmap-v3.92.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.92.0...@appland/appmap-v3.92.1) (2023-09-07)
+
+
+### Bug Fixes
+
+* Stage requests into files ([e42e7c2](https://github.com/getappmap/appmap-js/commit/e42e7c2753c23c44e6fe813caca460548a3983e7))
+
+# [@appland/appmap-v3.92.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.91.1...@appland/appmap-v3.92.0) (2023-09-07)
+
+
+### Features
+
+* Sequence diagram validation ([e88ab44](https://github.com/getappmap/appmap-js/commit/e88ab44791a994f4102903e8141e538db481d23a))
+
 # [@appland/appmap-v3.91.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.91.0...@appland/appmap-v3.91.1) (2023-09-06)
 
 

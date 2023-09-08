@@ -32,7 +32,6 @@ describe('PropertiesParser', () => {
     it('parses AppMaps adhering to v1.9.0 spec', async () => {
       const examples = await getExamples('appmap-v1.9.0.yml');
       expect(PropertiesParserV2.canParse(examples[0])).toBe(false);
-      console.log(parse(examples[0]));
       expect(parse(examples[0])).toStrictEqual({
         type: 'array',
         items: {
