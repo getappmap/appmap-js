@@ -5,6 +5,13 @@ context('Sequence Diagram', () => {
     );
   });
 
+  it('view tabs are disabled', () => {
+    cy.get('.tabs .tab-btn').contains('Dependency Map').should('be.disabled');
+    cy.get('.tabs .tab-btn').contains('Sequence Diagram').should('be.disabled');
+    cy.get('.tabs .tab-btn').contains('Trace View').should('be.disabled');
+    cy.get('.tabs .tab-btn').contains('Flame Graph').should('be.disabled');
+  });
+
   it('opens as the initial view', () => {
     cy.get('.sequence-diagram').should('exist');
   });
