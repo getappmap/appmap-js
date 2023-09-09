@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.93.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.93.0...@appland/appmap-v3.93.1) (2023-09-09)
+
+
+### Bug Fixes
+
+* Ignore invalid OpenAPI paths ([d313625](https://github.com/getappmap/appmap-js/commit/d313625c071131732a7eaf845700126915d50ab5))
+
 # [@appland/appmap-v3.93.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.92.1...@appland/appmap-v3.93.0) (2023-09-07)
 
 
