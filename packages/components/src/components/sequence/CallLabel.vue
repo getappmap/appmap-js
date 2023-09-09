@@ -168,6 +168,7 @@ $bg-fade: rgba(0, 0, 0, 0.8);
 
   .name {
     border-radius: 3px;
+    background-color: rgba(0, 0, 0, 0.7);
     color: lighten($gray4, 20);
     display: inline-block;
     padding: 2px 4px;

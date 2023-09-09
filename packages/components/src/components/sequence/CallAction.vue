@@ -441,6 +441,10 @@ export default {
   fill: $sequence-call-line-color;
 }
 
+.connecting-span {
+  position: relative;
+}
+
 .call-right {
   .single-span {
     left: calc(((var(--caller-lifecycle-depth)) * $sequence-activation-gutter-width));
@@ -470,6 +474,7 @@ export default {
   .connecting-span {
     border-radius: 0;
     border-top: 4px solid $black;
+    position: relative;
   }
 
   .arrow {
@@ -487,6 +492,7 @@ export default {
   .connecting-span {
     border-radius: 0;
     border-top: 4px solid $black;
+    position: relative;
   }
 
   .arrow-head {
