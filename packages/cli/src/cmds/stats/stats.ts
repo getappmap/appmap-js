@@ -26,32 +26,19 @@ async function locateAppMapFile(userInput: string, appmapDir: string): Promise<s
   }
   const mapFile = userInput + extension;
 
-  const appmapDirIsCwd = (): boolean => path.resolve(appmapDir) === process.cwd();
-
   // if --appmap-file is a valid exact path, then return it
-  if (path.isAbsolute(mapFile) && existsSync(mapFile)) return mapFile;
+  // or resolve cwd and --appmap-file and check for an exact match
+  const absoluteUserInput = path.resolve(process.cwd(), mapFile);
+  if (existsSync(absoluteUserInput)) return absoluteUserInput;
 
-  // resolve --appmap-dir and --appmap-file and check for an exact match
-  const searchPath = appmapDirIsCwd() ? mapFile : path.join(appmapDir, mapFile);
-  if (existsSync(path.resolve(searchPath))) return searchPath;
+  // resolve --appmap-dir against CWD. If it's an absolute path, it'll remain unchanged.
+  // If it's relative, it'll be resolved against CWD.
+  const absoluteAppmapDir = path.resolve(process.cwd(), appmapDir);
+  const searchPath = path.join(absoluteAppmapDir, mapFile);
+  if (existsSync(searchPath)) return searchPath;
 
-  // recursively search in the --appmap-dir
-  const globArray = appmapDirIsCwd() ? ['**', mapFile] : [appmapDir, '**', mapFile];
-  const matches = glob.sync(path.join(...globArray));
-
-  if (matches.length === 0) {
-    console.error(chalk.red('No matching AppMap found'));
-    return;
-  } else if (matches.length > 1) {
-    const { choice } = await UI.prompt({
-      type: 'list',
-      choices: matches,
-      name: 'choice',
-      message: 'There are multiple matching AppMaps, which one do you want to anlyze?',
-    });
-    return choice;
-  }
-  return matches[0];
+  console.error(chalk.red('No matching AppMap found'));
+  return;
 }
 
 export const builder = (args: yargs.Argv) => {
