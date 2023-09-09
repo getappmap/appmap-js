@@ -1,6 +1,7 @@
 import { glob } from 'glob';
 import { join, resolve } from 'path';
 import { promisify } from 'util';
+import nodeFetch from 'node-fetch';
 import { Octokit } from '@octokit/rest';
 import { mkdtemp, rm, unlink } from 'fs/promises';
 import { createWriteStream } from 'fs';
@@ -77,6 +78,7 @@ export class GitHubArchiveStore implements ArchiveStore {
     this.repo = tokens.pop()!.split('.')[0]!;
     this.owner = tokens.pop()!;
     this.octokit = new Octokit({
+      request: { fetch: nodeFetch },
       auth: this.token,
     });
   }
