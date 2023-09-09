@@ -1,8 +1,10 @@
-import { rpcRequestForEvent } from '../src/rpcRequest';
+import { RPCRequest, rpcRequestForEvent } from '../src/rpcRequest';
 import Model from '../src/model';
 import { httpClientRequests, httpServerRequests } from './util';
+import { OpenAPIV3 } from 'openapi-types';
+import assert from 'assert';
 
-describe('openapi.method', () => {
+describe('openapi', () => {
   it('http_client_request', async () => {
     const request = rpcRequestForEvent(httpClientRequests[0])!;
     expect(request.status).toEqual(200);
@@ -82,10 +84,56 @@ describe('openapi.method', () => {
       },
     });
   });
+
+  describe('from RPCRequest', () => {
+    let rpcRequest: RPCRequest | undefined;
+
+    beforeEach(() => {
+      rpcRequest = {
+        requestMethod: OpenAPIV3.HttpMethods.GET,
+        requestPath: '/api/users/:id',
+        status: 200,
+        responseHeaders: {},
+        requestHeaders: {},
+        parameters: [],
+      };
+    });
+
+    it('accepts a valid path', () => {
+      assert(rpcRequest);
+      const model = new Model();
+      model.addRpcRequest(rpcRequest);
+      expect(JSON.stringify(model.openapi(), null, 2)).toEqual(
+        JSON.stringify(
+          {
+            '/api/users/{id}': {
+              get: {
+                responses: {
+                  '200': {
+                    content: {},
+                    description: 'OK',
+                  },
+                },
+              },
+            },
+          },
+          null,
+          2
+        )
+      );
+    });
+    it('ignores invalid paths', () => {
+      assert(rpcRequest);
+      rpcRequest.requestPath = `(/locale/:locale)/api/users/:id`;
+      const model = new Model();
+      model.addRpcRequest(rpcRequest);
+      expect(model.openapi()).toEqual({});
+    });
+  });
 });
 
 // similar to https://github.com/getappmap/appmap-ruby/blob/master/spec/util_spec.rb#L21
-describe('basePath', () => {
+describe('openapi.basePath', () => {
   it('simple path', async () => {
     const path = Model.basePath('/api/users');
     expect(path).toEqual('/api/users');

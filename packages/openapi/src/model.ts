@@ -4,6 +4,7 @@ import { RPCRequest } from './rpcRequest';
 
 export default class Model {
   paths: Record<string, Path> = {};
+  errors: string[] = [];
 
   openapi(): OpenAPIV3.PathsObject {
     const paths = Object.keys(this.paths)
@@ -18,6 +19,13 @@ export default class Model {
 
   addRpcRequest(rpcRequest: RPCRequest): void {
     const path = Model.basePath(rpcRequest.requestPath);
+    if (!path.startsWith('/')) {
+      this.errors.push(
+        `Invalid path '${rpcRequest.requestPath}'. OpenAPI path must start with '/'.`
+      );
+      return;
+    }
+
     if (!this.paths[path]) {
       this.paths[path] = new Path();
     }
@@ -26,18 +34,17 @@ export default class Model {
   }
 
   static basePath(path: string): string {
-    const pathTokens = path
-      .split('/')
-      .map((entry) => {
-        if (entry.match(/^:(.*)/)) {
-          // eslint-disable-next-line no-param-reassign
-          entry = `{${entry.substring(1)}}`;
-        }
-        return entry;
-      });
+    const pathTokens = path.split('/').map((entry) => {
+      if (entry.match(/^:(.*)/)) {
+        // eslint-disable-next-line no-param-reassign
+        entry = `{${entry.substring(1)}}`;
+      }
+      return entry;
+    });
     if (pathTokens.length === 1 && path[0] === '') {
       pathTokens.push('');
     }
+
     return pathTokens.join('/');
   }
 }
