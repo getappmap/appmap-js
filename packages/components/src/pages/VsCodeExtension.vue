@@ -206,6 +206,11 @@
               ></v-filter-menu>
             </template>
           </v-popper-menu>
+          <template v-if="!isPrecomputedSequenceDiagram && !isGiantAppMap">
+            <button text="Compare" placement="left" text-align="left">
+              <span @click="doCompare"> Compare </span>
+            </button>
+          </template>
           <v-popper class="hover-text-popper" text="Reload map" placement="left" text-align="left">
             <button
               v-if="!isGiantAppMap"
@@ -916,6 +921,10 @@ export default {
 
     openFilterModal() {
       this.$root.$emit('clickFilterButton');
+    },
+
+    doCompare() {
+      this.$root.$emit('clickCompareButton');
     },
 
     setSelectedObject(fqid) {
