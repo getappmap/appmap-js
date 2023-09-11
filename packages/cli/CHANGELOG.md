@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.94.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.93.1...@appland/appmap-v3.94.0) (2023-09-11)
+
+
+### Features
+
+* Indexer now removes index directories when appmaps are removed ([382be23](https://github.com/getappmap/appmap-js/commit/382be231885a98a378efec6f930e7ffd88ec7249))
+* Print machine-readable events when indexing verbosely ([9f1490a](https://github.com/getappmap/appmap-js/commit/9f1490a140107b45b444bab6f81a9d471ea83a37)), closes [#1307](https://github.com/getappmap/appmap-js/issues/1307)
+
 # [@appland/appmap-v3.93.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.93.0...@appland/appmap-v3.93.1) (2023-09-09)
 
 
