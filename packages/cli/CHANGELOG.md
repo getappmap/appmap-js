@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.95.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.94.0...@appland/appmap-v3.95.0) (2023-09-11)
+
+
+### Features
+
+* Index emits run stats under `.appmap/run-stats` ([0b359b1](https://github.com/getappmap/appmap-js/commit/0b359b130225246da3fce9f9e4d8ba992e95b050))
+* Index worker emits metadata upon completion ([e4fd699](https://github.com/getappmap/appmap-js/commit/e4fd699dc7cca5dab9d92b6575d5b9646191534b))
+
 # [@appland/appmap-v3.94.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.93.1...@appland/appmap-v3.94.0) (2023-09-11)
 
 
