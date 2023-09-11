@@ -26,9 +26,9 @@ No relevant code changes found.
 {{#with stack }}
 {{#each this }}
 {{#if (source_url this)}}
-* [{{this}}]({{ source_url this }})
+- [{{this}}]({{ source_url this }})
 {{else}}
-* {{ this }}
+- {{ this }}
 {{/if}}
 {{/each}}
 {{/with}}
@@ -62,8 +62,10 @@ No relevant code changes found.
 
 | Summary | Status |
 | --- | --- |
-| [Test failures](#test-failures) | {{#if testFailures.length}}:warning: {{testFailures.length}} failed{{else}}:white_check_mark: All tests passed{{/if}} |
-{{#if (defined apiDiff) }}
+{{#if (enabled 'failed-tests') }}
+| [Failed tests](#failed-tests) | {{#if testFailures.length}}:warning: {{testFailures.length}} failed{{else}}:white_check_mark: All tests passed{{/if}} |
+{{~/if}}
+{{~#if (enabled 'openapi-diff')}}{{~#if (defined apiDiff) }}
 | [API changes](#api-changes) | 
   {{~#unless apiDiff.differenceCount }}
   :white_check_mark: No API changes
@@ -73,8 +75,8 @@ No relevant code changes found.
   {{~#if apiDiff.nonBreakingDifferenceCount }}{{#if apiDiff.breakingDifferenceCount }},&nbsp;{{~/if}}:wrench: {{apiDiff.nonBreakingDifferenceCount}} non-breaking{{~/if}}
   {{~/if}}
   |
-{{/if}}
-{{#if (defined findingDiff) }}
+{{~/if}}{{~/if}}
+{{~#if (enabled 'findings')}}{{~#if (defined findingDiff) }}
 | [Findings](#findings) |
   {{~#with findingDiff}}
   {{~#unless (length new resolved) }}
@@ -88,7 +90,8 @@ No relevant code changes found.
   {{~/if}}
   {{~/with}}
   |
-{{/if}}
+{{~/if}}{{~/if}}
+{{#if (enabled 'new-appmaps')}}
 | [New AppMaps](#new-appmaps) | 
   {{~#unless newAppMaps.length }}
   :white_check_mark: None
@@ -96,16 +99,20 @@ No relevant code changes found.
   :star: {{newAppMaps.length}} new
   {{~/unless}}
   |
-| [Changed code behavior](#changed-code-behavior) |
+{{/if}}
+{{#if (enabled 'changed-appmaps')}}
+| [Changed AppMaps](#changed-appmaps) |
   {{~#unless sequenceDiagramDiffSnippetCount }}
   :white_check_mark: No changes
   {{~else}}
   :twisted_rightwards_arrows: {{sequenceDiagramDiffSnippetCount}} changes
   {{~/unless}}
   |
+{{~/if}}
 
+{{#if (enabled 'failed-tests')}}
 {{#if testFailures.length}}
-## :warning: Test failures
+## :warning: Failed tests
 
 {{#each testFailures}}
 
@@ -159,7 +166,9 @@ No relevant code changes found.
 
 {{/each}}
 {{/if}}
+{{/if}}
 
+{{#if (enabled 'openapi-diff')}}
 {{#if apiDiff.differenceCount }}
 
 ## 🔄 API changes
@@ -168,7 +177,7 @@ No relevant code changes found.
 ### 🚧 Breaking changes
 
 {{#each apiDiff.breakingDifferences}}
-  - {{> api-change }}
+- {{> api-change }}
 {{/each}}
 {{/if}}
 
@@ -176,7 +185,7 @@ No relevant code changes found.
 ### :wrench: Non-breaking changes
 
 {{#each apiDiff.nonBreakingDifferences}}
-  - {{> api-change }}
+- {{> api-change }}
 {{/each}}
 {{/if}}
 
@@ -199,7 +208,9 @@ No relevant code changes found.
 </details>
 
 {{/if}}
+{{/if}}
 
+{{#if (enabled 'findings') }}
 {{#with findingDiff}}
 {{#if (length new resolved)}}
 
@@ -225,7 +236,9 @@ No relevant code changes found.
 
 {{/if}}
 {{/with}}
+{{/if}}
 
+{{#if (enabled 'new-appmaps')}}
 {{#if newAppMaps.length }}
 
 <h2 id="new-appmaps">New AppMaps</h2>
@@ -237,9 +250,11 @@ No relevant code changes found.
 {{/each}}
 
 {{/if}}
+{{/if}}
 
+{{#if (enabled 'changed-appmaps')}}
 {{#if sequenceDiagramDiffSnippetCount }}
-## :twisted_rightwards_arrows: Changed code behavior
+## :twisted_rightwards_arrows: Changed AppMaps
 
 <details>
 
@@ -260,4 +275,5 @@ Review {{ sequenceDiagramDiffSnippetCount }} changes
 {{/each}}
 
 </details>
+{{/if}}
 {{/if}}
