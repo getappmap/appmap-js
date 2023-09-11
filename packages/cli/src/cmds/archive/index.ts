@@ -6,6 +6,7 @@ import { IndexResult } from '../index/IndexResult';
 import { basename, dirname, join } from 'path';
 import { readFile } from 'fs/promises';
 import { Metadata } from '@appland/models';
+import emitUsage from '../../lib/emitUsage';
 
 export async function index(
   workerPool: WorkerPool,
@@ -23,12 +24,23 @@ export async function index(
 
   const startTime = new Date().getTime();
 
+  let sampleMetadata: Metadata | undefined;
+  let totalEvents = 0;
   const result = await processAppMapDir<IndexTask, IndexResult>(
     'Indexing AppMaps',
     workerPool,
     task,
-    appMapDir
+    appMapDir,
+    undefined,
+    async (_appmap, { result: { metadata, numEvents } }) => {
+      if (!sampleMetadata) sampleMetadata = metadata;
+      totalEvents += numEvents;
+    }
   );
+
+  if (sampleMetadata) {
+    await emitUsage(appMapDir, totalEvents, result.numProcessed, sampleMetadata);
+  }
 
   const elapsed = new Date().getTime() - startTime;
   console.log(`Indexed ${result.numProcessed} AppMaps in ${elapsed}ms`);
