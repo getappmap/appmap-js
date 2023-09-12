@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.96.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.96.0...@appland/appmap-v3.96.1) (2023-09-12)
+
+
+### Bug Fixes
+
+* simplify appmap file resolution logic, add tests for appmap file resolution ([d9ee43b](https://github.com/getappmap/appmap-js/commit/d9ee43bf90a4893baf4f803d1a147cc5788e6b14))
+
 # [@appland/appmap-v3.96.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.95.0...@appland/appmap-v3.96.0) (2023-09-12)
 
 
