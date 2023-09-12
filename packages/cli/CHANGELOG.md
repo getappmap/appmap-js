@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.96.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.95.0...@appland/appmap-v3.96.0) (2023-09-12)
+
+
+### Features
+
+* Enable and disable report sections ([6422b51](https://github.com/getappmap/appmap-js/commit/6422b5116e846d2df43d57b9e996abf1f73a9af9))
+
 # [@appland/appmap-v3.95.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.94.0...@appland/appmap-v3.95.0) (2023-09-11)
 
 
