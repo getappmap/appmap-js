@@ -25,7 +25,14 @@ function isURL(path: string): boolean {
   }
 }
 
+export const SECTIONS = ['failed-tests', 'openapi-diff', 'findings', 'new-appmaps'];
+
+export const EXPERIMENTAL_SECTIONS = ['changed-appmaps'];
+
 export default class MarkdownReport implements Report {
+  public excludeSections: string[] | undefined;
+  public includeSections: string[] | undefined;
+
   constructor(public appmapURL: URL, public sourceURL: URL) {}
 
   async generateReport(changeReport: ChangeReport, baseDir: string): Promise<string> {
@@ -135,6 +142,15 @@ export default class MarkdownReport implements Report {
     }
 
     const self = this;
+
+    Handlebars.registerHelper('enabled', function (section: string): boolean {
+      if (SECTIONS.includes(section) && !self.excludeSections?.includes(section)) return true;
+
+      if (EXPERIMENTAL_SECTIONS.includes(section) && self.includeSections?.includes(section))
+        return true;
+
+      return false;
+    });
 
     Handlebars.registerHelper('inspect', function (value: any) {
       return new Handlebars.SafeString(JSON.stringify(value, null, 2));

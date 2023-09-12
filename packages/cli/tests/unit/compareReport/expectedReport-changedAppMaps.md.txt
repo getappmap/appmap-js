@@ -7,13 +7,13 @@
 
 | Summary | Status |
 | --- | --- |
-| [Test failures](#test-failures) | :warning: 3 failed |
+| [Failed tests](#failed-tests) | :warning: 3 failed |
 | [API changes](#api-changes) |🚧 4 breaking,&nbsp;:wrench: 1 non-breaking  |
 | [Findings](#findings) |  :tada: 4 resolved  |
 | [New AppMaps](#new-appmaps) |  :star: 1 new  |
-| [Changed code behavior](#changed-code-behavior) |  :twisted_rightwards_arrows: 1 changes  |
+| [Changed AppMaps](#changed-appmaps) |  :twisted_rightwards_arrows: 1 changes  |
 
-## :warning: Test failures
+## :warning: Failed tests
 
 
 <details>
@@ -116,14 +116,14 @@ No relevant code changes found.
 
 ### 🚧 Breaking changes
 
-  - Remove path `/microposts/{id}` 
-  - Remove response status code `302 POST /microposts` 
-  - Remove response status code `303 POST /microposts` 
-  - Remove response status code `422 POST /microposts` 
+- Remove path `/microposts/{id}` 
+- Remove response status code `302 POST /microposts` 
+- Remove response status code `303 POST /microposts` 
+- Remove response status code `422 POST /microposts` 
 
 ### :wrench: Non-breaking changes
 
-  - Add response status code  `200 POST /microposts`
+- Add response status code  `200 POST /microposts`
 
 
 <details>
@@ -198,11 +198,11 @@ No relevant code changes found.
 
 ##### Stack trace
 
-* [app/helpers/sessions_helper.rb:19](app/helpers/sessions_helper.rb:19)
-* [app/helpers/sessions_helper.rb:35](app/helpers/sessions_helper.rb:35)
-* [app/views/shared/_feed.html.erb](app/views/shared/_feed.html.erb)
-* [app/views/static_pages/home.html.erb](app/views/static_pages/home.html.erb)
-* /home/ahtrotta/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/actionpack-7.0.4/lib/action_controller/metal/renderers.rb:140
+- [app/helpers/sessions_helper.rb:19](app/helpers/sessions_helper.rb:19)
+- [app/helpers/sessions_helper.rb:35](app/helpers/sessions_helper.rb:35)
+- [app/views/shared/_feed.html.erb](app/views/shared/_feed.html.erb)
+- [app/views/static_pages/home.html.erb](app/views/static_pages/home.html.erb)
+- /home/ahtrotta/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/actionpack-7.0.4/lib/action_controller/metal/renderers.rb:140
 
 
 </details>
@@ -224,12 +224,12 @@ No relevant code changes found.
 
 ##### Stack trace
 
-* [app/helpers/sessions_helper.rb:19](app/helpers/sessions_helper.rb:19)
-* [app/helpers/sessions_helper.rb:35](app/helpers/sessions_helper.rb:35)
-* [app/views/shared/_feed.html.erb](app/views/shared/_feed.html.erb)
-* [app/views/static_pages/home.html.erb](app/views/static_pages/home.html.erb)
-* /home/ahtrotta/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/actionpack-7.0.4/lib/action_controller/metal/renderers.rb:140
-* [app/controllers/microposts_controller.rb:5](app/controllers/microposts_controller.rb:5)
+- [app/helpers/sessions_helper.rb:19](app/helpers/sessions_helper.rb:19)
+- [app/helpers/sessions_helper.rb:35](app/helpers/sessions_helper.rb:35)
+- [app/views/shared/_feed.html.erb](app/views/shared/_feed.html.erb)
+- [app/views/static_pages/home.html.erb](app/views/static_pages/home.html.erb)
+- /home/ahtrotta/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/actionpack-7.0.4/lib/action_controller/metal/renderers.rb:140
+- [app/controllers/microposts_controller.rb:5](app/controllers/microposts_controller.rb:5)
 
 
 </details>
@@ -251,11 +251,11 @@ No relevant code changes found.
 
 ##### Stack trace
 
-* [app/helpers/sessions_helper.rb:19](app/helpers/sessions_helper.rb:19)
-* [app/helpers/sessions_helper.rb:35](app/helpers/sessions_helper.rb:35)
-* [app/views/shared/_feed.html.erb](app/views/shared/_feed.html.erb)
-* [app/views/static_pages/home.html.erb](app/views/static_pages/home.html.erb)
-* /home/ahtrotta/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/actionpack-7.0.4/lib/action_controller/metal/renderers.rb:140
+- [app/helpers/sessions_helper.rb:19](app/helpers/sessions_helper.rb:19)
+- [app/helpers/sessions_helper.rb:35](app/helpers/sessions_helper.rb:35)
+- [app/views/shared/_feed.html.erb](app/views/shared/_feed.html.erb)
+- [app/views/static_pages/home.html.erb](app/views/static_pages/home.html.erb)
+- /home/ahtrotta/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/actionpack-7.0.4/lib/action_controller/metal/renderers.rb:140
 
 
 </details>
@@ -277,10 +277,10 @@ No relevant code changes found.
 
 ##### Stack trace
 
-* [app/helpers/sessions_helper.rb:19](app/helpers/sessions_helper.rb:19)
-* [app/helpers/sessions_helper.rb:40](app/helpers/sessions_helper.rb:40)
-* [app/views/users/show.html.erb](app/views/users/show.html.erb)
-* /home/ahtrotta/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/actionpack-7.0.4/lib/action_controller/metal/renderers.rb:140
+- [app/helpers/sessions_helper.rb:19](app/helpers/sessions_helper.rb:19)
+- [app/helpers/sessions_helper.rb:40](app/helpers/sessions_helper.rb:40)
+- [app/views/users/show.html.erb](app/views/users/show.html.erb)
+- /home/ahtrotta/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/actionpack-7.0.4/lib/action_controller/metal/renderers.rb:140
 
 
 </details>
@@ -293,22 +293,15 @@ No relevant code changes found.
 
 [minitest/Valid_login_redirect_after_login](head/minitest/Valid_login_redirect_after_login.appmap.json)
 
-
-
-## :twisted_rightwards_arrows: Changed code behavior
+## :twisted_rightwards_arrows: Changed AppMaps
 
 <details>
-
 <summary>
 Review 1 changes
 </summary>
 
-
 ```
 removed SQL `PRAGMA foreign_keys = ON`
 ```
-
 - [minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost](diff/minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost.diff.sequence.json)
-
-
 </details>
