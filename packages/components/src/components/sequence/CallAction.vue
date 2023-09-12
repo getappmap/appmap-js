@@ -512,8 +512,11 @@ export default {
   background-color: black;
   border: 1px solid gray;
   position: relative;
-  height: calc(100% - 6px - (var(--open-group-count) + var(--close-group-count)) * 40px);
-  top: calc(var(--open-group-count) * 40px + 35px);
+  height: calc(
+    100% - 6px - (var(--open-group-count) + var(--close-group-count)) * 40px -
+      var(--first-lifeline-first-action) * 80px
+  );
+  top: calc(var(--open-group-count) * 40px + 35px + var(--first-lifeline-first-action) * 80px);
   left: calc(100% - (var(--callee-lifecycle-depth) * $sequence-activation-gutter-width));
 }
 </style>

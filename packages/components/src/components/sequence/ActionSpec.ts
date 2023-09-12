@@ -97,6 +97,7 @@ export class ActionSpec {
     return {
       '--caller-lifecycle-depth': this.callerLifecycleDepth || 0,
       '--callee-lifecycle-depth': this.calleeLifecycleDepth || 0,
+      '--first-lifeline-first-action': !this.action.parent && this.index == 0 ? 1 : 0,
     };
   }
 
