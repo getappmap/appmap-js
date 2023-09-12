@@ -1,3 +1,11 @@
+# [@appland/components-v2.61.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.61.1...@appland/components-v2.61.2) (2023-09-12)
+
+
+### Bug Fixes
+
+* Labels which overflow the sequence diagram are truncated ([#1360](https://github.com/getappmap/appmap-js/issues/1360)) ([f3192f1](https://github.com/getappmap/appmap-js/commit/f3192f1fe031ca1e080848407cb904f1ddf2823a))
+* The first lifeline in the sequence diagram now renders at the expected height ([#1365](https://github.com/getappmap/appmap-js/issues/1365)) ([ed80466](https://github.com/getappmap/appmap-js/commit/ed80466199e6923ad4de7b1fd3272ad334eb5fb3))
+
 # [@appland/components-v2.61.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.61.0...@appland/components-v2.61.1) (2023-09-08)
 
 
