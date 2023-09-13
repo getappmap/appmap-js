@@ -1,3 +1,15 @@
+# [@appland/components-v2.62.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.61.2...@appland/components-v2.62.0) (2023-09-13)
+
+
+### Bug Fixes
+
+* Call labels appear at the top in the sequence diagram ([#1367](https://github.com/getappmap/appmap-js/issues/1367)) ([cba74ef](https://github.com/getappmap/appmap-js/commit/cba74eff207ae2409f6b0a7c2ffd07dcd08da873))
+
+
+### Features
+
+* Hovering over a return in the sequence diagram provides a tooltip containing the return value ([#1363](https://github.com/getappmap/appmap-js/issues/1363)) ([27a06e9](https://github.com/getappmap/appmap-js/commit/27a06e9ba8b49040ad25dda78164c82826ebfb67))
+
 # [@appland/components-v2.61.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.61.1...@appland/components-v2.61.2) (2023-09-12)
 
 
