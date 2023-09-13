@@ -15,12 +15,12 @@ const { join } = require('path');
 import { setSQLErrorHandler } from '@appland/models';
 
 const { verbose } = require('./utils');
-const FingerprintDirectoryCommand = require('./fingerprint/fingerprintDirectoryCommand');
+const FingerprintDirectoryCommand = require('./fingerprint/fingerprintDirectoryCommand').default;
 const FingerprintWatchCommand = require('./fingerprint/fingerprintWatchCommand').default;
 const Depends = require('./depends');
 import InstallCommand from './cmds/agentInstaller/install-agent';
 import StatusCommand from './cmds/agentInstaller/status';
-import { default as OpenAPICommand } from './cmds/openapi';
+import { default as OpenAPICommand } from './cmds/openapi/openapi';
 import PruneCommand from './cmds/prune/prune';
 import RecordCommand from './cmds/record/record';
 import { handleWorkingDirectory } from './lib/handleWorkingDirectory';

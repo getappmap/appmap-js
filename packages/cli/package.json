@@ -1,6 +1,6 @@
 {
   "name": "@appland/appmap",
-  "version": "3.90.0",
+  "version": "3.96.1",
   "description": "",
   "bin": "built/cli.js",
   "engines": {
@@ -36,6 +36,7 @@
     "@appland/appmap-agent-js": "^13.9.0",
     "@craftamap/esbuild-plugin-html": "^0.4.0",
     "@octokit/types": "^11.1.0",
+    "@swc/core": "^1.3.76",
     "@types/fs-extra": "^9.0.13",
     "@types/gitconfiglocal": "^2.0.1",
     "@types/inquirer": "^9.0.3",

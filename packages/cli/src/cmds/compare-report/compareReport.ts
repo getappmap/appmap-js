@@ -3,7 +3,8 @@ import yargs from 'yargs';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { verbose } from '../../utils';
 import { ChangeReport } from '../compare/ChangeReport';
-import MarkdownReport from './MarkdownReport';
+import MarkdownReport, { SECTIONS, EXPERIMENTAL_SECTIONS } from './MarkdownReport';
+import { log } from 'console';
 
 export const command = 'compare-report <report-directory>';
 export const describe =
@@ -32,12 +33,26 @@ export const builder = (args: yargs.Argv) => {
     alias: 'd',
   });
 
+  args.option('include-section', {
+    describe:
+      'Non-default sections to include in the report. This repeatable option may be used to include beta, early access and/or experimental sections in the report. ' +
+      `The experimental sections are: ${EXPERIMENTAL_SECTIONS.join(', ')}`,
+    type: 'string',
+  });
+
+  args.option('exclude-section', {
+    describe: `Default sections to exclude in the report. The default sections are: ${SECTIONS.join(
+      ' ,'
+    )}`,
+    type: 'string',
+  });
+
   return args.strict();
 };
 
 export const handler = async (argv: any) => {
   verbose(argv.verbose);
-  const { directory } = argv;
+  const { directory, includeSection: includeSections, excludeSection: excludeSections } = argv;
   handleWorkingDirectory(directory);
 
   const baseDir = process.cwd();
@@ -45,7 +60,17 @@ export const handler = async (argv: any) => {
   const { reportDirectory, sourceUrl, appmapUrl } = argv;
   process.chdir(reportDirectory);
 
+  const makeArray = (arg: string): string[] => {
+    if (Array.isArray(arg)) return arg;
+
+    return [arg];
+  };
+
   const report = JSON.parse(await readFile('change-report.json', 'utf-8')) as ChangeReport;
-  const reportMD = await new MarkdownReport(appmapUrl, sourceUrl).generateReport(report, baseDir);
+  const mdReport = new MarkdownReport(appmapUrl, sourceUrl);
+  if (includeSections) mdReport.includeSections = makeArray(includeSections);
+  if (excludeSections) mdReport.excludeSections = makeArray(excludeSections);
+
+  const reportMD = await mdReport.generateReport(report, baseDir);
   await writeFile('report.md', reportMD);
 };

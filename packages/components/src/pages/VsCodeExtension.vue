@@ -181,7 +181,10 @@
               <StatsIcon class="control-button__icon" />
             </button>
           </v-popper>
-          <v-popper-menu v-if="!isGiantAppMap" :isHighlight="filtersChanged">
+          <v-popper-menu
+            v-if="!isPrecomputedSequenceDiagram && !isGiantAppMap"
+            :isHighlight="filtersChanged"
+          >
             <template v-slot:icon>
               <v-popper
                 class="hover-text-popper"
@@ -331,6 +334,8 @@ import {
   base64UrlEncode,
   AppMapFilter,
 } from '@appland/models';
+import { unparseDiagram } from '@appland/sequence-diagram';
+
 import CopyIcon from '@/assets/copy-icon.svg';
 import CloseIcon from '@/assets/close.svg';
 import ReloadIcon from '@/assets/reload.svg';
@@ -382,6 +387,7 @@ import {
   SET_HIGHLIGHTED_EVENTS,
   SET_FOCUSED_EVENT,
 } from '../store/vsCode';
+import isPrecomputedSequenceDiagram from '@/lib/isPrecomputedSequenceDiagram';
 
 export default {
   name: 'VSCodeExtension',
@@ -489,7 +495,10 @@ export default {
       handler(event) {
         if (event) {
           if (this.currentView === VIEW_COMPONENT) {
-            this.setView(this.defaultView === VIEW_SEQUENCE ? VIEW_SEQUENCE : VIEW_FLOW);
+            let { defaultView } = this;
+            if (this.isPrecomputedSequenceDiagram) defaultView = VIEW_SEQUENCE;
+
+            this.setView(defaultView === VIEW_SEQUENCE ? VIEW_SEQUENCE : VIEW_FLOW);
           }
           this.$nextTick(() => {
             Object.keys(this.$refs)
@@ -528,6 +537,7 @@ export default {
   },
 
   computed: {
+    isPrecomputedSequenceDiagram,
     classes() {
       return this.isLoading ? 'app--loading' : '';
     },
@@ -796,8 +806,13 @@ export default {
   },
 
   methods: {
-    loadData(data) {
-      this.$store.commit(SET_APPMAP_DATA, data);
+    loadData(appMap, sequenceDiagram) {
+      if (sequenceDiagram) {
+        appMap['sequenceDiagram'] = unparseDiagram(sequenceDiagram);
+      }
+
+      this.$store.commit(SET_APPMAP_DATA, appMap);
+
       this.initializeSavedFilters();
 
       const rootEvents = this.$store.state.appMap.rootEvents();

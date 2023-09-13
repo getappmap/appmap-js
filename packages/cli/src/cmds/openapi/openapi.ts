@@ -1,34 +1,24 @@
 import { join } from 'path';
 
-import { existsSync, promises as fsp } from 'fs';
+import { existsSync, openSync, write } from 'fs';
+import { promises as fsp } from 'fs';
 import { readFile } from 'fs/promises';
-import { queue } from 'async';
-import { glob } from 'glob';
 import yaml, { load } from 'js-yaml';
 import { OpenAPIV3 } from 'openapi-types';
-import {
-  Model,
-  parseHTTPServerRequests,
-  rpcRequestForEvent,
-  SecuritySchemes,
-  verbose,
-} from '@appland/openapi';
-import { Event } from '@appland/models';
-import { Arguments, Argv, number } from 'yargs';
-import { inspect } from 'util';
+import { verbose } from '@appland/openapi';
+import { Arguments, Argv } from 'yargs';
 
-import { locateAppMapDir } from '../lib/locateAppMapDir';
-import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
-import { locateAppMapConfigFile } from '../lib/locateAppMapConfigFile';
-import { Git, GitState } from '../telemetry';
-import { DefaultMaxAppMapSizeInMB, fileSizeFilter } from '../lib/fileSizeFilter';
+import { locateAppMapDir } from '../../lib/locateAppMapDir';
+import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
+import { locateAppMapConfigFile } from '../../lib/locateAppMapConfigFile';
+import { DefaultMaxAppMapSizeInMB, fileSizeFilter } from '../../lib/fileSizeFilter';
+import { findFiles } from '../../utils';
+import DataStore from './DataStore';
+import DefinitionGenerator from './DefinitionGenerator';
 
 export type FilterFunction = (file: string) => Promise<{ enable: boolean; message?: string }>;
 
 class OpenAPICommand {
-  private readonly model = new Model();
-  private readonly securitySchemes = new SecuritySchemes();
-
   public errors: string[] = [];
   public filter: FilterFunction = async (file: string) => ({ enable: true });
 
@@ -43,72 +33,59 @@ class OpenAPICommand {
       number
     ]
   > {
-    const q = queue(this.collectAppMap.bind(this), 2);
-    q.pause();
-
     // Make sure the directory exists -- if it doesn't, the glob below just returns nothing.
     if (!existsSync(this.appmapDir)) {
       throw new Error(`AppMap directory ${this.appmapDir} does not exist`);
     }
 
-    const files = glob.sync(join(this.appmapDir, '**', '*.appmap.json'));
-    for (let index = 0; index < files.length; index++) {
-      const file = files[index];
+    const dataStore = new DataStore();
+    await dataStore.initialize();
+
+    const collectAppMap = async (file: string) => {
+      try {
+        await dataStore.storeAppMap(file);
+      } catch (e) {
+        let errorString: string;
+        try {
+          errorString = (e as any).toString();
+        } catch (x) {
+          errorString = ((e as any) || '').toString();
+        }
+        this.errors.push(errorString);
+      }
+    };
+
+    const appMapFiles = await findFiles(this.appmapDir, '.appmap.json');
+    for (const file of appMapFiles) {
       const filterResult = await this.filter(file);
       if (!filterResult.enable) {
         if (filterResult.message) console.warn(filterResult.message);
         continue;
       }
-
-      q.push(file);
+      await collectAppMap(file);
     }
+    await dataStore.closeAll();
 
-    if (q.length() > 0) {
-      await new Promise<void>((resolve, reject) => {
-        q.drain(resolve);
-        q.error(reject);
-        q.resume();
-      });
-    }
+    const definitionGenerator = new DefinitionGenerator(dataStore);
+    const { paths, securitySchemes } = await definitionGenerator.generate();
+
+    // Leave the files in place if an error occurs.
+    await dataStore.cleanup();
 
     return [
       {
-        paths: this.model.openapi(),
-        securitySchemes: this.securitySchemes.openapi(),
+        paths,
+        securitySchemes,
       },
-      files.length,
+      appMapFiles.length,
     ];
-  }
-
-  async collectAppMap(file: string): Promise<void> {
-    try {
-      const data = await fsp.readFile(file, 'utf-8');
-      parseHTTPServerRequests(JSON.parse(data), (e: Event) => {
-        const request = rpcRequestForEvent(e);
-        if (request) {
-          this.model.addRpcRequest(request);
-          this.securitySchemes.addRpcRequest(request);
-        }
-      });
-    } catch (e) {
-      // Re-throwing this error crashes the whole process.
-      // So if there is a malformed AppMap, indicate it here but don't blow everything up.
-      // Do not write to stdout!
-      let errorString: string;
-      try {
-        errorString = inspect(e);
-      } catch (x) {
-        errorString = ((e as any) || '').toString();
-      }
-      this.errors.push(errorString);
-    }
   }
 }
 
 async function loadTemplate(fileName: string): Promise<any> {
   if (!fileName) {
     // eslint-disable-next-line no-param-reassign
-    fileName = join(__dirname, '../../resources/openapi-template.yaml');
+    fileName = join(__dirname, '../../../resources/openapi-template.yaml');
   }
   return yaml.load((await fsp.readFile(fileName)).toString());
 }
@@ -153,7 +130,7 @@ export default {
     verbose(argv.verbose);
     handleWorkingDirectory(argv.directory);
     const appmapDir = await locateAppMapDir(argv.appmapDir);
-    const { openapiTitle, openapiVersion, maxSize } = argv;
+    const { openapiTitle, openapiVersion, maxSize, maxExamples } = argv;
     const maxAppMapSizeInBytes = Math.round(parseFloat(maxSize) * 1024 * 1024);
 
     function tryConfigure(path: string, fn: () => void) {
@@ -168,7 +145,7 @@ export default {
 
     const cmd = new OpenAPICommand(appmapDir);
     cmd.filter = fileSizeFilter(maxAppMapSizeInBytes);
-    const [openapi, numAppMaps] = await cmd.execute();
+    const [openapi] = await cmd.execute();
 
     for (const error of cmd.errors) {
       console.warn(error);

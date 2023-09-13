@@ -6,6 +6,7 @@ import { withStubbedTelemetry } from '../../helper';
 const fixtureDir = path.join(__dirname, '../', 'fixtures', 'stats');
 const mapPath = path.join('Microposts_interface_micropost_interface.appmap.json');
 
+const relativeMapPath = path.join('appmap', 'Microposts_interface_micropost_interface.appmap.json');
 const originalDir = process.cwd();
 
 describe('stats subcommand', () => {
@@ -32,10 +33,10 @@ describe('stats subcommand', () => {
     expect(slowestExecutionTimes[0].name).toEqual('function:logger/Logger::LogDevice#write');
   });
 
-  it('analyzes an appmap', async () => {
+  it('analyzes an appmap absolute path', async () => {
     let argv = {
       ...commonArgs,
-      appmapFile: mapPath,
+      appmapFile: path.resolve(fixtureDir, relativeMapPath),
       limit: 10,
     };
 
@@ -46,5 +47,47 @@ describe('stats subcommand', () => {
     expect(fn).toEqual('function:logger/Logger::LogDevice#write');
     expect(count).toEqual(319);
     expect(size).toEqual(172419);
+  });
+
+  it('analyzes a file in the current working directory', async () => {
+    const argv = {
+      ...commonArgs,
+      directory: path.join(fixtureDir, 'appmap'),
+      appmapFile: mapPath,
+    };
+
+    const ret = await StatsCommand.handler(argv);
+    if (!ret) throw Error();
+    expect(ret.length).toEqual(75);
+    const { function: fn, count, size } = ret[0] as EventInfo;
+    expect(fn).toEqual('function:logger/Logger::LogDevice#write');
+    expect(count).toEqual(319);
+    expect(size).toEqual(172419);
+  });
+
+  it('handles and analyzes relative file paths correctly', async () => {
+    const argv = {
+      ...commonArgs,
+      appmapFile: relativeMapPath,
+    };
+
+    const ret = await StatsCommand.handler(argv);
+    if (!ret) throw Error();
+    expect(ret.length).toEqual(75);
+    const { function: fn, count, size } = ret[0] as EventInfo;
+    expect(fn).toEqual('function:logger/Logger::LogDevice#write');
+    expect(count).toEqual(319);
+    expect(size).toEqual(172419);
+  });
+
+  it('does not analyze a file in a child directory when only a file name is passed', async () => {
+    const argv = {
+      ...commonArgs,
+      directory: originalDir,
+      appmapFile: mapPath,
+    };
+
+    const ret = await StatsCommand.handler(argv);
+    expect(ret).toBeUndefined();
   });
 });

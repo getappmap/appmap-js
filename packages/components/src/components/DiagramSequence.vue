@@ -55,13 +55,20 @@
 <script lang="ts">
 // @ts-nocheck
 import { AppMap, CodeObject } from '@appland/models';
-import { buildDiagram, unparseDiagram, Diagram, Specification } from '@appland/sequence-diagram';
+import {
+  buildDiagram,
+  unparseDiagram,
+  Diagram,
+  Specification,
+  Action,
+} from '@appland/sequence-diagram';
 import VLoopAction from '@/components/sequence/LoopAction.vue';
 import VCallAction from '@/components/sequence/CallAction.vue';
 import VReturnAction from '@/components/sequence/ReturnAction.vue';
 import VActor from '@/components/sequence/Actor.vue';
 import DiagramSpec from './sequence/DiagramSpec';
 import { ActionSpec } from './sequence/ActionSpec';
+import { SET_FOCUSED_EVENT } from '../store/vsCode';
 
 const SCROLL_OPTIONS = { behavior: 'smooth', block: 'center', inline: 'center' };
 
@@ -132,6 +139,8 @@ export default {
       let result: Diagram | undefined;
       if (this.serializedDiagram) {
         result = unparseDiagram(this.serializedDiagram as Diagram);
+      } else if (this.$store?.state?.precomputedSequenceDiagram) {
+        result = this.$store.state.precomputedSequenceDiagram;
       } else if (this.appMap) {
         const appMapObj: AppMap | undefined = this.appMap as AppMap;
         const { priority, expand } = this;
@@ -147,8 +156,44 @@ export default {
     diagramSpec(): DiagramSpec {
       const result = new DiagramSpec(this.diagram);
       this.collapsedActions = []; // eslint-disable-line vue/no-side-effects-in-computed-properties
+
+      // If a Diagram contains any actions in diff mode, expand all ancestors of every diff action,
+      // and collapse all other actions.
+      const expandedActions = new Set<number>();
+      let firstDiffAction: Action | undefined;
+
+      const eventIds = (action: Action) => (action.eventIds || []).filter((id) => id !== undefined);
+
+      const markExpandedActions = (action: Action, ancestors = new Array<Action>()) => {
+        if (action.diffMode) {
+          if (!firstDiffAction) firstDiffAction = action;
+          expandedActions.add(...eventIds(action));
+          for (const ancestor of ancestors) expandedActions.add(...eventIds(ancestor));
+        }
+        if (action.children && action.children.length > 0) {
+          ancestors.push(action);
+          action.children.forEach((child) => markExpandedActions(child, ancestors));
+          ancestors.pop();
+        }
+        return ancestors;
+      };
+
+      const shouldExpand = (action: Action) =>
+        expandedActions.size === 0 || eventIds(action).some((id) => expandedActions.has(id));
+
+      this.diagram?.rootActions.forEach((root) => markExpandedActions(root));
+      expandedActions.delete(undefined);
+
       for (let index = 0; index < result.actions.length; index++)
-        this.$set(this.collapsedActions, index, false);
+        this.$set(this.collapsedActions, index, !shouldExpand(result.actions[index]));
+
+      if (firstDiffAction && this.$store?.state) {
+        const eventId = eventIds(firstDiffAction).filter(Boolean)[0];
+        const { appMap } = this.$store.state;
+        const event = appMap.eventsById[eventId];
+        this.$store.commit(SET_FOCUSED_EVENT, event);
+      }
+
       return result;
     },
     actors() {

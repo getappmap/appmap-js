@@ -4,8 +4,9 @@ import { CompareFilter, HideOption } from '../../lib/loadAppMapConfig';
 export type Language = 'ruby' | 'python' | 'java' | 'javascript';
 
 export const HIDE_OPTIONS: Record<HideOption, RegExp[]> = {
-  pragma: [/^query:PRAGMA\b/, /^query:[\s\S]*\bPRAGMA\b/],
-  savepoint: [/^query:SAVEPOINT\b/, /^query:[\s\S]*\bSAVEPOINT\b/],
+  sql_pragma: [/^query:PRAGMA\b/, /^query:[\s\S]*\bPRAGMA\b/],
+  sql_savepoint: [/^query:SAVEPOINT\b/, /^query:[\s\S]*\bSAVEPOINT\b/],
+  sql_show: [/^query:SHOW\b/],
   selenium: [/^external-route:.*\bhttp:\/\/127\.0\.0\.1:\d+\/session\/[a-f0-9]{32,}\//],
   pg_metadata: [/^query:[\s\S]*\bpg_attribute\b/],
   sqlite_metadata: [/^query:[\s\S]*\bsqlite_master\b/],

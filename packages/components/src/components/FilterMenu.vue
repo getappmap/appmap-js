@@ -134,8 +134,8 @@
         </div>
         <div class="filters__block-row">
           <div class="filters__block-row-content">
-            <button class="filters__button" data-cy="apply-filter-button" @click="applyFilter">
-              Apply
+            <button :class="applyButtonClass" data-cy="apply-filter-button" @click="applyFilter">
+              Load
             </button>
             <button :class="deleteButtonClass" data-cy="delete-filter-button" @click="deleteFilter">
               Delete
@@ -306,6 +306,15 @@ export default {
         appMap.metadata.language &&
         ['ruby', 'javascript'].includes(appMap.metadata.language.name)
       );
+    },
+
+    applyButtonClass() {
+      const serializedFilter = serializeFilter(this.filters);
+      const state = base64UrlEncode(JSON.stringify({ filters: serializedFilter }));
+
+      const suffix =
+        this.selectedSavedFilter && this.selectedSavedFilter.state === state ? '-disabled' : '';
+      return 'filters__button' + suffix;
     },
 
     defaultButtonClass() {

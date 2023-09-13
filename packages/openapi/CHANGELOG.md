@@ -1,3 +1,10 @@
+# [@appland/openapi-v1.6.1](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.6.0...@appland/openapi-v1.6.1) (2023-09-09)
+
+
+### Bug Fixes
+
+* Ignore invalid OpenAPI paths ([d313625](https://github.com/getappmap/appmap-js/commit/d313625c071131732a7eaf845700126915d50ab5))
+
 # [@appland/openapi-v1.6.0](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.5.0...@appland/openapi-v1.6.0) (2023-07-19)
 
 

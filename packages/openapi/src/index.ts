@@ -1,9 +1,8 @@
 import Model from './model';
 import SecuritySchemes from './securitySchemes';
-import { rpcRequestForEvent } from './rpcRequest';
+import { headerValue, rpcRequestForEvent } from './rpcRequest';
 import { Event } from '@appland/models';
 import { OpenAPIV3 } from 'openapi-types';
-import { URL } from 'url';
 export { default as parseHTTPServerRequests } from './parseHTTPServerRequests';
 export { classNameToOpenAPIType, verbose } from './util';
 
@@ -20,7 +19,10 @@ const forClientRequest = (event: Event): OpenAPIV3Fragment | undefined => {
 
   const securitySchemes = new SecuritySchemes();
   const model = new Model();
-  securitySchemes.addRpcRequest(rpcRequest);
+  if (rpcRequest.requestHeaders) {
+    const authorizationHeader = headerValue(rpcRequest.requestHeaders, 'authorization');
+    if (authorizationHeader) securitySchemes.addAuthorizationHeader(authorizationHeader);
+  }
   model.addRpcRequest(rpcRequest);
 
   return { paths: model.openapi(), securitySchemes: securitySchemes.openapi() };

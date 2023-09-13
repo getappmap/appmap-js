@@ -9,6 +9,8 @@ import Telemetry from '../telemetry';
 import emitUsage from '../lib/emitUsage';
 import { FingerprintEvent } from './fingerprinter';
 import { Metadata } from '@appland/models';
+import { rm } from 'fs/promises';
+import AppMapIndex from './appmapIndex';
 
 export default class FingerprintWatchCommand {
   private pidfilePath: string | undefined;
@@ -225,7 +227,8 @@ export default class FingerprintWatchCommand {
   }
 
   removed(file: string) {
-    console.warn(`TODO: AppMap removed: ${file}`);
+    const { indexDir } = new AppMapIndex(file);
+    rm(indexDir, { force: true, recursive: true });
   }
 
   ready() {

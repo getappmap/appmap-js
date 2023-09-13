@@ -1,3 +1,75 @@
+# [@appland/appmap-v3.96.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.96.0...@appland/appmap-v3.96.1) (2023-09-12)
+
+
+### Bug Fixes
+
+* simplify appmap file resolution logic, add tests for appmap file resolution ([d9ee43b](https://github.com/getappmap/appmap-js/commit/d9ee43bf90a4893baf4f803d1a147cc5788e6b14))
+
+# [@appland/appmap-v3.96.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.95.0...@appland/appmap-v3.96.0) (2023-09-12)
+
+
+### Features
+
+* Enable and disable report sections ([6422b51](https://github.com/getappmap/appmap-js/commit/6422b5116e846d2df43d57b9e996abf1f73a9af9))
+
+# [@appland/appmap-v3.95.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.94.0...@appland/appmap-v3.95.0) (2023-09-11)
+
+
+### Features
+
+* Index emits run stats under `.appmap/run-stats` ([0b359b1](https://github.com/getappmap/appmap-js/commit/0b359b130225246da3fce9f9e4d8ba992e95b050))
+* Index worker emits metadata upon completion ([e4fd699](https://github.com/getappmap/appmap-js/commit/e4fd699dc7cca5dab9d92b6575d5b9646191534b))
+
+# [@appland/appmap-v3.94.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.93.1...@appland/appmap-v3.94.0) (2023-09-11)
+
+
+### Features
+
+* Indexer now removes index directories when appmaps are removed ([382be23](https://github.com/getappmap/appmap-js/commit/382be231885a98a378efec6f930e7ffd88ec7249))
+* Print machine-readable events when indexing verbosely ([9f1490a](https://github.com/getappmap/appmap-js/commit/9f1490a140107b45b444bab6f81a9d471ea83a37)), closes [#1307](https://github.com/getappmap/appmap-js/issues/1307)
+
+# [@appland/appmap-v3.93.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.93.0...@appland/appmap-v3.93.1) (2023-09-09)
+
+
+### Bug Fixes
+
+* Ignore invalid OpenAPI paths ([d313625](https://github.com/getappmap/appmap-js/commit/d313625c071131732a7eaf845700126915d50ab5))
+
+# [@appland/appmap-v3.93.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.92.1...@appland/appmap-v3.93.0) (2023-09-07)
+
+
+### Features
+
+* **ChangeReporter.ts:** add import statements for DiffOutcome and DiffResult ([1e9ce9d](https://github.com/getappmap/appmap-js/commit/1e9ce9defab93fc4e86a66d8ea52322d9514d543))
+
+# [@appland/appmap-v3.92.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.92.0...@appland/appmap-v3.92.1) (2023-09-07)
+
+
+### Bug Fixes
+
+* Stage requests into files ([e42e7c2](https://github.com/getappmap/appmap-js/commit/e42e7c2753c23c44e6fe813caca460548a3983e7))
+
+# [@appland/appmap-v3.92.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.91.1...@appland/appmap-v3.92.0) (2023-09-07)
+
+
+### Features
+
+* Sequence diagram validation ([e88ab44](https://github.com/getappmap/appmap-js/commit/e88ab44791a994f4102903e8141e538db481d23a))
+
+# [@appland/appmap-v3.91.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.91.0...@appland/appmap-v3.91.1) (2023-09-06)
+
+
+### Bug Fixes
+
+* Resolve some cases where locating AppMap files fails ([0f8fc8d](https://github.com/getappmap/appmap-js/commit/0f8fc8def801f73be46f3b87275cd799ca546cfd))
+
+# [@appland/appmap-v3.91.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.90.0...@appland/appmap-v3.91.0) (2023-09-05)
+
+
+### Features
+
+* Hide SQL SHOW from compare ([5d0a563](https://github.com/getappmap/appmap-js/commit/5d0a563ddfee0106e03d58034aafdf9646b4ac22))
+
 # [@appland/appmap-v3.90.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.89.1...@appland/appmap-v3.90.0) (2023-09-01)
 
 

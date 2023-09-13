@@ -1,4 +1,4 @@
-import { rpcRequestForEvent } from '../src/rpcRequest';
+import { headerValue, rpcRequestForEvent } from '../src/rpcRequest';
 import SecuritySchemes from '../src/securitySchemes';
 import { httpClientRequests, httpServerRequests } from './util';
 
@@ -10,7 +10,7 @@ describe('openapi.securitySchemes', () => {
     );
 
     const schemes = new SecuritySchemes();
-    schemes.addRpcRequest(request);
+    schemes.addAuthorizationHeader(headerValue(request.requestHeaders, 'authorization')!);
     expect(schemes.openapi()).toEqual({
       bearer: { scheme: 'bearer', type: 'http' },
     });
@@ -22,7 +22,7 @@ describe('openapi.securitySchemes', () => {
     );
 
     const schemes = new SecuritySchemes();
-    schemes.addRpcRequest(request);
+    schemes.addAuthorizationHeader(headerValue(request.requestHeaders, 'authorization')!);
     expect(schemes.openapi()).toEqual({
       bearer: { scheme: 'bearer', type: 'http' },
     });

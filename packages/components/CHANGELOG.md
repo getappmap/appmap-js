@@ -1,3 +1,36 @@
+# [@appland/components-v2.61.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.61.1...@appland/components-v2.61.2) (2023-09-12)
+
+
+### Bug Fixes
+
+* Labels which overflow the sequence diagram are truncated ([#1360](https://github.com/getappmap/appmap-js/issues/1360)) ([f3192f1](https://github.com/getappmap/appmap-js/commit/f3192f1fe031ca1e080848407cb904f1ddf2823a))
+* The first lifeline in the sequence diagram now renders at the expected height ([#1365](https://github.com/getappmap/appmap-js/issues/1365)) ([ed80466](https://github.com/getappmap/appmap-js/commit/ed80466199e6923ad4de7b1fd3272ad334eb5fb3))
+
+# [@appland/components-v2.61.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.61.0...@appland/components-v2.61.1) (2023-09-08)
+
+
+### Bug Fixes
+
+* Long package names are clipped ([71c89ba](https://github.com/getappmap/appmap-js/commit/71c89ba39e3c2e44cd728ffa31d74d763ae34eb1))
+
+# [@appland/components-v2.61.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.60.1...@appland/components-v2.61.0) (2023-09-06)
+
+
+### Features
+
+* Collapse non-diff-participating Actions ([8525318](https://github.com/getappmap/appmap-js/commit/852531831e072ac3a554405a48b3829065272dd0))
+* Enable sequence diagram diff in AppMap ([885239e](https://github.com/getappmap/appmap-js/commit/885239e28dd92db741e76ee6a40247ee15681aa4))
+* Scroll to first 'diff' action in SD ([4a79587](https://github.com/getappmap/appmap-js/commit/4a795872a73c744f9b63f33968739f0d308888c7))
+* Set default view for precomputed seq diagram ([cb5093d](https://github.com/getappmap/appmap-js/commit/cb5093d4bcd7a8b6e3b994c6eb203d1fb3398c84))
+* Suppress hide and expand Actor for SD diff ([293a24f](https://github.com/getappmap/appmap-js/commit/293a24fabf23bc3cd451a4617db8b871a3bbe186))
+
+# [@appland/components-v2.60.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.60.0...@appland/components-v2.60.1) (2023-09-06)
+
+
+### Bug Fixes
+
+* Apply button in filter dialog is confusing ([5329172](https://github.com/getappmap/appmap-js/commit/53291721aeecf1dd367050b7623cb8683ed7ceb5))
+
 # [@appland/components-v2.60.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.59.0...@appland/components-v2.60.0) (2023-09-01)
 
 
