@@ -45,6 +45,13 @@ context('AppMap sequence diagram', () => {
       cy.get('.sequence-actor[data-actor-id="class:openssl/Digest::Instance"]').should('exist');
       cy.get('.sequence-actor[data-actor-id="class:openssl/OpenSSL::Cipher"]').should('exist');
     });
+
+    it('check if all .call-line-segment.connecting-span elements have position as relative', () => {
+      // Check each .connecting-span for position: relative
+      cy.get('.call-line-segment.connecting-span').each(($el) => {
+        expect($el.css('position')).to.eq('relative');
+      });
+    });
   });
 
   context('with no data provided', () => {
