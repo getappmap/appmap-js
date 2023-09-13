@@ -19,7 +19,7 @@
           },
         }"
       >
-        <VReturnLabel :action-spec="actionSpec" />
+        <VReturnLabel :action-spec="actionSpec" :return-value="returnValue" />
       </div>
     </template>
     <template v-else-if="actionSpec.callArrowDirection === 'right'">
@@ -35,7 +35,7 @@
             },
           }"
         >
-          <VReturnLabel :action-spec="actionSpec" />
+          <VReturnLabel :action-spec="actionSpec" :return-value="returnValue" />
           <Arrow class="arrow" />
         </div>
       </template>
@@ -51,7 +51,7 @@
             },
           }"
         >
-          <VReturnLabel :action-spec="actionSpec" />
+          <VReturnLabel :action-spec="actionSpec" :return-value="returnValue" />
           <Arrow class="arrow" />
         </div>
         <template v-if="actionSpec.calleeActionIndex - actionSpec.callerActionIndex > 2">
@@ -93,7 +93,7 @@
             },
           }"
         >
-          <VReturnLabel :action-spec="actionSpec" />
+          <VReturnLabel :action-spec="actionSpec" :return-value="returnValue" />
           <Arrow class="arrow" />
         </div>
       </template>
@@ -133,7 +133,7 @@
             },
           }"
         >
-          <VReturnLabel :action-spec="actionSpec" />
+          <VReturnLabel :action-spec="actionSpec" :return-value="returnValue" />
           <Arrow class="arrow" />
         </div>
       </template>
@@ -162,6 +162,11 @@ export default {
     collapsedActions: {
       type: Array,
       required: true,
+    },
+    returnValue: {
+      type: String,
+      required: true,
+      readonly: true,
     },
   },
 

@@ -46,6 +46,15 @@ context('AppMap sequence diagram', () => {
       cy.get('.sequence-actor[data-actor-id="class:openssl/OpenSSL::Cipher"]').should('exist');
     });
 
+
+    it.only('should display the tooltip on hover', () => {
+      // Hover over the .label
+      cy.get('.return:nth-child(14) .name').trigger('mouseover');
+      cy.get('.return:nth-child(14) span.tooltip').should('exist');
+      cy.get('.return:nth-child(14) .name').trigger('mouseout');
+      cy.get('.return:nth-child(14) span.tooltip').should('not.exist');
+    });
+
     it('check if all .call-line-segment.connecting-span elements have position as relative', () => {
       // Check each .connecting-span for position: relative
       cy.get('.call-line-segment.connecting-span').each(($el) => {

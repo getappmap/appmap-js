@@ -1,6 +1,7 @@
 <template>
-  <div class="label">
+  <div class="label" @mouseover="hover = true" @mouseout="hover = false">
     <span class="name">{{ label }}</span>
+    <span v-if="hover && returnValue" class="tooltip">{{ returnValue }}</span>
   </div>
 </template>
 
@@ -10,11 +11,20 @@ import { ActionSpec } from './ActionSpec';
 export default {
   name: 'v-sequence-return-label',
 
-  components: {},
+  data() {
+    return {
+      hover: false,
+    };
+  },
 
   props: {
     actionSpec: {
       type: ActionSpec,
+      required: true,
+      readonly: true,
+    },
+    returnValue: {
+      type: String,
       required: true,
       readonly: true,
     },
@@ -47,5 +57,15 @@ export default {
   text-overflow: ellipsis;
   font-style: italic;
   color: lighten($gray4, 20);
+}
+
+.tooltip {
+  position: absolute;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+  padding: 5px;
+  z-index: 1;
+  opacity: 0.9;
 }
 </style>
