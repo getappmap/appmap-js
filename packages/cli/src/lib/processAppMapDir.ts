@@ -21,6 +21,7 @@ export type TaskResultHandler<V> = (appmapFile: string, result: V) => void | Pro
 export type ProcessResult = {
   oversized: Set<string>;
   errors: Array<Error>;
+  unhandledErrors: Array<Error>;
   numProcessed: number;
 };
 
@@ -43,19 +44,25 @@ export default async function processAppMapDir<T extends Task, V>(
   }
 
   const oversized = new Set<string>();
+  const unhandledErrors = new Array<Error>();
   const errors = new Array<Error>();
   await Promise.all(
     files.map(
       async (file) =>
-        new Promise<void>((resolve, reject) =>
+        new Promise<void>((resolve) =>
           pool.runTask(taskFunction(file), async (err: Error | null, result: TaskResult<V>) => {
-            if (err) return reject(err);
-
-            if (result.oversized) {
+            if (err) {
+              warn(`Unhandled error: ${err}`);
+              unhandledErrors.push(err);
+              errors.push(err);
+            } else if (result.oversized) {
               warn(`Skipping oversized AppMap ${file}`);
               oversized.add(file);
             } else if (result.error) {
-              warn(`${name} failed to process ${file}: ${(result.error as Error).message}`);
+              // warn(`${name} failed to process ${file}: ${(result.error as Error).message}`);
+              // TODO: Change ^ to this:
+              warn(`${name} failed to process ${file}: ${result.error}`);
+
               errors.push(result.error);
             } else {
               if (resultHandler) {
@@ -77,5 +84,5 @@ export default async function processAppMapDir<T extends Task, V>(
     )
   );
 
-  return { oversized, errors, numProcessed: files.length };
+  return { oversized, errors, unhandledErrors, numProcessed: files.length };
 }

@@ -137,6 +137,9 @@ export default class WorkerPool extends EventEmitter {
     });
     worker.on('error', (err) => {
       warn(`Uncaught exception in worker thread: ${err}`);
+      warn(
+        `This worker thread will be terminated and a new one launched in its place - which is expensive!`
+      );
       // In case of an uncaught exception: Call the callback that was passed to
       // `runTask` with the error.
       if (worker[kTaskInfo]) worker[kTaskInfo].done(err, null);
@@ -144,6 +147,7 @@ export default class WorkerPool extends EventEmitter {
       // Remove the worker from the list and start a new Worker to replace the
       // current one.
       this.workers.splice(this.workers.indexOf(worker), 1);
+      worker.unref();
       this.addNewWorker();
     });
     this.workers.push(worker);

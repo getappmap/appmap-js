@@ -69,7 +69,7 @@ class Fingerprinter extends EventEmitter {
   public checkVersion = true;
   public maxFileSizeInBytes: number | undefined = MAX_APPMAP_SIZE;
 
-  async fingerprint(appMapFileName: string) {
+  async fingerprint(appMapFileName: string): Promise<FingerprintEvent | undefined> {
     if (verbose()) {
       console.log(`Indexing ${appMapFileName}`);
     }
@@ -143,7 +143,9 @@ class Fingerprinter extends EventEmitter {
     // it's machine-readable (see doc/index-verbose.md)
     if (verbose()) console.log(`Indexed ${quotePath(resolve(appMapFileName))}`);
 
-    this.emit('index', { path: appMapFileName, metadata: appmap.metadata, numEvents });
+    const result = { path: appMapFileName, metadata: appmap.metadata, numEvents };
+    this.emit('index', result);
+    return result;
   }
 }
 
