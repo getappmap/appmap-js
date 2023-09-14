@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.96.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.96.1...@appland/appmap-v3.96.2) (2023-09-14)
+
+
+### Bug Fixes
+
+* Handle malformed appmaps in analysis step ([f72d119](https://github.com/getappmap/appmap-js/commit/f72d1191d8dda0a57902a2ef9bba0852af34a23e))
+
 # [@appland/appmap-v3.96.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.96.0...@appland/appmap-v3.96.1) (2023-09-12)
 
 
