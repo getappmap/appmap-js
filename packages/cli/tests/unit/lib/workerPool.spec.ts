@@ -1,12 +1,6 @@
 import { join } from 'path';
 import WorkerPool from '../../../src/lib/workerPool';
 
-type SumTask = {
-  a: number;
-  b: number;
-  delay: number;
-};
-
 type TaskResult = {
   errors: Error[];
   sums: number[];
@@ -16,12 +10,12 @@ type TaskResult = {
 describe('WorkerPool', () => {
   let numThreads = 1;
   let delay = 100;
-  let jobFile = join(__dirname, 'delay-sum.mjs');
   let workerPool: WorkerPool;
+  let jobFile: string;
 
   const initializeWorkerPool = () => (workerPool = new WorkerPool(jobFile, numThreads));
 
-  const runTasks = async (tasks: SumTask[]): Promise<TaskResult> => {
+  const runTasks = async <T>(tasks: Array<T>): Promise<TaskResult> => {
     const processTasks = async (cb: (err: Error | null, result: any) => void) => {
       await Promise.all(
         tasks.map((task) => {
@@ -56,35 +50,21 @@ describe('WorkerPool', () => {
 
   afterEach(async () => (workerPool ? await workerPool.close() : undefined));
 
-  it('processes a simple task using MJS', async () => {
-    initializeWorkerPool();
+  describe('performing a fixed-time task', () => {
+    beforeEach(() => (jobFile = join(__dirname, 'delay-sum-task.mjs')));
 
-    const task = { a: 1, b: 2, delay };
-    const result = await runTasks([task]);
+    it('completes the task', async () => {
+      initializeWorkerPool();
 
-    expect(result.sums).toEqual([3]);
-    expect(result.elapsed).toBeGreaterThanOrEqual(delay);
-    expect(result.elapsed).toBeLessThan(delay * 1.5);
-  });
+      const task = { a: 1, b: 2, delay };
+      const result = await runTasks([task]);
 
-  it('takes 2x the delay time using one worker', async () => {
-    initializeWorkerPool();
+      expect(result.sums).toEqual([3]);
+      expect(result.elapsed).toBeGreaterThanOrEqual(delay);
+      expect(result.elapsed).toBeLessThan(delay * 1.5);
+    });
 
-    const tasks = [
-      { a: 1, b: 1, delay },
-      { a: 2, b: 2, delay },
-    ];
-    const result = await runTasks(tasks);
-
-    expect(result.sums.sort((a, b) => a - b)).toEqual([2, 4]);
-    expect(result.elapsed).toBeGreaterThanOrEqual(delay * 2);
-    expect(result.elapsed).toBeLessThan(delay * 3);
-  });
-
-  describe('using two workers', () => {
-    beforeEach(() => (numThreads = 2));
-
-    it('takes about 1x the delay time', async () => {
+    it('takes 2x the delay time using one worker', async () => {
       initializeWorkerPool();
 
       const tasks = [
@@ -94,8 +74,40 @@ describe('WorkerPool', () => {
       const result = await runTasks(tasks);
 
       expect(result.sums.sort((a, b) => a - b)).toEqual([2, 4]);
-      expect(result.elapsed).toBeGreaterThanOrEqual(delay);
-      expect(result.elapsed).toBeLessThan(delay * 1.5);
+      expect(result.elapsed).toBeGreaterThanOrEqual(delay * 2);
+      expect(result.elapsed).toBeLessThan(delay * 3);
+    });
+
+    describe('using two workers', () => {
+      beforeEach(() => (numThreads = 2));
+
+      it('takes about 1x the delay time', async () => {
+        initializeWorkerPool();
+
+        const tasks = [
+          { a: 1, b: 1, delay },
+          { a: 2, b: 2, delay },
+        ];
+        const result = await runTasks(tasks);
+
+        expect(result.sums.sort((a, b) => a - b)).toEqual([2, 4]);
+        expect(result.elapsed).toBeGreaterThanOrEqual(delay);
+        expect(result.elapsed).toBeLessThan(delay * 1.5);
+      });
+    });
+  });
+
+  describe('when the task raises an error', () => {
+    beforeEach(() => (jobFile = join(__dirname, 'error-task.mjs')));
+
+    it('re-raises the error', async () => {
+      initializeWorkerPool();
+
+      const task = { errorMessage: 'an error occurred' };
+      const result = await runTasks([task]);
+
+      expect(result.errors.map((e) => e.toString())).toEqual(['Error: an error occurred']);
+      expect(result.sums).toEqual([]);
     });
   });
 });
