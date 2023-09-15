@@ -179,6 +179,54 @@ context('AppMap component diagram', () => {
           cy.get('.details-search__block-item-count').should('contain.text', '2');
         });
     });
+
+    context('Details panel selected root functionality', () => {
+      beforeEach(() => {
+        // Set as root
+        cy.get('g[data-id="app/controllers"]').click();
+        cy.get('.details-panel-filters__item').contains('Set as Root').click();
+        cy.get('.details-panel-filters__item')
+          .contains('Set as Root')
+          .should('have.class', 'details-panel-filters__item--active');
+      });
+
+      it('sets and unsets an item as root through filter popup', () => {
+        // Remove root
+        cy.get('[data-cy="filter-button"]').click();
+        cy.get('.filters__root-icon').click();
+
+        // Check if the "Set as Root" circle is no longer active
+        cy.get('.details-panel-filters__item')
+          .contains('Set as Root')
+          .should('not.have.class', 'details-panel-filters__item--active');
+      });
+
+      it('checks "Reset all" unchecks the selected circle', () => {
+        // click on reset all
+        cy.get('.details-panel-filters__head-reset').click();
+
+        // Check if the "Set as Root" circle is unchecked
+        cy.get('.details-panel-filters__item')
+          .contains('Set as Root')
+          .should('not.have.class', 'details-panel-filters__item--active');
+      });
+
+      it('ensures "Set as Root" circle can be un-selected', () => {
+        // Unset as root
+        cy.get('.details-panel-filters__item').contains('Set as Root').click();
+
+        // Check if the "Set as Root" circle is unchecked
+        cy.get('.details-panel-filters__item')
+          .contains('Set as Root')
+          .should('not.have.class', 'details-panel-filters__item--active');
+      });
+    });
+    it('checks both "Set as Root" and "Hide" cannot be set at the same time', () => {
+      cy.get('g[data-id="app/controllers"]').click();
+      cy.get('.details-panel-filters__item').contains('Hide').should('exist');
+      cy.get('.details-panel-filters__item').contains('Set as Root').click();
+      cy.get('.details-panel-filters__item').contains('Hide').should('not.exist');
+    });
   });
 
   context('Java', () => {
