@@ -13,7 +13,7 @@ describe('Sidebar sign-in page', () => {
 
   it('informs the user that we do not access their source code', () => {
     const expectedText1 =
-      'Authentication with GitHub or GitLab is used solely for issuing a license. AppMap runs in';
+      'Authentication with GitHub is used solely for issuing a license. AppMap runs in';
     const expectedText2 =
       'your code editor, so your AppMaps and your source code stay on your machine.';
 
