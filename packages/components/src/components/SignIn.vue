@@ -37,8 +37,8 @@
       <div class="your-data">
         <shieldIcon />
         <p data-cy="your-data-text">
-          Authentication with GitHub is used solely for issuing a license. AppMap runs in your code
-          editor, so your AppMaps and your source code stay on your machine.
+          Authentication with GitHub is used solely for issuing a license. AppMap runs in
+          your code editor, so your AppMaps and your source code stay on your machine.
           <a href="https://appmap.io/security">Security FAQ<VExternalLinkIcon /></a>
         </p>
       </div>
