@@ -1,5 +1,5 @@
 <template>
-  <div class="label" @mouseover="hover = true" @mouseout="hover = false">
+  <div class="label" @mouseover="startHover" @mouseout="stopHover">
     <span class="name">{{ label }}</span>
     <span v-if="hover && returnValue" class="tooltip">{{ returnValue }}</span>
   </div>
@@ -14,7 +14,20 @@ export default {
   data() {
     return {
       hover: false,
+      hoverTimeout: null,
     };
+  },
+
+  methods: {
+    startHover() {
+      this.hoverTimeout = setTimeout(() => {
+        this.hover = true;
+      }, 300);
+    },
+    stopHover() {
+      clearTimeout(this.hoverTimeout);
+      this.hover = false;
+    },
   },
 
   props: {

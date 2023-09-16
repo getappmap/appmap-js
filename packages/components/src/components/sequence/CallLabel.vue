@@ -26,13 +26,13 @@
             @click="selectEvent"
             :class="text.class"
             :key="text.text"
-            :title="
-              text.text +
-              (actionSpec.elapsedTimeMs ? '\n\n' + actionSpec.elapsedTimeMs + ' ms' : '')
-            "
+            :title="sqlize"
+            @mouseover="startHover"
+            @mouseout="stopHover"
           >
             {{ text.text }}
           </span>
+          <span v-if="hover && parameters" class="tooltip">{{ parameters }}</span>
         </div>
       </template>
     </div>
@@ -93,6 +93,8 @@ export default {
   data() {
     return {
       collapsedActionState: this.collapsedActions,
+      hover: false,
+      hoverTimeout: null,
     };
   },
 
@@ -157,6 +159,36 @@ export default {
 
       return result;
     },
+    currentEvent() {
+      if (!this.appMap) return null;
+      if (!this.actionSpec.action.eventIds) return null;
+      const eventId = this.actionSpec.action.eventIds[0];
+      return this.appMap.eventsById[eventId];
+    },
+    sqlize() {
+      if (!this.currentEvent) return '';
+      if (this.currentEvent.sql) {
+        return `${this.currentEvent.sqlQuery} ${
+          this.actionSpec.elapsedTimeMs ? `\n\n${this.actionSpec.elapsedTimeMs} ms` : ''
+        }`;
+      }
+      return '';
+    },
+    parameters() {
+      if (!this.currentEvent) return '';
+
+      if (this.currentEvent.sql) return '';
+
+      if (this.currentEvent.parameters) {
+        return this.formatParameters(this.currentEvent.parameters);
+      }
+
+      if (this.currentEvent.message) {
+        return this.formatParameters(this.currentEvent.message);
+      }
+
+      return '';
+    },
   },
   methods: {
     collapseOrExpand() {
@@ -170,6 +202,33 @@ export default {
         const event = this.appMap.events.find((e) => e.id === eventId);
         if (event) this.$store.commit(SELECT_CODE_OBJECT, event);
       }
+    },
+    startHover() {
+      this.hoverTimeout = setTimeout(() => {
+        this.hover = true;
+      }, 300);
+    },
+    stopHover() {
+      clearTimeout(this.hoverTimeout);
+      this.hover = false;
+    },
+    truncate(str) {
+      const MAX_LENGTH = 75;
+      const TRUNCATION_SUFFIX = '...';
+
+      if (str.length > MAX_LENGTH) {
+        return str.substring(0, MAX_LENGTH - TRUNCATION_SUFFIX.length) + TRUNCATION_SUFFIX;
+      }
+      return str;
+    },
+    formatParameters(parameters) {
+      return parameters
+        .map((p) => {
+          const name = p?.name ?? '';
+          const value = p?.value ?? 'null';
+          return `${name}: ${this.truncate(value.toString())}`;
+        })
+        .join(', ');
     },
   },
 };
@@ -240,5 +299,14 @@ $bg-fade: rgba(0, 0, 0, 0.8);
     cursor: pointer;
     color: $lightblue;
   }
+}
+.tooltip {
+  position: absolute;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+  padding: 5px;
+  z-index: 99999;
+  opacity: 0.9;
 }
 </style>
