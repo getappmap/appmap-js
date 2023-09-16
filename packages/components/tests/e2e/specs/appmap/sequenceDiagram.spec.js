@@ -46,13 +46,59 @@ context('AppMap sequence diagram', () => {
       cy.get('.sequence-actor[data-actor-id="class:openssl/OpenSSL::Cipher"]').should('exist');
     });
 
-
-    it.only('should display the tooltip on hover', () => {
+    it('should display the tooltip on hover on return label', () => {
       // Hover over the .label
       cy.get('.return:nth-child(14) .name').trigger('mouseover');
       cy.get('.return:nth-child(14) span.tooltip').should('exist');
       cy.get('.return:nth-child(14) .name').trigger('mouseout');
       cy.get('.return:nth-child(14) span.tooltip').should('not.exist');
+    });
+
+    it('should display the tooltip on hover on call label', () => {
+      // Hover over the .label
+      cy.get('.call:nth-child(17) .name').trigger('mouseover');
+      cy.get('.call:nth-child(17) span.tooltip').should('exist');
+      cy.get('.call:nth-child(17) .name').trigger('mouseout');
+      cy.get('.call:nth-child(17) span.tooltip').should('not.exist');
+    });
+
+    it('should display the tooltip on hover on link_to_with_icon call label', () => {
+      // Hover over the .label
+      cy.get('.call:nth-child(72) .name').trigger('mouseover');
+      cy.get('.call:nth-child(72) span.tooltip').should('exist');
+      cy.get('.call:nth-child(72) .name').trigger('mouseout');
+      cy.get('.call:nth-child(72) span.tooltip').should('not.exist');
+    });
+
+    it('should display the truncated tooltip on hover on generate call label', () => {
+      cy.get('.call:nth-child(67) .name').trigger('mouseover');
+      cy.get('.call:nth-child(67) span.tooltip')
+        .should('exist')
+        .invoke('text')
+        .should((text) => {
+          const trimmedText = text.trim().replace('arg: ', '');
+          expect(trimmedText).to.match(/\.\.\.$/); // endsWith '...'
+          expect(trimmedText).to.have.lengthOf(75);
+        });
+      cy.get('.call:nth-child(67) .name').trigger('mouseout');
+      cy.get('.call:nth-child(67) span.tooltip').should('not.exist');
+    });
+
+    it('should display the truncated tooltip on hover on tab call label', () => {
+      cy.get('.call:nth-child(293) .name').trigger('mouseover');
+      cy.get('.call:nth-child(293) span.tooltip')
+        .should('exist')
+        .invoke('text')
+        .should('include', '...,');
+      cy.get('.call:nth-child(293) .name').trigger('mouseout');
+      cy.get('.call:nth-child(293) span.tooltip').should('not.exist');
+    });
+
+    it('should not display the tooltip on hover on index call label without parameters', () => {
+      cy.get('.call:nth-child(11) .name').trigger('mouseover');
+      cy.get('.call:nth-child(11) span.tooltip').should('not.exist');
+      cy.get('.call:nth-child(11) .name').trigger('mouseout');
+      cy.get('.call:nth-child(11) span.tooltip').should('not.exist');
     });
 
     it('check if all .call-line-segment.connecting-span elements have position as relative', () => {
