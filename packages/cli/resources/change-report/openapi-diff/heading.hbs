@@ -1,0 +1,8 @@
+| [API changes](#api-changes) | 
+  {{~#unless apiDiff.differenceCount }}
+  :white_check_mark: No API changes
+  {{~/unless}}
+  {{~#if apiDiff.differenceCount }}
+  {{~#if apiDiff.breakingDifferenceCount }}🚧 {{apiDiff.breakingDifferenceCount}} breaking{{~/if}}
+  {{~#if apiDiff.nonBreakingDifferenceCount }}{{#if apiDiff.breakingDifferenceCount }},&nbsp;{{~/if}} :wrench: {{apiDiff.nonBreakingDifferenceCount}} non-breaking
+  {{~/if}}{{~/if}} |

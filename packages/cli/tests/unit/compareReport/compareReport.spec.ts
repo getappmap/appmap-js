@@ -17,12 +17,10 @@ const changeReportDirectory = path.join(
   'change-report',
   `testBase-testHead`
 );
-const changeReportPath = path.join(changeReportDirectory, 'change-report.json');
 
 describe('compare-report command', () => {
   beforeEach(async () => {
     await cleanProject(compareFixturePath);
-    copyFileSync(path.join(compareFixturePath, 'expected-change-report.json'), changeReportPath);
   });
 
   afterEach(async () => {

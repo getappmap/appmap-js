@@ -1,0 +1,46 @@
+{{#*inline "api-change"}}
+{{title}} {{#each sourceSpecEntityDetails}}`{{location}}`{{/each}} {{#each destinationSpecEntityDetails}}`{{location}}`{{/each}}
+{{~/inline}}
+## 🔄 API changes
+
+{{#with apiDiff}}
+  {{#if differenceCount}}
+    {{#if breakingDifferences}}
+### 🚧 Breaking changes
+
+      {{#each breakingDifferences}}
+- {{> api-change }}
+      {{/each}}
+    {{/if}}
+
+    {{#if nonBreakingDifferences}}
+### :wrench: Non-breaking changes
+
+      {{#each nonBreakingDifferences}}
+- {{> api-change }}
+      {{/each}}
+    {{/if}}
+
+    {{#if unclassifiedDifferences}}
+### Unclassified changes
+
+      {{#each unclassifiedDifferences}}
+- {{> api-change }}
+      {{/each}}
+    {{/if}}
+
+<details>
+<summary>
+Detailed OpenAPI diff
+</summary>
+
+```diff
+{{{sourceDiff}}}
+```
+</details>
+
+  {{/if}}
+  {{#else}}
+  No API changes
+  {{/else}}
+{{/with}}

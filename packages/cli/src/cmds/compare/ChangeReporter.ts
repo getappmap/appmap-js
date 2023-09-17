@@ -8,6 +8,7 @@ import {
 } from 'openapi-diff';
 import { dirname, isAbsolute, join, relative, resolve } from 'path';
 import { ClassMap, Metadata } from '@appland/models';
+import { Finding } from '@appland/scanner';
 import { FormatType, format } from '@appland/sequence-diagram';
 import { queue } from 'async';
 import assert from 'assert';
@@ -22,7 +23,6 @@ import { exists, verbose } from '../../utils';
 import mapToRecord from './mapToRecord';
 import { mutedStyle, prominentStyle } from './ui';
 import { executeCommand } from '../../lib/executeCommand';
-import { Finding, ImpactDomain } from '../../lib/findings';
 import loadFindings from './loadFindings';
 import { loadSequenceDiagram } from './loadSequenceDiagram';
 import { warn } from 'console';
@@ -372,11 +372,11 @@ export function buildFailure(
         const [path, linenoStr] = location.split(':');
         if (linenoStr && (await exists(path))) {
           const lineno = parseInt(linenoStr, 10);
-          const testCode = (await readFile(path, 'utf-8')).split('\n');
+          const failureCauseCode = (await readFile(path, 'utf-8')).split('\n');
           const minIndex = Math.max(lineno - snippetWidth, 0);
-          const maxIndex = Math.min(lineno + snippetWidth, testCode.length);
+          const maxIndex = Math.min(lineno + snippetWidth, failureCauseCode.length);
           testFailure.testSnippet = {
-            codeFragment: testCode.slice(minIndex, maxIndex).join('\n'),
+            codeFragment: failureCauseCode.slice(minIndex, maxIndex).join('\n'),
             startLine: minIndex + 1,
             language: metadata.language?.name,
           };

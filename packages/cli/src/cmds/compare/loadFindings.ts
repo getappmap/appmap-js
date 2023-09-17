@@ -1,11 +1,12 @@
 import assert from 'assert';
-import { Finding } from '../../lib/findings';
+import { SemVer } from 'semver';
+import { readFile } from 'fs/promises';
+import { Finding } from '@appland/scanner';
+
 import { ArchiveMetadata } from '../archive/ArchiveMetadata';
 import { Paths } from './Paths';
 import { RevisionName } from './RevisionName';
-import { SemVer } from 'semver';
 import { executeCommand } from '../../lib/executeCommand';
-import { readFile } from 'fs/promises';
 import { processNamedFiles } from '../../utils';
 
 export default async function loadFindings(
