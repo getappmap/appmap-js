@@ -17,7 +17,9 @@ context('Investigate Findings (10 findings)', () => {
   });
 
   it('should display a button to investigate findings', () => {
-    cy.get('[data-cy="investigate-findings-button"]').should('be.visible');
+    cy.get('[data-cy="investigate-findings-button"]')
+      .should('be.visible')
+      .should('contain.text', 'View analysis report');
   });
 
   it('shows next button', () => {
