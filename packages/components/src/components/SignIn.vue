@@ -26,8 +26,14 @@
             >Dependency maps</a
           >
         </li>
-        <li @click="clickSignInLink('open-api')">
-          <a href="https://appmap.io/docs/openapi">OpenAPI definitions</a>
+        <li @click="clickSignInLink('flame-graphs')">
+          <a href="https://appmap.io/docs/diagrams/flamegraph.html">Flame graphs</a>
+        </li>
+        <li @click="clickSignInLink('runtime-analysis')">
+          <a href="https://appmap.io/docs/analysis/in-your-code-editor.html">Runtime analysis</a>
+        </li>
+        <li @click="clickSignInLink('appmap-ci')">
+          <a href="https://appmap.io/docs/analysis/in-ci.html">AppMap in CI</a>
         </li>
       </ul>
       <div class="signin-buttons">
