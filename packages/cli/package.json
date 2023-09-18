@@ -80,7 +80,7 @@
   ],
   "dependencies": {
     "@appland/client": "workspace:^1.8.0",
-    "@appland/components": "workspace:^2",
+    "@appland/components": "workspace:^3",
     "@appland/diagrams": "workspace:^1.7.0",
     "@appland/models": "workspace:^2.6.3",
     "@appland/openapi": "workspace:^1.4.3",
