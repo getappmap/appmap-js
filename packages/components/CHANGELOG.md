@@ -1,3 +1,16 @@
+# [@appland/components-v3.1.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.0.0...@appland/components-v3.1.0) (2023-09-18)
+
+
+### Bug Fixes
+
+* The OpenAPI links have been replaced in the sign in page ([ba0675f](https://github.com/getappmap/appmap-js/commit/ba0675f99056b52756ae416c1357904e2223e294))
+
+
+### Features
+
+* Add a local storage backend for persisting filters ([#1364](https://github.com/getappmap/appmap-js/issues/1364)) ([a5f2c75](https://github.com/getappmap/appmap-js/commit/a5f2c7561bbd7ef2bc4ce06ba4eeacf515348c2d))
+* Improved usability when changing filters from the sidebar ([#1381](https://github.com/getappmap/appmap-js/issues/1381)) ([caec1b8](https://github.com/getappmap/appmap-js/commit/caec1b89f9a824b50b5aba23c32d070d8d8e0c32))
+
 # [@appland/components-v3.0.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.62.0...@appland/components-v3.0.0) (2023-09-18)
 
 
