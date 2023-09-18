@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.96.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.96.2...@appland/appmap-v3.96.3) (2023-09-18)
+
+
+### Bug Fixes
+
+* update components to major version 3 ([8983a1f](https://github.com/getappmap/appmap-js/commit/8983a1f0a7acbeaada0a4c4e8cd5eea19b7c9667))
+
 # [@appland/appmap-v3.96.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.96.1...@appland/appmap-v3.96.2) (2023-09-14)
 
 
