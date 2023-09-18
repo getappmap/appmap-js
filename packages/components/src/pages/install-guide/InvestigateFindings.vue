@@ -51,9 +51,10 @@
             <br />
             <p>
               <v-button
+                v-if="enableAnalysisReport"
                 data-cy="investigate-findings-button"
-                label="Open the PROBLEMS tab"
-                @click.native="viewProblems"
+                label="View analysis report"
+                @click.native="viewFindings"
               />
             </p>
           </article>
@@ -162,8 +163,8 @@ export default {
   },
 
   methods: {
-    viewProblems() {
-      this.$root.$emit('view-problems', this.projectPath);
+    viewFindings() {
+      this.$root.$emit('open-findings-overview');
     },
   },
 
@@ -171,6 +172,9 @@ export default {
     enableButtonLabel() {
       if (!this.userAuthenticated) return 'Sign in to enable AppMap Runtime Analysis';
       return 'Enable AppMap Runtime Analysis';
+    },
+    enableAnalysisReport() {
+      return Object.values(this.findingsDomainCounts).some((count) => count > 0);
     },
   },
 };
