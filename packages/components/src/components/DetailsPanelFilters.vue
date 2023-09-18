@@ -73,16 +73,31 @@ export default {
 
       if (this.isRootObject) {
         filterItems.setAsRoot.isActive = true;
+      } else {
+        filterItems.setAsRoot.isActive = false;
       }
 
-      return filterItems;
+      const filteredItems = this.isRootObject
+        ? Object.keys(filterItems).reduce((acc, key) => {
+            if (key !== 'hide') {
+              acc[key] = filterItems[key];
+            }
+            return acc;
+          }, {})
+        : filterItems;
+
+      return filteredItems;
     },
   },
 
   methods: {
     toggleFilter(key) {
       if (key === 'setAsRoot') {
-        this.$root.$emit('makeRoot', this.object);
+        if (this.isRootObject) {
+          this.$root.$emit('removeRoot', this.object.fqid);
+        } else {
+          this.$root.$emit('makeRoot', this.object);
+        }
       }
       if (key === 'hide') {
         this.$store.commit(ADD_HIDDEN_NAME, this.object.fqid);
