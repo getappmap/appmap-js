@@ -202,6 +202,7 @@
             <template v-slot:body>
               <v-filter-menu
                 :filteredAppMap="filteredAppMap"
+                :isInBrowser="isInBrowser"
                 @setState="(stateString) => setState(stateString)"
               ></v-filter-menu>
             </template>
@@ -388,6 +389,7 @@ import {
   SET_FOCUSED_EVENT,
 } from '../store/vsCode';
 import isPrecomputedSequenceDiagram from '@/lib/isPrecomputedSequenceDiagram';
+import { SAVED_FILTERS_STORAGE_ID } from '../components/FilterMenu.vue';
 
 export default {
   name: 'VSCodeExtension',
@@ -540,6 +542,10 @@ export default {
     isPrecomputedSequenceDiagram,
     classes() {
       return this.isLoading ? 'app--loading' : '';
+    },
+
+    isInBrowser() {
+      return window.location.protocol.includes('http');
     },
 
     pruneFilter() {
@@ -1205,7 +1211,19 @@ export default {
     },
 
     initializeSavedFilters() {
-      const savedFilters = this.savedFilters;
+      let savedFilters = this.savedFilters;
+
+      if (this.isInBrowser && (!savedFilters || savedFilters.length === 0)) {
+        const savedFiltersJson = localStorage.getItem(SAVED_FILTERS_STORAGE_ID);
+        if (savedFiltersJson) {
+          try {
+            const loadedFilters = JSON.parse(savedFiltersJson);
+            if (loadedFilters.length > 0) savedFilters = loadedFilters;
+          } catch (e) {
+            // do nothing
+          }
+        }
+      }
 
       if (this.savedFilters.length === 0) {
         const defaultFilter = new AppMapFilter();
@@ -1221,6 +1239,9 @@ export default {
         this.$root.$emit('saveFilter', filterObject);
         savedFilters.push(filterObject);
       }
+
+      if (this.isInBrowser)
+        localStorage.setItem(SAVED_FILTERS_STORAGE_ID, JSON.stringify(savedFilters));
 
       this.$store.commit(SET_SAVED_FILTERS, savedFilters);
 

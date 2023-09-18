@@ -174,8 +174,11 @@ import {
   REMOVE_HIDDEN_NAME,
   SET_SELECTED_SAVED_FILTER,
   DEFAULT_FILTER_NAME,
+  SET_SAVED_FILTERS,
 } from '@/store/vsCode';
 import { serializeFilter, base64UrlEncode } from '@appland/models';
+
+export const SAVED_FILTERS_STORAGE_ID = 'savedFilters';
 
 export default {
   name: 'v-filter-menu',
@@ -192,6 +195,10 @@ export default {
     filteredAppMap: {
       type: Object,
       required: true,
+    },
+
+    isInBrowser: {
+      type: Boolean,
     },
   },
 
@@ -356,6 +363,24 @@ export default {
         this.$store.commit(SET_DECLUTTER_ON, { declutterProperty: 'hideName', value: false });
     },
 
+    getFiltersFromLocalStorage() {
+      const savedFiltersJson = localStorage.getItem(SAVED_FILTERS_STORAGE_ID);
+      if (savedFiltersJson) {
+        try {
+          return JSON.parse(savedFiltersJson);
+        } catch (e) {
+          return [];
+        }
+      }
+      return [];
+    },
+
+    updateFilters(updatedFilters) {
+      this.$store.commit(SET_SAVED_FILTERS, updatedFilters);
+      if (this.isInBrowser)
+        localStorage.setItem(SAVED_FILTERS_STORAGE_ID, JSON.stringify(updatedFilters));
+    },
+
     saveFilter() {
       const filterName = this.newFilterName.trim();
       if (this.newFilterName.trim() === '' || this.newFilterName === DEFAULT_FILTER_NAME) {
@@ -368,8 +393,25 @@ export default {
       const filterToSave = { filterName, state, default: false };
 
       this.$store.commit(SET_SELECTED_SAVED_FILTER, filterToSave);
-      this.$root.$emit('saveFilter', filterToSave);
 
+      if (this.isInBrowser) {
+        const savedFilters = this.getFiltersFromLocalStorage();
+
+        let updatedFilters;
+        // overwrite a saved filter if one exists with the same name
+        if (savedFilters.some((savedFilter) => savedFilter.filterName === filterName)) {
+          updatedFilters = savedFilters.map((savedFilter) =>
+            savedFilter.filterName === filterName ? filterToSave : savedFilter
+          );
+        } else {
+          savedFilters.push(filterToSave);
+          updatedFilters = savedFilters;
+        }
+
+        this.updateFilters(updatedFilters);
+      }
+
+      this.$root.$emit('saveFilter', filterToSave);
       this.newFilterName = '';
     },
 
@@ -379,10 +421,28 @@ export default {
 
     deleteFilter() {
       if (this.selectedSavedFilter.filterName === DEFAULT_FILTER_NAME) return;
+
+      if (this.isInBrowser) {
+        const savedFilters = this.getFiltersFromLocalStorage();
+        const updatedFilters = savedFilters.filter(
+          (savedFilter) => savedFilter.filterName !== this.selectedSavedFilter.filterName
+        );
+        this.updateFilters(updatedFilters);
+      }
+
       this.$root.$emit('deleteFilter', this.selectedSavedFilter);
     },
 
     setAsDefault() {
+      if (this.isInBrowser) {
+        const savedFilters = this.getFiltersFromLocalStorage();
+        savedFilters.forEach(
+          (savedFilter) =>
+            (savedFilter.default = savedFilter.filterName === this.selectedSavedFilter.filterName)
+        );
+        this.updateFilters(savedFilters);
+      }
+
       this.$root.$emit('defaultFilter', this.selectedSavedFilter);
     },
 

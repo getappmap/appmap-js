@@ -272,6 +272,63 @@ context('AppMap view filter', () => {
     });
   });
 
+  context('when used in a browser', () => {
+    beforeEach(() => {
+      cy.visit(
+        'http://localhost:6006/iframe.html?args=&id=pages-vs-code--extension&viewMode=story'
+      );
+    });
+
+    it('disables the delete and default buttons for AppMap default filter', () => {
+      cy.get('.tabs .tab-btn').contains('Trace View').click();
+      cy.get('.trace .trace-node').should('have.length', 4);
+      cy.get('.tabs__controls .popper__button').click();
+
+      cy.get('.filters__select').find(':selected').should('contain.text', 'AppMap default');
+      cy.get('.filters__button-disabled').first().should('contain.text', 'Load');
+      cy.get('.filters__button').eq(1).should('contain.text', 'Copy');
+      cy.get('.filters__button-disabled').eq(1).should('contain.text', 'Delete');
+      cy.get('.filters__button-disabled').eq(2).should('contain.text', 'Set as default');
+    });
+
+    it('saves a new filter and sets it as default', () => {
+      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.filters__select > option').should('have.length', 1);
+
+      // save new filter
+      cy.get('.filters__checkbox').eq(2).click();
+      cy.get('.filters__input').type('new filter');
+      cy.get('[data-cy="save-filter-button"]').click();
+
+      cy.get('.filters__select').find(':selected').should('contain.text', 'new filter');
+      cy.get('.filters__button-disabled').first().should('contain.text', 'Load');
+      cy.get('.filters__select > option').should('have.length', 2);
+
+      // set as default
+      cy.get('.filters__button').contains('Set as default').click();
+      cy.get('.filters__button-disabled').eq(1).should('contain.text', 'Set as default');
+
+      cy.get('.filters__select').select('AppMap default');
+      cy.get('.filters__button').eq(2).should('contain.text', 'Set as default');
+    });
+
+    it('overwrites an existing filter with the same name', () => {
+      cy.get('.tabs__controls .popper__button').click();
+
+      // save new filter
+      cy.get('.filters__checkbox').eq(2).click();
+      cy.get('.filters__input').type('new filter');
+      cy.get('[data-cy="save-filter-button"]').click();
+
+      // overwrite new filter
+      cy.get('.filters__checkbox').eq(3).click();
+      cy.get('.filters__input').type('new filter');
+      cy.get('[data-cy="save-filter-button"]').click();
+
+      cy.get('.filters__select > option').should('have.length', 2);
+    });
+  });
+
   context('without HTTP events', () => {
     beforeEach(() => {
       cy.visit(
