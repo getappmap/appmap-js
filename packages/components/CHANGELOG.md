@@ -1,3 +1,16 @@
+# [@appland/components-v3.0.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.62.0...@appland/components-v3.0.0) (2023-09-18)
+
+
+### Features
+
+* Runtime analysis CTA is now 'view analysis report' ([#1388](https://github.com/getappmap/appmap-js/issues/1388)) ([f583c93](https://github.com/getappmap/appmap-js/commit/f583c93f8396e8ac0d39b7a2a80a28a3df0b6d03))
+
+
+### BREAKING CHANGES
+
+* The 'view-problems' event has been replaced with
+'open-findings-overview'.
+
 # [@appland/components-v2.62.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v2.61.2...@appland/components-v2.62.0) (2023-09-13)
 
 
