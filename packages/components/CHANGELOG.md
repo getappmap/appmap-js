@@ -1,3 +1,10 @@
+# [@appland/components-v3.2.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.1.0...@appland/components-v3.2.0) (2023-09-19)
+
+
+### Features
+
+* Add responsive styling for mobile ([7b38061](https://github.com/getappmap/appmap-js/commit/7b38061fb979a2e558ba94c200847098ae2dcb84))
+
 # [@appland/components-v3.1.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.0.0...@appland/components-v3.1.0) (2023-09-18)
 
 
