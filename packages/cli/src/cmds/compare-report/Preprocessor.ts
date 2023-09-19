@@ -1,3 +1,4 @@
+import { warn } from 'console';
 import ChangeReport, { AppMap, FindingDiff, OpenAPIDiff, TestFailure } from './ChangeReport';
 import { ExperimentalSection, Section } from './ReportSection';
 
@@ -99,6 +100,24 @@ class NewAppMapsPreprocessor implements Preprocessor {
   }
 }
 
+class ChangedAppMapsPreprocessor implements Preprocessor {
+  constructor(public report: ChangeReport) {}
+
+  get numElements() {
+    return Object.keys(this.report.changedAppMaps).length;
+  }
+
+  prune(numElements: number) {
+    const retainKeys = Object.keys(this.report.changedAppMaps).slice(0, numElements);
+    return {
+      changedAppMaps: retainKeys.reduce(
+        (memo, key) => ((memo[key] = this.report.changedAppMaps[key]), memo),
+        {}
+      ),
+    };
+  }
+}
+
 export default function buildPreprocessor(
   section: Section | ExperimentalSection,
   report: ChangeReport
@@ -112,5 +131,9 @@ export default function buildPreprocessor(
       return new FindingDiffPreprocessor(report);
     case Section.NewAppMaps:
       return new NewAppMapsPreprocessor(report);
+    case ExperimentalSection.ChangedAppMaps:
+      return new ChangedAppMapsPreprocessor(report);
+    default:
+      warn(`No Preprocessor for section ${section}`);
   }
 }

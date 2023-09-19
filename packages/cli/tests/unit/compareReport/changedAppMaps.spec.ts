@@ -1,32 +1,37 @@
 import { Metadata } from '@appland/models';
 import ChangeReport, { AppMap } from '../../../src/cmds/compare-report/ChangeReport';
-import ReportSection, { Section } from '../../../src/cmds/compare-report/ReportSection';
+import ReportSection, {
+  ExperimentalSection,
+  Section,
+} from '../../../src/cmds/compare-report/ReportSection';
 import { reportOptions } from './testHelper';
 
-describe('newAppMaps', () => {
+describe('changedAppMaps', () => {
   let section: ReportSection;
 
-  beforeAll(async () => (section = await ReportSection.build(Section.NewAppMaps)));
+  beforeAll(async () => (section = await ReportSection.build(ExperimentalSection.ChangedAppMaps)));
 
   describe('when there are no changes', () => {
-    const newAppMaps: AppMap[] = [];
+    const changedAppMaps = {};
 
     describe('header', () => {
       it('reports all passed', async () => {
         const report = section.generateHeading(
           {
-            newAppMaps,
+            changedAppMaps,
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual('| [New AppMaps](#new-appmaps) | :white_check_mark: None |');
+        expect(report).toEqual(
+          '| [Changed AppMaps](#changed-appmaps) |  :white_check_mark: No changes  |'
+        );
       });
     });
     describe('details', () => {
       it('are blank', () => {
         const report = section.generateDetails(
           {
-            newAppMaps,
+            changedAppMaps,
           } as unknown as ChangeReport,
           reportOptions
         );
@@ -35,7 +40,7 @@ describe('newAppMaps', () => {
       });
     });
   });
-  describe('when there is a new AppMap', () => {
+  describe('when there is a changed AppMap', () => {
     const metadata: Metadata = {
       name: 'Users controller test',
       client: {} as any,
@@ -44,36 +49,52 @@ describe('newAppMaps', () => {
       source_location: 'spec/controllers/users_controller_test.rb:10',
     };
     const appmap = new AppMap('minitest/users_controller_test', metadata, false, undefined);
-    const newAppMaps = [appmap];
+    const changedAppMaps = {
+      'appmap behavior has changed': [appmap],
+    };
 
     describe('header', () => {
       it('reports the changes', async () => {
         const report = section.generateHeading(
           {
-            newAppMaps,
+            changedAppMaps,
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual('| [New AppMaps](#new-appmaps) | :star: 1 new |');
+        expect(report).toEqual(
+          '| [Changed AppMaps](#changed-appmaps) |  :twisted_rightwards_arrows: 1 changes  |'
+        );
       });
     });
     describe('details', () => {
       it('are provided', () => {
         const report = section.generateDetails(
           {
-            newAppMaps,
+            changedAppMaps,
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual(`<h2 id=\"new-appmaps\">New AppMaps</h2>
+        expect(report).toEqual(`## :twisted_rightwards_arrows: Changed AppMaps
 
-[Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
+<details>
 
+<summary>
+Review changes
+</summary>
+
+
+\`\`\`
+appmap behavior has changed
+\`\`\`
+
+- [Users controller test](https://getappmap.com/?path=diff%2Fminitest%2Fusers_controller_test.diff.sequence.json)
+
+</details>
 `);
       });
     });
   });
-  describe('when there are many new AppMaps', () => {
+  describe('when there are many changes', () => {
     const metadata: Metadata = {
       name: 'Users controller test',
       client: {} as any,
@@ -82,38 +103,65 @@ describe('newAppMaps', () => {
       source_location: 'spec/controllers/users_controller_test.rb:10',
     };
     const appmap = new AppMap('minitest/users_controller_test', metadata, false, undefined);
-    const newAppMaps = [appmap, appmap, appmap, appmap, appmap];
+    const changedAppMaps = {
+      'changed 1': [appmap],
+      'changed 2': [appmap],
+      'changed 3': [appmap],
+      'changed 4': [appmap],
+      'changed 5': [appmap],
+      'changed 6': [appmap],
+    };
 
     describe('header', () => {
       it('reports the changes', async () => {
         const report = section.generateHeading(
           {
-            newAppMaps,
+            changedAppMaps,
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual('| [New AppMaps](#new-appmaps) | :star: 5 new |');
+        expect(report).toEqual(
+          '| [Changed AppMaps](#changed-appmaps) |  :twisted_rightwards_arrows: 6 changes  |'
+        );
       });
     });
     describe('details', () => {
       it('are limited', () => {
         const report = section.generateDetails(
           {
-            newAppMaps,
+            changedAppMaps,
           } as unknown as ChangeReport,
           { ...reportOptions, ...{ maxElements: 3 } }
         );
-        expect(report).toEqual(`<h2 id=\"new-appmaps\">New AppMaps</h2>
+        expect(report).toEqual(`## :twisted_rightwards_arrows: Changed AppMaps
 
-[Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
+<details>
+
+<summary>
+Review changes
+</summary>
 
 
-[Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
+\`\`\`
+changed 1
+\`\`\`
 
+- [Users controller test](https://getappmap.com/?path=diff%2Fminitest%2Fusers_controller_test.diff.sequence.json)
 
-[Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
+\`\`\`
+changed 2
+\`\`\`
 
-Because there are so many new AppMaps, some of them are not listed in this report.
+- [Users controller test](https://getappmap.com/?path=diff%2Fminitest%2Fusers_controller_test.diff.sequence.json)
+
+\`\`\`
+changed 3
+\`\`\`
+
+- [Users controller test](https://getappmap.com/?path=diff%2Fminitest%2Fusers_controller_test.diff.sequence.json)
+
+Because there are so many changed AppMaps, some of them are not listed in this report.
+</details>
 `);
       });
     });

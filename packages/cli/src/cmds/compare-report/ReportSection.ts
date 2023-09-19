@@ -82,6 +82,10 @@ export default class ReportSection {
       for (const item of list) {
         if (Array.isArray(item)) {
           result += item.length;
+        } else if (item.constructor === Map) {
+          result += item.size;
+        } else if (typeof item === 'object') {
+          result += Object.keys(item).length;
         }
       }
       return result;

@@ -135,6 +135,7 @@ export default class ChangeReport {
     public readonly openapiDiff: OpenAPIDiff,
     public readonly findingDiff: FindingDiff,
     public readonly newAppMaps: AppMap[],
+    public readonly changedAppMaps: Record<string, AppMap[]>,
     public pruned = false
   ) {}
 
@@ -159,7 +160,7 @@ export default class ChangeReport {
       return metadata;
     };
 
-    const changedAppMaps = changeReportData.changedAppMaps.reduce(
+    const changedAppMapSet = changeReportData.changedAppMaps.reduce(
       (memo, change) => (memo.add(this.normalizeId(change.appmap)), memo),
       new Set<string>()
     );
@@ -174,7 +175,7 @@ export default class ChangeReport {
       return new AppMap(
         appmapId,
         metadata(revision, appmapId),
-        changedAppMaps.has(appmapId),
+        changedAppMapSet.has(appmapId),
         sourceDiff
       );
     };
@@ -187,9 +188,6 @@ export default class ChangeReport {
 
     // Remove the empty sequence diagram diff snippet - which can't be reasonably rendered.
     delete changeReportData.sequenceDiagramDiff[''];
-    const sequenceDiagramDiffSnippetCount = Object.keys(
-      changeReportData.sequenceDiagramDiff || {}
-    ).length;
 
     let apiDiff: OpenAPIDiff | undefined;
     if (changeReportData.apiDiff) {
@@ -242,6 +240,16 @@ export default class ChangeReport {
       appmap(RevisionName.Head, this.normalizeId(appmapId))
     );
 
-    return new ChangeReport(testFailures, apiDiff, findingDiff, newAppMaps);
+    const changedAppMaps = Object.keys(changeReportData.sequenceDiagramDiff).reduce<
+      Record<string, AppMap[]>
+    >((memo, key) => {
+      const appmaps = changeReportData.sequenceDiagramDiff[key].map((appmapId) =>
+        appmap(RevisionName.Head, this.normalizeId(appmapId))
+      );
+      memo[key] = appmaps;
+      return memo;
+    }, {});
+
+    return new ChangeReport(testFailures, apiDiff, findingDiff, newAppMaps, changedAppMaps);
   }
 }
