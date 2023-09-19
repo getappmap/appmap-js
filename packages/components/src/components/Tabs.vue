@@ -1,6 +1,6 @@
 <template>
   <div class="tabs">
-    <div class="tabs__header">
+    <div class="tabs__header" data-cy="tabs">
       <div class="tabs__group">
         <v-tab-button
           v-for="tab in tabs"
@@ -87,6 +87,7 @@ export default {
   flex-direction: column;
   gap: 0;
   background-color: $black;
+  overflow: hidden;
 
   &__header {
     width: 100%;
@@ -132,17 +133,21 @@ export default {
 
 @media (max-width: 900px) {
   .tabs {
+    ::-webkit-scrollbar {
+      display: none;
+    }
     &__header {
       flex-direction: column-reverse;
       min-height: 70px;
       padding-top: 0.5rem;
       height: auto;
       gap: 0.4rem;
-      justify-content: center;
-      justify-items: center;
+      justify-content: end;
+      overflow-x: scroll;
+      overflow-y: hidden;
     }
     &__group {
-      width: 100%;
+      align-self: flex-start;
       justify-content: center;
     }
     &__notification {
@@ -150,6 +155,11 @@ export default {
     }
     &__content {
       padding-top: 70px;
+    }
+    &__controls {
+      gap: 1rem;
+      position: fixed;
+      top: 0.5rem;
     }
   }
 }

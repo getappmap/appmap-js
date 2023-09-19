@@ -27,6 +27,7 @@
             this.showStatsPanel = true;
           }
         "
+        data-cy="sidebar"
       >
         <template v-slot:buttons>
           <v-details-button
@@ -167,23 +168,20 @@
           </v-popper>
           <v-popper
             v-if="hasStats"
-            class="hover-text-popper"
+            class="hover-text-popper hide-small"
             text="Show statistics about this AppMap"
             placement="left"
             text-align="left"
+            data-cy="stats-button"
           >
-            <button
-              class="control-button"
-              data-cy="stats-button"
-              @click="toggleStatsPanel"
-              title=""
-            >
+            <button class="control-button" @click="toggleStatsPanel" title="">
               <StatsIcon class="control-button__icon" />
             </button>
           </v-popper>
           <v-popper-menu
             v-if="!isPrecomputedSequenceDiagram && !isGiantAppMap"
             :isHighlight="filtersChanged"
+            data-cy="filters-button"
           >
             <template v-slot:icon>
               <v-popper
@@ -292,7 +290,7 @@
         </v-stats-panel>
       </div>
 
-      <div class="diagram-instructions">
+      <div class="diagram-instructions hide-small" data-cy="instructions-button">
         <v-instructions ref="instructions" :currentView="currentView" />
       </div>
     </div>
@@ -1338,6 +1336,12 @@ code {
   color: $teal;
 }
 
+.hide-small {
+  @media (max-width: 900px) {
+    display: none !important;
+  }
+}
+
 .appmap-stats {
   height: 95%;
   overflow-y: auto;
@@ -1509,6 +1513,9 @@ code {
       position: relative;
       grid-column: 1;
       width: 420px;
+      @media (max-width: 900px) {
+        display: none;
+      }
     }
 
     &--right {

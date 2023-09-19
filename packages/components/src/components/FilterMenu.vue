@@ -1,11 +1,14 @@
 <template>
-  <div class="filters">
+  <div class="filters" data-cy="filters-menu">
     <div class="filters__head">
       <FilterIcon class="filters__head-icon" />
       <h2 class="filters__head-text">Filters</h2>
       <button class="filters__head-reset" @click="resetFilters">
         Reset
         <ResetIcon />
+      </button>
+      <button class="filters__head-close" @click="close" data-cy="filters-close">
+        <CloseThinIcon />
       </button>
     </div>
     <div class="filters__block">
@@ -459,13 +462,19 @@ export default {
     optionStyle(savedFilter) {
       return savedFilter.default ? { fontWeight: 'bold' } : { color: '#c8c8c8' };
     },
+
+    close() {
+      // The popper is closed by clicking outside of it.
+      // This should suffice for closing the menu.
+      window.document.body.click();
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
 .filters {
-  width: 390px;
+  width: 100%;
   font-size: 0.75rem;
 
   .copied {
@@ -555,6 +564,7 @@ export default {
       font-weight: bold;
     }
 
+    &-close,
     &-reset {
       margin-left: auto;
       border: none;
@@ -578,6 +588,19 @@ export default {
 
       svg {
         margin-left: 0.5rem;
+      }
+    }
+
+    &-close {
+      margin-left: 2rem;
+      svg {
+        fill: white;
+      }
+    }
+
+    @media (min-width: 900px) {
+      &-close {
+        display: none;
       }
     }
   }

@@ -111,6 +111,20 @@ export default {
 
     &.filter {
       background-color: $gray2;
+      @media (max-width: 900px) {
+        position: fixed;
+        left: 0 !important;
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        max-width: inherit !important;
+        max-height: inherit !important;
+        width: inherit !important;
+        height: inherit !important;
+        margin-top: 0 !important;
+        border-radius: 0 !important;
+        z-index: 1000;
+      }
     }
 
     .popper--v-top & {
