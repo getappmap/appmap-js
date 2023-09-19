@@ -90,11 +90,20 @@ export default class ReportSection {
     };
 
     const appmap_url = (revisionName: RevisionName, appmap: AppMap) => {
-      let { fileName } = appmap;
-      if (fileName.startsWith('./')) fileName = fileName.slice('./'.length);
-      if (fileName.endsWith('.appmap.json'))
-        fileName = fileName.slice(0, '.appmap.json'.length * -1);
-      const path = [revisionName, `${fileName}.appmap.json`].join('/');
+      let { id } = appmap;
+      const path = [revisionName, `${id}.appmap.json`].join('/');
+
+      if (options.appmapURL) {
+        const url = new URL(options.appmapURL.toString());
+        url.searchParams.append('path', path);
+        return new Handlebars.SafeString(url.toString());
+      } else {
+        return new Handlebars.SafeString(path);
+      }
+    };
+
+    const appmap_diff_url = (appmap: AppMap): SafeString => {
+      const path = ['diff', `${appmap.id}.diff.sequence.json`].join('/');
 
       if (options.appmapURL) {
         const url = new URL(options.appmapURL.toString());
@@ -109,8 +118,9 @@ export default class ReportSection {
       inspect,
       length,
       coalesce,
-      source_url,
       appmap_url,
+      appmap_diff_url,
+      source_url,
     };
   }
 

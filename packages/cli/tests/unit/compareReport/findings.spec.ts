@@ -82,15 +82,17 @@ describe('findings', () => {
 | Field | Value |
 | --- | --- |
 | Message | app_views_shared__feed_html_erb.render[418] contains 30 occurrences of SQL: SELECT &quot;users&quot;.* FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ? LIMIT ? |
+| Sequence Diagram Diff | [(diff) Microposts interface micropost interface](https://getappmap.com/?path=diff%2Fminitest%2FMicroposts_interface_micropost_interface.diff.sequence.json) |
 | AppMap | [Microposts interface micropost interface](https://getappmap.com/?path=head%2Fminitest%2FMicroposts_interface_micropost_interface.appmap.json) |
-
-<!-- TODO: Show source diff -->
-<!--
 
 ##### Related code changes
 
-\\{\\{~> finding-source-diff}}
--->
+\`\`\`diff
+--- spec/controllers/users_controller_test.rb
++++ spec/controllers/users_controller_test.rb
+@@ -10,6 +10,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
+
+\`\`\`
 
 ##### Stack trace
 
@@ -119,9 +121,16 @@ const appmapMetadata: Metadata = {
   test_status: 'succeeded',
 };
 
+const sourceDiff = `--- spec/controllers/users_controller_test.rb
++++ spec/controllers/users_controller_test.rb
+@@ -10,6 +10,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
+`;
+
 const Microposts_interface_micropost_interface: AppMap = new AppMap(
-  'minitest/Microposts_interface_micropost_interface.appmap.json',
-  appmapMetadata
+  'minitest/Microposts_interface_micropost_interface',
+  appmapMetadata,
+  true,
+  sourceDiff
 );
 
 resolvedFinding = {

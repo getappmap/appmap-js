@@ -47,19 +47,17 @@ describe('failedTests', () => {
         location: 'spec/controllers/users_controller_test.rb:10',
       },
     };
-    const appmap = new AppMap('users_controller_test.appmap.json', metadata);
+    const sourceDiff = `--- spec/controllers/users_controller_test.rb
++++ spec/controllers/users_controller_test.rb
+@@ -10,6 +10,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
+`;
+    const appmap = new AppMap('minitest/users_controller_test', metadata, true, sourceDiff);
     const testSnippet = {
       codeFragment: '  def test_index\n    get users_url\n    assert_response :success\n  end',
       language: 'ruby',
       startLine: 10,
     };
-    const sourceDiff = `diff
---- spec/controllers/users_controller_test.rb
-+++ spec/controllers/users_controller_test.rb
-@@ -10,6 +10,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
-`;
-
-    const testFailure = new TestFailure(appmap, testSnippet, sourceDiff);
+    const testFailure = new TestFailure(appmap, testSnippet);
 
     describe('header', () => {
       it('reports 1 failed', async () => {
@@ -114,7 +112,6 @@ The error occurred at [spec/controllers/users_controller_test.rb:10](../../../..
 The following code changes may be related to this test failure:
 
 \`\`\`diff
-diff
 --- spec/controllers/users_controller_test.rb
 +++ spec/controllers/users_controller_test.rb
 @@ -10,6 +10,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
@@ -124,8 +121,8 @@ diff
 
 | Diagram | Link |
 | --- | --- |
-<!-- TODO: sequence diagram diff, if available -->
-| AppMap | [Users controller test](https://getappmap.com/?path=head%2Fusers_controller_test.appmap.json) |
+| Sequence Diagram Diff | [(diff) Users controller test](https://getappmap.com/?path=diff%2Fminitest%2Fusers_controller_test.diff.sequence.json) |
+| AppMap | [(appmap) Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json) |
 
 </details>
 `)

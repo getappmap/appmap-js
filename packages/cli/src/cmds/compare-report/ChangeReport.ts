@@ -6,10 +6,22 @@ import { RevisionName } from '../compare/RevisionName';
 import assert from 'assert';
 import { executeCommand } from '../../lib/executeCommand';
 import { verbose } from '../../utils';
+import { warn } from 'console';
 
 export class AppMap {
-  constructor(public fileName: string, private metadata: Metadata) {}
+  constructor(
+    // id is a unique identifier for the AppMap. It's essentially the path to the AppMap
+    // index directory, relative to the appmap_dir. For example, for an AppMap file
+    // 'tmp/appmap/minitest/Test_user.appmap.json', the id is 'minitest/Test_user'.;
+    public id: string,
+    public metadata: Metadata,
+    public changed: boolean,
+    public sourceDiff: string | undefined
+  ) {}
 
+  // Gets the recorder-assigned name for the AppMap. This should be the metadata.name field, which is
+  // normally constructed from the name of the test function and its context functions/blocks. If
+  // that is missing for some reason, we'll use metadata.source_location.
   get name(): string {
     return this.metadata.name || this.sourceLocation || '<anonymous AppMap>';
   }
@@ -36,8 +48,7 @@ export class TestFailure {
 
   constructor(
     public appmap: AppMap,
-    testSnippet?: { codeFragment: string; language?: string; startLine: number },
-    public sourceDiff?: string
+    testSnippet?: { codeFragment: string; language?: string; startLine: number }
   ) {
     this.testLocation = appmap.sourceLocation;
     this.failureMessage = appmap.failureMessage;
@@ -83,7 +94,7 @@ export class OpenAPIDiff {
   public nonBreakingDifferences: APIChange[];
   public unclassifiedDifferences: APIChange[];
 
-  constructor(public differenceCount: number, apiDiff: any, public sourceDiff?: string) {
+  constructor(public differenceCount: number, apiDiff: any) {
     this.breakingDifferenceCount = apiDiff.breakingDifferences?.length || 0;
     this.nonBreakingDifferenceCount = apiDiff.nonBreakingDifferences?.length || 0;
 
@@ -110,7 +121,6 @@ export class OpenAPIDiff {
 export type FindingChange = {
   appmap: AppMap;
   finding: FindingData;
-  sourceDiff?: string;
 };
 
 export class FindingDiff {
@@ -124,38 +134,51 @@ export default class ChangeReport {
     public findingDiff: FindingDiff
   ) {}
 
+  static normalizeId(id: string): string {
+    let normalizedId = id;
+    if (normalizedId.startsWith('./')) normalizedId = normalizedId.slice('./'.length);
+    if (normalizedId.endsWith('.appmap.json')) {
+      warn(`AppMap id ${id} should not include the file extension`);
+      normalizedId = normalizedId.slice(0, '.appmap.json'.length * -1);
+    }
+    return normalizedId;
+  }
+
   static async build(changeReportData: ChangeReportData): Promise<ChangeReport> {
     const metadata = (
       revision: RevisionName.Head | RevisionName.Base,
       appmap: string
     ): Metadata => {
-      let metadataKey: string;
-      if (appmap.endsWith('.appmap.json'))
-        metadataKey = appmap.slice(0, '.appmap.json'.length * -1);
-      else metadataKey = appmap;
-      const metadata = changeReportData.appMapMetadata[revision][metadataKey];
+      const appmapId = this.normalizeId(appmap);
+      const metadata = changeReportData.appMapMetadata[revision][appmapId];
       assert(metadata);
       return metadata;
     };
 
-    const appmap = (revision: RevisionName.Head | RevisionName.Base, appmap: string): AppMap => {
-      return new AppMap(appmap, metadata(revision, appmap));
-    };
-
+    const changedAppMaps = changeReportData.changedAppMaps.reduce(
+      (memo, change) => (memo.add(this.normalizeId(change.appmap)), memo),
+      new Set<string>()
+    );
     const sourceDiffs = changeReportData.changedAppMaps.reduce((memo, change) => {
-      if (change.sourceDiff) memo.set(change.appmap, change.sourceDiff);
+      if (change.sourceDiff) memo.set(this.normalizeId(change.appmap), change.sourceDiff);
       return memo;
     }, new Map<string, string>());
+
+    const appmap = (revision: RevisionName.Head | RevisionName.Base, appmapId: string): AppMap => {
+      appmapId = this.normalizeId(appmapId);
+      const sourceDiff = sourceDiffs.get(appmapId);
+      return new AppMap(
+        appmapId,
+        metadata(revision, appmapId),
+        changedAppMaps.has(appmapId),
+        sourceDiff
+      );
+    };
 
     // Resolve changedAppMap entry for a test failure. Note that this will not help much
     // with new test cases that fail, but it will help with modified tests that fail.
     const testFailures = changeReportData.testFailures.map((failure) => {
-      return new TestFailure(
-        appmap(RevisionName.Head, failure.appmap),
-        failure.testSnippet,
-        sourceDiffs.get(failure.appmap)
-        // TODO: Provide sequence diagram diff, if available
-      );
+      return new TestFailure(appmap(RevisionName.Head, failure.appmap), failure.testSnippet);
     });
 
     // Remove the empty sequence diagram diff snippet - which can't be reasonably rendered.
@@ -185,7 +208,7 @@ export default class ChangeReport {
         ).trim();
       }
 
-      apiDiff = new OpenAPIDiff(differenceCount, changeReportData.apiDiff, sourceDiff);
+      apiDiff = new OpenAPIDiff(differenceCount, changeReportData.apiDiff);
     } else {
       apiDiff = new OpenAPIDiff(0, {});
     }
@@ -198,9 +221,8 @@ export default class ChangeReport {
       ): FindingChange[] => {
         assert(changeReportData.findingDiff);
         return changeReportData.findingDiff[key].map((finding: FindingData) => ({
-          appmap: appmap(revisionName, finding.appMapFile),
+          appmap: appmap(revisionName, this.normalizeId(finding.appMapFile)),
           finding,
-          sourceDiff: sourceDiffs.get(finding.appMapFile),
         }));
       };
 

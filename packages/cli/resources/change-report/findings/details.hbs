@@ -22,15 +22,18 @@
 | Field | Value |
 | --- | --- |
 | Message | {{ finding.message }} |
+{{#if appmap.changed}}
+| Sequence Diagram Diff | [(diff) {{ appmap.name }}]({{ appmap_diff_url appmap }}) |
+{{/if}}
 | AppMap | [{{appmap.name}}]({{~ appmap_url 'head' appmap }}) |
-
-<!-- TODO: Show source diff -->
-<!--
+{{#if appmap.sourceDiff}}
 
 ##### Related code changes
 
-\{\{~> finding-source-diff}}
--->
+```diff
+{{{ appmap.sourceDiff }}}
+```
+{{/if}}
 
 ##### Stack trace
 

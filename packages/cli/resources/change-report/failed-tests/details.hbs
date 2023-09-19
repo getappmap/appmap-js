@@ -35,11 +35,11 @@ The error occurred at [{{failureLocation}}]({{ source_url failureLocation }}):
 {{/if}}
 
 <!-- sourceDiff -->
-{{#if sourceDiff }}
+{{#if appmap.sourceDiff }}
 The following code changes may be related to this test failure:
 
 ```diff
-{{{sourceDiff}}}
+{{{appmap.sourceDiff}}}
 ```
 {{else}}
 No relevant code changes found.
@@ -48,13 +48,10 @@ No relevant code changes found.
 
 | Diagram | Link |
 | --- | --- |
-<!-- TODO: sequence diagram diff, if available -->
-{{!-- {{#if changedAppMap}}
-{{#with changedAppMap}}
-| Sequence diagram diff | {{> sequence-diagram-diff-link }} |
-{{/with}}
-{{/if}} --}}
-| AppMap | [{{ appmap.name }}]({{ appmap_url 'head' appmap }}) |
+{{#if appmap.changed}}
+| Sequence Diagram Diff | [(diff) {{ appmap.name }}]({{ appmap_diff_url appmap }}) |
+{{/if}}
+| AppMap | [(appmap) {{ appmap.name }}]({{ appmap_url 'head' appmap }}) |
 
 </details>
   {{/each}}
