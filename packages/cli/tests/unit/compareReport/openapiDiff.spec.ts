@@ -198,7 +198,7 @@ describe('openapiDiff', () => {
           reportOptions
         );
         expect(report).toEqual(
-          '| [API changes](#api-changes) |🚧 4 breaking,&nbsp; :wrench: 1 non-breaking |'
+          '| [API changes](#api-changes) | 🚧 4 breaking,&nbsp; :wrench: 1 non-breaking |'
         );
       });
     });

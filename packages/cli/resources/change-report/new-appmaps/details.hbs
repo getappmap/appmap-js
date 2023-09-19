@@ -1,0 +1,8 @@
+{{#if newAppMaps.length }}
+<h2 id="new-appmaps">New AppMaps</h2>
+{{#each newAppMaps}}
+
+[{{name}}]({{ appmap_url 'head' this }})
+
+{{/each}}
+{{/if}}

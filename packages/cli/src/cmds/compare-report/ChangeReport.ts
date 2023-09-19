@@ -94,7 +94,7 @@ export class OpenAPIDiff {
   public nonBreakingDifferences: APIChange[];
   public unclassifiedDifferences: APIChange[];
 
-  constructor(public differenceCount: number, apiDiff: any) {
+  constructor(public differenceCount: number, apiDiff: any, public sourceDiff) {
     this.breakingDifferenceCount = apiDiff.breakingDifferences?.length || 0;
     this.nonBreakingDifferenceCount = apiDiff.nonBreakingDifferences?.length || 0;
 
@@ -131,7 +131,8 @@ export default class ChangeReport {
   constructor(
     public testFailures: TestFailure[],
     public openapiDiff: OpenAPIDiff,
-    public findingDiff: FindingDiff
+    public findingDiff: FindingDiff,
+    public newAppMaps: AppMap[]
   ) {}
 
   static normalizeId(id: string): string {
@@ -208,9 +209,9 @@ export default class ChangeReport {
         ).trim();
       }
 
-      apiDiff = new OpenAPIDiff(differenceCount, changeReportData.apiDiff);
+      apiDiff = new OpenAPIDiff(differenceCount, changeReportData.apiDiff, sourceDiff);
     } else {
-      apiDiff = new OpenAPIDiff(0, {});
+      apiDiff = new OpenAPIDiff(0, {}, undefined);
     }
 
     let findingDiff: FindingDiff | undefined;
@@ -234,6 +235,10 @@ export default class ChangeReport {
       findingDiff = new FindingDiff([], []);
     }
 
-    return new ChangeReport(testFailures, apiDiff, findingDiff);
+    const newAppMaps = changeReportData.newAppMaps.map((appmapId) =>
+      appmap(RevisionName.Head, this.normalizeId(appmapId))
+    );
+
+    return new ChangeReport(testFailures, apiDiff, findingDiff, newAppMaps);
   }
 }

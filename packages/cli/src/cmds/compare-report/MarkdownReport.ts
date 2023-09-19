@@ -4,11 +4,9 @@ import ChangeReport, { AppMap } from './ChangeReport';
 import ReportSection, { ReportOptions } from './ReportSection';
 import { log } from 'console';
 
+export const SECTIONS = ['failed-tests', 'openapi-diff', 'findings', 'new-appmaps'];
 // TODO: Restore these
-// export const SECTIONS = ['failed-tests', 'openapi-diff', 'findings', 'new-appmaps'];
 // export const EXPERIMENTAL_SECTIONS = ['changed-appmaps'];
-
-export const SECTIONS = ['failed-tests', 'openapi-diff', 'findings'];
 export const EXPERIMENTAL_SECTIONS = [];
 
 export default class MarkdownReport implements Report {
