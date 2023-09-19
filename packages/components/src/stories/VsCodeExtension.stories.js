@@ -63,7 +63,7 @@ export default {
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VVsCodeExtension },
-  template: '<v-vs-code-extension v-bind="$props" ref="vsCode" />',
+  template: '<v-vs-code-extension v-bind="$props" style="overflow: hidden;" ref="vsCode" />',
   mounted() {
     const scenario = scenarioData[args.scenario];
     const sequenceDiagram = sequenceDiagramData[args.scenario];
