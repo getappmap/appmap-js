@@ -75,7 +75,7 @@ export type APIChange = {
   destinationSpecEntityDetails: any;
 };
 
-export class APIDiff {
+export class OpenAPIDiff {
   public breakingDifferenceCount: number;
   public nonBreakingDifferenceCount: number;
 
@@ -120,7 +120,7 @@ export class FindingDiff {
 export default class ChangeReport {
   constructor(
     public testFailures: TestFailure[],
-    public apiDiff: APIDiff,
+    public openapiDiff: OpenAPIDiff,
     public findingDiff: FindingDiff
   ) {}
 
@@ -164,7 +164,7 @@ export default class ChangeReport {
       changeReportData.sequenceDiagramDiff || {}
     ).length;
 
-    let apiDiff: APIDiff | undefined;
+    let apiDiff: OpenAPIDiff | undefined;
     if (changeReportData.apiDiff) {
       // Provide a simple count of the number of differences - since Handlebars can't do math.
       const differenceCount =
@@ -185,9 +185,9 @@ export default class ChangeReport {
         ).trim();
       }
 
-      apiDiff = new APIDiff(differenceCount, changeReportData.apiDiff, sourceDiff);
+      apiDiff = new OpenAPIDiff(differenceCount, changeReportData.apiDiff, sourceDiff);
     } else {
-      apiDiff = new APIDiff(0, {});
+      apiDiff = new OpenAPIDiff(0, {});
     }
 
     let findingDiff: FindingDiff | undefined;

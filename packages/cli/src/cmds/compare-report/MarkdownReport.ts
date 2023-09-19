@@ -10,14 +10,6 @@ import { log } from 'console';
 import { inspect } from 'util';
 import { RevisionName } from '../compare/RevisionName';
 
-const TemplateDirectory = [
-  '../../../resources/change-report', // As packaged
-  '../../../../resources/change-report', // In development
-]
-  .map((dirName) => join(__dirname, dirName))
-  .find((dirName) => existsSync(dirName));
-assert(TemplateDirectory, "Report template directory 'change-report' not found");
-
 // TODO: Restore these
 // export const SECTIONS = ['failed-tests', 'openapi-diff', 'findings', 'new-appmaps'];
 // export const EXPERIMENTAL_SECTIONS = ['changed-appmaps'];
@@ -31,7 +23,7 @@ export default class MarkdownReport implements Report {
 
   constructor(public appmapURL: URL, public sourceURL: URL) {}
 
-  async generateReport(changeReportData: ChangeReportData, baseDir: string): Promise<string> {
+  async generateReport(changeReportData: ChangeReportData): Promise<string> {
     const sections = [
       ...SECTIONS.filter((section) => !this.excludeSections?.includes(section)),
       ...EXPERIMENTAL_SECTIONS.filter((section) => this.includeSections?.includes(section)),
@@ -40,78 +32,15 @@ export default class MarkdownReport implements Report {
     const changeReport = await ChangeReport.build(changeReportData);
     const self = this;
 
-    Handlebars.registerHelper('inspect', function (value: any) {
-      return new Handlebars.SafeString(JSON.stringify(value, null, 2));
-    });
-
-    Handlebars.registerHelper('length', function (...list): number {
-      const _fn = list.pop();
-      let result = 0;
-      for (const item of list) {
-        if (Array.isArray(item)) {
-          result += item.length;
-        }
-      }
-      return result;
-    });
-
-    Handlebars.registerHelper('coalesce', function (...list): number {
-      const _fn = list.pop();
-      return list.find((item) => item !== undefined && item !== '');
-    });
-
-    Handlebars.registerHelper('source_url', function (location, fileLinenoSeparator = '#L') {
-      if (typeof fileLinenoSeparator === 'object') {
-        fileLinenoSeparator = '#L';
-      }
-
-      const [path, lineno] = location.split(':');
-
-      if (isAbsolute(path)) return;
-      if (path.startsWith('vendor/') || path.startsWith('node_modules/')) return;
-
-      if (self.sourceURL) {
-        const url = new URL(self.sourceURL.toString());
-        if (url.protocol === 'file:') {
-          const sourcePath = relative(process.cwd(), join(url.pathname, path));
-          return new Handlebars.SafeString(
-            [sourcePath, lineno].filter(Boolean).join(fileLinenoSeparator)
-          );
-        } else {
-          url.pathname = join(url.pathname, path);
-          if (lineno) url.hash = `L${lineno}`;
-          return new Handlebars.SafeString(url.toString());
-        }
-      } else {
-        return new Handlebars.SafeString(location);
-      }
-    });
-
-    Handlebars.registerHelper('appmap_url', function (revisionName: RevisionName, appmap: AppMap) {
-      let { fileName } = appmap;
-      if (fileName.startsWith('./')) fileName = fileName.slice('./'.length);
-      if (fileName.endsWith('.appmap.json'))
-        fileName = fileName.slice(0, '.appmap.json'.length * -1);
-      const path = [revisionName, `${fileName}.appmap.json`].join('/');
-
-      if (self.appmapURL) {
-        const url = new URL(self.appmapURL.toString());
-        url.searchParams.append('path', path);
-        return new Handlebars.SafeString(url.toString());
-      } else {
-        return new Handlebars.SafeString(path);
-      }
-    });
-
-    log(inspect(changeReport));
-
     const headings = new Array<string>();
     const details = new Array<string>();
     for (const sectionName of sections) {
-      assert(TemplateDirectory);
-      const section = await ReportSection.build(sectionName, TemplateDirectory);
+      const section = await ReportSection.build(sectionName);
       const heading = section.generateHeading(changeReport);
-      const detail = section.generateDetails(changeReport);
+      const detail = section.generateDetails(changeReport, {
+        sourceURL: this.sourceURL,
+        appmapURL: this.appmapURL,
+      });
 
       log(`${sectionName} heading: ${heading}`);
       log(`${sectionName} details: ${detail}`);

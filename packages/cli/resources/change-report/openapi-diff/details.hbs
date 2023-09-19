@@ -1,9 +1,10 @@
 {{#*inline "api-change"}}
 {{title}} {{#each sourceSpecEntityDetails}}`{{location}}`{{/each}} {{#each destinationSpecEntityDetails}}`{{location}}`{{/each}}
 {{~/inline}}
+{{#if openapiDiff.differenceCount}}
 ## 🔄 API changes
 
-{{#with apiDiff}}
+{{#with openapiDiff}}
   {{#if differenceCount}}
     {{#if breakingDifferences}}
 ### 🚧 Breaking changes
@@ -38,9 +39,9 @@ Detailed OpenAPI diff
 {{{sourceDiff}}}
 ```
 </details>
-
   {{/if}}
   {{#else}}
-  No API changes
+No API changes
   {{/else}}
 {{/with}}
+{{/if}}

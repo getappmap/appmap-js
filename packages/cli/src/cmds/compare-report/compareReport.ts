@@ -55,8 +55,6 @@ export const handler = async (argv: any) => {
   const { directory, includeSection: includeSections, excludeSection: excludeSections } = argv;
   handleWorkingDirectory(directory);
 
-  const baseDir = process.cwd();
-
   const { reportDirectory, sourceUrl, appmapUrl } = argv;
   process.chdir(reportDirectory);
 
@@ -71,6 +69,6 @@ export const handler = async (argv: any) => {
   if (includeSections) mdReport.includeSections = makeArray(includeSections);
   if (excludeSections) mdReport.excludeSections = makeArray(excludeSections);
 
-  const reportMD = await mdReport.generateReport(report, baseDir);
+  const reportMD = await mdReport.generateReport(report);
   await writeFile('report.md', reportMD);
 };

@@ -1,8 +1,10 @@
+{{#with openapiDiff }}
 | [API changes](#api-changes) | 
-  {{~#unless apiDiff.differenceCount }}
+  {{~#unless differenceCount }}
   :white_check_mark: No API changes
   {{~/unless}}
-  {{~#if apiDiff.differenceCount }}
-  {{~#if apiDiff.breakingDifferenceCount }}🚧 {{apiDiff.breakingDifferenceCount}} breaking{{~/if}}
-  {{~#if apiDiff.nonBreakingDifferenceCount }}{{#if apiDiff.breakingDifferenceCount }},&nbsp;{{~/if}} :wrench: {{apiDiff.nonBreakingDifferenceCount}} non-breaking
+  {{~#if differenceCount }}
+  {{~#if breakingDifferenceCount }}🚧 {{breakingDifferenceCount}} breaking{{~/if}}
+  {{~#if nonBreakingDifferenceCount }}{{#if breakingDifferenceCount }},&nbsp;{{~/if}} :wrench: {{nonBreakingDifferenceCount}} non-breaking
   {{~/if}}{{~/if}} |
+{{~/with}}

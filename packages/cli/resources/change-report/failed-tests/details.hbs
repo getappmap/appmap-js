@@ -1,6 +1,6 @@
+{{#if testFailures.length}}
 ## :warning: Failed tests
 
-{{#if testFailures.length}}
   {{#each testFailures}}
 
 <details>
@@ -13,26 +13,28 @@
 <!-- testLocation -->
 [{{testLocation}}]({{ source_url testLocation }}) failed with error:
 
+{{#if failureMessage}}
 <!-- failureMessage -->
 ```
 {{{failureMessage}}}
 ```
+{{/if}}
 
-<!-- TODO: Test failureLocation -->
+<!-- failureLocation -->
 {{#if failureLocation}}
 The error occurred at [{{failureLocation}}]({{ source_url failureLocation }}):
 {{/if}}
 
 {{#if testSnippet}}
 {{#with testSnippet}}
-<!-- TODO: Test testSnippet -->
+<!-- testSnippet -->
 ```{{language}}
 {{{codeFragment}}}
 ```
 {{/with}}
 {{/if}}
 
-<!-- TODO: Test sourceDiff -->
+<!-- sourceDiff -->
 {{#if sourceDiff }}
 The following code changes may be related to this test failure:
 
@@ -57,6 +59,3 @@ No relevant code changes found.
 </details>
   {{/each}}
 {{/if}}
-{{#else}}
-All tests passed!
-{{/else}}
