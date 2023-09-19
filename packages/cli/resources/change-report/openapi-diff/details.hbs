@@ -30,6 +30,10 @@
       {{/each}}
     {{/if}}
 
+    {{#if pruned}}
+Because there are so many OpenAPI changes, some of them are not listed in this report,
+and the full diff has not been printed either.
+    {{else}}
 <details>
 <summary>
 Detailed OpenAPI diff
@@ -39,9 +43,7 @@ Detailed OpenAPI diff
 {{{sourceDiff}}}
 ```
 </details>
+    {{/if}}
   {{/if}}
-  {{#else}}
-No API changes
-  {{/else}}
 {{/with}}
 {{/if}}

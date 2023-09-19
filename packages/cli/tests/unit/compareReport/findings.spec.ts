@@ -4,7 +4,7 @@ import ChangeReport, {
   FindingChange,
   FindingDiff,
 } from '../../../src/cmds/compare-report/ChangeReport';
-import ReportSection from '../../../src/cmds/compare-report/ReportSection';
+import ReportSection, { Section } from '../../../src/cmds/compare-report/ReportSection';
 import { reportOptions } from './testHelper';
 
 let resolvedFinding: FindingChange;
@@ -12,7 +12,7 @@ let resolvedFinding: FindingChange;
 describe('findings', () => {
   let section: ReportSection;
 
-  beforeAll(async () => (section = await ReportSection.build('findings')));
+  beforeAll(async () => (section = await ReportSection.build(Section.Findings)));
 
   describe('when there are no changes', () => {
     const findingDiff = new FindingDiff([], []);

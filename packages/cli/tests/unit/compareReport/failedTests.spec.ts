@@ -1,12 +1,12 @@
 import { Metadata } from '@appland/models';
 import ChangeReport, { AppMap, TestFailure } from '../../../src/cmds/compare-report/ChangeReport';
-import ReportSection from '../../../src/cmds/compare-report/ReportSection';
+import ReportSection, { Section } from '../../../src/cmds/compare-report/ReportSection';
 import { normalizeReport, reportOptions } from './testHelper';
 
 describe('failedTests', () => {
   let section: ReportSection;
 
-  beforeAll(async () => (section = await ReportSection.build('failed-tests')));
+  beforeAll(async () => (section = await ReportSection.build(Section.FailedTests)));
 
   describe('when all passed', () => {
     describe('header', () => {

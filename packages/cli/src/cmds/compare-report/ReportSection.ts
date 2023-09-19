@@ -6,6 +6,7 @@ import ChangeReport, { AppMap } from './ChangeReport';
 import { existsSync } from 'fs';
 import assert from 'assert';
 import { RevisionName } from '../compare/RevisionName';
+import buildPreprocessor from './Preprocessor';
 
 const TemplateDirectory = [
   '../../../resources/change-report', // As packaged
@@ -15,14 +16,28 @@ const TemplateDirectory = [
   .find((dirName) => existsSync(dirName));
 assert(TemplateDirectory, "Report template directory 'change-report' not found");
 
+export const DEFAULT_MAX_ELEMENTS = 10;
+
+export enum Section {
+  FailedTests = 'failed-tests',
+  OpenAPIDiff = 'openapi-diff',
+  Findings = 'findings',
+  NewAppMaps = 'new-appmaps',
+}
+
+export enum ExperimentalSection {
+  ChangedAppMaps = 'changed-appmaps',
+}
+
 export type ReportOptions = {
   sourceURL: URL;
   appmapURL: URL;
+  maxElements?: number;
 };
 
 export default class ReportSection {
   constructor(
-    public section: string,
+    public section: Section | ExperimentalSection,
     private headingTemplate: HandlebarsTemplateDelegate,
     private detailsTemplate: HandlebarsTemplateDelegate
   ) {}
@@ -35,7 +50,22 @@ export default class ReportSection {
   }
 
   generateDetails(changeReport: ChangeReport, options: ReportOptions) {
-    return this.detailsTemplate(changeReport, {
+    const report: ChangeReport = { ...changeReport };
+
+    let maxElements = options.maxElements || DEFAULT_MAX_ELEMENTS;
+    const preprocessor = buildPreprocessor(this.section, report);
+    if (preprocessor) {
+      const { numElements } = preprocessor;
+      if (numElements > maxElements) {
+        const pruneResult = preprocessor.prune(maxElements);
+        for (const key of Object.keys(pruneResult)) {
+          report[key] = pruneResult[key];
+        }
+        report.pruned = true;
+      }
+    }
+
+    return this.detailsTemplate(report, {
       helpers: ReportSection.helpers(options),
       allowProtoPropertiesByDefault: true,
     });
@@ -124,7 +154,10 @@ export default class ReportSection {
     };
   }
 
-  static async build(section: string, templateDir = TemplateDirectory): Promise<ReportSection> {
+  static async build(
+    section: Section | ExperimentalSection,
+    templateDir = TemplateDirectory
+  ): Promise<ReportSection> {
     assert(templateDir);
     const headingTemplateFile = join(templateDir, section, 'heading.hbs');
     const headingTemplate = Handlebars.compile(await readFile(headingTemplateFile, 'utf8'));

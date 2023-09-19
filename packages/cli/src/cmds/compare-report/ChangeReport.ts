@@ -7,6 +7,8 @@ import assert from 'assert';
 import { executeCommand } from '../../lib/executeCommand';
 import { verbose } from '../../utils';
 import { warn } from 'console';
+import { ExperimentalSection, Section } from './ReportSection';
+import OpenApiDiff from 'openapi-diff';
 
 export class AppMap {
   constructor(
@@ -94,7 +96,7 @@ export class OpenAPIDiff {
   public nonBreakingDifferences: APIChange[];
   public unclassifiedDifferences: APIChange[];
 
-  constructor(public differenceCount: number, apiDiff: any, public sourceDiff) {
+  constructor(public differenceCount: number, apiDiff: any, public sourceDiff?: string) {
     this.breakingDifferenceCount = apiDiff.breakingDifferences?.length || 0;
     this.nonBreakingDifferenceCount = apiDiff.nonBreakingDifferences?.length || 0;
 
@@ -129,10 +131,11 @@ export class FindingDiff {
 
 export default class ChangeReport {
   constructor(
-    public testFailures: TestFailure[],
-    public openapiDiff: OpenAPIDiff,
-    public findingDiff: FindingDiff,
-    public newAppMaps: AppMap[]
+    public readonly testFailures: TestFailure[],
+    public readonly openapiDiff: OpenAPIDiff,
+    public readonly findingDiff: FindingDiff,
+    public readonly newAppMaps: AppMap[],
+    public pruned = false
   ) {}
 
   static normalizeId(id: string): string {

@@ -1,12 +1,12 @@
 {{#*inline "finding-stack" }}
 {{#with stack }}
-{{#each this }}
-{{#if (source_url this)}}
+  {{#each this }}
+    {{#if (source_url this)}}
 - [{{this}}]({{ source_url this }})
-{{else}}
+    {{else}}
 - {{ this }}
-{{/if}}
-{{/each}}
+    {{/if}}
+  {{/each}}
 {{/with}}
 
 {{/inline}}
@@ -44,26 +44,29 @@
 </details>
 {{/inline}}
 {{#with findingDiff}}
-{{#if (length newFindings resolvedFindings)}}
+  {{#if (length newFindings resolvedFindings)}}
 <h2 id="findings">Findings</h2>
 
-{{#with newFindings}}
+    {{#with newFindings}}
 ### :beetle: New findings ({{ length this}})
 
-{{#each this}}
+      {{#each this}}
 {{> finding}}
-{{/each}}
+      {{/each}}
 
-{{/with}}
+    {{/with}}
 
-{{#with resolvedFindings}}
+    {{#with resolvedFindings}}
 ### :tada: Resolved findings ({{ length this}})
 
-{{#each this}}
+      {{#each this}}
 {{> finding}}
-{{/each}}
+      {{/each}}
 
-{{/with}}
+    {{/with}}
 
-{{/if}}
+    {{#if pruned}}
+Because there are so many new and resolved findings, some of them are not listed in this report.
+    {{/if}}
+  {{/if}}
 {{/with}}

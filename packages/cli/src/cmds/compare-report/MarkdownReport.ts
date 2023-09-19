@@ -1,13 +1,19 @@
 import Report from './Report';
 import { ChangeReport as ChangeReportData } from '../compare/ChangeReport';
-import ChangeReport, { AppMap } from './ChangeReport';
-import ReportSection, { ReportOptions } from './ReportSection';
+import ChangeReport from './ChangeReport';
+import ReportSection, { ExperimentalSection, ReportOptions, Section } from './ReportSection';
 import { log } from 'console';
 
-export const SECTIONS = ['failed-tests', 'openapi-diff', 'findings', 'new-appmaps'];
+// TODO: Get this from the type?
+export const SECTIONS: Section[] = [
+  Section.FailedTests,
+  Section.OpenAPIDiff,
+  Section.Findings,
+  Section.NewAppMaps,
+];
 // TODO: Restore these
 // export const EXPERIMENTAL_SECTIONS = ['changed-appmaps'];
-export const EXPERIMENTAL_SECTIONS = [];
+export const EXPERIMENTAL_SECTIONS: ExperimentalSection[] = [];
 
 export default class MarkdownReport implements Report {
   public excludeSections: string[] | undefined;
@@ -41,7 +47,7 @@ export default class MarkdownReport implements Report {
       details.push(detail);
     }
 
-    const heading = ['# AppMap', '| Summary | Status |', '| --- | --- |', ...headings];
+    const heading = ['# AppMap', '| Summary | Status |', '| --- | --- |', ...headings].join('\n');
     return [heading, ...details].join('\n');
 
     // const self = this;

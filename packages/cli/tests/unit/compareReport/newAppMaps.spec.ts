@@ -1,12 +1,12 @@
 import { Metadata } from '@appland/models';
 import ChangeReport, { AppMap, OpenAPIDiff } from '../../../src/cmds/compare-report/ChangeReport';
-import ReportSection from '../../../src/cmds/compare-report/ReportSection';
+import ReportSection, { Section } from '../../../src/cmds/compare-report/ReportSection';
 import { reportOptions } from './testHelper';
 
 describe('newAppMaps', () => {
   let section: ReportSection;
 
-  beforeAll(async () => (section = await ReportSection.build('new-appmaps')));
+  beforeAll(async () => (section = await ReportSection.build(Section.NewAppMaps)));
 
   describe('when there are no changes', () => {
     const newAppMaps: AppMap[] = [];
@@ -19,7 +19,7 @@ describe('newAppMaps', () => {
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual('| [New AppMaps](#new-appmaps) |  :white_check_mark: None  |');
+        expect(report).toEqual('| [New AppMaps](#new-appmaps) | :white_check_mark: None |');
       });
     });
     describe('details', () => {
@@ -54,7 +54,7 @@ describe('newAppMaps', () => {
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual('| [New AppMaps](#new-appmaps) |  :star: 1 new  |');
+        expect(report).toEqual('| [New AppMaps](#new-appmaps) | :star: 1 new |');
       });
     });
     describe('details', () => {
@@ -69,6 +69,51 @@ describe('newAppMaps', () => {
 
 [Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
 
+`);
+      });
+    });
+  });
+  describe('when there are many new AppMaps', () => {
+    const metadata: Metadata = {
+      name: 'Users controller test',
+      client: {} as any,
+      recorder: {} as any,
+      exception: {} as any,
+      source_location: 'spec/controllers/users_controller_test.rb:10',
+    };
+    const appmap = new AppMap('minitest/users_controller_test', metadata, false, undefined);
+    const newAppMaps = [appmap, appmap, appmap, appmap, appmap];
+
+    describe('header', () => {
+      it('reports the changes', async () => {
+        const report = section.generateHeading(
+          {
+            newAppMaps,
+          } as unknown as ChangeReport,
+          reportOptions
+        );
+        expect(report).toEqual('| [New AppMaps](#new-appmaps) | :star: 5 new |');
+      });
+    });
+    describe('details', () => {
+      it('are limited', () => {
+        const report = section.generateDetails(
+          {
+            newAppMaps,
+          } as unknown as ChangeReport,
+          { ...reportOptions, ...{ maxElements: 3 } }
+        );
+        expect(report).toEqual(`<h2 id=\"new-appmaps\">New AppMaps</h2>
+
+[Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
+
+
+[Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
+
+
+[Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
+
+Because there are so many new AppMaps, some of them are not listed in this report.
 `);
       });
     });

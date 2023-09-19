@@ -1,11 +1,11 @@
 import ChangeReport, { OpenAPIDiff } from '../../../src/cmds/compare-report/ChangeReport';
-import ReportSection from '../../../src/cmds/compare-report/ReportSection';
+import ReportSection, { Section } from '../../../src/cmds/compare-report/ReportSection';
 import { reportOptions } from './testHelper';
 
 describe('openapiDiff', () => {
   let section: ReportSection;
 
-  beforeAll(async () => (section = await ReportSection.build('openapi-diff')));
+  beforeAll(async () => (section = await ReportSection.build(Section.OpenAPIDiff)));
 
   describe('when there are no changes', () => {
     const openapiDiff = new OpenAPIDiff(0, {});
@@ -19,7 +19,7 @@ describe('openapiDiff', () => {
           reportOptions
         );
         expect(report).toEqual(
-          '| [API changes](#api-changes) |  :white_check_mark: No API changes |'
+          '| [API changes](#api-changes) | :white_check_mark: No API changes |'
         );
       });
     });
@@ -198,7 +198,7 @@ describe('openapiDiff', () => {
           reportOptions
         );
         expect(report).toEqual(
-          '| [API changes](#api-changes) | 🚧 4 breaking,&nbsp; :wrench: 1 non-breaking |'
+          '| [API changes](#api-changes) | 🚧 4 breaking, :wrench: 1 non-breaking |'
         );
       });
     });
