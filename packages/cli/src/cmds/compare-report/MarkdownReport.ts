@@ -1,20 +1,14 @@
-import { existsSync } from 'fs';
-import Handlebars from 'handlebars';
-import { isAbsolute, join, relative } from 'path';
 import Report from './Report';
 import { ChangeReport as ChangeReportData } from '../compare/ChangeReport';
-import assert from 'assert';
 import ChangeReport, { AppMap } from './ChangeReport';
-import ReportSection from './ReportSection';
+import ReportSection, { ReportOptions } from './ReportSection';
 import { log } from 'console';
-import { inspect } from 'util';
-import { RevisionName } from '../compare/RevisionName';
 
 // TODO: Restore these
 // export const SECTIONS = ['failed-tests', 'openapi-diff', 'findings', 'new-appmaps'];
 // export const EXPERIMENTAL_SECTIONS = ['changed-appmaps'];
 
-export const SECTIONS = ['failed-tests', 'openapi-diff'];
+export const SECTIONS = ['failed-tests', 'openapi-diff', 'findings'];
 export const EXPERIMENTAL_SECTIONS = [];
 
 export default class MarkdownReport implements Report {
@@ -30,17 +24,17 @@ export default class MarkdownReport implements Report {
     ];
 
     const changeReport = await ChangeReport.build(changeReportData);
-    const self = this;
 
     const headings = new Array<string>();
     const details = new Array<string>();
+    const reportOptions: ReportOptions = {
+      sourceURL: this.sourceURL,
+      appmapURL: this.appmapURL,
+    };
     for (const sectionName of sections) {
       const section = await ReportSection.build(sectionName);
-      const heading = section.generateHeading(changeReport);
-      const detail = section.generateDetails(changeReport, {
-        sourceURL: this.sourceURL,
-        appmapURL: this.appmapURL,
-      });
+      const heading = section.generateHeading(changeReport, reportOptions);
+      const detail = section.generateDetails(changeReport, reportOptions);
 
       log(`${sectionName} heading: ${heading}`);
       log(`${sectionName} details: ${detail}`);
@@ -49,7 +43,8 @@ export default class MarkdownReport implements Report {
       details.push(detail);
     }
 
-    return [...headings, ...details].join('\n');
+    const heading = ['# AppMap', '| Summary | Status |', '| --- | --- |', ...headings];
+    return [heading, ...details].join('\n');
 
     // const self = this;
 

@@ -127,7 +127,7 @@ No relevant code changes found.
 
 <details>
 <summary>
-  Detailed OpenAPI diff
+Detailed OpenAPI diff
 </summary>
 
 ```diff

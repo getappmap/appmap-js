@@ -1,0 +1,13 @@
+| [Findings](#findings) |
+  {{~#with findingDiff}}
+  {{~#unless (length newFindings resolvedFindings) }}
+  :white_check_mark: None
+  {{~/unless}}
+  {{~#if (length newFindings) }}
+  :beetle: {{length newFindings}} new
+  {{~/if}}
+  {{~#if (length resolvedFindings) }}
+  :tada: {{length resolvedFindings}} resolved
+  {{~/if}}
+  {{~/with}}
+  |

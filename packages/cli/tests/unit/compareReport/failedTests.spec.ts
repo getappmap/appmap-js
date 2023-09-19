@@ -1,7 +1,7 @@
 import { Metadata } from '@appland/models';
 import ChangeReport, { AppMap, TestFailure } from '../../../src/cmds/compare-report/ChangeReport';
 import ReportSection from '../../../src/cmds/compare-report/ReportSection';
-import { normalizeReport, detailOptions } from './testHelper';
+import { normalizeReport, reportOptions } from './testHelper';
 
 describe('failedTests', () => {
   let section: ReportSection;
@@ -11,9 +11,12 @@ describe('failedTests', () => {
   describe('when all passed', () => {
     describe('header', () => {
       it('reports all passed', async () => {
-        const report = section.generateHeading({
-          testFailures: [],
-        } as unknown as ChangeReport);
+        const report = section.generateHeading(
+          {
+            testFailures: [],
+          } as unknown as ChangeReport,
+          reportOptions
+        );
         expect(report).toEqual(
           '| [Failed tests](#failed-tests) | :white_check_mark: All tests passed |'
         );
@@ -25,7 +28,7 @@ describe('failedTests', () => {
           {
             testFailures: [],
           } as unknown as ChangeReport,
-          detailOptions
+          reportOptions
         );
         expect(report).toEqual(``);
       });
@@ -60,9 +63,12 @@ describe('failedTests', () => {
 
     describe('header', () => {
       it('reports 1 failed', async () => {
-        const report = section.generateHeading({
-          testFailures: [testFailure],
-        } as unknown as ChangeReport);
+        const report = section.generateHeading(
+          {
+            testFailures: [testFailure],
+          } as unknown as ChangeReport,
+          reportOptions
+        );
         expect(report).toEqual('| [Failed tests](#failed-tests) | :warning: 1 failed |');
       });
     });
@@ -72,7 +78,7 @@ describe('failedTests', () => {
           {
             testFailures: [testFailure],
           } as unknown as ChangeReport,
-          detailOptions
+          reportOptions
         );
         expect(normalizeReport(report)).toEqual(
           normalizeReport(`## :warning: Failed tests

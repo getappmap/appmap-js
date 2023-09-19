@@ -1,4 +1,4 @@
-import Handlebars from 'handlebars';
+import Handlebars, { SafeString } from 'handlebars';
 import { isAbsolute, join, relative } from 'path';
 
 import { readFile } from 'fs/promises';
@@ -15,9 +15,7 @@ const TemplateDirectory = [
   .find((dirName) => existsSync(dirName));
 assert(TemplateDirectory, "Report template directory 'change-report' not found");
 
-export type HeadingOptions = {};
-
-export type DetailOptions = {
+export type ReportOptions = {
   sourceURL: URL;
   appmapURL: URL;
 };
@@ -29,21 +27,21 @@ export default class ReportSection {
     private detailsTemplate: HandlebarsTemplateDelegate
   ) {}
 
-  generateHeading(changeReport: ChangeReport, _options: HeadingOptions = {}) {
+  generateHeading(changeReport: ChangeReport, options: ReportOptions) {
     return this.headingTemplate(changeReport, {
-      helpers: {},
+      helpers: ReportSection.helpers(options),
       allowProtoPropertiesByDefault: true,
     });
   }
 
-  generateDetails(changeReport: ChangeReport, options: DetailOptions) {
+  generateDetails(changeReport: ChangeReport, options: ReportOptions) {
     return this.detailsTemplate(changeReport, {
-      helpers: ReportSection.detailHelpers(options),
+      helpers: ReportSection.helpers(options),
       allowProtoPropertiesByDefault: true,
     });
   }
 
-  static detailHelpers(options: DetailOptions): { [name: string]: Function } | undefined {
+  static helpers(options: ReportOptions): { [name: string]: Function } | undefined {
     const inspect = (value: any) => {
       return new Handlebars.SafeString(JSON.stringify(value, null, 2));
     };
@@ -64,7 +62,7 @@ export default class ReportSection {
       return list.find((item) => item !== undefined && item !== '');
     };
 
-    const source_url = (location, fileLinenoSeparator = '#L') => {
+    const source_url = (location: string, fileLinenoSeparator = '#L') => {
       if (typeof fileLinenoSeparator === 'object') {
         fileLinenoSeparator = '#L';
       }

@@ -1,8 +1,8 @@
-import { DetailOptions } from '../../../src/cmds/compare-report/ReportSection';
+import { ReportOptions } from '../../../src/cmds/compare-report/ReportSection';
 
 export const sourceURL = new URL('file:///Users/joe/dev/appmap-ruby');
 export const appmapURL = new URL('https://getappmap.com');
-export const detailOptions: DetailOptions = {
+export const reportOptions: ReportOptions = {
   sourceURL,
   appmapURL,
 };

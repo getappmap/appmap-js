@@ -1,6 +1,6 @@
 import ChangeReport, { OpenAPIDiff } from '../../../src/cmds/compare-report/ChangeReport';
 import ReportSection from '../../../src/cmds/compare-report/ReportSection';
-import { detailOptions } from './testHelper';
+import { reportOptions } from './testHelper';
 
 describe('openapiDiff', () => {
   let section: ReportSection;
@@ -12,9 +12,12 @@ describe('openapiDiff', () => {
 
     describe('header', () => {
       it('reports all passed', async () => {
-        const report = section.generateHeading({
-          openapiDiff,
-        } as unknown as ChangeReport);
+        const report = section.generateHeading(
+          {
+            openapiDiff,
+          } as unknown as ChangeReport,
+          reportOptions
+        );
         expect(report).toEqual(
           '| [API changes](#api-changes) |  :white_check_mark: No API changes |'
         );
@@ -26,7 +29,7 @@ describe('openapiDiff', () => {
           {
             openapiDiff,
           } as unknown as ChangeReport,
-          detailOptions
+          reportOptions
         );
 
         expect(report).toEqual(``);
@@ -188,9 +191,12 @@ describe('openapiDiff', () => {
 
     describe('header', () => {
       it('reports the changes', async () => {
-        const report = section.generateHeading({
-          openapiDiff,
-        } as unknown as ChangeReport);
+        const report = section.generateHeading(
+          {
+            openapiDiff,
+          } as unknown as ChangeReport,
+          reportOptions
+        );
         expect(report).toEqual(
           '| [API changes](#api-changes) |🚧 4 breaking,&nbsp; :wrench: 1 non-breaking |'
         );
@@ -202,7 +208,7 @@ describe('openapiDiff', () => {
           {
             openapiDiff,
           } as unknown as ChangeReport,
-          detailOptions
+          reportOptions
         );
 
         expect(report).toEqual(`## 🔄 API changes

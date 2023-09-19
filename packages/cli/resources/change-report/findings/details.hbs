@@ -1,0 +1,66 @@
+{{#*inline "finding-stack" }}
+{{#with stack }}
+{{#each this }}
+{{#if (source_url this)}}
+- [{{this}}]({{ source_url this }})
+{{else}}
+- {{ this }}
+{{/if}}
+{{/each}}
+{{/with}}
+
+{{/inline}}
+{{#*inline "finding"}}
+
+### {{ finding.ruleTitle }}
+
+<details>
+<summary>
+  Finding details
+</summary>
+
+| Field | Value |
+| --- | --- |
+| Message | {{ finding.message }} |
+| AppMap | [{{appmap.name}}]({{~ appmap_url 'head' appmap }}) |
+
+<!-- TODO: Show source diff -->
+<!--
+
+##### Related code changes
+
+\{\{~> finding-source-diff}}
+-->
+
+##### Stack trace
+
+{{#with finding}}
+{{> finding-stack}}
+{{/with}}
+
+</details>
+{{/inline}}
+{{#with findingDiff}}
+{{#if (length newFindings resolvedFindings)}}
+<h2 id="findings">Findings</h2>
+
+{{#with newFindings}}
+### :beetle: New findings ({{ length this}})
+
+{{#each this}}
+{{> finding}}
+{{/each}}
+
+{{/with}}
+
+{{#with resolvedFindings}}
+### :tada: Resolved findings ({{ length this}})
+
+{{#each this}}
+{{> finding}}
+{{/each}}
+
+{{/with}}
+
+{{/if}}
+{{/with}}
