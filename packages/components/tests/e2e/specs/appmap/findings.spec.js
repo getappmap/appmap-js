@@ -55,6 +55,30 @@ context('AppMap findings', () => {
           'Deserialization of untrusted data'
         );
       });
+
+      it('shows findings when finding title is searched', () => {
+        cy.get('.details-search__input-element').type('Deserialization');
+        cy.get('.details-search__block--analysis-finding')
+          .should('exist')
+          .find('.details-search__block-item')
+          .should('have.length', 1);
+      });
+
+      it('shows findings when finding message is searched', () => {
+        cy.get('.details-search__input-element').type('reset secret');
+        cy.get('.details-search__block--analysis-finding')
+          .should('exist')
+          .find('.details-search__block-item')
+          .should('have.length', 1);
+      });
+
+      it('shows no findings when irrelevant term is searched', () => {
+        cy.get('.details-search__input-element').type('access');
+        cy.get('.details-search__block--analysis-finding').should('not.exist');
+        cy.get('.details-search__block--labels')
+          .find('.details-search__block-item')
+          .should('have.length', 1);
+      });
     });
 
     describe('trace view', () => {
@@ -197,6 +221,27 @@ context('AppMap findings', () => {
         // go back to last selection
         cy.get('.details-btn').contains('Back to previous').click();
         cy.get('.highlighted').should('have.length', 0);
+      });
+
+      it('shows two findings when finding title is searched', () => {
+        cy.get('.details-search__input-element').type('N plus 1 SQL query');
+        cy.get('.details-search__block--analysis-finding')
+          .should('exist')
+          .find('.details-search__block-item')
+          .should('have.length', 2);
+      });
+
+      it('shows one finding when finding message is searched', () => {
+        cy.get('.details-search__input-element').type('active_storage_attachments');
+        cy.get('.details-search__block--analysis-finding')
+          .should('exist')
+          .find('.details-search__block-item')
+          .should('have.length', 1);
+      });
+
+      it('shows no findings when irrelevant term is searched', () => {
+        cy.get('.details-search__input-element').type('I_DONT_EXIST');
+        cy.get('.details-search__block--analysis-finding').should('not.exist');
       });
     });
   });
