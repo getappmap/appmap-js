@@ -308,7 +308,7 @@ declare module '@appland/models' {
     test_status?: 'succeeded' | 'failed';
     test_failure?: Metadata.TestFailure;
     source_location?: string;
-    exception: Metadata.Exception;
+    exception?: Metadata.Exception;
   }
 
   export class AppMap {
