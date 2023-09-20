@@ -39,8 +39,7 @@ describe('newAppMaps', () => {
     const metadata: Metadata = {
       name: 'Users controller test',
       client: {} as any,
-      recorder: {} as any,
-      exception: {} as any,
+      recorder: { name: 'rspec' } as any,
       source_location: 'spec/controllers/users_controller_test.rb:10',
     };
     const appmap = new AppMap('minitest/users_controller_test', metadata, false, undefined);
@@ -67,7 +66,7 @@ describe('newAppMaps', () => {
         );
         expect(report).toEqual(`<h2 id=\"new-appmaps\">New AppMaps</h2>
 
-[Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
+- [[rspec] Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
 
 `);
       });
@@ -77,8 +76,7 @@ describe('newAppMaps', () => {
     const metadata: Metadata = {
       name: 'Users controller test',
       client: {} as any,
-      recorder: {} as any,
-      exception: {} as any,
+      recorder: { name: 'rspec' } as any,
       source_location: 'spec/controllers/users_controller_test.rb:10',
     };
     const appmap = new AppMap('minitest/users_controller_test', metadata, false, undefined);
@@ -105,13 +103,13 @@ describe('newAppMaps', () => {
         );
         expect(report).toEqual(`<h2 id=\"new-appmaps\">New AppMaps</h2>
 
-[Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
+- [[rspec] Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
 
 
-[Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
+- [[rspec] Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
 
 
-[Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
+- [[rspec] Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
 
 Because there are so many new AppMaps, some of them are not listed in this report.
 `);

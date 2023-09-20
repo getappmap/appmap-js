@@ -72,18 +72,26 @@ describe('findings', () => {
 ### :tada: Resolved findings (1)
 
 
-### N plus 1 SQL query
-
 <details>
 <summary>
-  Finding details
+  N plus 1 SQL query
 </summary>
+
+
+##### Description
+
+> app_views_shared__feed_html_erb.render[418] contains 30 occurrences of SQL: SELECT &quot;users&quot;.* FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ? LIMIT ?
 
 | Field | Value |
 | --- | --- |
-| Message | app_views_shared__feed_html_erb.render[418] contains 30 occurrences of SQL: SELECT &quot;users&quot;.* FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ? LIMIT ? |
-| Sequence Diagram Diff | [(diff) Microposts interface micropost interface](https://getappmap.com/?path=diff%2Fminitest%2FMicroposts_interface_micropost_interface.diff.sequence.json) |
-| AppMap | [Microposts interface micropost interface](https://getappmap.com/?path=head%2Fminitest%2FMicroposts_interface_micropost_interface.appmap.json) |
+| Rule | [n-plus-one-query](https://appmap.io/docs/analysis/rules-reference.html#n-plus-one-query) |
+| Impact domain | Performance |
+
+##### View in AppMap
+
+- [Full AppMap &raquo;](https://getappmap.com/?path=head%2Fminitest%2FMicroposts_interface_micropost_interface.appmap.json)
+- [Sequence diagram diff &raquo;](https://getappmap.com/?path=diff%2Fminitest%2FMicroposts_interface_micropost_interface.diff.sequence.json)
+
 
 ##### Related code changes
 

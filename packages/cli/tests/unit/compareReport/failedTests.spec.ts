@@ -81,7 +81,6 @@ describe('failedTests', () => {
         expect(normalizeReport(report)).toEqual(
           normalizeReport(`## :warning: Failed tests
 
-
 <details>
 <summary>
 spec/controllers/users_controller_test.rb:10
@@ -109,7 +108,7 @@ The error occurred at [spec/controllers/users_controller_test.rb:10](../../../..
 \`\`\`
 
 <!-- sourceDiff -->
-The following code changes may be related to this test failure:
+##### Related code changes
 
 \`\`\`diff
 --- spec/controllers/users_controller_test.rb
@@ -118,13 +117,12 @@ The following code changes may be related to this test failure:
 
 \`\`\`
 
+[View AppMap of this test &raquo;](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
+[View sequence diagram diff of this test &raquo;](https://getappmap.com/?path=diff%2Fminitest%2Fusers_controller_test.diff.sequence.json)
 
-| Diagram | Link |
-| --- | --- |
-| Sequence Diagram Diff | [(diff) Users controller test](https://getappmap.com/?path=diff%2Fminitest%2Fusers_controller_test.diff.sequence.json) |
-| AppMap | [(appmap) Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json) |
-
+<hr/>
 </details>
+
 `)
         );
       });

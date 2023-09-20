@@ -9,6 +9,8 @@
     {{#if breakingDifferences}}
 ### 🚧 Breaking changes
 
+<small>These changes <b>are not</b> backwards-compatible, according to the OpenAPI specification.</small>
+
       {{#each breakingDifferences}}
 - {{> api-change }}
       {{/each}}
@@ -17,6 +19,8 @@
     {{#if nonBreakingDifferences}}
 ### :wrench: Non-breaking changes
 
+<small>These changes <b>are</b> backwards-compatible, according to the OpenAPI specification.</small>
+
       {{#each nonBreakingDifferences}}
 - {{> api-change }}
       {{/each}}
@@ -24,6 +28,8 @@
 
     {{#if unclassifiedDifferences}}
 ### Unclassified changes
+
+<small>The backwards-compatible of these changes <b>cannot be determined</b>, according to the OpenAPI specification.</small>
 
       {{#each unclassifiedDifferences}}
 - {{> api-change }}

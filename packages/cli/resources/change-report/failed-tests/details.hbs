@@ -2,7 +2,6 @@
 ## :warning: Failed tests
 
   {{#each testFailures}}
-
 <details>
 <summary>
 {{ testLocation }}
@@ -36,24 +35,21 @@ The error occurred at [{{failureLocation}}]({{ source_url failureLocation }}):
 
 <!-- sourceDiff -->
     {{#if appmap.sourceDiff }}
-The following code changes may be related to this test failure:
+##### Related code changes
 
 ```diff
 {{{appmap.sourceDiff}}}
 ```
-    {{else}}
-No relevant code changes found.
     {{/if}}
 
-
-| Diagram | Link |
-| --- | --- |
+[View AppMap of this test &raquo;]({{ appmap_url 'head' appmap }})
     {{#if appmap.changed}}
-| Sequence Diagram Diff | [(diff) {{ appmap.name }}]({{ appmap_diff_url appmap }}) |
+[View sequence diagram diff of this test &raquo;]({{ appmap_diff_url appmap }})
     {{/if}}
-| AppMap | [(appmap) {{ appmap.name }}]({{ appmap_url 'head' appmap }}) |
 
+<hr/>
 </details>
+
   {{/each}}
   {{#if pruned}}
 Because there are so many failed tests, some of them are not listed in this report.

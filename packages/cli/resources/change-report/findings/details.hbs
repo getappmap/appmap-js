@@ -12,20 +12,28 @@
 {{/inline}}
 {{#*inline "finding"}}
 
-### {{ finding.ruleTitle }}
-
 <details>
 <summary>
-  Finding details
+  {{ finding.ruleTitle }}
 </summary>
+
+
+##### Description
+
+> {{ finding.message }}
 
 | Field | Value |
 | --- | --- |
-| Message | {{ finding.message }} |
-{{#if appmap.changed}}
-| Sequence Diagram Diff | [(diff) {{ appmap.name }}]({{ appmap_diff_url appmap }}) |
-{{/if}}
-| AppMap | [{{appmap.name}}]({{~ appmap_url 'head' appmap }}) |
+| Rule | [{{ finding.ruleId }}](https://appmap.io/docs/analysis/rules-reference.html#{{finding.ruleId }}) |
+| Impact domain | {{ finding.impactDomain }} |
+
+##### View in AppMap
+
+- [Full AppMap &raquo;]({{ appmap_url 'head' appmap }})
+    {{#if appmap.changed}}
+- [Sequence diagram diff &raquo;]({{ appmap_diff_url appmap }})
+    {{/if}}
+
 {{#if appmap.sourceDiff}}
 
 ##### Related code changes

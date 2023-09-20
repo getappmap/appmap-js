@@ -123,6 +123,13 @@ export default class ReportSection {
       }
     };
 
+    const appmap_title = (appmap: AppMap): string => {
+      const tokens: string[] = [];
+      if (appmap.recorderName) tokens.push(['[', appmap.recorderName, ']'].join(''));
+      tokens.push(appmap.displayName);
+      return tokens.join(' ');
+    };
+
     const appmap_url = (revisionName: RevisionName, appmap: AppMap) => {
       let { id } = appmap;
       const path = [revisionName, `${id}.appmap.json`].join('/');
@@ -152,6 +159,7 @@ export default class ReportSection {
       inspect,
       length,
       coalesce,
+      appmap_title,
       appmap_url,
       appmap_diff_url,
       source_url,

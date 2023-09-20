@@ -215,12 +215,16 @@ describe('openapiDiff', () => {
 
 ### 🚧 Breaking changes
 
+<small>These changes <b>are not</b> backwards-compatible, according to the OpenAPI specification.</small>
+
 - Remove path \`/microposts/{id}\` 
 - Remove response status code \`302 POST /microposts\` 
 - Remove response status code \`303 POST /microposts\` 
 - Remove response status code \`422 POST /microposts\` 
 
 ### :wrench: Non-breaking changes
+
+<small>These changes <b>are</b> backwards-compatible, according to the OpenAPI specification.</small>
 
 - Add response status code  \`200 POST /microposts\`
 

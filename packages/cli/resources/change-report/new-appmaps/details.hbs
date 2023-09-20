@@ -2,7 +2,7 @@
 <h2 id="new-appmaps">New AppMaps</h2>
   {{#each newAppMaps}}
 
-[{{name}}]({{ appmap_url 'head' this }})
+- [{{appmap_title this}}]({{ appmap_url 'head' this }})
 
   {{/each}}
   {{#if pruned}}

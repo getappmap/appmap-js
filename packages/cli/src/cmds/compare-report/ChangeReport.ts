@@ -28,6 +28,14 @@ export class AppMap {
     return this.metadata.name || this.sourceLocation || '<anonymous AppMap>';
   }
 
+  get recorderName(): string | undefined {
+    return this.metadata.recorder.name;
+  }
+
+  get displayName(): string {
+    return this.name.replaceAll(/(\w)_(\w)/g, '$1 $2').replaceAll(/\s+/g, ' ');
+  }
+
   get sourceLocation(): string | undefined {
     return this.metadata.source_location;
   }
