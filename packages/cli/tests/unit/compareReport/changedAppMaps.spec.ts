@@ -74,7 +74,7 @@ describe('changedAppMaps', () => {
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual(`## :twisted_rightwards_arrows: Changed AppMaps
+        expect(report).toEqual(`<h2 id="changed-appmaps">🔀 Changed AppMaps</h2>
 
 <details>
 
@@ -133,7 +133,7 @@ appmap behavior has changed
           } as unknown as ChangeReport,
           { ...reportOptions, ...{ maxElements: 3 } }
         );
-        expect(report).toEqual(`## :twisted_rightwards_arrows: Changed AppMaps
+        expect(report).toEqual(`<h2 id="changed-appmaps">🔀 Changed AppMaps</h2>
 
 <details>
 

@@ -42,7 +42,9 @@ export default class MarkdownReport implements Report {
       details.push(detail);
     }
 
-    const heading = ['# AppMap', '| Summary | Status |', '| --- | --- |', ...headings].join('\n');
+    const heading = ['# AppMap', '', '| Summary | Status |', '| --- | --- |', ...headings, ''].join(
+      '\n'
+    );
     return [heading, ...details].join('\n');
   }
 }

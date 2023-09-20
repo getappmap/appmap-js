@@ -2,7 +2,7 @@
 {{title}} {{#each sourceSpecEntityDetails}}`{{location}}`{{/each}} {{#each destinationSpecEntityDetails}}`{{location}}`{{/each}}
 {{~/inline}}
 {{#if openapiDiff.differenceCount}}
-## 🔄 API changes
+<h2 id="openapi-changes">🔄 API changes</h2>
 
 {{#with openapiDiff}}
   {{#if differenceCount}}

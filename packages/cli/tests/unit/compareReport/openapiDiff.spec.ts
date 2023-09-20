@@ -19,8 +19,8 @@ describe('openapiDiff', () => {
           reportOptions
         );
         expect(report).toEqual(
-          '| [API changes](#api-changes) | :white_check_mark: No API changes |'
-        );
+          '| [API changes](#openapi-changes) | :white_check_mark: No API changes |'
+          );
       });
     });
     describe('details', () => {
@@ -198,7 +198,7 @@ describe('openapiDiff', () => {
           reportOptions
         );
         expect(report).toEqual(
-          '| [API changes](#api-changes) | 🚧 4 breaking, :wrench: 1 non-breaking |'
+          '| [API changes](#openapi-changes) | 🚧 4 breaking, :wrench: 1 non-breaking |'
         );
       });
     });
@@ -211,7 +211,7 @@ describe('openapiDiff', () => {
           reportOptions
         );
 
-        expect(report).toEqual(`## 🔄 API changes
+        expect(report).toEqual(`<h2 id="openapi-changes">🔄 API changes</h2>
 
 ### 🚧 Breaking changes
 

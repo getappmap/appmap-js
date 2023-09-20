@@ -79,7 +79,7 @@ describe('failedTests', () => {
           reportOptions
         );
         expect(normalizeReport(report)).toEqual(
-          normalizeReport(`## :warning: Failed tests
+          normalizeReport(`<h2 id="failed-tests">⚠️ Failed tests</h2>
 
 <details>
 <summary>

@@ -53,8 +53,8 @@ describe('compare-report command', () => {
     });
 
     const actualReport = readReportFile(actualReportPath);
-    expect(actualReport).toContain('## 🔄 API changes');
-    expect(actualReport).not.toContain('## :twisted_rightwards_arrows: Changed AppMaps');
+    expect(actualReport).toContain('<h2 id="openapi-changes">🔄 API changes</h2>');
+    expect(actualReport).not.toContain('<h2 id="changed-appmaps">🔀 Changed AppMaps</h2>');
 
     await verifyReportContents('expectedReport.md.txt');
   });
@@ -67,7 +67,7 @@ describe('compare-report command', () => {
     });
 
     const actualReport = readReportFile(actualReportPath);
-    expect(actualReport).not.toContain('## 🔄 API changes');
+    expect(actualReport).not.toContain('<h2 id="openapi-changes">🔄 API changes</h2>');
   });
 
   it('optional section can be enabled', async () => {
@@ -78,6 +78,6 @@ describe('compare-report command', () => {
     });
 
     const actualReport = readReportFile(actualReportPath);
-    expect(actualReport).toContain('## :twisted_rightwards_arrows: Changed AppMaps');
+    expect(actualReport).toContain('<h2 id="changed-appmaps">🔀 Changed AppMaps</h2>');
   });
 });

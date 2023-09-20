@@ -1,11 +1,13 @@
 # AppMap
+
 | Summary | Status |
 | --- | --- |
 | [Failed tests](#failed-tests) | :warning: 3 failed |
-| [API changes](#api-changes) | 🚧 4 breaking, :wrench: 1 non-breaking |
+| [API changes](#openapi-changes) | 🚧 4 breaking, :wrench: 1 non-breaking |
 | [Findings](#findings) |  :tada: 4 resolved  |
 | [New AppMaps](#new-appmaps) | :star: 1 new |
-## :warning: Failed tests
+
+<h2 id="failed-tests">⚠️ Failed tests</h2>
 
 <details>
 <summary>
@@ -103,7 +105,7 @@ Did you mean?  microposts_path
 </details>
 
 
-## 🔄 API changes
+<h2 id="openapi-changes">🔄 API changes</h2>
 
 ### 🚧 Breaking changes
 
