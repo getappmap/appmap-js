@@ -160,9 +160,13 @@ export default {
         }
       });
 
-      items[CodeObjectType.ANALYSIS_FINDING].data = this.findings.map((f) => ({
-        object: toListItem(f),
-      }));
+      this.findings.forEach((f) => {
+        if (this.passesFilter(f)) {
+          items[CodeObjectType.ANALYSIS_FINDING].data.push({
+            object: toListItem(f),
+          });
+        }
+      });
 
       Object.entries(items).forEach(([key, item]) => {
         if (!item.data.length) {
@@ -202,6 +206,13 @@ export default {
     passesFilter(obj) {
       // If it's null, we don't need to apply any filtering. Always return true.
       if (!this.filterRegex) {
+        return true;
+      }
+
+      if (
+        (obj.finding?.message && this.filterRegex.test(obj.finding.message.replace(/\n/g, ' '))) ||
+        (obj.rule?.title && this.filterRegex.test(obj.rule.title))
+      ) {
         return true;
       }
 
