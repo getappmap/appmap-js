@@ -230,10 +230,17 @@ export default class ChangeReport {
         revisionName: RevisionName.Base | RevisionName.Head
       ): FindingChange[] => {
         assert(changeReportData.findingDiff);
-        return changeReportData.findingDiff[key].map((finding: FindingData) => ({
-          appmap: appmap(revisionName, this.normalizeId(finding.appMapFile)),
-          finding,
-        }));
+        return changeReportData.findingDiff[key].map((finding: FindingData) => {
+          // This is a special case where the appmapId in the finding has the .appmap.json
+          // extension, which is non-standard from how we do it elsewhere.
+          let appmapId = finding.appMapFile;
+          if (appmapId.endsWith('.appmap.json'))
+            appmapId = appmapId.slice(0, appmapId.length - '.appmap.json'.length);
+          return {
+            appmap: appmap(revisionName, this.normalizeId(appmapId)),
+            finding,
+          };
+        });
       };
 
       const newFindings = buildFindings('new', RevisionName.Head);

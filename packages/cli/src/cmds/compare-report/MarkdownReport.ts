@@ -11,9 +11,7 @@ export const SECTIONS: Section[] = [
   Section.Findings,
   Section.NewAppMaps,
 ];
-// TODO: Restore these
-// export const EXPERIMENTAL_SECTIONS = ['changed-appmaps'];
-export const EXPERIMENTAL_SECTIONS: ExperimentalSection[] = [];
+export const EXPERIMENTAL_SECTIONS: ExperimentalSection[] = [ExperimentalSection.ChangedAppMaps];
 
 export default class MarkdownReport implements Report {
   public excludeSections: string[] | undefined;
@@ -40,34 +38,11 @@ export default class MarkdownReport implements Report {
       const heading = section.generateHeading(changeReport, reportOptions);
       const detail = section.generateDetails(changeReport, reportOptions);
 
-      log(`${sectionName} heading: ${heading}`);
-      log(`${sectionName} details: ${detail}`);
-
       headings.push(heading);
       details.push(detail);
     }
 
     const heading = ['# AppMap', '| Summary | Status |', '| --- | --- |', ...headings].join('\n');
     return [heading, ...details].join('\n');
-
-    // const self = this;
-
-    // Handlebars.registerHelper('appmap_diff_url', function (diagram): SafeString {
-    //   if (diagram.startsWith('./')) diagram = diagram.slice('./'.length);
-    //   if (diagram.startsWith('diff/')) diagram = diagram.slice('diff/'.length);
-    //   if (diagram.endsWith('.diff.sequence.json'))
-    //     diagram = diagram.slice(0, '.diff.sequence.json'.length * -1);
-    //   const path = ['diff', `${diagram}.diff.sequence.json`].join('/');
-
-    //   if (self.appmapURL) {
-    //     const url = new URL(self.appmapURL.toString());
-    //     url.searchParams.append('path', path);
-    //     return new Handlebars.SafeString(url.toString());
-    //   } else {
-    //     return new Handlebars.SafeString(path);
-    //   }
-    // });
-
-    // return Template(changeReport, { allowProtoPropertiesByDefault: true });
   }
 }
