@@ -10,6 +10,7 @@ export const SECTIONS: Section[] = [
   Section.OpenAPIDiff,
   Section.Findings,
   Section.NewAppMaps,
+  Section.RemovedAppMaps
 ];
 export const EXPERIMENTAL_SECTIONS: ExperimentalSection[] = [ExperimentalSection.ChangedAppMaps];
 
@@ -35,11 +36,12 @@ export default class MarkdownReport implements Report {
     };
     for (const sectionName of sections) {
       const section = await ReportSection.build(sectionName);
-      const heading = section.generateHeading(changeReport, reportOptions);
-      const detail = section.generateDetails(changeReport, reportOptions);
-
-      headings.push(heading);
-      details.push(detail);
+      const heading = section.generateHeading(changeReport, reportOptions).trim();
+      if (heading) {
+        const detail = section.generateDetails(changeReport, reportOptions);
+        headings.push(heading);
+        details.push(detail);
+      }
     }
 
     const heading = ['# AppMap', '', '| Summary | Status |', '| --- | --- |', ...headings, ''].join(

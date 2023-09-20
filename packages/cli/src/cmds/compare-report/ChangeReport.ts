@@ -143,6 +143,7 @@ export default class ChangeReport {
     public readonly openapiDiff: OpenAPIDiff,
     public readonly findingDiff: FindingDiff,
     public readonly newAppMaps: AppMap[],
+    public readonly removedAppMaps: AppMap[],
     public readonly changedAppMaps: Record<string, AppMap[]>,
     public pruned = false
   ) {}
@@ -164,7 +165,9 @@ export default class ChangeReport {
     ): Metadata => {
       const appmapId = this.normalizeId(appmap);
       const metadata = changeReportData.appMapMetadata[revision][appmapId];
-      assert(metadata);
+      if (!metadata) {
+        assert(metadata);
+      }
       return metadata;
     };
 
@@ -255,6 +258,10 @@ export default class ChangeReport {
       appmap(RevisionName.Head, this.normalizeId(appmapId))
     );
 
+    const removedAppMaps = changeReportData.removedAppMaps.map((appmapId) =>
+      appmap(RevisionName.Base, this.normalizeId(appmapId))
+    );
+
     const changedAppMaps = Object.keys(changeReportData.sequenceDiagramDiff).reduce<
       Record<string, AppMap[]>
     >((memo, key) => {
@@ -265,6 +272,13 @@ export default class ChangeReport {
       return memo;
     }, {});
 
-    return new ChangeReport(testFailures, apiDiff, findingDiff, newAppMaps, changedAppMaps);
+    return new ChangeReport(
+      testFailures,
+      apiDiff,
+      findingDiff,
+      newAppMaps,
+      removedAppMaps,
+      changedAppMaps
+    );
   }
 }

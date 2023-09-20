@@ -1,0 +1,11 @@
+[
+  "actionview/ActionView::Resolver",
+  "activesupport/ActiveSupport::Callbacks::CallbackSequence",
+  "app/mailers/UserMailer",
+  "app/models/User",
+  "app/views/app_views_layouts_mailer_html_erb",
+  "app/views/app_views_layouts_mailer_text_erb",
+  "logger/Logger::LogDevice",
+  "psych/Psych",
+  "ruby/Array"
+]

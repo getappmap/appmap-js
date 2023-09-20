@@ -100,6 +100,20 @@ class NewAppMapsPreprocessor implements Preprocessor {
   }
 }
 
+class RemovedAppMapsPreprocessor implements Preprocessor {
+  constructor(public report: ChangeReport) {}
+
+  get numElements() {
+    return this.report.removedAppMaps.length;
+  }
+
+  prune(numElements: number) {
+    return {
+      removedAppMaps: this.report.removedAppMaps.slice(0, numElements),
+    };
+  }
+}
+
 class ChangedAppMapsPreprocessor implements Preprocessor {
   constructor(public report: ChangeReport) {}
 
@@ -131,6 +145,8 @@ export default function buildPreprocessor(
       return new FindingDiffPreprocessor(report);
     case Section.NewAppMaps:
       return new NewAppMapsPreprocessor(report);
+    case Section.RemovedAppMaps:
+      return new RemovedAppMapsPreprocessor(report);
     case ExperimentalSection.ChangedAppMaps:
       return new ChangedAppMapsPreprocessor(report);
     default:

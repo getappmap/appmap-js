@@ -6,6 +6,7 @@
 | [API changes](#openapi-changes) | 🚧 4 breaking, :wrench: 1 non-breaking |
 | [Findings](#findings) |  :tada: 4 resolved  |
 | [New AppMaps](#new-appmaps) | :star: 1 new |
+| [Removed AppMaps](#removed-appmaps) | :heavy_multiplication_x: 1 removed |
 
 <h2 id="failed-tests">⚠️ Failed tests</h2>
 
@@ -306,7 +307,11 @@ Detailed OpenAPI diff
 
 
 
-<h2 id="new-appmaps">New AppMaps</h2>
+<h2 id="new-appmaps">⭐ New AppMaps</h2>
 
 - [[minitest] Valid login redirect after login](head/minitest/Valid_login_redirect_after_login.appmap.json)
 
+
+<h2 id="removed-appmaps">✖️ Removed AppMaps</h2>
+
+- [[minitest] User mailer password reset](base/minitest/User_mailer_password_reset.appmap.json)

@@ -6,27 +6,28 @@ import { reportOptions } from './testHelper';
 describe('newAppMaps', () => {
   let section: ReportSection;
 
-  beforeAll(async () => (section = await ReportSection.build(Section.NewAppMaps)));
+  beforeAll(async () => (section = await ReportSection.build(Section.RemovedAppMaps)));
 
   describe('when there are no changes', () => {
-    const newAppMaps: AppMap[] = [];
+    const removedAppMaps: AppMap[] = [];
 
     describe('header', () => {
       it('reports all passed', async () => {
         const report = section.generateHeading(
           {
-            newAppMaps,
+            removedAppMaps,
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual('| [New AppMaps](#new-appmaps) | :white_check_mark: None |');
+        // This section is not rendered if no AppMaps are removed.
+        expect(report).toEqual('');
       });
     });
     describe('details', () => {
       it('are blank', () => {
         const report = section.generateDetails(
           {
-            newAppMaps,
+            removedAppMaps,
           } as unknown as ChangeReport,
           reportOptions
         );
@@ -43,36 +44,38 @@ describe('newAppMaps', () => {
       source_location: 'spec/controllers/users_controller_test.rb:10',
     };
     const appmap = new AppMap('minitest/users_controller_test', metadata, false, undefined);
-    const newAppMaps = [appmap];
+    const removedAppMaps = [appmap];
 
     describe('header', () => {
       it('reports the changes', async () => {
         const report = section.generateHeading(
           {
-            newAppMaps,
+            removedAppMaps,
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual('| [New AppMaps](#new-appmaps) | :star: 1 new |');
+        expect(report).toEqual(
+          '| [Removed AppMaps](#removed-appmaps) | :heavy_multiplication_x: 1 removed |'
+        );
       });
     });
     describe('details', () => {
       it('are provided', () => {
         const report = section.generateDetails(
           {
-            newAppMaps,
+            removedAppMaps,
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual(`<h2 id=\"new-appmaps\">⭐ New AppMaps</h2>
+        expect(report).toEqual(`<h2 id=\"removed-appmaps\">✖️ Removed AppMaps</h2>
 
-- [[rspec] Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
+- [[rspec] Users controller test](https://getappmap.com/?path=base%2Fminitest%2Fusers_controller_test.appmap.json)
 
 `);
       });
     });
   });
-  describe('when there are many new AppMaps', () => {
+  describe('when there are many removed AppMaps', () => {
     const metadata: Metadata = {
       name: 'Users controller test',
       client: {} as any,
@@ -80,38 +83,40 @@ describe('newAppMaps', () => {
       source_location: 'spec/controllers/users_controller_test.rb:10',
     };
     const appmap = new AppMap('minitest/users_controller_test', metadata, false, undefined);
-    const newAppMaps = [appmap, appmap, appmap, appmap, appmap];
+    const removedAppMaps = [appmap, appmap, appmap, appmap, appmap];
 
     describe('header', () => {
       it('reports the changes', async () => {
         const report = section.generateHeading(
           {
-            newAppMaps,
+            removedAppMaps,
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual('| [New AppMaps](#new-appmaps) | :star: 5 new |');
+        expect(report).toEqual(
+          '| [Removed AppMaps](#removed-appmaps) | :heavy_multiplication_x: 5 removed |'
+        );
       });
     });
     describe('details', () => {
       it('are limited', () => {
         const report = section.generateDetails(
           {
-            newAppMaps,
+            removedAppMaps,
           } as unknown as ChangeReport,
           { ...reportOptions, ...{ maxElements: 3 } }
         );
-        expect(report).toEqual(`<h2 id=\"new-appmaps\">⭐ New AppMaps</h2>
+        expect(report).toEqual(`<h2 id=\"removed-appmaps\">✖️ Removed AppMaps</h2>
 
-- [[rspec] Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
-
-
-- [[rspec] Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
+- [[rspec] Users controller test](https://getappmap.com/?path=base%2Fminitest%2Fusers_controller_test.appmap.json)
 
 
-- [[rspec] Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
+- [[rspec] Users controller test](https://getappmap.com/?path=base%2Fminitest%2Fusers_controller_test.appmap.json)
 
-Because there are so many new AppMaps, some of them are not listed in this report.
+
+- [[rspec] Users controller test](https://getappmap.com/?path=base%2Fminitest%2Fusers_controller_test.appmap.json)
+
+Because there are so many removed AppMaps, some of them are not listed in this report.
 `);
       });
     });

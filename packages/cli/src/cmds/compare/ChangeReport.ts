@@ -26,6 +26,7 @@ export type TestFailure = {
 export type ChangeReport = {
   testFailures: TestFailure[];
   newAppMaps: AppMapLink[];
+  removedAppMaps: AppMapLink[];
   changedAppMaps: ChangedAppMap[];
   apiDiff?: any;
   findingDiff?: Record<'new' | 'resolved', Finding[]>;

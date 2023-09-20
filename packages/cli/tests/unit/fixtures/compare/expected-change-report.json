@@ -20,6 +20,7 @@
     }
   ],
   "newAppMaps": ["minitest/Valid_login_redirect_after_login"],
+  "removedAppMaps": ["minitest/User_mailer_password_reset"],
   "changedAppMaps": [
     {
       "appmap": "minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost",
@@ -1245,6 +1246,45 @@
   },
   "appMapMetadata": {
     "base": {
+      "minitest/User_mailer_password_reset": {
+        "app": "rails_tutorial_sample_app_7th_ed",
+        "language": {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.1.2"
+        },
+        "client": {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.99.4"
+        },
+        "frameworks": [
+          {
+            "name": "rails",
+            "version": "7.0.4"
+          },
+          {
+            "name": "minitest",
+            "version": "5.15.0"
+          }
+        ],
+        "git": {
+          "repository": "git@github.com:land-of-apps/rails_tutorial_sample_app_7th_ed.git",
+          "branch": "main",
+          "commit": "a9a602d6c8ef85143ca903b3a74daec1a92d5286",
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
+        },
+        "name": "User_mailer password reset",
+        "source_location": "test/mailers/user_mailer_test.rb:17",
+        "recorder": {
+          "name": "minitest",
+          "type": "tests"
+        },
+        "test_status": "succeeded"
+      },
       "minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost": {
         "app": "rails_tutorial_sample_app_7th_ed",
         "language": {

@@ -191,7 +191,8 @@ export default class ChangeReporter {
 
     const generator = new ReportFieldCalculator(this);
 
-    const isNewFn = isNew(baseAppMaps, isTest(appMapMetadata));
+    const isNewFn = isAdded(baseAppMaps, isTest(appMapMetadata));
+    const isRemovedFn = isAdded(headAppMaps, isTest(appMapMetadata));
     const isChangedFn = isChanged(baseAppMaps, isTest(appMapMetadata), this.digests);
     const referenceAppMapFn = (appmap: AppMapName) =>
       [RevisionName.Base, RevisionName.Head].forEach((revisionName) =>
@@ -208,11 +209,11 @@ export default class ChangeReporter {
     };
 
     const newAppMaps = [...headAppMaps].filter(isNewFn);
+    const removedAppMaps = [...baseAppMaps].filter(isRemovedFn);
     const changedAppMaps = [...headAppMaps].filter(isChangedFn).map((appmap) => ({ appmap }));
 
-    newAppMaps.forEach((appmap) => {
-      this.referencedAppMaps.add(RevisionName.Head, appmap);
-    });
+    newAppMaps.forEach((appmap) => this.referencedAppMaps.add(RevisionName.Head, appmap));
+    removedAppMaps.forEach((appmap) => referenceAppMapFn(appmap));
     changedAppMaps.forEach(({ appmap }) => referenceAppMapFn(appmap));
 
     const failureFn = buildFailure(appMapMetadata, options.snippetWidth);
@@ -253,6 +254,7 @@ export default class ChangeReporter {
     const result: ChangeReport = {
       testFailures,
       newAppMaps,
+      removedAppMaps,
       changedAppMaps,
       sequenceDiagramDiff: await generator.sequenceDiagramDiff(changedAppMaps),
       appMapMetadata: {
@@ -323,17 +325,17 @@ function isTest(appMapMetadata: AppMapMetadata): (appmap: AppMapName) => boolean
   };
 }
 
-// Selects AppMaps that have stable names, and are in the head revision but not in the base revision.
-export function isNew(
-  baseAppMaps: Set<AppMapName>,
+// Selects AppMaps that have stable names, and are not found in a base reference set.
+export function isAdded(
+  referenceSet: Set<AppMapName>,
   isTestFn: (appmap: AppMapName) => boolean
 ): (appmap: AppMapName) => boolean {
-  return (appmap: AppMapName) => isTestFn(appmap) && !baseAppMaps.has(appmap);
+  return (appmap: AppMapName) => isTestFn(appmap) && !referenceSet.has(appmap);
 }
 
-// Selects AppMaps that are present in both the base and head revisions, and have different digests.
+// Selects AppMaps that is present in the reference set, and have different digests.
 export function isChanged(
-  baseAppMaps: Set<AppMapName>,
+  referenceSet: Set<AppMapName>,
   isTestFn: (appmap: AppMapName) => boolean,
   digests: Digests
 ): (appmap: AppMapName) => boolean {
@@ -342,7 +344,7 @@ export function isChanged(
     const headDigest = digests.appmapDigest(RevisionName.Head, appmap);
     return (
       isTestFn(appmap) &&
-      baseAppMaps.has(appmap) &&
+      referenceSet.has(appmap) &&
       !!baseDigest &&
       !!headDigest &&
       baseDigest !== headDigest
@@ -440,7 +442,11 @@ export class ReportFieldCalculator {
       changedAppMaps.forEach((appmap) => q.push(appmap));
       if (!q.idle()) await q.drain();
     }
-    return mapToRecord(sequenceDiagramDiff);
+    const record = mapToRecord(sequenceDiagramDiff);
+    for (const key of Object.keys(record)) {
+      record[key] = record[key].sort();
+    }
+    return record;
   }
 
   async findingDiff(reportRemoved: boolean): Promise<Record<'new' | 'resolved', Finding[]>> {
