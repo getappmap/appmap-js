@@ -89,7 +89,7 @@ spec/controllers/users_controller_test.rb:10
 <p/>
 
 <!-- testLocation -->
-[spec/controllers/users_controller_test.rb:10](../../../../../../joe/dev/appmap-ruby/spec/controllers/users_controller_test.rb#L10) failed with error:
+[spec/controllers/users_controller_test.rb:10](spec/controllers/users_controller_test.rb#L10) failed with error:
 
 <!-- failureMessage -->
 \`\`\`
@@ -97,7 +97,7 @@ Expected response to be a <3XX: redirect>, but was a <200: OK>
 \`\`\`
 
 <!-- failureLocation -->
-The error occurred at [spec/controllers/users_controller_test.rb:10](../../../../../../joe/dev/appmap-ruby/spec/controllers/users_controller_test.rb#L10):
+The error occurred at [spec/controllers/users_controller_test.rb:10](spec/controllers/users_controller_test.rb#L10):
 
 <!-- testSnippet -->
 \`\`\`ruby

@@ -104,10 +104,10 @@ describe('findings', () => {
 
 ##### Stack trace
 
-- [app/helpers/sessions_helper.rb:19](../../../../../../joe/dev/appmap-ruby/app/helpers/sessions_helper.rb#L19)
-- [app/helpers/sessions_helper.rb:35](../../../../../../joe/dev/appmap-ruby/app/helpers/sessions_helper.rb#L35)
-- [app/views/shared/_feed.html.erb](../../../../../../joe/dev/appmap-ruby/app/views/shared/_feed.html.erb)
-- [app/views/static_pages/home.html.erb](../../../../../../joe/dev/appmap-ruby/app/views/static_pages/home.html.erb)
+- [app/helpers/sessions_helper.rb:19](app/helpers/sessions_helper.rb#L19)
+- [app/helpers/sessions_helper.rb:35](app/helpers/sessions_helper.rb#L35)
+- [app/views/shared/_feed.html.erb](app/views/shared/_feed.html.erb)
+- [app/views/static_pages/home.html.erb](app/views/static_pages/home.html.erb)
 - /home/myself/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/actionpack-7.0.4/lib/action_controller/metal/renderers.rb:140
 
 

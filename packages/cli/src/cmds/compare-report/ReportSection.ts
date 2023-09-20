@@ -33,6 +33,7 @@ export type ReportOptions = {
   sourceURL: URL;
   appmapURL: URL;
   maxElements?: number;
+  baseDir?: string;
 };
 
 export default class ReportSection {
@@ -72,6 +73,9 @@ export default class ReportSection {
   }
 
   static helpers(options: ReportOptions): { [name: string]: Function } | undefined {
+    let { baseDir } = options;
+    if (!baseDir) baseDir = process.cwd();
+
     const inspect = (value: any) => {
       return new Handlebars.SafeString(JSON.stringify(value, null, 2));
     };
@@ -109,7 +113,8 @@ export default class ReportSection {
       if (options.sourceURL) {
         const url = new URL(options.sourceURL.toString());
         if (url.protocol === 'file:') {
-          const sourcePath = relative(process.cwd(), join(url.pathname, path));
+          assert(baseDir);
+          const sourcePath = relative(baseDir, join(url.pathname, path));
           return new Handlebars.SafeString(
             [sourcePath, lineno].filter(Boolean).join(fileLinenoSeparator)
           );
