@@ -1,0 +1,10 @@
+[
+  "actionview",
+  "activesupport",
+  "app/mailers",
+  "app/models",
+  "app/views",
+  "logger",
+  "psych",
+  "ruby"
+]

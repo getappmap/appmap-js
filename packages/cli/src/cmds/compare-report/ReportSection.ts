@@ -23,6 +23,7 @@ export enum Section {
   OpenAPIDiff = 'openapi-diff',
   Findings = 'findings',
   NewAppMaps = 'new-appmaps',
+  RemovedAppMaps = 'removed-appmaps',
 }
 
 export enum ExperimentalSection {

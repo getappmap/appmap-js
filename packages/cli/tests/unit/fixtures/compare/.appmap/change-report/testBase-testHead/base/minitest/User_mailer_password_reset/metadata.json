@@ -1,0 +1,39 @@
+{
+  "app": "sample_app_6th_ed",
+  "language": {
+    "name": "ruby",
+    "engine": "ruby",
+    "version": "3.0.2"
+  },
+  "client": {
+    "name": "appmap",
+    "url": "https://github.com/applandinc/appmap-ruby",
+    "version": "0.101.0"
+  },
+  "frameworks": [
+    {
+      "name": "rails",
+      "version": "6.0.4.1"
+    },
+    {
+      "name": "minitest",
+      "version": "5.11.3"
+    }
+  ],
+  "git": {
+    "repository": "git@github.com:land-of-apps/sample_app_6th_ed.git",
+    "branch": "chore/test-action-utils",
+    "commit": "4bd64b9ccb087c9ce51174e41d7f77ead63a9f84",
+    "git_last_annotated_tag": null,
+    "git_last_tag": null,
+    "git_commits_since_last_annotated_tag": null,
+    "git_commits_since_last_tag": null
+  },
+  "name": "User_mailer password reset",
+  "source_location": "test/mailers/user_mailer_test.rb:17",
+  "recorder": {
+    "name": "minitest",
+    "type": "tests"
+  },
+  "test_status": "succeeded"
+}

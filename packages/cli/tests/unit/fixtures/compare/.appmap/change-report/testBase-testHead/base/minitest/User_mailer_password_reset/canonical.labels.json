@@ -1,0 +1,11 @@
+[
+  "array.pack",
+  "format.yaml.generate",
+  "log",
+  "mvc.after_action",
+  "mvc.before_action",
+  "mvc.template",
+  "mvc.template.resolver",
+  "secret",
+  "serialize"
+]

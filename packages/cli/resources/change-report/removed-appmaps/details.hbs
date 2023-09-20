@@ -1,0 +1,11 @@
+{{#if removedAppMaps.length }}
+<h2 id="removed-appmaps">✖️ Removed AppMaps</h2>
+  {{#each removedAppMaps}}
+
+- [{{appmap_title this}}]({{ appmap_url 'base' this }})
+
+  {{/each}}
+  {{#if pruned}}
+Because there are so many removed AppMaps, some of them are not listed in this report.
+  {{/if}}
+{{/if}}
