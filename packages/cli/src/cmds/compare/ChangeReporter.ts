@@ -90,7 +90,7 @@ class SourceDiff {
       if (!codeObject.location) return;
 
       const path = codeObject.location.split(':')[0];
-      if (path.indexOf('.') && !path.startsWith('<') && !isAbsolute(path)) {
+      if (path.indexOf('.') && !path.startsWith('<') && !path.includes('#') && !isAbsolute(path)) {
         sourcePaths.add(path);
         const pathTokens = path.split('/');
         if (pathTokens.length > 0) sourcePathRoots.add(pathTokens[0]);
@@ -98,6 +98,13 @@ class SourceDiff {
     });
 
     await this.diffLoader.update(sourcePathRoots);
+
+    const result = [...sourcePaths]
+      .sort()
+      .map((path) => this.diffLoader.lookupDiff(path))
+      .join('');
+    // warn(`${[...sourcePaths].sort()}: ${result}`);
+    return result;
   }
 }
 
