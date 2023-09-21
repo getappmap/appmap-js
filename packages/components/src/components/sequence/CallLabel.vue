@@ -47,7 +47,7 @@
 import { diffChars } from 'diff';
 import { DiffMode, isFunction } from '@appland/sequence-diagram';
 import { ActionSpec } from './ActionSpec';
-import { SELECT_CODE_OBJECT } from '@/store/vsCode';
+import { SET_COLLAPSED_ACTIONS, SELECT_CODE_OBJECT } from '@/store/vsCode';
 
 class LabelFragment {
   constructor(public text: string, public diffMode?: DiffMode.Insert | DiffMode.Delete) {}
@@ -193,6 +193,7 @@ export default {
   methods: {
     collapseOrExpand() {
       this.$set(this.collapsedActionState, this.actionSpec.index, !this.collapsed);
+      this.$store.commit(SET_COLLAPSED_ACTIONS, this.collapsedActionState);
     },
     selectEvent() {
       if (this.appMap) {

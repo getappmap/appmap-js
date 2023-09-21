@@ -17,11 +17,13 @@ export default class DiagramSpec {
 
   public actions: ActionSpec[] = [];
   public parentIndex = new Map<number, number>();
+  public visuallyReachableActors: Actor[];
 
   constructor(public diagram: Diagram) {
     UniqueId += 1;
     this.uniqueId = UniqueId;
     this.actions = [];
+    this.visuallyReachableActors = this.diagram.actors;
     const lifecycleDepth: Map<ActionId, number> = new Map();
     const collectActions = (action: Action, parent?: ActionSpec): void => {
       let spec: ActionSpec;
@@ -99,5 +101,31 @@ export default class DiagramSpec {
     const parent = this.actions[parentIndex];
     if (!parent) throw Error(`No parent found for action spec ${actionSpec.index}`);
     return parent;
+  }
+
+  determineVisuallyReachableActors(collapsedActions: boolean[]) {
+    const result = new Set<Actor>();
+
+    for (const actionSpec of this.actions.filter(a => a.nodeType !== 'return')) {
+      // If all of the actors are visible at this point
+      // no need to check remaining actions.
+      if (result.size == this.actions.length)
+        break;
+
+      // If non of the ancestors of this action is collapsed
+      // then this action is visible (not swallowed) and its actors
+      // need to be visible.
+      if (!actionSpec.isCollapsed(collapsedActions)) {
+        const [calle, caller] = actionActors(actionSpec.action);
+
+        if (calle && !result.has(calle))
+          result.add(calle);
+
+        if (caller && !result.has(caller))
+          result.add(caller);
+      }
+    }
+    // Preserve original order
+    this.visuallyReachableActors = this.diagram.actors.filter(a => result.has(a));
   }
 }

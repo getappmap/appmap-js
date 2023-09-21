@@ -68,7 +68,7 @@ export class ActionSpec {
   }
 
   get maxGridColumn(): number {
-    return this.diagram.actors.length + 1;
+    return this.diagramSpec.visuallyReachableActors.length + 1;
   }
 
   get diffClasses(): string[] {
@@ -137,7 +137,9 @@ export class ActionSpec {
       action.children.forEach((child) => collectActors(child));
     };
     this.action.children.forEach((child) => collectActors(child));
+    const visuallyReachableActorIds = this.diagramSpec.visuallyReachableActors.map(a => a.id);
     const indexes = [...actorIds]
+      .filter((id) => visuallyReachableActorIds.includes(id))
       .map((actorId) => this.diagram.actors.findIndex((a) => a.id === actorId))
       .filter((id) => id >= 0)
       .sort((a, b) => (a > b ? 1 : -1));
@@ -149,9 +151,10 @@ export class ActionSpec {
   // e.g. the user or client. So the diagram actors start with index 2.
   get callerActionIndex(): number {
     const actors = actionActors(this.action);
-    if (!actors[0]) return 1;
+    if (!actors[0] || !this.diagramSpec.visuallyReachableActors.includes(actors[0])) return 1;
 
-    const actorIndex = this.diagram.actors.findIndex((actor: Actor) => actors[0]!.id === actor.id);
+    const actorIndex = this.diagramSpec.visuallyReachableActors
+      .findIndex((actor: Actor) => actors[0]!.id === actor.id);
     if (actorIndex === -1) throw Error();
     return actorIndex + 2;
   }
@@ -160,9 +163,10 @@ export class ActionSpec {
   // TODO: For outbound RPC, is the callee column greater than the last actor?
   get calleeActionIndex(): number {
     const actors = actionActors(this.action);
-    if (!actors[1]) return 1;
+    if (!actors[1] || !this.diagramSpec.visuallyReachableActors.includes(actors[1])) return 1;
 
-    const actorIndex = this.diagram.actors.findIndex((actor: Actor) => actors[1]!.id === actor.id);
+    const actorIndex = this.diagramSpec.visuallyReachableActors
+      .findIndex((actor: Actor) => actors[1]!.id === actor.id);
     if (actorIndex === -1) throw Error();
     return actorIndex + 2;
   }
