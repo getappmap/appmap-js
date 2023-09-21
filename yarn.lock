@@ -186,6 +186,7 @@ __metadata:
     openapi-diff: ^0.23.6
     openapi-types: ^12.1.0
     ora: ^5.4.1
+    parse-diff: ^0.11.1
     pkg: ^5.8.0
     port-pid: ^0.0.7
     prettier: ^2.7.1
@@ -27131,6 +27132,13 @@ __metadata:
     just-diff: ^5.0.1
     just-diff-apply: ^5.2.0
   checksum: 076f65c958696586daefb153f59d575dfb59648be43116a21b74d5ff69ec63dd56f585a27cc2da56d8e64ca5abf0373d6619b8330c035131f8d1e990c8406378
+  languageName: node
+  linkType: hard
+
+"parse-diff@npm:^0.11.1":
+  version: 0.11.1
+  resolution: "parse-diff@npm:0.11.1"
+  checksum: d904b37596c6957ac4c9709b79cd383eeb6188beeaf2032ed4d4a3ca76e05ac9315030d0d88999dde9d032347bbc4fbd58c4e85169ce34ddf31e701fc8ea1329
   languageName: node
   linkType: hard
 
