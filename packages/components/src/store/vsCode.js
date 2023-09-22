@@ -39,7 +39,6 @@ export const SET_SELECTED_SAVED_FILTER = 'setselectedSavedFilter';
 export const SET_HIGHLIGHTED_EVENTS = 'setHighlightedEvents';
 export const DEFAULT_VIEW = VIEW_COMPONENT;
 export const DEFAULT_FILTER_NAME = 'AppMap default';
-export const SET_COLLAPSED_ACTIONS = 'setCollapsedActions';
 
 // Always have the AppMap default filter as the top option
 function savedFiltersSorter(a, b) {
@@ -68,7 +67,6 @@ export function buildStore() {
       savedFilters: [],
       selectedSavedFilter: null,
       defaultFilter: null,
-      collapsedActions: [],
       highlightedEvents: [],
     },
 
@@ -233,10 +231,6 @@ export function buildStore() {
 
       [SET_HIGHLIGHTED_EVENTS](state, highlightedEvents) {
         state.highlightedEvents = highlightedEvents;
-      },
-
-      [SET_COLLAPSED_ACTIONS](state, collapsedActions) {
-        state.collapsedActions = collapsedActions;
       },
     },
   });

@@ -68,7 +68,7 @@ import VReturnAction from '@/components/sequence/ReturnAction.vue';
 import VActor from '@/components/sequence/Actor.vue';
 import DiagramSpec from './sequence/DiagramSpec';
 import { ActionSpec } from './sequence/ActionSpec';
-import { SET_COLLAPSED_ACTIONS, SET_FOCUSED_EVENT } from '../store/vsCode';
+import { SET_FOCUSED_EVENT } from '../store/vsCode';
 
 const SCROLL_OPTIONS = { behavior: 'smooth', block: 'center', inline: 'center' };
 
@@ -95,6 +95,12 @@ export default {
     selectedEvents: {
       type: Array,
     },
+  },
+
+  data() {
+    return {
+      collapsedActionState: [],
+    };
   },
 
   computed: {
@@ -154,13 +160,13 @@ export default {
       return result;
     },
     collapsedActions() {
-      return this.$store?.state.collapsedActions ?? [];
+      return this.collapsedActionState;
     },
     diagramSpec(): DiagramSpec {
-      let currentCollapsedActions = this.$store?.state.collapsedActions;
+      this.collapsedActionState = this.collapsedActionState ?? [];
 
       const result = new DiagramSpec(this.diagram);
-      if (currentCollapsedActions && currentCollapsedActions.length == 0) {
+      if (this.collapsedActionState.length == 0) {
         // If a Diagram contains any actions in diff mode, expand all ancestors of every diff action,
         // and collapse all other actions.
         const expandedActions = new Set<number>();
@@ -190,7 +196,7 @@ export default {
         expandedActions.delete(undefined);
 
         for (let index = 0; index < result.actions.length; index++)
-          this.$set(currentCollapsedActions, index, !shouldExpand(result.actions[index]));
+          this.$set(this.collapsedActionState, index, !shouldExpand(result.actions[index]));
 
         if (firstDiffAction && this.$store?.state) {
           const eventId = eventIds(firstDiffAction).filter(Boolean)[0];
@@ -198,11 +204,10 @@ export default {
           const event = appMap.eventsById[eventId];
           this.$store.commit(SET_FOCUSED_EVENT, event);
         }
-
-        this.$store.commit(SET_COLLAPSED_ACTIONS, currentCollapsedActions);
       }
 
-      if (currentCollapsedActions) result.determineVisuallyReachableActors(currentCollapsedActions);
+      if (this.collapsedActionState)
+        result.determineVisuallyReachableActors(this.collapsedActionState);
 
       return result;
     },
