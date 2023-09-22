@@ -1,3 +1,10 @@
+# [@appland/components-v3.3.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.2.0...@appland/components-v3.3.0) (2023-09-22)
+
+
+### Features
+
+* **CallLabel.vue:** add hover effect to display SQL and parameters ([f949a3d](https://github.com/getappmap/appmap-js/commit/f949a3d8374c71b73d1d6422ad522888406ad2b7))
+
 # [@appland/components-v3.2.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.1.0...@appland/components-v3.2.0) (2023-09-19)
 
 
