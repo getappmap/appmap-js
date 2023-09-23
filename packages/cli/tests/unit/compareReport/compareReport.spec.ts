@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { copyFileSync, existsSync, readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import path from 'path';
 
 import { handler } from '../../../src/cmds/compare-report/compareReport';
@@ -17,12 +17,11 @@ const changeReportDirectory = path.join(
   'change-report',
   `testBase-testHead`
 );
-const changeReportPath = path.join(changeReportDirectory, 'change-report.json');
+const actualReportPath = path.join(changeReportDirectory, 'report.md');
 
 describe('compare-report command', () => {
   beforeEach(async () => {
     await cleanProject(compareFixturePath);
-    copyFileSync(path.join(compareFixturePath, 'expected-change-report.json'), changeReportPath);
   });
 
   afterEach(async () => {
@@ -31,15 +30,13 @@ describe('compare-report command', () => {
   });
 
   function readReportFile(filePath: string): string {
+    assert(existsSync(filePath));
     const lines = readFileSync(filePath, 'utf-8').split(/\r?\n/);
     const removeWhitespaceLines = lines.filter(Boolean).filter((line) => !line.match(/^\s*$/));
     return removeTimeStampLines(removeWhitespaceLines.join('\n'));
   }
 
   async function verifyReportContents(expectedReportFileName: string) {
-    const actualReportPath = path.join(changeReportDirectory, 'report.md');
-    assert(existsSync(actualReportPath));
-
     const actualReport = readReportFile(actualReportPath);
     // .txt file to disable IDE auto-formatting.
     // Note that the IDE auto-formatting is actually good, beacuse it does things like replace
@@ -55,6 +52,10 @@ describe('compare-report command', () => {
       reportDirectory: changeReportDirectory,
     });
 
+    const actualReport = readReportFile(actualReportPath);
+    expect(actualReport).toContain('<h2 id="openapi-changes">🔄 API changes</h2>');
+    expect(actualReport).not.toContain('<h2 id="changed-appmaps">🔀 Changed AppMaps</h2>');
+
     await verifyReportContents('expectedReport.md.txt');
   });
 
@@ -65,7 +66,8 @@ describe('compare-report command', () => {
       excludeSection: ['openapi-diff'],
     });
 
-    await verifyReportContents('expectedReport-openapiDiff.md.txt');
+    const actualReport = readReportFile(actualReportPath);
+    expect(actualReport).not.toContain('<h2 id="openapi-changes">🔄 API changes</h2>');
   });
 
   it('optional section can be enabled', async () => {
@@ -75,6 +77,7 @@ describe('compare-report command', () => {
       includeSection: ['changed-appmaps'],
     });
 
-    await verifyReportContents('expectedReport-changedAppMaps.md.txt');
+    const actualReport = readReportFile(actualReportPath);
+    expect(actualReport).toContain('<h2 id="changed-appmaps">🔀 Changed AppMaps</h2>');
   });
 });

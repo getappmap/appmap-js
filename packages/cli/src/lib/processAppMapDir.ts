@@ -59,10 +59,7 @@ export default async function processAppMapDir<T extends Task, V>(
               warn(`Skipping oversized AppMap ${file}`);
               oversized.add(file);
             } else if (result.error) {
-              // warn(`${name} failed to process ${file}: ${(result.error as Error).message}`);
-              // TODO: Change ^ to this:
               warn(`${name} failed to process ${file}: ${result.error}`);
-
               errors.push(result.error);
             } else {
               if (resultHandler) {

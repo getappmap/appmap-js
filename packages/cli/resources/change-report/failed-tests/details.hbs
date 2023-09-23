@@ -1,0 +1,57 @@
+{{#if testFailures.length}}
+<h2 id="failed-tests">⚠️ Failed tests</h2>
+
+  {{#each testFailures}}
+<details>
+<summary>
+{{ testLocation }}
+</summary>
+
+<p/>
+
+<!-- testLocation -->
+[{{testLocation}}]({{ source_url testLocation }}) failed with error:
+
+    {{#if failureMessage}}
+<!-- failureMessage -->
+```
+{{{failureMessage}}}
+```
+    {{/if}}
+
+<!-- failureLocation -->
+    {{#if failureLocation}}
+The error occurred at [{{failureLocation}}]({{ source_url failureLocation }}):
+    {{/if}}
+
+    {{#if testSnippet}}
+      {{#with testSnippet}}
+<!-- testSnippet -->
+```{{language}}
+{{{codeFragment}}}
+```
+      {{/with}}
+    {{/if}}
+
+<!-- sourceDiff -->
+    {{#if appmap.sourceDiff }}
+##### Related code changes
+
+```diff
+{{{appmap.sourceDiff}}}
+```
+    {{/if}}
+
+[View AppMap of this test &raquo;]({{ appmap_url 'head' appmap }})
+    {{#if appmap.changed}}
+[View sequence diagram diff of this test &raquo;]({{ appmap_diff_url appmap }})
+    {{/if}}
+
+<hr/>
+</details>
+
+  {{/each}}
+  {{#if pruned}}
+Because there are so many failed tests, some of them are not listed in this report.
+  {{/if}}
+{{/if}}

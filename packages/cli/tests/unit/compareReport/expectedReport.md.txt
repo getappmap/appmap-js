@@ -1,19 +1,13 @@
 # AppMap
 
-
-
-
-
-
 | Summary | Status |
 | --- | --- |
 | [Failed tests](#failed-tests) | :warning: 3 failed |
-| [API changes](#api-changes) |🚧 4 breaking,&nbsp;:wrench: 1 non-breaking  |
+| [API changes](#openapi-changes) | 🚧 4 breaking, :wrench: 1 non-breaking |
 | [Findings](#findings) |  :tada: 4 resolved  |
-| [New AppMaps](#new-appmaps) |  :star: 1 new  |
+| [New AppMaps](#new-appmaps) | :star: 1 new |
 
-## :warning: Failed tests
-
+<h2 id="failed-tests">⚠️ Failed tests</h2>
 
 <details>
 <summary>
@@ -22,8 +16,10 @@ test/controllers/microposts_controller_test.rb:24
 
 <p/>
 
+<!-- testLocation -->
 [test/controllers/microposts_controller_test.rb:24](test/controllers/microposts_controller_test.rb:24) failed with error:
 
+<!-- failureMessage -->
 ```
 NoMethodError: undefined method `micropost_path' for #<MicropostsControllerTest:0x00007f311d97a068>
 Did you mean?  microposts
@@ -31,18 +27,16 @@ Did you mean?  microposts
     test/controllers/microposts_controller_test.rb:27:in `block in <class:MicropostsControllerTest>'
 ```
 
+<!-- failureLocation -->
 
 
+<!-- sourceDiff -->
 
-No relevant code changes found.
+[View AppMap of this test &raquo;](head/minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost.appmap.json)
+[View sequence diagram diff of this test &raquo;](diff/minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost.diff.sequence.json)
 
-| Diagram | Link |
-| --- | --- |
-| Sequence diagram diff | [minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost.diff.sequence.json](diff/minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost.diff.sequence.json) |
-| AppMap | [minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost](head/minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost.appmap.json) |
-
+<hr/>
 </details>
-
 
 <details>
 <summary>
@@ -51,8 +45,10 @@ test/integration/microposts_interface_test.rb:9
 
 <p/>
 
+<!-- testLocation -->
 [test/integration/microposts_interface_test.rb:9](test/integration/microposts_interface_test.rb:9) failed with error:
 
+<!-- failureMessage -->
 ```
 ActionView::Template::Error: undefined method `micropost_path' for #<ActionView::Base:0x00000000028410>
 
@@ -65,18 +61,16 @@ Did you mean?  microposts_path
     test/integration/microposts_interface_test.rb:11:in `block in <class:MicropostsInterfaceTest>'
 ```
 
+<!-- failureLocation -->
 
 
+<!-- sourceDiff -->
 
-No relevant code changes found.
+[View AppMap of this test &raquo;](head/minitest/Microposts_interface_micropost_interface.appmap.json)
+[View sequence diagram diff of this test &raquo;](diff/minitest/Microposts_interface_micropost_interface.diff.sequence.json)
 
-| Diagram | Link |
-| --- | --- |
-| Sequence diagram diff | [minitest/Microposts_interface_micropost_interface.diff.sequence.json](diff/minitest/Microposts_interface_micropost_interface.diff.sequence.json) |
-| AppMap | [minitest/Microposts_interface_micropost_interface](head/minitest/Microposts_interface_micropost_interface.appmap.json) |
-
+<hr/>
 </details>
-
 
 <details>
 <summary>
@@ -85,8 +79,10 @@ test/integration/users_login_test.rb:45
 
 <p/>
 
+<!-- testLocation -->
 [test/integration/users_login_test.rb:45](test/integration/users_login_test.rb:45) failed with error:
 
+<!-- failureMessage -->
 ```
 ActionView::Template::Error: undefined method `micropost_path' for #<ActionView::Base:0x0000000002b3e0>
 
@@ -98,22 +94,22 @@ Did you mean?  microposts_path
     test/integration/users_login_test.rb:46:in `block in <class:ValidLoginTest>'
 ```
 
+<!-- failureLocation -->
 
 
+<!-- sourceDiff -->
 
-No relevant code changes found.
+[View AppMap of this test &raquo;](head/minitest/Valid_login_redirect_after_login.appmap.json)
 
-| Diagram | Link |
-| --- | --- |
-| AppMap | [minitest/Valid_login_redirect_after_login](head/minitest/Valid_login_redirect_after_login.appmap.json) |
-
+<hr/>
 </details>
 
 
-
-## 🔄 API changes
+<h2 id="openapi-changes">🔄 API changes</h2>
 
 ### 🚧 Breaking changes
+
+<small>These changes <b>are not</b> backwards-compatible, according to the OpenAPI specification.</small>
 
 - Remove path `/microposts/{id}` 
 - Remove response status code `302 POST /microposts` 
@@ -122,17 +118,19 @@ No relevant code changes found.
 
 ### :wrench: Non-breaking changes
 
+<small>These changes <b>are</b> backwards-compatible, according to the OpenAPI specification.</small>
+
 - Add response status code  `200 POST /microposts`
 
 
 <details>
 <summary>
-  Detailed OpenAPI diff
+Detailed OpenAPI diff
 </summary>
 
 ```diff
---- base/openapi.yml	2023-08-17 12:23:50.000000000 -0400
-+++ head/openapi.yml	2023-08-17 12:28:49.000000000 -0400
+--- base/openapi.yml	2023-08-31 13:25:30.000000000 -0400
++++ head/openapi.yml	2023-08-31 13:25:30.000000000 -0400
 @@ -100,18 +100,9 @@
    /microposts:
      post:
@@ -172,28 +170,32 @@ No relevant code changes found.
 ```
 </details>
 
-
-
 <h2 id="findings">Findings</h2>
 
 
 ### :tada: Resolved findings (4)
 
 
-### N plus 1 SQL query
-
 <details>
 <summary>
-  Finding details
+  N plus 1 SQL query
 </summary>
+
+
+##### Description
+
+> app_views_shared__feed_html_erb.render[418] contains 30 occurrences of SQL: SELECT &quot;users&quot;.* FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ? LIMIT ?
 
 | Field | Value |
 | --- | --- |
-| Message | app_views_shared__feed_html_erb.render[418] contains 30 occurrences of SQL: SELECT &quot;users&quot;.* FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ? LIMIT ? |
-| AppMap | [minitest/Microposts_interface_micropost_interface.appmap.json](head/minitest/Microposts_interface_micropost_interface.appmap.json) |
+| Rule | [n-plus-one-query](https://appmap.io/docs/analysis/rules-reference.html#n-plus-one-query) |
+| Impact domain | Performance |
 
-##### Related code changes
-No relevant code changes found.
+##### View in AppMap
+
+- [Full AppMap &raquo;](head/minitest/Microposts_interface_micropost_interface.appmap.json)
+- [Sequence diagram diff &raquo;](diff/minitest/Microposts_interface_micropost_interface.diff.sequence.json)
+
 
 ##### Stack trace
 
@@ -206,20 +208,26 @@ No relevant code changes found.
 
 </details>
 
-### N plus 1 SQL query
-
 <details>
 <summary>
-  Finding details
+  N plus 1 SQL query
 </summary>
+
+
+##### Description
+
+> app_views_shared__feed_html_erb.render[2707] contains 30 occurrences of SQL: SELECT &quot;users&quot;.* FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ? LIMIT ?
 
 | Field | Value |
 | --- | --- |
-| Message | app_views_shared__feed_html_erb.render[2707] contains 30 occurrences of SQL: SELECT &quot;users&quot;.* FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ? LIMIT ? |
-| AppMap | [minitest/Microposts_interface_micropost_interface.appmap.json](head/minitest/Microposts_interface_micropost_interface.appmap.json) |
+| Rule | [n-plus-one-query](https://appmap.io/docs/analysis/rules-reference.html#n-plus-one-query) |
+| Impact domain | Performance |
 
-##### Related code changes
-No relevant code changes found.
+##### View in AppMap
+
+- [Full AppMap &raquo;](head/minitest/Microposts_interface_micropost_interface.appmap.json)
+- [Sequence diagram diff &raquo;](diff/minitest/Microposts_interface_micropost_interface.diff.sequence.json)
+
 
 ##### Stack trace
 
@@ -233,20 +241,26 @@ No relevant code changes found.
 
 </details>
 
-### N plus 1 SQL query
-
 <details>
 <summary>
-  Finding details
+  N plus 1 SQL query
 </summary>
+
+
+##### Description
+
+> app_views_shared__feed_html_erb.render[3734] contains 30 occurrences of SQL: SELECT &quot;users&quot;.* FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ? LIMIT ?
 
 | Field | Value |
 | --- | --- |
-| Message | app_views_shared__feed_html_erb.render[3734] contains 30 occurrences of SQL: SELECT &quot;users&quot;.* FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ? LIMIT ? |
-| AppMap | [minitest/Microposts_interface_micropost_interface.appmap.json](head/minitest/Microposts_interface_micropost_interface.appmap.json) |
+| Rule | [n-plus-one-query](https://appmap.io/docs/analysis/rules-reference.html#n-plus-one-query) |
+| Impact domain | Performance |
 
-##### Related code changes
-No relevant code changes found.
+##### View in AppMap
+
+- [Full AppMap &raquo;](head/minitest/Microposts_interface_micropost_interface.appmap.json)
+- [Sequence diagram diff &raquo;](diff/minitest/Microposts_interface_micropost_interface.diff.sequence.json)
+
 
 ##### Stack trace
 
@@ -259,20 +273,26 @@ No relevant code changes found.
 
 </details>
 
-### N plus 1 SQL query
-
 <details>
 <summary>
-  Finding details
+  N plus 1 SQL query
 </summary>
+
+
+##### Description
+
+> app_views_users_show_html_erb.render[4559] contains 6 occurrences of SQL: SELECT &quot;users&quot;.* FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ? LIMIT ?
 
 | Field | Value |
 | --- | --- |
-| Message | app_views_users_show_html_erb.render[4559] contains 6 occurrences of SQL: SELECT &quot;users&quot;.* FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ? LIMIT ? |
-| AppMap | [minitest/Microposts_interface_micropost_interface.appmap.json](head/minitest/Microposts_interface_micropost_interface.appmap.json) |
+| Rule | [n-plus-one-query](https://appmap.io/docs/analysis/rules-reference.html#n-plus-one-query) |
+| Impact domain | Performance |
 
-##### Related code changes
-No relevant code changes found.
+##### View in AppMap
+
+- [Full AppMap &raquo;](head/minitest/Microposts_interface_micropost_interface.appmap.json)
+- [Sequence diagram diff &raquo;](diff/minitest/Microposts_interface_micropost_interface.diff.sequence.json)
+
 
 ##### Stack trace
 
@@ -286,9 +306,7 @@ No relevant code changes found.
 
 
 
-
 <h2 id="new-appmaps">New AppMaps</h2>
 
-
-[minitest/Valid_login_redirect_after_login](head/minitest/Valid_login_redirect_after_login.appmap.json)
+- [[minitest] Valid login redirect after login](head/minitest/Valid_login_redirect_after_login.appmap.json)
 

@@ -1,0 +1,8 @@
+{{#with openapiDiff }}
+| [API changes](#openapi-changes) | 
+  {{~#if differenceCount }}
+    {{~#if breakingDifferenceCount }} 🚧 {{breakingDifferenceCount}} breaking{{~/if}}
+    {{~#if nonBreakingDifferenceCount }}{{#if breakingDifferenceCount }},{{~/if}} :wrench: {{nonBreakingDifferenceCount}} non-breaking{{/if~}}
+  {{~else}} :white_check_mark: No API changes
+  {{~/if}} |
+{{~/with}}

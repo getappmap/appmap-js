@@ -1,5 +1,5 @@
 import { Metadata } from '@appland/models';
-import { Finding, ImpactDomain } from '../../lib/findings';
+import { Finding } from '@appland/scanner';
 
 export type AppMapLink = string;
 export type SequenceDiagramLink = string;
@@ -28,7 +28,7 @@ export type ChangeReport = {
   newAppMaps: AppMapLink[];
   changedAppMaps: ChangedAppMap[];
   apiDiff?: any;
-  findingDiff?: Record<'new' & 'resolved', Finding[]>;
+  findingDiff?: Record<'new' | 'resolved', Finding[]>;
   appMapMetadata: {
     base: Record<AppMapName, Metadata>;
     head: Record<AppMapName, Metadata>;

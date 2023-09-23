@@ -1,0 +1,25 @@
+{{#if (length changedAppMaps) }}
+<h2 id="changed-appmaps">🔀 Changed AppMaps</h2>
+
+<details>
+
+<summary>
+Review changes
+</summary>
+
+  {{#each changedAppMaps}}
+
+```
+{{{@key}}}
+```
+
+    {{#each this}}
+- [{{name}}]({{ appmap_diff_url . }})
+    {{/each}}
+  {{/each}}
+
+  {{#if pruned}}
+Because there are so many changed AppMaps, some of them are not listed in this report.
+  {{/if}}
+</details>
+{{/if}}
