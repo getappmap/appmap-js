@@ -140,7 +140,7 @@ export class ActionSpec {
     const visuallyReachableActorIds = this.diagramSpec.visuallyReachableActors.map(a => a.id);
     const indexes = [...actorIds]
       .filter((id) => visuallyReachableActorIds.includes(id))
-      .map((actorId) => this.diagram.actors.findIndex((a) => a.id === actorId))
+      .map((actorId) => this.diagramSpec.visuallyReachableActors.findIndex((a) => a.id === actorId))
       .filter((id) => id >= 0)
       .sort((a, b) => (a > b ? 1 : -1));
 
