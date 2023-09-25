@@ -1,3 +1,10 @@
+# [@appland/components-v3.5.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.4.0...@appland/components-v3.5.0) (2023-09-25)
+
+
+### Features
+
+* Hide unused actors when collapsing actions ([#1398](https://github.com/getappmap/appmap-js/issues/1398)) ([3f568f3](https://github.com/getappmap/appmap-js/commit/3f568f36418cd94aa37edcd422683e97435759ad))
+
 # [@appland/components-v3.4.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.3.0...@appland/components-v3.4.0) (2023-09-25)
 
 
