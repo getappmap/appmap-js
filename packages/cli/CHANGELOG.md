@@ -1,3 +1,17 @@
+# [@appland/appmap-v3.97.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.96.3...@appland/appmap-v3.97.0) (2023-09-25)
+
+
+### Features
+
+* Add changed-appmaps experimental section ([b107953](https://github.com/getappmap/appmap-js/commit/b107953d524d17811162a396e79703257fb8cf87))
+* Add findings report section ([52bd6bd](https://github.com/getappmap/appmap-js/commit/52bd6bddbdb7402e7cf12cd99da2f18c4fbe0b5d))
+* Add HTML anchors for all report sections ([36e392c](https://github.com/getappmap/appmap-js/commit/36e392c6aeead586542663401d51daf09fb2338f))
+* Improve markdown report output ([64f131a](https://github.com/getappmap/appmap-js/commit/64f131ac2a5585656180993086e6cf919ab42834))
+* Link to sequence diagram diff ([12fed52](https://github.com/getappmap/appmap-js/commit/12fed5297991e8927cb22f95559c52edb3b9e559))
+* List new AppMaps ([2f2fcc1](https://github.com/getappmap/appmap-js/commit/2f2fcc16abbdc68aa864fd318eaf4ce26d0976c0))
+* Preprocess to prune long report sections ([0c3822e](https://github.com/getappmap/appmap-js/commit/0c3822ee22c647d9ab0bfe9b3fbca7ada5c5fafc))
+* Refactor change report into components ([476cae8](https://github.com/getappmap/appmap-js/commit/476cae8667e1a516e6bcf3ceef0e8befe60cdf86))
+
 # [@appland/appmap-v3.96.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.96.2...@appland/appmap-v3.96.3) (2023-09-18)
 
 
