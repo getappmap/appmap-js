@@ -6,7 +6,7 @@
     </template>
     <template v-else>
       <div class="sequence-diagram" id="sequence-diagram-ui">
-        <template v-for="(actor, index) in actors">
+        <template v-for="(actor, index) in visuallyReachableActors">
           <VActor
             :actor="actor"
             :key="actorKey(actor)"
@@ -97,6 +97,12 @@ export default {
     },
   },
 
+  data() {
+    return {
+      collapsedActionState: [],
+    };
+  },
+
   computed: {
     styles() {
       if (this.isLoading) return 'display: none;';
@@ -153,51 +159,63 @@ export default {
       }
       return result;
     },
+    collapsedActions() {
+      return this.collapsedActionState;
+    },
     diagramSpec(): DiagramSpec {
+      this.collapsedActionState = this.collapsedActionState ?? []; // eslint-disable-line vue/no-side-effects-in-computed-properties
+
       const result = new DiagramSpec(this.diagram);
-      this.collapsedActions = []; // eslint-disable-line vue/no-side-effects-in-computed-properties
+      if (this.collapsedActionState.length == 0) {
+        // If a Diagram contains any actions in diff mode, expand all ancestors of every diff action,
+        // and collapse all other actions.
+        const expandedActions = new Set<number>();
+        let firstDiffAction: Action | undefined;
 
-      // If a Diagram contains any actions in diff mode, expand all ancestors of every diff action,
-      // and collapse all other actions.
-      const expandedActions = new Set<number>();
-      let firstDiffAction: Action | undefined;
+        const eventIds = (action: Action) =>
+          (action.eventIds || []).filter((id) => id !== undefined);
 
-      const eventIds = (action: Action) => (action.eventIds || []).filter((id) => id !== undefined);
+        const markExpandedActions = (action: Action, ancestors = new Array<Action>()) => {
+          if (action.diffMode) {
+            if (!firstDiffAction) firstDiffAction = action;
+            expandedActions.add(...eventIds(action));
+            for (const ancestor of ancestors) expandedActions.add(...eventIds(ancestor));
+          }
+          if (action.children && action.children.length > 0) {
+            ancestors.push(action);
+            action.children.forEach((child) => markExpandedActions(child, ancestors));
+            ancestors.pop();
+          }
+          return ancestors;
+        };
 
-      const markExpandedActions = (action: Action, ancestors = new Array<Action>()) => {
-        if (action.diffMode) {
-          if (!firstDiffAction) firstDiffAction = action;
-          expandedActions.add(...eventIds(action));
-          for (const ancestor of ancestors) expandedActions.add(...eventIds(ancestor));
+        const shouldExpand = (action: Action) =>
+          expandedActions.size === 0 || eventIds(action).some((id) => expandedActions.has(id));
+
+        this.diagram?.rootActions.forEach((root) => markExpandedActions(root));
+        expandedActions.delete(undefined);
+
+        for (let index = 0; index < result.actions.length; index++)
+          this.$set(this.collapsedActionState, index, !shouldExpand(result.actions[index]));
+
+        if (firstDiffAction && this.$store?.state) {
+          const eventId = eventIds(firstDiffAction).filter(Boolean)[0];
+          const { appMap } = this.$store.state;
+          const event = appMap.eventsById[eventId];
+          this.$store.commit(SET_FOCUSED_EVENT, event);
         }
-        if (action.children && action.children.length > 0) {
-          ancestors.push(action);
-          action.children.forEach((child) => markExpandedActions(child, ancestors));
-          ancestors.pop();
-        }
-        return ancestors;
-      };
-
-      const shouldExpand = (action: Action) =>
-        expandedActions.size === 0 || eventIds(action).some((id) => expandedActions.has(id));
-
-      this.diagram?.rootActions.forEach((root) => markExpandedActions(root));
-      expandedActions.delete(undefined);
-
-      for (let index = 0; index < result.actions.length; index++)
-        this.$set(this.collapsedActions, index, !shouldExpand(result.actions[index]));
-
-      if (firstDiffAction && this.$store?.state) {
-        const eventId = eventIds(firstDiffAction).filter(Boolean)[0];
-        const { appMap } = this.$store.state;
-        const event = appMap.eventsById[eventId];
-        this.$store.commit(SET_FOCUSED_EVENT, event);
       }
+
+      if (this.collapsedActionState)
+        result.determineVisuallyReachableActors(this.collapsedActionState);
 
       return result;
     },
     actors() {
       return this.diagram.actors;
+    },
+    visuallyReachableActors() {
+      return this.diagramSpec.visuallyReachableActors;
     },
     selectedActor() {
       if (!this.$store) return;

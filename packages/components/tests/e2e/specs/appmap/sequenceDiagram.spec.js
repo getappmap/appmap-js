@@ -175,4 +175,20 @@ context('AppMap sequence diagram', () => {
       cy.get('.call.selected').should('have.attr', 'data-event-ids', '183 185');
     });
   });
+
+  context('unused actors', () => {
+    beforeEach(() => {
+      cy.visit(
+        'http://localhost:6006/iframe.html?id=pages-vs-code--extension-with-default-sequence-view&viewMode=story'
+      );
+    });
+
+    it('are hidden when not reachable visually', () => {
+      cy.get('.sequence-diagram').children('.lane').should('have.length', 9);
+      // First collapse button [-] belongs to "Get /admin" action.
+      // Collapsing it should hide 1 actor (127.0.0.1:9515).
+      cy.get('div.collapse-expand.expanded').first().click();
+      cy.get('.sequence-diagram').children('.lane').should('have.length', 8);
+    });
+  });
 });
