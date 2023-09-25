@@ -112,14 +112,14 @@ export default class DiagramSpec {
       if (result.size == this.actions.length)
         break;
 
-      // If non of the ancestors of this action is collapsed
+      // If non of the ancestors of this action are collapsed
       // then this action is visible (not swallowed) and its actors
       // need to be visible.
       if (!actionSpec.isCollapsed(collapsedActions)) {
-        const [calle, caller] = actionActors(actionSpec.action);
+        const [callee, caller] = actionActors(actionSpec.action);
 
-        if (calle && !result.has(calle))
-          result.add(calle);
+        if (callee && !result.has(callee))
+          result.add(callee);
 
         if (caller && !result.has(caller))
           result.add(caller);

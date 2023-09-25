@@ -163,7 +163,7 @@ export default {
       return this.collapsedActionState;
     },
     diagramSpec(): DiagramSpec {
-      this.collapsedActionState = this.collapsedActionState ?? [];
+      this.collapsedActionState = this.collapsedActionState ?? []; // eslint-disable-line vue/no-side-effects-in-computed-properties
 
       const result = new DiagramSpec(this.diagram);
       if (this.collapsedActionState.length == 0) {
