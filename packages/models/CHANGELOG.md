@@ -1,3 +1,10 @@
+# [@appland/models-v2.6.5](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.6.4...@appland/models-v2.6.5) (2023-09-25)
+
+
+### Bug Fixes
+
+* Metadata.exception is optional ([326cc59](https://github.com/getappmap/appmap-js/commit/326cc592620b6c6b5602a71f57babdd8bf046d9a))
+
 # [@appland/models-v2.6.4](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.6.3...@appland/models-v2.6.4) (2023-07-26)
 
 
