@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.97.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.97.0...@appland/appmap-v3.97.1) (2023-09-25)
+
+
+### Bug Fixes
+
+* Package all resources in the native binary ([20269c4](https://github.com/getappmap/appmap-js/commit/20269c401138bf043869821010739ce1fa29bb89))
+
 # [@appland/appmap-v3.97.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.96.3...@appland/appmap-v3.97.0) (2023-09-25)
 
 
