@@ -138,8 +138,7 @@
     ],
     "assets": [
       "package.json",
-      "**/openapi-template.yaml",
-      "**/change-report.hbs",
+      "resources",
       "built/appmap.html"
     ],
     "outputPath": "dist"
