@@ -1,0 +1,771 @@
+{
+  "testFailures": [],
+  "newAppMaps": ["minitest/Users_profile_profile_display_while_logged_in_as_the_user"],
+  "changedAppMaps": [
+    {
+      "appmap": "minitest/Microposts_interface_micropost_interface",
+      "sequenceDiagramDiff": "minitest/Microposts_interface_micropost_interface.diff.sequence.json"
+    },
+    {
+      "appmap": "minitest/Users_login_login_with_valid_information_followed_by_logout",
+      "sequenceDiagramDiff": "minitest/Users_login_login_with_valid_information_followed_by_logout.diff.sequence.json"
+    },
+    {
+      "appmap": "minitest/Users_profile_profile_display_while_anonyomus",
+      "sequenceDiagramDiff": "minitest/Users_profile_profile_display_while_anonyomus.diff.sequence.json"
+    },
+    {
+      "appmap": "minitest/Users_signup_valid_signup_information_with_account_activation",
+      "sequenceDiagramDiff": "minitest/Users_signup_valid_signup_information_with_account_activation.diff.sequence.json"
+    }
+  ],
+  "removedAppMaps": ["minitest/Relationship_should_be_valid"],
+  "sequenceDiagramDiff": {
+    "": [
+      "minitest/Microposts_interface_micropost_interface",
+      "minitest/Users_login_login_with_valid_information_followed_by_logout",
+      "minitest/Users_signup_valid_signup_information_with_account_activation"
+    ],
+    "changed HTTP server request `GET /users/{id}` to return 302 instead of 200\n  changed function call `app/helpers#show` to function call `app/helpers#logged_in_user` and changed to return string instead of ActiveRecord::AssociationRelation\n    removed SQL `SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?`\n    removed function call `controllers#page_number`\n    changed function call `app/helpers#render` to function call `app/helpers#store_location` and changed to return string instead of void\n  removed function call `views.render`\n    removed function call `helpers#gravatar_for`\n4 times:     removed function call `views.render`\n      removed SQL `SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"followed_id\" WHERE \"relationships\".\"follower_id\" = ?`\n      removed SQL `SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"follower_id\" WHERE \"relationships\".\"followed_id\" = ?`\n    removed SQL `SELECT 1 AS one FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? LIMIT ?`\n2 times:     removed SQL `SELECT COUNT(*) FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ?`\n      removed SQL `SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC LIMIT ? OFFSET ?`\n      removed loop\n    removed function call `helpers#full_title`\n      removed function call `helpers#logged_in?`": [
+      "minitest/Users_profile_profile_display_while_anonyomus"
+    ]
+  },
+  "appMapMetadata": {
+    "base": {
+      "minitest/Microposts_interface_micropost_interface": {
+        "app": "sample_app_6th_ed",
+        "client": {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.102.1"
+        },
+        "frameworks": [
+          {
+            "name": "rails",
+            "version": "6.0.4.1"
+          },
+          {
+            "name": "minitest",
+            "version": "5.11.3"
+          }
+        ],
+        "git": {
+          "branch": "appmap-e2e",
+          "commit": "9745c3074776f1c102f193eec2a80ed7153a1412",
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null,
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
+        },
+        "language": {
+          "engine": "ruby",
+          "name": "ruby",
+          "version": "3.0.2"
+        },
+        "name": "Microposts_interface micropost interface",
+        "recorder": {
+          "name": "minitest",
+          "type": "tests"
+        },
+        "source_location": "test/integration/microposts_interface_test.rb:9",
+        "test_status": "succeeded"
+      },
+      "minitest/Relationship_should_be_valid": {
+        "app": "sample_app_6th_ed",
+        "client": {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.102.1"
+        },
+        "frameworks": [
+          {
+            "name": "rails",
+            "version": "6.0.4.1"
+          },
+          {
+            "name": "minitest",
+            "version": "5.11.3"
+          }
+        ],
+        "git": {
+          "branch": "appmap-e2e",
+          "commit": "9745c3074776f1c102f193eec2a80ed7153a1412",
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null,
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
+        },
+        "language": {
+          "engine": "ruby",
+          "name": "ruby",
+          "version": "3.0.2"
+        },
+        "name": "Relationship should be valid",
+        "recorder": {
+          "name": "minitest",
+          "type": "tests"
+        },
+        "source_location": "test/models/relationship_test.rb:10",
+        "test_status": "succeeded"
+      },
+      "minitest/Users_edit_unsuccessful_edit": {
+        "app": "sample_app_6th_ed",
+        "client": {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.102.1"
+        },
+        "frameworks": [
+          {
+            "name": "rails",
+            "version": "6.0.4.1"
+          },
+          {
+            "name": "minitest",
+            "version": "5.11.3"
+          }
+        ],
+        "git": {
+          "branch": "appmap-e2e",
+          "commit": "9745c3074776f1c102f193eec2a80ed7153a1412",
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null,
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
+        },
+        "language": {
+          "engine": "ruby",
+          "name": "ruby",
+          "version": "3.0.2"
+        },
+        "name": "Users_edit unsuccessful edit",
+        "recorder": {
+          "name": "minitest",
+          "type": "tests"
+        },
+        "source_location": "test/integration/users_edit_test.rb:9",
+        "test_status": "succeeded"
+      },
+      "minitest/Users_login_login_with_valid_information_followed_by_logout": {
+        "app": "sample_app_6th_ed",
+        "client": {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.102.1"
+        },
+        "frameworks": [
+          {
+            "name": "rails",
+            "version": "6.0.4.1"
+          },
+          {
+            "name": "minitest",
+            "version": "5.11.3"
+          }
+        ],
+        "git": {
+          "branch": "appmap-e2e",
+          "commit": "9745c3074776f1c102f193eec2a80ed7153a1412",
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null,
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
+        },
+        "language": {
+          "engine": "ruby",
+          "name": "ruby",
+          "version": "3.0.2"
+        },
+        "name": "Users_login login with valid information followed by logout",
+        "recorder": {
+          "name": "minitest",
+          "type": "tests"
+        },
+        "source_location": "test/integration/users_login_test.rb:21",
+        "test_status": "succeeded"
+      },
+      "minitest/Users_profile_profile_display_while_anonyomus": {
+        "app": "sample_app_6th_ed",
+        "client": {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.102.1"
+        },
+        "frameworks": [
+          {
+            "name": "rails",
+            "version": "6.0.4.1"
+          },
+          {
+            "name": "minitest",
+            "version": "5.11.3"
+          }
+        ],
+        "git": {
+          "branch": "appmap-e2e",
+          "commit": "9745c3074776f1c102f193eec2a80ed7153a1412",
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null,
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
+        },
+        "language": {
+          "engine": "ruby",
+          "name": "ruby",
+          "version": "3.0.2"
+        },
+        "name": "Users_profile profile display while anonyomus",
+        "recorder": {
+          "name": "minitest",
+          "type": "tests"
+        },
+        "source_location": "test/integration/users_profile_test.rb:18",
+        "test_status": "succeeded"
+      },
+      "minitest/Users_signup_valid_signup_information_with_account_activation": {
+        "app": "sample_app_6th_ed",
+        "client": {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.102.1"
+        },
+        "frameworks": [
+          {
+            "name": "rails",
+            "version": "6.0.4.1"
+          },
+          {
+            "name": "minitest",
+            "version": "5.11.3"
+          }
+        ],
+        "git": {
+          "branch": "appmap-e2e",
+          "commit": "9745c3074776f1c102f193eec2a80ed7153a1412",
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null,
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
+        },
+        "language": {
+          "engine": "ruby",
+          "name": "ruby",
+          "version": "3.0.2"
+        },
+        "name": "Users_signup valid signup information with account activation",
+        "recorder": {
+          "name": "minitest",
+          "type": "tests"
+        },
+        "source_location": "test/integration/users_signup_test.rb:22",
+        "test_status": "succeeded"
+      }
+    },
+    "head": {
+      "minitest/Microposts_interface_micropost_interface": {
+        "app": "sample_app_6th_ed",
+        "client": {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.101.0"
+        },
+        "frameworks": [
+          {
+            "name": "rails",
+            "version": "6.0.4.1"
+          },
+          {
+            "name": "minitest",
+            "version": "5.11.3"
+          }
+        ],
+        "git": {
+          "branch": "HEAD",
+          "commit": "7b255b2478f1a8a8c70b3d8adb52cd858397c38a",
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null,
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
+        },
+        "language": {
+          "engine": "ruby",
+          "name": "ruby",
+          "version": "3.0.2"
+        },
+        "name": "Microposts_interface micropost interface",
+        "recorder": {
+          "name": "minitest",
+          "type": "tests"
+        },
+        "source_location": "test/integration/microposts_interface_test.rb:9",
+        "test_status": "succeeded"
+      },
+      "minitest/Users_edit_unsuccessful_edit": {
+        "app": "sample_app_6th_ed",
+        "client": {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.101.0"
+        },
+        "frameworks": [
+          {
+            "name": "rails",
+            "version": "6.0.4.1"
+          },
+          {
+            "name": "minitest",
+            "version": "5.11.3"
+          }
+        ],
+        "git": {
+          "branch": "HEAD",
+          "commit": "7b255b2478f1a8a8c70b3d8adb52cd858397c38a",
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null,
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
+        },
+        "language": {
+          "engine": "ruby",
+          "name": "ruby",
+          "version": "3.0.2"
+        },
+        "name": "Users_edit unsuccessful edit",
+        "recorder": {
+          "name": "minitest",
+          "type": "tests"
+        },
+        "source_location": "test/integration/users_edit_test.rb:9",
+        "test_status": "succeeded"
+      },
+      "minitest/Users_login_login_with_valid_information_followed_by_logout": {
+        "app": "sample_app_6th_ed",
+        "client": {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.101.0"
+        },
+        "frameworks": [
+          {
+            "name": "rails",
+            "version": "6.0.4.1"
+          },
+          {
+            "name": "minitest",
+            "version": "5.11.3"
+          }
+        ],
+        "git": {
+          "branch": "HEAD",
+          "commit": "7b255b2478f1a8a8c70b3d8adb52cd858397c38a",
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null,
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
+        },
+        "language": {
+          "engine": "ruby",
+          "name": "ruby",
+          "version": "3.0.2"
+        },
+        "name": "Users_login login with valid information followed by logout",
+        "recorder": {
+          "name": "minitest",
+          "type": "tests"
+        },
+        "source_location": "test/integration/users_login_test.rb:21",
+        "test_status": "succeeded"
+      },
+      "minitest/Users_profile_profile_display_while_anonyomus": {
+        "app": "sample_app_6th_ed",
+        "client": {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.101.0"
+        },
+        "frameworks": [
+          {
+            "name": "rails",
+            "version": "6.0.4.1"
+          },
+          {
+            "name": "minitest",
+            "version": "5.11.3"
+          }
+        ],
+        "git": {
+          "branch": "HEAD",
+          "commit": "7b255b2478f1a8a8c70b3d8adb52cd858397c38a",
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null,
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
+        },
+        "language": {
+          "engine": "ruby",
+          "name": "ruby",
+          "version": "3.0.2"
+        },
+        "name": "Users_profile profile display while anonyomus",
+        "recorder": {
+          "name": "minitest",
+          "type": "tests"
+        },
+        "source_location": "test/integration/users_profile_test.rb:18",
+        "test_status": "succeeded"
+      },
+      "minitest/Users_profile_profile_display_while_logged_in_as_the_user": {
+        "app": "sample_app_6th_ed",
+        "client": {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.101.0"
+        },
+        "frameworks": [
+          {
+            "name": "rails",
+            "version": "6.0.4.1"
+          },
+          {
+            "name": "minitest",
+            "version": "5.11.3"
+          }
+        ],
+        "git": {
+          "branch": "HEAD",
+          "commit": "7b255b2478f1a8a8c70b3d8adb52cd858397c38a",
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null,
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
+        },
+        "language": {
+          "engine": "ruby",
+          "name": "ruby",
+          "version": "3.0.2"
+        },
+        "name": "Users_profile profile display while logged in as the user",
+        "recorder": {
+          "name": "minitest",
+          "type": "tests"
+        },
+        "source_location": "test/integration/users_profile_test.rb:24",
+        "test_status": "succeeded"
+      },
+      "minitest/Users_signup_valid_signup_information_with_account_activation": {
+        "app": "sample_app_6th_ed",
+        "client": {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.101.0"
+        },
+        "frameworks": [
+          {
+            "name": "rails",
+            "version": "6.0.4.1"
+          },
+          {
+            "name": "minitest",
+            "version": "5.11.3"
+          }
+        ],
+        "git": {
+          "branch": "HEAD",
+          "commit": "7b255b2478f1a8a8c70b3d8adb52cd858397c38a",
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null,
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
+        },
+        "language": {
+          "engine": "ruby",
+          "name": "ruby",
+          "version": "3.0.2"
+        },
+        "name": "Users_signup valid signup information with account activation",
+        "recorder": {
+          "name": "minitest",
+          "type": "tests"
+        },
+        "source_location": "test/integration/users_signup_test.rb:22",
+        "test_status": "succeeded"
+      }
+    }
+  },
+  "findingDiff": {
+    "new": [
+      {
+        "appMapFile": "minitest/Users_profile_profile_display_while_logged_in_as_the_user.appmap.json",
+        "checkId": "exec-of-untrusted-command",
+        "ruleId": "exec-of-untrusted-command",
+        "ruleTitle": "Execution of untrusted system command",
+        "event": {
+          "id": 685,
+          "event": "call",
+          "thread_id": 4460,
+          "defined_class": "Open3",
+          "method_id": "capture3",
+          "path": "/opt/hostedtoolcache/Ruby/3.0.2/x64/lib/ruby/3.0.0/open3.rb",
+          "lineno": 279,
+          "static": true,
+          "parameters": [
+            {
+              "name": "cmd",
+              "class": "Array",
+              "object_id": 66000,
+              "value": "[{WEBPACKER_ASSET_HOST=>, WEBPACKER_RELATIVE_URL_ROOT=>}, /opt/hostedtoolcache/Ruby/3.0.2/x64/bin/ruby ./bin/webpack, {:chdir=>/home/runner/work/sample_app_6th_ed/sample_app_6th_ed}]",
+              "kind": "rest",
+              "size": 3
+            }
+          ],
+          "receiver": {
+            "class": "Module",
+            "object_id": 66020,
+            "value": "Open3"
+          }
+        },
+        "hash": "cf9b19871c1f7912db1eb5081dc8d1450c45f1299a18e769210c9b2f6694b61d",
+        "hash_v2": "1841f78bb8eb2e9a88b405d2baa3642953115f0dbe3588aaa0c8037730613b27",
+        "stack": [
+          "/opt/hostedtoolcache/Ruby/3.0.2/x64/lib/ruby/3.0.0/open3.rb:279",
+          "app/views/sessions/new.html.erb",
+          "vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/renderers.rb:141",
+          "vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19"
+        ],
+        "scope": {
+          "id": 29,
+          "event": "call",
+          "thread_id": 4460,
+          "http_server_request": {
+            "request_method": "GET",
+            "path_info": "/login",
+            "normalized_path_info": "/login",
+            "headers": {
+              "Host": "www.example.com",
+              "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
+              "Content-Length": "0"
+            }
+          }
+        },
+        "message": "Open3.capture3 executes an untrusted command string",
+        "relatedEvents": [
+          {
+            "id": 685,
+            "event": "call",
+            "thread_id": 4460,
+            "defined_class": "Open3",
+            "method_id": "capture3",
+            "path": "/opt/hostedtoolcache/Ruby/3.0.2/x64/lib/ruby/3.0.0/open3.rb",
+            "lineno": 279,
+            "static": true,
+            "parameters": [
+              {
+                "name": "cmd",
+                "class": "Array",
+                "object_id": 66000,
+                "value": "[{WEBPACKER_ASSET_HOST=>, WEBPACKER_RELATIVE_URL_ROOT=>}, /opt/hostedtoolcache/Ruby/3.0.2/x64/bin/ruby ./bin/webpack, {:chdir=>/home/runner/work/sample_app_6th_ed/sample_app_6th_ed}]",
+                "kind": "rest",
+                "size": 3
+              }
+            ],
+            "receiver": {
+              "class": "Module",
+              "object_id": 66020,
+              "value": "Open3"
+            }
+          }
+        ],
+        "impactDomain": "Security",
+        "participatingEvents": {},
+        "scopeModifiedDate": "2023-09-10T20:02:46.000Z",
+        "eventsModifiedDate": "2023-09-10T20:02:46.000Z"
+      }
+    ],
+    "resolved": [
+      {
+        "appMapFile": "minitest/Users_edit_unsuccessful_edit.appmap.json",
+        "checkId": "exec-of-untrusted-command",
+        "ruleId": "exec-of-untrusted-command",
+        "ruleTitle": "Execution of untrusted system command",
+        "event": {
+          "id": 1147,
+          "event": "call",
+          "thread_id": 4460,
+          "defined_class": "Open3",
+          "method_id": "capture3",
+          "path": "/opt/hostedtoolcache/Ruby/3.0.2/x64/lib/ruby/3.0.0/open3.rb",
+          "lineno": 279,
+          "static": true,
+          "parameters": [
+            {
+              "name": "cmd",
+              "class": "Array",
+              "object_id": 66320,
+              "value": "[{WEBPACKER_ASSET_HOST=>, WEBPACKER_RELATIVE_URL_ROOT=>}, /opt/hostedtoolcache/Ruby/3.0.2/x64/bin/ruby ./bin/webpack, {:chdir=>/home/runner/work/sample_app_6th_ed/sample_app_6th_ed}]",
+              "kind": "rest",
+              "size": 3
+            }
+          ],
+          "receiver": {
+            "class": "Module",
+            "object_id": 66340,
+            "value": "Open3"
+          }
+        },
+        "hash": "cf9b19871c1f7912db1eb5081dc8d1450c45f1299a18e769210c9b2f6694b61d",
+        "hash_v2": "d2cd7d8820b3bd7977d120d6a8c9dc55b5d1f4ca9fbdfd1109e445187ee864e3",
+        "stack": [
+          "/opt/hostedtoolcache/Ruby/3.0.2/x64/lib/ruby/3.0.0/open3.rb:279",
+          "app/views/users/edit.html.erb",
+          "vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/renderers.rb:141",
+          "vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19"
+        ],
+        "scope": {
+          "id": 425,
+          "event": "call",
+          "thread_id": 4460,
+          "http_server_request": {
+            "request_method": "GET",
+            "path_info": "/users/762146111/edit",
+            "normalized_path_info": "/users/{id}/edit",
+            "headers": {
+              "Host": "www.example.com",
+              "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
+              "Cookie": "_sample_app_session=qjeL4FAVO26umY1UbmU6vgbiZv8dByPRRZSa%2FZvKZCuQnj0h25zSFp2rQjpceBEoUe5rYttK4VGv0i7KY41tY62vpGNJZ2Hb7fw6y8gTWqFUfD86NdtBYex82rGWO94R0yUUCcfaa4GtDmQXhsdpDGPaT6v51ChLBe6cKIpweawiGItKztkWhtqKf7IBM4CAeePTIEPpeEaMYHrgx88qtd9nzQ%3D%3D--hZXHi6sXiOPF6Pmk--YwpoPxIN5PqfKQSnMJvYRA%3D%3D; remember_token=EBNp7l7sSEV21iZ2PHINwQ; user_id=%2BGU%2BI2g9f0I3tsJXIEwiDBsVmrKOLtv5GrmE1dxBMyb4si4S5y7P8ffk3GqbF%2Bk9p2CzVgEUvPhMPrac93uzJdJbYOf0JI8%3D--7BekKVRm5oExH%2B9c--yk4g6rfDzl14GOjbYT%2FNsg%3D%3D",
+              "Content-Length": "0"
+            }
+          }
+        },
+        "message": "Open3.capture3 executes an untrusted command string",
+        "relatedEvents": [
+          {
+            "id": 1147,
+            "event": "call",
+            "thread_id": 4460,
+            "defined_class": "Open3",
+            "method_id": "capture3",
+            "path": "/opt/hostedtoolcache/Ruby/3.0.2/x64/lib/ruby/3.0.0/open3.rb",
+            "lineno": 279,
+            "static": true,
+            "parameters": [
+              {
+                "name": "cmd",
+                "class": "Array",
+                "object_id": 66320,
+                "value": "[{WEBPACKER_ASSET_HOST=>, WEBPACKER_RELATIVE_URL_ROOT=>}, /opt/hostedtoolcache/Ruby/3.0.2/x64/bin/ruby ./bin/webpack, {:chdir=>/home/runner/work/sample_app_6th_ed/sample_app_6th_ed}]",
+                "kind": "rest",
+                "size": 3
+              }
+            ],
+            "receiver": {
+              "class": "Module",
+              "object_id": 66340,
+              "value": "Open3"
+            }
+          }
+        ],
+        "impactDomain": "Security",
+        "participatingEvents": {},
+        "scopeModifiedDate": "2023-09-05T17:46:00.000Z",
+        "eventsModifiedDate": "2023-09-05T17:46:00.000Z"
+      },
+      {
+        "appMapFile": "minitest/Users_profile_profile_display_while_anonyomus.appmap.json",
+        "checkId": "missing-authentication",
+        "ruleId": "missing-authentication",
+        "ruleTitle": "Unauthenticated HTTP server request",
+        "event": {
+          "id": 29,
+          "event": "call",
+          "thread_id": 4460,
+          "http_server_request": {
+            "request_method": "GET",
+            "path_info": "/users/762146111",
+            "normalized_path_info": "/users/{id}",
+            "headers": {
+              "Host": "www.example.com",
+              "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
+              "Content-Length": "0"
+            }
+          }
+        },
+        "hash": "71d78423f522bdb8faaef33948567ddf2a4509a89e521947fba89d25632eae56",
+        "hash_v2": "d84f6ef0e5f0706fa98adcdeddb7e5bd81363b425118bf6503006330e87e5d85",
+        "stack": [],
+        "scope": {
+          "id": 29,
+          "event": "call",
+          "thread_id": 4460,
+          "http_server_request": {
+            "request_method": "GET",
+            "path_info": "/users/762146111",
+            "normalized_path_info": "/users/{id}",
+            "headers": {
+              "Host": "www.example.com",
+              "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
+              "Content-Length": "0"
+            }
+          }
+        },
+        "message": "Unauthenticated HTTP server request: GET /users/{id}",
+        "relatedEvents": [
+          {
+            "id": 29,
+            "event": "call",
+            "thread_id": 4460,
+            "http_server_request": {
+              "request_method": "GET",
+              "path_info": "/users/762146111",
+              "normalized_path_info": "/users/{id}",
+              "headers": {
+                "Host": "www.example.com",
+                "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
+                "Content-Length": "0"
+              }
+            }
+          }
+        ],
+        "impactDomain": "Security",
+        "participatingEvents": {},
+        "scopeModifiedDate": "2023-09-05T17:46:00.000Z"
+      }
+    ]
+  },
+  "apiDiff": {
+    "breakingDifferencesFound": false,
+    "nonBreakingDifferences": [
+      {
+        "type": "non-breaking",
+        "action": "add",
+        "code": "response.status-code.add",
+        "destinationSpecEntityDetails": [
+          {
+            "location": "302 GET /users/{id}",
+            "value": {
+              "content": {
+                "text/html": {}
+              },
+              "description": "Found"
+            }
+          }
+        ],
+        "entity": "response.status-code",
+        "source": "openapi-diff",
+        "sourceSpecEntityDetails": []
+      }
+    ],
+    "unclassifiedDifferences": []
+  }
+}

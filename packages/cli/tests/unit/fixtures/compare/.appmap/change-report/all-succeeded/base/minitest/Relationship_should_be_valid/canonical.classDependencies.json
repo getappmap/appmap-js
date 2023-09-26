@@ -1,0 +1,10 @@
+[
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "logger/Logger"
+  }
+]

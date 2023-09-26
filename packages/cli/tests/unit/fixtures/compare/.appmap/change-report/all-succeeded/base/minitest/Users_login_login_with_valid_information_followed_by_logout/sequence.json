@@ -1,0 +1,1778 @@
+{
+  "actors": [
+    {
+      "id": "http:HTTP server requests",
+      "name": "HTTP server requests",
+      "order": 0
+    },
+    {
+      "id": "package:app/controllers",
+      "name": "controllers",
+      "order": 1000
+    },
+    {
+      "id": "package:app/views",
+      "name": "views",
+      "order": 2000
+    },
+    {
+      "id": "package:app/helpers",
+      "name": "helpers",
+      "order": 3000
+    },
+    {
+      "id": "package:app/models",
+      "name": "models",
+      "order": 4000
+    },
+    {
+      "id": "database:Database",
+      "name": "Database",
+      "order": 7000
+    }
+  ],
+  "rootActions": [
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "GET /login",
+      "status": 200,
+      "digest": "42b787d163ea4e4aa42b3d6e9a2477f3da5b74f14d4a556fec888773b322d788",
+      "subtreeDigest": "56b16f34bf9e53b2fabe0ba7c801e1b3b69698db9ba9b10a337da02c3950368f",
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:app/controllers",
+          "name": "new",
+          "static": false,
+          "digest": "b714f618755f59398b5e4483177f19d7af5fe8a2f21ea591fd476cfe02c8361f",
+          "subtreeDigest": "0309542b021f904dd3e8b162e570a7de2bb15d351445290e49ea9de8d51e3e7c",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/controllers/SessionsController#new",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "void"
+            },
+            "raisesException": false
+          },
+          "children": [],
+          "elapsed": 0.0000016000000044869012,
+          "eventIds": [
+            45
+          ]
+        },
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:app/views",
+          "name": "render",
+          "static": true,
+          "digest": "f7a8ddb5cea459e3c5ff32db18419dce73dc1bd112739bb459e946c07aea45c6",
+          "subtreeDigest": "5808735e32c5cbf4ee7d46d4225ca6a232d44bc4f0cb67bc98c3a0fbbf2be582",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/views/app_views_sessions_new_html_erb.render",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "void"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/helpers",
+              "name": "full_title",
+              "static": false,
+              "digest": "6428a5b259bbf6313835680ae71302835d39681d81cd69e41c710da42e1d99f7",
+              "subtreeDigest": "361ef4b9bb2999ee86e9d958fe92bfd2390106bbf9b1da940c219041dd64675a",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/helpers/ApplicationHelper#full_title",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "ActiveSupport::SafeBuffer"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.000010199999991300501,
+              "eventIds": [
+                65
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/views",
+              "name": "render",
+              "static": true,
+              "digest": "8b9ec9f22e5fd30edef15949402dd291692d065f0c826216741d476d3afaa5d9",
+              "subtreeDigest": "d9df1064206d598dd41b8444b1e460077bb8d5fcde5d88d351291864082e1acb",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/views/app_views_layouts__shim_html_erb.render",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.0006675139999998692,
+              "eventIds": [
+                261
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/views",
+              "name": "render",
+              "static": true,
+              "digest": "a067a33c75f6a3a7014f32072c87f4c12afb634a4141d6c1d757b8f345269315",
+              "subtreeDigest": "e046d09e5d3e9bd55be577fe7853649292d28983bb56a021f1c106cc4b491b2a",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/views/app_views_layouts__header_html_erb.render",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/views",
+                  "callee": "package:app/helpers",
+                  "name": "logged_in?",
+                  "static": false,
+                  "digest": "77ba104e4ac11aaffbd62768cc00961bc71badb260963485b9897fbad354a39c",
+                  "subtreeDigest": "e711ae9ff1eb3d26633c13edf4795059ae7d47436fb6169ff8d9748dea1e6a72",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/helpers/SessionsHelper#logged_in?",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "void"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/helpers",
+                      "callee": "package:app/helpers",
+                      "name": "current_user",
+                      "static": false,
+                      "digest": "f2fde231b0994ff4256ad0e5188d0308c1a6148f09070dc9de9afaa808d8cd73",
+                      "subtreeDigest": "4bbbf501f2dabd944fbc67be1a25734cf646f7179b710e54553297d848f32790",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "app/helpers/SessionsHelper#current_user",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "void"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.00016680299999904946,
+                      "eventIds": [
+                        271
+                      ]
+                    }
+                  ],
+                  "elapsed": 0.0002090039999984583,
+                  "eventIds": [
+                    270
+                  ]
+                }
+              ],
+              "elapsed": 0.0011084220000014966,
+              "eventIds": [
+                267
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/views",
+              "name": "render",
+              "static": true,
+              "digest": "63985b0c938e10b1bc115ca2709f81992267c1ba90beb2edbd8ced516d9b2785",
+              "subtreeDigest": "9f2ddc6d4211a125286542a8b5b0a01262f45e120e13738b6850426ec9a29fed",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/views/app_views_layouts__footer_html_erb.render",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.0005215100000128814,
+              "eventIds": [
+                283
+              ]
+            }
+          ],
+          "elapsed": 0.021381517999998323,
+          "eventIds": [
+            50
+          ]
+        }
+      ],
+      "elapsed": 0.028571958000000564,
+      "eventIds": [
+        25
+      ]
+    },
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "POST /login",
+      "status": 302,
+      "digest": "5ec376a640bd7a1e4e68e1532c88708d569b32126c5ae179c437147e2980ee3f",
+      "subtreeDigest": "20bc98a6af2b03d77e7bd8b4316216675112ab08807bf759c6b68054384f092c",
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:app/controllers",
+          "name": "create",
+          "static": false,
+          "digest": "51948b2ba89c904474b66816d6e7045c6ad3cf6dbc94e6dbc916a012603e190a",
+          "subtreeDigest": "fb9642f14692cdc81cb751ec0c3915eddd34053fbf122e2f0fc0228e960424a4",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/controllers/SessionsController#create",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "string"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 6,
+              "caller": "package:app/controllers",
+              "callee": "database:Database",
+              "query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?",
+              "digest": "c14580bfbb4cbea2223956999abb2da07223fba57b1827a35152c7788d944313",
+              "subtreeDigest": "0dca967d63a879ead2e79eb0c84688d1d474cf732f25ad3a2ff5593cdaac7cdd",
+              "children": [],
+              "elapsed": 0.000296406,
+              "eventIds": [
+                326
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/controllers",
+              "callee": "package:app/helpers",
+              "name": "log_in",
+              "static": false,
+              "digest": "57684fbe3c025e0766d2336960175e61687ad9a419ac585f151f7bc55c8f75a9",
+              "subtreeDigest": "b79d63dd16565722105086e8074793df99d46c96e45187f649a46ed0daccb03e",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/helpers/SessionsHelper#log_in",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "integer"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.00007310100001234332,
+              "eventIds": [
+                338
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/controllers",
+              "callee": "package:app/helpers",
+              "name": "forget",
+              "static": false,
+              "digest": "aa7b21ebf94301210dba8b326df4a33756f3f18175004484e9510cb94615d502",
+              "subtreeDigest": "0131096cee8f1e897a00bb6d791f7441ccd3636666a7e9e9b4db101330979bae",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/helpers/SessionsHelper#forget",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/helpers",
+                  "callee": "package:app/models",
+                  "name": "forget",
+                  "static": false,
+                  "digest": "e8c004467c504b037d34b13447a25d6b1b84839fecfda7bdbfe818fd109e5a48",
+                  "subtreeDigest": "471b4c9c7793b6de60884901847cfa9ec96308a7437d21752eed56451e9a104a",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/models/User#forget",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "boolean"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [],
+                  "elapsed": 0.0009333189999978231,
+                  "eventIds": [
+                    343
+                  ]
+                }
+              ],
+              "elapsed": 0.001275124999992272,
+              "eventIds": [
+                342
+              ]
+            }
+          ],
+          "elapsed": 0.004437787000000526,
+          "eventIds": [
+            323
+          ]
+        }
+      ],
+      "elapsed": 0.011948433000000591,
+      "eventIds": [
+        301
+      ]
+    },
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "GET /users/{id}",
+      "status": 200,
+      "digest": "f73ae15250f45020dd686aefceee302b9f578947736f9adb11d1abbfbe47217c",
+      "subtreeDigest": "d768e9685dec4c910eb74138b922d0e9b6a308d9c689d6eaac71526ea0dcf9bd",
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:app/controllers",
+          "name": "show",
+          "static": false,
+          "digest": "74f5604aacab5d82d41a46aa815ab7ab15e58f2f3d0e131a61d97ae8707c781f",
+          "subtreeDigest": "1bfe8d2bc64e67e80a361d59fcabdd706725b2e4b1537082658232361939a8e1",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/controllers/UsersController#show",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "ActiveRecord::AssociationRelation"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 6,
+              "caller": "package:app/controllers",
+              "callee": "database:Database",
+              "query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?",
+              "digest": "d3215148ca0ab75b7a269bcfb8bbf9e50385569eb0fba0fdbcca10da78011030",
+              "subtreeDigest": "cff7d0dfa71e51580d152a25a9f26530c0ab1ed3356a77247851221b6b3081dc",
+              "children": [],
+              "elapsed": 0.000333507,
+              "eventIds": [
+                464
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/controllers",
+              "callee": "package:app/controllers",
+              "name": "page_number",
+              "static": false,
+              "digest": "df6346bd2579537ceed4391aad0559b3fcd9bba57d76389444072bad64abebcf",
+              "subtreeDigest": "0b7bf1266992b6ad25aafce21785e9139047fe419cf8fbc4a80212c7f0970d91",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/controllers/UsersController#page_number",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "integer"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.000018001000000822387,
+              "eventIds": [
+                466
+              ]
+            }
+          ],
+          "elapsed": 0.0016050309999968704,
+          "eventIds": [
+            461
+          ]
+        },
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:app/views",
+          "name": "render",
+          "static": true,
+          "digest": "62d98fa0db60cd4288bf76a6204e7b20f61e13862f1e05c769dd86e952245a6c",
+          "subtreeDigest": "2ea1eb276e11362f90f6d3010ec1234cb1f51db234b196a72dcbbad4d3d34825",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/views/app_views_users_show_html_erb.render",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "void"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/helpers",
+              "name": "gravatar_for",
+              "static": false,
+              "digest": "5ff1bfc2a21871ef1ea4c8455f3723347e6f7e782e6402f1d6b339cc513a8476",
+              "subtreeDigest": "f458db9a21347860c96fa2ede0017b2f10de5fdee95e86c65118ea07ccb1985b",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/helpers/UsersHelper#gravatar_for",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "ActiveSupport::SafeBuffer"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.00007460099999434533,
+              "eventIds": [
+                485
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/views",
+              "name": "render",
+              "static": true,
+              "digest": "8e18aef5ea89591739f74bd4df0cac0e9ff8f82fff7c8d75bda368f44e2b053c",
+              "subtreeDigest": "d88c5b946fff7182e1551a9b43fb4b66da6dcff632f3c62624efebe8535541dd",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/views/app_views_shared__stats_html_erb.render",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 6,
+                  "caller": "package:app/views",
+                  "callee": "database:Database",
+                  "query": "SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"followed_id\" WHERE \"relationships\".\"follower_id\" = ?",
+                  "digest": "8a345505b3941e0f4906e48e2d219860fa022aaa4d4a4b788602fe6a0ab6a2af",
+                  "subtreeDigest": "ac7d626aba07f85ac654615a0a2ae3185251c9fb388477f001ad6df6b308e0da",
+                  "children": [],
+                  "elapsed": 0.000407408,
+                  "eventIds": [
+                    492
+                  ]
+                },
+                {
+                  "nodeType": 6,
+                  "caller": "package:app/views",
+                  "callee": "database:Database",
+                  "query": "SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"follower_id\" WHERE \"relationships\".\"followed_id\" = ?",
+                  "digest": "0b21465b7b46abb916524effe611b800ea8b5642559d3857bec7e1e319200899",
+                  "subtreeDigest": "bfacf1caecf38e9fb2e05ddb3e23a6ad6b8e9f39e4bbb5098a50c0ebba43a78f",
+                  "children": [],
+                  "elapsed": 0.000579611,
+                  "eventIds": [
+                    496
+                  ]
+                }
+              ],
+              "elapsed": 0.003633970999999292,
+              "eventIds": [
+                487
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/helpers",
+              "name": "logged_in?",
+              "static": false,
+              "digest": "77ba104e4ac11aaffbd62768cc00961bc71badb260963485b9897fbad354a39c",
+              "subtreeDigest": "24e8f8deefe13b619b58d310fe23b3a267bf7afdca6984640de5bc6601079c46",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/helpers/SessionsHelper#logged_in?",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "boolean"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/helpers",
+                  "callee": "package:app/helpers",
+                  "name": "current_user",
+                  "static": false,
+                  "digest": "f2fde231b0994ff4256ad0e5188d0308c1a6148f09070dc9de9afaa808d8cd73",
+                  "subtreeDigest": "d2cf0eae4fcd2b91e1fb4ae75507488565a60f04ea4ed95c666219e1501a2d17",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/helpers/SessionsHelper#current_user",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "User"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [
+                    {
+                      "nodeType": 6,
+                      "caller": "package:app/helpers",
+                      "callee": "database:Database",
+                      "query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?",
+                      "digest": "d3215148ca0ab75b7a269bcfb8bbf9e50385569eb0fba0fdbcca10da78011030",
+                      "subtreeDigest": "cff7d0dfa71e51580d152a25a9f26530c0ab1ed3356a77247851221b6b3081dc",
+                      "children": [],
+                      "elapsed": 0.000231004,
+                      "eventIds": [
+                        507
+                      ]
+                    }
+                  ],
+                  "elapsed": 0.0005789119999946024,
+                  "eventIds": [
+                    502
+                  ]
+                }
+              ],
+              "elapsed": 0.0006455120000055103,
+              "eventIds": [
+                501
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/views",
+              "name": "render",
+              "static": true,
+              "digest": "27ae26b027e44fe2fb0a81e62f668ddb9eb3b3db049d77f0f286826706024f5b",
+              "subtreeDigest": "8386c92306b4ef36803bf34a89a2ec597ff3484bd2113cc390bcb829f7c72a0e",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/views/app_views_users__follow_form_html_erb.render",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/views",
+                  "callee": "package:app/helpers",
+                  "name": "current_user?",
+                  "static": false,
+                  "digest": "dbef797d2a0a8556f531d01acd2f8591a9ea6fd301fe70a393db0861e4155175",
+                  "subtreeDigest": "55c42766168ae9fe435bf8af8cbcaac3bbfdbbcde2480fba3c0be4fe581e2c71",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/helpers/SessionsHelper#current_user?",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "boolean"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/helpers",
+                      "callee": "package:app/helpers",
+                      "name": "current_user",
+                      "static": false,
+                      "digest": "f2fde231b0994ff4256ad0e5188d0308c1a6148f09070dc9de9afaa808d8cd73",
+                      "subtreeDigest": "4bbbf501f2dabd944fbc67be1a25734cf646f7179b710e54553297d848f32790",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "app/helpers/SessionsHelper#current_user",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "User"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.00006450099999710801,
+                      "eventIds": [
+                        515
+                      ]
+                    }
+                  ],
+                  "elapsed": 0.00014000299999850085,
+                  "eventIds": [
+                    514
+                  ]
+                }
+              ],
+              "elapsed": 0.000861017000005404,
+              "eventIds": [
+                511
+              ]
+            },
+            {
+              "nodeType": 6,
+              "caller": "package:app/views",
+              "callee": "database:Database",
+              "query": "SELECT 1 AS one FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? LIMIT ?",
+              "digest": "8e7658cc55f04124152ee4729500f556a4c625a9206d9454d43da5754d957f28",
+              "subtreeDigest": "f9c3d1622a7287c7ac5c3c79a3240e7f20455fc02e68aae6279d7b3869fa973a",
+              "children": [],
+              "elapsed": 0.000276905,
+              "eventIds": [
+                525
+              ]
+            },
+            {
+              "nodeType": 6,
+              "caller": "package:app/views",
+              "callee": "database:Database",
+              "query": "SELECT COUNT(*) FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ?",
+              "digest": "e1f3459e5ab185d533ff4a74856412ce48b234520639d2544fdf4efd57b62323",
+              "subtreeDigest": "168a98cd98338ab696ee7d20c758b8ec0adcc711e400924f41d354beff7c824e",
+              "children": [],
+              "elapsed": 0.000265505,
+              "eventIds": [
+                529
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/views",
+              "name": "render",
+              "static": true,
+              "digest": "077304456e4ab9dabeb3324fd60f34207abf5ec657f29e417431b740a20d3e75",
+              "subtreeDigest": "49f75bed076daa17c0d00ac1c3f3201b5b1f7312991035f06eea1905189d44b3",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/views/app_views_microposts__micropost_html_erb.render",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 6,
+                  "caller": "package:app/views",
+                  "callee": "database:Database",
+                  "query": "SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC LIMIT ? OFFSET ?",
+                  "digest": "19bc023ca792487c0257cd408be3a4ddc9c5d42aa35e4e8d6b2af664e5f91809",
+                  "subtreeDigest": "30bc3505215cc03a950e70f24608cb6b04e6898c3f0f86f22c4832c0296eb965",
+                  "children": [],
+                  "elapsed": 0.000293606,
+                  "eventIds": [
+                    534
+                  ]
+                },
+                {
+                  "nodeType": 1,
+                  "count": 30,
+                  "digest": "loop",
+                  "subtreeDigest": "loop:ee0e5da70f4ae42dc87c8745354d3ce11694e5546ca746c2ad7c4a6e90a090c9",
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/views",
+                      "callee": "package:app/helpers",
+                      "name": "gravatar_for",
+                      "static": false,
+                      "digest": "5ff1bfc2a21871ef1ea4c8455f3723347e6f7e782e6402f1d6b339cc513a8476",
+                      "subtreeDigest": "f458db9a21347860c96fa2ede0017b2f10de5fdee95e86c65118ea07ccb1985b",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "app/helpers/UsersHelper#gravatar_for",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "ActiveSupport::SafeBuffer"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.0012609250000537031,
+                      "eventIds": [
+                        538,
+                        550,
+                        562,
+                        574,
+                        586,
+                        598,
+                        610,
+                        622,
+                        634,
+                        646,
+                        658,
+                        670,
+                        682,
+                        694,
+                        706,
+                        718,
+                        730,
+                        742,
+                        754,
+                        766,
+                        778,
+                        790,
+                        802,
+                        814,
+                        826,
+                        838,
+                        850,
+                        862,
+                        874,
+                        886
+                      ]
+                    },
+                    {
+                      "nodeType": 6,
+                      "caller": "package:app/views",
+                      "callee": "database:Database",
+                      "query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?",
+                      "digest": "dc0970d40da095c45e53e50c788edd77b994cabdd5ca2826131b3afdfbb64fb9",
+                      "subtreeDigest": "0639c802f0b1165ac61ab94b37550e9805bacd1d7b8d76eb6163c826c7fb3b70",
+                      "children": [],
+                      "elapsed": 0.008208862999999999,
+                      "eventIds": [
+                        542,
+                        554,
+                        566,
+                        578,
+                        590,
+                        602,
+                        614,
+                        626,
+                        638,
+                        650,
+                        662,
+                        674,
+                        686,
+                        698,
+                        710,
+                        722,
+                        734,
+                        746,
+                        758,
+                        770,
+                        782,
+                        794,
+                        806,
+                        818,
+                        830,
+                        842,
+                        854,
+                        866,
+                        878,
+                        890
+                      ]
+                    },
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/views",
+                      "callee": "package:app/helpers",
+                      "name": "current_user?",
+                      "static": false,
+                      "digest": "dbef797d2a0a8556f531d01acd2f8591a9ea6fd301fe70a393db0861e4155175",
+                      "subtreeDigest": "55c42766168ae9fe435bf8af8cbcaac3bbfdbbcde2480fba3c0be4fe581e2c71",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "app/helpers/SessionsHelper#current_user?",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "boolean"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [
+                        {
+                          "nodeType": 3,
+                          "caller": "package:app/helpers",
+                          "callee": "package:app/helpers",
+                          "name": "current_user",
+                          "static": false,
+                          "digest": "f2fde231b0994ff4256ad0e5188d0308c1a6148f09070dc9de9afaa808d8cd73",
+                          "subtreeDigest": "4bbbf501f2dabd944fbc67be1a25734cf646f7179b710e54553297d848f32790",
+                          "stableProperties": {
+                            "event_type": "function",
+                            "id": "app/helpers/SessionsHelper#current_user",
+                            "raises_exception": false
+                          },
+                          "returnValue": {
+                            "returnValueType": {
+                              "name": "User"
+                            },
+                            "raisesException": false
+                          },
+                          "children": [],
+                          "elapsed": 0.0018296349999928907,
+                          "eventIds": [
+                            545,
+                            557,
+                            569,
+                            581,
+                            593,
+                            605,
+                            617,
+                            629,
+                            641,
+                            653,
+                            665,
+                            677,
+                            689,
+                            701,
+                            713,
+                            725,
+                            737,
+                            749,
+                            761,
+                            773,
+                            785,
+                            797,
+                            809,
+                            821,
+                            833,
+                            845,
+                            857,
+                            869,
+                            881,
+                            893
+                          ]
+                        }
+                      ],
+                      "elapsed": 0.0036919749999810847,
+                      "eventIds": [
+                        544,
+                        556,
+                        568,
+                        580,
+                        592,
+                        604,
+                        616,
+                        628,
+                        640,
+                        652,
+                        664,
+                        676,
+                        688,
+                        700,
+                        712,
+                        724,
+                        736,
+                        748,
+                        760,
+                        772,
+                        784,
+                        796,
+                        808,
+                        820,
+                        832,
+                        844,
+                        856,
+                        868,
+                        880,
+                        892
+                      ]
+                    }
+                  ],
+                  "elapsed": 0.013161763000034786,
+                  "eventIds": []
+                }
+              ],
+              "elapsed": 0.05174370999999667,
+              "eventIds": [
+                531
+              ]
+            },
+            {
+              "nodeType": 6,
+              "caller": "package:app/views",
+              "callee": "database:Database",
+              "query": "SELECT COUNT(*) FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ?",
+              "digest": "e1f3459e5ab185d533ff4a74856412ce48b234520639d2544fdf4efd57b62323",
+              "subtreeDigest": "168a98cd98338ab696ee7d20c758b8ec0adcc711e400924f41d354beff7c824e",
+              "children": [],
+              "elapsed": 0.000186104,
+              "eventIds": [
+                903
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/helpers",
+              "name": "full_title",
+              "static": false,
+              "digest": "6428a5b259bbf6313835680ae71302835d39681d81cd69e41c710da42e1d99f7",
+              "subtreeDigest": "361ef4b9bb2999ee86e9d958fe92bfd2390106bbf9b1da940c219041dd64675a",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/helpers/ApplicationHelper#full_title",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "ActiveSupport::SafeBuffer"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.000015799999999899228,
+              "eventIds": [
+                907
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/views",
+              "name": "render",
+              "static": true,
+              "digest": "8b9ec9f22e5fd30edef15949402dd291692d065f0c826216741d476d3afaa5d9",
+              "subtreeDigest": "d9df1064206d598dd41b8444b1e460077bb8d5fcde5d88d351291864082e1acb",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/views/app_views_layouts__shim_html_erb.render",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.0009064179999995758,
+              "eventIds": [
+                1103
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/views",
+              "name": "render",
+              "static": true,
+              "digest": "a067a33c75f6a3a7014f32072c87f4c12afb634a4141d6c1d757b8f345269315",
+              "subtreeDigest": "ca20a0e85d2806ded525d9bc6161b4c2f2b0993fe4a8eb6147127dddf46fe763",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/views/app_views_layouts__header_html_erb.render",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/views",
+                  "callee": "package:app/helpers",
+                  "name": "logged_in?",
+                  "static": false,
+                  "digest": "77ba104e4ac11aaffbd62768cc00961bc71badb260963485b9897fbad354a39c",
+                  "subtreeDigest": "e711ae9ff1eb3d26633c13edf4795059ae7d47436fb6169ff8d9748dea1e6a72",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/helpers/SessionsHelper#logged_in?",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "boolean"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/helpers",
+                      "callee": "package:app/helpers",
+                      "name": "current_user",
+                      "static": false,
+                      "digest": "f2fde231b0994ff4256ad0e5188d0308c1a6148f09070dc9de9afaa808d8cd73",
+                      "subtreeDigest": "4bbbf501f2dabd944fbc67be1a25734cf646f7179b710e54553297d848f32790",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "app/helpers/SessionsHelper#current_user",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "User"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.00007120099999724516,
+                      "eventIds": [
+                        1113
+                      ]
+                    }
+                  ],
+                  "elapsed": 0.00014750299999377603,
+                  "eventIds": [
+                    1112
+                  ]
+                },
+                {
+                  "nodeType": 1,
+                  "count": 2,
+                  "digest": "loop",
+                  "subtreeDigest": "loop:3ce87233ea0806bde12be208afb685815ffe79a7337ae51564212e5011901d63",
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/views",
+                      "callee": "package:app/helpers",
+                      "name": "current_user",
+                      "static": false,
+                      "digest": "f2fde231b0994ff4256ad0e5188d0308c1a6148f09070dc9de9afaa808d8cd73",
+                      "subtreeDigest": "4bbbf501f2dabd944fbc67be1a25734cf646f7179b710e54553297d848f32790",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "app/helpers/SessionsHelper#current_user",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "User"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.0001007020000116654,
+                      "eventIds": [
+                        1118,
+                        1122
+                      ]
+                    }
+                  ],
+                  "elapsed": 0.0001007020000116654,
+                  "eventIds": []
+                }
+              ],
+              "elapsed": 0.0012357240000113734,
+              "eventIds": [
+                1109
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/views",
+              "name": "render",
+              "static": true,
+              "digest": "63985b0c938e10b1bc115ca2709f81992267c1ba90beb2edbd8ced516d9b2785",
+              "subtreeDigest": "9f2ddc6d4211a125286542a8b5b0a01262f45e120e13738b6850426ec9a29fed",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/views/app_views_layouts__footer_html_erb.render",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.0005295099999926833,
+              "eventIds": [
+                1131
+              ]
+            }
+          ],
+          "elapsed": 0.0815451920000072,
+          "eventIds": [
+            472
+          ]
+        }
+      ],
+      "elapsed": 0.09354142700000523,
+      "eventIds": [
+        411
+      ]
+    },
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "DELETE /logout",
+      "status": 302,
+      "digest": "8ff185bc03a63f661820a89fa3bdb6c152ec9e1c6170e039c6d042aef46661e5",
+      "subtreeDigest": "22e299b45e24a4acb2c8240cb1bcc3b16a52e0a97d979bead88184cd99481775",
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:app/controllers",
+          "name": "destroy",
+          "static": false,
+          "digest": "32c1928c285478385674a8b8a8b024effe13e02286503010955d9be235851e30",
+          "subtreeDigest": "e6796994f28bbbeaeb5c23044b5908ca5f17a68478508138b1765995aadfe21d",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/controllers/SessionsController#destroy",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "string"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 3,
+              "caller": "package:app/controllers",
+              "callee": "package:app/helpers",
+              "name": "log_out",
+              "static": false,
+              "digest": "a61f9e5848a1797d2fa42331f353c82050def65bdd4fea03df88649143103783",
+              "subtreeDigest": "a7364c36b935f2b6848980f87dde2975ca689a3e0b81bd971f2d2165b1064648",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/helpers/SessionsHelper#log_out",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/helpers",
+                  "callee": "package:app/helpers",
+                  "name": "current_user",
+                  "static": false,
+                  "digest": "f2fde231b0994ff4256ad0e5188d0308c1a6148f09070dc9de9afaa808d8cd73",
+                  "subtreeDigest": "d2cf0eae4fcd2b91e1fb4ae75507488565a60f04ea4ed95c666219e1501a2d17",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/helpers/SessionsHelper#current_user",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "User"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [
+                    {
+                      "nodeType": 6,
+                      "caller": "package:app/helpers",
+                      "callee": "database:Database",
+                      "query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?",
+                      "digest": "d3215148ca0ab75b7a269bcfb8bbf9e50385569eb0fba0fdbcca10da78011030",
+                      "subtreeDigest": "cff7d0dfa71e51580d152a25a9f26530c0ab1ed3356a77247851221b6b3081dc",
+                      "children": [],
+                      "elapsed": 0.000336507,
+                      "eventIds": [
+                        1236
+                      ]
+                    }
+                  ],
+                  "elapsed": 0.0008688169999970796,
+                  "eventIds": [
+                    1231
+                  ]
+                },
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/helpers",
+                  "callee": "package:app/helpers",
+                  "name": "forget",
+                  "static": false,
+                  "digest": "aa7b21ebf94301210dba8b326df4a33756f3f18175004484e9510cb94615d502",
+                  "subtreeDigest": "0131096cee8f1e897a00bb6d791f7441ccd3636666a7e9e9b4db101330979bae",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/helpers/SessionsHelper#forget",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "void"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/helpers",
+                      "callee": "package:app/models",
+                      "name": "forget",
+                      "static": false,
+                      "digest": "e8c004467c504b037d34b13447a25d6b1b84839fecfda7bdbfe818fd109e5a48",
+                      "subtreeDigest": "471b4c9c7793b6de60884901847cfa9ec96308a7437d21752eed56451e9a104a",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "app/models/User#forget",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "boolean"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.0009601189999983717,
+                      "eventIds": [
+                        1240
+                      ]
+                    }
+                  ],
+                  "elapsed": 0.0011328220000024203,
+                  "eventIds": [
+                    1239
+                  ]
+                }
+              ],
+              "elapsed": 0.0026203510000044616,
+              "eventIds": [
+                1230
+              ]
+            }
+          ],
+          "elapsed": 0.0031402609999986453,
+          "eventIds": [
+            1229
+          ]
+        }
+      ],
+      "elapsed": 0.01223413799999662,
+      "eventIds": [
+        1181
+      ]
+    },
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "DELETE /logout",
+      "status": 302,
+      "digest": "8ff185bc03a63f661820a89fa3bdb6c152ec9e1c6170e039c6d042aef46661e5",
+      "subtreeDigest": "2b7dfff7caffe9649590e9c0e9ea29b601585f84f63929ceba448ddc83d6d533",
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:app/controllers",
+          "name": "destroy",
+          "static": false,
+          "digest": "32c1928c285478385674a8b8a8b024effe13e02286503010955d9be235851e30",
+          "subtreeDigest": "6fb03ceae77ee8863d9fc465886ff8fc95070b70d0188d7c53043c07cd95da73",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/controllers/SessionsController#destroy",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "string"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 3,
+              "caller": "package:app/controllers",
+              "callee": "package:app/helpers",
+              "name": "log_out",
+              "static": false,
+              "digest": "a61f9e5848a1797d2fa42331f353c82050def65bdd4fea03df88649143103783",
+              "subtreeDigest": "5c3e9b91b60dea8bac5966148c19e80cae1b743dbe452d7e558564a4f63de68a",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/helpers/SessionsHelper#log_out",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/helpers",
+                  "callee": "package:app/helpers",
+                  "name": "current_user",
+                  "static": false,
+                  "digest": "f2fde231b0994ff4256ad0e5188d0308c1a6148f09070dc9de9afaa808d8cd73",
+                  "subtreeDigest": "4bbbf501f2dabd944fbc67be1a25734cf646f7179b710e54553297d848f32790",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/helpers/SessionsHelper#current_user",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "void"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [],
+                  "elapsed": 0.00010130200000446621,
+                  "eventIds": [
+                    1365
+                  ]
+                },
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/helpers",
+                  "callee": "package:app/helpers",
+                  "name": "forget",
+                  "static": false,
+                  "digest": "aa7b21ebf94301210dba8b326df4a33756f3f18175004484e9510cb94615d502",
+                  "subtreeDigest": "32d9588d04aa007ccb224b2b1537aa719c9e10a5b0e97eba24b6d430caf21e3b",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/helpers/SessionsHelper#forget",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "void"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [],
+                  "elapsed": 0.00008920199999806755,
+                  "eventIds": [
+                    1371
+                  ]
+                }
+              ],
+              "elapsed": 0.0004469090000043252,
+              "eventIds": [
+                1364
+              ]
+            }
+          ],
+          "elapsed": 0.0009134180000103242,
+          "eventIds": [
+            1363
+          ]
+        }
+      ],
+      "elapsed": 0.009575287000004096,
+      "eventIds": [
+        1315
+      ]
+    },
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "GET /",
+      "status": 200,
+      "digest": "2d8280829be78e9717b9b7c789ead400346e6c84b1f59e80d0d103e2ce8d9984",
+      "subtreeDigest": "fe5bc83ebb6e6959bc4d748042bd42fdde49348046066440d886d07a03e9f1d7",
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:app/controllers",
+          "name": "home",
+          "static": false,
+          "digest": "e06fc75e1af60340e06a2cb4a97b28f2fb5a497602eecba33a543881da2b94ec",
+          "subtreeDigest": "730391cfb82425d914d3e21615c17acc9f30881386139121d12b3ccaee0a4dda",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/controllers/StaticPagesController#home",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "void"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 3,
+              "caller": "package:app/controllers",
+              "callee": "package:app/helpers",
+              "name": "logged_in?",
+              "static": false,
+              "digest": "77ba104e4ac11aaffbd62768cc00961bc71badb260963485b9897fbad354a39c",
+              "subtreeDigest": "e711ae9ff1eb3d26633c13edf4795059ae7d47436fb6169ff8d9748dea1e6a72",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/helpers/SessionsHelper#logged_in?",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/helpers",
+                  "callee": "package:app/helpers",
+                  "name": "current_user",
+                  "static": false,
+                  "digest": "f2fde231b0994ff4256ad0e5188d0308c1a6148f09070dc9de9afaa808d8cd73",
+                  "subtreeDigest": "4bbbf501f2dabd944fbc67be1a25734cf646f7179b710e54553297d848f32790",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/helpers/SessionsHelper#current_user",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "void"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [],
+                  "elapsed": 0.00011470200000474051,
+                  "eventIds": [
+                    1481
+                  ]
+                }
+              ],
+              "elapsed": 0.0001535030000070492,
+              "eventIds": [
+                1480
+              ]
+            }
+          ],
+          "elapsed": 0.0001957030000028226,
+          "eventIds": [
+            1479
+          ]
+        },
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:app/views",
+          "name": "render",
+          "static": true,
+          "digest": "a650e72da26342e63e12970d78314649884978141223defcef0bd2bfc4c156b1",
+          "subtreeDigest": "88df8597f4d1edbb412659c7ac9edbb8501e988d563b88f0e775030c0ff97240",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/views/app_views_static_pages_home_html_erb.render",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "void"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/helpers",
+              "name": "logged_in?",
+              "static": false,
+              "digest": "77ba104e4ac11aaffbd62768cc00961bc71badb260963485b9897fbad354a39c",
+              "subtreeDigest": "e711ae9ff1eb3d26633c13edf4795059ae7d47436fb6169ff8d9748dea1e6a72",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/helpers/SessionsHelper#logged_in?",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/helpers",
+                  "callee": "package:app/helpers",
+                  "name": "current_user",
+                  "static": false,
+                  "digest": "f2fde231b0994ff4256ad0e5188d0308c1a6148f09070dc9de9afaa808d8cd73",
+                  "subtreeDigest": "4bbbf501f2dabd944fbc67be1a25734cf646f7179b710e54553297d848f32790",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/helpers/SessionsHelper#current_user",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "void"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [],
+                  "elapsed": 0.00012030200001333924,
+                  "eventIds": [
+                    1506
+                  ]
+                }
+              ],
+              "elapsed": 0.00015890299999909985,
+              "eventIds": [
+                1505
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/helpers",
+              "name": "full_title",
+              "static": false,
+              "digest": "6428a5b259bbf6313835680ae71302835d39681d81cd69e41c710da42e1d99f7",
+              "subtreeDigest": "361ef4b9bb2999ee86e9d958fe92bfd2390106bbf9b1da940c219041dd64675a",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/helpers/ApplicationHelper#full_title",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "string"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.00000329999998882613,
+              "eventIds": [
+                1527
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/views",
+              "name": "render",
+              "static": true,
+              "digest": "8b9ec9f22e5fd30edef15949402dd291692d065f0c826216741d476d3afaa5d9",
+              "subtreeDigest": "d9df1064206d598dd41b8444b1e460077bb8d5fcde5d88d351291864082e1acb",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/views/app_views_layouts__shim_html_erb.render",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.0006264120000025741,
+              "eventIds": [
+                1723
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/views",
+              "name": "render",
+              "static": true,
+              "digest": "a067a33c75f6a3a7014f32072c87f4c12afb634a4141d6c1d757b8f345269315",
+              "subtreeDigest": "e046d09e5d3e9bd55be577fe7853649292d28983bb56a021f1c106cc4b491b2a",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/views/app_views_layouts__header_html_erb.render",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/views",
+                  "callee": "package:app/helpers",
+                  "name": "logged_in?",
+                  "static": false,
+                  "digest": "77ba104e4ac11aaffbd62768cc00961bc71badb260963485b9897fbad354a39c",
+                  "subtreeDigest": "e711ae9ff1eb3d26633c13edf4795059ae7d47436fb6169ff8d9748dea1e6a72",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/helpers/SessionsHelper#logged_in?",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "void"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/helpers",
+                      "callee": "package:app/helpers",
+                      "name": "current_user",
+                      "static": false,
+                      "digest": "f2fde231b0994ff4256ad0e5188d0308c1a6148f09070dc9de9afaa808d8cd73",
+                      "subtreeDigest": "4bbbf501f2dabd944fbc67be1a25734cf646f7179b710e54553297d848f32790",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "app/helpers/SessionsHelper#current_user",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "void"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.0001308030000046756,
+                      "eventIds": [
+                        1733
+                      ]
+                    }
+                  ],
+                  "elapsed": 0.00017330300001106025,
+                  "eventIds": [
+                    1732
+                  ]
+                }
+              ],
+              "elapsed": 0.0008898179999903277,
+              "eventIds": [
+                1729
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/views",
+              "name": "render",
+              "static": true,
+              "digest": "63985b0c938e10b1bc115ca2709f81992267c1ba90beb2edbd8ced516d9b2785",
+              "subtreeDigest": "9f2ddc6d4211a125286542a8b5b0a01262f45e120e13738b6850426ec9a29fed",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/views/app_views_layouts__footer_html_erb.render",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.0005758119999939026,
+              "eventIds": [
+                1745
+              ]
+            }
+          ],
+          "elapsed": 0.02245093800000575,
+          "eventIds": [
+            1492
+          ]
+        }
+      ],
+      "elapsed": 0.03255423599999574,
+      "eventIds": [
+        1431
+      ]
+    }
+  ]
+}

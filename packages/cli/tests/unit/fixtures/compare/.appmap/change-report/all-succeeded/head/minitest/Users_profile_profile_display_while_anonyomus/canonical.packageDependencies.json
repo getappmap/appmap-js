@@ -1,0 +1,66 @@
+[
+  {
+    "caller": "HTTP server requests",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "HTTP server requests",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "HTTP server requests",
+    "callee": "json"
+  },
+  {
+    "caller": "HTTP server requests",
+    "callee": "logger"
+  },
+  {
+    "caller": "HTTP server requests",
+    "callee": "ruby"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "activesupport"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "logger"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "openssl"
+  },
+  {
+    "caller": "actionpack",
+    "callee": "ruby"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "actionpack"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "json"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "logger"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "openssl"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "ruby"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "actionpack"
+  }
+]

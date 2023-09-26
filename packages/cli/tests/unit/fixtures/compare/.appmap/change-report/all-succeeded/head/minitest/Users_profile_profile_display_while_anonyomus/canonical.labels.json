@@ -1,0 +1,23 @@
+[
+  "array.pack",
+  "crypto.encrypt",
+  "crypto.final",
+  "crypto.pkcs5",
+  "crypto.set_auth_data",
+  "crypto.set_iv",
+  "crypto.set_key",
+  "deserialize.safe",
+  "format.json.generate",
+  "http.session.read",
+  "http.session.write",
+  "lang.eval.safe",
+  "log",
+  "mvc.after_action",
+  "mvc.before_action",
+  "mvc.controller",
+  "random.secure",
+  "security.authentication",
+  "security.require_login",
+  "serialize",
+  "string.unpack"
+]

@@ -1,0 +1,10 @@
+[
+  {
+    "caller": "activesupport",
+    "callee": "Database"
+  },
+  {
+    "caller": "activesupport",
+    "callee": "logger"
+  }
+]
