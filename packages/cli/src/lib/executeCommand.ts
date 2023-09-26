@@ -13,7 +13,7 @@ export function executeCommand(
   printStderr = verbose(),
   okCodes = [0]
 ): Promise<string> {
-  if (printCommand) console.log(commandStyle(cmd));
+  if (printCommand) console.warn(commandStyle(cmd));
   const command = exec(cmd);
   const result: string[] = [];
   const stderr: string[] = [];
@@ -31,11 +31,11 @@ export function executeCommand(
     command.addListener('exit', (code, signal) => {
       if (signal || (code !== null && okCodes.includes(code))) {
         if (signal) {
-          console.log(`Command "${cmd}" killed by signal ${signal}, exited with code ${code}`);
+          console.warn(`Command "${cmd}" killed by signal ${signal}, exited with code ${code}`);
         }
         resolve(result.join(''));
       } else {
-        if (!printCommand) console.log(commandStyle(cmd));
+        if (!printCommand) console.warn(commandStyle(cmd));
         console.warn(stderr.join(''));
         reject(new Error(`Command failed with code ${code}`));
       }

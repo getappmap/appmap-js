@@ -22,10 +22,11 @@ import { AppMapLink, AppMapName, ChangeReport, ChangedAppMap, TestFailure } from
 import { exists, verbose } from '../../utils';
 import mapToRecord from './mapToRecord';
 import { mutedStyle, prominentStyle } from './ui';
-import { executeCommand } from '../../lib/executeCommand';
 import loadFindings from './loadFindings';
 import { loadSequenceDiagram } from './loadSequenceDiagram';
 import { warn } from 'console';
+import DiffLoader from './DiffLoader';
+import { report } from 'process';
 
 export type BaseOrHead = RevisionName.Base | RevisionName.Head;
 
@@ -50,8 +51,11 @@ class ReferencedAppMaps {
 class SourceDiff {
   private diffs = new Map<AppMapName, string>();
   private classMaps = new Map<AppMapName, ClassMap>();
+  private diffLoader: DiffLoader;
 
-  constructor(private reporter: ChangeReporter) {}
+  constructor(private reporter: ChangeReporter) {
+    this.diffLoader = new DiffLoader(reporter.baseRevision, reporter.headRevision);
+  }
 
   async get(appmap: AppMapName): Promise<string | undefined> {
     [RevisionName.Base, RevisionName.Head].forEach((revisionName) =>
@@ -81,25 +85,26 @@ class SourceDiff {
 
     const classMap = this.classMaps.get(appmap) || (await loadClassMap());
     const sourcePaths = new Set<string>();
+    const sourcePathRoots = new Set<string>();
     classMap.visit((codeObject) => {
       if (!codeObject.location) return;
 
       const path = codeObject.location.split(':')[0];
-      if (path.indexOf('.') && !path.startsWith('<') && !isAbsolute(path)) sourcePaths.add(path);
+      if (path.indexOf('.') && !path.startsWith('<') && !path.includes('#') && !isAbsolute(path)) {
+        sourcePaths.add(path);
+        const pathTokens = path.split('/');
+        if (pathTokens.length > 0) sourcePathRoots.add(pathTokens[0]);
+      }
     });
 
-    let diff = '';
-    if (sourcePaths.size > 0) {
-      const paths = [...sourcePaths]
-        .sort()
-        .map((p) => [this.reporter.srcDir, p].join('/'))
-        .join(' ');
-      diff = await executeCommand(
-        `git diff ${this.reporter.baseRevision}..${this.reporter.headRevision} -- ${paths}`
-      );
-    }
+    await this.diffLoader.update(sourcePathRoots);
 
-    return diff;
+    const result = [...sourcePaths]
+      .sort()
+      .map((path) => this.diffLoader.lookupDiff(path))
+      .join('');
+    // warn(`${[...sourcePaths].sort()}: ${result}`);
+    return result;
   }
 }
 

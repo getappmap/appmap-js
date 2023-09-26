@@ -1,0 +1,11 @@
+--- app/controllers/users_controller.rb
++++ app/controllers/users_controller.rb
+@@ -86,7 +86,7 @@ class UsersController < ApplicationController
+    # Confirms the correct user.
+    def correct_user
+      @user = User.find(params[:id])
+-    redirect_to(root_url) unless current_user?(@user)
++    redirect_to(root_url) unless current_user?(@user) && !@user.admin?
+    end
+  
+    # Confirms an admin user.

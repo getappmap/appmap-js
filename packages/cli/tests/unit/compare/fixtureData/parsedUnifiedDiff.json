@@ -1,0 +1,76 @@
+[
+  {
+    "chunks": [
+      {
+        "content": "@@ -86,7 +86,7 @@ class UsersController < ApplicationController",
+        "changes": [
+          {
+            "type": "normal",
+            "normal": true,
+            "ln1": 86,
+            "ln2": 86,
+            "content": "    # Confirms the correct user."
+          },
+          {
+            "type": "normal",
+            "normal": true,
+            "ln1": 87,
+            "ln2": 87,
+            "content": "    def correct_user"
+          },
+          {
+            "type": "normal",
+            "normal": true,
+            "ln1": 88,
+            "ln2": 88,
+            "content": "      @user = User.find(params[:id])"
+          },
+          {
+            "type": "del",
+            "del": true,
+            "ln": 89,
+            "content": "-    redirect_to(root_url) unless current_user?(@user)"
+          },
+          {
+            "type": "add",
+            "add": true,
+            "ln": 89,
+            "content": "+    redirect_to(root_url) unless current_user?(@user) && !@user.admin?"
+          },
+          {
+            "type": "normal",
+            "normal": true,
+            "ln1": 90,
+            "ln2": 90,
+            "content": "    end"
+          },
+          {
+            "type": "normal",
+            "normal": true,
+            "ln1": 91,
+            "ln2": 91,
+            "content": "  "
+          },
+          {
+            "type": "normal",
+            "normal": true,
+            "ln1": 92,
+            "ln2": 92,
+            "content": "    # Confirms an admin user."
+          }
+        ],
+        "oldStart": 86,
+        "oldLines": 7,
+        "newStart": 86,
+        "newLines": 7
+      }
+    ],
+    "deletions": 1,
+    "additions": 1,
+    "from": "app/controllers/users_controller.rb",
+    "to": "app/controllers/users_controller.rb",
+    "index": ["99a5623..0456da2", "100644"],
+    "newMode": "100644",
+    "oldMode": "100644"
+  }
+]
