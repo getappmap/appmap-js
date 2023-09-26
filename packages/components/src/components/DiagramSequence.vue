@@ -61,6 +61,7 @@ import {
   Diagram,
   Specification,
   Action,
+  NodeType,
 } from '@appland/sequence-diagram';
 import VLoopAction from '@/components/sequence/LoopAction.vue';
 import VCallAction from '@/components/sequence/CallAction.vue';
@@ -160,7 +161,55 @@ export default {
       return result;
     },
     diagramSpec(): DiagramSpec {
-      return new DiagramSpec(this.diagram);
+      this.collapsedActionState = this.collapsedActionState ?? []; // eslint-disable-line vue/no-side-effects-in-computed-properties
+
+      const result = new DiagramSpec(this.diagram);
+      if (this.collapsedActionState.length == 0) {
+        // If a Diagram contains any actions in diff mode, expand all ancestors of every diff action,
+        // and collapse all other actions.
+        const expandedActions = new Set<number>();
+        let firstDiffAction: Action | undefined;
+
+        const eventIds = (action: Action) =>
+          (action.eventIds || []).filter((id) => id !== undefined);
+
+        const markExpandedActions = (action: Action, ancestors = new Array<Action>()) => {
+          if (action.diffMode) {
+            if (!firstDiffAction) firstDiffAction = action;
+            expandedActions.add(...eventIds(action));
+            for (const ancestor of ancestors) expandedActions.add(...eventIds(ancestor));
+          }
+          if (action.children && action.children.length > 0) {
+            ancestors.push(action);
+            action.children.forEach((child) => markExpandedActions(child, ancestors));
+            ancestors.pop();
+          }
+          return ancestors;
+        };
+
+        const shouldExpand = (action: Action) =>
+          expandedActions.size === 0 || eventIds(action).some((id) => expandedActions.has(id));
+
+        this.diagram?.rootActions.forEach((root) => markExpandedActions(root));
+        expandedActions.delete(undefined);
+
+        for (let index = 0; index < result.actions.length; index++)
+          this.$set(this.collapsedActionState, index, !shouldExpand(result.actions[index]));
+
+        if (firstDiffAction && this.$store?.state) {
+          const eventId = eventIds(firstDiffAction).filter(Boolean)[0];
+          const { appMap } = this.$store.state;
+          const event = appMap.eventsById[eventId];
+          this.$store.commit(SET_FOCUSED_EVENT, event);
+        }
+
+        this.collapseActionsForCompactLook();
+      }
+
+      if (this.collapsedActionState)
+        result.determineVisuallyReachableActors(this.collapsedActionState);
+
+      return result;
     },
     actors() {
       return this.diagram.actors;
@@ -182,7 +231,6 @@ export default {
       return this.actors.find((actor) => ancestorIds.indexOf(actor.id) !== -1);
     },
   },
-
   methods: {
     actorKey(actor: Actor): string {
       return ['actor', this.diagramSpec.uniqueId, actor.id].join(':');
@@ -234,6 +282,58 @@ export default {
       }
 
       return '';
+    },
+    collapseActionsForCompactLook() {
+      // Collapse any Actions that satisfy the following conditions:
+      //
+      // -Greater than 4 levels deep in the stack
+      // -All descendants are function calls (as opposed to other types
+      //  such as sql queries and external service calls)
+      // -Does not contain the Selected Action.
+
+      const isCollapsePreventingNodeType = (action: Action) =>
+        action.nodeType !== NodeType.Function && action.nodeType !== NodeType.Loop;
+
+      const isSelectedAction = (action: Action) =>
+        this.selectedEvents &&
+        this.selectedEvents.find((event) => action.eventIds?.includes(event.id));
+
+      const actionToActionSpec = new Map(
+        this.diagramSpec.actions.filter((a) => a.nodeType != 'return').map((a) => [a.action, a])
+      );
+
+      const visit = (action: Action) => {
+        const actionSpec = actionToActionSpec.get(action);
+        let descendantPreventingCollapseFound = false;
+
+        for (const child of action.children) {
+          const childHasDescendantPreventingCollapse = visit(child);
+
+          if (
+            !descendantPreventingCollapseFound &&
+            (childHasDescendantPreventingCollapse ||
+              isCollapsePreventingNodeType(child) ||
+              isSelectedAction(child))
+          )
+            descendantPreventingCollapseFound = true;
+        }
+
+        const actionShouldCollapse =
+          !descendantPreventingCollapseFound &&
+          action.children?.length > 0 &&
+          actionSpec.nodeType == 'call';
+
+        if (actionShouldCollapse) this.$set(this.collapsedActionState, actionSpec?.index, true);
+
+        return descendantPreventingCollapseFound;
+      };
+
+      const headsToVisit = this.diagramSpec.actions.filter(
+        (a) =>
+          a.ancestorIndexes.length == 4 && a.action.children?.length > 0 && a.nodeType === 'call'
+      );
+
+      headsToVisit.forEach((h) => visit(h.action));
     },
   },
 

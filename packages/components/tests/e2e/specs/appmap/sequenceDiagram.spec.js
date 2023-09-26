@@ -191,4 +191,25 @@ context('AppMap sequence diagram', () => {
       cy.get('.sequence-diagram').children('.lane').should('have.length', 8);
     });
   });
+
+  context('in initial compact view', () => {
+    beforeEach(() => {
+      cy.visit(
+        'http://localhost:6006/iframe.html?id=appland-diagrams-sequence--create-api-key&viewMode=story'
+      );
+    });
+
+    it("action is collapsed if it's 4+ level deep and has all function descendants", () => {
+      // Navigate to the first common ancestor after finding the span
+      // representing call label 'decode', to find the .collapse-expand
+      // div containing [+].
+      cy.contains('span', 'decode')
+        .first()
+        .parent()
+        .parent()
+        .parent()
+        .find('.collapse-expand')
+        .should('have.class', 'collapsed');
+    });
+  });
 });
