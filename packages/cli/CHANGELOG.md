@@ -1,3 +1,12 @@
+# [@appland/appmap-v3.98.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.97.1...@appland/appmap-v3.98.0) (2023-09-26)
+
+
+### Features
+
+* Cache source diff ([199cd17](https://github.com/getappmap/appmap-js/commit/199cd1793e871ae3ab20ec5ce7e401b95b279f1b))
+* Lookup diff entry for each source file ([5e7afdb](https://github.com/getappmap/appmap-js/commit/5e7afdbfbfab15d41cb5184da647cf4ac2bc0191))
+* Run each unique diff command once ([200e7d7](https://github.com/getappmap/appmap-js/commit/200e7d7090266e205a8efc0a0e256992c198c5e8))
+
 # [@appland/appmap-v3.97.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.97.0...@appland/appmap-v3.97.1) (2023-09-25)
 
 
