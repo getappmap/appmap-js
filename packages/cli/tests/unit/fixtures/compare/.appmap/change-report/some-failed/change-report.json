@@ -1,0 +1,335 @@
+{
+  "testFailures": [
+    {
+      "appmap": "minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost",
+      "name": "Microposts_controller should redirect destroy for wrong micropost",
+      "testLocation": "test/controllers/microposts_controller_test.rb:24",
+      "failureMessage": "NoMethodError: undefined method `micropost_path' for #<MicropostsControllerTest:0x00007f311d97a068>\nDid you mean?  microposts\n    test/controllers/microposts_controller_test.rb:28:in `block (2 levels) in <class:MicropostsControllerTest>'\n    test/controllers/microposts_controller_test.rb:27:in `block in <class:MicropostsControllerTest>'"
+    },
+    {
+      "appmap": "minitest/Microposts_interface_micropost_interface",
+      "name": "Microposts_interface micropost interface",
+      "testLocation": "test/integration/microposts_interface_test.rb:9",
+      "failureMessage": "ActionView::Template::Error: undefined method `micropost_path' for #<ActionView::Base:0x00000000028410>\n\n              target.public_send(method, *args)\n                    ^^^^^^^^^^^^\nDid you mean?  microposts_path\n    app/views/microposts/_micropost.html.erb:13\n    app/views/shared/_feed.html.erb:3\n    app/views/static_pages/home.html.erb:16\n    test/integration/microposts_interface_test.rb:11:in `block in <class:MicropostsInterfaceTest>'"
+    },
+    {
+      "appmap": "minitest/Valid_login_redirect_after_login",
+      "name": "Valid_login redirect after login",
+      "testLocation": "test/integration/users_login_test.rb:45",
+      "failureMessage": "ActionView::Template::Error: undefined method `micropost_path' for #<ActionView::Base:0x0000000002b3e0>\n\n              target.public_send(method, *args)\n                    ^^^^^^^^^^^^\nDid you mean?  microposts_path\n    app/views/microposts/_micropost.html.erb:13\n    app/views/users/show.html.erb:19\n    test/integration/users_login_test.rb:46:in `block in <class:ValidLoginTest>'"
+    }
+  ],
+  "newAppMaps": ["minitest/Valid_login_redirect_after_login"],
+  "changedAppMaps": [
+    {
+      "appmap": "minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost",
+      "sequenceDiagramDiff": "minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost.diff.sequence.json"
+    },
+    {
+      "appmap": "minitest/Microposts_interface_micropost_interface",
+      "sequenceDiagramDiff": "minitest/Microposts_interface_micropost_interface.diff.sequence.json"
+    },
+    {
+      "appmap": "minitest/User_associated_microposts_should_be_destroyed",
+      "sequenceDiagramDiff": "minitest/User_associated_microposts_should_be_destroyed.diff.sequence.json"
+    }
+  ],
+  "removedAppMaps": [],
+  "sequenceDiagramDiff": {
+    "removed SQL `PRAGMA foreign_keys = ON`": [
+      "minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost"
+    ],
+    "": [
+      "minitest/Microposts_interface_micropost_interface",
+      "minitest/User_associated_microposts_should_be_destroyed"
+    ]
+  },
+  "appMapMetadata": {
+    "base": {
+      "minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost": {
+        "app": "rails_tutorial_sample_app_7th_ed",
+        "language": {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.1.2"
+        },
+        "client": {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.99.4"
+        },
+        "frameworks": [
+          {
+            "name": "rails",
+            "version": "7.0.4"
+          },
+          {
+            "name": "minitest",
+            "version": "5.15.0"
+          }
+        ],
+        "git": {
+          "repository": "git@github.com:land-of-apps/rails_tutorial_sample_app_7th_ed.git",
+          "branch": "main",
+          "commit": "a9a602d6c8ef85143ca903b3a74daec1a92d5286",
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
+        },
+        "name": "Microposts_controller should redirect destroy for wrong micropost",
+        "source_location": "test/controllers/microposts_controller_test.rb:24",
+        "recorder": {
+          "name": "minitest",
+          "type": "tests"
+        },
+        "test_status": "succeeded"
+      },
+      "minitest/Microposts_interface_micropost_interface": {
+        "app": "rails_tutorial_sample_app_7th_ed",
+        "language": {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.1.2"
+        },
+        "client": {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.99.4"
+        },
+        "frameworks": [
+          {
+            "name": "rails",
+            "version": "7.0.4"
+          },
+          {
+            "name": "minitest",
+            "version": "5.15.0"
+          }
+        ],
+        "git": {
+          "repository": "git@github.com:land-of-apps/rails_tutorial_sample_app_7th_ed.git",
+          "branch": "main",
+          "commit": "a9a602d6c8ef85143ca903b3a74daec1a92d5286",
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
+        },
+        "name": "Microposts_interface micropost interface",
+        "source_location": "test/integration/microposts_interface_test.rb:9",
+        "recorder": {
+          "name": "minitest",
+          "type": "tests"
+        },
+        "test_status": "succeeded"
+      },
+      "minitest/User_associated_microposts_should_be_destroyed": {
+        "app": "rails_tutorial_sample_app_7th_ed",
+        "language": {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.1.2"
+        },
+        "client": {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.99.4"
+        },
+        "frameworks": [
+          {
+            "name": "rails",
+            "version": "7.0.4"
+          },
+          {
+            "name": "minitest",
+            "version": "5.15.0"
+          }
+        ],
+        "git": {
+          "repository": "git@github.com:land-of-apps/rails_tutorial_sample_app_7th_ed.git",
+          "branch": "main",
+          "commit": "a9a602d6c8ef85143ca903b3a74daec1a92d5286",
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
+        },
+        "name": "User associated microposts should be destroyed",
+        "source_location": "test/models/user_test.rb:72",
+        "recorder": {
+          "name": "minitest",
+          "type": "tests"
+        },
+        "test_status": "succeeded"
+      }
+    },
+    "head": {
+      "minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost": {
+        "app": "rails_tutorial_sample_app_7th_ed",
+        "language": {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.1.2"
+        },
+        "client": {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.99.4"
+        },
+        "frameworks": [
+          {
+            "name": "rails",
+            "version": "7.0.4"
+          },
+          {
+            "name": "minitest",
+            "version": "5.15.0"
+          }
+        ],
+        "git": {
+          "repository": "git@github.com:land-of-apps/rails_tutorial_sample_app_7th_ed.git",
+          "branch": "main",
+          "commit": "a9a602d6c8ef85143ca903b3a74daec1a92d5286",
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
+        },
+        "name": "Microposts_controller should redirect destroy for wrong micropost",
+        "source_location": "test/controllers/microposts_controller_test.rb:24",
+        "recorder": {
+          "name": "minitest",
+          "type": "tests"
+        },
+        "test_status": "failed",
+        "test_failure": {
+          "message": "NoMethodError: undefined method `micropost_path' for #<MicropostsControllerTest:0x00007f311d97a068>\nDid you mean?  microposts\n    test/controllers/microposts_controller_test.rb:28:in `block (2 levels) in <class:MicropostsControllerTest>'\n    test/controllers/microposts_controller_test.rb:27:in `block in <class:MicropostsControllerTest>'"
+        }
+      },
+      "minitest/Microposts_interface_micropost_interface": {
+        "app": "rails_tutorial_sample_app_7th_ed",
+        "language": {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.1.2"
+        },
+        "client": {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.99.4"
+        },
+        "frameworks": [
+          {
+            "name": "rails",
+            "version": "7.0.4"
+          },
+          {
+            "name": "minitest",
+            "version": "5.15.0"
+          }
+        ],
+        "git": {
+          "repository": "git@github.com:land-of-apps/rails_tutorial_sample_app_7th_ed.git",
+          "branch": "main",
+          "commit": "a9a602d6c8ef85143ca903b3a74daec1a92d5286",
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
+        },
+        "name": "Microposts_interface micropost interface",
+        "source_location": "test/integration/microposts_interface_test.rb:9",
+        "recorder": {
+          "name": "minitest",
+          "type": "tests"
+        },
+        "test_status": "failed",
+        "test_failure": {
+          "message": "ActionView::Template::Error: undefined method `micropost_path' for #<ActionView::Base:0x00000000028410>\n\n              target.public_send(method, *args)\n                    ^^^^^^^^^^^^\nDid you mean?  microposts_path\n    app/views/microposts/_micropost.html.erb:13\n    app/views/shared/_feed.html.erb:3\n    app/views/static_pages/home.html.erb:16\n    test/integration/microposts_interface_test.rb:11:in `block in <class:MicropostsInterfaceTest>'"
+        }
+      },
+      "minitest/User_associated_microposts_should_be_destroyed": {
+        "app": "rails_tutorial_sample_app_7th_ed",
+        "language": {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.1.2"
+        },
+        "client": {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.99.4"
+        },
+        "frameworks": [
+          {
+            "name": "rails",
+            "version": "7.0.4"
+          },
+          {
+            "name": "minitest",
+            "version": "5.15.0"
+          }
+        ],
+        "git": {
+          "repository": "git@github.com:land-of-apps/rails_tutorial_sample_app_7th_ed.git",
+          "branch": "main",
+          "commit": "a9a602d6c8ef85143ca903b3a74daec1a92d5286",
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
+        },
+        "name": "User associated microposts should be destroyed",
+        "source_location": "test/models/user_test.rb:72",
+        "recorder": {
+          "name": "minitest",
+          "type": "tests"
+        },
+        "test_status": "succeeded"
+      },
+      "minitest/Valid_login_redirect_after_login": {
+        "app": "rails_tutorial_sample_app_7th_ed",
+        "language": {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.1.2"
+        },
+        "client": {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.99.4"
+        },
+        "frameworks": [
+          {
+            "name": "rails",
+            "version": "7.0.4"
+          },
+          {
+            "name": "minitest",
+            "version": "5.15.0"
+          }
+        ],
+        "git": {
+          "repository": "git@github.com:land-of-apps/rails_tutorial_sample_app_7th_ed.git",
+          "branch": "main",
+          "commit": "a9a602d6c8ef85143ca903b3a74daec1a92d5286",
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
+        },
+        "name": "Valid_login redirect after login",
+        "source_location": "test/integration/users_login_test.rb:45",
+        "recorder": {
+          "name": "minitest",
+          "type": "tests"
+        },
+        "test_status": "failed",
+        "test_failure": {
+          "message": "ActionView::Template::Error: undefined method `micropost_path' for #<ActionView::Base:0x0000000002b3e0>\n\n              target.public_send(method, *args)\n                    ^^^^^^^^^^^^\nDid you mean?  microposts_path\n    app/views/microposts/_micropost.html.erb:13\n    app/views/users/show.html.erb:19\n    test/integration/users_login_test.rb:46:in `block in <class:ValidLoginTest>'"
+        }
+      }
+    }
+  }
+}
