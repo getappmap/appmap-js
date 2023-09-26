@@ -1,5 +1,0 @@
-[
-  "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?",
-  "begin transaction",
-  "rollback transaction"
-]

@@ -191,9 +191,13 @@ export default class ChangeReporter {
 
     const generator = new ReportFieldCalculator(this);
 
-    const isNewFn = isAdded(baseAppMaps, isTest(appMapMetadata));
-    const isRemovedFn = isAdded(headAppMaps, isTest(appMapMetadata));
-    const isChangedFn = isChanged(baseAppMaps, isTest(appMapMetadata), this.digests);
+    const isNewFn = isAdded(baseAppMaps, isTest(RevisionName.Head, appMapMetadata));
+    const isRemovedFn = isAdded(headAppMaps, isTest(RevisionName.Base, appMapMetadata));
+    const isChangedFn = isChanged(
+      baseAppMaps,
+      isTest(RevisionName.Head, appMapMetadata),
+      this.digests
+    );
     const referenceAppMapFn = (appmap: AppMapName) =>
       [RevisionName.Base, RevisionName.Head].forEach((revisionName) =>
         this.referencedAppMaps.add(revisionName, appmap)
@@ -307,7 +311,7 @@ export default class ChangeReporter {
       for (const appmap of await this.paths.appmaps(RevisionName.Head)) {
         const metadata = this.appMapMetadata[RevisionName.Head].get(appmap);
         if (!metadata) {
-          console.log(prominentStyle(`Metadata for ${appmap} not found!`));
+          console.warn(prominentStyle(`Metadata for ${appmap} not found!`));
           continue;
         }
         if (metadata.test_status === 'failed') failedAppMaps.add(appmap);
@@ -318,9 +322,12 @@ export default class ChangeReporter {
 }
 
 // Gets a function that returns true if the given appmap is a test.
-function isTest(appMapMetadata: AppMapMetadata): (appmap: AppMapName) => boolean {
+function isTest(
+  revisionName: RevisionName,
+  appMapMetadata: AppMapMetadata
+): (appmap: AppMapName) => boolean {
   return (appmap: AppMapName): boolean => {
-    const metadata = appMapMetadata[RevisionName.Head].get(appmap);
+    const metadata = appMapMetadata[revisionName].get(appmap);
     return !!(metadata && metadata.recorder.type === 'tests');
   };
 }

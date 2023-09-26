@@ -1,16 +1,16 @@
 import { verbose } from '../../../src/utils';
-import { isNew } from '../../../src/cmds/compare/ChangeReporter';
+import { isAdded } from '../../../src/cmds/compare/ChangeReporter';
 
 if (process.env.VERBOSE) verbose(true);
 
-describe('ChangeReporter.isNew', () => {
+describe('ChangeReporter.isAdded', () => {
   afterEach(() => jest.restoreAllMocks());
 
   it('ignores non-test AppMaps', () => {
-    expect(isNew(new Set(['theappmap']), () => false)('theappmap')).toBeFalsy();
+    expect(isAdded(new Set(['theappmap']), () => false)('theappmap')).toBeFalsy();
   });
 
   it('reports test AppMaps that are not in the base', () => {
-    expect(isNew(new Set([]), () => true)('theappmap')).toBeTruthy();
+    expect(isAdded(new Set([]), () => true)('theappmap')).toBeTruthy();
   });
 });
