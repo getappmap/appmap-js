@@ -1,0 +1,39 @@
+{
+  "app": "sample_app_6th_ed",
+  "language": {
+    "name": "ruby",
+    "engine": "ruby",
+    "version": "3.0.2"
+  },
+  "client": {
+    "name": "appmap",
+    "url": "https://github.com/applandinc/appmap-ruby",
+    "version": "0.102.1"
+  },
+  "frameworks": [
+    {
+      "name": "rails",
+      "version": "6.0.4.1"
+    },
+    {
+      "name": "minitest",
+      "version": "5.11.3"
+    }
+  ],
+  "git": {
+    "repository": "https://github.com/land-of-apps/sample_app_6th_ed",
+    "branch": "appmap-e2e",
+    "commit": "9745c3074776f1c102f193eec2a80ed7153a1412",
+    "git_last_annotated_tag": null,
+    "git_last_tag": null,
+    "git_commits_since_last_annotated_tag": null,
+    "git_commits_since_last_tag": null
+  },
+  "name": "Users_signup valid signup information with account activation",
+  "source_location": "test/integration/users_signup_test.rb:22",
+  "recorder": {
+    "name": "minitest",
+    "type": "tests"
+  },
+  "test_status": "succeeded"
+}

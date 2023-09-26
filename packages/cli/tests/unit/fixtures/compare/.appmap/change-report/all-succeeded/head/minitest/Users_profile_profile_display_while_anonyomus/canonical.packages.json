@@ -1,0 +1,9 @@
+[
+  "actionpack",
+  "activesupport",
+  "app/helpers",
+  "json",
+  "logger",
+  "openssl",
+  "ruby"
+]

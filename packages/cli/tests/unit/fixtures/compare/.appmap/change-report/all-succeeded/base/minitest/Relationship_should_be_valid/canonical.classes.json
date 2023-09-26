@@ -1,0 +1,4 @@
+[
+  "activesupport/ActiveSupport::Callbacks::CallbackSequence",
+  "logger/Logger::LogDevice"
+]

@@ -1,0 +1,9 @@
+[
+  "RELEASE SAVEPOINT active_record_1",
+  "ROLLBACK TO SAVEPOINT active_record_1",
+  "SAVEPOINT active_record_1",
+  "SELECT ? AS one FROM \"users\" WHERE \"users\".\"email\" = ? AND \"users\".\"id\" != ? LIMIT ?",
+  "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?",
+  "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?",
+  "UPDATE \"users\" SET \"remember_digest\" = ?, \"updated_at\" = ? WHERE \"users\".\"id\" = ?"
+]

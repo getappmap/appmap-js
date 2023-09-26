@@ -1,0 +1,708 @@
+{
+  "actors": [
+    {
+      "id": "http:HTTP server requests",
+      "name": "HTTP server requests",
+      "order": 0
+    },
+    {
+      "id": "package:app/controllers",
+      "name": "controllers",
+      "order": 1000
+    },
+    {
+      "id": "package:app/views",
+      "name": "views",
+      "order": 2000
+    },
+    {
+      "id": "package:app/helpers",
+      "name": "helpers",
+      "order": 3000
+    },
+    {
+      "id": "database:Database",
+      "name": "Database",
+      "order": 6000
+    }
+  ],
+  "rootActions": [
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "GET /users/{id}",
+      "status": 200,
+      "digest": "f73ae15250f45020dd686aefceee302b9f578947736f9adb11d1abbfbe47217c",
+      "subtreeDigest": "089870428cc4fd5a06de105bba523ffea84983ce91eb7a2ae3e4416375def654",
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:app/controllers",
+          "name": "show",
+          "static": false,
+          "digest": "74f5604aacab5d82d41a46aa815ab7ab15e58f2f3d0e131a61d97ae8707c781f",
+          "subtreeDigest": "1bfe8d2bc64e67e80a361d59fcabdd706725b2e4b1537082658232361939a8e1",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/controllers/UsersController#show",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "ActiveRecord::AssociationRelation"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 6,
+              "caller": "package:app/controllers",
+              "callee": "database:Database",
+              "query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?",
+              "digest": "d3215148ca0ab75b7a269bcfb8bbf9e50385569eb0fba0fdbcca10da78011030",
+              "subtreeDigest": "cff7d0dfa71e51580d152a25a9f26530c0ab1ed3356a77247851221b6b3081dc",
+              "children": [],
+              "elapsed": 0.000276706,
+              "eventIds": [
+                54
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/controllers",
+              "callee": "package:app/controllers",
+              "name": "page_number",
+              "static": false,
+              "digest": "df6346bd2579537ceed4391aad0559b3fcd9bba57d76389444072bad64abebcf",
+              "subtreeDigest": "0b7bf1266992b6ad25aafce21785e9139047fe419cf8fbc4a80212c7f0970d91",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/controllers/UsersController#page_number",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "integer"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.000017799999994849713,
+              "eventIds": [
+                56
+              ]
+            }
+          ],
+          "elapsed": 0.0016943329999890011,
+          "eventIds": [
+            51
+          ]
+        },
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:app/views",
+          "name": "render",
+          "static": true,
+          "digest": "62d98fa0db60cd4288bf76a6204e7b20f61e13862f1e05c769dd86e952245a6c",
+          "subtreeDigest": "6c7025fffc5e2560e7c1267ca59aeb84e391739cbea1021d1faa6927e599a82a",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/views/app_views_users_show_html_erb.render",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "void"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/helpers",
+              "name": "gravatar_for",
+              "static": false,
+              "digest": "5ff1bfc2a21871ef1ea4c8455f3723347e6f7e782e6402f1d6b339cc513a8476",
+              "subtreeDigest": "f458db9a21347860c96fa2ede0017b2f10de5fdee95e86c65118ea07ccb1985b",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/helpers/UsersHelper#gravatar_for",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "ActiveSupport::SafeBuffer"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.00007750099999270788,
+              "eventIds": [
+                75
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/views",
+              "name": "render",
+              "static": true,
+              "digest": "8e18aef5ea89591739f74bd4df0cac0e9ff8f82fff7c8d75bda368f44e2b053c",
+              "subtreeDigest": "d88c5b946fff7182e1551a9b43fb4b66da6dcff632f3c62624efebe8535541dd",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/views/app_views_shared__stats_html_erb.render",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 6,
+                  "caller": "package:app/views",
+                  "callee": "database:Database",
+                  "query": "SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"followed_id\" WHERE \"relationships\".\"follower_id\" = ?",
+                  "digest": "8a345505b3941e0f4906e48e2d219860fa022aaa4d4a4b788602fe6a0ab6a2af",
+                  "subtreeDigest": "ac7d626aba07f85ac654615a0a2ae3185251c9fb388477f001ad6df6b308e0da",
+                  "children": [],
+                  "elapsed": 0.000454809,
+                  "eventIds": [
+                    82
+                  ]
+                },
+                {
+                  "nodeType": 6,
+                  "caller": "package:app/views",
+                  "callee": "database:Database",
+                  "query": "SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"follower_id\" WHERE \"relationships\".\"followed_id\" = ?",
+                  "digest": "0b21465b7b46abb916524effe611b800ea8b5642559d3857bec7e1e319200899",
+                  "subtreeDigest": "bfacf1caecf38e9fb2e05ddb3e23a6ad6b8e9f39e4bbb5098a50c0ebba43a78f",
+                  "children": [],
+                  "elapsed": 0.000326507,
+                  "eventIds": [
+                    86
+                  ]
+                }
+              ],
+              "elapsed": 0.006325123000010535,
+              "eventIds": [
+                77
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/helpers",
+              "name": "logged_in?",
+              "static": false,
+              "digest": "77ba104e4ac11aaffbd62768cc00961bc71badb260963485b9897fbad354a39c",
+              "subtreeDigest": "e711ae9ff1eb3d26633c13edf4795059ae7d47436fb6169ff8d9748dea1e6a72",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/helpers/SessionsHelper#logged_in?",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/helpers",
+                  "callee": "package:app/helpers",
+                  "name": "current_user",
+                  "static": false,
+                  "digest": "f2fde231b0994ff4256ad0e5188d0308c1a6148f09070dc9de9afaa808d8cd73",
+                  "subtreeDigest": "4bbbf501f2dabd944fbc67be1a25734cf646f7179b710e54553297d848f32790",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/helpers/SessionsHelper#current_user",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "void"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [],
+                  "elapsed": 0.0001547029999926508,
+                  "eventIds": [
+                    92
+                  ]
+                }
+              ],
+              "elapsed": 0.00031020600000886134,
+              "eventIds": [
+                91
+              ]
+            },
+            {
+              "nodeType": 6,
+              "caller": "package:app/views",
+              "callee": "database:Database",
+              "query": "SELECT 1 AS one FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? LIMIT ?",
+              "digest": "8e7658cc55f04124152ee4729500f556a4c625a9206d9454d43da5754d957f28",
+              "subtreeDigest": "f9c3d1622a7287c7ac5c3c79a3240e7f20455fc02e68aae6279d7b3869fa973a",
+              "children": [],
+              "elapsed": 0.000266805,
+              "eventIds": [
+                101
+              ]
+            },
+            {
+              "nodeType": 6,
+              "caller": "package:app/views",
+              "callee": "database:Database",
+              "query": "SELECT COUNT(*) FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ?",
+              "digest": "e1f3459e5ab185d533ff4a74856412ce48b234520639d2544fdf4efd57b62323",
+              "subtreeDigest": "168a98cd98338ab696ee7d20c758b8ec0adcc711e400924f41d354beff7c824e",
+              "children": [],
+              "elapsed": 0.000255805,
+              "eventIds": [
+                105
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/views",
+              "name": "render",
+              "static": true,
+              "digest": "077304456e4ab9dabeb3324fd60f34207abf5ec657f29e417431b740a20d3e75",
+              "subtreeDigest": "49f75bed076daa17c0d00ac1c3f3201b5b1f7312991035f06eea1905189d44b3",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/views/app_views_microposts__micropost_html_erb.render",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 6,
+                  "caller": "package:app/views",
+                  "callee": "database:Database",
+                  "query": "SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC LIMIT ? OFFSET ?",
+                  "digest": "19bc023ca792487c0257cd408be3a4ddc9c5d42aa35e4e8d6b2af664e5f91809",
+                  "subtreeDigest": "30bc3505215cc03a950e70f24608cb6b04e6898c3f0f86f22c4832c0296eb965",
+                  "children": [],
+                  "elapsed": 0.000349206,
+                  "eventIds": [
+                    110
+                  ]
+                },
+                {
+                  "nodeType": 1,
+                  "count": 30,
+                  "digest": "loop",
+                  "subtreeDigest": "loop:ee0e5da70f4ae42dc87c8745354d3ce11694e5546ca746c2ad7c4a6e90a090c9",
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/views",
+                      "callee": "package:app/helpers",
+                      "name": "gravatar_for",
+                      "static": false,
+                      "digest": "5ff1bfc2a21871ef1ea4c8455f3723347e6f7e782e6402f1d6b339cc513a8476",
+                      "subtreeDigest": "f458db9a21347860c96fa2ede0017b2f10de5fdee95e86c65118ea07ccb1985b",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "app/helpers/UsersHelper#gravatar_for",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "ActiveSupport::SafeBuffer"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.0012068260000006603,
+                      "eventIds": [
+                        114,
+                        128,
+                        142,
+                        156,
+                        170,
+                        184,
+                        198,
+                        212,
+                        226,
+                        240,
+                        254,
+                        268,
+                        282,
+                        296,
+                        310,
+                        324,
+                        338,
+                        352,
+                        366,
+                        380,
+                        394,
+                        408,
+                        422,
+                        436,
+                        450,
+                        464,
+                        478,
+                        492,
+                        506,
+                        520
+                      ]
+                    },
+                    {
+                      "nodeType": 6,
+                      "caller": "package:app/views",
+                      "callee": "database:Database",
+                      "query": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?",
+                      "digest": "dc0970d40da095c45e53e50c788edd77b994cabdd5ca2826131b3afdfbb64fb9",
+                      "subtreeDigest": "0639c802f0b1165ac61ab94b37550e9805bacd1d7b8d76eb6163c826c7fb3b70",
+                      "children": [],
+                      "elapsed": 0.007816851000000001,
+                      "eventIds": [
+                        118,
+                        132,
+                        146,
+                        160,
+                        174,
+                        188,
+                        202,
+                        216,
+                        230,
+                        244,
+                        258,
+                        272,
+                        286,
+                        300,
+                        314,
+                        328,
+                        342,
+                        356,
+                        370,
+                        384,
+                        398,
+                        412,
+                        426,
+                        440,
+                        454,
+                        468,
+                        482,
+                        496,
+                        510,
+                        524
+                      ]
+                    },
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/views",
+                      "callee": "package:app/helpers",
+                      "name": "current_user?",
+                      "static": false,
+                      "digest": "dbef797d2a0a8556f531d01acd2f8591a9ea6fd301fe70a393db0861e4155175",
+                      "subtreeDigest": "55c42766168ae9fe435bf8af8cbcaac3bbfdbbcde2480fba3c0be4fe581e2c71",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "app/helpers/SessionsHelper#current_user?",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "void"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [
+                        {
+                          "nodeType": 3,
+                          "caller": "package:app/helpers",
+                          "callee": "package:app/helpers",
+                          "name": "current_user",
+                          "static": false,
+                          "digest": "f2fde231b0994ff4256ad0e5188d0308c1a6148f09070dc9de9afaa808d8cd73",
+                          "subtreeDigest": "4bbbf501f2dabd944fbc67be1a25734cf646f7179b710e54553297d848f32790",
+                          "stableProperties": {
+                            "event_type": "function",
+                            "id": "app/helpers/SessionsHelper#current_user",
+                            "raises_exception": false
+                          },
+                          "returnValue": {
+                            "returnValueType": {
+                              "name": "void"
+                            },
+                            "raisesException": false
+                          },
+                          "children": [],
+                          "elapsed": 0.003565169000012247,
+                          "eventIds": [
+                            121,
+                            135,
+                            149,
+                            163,
+                            177,
+                            191,
+                            205,
+                            219,
+                            233,
+                            247,
+                            261,
+                            275,
+                            289,
+                            303,
+                            317,
+                            331,
+                            345,
+                            359,
+                            373,
+                            387,
+                            401,
+                            415,
+                            429,
+                            443,
+                            457,
+                            471,
+                            485,
+                            499,
+                            513,
+                            527
+                          ]
+                        }
+                      ],
+                      "elapsed": 0.005005900000000452,
+                      "eventIds": [
+                        120,
+                        134,
+                        148,
+                        162,
+                        176,
+                        190,
+                        204,
+                        218,
+                        232,
+                        246,
+                        260,
+                        274,
+                        288,
+                        302,
+                        316,
+                        330,
+                        344,
+                        358,
+                        372,
+                        386,
+                        400,
+                        414,
+                        428,
+                        442,
+                        456,
+                        470,
+                        484,
+                        498,
+                        512,
+                        526
+                      ]
+                    }
+                  ],
+                  "elapsed": 0.014029577000001113,
+                  "eventIds": []
+                }
+              ],
+              "elapsed": 0.04862325000000567,
+              "eventIds": [
+                107
+              ]
+            },
+            {
+              "nodeType": 6,
+              "caller": "package:app/views",
+              "callee": "database:Database",
+              "query": "SELECT COUNT(*) FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ?",
+              "digest": "e1f3459e5ab185d533ff4a74856412ce48b234520639d2544fdf4efd57b62323",
+              "subtreeDigest": "168a98cd98338ab696ee7d20c758b8ec0adcc711e400924f41d354beff7c824e",
+              "children": [],
+              "elapsed": 0.000183404,
+              "eventIds": [
+                539
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/helpers",
+              "name": "full_title",
+              "static": false,
+              "digest": "6428a5b259bbf6313835680ae71302835d39681d81cd69e41c710da42e1d99f7",
+              "subtreeDigest": "361ef4b9bb2999ee86e9d958fe92bfd2390106bbf9b1da940c219041dd64675a",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/helpers/ApplicationHelper#full_title",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "ActiveSupport::SafeBuffer"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.000012400000002799061,
+              "eventIds": [
+                543
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/views",
+              "name": "render",
+              "static": true,
+              "digest": "8b9ec9f22e5fd30edef15949402dd291692d065f0c826216741d476d3afaa5d9",
+              "subtreeDigest": "d9df1064206d598dd41b8444b1e460077bb8d5fcde5d88d351291864082e1acb",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/views/app_views_layouts__shim_html_erb.render",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.0006082119999888391,
+              "eventIds": [
+                739
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/views",
+              "name": "render",
+              "static": true,
+              "digest": "a067a33c75f6a3a7014f32072c87f4c12afb634a4141d6c1d757b8f345269315",
+              "subtreeDigest": "e046d09e5d3e9bd55be577fe7853649292d28983bb56a021f1c106cc4b491b2a",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/views/app_views_layouts__header_html_erb.render",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/views",
+                  "callee": "package:app/helpers",
+                  "name": "logged_in?",
+                  "static": false,
+                  "digest": "77ba104e4ac11aaffbd62768cc00961bc71badb260963485b9897fbad354a39c",
+                  "subtreeDigest": "e711ae9ff1eb3d26633c13edf4795059ae7d47436fb6169ff8d9748dea1e6a72",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/helpers/SessionsHelper#logged_in?",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "void"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "caller": "package:app/helpers",
+                      "callee": "package:app/helpers",
+                      "name": "current_user",
+                      "static": false,
+                      "digest": "f2fde231b0994ff4256ad0e5188d0308c1a6148f09070dc9de9afaa808d8cd73",
+                      "subtreeDigest": "4bbbf501f2dabd944fbc67be1a25734cf646f7179b710e54553297d848f32790",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "app/helpers/SessionsHelper#current_user",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "void"
+                        },
+                        "raisesException": false
+                      },
+                      "children": [],
+                      "elapsed": 0.00014180299999111412,
+                      "eventIds": [
+                        749
+                      ]
+                    }
+                  ],
+                  "elapsed": 0.00018320399999538495,
+                  "eventIds": [
+                    748
+                  ]
+                }
+              ],
+              "elapsed": 0.0008341160000071568,
+              "eventIds": [
+                745
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/views",
+              "callee": "package:app/views",
+              "name": "render",
+              "static": true,
+              "digest": "63985b0c938e10b1bc115ca2709f81992267c1ba90beb2edbd8ced516d9b2785",
+              "subtreeDigest": "9f2ddc6d4211a125286542a8b5b0a01262f45e120e13738b6850426ec9a29fed",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/views/app_views_layouts__footer_html_erb.render",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.000503809999997884,
+              "eventIds": [
+                761
+              ]
+            }
+          ],
+          "elapsed": 0.07867943699999103,
+          "eventIds": [
+            62
+          ]
+        }
+      ],
+      "elapsed": 0.08829902400000833,
+      "eventIds": [
+        29
+      ]
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "actors": [
+    {
+      "id": "database:Database",
+      "name": "Database",
+      "order": 2000
+    }
+  ],
+  "rootActions": [
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "begin transaction",
+      "digest": "a837869ea3eec93baf679bf3bcd19a57204f99bafd58814b1d74682ae25c5c53",
+      "subtreeDigest": "0baedb63988fa07b8440439cc4301c26eb244276ea82cee730ba76fba5c41be4",
+      "children": [],
+      "elapsed": 0.000309806,
+      "eventIds": [
+        7
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?",
+      "digest": "d3215148ca0ab75b7a269bcfb8bbf9e50385569eb0fba0fdbcca10da78011030",
+      "subtreeDigest": "cff7d0dfa71e51580d152a25a9f26530c0ab1ed3356a77247851221b6b3081dc",
+      "children": [],
+      "elapsed": 0.000378807,
+      "eventIds": [
+        17
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?",
+      "digest": "d3215148ca0ab75b7a269bcfb8bbf9e50385569eb0fba0fdbcca10da78011030",
+      "subtreeDigest": "cff7d0dfa71e51580d152a25a9f26530c0ab1ed3356a77247851221b6b3081dc",
+      "children": [],
+      "elapsed": 0.000245104,
+      "eventIds": [
+        21
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?",
+      "digest": "d3215148ca0ab75b7a269bcfb8bbf9e50385569eb0fba0fdbcca10da78011030",
+      "subtreeDigest": "cff7d0dfa71e51580d152a25a9f26530c0ab1ed3356a77247851221b6b3081dc",
+      "children": [],
+      "elapsed": 0.000262105,
+      "eventIds": [
+        26
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?",
+      "digest": "d3215148ca0ab75b7a269bcfb8bbf9e50385569eb0fba0fdbcca10da78011030",
+      "subtreeDigest": "cff7d0dfa71e51580d152a25a9f26530c0ab1ed3356a77247851221b6b3081dc",
+      "children": [],
+      "elapsed": 0.000232105,
+      "eventIds": [
+        30
+      ]
+    },
+    {
+      "nodeType": 6,
+      "callee": "database:Database",
+      "query": "rollback transaction",
+      "digest": "c25f313099f39b61256e62b3c06095337f86af3e57d02a9e570db7412687ab65",
+      "subtreeDigest": "0c8f838a33893115ed65139cde4d941f82a7583ebf84bba5a8dfc8ae85f567f6",
+      "children": [],
+      "elapsed": 0.000211404,
+      "eventIds": [
+        37
+      ]
+    }
+  ]
+}

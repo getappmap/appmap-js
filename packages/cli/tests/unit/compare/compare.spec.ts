@@ -43,16 +43,6 @@ describe('compare command', () => {
         .filter((file) => isDirectory(join(baseDir, file)))
         .map((f) => join('minitest', f));
     };
-    // const expectedCommonAppMaps = [
-    //   'minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost',
-    //   'minitest/Microposts_interface_micropost_interface',
-    //   'minitest/User_associated_microposts_should_be_destroyed',
-    // ];
-    // const expectedBaseAppmaps = [...expectedCommonAppMaps, 'minitest/User_mailer_password_reset'];
-    // const expectedHeadAppMaps = [
-    //   ...expectedCommonAppMaps,
-    //   'minitest/Valid_login_redirect_after_login',
-    // ];
 
     for (const revisionName of [RevisionName.Base, RevisionName.Head])
       appmaps.withArgs(sinon.match(revisionName)).resolves(listAppMaps(revisionName));
@@ -74,9 +64,10 @@ describe('compare command', () => {
   });
 
   describe('when some tests failed', () => {
+    const scenarioName = 'some-failed';
+    const [baseRevision, headRevision] = scenarioName.split('-');
+
     it('creates the expected change report', async () => {
-      const scenarioName = 'some-failed';
-      const [baseRevision, headRevision] = scenarioName.split('-');
       mockBaseAndHeadAppMaps(scenarioName);
 
       const expectedReport = JSON.parse(readFileSync(changeReportFile(scenarioName), 'utf-8'));
@@ -94,43 +85,26 @@ describe('compare command', () => {
       assert.deepStrictEqual(actualReport, expectedReport);
     });
   });
-  // describe('when all tests passed', () => {
-  //   beforeEach(async () => {
-  //     const appmaps = new Set([...expectedBaseAppmaps, ...expectedHeadAppMaps]);
-  //     for (const appmap of appmaps) {
-  //       for (const revisionName of ['base', 'head']) {
-  //         const metadataFile = join(
-  //           dirname(changeReportPath),
-  //           revisionName,
-  //           appmap,
-  //           'metadata.json'
-  //         );
-  //         if (!existsSync(metadataFile)) continue;
+  describe('when all tests passed', () => {
+    const scenarioName = 'all-succeeded';
+    const [baseRevision, headRevision] = scenarioName.split('-');
 
-  //         const metadata = await JSON.parse(await readFile(metadataFile, 'utf-8'));
-  //         if (metadata.test_status === 'failed') {
-  //           warn(`Reverting ${appmap} to 'succeeded'`);
-  //           metadata.test_status = 'succeeded';
-  //           delete metadata['test_failure'];
-  //           await writeFile(metadataFile, JSON.stringify(metadata));
-  //         }
-  //       }
-  //     }
-  //   });
-  //   it('creates the expected change report', async () => {
-  //     await handler({
-  //       directory: compareFixturePath,
-  //       baseRevision,
-  //       headRevision,
-  //       sourceDir: '.',
-  //       deleteUnreferenced: true,
-  //       reportRemoved: true,
-  //       clobberOutputDir: false,
-  //     });
-  //     assert(existsSync(changeReportPath));
+    it('creates the expected change report', async () => {
+      mockBaseAndHeadAppMaps(scenarioName);
 
-  //     const actualReport = JSON.parse(String(readFileSync(changeReportPath)));
-  //     assert.deepStrictEqual(actualReport, expectedReport);
-  //   });
-  // });
+      const expectedReport = JSON.parse(readFileSync(changeReportFile(scenarioName), 'utf-8'));
+      await handler({
+        directory: projectDir,
+        baseRevision,
+        headRevision,
+        sourceDir: '.',
+        deleteUnreferenced: true,
+        reportRemoved: true,
+        clobberOutputDir: false,
+      });
+      assert(existsSync(changeReportFile(scenarioName)));
+      const actualReport = JSON.parse(readFileSync(changeReportFile(scenarioName), 'utf-8'));
+      assert.deepStrictEqual(actualReport, expectedReport);
+    });
+  });
 });

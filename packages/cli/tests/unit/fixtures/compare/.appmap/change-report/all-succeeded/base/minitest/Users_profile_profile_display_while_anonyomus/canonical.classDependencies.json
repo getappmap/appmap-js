@@ -1,0 +1,106 @@
+[
+  {
+    "caller": "GET /users/{id}",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "GET /users/{id}",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "GET /users/{id}",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "GET /users/{id}",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/views"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/views",
+    "callee": "SELECT 1 AS one FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/views",
+    "callee": "SELECT COUNT(*) FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ?"
+  },
+  {
+    "caller": "app/views",
+    "callee": "SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"followed_id\" WHERE \"relationships\".\"follower_id\" = ?"
+  },
+  {
+    "caller": "app/views",
+    "callee": "SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"follower_id\" WHERE \"relationships\".\"followed_id\" = ?"
+  },
+  {
+    "caller": "app/views",
+    "callee": "SELECT \"active_storage_attachments\".* FROM \"active_storage_attachments\" WHERE \"active_storage_attachments\".\"record_id\" = ? AND \"active_storage_attachments\".\"record_type\" = ? AND \"active_storage_attachments\".\"name\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/views",
+    "callee": "SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC LIMIT ? OFFSET ?"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "app/views",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/views",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views",
+    "callee": "ruby/Array"
+  },
+  {
+    "caller": "app/views",
+    "callee": "ruby/Marshal"
+  }
+]
