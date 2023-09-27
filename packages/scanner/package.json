@@ -20,8 +20,8 @@
     "doc-up-to-date": "git diff --exit-code doc/",
     "lint": "eslint src --ext .ts",
     "ci": "yarn lint && yarn build && yarn schema-up-to-date && yarn doc-up-to-date && yarn test",
-    "test": "jest --filter=./test/testFilter.js",
-    "jest": "jest --filter=./test/testFilter.js",
+    "test": "jest --filter=./test/testFilter.js --detectOpenHandles",
+    "jest": "jest --filter=./test/testFilter.js --detectOpenHandles",
     "semantic-release": "semantic-release",
     "watch": "node bin/preBuild.js && tsc -p tsconfig.build.json --watch"
   },
