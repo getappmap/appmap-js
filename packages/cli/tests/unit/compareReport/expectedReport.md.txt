@@ -2,126 +2,21 @@
 
 | Summary | Status |
 | --- | --- |
-| [Failed tests](#failed-tests) | :warning: 3 failed |
-| [API changes](#openapi-changes) | 🚧 4 breaking, :wrench: 1 non-breaking |
-| [Findings](#findings) |  :tada: 4 resolved  |
+| [Failed tests](#failed-tests) | :white_check_mark: All tests passed |
+| [API changes](#openapi-changes) | :wrench: 1 non-breaking |
+| [Findings](#findings) |  :beetle: 1 new  :tada: 2 resolved  |
 | [New AppMaps](#new-appmaps) | :star: 1 new |
 | [Removed AppMaps](#removed-appmaps) | :heavy_multiplication_x: 1 removed |
-
-<h2 id="failed-tests">⚠️ Failed tests</h2>
-
-<details>
-<summary>
-test/controllers/microposts_controller_test.rb:24
-</summary>
-
-<p/>
-
-<!-- testLocation -->
-[test/controllers/microposts_controller_test.rb:24](test/controllers/microposts_controller_test.rb:24) failed with error:
-
-<!-- failureMessage -->
-```
-NoMethodError: undefined method `micropost_path' for #<MicropostsControllerTest:0x00007f311d97a068>
-Did you mean?  microposts
-    test/controllers/microposts_controller_test.rb:28:in `block (2 levels) in <class:MicropostsControllerTest>'
-    test/controllers/microposts_controller_test.rb:27:in `block in <class:MicropostsControllerTest>'
-```
-
-<!-- failureLocation -->
-
-
-<!-- sourceDiff -->
-
-[View AppMap of this test &raquo;](head/minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost.appmap.json)
-[View sequence diagram diff of this test &raquo;](diff/minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost.diff.sequence.json)
-
-<hr/>
-</details>
-
-<details>
-<summary>
-test/integration/microposts_interface_test.rb:9
-</summary>
-
-<p/>
-
-<!-- testLocation -->
-[test/integration/microposts_interface_test.rb:9](test/integration/microposts_interface_test.rb:9) failed with error:
-
-<!-- failureMessage -->
-```
-ActionView::Template::Error: undefined method `micropost_path' for #<ActionView::Base:0x00000000028410>
-
-              target.public_send(method, *args)
-                    ^^^^^^^^^^^^
-Did you mean?  microposts_path
-    app/views/microposts/_micropost.html.erb:13
-    app/views/shared/_feed.html.erb:3
-    app/views/static_pages/home.html.erb:16
-    test/integration/microposts_interface_test.rb:11:in `block in <class:MicropostsInterfaceTest>'
-```
-
-<!-- failureLocation -->
-
-
-<!-- sourceDiff -->
-
-[View AppMap of this test &raquo;](head/minitest/Microposts_interface_micropost_interface.appmap.json)
-[View sequence diagram diff of this test &raquo;](diff/minitest/Microposts_interface_micropost_interface.diff.sequence.json)
-
-<hr/>
-</details>
-
-<details>
-<summary>
-test/integration/users_login_test.rb:45
-</summary>
-
-<p/>
-
-<!-- testLocation -->
-[test/integration/users_login_test.rb:45](test/integration/users_login_test.rb:45) failed with error:
-
-<!-- failureMessage -->
-```
-ActionView::Template::Error: undefined method `micropost_path' for #<ActionView::Base:0x0000000002b3e0>
-
-              target.public_send(method, *args)
-                    ^^^^^^^^^^^^
-Did you mean?  microposts_path
-    app/views/microposts/_micropost.html.erb:13
-    app/views/users/show.html.erb:19
-    test/integration/users_login_test.rb:46:in `block in <class:ValidLoginTest>'
-```
-
-<!-- failureLocation -->
-
-
-<!-- sourceDiff -->
-
-[View AppMap of this test &raquo;](head/minitest/Valid_login_redirect_after_login.appmap.json)
-
-<hr/>
-</details>
 
 
 <h2 id="openapi-changes">🔄 API changes</h2>
 
-### 🚧 Breaking changes
-
-<small>These changes <b>are not</b> backwards-compatible, according to the OpenAPI specification.</small>
-
-- Remove path `/microposts/{id}` 
-- Remove response status code `302 POST /microposts` 
-- Remove response status code `303 POST /microposts` 
-- Remove response status code `422 POST /microposts` 
 
 ### :wrench: Non-breaking changes
 
 <small>These changes <b>are</b> backwards-compatible, according to the OpenAPI specification.</small>
 
-- Add response status code  `200 POST /microposts`
+- Add response status code  `302 GET /users/{id}`
 
 
 <details>
@@ -130,177 +25,114 @@ Detailed OpenAPI diff
 </summary>
 
 ```diff
---- base/openapi.yml	2023-08-31 13:25:30.000000000 -0400
-+++ head/openapi.yml	2023-08-31 13:25:30.000000000 -0400
-@@ -100,18 +100,9 @@
-   /microposts:
-     post:
+--- base/openapi.yml	2023-09-26 11:11:02.000000000 -0400
++++ head/openapi.yml	2023-09-26 11:11:02.000000000 -0400
+@@ -286,6 +286,10 @@
+           content:
+             text/html: {}
+           description: OK
++        '302':
++          content:
++            text/html: {}
++          description: Found
+     patch:
        responses:
--        '302':
--          content:
--            text/html: {}
--          description: Found
--        '303':
--          content:
--            text/html: {}
--          description: See Other
--        '422':
--          content:
--            text/html: {}
--          description: Unprocessable Entity
-+        '200':
-+          content: {}
-+          description: OK
-       requestBody:
-         content:
-           application/x-www-form-urlencoded:
-@@ -123,13 +114,6 @@
-                   properties:
-                     content:
-                       type: string
--  /microposts/{id}:
--    delete:
--      responses:
--        '303':
--          content:
--            text/html: {}
--          description: See Other
-   /password_resets:
-     post:
-       responses:
+         '200':
 ```
 </details>
 
 <h2 id="findings">Findings</h2>
 
-
-### :tada: Resolved findings (4)
+### :beetle: New findings (1)
 
 
 <details>
 <summary>
-  N plus 1 SQL query
+  Execution of untrusted system command
 </summary>
 
 
 ##### Description
 
-> app_views_shared__feed_html_erb.render[418] contains 30 occurrences of SQL: SELECT &quot;users&quot;.* FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ? LIMIT ?
+> Open3.capture3 executes an untrusted command string
 
 | Field | Value |
 | --- | --- |
-| Rule | [n-plus-one-query](https://appmap.io/docs/analysis/rules-reference.html#n-plus-one-query) |
-| Impact domain | Performance |
+| Rule | [exec-of-untrusted-command](https://appmap.io/docs/analysis/rules-reference.html#exec-of-untrusted-command) |
+| Impact domain | Security |
 
 ##### View in AppMap
 
-- [Full AppMap &raquo;](head/minitest/Microposts_interface_micropost_interface.appmap.json)
-- [Sequence diagram diff &raquo;](diff/minitest/Microposts_interface_micropost_interface.diff.sequence.json)
+- [Full AppMap &raquo;](head/minitest/Users_profile_profile_display_while_logged_in_as_the_user.appmap.json)
 
 
 ##### Stack trace
 
-- [app/helpers/sessions_helper.rb:19](app/helpers/sessions_helper.rb:19)
-- [app/helpers/sessions_helper.rb:35](app/helpers/sessions_helper.rb:35)
-- [app/views/shared/_feed.html.erb](app/views/shared/_feed.html.erb)
-- [app/views/static_pages/home.html.erb](app/views/static_pages/home.html.erb)
-- /home/ahtrotta/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/actionpack-7.0.4/lib/action_controller/metal/renderers.rb:140
+- /opt/hostedtoolcache/Ruby/3.0.2/x64/lib/ruby/3.0.0/open3.rb:279
+- [app/views/sessions/new.html.erb](app/views/sessions/new.html.erb)
+- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/renderers.rb:141
+- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19
+
+
+</details>
+
+
+### :tada: Resolved findings (2)
+
+
+<details>
+<summary>
+  Execution of untrusted system command
+</summary>
+
+
+##### Description
+
+> Open3.capture3 executes an untrusted command string
+
+| Field | Value |
+| --- | --- |
+| Rule | [exec-of-untrusted-command](https://appmap.io/docs/analysis/rules-reference.html#exec-of-untrusted-command) |
+| Impact domain | Security |
+
+##### View in AppMap
+
+- [Full AppMap &raquo;](head/minitest/Users_edit_unsuccessful_edit.appmap.json)
+
+
+##### Stack trace
+
+- /opt/hostedtoolcache/Ruby/3.0.2/x64/lib/ruby/3.0.0/open3.rb:279
+- [app/views/users/edit.html.erb](app/views/users/edit.html.erb)
+- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/renderers.rb:141
+- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19
 
 
 </details>
 
 <details>
 <summary>
-  N plus 1 SQL query
+  Unauthenticated HTTP server request
 </summary>
 
 
 ##### Description
 
-> app_views_shared__feed_html_erb.render[2707] contains 30 occurrences of SQL: SELECT &quot;users&quot;.* FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ? LIMIT ?
+> Unauthenticated HTTP server request: GET /users/{id}
 
 | Field | Value |
 | --- | --- |
-| Rule | [n-plus-one-query](https://appmap.io/docs/analysis/rules-reference.html#n-plus-one-query) |
-| Impact domain | Performance |
+| Rule | [missing-authentication](https://appmap.io/docs/analysis/rules-reference.html#missing-authentication) |
+| Impact domain | Security |
 
 ##### View in AppMap
 
-- [Full AppMap &raquo;](head/minitest/Microposts_interface_micropost_interface.appmap.json)
-- [Sequence diagram diff &raquo;](diff/minitest/Microposts_interface_micropost_interface.diff.sequence.json)
+- [Full AppMap &raquo;](head/minitest/Users_profile_profile_display_while_anonyomus.appmap.json)
+- [Sequence diagram diff &raquo;](diff/minitest/Users_profile_profile_display_while_anonyomus.diff.sequence.json)
 
 
 ##### Stack trace
 
-- [app/helpers/sessions_helper.rb:19](app/helpers/sessions_helper.rb:19)
-- [app/helpers/sessions_helper.rb:35](app/helpers/sessions_helper.rb:35)
-- [app/views/shared/_feed.html.erb](app/views/shared/_feed.html.erb)
-- [app/views/static_pages/home.html.erb](app/views/static_pages/home.html.erb)
-- /home/ahtrotta/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/actionpack-7.0.4/lib/action_controller/metal/renderers.rb:140
-- [app/controllers/microposts_controller.rb:5](app/controllers/microposts_controller.rb:5)
-
-
-</details>
-
-<details>
-<summary>
-  N plus 1 SQL query
-</summary>
-
-
-##### Description
-
-> app_views_shared__feed_html_erb.render[3734] contains 30 occurrences of SQL: SELECT &quot;users&quot;.* FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ? LIMIT ?
-
-| Field | Value |
-| --- | --- |
-| Rule | [n-plus-one-query](https://appmap.io/docs/analysis/rules-reference.html#n-plus-one-query) |
-| Impact domain | Performance |
-
-##### View in AppMap
-
-- [Full AppMap &raquo;](head/minitest/Microposts_interface_micropost_interface.appmap.json)
-- [Sequence diagram diff &raquo;](diff/minitest/Microposts_interface_micropost_interface.diff.sequence.json)
-
-
-##### Stack trace
-
-- [app/helpers/sessions_helper.rb:19](app/helpers/sessions_helper.rb:19)
-- [app/helpers/sessions_helper.rb:35](app/helpers/sessions_helper.rb:35)
-- [app/views/shared/_feed.html.erb](app/views/shared/_feed.html.erb)
-- [app/views/static_pages/home.html.erb](app/views/static_pages/home.html.erb)
-- /home/ahtrotta/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/actionpack-7.0.4/lib/action_controller/metal/renderers.rb:140
-
-
-</details>
-
-<details>
-<summary>
-  N plus 1 SQL query
-</summary>
-
-
-##### Description
-
-> app_views_users_show_html_erb.render[4559] contains 6 occurrences of SQL: SELECT &quot;users&quot;.* FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ? LIMIT ?
-
-| Field | Value |
-| --- | --- |
-| Rule | [n-plus-one-query](https://appmap.io/docs/analysis/rules-reference.html#n-plus-one-query) |
-| Impact domain | Performance |
-
-##### View in AppMap
-
-- [Full AppMap &raquo;](head/minitest/Microposts_interface_micropost_interface.appmap.json)
-- [Sequence diagram diff &raquo;](diff/minitest/Microposts_interface_micropost_interface.diff.sequence.json)
-
-
-##### Stack trace
-
-- [app/helpers/sessions_helper.rb:19](app/helpers/sessions_helper.rb:19)
-- [app/helpers/sessions_helper.rb:40](app/helpers/sessions_helper.rb:40)
-- [app/views/users/show.html.erb](app/views/users/show.html.erb)
-- /home/ahtrotta/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/actionpack-7.0.4/lib/action_controller/metal/renderers.rb:140
 
 
 </details>
@@ -309,9 +141,10 @@ Detailed OpenAPI diff
 
 <h2 id="new-appmaps">⭐ New AppMaps</h2>
 
-- [[minitest] Valid login redirect after login](head/minitest/Valid_login_redirect_after_login.appmap.json)
+- [[minitest] Users profile profile display while logged in as the user](head/minitest/Users_profile_profile_display_while_logged_in_as_the_user.appmap.json)
 
 
 <h2 id="removed-appmaps">✖️ Removed AppMaps</h2>
 
-- [[minitest] User mailer password reset](base/minitest/User_mailer_password_reset.appmap.json)
+- [[minitest] Relationship should be valid](base/minitest/Relationship_should_be_valid.appmap.json)
+
