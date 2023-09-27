@@ -4,6 +4,7 @@ import path from 'path';
 
 import { handler } from '../../../src/cmds/compare-report/compareReport';
 import { cleanProject, fixtureDir } from '../util';
+import { writeFile } from 'fs/promises';
 
 function removeTimeStampLines(report: string): string {
   return report.replace(/[-+]{3}.*openapi\.yml.*\n/g, '');
@@ -15,7 +16,7 @@ const changeReportDirectory = path.join(
   compareFixturePath,
   '.appmap',
   'change-report',
-  `testBase-testHead`
+  `all-succeeded`
 );
 const actualReportPath = path.join(changeReportDirectory, 'report.md');
 
@@ -38,6 +39,7 @@ describe('compare-report command', () => {
 
   async function verifyReportContents(expectedReportFileName: string) {
     const actualReport = readReportFile(actualReportPath);
+
     // .txt file to disable IDE auto-formatting.
     // Note that the IDE auto-formatting is actually good, beacuse it does things like replace
     // markdown elements such as '_' with '\_'. But it's not in scope for me to manually
