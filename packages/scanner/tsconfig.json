@@ -3,6 +3,7 @@
   "compilerOptions": {
     "outDir": "built",
     "types": ["node", "jest"],
+    "declaration": true,
     "resolveJsonModule": true
   },
   "include": ["src", "test", "types/sinon.d.ts"]
