@@ -161,8 +161,6 @@ export default {
       return result;
     },
     diagramSpec(): DiagramSpec {
-      this.collapsedActionState = this.collapsedActionState ?? []; // eslint-disable-line vue/no-side-effects-in-computed-properties
-
       const result = new DiagramSpec(this.diagram);
       if (this.collapsedActionState.length == 0) {
         // If a Diagram contains any actions in diff mode, expand all ancestors of every diff action,
@@ -203,7 +201,7 @@ export default {
           this.$store.commit(SET_FOCUSED_EVENT, event);
         }
 
-        this.collapseActionsForCompactLook();
+        if (!firstDiffAction) this.collapseActionsForCompactLook(result.actions);
       }
 
       if (this.collapsedActionState)
@@ -283,10 +281,10 @@ export default {
 
       return '';
     },
-    collapseActionsForCompactLook() {
+    collapseActionsForCompactLook(actionSpecs: ActionSpec[]) {
       // Collapse any Actions that satisfy the following conditions:
       //
-      // -Greater than 4 levels deep in the stack
+      // -Greater than 2 levels deep in the stack
       // -All descendants are function calls (as opposed to other types
       //  such as sql queries and external service calls)
       // -Does not contain the Selected Action.
@@ -299,7 +297,7 @@ export default {
         this.selectedEvents.find((event) => action.eventIds?.includes(event.id));
 
       const actionToActionSpec = new Map(
-        this.diagramSpec.actions.filter((a) => a.nodeType != 'return').map((a) => [a.action, a])
+        actionSpecs.filter((a) => a.nodeType != 'return').map((a) => [a.action, a])
       );
 
       const visit = (action: Action) => {
@@ -328,9 +326,8 @@ export default {
         return descendantPreventingCollapseFound;
       };
 
-      const headsToVisit = this.diagramSpec.actions.filter(
-        (a) =>
-          a.ancestorIndexes.length == 4 && a.action.children?.length > 0 && a.nodeType === 'call'
+      const headsToVisit = actionSpecs.filter(
+        (a) => a.ancestorIndexes.length == 2 && a.action.children?.length > 0
       );
 
       headsToVisit.forEach((h) => visit(h.action));

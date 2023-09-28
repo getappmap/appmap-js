@@ -192,24 +192,59 @@ context('AppMap sequence diagram', () => {
     });
   });
 
-  context('in initial compact view', () => {
-    beforeEach(() => {
-      cy.visit(
-        'http://localhost:6006/iframe.html?id=appland-diagrams-sequence--create-api-key&viewMode=story'
-      );
+  context('action in initial compact view', () => {
+    // Navigate to the first common ancestor after finding the span
+    // representing call label labelText, to find the .collapse-expand
+    // div containing [+].
+    const getCollapseExpandElementOfActionLabel = (labelText, order = 0) =>
+      cy
+        .get('span')
+        .filter(':contains("' + labelText + '")')
+        .eq(order)
+        .parent()
+        .parent()
+        .parent()
+        .find('.collapse-expand');
+
+    context('is not 2+ levels deep', () => {
+      beforeEach(() => {
+        cy.visit(
+          'http://localhost:6006/iframe.html?id=appland-diagrams-sequence--list-users&viewMode=story'
+        );
+      });
+
+      it('is not collapsed even if it has all function descendants', () => {
+        // First action in the root
+        getCollapseExpandElementOfActionLabel('list', 0).should('have.class', 'expanded');
+        // These two have only one ancestor
+        getCollapseExpandElementOfActionLabel('list', 1).should('have.class', 'expanded');
+        getCollapseExpandElementOfActionLabel('list', 2).should('have.class', 'expanded');
+      });
     });
 
-    it("action is collapsed if it's 4+ level deep and has all function descendants", () => {
-      // Navigate to the first common ancestor after finding the span
-      // representing call label 'decode', to find the .collapse-expand
-      // div containing [+].
-      cy.contains('span', 'decode')
-        .first()
-        .parent()
-        .parent()
-        .parent()
-        .find('.collapse-expand')
-        .should('have.class', 'collapsed');
+    context('is 2+ levels deep', () => {
+      beforeEach(() => {
+        cy.visit(
+          'http://localhost:6006/iframe.html?id=appland-diagrams-sequence--create-api-key&viewMode=story'
+        );
+      });
+
+      it('is collapsed if it has all function descendants', () => {
+        getCollapseExpandElementOfActionLabel('decode').should('have.class', 'collapsed');
+      });
+
+      it('is not collapsed if it has a non collapsable function child', () => {
+        // This one has a non collapsable function call child: authenticate
+        getCollapseExpandElementOfActionLabel('authenticate_token').should(
+          'have.class',
+          'expanded'
+        );
+      });
+
+      it('is not collapsed if it has a sql query child', () => {
+        // It has this sql query child: SELECT * FROM "api_keys"...
+        getCollapseExpandElementOfActionLabel('authenticate').should('have.class', 'expanded');
+      });
     });
   });
 });
