@@ -319,7 +319,7 @@ export default {
         const actionShouldCollapse =
           !descendantPreventingCollapseFound &&
           action.children?.length > 0 &&
-          actionSpec.nodeType == 'call';
+          actionSpec.nodeType === 'call';
 
         if (actionShouldCollapse) this.$set(this.collapsedActionState, actionSpec?.index, true);
 
@@ -327,13 +327,31 @@ export default {
       };
 
       const headsToVisit = actionSpecs.filter(
-        (a) => a.ancestorIndexes.length == 2 && a.action.children?.length > 0
+        (a) => a.ancestorIndexes.length === 2 && a.action.children?.length > 0
       );
 
       headsToVisit.forEach((h) => visit(h.action));
     },
   },
-
+  watch: {
+    focusedEvent(newVal) {
+      // If there are hidden actions containing this event
+      // ensure they are not hidden by expanding collapsed
+      // ancestors
+      if (newVal) {
+        const actionSpecs = this.diagramSpec.actions;
+        for (const actionSpec of actionSpecs)
+          if (actionSpec.eventIds.includes(newVal.id)) {
+            const collapsedAncestorIndexes = actionSpec.ancestorIndexes.filter(
+              (ancestorIndex) => this.collapsedActions[ancestorIndex]
+            );
+            collapsedAncestorIndexes.forEach((index) => {
+              this.$set(this.collapsedActionState, index, false);
+            });
+          }
+      }
+    },
+  },
   mounted() {
     this.focusHighlighted();
   },

@@ -192,20 +192,45 @@ context('AppMap sequence diagram', () => {
     });
   });
 
-  context('action in initial compact view', () => {
-    // Navigate to the first common ancestor after finding the span
-    // representing call label labelText, to find the .collapse-expand
-    // div containing [+].
-    const getCollapseExpandElementOfActionLabel = (labelText, order = 0) =>
-      cy
-        .get('span')
-        .filter(':contains("' + labelText + '")')
-        .eq(order)
-        .parent()
-        .parent()
-        .parent()
-        .find('.collapse-expand');
+  // Navigate to the first common ancestor after finding the span
+  // representing call label labelText, to find the .collapse-expand
+  // div containing [+].
+  const getCollapseExpandElementOfActionLabel = (labelText, order = 0) =>
+    cy
+      .get('span')
+      .filter(':contains("' + labelText + '")')
+      .eq(order)
+      .parent()
+      .parent()
+      .parent()
+      .find('.collapse-expand');
 
+  context('when an action is hidden', () => {
+    beforeEach(() => {
+      cy.visit(
+        'http://localhost:6006/iframe.html?id=pages-vs-code--extension-with-default-sequence-view&viewMode=story'
+      );
+    });
+
+    it.only('becomes visible if panned with eyeball', () => {
+      // Ensure it's collapsed
+      let isCollapsed = false;
+      getCollapseExpandElementOfActionLabel('GET /admin/orders').then(
+        ($el) => (isCollapsed = $el.text() === '[+]')
+      );
+      if (!isCollapsed) getCollapseExpandElementOfActionLabel('GET /admin/orders').click();
+
+      getCollapseExpandElementOfActionLabel('GET /admin/orders').should('have.class', 'collapsed');
+      // Click related items
+      cy.get('.details-search__block-item').contains('SELECT COUNT(*) FROM "spree_stores"').click();
+      cy.get('span.list-item__event-quickview').first().click();
+
+      // Parent should have expanded
+      getCollapseExpandElementOfActionLabel('GET /admin/orders').should('have.class', 'expanded');
+    });
+  });
+
+  context('action in initial compact view', () => {
     context('is not 2+ levels deep', () => {
       beforeEach(() => {
         cy.visit(
