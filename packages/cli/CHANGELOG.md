@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.99.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.98.0...@appland/appmap-v3.99.0) (2023-09-29)
+
+
+### Features
+
+* Report removed AppMaps ([e199371](https://github.com/getappmap/appmap-js/commit/e1993717d6f3a99ea1320b2aed80a73ccc9fa4a4))
+
 # [@appland/appmap-v3.98.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.97.1...@appland/appmap-v3.98.0) (2023-09-26)
 
 
