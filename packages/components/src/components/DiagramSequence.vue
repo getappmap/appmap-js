@@ -61,7 +61,6 @@ import {
   Diagram,
   Specification,
   Action,
-  NodeType,
 } from '@appland/sequence-diagram';
 import VLoopAction from '@/components/sequence/LoopAction.vue';
 import VCallAction from '@/components/sequence/CallAction.vue';
@@ -95,6 +94,10 @@ export default {
     },
     selectedEvents: {
       type: Array,
+    },
+    collapseDepth: {
+      type: Number,
+      default: 3,
     },
   },
 
@@ -201,7 +204,8 @@ export default {
           this.$store.commit(SET_FOCUSED_EVENT, event);
         }
 
-        if (!firstDiffAction) this.collapseActionsForCompactLook(result.actions);
+        this.$emit('notifyDiffMode', firstDiffAction != undefined);
+        this.collapseActionsForCompactLook(result.actions, this.collapseDepth);
       }
 
       if (this.collapsedActionState)
@@ -281,16 +285,11 @@ export default {
 
       return '';
     },
-    collapseActionsForCompactLook(actionSpecs: ActionSpec[]) {
+    collapseActionsForCompactLook(actionSpecs: ActionSpec[], collapseDepth: number) {
       // Collapse any Actions that satisfy the following conditions:
       //
-      // -Greater than 2 levels deep in the stack
-      // -All descendants are function calls (as opposed to other types
-      //  such as sql queries and external service calls)
+      // -Greater than collapseDepth levels deep in the stack
       // -Does not contain the Selected Action.
-
-      const isCollapsePreventingNodeType = (action: Action) =>
-        action.nodeType !== NodeType.Function && action.nodeType !== NodeType.Loop;
 
       const isSelectedAction = (action: Action) =>
         this.selectedEvents &&
@@ -309,31 +308,36 @@ export default {
 
           if (
             !descendantPreventingCollapseFound &&
-            (childHasDescendantPreventingCollapse ||
-              isCollapsePreventingNodeType(child) ||
-              isSelectedAction(child))
+            (childHasDescendantPreventingCollapse || isSelectedAction(child))
           )
             descendantPreventingCollapseFound = true;
         }
 
-        const actionShouldCollapse =
-          !descendantPreventingCollapseFound &&
-          action.children?.length > 0 &&
-          actionSpec.nodeType === 'call';
+        const isCollapseExpandApplicable =
+          action.children?.length > 0 && actionSpec.nodeType === 'call';
 
-        if (actionShouldCollapse) this.$set(this.collapsedActionState, actionSpec?.index, true);
+        if (isCollapseExpandApplicable) {
+          const shouldCollapse =
+            actionSpec?.ancestorIndexes.length >= collapseDepth &&
+            !descendantPreventingCollapseFound;
+          if (this.collapsedActionState[actionSpec?.index] != shouldCollapse)
+            this.$set(this.collapsedActionState, actionSpec?.index, shouldCollapse);
+        }
 
         return descendantPreventingCollapseFound;
       };
 
-      const headsToVisit = actionSpecs.filter(
-        (a) => a.ancestorIndexes.length === 2 && a.action.children?.length > 0
-      );
+      const rootActionSpecs = actionSpecs.filter((a) => a.ancestorIndexes.length === 0);
 
-      headsToVisit.forEach((h) => visit(h.action));
+      rootActionSpecs.forEach((h) => visit(h.action));
     },
   },
   watch: {
+    collapseDepth(newVal) {
+      const diffMode = this.diagramSpec.actions.some((a) => a.action.diffMode);
+      if (!diffMode)
+        this.collapseActionsForCompactLook(this.diagramSpec.actions, this.collapseDepth);
+    },
     focusedEvent(newVal) {
       // If there are hidden actions containing this event
       // ensure they are not hidden by expanding collapsed

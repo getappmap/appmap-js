@@ -212,7 +212,7 @@ context('AppMap sequence diagram', () => {
       );
     });
 
-    it.only('becomes visible if panned with eyeball', () => {
+    it('becomes visible if panned with eyeball', () => {
       // Ensure it's collapsed
       let isCollapsed = false;
       getCollapseExpandElementOfActionLabel('GET /admin/orders').then(
@@ -230,46 +230,60 @@ context('AppMap sequence diagram', () => {
     });
   });
 
-  context('action in initial compact view', () => {
-    context('is not 2+ levels deep', () => {
-      beforeEach(() => {
-        cy.visit(
-          'http://localhost:6006/iframe.html?id=appland-diagrams-sequence--list-users&viewMode=story'
-        );
-      });
-
-      it('is not collapsed even if it has all function descendants', () => {
-        // First action in the root
-        getCollapseExpandElementOfActionLabel('list', 0).should('have.class', 'expanded');
-        // These two have only one ancestor
-        getCollapseExpandElementOfActionLabel('list', 1).should('have.class', 'expanded');
-        getCollapseExpandElementOfActionLabel('list', 2).should('have.class', 'expanded');
-      });
+  context('compact look with collapse depth', () => {
+    beforeEach(() => {
+      cy.visit(
+        'http://localhost:6006/iframe.html?id=pages-vs-code--extension-with-default-sequence-view&viewMode=story'
+      );
     });
 
-    context('is 2+ levels deep', () => {
-      beforeEach(() => {
-        cy.visit(
-          'http://localhost:6006/iframe.html?id=appland-diagrams-sequence--create-api-key&viewMode=story'
-        );
-      });
+    it('action is collapsed when inside current depth', () => {
+      cy.get('div.depth-text').first().contains('3');
 
-      it('is collapsed if it has all function descendants', () => {
-        getCollapseExpandElementOfActionLabel('decode').should('have.class', 'collapsed');
-      });
+      getCollapseExpandElementOfActionLabel('index').should('have.class', 'expanded');
 
-      it('is not collapsed if it has a non collapsable function child', () => {
-        // This one has a non collapsable function call child: authenticate
-        getCollapseExpandElementOfActionLabel('authenticate_token').should(
-          'have.class',
-          'expanded'
-        );
-      });
+      const decreaseSelector = 'button[data-cy="decrease-collapse-depth"]';
+      cy.get(decreaseSelector).click();
+      cy.get(decreaseSelector).click();
+      cy.get('div.depth-text').first().contains('1');
+      getCollapseExpandElementOfActionLabel('index').should('have.class', 'collapsed');
+    });
 
-      it('is not collapsed if it has a sql query child', () => {
-        // It has this sql query child: SELECT * FROM "api_keys"...
-        getCollapseExpandElementOfActionLabel('authenticate').should('have.class', 'expanded');
-      });
+    it('action is not collapsed if it has a selected descendant', () => {
+      // select
+      cy.get('span').contains('secure_compare').click();
+
+      cy.get('div.depth-text').first().contains('3');
+      const decreaseSelector = 'button[data-cy="decrease-collapse-depth"]';
+      cy.get(decreaseSelector).click();
+      cy.get(decreaseSelector).click();
+      cy.get(decreaseSelector).click();
+      cy.get('div.depth-text').first().contains('0');
+
+      // parent action should not be collapsed even if the collapse depth is 0
+      getCollapseExpandElementOfActionLabel('GET /admin/orders').should('have.class', 'expanded');
+    });
+
+    it('action is not collapsed when not inside current depth', () => {
+      cy.get('div.depth-text').first().contains('3');
+      getCollapseExpandElementOfActionLabel('secure_compare').should('have.class', 'expanded');
+    });
+
+    it('action is expanded again after falls outside current depth', () => {
+      cy.get('div.depth-text').first().contains('3');
+      getCollapseExpandElementOfActionLabel('index').should('have.class', 'expanded');
+
+      const decreaseSelector = 'button[data-cy="decrease-collapse-depth"]';
+      cy.get(decreaseSelector).click();
+      cy.get(decreaseSelector).click();
+      cy.get('div.depth-text').first().contains('1');
+
+      getCollapseExpandElementOfActionLabel('index').should('have.class', 'collapsed');
+
+      const increaseSelector = 'button[data-cy="increase-collapse-depth"]';
+      cy.get(increaseSelector).click();
+      cy.get('div.depth-text').first().contains('2');
+      getCollapseExpandElementOfActionLabel('index').should('have.class', 'expanded');
     });
   });
 });

@@ -78,6 +78,8 @@
             :app-map="filteredAppMap"
             :focused-event="focusedEvent"
             :selected-events="selectedEvent"
+            :collapse-depth="seqDiagramCollapseDepth"
+            @notifyDiffMode="handleSequenceDiagramNotifyDiffMode"
           />
         </v-tab>
 
@@ -137,6 +139,26 @@
           />
         </template>
         <template v-slot:controls>
+          <div v-if="isViewingSequence && !sequenceDiagramDiffMode" class="depth-control">
+            <button
+              class="depth-button"
+              @click="decreaseSeqDiagramCollapseDepth"
+              title="Decrease collapse depth"
+              data-cy="decrease-collapse-depth"
+            >
+              -
+            </button>
+            <div class="depth-text">{{ seqDiagramCollapseDepth }}</div>
+            <button
+              class="depth-button"
+              @click="increaseSeqDiagramCollapseDepth"
+              title="Increase collapse depth"
+              data-cy="increase-collapse-depth"
+            >
+              +
+            </button>
+          </div>
+
           <v-popper
             v-if="appMapUploadable && !isGiantAppMap"
             class="hover-text-popper"
@@ -442,6 +464,8 @@ export default {
       showStatsPanel: false,
       shareURL: undefined,
       seqDiagramTimeoutId: undefined,
+      seqDiagramCollapseDepth: 3,
+      sequenceDiagramDiffMode: false,
       isActive: true,
     };
   },
@@ -1272,6 +1296,18 @@ export default {
       const event = this.filteredAppMap.eventsById[eventToFocus.id];
       this.$store.commit(SET_FOCUSED_EVENT, event);
     },
+
+    increaseSeqDiagramCollapseDepth() {
+      if (this.seqDiagramCollapseDepth < 9) this.seqDiagramCollapseDepth++;
+    },
+
+    decreaseSeqDiagramCollapseDepth() {
+      if (this.seqDiagramCollapseDepth > 0) this.seqDiagramCollapseDepth--;
+    },
+
+    handleSequenceDiagramNotifyDiffMode(diffMode) {
+      this.sequenceDiagramDiffMode = diffMode;
+    },
   },
 
   mounted() {
@@ -1567,6 +1603,65 @@ code {
 
       .hover-text-popper {
         display: inline-block;
+      }
+
+      .depth-text {
+        width: 18px;
+        padding: 0px 0px;
+
+        text-align: center;
+        display: inline;
+
+        font: inherit;
+        font-family: $appland-text-font-family;
+        font-size: 0.75rem;
+      }
+
+      .depth-button {
+        width: 16px;
+        padding: 0px 0px;
+        aspect-ratio: 1/1;
+
+        border: none;
+        background-color: $gray2;
+        color: $lightgray2;
+        font: inherit;
+        font-family: $appland-text-font-family;
+        font-size: 1rem;
+        outline: none;
+        appearance: none;
+        cursor: pointer;
+        transition: color 0.3s ease-in;
+
+        &:hover,
+        &:active {
+          color: $gray5;
+          transition-timing-function: ease-out;
+        }
+      }
+
+      .depth-control {
+        border-width: 1px;
+        border-radius: 3px;
+        border-color: $gray2;
+        border-style: solid;
+        padding: 0%;
+        display: inline-flex;
+        align-items: center;
+        background: transparent;
+        color: $lightgray2;
+        font: inherit;
+        font-family: $appland-text-font-family;
+        font-size: 0.75rem;
+        outline: none;
+        appearance: none;
+        transition: color 0.3s ease-in;
+
+        &:hover,
+        &:active {
+          color: $gray5;
+          transition-timing-function: ease-out;
+        }
       }
     }
 
