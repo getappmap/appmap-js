@@ -205,7 +205,9 @@ export default {
         }
 
         this.$emit('notifyDiffMode', firstDiffAction != undefined);
-        this.collapseActionsForCompactLook(result.actions, this.collapseDepth);
+
+        if (!firstDiffAction)
+          this.collapseActionsForCompactLook(result.actions, this.collapseDepth);
       }
 
       if (this.collapsedActionState)

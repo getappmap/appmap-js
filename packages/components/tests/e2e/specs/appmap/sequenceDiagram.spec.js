@@ -242,10 +242,10 @@ context('AppMap sequence diagram', () => {
 
       getCollapseExpandElementOfActionLabel('index').should('have.class', 'expanded');
 
-      const decreaseSelector = 'button[data-cy="decrease-collapse-depth"]';
-      cy.get(decreaseSelector).click();
-      cy.get(decreaseSelector).click();
+      cy.get('button[data-cy="decrease-collapse-depth"]').click({ force: true });
+      cy.get('button[data-cy="decrease-collapse-depth"]').click({ force: true });
       cy.get('div.depth-text').first().contains('1');
+
       getCollapseExpandElementOfActionLabel('index').should('have.class', 'collapsed');
     });
 
@@ -254,10 +254,8 @@ context('AppMap sequence diagram', () => {
       cy.get('span').contains('secure_compare').click();
 
       cy.get('div.depth-text').first().contains('3');
-      const decreaseSelector = 'button[data-cy="decrease-collapse-depth"]';
-      cy.get(decreaseSelector).click();
-      cy.get(decreaseSelector).click();
-      cy.get(decreaseSelector).click();
+      for (let i = 0; i < 3; i++)
+        cy.get('button[data-cy="decrease-collapse-depth"]').click({ force: true });
       cy.get('div.depth-text').first().contains('0');
 
       // parent action should not be collapsed even if the collapse depth is 0
@@ -269,19 +267,17 @@ context('AppMap sequence diagram', () => {
       getCollapseExpandElementOfActionLabel('secure_compare').should('have.class', 'expanded');
     });
 
-    it('action is expanded again after falls outside current depth', () => {
+    it('action is expanded again after current depth increases', () => {
       cy.get('div.depth-text').first().contains('3');
       getCollapseExpandElementOfActionLabel('index').should('have.class', 'expanded');
 
-      const decreaseSelector = 'button[data-cy="decrease-collapse-depth"]';
-      cy.get(decreaseSelector).click();
-      cy.get(decreaseSelector).click();
+      cy.get('button[data-cy="decrease-collapse-depth"]').click({ force: true });
+      cy.get('button[data-cy="decrease-collapse-depth"]').click({ force: true });
       cy.get('div.depth-text').first().contains('1');
 
       getCollapseExpandElementOfActionLabel('index').should('have.class', 'collapsed');
 
-      const increaseSelector = 'button[data-cy="increase-collapse-depth"]';
-      cy.get(increaseSelector).click();
+      cy.get('button[data-cy="increase-collapse-depth"]').click();
       cy.get('div.depth-text').first().contains('2');
       getCollapseExpandElementOfActionLabel('index').should('have.class', 'expanded');
     });

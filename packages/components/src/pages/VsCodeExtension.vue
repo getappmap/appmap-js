@@ -139,18 +139,27 @@
           />
         </template>
         <template v-slot:controls>
-          <div v-if="isViewingSequence && !sequenceDiagramDiffMode" class="depth-control">
+          <div
+            v-if="isViewingSequence && !sequenceDiagramDiffMode"
+            class="depth-control"
+            @mouseenter="depthButtonsVisible = true"
+            @mouseleave="depthButtonsVisible = false"
+          >
             <button
-              class="depth-button"
+              v-show="depthButtonsVisible"
+              class="depth-button depth-button__decrease"
               @click="decreaseSeqDiagramCollapseDepth"
               title="Decrease collapse depth"
               data-cy="decrease-collapse-depth"
             >
               -
             </button>
-            <div class="depth-text">{{ seqDiagramCollapseDepth }}</div>
+            <div class="depth-text" @click="depthButtonsVisible = !depthButtonsVisible">
+              {{ seqDiagramCollapseDepth }}
+            </div>
             <button
-              class="depth-button"
+              v-show="depthButtonsVisible"
+              class="depth-button depth-button__increase"
               @click="increaseSeqDiagramCollapseDepth"
               title="Increase collapse depth"
               data-cy="increase-collapse-depth"
@@ -466,6 +475,7 @@ export default {
       seqDiagramTimeoutId: undefined,
       seqDiagramCollapseDepth: 3,
       sequenceDiagramDiffMode: false,
+      depthButtonsVisible: false,
       isActive: true,
     };
   },
@@ -1606,7 +1616,7 @@ code {
       }
 
       .depth-text {
-        width: 18px;
+        width: 16px;
         padding: 0px 0px;
 
         text-align: center;
@@ -1615,14 +1625,18 @@ code {
         font: inherit;
         font-family: $appland-text-font-family;
         font-size: 0.75rem;
+        cursor: pointer;
       }
 
       .depth-button {
-        width: 16px;
+        position: absolute;
+        width: 18px;
         padding: 0px 0px;
         aspect-ratio: 1/1;
+        z-index: 100;
 
         border: none;
+        border-radius: 3px;
         background-color: $gray2;
         color: $lightgray2;
         font: inherit;
@@ -1638,9 +1652,18 @@ code {
           color: $gray5;
           transition-timing-function: ease-out;
         }
+
+        &__increase {
+          left: 16px;
+        }
+
+        &__decrease {
+          left: -18px;
+        }
       }
 
       .depth-control {
+        position: relative;
         border-width: 1px;
         border-radius: 3px;
         border-color: $gray2;
