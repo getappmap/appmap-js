@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.83.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.83.0...@appland/scanner-v1.83.1) (2023-10-02)
+
+
+### Bug Fixes
+
+* Export primary types ([5b845d6](https://github.com/getappmap/appmap-js/commit/5b845d60bf3a200e98f29011f8084468bb0e5f43))
+
 # [@appland/scanner-v1.83.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.82.1...@appland/scanner-v1.83.0) (2023-09-01)
 
 
