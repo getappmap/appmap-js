@@ -54,6 +54,7 @@ context('AppMap view filter', () => {
       cy.get('.trace .trace-node').should('have.length', 2);
       cy.get('.filters .filters__root .filters__root-icon').click();
 
+      cy.get('.tabs__controls .popper__button').click();
       cy.get('.tabs .tab-btn').first().click();
       cy.get('.nodes .node').should('have.length', 9);
       cy.get('.tabs__controls .popper__button').click();

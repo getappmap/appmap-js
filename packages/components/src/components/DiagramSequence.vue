@@ -71,6 +71,7 @@ import { ActionSpec } from './sequence/ActionSpec';
 import { SET_FOCUSED_EVENT } from '../store/vsCode';
 
 const SCROLL_OPTIONS = { behavior: 'smooth', block: 'center', inline: 'center' };
+export const DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH = 3;
 
 export default {
   name: 'v-diagram-sequence',
@@ -97,7 +98,7 @@ export default {
     },
     collapseDepth: {
       type: Number,
-      default: 3,
+      default: DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH,
     },
   },
 
@@ -203,8 +204,6 @@ export default {
           const event = appMap.eventsById[eventId];
           this.$store.commit(SET_FOCUSED_EVENT, event);
         }
-
-        this.$emit('notifyDiffMode', firstDiffAction != undefined);
 
         if (!firstDiffAction)
           this.collapseActionsForCompactLook(result.actions, this.collapseDepth);
@@ -333,9 +332,16 @@ export default {
 
       rootActionSpecs.forEach((h) => visit(h.action));
     },
+    getMaxActionDepth() {
+      return this.diagramSpec.actions.reduce((maxDepth, action) => {
+        const depth = action.ancestorIndexes.length;
+        if (depth > maxDepth) return depth;
+        return maxDepth;
+      }, 0);
+    },
   },
   watch: {
-    collapseDepth(newVal) {
+    collapseDepth() {
       const diffMode = this.diagramSpec.actions.some((a) => a.action.diffMode);
       if (!diffMode)
         this.collapseActionsForCompactLook(this.diagramSpec.actions, this.collapseDepth);
@@ -359,6 +365,7 @@ export default {
     },
   },
   mounted() {
+    this.$emit('setMaxSeqDiagramCollapseDepth', this.getMaxActionDepth());
     this.focusHighlighted();
   },
   activated() {

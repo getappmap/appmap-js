@@ -1,7 +1,14 @@
 <template>
   <div :class="classes">
     <template v-if="collapseEnabled">
-      <div :class="collapseClasses" @click="collapseOrExpand">{{ collapseExpandIndicator }}</div>
+      <div
+        :class="collapseClasses"
+        @click="collapseOrExpand"
+        @mouseover="startHoverExpandCollapse"
+        @mouseout="stopHoverExpandCollapse"
+      >
+        {{ collapseExpandIndicator }}
+      </div>
     </template>
     <div :class="nameClasses">
       <template v-for="text in name">
@@ -22,6 +29,9 @@
               'px',
           }"
         >
+          <span v-if="hoverExpandCollapse" class="tooltip">
+            {{ collapsed ? 'Expand' : 'Collapse' }}
+          </span>
           <span
             @click="selectEvent"
             :class="text.class"
@@ -94,7 +104,7 @@ export default {
     return {
       collapsedActionState: this.collapsedActions,
       hover: false,
-      hoverTimeout: null,
+      hoverExpandCollapse: false,
     };
   },
 
@@ -203,13 +213,16 @@ export default {
         if (event) this.$store.commit(SELECT_CODE_OBJECT, event);
       }
     },
+    startHoverExpandCollapse() {
+      this.hoverExpandCollapse = true;
+    },
+    stopHoverExpandCollapse() {
+      this.hoverExpandCollapse = false;
+    },
     startHover() {
-      this.hoverTimeout = setTimeout(() => {
-        this.hover = true;
-      }, 300);
+      this.hover = true;
     },
     stopHover() {
-      clearTimeout(this.hoverTimeout);
       this.hover = false;
     },
     truncate(str) {

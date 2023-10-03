@@ -79,7 +79,7 @@
             :focused-event="focusedEvent"
             :selected-events="selectedEvent"
             :collapse-depth="seqDiagramCollapseDepth"
-            @notifyDiffMode="handleSequenceDiagramNotifyDiffMode"
+            @setMaxSeqDiagramCollapseDepth="setMaxSeqDiagramCollapseDepth"
           />
         </v-tab>
 
@@ -139,34 +139,32 @@
           />
         </template>
         <template v-slot:controls>
-          <div
-            v-if="isViewingSequence && !sequenceDiagramDiffMode"
-            class="depth-control"
-            @mouseenter="depthButtonsVisible = true"
-            @mouseleave="depthButtonsVisible = false"
+          <v-popper
+            class="hover-text-popper"
+            text="Collapse actions below this depth"
+            placement="left"
+            text-align="left"
           >
-            <button
-              v-show="depthButtonsVisible"
-              class="depth-button depth-button__decrease"
-              @click="decreaseSeqDiagramCollapseDepth"
-              title="Decrease collapse depth"
-              data-cy="decrease-collapse-depth"
-            >
-              -
-            </button>
-            <div class="depth-text" @click="depthButtonsVisible = !depthButtonsVisible">
-              {{ seqDiagramCollapseDepth }}
+            <div v-if="isViewingSequence && !sequenceDiagramDiffMode" class="depth-control">
+              <button
+                class="depth-button depth-button__decrease"
+                @click="decreaseSeqDiagramCollapseDepth"
+                data-cy="decrease-collapse-depth"
+              >
+                -
+              </button>
+              <div class="depth-text">
+                {{ seqDiagramCollapseDepth }}
+              </div>
+              <button
+                class="depth-button depth-button__increase"
+                @click="increaseSeqDiagramCollapseDepth"
+                data-cy="increase-collapse-depth"
+              >
+                +
+              </button>
             </div>
-            <button
-              v-show="depthButtonsVisible"
-              class="depth-button depth-button__increase"
-              @click="increaseSeqDiagramCollapseDepth"
-              title="Increase collapse depth"
-              data-cy="increase-collapse-depth"
-            >
-              +
-            </button>
-          </div>
+          </v-popper>
 
           <v-popper
             v-if="appMapUploadable && !isGiantAppMap"
@@ -419,6 +417,7 @@ import {
 } from '../store/vsCode';
 import isPrecomputedSequenceDiagram from '@/lib/isPrecomputedSequenceDiagram';
 import { SAVED_FILTERS_STORAGE_ID } from '../components/FilterMenu.vue';
+import { DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH } from '../components/DiagramSequence.vue';
 
 export default {
   name: 'VSCodeExtension',
@@ -473,9 +472,9 @@ export default {
       showStatsPanel: false,
       shareURL: undefined,
       seqDiagramTimeoutId: undefined,
-      seqDiagramCollapseDepth: 3,
+      seqDiagramCollapseDepth: DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH,
+      maxSeqDiagramCollapseDepth: 9,
       sequenceDiagramDiffMode: false,
-      depthButtonsVisible: false,
       isActive: true,
     };
   },
@@ -846,6 +845,7 @@ export default {
   methods: {
     loadData(appMap, sequenceDiagram) {
       if (sequenceDiagram) {
+        this.sequenceDiagramDiffMode = true;
         appMap['sequenceDiagram'] = unparseDiagram(sequenceDiagram);
       }
 
@@ -1097,6 +1097,7 @@ export default {
     },
 
     resetDiagram() {
+      this.seqDiagramCollapseDepth = DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH;
       this.$store.commit(CLEAR_EXPANDED_PACKAGES);
       this.clearSelection();
       this.$store.commit(RESET_FILTERS);
@@ -1308,15 +1309,16 @@ export default {
     },
 
     increaseSeqDiagramCollapseDepth() {
-      if (this.seqDiagramCollapseDepth < 9) this.seqDiagramCollapseDepth++;
+      if (this.seqDiagramCollapseDepth < this.maxSeqDiagramCollapseDepth)
+        this.seqDiagramCollapseDepth++;
     },
 
     decreaseSeqDiagramCollapseDepth() {
       if (this.seqDiagramCollapseDepth > 0) this.seqDiagramCollapseDepth--;
     },
 
-    handleSequenceDiagramNotifyDiffMode(diffMode) {
-      this.sequenceDiagramDiffMode = diffMode;
+    setMaxSeqDiagramCollapseDepth(maxDepth) {
+      this.maxSeqDiagramCollapseDepth = maxDepth;
     },
   },
 
@@ -1622,24 +1624,20 @@ code {
         text-align: center;
         display: inline;
 
-        font: inherit;
+        font-weight: 700;
         font-family: $appland-text-font-family;
-        font-size: 0.75rem;
+        font-size: 0.9rem;
         cursor: pointer;
       }
 
       .depth-button {
-        position: absolute;
         width: 18px;
         padding: 0px 0px;
         aspect-ratio: 1/1;
-        z-index: 100;
 
         border: none;
-        border-radius: 3px;
-        background-color: $gray2;
-        color: $lightgray2;
-        font: inherit;
+        background-color: $lightgray2;
+        font-weight: 700;
         font-family: $appland-text-font-family;
         font-size: 1rem;
         outline: none;
@@ -1647,8 +1645,7 @@ code {
         cursor: pointer;
         transition: color 0.3s ease-in;
 
-        &:hover,
-        &:active {
+        &:hover {
           color: $gray5;
           transition-timing-function: ease-out;
         }
@@ -1664,9 +1661,9 @@ code {
 
       .depth-control {
         position: relative;
-        border-width: 1px;
-        border-radius: 3px;
-        border-color: $gray2;
+        border-width: 2px;
+        border-radius: 7px;
+        border-color: $lightgray2;
         border-style: solid;
         padding: 0%;
         display: inline-flex;
@@ -1680,8 +1677,7 @@ code {
         appearance: none;
         transition: color 0.3s ease-in;
 
-        &:hover,
-        &:active {
+        &:hover {
           color: $gray5;
           transition-timing-function: ease-out;
         }
