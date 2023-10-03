@@ -4,7 +4,6 @@ import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { verbose } from '../../utils';
 import { ChangeReport } from '../compare/ChangeReport';
 import MarkdownReport, { SECTIONS, EXPERIMENTAL_SECTIONS } from './MarkdownReport';
-import { log } from 'console';
 
 export const command = 'compare-report <report-directory>';
 export const describe =
