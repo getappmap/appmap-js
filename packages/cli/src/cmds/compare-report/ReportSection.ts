@@ -8,7 +8,7 @@ import assert from 'assert';
 import { RevisionName } from '../compare/RevisionName';
 import buildPreprocessor from './Preprocessor';
 
-const TemplateDirectory = [
+export const TemplateDirectory = [
   '../../../resources/change-report', // As packaged
   '../../../../resources/change-report', // In development
 ]
@@ -47,7 +47,6 @@ export default class ReportSection {
   generateHeading(changeReport: ChangeReport, options: ReportOptions) {
     return this.headingTemplate(changeReport, {
       helpers: ReportSection.helpers(options),
-      allowProtoPropertiesByDefault: true,
     });
   }
 
