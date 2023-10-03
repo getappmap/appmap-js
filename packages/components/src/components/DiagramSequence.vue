@@ -199,6 +199,7 @@ export default {
         expandedActions.delete(undefined);
 
         for (let index = 0; index < result.actions.length; index++)
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.$set(this.collapsedActionState, index, !shouldExpand(result.actions[index]));
 
         if (firstDiffAction && this.$store?.state) {
