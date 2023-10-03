@@ -7,15 +7,27 @@
       :object-id="object.id.toString()"
     >
       <template v-slot:links>
-        <v-details-button v-if="shouldDisplayViewInSequence" @click.native="viewEventInSequence">
+        <v-details-button
+          v-if="shouldDisplayViewInSequence"
+          @click.native="viewEventInSequence"
+          :class="classes"
+          :disabled="isDisabled"
+        >
           Show in Sequence
         </v-details-button>
-        <v-details-button v-if="shouldDisplayViewInTrace" @click.native="viewEventInTrace">
+        <v-details-button
+          v-if="shouldDisplayViewInTrace"
+          @click.native="viewEventInTrace"
+          :class="classes"
+          :disabled="isDisabled"
+        >
           Show in Trace
         </v-details-button>
         <v-details-button
           v-if="shouldDisplayViewInFlamegraph"
           @click.native="viewEventInFlamegraph"
+          :class="classes"
+          :disabled="isDisabled"
         >
           Show in Flame Graph
         </v-details-button>
@@ -214,6 +226,15 @@ export default {
 
     findings() {
       return (this.object.findings || []).map(toListItem);
+    },
+    isDisabled() {
+      if (!this.$store) return false;
+      return !!this.$store.state.precomputedSequenceDiagram;
+    },
+    classes() {
+      return {
+        'details-btn--disabled': this.isDisabled,
+      };
     },
   },
 

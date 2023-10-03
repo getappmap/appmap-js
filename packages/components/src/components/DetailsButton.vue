@@ -43,7 +43,7 @@ export default {
   align-items: center;
   transition: $transition;
 
-  &:hover {
+  &:hover:not(&--disabled) {
     background-color: $gray4;
     border-color: $gray4;
     color: $gray1;
@@ -53,6 +53,19 @@ export default {
       }
       &--back:before {
         color: $gray1;
+      }
+    }
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+    background-color: transparent;
+    border-color: $gray3;
+    color: $gray3;
+    .icon {
+      &--clear:before,
+      &--back:before {
+        color: $gray3;
       }
     }
   }

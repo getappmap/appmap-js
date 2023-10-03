@@ -1,5 +1,5 @@
 <template>
-  <button :class="classes" @click="clickTab">
+  <button :class="classes" :disabled="isDisabled" @click="clickTab">
     {{ label }}
   </button>
 </template>
@@ -13,7 +13,13 @@ export default {
       return {
         'tab-btn': true,
         'tab-btn--active': this.isActive,
+        'tab-btn--disabled': !this.isActive && this.isDisabled,
       };
+    },
+    isDisabled() {
+      if (!this.$store) return false;
+
+      return !!this.$store.state.precomputedSequenceDiagram;
     },
   },
 
@@ -43,7 +49,6 @@ export default {
   border: 1px solid $gray2;
   border-radius: 0.25rem 0.25rem 0 0;
   background-color: transparent;
-  cursor: pointer;
   color: $lightgray2;
   font-size: 0.75rem;
   font-family: $appland-text-font-family;
@@ -52,26 +57,6 @@ export default {
   transition: $transition;
   white-space: nowrap;
 
-  &:hover,
-  &:active {
-    color: $base03;
-  }
-
-  &:focus {
-    outline: none;
-  }
-
-  &--active {
-    border-bottom-color: $black;
-    cursor: default;
-    color: $base03;
-
-    &:hover,
-    &:active {
-      color: $base03;
-    }
-  }
-
   .tab-badge {
     background-color: $hotpink;
     font-size: 11px;
@@ -79,6 +64,28 @@ export default {
     margin-left: 0.4rem;
     padding: 2px 4px;
     color: white;
+  }
+
+  &--active {
+    border-bottom-color: $black;
+    cursor: default;
+    color: $base03;
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+  }
+
+  &:enabled {
+    cursor: pointer;
+
+    &:hover {
+      color: $base03;
+    }
+
+    &:focus {
+      outline: none;
+    }
   }
 }
 </style>
