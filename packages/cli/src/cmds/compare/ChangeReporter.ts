@@ -26,7 +26,6 @@ import loadFindings from './loadFindings';
 import { loadSequenceDiagram } from './loadSequenceDiagram';
 import { warn } from 'console';
 import DiffLoader from './DiffLoader';
-import { report } from 'process';
 
 export type BaseOrHead = RevisionName.Base | RevisionName.Head;
 
