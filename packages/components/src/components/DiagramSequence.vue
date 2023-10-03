@@ -211,7 +211,7 @@ export default {
           this.$store.commit(SET_FOCUSED_EVENT, event);
         }
 
-        if (!firstDiffAction)
+        if (!firstDiffAction && this.interactive)
           this.collapseActionsForCompactLook(result.actions, this.collapseDepth);
       }
 
