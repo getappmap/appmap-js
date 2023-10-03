@@ -1,0 +1,89 @@
+##  AppMap data profile
+
+#### How is AppMap data created in this project?
+
+| Recorder | Number of AppMaps |
+| --- | --- |
+{{#each appmapCountByRecorderName}}
+| {{@key}} | {{@this}} |
+{{/each}}
+
+
+## Code quality
+
+#### Findings
+
+| Impact Domain | Number of Findings |
+| --- | --- |
+{{#each findingCountByImpactDomain}}
+| {{@key}} | {{@this}} |
+{{/each}}
+
+
+## Server API profile
+
+{{#if (length appmapCountByHTTPServerRequestCount) }}
+
+#### How many AppMaps have HTTP server requests, and how many do they have?
+
+| Number of HTTP server requests | Number of AppMaps |
+| --- | --- |
+| None | {{ coalesce appmapCountByHTTPServerRequestCount.[0] 'No AppMaps' }} |
+| Between 1 and 5 | {{ sum_values_by_key_range appmapCountByHTTPServerRequestCount 1 5 }} |
+| More than 5 | {{ sum_values_by_key_range appmapCountByHTTPServerRequestCount 5 }} |
+
+#### What are the HTTP server routes of the project?
+
+| Route prefix | Number of routes |
+| --- | --- |
+  {{#each routeCountByResource}}
+| {{@key}} | {{@this}} |
+  {{/each}}
+
+#### What HTTP content types are served by the project?
+
+| Response Content Type | Number of Routes |
+| --- | --- |
+  {{#each routeCountByContentType}}
+| {{@key}} | {{@this}} |
+  {{/each}}
+
+{{~else~}}
+This project doesn't have any AppMaps of HTTP server requests.
+{{/if}}
+
+## SQL profile
+
+#### How many AppMaps have SQL queries, and how many do they have?
+
+{{#if (length appmapCountBySQLQueryCount) }}
+| SQL queries | Number of AppMaps |
+| --- | --- |
+| None | {{ coalesce appmapCountBySQLQueryCount.[0] 'No AppMaps' }} |
+| Between 1 and 5 | {{ sum_values_by_key_range appmapCountBySQLQueryCount 1 5 }} |
+| More than 5 | {{ sum_values_by_key_range appmapCountBySQLQueryCount 5 }} |
+
+#### What SQL tables are used by this project?
+
+{{#if (length sqlTables) }}
+| Table name | 
+| --- |
+  {{#each sqlTables}}
+| {{@this}} |
+  {{/each}}
+{{/if}}
+
+{{~else~}}
+This project doesn't have any AppMaps of SQL queries.
+{{/if}}
+
+<!--
+  ## External services profile 
+
+  TODO
+-->
+
+## Code organization
+
+The app contains `{{ length packages }}` code packages.
+

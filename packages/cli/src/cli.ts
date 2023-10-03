@@ -35,6 +35,7 @@ const RestoreCommand = require('./cmds/archive/restore');
 const CompareCommand = require('./cmds/compare/compare');
 const CompareReportCommand = require('./cmds/compare-report/compareReport');
 const InventoryCommand = require('./cmds/inventory/inventory');
+const InventoryReportCommand = require('./cmds/inventory-report/inventoryReport');
 import UploadCommand from './cmds/upload';
 import { default as sqlErrorLog } from './lib/sqlErrorLog';
 
@@ -190,6 +191,7 @@ yargs(process.argv.slice(2))
   .command(CompareCommand)
   .command(CompareReportCommand)
   .command(InventoryCommand)
+  .command(InventoryReportCommand)
   .option('verbose', {
     alias: 'v',
     type: 'boolean',

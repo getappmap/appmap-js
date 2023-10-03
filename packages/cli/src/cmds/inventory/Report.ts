@@ -5,12 +5,12 @@ export type Dependency = {
 
 export type Report = {
   appmapCountByRecorderName: Record<string, number>;
-  appmapCountByHTTPServerRequestCount: Record<string, number>;
-  appmapCountBySQLQueryCount: Record<string, number>;
+  appmapCountByHTTPServerRequestCount: Record<number, number>;
   routeCountByResource: Record<string, number>;
   routeCountByContentType: Record<string, number>;
-  clientRouteCountByResource: Record<string, number>;
+  appmapCountBySQLQueryCount: Record<number, number>;
   sqlTables: string[];
+  clientRouteCountByResource: Record<string, number>;
   labels: string[];
   packages: string[];
   packageDependencies: Dependency[];

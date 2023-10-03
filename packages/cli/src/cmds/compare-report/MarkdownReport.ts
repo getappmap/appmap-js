@@ -10,7 +10,7 @@ export const SECTIONS: Section[] = [
   Section.OpenAPIDiff,
   Section.Findings,
   Section.NewAppMaps,
-  Section.RemovedAppMaps
+  Section.RemovedAppMaps,
 ];
 export const EXPERIMENTAL_SECTIONS: ExperimentalSection[] = [ExperimentalSection.ChangedAppMaps];
 
