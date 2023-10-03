@@ -13,6 +13,7 @@ export default {
       return {
         'tab-btn': true,
         'tab-btn--active': this.isActive,
+        'tab-btn--disabled': !this.isActive && this.isDisabled,
       };
     },
     isDisabled() {
@@ -69,6 +70,10 @@ export default {
     border-bottom-color: $black;
     cursor: default;
     color: $base03;
+  }
+
+  &--disabled {
+    cursor: not-allowed;
   }
 
   &:enabled {
