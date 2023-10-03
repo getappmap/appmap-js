@@ -168,6 +168,8 @@ export default {
       return this.collapsedActionState;
     },
     diagramSpec(): DiagramSpec {
+      if (!this.diagram || this.diagram.actors.length === 0) return;
+
       const result = new DiagramSpec(this.diagram);
       if (this.collapsedActionState.length === 0) {
         // If a Diagram contains any actions in diff mode, expand all ancestors of every diff action,
@@ -336,7 +338,7 @@ export default {
       rootActionSpecs.forEach((h) => visit(h.action));
     },
     getMaxActionDepth() {
-      return this.diagramSpec.actions.reduce((maxDepth, action) => {
+      return this.diagramSpec?.actions.reduce((maxDepth, action) => {
         const depth = action.ancestorIndexes.length;
         if (depth > maxDepth) return depth;
         return maxDepth;
