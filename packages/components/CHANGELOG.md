@@ -1,3 +1,10 @@
+# [@appland/components-v3.6.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.5.0...@appland/components-v3.6.0) (2023-10-03)
+
+
+### Features
+
+* Disable diagram tabs in 'diff' mode ([#1362](https://github.com/getappmap/appmap-js/issues/1362)) ([4607260](https://github.com/getappmap/appmap-js/commit/4607260a75590ca740355b29a6b688a9a0755a3c))
+
 # [@appland/components-v3.5.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.4.0...@appland/components-v3.5.0) (2023-09-25)
 
 
