@@ -61,6 +61,7 @@ import {
   Diagram,
   Specification,
   Action,
+  getActors,
 } from '@appland/sequence-diagram';
 import VLoopAction from '@/components/sequence/LoopAction.vue';
 import VCallAction from '@/components/sequence/CallAction.vue';
@@ -121,11 +122,8 @@ export default {
       let { appMap } = this.$store.state;
       if (!appMap) appMap = this.appMap;
 
-      // TODO: optimize for performance building actor priority separately
       const specification = Specification.build(appMap, { loops: true });
-      const diagram = buildDiagram('<an AppMap file>', appMap, specification);
-
-      return diagram.actors;
+      return getActors(appMap, specification);
     },
     priority() {
       const priority = {};
