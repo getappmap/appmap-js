@@ -4,9 +4,8 @@ import { join } from 'path';
 import { readFile } from 'fs/promises';
 import assert from 'assert';
 import { existsSync } from 'fs';
-import { warn } from 'console';
 
-export const TemplateDirectory = [
+const TemplateDirectory = [
   '../../../resources/inventory-report', // As packaged
   '../../../../resources/inventory-report', // In development
 ]
@@ -14,7 +13,50 @@ export const TemplateDirectory = [
   .find((dirName) => existsSync(dirName));
 assert(TemplateDirectory, "Report template directory 'inventory-report' not found");
 
-class ReportTemplate {
+enum TemplateName {
+  Default = 'default',
+  Welcome = 'welcome',
+}
+
+export default async function generateReport(
+  templateName: TemplateName,
+  report: Report
+): Promise<string> {
+  let reportTemplate: MarkdownReport;
+  switch (templateName) {
+    case TemplateName.Default:
+      reportTemplate = new DefaultReport();
+      break;
+    case TemplateName.Welcome:
+      reportTemplate = new WelcomeReport();
+      break;
+  }
+  return reportTemplate.generateReport(report);
+}
+
+export interface MarkdownReport {
+  generateReport(report: Report): Promise<string>;
+}
+
+export class DefaultReport implements MarkdownReport {
+  async generateReport(reportData: Report): Promise<string> {
+    assert(TemplateDirectory);
+    const templateFile = join(TemplateDirectory, 'default', 'inventory.hbs');
+    const template = await ReportTemplate.build(templateFile);
+    return template.generateMarkdown(reportData);
+  }
+}
+
+export class WelcomeReport implements MarkdownReport {
+  async generateReport(reportData: Report): Promise<string> {
+    assert(TemplateDirectory);
+    const templateFile = join(TemplateDirectory, 'welcome', 'welcome.hbs');
+    const template = await ReportTemplate.build(templateFile);
+    return template.generateMarkdown(reportData);
+  }
+}
+
+export class ReportTemplate {
   constructor(public template: HandlebarsTemplateDelegate) {}
 
   generateMarkdown(report: Report): string {
@@ -89,20 +131,8 @@ class ReportTemplate {
     };
   }
 
-  static async build(templateDir = TemplateDirectory): Promise<ReportTemplate> {
-    assert(templateDir);
-    const headingTemplateFile = join(templateDir, 'inventory.hbs');
-    const template = Handlebars.compile(await readFile(headingTemplateFile, 'utf8'));
-
+  static async build(templateFile: string): Promise<ReportTemplate> {
+    const template = Handlebars.compile(await readFile(templateFile, 'utf8'));
     return new ReportTemplate(template);
-  }
-}
-
-export default class MarkdownReport {
-  constructor() {}
-
-  async generateReport(reportData: Report): Promise<string> {
-    const template = await ReportTemplate.build();
-    return template.generateMarkdown(reportData);
   }
 }

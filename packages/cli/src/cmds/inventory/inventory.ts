@@ -252,7 +252,11 @@ export const handler = async (argv: any) => {
 
   warn(`Building repository report from ${appmaps.length} AppMaps in ${appmapDir}`);
 
-  const report = await buildRepositoryReport(appmapDir, appmaps, resourceTokens);
+  const report = await buildRepositoryReport(
+    appmapDir,
+    appmaps,
+    resourceTokens + 1 /* The url '/' is actually 2 tokens, so add 1 to the user input */
+  );
 
   const reportJSONStr = JSON.stringify(report, null, 2);
   if (outputFile) {
