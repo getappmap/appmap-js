@@ -22,7 +22,7 @@ export default class MavenInstaller extends JavaBuildToolInstaller {
   }
 
   get appmap_dir(): string {
-    return 'target/appmap';
+    return 'tmp/appmap';
   }
 
   get buildFile(): string {

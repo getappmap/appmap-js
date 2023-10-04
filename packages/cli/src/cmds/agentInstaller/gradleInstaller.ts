@@ -23,7 +23,7 @@ export default class GradleInstaller extends JavaBuildToolInstaller {
   }
 
   get appmap_dir(): string {
-    return 'build/appmap';
+    return 'tmp/appmap';
   }
 
   private get buildGradleFileName(): string {
