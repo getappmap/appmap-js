@@ -333,7 +333,8 @@ export default {
     this.focusHighlighted();
   },
   created() {
-    if (this.collapsedActionState.length > 0) return;
+    if (!this.diagram || this.diagram.actors.length === 0 || this.collapsedActionState.length > 0)
+      return;
 
     // If a Diagram contains any actions in diff mode,
     // expand all ancestors of every diff action and collapse all other actions.
