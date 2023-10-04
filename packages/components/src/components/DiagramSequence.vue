@@ -9,7 +9,7 @@
         <template v-for="(actor, index) in visuallyReachableActors">
           <VActor
             :actor="actor"
-            :key="actorKey(actor)"
+            :key="actor.id"
             :row="1"
             :index="index"
             :height="diagramSpec.actions.length"
@@ -194,11 +194,8 @@ export default {
     },
   },
   methods: {
-    actorKey(actor: Actor): string {
-      return ['actor', this.diagramSpec.uniqueId, actor.id].join(':');
-    },
     actionKey(action: ActionSpec): string {
-      return ['action', this.diagramSpec.uniqueId, action.index].join(':');
+      return `action:${action.index}:${action.action.digest}`;
     },
     isSelected(action: ActionSpec): boolean {
       return !!this.selectedEvents?.find(({ id }) => action.eventIds.includes(id));
