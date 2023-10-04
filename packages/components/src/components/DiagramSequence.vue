@@ -24,7 +24,7 @@
               :actionSpec="action"
               :key="actionKey(action)"
               :interactive="interactive"
-              :collapsed-actions="collapsedActions"
+              :collapsed-actions="collapsedActionState"
               :selected="isSelected(action)"
               :focused-event="focusedEvent"
               :appMap="appMap"
@@ -33,7 +33,7 @@
           <template v-if="action.nodeType === 'return'">
             <VReturnAction
               :actionSpec="action"
-              :collapsed-actions="collapsedActions"
+              :collapsed-actions="collapsedActionState"
               :key="actionKey(action)"
               :return-value="returnValue(action)"
             />
@@ -43,7 +43,7 @@
           <template v-if="action.nodeType === 'loop'"
             ><VLoopAction
               :actionSpec="action"
-              :collapsed-actions="collapsedActions"
+              :collapsed-actions="collapsedActionState"
               :key="actionKey(action)"
           /></template>
         </template>
@@ -164,58 +164,12 @@ export default {
       }
       return result;
     },
-    collapsedActions() {
-      return this.collapsedActionState;
-    },
     diagramSpec(): DiagramSpec {
       if (!this.diagram || this.diagram.actors.length === 0) return;
 
       const result = new DiagramSpec(this.diagram);
-      if (this.collapsedActionState.length === 0) {
-        // If a Diagram contains any actions in diff mode, expand all ancestors of every diff action,
-        // and collapse all other actions.
-        const expandedActions = new Set<number>();
-        let firstDiffAction: Action | undefined;
 
-        const eventIds = (action: Action) =>
-          (action.eventIds || []).filter((id) => id !== undefined);
-
-        const markExpandedActions = (action: Action, ancestors = new Array<Action>()) => {
-          if (action.diffMode) {
-            if (!firstDiffAction) firstDiffAction = action;
-            expandedActions.add(...eventIds(action));
-            for (const ancestor of ancestors) expandedActions.add(...eventIds(ancestor));
-          }
-          if (action.children && action.children.length > 0) {
-            ancestors.push(action);
-            action.children.forEach((child) => markExpandedActions(child, ancestors));
-            ancestors.pop();
-          }
-          return ancestors;
-        };
-
-        const shouldExpand = (action: Action) =>
-          expandedActions.size === 0 || eventIds(action).some((id) => expandedActions.has(id));
-
-        this.diagram?.rootActions.forEach((root) => markExpandedActions(root));
-        expandedActions.delete(undefined);
-
-        for (let index = 0; index < result.actions.length; index++)
-          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-          this.$set(this.collapsedActionState, index, !shouldExpand(result.actions[index]));
-
-        if (firstDiffAction && this.$store?.state) {
-          const eventId = eventIds(firstDiffAction).filter(Boolean)[0];
-          const { appMap } = this.$store.state;
-          const event = appMap.eventsById[eventId];
-          this.$store.commit(SET_FOCUSED_EVENT, event);
-        }
-
-        if (!firstDiffAction && this.interactive)
-          this.collapseActionsForCompactLook(result.actions, this.collapseDepth);
-      }
-
-      if (this.collapsedActionState)
+      if (this.collapsedActionState && this.collapsedActionState.length > 0)
         result.determineVisuallyReachableActors(this.collapsedActionState);
 
       return result;
@@ -352,15 +306,14 @@ export default {
         this.collapseActionsForCompactLook(this.diagramSpec.actions, this.collapseDepth);
     },
     focusedEvent(newVal) {
-      // If there are hidden actions containing this event
-      // ensure they are not hidden by expanding collapsed
-      // ancestors
+      // If there are hidden actions containing this event ensure
+      // they are not hidden by expanding collapsed ancestors
       if (newVal) {
         const actionSpecs = this.diagramSpec.actions;
         for (const actionSpec of actionSpecs)
           if (actionSpec.eventIds.includes(newVal.id)) {
             const collapsedAncestorIndexes = actionSpec.ancestorIndexes.filter(
-              (ancestorIndex) => this.collapsedActions[ancestorIndex]
+              (ancestorIndex) => this.collapsedActionState[ancestorIndex]
             );
             collapsedAncestorIndexes.forEach((index) => {
               this.$set(this.collapsedActionState, index, false);
@@ -378,6 +331,49 @@ export default {
   },
   updated() {
     this.focusHighlighted();
+  },
+  created() {
+    if (this.collapsedActionState.length > 0) return;
+
+    // If a Diagram contains any actions in diff mode,
+    // expand all ancestors of every diff action and collapse all other actions.
+    const expandedActions = new Set<number>();
+    let firstDiffAction: Action | undefined;
+
+    const eventIds = (action: Action) => (action.eventIds || []).filter((id) => id !== undefined);
+
+    const markExpandedActions = (action: Action, ancestors = new Array<Action>()) => {
+      if (action.diffMode) {
+        if (!firstDiffAction) firstDiffAction = action;
+        expandedActions.add(...eventIds(action));
+        for (const ancestor of ancestors) expandedActions.add(...eventIds(ancestor));
+      }
+      if (action.children && action.children.length > 0) {
+        ancestors.push(action);
+        action.children.forEach((child) => markExpandedActions(child, ancestors));
+        ancestors.pop();
+      }
+      return ancestors;
+    };
+
+    const shouldExpand = (action: Action) =>
+      expandedActions.size === 0 || eventIds(action).some((id) => expandedActions.has(id));
+
+    this.diagram?.rootActions.forEach((root) => markExpandedActions(root));
+    expandedActions.delete(undefined);
+
+    for (let index = 0; index < this.diagramSpec.actions.length; index++)
+      this.$set(this.collapsedActionState, index, !shouldExpand(this.diagramSpec.actions[index]));
+
+    if (firstDiffAction && this.$store?.state) {
+      const eventId = eventIds(firstDiffAction).filter(Boolean)[0];
+      const { appMap } = this.$store.state;
+      const event = appMap.eventsById[eventId];
+      this.$store.commit(SET_FOCUSED_EVENT, event);
+    }
+
+    if (!firstDiffAction && this.interactive)
+      this.collapseActionsForCompactLook(this.diagramSpec.actions, this.collapseDepth);
   },
 };
 </script>
