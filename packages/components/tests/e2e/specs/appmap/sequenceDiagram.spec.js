@@ -191,4 +191,95 @@ context('AppMap sequence diagram', () => {
       cy.get('.sequence-diagram').children('.lane').should('have.length', 8);
     });
   });
+
+  // Navigate to the first common ancestor after finding the span
+  // representing call label labelText, to find the .collapse-expand
+  // div containing [+].
+  const getCollapseExpandElementOfActionLabel = (labelText, order = 0) =>
+    cy
+      .get('span')
+      .filter(':contains("' + labelText + '")')
+      .eq(order)
+      .parent()
+      .parent()
+      .parent()
+      .find('.collapse-expand');
+
+  context('when an action is hidden', () => {
+    beforeEach(() => {
+      cy.visit(
+        'http://localhost:6006/iframe.html?id=pages-vs-code--extension-with-default-sequence-view&viewMode=story'
+      );
+    });
+
+    it('becomes visible if panned with eyeball', () => {
+      // Ensure it's collapsed
+      let isCollapsed = false;
+      getCollapseExpandElementOfActionLabel('GET /admin/orders').then(
+        ($el) => (isCollapsed = $el.text() === '[+]')
+      );
+      if (!isCollapsed) getCollapseExpandElementOfActionLabel('GET /admin/orders').click();
+
+      getCollapseExpandElementOfActionLabel('GET /admin/orders').should('have.class', 'collapsed');
+      // Click related items
+      cy.get('.details-search__block-item').contains('SELECT COUNT(*) FROM "spree_stores"').click();
+      cy.get('span.list-item__event-quickview').first().click();
+
+      // Parent should have expanded
+      getCollapseExpandElementOfActionLabel('GET /admin/orders').should('have.class', 'expanded');
+    });
+  });
+
+  context('compact look with collapse depth', () => {
+    beforeEach(() => {
+      cy.visit(
+        'http://localhost:6006/iframe.html?id=pages-vs-code--extension-with-default-sequence-view&viewMode=story'
+      );
+    });
+
+    it('action is collapsed when inside current depth', () => {
+      cy.get('div.depth-text').first().contains('3');
+
+      getCollapseExpandElementOfActionLabel('index').should('have.class', 'expanded');
+
+      cy.get('button[data-cy="decrease-collapse-depth"]').click({ force: true });
+      cy.get('button[data-cy="decrease-collapse-depth"]').click({ force: true });
+      cy.get('div.depth-text').first().contains('1');
+
+      getCollapseExpandElementOfActionLabel('index').should('have.class', 'collapsed');
+    });
+
+    it('action is not collapsed if it has a selected descendant', () => {
+      // select
+      cy.get('span').contains('secure_compare').click();
+
+      cy.get('div.depth-text').first().contains('3');
+      for (let i = 0; i < 3; i++)
+        cy.get('button[data-cy="decrease-collapse-depth"]').click({ force: true });
+      cy.get('div.depth-text').first().contains('0');
+
+      // parent action should not be collapsed even if the collapse depth is 0
+      getCollapseExpandElementOfActionLabel('GET /admin/orders').should('have.class', 'expanded');
+    });
+
+    it('action is not collapsed when not inside current depth', () => {
+      cy.get('div.depth-text').first().contains('3');
+      getCollapseExpandElementOfActionLabel('secure_compare').should('have.class', 'expanded');
+    });
+
+    it('action is expanded again after current depth increases', () => {
+      cy.get('div.depth-text').first().contains('3');
+      getCollapseExpandElementOfActionLabel('index').should('have.class', 'expanded');
+
+      cy.get('button[data-cy="decrease-collapse-depth"]').click({ force: true });
+      cy.get('button[data-cy="decrease-collapse-depth"]').click({ force: true });
+      cy.get('div.depth-text').first().contains('1');
+
+      getCollapseExpandElementOfActionLabel('index').should('have.class', 'collapsed');
+
+      cy.get('button[data-cy="increase-collapse-depth"]').click();
+      cy.get('div.depth-text').first().contains('2');
+      getCollapseExpandElementOfActionLabel('index').should('have.class', 'expanded');
+    });
+  });
 });

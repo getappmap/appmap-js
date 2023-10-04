@@ -24,7 +24,7 @@
               :actionSpec="action"
               :key="actionKey(action)"
               :interactive="interactive"
-              :collapsed-actions="collapsedActions"
+              :collapsed-actions="collapsedActionState"
               :selected="isSelected(action)"
               :focused-event="focusedEvent"
               :appMap="appMap"
@@ -33,7 +33,7 @@
           <template v-if="action.nodeType === 'return'">
             <VReturnAction
               :actionSpec="action"
-              :collapsed-actions="collapsedActions"
+              :collapsed-actions="collapsedActionState"
               :key="actionKey(action)"
               :return-value="returnValue(action)"
             />
@@ -43,7 +43,7 @@
           <template v-if="action.nodeType === 'loop'"
             ><VLoopAction
               :actionSpec="action"
-              :collapsed-actions="collapsedActions"
+              :collapsed-actions="collapsedActionState"
               :key="actionKey(action)"
           /></template>
         </template>
@@ -71,6 +71,7 @@ import { ActionSpec } from './sequence/ActionSpec';
 import { SET_FOCUSED_EVENT } from '../store/vsCode';
 
 const SCROLL_OPTIONS = { behavior: 'smooth', block: 'center', inline: 'center' };
+export const DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH = 3;
 
 export default {
   name: 'v-diagram-sequence',
@@ -95,11 +96,15 @@ export default {
     selectedEvents: {
       type: Array,
     },
+    collapseDepth: {
+      type: Number,
+      default: DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH,
+    },
   },
 
   data() {
     return {
-      collapsedActions: [],
+      collapsedActionState: [],
     };
   },
 
@@ -160,13 +165,19 @@ export default {
       return result;
     },
     diagramSpec(): DiagramSpec {
-      return new DiagramSpec(this.diagram);
+      if (!this.diagram || this.diagram.actors.length === 0) return;
+
+      const result = new DiagramSpec(this.diagram);
+
+      if (this.collapsedActionState && this.collapsedActionState.length > 0)
+        result.determineVisuallyReachableActors(this.collapsedActionState);
+
+      return result;
     },
     actors() {
       return this.diagram.actors;
     },
     visuallyReachableActors() {
-      this.diagramSpec.determineVisuallyReachableActors(this.collapsedActions);
       return this.diagramSpec.visuallyReachableActors;
     },
     selectedActor() {
@@ -182,7 +193,6 @@ export default {
       return this.actors.find((actor) => ancestorIds.indexOf(actor.id) !== -1);
     },
   },
-
   methods: {
     actorKey(actor: Actor): string {
       return ['actor', this.diagramSpec.uniqueId, actor.id].join(':');
@@ -235,9 +245,85 @@ export default {
 
       return '';
     },
-  },
+    collapseActionsForCompactLook(actionSpecs: ActionSpec[], collapseDepth: number) {
+      // Collapse any Actions that satisfy the following conditions:
+      //
+      // -Greater than collapseDepth levels deep in the stack
+      // -Does not contain the Selected Action.
 
+      const isSelectedAction = (action: Action) =>
+        this.selectedEvents &&
+        this.selectedEvents.find((event) => action.eventIds?.includes(event.id));
+
+      const actionToActionSpec = new Map(
+        actionSpecs.filter((a) => a.nodeType != 'return').map((a) => [a.action, a])
+      );
+
+      const visit = (action: Action) => {
+        const actionSpec = actionToActionSpec.get(action);
+        let descendantPreventingCollapseFound = false;
+
+        for (const child of action.children) {
+          const childHasDescendantPreventingCollapse = visit(child);
+
+          if (
+            !descendantPreventingCollapseFound &&
+            (childHasDescendantPreventingCollapse || isSelectedAction(child))
+          )
+            descendantPreventingCollapseFound = true;
+        }
+
+        const isCollapseExpandApplicable =
+          action.children?.length > 0 && actionSpec.nodeType === 'call';
+
+        if (isCollapseExpandApplicable) {
+          const shouldCollapse =
+            actionSpec?.ancestorIndexes.length >= collapseDepth &&
+            !descendantPreventingCollapseFound;
+          if (this.collapsedActionState[actionSpec?.index] != shouldCollapse)
+            this.$set(this.collapsedActionState, actionSpec?.index, shouldCollapse);
+        }
+
+        return descendantPreventingCollapseFound;
+      };
+
+      const rootActionSpecs = actionSpecs.filter((a) => a.ancestorIndexes.length === 0);
+
+      rootActionSpecs.forEach((h) => visit(h.action));
+    },
+    getMaxActionDepth() {
+      return this.diagramSpec?.actions.reduce((maxDepth, action) => {
+        const depth = action.ancestorIndexes.length;
+        if (depth > maxDepth) return depth;
+        return maxDepth;
+      }, 0);
+    },
+  },
+  watch: {
+    collapseDepth() {
+      const diffMode = this.diagramSpec.actions.some((a) => a.action.diffMode);
+      if (!diffMode)
+        this.collapseActionsForCompactLook(this.diagramSpec.actions, this.collapseDepth);
+    },
+    focusedEvent(newVal) {
+      // If there are hidden actions containing this event ensure
+      // they are not hidden by expanding collapsed ancestors
+      if (newVal) {
+        const actionSpecs = this.diagramSpec.actions;
+        for (const actionSpec of actionSpecs)
+          if (actionSpec.eventIds.includes(newVal.id)) {
+            const collapsedAncestorIndexes = actionSpec.ancestorIndexes.filter(
+              (ancestorIndex) => this.collapsedActionState[ancestorIndex]
+            );
+            collapsedAncestorIndexes.forEach((index) => {
+              this.$set(this.collapsedActionState, index, false);
+            });
+          }
+      }
+    },
+  },
   mounted() {
+    this.$emit('setMaxSeqDiagramCollapseDepth', this.getMaxActionDepth());
     this.focusHighlighted();
   },
   activated() {
@@ -246,10 +332,12 @@ export default {
   updated() {
     this.focusHighlighted();
   },
-
   created() {
-    // If a Diagram contains any actions in diff mode, expand all ancestors of every diff action,
-    // and collapse all other actions.
+    if (!this.diagram || this.diagram.actors.length === 0 || this.collapsedActionState.length > 0)
+      return;
+
+    // If a Diagram contains any actions in diff mode,
+    // expand all ancestors of every diff action and collapse all other actions.
     const expandedActions = new Set<number>();
     let firstDiffAction: Action | undefined;
 
@@ -275,6 +363,8 @@ export default {
     this.diagram?.rootActions.forEach((root) => markExpandedActions(root));
     expandedActions.delete(undefined);
 
+    this.collapsedActionState = this.diagramSpec.actions.map((action) => !shouldExpand(action));
+
     if (firstDiffAction && this.$store?.state) {
       const eventId = eventIds(firstDiffAction).filter(Boolean)[0];
       const { appMap } = this.$store.state;
@@ -282,9 +372,8 @@ export default {
       this.$store.commit(SET_FOCUSED_EVENT, event);
     }
 
-    this.diagramSpec.actions.forEach((a, i) =>
-      this.$set(this.collapsedActions, i, !shouldExpand(a))
-    );
+    if (!firstDiffAction && this.interactive)
+      this.collapseActionsForCompactLook(this.diagramSpec.actions, this.collapseDepth);
   },
 };
 </script>

@@ -78,6 +78,8 @@
             :app-map="filteredAppMap"
             :focused-event="focusedEvent"
             :selected-events="selectedEvent"
+            :collapse-depth="seqDiagramCollapseDepth"
+            @setMaxSeqDiagramCollapseDepth="setMaxSeqDiagramCollapseDepth"
           />
         </v-tab>
 
@@ -137,6 +139,33 @@
           />
         </template>
         <template v-slot:controls>
+          <v-popper
+            class="hover-text-popper"
+            text="Collapse actions below this depth"
+            placement="left"
+            text-align="left"
+          >
+            <div v-if="isViewingSequence && !sequenceDiagramDiffMode" class="depth-control">
+              <button
+                class="depth-button depth-button__decrease"
+                @click="decreaseSeqDiagramCollapseDepth"
+                data-cy="decrease-collapse-depth"
+              >
+                -
+              </button>
+              <div class="depth-text">
+                {{ seqDiagramCollapseDepth }}
+              </div>
+              <button
+                class="depth-button depth-button__increase"
+                @click="increaseSeqDiagramCollapseDepth"
+                data-cy="increase-collapse-depth"
+              >
+                +
+              </button>
+            </div>
+          </v-popper>
+
           <v-popper
             v-if="appMapUploadable && !isGiantAppMap"
             class="hover-text-popper"
@@ -388,6 +417,7 @@ import {
 } from '../store/vsCode';
 import isPrecomputedSequenceDiagram from '@/lib/isPrecomputedSequenceDiagram';
 import { SAVED_FILTERS_STORAGE_ID } from '../components/FilterMenu.vue';
+import { DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH } from '../components/DiagramSequence.vue';
 
 export default {
   name: 'VSCodeExtension',
@@ -442,6 +472,9 @@ export default {
       showStatsPanel: false,
       shareURL: undefined,
       seqDiagramTimeoutId: undefined,
+      seqDiagramCollapseDepth: DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH,
+      maxSeqDiagramCollapseDepth: 9,
+      sequenceDiagramDiffMode: false,
       isActive: true,
     };
   },
@@ -812,6 +845,7 @@ export default {
   methods: {
     loadData(appMap, sequenceDiagram) {
       if (sequenceDiagram) {
+        this.sequenceDiagramDiffMode = true;
         appMap['sequenceDiagram'] = unparseDiagram(sequenceDiagram);
       }
 
@@ -1063,6 +1097,7 @@ export default {
     },
 
     resetDiagram() {
+      this.seqDiagramCollapseDepth = DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH;
       this.$store.commit(CLEAR_EXPANDED_PACKAGES);
       this.clearSelection();
       this.$store.commit(RESET_FILTERS);
@@ -1271,6 +1306,19 @@ export default {
 
       const event = this.filteredAppMap.eventsById[eventToFocus.id];
       this.$store.commit(SET_FOCUSED_EVENT, event);
+    },
+
+    increaseSeqDiagramCollapseDepth() {
+      if (this.seqDiagramCollapseDepth < this.maxSeqDiagramCollapseDepth)
+        this.seqDiagramCollapseDepth++;
+    },
+
+    decreaseSeqDiagramCollapseDepth() {
+      if (this.seqDiagramCollapseDepth > 0) this.seqDiagramCollapseDepth--;
+    },
+
+    setMaxSeqDiagramCollapseDepth(maxDepth) {
+      this.maxSeqDiagramCollapseDepth = maxDepth;
     },
   },
 
@@ -1567,6 +1615,72 @@ code {
 
       .hover-text-popper {
         display: inline-block;
+      }
+
+      .depth-text {
+        width: 16px;
+        padding: 0px 0px;
+
+        text-align: center;
+        display: inline;
+
+        font-weight: 700;
+        font-family: $appland-text-font-family;
+        font-size: 0.9rem;
+        cursor: pointer;
+      }
+
+      .depth-button {
+        width: 18px;
+        padding: 0px 0px;
+        aspect-ratio: 1/1;
+
+        border: none;
+        background-color: $lightgray2;
+        font-weight: 700;
+        font-family: $appland-text-font-family;
+        font-size: 1rem;
+        outline: none;
+        appearance: none;
+        cursor: pointer;
+        transition: color 0.3s ease-in;
+
+        &:hover {
+          color: $gray5;
+          transition-timing-function: ease-out;
+        }
+
+        &__increase {
+          left: 16px;
+        }
+
+        &__decrease {
+          left: -18px;
+        }
+      }
+
+      .depth-control {
+        position: relative;
+        border-width: 2px;
+        border-radius: 7px;
+        border-color: $lightgray2;
+        border-style: solid;
+        padding: 0%;
+        display: inline-flex;
+        align-items: center;
+        background: transparent;
+        color: $lightgray2;
+        font: inherit;
+        font-family: $appland-text-font-family;
+        font-size: 0.75rem;
+        outline: none;
+        appearance: none;
+        transition: color 0.3s ease-in;
+
+        &:hover {
+          color: $gray5;
+          transition-timing-function: ease-out;
+        }
       }
     }
 

@@ -121,7 +121,7 @@ export default {
     z-index: 1;
     display: flex;
     gap: 0.5rem;
-    align-items: baseline;
+    align-items: center;
   }
 
   &__content {
@@ -131,7 +131,7 @@ export default {
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
   .tabs {
     ::-webkit-scrollbar {
       display: none;
@@ -147,7 +147,7 @@ export default {
       overflow-y: hidden;
     }
     &__group {
-      align-self: flex-start;
+      align-self: center;
       justify-content: center;
     }
     &__notification {

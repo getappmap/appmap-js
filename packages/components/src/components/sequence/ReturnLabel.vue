@@ -14,18 +14,14 @@ export default {
   data() {
     return {
       hover: false,
-      hoverTimeout: null,
     };
   },
 
   methods: {
     startHover() {
-      this.hoverTimeout = setTimeout(() => {
-        this.hover = true;
-      }, 300);
+      this.hover = true;
     },
     stopHover() {
-      clearTimeout(this.hoverTimeout);
       this.hover = false;
     },
   },
