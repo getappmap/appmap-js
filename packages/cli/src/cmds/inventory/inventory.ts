@@ -8,12 +8,12 @@ import { OpenAPIV3 } from 'openapi-types';
 
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { findFiles, verbose } from '../../utils';
-import loadAppMapConfig from '../../lib/loadAppMapConfig';
 import { Dependency, Report } from './Report';
 import { ScanResults } from '@appland/scanner';
 import { warn } from 'console';
 import DependencyMap from './DependencyMap';
 import assert from 'assert';
+import { locateAppMapDir } from '../../lib/locateAppMapDir';
 
 async function buildRepositoryReport(
   appmapDir: string,
@@ -210,6 +210,10 @@ export const builder = (args: yargs.Argv) => {
     alias: 'd',
   });
 
+  args.option('appmap-dir', {
+    describe: 'directory to recursively inspect for AppMaps',
+  });
+
   args.option('resource-tokens', {
     describe: `number of path tokens to include in the 'by resource' output`,
     type: 'number',
@@ -232,11 +236,7 @@ export const handler = async (argv: any) => {
     warn(`No output file specified. Report JSON will be written to stdout.`);
   }
 
-  const appmapConfig = await loadAppMapConfig();
-  if (!appmapConfig) throw new Error(`Unable to load appmap.yml config file`);
-
-  let { appmap_dir: appmapDir } = appmapConfig;
-  appmapDir ||= 'tmp/appmap';
+  const appmapDir = await locateAppMapDir(argv.appmapDir);
 
   if (!existsSync(join(appmapDir, 'appmap_archive.json'))) {
     warn(`No appmap_archive.json found in ${appmapDir}`);
