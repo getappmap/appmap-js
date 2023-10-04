@@ -1,3 +1,10 @@
+# [@appland/components-v3.7.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.6.0...@appland/components-v3.7.0) (2023-10-04)
+
+
+### Features
+
+* Sequence diagram auto collapses actions on startup ([#1401](https://github.com/getappmap/appmap-js/issues/1401)) ([5452fb1](https://github.com/getappmap/appmap-js/commit/5452fb19a2a1f99cfc16c638e5c77f396fa1a73f))
+
 # [@appland/components-v3.6.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.5.0...@appland/components-v3.6.0) (2023-10-03)
 
 
