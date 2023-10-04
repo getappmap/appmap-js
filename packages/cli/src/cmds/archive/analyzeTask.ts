@@ -26,6 +26,7 @@ export async function analyzeTask(
     handler.maxFileSizeInBytes = undefined; // This has already been checked
     const indexResult = await handler.fingerprint(task.appmapFile);
     if (indexResult) result = indexResult;
+    else result = { numEvents: 0 };
   } else if (isScanTask(task)) {
     const scanResults = await scan(task.appmapFile, 'appmap-scanner.yml');
     await writeIndexFile(JSON.stringify(scanResults, null, 2), 'appmap-findings.json');
