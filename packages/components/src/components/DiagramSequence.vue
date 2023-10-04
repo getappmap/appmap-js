@@ -362,8 +362,7 @@ export default {
     this.diagram?.rootActions.forEach((root) => markExpandedActions(root));
     expandedActions.delete(undefined);
 
-    for (let index = 0; index < this.diagramSpec.actions.length; index++)
-      this.$set(this.collapsedActionState, index, !shouldExpand(this.diagramSpec.actions[index]));
+    this.collapsedActionState = this.diagramSpec.actions.map((action) => !shouldExpand(action));
 
     if (firstDiffAction && this.$store?.state) {
       const eventId = eventIds(firstDiffAction).filter(Boolean)[0];
