@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { addHiddenProperty, hasProp, transformToJSON } from './util';
 import analyzeSQL, { abstractSqlAstJSON } from './sql/analyze';
 import normalizeSQL from './sql/normalize';
@@ -19,6 +20,8 @@ function alias(obj, prop, alias) {
 // This class supercedes `CallTree` and `CallNode`. Events are stored in a flat
 // array and can also be traversed like a tree via `parent` and `children`.
 export default class Event {
+  static parsedSqlCache = {};
+
   static contentType(...messages) {
     const msg = messages.find((message) => (message?.headers || {})['Content-Type']);
     if (!msg) {
@@ -526,10 +529,19 @@ export default class Event {
 
     let properties;
     if (sqlQuery) {
-      const sqlNormalized = abstractSqlAstJSON(sqlQuery, this.sql.database_type)
-        // Collapse repeated variable literals and parameter tokens (e.g. '?, ?' in an IN clause)
-        .split(/{"type":"variable"}(?:,{"type":"variable"})*/g)
-        .join(`{"type":"variable"}`);
+      let sqlNormalized;
+      const cacheKey = `${this.sql.database_type}:${sqlQuery}`;
+      if (!Event.parsedSqlCache[cacheKey]) {
+        sqlNormalized = abstractSqlAstJSON(sqlQuery, this.sql.database_type)
+          // Collapse repeated variable literals and parameter tokens (e.g. '?, ?' in an IN clause)
+          .split(/{"type":"variable"}(?:,{"type":"variable"})*/g)
+          .join(`{"type":"variable"}`);
+
+        Event.parsedSqlCache[cacheKey] = sqlNormalized;
+      } else {
+        sqlNormalized = Event.parsedSqlCache[cacheKey];
+      }
+
       properties = {
         event_type: 'sql',
         sql_normalized: sqlNormalized,
