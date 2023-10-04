@@ -103,14 +103,14 @@ packages:
 packages:
   - path: com.fake.Fake
 language: java
-appmap_dir: target/appmap
+appmap_dir: tmp/appmap
 `;
 
     const expectedGradleConfig = `name: fake-app
 packages:
   - path: com.fake.Fake
 language: java
-appmap_dir: build/appmap
+appmap_dir: tmp/appmap
 `;
 
     const initAgent = (cmdStruct: CommandStruct) => {
