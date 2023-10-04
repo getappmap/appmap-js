@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.99.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.99.0...@appland/appmap-v3.99.1) (2023-10-04)
+
+
+### Bug Fixes
+
+* Don't report undefined when the index is already up-to-date ([6b8d38e](https://github.com/getappmap/appmap-js/commit/6b8d38ed6cb16dabb57a703ca188d1f670c785b2))
+
 # [@appland/appmap-v3.99.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.98.0...@appland/appmap-v3.99.0) (2023-09-29)
 
 
