@@ -41,15 +41,13 @@ export default async function serveAndOpen(
 
       if (!contentType) contentType = mimeTypeOfName(fileName);
 
-      res.writeHead(200, 'OK', { 'Content-Type': contentType });
-
       const fileStream = createReadStream(path);
       fileStream.pipe(res);
       fileStream.on('open', function () {
         if (verbose()) {
           console.log(`${path}: 200`);
         }
-        res.writeHead(200);
+        res.writeHead(200, 'OK', { 'Content-Type': contentType });
       });
       fileStream.on('error', function (e) {
         if (verbose()) {
