@@ -196,12 +196,12 @@ export enum ValidationResult {
   AppMap = 2,
 }
 
-import buildDiagram from './buildDiagram';
+import buildDiagram, { getActors } from './buildDiagram';
 import buildDiffDiagram from './buildDiffDiagram';
 import diff from './diff';
 import unparseDiagram from './unparseDiagram';
 import validateDiagram from './validateDiagram';
-export { buildDiagram, buildDiffDiagram, diff, unparseDiagram, validateDiagram };
+export { buildDiagram, buildDiffDiagram, diff, unparseDiagram, validateDiagram, getActors };
 
 export enum FormatType {
   JSON = 'json',
