@@ -35,6 +35,7 @@ const ArchiveCommand = require('./cmds/archive/archive');
 const RestoreCommand = require('./cmds/archive/restore');
 const CompareCommand = require('./cmds/compare/compare');
 const CompareReportCommand = require('./cmds/compare-report/compareReport');
+const InstallGitHubAction = require('./cmds/install-github-action/install-github-action');
 import UploadCommand from './cmds/upload';
 import { default as sqlErrorLog } from './lib/sqlErrorLog';
 
@@ -233,6 +234,7 @@ yargs(process.argv.slice(2))
   .command(RestoreCommand)
   .command(CompareCommand)
   .command(CompareReportCommand)
+  .command(InstallGitHubAction)
   .strict()
   .demandCommand()
   .help().argv;
