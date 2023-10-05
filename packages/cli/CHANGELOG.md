@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.99.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.99.1...@appland/appmap-v3.99.2) (2023-10-05)
+
+
+### Bug Fixes
+
+* set appmap_dir for maven, gradle project ([14fcc71](https://github.com/getappmap/appmap-js/commit/14fcc716d11483c032dd46d03521ee78c35a89f7))
+
 # [@appland/appmap-v3.99.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.99.0...@appland/appmap-v3.99.1) (2023-10-04)
 
 
