@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.99.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.99.2...@appland/appmap-v3.99.3) (2023-10-05)
+
+
+### Bug Fixes
+
+* Commands involving HTTP serving work again ([cb363be](https://github.com/getappmap/appmap-js/commit/cb363be6e9e92954ab41efa5c56a1b9885a47455))
+
 # [@appland/appmap-v3.99.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.99.1...@appland/appmap-v3.99.2) (2023-10-05)
 
 
