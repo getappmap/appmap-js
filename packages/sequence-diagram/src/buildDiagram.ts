@@ -20,24 +20,20 @@ import {
 
 const MAX_WINDOW_SIZE = 5;
 
-export default function buildDiagram(
-  _appmapFile: string,
-  appmap: AppMap,
-  specification: Specification
-): Diagram {
-  const events = selectEvents(appmap, specification);
+class ActorManager {
+  private _actorsByCodeObjectId = new Map<string, Actor>();
+  private _actors: Actor[] = [];
 
-  const actors: Actor[] = [];
-  const actorsByCodeObjectId = new Map<string, Actor>();
+  constructor(private specification: Specification) {}
 
-  const findOrCreateActor = (event: Event): Actor | undefined => {
-    const actorCodeObject = specification.isIncludedCodeObject(event.codeObject);
+  findOrCreateActor(event: Event): Actor | undefined {
+    const actorCodeObject = this.specification.isIncludedCodeObject(event.codeObject);
     if (!actorCodeObject) throw Error('actor code object not found');
-    const order = specification.priorityOf(actorCodeObject);
+    const order = this.specification.priorityOf(actorCodeObject);
 
     const actorKey = actorCodeObject.fqid;
 
-    let actor = actorsByCodeObjectId.get(actorKey);
+    let actor = this._actorsByCodeObjectId.get(actorKey);
     if (actor) return actor;
 
     actor = {
@@ -45,10 +41,23 @@ export default function buildDiagram(
       name: actorCodeObject.name,
       order,
     } as Actor;
-    actors.push(actor);
-    actorsByCodeObjectId.set(actorKey, actor);
+    this._actors.push(actor);
+    this._actorsByCodeObjectId.set(actorKey, actor);
     return actor;
-  };
+  }
+
+  getSortedActors(): Actor[] {
+    return this._actors.sort((a, b) => a.order - b.order);
+  }
+}
+
+export default function buildDiagram(
+  _appmapFile: string,
+  appmap: AppMap,
+  specification: Specification
+): Diagram {
+  const events = selectEvents(appmap, specification);
+  const actorManager = new ActorManager(specification);
 
   function buildRequest(caller?: Event | undefined, callee?: Event): Action | undefined {
     if (callee?.httpServerRequest && callee?.httpServerResponse) {
@@ -56,7 +65,7 @@ export default function buildDiagram(
       const response = callee.httpServerResponse as any;
       return {
         nodeType: NodeType.ServerRPC,
-        callee: findOrCreateActor(callee),
+        callee: actorManager.findOrCreateActor(callee),
         route: callee.route,
         status: response.status || response.status_code,
         digest: callee.hash,
@@ -70,8 +79,8 @@ export default function buildDiagram(
       const response = callee.httpClientResponse as any;
       return {
         nodeType: NodeType.ClientRPC,
-        caller: caller ? findOrCreateActor(caller) : undefined,
-        callee: findOrCreateActor(callee),
+        caller: caller ? actorManager.findOrCreateActor(caller) : undefined,
+        callee: actorManager.findOrCreateActor(callee),
         route: callee.route,
         status: response.status || response.status_code,
         digest: callee.hash,
@@ -84,8 +93,8 @@ export default function buildDiagram(
       const truncatedQuery = callee.sqlQuery.endsWith('...');
       return {
         nodeType: NodeType.Query,
-        caller: caller ? findOrCreateActor(caller) : undefined,
-        callee: findOrCreateActor(callee),
+        caller: caller ? actorManager.findOrCreateActor(caller) : undefined,
+        callee: actorManager.findOrCreateActor(callee),
         query: callee.sqlQuery,
         digest: truncatedQuery ? 'truncatedQuery' : callee.hash,
         subtreeDigest: 'undefined',
@@ -96,8 +105,8 @@ export default function buildDiagram(
     } else if (callee) {
       return {
         nodeType: NodeType.Function,
-        caller: caller ? findOrCreateActor(caller) : undefined,
-        callee: findOrCreateActor(callee),
+        caller: caller ? actorManager.findOrCreateActor(caller) : undefined,
+        callee: actorManager.findOrCreateActor(callee),
         name: callee.codeObject.name,
         static: callee.codeObject.static,
         digest: callee.hash,
@@ -216,7 +225,14 @@ export default function buildDiagram(
   rootActions.forEach((root) => setParent(root));
 
   return {
-    actors: actors.sort((a, b) => a.order - b.order),
+    actors: actorManager.getSortedActors(),
     rootActions,
   };
+}
+
+export function getActors(appmap: AppMap, specification: Specification): Actor[] {
+  const actorManager = new ActorManager(specification);
+  const events = selectEvents(appmap, specification);
+  events.forEach((event) => actorManager.findOrCreateActor(event));
+  return actorManager.getSortedActors();
 }

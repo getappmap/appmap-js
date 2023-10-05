@@ -2,6 +2,7 @@ import assert from 'assert';
 import { isFunction, isLoop } from '../../src/types';
 import {
   findActionById,
+  getActorsFromMap,
   LIST_USERS_APPMAP,
   loadDiagram,
   SHOW_USER_APPMAP,
@@ -37,6 +38,11 @@ describe('Sequence diagram', () => {
           { id: 'package:lib/database', order: 10000 },
         ]
       );
+    });
+    it('is the same when using getActors', () => {
+      const diagram = loadDiagram(SHOW_USER_APPMAP);
+      const actors = getActorsFromMap(SHOW_USER_APPMAP);
+      assert.deepStrictEqual(actors, diagram.actors);
     });
   });
 

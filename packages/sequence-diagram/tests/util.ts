@@ -2,7 +2,7 @@ import { AppMap, buildAppMap } from '@appland/models';
 import assert from 'assert';
 import { readFileSync } from 'fs';
 import path, { join } from 'path';
-import buildDiagram from '../src/buildDiagram';
+import buildDiagram, { getActors } from '../src/buildDiagram';
 import Specification from '../src/specification';
 import { Action, Actor, Diagram, isFunction } from '../src/types';
 import { SequenceDiagramOptions } from '../src/specification';
@@ -91,6 +91,11 @@ export function loadDiagram(
 ): Diagram {
   const specification = Specification.build(appmap, options);
   return buildDiagram(SHOW_USER_APPMAP_FILE, appmap, specification);
+}
+
+export function getActorsFromMap(appmap: AppMap): Actor[] {
+  const specification = Specification.build(appmap, { loops: true });
+  return getActors(appmap, specification);
 }
 
 export function findActor(diagram: Diagram, id: string): Actor {
