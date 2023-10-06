@@ -1,3 +1,17 @@
+# [@appland/components-v3.8.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.7.0...@appland/components-v3.8.0) (2023-10-06)
+
+
+### Bug Fixes
+
+* Ensure that max collapse depth is updated ([e778f2a](https://github.com/getappmap/appmap-js/commit/e778f2a53f49379eee26f37dbaa3df6ec2232557))
+* Get actors without building a complete seq diagram ([81dbcac](https://github.com/getappmap/appmap-js/commit/81dbcac0166c0ba859c4e5427bc7aae960c45990))
+* Prevent errors on initial load in vs code ([2273b82](https://github.com/getappmap/appmap-js/commit/2273b824fea5f67663dac457b60046623034fc8b))
+
+
+### Features
+
+* Simplify action/actor key computation ([2041f59](https://github.com/getappmap/appmap-js/commit/2041f5906640aacf8e74730daca9ccf22392ca2f))
+
 # [@appland/components-v3.7.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.6.0...@appland/components-v3.7.0) (2023-10-04)
 
 
