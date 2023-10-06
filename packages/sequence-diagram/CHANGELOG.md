@@ -1,3 +1,10 @@
+# [@appland/sequence-diagram-v1.8.1](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.8.0...@appland/sequence-diagram-v1.8.1) (2023-10-06)
+
+
+### Bug Fixes
+
+* Avoid calling buildDiagram on seq diagram load ([690e4f6](https://github.com/getappmap/appmap-js/commit/690e4f65723ca70df236841d9d5090689e647741))
+
 # [@appland/sequence-diagram-v1.8.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.7.0...@appland/sequence-diagram-v1.8.0) (2023-09-07)
 
 
