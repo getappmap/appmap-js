@@ -15,7 +15,6 @@ YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install
 
 yarn run appmap index --appmap-dir ruby
 yarn run appmap depends --appmap-dir ruby
-yarn run appmap inventory --appmap-dir ruby > /dev/null
 yarn run appmap openapi --appmap-dir ruby -o /dev/null
 
 cd "$PKGDIR"

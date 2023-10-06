@@ -2,13 +2,17 @@ import { executeCommand } from '../../lib/executeCommand';
 import { prominentStyle } from './ui';
 import { ValidationError } from './ValidationError';
 
+export async function detectRevision(): Promise<string> {
+  return (await executeCommand(`git rev-parse HEAD`)).trim().split('\n')[0];
+}
+
 export default async function detectRevisions(
   baseRevision: string,
   headArg: string
 ): Promise<{ baseRevision: string; headRevision: string }> {
   let headRevision = headArg;
   if (!headRevision) {
-    let currentBranch = (await executeCommand(`git rev-parse HEAD`)).trim().split('\n')[0];
+    let currentBranch = await detectRevision();
 
     headRevision = currentBranch;
   }

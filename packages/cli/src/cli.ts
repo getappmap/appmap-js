@@ -25,7 +25,6 @@ import PruneCommand from './cmds/prune/prune';
 import RecordCommand from './cmds/record/record';
 import { handleWorkingDirectory } from './lib/handleWorkingDirectory';
 import { locateAppMapDir } from './lib/locateAppMapDir';
-const InventoryCommand = require('./inventoryCommand');
 const OpenCommand = require('./cmds/open/open');
 const InspectCommand = require('./cmds/inspect/inspect');
 const SequenceDiagramCommand = require('./cmds/sequenceDiagram');
@@ -35,6 +34,8 @@ const ArchiveCommand = require('./cmds/archive/archive');
 const RestoreCommand = require('./cmds/archive/restore');
 const CompareCommand = require('./cmds/compare/compare');
 const CompareReportCommand = require('./cmds/compare-report/compareReport');
+const InventoryCommand = require('./cmds/inventory/inventory');
+const InventoryReportCommand = require('./cmds/inventory-report/inventoryReport');
 import UploadCommand from './cmds/upload';
 import { default as sqlErrorLog } from './lib/sqlErrorLog';
 
@@ -174,31 +175,23 @@ yargs(process.argv.slice(2))
       }
     }
   )
-  .command(
-    'inventory',
-    'Generate canonical lists of the application code object inventory',
-    (args) => {
-      args.option('directory', {
-        describe: 'program working directory',
-        type: 'string',
-        alias: 'd',
-      });
-      args.option('appmap-dir', {
-        describe: 'directory to recursively inspect for AppMaps',
-      });
-      return args.strict();
-    },
-    async (argv) => {
-      verbose(argv.verbose);
-      handleWorkingDirectory(argv.directory);
-      const appmapDir = await locateAppMapDir(argv.appmapDir);
-
-      await new FingerprintDirectoryCommand(appmapDir).execute();
-
-      const inventory = await new InventoryCommand(appmapDir).execute();
-      console.log(yaml.dump(inventory));
-    }
-  )
+  .command(OpenAPICommand)
+  .command(InstallCommand)
+  .command(OpenCommand)
+  .command(RecordCommand)
+  .command(StatusCommand)
+  .command(StatsCommand)
+  .command(InspectCommand)
+  .command(SequenceDiagramCommand)
+  .command(SequenceDiagramDiffCommand)
+  .command(PruneCommand)
+  .command(UploadCommand)
+  .command(ArchiveCommand)
+  .command(RestoreCommand)
+  .command(CompareCommand)
+  .command(CompareReportCommand)
+  .command(InventoryCommand)
+  .command(InventoryReportCommand)
   .option('verbose', {
     alias: 'v',
     type: 'boolean',
@@ -218,21 +211,6 @@ yargs(process.argv.slice(2))
     }
     process.exit(1);
   })
-  .command(OpenAPICommand)
-  .command(InstallCommand)
-  .command(OpenCommand)
-  .command(RecordCommand)
-  .command(StatusCommand)
-  .command(StatsCommand)
-  .command(InspectCommand)
-  .command(SequenceDiagramCommand)
-  .command(SequenceDiagramDiffCommand)
-  .command(PruneCommand)
-  .command(UploadCommand)
-  .command(ArchiveCommand)
-  .command(RestoreCommand)
-  .command(CompareCommand)
-  .command(CompareReportCommand)
   .strict()
   .demandCommand()
   .help().argv;

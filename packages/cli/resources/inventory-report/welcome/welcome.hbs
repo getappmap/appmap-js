@@ -1,0 +1,115 @@
+##  Welcome to AppMap!
+
+This is a report of the AppMap data in your project. Let's start with a look at how the
+AppMap data is created in this project. In CI, AppMaps are generally created by recording
+test cases. Here's how the AppMaps in this project were created:
+
+| Recorder | Number of AppMaps |
+| --- | --- |
+{{#each appmapCountByRecorderName}}
+| {{@key}} | {{@this}} |
+{{/each}}
+
+Continue reading for information about:
+
+- [Runtime analysis](#runtime-analysis)
+- [REST API analysis](#rest-api-analysis)
+- [SQL profile](#sql-profile)
+
+#### Runtime Analysis
+
+AppMap includes a runtime analysis capability that analyzes the AppMap data for security vulnerabilities,
+performance problems, and code anti-patterns. On each pull request, you'll get a report of
+the new and resolved issues for the repo.
+
+{{#if (length findingCountByImpactDomain) }}
+AppMap has performed a preliminary analysis of this repo, and detected some problems. Here's a
+summary:
+
+| Impact Domain | Number of Problems |
+| --- | --- |
+  {{#each findingCountByImpactDomain}}
+| {{@key}} | {{@this}} |
+  {{/each}}
+
+{{~else~}}
+No security vulnerabilities or performance problems were detected in this repo. Keep up the good work :slightly_smiling_face:
+{{/if}}
+
+AppMap runtime analysis is configurable. [Learn more about configuring AppMap runtime analysis](https://appmap.io/docs/guides/configuring-analysis.html).
+
+#### REST API analysis
+
+When you record AppMaps that include HTTP server requests, AppMap can automatically generate OpenAPI definitions. 
+
+{{#if (length appmapCountByHTTPServerRequestCount) }}
+
+This project has AppMaps that contain HTTP server requests. Here's a profile of the AppMaps that
+include HTTP server requests:
+
+| Number of HTTP server requests | Number of AppMaps |
+| --- | --- |
+| None | {{ coalesce appmapCountByHTTPServerRequestCount.[0] 'No AppMaps' }} |
+| Between 1 and 5 | {{ sum_values_by_key_range appmapCountByHTTPServerRequestCount 1 5 }} |
+| More than 5 | {{ sum_values_by_key_range appmapCountByHTTPServerRequestCount 5 }} |
+
+At a high level, here are the REST resources that are provided by this project:
+
+{{#each routeCountByResource}}`{{@key}}` {{/each}}
+
+And here are the different content types served by the API:
+
+| Response Content Type | Number of Routes |
+| --- | --- |
+  {{#each routeCountByContentType}}
+| {{@key}} | {{@this}} |
+  {{/each}}
+
+As you change your code and tests, AppMap will automatically update the OpenAPI definitions. 
+You'll see a summary of the REST API changes in each pull request.
+
+{{~else~}}
+This project doesn't have any AppMaps that contain HTTP server requests. If this is unexpected,
+you can add some test cases that exercise the HTTP server. The more of these type of tests you add,
+the better the AppMap data will be for generating OpenAPI definitions and comparing the API
+changes in each pull request.
+{{/if}}
+
+#### SQL profile
+
+When your code makes a SQL query, AppMap records the SQL query in detail. It even parses the queries
+to figure out which tables your app is using, and how it's using them.
+
+{{#if (length appmapCountBySQLQueryCount) }}
+
+Here's a summary of how many SQL queries are in the AppMaps of this project:
+
+| SQL queries | Number of AppMaps |
+| --- | --- |
+| None | {{ coalesce appmapCountBySQLQueryCount.[0] 'No AppMaps' }} |
+| Between 1 and 5 | {{ sum_values_by_key_range appmapCountBySQLQueryCount 1 5 }} |
+| More than 5 | {{ sum_values_by_key_range appmapCountBySQLQueryCount 5 }} |
+
+{{#if (length sqlTables) }}
+
+And here are all the SQL tables that are used by this project:
+
+{{#each sqlTables}}`{{@this}}` {{/each}}
+{{/if}}
+
+{{~else~}}
+This project doesn't have any AppMaps of SQL queries. If this is unexpected,
+you can add some test cases that interact with the database. The more of these type of tests you add,
+the better the AppMap data will be for analyzing the SQL changes in each pull request.
+{{/if}}
+
+<!--
+  ## External services profile 
+
+  TODO
+
+## Code organization
+
+The app contains `{{ length packages }}` code packages.
+-->
+

@@ -6,6 +6,7 @@ import { join } from 'path';
 import assert from 'assert';
 import { Event, ReturnValueObject } from '@appland/models';
 import { readdir, stat } from 'fs/promises';
+import { warn } from 'console';
 
 const StartTime = Date.now();
 const renameFile = promisify(gracefulFs.rename);
@@ -170,7 +171,7 @@ export async function findFiles(
 ): Promise<string[]> {
   const printDebug = verbose();
   if (printDebug) {
-    console.warn(`Scanning ${directory} for AppMaps`);
+    console.warn(`Scanning ${directory} for files matching ${extensionOrPredicate}`);
   }
 
   const matchFile = async (file: string): Promise<boolean> => {
