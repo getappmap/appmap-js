@@ -12,13 +12,13 @@
             :key="actorKey(actor)"
             :row="1"
             :index="index"
-            :height="diagramSpec.actions.length"
+            :height="actions.length"
             :interactive="interactive"
             :selected-actor="selectedActor"
             :appMap="appMap"
           />
         </template>
-        <template v-for="action in diagramSpec.actions">
+        <template v-for="action in actions">
           <template v-if="action.nodeType === 'call'">
             <VCallAction
               :actionSpec="action"
@@ -39,7 +39,7 @@
             />
           </template>
         </template>
-        <template v-for="action in diagramSpec.actions">
+        <template v-for="action in actions">
           <template v-if="action.nodeType === 'loop'"
             ><VLoopAction
               :actionSpec="action"
@@ -174,11 +174,14 @@ export default {
 
       return result;
     },
+    actions() {
+      return this.diagramSpec?.actions || [];
+    },
     actors() {
       return this.diagram.actors;
     },
     visuallyReachableActors() {
-      return this.diagramSpec.visuallyReachableActors;
+      return this.diagramSpec?.visuallyReachableActors || [];
     },
     selectedActor() {
       if (!this.$store) return;
@@ -292,7 +295,7 @@ export default {
       rootActionSpecs.forEach((h) => visit(h.action));
     },
     getMaxActionDepth() {
-      return this.diagramSpec?.actions.reduce((maxDepth, action) => {
+      return this.actions.reduce((maxDepth, action) => {
         const depth = action.ancestorIndexes.length;
         if (depth > maxDepth) return depth;
         return maxDepth;
@@ -301,16 +304,14 @@ export default {
   },
   watch: {
     collapseDepth() {
-      const diffMode = this.diagramSpec.actions.some((a) => a.action.diffMode);
-      if (!diffMode)
-        this.collapseActionsForCompactLook(this.diagramSpec.actions, this.collapseDepth);
+      const diffMode = this.actions.some((a) => a.action.diffMode);
+      if (!diffMode) this.collapseActionsForCompactLook(this.actions, this.collapseDepth);
     },
     focusedEvent(newVal) {
       // If there are hidden actions containing this event ensure
       // they are not hidden by expanding collapsed ancestors
       if (newVal) {
-        const actionSpecs = this.diagramSpec.actions;
-        for (const actionSpec of actionSpecs)
+        for (const actionSpec of this.actions)
           if (actionSpec.eventIds.includes(newVal.id)) {
             const collapsedAncestorIndexes = actionSpec.ancestorIndexes.filter(
               (ancestorIndex) => this.collapsedActionState[ancestorIndex]
@@ -363,7 +364,7 @@ export default {
     this.diagram?.rootActions.forEach((root) => markExpandedActions(root));
     expandedActions.delete(undefined);
 
-    this.collapsedActionState = this.diagramSpec.actions.map((action) => !shouldExpand(action));
+    this.collapsedActionState = this.actions.map((action) => !shouldExpand(action));
 
     if (firstDiffAction && this.$store?.state) {
       const eventId = eventIds(firstDiffAction).filter(Boolean)[0];
@@ -373,7 +374,7 @@ export default {
     }
 
     if (!firstDiffAction && this.interactive)
-      this.collapseActionsForCompactLook(this.diagramSpec.actions, this.collapseDepth);
+      this.collapseActionsForCompactLook(this.actions, this.collapseDepth);
   },
 };
 </script>
