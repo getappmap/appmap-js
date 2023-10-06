@@ -1,3 +1,12 @@
+# [@appland/appmap-v3.100.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.99.3...@appland/appmap-v3.100.0) (2023-10-06)
+
+
+### Features
+
+* Inventory command, v2 ([27141a0](https://github.com/getappmap/appmap-js/commit/27141a0e86f24a19f60450e781a8ab13d49f6ff9))
+* Inventory report ([5aa3ab0](https://github.com/getappmap/appmap-js/commit/5aa3ab0613d8909de5c624b3319bf3c2604ceb1c))
+* Provide 'default' and 'welcome' inventory reports ([d007bd2](https://github.com/getappmap/appmap-js/commit/d007bd24f80a50ba7c51c5b0695e4b6115fff97c))
+
 # [@appland/appmap-v3.99.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.99.2...@appland/appmap-v3.99.3) (2023-10-05)
 
 
