@@ -331,6 +331,7 @@ export default {
     this.focusHighlighted();
   },
   updated() {
+    this.$emit('setMaxSeqDiagramCollapseDepth', this.getMaxActionDepth());
     this.focusHighlighted();
   },
   created() {
