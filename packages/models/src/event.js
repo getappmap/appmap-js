@@ -362,14 +362,14 @@ export default class Event {
 
   get identityHash() {
     if (!this.$hidden.identityHash) {
-      this.$hidden.identityHash = this.buildIdentityHash(this).digest();
+      this.$hidden.identityHash = this.buildIdentityHash().digest();
     }
     return this.$hidden.identityHash;
   }
 
   get hash() {
     if (!this.$hidden.hash) {
-      this.$hidden.hash = this.buildStableHash(this).digest();
+      this.$hidden.hash = this.buildStableHash().digest();
     }
     return this.$hidden.hash;
   }
@@ -379,6 +379,13 @@ export default class Event {
       this.$hidden.stableProperties = this.gatherStableProperties();
     }
     return this.$hidden.stableProperties;
+  }
+
+  getHashWithSqlCache(parsedSqlCache) {
+    if (!this.$hidden.hash) {
+      this.$hidden.hash = this.buildStableHash(parsedSqlCache).digest();
+    }
+    return this.$hidden.hash;
   }
 
   callStack() {
@@ -501,7 +508,7 @@ export default class Event {
 
   // Collects properties of an event which are not dependent on the specifics
   // of invocation.
-  gatherStableProperties() {
+  gatherStableProperties(parsedSqlCache) {
     const { sqlQuery } = this;
 
     // Convert null and undefined values to empty strings
@@ -526,10 +533,17 @@ export default class Event {
 
     let properties;
     if (sqlQuery) {
-      const sqlNormalized = abstractSqlAstJSON(sqlQuery, this.sql.database_type)
-        // Collapse repeated variable literals and parameter tokens (e.g. '?, ?' in an IN clause)
-        .split(/{"type":"variable"}(?:,{"type":"variable"})*/g)
-        .join(`{"type":"variable"}`);
+      let sqlNormalized;
+      const cacheKey = `${this.sql.database_type}:${sqlQuery}`;
+      if (parsedSqlCache) sqlNormalized = parsedSqlCache.get(cacheKey);
+      if (!sqlNormalized) {
+        sqlNormalized = abstractSqlAstJSON(sqlQuery, this.sql.database_type)
+          // Collapse repeated variable literals and parameter tokens (e.g. '?, ?' in an IN clause)
+          .split(/{"type":"variable"}(?:,{"type":"variable"})*/g)
+          .join(`{"type":"variable"}`);
+        parsedSqlCache.set(cacheKey, sqlNormalized);
+      }
+
       properties = {
         event_type: 'sql',
         sql_normalized: sqlNormalized,
@@ -554,7 +568,10 @@ export default class Event {
     return HashBuilder.buildHash('event-identity-v2', this.gatherIdentityProperties());
   }
 
-  buildStableHash() {
-    return HashBuilder.buildHash('event-stable-properties-v2', this.gatherStableProperties());
+  buildStableHash(parsedSqlCache) {
+    return HashBuilder.buildHash(
+      'event-stable-properties-v2',
+      this.gatherStableProperties(parsedSqlCache)
+    );
   }
 }
