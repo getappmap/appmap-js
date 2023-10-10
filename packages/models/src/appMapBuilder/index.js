@@ -140,8 +140,9 @@ class AppMapBuilder extends EventSource {
     let pruneRatio = 0;
 
     return this.on('preprocess', (d) => {
+      const size = this.sorter.size();
       classMap = new ClassMap(d.data.classMap);
-      pruneRatio = Math.min(sizeBytes / d.size, 1);
+      pruneRatio = Math.min(sizeBytes / size, 1);
 
       // We're storing size/count state in the global class map. This isn't
       // great but it works for now.
@@ -270,8 +271,7 @@ class AppMapBuilder extends EventSource {
   // Returns an Appmap model after running transforms such as normalize, prune,
   // etc.
   build() {
-    const size = this.sorter.size();
-    this.emit('preprocess', { size, data: this.data });
+    this.emit('preprocess', { data: this.data });
     const events = this.collectEvents();
     return new AppMap({ ...this.data, events });
   }
