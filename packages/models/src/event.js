@@ -71,6 +71,7 @@ export default class Event {
     addHiddenProperty(this, 'hash');
     addHiddenProperty(this, 'identityHash');
     addHiddenProperty(this, 'depth');
+    addHiddenProperty(this, 'sqlQuery');
 
     // Backward compatibility
     // `status_code` used to be normalized to `status` during normalization. They can now be used
@@ -224,11 +225,11 @@ export default class Event {
   }
 
   get sqlQuery() {
+    if (!this.$hidden.sqlQuery) {
     const { sql } = this;
-    if (!sql) {
-      return null;
+      this.$hidden.sqlQuery = sql ? sql.normalized_sql || sql.sql : null;
     }
-    return sql.normalized_sql || sql.sql;
+    return this.$hidden.sqlQuery;
   }
 
   get fqid() {
