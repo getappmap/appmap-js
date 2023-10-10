@@ -1,4 +1,5 @@
 import type { SqliteParser } from './sqlite-parser';
+import type LRUCache from 'lru-cache';
 
 declare module '@appland/models' {
   export type CodeObjectType =
@@ -214,6 +215,7 @@ declare module '@appland/models' {
     dataObjects(): Array<ParameterObject | ReturnValueObject>;
     toString(): string;
     toJSON(): any;
+    buildStableHash(parsedSqlCache?: LRUCache<string, any>): any;
   }
 
   export class EventNavigator {
