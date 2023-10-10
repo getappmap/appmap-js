@@ -32,10 +32,15 @@ export default class CodeObject {
 
     addHiddenProperty(this, 'parent', { value: parent });
     addHiddenProperty(this, 'events', { writable: false, value: [] });
+    addHiddenProperty(this, 'id');
+    addHiddenProperty(this, 'fqid');
   }
 
   get id() {
-    return this.buildId().join('');
+    if (!this.$hidden.id) {
+      this.$hidden.id = this.buildId().join('');
+    }
+    return this.$hidden.id;
   }
 
   get name() {
@@ -317,7 +322,10 @@ export default class CodeObject {
   }
 
   get fqid() {
-    return `${this.type}:${this.id}`;
+    if (!this.$hidden.fqid) {
+      this.$hidden.fqid = `${this.type}:${this.id}`;
+    }
+    return this.$hidden.fqid;
   }
 
   // The zone of deprecation.
