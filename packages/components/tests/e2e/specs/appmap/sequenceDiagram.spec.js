@@ -51,7 +51,7 @@ context('AppMap sequence diagram', () => {
       cy.get('.return:nth-child(14) .name').trigger('mouseover');
       cy.get('.return:nth-child(14) span.tooltip').should('exist');
       cy.get('.return:nth-child(14) .name').trigger('mouseout');
-      cy.get('.return:nth-child(14) span.tooltip').should('not.exist');
+      cy.get('.return:nth-child(14) span.tooltip').should('not.be.visible');
     });
 
     it('should display the tooltip on hover on call label', () => {

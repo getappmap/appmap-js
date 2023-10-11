@@ -1,7 +1,7 @@
-<template>
-  <div class="label" @mouseover="startHover" @mouseout="stopHover">
-    <span class="name">{{ label }}</span>
-    <span v-if="hover && returnValue" class="tooltip">{{ returnValue }}</span>
+<template functional>
+  <div class="label">
+    <span class="name">{{ props.label }}</span>
+    <span :class="[props.returnValue ? 'tooltip' : 'hidden']">{{ props.returnValue }}</span>
   </div>
 </template>
 
@@ -10,21 +10,6 @@ import { ActionSpec } from './ActionSpec';
 
 export default {
   name: 'v-sequence-return-label',
-
-  data() {
-    return {
-      hover: false,
-    };
-  },
-
-  methods: {
-    startHover() {
-      this.hover = true;
-    },
-    stopHover() {
-      this.hover = false;
-    },
-  },
 
   props: {
     actionSpec: {
@@ -37,17 +22,9 @@ export default {
       required: true,
       readonly: true,
     },
-  },
-
-  computed: {
-    label() {
-      function extractSimpleName(fullName) {
-        const segments = fullName.split('.');
-        return segments[segments.length - 1];
-      }
-
-      const { nodeResult } = this.actionSpec;
-      return !nodeResult || nodeResult === 'void' ? '' : extractSimpleName(nodeResult);
+    label: {
+      type: String,
+      readonly: true,
     },
   },
 };
@@ -76,5 +53,14 @@ export default {
   padding: 5px;
   z-index: 1;
   opacity: 0.9;
+  display: none;
+}
+
+.label:hover .tooltip {
+  display: inline-block;
+}
+
+.hidden {
+  display: none;
 }
 </style>
