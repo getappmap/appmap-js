@@ -1,17 +1,17 @@
-<template>
+<template functional>
   <div
-    :class="loopClasses"
+    :class="$options.loopClasses(props.isCollapsed)"
     :style="{
-      'grid-column': gridColumns,
-      'grid-row': gridRows,
+      'grid-column': $options.gridColumns(props.actionSpec),
+      'grid-row': $options.gridRows(props.actionSpec),
     }"
   >
     <div class="label-container">
       <div class="label">Loop</div>
       <div class="description">
         [
-        <div class="count">{{ actionSpec.action.count }} times</div>
-        <div class="elapsed">{{ actionSpec.elapsedTimeMs }}ms</div>
+        <div class="count">{{ props.actionSpec.action.count }} times</div>
+        <div class="elapsed">{{ props.actionSpec.elapsedTimeMs }}ms</div>
         ]
       </div>
     </div>
@@ -24,42 +24,29 @@ import { ActionSpec } from './ActionSpec';
 
 export default {
   name: 'v-sequence-loop',
-
   props: {
     actionSpec: {
       type: ActionSpec,
       required: true,
       readonly: true,
     },
-    collapsedActions: {
-      type: Array,
+    isCollapsed: {
+      type: Boolean,
       required: true,
+      readonly: true,
     },
   },
-
-  data() {
-    return {
-      collapsedActionState: this.collapsedActions,
-      columnIndexSpan: this.actionSpec.descendantsActorIndexSpan,
-    };
+  loopClasses(isCollapsed: boolean): string[] {
+    const result = ['loop'];
+    if (isCollapsed) result.push('loop-collapsed');
+    return result;
   },
-
-  computed: {
-    loopClasses(): string[] {
-      const result = ['loop'];
-
-      if (this.actionSpec.isCollapsed(this.collapsedActionState)) result.push('loop-collapsed');
-
-      return result;
-    },
-
-    gridRows(): string {
-      return [this.actionSpec.index + 2, this.actionSpec.returnIndex! + 2].join(' / ');
-    },
-    gridColumns(): string {
-      const [min, max] = this.columnIndexSpan;
-      return [min + 2, max + 2].join(' / ');
-    },
+  gridRows(actionSpec: ActionSpec): string {
+    return [actionSpec.index + 2, actionSpec.returnIndex! + 2].join(' / ');
+  },
+  gridColumns(actionSpec: ActionSpec): string {
+    const [min, max] = actionSpec.descendantsActorIndexSpan;
+    return [min + 2, max + 2].join(' / ');
   },
 };
 </script>
