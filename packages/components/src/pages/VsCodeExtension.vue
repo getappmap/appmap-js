@@ -617,15 +617,17 @@ export default {
     },
 
     rootObjectsSuggestions() {
+      const filters = this.filters;
       return this.$store.state.appMap.classMap.codeObjects
         .map((co) => co.fqid)
-        .filter((fqid) => !this.filters.rootObjects.includes(fqid));
+        .filter((fqid) => !filters.rootObjects.includes(fqid));
     },
 
     hideNamesSuggestions() {
+      const filters = this.filters;
       return this.filteredAppMap.classMap.codeObjects
         .map((co) => co.fqid)
-        .filter((fqid) => !this.filters.declutter.hideName.names.includes(fqid));
+        .filter((fqid) => !filters.declutter.hideName.names.includes(fqid));
     },
 
     eventsSuggestions() {
@@ -995,6 +997,8 @@ export default {
           return;
         }
 
+        const filteredMap = this.filteredAppMap;
+
         const state = filterStringToFilterState(serializedState);
         if (state.selectedObject) {
           do {
@@ -1010,7 +1014,7 @@ export default {
               break;
             }
 
-            const { classMap, events } = this.filteredAppMap;
+            const { classMap, events } = filteredMap;
             let selectedObject = null;
 
             if (type === 'event') {
@@ -1060,7 +1064,7 @@ export default {
 
         if (expandedPackages) {
           const codeObjects = expandedPackages.map((expandedPackageId) =>
-            this.filteredAppMap.classMap.codeObjectFromId(expandedPackageId)
+            filteredMap.classMap.codeObjectFromId(expandedPackageId)
           );
           this.$store.commit(SET_EXPANDED_PACKAGES, codeObjects);
         }
