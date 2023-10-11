@@ -1,4 +1,4 @@
-<template>
+<template functional>
   <h5 class="details-panel-list-header"><slot /></h5>
 </template>
 
