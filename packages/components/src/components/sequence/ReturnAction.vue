@@ -19,7 +19,7 @@
           },
         }"
       >
-        <VReturnLabel :action-spec="actionSpec" :return-value="returnValue" />
+        <VReturnLabel :action-spec="actionSpec" :return-value="returnValue" :label="label" />
       </div>
     </template>
     <template v-else-if="actionSpec.callArrowDirection === 'right'">
@@ -35,7 +35,7 @@
             },
           }"
         >
-          <VReturnLabel :action-spec="actionSpec" :return-value="returnValue" />
+          <VReturnLabel :action-spec="actionSpec" :return-value="returnValue" :label="label" />
           <Arrow class="arrow" />
         </div>
       </template>
@@ -51,7 +51,7 @@
             },
           }"
         >
-          <VReturnLabel :action-spec="actionSpec" :return-value="returnValue" />
+          <VReturnLabel :action-spec="actionSpec" :return-value="returnValue" :label="label" />
           <Arrow class="arrow" />
         </div>
         <template v-if="actionSpec.calleeActionIndex - actionSpec.callerActionIndex > 2">
@@ -93,7 +93,7 @@
             },
           }"
         >
-          <VReturnLabel :action-spec="actionSpec" :return-value="returnValue" />
+          <VReturnLabel :action-spec="actionSpec" :return-value="returnValue" :label="label" />
           <Arrow class="arrow" />
         </div>
       </template>
@@ -133,7 +133,7 @@
             },
           }"
         >
-          <VReturnLabel :action-spec="actionSpec" :return-value="returnValue" />
+          <VReturnLabel :action-spec="actionSpec" :return-value="returnValue" :label="label" />
           <Arrow class="arrow" />
         </div>
       </template>
@@ -193,6 +193,15 @@ export default {
     },
     gridRows(): string {
       return [this.actionSpec.index + 2, this.actionSpec.index + 2].join(' / ');
+    },
+    label() {
+      function extractSimpleName(fullName) {
+        const segments = fullName.split('.');
+        return segments[segments.length - 1];
+      }
+
+      const { nodeResult } = this.actionSpec;
+      return !nodeResult || nodeResult === 'void' ? '' : extractSimpleName(nodeResult);
     },
   },
 };
