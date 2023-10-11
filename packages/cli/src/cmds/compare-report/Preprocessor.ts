@@ -1,6 +1,7 @@
 import { warn } from 'console';
-import ChangeReport, { AppMap, FindingDiff, OpenAPIDiff, TestFailure } from './ChangeReport';
+import ChangeReport, { FindingChange } from './ChangeReport';
 import { ExperimentalSection, Section } from './ReportSection';
+import { ImpactDomain } from '@appland/scanner';
 
 export interface Preprocessor {
   get numElements(): number;
@@ -57,17 +58,41 @@ class OpenAPIDiffPreprocessor implements Preprocessor {
   }
 }
 
+const SECTION_INCLUDE_DOMAINS: Record<Section & ExperimentalSection, ImpactDomain[]> = {
+  'performance-problems': ['Performance'],
+  'security-flaws': ['Security'],
+};
+
+const SECTION_EXCLUDE_DOMAINS: Record<Section & ExperimentalSection, ImpactDomain[]> = {
+  'code-antipatterns': ['Security', 'Performance'],
+};
+
+export function filterFindings(findings: FindingChange[], section: Section | ExperimentalSection) {
+  const includeDomains = SECTION_INCLUDE_DOMAINS[section];
+  const excludeDomains = SECTION_EXCLUDE_DOMAINS[section];
+
+  return findings.filter(
+    (finding) =>
+      (!includeDomains || includeDomains.includes(finding.finding.impactDomain || 'Stability')) &&
+      (!excludeDomains || !excludeDomains.includes(finding.finding.impactDomain || 'Stability'))
+  );
+}
+
 class FindingDiffPreprocessor implements Preprocessor {
-  constructor(public report: ChangeReport) {}
+  newFindings: FindingChange[];
+  resolvedFindings: FindingChange[];
+
+  constructor(public report: ChangeReport, public section: Section) {
+    this.newFindings = filterFindings(this.report.findingDiff.newFindings || [], section);
+    this.resolvedFindings = filterFindings(this.report.findingDiff.resolvedFindings || [], section);
+  }
 
   get numElements(): number {
-    return (
-      this.report.findingDiff.newFindings.length + this.report.findingDiff.resolvedFindings.length
-    );
+    return this.newFindings.length + this.resolvedFindings.length;
   }
 
   prune(numElements: number) {
-    const findingDiff = { ...this.report.findingDiff };
+    const findingDiff = { newFindings: this.newFindings, resolvedFindings: this.resolvedFindings };
 
     let numRemaining = numElements;
     {
@@ -141,8 +166,10 @@ export default function buildPreprocessor(
       return new FailedTestsPreprocessor(report);
     case Section.OpenAPIDiff:
       return new OpenAPIDiffPreprocessor(report);
-    case Section.Findings:
-      return new FindingDiffPreprocessor(report);
+    case Section.SecurityFlaws:
+    case Section.CodeAntiPatterns:
+    case Section.PerformanceProblems:
+      return new FindingDiffPreprocessor(report, section);
     case Section.NewAppMaps:
       return new NewAppMapsPreprocessor(report);
     case Section.RemovedAppMaps:

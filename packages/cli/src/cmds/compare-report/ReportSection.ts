@@ -2,11 +2,12 @@ import Handlebars, { SafeString } from 'handlebars';
 import { isAbsolute, join, relative } from 'path';
 
 import { readFile } from 'fs/promises';
-import ChangeReport, { AppMap } from './ChangeReport';
+import ChangeReport, { AppMap, FindingDiff } from './ChangeReport';
 import { existsSync } from 'fs';
 import assert from 'assert';
 import { RevisionName } from '../compare/RevisionName';
-import buildPreprocessor from './Preprocessor';
+import buildPreprocessor, { filterFindings } from './Preprocessor';
+import { ImpactDomain } from '@appland/scanner';
 
 export const TemplateDirectory = [
   '../../../resources/change-report', // As packaged
@@ -21,20 +22,65 @@ export const DEFAULT_MAX_ELEMENTS = 10;
 export enum Section {
   FailedTests = 'failed-tests',
   OpenAPIDiff = 'openapi-diff',
-  Findings = 'findings',
+  SecurityFlaws = 'security-flaws',
+  PerformanceProblems = 'performance-problems',
+  CodeAntiPatterns = 'code-antipatterns',
   NewAppMaps = 'new-appmaps',
   RemovedAppMaps = 'removed-appmaps',
 }
 
+export const FindingsSections: (Section | ExperimentalSection)[] = [
+  Section.SecurityFlaws,
+  Section.PerformanceProblems,
+  Section.CodeAntiPatterns,
+];
+
 export enum ExperimentalSection {
   ChangedAppMaps = 'changed-appmaps',
 }
+
+export type SectionMetadata = {
+  name: string;
+  title: string;
+  anchor: string;
+  emoji: string;
+};
+
+type ReportContext = ChangeReport & { metadata?: SectionMetadata };
+
+const SECTION_DIRECTORY: Record<Section & ExperimentalSection, string> = {
+  'performance-problems': 'findings',
+  'security-flaws': 'findings',
+  'code-antipatterns': 'findings',
+};
+
+const SECTION_METADATA: Record<Section & ExperimentalSection, SectionMetadata> = {
+  'performance-problems': {
+    name: 'performance problems',
+    title: 'Performance problems',
+    anchor: 'performance-problems',
+    emoji: '🐌',
+  },
+  'security-flaws': {
+    name: 'security flaws',
+    title: 'Security flaws',
+    anchor: 'security-flaws',
+    emoji: '🔒',
+  },
+  'code-antipatterns': {
+    name: 'code anti-patterns',
+    title: 'Code anti-patterns',
+    anchor: 'code-antipatterns',
+    emoji: '🚨',
+  },
+};
 
 export type ReportOptions = {
   sourceURL: URL;
   appmapURL: URL;
   maxElements?: number;
   baseDir?: string;
+  metadata?: SectionMetadata;
 };
 
 export default class ReportSection {
@@ -45,7 +91,7 @@ export default class ReportSection {
   ) {}
 
   generateHeading(changeReport: ChangeReport, options: ReportOptions) {
-    return this.headingTemplate(changeReport, {
+    return this.headingTemplate(this.buildContext(changeReport), {
       helpers: ReportSection.helpers(options),
     });
   }
@@ -66,10 +112,27 @@ export default class ReportSection {
       }
     }
 
-    return this.detailsTemplate(report, {
+    return this.detailsTemplate(this.buildContext(report), {
       helpers: ReportSection.helpers(options),
       allowProtoPropertiesByDefault: true,
     });
+  }
+
+  buildContext(changeReport: ChangeReport): ReportContext {
+    const context = { ...changeReport } as any;
+    const metadata = SECTION_METADATA[this.section];
+    if (metadata) context.metadata = metadata;
+
+    if (FindingsSections.includes(this.section)) {
+      const newFindings = filterFindings(changeReport.findingDiff.newFindings, this.section);
+      const resolvedFindings = filterFindings(
+        changeReport.findingDiff.resolvedFindings,
+        this.section
+      );
+      context.findingDiff = { newFindings, resolvedFindings };
+    }
+
+    return context;
   }
 
   static helpers(options: ReportOptions): { [name: string]: Function } | undefined {
@@ -176,10 +239,13 @@ export default class ReportSection {
     templateDir = TemplateDirectory
   ): Promise<ReportSection> {
     assert(templateDir);
-    const headingTemplateFile = join(templateDir, section, 'heading.hbs');
+
+    const sectionDir = SECTION_DIRECTORY[section] || section;
+
+    const headingTemplateFile = join(templateDir, sectionDir, 'heading.hbs');
     const headingTemplate = Handlebars.compile(await readFile(headingTemplateFile, 'utf8'));
 
-    const detailsTemplateFile = join(templateDir, section, 'details.hbs');
+    const detailsTemplateFile = join(templateDir, sectionDir, 'details.hbs');
     const detailsTemplate = Handlebars.compile(await readFile(detailsTemplateFile, 'utf8'));
 
     return new ReportSection(section, headingTemplate, detailsTemplate);

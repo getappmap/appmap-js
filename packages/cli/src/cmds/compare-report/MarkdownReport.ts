@@ -2,13 +2,14 @@ import Report from './Report';
 import { ChangeReport as ChangeReportData } from '../compare/ChangeReport';
 import ChangeReport from './ChangeReport';
 import ReportSection, { ExperimentalSection, ReportOptions, Section } from './ReportSection';
-import { log } from 'console';
 
 // TODO: Get this from the type?
 export const SECTIONS: Section[] = [
   Section.FailedTests,
   Section.OpenAPIDiff,
-  Section.Findings,
+  Section.SecurityFlaws,
+  Section.PerformanceProblems,
+  Section.CodeAntiPatterns,
   Section.NewAppMaps,
   Section.RemovedAppMaps,
 ];

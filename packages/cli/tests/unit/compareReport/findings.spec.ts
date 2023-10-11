@@ -12,7 +12,7 @@ let resolvedFinding: FindingChange;
 describe('findings', () => {
   let section: ReportSection;
 
-  beforeAll(async () => (section = await ReportSection.build(Section.Findings)));
+  beforeAll(async () => (section = await ReportSection.build(Section.PerformanceProblems)));
 
   describe('when there are no changes', () => {
     const findingDiff = new FindingDiff([], []);
@@ -25,7 +25,9 @@ describe('findings', () => {
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual('| [Findings](#findings) |  :white_check_mark: None  |');
+        expect(report).toEqual(
+          '| [Performance problems](#performance-problems) |  :white_check_mark: None detected  |'
+        );
       });
     });
     describe('details', () => {
@@ -55,7 +57,9 @@ describe('findings', () => {
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual('| [Findings](#findings) |  :tada: 1 resolved  |');
+        expect(report).toEqual(
+          '| [Performance problems](#performance-problems) |  :tada: 1 resolved  |'
+        );
       });
     });
     describe('details', () => {
@@ -66,10 +70,9 @@ describe('findings', () => {
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual(`<h2 id=\"findings\">Findings</h2>
+        expect(report).toEqual(`<h2 id=\"performance-problems\">Performance problems</h2>
 
-
-### :tada: Resolved findings (1)
+### :tada: Problems resolved (1)
 
 
 <details>

@@ -4,7 +4,6 @@ import path from 'path';
 
 import { handler } from '../../../src/cmds/compare-report/compareReport';
 import { cleanProject, fixtureDir } from '../util';
-import { writeFile } from 'fs/promises';
 
 function removeTimeStampLines(report: string): string {
   return report.replace(/[-+]{3}.*openapi\.yml.*\n/g, '');
