@@ -43,7 +43,7 @@
           <template v-if="action.nodeType === 'loop'"
             ><VLoopAction
               :actionSpec="action"
-              :collapsed-actions="collapsedActionState"
+              :isCollapsed="isCollapsed(action)"
               :key="actionKey(action)"
           /></template>
         </template>
@@ -295,6 +295,9 @@ export default {
         if (depth > maxDepth) return depth;
         return maxDepth;
       }, 0);
+    },
+    isCollapsed(action: ActionSpec) {
+      return action.isCollapsed(this.collapsedActionState);
     },
   },
   watch: {
