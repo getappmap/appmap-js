@@ -191,6 +191,27 @@ export default class ReportSection {
       }
     };
 
+    type RecorderGroup = {
+      recorderName: string;
+      count: number;
+      isTest: boolean;
+    };
+
+    const group_appmaps_by_recorder_name = (appmaps: AppMap[]): RecorderGroup[] => {
+      const recorderGroups = appmaps.reduce((acc, appmap) => {
+        const recorderName = appmap.recorderName || 'unknown';
+        if (!acc.has(recorderName))
+          acc.set(recorderName, {
+            recorderName: recorderName,
+            isTest: appmap.isTest,
+            count: 1,
+          });
+        else acc.get(recorderName)!.count += 1;
+        return acc;
+      }, new Map<string, RecorderGroup>());
+      return [...recorderGroups.values()].sort((a, b) => b.count - a.count);
+    };
+
     const appmap_title = (appmap: AppMap): string => {
       const tokens: string[] = [];
       if (appmap.recorderName) tokens.push(['[', appmap.recorderName, ']'].join(''));
@@ -223,13 +244,19 @@ export default class ReportSection {
       }
     };
 
+    const pluralize = (count: number, singular: string, plural?: string): string => {
+      return count === 1 ? singular : plural || singular + 's';
+    };
+
     return {
-      inspect,
-      length,
-      coalesce,
+      appmap_diff_url,
       appmap_title,
       appmap_url,
-      appmap_diff_url,
+      coalesce,
+      group_appmaps_by_recorder_name,
+      inspect,
+      length,
+      pluralize,
       source_url,
     };
   }

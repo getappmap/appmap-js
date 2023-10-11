@@ -1,3 +1,5 @@
 {{#if removedAppMaps.length ~}}
-| [Removed AppMaps](#removed-appmaps) | :heavy_multiplication_x: {{removedAppMaps.length}} removed |
+| [Removed AppMaps](#removed-appmaps) | 
+  {{~#with (group_appmaps_by_recorder_name removedAppMaps) }} :heavy_multiplication_x: {{#each @this}}{{#unless @first }}, {{/unless}}{{ count }} removed {{ recorderName }}{{#if isTest}} {{ pluralize count 'test' }}{{/if}}{{/each}} {{/with~}}
+  |
 {{~/if}}

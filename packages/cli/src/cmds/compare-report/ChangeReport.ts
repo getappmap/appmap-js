@@ -28,6 +28,10 @@ export class AppMap {
     return this.metadata.name || this.sourceLocation || '<anonymous AppMap>';
   }
 
+  get isTest(): boolean {
+    return this.metadata.recorder.type === 'tests' || this.metadata.test_status !== undefined;
+  }
+
   get recorderName(): string | undefined {
     return this.metadata.recorder.name;
   }
