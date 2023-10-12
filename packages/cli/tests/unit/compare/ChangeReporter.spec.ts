@@ -12,9 +12,15 @@ describe('ChangeReporter', () => {
         .spyOn(ReportFieldCalculator.prototype, 'findingDiff')
         .mockResolvedValue({ new: [], resolved: [] });
       jest.spyOn(ReportFieldCalculator.prototype, 'apiDiff').mockResolvedValue(undefined);
+      jest.spyOn(ReportFieldCalculator.prototype, 'sqlDiff').mockResolvedValue(undefined);
       jest.spyOn(ReportFieldCalculator.prototype, 'sequenceDiagramDiff').mockResolvedValue({});
 
-      const changeReporter = new ChangeReporter('base', 'head', 'outputDir', 'srcDir');
+      const changeReporter = new ChangeReporter(
+        'base-revision',
+        'head-revision',
+        'outputDir',
+        'srcDir'
+      );
       changeReporter.appMapMetadata = {
         base: new Map(),
         head: new Map([

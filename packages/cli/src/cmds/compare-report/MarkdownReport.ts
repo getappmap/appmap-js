@@ -13,7 +13,10 @@ export const SECTIONS: Section[] = [
   Section.NewAppMaps,
   Section.RemovedAppMaps,
 ];
-export const EXPERIMENTAL_SECTIONS: ExperimentalSection[] = [ExperimentalSection.ChangedAppMaps];
+export const EXPERIMENTAL_SECTIONS: ExperimentalSection[] = [
+  ExperimentalSection.ChangedAppMaps,
+  ExperimentalSection.SQLDiff,
+];
 
 export default class MarkdownReport implements Report {
   public excludeSections: string[] | undefined;

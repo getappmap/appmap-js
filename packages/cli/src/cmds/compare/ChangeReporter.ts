@@ -18,7 +18,15 @@ import { ArchiveMetadata } from '../archive/ArchiveMetadata';
 import { Paths } from './Paths';
 import { Digests } from './Digests';
 import { RevisionName } from './RevisionName';
-import { AppMapLink, AppMapName, ChangeReport, ChangedAppMap, TestFailure } from './ChangeReport';
+import {
+  AppMapLink,
+  AppMapName,
+  ChangeReport,
+  ChangedAppMap,
+  SQLDiff,
+  SQLQueryReference,
+  TestFailure,
+} from './ChangeReport';
 import { exists, verbose } from '../../utils';
 import mapToRecord from './mapToRecord';
 import { mutedStyle, prominentStyle } from './ui';
@@ -186,7 +194,7 @@ export default class ChangeReporter {
     assert(headAppMaps);
     assert(failedAppMaps);
 
-    let apiDiff: any;
+    let apiDiff: openapiDiff.DiffOutcome | undefined;
 
     const generator = new ReportFieldCalculator(this);
 
@@ -230,9 +238,10 @@ export default class ChangeReporter {
     }
 
     let findingDiff: Record<'new' | 'resolved', Finding[]> | undefined;
+    let sqlDiff: SQLDiff | undefined;
     if (testFailures.length === 0) {
       apiDiff = await generator.apiDiff(options.reportRemoved);
-
+      sqlDiff = await generator.sqlDiff(options.reportRemoved);
       findingDiff = await generator.findingDiff(options.reportRemoved);
       for (const finding of findingDiff.new || [])
         referenceFindingAppMapFn(RevisionName.Head, finding);
@@ -267,6 +276,7 @@ export default class ChangeReporter {
     };
 
     if (findingDiff) result.findingDiff = findingDiff;
+    if (sqlDiff) result.sqlDiff = sqlDiff;
     if (apiDiff) result.apiDiff = apiDiff;
 
     return result;
@@ -542,7 +552,7 @@ export class ReportFieldCalculator {
     }
   }
 
-  async apiDiff(reportRemoved: boolean): Promise<any | undefined> {
+  async apiDiff(reportRemoved: boolean): Promise<openapiDiff.DiffOutcome | undefined> {
     const readOpenAPI = async (revision: RevisionName) => {
       const openapiPath = this.reporter.paths.openapiPath(revision);
       try {
@@ -557,7 +567,7 @@ export class ReportFieldCalculator {
     const headDefinitions = await readOpenAPI(RevisionName.Head);
     if (!baseDefinitions || !headDefinitions) return;
 
-    let apiDiff: any;
+    let apiDiff: openapiDiff.DiffOutcome;
     {
       const result = await openapiDiff.diffSpecs({
         sourceSpec: {
@@ -597,5 +607,79 @@ export class ReportFieldCalculator {
       apiDiff = result;
     }
     return apiDiff;
+  }
+
+  async sqlDiff(reportRemoved: boolean): Promise<SQLDiff | undefined> {
+    const collectStrings = (strings: Set<string>): ((fileName: string) => Promise<void>) => {
+      return async (fileName: string) => {
+        const values: string[] = JSON.parse(await readFile(fileName, 'utf-8'));
+        for (const value of values) strings.add(value);
+      };
+    };
+
+    const loadSQL = async (
+      revisionName: RevisionName
+    ): Promise<{
+      queries: Set<string>;
+      tables: Set<string>;
+    }> => {
+      const queryStrings = new Set<string>();
+      const tableStrings = new Set<string>();
+
+      await processNamedFiles(
+        this.reporter.paths.revisionPath(revisionName),
+        'canonical.sqlNormalized.json',
+        collectStrings(queryStrings)
+      );
+      await processNamedFiles(
+        this.reporter.paths.revisionPath(revisionName),
+        'canonical.sqlTables.json',
+        collectStrings(tableStrings)
+      );
+      console.info(
+        `Found ${queryStrings.size} queries and ${tableStrings.size} tables for ${revisionName} revision`
+      );
+      return { queries: queryStrings, tables: tableStrings };
+    };
+
+    const { queries: baseQueries, tables: baseTables } = await loadSQL(RevisionName.Base);
+    const { queries: headQueries, tables: headTables } = await loadSQL(RevisionName.Head);
+
+    const newQueryStrings = [...headQueries].filter((query) => !baseQueries.has(query)).sort();
+    const removedQueries = reportRemoved
+      ? [...baseQueries].filter((query) => !headQueries.has(query)).sort()
+      : [];
+    const newTables = [...headTables].filter((table) => !baseTables.has(table)).sort();
+    const removedTables = reportRemoved
+      ? [...baseTables].filter((table) => !headTables.has(table)).sort()
+      : [];
+
+    const newQueryAppMapsMap = new Map<string, AppMapName[]>();
+    await processNamedFiles(
+      this.reporter.paths.revisionPath(RevisionName.Head),
+      'canonical.sqlNormalized.json',
+      async (fileName: string) => {
+        const values: string[] = JSON.parse(await readFile(fileName, 'utf-8'));
+        const appmap = fileName
+          .slice(this.reporter.paths.workingDir.length + 1)
+          .slice(RevisionName.Head.length + 1)
+          .slice(0, -1 * ('canonical.sqlNormalized.json'.length + 1));
+        for (const value of values) {
+          if (newQueryStrings.includes(value)) {
+            if (!newQueryAppMapsMap.has(value)) newQueryAppMapsMap.set(value, []);
+            newQueryAppMapsMap.get(value)?.push(appmap);
+          }
+        }
+      }
+    );
+
+    const newQueryAppMaps: SQLQueryReference[] = [...newQueryAppMapsMap.keys()]
+      .sort()
+      .reduce((memo, key) => {
+        memo.push({ query: key, appmaps: newQueryAppMapsMap.get(key) || [] });
+        return memo;
+      }, new Array<SQLQueryReference>());
+
+    return { newQueries: newQueryAppMaps, removedQueries, newTables, removedTables };
   }
 }

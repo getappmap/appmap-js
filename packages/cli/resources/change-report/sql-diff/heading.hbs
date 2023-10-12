@@ -1,0 +1,14 @@
+{{#with sqlDiff }}
+| [SQL changes](#sql-changes) | 
+  {{~#if (length newQueries removedQueries newTables removedTables) }}
+    :mag:
+    {{~#if (length newQueries removedQueries) }}
+      {{ length newQueries removedQueries }} SQL query changes
+    {{~/if}}
+    {{~#if (length newTables removedTables) }}
+      {{~#if (length newQueries removedQueries) }}, {{/if}}
+      {{ length newTables removedTables }} SQL table changes
+    {{~/if}}
+  {{~else}} :zero: No SQL changes
+  {{~/if}} |
+{{~/with}}

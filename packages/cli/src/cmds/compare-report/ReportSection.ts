@@ -36,6 +36,7 @@ export const FindingsSections: (Section | ExperimentalSection)[] = [
 ];
 
 export enum ExperimentalSection {
+  SQLDiff = 'sql-diff',
   ChangedAppMaps = 'changed-appmaps',
 }
 

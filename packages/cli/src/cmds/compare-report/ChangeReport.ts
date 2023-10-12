@@ -130,6 +130,18 @@ export class OpenAPIDiff {
   }
 }
 
+export type SQLQueryReference = {
+  query: string;
+  appmaps: AppMap[];
+};
+
+export type SQLDiff = {
+  newQueries: SQLQueryReference[];
+  removedQueries: string[];
+  newTables: string[];
+  removedTables: string[];
+};
+
 export type FindingChange = {
   appmap: AppMap;
   finding: FindingData;
@@ -146,6 +158,7 @@ export default class ChangeReport {
     public readonly removedAppMaps: AppMap[],
     public readonly changedAppMaps: Record<string, AppMap[]>,
     public readonly openapiDiff?: OpenAPIDiff,
+    public readonly sqlDiff?: SQLDiff,
     public readonly findingDiff?: FindingDiff,
     public pruned = false
   ) {}
@@ -194,9 +207,10 @@ export default class ChangeReport {
 
     let apiDiff: OpenAPIDiff | undefined;
     if (changeReportData.apiDiff) {
-      // Provide a simple count of the number of differences - since Handlebars can't do math.
       const differenceCount =
-        (changeReportData.apiDiff.breakingDifferences?.length || 0) +
+        (changeReportData.apiDiff.breakingDifferencesFound
+          ? changeReportData.apiDiff.breakingDifferences?.length
+          : 0) +
         (changeReportData.apiDiff.nonBreakingDifferences?.length || 0) +
         (changeReportData.apiDiff.unclassifiedDifferences?.length || 0);
 
@@ -242,6 +256,26 @@ export default class ChangeReport {
       findingDiff = new FindingDiff(newFindings, resolvedFindings);
     }
 
+    let sqlDiff: SQLDiff | undefined;
+    if (changeReportData.sqlDiff) {
+      const newQueries: SQLQueryReference[] = changeReportData.sqlDiff.newQueries.map(
+        (newQuery) => {
+          const appmaps = newQuery.appmaps.map((appmapId) =>
+            appmap(RevisionName.Head, normalizeAppMapId(appmapId))
+          );
+          return { query: newQuery.query, appmaps };
+        }
+      );
+      sqlDiff = {
+        newQueries,
+        removedQueries: changeReportData.sqlDiff.removedQueries,
+        newTables: changeReportData.sqlDiff.newTables,
+        removedTables: changeReportData.sqlDiff.removedTables,
+      };
+    } else {
+      sqlDiff = { newQueries: [], removedQueries: [], newTables: [], removedTables: [] };
+    }
+
     const newAppMaps = changeReportData.newAppMaps.map((appmapId) =>
       appmap(RevisionName.Head, normalizeAppMapId(appmapId))
     );
@@ -266,6 +300,7 @@ export default class ChangeReport {
       removedAppMaps,
       changedAppMaps,
       apiDiff,
+      sqlDiff,
       findingDiff
     );
   }

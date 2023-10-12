@@ -64,6 +64,35 @@ class OpenAPIDiffPreprocessor implements Preprocessor {
   }
 }
 
+class SQLDiffPreprocessor implements Preprocessor {
+  constructor(public report: ChangeReport) {}
+
+  get numElements(): number {
+    return (
+      this.report.sqlDiff.newQueries.length +
+      this.report.sqlDiff.removedQueries.length +
+      this.report.sqlDiff.newTables.length +
+      this.report.sqlDiff.removedTables.length
+    );
+  }
+
+  prune(numElements: number) {
+    const sqlDiff = { ...this.report.sqlDiff };
+
+    const keys = ['newQueries', 'removedQueries', 'newTables', 'removedTables'];
+    for (const key of keys) {
+      let numRemaining = numElements;
+      if (numRemaining > 0) {
+        numRemaining -= sqlDiff[key].length;
+        sqlDiff[key] = sqlDiff[key].slice(0, numElements);
+      } else {
+        sqlDiff[key] = [];
+      }
+    }
+    return { sqlDiff };
+  }
+}
+
 const SECTION_INCLUDE_DOMAINS: Record<Section & ExperimentalSection, ImpactDomain[]> = {
   'performance-problems': ['Performance'],
   'security-flaws': ['Security'],
@@ -184,6 +213,8 @@ export default function buildPreprocessor(
       return new RemovedAppMapsPreprocessor(report);
     case ExperimentalSection.ChangedAppMaps:
       return new ChangedAppMapsPreprocessor(report);
+    case ExperimentalSection.SQLDiff:
+      return new SQLDiffPreprocessor(report);
     default:
       warn(`No Preprocessor for section ${section}`);
   }

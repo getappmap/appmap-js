@@ -1,0 +1,59 @@
+{{#with sqlDiff }}
+  {{~#if (length newQueries removedQueries newTables removedTables) }}
+<h2 id="sql-changes">🔍 SQL changes</h2>
+
+    {{#if (length newQueries) }}
+### New queries ({{ length newQueries }})
+      {{#each newQueries}}
+```sql
+{{{ query }}}
+```
+
+The query occurs in {{ length appmaps }} {{ pluralize (length appmaps) 'AppMap' }}{{#if (gt (length appmaps) 1) }}. A representative AppMap is{{/if}}:
+  
+        {{#with (first appmaps) }}
+          {{#if sourceDiff}}
+
+##### Related code changes
+
+```diff
+{{{ sourceDiff }}}
+```
+          {{/if}}
+
+- [Full AppMap &raquo;]({{ appmap_url 'head' @this }})
+          {{#if changed}}
+- [Sequence diagram diff &raquo;]({{ appmap_diff_url @this }})
+          {{/if}}
+        {{/with}}
+      {{/each}}
+
+    {{/if}}
+
+    {{#if (length removedQueries) }}
+### Removed queries ({{ length removedQueries }})
+      {{#each removedQueries}}
+```sql
+{{{ @this }}}
+```
+      {{/each}}
+
+    {{/if}}
+
+    {{#if (length newTables) }}
+### Added tables
+
+      {{#each newTables}}`{{@this}}` {{/each}}
+    {{/if}}
+
+    {{#if (length removedTables) }}
+### Removed tables
+
+      {{#each removedTables}}`{{@this}}` {{/each}}
+    {{/if}}
+
+    {{#if findingDiff.pruned}}
+Because there are many new and removed SQL changes, some of them are not listed in this report.
+    {{/if}}
+  {{/if}}
+{{/with}}

@@ -43,6 +43,10 @@ const eq = (...args: any[]): boolean => {
   return args.every((value) => value === first);
 };
 
+const gt = (a: number, b: number) => a > b;
+
+const lt = (a: number, b: number) => a < b;
+
 const pluralize = (count: number, singular: string, plural?: string): string => {
   if (typeof plural !== 'string') plural = undefined;
 
@@ -107,6 +111,8 @@ export default {
   coalesce,
   every,
   eq,
+  gt,
+  lt,
   pluralize,
   subtract,
   sum,
