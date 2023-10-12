@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.100.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.100.0...@appland/appmap-v3.100.1) (2023-10-12)
+
+
+### Bug Fixes
+
+* Bump version of CLI to pick up Maven/Gradle plugin installer changes ([7c93e9f](https://github.com/getappmap/appmap-js/commit/7c93e9f75c8f30adf745e7d9cd6de1b47ac9adbe))
+
 # [@appland/appmap-v3.100.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.99.3...@appland/appmap-v3.100.0) (2023-10-06)
 
 
