@@ -133,6 +133,7 @@ export class OpenAPIDiff {
 export type SQLQueryReference = {
   query: string;
   appmaps: AppMap[];
+  sourceLocations: string[];
 };
 
 export type SQLDiff = {
@@ -263,7 +264,7 @@ export default class ChangeReport {
           const appmaps = newQuery.appmaps.map((appmapId) =>
             appmap(RevisionName.Head, normalizeAppMapId(appmapId))
           );
-          return { query: newQuery.query, appmaps };
+          return { query: newQuery.query, appmaps, sourceLocations: newQuery.sourceLocations };
         }
       );
       sqlDiff = {

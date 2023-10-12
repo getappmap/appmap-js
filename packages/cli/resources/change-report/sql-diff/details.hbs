@@ -4,12 +4,22 @@
 
     {{#if (length newQueries) }}
 ### New queries ({{ length newQueries }})
+
       {{#each newQueries}}
+
 ```sql
 {{{ query }}}
 ```
+        {{#if (length sourceLocations) }}
 
-The query occurs in {{ length appmaps }} {{ pluralize (length appmaps) 'AppMap' }}{{#if (gt (length appmaps) 1) }}. A representative AppMap is{{/if}}:
+This query is issued from the following source locations:
+
+          {{#each sourceLocations}}
+[{{ this }}]({{{ source_url this }}})
+          {{/each}}
+        {{/if}}
+
+This query occurs in {{ length appmaps }} {{ pluralize (length appmaps) 'AppMap' }}{{#if (gt (length appmaps) 1) }}. A representative AppMap is{{/if}}:
   
         {{#with (first appmaps) }}
           {{#if sourceDiff}}

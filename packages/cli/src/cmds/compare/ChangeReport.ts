@@ -27,6 +27,7 @@ export type TestFailure = {
 export type SQLQueryReference = {
   query: string;
   appmaps: string[];
+  sourceLocations: string[];
 };
 
 export type SQLDiff = {

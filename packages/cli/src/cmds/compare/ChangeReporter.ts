@@ -7,7 +7,7 @@ import {
   default as openapiDiff,
 } from 'openapi-diff';
 import { dirname, isAbsolute, join, relative, resolve } from 'path';
-import { ClassMap, Metadata } from '@appland/models';
+import { ClassMap, Metadata, buildAppMap, normalizeSQL } from '@appland/models';
 import { Finding } from '@appland/scanner';
 import { FormatType, format } from '@appland/sequence-diagram';
 import { queue } from 'async';
@@ -34,6 +34,7 @@ import loadFindings from './loadFindings';
 import { loadSequenceDiagram } from './loadSequenceDiagram';
 import { warn } from 'console';
 import DiffLoader from './DiffLoader';
+import { resolvePath } from '../../lib/resolvePath';
 
 export type BaseOrHead = RevisionName.Base | RevisionName.Head;
 
@@ -654,20 +655,69 @@ export class ReportFieldCalculator {
       ? [...baseTables].filter((table) => !headTables.has(table)).sort()
       : [];
 
+    const newQuerySourceLinesMap = new Map<string, string[]>();
     const newQueryAppMapsMap = new Map<string, AppMapName[]>();
     await processNamedFiles(
       this.reporter.paths.revisionPath(RevisionName.Head),
       'canonical.sqlNormalized.json',
       async (fileName: string) => {
         const values: string[] = JSON.parse(await readFile(fileName, 'utf-8'));
-        const appmap = fileName
+        const appmapId = fileName
           .slice(this.reporter.paths.workingDir.length + 1)
           .slice(RevisionName.Head.length + 1)
           .slice(0, -1 * ('canonical.sqlNormalized.json'.length + 1));
+
+        const newQueriesInAppMap = new Set<string>();
         for (const value of values) {
           if (newQueryStrings.includes(value)) {
-            if (!newQueryAppMapsMap.has(value)) newQueryAppMapsMap.set(value, []);
-            newQueryAppMapsMap.get(value)?.push(appmap);
+            if (!newQueryAppMapsMap.has(value)) {
+              newQueryAppMapsMap.set(value, []);
+            }
+            newQueriesInAppMap.add(value);
+            newQueryAppMapsMap.get(value)?.push(appmapId);
+          }
+        }
+
+        const appmapFileName = [dirname(fileName), 'appmap.json'].join('.');
+        if (newQueriesInAppMap.size) {
+          const appmap = buildAppMap()
+            .source(await readFile(appmapFileName, 'utf-8'))
+            .build();
+          const database = appmap.classMap.sqlObject;
+          if (!database) {
+            warn(`No Database found in AppMap ${fileName}`);
+          } else {
+            for (const query of database.children) {
+              for (const queryEvent of query.events) {
+                if (queryEvent.sqlQuery && queryEvent.sql?.database_type) {
+                  const sqlNormalized = normalizeSQL(
+                    queryEvent.sqlQuery,
+                    queryEvent.sql.database_type
+                  );
+                  if (newQueriesInAppMap.has(sqlNormalized)) {
+                    if (!newQuerySourceLinesMap.has(sqlNormalized))
+                      newQuerySourceLinesMap.set(sqlNormalized, []);
+
+                    let sourcePath: string | undefined;
+                    let sourceLine: number | undefined;
+                    for (const ancestor of queryEvent.ancestors()) {
+                      const { path } = ancestor;
+                      if (!path) continue;
+
+                      sourcePath = await resolvePath(path, appmap.metadata.language?.name);
+                      if (sourcePath) {
+                        sourceLine = ancestor.lineno;
+                        break;
+                      }
+                    }
+                    if (sourcePath) {
+                      const sourceLocation = [sourcePath, sourceLine].filter(Boolean).join(':');
+                      newQuerySourceLinesMap.get(sqlNormalized)?.push(sourceLocation);
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -676,7 +726,11 @@ export class ReportFieldCalculator {
     const newQueryAppMaps: SQLQueryReference[] = [...newQueryAppMapsMap.keys()]
       .sort()
       .reduce((memo, key) => {
-        memo.push({ query: key, appmaps: newQueryAppMapsMap.get(key) || [] });
+        memo.push({
+          query: key,
+          appmaps: newQueryAppMapsMap.get(key) || [],
+          sourceLocations: [...new Set(newQuerySourceLinesMap.get(key) || [])].sort(),
+        });
         return memo;
       }, new Array<SQLQueryReference>());
 
