@@ -158,7 +158,7 @@ changed 3
 
 - [Users controller test](https://getappmap.com/?path=diff%2Fminitest%2Fusers_controller_test.diff.sequence.json)
 
-Because there are so many changed AppMaps, some of them are not listed in this report.
+Because there are many changed AppMaps, some of them are not listed in this report.
 </details>
 `);
       });

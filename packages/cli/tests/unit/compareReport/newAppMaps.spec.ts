@@ -118,7 +118,7 @@ describe('newAppMaps', () => {
 
 - [[rspec] Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
 
-Because there are so many new AppMaps, some of them are not listed in this report.
+Because there are many new AppMaps, some of them are not listed in this report.
 `);
       });
     });

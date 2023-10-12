@@ -121,7 +121,7 @@ describe('removedAppMaps', () => {
 
 - [[rspec] Users controller test](https://getappmap.com/?path=base%2Fminitest%2Fusers_controller_test.appmap.json)
 
-Because there are so many removed AppMaps, some of them are not listed in this report.
+Because there are many removed AppMaps, some of them are not listed in this report.
 `);
       });
     });
