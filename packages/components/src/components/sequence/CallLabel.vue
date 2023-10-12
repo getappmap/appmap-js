@@ -30,7 +30,7 @@
           }"
         >
           <span v-if="hoverExpandCollapse" class="tooltip">
-            {{ collapsed ? 'Expand' : 'Collapse' }}
+            {{ isCollapsed ? 'Expand' : 'Collapse' }}
           </span>
           <span
             @click="selectEvent"
@@ -86,9 +86,9 @@ export default {
       required: true,
       readonly: true,
     },
-    collapsedActions: {
-      type: Array,
-      required: true,
+    isCollapsed: {
+      type: Boolean,
+      default: false,
     },
     interactive: {
       type: Boolean,
@@ -102,7 +102,6 @@ export default {
 
   data() {
     return {
-      collapsedActionState: this.collapsedActions,
       hover: false,
       hoverExpandCollapse: false,
     };
@@ -122,15 +121,12 @@ export default {
 
       return true;
     },
-    collapsed(): boolean {
-      return this.collapsedActionState[this.actionSpec.index];
-    },
     collapseExpandIndicator(): string {
-      return this.collapsed ? '[+]' : '[-]';
+      return this.isCollapsed ? '[+]' : '[-]';
     },
     collapseClasses(): string[] {
       const result = ['collapse-expand'];
-      result.push(this.collapsed ? 'collapsed' : 'expanded');
+      result.push(this.isCollapsed ? 'collapsed' : 'expanded');
       return result;
     },
     nameClasses(): string[] {
@@ -202,7 +198,7 @@ export default {
   },
   methods: {
     collapseOrExpand() {
-      this.$set(this.collapsedActionState, this.actionSpec.index, !this.collapsed);
+      this.$set(this.$store.state.collapsedActionState, this.actionSpec.index, !this.isCollapsed);
     },
     selectEvent() {
       if (this.appMap) {

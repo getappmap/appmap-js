@@ -23,8 +23,8 @@
       >
         <VCallLabel
           :action-spec="actionSpec"
-          :collapsed-actions="collapsedActionState"
           :appMap="appMap"
+          :is-collapsed="isLabelCollapsed"
           :interactive="interactive"
         />
         <VSelfCallArrow :action-spec="actionSpec" />
@@ -45,8 +45,8 @@
         >
           <VCallLabel
             :action-spec="actionSpec"
-            :collapsed-actions="collapsedActionState"
             :appMap="appMap"
+            :is-collapsed="isLabelCollapsed"
             :interactive="interactive"
           />
           <Arrow class="arrow" />
@@ -66,8 +66,8 @@
         >
           <VCallLabel
             :action-spec="actionSpec"
-            :collapsed-actions="collapsedActionState"
             :appMap="appMap"
+            :is-collapsed="isLabelCollapsed"
             :interactive="interactive"
           />
         </div>
@@ -117,8 +117,8 @@
         >
           <VCallLabel
             :action-spec="actionSpec"
-            :collapsed-actions="collapsedActionState"
             :appMap="appMap"
+            :is-collapsed="isLabelCollapsed"
             :interactive="interactive"
           />
           <Arrow class="arrow" />
@@ -138,8 +138,8 @@
         >
           <VCallLabel
             :action-spec="actionSpec"
-            :collapsed-actions="collapsedActionState"
             :appMap="appMap"
+            :is-collapsed="isLabelCollapsed"
             :interactive="interactive"
           />
           <Arrow class="arrow" />
@@ -231,10 +231,6 @@ export default {
       required: true,
       readonly: true,
     },
-    collapsedActions: {
-      type: Array,
-      required: true,
-    },
     interactive: {
       type: Boolean,
       required: true,
@@ -243,12 +239,6 @@ export default {
     appMap: {
       type: Object,
     },
-  },
-
-  data() {
-    return {
-      collapsedActionState: this.collapsedActions,
-    };
   },
 
   computed: {
@@ -262,6 +252,12 @@ export default {
     focusedEvent() {
       return this.$store.state.focusedEvent;
     },
+    isCollapsed() {
+      return this.actionSpec.isCollapsed(this.$store.state.collapsedActionState);
+    },
+    isLabelCollapsed() {
+      return this.$store.state.collapsedActionState[this.actionSpec.index];
+    },
     containerClasses(): string[] {
       const result = [
         'call',
@@ -269,7 +265,7 @@ export default {
         ...this.actionSpec.diffClasses,
       ];
 
-      if (this.actionSpec.isCollapsed(this.collapsedActionState)) result.push('call-collapsed');
+      if (this.isCollapsed) result.push('call-collapsed');
 
       if (this.actionSpec.index === 0) result.push('first-action');
 

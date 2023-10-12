@@ -5,6 +5,9 @@ import list_users from '@/stories/data/sequence/list_users.sequence.json';
 import list_users_prefetch from '@/stories/data/sequence/list_users_prefetch.sequence.json';
 import show_user from '@/stories/data/sequence/show_user.sequence.json';
 import user_not_found from '@/stories/data/sequence/user_not_found.sequence.json';
+import { buildStore } from '@/store/vsCode';
+
+const store = buildStore();
 
 export default {
   title: 'AppLand/Diagrams/Sequence',
@@ -15,6 +18,7 @@ const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VDiagramSequence },
   template: '<v-diagram-sequence v-bind="$props"/>',
+  store,
 });
 
 export const MicropostUserProfileDiff = Template.bind({});
