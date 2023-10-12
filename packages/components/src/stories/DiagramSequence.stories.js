@@ -25,6 +25,7 @@ const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VDiagramSequence },
   template: '<v-diagram-sequence v-bind="$props"/>',
+  store,
 });
 
 export const MicropostUserProfileDiff = Template.bind({});

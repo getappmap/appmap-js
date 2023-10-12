@@ -159,21 +159,11 @@ export default {
       required: true,
       readonly: true,
     },
-    collapsedActions: {
-      type: Array,
-      required: true,
-    },
     returnValue: {
       type: String,
       required: true,
       readonly: true,
     },
-  },
-
-  data() {
-    return {
-      collapsedActionState: this.collapsedActions,
-    };
   },
 
   computed: {
@@ -185,7 +175,8 @@ export default {
       ];
 
       const caller: ActionSpec = this.actionSpec.diagramSpec.actions[this.actionSpec.callIndex];
-      if (caller.isCollapsed(this.collapsedActionState)) result.push('return-collapsed');
+      if (caller.isCollapsed(this.$store.state.collapsedActionState))
+        result.push('return-collapsed');
 
       if (this.actionSpec.index === 0) result.push('first-action');
 
