@@ -13,7 +13,7 @@
     <div :class="nameClasses">
       <template v-for="text in name">
         <div
-          :key="text.text"
+          :key="actionSpec.index + text.text"
           :style="{
             overflow: 'hidden',
             // Text baseline changes when overflow: hidden, so we need next two properties
@@ -35,7 +35,7 @@
           <span
             @click="selectEvent"
             :class="text.class"
-            :key="text.text"
+            :key="actionSpec.index + text.text"
             :title="sqlize"
             @mouseover="startHover"
             @mouseout="stopHover"
