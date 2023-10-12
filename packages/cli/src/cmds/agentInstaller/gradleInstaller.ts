@@ -168,8 +168,8 @@ ${whitespace.padLine(pluginSpec)}
   }
 
   private selectPluginSpec() {
-    const pluginSpecKotlinSyntax = `id("com.appland.appmap") version "1.1.0"`;
-    const pluginSpecGroovySyntax = `id 'com.appland.appmap' version '1.1.0'`;
+    const pluginSpecKotlinSyntax = `id("com.appland.appmap") version "1.2.0"`;
+    const pluginSpecGroovySyntax = `id 'com.appland.appmap' version '1.2.0'`;
     return this.identifyGradleFile.endsWith('.gradle.kts')
       ? pluginSpecKotlinSyntax
       : pluginSpecGroovySyntax;
