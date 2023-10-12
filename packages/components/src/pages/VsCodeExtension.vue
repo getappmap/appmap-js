@@ -76,8 +76,6 @@
           <v-diagram-sequence
             ref="viewSequence_diagram"
             :app-map="filteredAppMap"
-            :focused-event="focusedEvent"
-            :selected-events="selectedEvent"
             :collapse-depth="seqDiagramCollapseDepth"
             @setMaxSeqDiagramCollapseDepth="setMaxSeqDiagramCollapseDepth"
           />

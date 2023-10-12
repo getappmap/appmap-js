@@ -73,9 +73,6 @@ export default {
       required: true,
       readonly: true,
     },
-    selectedActor: {
-      type: Object,
-    },
     row: {
       type: Number,
       required: true,
@@ -104,6 +101,13 @@ export default {
       type: Object,
     },
   },
+
+  data() {
+    return {
+      isSelectedActor: null,
+    };
+  },
+
   computed: {
     isPrecomputedSequenceDiagram,
     inlineStyle(): { [key: string]: string } {
@@ -114,7 +118,7 @@ export default {
     labelClasses(): { [key: string]: string } {
       return {
         'label-container': true,
-        'label-container--selected': this.actor === this.selectedActor,
+        'label-container--selected': this.isSelectedActor,
         interactive: this.interactive,
       };
     },
@@ -170,6 +174,17 @@ export default {
       const codeObj = this.codeObjectFromActor();
       if (codeObj) this.$store.commit(REMOVE_EXPANDED_PACKAGE, codeObj);
     },
+    updateSelectedActor(selectedObject) {
+      if (!selectedObject || !(selectedObject instanceof CodeObject)) {
+        if (this.isSelectedActor) this.isSelectedActor = false;
+        return;
+      }
+      const ancestorIds = [
+        selectedObject.fqid,
+        ...(selectedObject as any).ancestors().map((ancestor: CodeObject) => ancestor.fqid),
+      ];
+      this.isSelectedActor = ancestorIds.indexOf(this.actor.id) !== -1;
+    },
   },
   watch: {
     '$store.getters.selectedObject': {
@@ -182,6 +197,7 @@ export default {
             this.$refs.label_container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
           }
         }
+        this.updateSelectedActor(selectedObject);
       },
     },
   },

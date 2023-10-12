@@ -174,6 +174,23 @@ context('AppMap sequence diagram', () => {
       cy.get('.call.selected > :first').should('be.visible');
       cy.get('.call.selected').should('have.attr', 'data-event-ids', '183 185');
     });
+    it('highlights the proper action when selecting "View in Sequence" and does not collapse the selected event', () => {
+      cy.get('.node.class[data-id="active_support/ActiveSupport::SecurityUtils"]').click();
+
+      cy.get('.v-details-panel-list')
+        .contains('Outbound connections')
+        .parent()
+        .within(() => {
+          cy.get('.list-item').contains('Digest::Instance#digest').click();
+        });
+
+      cy.get('.list-item:nth-child(2)').click();
+      cy.get('button').contains('Show in Sequence').click();
+      cy.get('.call.selected > :first').should('be.visible');
+
+      cy.get('.depth-button__decrease').click();
+      cy.get('.call.selected > :first').should('be.visible');
+    });
   });
 
   context('unused actors', () => {
