@@ -5,6 +5,16 @@ import list_users from '@/stories/data/sequence/list_users.sequence.json';
 import list_users_prefetch from '@/stories/data/sequence/list_users_prefetch.sequence.json';
 import show_user from '@/stories/data/sequence/show_user.sequence.json';
 import user_not_found from '@/stories/data/sequence/user_not_found.sequence.json';
+import { buildStore, SELECT_CODE_OBJECT } from '@/store/vsCode';
+import { Event } from '@appland/models';
+
+const store = buildStore();
+
+// Build a mock Event that will trick the instanceof operator
+const mockEvent = Object.create(Event.prototype);
+Object.assign(mockEvent, { id: 536 });
+
+store.commit(SELECT_CODE_OBJECT, mockEvent);
 
 export default {
   title: 'AppLand/Diagrams/Sequence',
@@ -20,7 +30,6 @@ const Template = (args, { argTypes }) => ({
 export const MicropostUserProfileDiff = Template.bind({});
 MicropostUserProfileDiff.args = {
   serializedDiagram: micropost_diff,
-  selectedEvents: [{ id: 536 }],
 };
 export const Empty = Template.bind({});
 
