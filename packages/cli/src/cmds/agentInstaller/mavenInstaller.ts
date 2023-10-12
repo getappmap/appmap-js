@@ -77,7 +77,7 @@ export default class MavenInstaller extends JavaBuildToolInstaller {
     const jsdom = new JSDOM();
     const domParser = new jsdom.window.DOMParser();
     const doc = domParser.parseFromString(buildFileSource, 'text/xml');
-    const pluginVersion = '[1.0,2)';
+    const pluginVersion = '1.3.0';
     const defaultns = 'http://maven.apache.org/POM/4.0.0';
 
     const createEmptySection = (tag, ns) => {

@@ -21,7 +21,7 @@
       <plugin>
         <groupId>com.appland</groupId>
         <artifactId>appmap-maven-plugin</artifactId>
-        <version>[1.0,2)</version>
+        <version>1.3.0</version>
         <executions>
           <execution>
             <phase>process-test-classes</phase>
