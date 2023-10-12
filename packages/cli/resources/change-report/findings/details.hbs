@@ -54,23 +54,23 @@
 {{#if (length findingDiff.newFindings findingDiff.resolvedFindings)}}
 <h2 id="{{ metadata.anchor }}">{{ metadata.title }}</h2>
   {{#if (length findingDiff.newFindings) }}
+
 ### {{metadata.emoji}} New problems detected ({{ length findingDiff.newFindings }})
-      {{#each findingDiff.newFindings}}
+
+    {{#each findingDiff.newFindings}}
 {{> finding}}
-      {{/each}}
-
+    {{/each}}
   {{/if}}
-
   {{#if (length findingDiff.resolvedFindings) }}
+
 ### :tada: Problems resolved ({{ length findingDiff.resolvedFindings}})
 
-      {{#each findingDiff.resolvedFindings}}
+    {{#each findingDiff.resolvedFindings}}
 {{> finding}}
-      {{/each}}
-
+    {{/each}}
   {{/if}}
-
   {{#if findingDiff.pruned}}
-Because there are so many new and resolved {{ metadata.name }}, some of them are not listed in this report.
+
+Because there are many new and resolved {{ metadata.name }}, some of them are not listed in this report.
   {{/if}}
 {{/if}}

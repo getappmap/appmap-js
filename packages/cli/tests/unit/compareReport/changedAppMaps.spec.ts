@@ -22,9 +22,7 @@ describe('changedAppMaps', () => {
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual(
-          '| [Changed AppMaps](#changed-appmaps) |  :white_check_mark: No changes  |'
-        );
+        expect(report).toEqual('| [Changed AppMaps](#changed-appmaps) |  :zero: No changes  |');
       });
     });
     describe('details', () => {

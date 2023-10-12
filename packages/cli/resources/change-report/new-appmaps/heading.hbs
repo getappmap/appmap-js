@@ -1,3 +1,3 @@
 | [New AppMaps](#new-appmaps) |
-  {{~#with (group_appmaps_by_recorder_name newAppMaps) }} :star: {{#each @this}}{{#unless @first }}, {{/unless}}{{ count }} new {{ recorderName }}{{#if isTest}} {{ pluralize count 'test' }}{{/if}}{{/each}} {{else}} :white_check_mark: None {{/with~}}
+  {{~#with (group_appmaps_by_recorder_name newAppMaps) }} :star: {{#each @this}}{{#unless @first }}, {{/unless}}{{ count }} new {{ recorderName }}{{#if isTest}} {{ pluralize count 'test' }}{{/if}}{{/each}} {{else}} :zero: No new AppMaps {{/with~}}
 |

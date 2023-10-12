@@ -19,7 +19,7 @@ describe('newAppMaps', () => {
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual('| [New AppMaps](#new-appmaps) | :white_check_mark: None |');
+        expect(report).toEqual('| [New AppMaps](#new-appmaps) | :zero: No new AppMaps |');
       });
     });
     describe('details', () => {

@@ -115,8 +115,6 @@ describe('findings', () => {
 
 
 </details>
-
-
 `);
       });
     });

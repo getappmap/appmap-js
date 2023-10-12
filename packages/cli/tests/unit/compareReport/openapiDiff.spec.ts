@@ -18,9 +18,7 @@ describe('openapiDiff', () => {
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual(
-          '| [API changes](#openapi-changes) | :white_check_mark: No API changes |'
-          );
+        expect(report).toEqual('| [API changes](#openapi-changes) | :zero: No API changes |');
       });
     });
     describe('details', () => {
