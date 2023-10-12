@@ -23,14 +23,12 @@
               :actionSpec="action"
               :key="actionKey(action)"
               :interactive="interactive"
-              :collapsed-actions="collapsedActionState"
               :appMap="appMap"
             />
           </template>
           <template v-if="action.nodeType === 'return'">
             <VReturnAction
               :actionSpec="action"
-              :collapsed-actions="collapsedActionState"
               :key="actionKey(action)"
               :return-value="returnValue(action)"
             />
@@ -66,7 +64,7 @@ import VReturnAction from '@/components/sequence/ReturnAction.vue';
 import VActor from '@/components/sequence/Actor.vue';
 import DiagramSpec from './sequence/DiagramSpec';
 import { ActionSpec } from './sequence/ActionSpec';
-import { SET_FOCUSED_EVENT } from '../store/vsCode';
+import { SET_FOCUSED_EVENT, SET_COLLAPSED_ACTION_STATE } from '../store/vsCode';
 
 const SCROLL_OPTIONS = { behavior: 'smooth', block: 'center', inline: 'center' };
 export const DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH = 3;
@@ -93,13 +91,16 @@ export default {
     },
   },
 
-  data() {
-    return {
-      collapsedActionState: [],
-    };
-  },
-
   computed: {
+    collapsedActionState: {
+      get() {
+        return this.$store?.state?.collapsedActionState || [];
+      },
+      set(value) {
+        if (this.$store?.state?.collapsedActionState)
+          this.$store.commit(SET_COLLAPSED_ACTION_STATE, value);
+      },
+    },
     selectedEvents() {
       const selectedObject = this.$store?.getters?.selectedObject;
       return selectedObject && selectedObject instanceof Event ? [selectedObject] : [];
@@ -257,8 +258,7 @@ export default {
             actionSpec?.ancestorIndexes.length >= collapseDepth &&
             !descendantPreventingCollapseFound;
           if (this.collapsedActionState[actionSpec?.index] != shouldCollapse)
-            // TODO
-            this.$set(this.collapsedActionState, actionSpec?.index, shouldCollapse);
+            this.$set(this.$store.state.collapsedActionState, actionSpec?.index, shouldCollapse);
         }
 
         return descendantPreventingCollapseFound;
