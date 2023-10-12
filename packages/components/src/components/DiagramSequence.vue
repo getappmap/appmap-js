@@ -14,7 +14,6 @@
             :index="index"
             :height="actions.length"
             :interactive="interactive"
-            :selected-actor="selectedActor"
             :appMap="appMap"
           />
         </template>
@@ -25,8 +24,6 @@
               :key="actionKey(action)"
               :interactive="interactive"
               :collapsed-actions="collapsedActionState"
-              :selected="isSelected(action)"
-              :focused-event="focusedEvent"
               :appMap="appMap"
             />
           </template>
@@ -54,7 +51,7 @@
 
 <script lang="ts">
 // @ts-nocheck
-import { AppMap, CodeObject } from '@appland/models';
+import { AppMap, Event } from '@appland/models';
 import {
   buildDiagram,
   unparseDiagram,
@@ -86,16 +83,9 @@ export default {
     serializedDiagram: {
       type: Object,
     },
-    focusedEvent: {
-      type: Object,
-      default: null,
-    },
     interactive: {
       type: Boolean,
       default: true,
-    },
-    selectedEvents: {
-      type: Array,
     },
     collapseDepth: {
       type: Number,
@@ -110,6 +100,10 @@ export default {
   },
 
   computed: {
+    selectedEvents() {
+      const selectedObject = this.$store?.getters?.selectedObject;
+      return selectedObject && selectedObject instanceof Event ? [selectedObject] : [];
+    },
     styles() {
       if (this.isLoading) return 'display: none;';
 
@@ -181,25 +175,13 @@ export default {
     visuallyReachableActors() {
       return this.diagramSpec?.visuallyReachableActors || [];
     },
-    selectedActor() {
-      if (!this.$store) return;
-      if (!this.$store.getters.selectedObject) return;
-      if (!(this.$store.getters.selectedObject instanceof CodeObject)) return;
-
-      const codeObject = this.$store.getters.selectedObject as CodeObject;
-      const ancestorIds = [
-        codeObject.fqid,
-        ...(codeObject as any).ancestors().map((ancestor: CodeObject) => ancestor.fqid),
-      ];
-      return this.actors.find((actor) => ancestorIds.indexOf(actor.id) !== -1);
-    },
   },
   methods: {
     actionKey(action: ActionSpec): string {
       return `action:${action.index}:${action.action.digest}`;
     },
     isSelected(action: ActionSpec): boolean {
-      return !!this.selectedEvents?.find(({ id }) => action.eventIds.includes(id));
+      return !!this.selectedEvents?.find(({ id }) => action.eventIds?.includes(id));
     },
     showFocusEffect() {
       setTimeout(() => {
@@ -249,10 +231,6 @@ export default {
       // -Greater than collapseDepth levels deep in the stack
       // -Does not contain the Selected Action.
 
-      const isSelectedAction = (action: Action) =>
-        this.selectedEvents &&
-        this.selectedEvents.find((event) => action.eventIds?.includes(event.id));
-
       const actionToActionSpec = new Map(
         actionSpecs.filter((a) => a.nodeType != 'return').map((a) => [a.action, a])
       );
@@ -266,7 +244,7 @@ export default {
 
           if (
             !descendantPreventingCollapseFound &&
-            (childHasDescendantPreventingCollapse || isSelectedAction(child))
+            (childHasDescendantPreventingCollapse || this.isSelected(child))
           )
             descendantPreventingCollapseFound = true;
         }
@@ -279,6 +257,7 @@ export default {
             actionSpec?.ancestorIndexes.length >= collapseDepth &&
             !descendantPreventingCollapseFound;
           if (this.collapsedActionState[actionSpec?.index] != shouldCollapse)
+            // TODO
             this.$set(this.collapsedActionState, actionSpec?.index, shouldCollapse);
         }
 
@@ -305,20 +284,22 @@ export default {
       const diffMode = this.actions.some((a) => a.action.diffMode);
       if (!diffMode) this.collapseActionsForCompactLook(this.actions, this.collapseDepth);
     },
-    focusedEvent(newVal) {
-      // If there are hidden actions containing this event ensure
-      // they are not hidden by expanding collapsed ancestors
-      if (newVal) {
-        for (const actionSpec of this.actions)
-          if (actionSpec.eventIds.includes(newVal.id)) {
-            const collapsedAncestorIndexes = actionSpec.ancestorIndexes.filter(
-              (ancestorIndex) => this.collapsedActionState[ancestorIndex]
-            );
-            collapsedAncestorIndexes.forEach((index) => {
-              this.$set(this.collapsedActionState, index, false);
-            });
-          }
-      }
+    '$store.state.focusedEvent': {
+      handler(newVal) {
+        // If there are hidden actions containing this event ensure
+        // they are not hidden by expanding collapsed ancestors
+        if (newVal) {
+          for (const actionSpec of this.actions)
+            if (actionSpec.eventIds.includes(newVal.id)) {
+              const collapsedAncestorIndexes = actionSpec.ancestorIndexes.filter(
+                (ancestorIndex) => this.collapsedActionState[ancestorIndex]
+              );
+              collapsedAncestorIndexes.forEach((index) => {
+                this.$set(this.collapsedActionState, index, false);
+              });
+            }
+        }
+      },
     },
   },
   mounted() {

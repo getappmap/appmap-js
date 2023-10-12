@@ -213,6 +213,7 @@
 
 <script lang="ts">
 // @ts-nocheck
+import { Event } from '@appland/models';
 import Arrow from '@/assets/sequence-action-arrow.svg';
 import { ActionSpec } from './ActionSpec';
 import VCallLabel from './CallLabel.vue';
@@ -234,17 +235,10 @@ export default {
       type: Array,
       required: true,
     },
-    focusedEvent: {
-      type: Object,
-      default: null,
-    },
     interactive: {
       type: Boolean,
       required: true,
       readonly: true,
-    },
-    selected: {
-      type: Boolean,
     },
     appMap: {
       type: Object,
@@ -258,6 +252,16 @@ export default {
   },
 
   computed: {
+    selected() {
+      return (
+        this.$store.getters.selectedObject &&
+        this.$store.getters.selectedObject instanceof Event &&
+        this.actionSpec.eventIds.includes(this.$store.getters.selectedObject.id)
+      );
+    },
+    focusedEvent() {
+      return this.$store.state.focusedEvent;
+    },
     containerClasses(): string[] {
       const result = [
         'call',
