@@ -1,0 +1,132 @@
+{
+  "actors": [
+    {
+      "id": "http:HTTP server requests",
+      "name": "HTTP server requests",
+      "order": 0
+    },
+    {
+      "id": "package:app/helpers",
+      "name": "app/helpers",
+      "order": 1000
+    }
+  ],
+  "rootActions": [
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "GET /users/{id}",
+      "status": 302,
+      "digest": "4904009fdc244f63769cde6a33768ed5bdbea92efc278d51d45297c09cdd6988",
+      "subtreeDigest": "dd028040509e7f49392bcbaaa1768fcfcca3912be68778dfea46b37c3322e552",
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:app/helpers",
+          "name": "logged_in_user",
+          "static": false,
+          "digest": "ab25a1ec620fa35f1f11392d0af0cb9a546f9c284681bf5bb336c94916ba8ce5",
+          "subtreeDigest": "a009c47a55524150c42d942fb704cd3c7548ea5671e92da50caa54407f938ef5",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/helpers/LoggedInHelper#logged_in_user",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "string"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 3,
+              "caller": "package:app/helpers",
+              "callee": "package:app/helpers",
+              "name": "logged_in?",
+              "static": false,
+              "digest": "77ba104e4ac11aaffbd62768cc00961bc71badb260963485b9897fbad354a39c",
+              "subtreeDigest": "e711ae9ff1eb3d26633c13edf4795059ae7d47436fb6169ff8d9748dea1e6a72",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/helpers/SessionsHelper#logged_in?",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "void"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/helpers",
+                  "callee": "package:app/helpers",
+                  "name": "current_user",
+                  "static": false,
+                  "digest": "f2fde231b0994ff4256ad0e5188d0308c1a6148f09070dc9de9afaa808d8cd73",
+                  "subtreeDigest": "4bbbf501f2dabd944fbc67be1a25734cf646f7179b710e54553297d848f32790",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/helpers/SessionsHelper#current_user",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "void"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [],
+                  "elapsed": 0.00013280299999962608,
+                  "eventIds": [
+                    68
+                  ]
+                }
+              ],
+              "elapsed": 0.00018480399999987185,
+              "eventIds": [
+                67
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/helpers",
+              "callee": "package:app/helpers",
+              "name": "store_location",
+              "static": false,
+              "digest": "c1500c66df8a1863dbd05a35d326369f01c5ffe9ade4c7c5e0a569ab32424d3f",
+              "subtreeDigest": "e0743bc644e8903204a9d35c4982a580b5010641ea13d8389a3ab7856f6b8a94",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/helpers/SessionsHelper#store_location",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "string"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.0003449080000024196,
+              "eventIds": [
+                75
+              ]
+            }
+          ],
+          "elapsed": 0.0013815320000105658,
+          "eventIds": [
+            66
+          ]
+        }
+      ],
+      "elapsed": 0.02553490799999736,
+      "eventIds": [
+        31
+      ]
+    }
+  ]
+}

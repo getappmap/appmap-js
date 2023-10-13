@@ -1,0 +1,319 @@
+##  Welcome to AppMap!
+
+This is a report of the AppMap data in your project. Let's start with a look at how the
+AppMap data is created in this project. In CI, AppMaps are generally created by recording
+test cases. Here's how the AppMaps in this project were created:
+
+| Recorder | Number of AppMaps |
+| --- | --- |
+| minitest | 6 |
+
+Continue reading for information about:
+
+- [Runtime analysis](#runtime-analysis)
+- [Web service API profile](#ws-api-profile)
+- [SQL profile](#sql-profile)
+
+<h4><a id="runtime-analysis">Runtime analysis</a></h4>
+
+AppMap includes a runtime analysis capability that analyzes the AppMap data for security vulnerabilities,
+performance problems, and code anti-patterns. On each pull request, you'll get a report of
+the new and resolved issues for the repo.
+
+AppMap has performed a preliminary analysis of this repo, and detected some problems. Here's a
+summary:
+
+| Impact Domain | Number of Problems |
+| --- | --- |
+| Performance | 8 |
+| Security | 5 |
+| Maintainability | 2 |
+
+Here's a sample of the security flaws, performance problems, and code anti-patterns that were
+detected in this project:
+
+
+<details>
+<summary>
+  Execution of untrusted system command (Security)
+</summary>
+
+##### Description
+
+> Open3.capture3 executes an untrusted command string
+
+| Field | Value |
+| --- | --- |
+| Rule | [exec-of-untrusted-command](https://appmap.io/docs/analysis/rules-reference.html#exec-of-untrusted-command) |
+| Impact domain | Security |
+
+##### Stack trace
+
+- /opt/hostedtoolcache/Ruby/3.0.2/x64/lib/ruby/3.0.0/open3.rb:279
+- app/views/sessions/new.html.erb
+- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/renderers.rb:141
+- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19
+
+
+</details>
+
+<details>
+<summary>
+  Secret in log (Security)
+</summary>
+
+##### Description
+
+> Log message contains secret User.new_activation_token &quot;7Jgdj4mjIIWebMP5M97Xwg&quot;: Started GET &quot;/account_activations/7Jgdj4mjIIWebMP5M97Xwg/edit?email&#x3D;wrong&quot; for 127.0.0.1 at 2023-09- (...18 more characters)
+
+| Field | Value |
+| --- | --- |
+| Rule | [secret-in-log](https://appmap.io/docs/analysis/rules-reference.html#secret-in-log) |
+| Impact domain | Security |
+
+##### Stack trace
+
+- /opt/hostedtoolcache/Ruby/3.0.2/x64/lib/ruby/3.0.0/logger/log_device.rb:31
+
+
+</details>
+
+<details>
+<summary>
+  Secret in log (Security)
+</summary>
+
+##### Description
+
+> Log message contains secret User.new_activation_token &quot;7Jgdj4mjIIWebMP5M97Xwg&quot;:   Parameters: {&quot;email&quot;&#x3D;&gt;&quot;wrong&quot;, &quot;id&quot;&#x3D;&gt;&quot;7Jgdj4mjIIWebMP5M97Xwg&quot;}
+
+
+| Field | Value |
+| --- | --- |
+| Rule | [secret-in-log](https://appmap.io/docs/analysis/rules-reference.html#secret-in-log) |
+| Impact domain | Security |
+
+##### Stack trace
+
+- /opt/hostedtoolcache/Ruby/3.0.2/x64/lib/ruby/3.0.0/logger/log_device.rb:31
+- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19
+
+
+</details>
+
+<details>
+<summary>
+  Secret in log (Security)
+</summary>
+
+##### Description
+
+> Log message contains secret User.new_activation_token &quot;7Jgdj4mjIIWebMP5M97Xwg&quot;: Started GET &quot;/account_activations/7Jgdj4mjIIWebMP5M97Xwg/edit?email&#x3D;user%40example.com&quot; for 127.0.0. (...31 more characters)
+
+| Field | Value |
+| --- | --- |
+| Rule | [secret-in-log](https://appmap.io/docs/analysis/rules-reference.html#secret-in-log) |
+| Impact domain | Security |
+
+##### Stack trace
+
+- /opt/hostedtoolcache/Ruby/3.0.2/x64/lib/ruby/3.0.0/logger/log_device.rb:31
+
+
+</details>
+
+<details>
+<summary>
+  N plus 1 SQL query (Performance)
+</summary>
+
+##### Description
+
+> app_views_microposts__micropost_html_erb.render[344] contains 30 occurrences of SQL: SELECT &quot;users&quot;.* FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ? LIMIT ?
+
+| Field | Value |
+| --- | --- |
+| Rule | [n-plus-one-query](https://appmap.io/docs/analysis/rules-reference.html#n-plus-one-query) |
+| Impact domain | Performance |
+
+##### Stack trace
+
+- app/views/microposts/_micropost.html.erb
+- app/views/shared/_feed.html.erb
+- app/views/static_pages/home.html.erb
+- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/renderers.rb:141
+- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19
+
+
+</details>
+
+<details>
+<summary>
+  N plus 1 SQL query (Performance)
+</summary>
+
+##### Description
+
+> app_views_microposts__micropost_html_erb.render[344] contains 30 occurrences of SQL: SELECT &quot;active_storage_attachments&quot;.* FROM &quot;active_storage_attachments&quot; WHERE &quot;active_storage_attachments&quot;.&quot;record_id&quot; &#x3D; ? AND &quot;active_storage_attachments&quot;.&quot;record_type&quot; &#x3D; ? AND &quot;active_storage_attachments&quot;.&quot;name&quot; &#x3D; ? LIMIT ?
+
+| Field | Value |
+| --- | --- |
+| Rule | [n-plus-one-query](https://appmap.io/docs/analysis/rules-reference.html#n-plus-one-query) |
+| Impact domain | Performance |
+
+##### Stack trace
+
+- app/views/microposts/_micropost.html.erb
+- app/views/shared/_feed.html.erb
+- app/views/static_pages/home.html.erb
+- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/renderers.rb:141
+- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19
+
+
+</details>
+
+<details>
+<summary>
+  N plus 1 SQL query (Performance)
+</summary>
+
+##### Description
+
+> app_views_microposts__micropost_html_erb.render[1281] contains 30 occurrences of SQL: SELECT &quot;users&quot;.* FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ? LIMIT ?
+
+| Field | Value |
+| --- | --- |
+| Rule | [n-plus-one-query](https://appmap.io/docs/analysis/rules-reference.html#n-plus-one-query) |
+| Impact domain | Performance |
+
+##### Stack trace
+
+- app/views/microposts/_micropost.html.erb
+- app/views/shared/_feed.html.erb
+- app/views/static_pages/home.html.erb
+- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/renderers.rb:141
+- app/controllers/microposts_controller.rb:6
+- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19
+
+
+</details>
+
+<details>
+<summary>
+  N plus 1 SQL query (Performance)
+</summary>
+
+##### Description
+
+> app_views_microposts__micropost_html_erb.render[1281] contains 30 occurrences of SQL: SELECT &quot;active_storage_attachments&quot;.* FROM &quot;active_storage_attachments&quot; WHERE &quot;active_storage_attachments&quot;.&quot;record_id&quot; &#x3D; ? AND &quot;active_storage_attachments&quot;.&quot;record_type&quot; &#x3D; ? AND &quot;active_storage_attachments&quot;.&quot;name&quot; &#x3D; ? LIMIT ?
+
+| Field | Value |
+| --- | --- |
+| Rule | [n-plus-one-query](https://appmap.io/docs/analysis/rules-reference.html#n-plus-one-query) |
+| Impact domain | Performance |
+
+##### Stack trace
+
+- app/views/microposts/_micropost.html.erb
+- app/views/shared/_feed.html.erb
+- app/views/static_pages/home.html.erb
+- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/renderers.rb:141
+- app/controllers/microposts_controller.rb:6
+- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19
+
+
+</details>
+
+<details>
+<summary>
+  Data update performed in GET or HEAD request (Maintainability)
+</summary>
+
+##### Description
+
+> Data update performed in HTTP request GET /account_activations/{id}/edit: UPDATE &quot;users&quot; SET &quot;activated&quot; &#x3D; ?, &quot;updated_at&quot; &#x3D; ? WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ?
+
+| Field | Value |
+| --- | --- |
+| Rule | [update-in-get-request](https://appmap.io/docs/analysis/rules-reference.html#update-in-get-request) |
+| Impact domain | Maintainability |
+
+##### Stack trace
+
+- app/models/user.rb:73
+- app/controllers/account_activations_controller.rb:5
+- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19
+
+
+</details>
+
+<details>
+<summary>
+  Data update performed in GET or HEAD request (Maintainability)
+</summary>
+
+##### Description
+
+> Data update performed in HTTP request GET /account_activations/{id}/edit: UPDATE &quot;users&quot; SET &quot;updated_at&quot; &#x3D; ?, &quot;activated_at&quot; &#x3D; ? WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ?
+
+| Field | Value |
+| --- | --- |
+| Rule | [update-in-get-request](https://appmap.io/docs/analysis/rules-reference.html#update-in-get-request) |
+| Impact domain | Maintainability |
+
+##### Stack trace
+
+- app/models/user.rb:73
+- app/controllers/account_activations_controller.rb:5
+- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19
+
+
+</details>
+
+AppMap runtime analysis is configurable. [Learn more about configuring AppMap runtime analysis](https://appmap.io/docs/guides/configuring-analysis.html).
+
+<h4><a id="ws-api-profile">Web service API profile</a></h4>
+
+When you record AppMaps that include HTTP server requests, AppMap can automatically generate OpenAPI definitions. 
+
+
+This project has AppMaps that contain HTTP server requests. Here's a profile of the AppMaps that
+include HTTP server requests:
+
+| Number of HTTP server requests | Number of AppMaps |
+| --- | --- |
+| None | No AppMaps |
+| Between 1 and 5 | 3 |
+| More than 5 | 3 |
+
+At a high level, here are the REST resources that are provided by this project:
+
+`/` `/about` `/account_activations/{id}` `/contact` `/help` `/login` `/logout` `/microposts` `/microposts/{id}` `/password_resets` `/password_resets/new` `/password_resets/{id}` `/relationships` `/relationships/{id}` `/signup` `/users` `/users/{id}` 
+
+And here are the different content types served by the API:
+
+| Response Content Type | Number of Routes |
+| --- | --- |
+| text/html | 38 |
+| text/javascript | 2 |
+
+As you change your code and tests, AppMap will automatically update the OpenAPI definitions. 
+You'll see a summary of the REST API changes in each pull request.
+<h4><a id="sql-profile">SQL profile</a></h4>
+
+When your code makes a SQL query, AppMap records the SQL query in detail. It even parses the queries
+to figure out which tables your app is using, and how it's using them.
+
+
+Here's a summary of how many SQL queries are in the AppMaps of this project:
+
+| SQL queries | Number of AppMaps |
+| --- | --- |
+| None | 1 |
+| Between 1 and 5 | 0 |
+| More than 5 | 5 |
+
+
+And here are all the SQL tables that are used by this project:
+
+`active_storage_attachments` `active_storage_blobs` `microposts` `relationships` `sqlite_master` `sqlite_temp_master` `users` 

@@ -1,0 +1,39 @@
+{
+  "app": "sample_app_6th_ed",
+  "language": {
+    "name": "ruby",
+    "engine": "ruby",
+    "version": "3.0.2"
+  },
+  "client": {
+    "name": "appmap",
+    "url": "https://github.com/applandinc/appmap-ruby",
+    "version": "0.101.0"
+  },
+  "frameworks": [
+    {
+      "name": "rails",
+      "version": "6.0.4.1"
+    },
+    {
+      "name": "minitest",
+      "version": "5.11.3"
+    }
+  ],
+  "git": {
+    "repository": "https://github.com/land-of-apps/sample_app_6th_ed",
+    "branch": "HEAD",
+    "commit": "7b255b2478f1a8a8c70b3d8adb52cd858397c38a",
+    "git_last_annotated_tag": null,
+    "git_last_tag": null,
+    "git_commits_since_last_annotated_tag": null,
+    "git_commits_since_last_tag": null
+  },
+  "name": "Users_profile profile display while logged in as the user",
+  "source_location": "test/integration/users_profile_test.rb:24",
+  "recorder": {
+    "name": "minitest",
+    "type": "tests"
+  },
+  "test_status": "succeeded"
+}
