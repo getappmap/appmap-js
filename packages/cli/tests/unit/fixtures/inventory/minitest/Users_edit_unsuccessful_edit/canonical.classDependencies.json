@@ -1,0 +1,262 @@
+[
+  {
+    "caller": "GET /users/{id}/edit",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "GET /users/{id}/edit",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "GET /users/{id}/edit",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "GET /users/{id}/edit",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "GET /users/{id}/edit",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "GET /users/{id}/edit",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "PATCH /users/{id}",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "PATCH /users/{id}",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "PATCH /users/{id}",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "PATCH /users/{id}",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "PATCH /users/{id}",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "PATCH /users/{id}",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "POST /login",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "POST /login",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "POST /login",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "POST /login",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "POST /login",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "POST /login",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "app/views"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "SELECT 1 AS one FROM \"users\" WHERE \"users\".\"email\" = ? AND \"users\".\"id\" != ? LIMIT ?"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "app/controllers"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "ruby/Array"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "ROLLBACK TO SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/controllers",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "app/models"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/helpers",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/models",
+    "callee": "RELEASE SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/models",
+    "callee": "SAVEPOINT active_record_1"
+  },
+  {
+    "caller": "app/models",
+    "callee": "UPDATE \"users\" SET \"remember_digest\" = ?, \"updated_at\" = ? WHERE \"users\".\"id\" = ?"
+  },
+  {
+    "caller": "app/models",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "app/models",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/models",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "app/models",
+    "callee": "ruby/Array"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/views",
+    "callee": "actionview/ActionView"
+  },
+  {
+    "caller": "app/views",
+    "callee": "app/helpers"
+  },
+  {
+    "caller": "app/views",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "app/views",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "app/views",
+    "callee": "ruby/Array"
+  },
+  {
+    "caller": "app/views",
+    "callee": "ruby/Marshal"
+  }
+]

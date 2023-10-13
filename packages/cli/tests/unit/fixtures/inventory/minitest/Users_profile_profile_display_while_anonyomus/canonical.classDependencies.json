@@ -1,0 +1,82 @@
+[
+  {
+    "caller": "GET /users/{id}",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "GET /users/{id}",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "GET /users/{id}",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "GET /users/{id}",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "GET /users/{id}",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "GET /users/{id}",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "activesupport/ActiveSupport"
+  },
+  {
+    "caller": "actionpack/ActionController",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "actionpack/ActionDispatch",
+    "callee": "ruby/String"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "app/helpers/LoggedInHelper"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "json/JSON"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "logger/Logger"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "openssl/OpenSSL"
+  },
+  {
+    "caller": "activesupport/ActiveSupport",
+    "callee": "ruby/Array"
+  },
+  {
+    "caller": "app/helpers/LoggedInHelper",
+    "callee": "actionpack/ActionController"
+  },
+  {
+    "caller": "app/helpers/LoggedInHelper",
+    "callee": "actionpack/ActionDispatch"
+  },
+  {
+    "caller": "app/helpers/LoggedInHelper",
+    "callee": "app/helpers/SessionsHelper"
+  },
+  {
+    "caller": "app/helpers/SessionsHelper",
+    "callee": "actionpack/ActionDispatch"
+  }
+]

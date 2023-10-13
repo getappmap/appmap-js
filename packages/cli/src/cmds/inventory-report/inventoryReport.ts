@@ -7,6 +7,7 @@ import { warn } from 'console';
 import { cwd } from 'process';
 import { join } from 'path';
 import { Report } from '../inventory/Report';
+import assert from 'assert';
 
 export const command = 'inventory-report <report-json-file> [output-file]';
 export const describe = 'Generate a report document describing the current state of a repository.';
@@ -47,6 +48,8 @@ export const handler = async (argv: any) => {
   handleWorkingDirectory(directory);
 
   const { reportJsonFile, outputFile, templateName } = argv;
+  assert(reportJsonFile);
+  assert(templateName);
 
   const report: Report = JSON.parse(await readFile(reportJsonFile, 'utf-8'));
 
