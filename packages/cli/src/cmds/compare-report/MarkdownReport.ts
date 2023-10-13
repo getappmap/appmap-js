@@ -45,9 +45,14 @@ export default class MarkdownReport implements Report {
       }
     }
 
-    const heading = ['# AppMap', '', '| Summary | Status |', '| --- | --- |', ...headings, ''].join(
-      '\n'
-    );
+    const heading = [
+      '# AppMap pull request analysis',
+      '',
+      '| Summary | Status |',
+      '| --- | --- |',
+      ...headings,
+      '',
+    ].join('\n');
     return [heading, ...details].join('\n');
   }
 }
