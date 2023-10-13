@@ -1,10 +1,10 @@
 <template>
-  <div class="diagram-flamegraph-main" @mousedown="handleMouseDown" @wheel="handleMouseWheel">
+  <div class="diagram-flamegraph-main" @wheel="handleMouseWheel">
     <div class="diagram-flamegraph-main-left">
       <v-flamegraph-main
         ref="main"
         :events="events"
-        :zoom="smoothZoom"
+        :zoom="zoom"
         :title="title"
         @select="propagateSelect"
         @hover="onHover"
@@ -12,7 +12,7 @@
       <v-flamegraph-hover :event="hoverEvent" />
     </div>
     <div class="diagram-flamegraph-main-right">
-      <v-slider :value="smoothZoom" @slide="updateZoom" ref="slider" />
+      <v-slider :value="zoom" @slide="updateZoom" ref="slider" />
     </div>
   </div>
 </template>
@@ -21,13 +21,11 @@
 import VFlamegraphMain from '@/components/flamegraph/FlamegraphMain.vue';
 import VFlamegraphHover from '@/components/flamegraph/FlamegraphHover.vue';
 import VSlider from '@/components/Slider.vue';
-const FPS = 60;
 const WHEEL_SENSITIVITY = 1e-3;
 const clamp = (val) => (val < 0 ? 0 : val > 1 ? 1 : val);
 // {delta:0, transit:0}
 // {delta:0.08, transit:0.18} >> a typical mouse wheel tick
 // {delta:1, transit:2} >> a complete zoom traversal
-const computeZoomTansit = (delta) => 2 * Math.sqrt(delta);
 export default {
   name: 'v-diagram-flamegraph',
   emits: ['select'],
@@ -47,18 +45,13 @@ export default {
     },
   },
   data() {
-    return { zoom: 0, hoverEvent: null, smoothZoom: 0, zoomVelocity: 0 };
+    return { zoom: 0, hoverEvent: null };
   },
   methods: {
-    handleMouseDown(event) {
-      // Stop zoom animation.
-      if (event.button === 0) {
-        this.zoom = this.smoothZoom;
-      }
-    },
     handleMouseWheel(event) {
       event.preventDefault();
-      this.updateZoom(clamp(this.smoothZoom - WHEEL_SENSITIVITY * event.deltaY));
+      const newZoomValue = clamp(this.zoom + WHEEL_SENSITIVITY * (event.deltaY * -1));
+      this.updateZoom(newZoomValue);
     },
     onHover({ type, target }) {
       if (type === 'enter') {
@@ -73,26 +66,7 @@ export default {
       }
     },
     updateZoom(zoom) {
-      const isAlreadySteppingZoom = this.zoomVelocity !== 0;
       this.zoom = zoom;
-      const deltaZoom = this.zoom - this.smoothZoom;
-      // Prevent NaN by avoiding 0/0.
-      if (Math.abs(deltaZoom) > 0) {
-        const deltaTime = computeZoomTansit(Math.abs(deltaZoom));
-        this.zoomVelocity = deltaZoom / (deltaTime * FPS);
-        if (!isAlreadySteppingZoom) {
-          this.stepZoom();
-        }
-      }
-    },
-    stepZoom() {
-      if (Math.abs(this.smoothZoom - this.zoom) <= Math.abs(this.zoomVelocity)) {
-        this.zoomVelocity = 0;
-        this.smoothZoom = this.zoom;
-      } else {
-        this.smoothZoom += this.zoomVelocity;
-        requestAnimationFrame(this.stepZoom);
-      }
     },
     propagateSelect(target) {
       this.$emit('select', target);
