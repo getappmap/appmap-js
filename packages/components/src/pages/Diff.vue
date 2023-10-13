@@ -4,7 +4,7 @@
       <v-diagram-trace
         ref="base"
         :events="eventsBase"
-        :selectedEvents="selectedEventsBase"
+        :selectedEventsForDiff="selectedEventsBase"
         :highlightColor="highlightConfig.color"
         :highlightStyle="highlightConfig.style"
         :zoomControls="false"
@@ -46,7 +46,7 @@
       <v-diagram-trace
         ref="working"
         :events="eventsWorking"
-        :selectedEvents="selectedEventsWorking"
+        :selectedEventsForDiff="selectedEventsWorking"
         :highlightColor="highlightConfig.color"
         :highlightStyle="highlightConfig.style"
         :zoomControls="false"
