@@ -1,3 +1,13 @@
+# [@appland/appmap-v3.101.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.100.1...@appland/appmap-v3.101.0) (2023-10-13)
+
+
+### Features
+
+* Organize findings by category ([c05c1a1](https://github.com/getappmap/appmap-js/commit/c05c1a16c89a1a7490805657fd57107af1af478c))
+* Report recorder name and type of removed AppMaps ([c8b25ea](https://github.com/getappmap/appmap-js/commit/c8b25eaf743a1d1358f44bd609cf8b9831f81f08))
+* Reword 'so many' -> 'many' ([31e47c6](https://github.com/getappmap/appmap-js/commit/31e47c68e1b0d7f18b0f74f5fde50cc20e2a3c28))
+* Use :zero: instead of :white_check_mark: ([89fa284](https://github.com/getappmap/appmap-js/commit/89fa2845b0aeb33c6cf1fc8427ed4169839469cb))
+
 # [@appland/appmap-v3.100.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.100.0...@appland/appmap-v3.100.1) (2023-10-12)
 
 
