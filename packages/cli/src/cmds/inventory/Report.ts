@@ -1,3 +1,5 @@
+import { Finding } from "@appland/scanner";
+
 export type Dependency = {
   caller: string;
   callee: string;
@@ -15,4 +17,5 @@ export type Report = {
   packages: string[];
   packageDependencies: Dependency[];
   findingCountByImpactDomain: Record<string, number>;
+  findings: Finding[];
 };
