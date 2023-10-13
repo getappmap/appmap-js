@@ -1,122 +1,36 @@
-<template>
+<template functional>
   <div
-    :class="classes"
-    :style="style"
-    @mousedown="handleMouseDown"
-    @mouseup="handleMouseUp"
-    @mouseenter="handleMouseEnter"
-    @mouseleave="handleMouseLeave"
+    :class="props.classes"
+    :style="props.itemStyle"
+    @mousedown="() => listeners['mousedown']()"
+    @mouseup="() => listeners['mouseup']()"
+    @mouseenter="() => listeners['hover']({ type: 'enter', target: props.event })"
+    @mouseleave="() => listeners['hover']({ type: 'leave', target: props.event })"
   >
-    {{ content }}
+    {{ props.content }}
   </div>
 </template>
 
 <script>
-import { formatDurationMillisecond, getEventDuration } from '../../lib/flamegraph';
-
-const MIN_BORDER_WIDTH = 2;
-const MIN_TEXT_WIDTH = 50;
-
 export default {
   name: 'v-flamegraph-item',
-  emits: ['select', 'hover'],
+  emits: ['mousedown', 'mouseup', 'hover'],
   props: {
     event: {
       type: Object,
       required: true,
     },
-    factor: {
-      type: Number,
-      required: true,
+    classes: {
+      type: Array,
+      default: () => ['flamegraph-item'],
     },
-    status: {
+    itemStyle: {
+      type: Object,
+      default: () => ({}),
+    },
+    content: {
       type: String,
-      default: null,
-    },
-    baseBudget: {
-      type: Number,
-      required: true,
-    },
-    zoomBudget: {
-      type: Number,
-      required: true,
-    },
-  },
-  data() {
-    return { timer: 0 };
-  },
-  computed: {
-    eventType() {
-      const type =
-        this.event.codeObject && this.event.codeObject.data && this.event.codeObject.type;
-
-      return type ? type : 'default';
-    },
-    dimension() {
-      if (this.width < MIN_BORDER_WIDTH) {
-        return 'borderless';
-      } else if (this.width < MIN_TEXT_WIDTH) {
-        return 'textless';
-      } else {
-        return 'normal';
-      }
-    },
-    classes() {
-      const result = [
-        'flamegraph-item',
-        `flamegraph-item-${this.eventType}`,
-        `flamegraph-item-${this.status}`,
-        `flamegraph-item-${this.dimension}`,
-      ];
-
-      if (this.isHighlighted) result.push('highlighted');
-      return result;
-    },
-    width() {
-      if (this.status === 'pruned') {
-        return 0;
-      } else if (this.status === 'branch') {
-        return this.factor * this.zoomBudget;
-      } else {
-        return this.baseBudget;
-      }
-    },
-    style() {
-      return { width: `${this.width}px` };
-    },
-    content() {
-      if (this.dimension === 'normal') {
-        const duration = getEventDuration(this.event);
-        if (duration > 0) {
-          return `[${formatDurationMillisecond(duration, 3)}] ${this.event.toString()}`;
-        } else {
-          return this.event.toString();
-        }
-      } else {
-        return '';
-      }
-    },
-    isHighlighted() {
-      return this.$store.state.highlightedEvents.some(
-        (highlightedEvent) => highlightedEvent.id === this.event.id
-      );
-    },
-  },
-  methods: {
-    handleMouseDown() {
-      this.timer = Date.now();
-    },
-    handleMouseUp() {
-      // We want to differentiate between clicking and dragging
-      if (Date.now() - this.timer < 200) {
-        this.$emit('select', this.event);
-      }
-    },
-    handleMouseEnter() {
-      this.$emit('hover', { type: 'enter', target: this.event });
-    },
-    handleMouseLeave() {
-      this.$emit('hover', { type: 'leave', target: this.event });
+      default: '',
     },
   },
 };
