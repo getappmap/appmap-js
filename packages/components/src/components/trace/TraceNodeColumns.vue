@@ -1,4 +1,4 @@
-<template>
+<template functional>
   <div class="columns">
     <div class="columns__column columns__column--left">
       <slot name="left" />
