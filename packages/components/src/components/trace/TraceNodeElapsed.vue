@@ -1,29 +1,19 @@
-<template>
+<template functional>
   <div class="trace-node__elapsed">
     <span class="trace-node__elapsed-time">
-      <Clock class="trace-node__elapsed-icon" />
-      {{ elapsedTime }}
+      <slot />
+      {{ String((props.time * 1000).toFixed(0)) + 'ms' }}
     </span>
   </div>
 </template>
 
 <script>
-import Clock from '@/assets/clock.svg';
-
 export default {
   name: 'v-trace-node-elapsed',
-  components: {
-    Clock,
-  },
   props: {
     time: {
       type: Number,
       required: true,
-    },
-  },
-  computed: {
-    elapsedTime() {
-      return `${(this.time * 1000).toFixed(0)}ms`;
     },
   },
 };
@@ -42,12 +32,5 @@ export default {
   color: #eaeaea;
   background-color: #3e4864;
   white-space: nowrap;
-}
-
-.trace-node__elapsed-icon {
-  margin-right: 0.3rem;
-  width: 1em;
-  height: 1em;
-  fill: currentColor;
 }
 </style>

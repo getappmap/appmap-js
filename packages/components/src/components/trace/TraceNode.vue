@@ -14,8 +14,14 @@
         @click.stop="$emit('expandChildren')"
       />
       <component :is="`v-trace-node-body-${eventType}`" :event="event" />
-      <v-trace-node-elapsed v-if="event.returnEvent.elapsed" :time="event.returnEvent.elapsed" />
-      <v-trace-node-labels v-if="event.labels.size" :labels="Array.from(event.labels)" />
+      <v-trace-node-elapsed v-if="event.returnEvent.elapsed" :time="event.returnEvent.elapsed">
+        <Clock class="trace-node__elapsed-icon" />
+      </v-trace-node-elapsed>
+      <v-trace-node-labels
+        v-if="event.labels.size"
+        :labels="Array.from(event.labels)"
+        @selectLabel="selectLabel"
+      />
     </div>
   </div>
 </template>
@@ -29,6 +35,8 @@ import VTraceNodeBodyHttpClient from './TraceNodeBodyHttpClient.vue';
 import VTraceNodeBodySql from './TraceNodeBodySql.vue';
 import VTraceNodeElapsed from './TraceNodeElapsed.vue';
 import VTraceNodeLabels from './TraceNodeLabels.vue';
+import Clock from '@/assets/clock.svg';
+import { SELECT_LABEL } from '../../store/vsCode';
 
 export default {
   name: 'v-trace-node',
@@ -40,6 +48,7 @@ export default {
     VTraceNodeBodySql,
     VTraceNodeElapsed,
     VTraceNodeLabels,
+    Clock,
   },
   props: {
     event: {
@@ -115,6 +124,11 @@ export default {
         'connection-icon--right': true,
         'connection-icon--connected': this.event.children.length > 0,
       };
+    },
+  },
+  methods: {
+    selectLabel(label) {
+      this.$store.commit(SELECT_LABEL, label);
     },
   },
 };
@@ -213,6 +227,13 @@ $bg-color: $gray2;
   &--connected {
     fill: lighten($bg-color, 35);
   }
+}
+
+.trace-node__elapsed-icon {
+  margin-right: 0.3rem;
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
 }
 
 @keyframes node-focused {
