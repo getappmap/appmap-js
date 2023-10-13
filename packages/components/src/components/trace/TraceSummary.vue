@@ -1,10 +1,5 @@
 <template>
-  <div
-    class="trace-summary"
-    @click="$emit('click')"
-    @mouseover="hover = true"
-    @mouseleave="hover = false"
-  >
+  <div class="trace-summary" @click="$emit('click')">
     <div ref="text" class="trace-summary__content">
       {{ text }}
     </div>
@@ -16,17 +11,11 @@ import { Event } from '@appland/models';
 
 export default {
   name: 'v-trace-summary',
-  components: {},
   props: {
     event: {
       type: Event,
       required: true,
     },
-  },
-  data() {
-    return {
-      hover: false,
-    };
   },
   computed: {
     text() {
