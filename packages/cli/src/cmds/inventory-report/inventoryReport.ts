@@ -21,8 +21,8 @@ export const builder = (args: yargs.Argv) => {
   args.positional('template-name', {
     type: 'string',
     describe: `Template name.`,
-    default: 'default',
-    choices: ['default', 'welcome'],
+    default: 'welcome',
+    choices: ['welcome'],
     alias: 't',
   });
 
