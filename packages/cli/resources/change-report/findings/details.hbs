@@ -51,30 +51,26 @@
 
 </details>
 {{/inline}}
-{{#with findingDiff}}
-  {{#if (length newFindings resolvedFindings)}}
-<h2 id="findings">Findings</h2>
+{{#if (length findingDiff.newFindings findingDiff.resolvedFindings)}}
+<h2 id="{{ metadata.anchor }}">{{ metadata.title }}</h2>
+  {{#if (length findingDiff.newFindings) }}
 
-    {{#with newFindings}}
-### :beetle: New findings ({{ length this}})
+### {{metadata.emoji}} New problems detected ({{ length findingDiff.newFindings }})
 
-      {{#each this}}
+    {{#each findingDiff.newFindings}}
 {{> finding}}
-      {{/each}}
-
-    {{/with}}
-
-    {{#with resolvedFindings}}
-### :tada: Resolved findings ({{ length this}})
-
-      {{#each this}}
-{{> finding}}
-      {{/each}}
-
-    {{/with}}
-
-    {{#if pruned}}
-Because there are so many new and resolved findings, some of them are not listed in this report.
-    {{/if}}
+    {{/each}}
   {{/if}}
-{{/with}}
+  {{#if (length findingDiff.resolvedFindings) }}
+
+### :tada: Problems resolved ({{ length findingDiff.resolvedFindings}})
+
+    {{#each findingDiff.resolvedFindings}}
+{{> finding}}
+    {{/each}}
+  {{/if}}
+  {{#if findingDiff.pruned}}
+
+Because there are many new and resolved {{ metadata.name }}, some of them are not listed in this report.
+  {{/if}}
+{{/if}}

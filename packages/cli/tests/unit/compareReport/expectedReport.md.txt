@@ -4,9 +4,11 @@
 | --- | --- |
 | [Failed tests](#failed-tests) | :white_check_mark: All tests passed |
 | [API changes](#openapi-changes) | :wrench: 1 non-breaking |
-| [Findings](#findings) |  :beetle: 1 new  :tada: 2 resolved  |
-| [New AppMaps](#new-appmaps) | :star: 1 new |
-| [Removed AppMaps](#removed-appmaps) | :heavy_multiplication_x: 1 removed |
+| [Security flaws](#security-flaws) |  🔒 1 new  :tada: 2 resolved  |
+| [Performance problems](#performance-problems) |  :white_check_mark: None detected  |
+| [Code anti-patterns](#code-antipatterns) |  :white_check_mark: None detected  |
+| [New AppMaps](#new-appmaps) | :star: 1 new minitest test |
+| [Removed AppMaps](#removed-appmaps) | :heavy_multiplication_x: 1 removed minitest test |
 
 
 <h2 id="openapi-changes">🔄 API changes</h2>
@@ -41,9 +43,9 @@ Detailed OpenAPI diff
 ```
 </details>
 
-<h2 id="findings">Findings</h2>
+<h2 id="security-flaws">Security flaws</h2>
 
-### :beetle: New findings (1)
+### 🔒 New problems detected (1)
 
 
 <details>
@@ -77,7 +79,7 @@ Detailed OpenAPI diff
 </details>
 
 
-### :tada: Resolved findings (2)
+### :tada: Problems resolved (2)
 
 
 <details>

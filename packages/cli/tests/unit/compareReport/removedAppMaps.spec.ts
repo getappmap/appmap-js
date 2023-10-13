@@ -3,7 +3,7 @@ import ChangeReport, { AppMap } from '../../../src/cmds/compare-report/ChangeRep
 import ReportSection, { Section } from '../../../src/cmds/compare-report/ReportSection';
 import { reportOptions } from './testHelper';
 
-describe('newAppMaps', () => {
+describe('removedAppMaps', () => {
   let section: ReportSection;
 
   beforeAll(async () => (section = await ReportSection.build(Section.RemovedAppMaps)));
@@ -36,11 +36,11 @@ describe('newAppMaps', () => {
       });
     });
   });
-  describe('when there is a new AppMap', () => {
+  describe('when there is a removed AppMap', () => {
     const metadata: Metadata = {
       name: 'Users controller test',
       client: {} as any,
-      recorder: { name: 'rspec' } as any,
+      recorder: { name: 'rspec', type: 'tests' } as any,
       source_location: 'spec/controllers/users_controller_test.rb:10',
     };
     const appmap = new AppMap('minitest/users_controller_test', metadata, false, undefined);
@@ -55,7 +55,7 @@ describe('newAppMaps', () => {
           reportOptions
         );
         expect(report).toEqual(
-          '| [Removed AppMaps](#removed-appmaps) | :heavy_multiplication_x: 1 removed |'
+          '| [Removed AppMaps](#removed-appmaps) | :heavy_multiplication_x: 1 removed rspec test |'
         );
       });
     });
@@ -76,14 +76,22 @@ describe('newAppMaps', () => {
     });
   });
   describe('when there are many removed AppMaps', () => {
-    const metadata: Metadata = {
+    const metadata1: Metadata = {
       name: 'Users controller test',
       client: {} as any,
       recorder: { name: 'rspec' } as any,
       source_location: 'spec/controllers/users_controller_test.rb:10',
     };
-    const appmap = new AppMap('minitest/users_controller_test', metadata, false, undefined);
-    const removedAppMaps = [appmap, appmap, appmap, appmap, appmap];
+    const metadata2: Metadata = {
+      name: 'Sessions controller test',
+      client: {} as any,
+      recorder: { name: 'minitest' } as any,
+      source_location: 'spec/controllers/users_controller_test.rb:10',
+    };
+    const appmap1 = new AppMap('minitest/users_controller_test', metadata1, false, undefined);
+    const appmap2 = new AppMap('minitest/users_controller_test', metadata1, false, undefined);
+    const appmap3 = new AppMap('minitest/users_controller_test', metadata2, false, undefined);
+    const removedAppMaps = [appmap1, appmap2, appmap3];
 
     describe('header', () => {
       it('reports the changes', async () => {
@@ -94,7 +102,7 @@ describe('newAppMaps', () => {
           reportOptions
         );
         expect(report).toEqual(
-          '| [Removed AppMaps](#removed-appmaps) | :heavy_multiplication_x: 5 removed |'
+          '| [Removed AppMaps](#removed-appmaps) | :heavy_multiplication_x: 2 removed rspec, 1 removed minitest |'
         );
       });
     });
@@ -104,7 +112,7 @@ describe('newAppMaps', () => {
           {
             removedAppMaps,
           } as unknown as ChangeReport,
-          { ...reportOptions, ...{ maxElements: 3 } }
+          { ...reportOptions, ...{ maxElements: 2 } }
         );
         expect(report).toEqual(`<h2 id=\"removed-appmaps\">✖️ Removed AppMaps</h2>
 
@@ -113,10 +121,7 @@ describe('newAppMaps', () => {
 
 - [[rspec] Users controller test](https://getappmap.com/?path=base%2Fminitest%2Fusers_controller_test.appmap.json)
 
-
-- [[rspec] Users controller test](https://getappmap.com/?path=base%2Fminitest%2Fusers_controller_test.appmap.json)
-
-Because there are so many removed AppMaps, some of them are not listed in this report.
+Because there are many removed AppMaps, some of them are not listed in this report.
 `);
       });
     });

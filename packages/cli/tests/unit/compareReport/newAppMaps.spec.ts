@@ -19,7 +19,7 @@ describe('newAppMaps', () => {
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual('| [New AppMaps](#new-appmaps) | :white_check_mark: None |');
+        expect(report).toEqual('| [New AppMaps](#new-appmaps) | :zero: No new AppMaps |');
       });
     });
     describe('details', () => {
@@ -39,7 +39,7 @@ describe('newAppMaps', () => {
     const metadata: Metadata = {
       name: 'Users controller test',
       client: {} as any,
-      recorder: { name: 'rspec' } as any,
+      recorder: { name: 'rspec', type: 'tests' } as any,
       source_location: 'spec/controllers/users_controller_test.rb:10',
     };
     const appmap = new AppMap('minitest/users_controller_test', metadata, false, undefined);
@@ -53,7 +53,7 @@ describe('newAppMaps', () => {
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual('| [New AppMaps](#new-appmaps) | :star: 1 new |');
+        expect(report).toEqual('| [New AppMaps](#new-appmaps) | :star: 1 new rspec test |');
       });
     });
     describe('details', () => {
@@ -72,15 +72,23 @@ describe('newAppMaps', () => {
       });
     });
   });
-  describe('when there are many new AppMaps', () => {
-    const metadata: Metadata = {
+  describe('when there are multiple new AppMaps', () => {
+    const metadata1: Metadata = {
       name: 'Users controller test',
       client: {} as any,
       recorder: { name: 'rspec' } as any,
       source_location: 'spec/controllers/users_controller_test.rb:10',
     };
-    const appmap = new AppMap('minitest/users_controller_test', metadata, false, undefined);
-    const newAppMaps = [appmap, appmap, appmap, appmap, appmap];
+    const metadata2: Metadata = {
+      name: 'Sessions controller test',
+      client: {} as any,
+      recorder: { name: 'minitest' } as any,
+      source_location: 'spec/controllers/users_controller_test.rb:10',
+    };
+    const appmap1 = new AppMap('minitest/users_controller_test', metadata1, false, undefined);
+    const appmap2 = new AppMap('minitest/users_controller_test', metadata1, false, undefined);
+    const appmap3 = new AppMap('minitest/users_controller_test', metadata2, false, undefined);
+    const newAppMaps = [appmap1, appmap2, appmap3];
 
     describe('header', () => {
       it('reports the changes', async () => {
@@ -90,7 +98,9 @@ describe('newAppMaps', () => {
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual('| [New AppMaps](#new-appmaps) | :star: 5 new |');
+        expect(report).toEqual(
+          '| [New AppMaps](#new-appmaps) | :star: 2 new rspec, 1 new minitest |'
+        );
       });
     });
     describe('details', () => {
@@ -99,7 +109,7 @@ describe('newAppMaps', () => {
           {
             newAppMaps,
           } as unknown as ChangeReport,
-          { ...reportOptions, ...{ maxElements: 3 } }
+          { ...reportOptions, ...{ maxElements: 2 } }
         );
         expect(report).toEqual(`<h2 id=\"new-appmaps\">⭐ New AppMaps</h2>
 
@@ -108,10 +118,7 @@ describe('newAppMaps', () => {
 
 - [[rspec] Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
 
-
-- [[rspec] Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
-
-Because there are so many new AppMaps, some of them are not listed in this report.
+Because there are many new AppMaps, some of them are not listed in this report.
 `);
       });
     });

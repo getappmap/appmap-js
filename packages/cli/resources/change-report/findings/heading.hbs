@@ -1,13 +1,11 @@
-| [Findings](#findings) |
-  {{~#with findingDiff}}
-  {{~#unless (length newFindings resolvedFindings) }}
-  :white_check_mark: None
+| [{{ metadata.title }}](#{{ metadata.anchor }}) |
+  {{~#unless (length findingDiff.newFindings findingDiff.resolvedFindings) }}
+  :white_check_mark: None detected
   {{~/unless}}
-  {{~#if (length newFindings) }}
-  :beetle: {{length newFindings}} new
+  {{~#if (length findingDiff.newFindings) }}
+  {{ metadata.emoji }} {{length findingDiff.newFindings}} new
   {{~/if}}
-  {{~#if (length resolvedFindings) }}
-  :tada: {{length resolvedFindings}} resolved
+  {{~#if (length findingDiff.resolvedFindings) }}
+  :tada: {{length findingDiff.resolvedFindings}} resolved
   {{~/if}}
-  {{~/with}}
   |
