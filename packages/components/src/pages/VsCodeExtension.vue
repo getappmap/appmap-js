@@ -100,8 +100,6 @@
             <v-diagram-trace
               ref="viewFlow_diagram"
               :events="filteredAppMap.rootEvents()"
-              :selected-events="selectedEvent"
-              :focused-event="focusedEvent"
               :event-filter-matches="new Set(eventFilterMatches)"
               :event-filter-match="eventFilterMatch"
               :event-filter-match-index="eventFilterMatchIndex + 1"
@@ -755,10 +753,6 @@ export default {
 
     selectedLabel() {
       return this.$store.state.selectedLabel;
-    },
-
-    focusedEvent() {
-      return this.$store.state.focusedEvent;
     },
 
     currentView() {

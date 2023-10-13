@@ -4,8 +4,7 @@
       v-for="(event, i) in events"
       :key="event.id"
       :event="event"
-      :selected-events="selectedEvents"
-      :focused-event="focusedEvent"
+      :selected-events-for-diff="selectedEventsForDiff"
       :event-filter-matches="eventFilterMatches"
       :event-filter-match="eventFilterMatch"
       :event-filter-match-index="eventFilterMatchIndex"
@@ -38,13 +37,9 @@ export default {
       type: Array,
       required: true,
     },
-    selectedEvents: {
+    selectedEventsForDiff: {
       type: Array,
       default: () => [],
-    },
-    focusedEvent: {
-      type: Object,
-      default: null,
     },
     eventFilterMatches: {
       type: Set,
