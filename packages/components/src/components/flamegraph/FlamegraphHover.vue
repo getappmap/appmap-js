@@ -5,14 +5,13 @@
 </template>
 <script>
 import { formatDuration, getEventDuration, isEventDurationValid } from '@/lib/flamegraph';
-import { Event } from '@appland/models';
+
 export default {
   name: 'v-flamegraph-hover',
   props: {
     event: {
       type: Object,
       default: null,
-      validator: (value) => value === null || value instanceof Event,
     },
   },
   computed: {

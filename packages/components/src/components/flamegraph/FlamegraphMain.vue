@@ -57,7 +57,6 @@ export default {
     zoom: {
       type: Number,
       required: true,
-      validator: (value) => value >= 0 && value <= 1,
     },
     title: {
       type: String,
