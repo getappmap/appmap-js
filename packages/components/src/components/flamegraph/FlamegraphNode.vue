@@ -12,12 +12,13 @@
     />
     <v-flamegraph-item
       :event="event"
-      :factor="factor"
-      :status="status"
-      :base-budget="baseBudget"
-      :zoom-budget="zoomBudget"
+      :classes="classes"
+      :item-style="style"
+      :content="content"
       @select="propagateSelect"
       @hover="propagateHover"
+      @mousedown="mousedown"
+      @mouseup="mouseup"
     />
   </div>
 </template>
@@ -25,7 +26,15 @@
 <script>
 import VFlamegraphBranch from './FlamegraphBranch.vue';
 import VFlamegraphItem from './FlamegraphItem.vue';
-import { add, getEventDuration, isEventDurationValid } from '../../lib/flamegraph';
+import {
+  add,
+  getEventDuration,
+  isEventDurationValid,
+  formatDurationMillisecond,
+} from '../../lib/flamegraph';
+
+const MIN_BORDER_WIDTH = 2;
+const MIN_TEXT_WIDTH = 50;
 
 export default {
   name: 'v-flamegraph-node',
@@ -56,15 +65,67 @@ export default {
       required: true,
     },
   },
-  methods: {
-    propagateSelect(target) {
-      this.$emit('select', target);
-    },
-    propagateHover(event) {
-      this.$emit('hover', event);
-    },
+  data() {
+    return {
+      timer: 0,
+    };
   },
   computed: {
+    eventType() {
+      const type =
+        this.event.codeObject && this.event.codeObject.data && this.event.codeObject.type;
+
+      return type ? type : 'default';
+    },
+    classes() {
+      const result = [
+        'flamegraph-item',
+        `flamegraph-item-${this.eventType}`,
+        `flamegraph-item-${this.status}`,
+        `flamegraph-item-${this.dimension}`,
+      ];
+
+      if (this.isHighlighted) result.push('highlighted');
+      return result;
+    },
+    isHighlighted() {
+      return this.$store.state.highlightedEvents.some(
+        (highlightedEvent) => highlightedEvent.id === this.event.id
+      );
+    },
+    style() {
+      return { width: `${this.width}px` };
+    },
+    content() {
+      if (this.dimension === 'normal') {
+        const duration = getEventDuration(this.event);
+        if (duration > 0) {
+          return `[${formatDurationMillisecond(duration, 3)}] ${this.event.toString()}`;
+        } else {
+          return this.event.toString();
+        }
+      } else {
+        return '';
+      }
+    },
+    width() {
+      if (this.status === 'pruned') {
+        return 0;
+      } else if (this.status === 'branch') {
+        return this.factor * this.zoomBudget;
+      } else {
+        return this.baseBudget;
+      }
+    },
+    dimension() {
+      if (this.width < MIN_BORDER_WIDTH) {
+        return 'borderless';
+      } else if (this.width < MIN_TEXT_WIDTH) {
+        return 'textless';
+      } else {
+        return 'normal';
+      }
+    },
     ancestors() {
       return new Set(this.event.ancestors());
     },
@@ -103,6 +164,22 @@ export default {
         );
       } else {
         return this.factor;
+      }
+    },
+  },
+  methods: {
+    propagateSelect(target) {
+      this.$emit('select', target);
+    },
+    propagateHover(event) {
+      this.$emit('hover', event);
+    },
+    mousedown() {
+      this.timer = Date.now();
+    },
+    mouseup() {
+      if (new Date() - this.timer < 200) {
+        this.propagateSelect(this.event);
       }
     },
   },
