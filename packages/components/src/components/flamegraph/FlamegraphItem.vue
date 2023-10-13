@@ -13,10 +13,10 @@
 
 <script>
 import { formatDurationMillisecond, getEventDuration } from '../../lib/flamegraph';
-import { Event } from '@appland/models';
+
 const MIN_BORDER_WIDTH = 2;
 const MIN_TEXT_WIDTH = 50;
-const statuses = new Set(['trunk', 'crown', 'branch', 'pruned']);
+
 export default {
   name: 'v-flamegraph-item',
   emits: ['select', 'hover'],
@@ -24,27 +24,22 @@ export default {
     event: {
       type: Object,
       required: true,
-      validator: (value) => value instanceof Event,
     },
     factor: {
       type: Number,
       required: true,
-      validator: (value) => value >= 0 && value <= 1,
     },
     status: {
       type: String,
       default: null,
-      validator: (value) => statuses.has(value),
     },
     baseBudget: {
       type: Number,
       required: true,
-      validator: (value) => value >= 0,
     },
     zoomBudget: {
       type: Number,
       required: true,
-      validator: (value) => value >= 0,
     },
   },
   data() {

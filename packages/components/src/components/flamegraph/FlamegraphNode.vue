@@ -23,10 +23,10 @@
 </template>
 
 <script>
-import { Event } from '@appland/models';
 import VFlamegraphBranch from './FlamegraphBranch.vue';
 import VFlamegraphItem from './FlamegraphItem.vue';
 import { add, getEventDuration, isEventDurationValid } from '../../lib/flamegraph';
+
 export default {
   name: 'v-flamegraph-node',
   emits: ['select', 'hover'],
@@ -38,28 +38,22 @@ export default {
     event: {
       type: Object,
       required: true,
-      validator: (value) => value instanceof Event,
     },
     factor: {
       type: Number,
       required: true,
-      validator: (value) => value >= 0 && value <= 1,
     },
     focus: {
       type: Object,
       default: null,
-      validator: (value) =>
-        value === null || (value.target instanceof Event && value.ancestors instanceof Set),
     },
     baseBudget: {
       type: Number,
       required: true,
-      validator: (value) => value >= 0,
     },
     zoomBudget: {
       type: Number,
       required: true,
-      validator: (value) => value >= 0,
     },
   },
   methods: {
