@@ -21,8 +21,6 @@
     <v-trace
       v-if="isExpanded"
       :events="event.children"
-      :selected-events="selectedEvents"
-      :focused-event="focusedEvent"
       :event-filter-matches="eventFilterMatches"
       :event-filter-match="eventFilterMatch"
       :event-filter-match-index="eventFilterMatchIndex"
@@ -62,14 +60,6 @@ export default {
     event: {
       type: Event,
       required: true,
-    },
-    selectedEvents: {
-      type: Array,
-      default: () => [],
-    },
-    focusedEvent: {
-      type: Object,
-      default: null,
     },
     eventFilterMatches: {
       type: Set,
@@ -136,6 +126,13 @@ export default {
     },
   },
   computed: {
+    focusedEvent() {
+      return this.$store.state.focusedEvent;
+    },
+    selectedEvents() {
+      const { selectedObject } = this.$store.getters;
+      return selectedObject instanceof Event ? [selectedObject] : [];
+    },
     isExpanded() {
       return (
         this.expanded ||

@@ -2,8 +2,6 @@
   <v-container @click.native="clearSelection" :zoomControls="zoomControls" ref="container">
     <v-trace
       :events="events"
-      :selected-events="selectedEvents"
-      :focused-event="focusedEvent"
       :event-filter-matches="eventFilterMatches"
       :event-filter-match="eventFilterMatch"
       :event-filter-match-index="eventFilterMatchIndex"
@@ -36,17 +34,9 @@ export default {
     events: {
       type: Array,
     },
-    selectedEvents: {
-      type: Array,
-      default: () => [],
-    },
-    focusedEvent: {
-      type: Object,
-      default: null,
-    },
     eventFilterMatches: {
       type: Set,
-      default: new Set(),
+      default: () => new Set(),
     },
     eventFilterMatch: {
       type: Event,
