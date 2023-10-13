@@ -46,6 +46,7 @@ export default {
       interval: null,
       focusing: 0,
       inertia: null,
+      grabbing: false,
     };
   },
   props: {
@@ -111,6 +112,7 @@ export default {
       return {
         'flamegraph-main': true,
         'flamegraph-main-focusing': this.focusing > 0,
+        mousedown: this.grabbing,
       };
     },
   },
@@ -147,9 +149,11 @@ export default {
   methods: {
     handleMouseDown() {
       this.inertia = null;
+      this.grabbing = true;
     },
     handleMouseUp() {
       this.up = true;
+      this.grabbing = false;
     },
     startFocusing() {
       this.focusing += 1;
@@ -244,6 +248,10 @@ export default {
   flex-grow: 1;
   flex-shrink: 1;
   overflow: scroll;
+}
+
+.mousedown {
+  cursor: grabbing;
 }
 
 .flamegraph-main-focusing {
