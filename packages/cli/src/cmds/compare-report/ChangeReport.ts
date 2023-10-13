@@ -7,8 +7,7 @@ import assert from 'assert';
 import { executeCommand } from '../../lib/executeCommand';
 import { verbose } from '../../utils';
 import { warn } from 'console';
-import { ExperimentalSection, Section } from './ReportSection';
-import OpenApiDiff from 'openapi-diff';
+import normalizeAppMapId from './normalizeAppMapId';
 
 export class AppMap {
   constructor(
@@ -17,8 +16,8 @@ export class AppMap {
     // 'tmp/appmap/minitest/Test_user.appmap.json', the id is 'minitest/Test_user'.;
     public id: string,
     public metadata: Metadata,
-    public changed: boolean,
-    public sourceDiff: string | undefined
+    public changed?: boolean | undefined,
+    public sourceDiff?: string | undefined
   ) {}
 
   // Gets the recorder-assigned name for the AppMap. This should be the metadata.name field, which is
@@ -152,22 +151,12 @@ export default class ChangeReport {
     public pruned = false
   ) {}
 
-  static normalizeId(id: string): string {
-    let normalizedId = id;
-    if (normalizedId.startsWith('./')) normalizedId = normalizedId.slice('./'.length);
-    if (normalizedId.endsWith('.appmap.json')) {
-      warn(`AppMap id ${id} should not include the file extension`);
-      normalizedId = normalizedId.slice(0, '.appmap.json'.length * -1);
-    }
-    return normalizedId;
-  }
-
   static async build(changeReportData: ChangeReportData): Promise<ChangeReport> {
     const metadata = (
       revision: RevisionName.Head | RevisionName.Base,
       appmap: string
     ): Metadata => {
-      const appmapId = this.normalizeId(appmap);
+      const appmapId = normalizeAppMapId(appmap);
       const metadata = changeReportData.appMapMetadata[revision][appmapId];
       if (!metadata) {
         assert(metadata);
@@ -176,16 +165,16 @@ export default class ChangeReport {
     };
 
     const changedAppMapSet = changeReportData.changedAppMaps.reduce(
-      (memo, change) => (memo.add(this.normalizeId(change.appmap)), memo),
+      (memo, change) => (memo.add(normalizeAppMapId(change.appmap)), memo),
       new Set<string>()
     );
     const sourceDiffs = changeReportData.changedAppMaps.reduce((memo, change) => {
-      if (change.sourceDiff) memo.set(this.normalizeId(change.appmap), change.sourceDiff);
+      if (change.sourceDiff) memo.set(normalizeAppMapId(change.appmap), change.sourceDiff);
       return memo;
     }, new Map<string, string>());
 
     const appmap = (revision: RevisionName.Head | RevisionName.Base, appmapId: string): AppMap => {
-      appmapId = this.normalizeId(appmapId);
+      appmapId = normalizeAppMapId(appmapId);
       const sourceDiff = sourceDiffs.get(appmapId);
       return new AppMap(
         appmapId,
@@ -244,7 +233,7 @@ export default class ChangeReport {
           if (appmapId.endsWith('.appmap.json'))
             appmapId = appmapId.slice(0, appmapId.length - '.appmap.json'.length);
           return {
-            appmap: appmap(revisionName, this.normalizeId(appmapId)),
+            appmap: appmap(revisionName, normalizeAppMapId(appmapId)),
             finding,
           };
         });
@@ -259,18 +248,18 @@ export default class ChangeReport {
     }
 
     const newAppMaps = changeReportData.newAppMaps.map((appmapId) =>
-      appmap(RevisionName.Head, this.normalizeId(appmapId))
+      appmap(RevisionName.Head, normalizeAppMapId(appmapId))
     );
 
     const removedAppMaps = changeReportData.removedAppMaps.map((appmapId) =>
-      appmap(RevisionName.Base, this.normalizeId(appmapId))
+      appmap(RevisionName.Base, normalizeAppMapId(appmapId))
     );
 
     const changedAppMaps = Object.keys(changeReportData.sequenceDiagramDiff).reduce<
       Record<string, AppMap[]>
     >((memo, key) => {
       const appmaps = changeReportData.sequenceDiagramDiff[key].map((appmapId) =>
-        appmap(RevisionName.Head, this.normalizeId(appmapId))
+        appmap(RevisionName.Head, normalizeAppMapId(appmapId))
       );
       memo[key] = appmaps;
       return memo;

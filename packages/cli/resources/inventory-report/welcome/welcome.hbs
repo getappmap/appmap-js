@@ -1,3 +1,35 @@
+{{#*inline "finding-stack" }}
+{{#with stack }}
+  {{#each this }}
+- {{ this }}
+  {{/each}}
+{{/with}}
+
+{{/inline}}
+{{#*inline "finding"}}
+
+<details>
+<summary>
+  {{ ruleTitle }} ({{impactDomain}})
+</summary>
+
+##### Description
+
+> {{ message }}
+
+| Field | Value |
+| --- | --- |
+| Rule | [{{ ruleId }}](https://appmap.io/docs/analysis/rules-reference.html#{{ruleId }}) |
+| Impact domain | {{ impactDomain }} |
+
+{{#if stack}}
+##### Stack trace
+
+{{> finding-stack}}
+{{/if}}
+
+</details>
+{{/inline}}
 ##  Welcome to AppMap!
 
 This is a report of the AppMap data in your project. Let's start with a look at how the
@@ -13,10 +45,10 @@ test cases. Here's how the AppMaps in this project were created:
 Continue reading for information about:
 
 - [Runtime analysis](#runtime-analysis)
-- [REST API analysis](#rest-api-analysis)
+- [Web service API profile](#ws-api-profile)
 - [SQL profile](#sql-profile)
 
-#### Runtime Analysis
+<h4><a id="runtime-analysis">Runtime analysis</a></h4>
 
 AppMap includes a runtime analysis capability that analyzes the AppMap data for security vulnerabilities,
 performance problems, and code anti-patterns. On each pull request, you'll get a report of
@@ -32,13 +64,20 @@ summary:
 | {{@key}} | {{@this}} |
   {{/each}}
 
+Here's a sample of the security flaws, performance problems, and code anti-patterns that were
+detected in this project:
+
+{{#each findings}}
+{{> finding}}
+{{/each}}
+
 {{~else~}}
 No security vulnerabilities or performance problems were detected in this repo. Keep up the good work :slightly_smiling_face:
 {{/if}}
 
 AppMap runtime analysis is configurable. [Learn more about configuring AppMap runtime analysis](https://appmap.io/docs/guides/configuring-analysis.html).
 
-#### REST API analysis
+<h4><a id="ws-api-profile">Web service API profile</a></h4>
 
 When you record AppMaps that include HTTP server requests, AppMap can automatically generate OpenAPI definitions. 
 
@@ -75,7 +114,7 @@ the better the AppMap data will be for generating OpenAPI definitions and compar
 changes in each pull request.
 {{/if}}
 
-#### SQL profile
+<h4><a id="sql-profile">SQL profile</a></h4>
 
 When your code makes a SQL query, AppMap records the SQL query in detail. It even parses the queries
 to figure out which tables your app is using, and how it's using them.
@@ -102,14 +141,3 @@ This project doesn't have any AppMaps of SQL queries. If this is unexpected,
 you can add some test cases that interact with the database. The more of these type of tests you add,
 the better the AppMap data will be for analyzing the SQL changes in each pull request.
 {{/if}}
-
-<!--
-  ## External services profile 
-
-  TODO
-
-## Code organization
-
-The app contains `{{ length packages }}` code packages.
--->
-
