@@ -36,63 +36,73 @@ This is a report of the AppMap data in your project. Let's start with a look at 
 AppMap data is created in this project. In CI, AppMaps are generally created by recording
 test cases. Here's how the AppMaps in this project were created:
 
-| Recorder | Number of AppMaps |
+{{#if (eq (length appmapCountByRecorderName) 1) }}
+| Number of AppMaps | Type of recording |
 | --- | --- |
 {{#each appmapCountByRecorderName}}
-| {{@key}} | {{@this}} |
+| {{@this}} | {{@key}} |
 {{/each}}
+{{else}}
+```mermaid
+pie showData
+  title Sources of AppMap data in this project
+{{#each appmapCountByRecorderName}}
+  "{{@key}}" : {{@this}}
+{{/each}}
+```
+{{/if}}
 
 Continue reading for information about:
 
-- [Runtime analysis](#runtime-analysis)
+- [Code profile](#code-profile)
 - [Web service API profile](#ws-api-profile)
 - [SQL profile](#sql-profile)
+- [Runtime analysis](#runtime-analysis)
 
-<h4><a id="runtime-analysis">Runtime analysis</a></h4>
+<h3><a id="code-profile">Code profile</a></h3>
 
-AppMap includes a runtime analysis capability that analyzes the AppMap data for security vulnerabilities,
-performance problems, and code anti-patterns. On each pull request, you'll get a report of
-the new and resolved issues for the repo.
+Your _appmap.yml_ configuration file specifies all the code that you want AppMap to instrument and record.
+By default, sub-modules of any requested code are recorded as well. In this project, the packages specified
+in _appmap.yml_ are:
 
-{{#if (length findingCountByImpactDomain) }}
-AppMap has performed a preliminary analysis of this repo, and detected some problems. Here's a
-summary:
+```yaml
+{{{ format_as_yaml appmapConfig.packages }}}```
 
-| Impact Domain | Number of Problems |
-| --- | --- |
-  {{#each findingCountByImpactDomain}}
-| {{@key}} | {{@this}} |
-  {{/each}}
+By applying this configuration to your {{ appmapConfig.language }} project, AppMap has recorded the 
+following packages and modules:
 
-Here's a sample of the security flaws, performance problems, and code anti-patterns that were
-detected in this project:
+{{#each (packages_matching_configuration packages appmapConfig.packages) }}`{{ @this }}` {{/each}}
 
-{{#each findings}}
-{{> finding}}
-{{/each}}
+<h3><a id="ws-api-profile">Web service API profile</a></h3>
 
-{{~else~}}
-No security vulnerabilities or performance problems were detected in this repo. Keep up the good work :slightly_smiling_face:
-{{/if}}
-
-AppMap runtime analysis is configurable. [Learn more about configuring AppMap runtime analysis](https://appmap.io/docs/guides/configuring-analysis.html).
-
-<h4><a id="ws-api-profile">Web service API profile</a></h4>
-
-When you record AppMaps that include HTTP server requests, AppMap can automatically generate OpenAPI definitions. 
+When you record AppMaps that include HTTP server requests, AppMap automatically generates OpenAPI definitions
+based on the observed data.
 
 {{#if (length appmapCountByHTTPServerRequestCount) }}
 
-This project has AppMaps that contain HTTP server requests. Here's a profile of the AppMaps that
-include HTTP server requests:
+**{{ format_as_percentage 
+  (divide
+    (subtract 
+      (sum (values appmapCountByRecorderName))
+      (coalesce appmapCountByHTTPServerRequestCount.[0] 0)
+    )
+    (sum (values appmapCountByRecorderName))
+  ) 
+  }}** of the AppMaps in this project contain **at least one** HTTP server request.
 
-| Number of HTTP server requests | Number of AppMaps |
-| --- | --- |
-| None | {{ coalesce appmapCountByHTTPServerRequestCount.[0] 'No AppMaps' }} |
-| Between 1 and 5 | {{ sum_values_by_key_range appmapCountByHTTPServerRequestCount 1 5 }} |
-| More than 5 | {{ sum_values_by_key_range appmapCountByHTTPServerRequestCount 5 }} |
 
-At a high level, here are the REST resources that are provided by this project:
+**{{ format_as_percentage 
+  (divide
+    (subtract 
+      (sum (values appmapCountByRecorderName))
+      (coalesce appmapCountByHTTPServerRequestCount.[0] 0)
+      (coalesce appmapCountByHTTPServerRequestCount.[1] 0)
+    )
+    (sum (values appmapCountByRecorderName))
+  ) 
+  }}** of the AppMaps in this project contain **more than one** HTTP server request.
+
+Here's **a summary of the web service routes** that are provided by this project:
 
 {{#each routeCountByResource}}`{{@key}}` {{/each}}
 
@@ -108,36 +118,84 @@ As you change your code and tests, AppMap will automatically update the OpenAPI 
 You'll see a summary of the REST API changes in each pull request.
 
 {{~else~}}
-This project doesn't have any AppMaps that contain HTTP server requests. If this is unexpected,
-you can add some test cases that exercise the HTTP server. The more of these type of tests you add,
+This project doesn't have any AppMaps that contain HTTP server requests. If your app provides
+web service APIs, and you don't see any HTTP server requests here, you can add some test cases that 
+exercise the HTTP server. The more of these type of tests you add,
 the better the AppMap data will be for generating OpenAPI definitions and comparing the API
 changes in each pull request.
 {{/if}}
 
-<h4><a id="sql-profile">SQL profile</a></h4>
+<h3><a id="sql-profile">SQL profile</a></h3>
 
 When your code makes a SQL query, AppMap records the SQL query in detail. It even parses the queries
 to figure out which tables your app is using, and how it's using them.
 
 {{#if (length appmapCountBySQLQueryCount) }}
 
-Here's a summary of how many SQL queries are in the AppMaps of this project:
 
-| SQL queries | Number of AppMaps |
-| --- | --- |
-| None | {{ coalesce appmapCountBySQLQueryCount.[0] 'No AppMaps' }} |
-| Between 1 and 5 | {{ sum_values_by_key_range appmapCountBySQLQueryCount 1 5 }} |
-| More than 5 | {{ sum_values_by_key_range appmapCountBySQLQueryCount 5 }} |
+**{{ format_as_percentage 
+  (divide
+    (subtract 
+      (sum (values appmapCountByRecorderName))
+      (coalesce appmapCountBySQLQueryCount.[0] 0)
+    )
+    (sum (values appmapCountByRecorderName))
+  ) 
+  }}** of the AppMaps in this project contain **at least one** SQL query.
+
+
+**{{ format_as_percentage 
+  (divide
+    (subtract 
+      (sum (values appmapCountByRecorderName))
+      (coalesce appmapCountBySQLQueryCount.[0] 0)
+      (coalesce appmapCountBySQLQueryCount.[1] 0)
+    )
+    (sum (values appmapCountByRecorderName))
+  ) 
+  }}** of the AppMaps in this project contain **more than one** SQL query.
 
 {{#if (length sqlTables) }}
 
-And here are all the SQL tables that are used by this project:
+Here's are all the SQL tables that are present in the observed queries:
 
 {{#each sqlTables}}`{{@this}}` {{/each}}
 {{/if}}
 
 {{~else~}}
-This project doesn't have any AppMaps of SQL queries. If this is unexpected,
-you can add some test cases that interact with the database. The more of these type of tests you add,
+This project doesn't have any AppMaps of SQL queries. If your app uses a database,
+and you don't see SQL queries here, you can add some test cases that interact with the database. The more of these type of tests you add,
 the better the AppMap data will be for analyzing the SQL changes in each pull request.
+{{/if}}
+
+<h3><a id="runtime-analysis">Runtime analysis</a></h3>
+
+AppMap includes a runtime analysis capability that analyzes the AppMap data for security vulnerabilities,
+performance problems, and code anti-patterns. On each pull request, you'll get a report of
+the new and resolved issues for the repo.
+
+{{#if (length findingCountByImpactDomain) }}
+AppMap has performed a preliminary analysis of this repo, and detected some problems. Here's a
+summary:
+
+```mermaid
+pie showData
+  title Security flaws, performance problems and code anti-patterns
+{{#each findingCountByImpactDomain}}
+  "{{@key}}" : {{@this}}
+{{/each}}
+```
+
+Here's a sample of the security flaws, performance problems, and code anti-patterns that were
+detected in this project:
+
+{{#each findings}}
+{{> finding}}
+{{/each}}
+
+A GitHub Artifact called `appmap-archive-full_[sha].tar` is attached to this GitHub Action workflow
+run. A full accounting of the problems detected in this repo can be found in that archive file.
+
+{{~else~}}
+No security vulnerabilities or performance problems were detected in this repo. Keep up the good work :slightly_smiling_face:
 {{/if}}

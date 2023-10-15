@@ -29,10 +29,15 @@ export interface UpdateConfig {
   test_commands?: Record<string, string>;
 }
 
+export type ConfiguredPackage = {
+  path: string;
+};
+
 export interface AppMapConfig {
   name: string;
   language?: string;
   appmap_dir?: string;
+  packages: ConfiguredPackage[];
   compare?: CompareConfig;
   update?: UpdateConfig;
 }

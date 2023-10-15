@@ -8,6 +8,7 @@ import { cwd } from 'process';
 import { join } from 'path';
 import { Report } from '../inventory/Report';
 import assert from 'assert';
+import loadAppMapConfig from '../../lib/loadAppMapConfig';
 
 export const command = 'inventory-report <report-json-file> [output-file]';
 export const describe = 'Generate a report document describing the current state of a repository.';
@@ -51,9 +52,12 @@ export const handler = async (argv: any) => {
   assert(reportJsonFile);
   assert(templateName);
 
+  const appmapConfig = await loadAppMapConfig();
+  if (!appmapConfig) throw new Error('Unable to load appmap.yml');
+
   const report: Report = JSON.parse(await readFile(reportJsonFile, 'utf-8'));
 
-  const reportMD = await generateReport(templateName, report);
+  const reportMD = await generateReport(templateName, report, appmapConfig);
   if (outputFile) {
     await writeFile(outputFile, reportMD);
     warn(`Report written to ${join(cwd(), outputFile)}`);

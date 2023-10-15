@@ -220,16 +220,11 @@ export default class ReportSection {
       }
     };
 
-    const pluralize = (count: number, singular: string, plural?: string): string => {
-      return count === 1 ? singular : plural || singular + 's';
-    };
-
     return {
       appmap_diff_url,
       appmap_title,
       appmap_url,
       group_appmaps_by_recorder_name,
-      pluralize,
       source_url,
       ...helpers,
     };
