@@ -4,17 +4,74 @@ This is a report of the AppMap data in your project. Let's start with a look at 
 AppMap data is created in this project. In CI, AppMaps are generally created by recording
 test cases. Here's how the AppMaps in this project were created:
 
-| Recorder | Number of AppMaps |
+| Number of AppMaps | Type of recording |
 | --- | --- |
-| minitest | 6 |
+| 6 | minitest |
 
 Continue reading for information about:
 
-- [Runtime analysis](#runtime-analysis)
+- [Code profile](#code-profile)
 - [Web service API profile](#ws-api-profile)
 - [SQL profile](#sql-profile)
+- [Runtime analysis](#runtime-analysis)
 
-<h4><a id="runtime-analysis">Runtime analysis</a></h4>
+<h3><a id="code-profile">Code profile</a></h3>
+
+Your _appmap.yml_ configuration file specifies all the code that you want AppMap to instrument and record.
+By default, sub-modules of any requested code are recorded as well. In this project, the packages specified
+in _appmap.yml_ are:
+
+```yaml
+- path: app
+```
+
+By applying this configuration to your ruby project, AppMap has recorded the 
+following packages and modules:
+
+`app` `app/helpers` 
+
+<h3><a id="ws-api-profile">Web service API profile</a></h3>
+
+When you record AppMaps that include HTTP server requests, AppMap automatically generates OpenAPI definitions
+based on the observed data.
+
+
+**100%** of the AppMaps in this project contain **at least one** HTTP server request.
+
+
+**83%** of the AppMaps in this project contain **more than one** HTTP server request.
+
+Here's **a summary of the web service routes** that are provided by this project:
+
+`/` `/about` `/account_activations/{id}` `/contact` `/help` `/login` `/logout` `/microposts` `/microposts/{id}` `/password_resets` `/password_resets/new` `/password_resets/{id}` `/relationships` `/relationships/{id}` `/signup` `/users` `/users/{id}` 
+
+And here are the different content types served by the API:
+
+| Response Content Type | Number of Routes |
+| --- | --- |
+| text/html | 38 |
+| text/javascript | 2 |
+
+As you change your code and tests, AppMap will automatically update the OpenAPI definitions. 
+You'll see a summary of the REST API changes in each pull request.
+<h3><a id="sql-profile">SQL profile</a></h3>
+
+When your code makes a SQL query, AppMap records the SQL query in detail. It even parses the queries
+to figure out which tables your app is using, and how it's using them.
+
+
+
+**83%** of the AppMaps in this project contain **at least one** SQL query.
+
+
+**83%** of the AppMaps in this project contain **more than one** SQL query.
+
+
+Here's are all the SQL tables that are present in the observed queries:
+
+`active_storage_attachments` `active_storage_blobs` `microposts` `relationships` `sqlite_master` `sqlite_temp_master` `users` 
+
+<h3><a id="runtime-analysis">Runtime analysis</a></h3>
 
 AppMap includes a runtime analysis capability that analyzes the AppMap data for security vulnerabilities,
 performance problems, and code anti-patterns. On each pull request, you'll get a report of
@@ -23,11 +80,13 @@ the new and resolved issues for the repo.
 AppMap has performed a preliminary analysis of this repo, and detected some problems. Here's a
 summary:
 
-| Impact Domain | Number of Problems |
-| --- | --- |
-| Performance | 8 |
-| Security | 5 |
-| Maintainability | 2 |
+```mermaid
+pie showData
+  title Security flaws, performance problems and code anti-patterns
+  "Performance" : 8
+  "Security" : 5
+  "Maintainability" : 2
+```
 
 Here's a sample of the security flaws, performance problems, and code anti-patterns that were
 detected in this project:
@@ -270,50 +329,5 @@ detected in this project:
 
 </details>
 
-AppMap runtime analysis is configurable. [Learn more about configuring AppMap runtime analysis](https://appmap.io/docs/guides/configuring-analysis.html).
-
-<h4><a id="ws-api-profile">Web service API profile</a></h4>
-
-When you record AppMaps that include HTTP server requests, AppMap can automatically generate OpenAPI definitions. 
-
-
-This project has AppMaps that contain HTTP server requests. Here's a profile of the AppMaps that
-include HTTP server requests:
-
-| Number of HTTP server requests | Number of AppMaps |
-| --- | --- |
-| None | No AppMaps |
-| Between 1 and 5 | 3 |
-| More than 5 | 3 |
-
-At a high level, here are the REST resources that are provided by this project:
-
-`/` `/about` `/account_activations/{id}` `/contact` `/help` `/login` `/logout` `/microposts` `/microposts/{id}` `/password_resets` `/password_resets/new` `/password_resets/{id}` `/relationships` `/relationships/{id}` `/signup` `/users` `/users/{id}` 
-
-And here are the different content types served by the API:
-
-| Response Content Type | Number of Routes |
-| --- | --- |
-| text/html | 38 |
-| text/javascript | 2 |
-
-As you change your code and tests, AppMap will automatically update the OpenAPI definitions. 
-You'll see a summary of the REST API changes in each pull request.
-<h4><a id="sql-profile">SQL profile</a></h4>
-
-When your code makes a SQL query, AppMap records the SQL query in detail. It even parses the queries
-to figure out which tables your app is using, and how it's using them.
-
-
-Here's a summary of how many SQL queries are in the AppMaps of this project:
-
-| SQL queries | Number of AppMaps |
-| --- | --- |
-| None | 1 |
-| Between 1 and 5 | 0 |
-| More than 5 | 5 |
-
-
-And here are all the SQL tables that are used by this project:
-
-`active_storage_attachments` `active_storage_blobs` `microposts` `relationships` `sqlite_master` `sqlite_temp_master` `users` 
+A GitHub Artifact called `appmap-archive-full_[sha].tar` is attached to this GitHub Action workflow
+run. A full accounting of the problems detected in this repo can be found in that archive file.
