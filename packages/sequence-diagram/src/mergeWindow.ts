@@ -1,8 +1,17 @@
 import sha256 from 'crypto-js/sha256.js';
+import LRUCache from 'lru-cache';
 import { Action, Loop, NodeType } from './types';
 
+const sha256Cache = new LRUCache<string, string>({ max: 3000 });
+
 function buildDigest(actions: Action[]): string {
-  return sha256(actions.map((action) => action.subtreeDigest).join('\n')).toString();
+  const sha256Input = actions.map((action) => action.subtreeDigest).join('\n');
+  let result = sha256Cache.get(sha256Input);
+  if (!result) {
+    result = sha256(sha256Input).toString();
+    sha256Cache.set(sha256Input, result);
+  }
+  return result;
 }
 
 function countDigests(actions: Action[], windowSize: number): Map<string, number> {
