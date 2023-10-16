@@ -1,19 +1,25 @@
-##  Welcome to AppMap!
+##  AppMap configuration report
 
-This is a report of the AppMap data in your project. Let's start with a look at how the
-AppMap data is created in this project. In CI, AppMaps are generally created by recording
+Success! Your project has been successfully configured to record AppMaps when
+you run your tests.
+
+> **[Continue with AppMap Setup >>](https://getappmap.com/github/welcome_report)**
+
+<hr/>
+
+<details>
+<summary>
+View details
+</summary>
+
+<h3><a id="data-sources">AppMap data sources</a></h3>
+
+In GitHub Actions and other CI systems, AppMaps are created by recording
 test cases. Here's how the AppMaps in this project were created:
 
 | Number of AppMaps | Type of recording |
 | --- | --- |
 | 6 | minitest |
-
-Continue reading for information about:
-
-- [Code profile](#code-profile)
-- [Web service API profile](#ws-api-profile)
-- [SQL profile](#sql-profile)
-- [Runtime analysis](#runtime-analysis)
 
 <h3><a id="code-profile">Code profile</a></h3>
 
@@ -71,263 +77,9 @@ Here's are all the SQL tables that are present in the observed queries:
 
 `active_storage_attachments` `active_storage_blobs` `microposts` `relationships` `sqlite_master` `sqlite_temp_master` `users` 
 
-<h3><a id="runtime-analysis">Runtime analysis</a></h3>
+### Learn more
 
-AppMap includes a runtime analysis capability that analyzes the AppMap data for security vulnerabilities,
-performance problems, and code anti-patterns. On each pull request, you'll get a report of
-the new and resolved issues for the repo.
-
-AppMap has performed a preliminary analysis of this repo, and detected some problems. Here's a
-summary:
-
-```mermaid
-pie showData
-  title Security flaws, performance problems and code anti-patterns
-  "Performance" : 8
-  "Security" : 5
-  "Maintainability" : 2
-```
-
-Here's a sample of the security flaws, performance problems, and code anti-patterns that were
-detected in this project:
-
-
-<details>
-<summary>
-  Execution of untrusted system command (Security)
-</summary>
-
-##### Description
-
-> Open3.capture3 executes an untrusted command string
-
-| Field | Value |
-| --- | --- |
-| Rule | [exec-of-untrusted-command](https://appmap.io/docs/analysis/rules-reference.html#exec-of-untrusted-command) |
-| Impact domain | Security |
-
-##### Stack trace
-
-- /opt/hostedtoolcache/Ruby/3.0.2/x64/lib/ruby/3.0.0/open3.rb:279
-- app/views/sessions/new.html.erb
-- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/renderers.rb:141
-- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19
-
+To learn more about AppMap, visit
+[appmap.io/docs](https://appmap.io/docs).
 
 </details>
-
-<details>
-<summary>
-  Secret in log (Security)
-</summary>
-
-##### Description
-
-> Log message contains secret User.new_activation_token &quot;7Jgdj4mjIIWebMP5M97Xwg&quot;: Started GET &quot;/account_activations/7Jgdj4mjIIWebMP5M97Xwg/edit?email&#x3D;wrong&quot; for 127.0.0.1 at 2023-09- (...18 more characters)
-
-| Field | Value |
-| --- | --- |
-| Rule | [secret-in-log](https://appmap.io/docs/analysis/rules-reference.html#secret-in-log) |
-| Impact domain | Security |
-
-##### Stack trace
-
-- /opt/hostedtoolcache/Ruby/3.0.2/x64/lib/ruby/3.0.0/logger/log_device.rb:31
-
-
-</details>
-
-<details>
-<summary>
-  Secret in log (Security)
-</summary>
-
-##### Description
-
-> Log message contains secret User.new_activation_token &quot;7Jgdj4mjIIWebMP5M97Xwg&quot;:   Parameters: {&quot;email&quot;&#x3D;&gt;&quot;wrong&quot;, &quot;id&quot;&#x3D;&gt;&quot;7Jgdj4mjIIWebMP5M97Xwg&quot;}
-
-
-| Field | Value |
-| --- | --- |
-| Rule | [secret-in-log](https://appmap.io/docs/analysis/rules-reference.html#secret-in-log) |
-| Impact domain | Security |
-
-##### Stack trace
-
-- /opt/hostedtoolcache/Ruby/3.0.2/x64/lib/ruby/3.0.0/logger/log_device.rb:31
-- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19
-
-
-</details>
-
-<details>
-<summary>
-  Secret in log (Security)
-</summary>
-
-##### Description
-
-> Log message contains secret User.new_activation_token &quot;7Jgdj4mjIIWebMP5M97Xwg&quot;: Started GET &quot;/account_activations/7Jgdj4mjIIWebMP5M97Xwg/edit?email&#x3D;user%40example.com&quot; for 127.0.0. (...31 more characters)
-
-| Field | Value |
-| --- | --- |
-| Rule | [secret-in-log](https://appmap.io/docs/analysis/rules-reference.html#secret-in-log) |
-| Impact domain | Security |
-
-##### Stack trace
-
-- /opt/hostedtoolcache/Ruby/3.0.2/x64/lib/ruby/3.0.0/logger/log_device.rb:31
-
-
-</details>
-
-<details>
-<summary>
-  N plus 1 SQL query (Performance)
-</summary>
-
-##### Description
-
-> app_views_microposts__micropost_html_erb.render[344] contains 30 occurrences of SQL: SELECT &quot;users&quot;.* FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ? LIMIT ?
-
-| Field | Value |
-| --- | --- |
-| Rule | [n-plus-one-query](https://appmap.io/docs/analysis/rules-reference.html#n-plus-one-query) |
-| Impact domain | Performance |
-
-##### Stack trace
-
-- app/views/microposts/_micropost.html.erb
-- app/views/shared/_feed.html.erb
-- app/views/static_pages/home.html.erb
-- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/renderers.rb:141
-- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19
-
-
-</details>
-
-<details>
-<summary>
-  N plus 1 SQL query (Performance)
-</summary>
-
-##### Description
-
-> app_views_microposts__micropost_html_erb.render[344] contains 30 occurrences of SQL: SELECT &quot;active_storage_attachments&quot;.* FROM &quot;active_storage_attachments&quot; WHERE &quot;active_storage_attachments&quot;.&quot;record_id&quot; &#x3D; ? AND &quot;active_storage_attachments&quot;.&quot;record_type&quot; &#x3D; ? AND &quot;active_storage_attachments&quot;.&quot;name&quot; &#x3D; ? LIMIT ?
-
-| Field | Value |
-| --- | --- |
-| Rule | [n-plus-one-query](https://appmap.io/docs/analysis/rules-reference.html#n-plus-one-query) |
-| Impact domain | Performance |
-
-##### Stack trace
-
-- app/views/microposts/_micropost.html.erb
-- app/views/shared/_feed.html.erb
-- app/views/static_pages/home.html.erb
-- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/renderers.rb:141
-- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19
-
-
-</details>
-
-<details>
-<summary>
-  N plus 1 SQL query (Performance)
-</summary>
-
-##### Description
-
-> app_views_microposts__micropost_html_erb.render[1281] contains 30 occurrences of SQL: SELECT &quot;users&quot;.* FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ? LIMIT ?
-
-| Field | Value |
-| --- | --- |
-| Rule | [n-plus-one-query](https://appmap.io/docs/analysis/rules-reference.html#n-plus-one-query) |
-| Impact domain | Performance |
-
-##### Stack trace
-
-- app/views/microposts/_micropost.html.erb
-- app/views/shared/_feed.html.erb
-- app/views/static_pages/home.html.erb
-- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/renderers.rb:141
-- app/controllers/microposts_controller.rb:6
-- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19
-
-
-</details>
-
-<details>
-<summary>
-  N plus 1 SQL query (Performance)
-</summary>
-
-##### Description
-
-> app_views_microposts__micropost_html_erb.render[1281] contains 30 occurrences of SQL: SELECT &quot;active_storage_attachments&quot;.* FROM &quot;active_storage_attachments&quot; WHERE &quot;active_storage_attachments&quot;.&quot;record_id&quot; &#x3D; ? AND &quot;active_storage_attachments&quot;.&quot;record_type&quot; &#x3D; ? AND &quot;active_storage_attachments&quot;.&quot;name&quot; &#x3D; ? LIMIT ?
-
-| Field | Value |
-| --- | --- |
-| Rule | [n-plus-one-query](https://appmap.io/docs/analysis/rules-reference.html#n-plus-one-query) |
-| Impact domain | Performance |
-
-##### Stack trace
-
-- app/views/microposts/_micropost.html.erb
-- app/views/shared/_feed.html.erb
-- app/views/static_pages/home.html.erb
-- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/renderers.rb:141
-- app/controllers/microposts_controller.rb:6
-- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19
-
-
-</details>
-
-<details>
-<summary>
-  Data update performed in GET or HEAD request (Maintainability)
-</summary>
-
-##### Description
-
-> Data update performed in HTTP request GET /account_activations/{id}/edit: UPDATE &quot;users&quot; SET &quot;activated&quot; &#x3D; ?, &quot;updated_at&quot; &#x3D; ? WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ?
-
-| Field | Value |
-| --- | --- |
-| Rule | [update-in-get-request](https://appmap.io/docs/analysis/rules-reference.html#update-in-get-request) |
-| Impact domain | Maintainability |
-
-##### Stack trace
-
-- app/models/user.rb:73
-- app/controllers/account_activations_controller.rb:5
-- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19
-
-
-</details>
-
-<details>
-<summary>
-  Data update performed in GET or HEAD request (Maintainability)
-</summary>
-
-##### Description
-
-> Data update performed in HTTP request GET /account_activations/{id}/edit: UPDATE &quot;users&quot; SET &quot;updated_at&quot; &#x3D; ?, &quot;activated_at&quot; &#x3D; ? WHERE &quot;users&quot;.&quot;id&quot; &#x3D; ?
-
-| Field | Value |
-| --- | --- |
-| Rule | [update-in-get-request](https://appmap.io/docs/analysis/rules-reference.html#update-in-get-request) |
-| Impact domain | Maintainability |
-
-##### Stack trace
-
-- app/models/user.rb:73
-- app/controllers/account_activations_controller.rb:5
-- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19
-
-
-</details>
-
-A GitHub Artifact called `appmap-archive-full_[sha].tar` is attached to this GitHub Action workflow
-run. A full accounting of the problems detected in this repo can be found in that archive file.
