@@ -92,7 +92,7 @@ describe('findings', () => {
 
 ##### View in AppMap
 
-- [Full AppMap &raquo;](https://getappmap.com/?path=head%2Fminitest%2FMicroposts_interface_micropost_interface.appmap.json)
+- [Full AppMap &raquo;](https://getappmap.com/?path=head%2Fminitest%2FMicroposts_interface_micropost_interface.appmap.json&state=eyJzZWxlY3RlZE9iamVjdCI6ImFuYWx5c2lzLWZpbmRpbmc6YzdhNDk0OWY1NTNjMTcyYWIxYTFmYjJjNTdiMWE1YjVhNjFjZDk5ODAzOTA5MzM2NTVkNDI3NmE4ZGY0ZTc0MCJ9)
 - [Sequence diagram diff &raquo;](https://getappmap.com/?path=diff%2Fminitest%2FMicroposts_interface_micropost_interface.diff.sequence.json)
 
 
