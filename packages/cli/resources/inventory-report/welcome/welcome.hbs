@@ -1,39 +1,20 @@
-{{#*inline "finding-stack" }}
-{{#with stack }}
-  {{#each this }}
-- {{ this }}
-  {{/each}}
-{{/with}}
+##  AppMap configuration report
 
-{{/inline}}
-{{#*inline "finding"}}
+Success! Your project has been successfully configured to record AppMaps when
+you run your tests.
+
+> **[Continue with AppMap Setup >>](https://getappmap.com/github/configuration_report)**
+
+<hr/>
 
 <details>
 <summary>
-  {{ ruleTitle }} ({{impactDomain}})
+View details
 </summary>
 
-##### Description
+<h3><a id="data-sources">AppMap data sources</a></h3>
 
-> {{ message }}
-
-| Field | Value |
-| --- | --- |
-| Rule | [{{ ruleId }}](https://appmap.io/docs/analysis/rules-reference.html#{{ruleId }}) |
-| Impact domain | {{ impactDomain }} |
-
-{{#if stack}}
-##### Stack trace
-
-{{> finding-stack}}
-{{/if}}
-
-</details>
-{{/inline}}
-##  Welcome to AppMap!
-
-This is a report of the AppMap data in your project. Let's start with a look at how the
-AppMap data is created in this project. In CI, AppMaps are generally created by recording
+In GitHub Actions and other CI systems, AppMaps are created by recording
 test cases. Here's how the AppMaps in this project were created:
 
 {{#if (eq (length appmapCountByRecorderName) 1) }}
@@ -51,13 +32,6 @@ pie showData
 {{/each}}
 ```
 {{/if}}
-
-Continue reading for information about:
-
-- [Code profile](#code-profile)
-- [Web service API profile](#ws-api-profile)
-- [SQL profile](#sql-profile)
-- [Runtime analysis](#runtime-analysis)
 
 <h3><a id="code-profile">Code profile</a></h3>
 
@@ -157,7 +131,7 @@ to figure out which tables your app is using, and how it's using them.
 
 {{#if (length sqlTables) }}
 
-Here's are all the SQL tables that are present in the observed queries:
+Here are the SQL tables that are present in the observed queries:
 
 {{#each sqlTables}}`{{@this}}` {{/each}}
 {{/if}}
@@ -168,34 +142,9 @@ and you don't see SQL queries here, you can add some test cases that interact wi
 the better the AppMap data will be for analyzing the SQL changes in each pull request.
 {{/if}}
 
-<h3><a id="runtime-analysis">Runtime analysis</a></h3>
+### Learn more
 
-AppMap includes a runtime analysis capability that analyzes the AppMap data for security vulnerabilities,
-performance problems, and code anti-patterns. On each pull request, you'll get a report of
-the new and resolved issues for the repo.
+To learn more about AppMap, visit
+[appmap.io/docs](https://appmap.io/docs).
 
-{{#if (length findingCountByImpactDomain) }}
-AppMap has performed a preliminary analysis of this repo, and detected some problems. Here's a
-summary:
-
-```mermaid
-pie showData
-  title Security flaws, performance problems and code anti-patterns
-{{#each findingCountByImpactDomain}}
-  "{{@key}}" : {{@this}}
-{{/each}}
-```
-
-Here's a sample of the security flaws, performance problems, and code anti-patterns that were
-detected in this project:
-
-{{#each findings}}
-{{> finding}}
-{{/each}}
-
-A GitHub Artifact called `appmap-archive-full_[sha].tar` is attached to this GitHub Action workflow
-run. A full accounting of the problems detected in this repo can be found in that archive file.
-
-{{~else~}}
-No security vulnerabilities or performance problems were detected in this repo. Keep up the good work :slightly_smiling_face:
-{{/if}}
+</details>

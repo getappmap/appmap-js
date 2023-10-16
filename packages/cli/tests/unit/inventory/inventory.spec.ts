@@ -34,16 +34,5 @@ describe('inventory command', () => {
     });
     expect(Object.keys(actualReport.routeCountByResource)).toContain('/account_activations/{id}');
     expect(actualReport.sqlTables).toContain('microposts');
-    expect(actualReport.findingCountByImpactDomain).toEqual({
-      Performance: 8,
-      Security: 5,
-      Maintainability: 2,
-    });
-    expect(actualReport.findings).toHaveLength(3);
-    expect(actualReport.findings.map((f) => f.impactDomain)).toEqual([
-      'Security',
-      'Performance',
-      'Maintainability',
-    ]);
   });
 });

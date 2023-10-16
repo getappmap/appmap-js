@@ -7,7 +7,6 @@ import { existsSync } from 'fs';
 import { Report } from '../inventory/Report';
 import helpers from '../compare-report/helpers';
 import { AppMapConfig, ConfiguredPackage } from '../../lib/loadAppMapConfig';
-import { App } from '@appland/client';
 
 const TemplateDirectory = [
   '../../../resources/inventory-report', // As packaged

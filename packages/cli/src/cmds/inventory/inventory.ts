@@ -9,7 +9,6 @@ import { OpenAPIV3 } from 'openapi-types';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { findFiles, verbose } from '../../utils';
 import { Dependency, Report } from './Report';
-import { Finding, ImpactDomain, ScanResults } from '@appland/scanner';
 import { warn } from 'console';
 import DependencyMap from './DependencyMap';
 import assert from 'assert';
@@ -18,8 +17,7 @@ import { locateAppMapDir } from '../../lib/locateAppMapDir';
 async function buildRepositoryReport(
   appmapDir: string,
   appmaps: string[],
-  resourceTokens: number,
-  findingLimit: number
+  resourceTokens: number
 ): Promise<Report | undefined> {
   const appmapCountByRecorderName: Record<string, number> = {};
   const appmapCountByHTTPServerRequestCount: Record<string, number> = {};
@@ -147,8 +145,6 @@ async function buildRepositoryReport(
         const operation = pathItem[method];
         if (!operation) continue;
 
-        const route = `${method.toUpperCase()} ${pattern}`;
-
         const directoryIsh = pattern.split('/').slice(0, resourceTokens).join('/');
         if (!routeCountByResource[directoryIsh]) routeCountByResource[directoryIsh] = 1;
         else routeCountByResource[directoryIsh] = routeCountByResource[directoryIsh] + 1;
@@ -166,91 +162,6 @@ async function buildRepositoryReport(
     }
   }
 
-  const findingsFiles = await findFiles(appmapDir, 'appmap-findings.json');
-  const findingCountByImpactDomain: Record<string, number> = {};
-  // Collect up to `findingLimit` findings for each impact domain
-  const findingExamples = new Map<ImpactDomain, Finding[]>();
-  {
-    const countFinding = (finding: Finding): void => {
-      const impactDomain = finding.impactDomain || 'Unknown';
-
-      if (!findingCountByImpactDomain[impactDomain]) findingCountByImpactDomain[impactDomain] = 1;
-      else findingCountByImpactDomain[impactDomain] = findingCountByImpactDomain[impactDomain] + 1;
-    };
-
-    const collectFindingExample = (finding: Finding): void => {
-      const impactDomain = finding.impactDomain;
-      if (!impactDomain) return;
-
-      if (!findingExamples.has(impactDomain)) findingExamples.set(impactDomain, [] as Finding[]);
-      const findings = findingExamples.get(impactDomain);
-      assert(findings);
-      if (findings.length < findingLimit) {
-        findings.push(finding);
-      }
-    };
-
-    for (const findingsFile of findingsFiles) {
-      const scanResults = JSON.parse(await readFile(findingsFile, 'utf-8')) as ScanResults;
-      for (const finding of scanResults.findings) {
-        countFinding(finding);
-        collectFindingExample(finding);
-      }
-    }
-  }
-
-  const findings = new Array<Finding>();
-  {
-    const impactDomainPriority = (impactDomain?: ImpactDomain): number => {
-      switch (impactDomain) {
-        case 'Security':
-          return 0;
-        case 'Performance':
-          return 1;
-        case 'Stability':
-          return 3;
-        case 'Maintainability':
-          return 4;
-        default:
-          return 5;
-      }
-    };
-
-    {
-      let impactDomains = [...findingExamples.keys()]
-        .filter((impactDomain) => findingExamples.get(impactDomain)?.length)
-        .sort((a, b) => impactDomainPriority(a) - impactDomainPriority(b));
-
-      let impactDomainIndex = 0;
-      const nextFinding = (): Finding => {
-        assert(impactDomains.length > 0);
-        const impactDomain = impactDomains[impactDomainIndex];
-        const findingsForDomain = findingExamples.get(impactDomain);
-        assert(findingsForDomain);
-        const finding = findingsForDomain.shift();
-        assert(finding);
-
-        if (findingsForDomain.length === 0) impactDomains.splice(impactDomainIndex, 1);
-        else impactDomainIndex = impactDomainIndex + 1;
-        impactDomainIndex = impactDomainIndex % impactDomains.length;
-
-        return finding;
-      };
-
-      let finding: Finding;
-      while ((finding = nextFinding())) {
-        findings.push(finding);
-
-        if (findings.length === findingLimit) break;
-        if (impactDomains.length === 0) break;
-      }
-    }
-
-    findings.sort(
-      (a, b) => impactDomainPriority(a.impactDomain) - impactDomainPriority(b.impactDomain)
-    );
-  }
-
   return {
     appmapCountByRecorderName,
     appmapCountByHTTPServerRequestCount,
@@ -264,8 +175,6 @@ async function buildRepositoryReport(
       ...new Set(uniquePackageDependencies.dependencies.map((d) => [d.caller, d.callee]).flat()),
     ].sort(),
     packageDependencies: uniquePackageDependencies.dependencies,
-    findingCountByImpactDomain,
-    findings,
   };
 }
 
@@ -293,12 +202,6 @@ export const builder = (args: yargs.Argv) => {
     describe: `number of path tokens to include in the 'by resource' output`,
     type: 'number',
     default: 2,
-  });
-
-  args.option('finding-limit', {
-    describe: `number of sample findings to include in the report`,
-    type: 'number',
-    default: 10,
   });
 
   return args.strict();
@@ -336,8 +239,7 @@ export const handler = async (argv: any) => {
   const report = await buildRepositoryReport(
     appmapDir,
     appmaps,
-    resourceTokens + 1 /* The url '/' is actually 2 tokens, so add 1 to the user input */,
-    findingLimit
+    resourceTokens + 1 /* The url '/' is actually 2 tokens, so add 1 to the user input */
   );
 
   const reportJSONStr = JSON.stringify(report, null, 2);
