@@ -1,3 +1,12 @@
+# [@appland/models-v2.7.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.6.5...@appland/models-v2.7.0) (2023-10-16)
+
+
+### Features
+
+* Cache parsed SQL to improve hash generation for events ([22a40c7](https://github.com/getappmap/appmap-js/commit/22a40c73cbbccd489b89c80c3c8d39c12eaeaa4f))
+* Cache properties of events and code objects ([23c9470](https://github.com/getappmap/appmap-js/commit/23c9470b2fc50373071d4fe2474c3186adf4bd69))
+* Only determine size of code objects if pruning ([1018e8d](https://github.com/getappmap/appmap-js/commit/1018e8d83a0b528a57cd7d48582d8aca8145085a))
+
 # [@appland/models-v2.6.5](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.6.4...@appland/models-v2.6.5) (2023-09-25)
 
 
