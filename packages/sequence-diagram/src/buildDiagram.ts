@@ -22,6 +22,7 @@ import {
 const MAX_WINDOW_SIZE = 5;
 
 const parsedSqlCache = new LRUCache<string, any>({ max: 1000 });
+const sha256Cache = new LRUCache<string, string>({ max: 1000 });
 
 class ActorManager {
   private _actorsByCodeObjectId = new Map<string, Actor>();
@@ -204,7 +205,13 @@ export default function buildDiagram(
 
       hashEntries.push(child.subtreeDigest);
     });
-    node.subtreeDigest = sha256(hashEntries.join('\n')).toString();
+    const hashInput = hashEntries.join('\n');
+    let sha256Digest = sha256Cache.get(hashInput);
+    if (!sha256Digest) {
+      sha256Digest = sha256(hashInput).toString();
+      sha256Cache.set(hashInput, sha256Digest);
+    }
+    node.subtreeDigest = sha256Digest;
   };
 
   const detectLoops = (node: Action): void => {
