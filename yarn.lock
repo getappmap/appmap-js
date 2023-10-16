@@ -256,8 +256,8 @@ __metadata:
   resolution: "@appland/components@workspace:packages/components"
   dependencies:
     "@appland/diagrams": "workspace:^1.7.0"
-    "@appland/models": "workspace:^2.6.3"
-    "@appland/sequence-diagram": "workspace:^1.8.1"
+    "@appland/models": "workspace:^2.7.0"
+    "@appland/sequence-diagram": "workspace:^1.9.0"
     "@babel/core": ^7.22.5
     "@babel/node": ^7.22.5
     "@babel/preset-env": ^7.22.5
@@ -476,7 +476,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/sequence-diagram@workspace:^1.7.0, @appland/sequence-diagram@workspace:^1.8.1, @appland/sequence-diagram@workspace:packages/sequence-diagram":
+"@appland/sequence-diagram@workspace:^1.7.0, @appland/sequence-diagram@workspace:^1.9.0, @appland/sequence-diagram@workspace:packages/sequence-diagram":
   version: 0.0.0-use.local
   resolution: "@appland/sequence-diagram@workspace:packages/sequence-diagram"
   dependencies:
