@@ -1,3 +1,11 @@
+# [@appland/sequence-diagram-v1.9.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.8.1...@appland/sequence-diagram-v1.9.0) (2023-10-16)
+
+
+### Features
+
+* Cache parsed SQL to improve hash generation for events ([7fb7b9f](https://github.com/getappmap/appmap-js/commit/7fb7b9f945888c4007d3c20844e00212455acda6))
+* Cache sha256 computations ([b50e342](https://github.com/getappmap/appmap-js/commit/b50e3425ad7744b6c2a2439a6056ceeb9a3100aa))
+
 # [@appland/sequence-diagram-v1.8.1](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.8.0...@appland/sequence-diagram-v1.8.1) (2023-10-06)
 
 

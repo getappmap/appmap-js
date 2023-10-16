@@ -1,6 +1,6 @@
 {
   "name": "@appland/sequence-diagram",
-  "version": "1.8.1",
+  "version": "1.9.0",
   "description": "Generate sequence diagram from AppMap",
   "files": [
     "dist"
