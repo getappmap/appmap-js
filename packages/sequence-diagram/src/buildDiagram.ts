@@ -1,6 +1,7 @@
 import { AppMap, Event } from '@appland/models';
 import { classNameToOpenAPIType } from '@appland/openapi';
 import sha256 from 'crypto-js/sha256.js';
+import LRUCache from 'lru-cache';
 import { merge } from './mergeWindow';
 import { selectEvents } from './selectEvents';
 import Specification from './specification';
@@ -19,6 +20,8 @@ import {
 } from './types';
 
 const MAX_WINDOW_SIZE = 5;
+
+const parsedSqlCache = new LRUCache<string, any>({ max: 1000 });
 
 class ActorManager {
   private _actorsByCodeObjectId = new Map<string, Actor>();
@@ -68,7 +71,7 @@ export default function buildDiagram(
         callee: actorManager.findOrCreateActor(callee),
         route: callee.route,
         status: response.status || response.status_code,
-        digest: callee.hash,
+        digest: callee.buildStableHash(parsedSqlCache).digest(),
         subtreeDigest: 'undefined',
         children: [],
         elapsed: callee.elapsedTime,
@@ -83,7 +86,7 @@ export default function buildDiagram(
         callee: actorManager.findOrCreateActor(callee),
         route: callee.route,
         status: response.status || response.status_code,
-        digest: callee.hash,
+        digest: callee.buildStableHash(parsedSqlCache).digest(),
         subtreeDigest: 'undefined',
         children: [],
         elapsed: callee.elapsedTime,
@@ -96,7 +99,7 @@ export default function buildDiagram(
         caller: caller ? actorManager.findOrCreateActor(caller) : undefined,
         callee: actorManager.findOrCreateActor(callee),
         query: callee.sqlQuery,
-        digest: truncatedQuery ? 'truncatedQuery' : callee.hash,
+        digest: truncatedQuery ? 'truncatedQuery' : callee.buildStableHash(parsedSqlCache).digest(),
         subtreeDigest: 'undefined',
         children: [],
         elapsed: callee.elapsedTime,
@@ -109,7 +112,7 @@ export default function buildDiagram(
         callee: actorManager.findOrCreateActor(callee),
         name: callee.codeObject.name,
         static: callee.codeObject.static,
-        digest: callee.hash,
+        digest: callee.buildStableHash(parsedSqlCache).digest(),
         subtreeDigest: 'undefined',
         stableProperties: { ...callee.stableProperties },
         returnValue: buildReturnValue(callee),
