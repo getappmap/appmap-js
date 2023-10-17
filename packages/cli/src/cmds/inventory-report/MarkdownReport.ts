@@ -1,9 +1,12 @@
 import Handlebars from 'handlebars';
-import { Report } from '../inventory/Report';
 import { join } from 'path';
 import { readFile } from 'fs/promises';
 import assert from 'assert';
 import { existsSync } from 'fs';
+
+import { Report } from '../inventory/Report';
+import helpers from '../compare-report/helpers';
+import { AppMapConfig, ConfiguredPackage } from '../../lib/loadAppMapConfig';
 
 const TemplateDirectory = [
   '../../../resources/inventory-report', // As packaged
@@ -14,83 +17,52 @@ const TemplateDirectory = [
 assert(TemplateDirectory, "Report template directory 'inventory-report' not found");
 
 enum TemplateName {
-  Default = 'default',
   Welcome = 'welcome',
 }
 
 export default async function generateReport(
   templateName: TemplateName,
-  report: Report
+  report: Report,
+  appmapConfig: AppMapConfig
 ): Promise<string> {
   let reportTemplate: MarkdownReport;
   switch (templateName) {
-    case TemplateName.Default:
-      reportTemplate = new DefaultReport();
-      break;
     case TemplateName.Welcome:
       reportTemplate = new WelcomeReport();
       break;
   }
-  return reportTemplate.generateReport(report);
+
+  return reportTemplate.generateReport(report, appmapConfig);
 }
+
+type AugmentedReportData = Report & { appmapConfig: AppMapConfig };
 
 export interface MarkdownReport {
-  generateReport(report: Report): Promise<string>;
-}
-
-export class DefaultReport implements MarkdownReport {
-  async generateReport(reportData: Report): Promise<string> {
-    assert(TemplateDirectory);
-    const templateFile = join(TemplateDirectory, 'default', 'inventory.hbs');
-    const template = await ReportTemplate.build(templateFile);
-    return template.generateMarkdown(reportData);
-  }
+  generateReport(report: Report, appmapConfig: AppMapConfig): Promise<string>;
 }
 
 export class WelcomeReport implements MarkdownReport {
-  async generateReport(reportData: Report): Promise<string> {
+  async generateReport(reportData: Report, appmapConfig: AppMapConfig): Promise<string> {
     assert(TemplateDirectory);
     const templateFile = join(TemplateDirectory, 'welcome', 'welcome.hbs');
     const template = await ReportTemplate.build(templateFile);
-    return template.generateMarkdown(reportData);
+
+    const data: AugmentedReportData = { ...reportData, appmapConfig };
+    return template.generateMarkdown(data);
   }
 }
 
 export class ReportTemplate {
   constructor(public template: HandlebarsTemplateDelegate) {}
 
-  generateMarkdown(report: Report): string {
-    return this.template(report, {
+  generateMarkdown(data: AugmentedReportData): string {
+    return this.template(data, {
       helpers: ReportTemplate.helpers(),
       allowProtoPropertiesByDefault: true,
     });
   }
 
   static helpers(): { [name: string]: Function } | undefined {
-    const inspect = (value: any) => {
-      return new Handlebars.SafeString(JSON.stringify(value, null, 2));
-    };
-
-    const length = (...list: any[]): number => {
-      const _fn = list.pop();
-      let result = 0;
-      for (const item of list) {
-        if (Array.isArray(item)) {
-          result += item.length;
-        } else if (item.constructor === Map) {
-          result += item.size;
-        } else if (typeof item === 'object') {
-          result += Object.keys(item).length;
-        }
-      }
-      return result;
-    };
-
-    const coalesce = (...list: any[]): number => {
-      const _fn = list.pop();
-      return list.find((item) => item !== undefined && item !== '');
-    };
-
     const select_values_by_key_range = (
       data: Record<number, number>,
       keyMin: number,
@@ -103,7 +75,6 @@ export class ReportTemplate {
         .map((k) => data[k]);
       return result;
     };
-    const extractArrayValue = (args: any[]): any[] => (Array.isArray(args[0]) ? args[0] : args);
 
     const sum_values_by_key_range = (
       data: Record<number, number>,
@@ -114,20 +85,24 @@ export class ReportTemplate {
       return values.reduce((a, b) => a + (b || 0), 0);
     };
 
-    const sum = () => {
-      const args = [...arguments];
-      const _fn = args.pop();
-      const values = extractArrayValue(args);
-      return values.reduce((a, b) => a + (b || 0), 0);
+    const packages_matching_configuration = (
+      packages: string[],
+      configuredPackages: ConfiguredPackage[]
+    ) => {
+      const normalizePackage = (pkg: string) => pkg.replace(/\//g, '.').toLowerCase();
+
+      return packages.filter((pkg) => {
+        return configuredPackages.find((configuredPackage) =>
+          normalizePackage(pkg).startsWith(normalizePackage(configuredPackage.path))
+        );
+      });
     };
 
     return {
-      coalesce,
-      inspect,
-      length,
+      packages_matching_configuration,
       select_values_by_key_range,
-      sum,
       sum_values_by_key_range,
+      ...helpers,
     };
   }
 

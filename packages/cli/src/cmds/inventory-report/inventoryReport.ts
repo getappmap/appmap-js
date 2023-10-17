@@ -6,6 +6,9 @@ import generateReport from './MarkdownReport';
 import { warn } from 'console';
 import { cwd } from 'process';
 import { join } from 'path';
+import { Report } from '../inventory/Report';
+import assert from 'assert';
+import loadAppMapConfig from '../../lib/loadAppMapConfig';
 
 export const command = 'inventory-report <report-json-file> [output-file]';
 export const describe = 'Generate a report document describing the current state of a repository.';
@@ -20,8 +23,8 @@ export const builder = (args: yargs.Argv) => {
   args.positional('template-name', {
     type: 'string',
     describe: `Template name.`,
-    default: 'default',
-    choices: ['default', 'welcome'],
+    default: 'welcome',
+    choices: ['welcome'],
     alias: 't',
   });
 
@@ -46,10 +49,15 @@ export const handler = async (argv: any) => {
   handleWorkingDirectory(directory);
 
   const { reportJsonFile, outputFile, templateName } = argv;
+  assert(reportJsonFile);
+  assert(templateName);
 
-  const report = JSON.parse(await readFile(reportJsonFile, 'utf-8'));
+  const appmapConfig = await loadAppMapConfig();
+  if (!appmapConfig) throw new Error('Unable to load appmap.yml');
 
-  const reportMD = await generateReport(templateName, report);
+  const report: Report = JSON.parse(await readFile(reportJsonFile, 'utf-8'));
+
+  const reportMD = await generateReport(templateName, report, appmapConfig);
   if (outputFile) {
     await writeFile(outputFile, reportMD);
     warn(`Report written to ${join(cwd(), outputFile)}`);

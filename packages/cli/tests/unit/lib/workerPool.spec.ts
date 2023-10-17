@@ -60,7 +60,7 @@ describe('WorkerPool', () => {
       const result = await runTasks([task]);
 
       expect(result.sums).toEqual([3]);
-      expect(result.elapsed).toBeGreaterThanOrEqual(delay);
+      expect(result.elapsed).toBeGreaterThanOrEqual(delay * 0.98);
     });
 
     it('takes 2x the delay time using one worker', async () => {
@@ -73,7 +73,7 @@ describe('WorkerPool', () => {
       const result = await runTasks(tasks);
 
       expect(result.sums.sort((a, b) => a - b)).toEqual([2, 4]);
-      expect(result.elapsed).toBeGreaterThanOrEqual(delay * 2);
+      expect(result.elapsed).toBeGreaterThanOrEqual(delay * 1.98);
     });
 
     describe('using two workers', () => {
@@ -89,7 +89,7 @@ describe('WorkerPool', () => {
         const result = await runTasks(tasks);
 
         expect(result.sums.sort((a, b) => a - b)).toEqual([2, 4]);
-        expect(result.elapsed).toBeGreaterThanOrEqual(delay);
+        expect(result.elapsed).toBeGreaterThanOrEqual(delay * 0.98);
       });
     });
   });

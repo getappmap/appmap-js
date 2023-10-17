@@ -1,0 +1,248 @@
+{
+  "appmapCountByRecorderName": {
+    "minitest": 6
+  },
+  "appmapCountByHTTPServerRequestCount": {
+    "1": 1,
+    "3": 2,
+    "5": 2,
+    "6": 1
+  },
+  "appmapCountBySQLQueryCount": {
+    "0": 1,
+    "7": 1,
+    "8": 1,
+    "10": 1,
+    "11": 1,
+    "24": 1
+  },
+  "routeCountByResource": {
+    "/": 1,
+    "/about": 1,
+    "/account_activations/{id}": 1,
+    "/contact": 1,
+    "/help": 1,
+    "/login": 2,
+    "/logout": 1,
+    "/microposts": 1,
+    "/microposts/{id}": 1,
+    "/password_resets": 1,
+    "/password_resets/new": 1,
+    "/password_resets/{id}": 2,
+    "/relationships": 1,
+    "/relationships/{id}": 1,
+    "/signup": 1,
+    "/users": 2,
+    "/users/{id}": 6
+  },
+  "routeCountByContentType": {
+    "text/html": 38,
+    "text/javascript": 2
+  },
+  "clientRouteCountByResource": {},
+  "labels": [
+    "access.public",
+    "array.pack",
+    "crypto.decrypt",
+    "crypto.encrypt",
+    "crypto.final",
+    "crypto.pkcs5",
+    "crypto.set_auth_data",
+    "crypto.set_auth_tag",
+    "crypto.set_iv",
+    "crypto.set_key",
+    "deserialize.safe",
+    "deserialize.unsafe",
+    "format.json.generate",
+    "format.json.parse",
+    "format.yaml.parse",
+    "http.session.clear",
+    "http.session.read",
+    "http.session.write",
+    "job.create",
+    "lang.eval",
+    "lang.eval.safe",
+    "log",
+    "mvc.after_action",
+    "mvc.before_action",
+    "mvc.controller",
+    "mvc.render",
+    "mvc.template",
+    "mvc.template.resolver",
+    "random.secure",
+    "secret",
+    "security.authentication",
+    "security.login",
+    "security.require_login",
+    "serialize",
+    "string.unpack",
+    "system.exec"
+  ],
+  "sqlTables": [
+    "active_storage_attachments",
+    "active_storage_blobs",
+    "microposts",
+    "relationships",
+    "sqlite_master",
+    "sqlite_temp_master",
+    "users"
+  ],
+  "packages": [
+    "Database",
+    "HTTP server requests",
+    "actionpack",
+    "actionview",
+    "activejob",
+    "activesupport",
+    "app",
+    "app/helpers",
+    "json",
+    "logger",
+    "open3",
+    "openssl",
+    "psych",
+    "ruby"
+  ],
+  "packageDependencies": [
+    {
+      "caller": "HTTP server requests",
+      "callee": "actionpack"
+    },
+    {
+      "caller": "HTTP server requests",
+      "callee": "activesupport"
+    },
+    {
+      "caller": "HTTP server requests",
+      "callee": "json"
+    },
+    {
+      "caller": "HTTP server requests",
+      "callee": "logger"
+    },
+    {
+      "caller": "HTTP server requests",
+      "callee": "ruby"
+    },
+    {
+      "caller": "actionpack",
+      "callee": "actionview"
+    },
+    {
+      "caller": "actionpack",
+      "callee": "activesupport"
+    },
+    {
+      "caller": "actionpack",
+      "callee": "app"
+    },
+    {
+      "caller": "actionpack",
+      "callee": "json"
+    },
+    {
+      "caller": "actionpack",
+      "callee": "logger"
+    },
+    {
+      "caller": "actionpack",
+      "callee": "ruby"
+    },
+    {
+      "caller": "activejob",
+      "callee": "activesupport"
+    },
+    {
+      "caller": "activejob",
+      "callee": "logger"
+    },
+    {
+      "caller": "activesupport",
+      "callee": "Database"
+    },
+    {
+      "caller": "activesupport",
+      "callee": "actionpack"
+    },
+    {
+      "caller": "activesupport",
+      "callee": "activejob"
+    },
+    {
+      "caller": "activesupport",
+      "callee": "app"
+    },
+    {
+      "caller": "activesupport",
+      "callee": "json"
+    },
+    {
+      "caller": "activesupport",
+      "callee": "logger"
+    },
+    {
+      "caller": "activesupport",
+      "callee": "openssl"
+    },
+    {
+      "caller": "activesupport",
+      "callee": "psych"
+    },
+    {
+      "caller": "activesupport",
+      "callee": "ruby"
+    },
+    {
+      "caller": "app",
+      "callee": "Database"
+    },
+    {
+      "caller": "app",
+      "callee": "actionpack"
+    },
+    {
+      "caller": "app",
+      "callee": "actionview"
+    },
+    {
+      "caller": "app",
+      "callee": "activesupport"
+    },
+    {
+      "caller": "app",
+      "callee": "json"
+    },
+    {
+      "caller": "app",
+      "callee": "logger"
+    },
+    {
+      "caller": "app",
+      "callee": "openssl"
+    },
+    {
+      "caller": "app",
+      "callee": "ruby"
+    },
+    {
+      "caller": "actionpack",
+      "callee": "openssl"
+    },
+    {
+      "caller": "activesupport",
+      "callee": "app/helpers"
+    },
+    {
+      "caller": "app/helpers",
+      "callee": "actionpack"
+    },
+    {
+      "caller": "app",
+      "callee": "open3"
+    },
+    {
+      "caller": "open3",
+      "callee": "ruby"
+    }
+  ]
+}

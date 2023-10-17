@@ -54,14 +54,9 @@ describe('compare command', () => {
     appmaps = sandbox.stub(Paths.prototype, 'appmaps');
   });
 
-  afterEach(async () => {
-    sandbox.restore();
-    await cleanProject(projectDir);
-  });
-
-  afterAll(() => {
-    process.chdir(originalWorkingDir);
-  });
+  afterEach(async () => sandbox.restore());
+  afterEach(async () => await cleanProject(projectDir));
+  afterEach(async () => process.chdir(originalWorkingDir));
 
   describe('when some tests failed', () => {
     const scenarioName = 'some-failed';

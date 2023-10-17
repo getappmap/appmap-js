@@ -14,5 +14,4 @@ export type Report = {
   labels: string[];
   packages: string[];
   packageDependencies: Dependency[];
-  findingCountByImpactDomain: Record<string, number>;
 };

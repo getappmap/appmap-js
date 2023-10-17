@@ -1,4 +1,4 @@
-# AppMap
+# AppMap pull request analysis
 
 | Summary | Status |
 | --- | --- |

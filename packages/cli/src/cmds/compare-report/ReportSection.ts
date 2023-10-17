@@ -7,7 +7,7 @@ import { existsSync } from 'fs';
 import assert from 'assert';
 import { RevisionName } from '../compare/RevisionName';
 import buildPreprocessor, { filterFindings } from './Preprocessor';
-import { ImpactDomain } from '@appland/scanner';
+import helpers from './helpers';
 
 export const TemplateDirectory = [
   '../../../resources/change-report', // As packaged
@@ -139,30 +139,6 @@ export default class ReportSection {
     let { baseDir } = options;
     if (!baseDir) baseDir = process.cwd();
 
-    const inspect = (value: any) => {
-      return new Handlebars.SafeString(JSON.stringify(value, null, 2));
-    };
-
-    const length = (...list: any[]): number => {
-      const _fn = list.pop();
-      let result = 0;
-      for (const item of list) {
-        if (Array.isArray(item)) {
-          result += item.length;
-        } else if (item.constructor === Map) {
-          result += item.size;
-        } else if (typeof item === 'object') {
-          result += Object.keys(item).length;
-        }
-      }
-      return result;
-    };
-
-    const coalesce = (...list: any[]): number => {
-      const _fn = list.pop();
-      return list.find((item) => item !== undefined && item !== '');
-    };
-
     const source_url = (location: string, fileLinenoSeparator = '#L') => {
       if (typeof fileLinenoSeparator === 'object') {
         fileLinenoSeparator = '#L';
@@ -244,20 +220,13 @@ export default class ReportSection {
       }
     };
 
-    const pluralize = (count: number, singular: string, plural?: string): string => {
-      return count === 1 ? singular : plural || singular + 's';
-    };
-
     return {
       appmap_diff_url,
       appmap_title,
       appmap_url,
-      coalesce,
       group_appmaps_by_recorder_name,
-      inspect,
-      length,
-      pluralize,
       source_url,
+      ...helpers,
     };
   }
 

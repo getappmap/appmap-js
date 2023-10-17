@@ -9,7 +9,6 @@ import { OpenAPIV3 } from 'openapi-types';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { findFiles, verbose } from '../../utils';
 import { Dependency, Report } from './Report';
-import { ScanResults } from '@appland/scanner';
 import { warn } from 'console';
 import DependencyMap from './DependencyMap';
 import assert from 'assert';
@@ -146,8 +145,6 @@ async function buildRepositoryReport(
         const operation = pathItem[method];
         if (!operation) continue;
 
-        const route = `${method.toUpperCase()} ${pattern}`;
-
         const directoryIsh = pattern.split('/').slice(0, resourceTokens).join('/');
         if (!routeCountByResource[directoryIsh]) routeCountByResource[directoryIsh] = 1;
         else routeCountByResource[directoryIsh] = routeCountByResource[directoryIsh] + 1;
@@ -165,18 +162,6 @@ async function buildRepositoryReport(
     }
   }
 
-  const findingsFiles = await findFiles(appmapDir, 'appmap-findings.json');
-  const findingCountByImpactDomain: Record<string, number> = {};
-  for (const findingsFile of findingsFiles) {
-    const scanResults = JSON.parse(await readFile(findingsFile, 'utf-8')) as ScanResults;
-    for (const finding of scanResults.findings) {
-      const impactDomain = finding.impactDomain || 'Unknown';
-
-      if (!findingCountByImpactDomain[impactDomain]) findingCountByImpactDomain[impactDomain] = 1;
-      else findingCountByImpactDomain[impactDomain] = findingCountByImpactDomain[impactDomain] + 1;
-    }
-  }
-
   return {
     appmapCountByRecorderName,
     appmapCountByHTTPServerRequestCount,
@@ -190,7 +175,6 @@ async function buildRepositoryReport(
       ...new Set(uniquePackageDependencies.dependencies.map((d) => [d.caller, d.callee]).flat()),
     ].sort(),
     packageDependencies: uniquePackageDependencies.dependencies,
-    findingCountByImpactDomain,
   };
 }
 
@@ -226,7 +210,7 @@ export const builder = (args: yargs.Argv) => {
 export const handler = async (argv: any) => {
   verbose(argv.verbose);
 
-  const { outputFile, directory, resourceTokens } = argv;
+  const { outputFile, directory, resourceTokens, findingLimit } = argv;
   assert(resourceTokens);
   assert(typeof resourceTokens === 'number');
   assert(resourceTokens > 0);

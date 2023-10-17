@@ -1,0 +1,85 @@
+##  AppMap configuration report
+
+Success! Your project has been successfully configured to record AppMaps when
+you run your tests.
+
+> **[Continue with AppMap Setup >>](https://getappmap.com/github/configuration_report)**
+
+<hr/>
+
+<details>
+<summary>
+View details
+</summary>
+
+<h3><a id="data-sources">AppMap data sources</a></h3>
+
+In GitHub Actions and other CI systems, AppMaps are created by recording
+test cases. Here's how the AppMaps in this project were created:
+
+| Number of AppMaps | Type of recording |
+| --- | --- |
+| 6 | minitest |
+
+<h3><a id="code-profile">Code profile</a></h3>
+
+Your _appmap.yml_ configuration file specifies all the code that you want AppMap to instrument and record.
+By default, sub-modules of any requested code are recorded as well. In this project, the packages specified
+in _appmap.yml_ are:
+
+```yaml
+- path: app
+```
+
+By applying this configuration to your ruby project, AppMap has recorded the 
+following packages and modules:
+
+`app` `app/helpers` 
+
+<h3><a id="ws-api-profile">Web service API profile</a></h3>
+
+When you record AppMaps that include HTTP server requests, AppMap automatically generates OpenAPI definitions
+based on the observed data.
+
+
+**100%** of the AppMaps in this project contain **at least one** HTTP server request.
+
+
+**83%** of the AppMaps in this project contain **more than one** HTTP server request.
+
+Here's **a summary of the web service routes** that are provided by this project:
+
+`/` `/about` `/account_activations/{id}` `/contact` `/help` `/login` `/logout` `/microposts` `/microposts/{id}` `/password_resets` `/password_resets/new` `/password_resets/{id}` `/relationships` `/relationships/{id}` `/signup` `/users` `/users/{id}` 
+
+And here are the different content types served by the API:
+
+| Response Content Type | Number of Routes |
+| --- | --- |
+| text/html | 38 |
+| text/javascript | 2 |
+
+As you change your code and tests, AppMap will automatically update the OpenAPI definitions. 
+You'll see a summary of the REST API changes in each pull request.
+<h3><a id="sql-profile">SQL profile</a></h3>
+
+When your code makes a SQL query, AppMap records the SQL query in detail. It even parses the queries
+to figure out which tables your app is using, and how it's using them.
+
+
+
+**83%** of the AppMaps in this project contain **at least one** SQL query.
+
+
+**83%** of the AppMaps in this project contain **more than one** SQL query.
+
+
+Here are the SQL tables that are present in the observed queries:
+
+`active_storage_attachments` `active_storage_blobs` `microposts` `relationships` `sqlite_master` `sqlite_temp_master` `users` 
+
+### Learn more
+
+To learn more about AppMap, visit
+[appmap.io/docs](https://appmap.io/docs).
+
+</details>
