@@ -27,6 +27,8 @@ const coalesce = (...list: any[]): number => {
   return list.find((item) => item !== undefined && item !== null && item !== '');
 };
 
+const first = (list: any[]): any => list[0];
+
 const extractArrayValue = (args: any[]): any[] => (Array.isArray(args[0]) ? args[0] : args);
 
 const every = (...args: any[]): boolean => {
@@ -100,8 +102,17 @@ const values = (obj: any): any[] => {
   return [];
 };
 
+const words = (text: string, count: number): string => {
+  if (typeof count === 'object') count = 3;
+
+  const tokens = text.split(/\s+/);
+  if (tokens.length < 3) return tokens.join(' ');
+  else return tokens.slice(0, count).join(' ') + ' ...';
+};
+
 export default {
   divide,
+  first,
   format_as_percentage,
   format_as_yaml,
   keys,
@@ -117,4 +128,5 @@ export default {
   subtract,
   sum,
   values,
+  words,
 };

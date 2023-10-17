@@ -1,12 +1,21 @@
 import { Metadata } from '@appland/models';
 import { Finding as FindingData } from '@appland/scanner';
+import assert from 'assert';
+import { format as sqlFormatFn } from 'sql-formatter';
 
 import { ChangeReport as ChangeReportData } from '../compare/ChangeReport';
 import { RevisionName } from '../compare/RevisionName';
-import assert from 'assert';
 import { executeCommand } from '../../lib/executeCommand';
 import { verbose } from '../../utils';
 import normalizeAppMapId from './normalizeAppMapId';
+
+function sqlFormat(query: string): string {
+  try {
+    return sqlFormatFn(query);
+  } catch (e) {
+    return query;
+  }
+}
 
 export class AppMap {
   constructor(
@@ -264,14 +273,18 @@ export default class ChangeReport {
           const appmaps = newQuery.appmaps.map((appmapId) =>
             appmap(RevisionName.Head, normalizeAppMapId(appmapId))
           );
-          return { query: newQuery.query, appmaps, sourceLocations: newQuery.sourceLocations };
+          return {
+            query: sqlFormat(newQuery.query),
+            appmaps,
+            sourceLocations: newQuery.sourceLocations,
+          };
         }
       );
       sqlDiff = {
         newQueries,
-        removedQueries: changeReportData.sqlDiff.removedQueries,
-        newTables: changeReportData.sqlDiff.newTables,
-        removedTables: changeReportData.sqlDiff.removedTables,
+        removedQueries: changeReportData.sqlDiff.removedQueries.map(sqlFormat),
+        newTables: changeReportData.sqlDiff.newTables.map(sqlFormat),
+        removedTables: changeReportData.sqlDiff.removedTables.map(sqlFormat),
       };
     } else {
       sqlDiff = { newQueries: [], removedQueries: [], newTables: [], removedTables: [] };

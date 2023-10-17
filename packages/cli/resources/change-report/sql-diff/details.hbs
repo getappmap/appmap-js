@@ -7,19 +7,27 @@
 
       {{#each newQueries}}
 
+`{{{ words query 5 }}}` {{# if (length sourceLocations) }} at [{{ first sourceLocations }}]({{{ source_url (first sourceLocations) }}}){{/if}}
+
+<details>
+<summary>View details</summary>
+
+Full SQL query:
+
 ```sql
 {{{ query }}}
 ```
+
         {{#if (length sourceLocations) }}
 
-This query is issued from the following source locations:
+All source locations:
 
           {{#each sourceLocations}}
 [{{ this }}]({{{ source_url this }}})
           {{/each}}
         {{/if}}
 
-This query occurs in {{ length appmaps }} {{ pluralize (length appmaps) 'AppMap' }}{{#if (gt (length appmaps) 1) }}. A representative AppMap is{{/if}}:
+Occurs in {{ length appmaps }} {{ pluralize (length appmaps) 'AppMap' }}{{#if (gt (length appmaps) 1) }}. A representative AppMap is{{/if}}:
   
         {{#with (first appmaps) }}
           {{#if sourceDiff}}
@@ -36,8 +44,8 @@ This query occurs in {{ length appmaps }} {{ pluralize (length appmaps) 'AppMap'
 - [Sequence diagram diff &raquo;]({{ appmap_diff_url @this }})
           {{/if}}
         {{/with}}
+</details>
       {{/each}}
-
     {{/if}}
 
     {{#if (length removedQueries) }}
