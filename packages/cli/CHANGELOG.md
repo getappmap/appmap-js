@@ -1,3 +1,14 @@
+# [@appland/appmap-v3.102.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.101.0...@appland/appmap-v3.102.0) (2023-10-17)
+
+
+### Features
+
+* Delete un-maintained report ([caa2afd](https://github.com/getappmap/appmap-js/commit/caa2afdb83cd6e25cc28b15bb83f4f492654d93f))
+* Include Finding examples in inventory output ([a84b0d9](https://github.com/getappmap/appmap-js/commit/a84b0d9f50014ce70b50f3656e39fa09c878607f))
+* Iterate to minimal welcome / configuration report ([fd700f4](https://github.com/getappmap/appmap-js/commit/fd700f4c5f5ff2f4e2cc7532f7ebae682976ee10))
+* Revise the welcome report ([6c682f1](https://github.com/getappmap/appmap-js/commit/6c682f1ecb0b29d2dee555f2e8fdbc2fd1c22d21))
+* Show a sample of Findings in the Welcome message ([496e792](https://github.com/getappmap/appmap-js/commit/496e7922490ef4cf6d42a2bd2436c34e4b36a1b1))
+
 # [@appland/appmap-v3.101.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.100.1...@appland/appmap-v3.101.0) (2023-10-13)
 
 
