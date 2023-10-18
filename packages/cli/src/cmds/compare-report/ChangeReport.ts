@@ -2,12 +2,15 @@ import { Metadata } from '@appland/models';
 import { Finding as FindingData } from '@appland/scanner';
 import assert from 'assert';
 import { format as sqlFormatFn } from 'sql-formatter';
+import { DiffResult, DiffResultType, default as openapiDiff } from 'openapi-diff';
 
 import { ChangeReport as ChangeReportData } from '../compare/ChangeReport';
 import { RevisionName } from '../../diffArchive/RevisionName';
 import { executeCommand } from '../../lib/executeCommand';
 import { verbose } from '../../utils';
 import normalizeAppMapId from '../../lib/normalizeAppMapId';
+import formatAPILocation from './formatAPILocation';
+import { format } from 'path';
 
 function sqlFormat(query: string): string {
   try {
@@ -115,25 +118,40 @@ export class OpenAPIDiff {
   public nonBreakingDifferences: APIChange[];
   public unclassifiedDifferences: APIChange[];
 
-  constructor(public differenceCount: number, apiDiff: any, public sourceDiff?: string) {
-    this.breakingDifferenceCount = apiDiff.breakingDifferences?.length || 0;
+  constructor(
+    public differenceCount: number,
+    apiDiff: openapiDiff.DiffOutcome,
+    public sourceDiff?: string
+  ) {
+    this.breakingDifferenceCount = apiDiff.breakingDifferencesFound
+      ? apiDiff.breakingDifferences?.length
+      : 0;
     this.nonBreakingDifferenceCount = apiDiff.nonBreakingDifferences?.length || 0;
 
     const wordify = (s: string) => s.replace(/([-_])/g, ' ').toLowerCase();
     const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-    const explainAPIChange = (change: any): APIChange => {
-      const { action, entity } = change;
+    const explainAPIChange = (change: DiffResult<DiffResultType>): APIChange => {
+      const { action, entity, sourceSpecEntityDetails, destinationSpecEntityDetails } = change;
+
       const entityTokens = entity.split('.');
       const title = [capitalize(wordify(action)), ...entityTokens.map(wordify)].join(' ');
+
+      let location = [...sourceSpecEntityDetails, ...destinationSpecEntityDetails].find(
+        (spec) => spec.location
+      )?.location;
+      if (location) location = formatAPILocation(location);
+
       return {
         title,
-        location: change.location,
+        location: location || 'an undefined URL location',
         sourceSpecEntityDetails: change.sourceSpecEntityDetails,
         destinationSpecEntityDetails: change.destinationSpecEntityDetails,
       };
     };
 
-    this.breakingDifferences = apiDiff.breakingDifferences?.map(explainAPIChange);
+    this.breakingDifferences = apiDiff.breakingDifferencesFound
+      ? apiDiff.breakingDifferences?.map(explainAPIChange)
+      : [];
     this.nonBreakingDifferences = apiDiff.nonBreakingDifferences?.map(explainAPIChange);
     this.unclassifiedDifferences = apiDiff.unclassifiedDifferences?.map(explainAPIChange);
   }

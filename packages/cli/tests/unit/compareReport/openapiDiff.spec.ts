@@ -8,7 +8,11 @@ describe('openapiDiff', () => {
   beforeAll(async () => (section = await ReportSection.build(Section.OpenAPIDiff)));
 
   describe('when there are no changes', () => {
-    const openapiDiff = new OpenAPIDiff(0, {});
+    const openapiDiff = new OpenAPIDiff(0, {
+      breakingDifferencesFound: false,
+      nonBreakingDifferences: [],
+      unclassifiedDifferences: [],
+    });
 
     describe('header', () => {
       it('reports all passed', async () => {
@@ -231,16 +235,16 @@ describe('openapiDiff', () => {
 
 <small>These changes <b>are not</b> backwards-compatible, according to the OpenAPI specification.</small>
 
-- Remove path \`/microposts/{id}\` 
-- Remove response status code \`302 POST /microposts\` 
-- Remove response status code \`303 POST /microposts\` 
-- Remove response status code \`422 POST /microposts\` 
+- Remove path \`/microposts/{id}\`
+- Remove response status code \`302 POST /microposts\`
+- Remove response status code \`303 POST /microposts\`
+- Remove response status code \`422 POST /microposts\`
 
 ### :wrench: Non-breaking changes
 
 <small>These changes <b>are</b> backwards-compatible, according to the OpenAPI specification.</small>
 
-- Add response status code  \`200 POST /microposts\`
+- Add response status code \`200 POST /microposts\`
 
 
 <details>

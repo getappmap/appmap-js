@@ -18,7 +18,7 @@
 
 <small>These changes <b>are</b> backwards-compatible, according to the OpenAPI specification.</small>
 
-- Add response status code  `302 GET /users/{id}`
+- Add response status code `302 GET /users/{id}`
 
 
 <details>

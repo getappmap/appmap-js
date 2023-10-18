@@ -1,5 +1,5 @@
+import { isAdded } from '../../../src/diffArchive/ChangeAnalysis';
 import { verbose } from '../../../src/utils';
-import { isAdded } from '../../../src/cmds/compare/ChangeReporter';
 
 if (process.env.VERBOSE) verbose(true);
 
