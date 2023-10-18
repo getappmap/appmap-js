@@ -1,6 +1,6 @@
 import ChangeReporter, { ReportFieldCalculator } from '../../../src/cmds/compare/ChangeReporter';
-import { RevisionName } from '../../../src/cmds/compare/RevisionName';
-import * as loadFindings from '../../../src/cmds/compare/loadFindings';
+import { RevisionName } from '../../../src/diffArchive/RevisionName';
+import * as loadFindings from '../../../src/diffArchive/loadFindings';
 
 describe('ReportFieldCalculator', () => {
   describe('findingDiff', () => {

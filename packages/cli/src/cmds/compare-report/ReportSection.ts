@@ -5,7 +5,7 @@ import { readFile } from 'fs/promises';
 import ChangeReport, { AppMap, FindingDiff } from './ChangeReport';
 import { existsSync } from 'fs';
 import assert from 'assert';
-import { RevisionName } from '../compare/RevisionName';
+import { RevisionName } from '../../diffArchive/RevisionName';
 import buildPreprocessor, { filterFindings } from './Preprocessor';
 import helpers from './helpers';
 

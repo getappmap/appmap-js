@@ -3,7 +3,7 @@ import ChangeReporter, {
   ChangeReportOptions,
   ReportFieldCalculator,
 } from '../../../src/cmds/compare/ChangeReporter';
-import { RevisionName } from '../../../src/cmds/compare/RevisionName';
+import { RevisionName } from '../../../src/diffArchive/RevisionName';
 
 describe('ChangeReporter', () => {
   describe('report', () => {

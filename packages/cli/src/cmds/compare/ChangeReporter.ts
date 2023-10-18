@@ -14,10 +14,10 @@ import { queue } from 'async';
 import assert from 'assert';
 
 import { DiffDiagrams } from '../../sequenceDiagramDiff/DiffDiagrams';
-import { ArchiveMetadata } from '../archive/ArchiveMetadata';
-import { Paths } from './Paths';
-import { Digests } from './Digests';
-import { RevisionName } from './RevisionName';
+import { ArchiveMetadata } from '../../lib/ArchiveMetadata';
+import { Paths } from '../../diffArchive/Paths';
+import { Digests } from '../../diffArchive/Digests';
+import { RevisionName } from '../../diffArchive/RevisionName';
 import {
   AppMapLink,
   AppMapName,
@@ -30,10 +30,10 @@ import {
 import { exists, verbose } from '../../utils';
 import mapToRecord from './mapToRecord';
 import { mutedStyle, prominentStyle } from './ui';
-import loadFindings from './loadFindings';
+import loadFindings from '../../diffArchive/loadFindings';
 import { loadSequenceDiagram } from './loadSequenceDiagram';
 import { warn } from 'console';
-import DiffLoader from './DiffLoader';
+import { default as SourceDiffLoader } from '../../diffArchive/SourceDiff';
 import { resolvePath } from '../../lib/resolvePath';
 
 export type BaseOrHead = RevisionName.Base | RevisionName.Head;
@@ -59,10 +59,10 @@ class ReferencedAppMaps {
 class SourceDiff {
   private diffs = new Map<AppMapName, string>();
   private classMaps = new Map<AppMapName, ClassMap>();
-  private diffLoader: DiffLoader;
+  private diffLoader: SourceDiffLoader;
 
   constructor(private reporter: ChangeReporter) {
-    this.diffLoader = new DiffLoader(reporter.baseRevision, reporter.headRevision);
+    this.diffLoader = new SourceDiffLoader(reporter.baseRevision, reporter.headRevision);
   }
 
   async get(appmap: AppMapName): Promise<string | undefined> {
@@ -111,7 +111,6 @@ class SourceDiff {
       .sort()
       .map((path) => this.diffLoader.lookupDiff(path))
       .join('');
-    // warn(`${[...sourcePaths].sort()}: ${result}`);
     return result;
   }
 }

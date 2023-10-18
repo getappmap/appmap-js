@@ -3,7 +3,7 @@ import { Finding } from '@appland/scanner';
 
 import { Paths } from './Paths';
 import { RevisionName } from './RevisionName';
-import { processNamedFiles } from '../../utils';
+import { processNamedFiles } from '../utils';
 
 export default async function loadFindings(
   paths: Paths,

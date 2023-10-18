@@ -10,7 +10,7 @@ import loadAppMapConfig from '../../lib/loadAppMapConfig';
 import { VERSION as IndexVersion } from '../../fingerprint/fingerprinter';
 import chalk from 'chalk';
 import gitRevision from './gitRevision';
-import { ArchiveMetadata } from './ArchiveMetadata';
+import { ArchiveMetadata } from '../../lib/ArchiveMetadata';
 import analyze from './analyze';
 import parseFilterArgs from './parseFilterArgs';
 import { cpus } from 'os';

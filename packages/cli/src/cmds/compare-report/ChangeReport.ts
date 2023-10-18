@@ -4,10 +4,10 @@ import assert from 'assert';
 import { format as sqlFormatFn } from 'sql-formatter';
 
 import { ChangeReport as ChangeReportData } from '../compare/ChangeReport';
-import { RevisionName } from '../compare/RevisionName';
+import { RevisionName } from '../../diffArchive/RevisionName';
 import { executeCommand } from '../../lib/executeCommand';
 import { verbose } from '../../utils';
-import normalizeAppMapId from './normalizeAppMapId';
+import normalizeAppMapId from '../../lib/normalizeAppMapId';
 
 function sqlFormat(query: string): string {
   try {

@@ -1,10 +1,9 @@
 import { join } from 'path';
 import { readFileSync } from 'fs';
-import DiffLoader, { Diff, DiffLoaderQueue } from '../../../src/cmds/compare/DiffLoader';
+import SourceDiff, { SourceDiffItem, SourceDiffQueue } from '../../../src/diffArchive/SourceDiff';
 import * as executeCommand from '../../../src/lib/executeCommand';
 
 import parsedUnifiedDiff from './fixtureData/parsedUnifiedDiff.json';
-import { warn } from 'console';
 const exampleDiff = readFileSync(join(__dirname, 'fixtureData', 'exampleDiff.txt'), 'utf-8');
 const addDeleteChangeRemoveDiff = readFileSync(
   join(__dirname, 'fixtureData', 'addDeleteChangeRemoveDiff.txt'),
@@ -19,12 +18,12 @@ describe('DiffLoader', () => {
   afterEach(() => jest.restoreAllMocks());
 
   describe('lookupDiff', () => {
-    let diffLoader: DiffLoader;
+    let diffLoader: SourceDiff;
 
-    beforeEach(() => (diffLoader = new DiffLoader(baseRevision, headRevision)));
+    beforeEach(() => (diffLoader = new SourceDiff(baseRevision, headRevision)));
 
     it('organizes the diff by file', async () => {
-      jest.spyOn(DiffLoader, 'isEligibleFile').mockReturnValue(true);
+      jest.spyOn(SourceDiff, 'isEligibleFile').mockReturnValue(true);
       jest.spyOn(executeCommand, 'executeCommand').mockResolvedValue(exampleDiff);
 
       await diffLoader.update(new Set(['app']));
@@ -40,7 +39,7 @@ describe('DiffLoader', () => {
     });
 
     it('updates the diff information incrementally', async () => {
-      jest.spyOn(DiffLoader, 'isEligibleFile').mockReturnValue(true);
+      jest.spyOn(SourceDiff, 'isEligibleFile').mockReturnValue(true);
       const executeCommandSpy = jest.spyOn(executeCommand, 'executeCommand');
       executeCommandSpy.mockResolvedValueOnce('');
       executeCommandSpy.mockResolvedValueOnce(exampleDiff);
@@ -61,7 +60,7 @@ describe('DiffLoader', () => {
     });
 
     it('reports on a variety of diff information', async () => {
-      jest.spyOn(DiffLoader, 'isEligibleFile').mockReturnValue(true);
+      jest.spyOn(SourceDiff, 'isEligibleFile').mockReturnValue(true);
       const executeCommandSpy = jest.spyOn(executeCommand, 'executeCommand');
       executeCommandSpy.mockResolvedValueOnce(addDeleteChangeRemoveDiff);
 
@@ -101,9 +100,9 @@ describe('DiffLoader', () => {
   });
 
   describe('Queue', () => {
-    let q: DiffLoaderQueue;
+    let q: SourceDiffQueue;
 
-    beforeEach(() => (q = new DiffLoaderQueue(baseRevision, headRevision)));
+    beforeEach(() => (q = new SourceDiffQueue(baseRevision, headRevision)));
 
     it('processes a single diff request', async () => {
       const executeCommandSpy = jest.spyOn(executeCommand, 'executeCommand').mockResolvedValue('');
@@ -140,7 +139,7 @@ describe('DiffLoader', () => {
       });
 
       const iterationCount = 10;
-      const promises = new Array<Promise<Diff | undefined>>();
+      const promises = new Array<Promise<SourceDiffItem | undefined>>();
       const startTime = new Date().getTime();
       for (let count = 0; count < iterationCount; count++) {
         const root = `root-${count}`;

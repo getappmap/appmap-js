@@ -6,8 +6,8 @@ import path, { join } from 'path';
 import { handler } from '../../../src/cmds/compare/compare';
 import { cleanProject, fixtureDir } from '../util';
 import * as executeCmd from '../../../src/lib/executeCommand';
-import { Paths } from '../../../src/cmds/compare/Paths';
-import { RevisionName } from '../../../src/cmds/compare/RevisionName';
+import { Paths } from '../../../src/diffArchive/Paths';
+import { RevisionName } from '../../../src/diffArchive/RevisionName';
 
 const originalWorkingDir = process.cwd();
 const projectDir = path.join(fixtureDir, 'compare');

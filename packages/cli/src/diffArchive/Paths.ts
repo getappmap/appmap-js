@@ -1,7 +1,7 @@
 import { glob } from 'glob';
 import { dirname, join, relative } from 'path';
 import { promisify } from 'util';
-import { AppMapName } from './ChangeReport';
+import { AppMapName } from '../cmds/compare/ChangeReport';
 import { RevisionName } from './RevisionName';
 
 export class Paths {
