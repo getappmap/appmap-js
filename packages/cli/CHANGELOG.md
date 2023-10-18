@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.102.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.102.0...@appland/appmap-v3.102.1) (2023-10-18)
+
+
+### Bug Fixes
+
+* Drop Handebars-provided arg from helper function ([284b489](https://github.com/getappmap/appmap-js/commit/284b48963f14419bfe053ce4742400e506ec5ca4))
+
 # [@appland/appmap-v3.102.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.101.0...@appland/appmap-v3.102.0) (2023-10-17)
 
 
