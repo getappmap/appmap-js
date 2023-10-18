@@ -36,9 +36,11 @@ const eq = (...args: any[]): boolean => {
 };
 
 const pluralize = (count: number, singular: string, plural?: string): string => {
+  if (typeof plural !== 'string') plural = undefined;
+
   if (count === 1) return singular;
   else if (plural) return plural;
-  else return `${singular}s`;
+  else return [singular, 's'].join('');
 };
 
 const format_as_yaml = (value: any): SafeString => new Handlebars.SafeString(dump(value));
