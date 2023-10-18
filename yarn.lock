@@ -320,7 +320,7 @@ __metadata:
     sass: ^1.26.5
     sass-loader: ^8.0.2
     sass-resources-loader: ^2.1.1
-    sql-formatter: ^4.0.2
+    sql-formatter: ^13.0.0
     start-server-and-test: ^1.14.0
     svg-to-vue: ^0.7.0
     typescript: ^4.9.5
@@ -32138,17 +32138,6 @@ resolve@1.1.7:
   bin:
     sql-formatter: bin/sql-formatter-cli.cjs
   checksum: 87d1bb512a1b3c7d1383bfd440c3efc3c96f8fc3c7993f66fbfc463571c0fc540b8d3e2742410970c29222c5f72df9c275684408e56fa3d1377b6af59c678797
-  languageName: node
-  linkType: hard
-
-"sql-formatter@npm:^4.0.2":
-  version: 4.0.2
-  resolution: "sql-formatter@npm:4.0.2"
-  dependencies:
-    argparse: ^2.0.1
-  bin:
-    sql-formatter: bin/sqlfmt.js
-  checksum: ce2bd1c507bc3435cfc17184d6404e39d033541ebf0f092087623972a4cf0f72822aec0752060b9f8ed387b63e3a1c46e3d621037dd069fe15f258a83e235940
   languageName: node
   linkType: hard
 
