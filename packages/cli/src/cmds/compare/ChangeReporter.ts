@@ -168,10 +168,10 @@ export default class ChangeReporter {
         console.log(
           mutedStyle(`AppMap ${revisionName}/${appmap} is unreferenced so it will be deleted.`)
         );
-      const path = this.paths.appmapPath(revisionName, appmap);
-      const fileName = [path, 'appmap.json'].join('.');
-      await rm(fileName);
-      await rm(path, { recursive: true });
+      const appmapPath = this.paths.appmapPath(revisionName, appmap);
+      const appmapIndexDir = appmapPath.slice(0, -'.appmap.json'.length);
+      await rm(appmapPath);
+      await rm(appmapIndexDir, { recursive: true });
     };
 
     for (const revisionName of [RevisionName.Base, RevisionName.Head]) {
@@ -213,7 +213,7 @@ export default class ChangeReporter {
     const referenceFindingAppMapFn = async (revisionName: RevisionName, finding: Finding) => {
       const { appMapFile } = finding;
       const appmap = appMapFile.slice(0, -'.appmap.json'.length);
-      const path = [this.paths.appmapPath(revisionName, appmap), 'appmap.json'].join('.');
+      const path = this.paths.appmapPath(revisionName, appmap);
       // A sanity check
       if (!(await exists(path)))
         warn(`AppMap ${path}, referenced by finding ${finding.hash_v2}, does not exist.`);
@@ -611,15 +611,28 @@ export class ReportFieldCalculator {
   }
 
   async sqlDiff(reportRemoved: boolean): Promise<SQLDiff | undefined> {
-    const collectStrings = (strings: Set<string>): ((fileName: string) => Promise<void>) => {
-      return async (fileName: string) => {
-        const values: string[] = JSON.parse(await readFile(fileName, 'utf-8'));
-        for (const value of values) strings.add(value);
-      };
+    const collectStrings = async (
+      revisionName: RevisionName,
+      appmapName: string,
+      indexFileName: string,
+      strings: Set<string>
+    ): Promise<void> => {
+      const indexFilePath = this.reporter.paths.indexFilePath(
+        revisionName,
+        appmapName,
+        indexFileName
+      );
+      if (!(await exists(indexFilePath))) {
+        warn(`Index file ${indexFilePath} does not exist!`);
+        return Promise.resolve();
+      }
+      const values: string[] = JSON.parse(await readFile(indexFilePath, 'utf-8'));
+      for (const value of values) strings.add(value);
     };
 
     const loadSQL = async (
-      revisionName: RevisionName
+      revisionName: RevisionName,
+      appmaps?: Iterable<AppMapName>
     ): Promise<{
       queries: Set<string>;
       tables: Set<string>;
@@ -627,24 +640,32 @@ export class ReportFieldCalculator {
       const queryStrings = new Set<string>();
       const tableStrings = new Set<string>();
 
-      await processNamedFiles(
-        this.reporter.paths.revisionPath(revisionName),
-        'canonical.sqlNormalized.json',
-        collectStrings(queryStrings)
-      );
-      await processNamedFiles(
-        this.reporter.paths.revisionPath(revisionName),
-        'canonical.sqlTables.json',
-        collectStrings(tableStrings)
-      );
+      if (!appmaps) return { queries: queryStrings, tables: tableStrings };
+
+      for (const appmapName of appmaps) {
+        await collectStrings(
+          revisionName,
+          appmapName,
+          'canonical.sqlNormalized.json',
+          queryStrings
+        );
+        await collectStrings(revisionName, appmapName, 'canonical.sqlTables.json', tableStrings);
+      }
+
       console.info(
         `Found ${queryStrings.size} queries and ${tableStrings.size} tables for ${revisionName} revision`
       );
       return { queries: queryStrings, tables: tableStrings };
     };
 
-    const { queries: baseQueries, tables: baseTables } = await loadSQL(RevisionName.Base);
-    const { queries: headQueries, tables: headTables } = await loadSQL(RevisionName.Head);
+    const { queries: baseQueries, tables: baseTables } = await loadSQL(
+      RevisionName.Base,
+      this.reporter.baseAppMaps
+    );
+    const { queries: headQueries, tables: headTables } = await loadSQL(
+      RevisionName.Head,
+      this.reporter.headAppMaps
+    );
 
     const newQueryStrings = [...headQueries].filter((query) => !baseQueries.has(query)).sort();
     const removedQueries = reportRemoved
@@ -657,63 +678,59 @@ export class ReportFieldCalculator {
 
     const newQuerySourceLinesMap = new Map<string, string[]>();
     const newQueryAppMapsMap = new Map<string, AppMapName[]>();
-    await processNamedFiles(
-      this.reporter.paths.revisionPath(RevisionName.Head),
-      'canonical.sqlNormalized.json',
-      async (fileName: string) => {
-        const values: string[] = JSON.parse(await readFile(fileName, 'utf-8'));
-        const appmapId = fileName
-          .slice(this.reporter.paths.workingDir.length + 1)
-          .slice(RevisionName.Head.length + 1)
-          .slice(0, -1 * ('canonical.sqlNormalized.json'.length + 1));
-
-        const newQueriesInAppMap = new Set<string>();
-        for (const value of values) {
-          if (newQueryStrings.includes(value)) {
-            if (!newQueryAppMapsMap.has(value)) {
-              newQueryAppMapsMap.set(value, []);
-            }
-            newQueriesInAppMap.add(value);
-            newQueryAppMapsMap.get(value)?.push(appmapId);
+    for (const appmapName of this.reporter.headAppMaps || []) {
+      const indexFilePath = this.reporter.paths.indexFilePath(
+        RevisionName.Head,
+        appmapName,
+        'canonical.sqlNormalized.json'
+      );
+      const values: string[] = JSON.parse(await readFile(indexFilePath, 'utf-8'));
+      const newQueriesInAppMap = new Set<string>();
+      for (const value of values) {
+        if (newQueryStrings.includes(value)) {
+          if (!newQueryAppMapsMap.has(value)) {
+            newQueryAppMapsMap.set(value, []);
           }
+          newQueriesInAppMap.add(value);
+          newQueryAppMapsMap.get(value)?.push(appmapName);
         }
+      }
 
-        const appmapFileName = [dirname(fileName), 'appmap.json'].join('.');
-        if (newQueriesInAppMap.size) {
-          const appmap = buildAppMap()
-            .source(await readFile(appmapFileName, 'utf-8'))
-            .build();
-          const database = appmap.classMap.sqlObject;
-          if (!database) {
-            warn(`No Database found in AppMap ${fileName}`);
-          } else {
-            for (const query of database.children) {
-              for (const queryEvent of query.events) {
-                if (queryEvent.sqlQuery && queryEvent.sql?.database_type) {
-                  const sqlNormalized = normalizeSQL(
-                    queryEvent.sqlQuery,
-                    queryEvent.sql.database_type
-                  );
-                  if (newQueriesInAppMap.has(sqlNormalized)) {
-                    if (!newQuerySourceLinesMap.has(sqlNormalized))
-                      newQuerySourceLinesMap.set(sqlNormalized, []);
+      const appmapFileName = this.reporter.paths.appmapPath(RevisionName.Head, appmapName);
+      if (newQueriesInAppMap.size) {
+        const appmap = buildAppMap()
+          .source(await readFile(appmapFileName, 'utf-8'))
+          .build();
+        const database = appmap.classMap.sqlObject;
+        if (!database) {
+          warn(`No Database found in AppMap ${appmapFileName}`);
+        } else {
+          for (const query of database.children) {
+            for (const queryEvent of query.events) {
+              if (queryEvent.sqlQuery && queryEvent.sql?.database_type) {
+                const sqlNormalized = normalizeSQL(
+                  queryEvent.sqlQuery,
+                  queryEvent.sql.database_type
+                );
+                if (newQueriesInAppMap.has(sqlNormalized)) {
+                  if (!newQuerySourceLinesMap.has(sqlNormalized))
+                    newQuerySourceLinesMap.set(sqlNormalized, []);
 
-                    let sourcePath: string | undefined;
-                    let sourceLine: number | undefined;
-                    for (const ancestor of queryEvent.ancestors()) {
-                      const { path } = ancestor;
-                      if (!path) continue;
+                  let sourcePath: string | undefined;
+                  let sourceLine: number | undefined;
+                  for (const ancestor of queryEvent.ancestors()) {
+                    const { path } = ancestor;
+                    if (!path) continue;
 
-                      sourcePath = await resolvePath(path, appmap.metadata.language?.name);
-                      if (sourcePath) {
-                        sourceLine = ancestor.lineno;
-                        break;
-                      }
-                    }
+                    sourcePath = await resolvePath(path, appmap.metadata.language?.name);
                     if (sourcePath) {
-                      const sourceLocation = [sourcePath, sourceLine].filter(Boolean).join(':');
-                      newQuerySourceLinesMap.get(sqlNormalized)?.push(sourceLocation);
+                      sourceLine = ancestor.lineno;
+                      break;
                     }
+                  }
+                  if (sourcePath) {
+                    const sourceLocation = [sourcePath, sourceLine].filter(Boolean).join(':');
+                    newQuerySourceLinesMap.get(sqlNormalized)?.push(sourceLocation);
                   }
                 }
               }
@@ -721,7 +738,7 @@ export class ReportFieldCalculator {
           }
         }
       }
-    );
+    }
 
     const newQueryAppMaps: SQLQueryReference[] = [...newQueryAppMapsMap.keys()]
       .sort()
