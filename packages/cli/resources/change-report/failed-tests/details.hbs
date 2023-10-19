@@ -10,7 +10,7 @@
 <p/>
 
 <!-- testLocation -->
-[{{testLocation}}]({{ source_url testLocation }}) failed with error:
+{{ source_link testLocation }} failed with error:
 
     {{#if failureMessage}}
 <!-- failureMessage -->
@@ -21,7 +21,7 @@
 
 <!-- failureLocation -->
     {{#if failureLocation}}
-The error occurred at [{{failureLocation}}]({{ source_url failureLocation }}):
+The error occurred at {{ source_link failureLocation }}:
     {{/if}}
 
     {{#if testSnippet}}
