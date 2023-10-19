@@ -18,7 +18,7 @@ describe('failedTests', () => {
           reportOptions
         );
         expect(report).toEqual(
-          '| [Failed tests](#failed-tests) | :white_check_mark: All tests passed |'
+          '| Failed tests | :white_check_mark: All tests passed |'
         );
       });
     });

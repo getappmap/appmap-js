@@ -220,11 +220,15 @@ export default class ReportSection {
       }
     };
 
+    const section_link = (sectionName: string, anchor: string, itemCount: number): SafeString =>
+      new SafeString(itemCount === 0 ? sectionName : `[${sectionName}](#${anchor})`);
+
     return {
       appmap_diff_url,
       appmap_title,
       appmap_url,
       group_appmaps_by_recorder_name,
+      section_link,
       source_url,
       ...helpers,
     };

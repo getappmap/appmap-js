@@ -26,7 +26,7 @@ describe('findings', () => {
           reportOptions
         );
         expect(report).toEqual(
-          '| [Performance problems](#performance-problems) |  :white_check_mark: None detected  |'
+          '| Performance problems |  :white_check_mark: None detected  |'
         );
       });
     });

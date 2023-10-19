@@ -1,5 +1,5 @@
 {{#if findingDiff }}
-| [{{ metadata.title }}](#{{ metadata.anchor }}) |
+| {{ section_link metadata.title metadata.anchor (length findingDiff.newFindings findingDiff.resolvedFindings) }} |
   {{~#unless (length findingDiff.newFindings findingDiff.resolvedFindings) }}
   :white_check_mark: None detected
   {{~/unless}}
