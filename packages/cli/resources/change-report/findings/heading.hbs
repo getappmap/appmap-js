@@ -1,9 +1,5 @@
 {{#if findingDiff }}
-<<<<<<< HEAD
 | {{ section_link metadata.title metadata.anchor (length findingDiff.newFindings findingDiff.resolvedFindings) }} |
-=======
-| [{{ metadata.title }}](#{{ metadata.anchor }}) |
->>>>>>> 773d6cbcc (fix: Suppress findings when there are test failures)
   {{~#unless (length findingDiff.newFindings findingDiff.resolvedFindings) }}
   :white_check_mark: None detected
   {{~/unless}}

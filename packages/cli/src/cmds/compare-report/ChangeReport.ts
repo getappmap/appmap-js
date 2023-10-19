@@ -10,7 +10,6 @@ import { executeCommand } from '../../lib/executeCommand';
 import { verbose } from '../../utils';
 import normalizeAppMapId from '../../lib/normalizeAppMapId';
 import formatAPILocation from './formatAPILocation';
-import { format } from 'path';
 
 function sqlFormat(query: string): string {
   try {

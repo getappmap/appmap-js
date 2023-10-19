@@ -1,5 +1,5 @@
 {{#with sqlDiff }}
-| [SQL changes](#sql-changes) | 
+| {{ section_link 'SQL changes' 'sql-changes' (length newQueries removedQueries newTables removedTables) }} | 
   {{~#if (length newQueries removedQueries newTables removedTables) }}
     :mag:
     {{~#if (length newQueries removedQueries) }}
