@@ -4,6 +4,7 @@ import ChangeReport, {
   FindingChange,
   FindingDiff,
   OpenAPIDiff,
+  SQLDiff,
   TestFailure,
 } from './ChangeReport';
 import { ExperimentalSection, Section } from './ReportSection';
@@ -65,19 +66,19 @@ class OpenAPIDiffPreprocessor implements Preprocessor {
 }
 
 class SQLDiffPreprocessor implements Preprocessor {
-  constructor(public report: ChangeReport) {}
+  constructor(public sqlDiff: SQLDiff) {}
 
   get numElements(): number {
     return (
-      this.report.sqlDiff.newQueries.length +
-      this.report.sqlDiff.removedQueries.length +
-      this.report.sqlDiff.newTables.length +
-      this.report.sqlDiff.removedTables.length
+      this.sqlDiff.newQueries.length +
+      this.sqlDiff.removedQueries.length +
+      this.sqlDiff.newTables.length +
+      this.sqlDiff.removedTables.length
     );
   }
 
-  prune(numElements: number) {
-    const sqlDiff = { ...this.report.sqlDiff };
+  prune(numElements: number): { sqlDiff: SQLDiff } {
+    const sqlDiff = { ...this.sqlDiff };
 
     const keys = ['newQueries', 'removedQueries', 'newTables', 'removedTables'];
     for (const key of keys) {
@@ -214,7 +215,7 @@ export default function buildPreprocessor(
     case ExperimentalSection.ChangedAppMaps:
       return new ChangedAppMapsPreprocessor(report);
     case ExperimentalSection.SQLDiff:
-      return new SQLDiffPreprocessor(report);
+      return report.sqlDiff ? new SQLDiffPreprocessor(report.sqlDiff) : undefined;
     default:
       warn(`No Preprocessor for section ${section}`);
   }

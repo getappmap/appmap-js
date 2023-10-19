@@ -304,8 +304,6 @@ export default class ChangeReport {
         newTables: changeReportData.sqlDiff.newTables.map(sqlFormat),
         removedTables: changeReportData.sqlDiff.removedTables.map(sqlFormat),
       };
-    } else {
-      sqlDiff = { newQueries: [], removedQueries: [], newTables: [], removedTables: [] };
     }
 
     const newAppMaps = changeReportData.newAppMaps.map((appmapId) =>
