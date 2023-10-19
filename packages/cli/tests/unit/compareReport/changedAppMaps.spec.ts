@@ -22,7 +22,7 @@ describe('changedAppMaps', () => {
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual('| [Changed AppMaps](#changed-appmaps) |  :zero: No changes  |');
+        expect(report).toEqual('| Changed AppMaps |  :zero: No changes  |');
       });
     });
     describe('details', () => {

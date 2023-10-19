@@ -26,7 +26,7 @@ describe('findings', () => {
           reportOptions
         );
         expect(report).toEqual(
-          '| [Performance problems](#performance-problems) |  :white_check_mark: None detected  |'
+          '| Performance problems |  :white_check_mark: None detected  |'
         );
       });
     });
@@ -38,6 +38,22 @@ describe('findings', () => {
           } as unknown as ChangeReport,
           reportOptions
         );
+
+        expect(report).toEqual(``);
+      });
+    });
+  });
+
+  describe('when the findingDiff is not present', () => {
+    describe('header', () => {
+      it('is blank', async () => {
+        const report = section.generateHeading({} as unknown as ChangeReport, reportOptions);
+        expect(report).toEqual('');
+      });
+    });
+    describe('details', () => {
+      it('are blank', () => {
+        const report = section.generateDetails({} as unknown as ChangeReport, reportOptions);
 
         expect(report).toEqual(``);
       });

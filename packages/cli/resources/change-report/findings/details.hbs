@@ -51,7 +51,7 @@
 
 </details>
 {{/inline}}
-{{#if (length findingDiff.newFindings findingDiff.resolvedFindings)}}
+{{#if (every findingDiff (length findingDiff.newFindings findingDiff.resolvedFindings)) }}
 <h2 id="{{ metadata.anchor }}">{{ metadata.title }}</h2>
   {{#if (length findingDiff.newFindings) }}
 

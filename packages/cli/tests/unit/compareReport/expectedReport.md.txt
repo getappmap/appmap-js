@@ -2,11 +2,11 @@
 
 | Summary | Status |
 | --- | --- |
-| [Failed tests](#failed-tests) | :white_check_mark: All tests passed |
+| Failed tests | :white_check_mark: All tests passed |
 | [API changes](#openapi-changes) | :wrench: 1 non-breaking |
 | [Security flaws](#security-flaws) |  🔒 1 new  :tada: 2 resolved  |
-| [Performance problems](#performance-problems) |  :white_check_mark: None detected  |
-| [Code anti-patterns](#code-antipatterns) |  :white_check_mark: None detected  |
+| Performance problems |  :white_check_mark: None detected  |
+| Code anti-patterns |  :white_check_mark: None detected  |
 | [New AppMaps](#new-appmaps) | :star: 1 new minitest test |
 | [Removed AppMaps](#removed-appmaps) | :heavy_multiplication_x: 1 removed minitest test |
 

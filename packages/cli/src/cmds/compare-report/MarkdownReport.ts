@@ -53,6 +53,18 @@ export default class MarkdownReport implements Report {
       ...headings,
       '',
     ].join('\n');
-    return [heading, ...details].join('\n');
+
+    const comments: string[] = [];
+    if (changeReport.testFailures.length > 0) {
+      comments.push('');
+      comments.push(
+        `:warning: **Note** Because ${changeReport.testFailures.length} test${
+          changeReport.testFailures.length > 1 ? 's' : ''
+        } failed, AppMap is showing an abbreviated analysis to help you get them working. Once all tests are passing, all report sections will be available.`
+      );
+      comments.push('');
+    }
+
+    return [heading, ...comments, ...details].join('\n');
   }
 }

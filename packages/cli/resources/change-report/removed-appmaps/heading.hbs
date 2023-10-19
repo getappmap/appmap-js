@@ -1,5 +1,5 @@
 {{#if removedAppMaps.length ~}}
-| [Removed AppMaps](#removed-appmaps) | 
+| {{ section_link 'Removed AppMaps' 'removed-appmaps' (length removedAppMaps) }} | 
   {{~#with (group_appmaps_by_recorder_name removedAppMaps) }} :heavy_multiplication_x: {{#each @this}}{{#unless @first }}, {{/unless}}{{ count }} removed {{ recorderName }}{{#if isTest}} {{ pluralize count 'test' }}{{/if}}{{/each}} {{/with~}}
   |
 {{~/if}}
