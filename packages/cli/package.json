@@ -122,7 +122,7 @@
     "ps-node": "^0.1.6",
     "read-pkg-up": "^7.0.1",
     "semver": "^7.3.5",
-    "sql-formatter": "^13.0.0",
+    "sql-formatter": "^4.0.2",
     "strip-ansi": "^6.0.0",
     "validator": "^13.7.0",
     "w3c-xmlserializer": "^2.0.0",
