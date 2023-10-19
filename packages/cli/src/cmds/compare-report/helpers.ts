@@ -9,7 +9,9 @@ const length = (...list: any[]): number => {
   const _fn = list.pop();
   let result = 0;
   for (const item of list) {
-    if (Array.isArray(item)) {
+    if (item === undefined || item === null) {
+      // pass
+    } else if (Array.isArray(item)) {
       result += item.length;
     } else if (item.constructor === Map) {
       result += item.size;
@@ -22,10 +24,16 @@ const length = (...list: any[]): number => {
 
 const coalesce = (...list: any[]): number => {
   const _fn = list.pop();
-  return list.find((item) => item !== undefined && item !== '');
+  return list.find((item) => item !== undefined && item !== null && item !== '');
 };
 
 const extractArrayValue = (args: any[]): any[] => (Array.isArray(args[0]) ? args[0] : args);
+
+const every = (...args: any[]): boolean => {
+  args = [...args];
+  const _fn = args.pop();
+  return args.every((value) => !!value);
+};
 
 const eq = (...args: any[]): boolean => {
   args = [...args];
@@ -97,6 +105,7 @@ export default {
   lang_package_alias,
   length,
   coalesce,
+  every,
   eq,
   pluralize,
   subtract,

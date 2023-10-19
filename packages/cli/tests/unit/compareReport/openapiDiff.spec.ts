@@ -35,6 +35,22 @@ describe('openapiDiff', () => {
     });
   });
 
+  describe('when the openapiDiff is not present', () => {
+    describe('header', () => {
+      it('is blank', async () => {
+        const report = section.generateHeading({} as unknown as ChangeReport, reportOptions);
+        expect(report).toEqual('');
+      });
+    });
+    describe('details', () => {
+      it('are blank', () => {
+        const report = section.generateDetails({} as unknown as ChangeReport, reportOptions);
+
+        expect(report).toEqual(``);
+      });
+    });
+  });
+
   describe('when there are changes', () => {
     const sourceDiff = `--- base/openapi.yml    2023-08-31 13:25:30.000000000 -0400
     +++ head/openapi.yml    2023-08-31 13:25:30.000000000 -0400

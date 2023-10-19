@@ -1,5 +1,11 @@
 import { warn } from 'console';
-import ChangeReport, { FindingChange } from './ChangeReport';
+import ChangeReport, {
+  AppMap,
+  FindingChange,
+  FindingDiff,
+  OpenAPIDiff,
+  TestFailure,
+} from './ChangeReport';
 import { ExperimentalSection, Section } from './ReportSection';
 import { ImpactDomain } from '@appland/scanner';
 
@@ -16,20 +22,20 @@ class FailedTestsPreprocessor implements Preprocessor {
     return this.report.testFailures.length;
   }
 
-  prune(numElements: number) {
+  prune(numElements: number): { testFailures: TestFailure[] } {
     return { testFailures: this.report.testFailures.slice(0, numElements) };
   }
 }
 
 class OpenAPIDiffPreprocessor implements Preprocessor {
-  constructor(public report: ChangeReport) {}
+  constructor(public openapiDiff: OpenAPIDiff) {}
 
   get numElements(): number {
-    return this.report.openapiDiff.differenceCount;
+    return this.openapiDiff.differenceCount;
   }
 
-  prune(numElements: number) {
-    const openapiDiff = { ...this.report.openapiDiff };
+  prune(numElements: number): { openapiDiff: OpenAPIDiff } {
+    const openapiDiff = { ...this.openapiDiff };
 
     let numRemaining = numElements;
     {
@@ -82,16 +88,16 @@ class FindingDiffPreprocessor implements Preprocessor {
   newFindings: FindingChange[];
   resolvedFindings: FindingChange[];
 
-  constructor(public report: ChangeReport, public section: Section) {
-    this.newFindings = filterFindings(this.report.findingDiff.newFindings || [], section);
-    this.resolvedFindings = filterFindings(this.report.findingDiff.resolvedFindings || [], section);
+  constructor(public findingDiff: FindingDiff, public section: Section) {
+    this.newFindings = filterFindings(this.findingDiff.newFindings || [], section);
+    this.resolvedFindings = filterFindings(this.findingDiff.resolvedFindings || [], section);
   }
 
   get numElements(): number {
     return this.newFindings.length + this.resolvedFindings.length;
   }
 
-  prune(numElements: number) {
+  prune(numElements: number): { findingDiff: FindingDiff } {
     const findingDiff = { newFindings: this.newFindings, resolvedFindings: this.resolvedFindings };
 
     let numRemaining = numElements;
@@ -118,7 +124,7 @@ class NewAppMapsPreprocessor implements Preprocessor {
     return this.report.newAppMaps.length;
   }
 
-  prune(numElements: number) {
+  prune(numElements: number): { newAppMaps: AppMap[] } {
     return {
       newAppMaps: this.report.newAppMaps.slice(0, numElements),
     };
@@ -132,7 +138,7 @@ class RemovedAppMapsPreprocessor implements Preprocessor {
     return this.report.removedAppMaps.length;
   }
 
-  prune(numElements: number) {
+  prune(numElements: number): { removedAppMaps: AppMap[] } {
     return {
       removedAppMaps: this.report.removedAppMaps.slice(0, numElements),
     };
@@ -146,7 +152,7 @@ class ChangedAppMapsPreprocessor implements Preprocessor {
     return Object.keys(this.report.changedAppMaps).length;
   }
 
-  prune(numElements: number) {
+  prune(numElements: number): { changedAppMaps: Record<string, AppMap[]> } {
     const retainKeys = Object.keys(this.report.changedAppMaps).slice(0, numElements);
     return {
       changedAppMaps: retainKeys.reduce(
@@ -165,11 +171,13 @@ export default function buildPreprocessor(
     case Section.FailedTests:
       return new FailedTestsPreprocessor(report);
     case Section.OpenAPIDiff:
-      return new OpenAPIDiffPreprocessor(report);
+      return report.openapiDiff ? new OpenAPIDiffPreprocessor(report.openapiDiff) : undefined;
     case Section.SecurityFlaws:
     case Section.CodeAntiPatterns:
     case Section.PerformanceProblems:
-      return new FindingDiffPreprocessor(report, section);
+      return report.findingDiff
+        ? new FindingDiffPreprocessor(report.findingDiff, section)
+        : undefined;
     case Section.NewAppMaps:
       return new NewAppMapsPreprocessor(report);
     case Section.RemovedAppMaps:

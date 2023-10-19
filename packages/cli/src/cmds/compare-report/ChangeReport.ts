@@ -6,7 +6,6 @@ import { RevisionName } from '../compare/RevisionName';
 import assert from 'assert';
 import { executeCommand } from '../../lib/executeCommand';
 import { verbose } from '../../utils';
-import { warn } from 'console';
 import normalizeAppMapId from './normalizeAppMapId';
 
 export class AppMap {
@@ -143,11 +142,11 @@ export class FindingDiff {
 export default class ChangeReport {
   constructor(
     public readonly testFailures: TestFailure[],
-    public readonly openapiDiff: OpenAPIDiff,
-    public readonly findingDiff: FindingDiff,
     public readonly newAppMaps: AppMap[],
     public readonly removedAppMaps: AppMap[],
     public readonly changedAppMaps: Record<string, AppMap[]>,
+    public readonly openapiDiff?: OpenAPIDiff,
+    public readonly findingDiff?: FindingDiff,
     public pruned = false
   ) {}
 
@@ -215,8 +214,6 @@ export default class ChangeReport {
       }
 
       apiDiff = new OpenAPIDiff(differenceCount, changeReportData.apiDiff, sourceDiff);
-    } else {
-      apiDiff = new OpenAPIDiff(0, {}, undefined);
     }
 
     let findingDiff: FindingDiff | undefined;
@@ -243,8 +240,6 @@ export default class ChangeReport {
       const resolvedFindings = buildFindings('resolved', RevisionName.Base);
 
       findingDiff = new FindingDiff(newFindings, resolvedFindings);
-    } else {
-      findingDiff = new FindingDiff([], []);
     }
 
     const newAppMaps = changeReportData.newAppMaps.map((appmapId) =>
@@ -267,11 +262,11 @@ export default class ChangeReport {
 
     return new ChangeReport(
       testFailures,
-      apiDiff,
-      findingDiff,
       newAppMaps,
       removedAppMaps,
-      changedAppMaps
+      changedAppMaps,
+      apiDiff,
+      findingDiff
     );
   }
 }

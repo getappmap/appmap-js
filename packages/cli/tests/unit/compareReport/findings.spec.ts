@@ -44,6 +44,22 @@ describe('findings', () => {
     });
   });
 
+  describe('when the findingDiff is not present', () => {
+    describe('header', () => {
+      it('is blank', async () => {
+        const report = section.generateHeading({} as unknown as ChangeReport, reportOptions);
+        expect(report).toEqual('');
+      });
+    });
+    describe('details', () => {
+      it('are blank', () => {
+        const report = section.generateDetails({} as unknown as ChangeReport, reportOptions);
+
+        expect(report).toEqual(``);
+      });
+    });
+  });
+
   describe('when there is a resolved finding', () => {
     let findingDiff: FindingDiff;
 

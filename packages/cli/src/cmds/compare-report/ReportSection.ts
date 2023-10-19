@@ -123,7 +123,7 @@ export default class ReportSection {
     const metadata = SECTION_METADATA[this.section];
     if (metadata) context.metadata = metadata;
 
-    if (FindingsSections.includes(this.section)) {
+    if (changeReport.findingDiff && FindingsSections.includes(this.section)) {
       const newFindings = filterFindings(changeReport.findingDiff.newFindings, this.section);
       const resolvedFindings = filterFindings(
         changeReport.findingDiff.resolvedFindings,
