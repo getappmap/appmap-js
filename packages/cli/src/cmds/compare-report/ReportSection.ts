@@ -224,6 +224,12 @@ export default class ReportSection {
     const source_link = (location: string, fileLinenoSeparator = '#L'): SafeString => {
       const label = location;
       const url = source_url(location, fileLinenoSeparator);
+      return url ? new SafeString(`[\`${label}\`](${url})`) : new SafeString(`\`${label}\``);
+    };
+
+    const source_link_html = (location: string, fileLinenoSeparator = '#L'): SafeString => {
+      const label = location;
+      const url = source_url(location, fileLinenoSeparator);
       return url
         ? new SafeString(`<a href="${url}"><code>${label}</code></a>`)
         : new SafeString(label);
@@ -239,6 +245,7 @@ export default class ReportSection {
       group_appmaps_by_recorder_name,
       section_link,
       source_link,
+      source_link_html,
       source_url,
       ...helpers,
     };

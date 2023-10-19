@@ -85,8 +85,7 @@ Review changes
 appmap behavior has changed
 \`\`\`
 
-- [Users controller test](https://getappmap.com/?path=diff%2Fminitest%2Fusers_controller_test.diff.sequence.json)
-
+[Users controller test](https://getappmap.com/?path=diff%2Fminitest%2Fusers_controller_test.diff.sequence.json)
 </details>
 `);
       });
@@ -144,19 +143,19 @@ Review changes
 changed 1
 \`\`\`
 
-- [Users controller test](https://getappmap.com/?path=diff%2Fminitest%2Fusers_controller_test.diff.sequence.json)
+[Users controller test](https://getappmap.com/?path=diff%2Fminitest%2Fusers_controller_test.diff.sequence.json)
 
 \`\`\`
 changed 2
 \`\`\`
 
-- [Users controller test](https://getappmap.com/?path=diff%2Fminitest%2Fusers_controller_test.diff.sequence.json)
+[Users controller test](https://getappmap.com/?path=diff%2Fminitest%2Fusers_controller_test.diff.sequence.json)
 
 \`\`\`
 changed 3
 \`\`\`
 
-- [Users controller test](https://getappmap.com/?path=diff%2Fminitest%2Fusers_controller_test.diff.sequence.json)
+[Users controller test](https://getappmap.com/?path=diff%2Fminitest%2Fusers_controller_test.diff.sequence.json)
 
 Because there are many changed AppMaps, some of them are not listed in this report.
 </details>

@@ -1,5 +1,5 @@
 {{#with sqlDiff }}
-  {{~#if (length newQueries removedQueries newTables removedTables) }}
+  {{~#if (length newQueries newTables) }}
 <h2 id="sql-changes">🔍 SQL changes</h2>
 
     {{#if (length newQueries) }}
@@ -7,55 +7,43 @@
 
       {{#each newQueries}}
 
-`{{{ words query 5 }}}` {{# if (length sourceLocations) }} at [{{ first sourceLocations }}]({{{ source_url (first sourceLocations) }}}){{/if}}
-
 <details>
-<summary>View details</summary>
+<summary>
+  <code>{{{ words query 5 }}}</code> {{#if (length sourceLocations) }} at {{ source_link_html (first sourceLocations) }}{{/if}}
+</summary>
 
-Full SQL query:
+  ```sql
+  {{{ query }}}
+  ```
 
-```sql
-{{{ query }}}
-```
-
-        {{#if (length sourceLocations) }}
+        {{#if ( gt (length sourceLocations) 1 ) }}
 
 All source locations:
 
           {{#each sourceLocations}}
-[{{ this }}]({{{ source_url this }}})
+  * {{ source_link this }}
           {{/each}}
         {{/if}}
 
-Occurs in {{ length appmaps }} {{ pluralize (length appmaps) 'AppMap' }}{{#if (gt (length appmaps) 1) }}. A representative AppMap is{{/if}}:
-  
         {{#with (first appmaps) }}
           {{#if sourceDiff}}
+**Related code changes**
 
-##### Related code changes
-
-```diff
-{{{ sourceDiff }}}
-```
-          {{/if}}
-
-- [Full AppMap &raquo;]({{ appmap_url 'head' @this }})
-          {{#if changed}}
-- [Sequence diagram diff &raquo;]({{ appmap_diff_url @this }})
+  ```diff
+  {{{ sourceDiff }}}
+  ```
           {{/if}}
         {{/with}}
+
+Occurs in {{ length appmaps }} {{ pluralize (length appmaps) 'AppMap' }}:
+
+| Name | Source location | AppMap diagram | Diff diagram |
+| --- | --- | --- | ---|
+        {{#each appmaps }}
+| {{ metadata.name }} | {{ source_link metadata.source_location }} | [Full AppMap &raquo;]({{ appmap_url 'head' @this }}) | [Sequence diagram diff &raquo;]({{ appmap_diff_url @this }}) |
+        {{/each}}
 </details>
       {{/each}}
-    {{/if}}
-
-    {{#if (length removedQueries) }}
-### Removed queries ({{ length removedQueries }})
-      {{#each removedQueries}}
-```sql
-{{{ @this }}}
-```
-      {{/each}}
-
     {{/if}}
 
     {{#if (length newTables) }}
@@ -64,14 +52,8 @@ Occurs in {{ length appmaps }} {{ pluralize (length appmaps) 'AppMap' }}{{#if (g
       {{#each newTables}}`{{@this}}` {{/each}}
     {{/if}}
 
-    {{#if (length removedTables) }}
-### Removed tables
-
-      {{#each removedTables}}`{{@this}}` {{/each}}
-    {{/if}}
-
-    {{#if findingDiff.pruned}}
-Because there are many new and removed SQL changes, some of them are not listed in this report.
+    {{#if sqlDiff.pruned}}
+Because there are many SQL changes, some of them are not listed in this report.
     {{/if}}
   {{/if}}
 {{/with}}

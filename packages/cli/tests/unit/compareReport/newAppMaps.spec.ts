@@ -66,8 +66,8 @@ describe('newAppMaps', () => {
         );
         expect(report).toEqual(`<h2 id=\"new-appmaps\">⭐ New AppMaps</h2>
 
-- [[rspec] Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
 
+[[rspec] Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json) from [\`spec/controllers/users_controller_test.rb:10\`](spec/controllers/users_controller_test.rb#L10)
 `);
       });
     });
@@ -113,10 +113,10 @@ describe('newAppMaps', () => {
         );
         expect(report).toEqual(`<h2 id=\"new-appmaps\">⭐ New AppMaps</h2>
 
-- [[rspec] Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
 
+[[rspec] Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json) from [\`spec/controllers/users_controller_test.rb:10\`](spec/controllers/users_controller_test.rb#L10)
 
-- [[rspec] Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json)
+[[rspec] Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json) from [\`spec/controllers/users_controller_test.rb:10\`](spec/controllers/users_controller_test.rb#L10)
 
 Because there are many new AppMaps, some of them are not listed in this report.
 `);

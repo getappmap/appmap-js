@@ -1,13 +1,13 @@
 {{#with sqlDiff }}
-| {{ section_link 'SQL changes' 'sql-changes' (length newQueries removedQueries newTables removedTables) }} | 
-  {{~#if (length newQueries removedQueries newTables removedTables) }}
+| {{ section_link 'SQL changes' 'sql-changes' (length newQueries newTables) }} | 
+  {{~#if (length newQueries newTables) }}
     :mag:
-    {{~#if (length newQueries removedQueries) }}
-      {{ length newQueries removedQueries }} SQL query changes
+    {{~#if (length newQueries) }}
+      {{ length newQueries }} new queries
     {{~/if}}
-    {{~#if (length newTables removedTables) }}
-      {{~#if (length newQueries removedQueries) }}, {{/if}}
-      {{ length newTables removedTables }} SQL table changes
+    {{~#if (length newTables) }}
+      {{~#if (length newQueries) }}, {{/if}}
+      {{ length newTables }} new tables
     {{~/if}}
   {{~else}} :zero: No SQL changes
   {{~/if}} |
