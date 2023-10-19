@@ -1,3 +1,16 @@
+# [@appland/appmap-v3.103.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.102.1...@appland/appmap-v3.103.0) (2023-10-19)
+
+
+### Bug Fixes
+
+* Suppress findings when there are test failures ([451c273](https://github.com/getappmap/appmap-js/commit/451c2736790300938237102a6fdeb594654d34c0))
+
+
+### Features
+
+* Explain the abbreviated report for test failures ([645b4d7](https://github.com/getappmap/appmap-js/commit/645b4d7afa1df506b676d4d3d1bb241468edc97f))
+* Suppress report links when there are no details ([5467b0b](https://github.com/getappmap/appmap-js/commit/5467b0bb238980294efbb902d8721b52a956edcf))
+
 # [@appland/appmap-v3.102.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.102.0...@appland/appmap-v3.102.1) (2023-10-18)
 
 
