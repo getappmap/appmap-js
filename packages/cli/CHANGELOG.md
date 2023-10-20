@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.105.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.104.0...@appland/appmap-v3.105.0) (2023-10-20)
+
+
+### Features
+
+* Finding is selected in appmaps from PR report ([#1438](https://github.com/getappmap/appmap-js/issues/1438)) ([26d355a](https://github.com/getappmap/appmap-js/commit/26d355a9575ae0e021c0263cef26133c1ca0c832))
+
 # [@appland/appmap-v3.104.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.103.0...@appland/appmap-v3.104.0) (2023-10-20)
 
 
