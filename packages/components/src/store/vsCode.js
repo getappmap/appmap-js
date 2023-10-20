@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import FloatingVue from 'floating-vue';
 import {
   AppMap,
   buildAppMap,
@@ -10,6 +11,20 @@ import {
 } from '@appland/models';
 
 Vue.use(Vuex);
+Vue.use(FloatingVue, {
+  themes: {
+    infotip: {
+      $extend: 'tooltip',
+      triggers: ['hover'],
+      autoHide: true,
+      placement: 'top',
+      delay: {
+        show: 300,
+        hide: 0,
+      },
+    },
+  },
+});
 
 export const SELECT_CODE_OBJECT = 'selectCodeObject';
 export const SELECT_LABEL = 'selectLabel';

@@ -1,7 +1,13 @@
 <template functional>
-  <div class="label">
+  <div
+    class="label"
+    v-tooltip="{
+      content: props.returnValue,
+      theme: 'infotip',
+    }"
+  >
     <span class="name">{{ props.label }}</span>
-    <span :class="[props.returnValue ? 'tooltip' : 'hidden']">{{ props.returnValue }}</span>
+    <!-- <span :class="[props.returnValue ? 'tooltip' : 'hidden']">{{ props.returnValue }}</span> -->
   </div>
 </template>
 

@@ -47,32 +47,38 @@ context('AppMap sequence diagram', () => {
     });
 
     it('should display the tooltip on hover on return label', () => {
-      // Hover over the .label
-      cy.get('.return:nth-child(14) .name').trigger('mouseover');
-      cy.get('.return:nth-child(14) span.tooltip').should('exist');
-      cy.get('.return:nth-child(14) .name').trigger('mouseout');
-      cy.get('.return:nth-child(14) span.tooltip').should('not.be.visible');
+      // rightclick will trigger the hover
+      cy.get('.return:nth-child(14) .v-popper--has-tooltip').rightclick();
+      cy.get(
+        '.v-popper--theme-infotip.v-popper__popper--shown .v-popper__wrapper .v-popper__inner'
+      ).should('exist');
+      cy.get('body').click();
+      cy.get('.v-popper--theme-infotip.v-popper__popper--hidden').should('exist');
     });
 
     it('should display the tooltip on hover on call label', () => {
       // Hover over the .label
-      cy.get('.call:nth-child(17) .name').trigger('mouseover');
-      cy.get('.call:nth-child(17) span.tooltip').should('exist');
-      cy.get('.call:nth-child(17) .name').trigger('mouseout');
-      cy.get('.call:nth-child(17) span.tooltip').should('not.exist');
+      cy.get('.call:nth-child(17) .v-popper--has-tooltip').rightclick();
+      cy.get(
+        '.v-popper--theme-infotip.v-popper__popper--shown .v-popper__wrapper .v-popper__inner'
+      ).should('exist');
+      cy.get('body').click();
+      cy.get('.v-popper--theme-infotip.v-popper__popper--hidden').should('exist');
     });
 
     it('should display the tooltip on hover on link_to_with_icon call label', () => {
       // Hover over the .label
-      cy.get('.call:nth-child(72) .name').trigger('mouseover');
-      cy.get('.call:nth-child(72) span.tooltip').should('exist');
-      cy.get('.call:nth-child(72) .name').trigger('mouseout');
-      cy.get('.call:nth-child(72) span.tooltip').should('not.exist');
+      cy.get('.call:nth-child(72) .v-popper--has-tooltip').rightclick();
+      cy.get(
+        '.v-popper--theme-infotip.v-popper__popper--shown .v-popper__wrapper .v-popper__inner'
+      ).should('exist');
+      cy.get('body').click();
+      cy.get('.v-popper--theme-infotip.v-popper__popper--hidden').should('exist');
     });
 
     it('should display the truncated tooltip on hover on generate call label', () => {
-      cy.get('.call:nth-child(67) .name').trigger('mouseover');
-      cy.get('.call:nth-child(67) span.tooltip')
+      cy.get('.call:nth-child(67) .v-popper--has-tooltip').rightclick();
+      cy.get('.v-popper--theme-infotip.v-popper__popper--shown .v-popper__wrapper .v-popper__inner')
         .should('exist')
         .invoke('text')
         .should((text) => {
@@ -80,25 +86,25 @@ context('AppMap sequence diagram', () => {
           expect(trimmedText).to.match(/\.\.\.$/); // endsWith '...'
           expect(trimmedText).to.have.lengthOf(75);
         });
-      cy.get('.call:nth-child(67) .name').trigger('mouseout');
-      cy.get('.call:nth-child(67) span.tooltip').should('not.exist');
+      cy.get('body').click();
+      cy.get('.v-popper--theme-infotip.v-popper__popper--hidden').should('exist');
     });
 
     it('should display the truncated tooltip on hover on tab call label', () => {
-      cy.get('.call:nth-child(293) .name').trigger('mouseover');
-      cy.get('.call:nth-child(293) span.tooltip')
+      cy.get('.call:nth-child(293) .v-popper--has-tooltip').rightclick();
+      cy.get('.v-popper--theme-infotip.v-popper__popper--shown .v-popper__wrapper .v-popper__inner')
         .should('exist')
         .invoke('text')
         .should('include', '...,');
-      cy.get('.call:nth-child(293) .name').trigger('mouseout');
-      cy.get('.call:nth-child(293) span.tooltip').should('not.exist');
+      cy.get('body').click();
+      cy.get('.v-popper--theme-infotip.v-popper__popper--hidden').should('exist');
     });
 
     it('should not display the tooltip on hover on index call label without parameters', () => {
-      cy.get('.call:nth-child(11) .name').trigger('mouseover');
-      cy.get('.call:nth-child(11) span.tooltip').should('not.exist');
-      cy.get('.call:nth-child(11) .name').trigger('mouseout');
-      cy.get('.call:nth-child(11) span.tooltip').should('not.exist');
+      cy.get('.call:nth-child(11)').should('not.have.class', '.v-popper--has-tooltip');
+      cy.get(
+        '.v-popper--theme-infotip.v-popper__popper--shown .v-popper__wrapper .v-popper__inner'
+      ).should('not.exist');
     });
 
     it('check if all .call-line-segment.connecting-span elements have position as relative', () => {

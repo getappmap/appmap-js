@@ -37,12 +37,13 @@
             :class="text.class"
             :key="actionSpec.index + text.text"
             :title="sqlize"
-            @mouseover="startHover"
-            @mouseout="stopHover"
+            v-tooltip="{
+              content: parameters,
+              theme: 'infotip',
+            }"
           >
             {{ text.text }}
           </span>
-          <span v-if="hover && parameters" class="tooltip">{{ parameters }}</span>
         </div>
       </template>
     </div>
@@ -215,12 +216,6 @@ export default {
     stopHoverExpandCollapse() {
       this.hoverExpandCollapse = false;
     },
-    startHover() {
-      this.hover = true;
-    },
-    stopHover() {
-      this.hover = false;
-    },
     truncate(str) {
       const MAX_LENGTH = 75;
       const TRUNCATION_SUFFIX = '...';
@@ -308,14 +303,5 @@ $bg-fade: rgba(0, 0, 0, 0.8);
     cursor: pointer;
     color: $lightblue;
   }
-}
-.tooltip {
-  position: absolute;
-  background-color: #fff;
-  color: #000;
-  border: 1px solid #ccc;
-  padding: 5px;
-  z-index: 99999;
-  opacity: 0.9;
 }
 </style>

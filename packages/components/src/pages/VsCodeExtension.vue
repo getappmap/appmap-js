@@ -1817,4 +1817,15 @@ code {
     }
   }
 }
+
+// Floating Vue styles - tooltip
+@import 'floating-vue/dist/style.css';
+.v-popper--theme-infotip .v-popper__inner {
+  background: rgba(255, 255, 255, 0.9);
+  color: #000000;
+}
+
+.v-popper--theme-infotip .v-popper__arrow-outer {
+  border-color: #ffffff;
+}
 </style>
