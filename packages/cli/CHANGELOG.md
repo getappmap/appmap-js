@@ -1,3 +1,20 @@
+# [@appland/appmap-v3.104.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.103.0...@appland/appmap-v3.104.0) (2023-10-20)
+
+
+### Bug Fixes
+
+* Suppress findings when there are test failures ([715d60d](https://github.com/getappmap/appmap-js/commit/715d60dba81d9a9e208ee3957adc9e8c6535094d))
+
+
+### Features
+
+* Apply section_link to sql heading ([ec56df8](https://github.com/getappmap/appmap-js/commit/ec56df8335d3fabf4b9a66d28a5caf01ed30223b))
+* Format SQL details ([48503ac](https://github.com/getappmap/appmap-js/commit/48503ac9234001946e24e7be1ee93fbeeea444de))
+* List new apppmaps in paragraph style ([047c749](https://github.com/getappmap/appmap-js/commit/047c74944b63e18f3ea5e52887fc0b0872427b33))
+* Report SQL changes (experimental section) ([bc86bf4](https://github.com/getappmap/appmap-js/commit/bc86bf4652b42b2fcdf43228cf97915c500fbb08))
+* Resolve SQL change source location ([271db9d](https://github.com/getappmap/appmap-js/commit/271db9dcde8a34c82ae86d0cc4362bf14b165ab0))
+* Update SQL report formatting ([9422bea](https://github.com/getappmap/appmap-js/commit/9422beaef38a194701e44e07775c7f1032e2738d))
+
 # [@appland/appmap-v3.103.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.102.1...@appland/appmap-v3.103.0) (2023-10-19)
 
 
