@@ -1,3 +1,26 @@
+# [@appland/components-v3.9.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.8.0...@appland/components-v3.9.0) (2023-10-20)
+
+
+### Bug Fixes
+
+* Prevent duplicate key error from call label ([17ca5ac](https://github.com/getappmap/appmap-js/commit/17ca5ac0fed9cfa9196056de6222ba82eeb487a8))
+* Simplify flame graph zoom ([d6d6479](https://github.com/getappmap/appmap-js/commit/d6d6479eef8a2b770af4ffd9dd049eb29817564d))
+
+
+### Features
+
+* Avoid re-renders in trace by stabilizing props ([a6916e4](https://github.com/getappmap/appmap-js/commit/a6916e4b125ffb2fa57ab63c4699fc6cb1240218))
+* Avoid repeated access to computed properties when iterating ([aed2a5d](https://github.com/getappmap/appmap-js/commit/aed2a5db9fbd5ff167cdbd8a5b48f52fac39c85e))
+* Avoid unnecessary re-renders when focusing/selecting ([fa438ed](https://github.com/getappmap/appmap-js/commit/fa438ed2011f85d51e47aefd6be1969352fbdfbe))
+* Make details panel list header a functional component ([a10994b](https://github.com/getappmap/appmap-js/commit/a10994b35f8686b2967e5311c1b11b05d9d4acff))
+* Make flamegraph item a functional component ([b5cb23f](https://github.com/getappmap/appmap-js/commit/b5cb23f2a387193f47a008e836c1b5c024f4d58a))
+* Make loop action a functional component ([530797f](https://github.com/getappmap/appmap-js/commit/530797f5572776b6dd6de667cbe97c0c78fc772e))
+* Make return labels functional components ([646fbef](https://github.com/getappmap/appmap-js/commit/646fbef93e9590a7097fd6067e8f59fef99208ef))
+* Remove flame graph prop validators ([635ca93](https://github.com/getappmap/appmap-js/commit/635ca93f12569c57450197e83fafe38fec7cf9dd))
+* Show grabbing cursor in flame graph ([83e907e](https://github.com/getappmap/appmap-js/commit/83e907ea637a7b66827e595360d41d389946c4f8))
+* Use functional components in trace diagram ([66d9b1d](https://github.com/getappmap/appmap-js/commit/66d9b1d08e45294c1ebc69dddc4f606e15bef7ef))
+* Use vuex store for collapsed action state ([a7b13f2](https://github.com/getappmap/appmap-js/commit/a7b13f241642fc3850db46b45b8553422747c566))
+
 # [@appland/components-v3.8.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.7.0...@appland/components-v3.8.0) (2023-10-06)
 
 
