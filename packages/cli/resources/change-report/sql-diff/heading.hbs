@@ -1,0 +1,14 @@
+{{#with sqlDiff }}
+| {{ section_link 'SQL changes' 'sql-changes' (length newQueries newTables) }} | 
+  {{~#if (length newQueries newTables) }}
+    :mag:
+    {{~#if (length newQueries) }}
+      {{ length newQueries }} new queries
+    {{~/if}}
+    {{~#if (length newTables) }}
+      {{~#if (length newQueries) }}, {{/if}}
+      {{ length newTables }} new tables
+    {{~/if}}
+  {{~else}} :zero: No SQL changes
+  {{~/if}} |
+{{~/with}}

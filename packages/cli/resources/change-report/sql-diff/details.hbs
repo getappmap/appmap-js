@@ -1,0 +1,59 @@
+{{#with sqlDiff }}
+  {{~#if (length newQueries newTables) }}
+<h2 id="sql-changes">🔍 SQL changes</h2>
+
+    {{#if (length newQueries) }}
+### New queries ({{ length newQueries }})
+
+      {{#each newQueries}}
+
+<details>
+<summary>
+  <code>{{{ words query 5 }}}</code> {{#if (length sourceLocations) }} at {{ source_link_html (first sourceLocations) }}{{/if}}
+</summary>
+
+  ```sql
+  {{{ query }}}
+  ```
+
+        {{#if ( gt (length sourceLocations) 1 ) }}
+
+All source locations:
+
+          {{#each sourceLocations}}
+  * {{ source_link this }}
+          {{/each}}
+        {{/if}}
+
+        {{#with (first appmaps) }}
+          {{#if sourceDiff}}
+**Related code changes**
+
+  ```diff
+  {{{ sourceDiff }}}
+  ```
+          {{/if}}
+        {{/with}}
+
+Occurs in {{ length appmaps }} {{ pluralize (length appmaps) 'AppMap' }}:
+
+| Name | Source location | AppMap diagram | Diff diagram |
+| --- | --- | --- | ---|
+        {{#each appmaps }}
+| {{ metadata.name }} | {{ source_link metadata.source_location }} | [Full AppMap &raquo;]({{ appmap_url 'head' @this }}) | [Sequence diagram diff &raquo;]({{ appmap_diff_url @this }}) |
+        {{/each}}
+</details>
+      {{/each}}
+    {{/if}}
+
+    {{#if (length newTables) }}
+### Added tables
+
+      {{#each newTables}}`{{@this}}` {{/each}}
+    {{/if}}
+
+    {{#if sqlDiff.pruned}}
+Because there are many SQL changes, some of them are not listed in this report.
+    {{/if}}
+  {{/if}}
+{{/with}}

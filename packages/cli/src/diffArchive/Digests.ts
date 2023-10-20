@@ -1,9 +1,9 @@
 import { queue } from 'async';
 import { Paths } from './Paths';
-import { AppMapDigest, AppMapName } from './ChangeReport';
+import { AppMapDigest, AppMapName } from '../cmds/compare/ChangeReport';
 import { RevisionName } from './RevisionName';
 import { SequenceDiagramDigest } from './SequenceDiagramDigest';
-import { exists } from '../../utils';
+import { exists } from '../utils';
 
 export class Digests {
   // All digests for the base and head revisions.

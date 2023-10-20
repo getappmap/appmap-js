@@ -1,5 +1,6 @@
 import { Metadata } from '@appland/models';
 import { Finding } from '@appland/scanner';
+import OpenApiDiff from 'openapi-diff';
 
 export type AppMapLink = string;
 export type SequenceDiagramLink = string;
@@ -23,12 +24,26 @@ export type TestFailure = {
   failureLocation?: string;
 };
 
+export type SQLQueryReference = {
+  query: string;
+  appmaps: string[];
+  sourceLocations: string[];
+};
+
+export type SQLDiff = {
+  newQueries: SQLQueryReference[];
+  removedQueries: string[];
+  newTables: string[];
+  removedTables: string[];
+};
+
 export type ChangeReport = {
   testFailures: TestFailure[];
   newAppMaps: AppMapLink[];
   removedAppMaps: AppMapLink[];
   changedAppMaps: ChangedAppMap[];
-  apiDiff?: any;
+  apiDiff?: OpenApiDiff.DiffOutcome;
+  sqlDiff?: SQLDiff;
   findingDiff?: Record<'new' | 'resolved', Finding[]>;
   appMapMetadata: {
     base: Record<AppMapName, Metadata>;

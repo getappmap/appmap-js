@@ -8,7 +8,10 @@ import detectRevisions from './detectRevisions';
 import { prepareOutputDir } from './prepareOutputDir';
 import { verbose } from '../../utils';
 import loadAppMapConfig from '../../lib/loadAppMapConfig';
-import ChangeReporter, { ChangeReportOptions } from './ChangeReporter';
+import { analyzeChanges } from '../../diffArchive/ChangeAnalysis';
+import reportChanges, { ChangeReportOptions } from './reportChanges';
+import deleteUnreferencedAppMaps from './deleteUnreferencedAppMaps';
+import { RevisionName } from '../../diffArchive/RevisionName';
 
 export const command = 'compare';
 export const describe = 'Compare runtime code behavior between base and head revisions';
@@ -96,15 +99,22 @@ export const handler = async (argv: any) => {
       rl
     );
 
-    const changeReporter = new ChangeReporter(baseRevision, headRevision, outputDir, srcDir);
-    await changeReporter.initialize();
-
     const options = new ChangeReportOptions();
     options.reportRemoved = reportRemoved;
-    const report = await changeReporter.report(options);
+
+    const changeAnalysis = await analyzeChanges(outputDir, srcDir, baseRevision, headRevision);
+    const report = await reportChanges(changeAnalysis, options);
+
+    // const changeReporter = new ChangeReporter(baseRevision, headRevision, outputDir, srcDir);
+    // await changeReporter.initialize();
+
+    // const report = await changeReporter.report(options);
 
     if (deleteUnreferenced) {
-      await changeReporter.deleteUnreferencedAppMaps();
+      const isPathReferenced = (revisionName: RevisionName, appmap: string): boolean =>
+        changeAnalysis.referencedAppMaps.test(revisionName, appmap);
+
+      await deleteUnreferencedAppMaps(changeAnalysis.paths, isPathReferenced);
     }
 
     await writeFile(join(outputDir, 'change-report.json'), JSON.stringify(report, null, 2));

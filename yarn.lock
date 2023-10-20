@@ -196,6 +196,7 @@ __metadata:
     read-pkg-up: ^7.0.1
     semver: ^7.3.5
     sinon: ^11.1.2
+    sql-formatter: ^4.0.2
     strip-ansi: ^6.0.0
     tmp: ^0.2.1
     tmp-promise: ^3.0.3

@@ -18,7 +18,7 @@
 
 <small>These changes <b>are</b> backwards-compatible, according to the OpenAPI specification.</small>
 
-- Add response status code  `302 GET /users/{id}`
+- Add response status code `302 GET /users/{id}`
 
 
 <details>
@@ -70,10 +70,10 @@ Detailed OpenAPI diff
 
 ##### Stack trace
 
-- /opt/hostedtoolcache/Ruby/3.0.2/x64/lib/ruby/3.0.0/open3.rb:279
-- [app/views/sessions/new.html.erb](app/views/sessions/new.html.erb)
-- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/renderers.rb:141
-- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19
+- `/opt/hostedtoolcache/Ruby/3.0.2/x64/lib/ruby/3.0.0/open3.rb:279`
+- [`app/views/sessions/new.html.erb`](app/views/sessions/new.html.erb)
+- `vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/renderers.rb:141`
+- `vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19`
 
 
 </details>
@@ -104,10 +104,10 @@ Detailed OpenAPI diff
 
 ##### Stack trace
 
-- /opt/hostedtoolcache/Ruby/3.0.2/x64/lib/ruby/3.0.0/open3.rb:279
-- [app/views/users/edit.html.erb](app/views/users/edit.html.erb)
-- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/renderers.rb:141
-- vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19
+- `/opt/hostedtoolcache/Ruby/3.0.2/x64/lib/ruby/3.0.0/open3.rb:279`
+- [`app/views/users/edit.html.erb`](app/views/users/edit.html.erb)
+- `vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/renderers.rb:141`
+- `vendor/bundle/ruby/3.0.0/gems/actionpack-6.0.4.1/lib/action_controller/metal/instrumentation.rb:19`
 
 
 </details>
@@ -143,10 +143,10 @@ Detailed OpenAPI diff
 
 <h2 id="new-appmaps">⭐ New AppMaps</h2>
 
-- [[minitest] Users profile profile display while logged in as the user](head/minitest/Users_profile_profile_display_while_logged_in_as_the_user.appmap.json)
+[[minitest] Users profile profile display while logged in as the user](head/minitest/Users_profile_profile_display_while_logged_in_as_the_user.appmap.json) from [`test/integration/users_profile_test.rb:24`](test/integration/users_profile_test.rb:24)
 
 
 <h2 id="removed-appmaps">✖️ Removed AppMaps</h2>
 
-- [[minitest] Relationship should be valid](base/minitest/Relationship_should_be_valid.appmap.json)
+[[minitest] Relationship should be valid](base/minitest/Relationship_should_be_valid.appmap.json)
 

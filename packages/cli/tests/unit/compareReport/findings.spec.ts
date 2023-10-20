@@ -25,9 +25,7 @@ describe('findings', () => {
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual(
-          '| Performance problems |  :white_check_mark: None detected  |'
-        );
+        expect(report).toEqual('| Performance problems |  :white_check_mark: None detected  |');
       });
     });
     describe('details', () => {
@@ -123,11 +121,11 @@ describe('findings', () => {
 
 ##### Stack trace
 
-- [app/helpers/sessions_helper.rb:19](app/helpers/sessions_helper.rb#L19)
-- [app/helpers/sessions_helper.rb:35](app/helpers/sessions_helper.rb#L35)
-- [app/views/shared/_feed.html.erb](app/views/shared/_feed.html.erb)
-- [app/views/static_pages/home.html.erb](app/views/static_pages/home.html.erb)
-- /home/myself/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/actionpack-7.0.4/lib/action_controller/metal/renderers.rb:140
+- [\`app/helpers/sessions_helper.rb:19\`](app/helpers/sessions_helper.rb#L19)
+- [\`app/helpers/sessions_helper.rb:35\`](app/helpers/sessions_helper.rb#L35)
+- [\`app/views/shared/_feed.html.erb\`](app/views/shared/_feed.html.erb)
+- [\`app/views/static_pages/home.html.erb\`](app/views/static_pages/home.html.erb)
+- \`/home/myself/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/actionpack-7.0.4/lib/action_controller/metal/renderers.rb:140\`
 
 
 </details>

@@ -69,8 +69,7 @@ describe('removedAppMaps', () => {
         );
         expect(report).toEqual(`<h2 id=\"removed-appmaps\">✖️ Removed AppMaps</h2>
 
-- [[rspec] Users controller test](https://getappmap.com/?path=base%2Fminitest%2Fusers_controller_test.appmap.json)
-
+[[rspec] Users controller test](https://getappmap.com/?path=base%2Fminitest%2Fusers_controller_test.appmap.json)
 `);
       });
     });
@@ -116,10 +115,9 @@ describe('removedAppMaps', () => {
         );
         expect(report).toEqual(`<h2 id=\"removed-appmaps\">✖️ Removed AppMaps</h2>
 
-- [[rspec] Users controller test](https://getappmap.com/?path=base%2Fminitest%2Fusers_controller_test.appmap.json)
+[[rspec] Users controller test](https://getappmap.com/?path=base%2Fminitest%2Fusers_controller_test.appmap.json)
 
-
-- [[rspec] Users controller test](https://getappmap.com/?path=base%2Fminitest%2Fusers_controller_test.appmap.json)
+[[rspec] Users controller test](https://getappmap.com/?path=base%2Fminitest%2Fusers_controller_test.appmap.json)
 
 Because there are many removed AppMaps, some of them are not listed in this report.
 `);

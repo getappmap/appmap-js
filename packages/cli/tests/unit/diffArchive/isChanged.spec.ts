@@ -1,8 +1,8 @@
 import { verbose } from '../../../src/utils';
-import { isChanged } from '../../../src/cmds/compare/ChangeReporter';
-import { Digests } from '../../../src/cmds/compare/Digests';
-import { RevisionName } from '../../../src/cmds/compare/RevisionName';
+import { Digests } from '../../../src/diffArchive/Digests';
+import { RevisionName } from '../../../src/diffArchive/RevisionName';
 import { AppMapName } from '../../../src/cmds/compare/ChangeReport';
+import { isChanged } from '../../../src/diffArchive/ChangeAnalysis';
 
 if (process.env.VERBOSE) verbose(true);
 

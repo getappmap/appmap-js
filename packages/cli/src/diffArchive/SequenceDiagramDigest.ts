@@ -1,7 +1,7 @@
 import { createHash } from 'crypto';
 import { RevisionName } from './RevisionName';
 import { Paths } from './Paths';
-import { loadSequenceDiagram } from './loadSequenceDiagram';
+import { loadSequenceDiagram } from '../cmds/compare/loadSequenceDiagram';
 
 export class SequenceDiagramDigest {
   constructor(public paths: Paths, public revisionName: RevisionName, public appmap: string) {}

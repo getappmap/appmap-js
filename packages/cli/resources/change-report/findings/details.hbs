@@ -1,11 +1,7 @@
 {{#*inline "finding-stack" }}
 {{#with stack }}
   {{#each this }}
-    {{#if (source_url this)}}
-- [{{this}}]({{ source_url this }})
-    {{else}}
-- {{ this }}
-    {{/if}}
+- {{ source_link this }}
   {{/each}}
 {{/with}}
 

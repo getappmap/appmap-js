@@ -2,7 +2,7 @@ import { mkdir, rm } from 'fs/promises';
 import { join } from 'path';
 import readline from 'readline';
 import { exists } from '../../utils';
-import { RevisionName } from './RevisionName';
+import { RevisionName } from '../../diffArchive/RevisionName';
 import { confirm, sanitizeRevision } from './ui';
 import { ValidationError } from './ValidationError';
 

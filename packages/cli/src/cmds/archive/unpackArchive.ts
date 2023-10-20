@@ -1,7 +1,7 @@
 import { exec } from 'child_process';
 import { cp, mkdir, readFile, rename, rmdir, unlink } from 'fs/promises';
 import { basename, join, resolve } from 'path';
-import { ArchiveMetadata } from './ArchiveMetadata';
+import { ArchiveMetadata } from '../../lib/ArchiveMetadata';
 
 export default async function unpackArchive(outputDir: any, archivePath: string) {
   await mkdir(outputDir, { recursive: true });

@@ -5,7 +5,7 @@ import { readFile } from 'fs/promises';
 import ChangeReport, { AppMap, FindingDiff } from './ChangeReport';
 import { existsSync } from 'fs';
 import assert from 'assert';
-import { RevisionName } from '../compare/RevisionName';
+import { RevisionName } from '../../diffArchive/RevisionName';
 import buildPreprocessor, { filterFindings } from './Preprocessor';
 import helpers from './helpers';
 
@@ -36,6 +36,7 @@ export const FindingsSections: (Section | ExperimentalSection)[] = [
 ];
 
 export enum ExperimentalSection {
+  SQLDiff = 'sql-diff',
   ChangedAppMaps = 'changed-appmaps',
 }
 
@@ -220,6 +221,20 @@ export default class ReportSection {
       }
     };
 
+    const source_link = (location: string, fileLinenoSeparator = '#L'): SafeString => {
+      const label = location;
+      const url = source_url(location, fileLinenoSeparator);
+      return url ? new SafeString(`[\`${label}\`](${url})`) : new SafeString(`\`${label}\``);
+    };
+
+    const source_link_html = (location: string, fileLinenoSeparator = '#L'): SafeString => {
+      const label = location;
+      const url = source_url(location, fileLinenoSeparator);
+      return url
+        ? new SafeString(`<a href="${url}"><code>${label}</code></a>`)
+        : new SafeString(label);
+    };
+
     const section_link = (sectionName: string, anchor: string, itemCount: number): SafeString =>
       new SafeString(itemCount === 0 ? sectionName : `[${sectionName}](#${anchor})`);
 
@@ -229,6 +244,8 @@ export default class ReportSection {
       appmap_url,
       group_appmaps_by_recorder_name,
       section_link,
+      source_link,
+      source_link_html,
       source_url,
       ...helpers,
     };

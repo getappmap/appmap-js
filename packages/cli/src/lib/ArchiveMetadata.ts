@@ -1,4 +1,4 @@
-import { AppMapConfig, CompareFilter } from '../../lib/loadAppMapConfig';
+import { AppMapConfig, CompareFilter } from './loadAppMapConfig';
 
 export type ArchiveMetadata = {
   versions: Record<'archive' | 'index' | string, string>;

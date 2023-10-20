@@ -752,7 +752,7 @@
         "code": "response.status-code.add",
         "destinationSpecEntityDetails": [
           {
-            "location": "302 GET /users/{id}",
+            "location": "paths./users/{id}.get.responses.302",
             "value": {
               "content": {
                 "text/html": {}
@@ -767,5 +767,11 @@
       }
     ],
     "unclassifiedDifferences": []
+  },
+  "sqlDiff": {
+    "newQueries": [],
+    "newTables": [],
+    "removedQueries": ["begin transaction", "rollback transaction"],
+    "removedTables": []
   }
 }

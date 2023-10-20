@@ -1,11 +1,12 @@
 {{#if newAppMaps.length }}
 <h2 id="new-appmaps">⭐ New AppMaps</h2>
+
   {{#each newAppMaps}}
 
-- [{{appmap_title this}}]({{ appmap_url 'head' this }})
-
+[{{appmap_title this}}]({{ appmap_url 'head' this }}){{#if metadata.source_location }} from {{ source_link metadata.source_location }}{{/if}}
   {{/each}}
   {{#if pruned}}
+
 Because there are many new AppMaps, some of them are not listed in this report.
   {{/if}}
 {{/if}}

@@ -4,6 +4,7 @@ import ChangeReport, {
   FindingChange,
   FindingDiff,
   OpenAPIDiff,
+  SQLDiff,
   TestFailure,
 } from './ChangeReport';
 import { ExperimentalSection, Section } from './ReportSection';
@@ -61,6 +62,35 @@ class OpenAPIDiffPreprocessor implements Preprocessor {
     }
 
     return { openapiDiff };
+  }
+}
+
+class SQLDiffPreprocessor implements Preprocessor {
+  constructor(public sqlDiff: SQLDiff) {}
+
+  get numElements(): number {
+    return (
+      this.sqlDiff.newQueries.length +
+      this.sqlDiff.removedQueries.length +
+      this.sqlDiff.newTables.length +
+      this.sqlDiff.removedTables.length
+    );
+  }
+
+  prune(numElements: number): { sqlDiff: SQLDiff } {
+    const sqlDiff = { ...this.sqlDiff };
+
+    const keys = ['newQueries', 'removedQueries', 'newTables', 'removedTables'];
+    for (const key of keys) {
+      let numRemaining = numElements;
+      if (numRemaining > 0) {
+        numRemaining -= sqlDiff[key].length;
+        sqlDiff[key] = sqlDiff[key].slice(0, numElements);
+      } else {
+        sqlDiff[key] = [];
+      }
+    }
+    return { sqlDiff };
   }
 }
 
@@ -184,6 +214,8 @@ export default function buildPreprocessor(
       return new RemovedAppMapsPreprocessor(report);
     case ExperimentalSection.ChangedAppMaps:
       return new ChangedAppMapsPreprocessor(report);
+    case ExperimentalSection.SQLDiff:
+      return report.sqlDiff ? new SQLDiffPreprocessor(report.sqlDiff) : undefined;
     default:
       warn(`No Preprocessor for section ${section}`);
   }

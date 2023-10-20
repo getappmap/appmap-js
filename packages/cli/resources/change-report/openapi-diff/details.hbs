@@ -1,5 +1,5 @@
 {{#*inline "api-change"}}
-{{title}} {{#each sourceSpecEntityDetails}}`{{location}}`{{/each}} {{#each destinationSpecEntityDetails}}`{{location}}`{{/each}}
+{{title}} `{{location}}`
 {{~/inline}}
 {{#if openapiDiff.differenceCount}}
 <h2 id="openapi-changes">🔄 API changes</h2>
@@ -35,11 +35,12 @@
 - {{> api-change }}
       {{/each}}
     {{/if}}
-
     {{#if pruned}}
+
 Because there are many OpenAPI changes, some of them are not listed in this report,
 and the full diff has not been printed either.
     {{else}}
+
 <details>
 <summary>
 Detailed OpenAPI diff
