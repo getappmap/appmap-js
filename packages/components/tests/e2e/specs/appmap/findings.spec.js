@@ -79,6 +79,14 @@ context('AppMap findings', () => {
           .find('.details-search__block-item')
           .should('have.length', 1);
       });
+
+      it('shows actionview package when term is searched', () => {
+        cy.get('.details-search__input-element').type('actionview');
+        cy.get('.details-search__block--package')
+          .should('exist')
+          .find('.details-search__block-item')
+          .should('have.length', 1);
+      });
     });
 
     describe('trace view', () => {
