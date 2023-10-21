@@ -121,7 +121,7 @@ export default {
 
         switch (codeObject.type) {
           case CodeObjectType.PACKAGE:
-            if (codeObject.childLeafs().length > 1) {
+            if (codeObject.childLeafs().length) {
               items[codeObject.type].data.push(item);
             }
             break;

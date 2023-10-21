@@ -128,7 +128,7 @@ context('AppMap view filter', () => {
     it('hides unlabeled code', () => {
       cy.get('.details-search__block--package .details-search__block-item').should(
         'have.length',
-        4
+        6
       );
       cy.get('.details-search__block--class .details-search__block-item').should('have.length', 11);
 
@@ -137,7 +137,7 @@ context('AppMap view filter', () => {
 
       cy.get('.details-search__block--package .details-search__block-item').should(
         'have.length',
-        2
+        3
       );
       cy.get('.details-search__block--class .details-search__block-item').should('have.length', 5);
     });
