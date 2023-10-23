@@ -1,7 +1,7 @@
-import { existsSync } from 'fs';
 import { readFile } from 'fs/promises';
 import { load } from 'js-yaml';
 import { OpenAPIV3 } from 'openapi-types';
+import { exists } from '../../../utils';
 
 export default async function collectRoutes(
   openapiFile: string,
@@ -9,7 +9,7 @@ export default async function collectRoutes(
   routeCountByResource: Record<string, number>,
   routeCountByContentType: Record<string, number>
 ) {
-  if (!existsSync(openapiFile)) return;
+  if (!(await exists(openapiFile))) return;
 
   const openapi: OpenAPIV3.Document = load(
     await readFile(openapiFile, 'utf-8')

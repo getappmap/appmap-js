@@ -7,6 +7,8 @@ export default function collectHTTPClientRequests(
 ) {
   return async (appmap: string) => {
     const httpClientRequests = await readIndexFile(appmap, 'canonical.httpClientRequests.json');
+    if (!httpClientRequests) return;
+
     for (const request of httpClientRequests) {
       const { route } = request;
       const [_method, urlStr] = route.split(' ');

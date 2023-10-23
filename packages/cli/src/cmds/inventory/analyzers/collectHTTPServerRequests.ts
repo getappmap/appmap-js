@@ -5,6 +5,8 @@ export default function collectHTTPServerRequests(
 ) {
   return async (appmap: string) => {
     const httpServerRequests = await readIndexFile(appmap, 'canonical.httpServerRequests.json');
+    if (!httpServerRequests) return;
+
     const requestCount = String(httpServerRequests.length);
     if (!appmapCountByHTTPServerRequestCount[requestCount])
       appmapCountByHTTPServerRequestCount[requestCount] = 1;
