@@ -49,7 +49,7 @@ export default class MarkdownReport implements Report {
     }
 
     const heading = [
-      '# AppMap pull request analysis',
+      '# AppMap runtime code review',
       '',
       '| Summary | Status |',
       '| --- | --- |',
