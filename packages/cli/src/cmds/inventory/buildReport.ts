@@ -21,7 +21,6 @@ export async function buildReport(
   const appmapCountBySQLQueryCount: Record<string, number> = {};
   const clientRouteCountByResource: Record<string, number> = {};
   const uniquePackageDependencies = new DependencyMap();
-  const uniqueClassDependencies = new DependencyMap();
   const sqlTables = new Set<string>();
   const labels = new Set<string>();
   const routeCountByResource: Record<string, number> = {};
@@ -33,7 +32,6 @@ export async function buildReport(
     collectSQLQueries(appmapCountBySQLQueryCount),
     collectHTTPClientRequests(clientRouteCountByResource, resourceTokens),
     collectPackageDependencies(uniquePackageDependencies),
-    collectClassDependencies(uniqueClassDependencies),
     collectSQLTables(sqlTables),
     collectLabels(labels),
   ];
