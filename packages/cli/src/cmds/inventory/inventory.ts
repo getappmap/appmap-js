@@ -66,7 +66,7 @@ export const handler = async (argv: any) => {
     return;
   }
 
-  warn(`Building repository report from ${appmaps.length} AppMaps in ${appmapDir}`);
+  warn(`Building inventory data from ${appmaps.length} AppMaps in ${appmapDir}`);
 
   const report = await buildReport(
     appmapDir,

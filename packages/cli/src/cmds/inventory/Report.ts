@@ -3,6 +3,13 @@ export type Dependency = {
   callee: string;
 };
 
+export type FindingExample = {
+  appmap: string;
+  modifiedDate: Date;
+  hash_v2: string;
+  impactDomain?: string;
+};
+
 export type Report = {
   appmapCountByRecorderName: Record<string, number>;
   appmapCountByHTTPServerRequestCount: Record<number, number>;
@@ -14,4 +21,5 @@ export type Report = {
   labels: string[];
   packages: string[];
   packageDependencies: Dependency[];
+  findings: FindingExample[];
 };
