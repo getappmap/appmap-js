@@ -1,0 +1,310 @@
+{
+  "appmapCountByRecorderName": {
+    "minitest": 6
+  },
+  "appmapCountByHTTPServerRequestCount": {
+    "1": 1,
+    "3": 2,
+    "5": 2,
+    "6": 1
+  },
+  "appmapCountBySQLQueryCount": {
+    "0": 1,
+    "7": 1,
+    "8": 1,
+    "10": 1,
+    "11": 1,
+    "24": 1
+  },
+  "routeCountByResource": {
+    "/": 1,
+    "/about": 1,
+    "/account_activations/{id}": 1,
+    "/contact": 1,
+    "/help": 1,
+    "/login": 2,
+    "/logout": 1,
+    "/microposts": 1,
+    "/microposts/{id}": 1,
+    "/password_resets": 1,
+    "/password_resets/new": 1,
+    "/password_resets/{id}": 2,
+    "/relationships": 1,
+    "/relationships/{id}": 1,
+    "/signup": 1,
+    "/users": 2,
+    "/users/{id}": 6
+  },
+  "routeCountByContentType": {
+    "text/html": 38,
+    "text/javascript": 2
+  },
+  "clientRouteCountByResource": {},
+  "labels": [
+    "access.public",
+    "array.pack",
+    "crypto.decrypt",
+    "crypto.encrypt",
+    "crypto.final",
+    "crypto.pkcs5",
+    "crypto.set_auth_data",
+    "crypto.set_auth_tag",
+    "crypto.set_iv",
+    "crypto.set_key",
+    "deserialize.safe",
+    "deserialize.unsafe",
+    "format.json.generate",
+    "format.json.parse",
+    "format.yaml.parse",
+    "http.session.clear",
+    "http.session.read",
+    "http.session.write",
+    "job.create",
+    "lang.eval",
+    "lang.eval.safe",
+    "log",
+    "mvc.after_action",
+    "mvc.before_action",
+    "mvc.controller",
+    "mvc.render",
+    "mvc.template",
+    "mvc.template.resolver",
+    "random.secure",
+    "secret",
+    "security.authentication",
+    "security.login",
+    "security.require_login",
+    "serialize",
+    "string.unpack",
+    "system.exec"
+  ],
+  "sqlTables": [
+    "active_storage_attachments",
+    "active_storage_blobs",
+    "microposts",
+    "relationships",
+    "sqlite_master",
+    "sqlite_temp_master",
+    "users"
+  ],
+  "packages": [
+    "Database",
+    "HTTP server requests",
+    "actionpack",
+    "actionview",
+    "activejob",
+    "activesupport",
+    "app",
+    "app/helpers",
+    "json",
+    "logger",
+    "open3",
+    "openssl",
+    "psych",
+    "ruby"
+  ],
+  "packageDependencies": [
+    {
+      "caller": "HTTP server requests",
+      "callee": "actionpack"
+    },
+    {
+      "caller": "HTTP server requests",
+      "callee": "activesupport"
+    },
+    {
+      "caller": "HTTP server requests",
+      "callee": "json"
+    },
+    {
+      "caller": "HTTP server requests",
+      "callee": "logger"
+    },
+    {
+      "caller": "HTTP server requests",
+      "callee": "ruby"
+    },
+    {
+      "caller": "actionpack",
+      "callee": "actionview"
+    },
+    {
+      "caller": "actionpack",
+      "callee": "activesupport"
+    },
+    {
+      "caller": "actionpack",
+      "callee": "app"
+    },
+    {
+      "caller": "actionpack",
+      "callee": "json"
+    },
+    {
+      "caller": "actionpack",
+      "callee": "logger"
+    },
+    {
+      "caller": "actionpack",
+      "callee": "ruby"
+    },
+    {
+      "caller": "activejob",
+      "callee": "activesupport"
+    },
+    {
+      "caller": "activejob",
+      "callee": "logger"
+    },
+    {
+      "caller": "activesupport",
+      "callee": "Database"
+    },
+    {
+      "caller": "activesupport",
+      "callee": "actionpack"
+    },
+    {
+      "caller": "activesupport",
+      "callee": "activejob"
+    },
+    {
+      "caller": "activesupport",
+      "callee": "app"
+    },
+    {
+      "caller": "activesupport",
+      "callee": "json"
+    },
+    {
+      "caller": "activesupport",
+      "callee": "logger"
+    },
+    {
+      "caller": "activesupport",
+      "callee": "openssl"
+    },
+    {
+      "caller": "activesupport",
+      "callee": "psych"
+    },
+    {
+      "caller": "activesupport",
+      "callee": "ruby"
+    },
+    {
+      "caller": "app",
+      "callee": "Database"
+    },
+    {
+      "caller": "app",
+      "callee": "actionpack"
+    },
+    {
+      "caller": "app",
+      "callee": "actionview"
+    },
+    {
+      "caller": "app",
+      "callee": "activesupport"
+    },
+    {
+      "caller": "app",
+      "callee": "json"
+    },
+    {
+      "caller": "app",
+      "callee": "logger"
+    },
+    {
+      "caller": "app",
+      "callee": "openssl"
+    },
+    {
+      "caller": "app",
+      "callee": "ruby"
+    },
+    {
+      "caller": "actionpack",
+      "callee": "openssl"
+    },
+    {
+      "caller": "activesupport",
+      "callee": "app/helpers"
+    },
+    {
+      "caller": "app/helpers",
+      "callee": "actionpack"
+    },
+    {
+      "caller": "app",
+      "callee": "open3"
+    },
+    {
+      "caller": "open3",
+      "callee": "ruby"
+    }
+  ],
+  "findings": [
+    {
+      "appmap": "minitest/Microposts_interface_micropost_interface.appmap.json",
+      "impactDomain": "Performance",
+      "modifiedDate": "2023-09-10T20:02:46.000Z",
+      "hash_v2": "0f1a411f223c6f6f1754d096d5aa1cbbc824b6ba6dfcc2a1aaa0b8be352ecaa7"
+    },
+    {
+      "appmap": "minitest/Microposts_interface_micropost_interface.appmap.json",
+      "impactDomain": "Performance",
+      "modifiedDate": "2023-09-10T20:02:46.000Z",
+      "hash_v2": "bdcf9e3293453c9cb59c68fbcfa958c6baec625bf707f927ae8ffd3ba0853e47"
+    },
+    {
+      "appmap": "minitest/Microposts_interface_micropost_interface.appmap.json",
+      "impactDomain": "Performance",
+      "modifiedDate": "2023-09-10T20:02:46.000Z",
+      "hash_v2": "f54a43f0c83d77a3b61021072d9b8e27b47ba0e37826c59009cb74c291e4f6a8"
+    },
+    {
+      "appmap": "minitest/Microposts_interface_micropost_interface.appmap.json",
+      "impactDomain": "Performance",
+      "modifiedDate": "2023-09-10T20:02:46.000Z",
+      "hash_v2": "020ccbf3f4b88376999f1450fedac83c92dd00b51c93ef9a1bdd8910f696a3ba"
+    },
+    {
+      "appmap": "minitest/Users_login_login_with_valid_information_followed_by_logout.appmap.json",
+      "impactDomain": "Performance",
+      "modifiedDate": "2023-09-10T20:02:46.000Z",
+      "hash_v2": "5e45ba35b57a3ec7ddb97f8ed8f7ae3834a4019fbdc07940c72beaeeac61f9eb"
+    },
+    {
+      "appmap": "minitest/Users_profile_profile_display_while_logged_in_as_the_user.appmap.json",
+      "impactDomain": "Security",
+      "modifiedDate": "2023-09-10T20:02:46.000Z",
+      "hash_v2": "1841f78bb8eb2e9a88b405d2baa3642953115f0dbe3588aaa0c8037730613b27"
+    },
+    {
+      "appmap": "minitest/Users_signup_valid_signup_information_with_account_activation.appmap.json",
+      "impactDomain": "Security",
+      "modifiedDate": "2023-09-10T20:02:46.000Z",
+      "hash_v2": "c3b296f0049b9f08ea79d9df8fba74341575a30de6b5f39da0a8762c334cdc0b"
+    },
+    {
+      "appmap": "minitest/Users_signup_valid_signup_information_with_account_activation.appmap.json",
+      "impactDomain": "Security",
+      "modifiedDate": "2023-09-10T20:02:46.000Z",
+      "hash_v2": "4f012b5f96a448545f8bc0393e2599e034baf41b107545eec9f02bf362785271"
+    },
+    {
+      "appmap": "minitest/Users_signup_valid_signup_information_with_account_activation.appmap.json",
+      "impactDomain": "Maintainability",
+      "modifiedDate": "2023-09-10T20:02:46.000Z",
+      "hash_v2": "0cd8e6544a38bc99297dcb906524ffa7cbdd71cad1d8e2b8b8056ffc84b0d4fe"
+    },
+    {
+      "appmap": "minitest/Users_signup_valid_signup_information_with_account_activation.appmap.json",
+      "impactDomain": "Maintainability",
+      "modifiedDate": "2023-09-10T20:02:46.000Z",
+      "hash_v2": "dec2f1f3aeaf200346646793c43adbd4ae255cc04fb2b9d09d0a4b24864ab924"
+    }
+  ]
+}
