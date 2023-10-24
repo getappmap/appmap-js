@@ -19,12 +19,9 @@ describe('findings', () => {
 
     describe('header', () => {
       it('reports all passed', async () => {
-        const report = section.generateHeading(
-          {
-            findingDiff,
-          } as unknown as ChangeReport,
-          reportOptions
-        );
+        const report = section.generateHeading({
+          findingDiff,
+        } as unknown as ChangeReport);
         expect(report).toEqual('| Performance problems |  :white_check_mark: None detected  |');
       });
     });
@@ -45,7 +42,7 @@ describe('findings', () => {
   describe('when the findingDiff is not present', () => {
     describe('header', () => {
       it('is blank', async () => {
-        const report = section.generateHeading({} as unknown as ChangeReport, reportOptions);
+        const report = section.generateHeading({} as unknown as ChangeReport);
         expect(report).toEqual('');
       });
     });
@@ -65,12 +62,9 @@ describe('findings', () => {
 
     describe('header', () => {
       it('reports the change', async () => {
-        const report = section.generateHeading(
-          {
-            findingDiff,
-          } as unknown as ChangeReport,
-          reportOptions
-        );
+        const report = section.generateHeading({
+          findingDiff,
+        } as unknown as ChangeReport);
         expect(report).toEqual(
           '| [Performance problems](#performance-problems) |  :tada: 1 resolved  |'
         );

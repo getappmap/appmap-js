@@ -197,9 +197,7 @@ export default class ChangeReport {
     ): Metadata => {
       const appmapId = normalizeAppMapId(appmap);
       const metadata = changeReportData.appMapMetadata[revision][appmapId];
-      if (!metadata) {
-        assert(metadata);
-      }
+      assert(metadata, `Missing metadata for ${revision} ${appmapId}`);
       return metadata;
     };
 

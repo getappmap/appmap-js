@@ -57,7 +57,7 @@ export async function buildReport(
 
   const uniqueFindings: FindingExample[] = [];
   {
-    findings.sort((a, b) => a.modifiedDate.getTime() - b.modifiedDate.getTime());
+    findings.sort((a, b) => b.modifiedDate.getTime() - a.modifiedDate.getTime());
     const findingHashes = new Set<string>();
     for (const finding of findings) {
       if (!findingHashes.has(finding.hash_v2)) {

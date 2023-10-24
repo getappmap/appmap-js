@@ -1,4 +1,4 @@
-# AppMap pull request analysis
+# AppMap runtime code review
 
 | Summary | Status |
 | --- | --- |
@@ -131,9 +131,6 @@ Detailed OpenAPI diff
 
 - [Full AppMap &raquo;](head/minitest/Users_profile_profile_display_while_anonyomus.appmap.json)
 - [Sequence diagram diff &raquo;](diff/minitest/Users_profile_profile_display_while_anonyomus.diff.sequence.json)
-
-
-##### Stack trace
 
 
 

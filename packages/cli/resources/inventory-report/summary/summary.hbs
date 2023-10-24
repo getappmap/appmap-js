@@ -1,0 +1,90 @@
+{{#*inline "finding"}}
+
+{{~#if (eq finding.impactDomain 'Performance') }}
+🐌&nbsp;
+{{~else~}}
+  {{~#if (eq finding.impactDomain 'Security') }}
+🔒&nbsp;
+  {{~else}}
+🚨&nbsp;
+  {{~/if}}
+{{~/if~}}
+ {{ finding.ruleTitle }}
+{{~#if (first_source_link finding.stack) }}
+ at {{ first_source_link finding.stack }}
+{{~/if}}
+
+
+_{{ time_ago finding.eventsModifiedDate finding.scopeModifiedDate }} old_
+
+<details>
+<summary>
+  View details
+</summary>
+
+##### Description
+
+> {{ finding.message }}
+
+| Field | Value |
+| --- | --- |
+| Rule | [{{ finding.ruleId }}](https://appmap.io/docs/analysis/rules-reference.html#{{finding.ruleId }}) |
+| Impact domain | {{ finding.impactDomain }} |
+
+{{#if finding.stack }}
+##### Stack trace
+
+{{> stack finding.stack}}
+{{/if}}
+
+</details>
+{{/inline}}
+##  AppMap project summary
+
+AppMap runtime code review scans the AppMaps for security flaws, performance
+problems, and code anti-patterns. When you use AppMap runtime code review on a pull request, 
+only the new problems and resolved problems are shown in the report. 
+
+{{#if findings.length}}
+### Overview of problems and flaws
+
+AppMap detected {{ findingCount }} problems and flaws in the runtime code review of your project. 
+Here's an overview of the types of problems that have been found:
+
+```mermaid
+pie showData
+{{#each findingCountByImpactDomain}}
+  "{{@key}}" : {{@this}}
+{{/each}}
+```
+
+### Recently introduced code flaws and problems
+
+A sample of all the problems that were found in the AppMaps. Problems are listed in order of
+when they were most likely introduced, with most recent first.
+
+  {{#each findings }}
+    {{#unless @first }}
+
+<hr>
+
+    {{/unless}}
+{{> finding}}
+  {{/each}}
+  {{#if (gt findingCount findings.length) }}
+The number of displayed problems is limited to {{ summaryLimit }}, because GitHub pull request
+comments are limited to 64kb in length.
+  {{/if}}
+{{else}}
+AppMap didn't detect any flaws or problems in the runtime code review of your project. 
+
+Note that AppMap runtime code review is optimized for projects that use SQL databases,
+serve HTTP requests, and make HTTP client requests to other services. 
+
+If your project doesn't do any of these things, then AppMap runtime code review will be primarily
+useful for:
+
+* Fixing broken test cases.
+* Determining whether a pull request has new test cases, and if so, what they do.
+* Reviewing AppMaps of new and changed test cases
+{{/if}}

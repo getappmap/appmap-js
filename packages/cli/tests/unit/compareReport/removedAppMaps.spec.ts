@@ -13,12 +13,9 @@ describe('removedAppMaps', () => {
 
     describe('header', () => {
       it('reports all passed', async () => {
-        const report = section.generateHeading(
-          {
-            removedAppMaps,
-          } as unknown as ChangeReport,
-          reportOptions
-        );
+        const report = section.generateHeading({
+          removedAppMaps,
+        } as unknown as ChangeReport);
         // This section is not rendered if no AppMaps are removed.
         expect(report).toEqual('');
       });
@@ -48,12 +45,9 @@ describe('removedAppMaps', () => {
 
     describe('header', () => {
       it('reports the changes', async () => {
-        const report = section.generateHeading(
-          {
-            removedAppMaps,
-          } as unknown as ChangeReport,
-          reportOptions
-        );
+        const report = section.generateHeading({
+          removedAppMaps,
+        } as unknown as ChangeReport);
         expect(report).toEqual(
           '| [Removed AppMaps](#removed-appmaps) | :heavy_multiplication_x: 1 removed rspec test |'
         );
@@ -94,12 +88,9 @@ describe('removedAppMaps', () => {
 
     describe('header', () => {
       it('reports the changes', async () => {
-        const report = section.generateHeading(
-          {
-            removedAppMaps,
-          } as unknown as ChangeReport,
-          reportOptions
-        );
+        const report = section.generateHeading({
+          removedAppMaps,
+        } as unknown as ChangeReport);
         expect(report).toEqual(
           '| [Removed AppMaps](#removed-appmaps) | :heavy_multiplication_x: 2 removed rspec, 1 removed minitest |'
         );

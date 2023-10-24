@@ -1,9 +1,10 @@
-import helpers from '../../../src/cmds/compare-report/helpers';
 import assert from 'assert';
 import sinon from 'sinon';
-import ReportSection, { ReportOptions } from '../../../src/cmds/compare-report/ReportSection';
 import { base64UrlEncode } from '@appland/models';
 import { SafeString } from 'handlebars';
+
+import urlHelpers from '../../../src/report/urlHelpers';
+import helpers from '../../../src/report/helpers';
 
 describe('pluralize', () => {
   const pluralize = (helpers as any).pluralize;
@@ -24,10 +25,10 @@ describe('pluralize', () => {
     expect(pluralize(0, 'test', () => true)).toEqual('tests'));
 });
 
-describe('ReportSection', () => {
+describe('urlHelpers', () => {
   describe('appmap_url_with_finding helper', () => {
-    const appmapURL = new URL('https://getappmap.com');
-    const sourceURL = new URL('http://fake.com');
+    const appmapURL = 'https://getappmap.com';
+    const sourceURL = 'http://fake.com';
     const mockHash = 'a0b1c2d3e4f5g6h7i8j9k';
     const pathToMap = 'path/to/map';
     const revision = 'head';
@@ -37,7 +38,7 @@ describe('ReportSection', () => {
     afterEach(() => sandbox.restore());
 
     it('creates the expected URL when appmapURL is set', () => {
-      const helpers = ReportSection.helpers({ appmapURL, sourceURL } as ReportOptions);
+      const helpers = urlHelpers({ appmapURL, sourceURL });
       assert(helpers);
       expect(helpers).toHaveProperty('appmap_url_with_finding');
       const result = helpers.appmap_url_with_finding(revision, { id: pathToMap }, mockHash);
@@ -47,24 +48,24 @@ describe('ReportSection', () => {
       const expectedStateObject = { selectedObject: `analysis-finding:${mockHash}` };
       const expectedState = base64UrlEncode(JSON.stringify(expectedStateObject));
       expect(result.string).toBe(
-        `${appmapURL.toString()}?path=${expectedPath}&state=${expectedState}`
+        `${appmapURL.toString()}/?path=${expectedPath}&state=${expectedState}`
       );
     });
 
     it('creates the expected URL when state is not created', () => {
       sinon.stub(JSON, 'stringify').throws(new Error('mock error'));
-      const helpers = ReportSection.helpers({ appmapURL, sourceURL } as ReportOptions);
+      const helpers = urlHelpers({ appmapURL, sourceURL });
       assert(helpers);
       expect(helpers).toHaveProperty('appmap_url_with_finding');
       const result = helpers.appmap_url_with_finding(revision, { id: pathToMap }, mockHash);
       expect(result).toBeInstanceOf(SafeString);
 
       const expectedPath = `${revision}%2F${pathToMap.replace(/\//g, '%2F')}.appmap.json`;
-      expect(result.string).toBe(`${appmapURL.toString()}?path=${expectedPath}`);
+      expect(result.string).toBe(`${appmapURL.toString()}/?path=${expectedPath}`);
     });
 
     it('creates the expected URL when appmapURL is not set', () => {
-      const helpers = ReportSection.helpers({ sourceURL } as ReportOptions);
+      const helpers = urlHelpers({ sourceURL });
       assert(helpers);
       expect(helpers).toHaveProperty('appmap_url_with_finding');
       const result = helpers.appmap_url_with_finding('head', { id: pathToMap }, mockHash);

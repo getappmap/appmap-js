@@ -16,12 +16,9 @@ describe('openapiDiff', () => {
 
     describe('header', () => {
       it('reports all passed', async () => {
-        const report = section.generateHeading(
-          {
-            openapiDiff,
-          } as unknown as ChangeReport,
-          reportOptions
-        );
+        const report = section.generateHeading({
+          openapiDiff,
+        } as unknown as ChangeReport);
         expect(report).toEqual('| API changes | :zero: No API changes |');
       });
     });
@@ -42,7 +39,7 @@ describe('openapiDiff', () => {
   describe('when the openapiDiff is not present', () => {
     describe('header', () => {
       it('is blank', async () => {
-        const report = section.generateHeading({} as unknown as ChangeReport, reportOptions);
+        const report = section.generateHeading({} as unknown as ChangeReport);
         expect(report).toEqual('');
       });
     });
@@ -209,12 +206,9 @@ describe('openapiDiff', () => {
 
     describe('header', () => {
       it('reports the changes', async () => {
-        const report = section.generateHeading(
-          {
-            openapiDiff,
-          } as unknown as ChangeReport,
-          reportOptions
-        );
+        const report = section.generateHeading({
+          openapiDiff,
+        } as unknown as ChangeReport);
         expect(report).toEqual(
           '| [API changes](#openapi-changes) | 🚧 4 breaking, :wrench: 1 non-breaking |'
         );

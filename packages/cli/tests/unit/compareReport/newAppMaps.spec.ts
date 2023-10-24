@@ -13,12 +13,9 @@ describe('newAppMaps', () => {
 
     describe('header', () => {
       it('reports all passed', async () => {
-        const report = section.generateHeading(
-          {
-            newAppMaps,
-          } as unknown as ChangeReport,
-          reportOptions
-        );
+        const report = section.generateHeading({
+          newAppMaps,
+        } as unknown as ChangeReport);
         expect(report).toEqual('| New AppMaps | :zero: No new AppMaps |');
       });
     });
@@ -47,12 +44,9 @@ describe('newAppMaps', () => {
 
     describe('header', () => {
       it('reports the changes', async () => {
-        const report = section.generateHeading(
-          {
-            newAppMaps,
-          } as unknown as ChangeReport,
-          reportOptions
-        );
+        const report = section.generateHeading({
+          newAppMaps,
+        } as unknown as ChangeReport);
         expect(report).toEqual('| [New AppMaps](#new-appmaps) | :star: 1 new rspec test |');
       });
     });
@@ -92,12 +86,9 @@ describe('newAppMaps', () => {
 
     describe('header', () => {
       it('reports the changes', async () => {
-        const report = section.generateHeading(
-          {
-            newAppMaps,
-          } as unknown as ChangeReport,
-          reportOptions
-        );
+        const report = section.generateHeading({
+          newAppMaps,
+        } as unknown as ChangeReport);
         expect(report).toEqual(
           '| [New AppMaps](#new-appmaps) | :star: 2 new rspec, 1 new minitest |'
         );

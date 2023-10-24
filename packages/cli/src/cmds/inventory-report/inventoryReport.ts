@@ -2,13 +2,14 @@ import yargs from 'yargs';
 import { verbose } from '../../utils';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { readFile, writeFile } from 'fs/promises';
-import generateReport from './MarkdownReport';
+import generateReport from './Reporter';
 import { warn } from 'console';
 import { cwd } from 'process';
 import { join } from 'path';
 import { Report } from '../inventory/Report';
 import assert from 'assert';
 import loadAppMapConfig from '../../lib/loadAppMapConfig';
+import buildReporter from './Reporter';
 
 export const command = 'inventory-report <report-json-file> [output-file]';
 export const describe = 'Generate a report document describing the current state of a repository.';
@@ -20,11 +21,17 @@ export const builder = (args: yargs.Argv) => {
     demandOption: true,
   });
 
+  args.option('directory', {
+    describe: 'program working directory',
+    type: 'string',
+    alias: 'd',
+  });
+
   args.positional('template-name', {
     type: 'string',
     describe: `Template name.`,
     default: 'welcome',
-    choices: ['welcome'],
+    choices: ['welcome', 'summary'],
     alias: 't',
   });
 
@@ -34,10 +41,14 @@ export const builder = (args: yargs.Argv) => {
     demandOption: true,
   });
 
-  args.option('directory', {
-    describe: 'program working directory',
+  args.option('source-url', {
+    describe: `Base URL to link to a source file. The relative path to the source file will be added to the URL path.`,
     type: 'string',
-    alias: 'd',
+  });
+
+  args.option('appmap-url', {
+    describe: `Base URL to link to AppMaps. A 'path' parameter will be added with the relative path from the report directory to the AppMap JSON file.`,
+    type: 'string',
   });
 
   return args.strict();
@@ -48,7 +59,7 @@ export const handler = async (argv: any) => {
   const { directory } = argv;
   handleWorkingDirectory(directory);
 
-  const { reportJsonFile, outputFile, templateName } = argv;
+  const { reportJsonFile, outputFile, templateName, appmapUrl, sourceUrl } = argv;
   assert(reportJsonFile);
   assert(templateName);
 
@@ -57,7 +68,8 @@ export const handler = async (argv: any) => {
 
   const report: Report = JSON.parse(await readFile(reportJsonFile, 'utf-8'));
 
-  const reportMD = await generateReport(templateName, report, appmapConfig);
+  const reporter = buildReporter(templateName, appmapUrl, sourceUrl);
+  const reportMD = await reporter.generateReport(report, appmapConfig);
   if (outputFile) {
     await writeFile(outputFile, reportMD);
     warn(`Report written to ${join(cwd(), outputFile)}`);
