@@ -8,7 +8,7 @@ import * as loadAppMapConfig from '../../../src/lib/loadAppMapConfig';
 const originalWorkingDir = process.cwd();
 const projectDir = path.join(fixtureDir, 'inventory');
 
-describe('inventory-report command', () => {
+describe(`inventory-report 'welcome'`, () => {
   afterEach(async () => await cleanProject(projectDir));
   afterEach(async () => process.chdir(originalWorkingDir));
   afterEach(async () => jest.restoreAllMocks());
@@ -31,12 +31,12 @@ describe('inventory-report command', () => {
     await handler({
       directory: projectDir,
       reportJsonFile: join(__dirname, 'inventory.json'),
-      outputFile: 'inventory.md',
+      outputFile: 'welcome.md',
       templateName: 'welcome',
     });
 
     expect(loadAppMapConfigSpy).toHaveBeenCalledTimes(1);
 
-    await verifyReportContents(join(__dirname, 'expectedReport.md.txt'), 'inventory.md');
+    await verifyReportContents(join(__dirname, 'welcome.md.txt'), 'welcome.md');
   });
 });
