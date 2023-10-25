@@ -2,7 +2,6 @@ import yargs from 'yargs';
 import { verbose } from '../../utils';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { readFile, writeFile } from 'fs/promises';
-import generateReport from './Reporter';
 import { warn } from 'console';
 import { cwd } from 'process';
 import { join } from 'path';
@@ -21,24 +20,24 @@ export const builder = (args: yargs.Argv) => {
     demandOption: true,
   });
 
+  args.positional('output-file', {
+    type: 'string',
+    describe: `Markdown output file. If not specified, the report is written to stdout.`,
+    demandOption: true,
+  });
+
   args.option('directory', {
     describe: 'program working directory',
     type: 'string',
     alias: 'd',
   });
 
-  args.positional('template-name', {
+  args.option('template-name', {
     type: 'string',
     describe: `Template name.`,
     default: 'welcome',
     choices: ['welcome', 'summary'],
     alias: 't',
-  });
-
-  args.positional('output-file', {
-    type: 'string',
-    describe: `Markdown output file. If not specified, the report is written to stdout.`,
-    demandOption: true,
   });
 
   args.option('source-url', {
