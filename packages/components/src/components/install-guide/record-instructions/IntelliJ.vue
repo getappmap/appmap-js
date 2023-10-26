@@ -101,21 +101,21 @@
     <br />
     <section class="recording-method">
       <h3>
-        <i class="header-icon"><PlayIcon /></i>Runnable recording
+        <i class="header-icon"><PlayIcon /></i>Code Block recording
       </h3>
       <p>
         You can use the AppMap Java library directly to record a specific span of code. With this
         method, you can control exactly what code is recorded, and where the recording is saved. To
-        use runnable recording, add an AppMap code snippet to the section of code you want to
+        use code block recording, add an AppMap code snippet to the section of code you want to
         record, then run your application using
         <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap".
       </p>
       <p>
         Visit
         <a
-          href="https://appmap.io/docs/reference/appmap-java.html#runnable-recording"
+          href="https://appmap.io/docs/reference/appmap-java.html#code-block-recording"
           target="_blank"
-          >AppMap Docs - Java Runnable recording</a
+          >AppMap Docs - Java Code Block recording</a
         >
         for more information.
       </p>
