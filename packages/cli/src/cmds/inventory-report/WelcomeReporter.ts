@@ -55,8 +55,10 @@ export default class WelcomeReporter implements Reporter {
       const normalizePackage = (pkg: string) => pkg.replace(/\//g, '.').toLowerCase();
 
       return packages.filter((pkg) => {
-        return configuredPackages.find((configuredPackage) =>
-          normalizePackage(pkg).startsWith(normalizePackage(configuredPackage.path))
+        return configuredPackages.find(
+          (configuredPackage) =>
+            configuredPackage.path &&
+            normalizePackage(pkg).startsWith(normalizePackage(configuredPackage.path))
         );
       });
     };
