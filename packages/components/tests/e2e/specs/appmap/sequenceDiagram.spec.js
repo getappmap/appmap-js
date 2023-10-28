@@ -299,4 +299,22 @@ context('AppMap sequence diagram', () => {
       getCollapseExpandElementOfActionLabel('index').should('have.class', 'expanded');
     });
   });
+
+  context('default collapse depth check', () => {
+    beforeEach(() => {
+      cy.visit(
+        'http://localhost:6006/iframe.html?args=scenario:appland1&id=pages-vs-code--extension-with-default-sequence-view&viewMode=story'
+      );
+    });
+
+    it('depth is within limits', () => {
+      cy.get('div.depth-text').first().contains('1');
+
+      cy.get('button[data-cy="decrease-collapse-depth"]').click({ force: true });
+      cy.get('div.depth-text').first().contains('0');
+
+      cy.get('button[data-cy="increase-collapse-depth"]').click({ force: true });
+      cy.get('div.depth-text').first().contains('1');
+    });
+  });
 });

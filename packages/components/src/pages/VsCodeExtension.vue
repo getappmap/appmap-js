@@ -1093,7 +1093,10 @@ export default {
     },
 
     resetDiagram() {
-      this.seqDiagramCollapseDepth = DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH;
+      this.seqDiagramCollapseDepth =
+        DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH > this.maxSeqDiagramCollapseDepth
+          ? this.maxSeqDiagramCollapseDepth
+          : DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH;
       this.$store.commit(CLEAR_EXPANDED_PACKAGES);
       this.clearSelection();
       this.$store.commit(RESET_FILTERS);
@@ -1314,6 +1317,7 @@ export default {
     },
 
     setMaxSeqDiagramCollapseDepth(maxDepth) {
+      if (maxDepth < this.seqDiagramCollapseDepth) this.seqDiagramCollapseDepth = maxDepth;
       this.maxSeqDiagramCollapseDepth = maxDepth;
     },
   },
