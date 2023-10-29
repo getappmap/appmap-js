@@ -298,5 +298,28 @@ context('AppMap sequence diagram', () => {
       cy.get('div.depth-text').first().contains('2');
       getCollapseExpandElementOfActionLabel('index').should('have.class', 'expanded');
     });
+
+    it('action is expanded when showed in sequence', () => {
+      cy.get('div.depth-text').first().contains('3');
+
+      cy.get('button[data-cy="decrease-collapse-depth"]').click({ force: true });
+      cy.get('button[data-cy="decrease-collapse-depth"]').click({ force: true });
+      cy.get('button[data-cy="decrease-collapse-depth"]').click({ force: true });
+      cy.get('div.depth-text').first().contains('0');
+
+      cy.get('.tabs .tab-btn').contains('Dependency Map').click();
+
+      cy.get('.database tspan').click();
+      cy.get('h5.details-panel-list-header')
+        .contains('Queries')
+        .next('ul')
+        .find('li')
+        .first()
+        .click();
+
+      cy.get('button.details-btn').contains('Show in Sequence').click();
+      cy.get('div.depth-text').first().contains('1');
+      cy.get('div[data-event-ids="64"]').should('have.class', 'selected');
+    });
   });
 });

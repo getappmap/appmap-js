@@ -78,6 +78,7 @@
             :app-map="filteredAppMap"
             :collapse-depth="seqDiagramCollapseDepth"
             @setMaxSeqDiagramCollapseDepth="setMaxSeqDiagramCollapseDepth"
+            @updateCollapseDepth="handleNewCollapseDepth"
           />
         </v-tab>
 
@@ -1315,6 +1316,9 @@ export default {
 
     setMaxSeqDiagramCollapseDepth(maxDepth) {
       this.maxSeqDiagramCollapseDepth = maxDepth;
+    },
+    handleNewCollapseDepth(newDepth) {
+      this.seqDiagramCollapseDepth = newDepth;
     },
   },
 
