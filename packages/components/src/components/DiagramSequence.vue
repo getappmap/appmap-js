@@ -278,6 +278,25 @@ export default {
     isCollapsed(action: ActionSpec) {
       return action.isCollapsed(this.collapsedActionState);
     },
+    expandCollapsedAncestors(eventId) {
+      // If there are hidden actions containing this event ensure
+      // they are not hidden by expanding collapsed ancestors
+      for (const actionSpec of this.actions) {
+        if (!actionSpec.eventIds.includes(eventId)) continue;
+
+        const collapsedAncestorIndexes = actionSpec.ancestorIndexes.filter(
+          (ancestorIndex) => this.collapsedActionState[ancestorIndex]
+        );
+
+        if (this.collapseDepth < collapsedAncestorIndexes.length) {
+          this.$emit('updateCollapseDepth', collapsedAncestorIndexes.length);
+        }
+
+        collapsedAncestorIndexes.forEach((index) => {
+          this.$set(this.collapsedActionState, index, false);
+        });
+      }
+    },
   },
   watch: {
     collapseDepth() {
@@ -286,18 +305,17 @@ export default {
     },
     '$store.state.focusedEvent': {
       handler(newVal) {
-        // If there are hidden actions containing this event ensure
-        // they are not hidden by expanding collapsed ancestors
         if (newVal) {
-          for (const actionSpec of this.actions)
-            if (actionSpec.eventIds.includes(newVal.id)) {
-              const collapsedAncestorIndexes = actionSpec.ancestorIndexes.filter(
-                (ancestorIndex) => this.collapsedActionState[ancestorIndex]
-              );
-              collapsedAncestorIndexes.forEach((index) => {
-                this.$set(this.collapsedActionState, index, false);
-              });
-            }
+          this.expandCollapsedAncestors(newVal.id);
+        }
+      },
+    },
+    '$store.state.currentView': {
+      handler(newVal) {
+        if (newVal === 'viewSequence') {
+          this.selectedEvents.forEach((event) => {
+            this.expandCollapsedAncestors(event.id);
+          });
         }
       },
     },
