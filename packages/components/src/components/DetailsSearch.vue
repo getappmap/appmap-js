@@ -14,6 +14,20 @@
           v-model="filter"
           @focus="searchFocused"
         />
+        <div class="details-search__sort-button">
+          <component
+            :is="sortAscending ? 'SortDownIcon' : 'SortUpIcon'"
+            class="control-button__icon"
+            @click="toggleDropdown"
+            ref="toggleButton"
+          ></component>
+          <div class="dropdown" v-if="showDropdown" ref="dropdown">
+            <a @click="sortBy('Name')">Name</a>
+            <a @click="sortBy('Execution order')">Execution order</a>
+            <a @click="sortBy('Occurrences')">Occurrences</a>
+            <a @click="sortBy('Elapsed time')">Elapsed time</a>
+          </div>
+        </div>
       </div>
     </form>
     <section
@@ -50,12 +64,16 @@ import { CodeObject, AppMap, CodeObjectType } from '@appland/models';
 import SearchIcon from '@/assets/search.svg';
 import toListItem from '@/lib/finding';
 import { SELECT_CODE_OBJECT, SELECT_LABEL } from '../store/vsCode';
+import SortDownIcon from '@/assets/sort-down.svg';
+import SortUpIcon from '@/assets/sort-up.svg';
 
 export default {
   name: 'v-details-search',
 
   components: {
     SearchIcon,
+    SortDownIcon,
+    SortUpIcon,
   },
 
   props: {
@@ -69,7 +87,14 @@ export default {
   data() {
     return {
       filter: '',
+      selectedSortCriteria: 'Name',
+      sortAscending: true,
+      showDropdown: false,
     };
+  },
+
+  beforeDestroy() {
+    document.removeEventListener('click', this.closeDropdownWhenClickedOutside);
   },
 
   computed: {
@@ -173,13 +198,48 @@ export default {
           delete items[key];
           return;
         }
-        item.data = item.data.sort((a, b) => {
-          const aStr = a.object instanceof CodeObject ? a.object.prettyName : String(a.object);
-          const bStr = b.object instanceof CodeObject ? b.object.prettyName : String(b.object);
-          return aStr.localeCompare(bStr);
-        });
-      });
 
+        const multiplier = this.sortAscending ? 1 : -1;
+
+        switch (this.selectedSortCriteria) {
+          case 'Name':
+            item.data = item.data.sort((a, b) => {
+              const aStr =
+                a.object instanceof CodeObject && key !== 'query'
+                  ? a.object.prettyName
+                  : a.object.name || String(a.object);
+              const bStr =
+                b.object instanceof CodeObject && key !== 'query'
+                  ? b.object.prettyName
+                  : b.object.name || String(b.object);
+              return aStr.localeCompare(bStr) * multiplier;
+            });
+            break;
+          case 'Execution order':
+            item.data = item.data.sort((a, b) => {
+              const aCount = a.object instanceof CodeObject ? a.object.events?.[0]?.id : 0;
+              const bCount = b.object instanceof CodeObject ? b.object.events?.[0]?.id : 0;
+              return (bCount - aCount) * multiplier;
+            });
+            break;
+          case 'Occurrences':
+            item.data = item.data.sort((a, b) => {
+              const aCount = a.childrenCount || 0;
+              const bCount = b.childrenCount || 0;
+              return (bCount - aCount) * multiplier;
+            });
+            break;
+          case 'Elapsed time':
+            item.data = item.data.sort((a, b) => {
+              const aCount = a.object instanceof CodeObject ? a.object.events?.[0]?.elapsedTime : 0;
+              const bCount = b.object instanceof CodeObject ? b.object.events?.[0]?.elapsedTime : 0;
+              return (bCount - aCount) * multiplier;
+            });
+            break;
+          default:
+            break;
+        }
+      });
       return items;
     },
 
@@ -229,6 +289,37 @@ export default {
 
     searchFocused() {
       this.$root.$emit('sidebarSearchFocused');
+    },
+    toggleDropdown() {
+      this.showDropdown = !this.showDropdown;
+
+      if (this.showDropdown) {
+        // Add the event listener if the dropdown is open.
+        document.addEventListener('click', this.closeDropdownWhenClickedOutside);
+      } else {
+        // Remove the event listener if the dropdown is closed.
+        document.removeEventListener('click', this.closeDropdownWhenClickedOutside);
+      }
+    },
+    closeDropdownWhenClickedOutside(event) {
+      // Check if the click was outside the dropdown or the toggle button.
+      if (
+        this.$refs.dropdown &&
+        !this.$refs.dropdown.contains(event.target) &&
+        !this.$refs.toggleButton.contains(event.target)
+      ) {
+        this.showDropdown = false;
+        document.removeEventListener('click', this.closeDropdownWhenClickedOutside);
+      }
+    },
+    sortBy(criteria) {
+      if (this.selectedSortCriteria === criteria) {
+        this.sortAscending = !this.sortAscending;
+      } else {
+        this.selectedSortCriteria = criteria;
+        this.sortAscending = false;
+      }
+      this.showDropdown = false;
     },
   },
 };
@@ -419,6 +510,54 @@ export default {
         }
       }
     }
+  }
+  .control-button {
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem;
+    background: transparent;
+    color: $lightgray2;
+    font: inherit;
+    font-family: $appland-text-font-family;
+    font-size: 0.75rem;
+    outline: none;
+    appearance: none;
+    cursor: pointer;
+    transition: color 0.3s ease-in;
+
+    &:hover,
+    &:active {
+      color: $gray5;
+      transition-timing-function: ease-out;
+    }
+
+    &__icon {
+      width: 16px;
+      height: 14px;
+      fill: currentColor;
+    }
+  }
+
+  .dropdown {
+    position: absolute;
+    background-color: $gray2;
+    z-index: 1;
+    width: 120px;
+    right: 0;
+    left: auto;
+  }
+
+  .dropdown a {
+    color: $gray6;
+    padding: 8px 12px;
+    text-decoration: none;
+    display: block;
+    font-size: 0.85em;
+  }
+
+  .dropdown a:hover {
+    background-color: $light-purple;
   }
 }
 </style>

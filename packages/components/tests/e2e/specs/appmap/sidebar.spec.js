@@ -408,4 +408,108 @@ context('AppMap sidebar', () => {
       });
     });
   });
+
+  context('sorting', () => {
+    it('check if all items are sorted by name ascending by default', () => {
+      cy.get('.details-search__sort-button svg').should('have.class', 'bi-sort-down');
+
+      cy.get('ul.details-search__block-list').each(($ul) => {
+        cy.wrap($ul)
+          .find('li')
+          .then(($li) => {
+            const listTexts = $li.toArray().map((el) => el.innerText);
+
+            const isSorted = listTexts.every((item, idx, array) => {
+              return idx === 0 || item.localeCompare(array[idx - 1]) >= 0;
+            });
+
+            expect(isSorted).to.be.true;
+          });
+      });
+    });
+
+    it('check if all items are sorted by name descending', () => {
+      cy.get('.details-search__sort-button svg').should('have.class', 'bi-sort-down');
+
+      cy.get('.details-search__sort-button').click();
+      cy.get('.details-search__sort-button .dropdown a').contains('Name').click();
+      cy.get('.details-search__sort-button svg').should('have.class', 'bi-sort-up-alt');
+
+      cy.get('ul.details-search__block-list').each(($ul) => {
+        cy.wrap($ul)
+          .find('li')
+          .then(($li) => {
+            const listTexts = $li.toArray().map((el) => el.innerText);
+
+            const isSorted = listTexts.every((item, idx, array) => {
+              return idx === 0 || item.localeCompare(array[idx - 1]) <= 0;
+            });
+
+            expect(isSorted).to.be.true;
+          });
+      });
+    });
+
+    it('check if all items are sorted by occurences', () => {
+      cy.get('.details-search__sort-button svg').should('have.class', 'bi-sort-down');
+
+      cy.get('.details-search__sort-button').click();
+      cy.get('.details-search__sort-button .dropdown a').contains('Occurrences').click();
+      cy.get('.details-search__sort-button svg').should('have.class', 'bi-sort-up-alt');
+
+      cy.get('ul.details-search__block-list').each(($ul) => {
+        cy.wrap($ul)
+          .find('li')
+          .then(($liItems) => {
+            // Extract the numbers from spans, if they exist
+            const numbers = $liItems
+              .toArray()
+              .map((li) => {
+                const span = li.querySelector('.details-search__block-item-count');
+                return span ? parseInt(span.innerText.trim(), 10) : null; // Using null to represent absence of the span
+              })
+              .filter((num) => num !== null); // Filtering out null values
+
+            const isSorted = numbers.every((num, idx, array) => {
+              return idx === 0 || num >= array[idx - 1];
+            });
+
+            expect(isSorted).to.be.true;
+          });
+      });
+    });
+
+    it('check if all items are sorted by occurences descending', () => {
+      cy.get('.details-search__sort-button svg').should('have.class', 'bi-sort-down');
+
+      cy.get('.details-search__sort-button').click();
+      cy.get('.details-search__sort-button .dropdown a').contains('Occurrences').click();
+      cy.get('.details-search__sort-button svg').should('have.class', 'bi-sort-up-alt');
+
+      cy.get('.details-search__sort-button').click();
+      cy.get('.details-search__sort-button .dropdown a').contains('Occurrences').click();
+      cy.get('.details-search__sort-button svg').should('have.class', 'bi-sort-down');
+
+      cy.get('ul.details-search__block-list').each(($ul) => {
+        cy.wrap($ul)
+          .find('li')
+          .then(($liItems) => {
+            // Extract the numbers from spans, if they exist
+            const numbers = $liItems
+              .toArray()
+              .map((li) => {
+                const span = li.querySelector('.details-search__block-item-count');
+                return span ? parseInt(span.innerText.trim(), 10) : null; // Using null to represent absence of the span
+              })
+              .filter((num) => num !== null); // Filtering out null values
+
+            const isSorted = numbers.every((num, idx, array) => {
+              return idx === 0 || num <= array[idx - 1];
+            });
+
+            expect(isSorted).to.be.true;
+          });
+      });
+    });
+  });
 });
