@@ -1,3 +1,10 @@
+# [@appland/components-v3.11.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.10.0...@appland/components-v3.11.0) (2023-10-30)
+
+
+### Features
+
+* **DiagramSequence.vue:** add method to expand ancestors of specific events ([3586cf1](https://github.com/getappmap/appmap-js/commit/3586cf109a7c077a444c2805f8bc12b3d4829616))
+
 # [@appland/components-v3.10.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.9.0...@appland/components-v3.10.0) (2023-10-30)
 
 
