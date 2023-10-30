@@ -1,3 +1,15 @@
+# [@appland/components-v3.10.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.9.0...@appland/components-v3.10.0) (2023-10-30)
+
+
+### Bug Fixes
+
+* **DetailsSearch.vue:** modify condition to push item based on childLeafs length ([b49182b](https://github.com/getappmap/appmap-js/commit/b49182bbee15a0520efc14ed6ad0b8f8b503d372))
+
+
+### Features
+
+* **VsCodeExtension.vue:** prevent seqDiagramCollapseDepth from exceeding max ([82d15d6](https://github.com/getappmap/appmap-js/commit/82d15d61116d08e4d003a131e4459b9b04d8c9dd))
+
 # [@appland/components-v3.9.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.8.0...@appland/components-v3.9.0) (2023-10-20)
 
 
