@@ -7,6 +7,7 @@ import ReportFieldCalculator from './ReportFieldCalculator';
 import { buildFailure } from './buildFailure';
 import { exists } from '../../utils';
 import mapToRecord from './mapToRecord';
+import { warn } from 'console';
 
 export const DEFAULT_SNIPPET_WIDTH = 10;
 
@@ -49,8 +50,10 @@ export default async function reportChanges(
   for (const revisionName of [RevisionName.Base, RevisionName.Head]) {
     const metadataByPath = appMapMetadata[revisionName];
     for (const appmap of metadataByPath.keys()) {
-      if (!(await sequenceDiagramExists(revisionName as RevisionName, appmap)))
+      if (!(await sequenceDiagramExists(revisionName as RevisionName, appmap))) {
+        warn(`No sequence diagram found for ${revisionName} AppMap ${appmap}`);
         metadataByPath.delete(appmap);
+      }
     }
   }
 

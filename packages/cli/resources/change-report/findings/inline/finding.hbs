@@ -1,0 +1,47 @@
+{{#*inline "stack" }}
+  {{#each this }}
+- {{ source_link this }}
+  {{/each}}
+
+{{/inline}}
+{{#*inline "finding"}}
+
+<details>
+<summary>
+  {{ finding.ruleTitle }}
+</summary>
+
+
+##### Description
+
+> {{ finding.message }}
+
+| Field | Value |
+| --- | --- |
+| Rule | [{{ finding.ruleId }}](https://appmap.io/docs/analysis/rules-reference.html#{{finding.ruleId }}) |
+| Impact domain | {{ finding.impactDomain }} |
+
+##### View in AppMap
+
+- [Full AppMap &raquo;]({{ appmap_url_with_finding 'head' appmap finding.hash_v2 }})
+    {{#if appmap.changed}}
+- [Sequence diagram diff &raquo;]({{ appmap_diff_url appmap }})
+    {{/if}}
+
+{{#if appmap.sourceDiff}}
+
+##### Related code changes
+
+```diff
+{{{ appmap.sourceDiff }}}
+```
+{{/if}}
+
+{{#if finding.stack }}
+##### Stack trace
+
+{{> stack finding.stack}}
+{{/if}}
+
+</details>
+{{/inline}}

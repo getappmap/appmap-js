@@ -15,7 +15,6 @@ describe('failedTests', () => {
           {
             testFailures: [],
           } as unknown as ChangeReport,
-          reportOptions
         );
         expect(report).toEqual(
           '| Failed tests | :white_check_mark: All tests passed |'
@@ -65,7 +64,6 @@ describe('failedTests', () => {
           {
             testFailures: [testFailure],
           } as unknown as ChangeReport,
-          reportOptions
         );
         expect(report).toEqual('| [Failed tests](#failed-tests) | :warning: 1 failed |');
       });

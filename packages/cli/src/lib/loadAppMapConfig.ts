@@ -30,7 +30,7 @@ export interface UpdateConfig {
 }
 
 export type ConfiguredPackage = {
-  path: string;
+  path?: string;
 };
 
 export interface AppMapConfig {

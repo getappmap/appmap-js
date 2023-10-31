@@ -1,14 +1,13 @@
-import Handlebars, { SafeString } from 'handlebars';
-import { isAbsolute, join, relative } from 'path';
+import { SafeString } from 'handlebars';
+import { join } from 'path';
 
-import { readFile } from 'fs/promises';
 import ChangeReport, { AppMap } from './ChangeReport';
 import { existsSync } from 'fs';
 import assert from 'assert';
-import { RevisionName } from '../../diffArchive/RevisionName';
 import buildPreprocessor, { filterFindings } from './Preprocessor';
-import helpers from './helpers';
-import { base64UrlEncode } from '@appland/models';
+import helpers from '../../report/helpers';
+import urlHelpers from '../../report/urlHelpers';
+import loadReportTemplate from '../../report/loadReportTemplate';
 
 export const TemplateDirectory = [
   '../../../resources/change-report', // As packaged
@@ -78,8 +77,8 @@ const SECTION_METADATA: Record<Section & ExperimentalSection, SectionMetadata> =
 };
 
 export type ReportOptions = {
-  sourceURL: URL;
-  appmapURL: URL;
+  appmapURL?: string;
+  sourceURL?: string;
   maxElements?: number;
   baseDir?: string;
   metadata?: SectionMetadata;
@@ -92,9 +91,9 @@ export default class ReportSection {
     private detailsTemplate: HandlebarsTemplateDelegate
   ) {}
 
-  generateHeading(changeReport: ChangeReport, options: ReportOptions) {
+  generateHeading(changeReport: ChangeReport) {
     return this.headingTemplate(this.buildContext(changeReport), {
-      helpers: ReportSection.helpers(options),
+      helpers: { ...helpers, ...ReportSection.helpers() },
     });
   }
 
@@ -115,7 +114,7 @@ export default class ReportSection {
     }
 
     return this.detailsTemplate(this.buildContext(report), {
-      helpers: ReportSection.helpers(options),
+      helpers: { ...helpers, ...ReportSection.helpers(), ...urlHelpers(options) },
       allowProtoPropertiesByDefault: true,
     });
   }
@@ -137,38 +136,7 @@ export default class ReportSection {
     return context;
   }
 
-  static helpers(options: ReportOptions): { [name: string]: Function } | undefined {
-    let { baseDir } = options;
-    if (!baseDir) baseDir = process.cwd();
-
-    const source_url = (location: string, fileLinenoSeparator = '#L') => {
-      if (typeof fileLinenoSeparator === 'object') {
-        fileLinenoSeparator = '#L';
-      }
-
-      const [path, lineno] = location.split(':');
-
-      if (isAbsolute(path)) return;
-      if (path.startsWith('vendor/') || path.startsWith('node_modules/')) return;
-
-      if (options.sourceURL) {
-        const url = new URL(options.sourceURL.toString());
-        if (url.protocol === 'file:') {
-          assert(baseDir);
-          const sourcePath = relative(baseDir, join(url.pathname, path));
-          return new Handlebars.SafeString(
-            [sourcePath, lineno].filter(Boolean).join(fileLinenoSeparator)
-          );
-        } else {
-          url.pathname = join(url.pathname, path);
-          if (lineno) url.hash = `L${lineno}`;
-          return new Handlebars.SafeString(url.toString());
-        }
-      } else {
-        return new Handlebars.SafeString(location);
-      }
-    };
-
+  static helpers(): { [name: string]: Function } | undefined {
     type RecorderGroup = {
       recorderName: string;
       count: number;
@@ -197,80 +165,13 @@ export default class ReportSection {
       return tokens.join(' ');
     };
 
-    const buildUrlString = (searchParams: Record<string, string>): string => {
-      const url = new URL(options.appmapURL.toString());
-      Object.keys(searchParams).forEach((key) => url.searchParams.append(key, searchParams[key]));
-      return url.toString();
-    };
-
-    const appmap_url = (revisionName: RevisionName, appmap: AppMap): SafeString => {
-      let { id } = appmap;
-      const path = [revisionName, `${id}.appmap.json`].join('/');
-
-      let url = path;
-      if (options.appmapURL) url = buildUrlString({ path });
-      return new SafeString(url);
-    };
-
-    const appmap_diff_url = (appmap: AppMap): SafeString => {
-      const path = ['diff', `${appmap.id}.diff.sequence.json`].join('/');
-
-      let url = path;
-      if (options.appmapURL) url = buildUrlString({ path });
-      return new SafeString(url);
-    };
-
-    const appmap_url_with_finding = (
-      revisionName: RevisionName,
-      appmap: AppMap,
-      findingHash: string
-    ) => {
-      let { id } = appmap;
-      const path = [revisionName, `${id}.appmap.json`].join('/');
-
-      let url = path;
-      if (options.appmapURL) {
-        const searchParams = { path } as Record<string, string>;
-        try {
-          const stateObject = { selectedObject: `analysis-finding:${findingHash}` };
-          const state = base64UrlEncode(JSON.stringify(stateObject));
-          searchParams.state = state;
-        } catch (e) {
-          // do not add state
-        }
-        url = buildUrlString(searchParams);
-      }
-      return new SafeString(url);
-    };
-
-    const source_link = (location: string, fileLinenoSeparator = '#L'): SafeString => {
-      const label = location;
-      const url = source_url(location, fileLinenoSeparator);
-      return url ? new SafeString(`[\`${label}\`](${url})`) : new SafeString(`\`${label}\``);
-    };
-
-    const source_link_html = (location: string, fileLinenoSeparator = '#L'): SafeString => {
-      const label = location;
-      const url = source_url(location, fileLinenoSeparator);
-      return url
-        ? new SafeString(`<a href="${url}"><code>${label}</code></a>`)
-        : new SafeString(label);
-    };
-
     const section_link = (sectionName: string, anchor: string, itemCount: number): SafeString =>
       new SafeString(itemCount === 0 ? sectionName : `[${sectionName}](#${anchor})`);
 
     return {
-      appmap_diff_url,
       appmap_title,
-      appmap_url,
-      appmap_url_with_finding,
       group_appmaps_by_recorder_name,
       section_link,
-      source_link,
-      source_link_html,
-      source_url,
-      ...helpers,
     };
   }
 
@@ -283,10 +184,10 @@ export default class ReportSection {
     const sectionDir = SECTION_DIRECTORY[section] || section;
 
     const headingTemplateFile = join(templateDir, sectionDir, 'heading.hbs');
-    const headingTemplate = Handlebars.compile(await readFile(headingTemplateFile, 'utf8'));
+    const headingTemplate = await loadReportTemplate(headingTemplateFile);
 
     const detailsTemplateFile = join(templateDir, sectionDir, 'details.hbs');
-    const detailsTemplate = Handlebars.compile(await readFile(detailsTemplateFile, 'utf8'));
+    const detailsTemplate = await loadReportTemplate(detailsTemplateFile);
 
     return new ReportSection(section, headingTemplate, detailsTemplate);
   }

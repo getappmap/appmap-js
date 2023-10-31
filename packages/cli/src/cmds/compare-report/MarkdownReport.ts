@@ -22,7 +22,7 @@ export default class MarkdownReport implements Report {
   public excludeSections: string[] | undefined;
   public includeSections: string[] | undefined;
 
-  constructor(public appmapURL: URL, public sourceURL: URL) {}
+  constructor(public appmapURL: string, public sourceURL?: string) {}
 
   async generateReport(changeReportData: ChangeReportData): Promise<string> {
     const sections = [
@@ -35,12 +35,12 @@ export default class MarkdownReport implements Report {
     const headings = new Array<string>();
     const details = new Array<string>();
     const reportOptions: ReportOptions = {
-      sourceURL: this.sourceURL,
       appmapURL: this.appmapURL,
+      sourceURL: this.sourceURL,
     };
     for (const sectionName of sections) {
       const section = await ReportSection.build(sectionName);
-      const heading = section.generateHeading(changeReport, reportOptions).trim();
+      const heading = section.generateHeading(changeReport).trim();
       if (heading) {
         const detail = section.generateDetails(changeReport, reportOptions);
         headings.push(heading);
@@ -49,7 +49,7 @@ export default class MarkdownReport implements Report {
     }
 
     const heading = [
-      '# AppMap pull request analysis',
+      '# AppMap runtime code review',
       '',
       '| Summary | Status |',
       '| --- | --- |',

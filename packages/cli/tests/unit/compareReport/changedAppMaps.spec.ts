@@ -16,12 +16,9 @@ describe('changedAppMaps', () => {
 
     describe('header', () => {
       it('reports all passed', async () => {
-        const report = section.generateHeading(
-          {
-            changedAppMaps,
-          } as unknown as ChangeReport,
-          reportOptions
-        );
+        const report = section.generateHeading({
+          changedAppMaps,
+        } as unknown as ChangeReport);
         expect(report).toEqual('| Changed AppMaps |  :zero: No changes  |');
       });
     });
@@ -53,12 +50,9 @@ describe('changedAppMaps', () => {
 
     describe('header', () => {
       it('reports the changes', async () => {
-        const report = section.generateHeading(
-          {
-            changedAppMaps,
-          } as unknown as ChangeReport,
-          reportOptions
-        );
+        const report = section.generateHeading({
+          changedAppMaps,
+        } as unknown as ChangeReport);
         expect(report).toEqual(
           '| [Changed AppMaps](#changed-appmaps) |  :twisted_rightwards_arrows: 1 changes  |'
         );
@@ -111,12 +105,9 @@ appmap behavior has changed
 
     describe('header', () => {
       it('reports the changes', async () => {
-        const report = section.generateHeading(
-          {
-            changedAppMaps,
-          } as unknown as ChangeReport,
-          reportOptions
-        );
+        const report = section.generateHeading({
+          changedAppMaps,
+        } as unknown as ChangeReport);
         expect(report).toEqual(
           '| [Changed AppMaps](#changed-appmaps) |  :twisted_rightwards_arrows: 6 changes  |'
         );
