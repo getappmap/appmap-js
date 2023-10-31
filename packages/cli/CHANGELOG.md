@@ -1,3 +1,17 @@
+# [@appland/appmap-v3.106.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.105.0...@appland/appmap-v3.106.0) (2023-10-31)
+
+
+### Bug Fixes
+
+* Argument declarations ([62f4ad8](https://github.com/getappmap/appmap-js/commit/62f4ad8aae4f43212604663cf10d9fa911b7c213))
+* Tolerate missing index files ([342b6aa](https://github.com/getappmap/appmap-js/commit/342b6aae15010e21c378c4e1ae3135770f6ae483))
+
+
+### Features
+
+* Rename report 'AppMap runtime code review' ([fb5fa2d](https://github.com/getappmap/appmap-js/commit/fb5fa2d4135aeb62a52ba312213361cf7f22ba4a))
+* Report findings in inventory ([4a2c468](https://github.com/getappmap/appmap-js/commit/4a2c468200e755980c340f39ef429619ddd36940))
+
 # [@appland/appmap-v3.105.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.104.0...@appland/appmap-v3.105.0) (2023-10-20)
 
 
