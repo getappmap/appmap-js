@@ -59,7 +59,7 @@ describe('emitUsage', () => {
         appmaps: numAppMaps,
         ci: Boolean(process.env.CI),
       });
-      expect(JSON.parse(dto.metadata ?? '{}')).toMatchObject({
+      expect(dto.metadata).toMatchObject({
         app: metadata.app,
         git: {
           repository,

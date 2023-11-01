@@ -38,9 +38,7 @@ export async function index(
     }
   );
 
-  if (sampleMetadata) {
-    await emitUsage(appMapDir, totalEvents, result.numProcessed, sampleMetadata);
-  }
+  await emitUsage(appMapDir, totalEvents, result.numProcessed, sampleMetadata);
 
   const elapsed = new Date().getTime() - startTime;
   console.log(`Indexed ${result.numProcessed} AppMaps in ${elapsed}ms`);
