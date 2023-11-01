@@ -8,15 +8,24 @@ import { collectPackageDependencies } from './analyzers/collectPackageDependenci
 import { collectSQLTables } from './analyzers/collectSQLTables';
 import { collectLabels } from './analyzers/collectLabels';
 import collectRoutes from './analyzers/collectRoutes';
+import collectAppMapSize from './analyzers/collectAppMapSize';
+import collectFunctionOccurances from './analyzers/collectFunctionOccurances';
 import { join } from 'path';
 import { warn } from 'console';
 import readIndexFile from './readIndexFile';
 import collectFindings from './analyzers/collectFindings';
+import { EventInfo } from '../stats/accumulateEvents';
+
+export type ReportOptions = {
+  frequentFunctionLimit: number;
+  largeAppMapLimit: number;
+  resourceTokens: number;
+};
 
 export async function buildReport(
   appmapDir: string,
   appmaps: string[],
-  resourceTokens: number
+  options: ReportOptions
 ): Promise<Report> {
   const appmapCountByRecorderName: Record<string, number> = {};
   const appmapCountByHTTPServerRequestCount: Record<string, number> = {};
@@ -28,16 +37,18 @@ export async function buildReport(
   const routeCountByResource: Record<string, number> = {};
   const routeCountByContentType: Record<string, number> = {};
   const findings: FindingExample[] = [];
+  const appmapSize: Record<string, number> = {};
 
   const analyzers: ((appmap: string) => Promise<void>)[] = [
     collectMetadata(appmapCountByRecorderName),
     collectHTTPServerRequests(appmapCountByHTTPServerRequestCount),
     collectSQLQueries(appmapCountBySQLQueryCount),
-    collectHTTPClientRequests(clientRouteCountByResource, resourceTokens),
+    collectHTTPClientRequests(clientRouteCountByResource, options.resourceTokens),
     collectPackageDependencies(uniquePackageDependencies),
     collectSQLTables(sqlTables),
     collectLabels(labels),
     collectFindings(findings),
+    collectAppMapSize(appmapSize),
   ];
 
   for (const appmap of appmaps) {
@@ -67,8 +78,41 @@ export async function buildReport(
     }
   }
 
+  const largeAppMaps: Record<string, number> = {};
+  {
+    const appmaps = Object.keys(appmapSize);
+    appmaps.sort((a, b) => appmapSize[b] - appmapSize[a]);
+    appmaps.slice(0, options.largeAppMapLimit).reduce((acc, appmap) => {
+      acc[appmap] = appmapSize[appmap];
+      return acc;
+    }, largeAppMaps);
+  }
+
+  const frequentFunctions: Record<string, EventInfo> = {};
+  {
+    const functionOccurrances: Record<string, EventInfo> = {};
+    {
+      const analyzer = collectFunctionOccurances(functionOccurrances);
+      for (const appmap of Object.keys(largeAppMaps)) {
+        await analyzer(appmap);
+      }
+    }
+
+    const functions = Object.keys(functionOccurrances);
+    functions.sort((a, b) => functionOccurrances[b].count - functionOccurrances[a].count);
+    functions.slice(0, options.frequentFunctionLimit).reduce((acc, fn) => {
+      acc[fn] = functionOccurrances[fn];
+      return acc;
+    }, frequentFunctions);
+  }
+
   const openapiFile = join(appmapDir, 'openapi.yml');
-  await collectRoutes(openapiFile, resourceTokens, routeCountByResource, routeCountByContentType);
+  await collectRoutes(
+    openapiFile,
+    options.resourceTokens,
+    routeCountByResource,
+    routeCountByContentType
+  );
 
   return {
     appmapCountByRecorderName,
@@ -84,5 +128,7 @@ export async function buildReport(
     ].sort(),
     packageDependencies: uniquePackageDependencies.dependencies,
     findings: uniqueFindings,
+    largeAppMaps,
+    frequentFunctions,
   };
 }

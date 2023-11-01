@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { existsSync, readFileSync } from 'fs';
-import path from 'path';
+import path, { join } from 'path';
 
 import { handler } from '../../../src/cmds/inventory/inventory';
 import { cleanProject, fixtureDir } from '../util';
@@ -20,7 +20,8 @@ describe('inventory command', () => {
       appmapDir: '.',
       outputFile: 'inventory.json',
       resourceTokens: 2,
-      findingLimit: 3,
+      largeAppmaps: 10,
+      frequentFunctions: 10,
     });
     assert(existsSync(outputFile));
     const actualReport: Report = JSON.parse(readFileSync(outputFile, 'utf-8'));
@@ -34,5 +35,9 @@ describe('inventory command', () => {
     });
     expect(Object.keys(actualReport.routeCountByResource)).toContain('/account_activations/{id}');
     expect(actualReport.sqlTables).toContain('microposts');
+    expect(Object.keys(actualReport.largeAppMaps)).toContain(
+      join('minitest', 'Microposts_interface_micropost_interface.appmap.json')
+    );
+    expect(Object.keys(actualReport.frequentFunctions)).toContain('function:ruby/Array#pack');
   });
 });

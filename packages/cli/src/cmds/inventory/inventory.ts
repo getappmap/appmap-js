@@ -36,13 +36,37 @@ export const builder = (args: yargs.Argv) => {
     default: 2,
   });
 
+  args.option('resource-tokens', {
+    describe: `number of path tokens to include in the 'by resource' output`,
+    type: 'number',
+    default: 2,
+  });
+
+  args.option('large-appmaps', {
+    describe: `number of largest AppMaps to report`,
+    type: 'number',
+    default: 20,
+  });
+
+  args.option('frequent-functions', {
+    describe: `number of most frequently occurring functions to report (this is an estimate based on inspecting the large AppMaps)`,
+    type: 'number',
+    default: 50,
+  });
+
   return args.strict();
 };
 
 export const handler = async (argv: any) => {
   verbose(argv.verbose);
 
-  const { outputFile, directory, resourceTokens, findingLimit } = argv;
+  const {
+    outputFile,
+    directory,
+    resourceTokens,
+    frequentFunctions: frequentFunctionLimit,
+    largeAppmaps: largeAppMapLimit,
+  } = argv;
   assert(resourceTokens);
   assert(typeof resourceTokens === 'number');
   assert(resourceTokens > 0);
@@ -68,11 +92,12 @@ export const handler = async (argv: any) => {
 
   warn(`Building inventory data from ${appmaps.length} AppMaps in ${appmapDir}`);
 
-  const report = await buildReport(
-    appmapDir,
-    appmaps,
-    resourceTokens + 1 /* The url '/' is actually 2 tokens, so add 1 to the user input */
-  );
+  const report = await buildReport(appmapDir, appmaps, {
+    resourceTokens:
+      resourceTokens + 1 /* The url '/' is actually 2 tokens, so add 1 to the user input */,
+    frequentFunctionLimit,
+    largeAppMapLimit,
+  });
 
   const reportJSONStr = JSON.stringify(report, null, 2);
   if (outputFile) {
