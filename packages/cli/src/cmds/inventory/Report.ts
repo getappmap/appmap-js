@@ -10,6 +10,12 @@ export type FindingExample = {
   impactDomain?: string;
 };
 
+export type FunctionInfo = {
+  count: number;
+  size: number;
+  location: string;
+};
+
 export type Report = {
   appmapCountByRecorderName: Record<string, number>;
   appmapCountByHTTPServerRequestCount: Record<number, number>;
@@ -22,4 +28,6 @@ export type Report = {
   packages: string[];
   packageDependencies: Dependency[];
   findings: FindingExample[];
+  largeAppMaps: Record<string, number>;
+  frequentFunctions: Record<string, FunctionInfo>;
 };

@@ -14,7 +14,7 @@ export default function collectFindings(findings: FindingExample[]) {
       const mDate = modifiedDate(finding);
       if (mDate)
         findings.push({
-          appmap,
+          appmap: appmap.slice(0, -'.appmap.json'.length),
           impactDomain: finding.impactDomain,
           modifiedDate: new Date(mDate),
           hash_v2: finding.hash_v2,
