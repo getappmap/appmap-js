@@ -4,6 +4,8 @@ import type { UsageUpdateDto } from '@appland/client';
 import sanitizeURL from './repositoryInfo';
 import { mkdir, stat, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import loadAppMapConfig from './loadAppMapConfig';
+import { warn } from 'node:console';
 
 async function buildMetadata(appmapDir: string, metadata: Metadata): Promise<Metadata> {
   const repository = await Git.repository(appmapDir);
@@ -41,12 +43,16 @@ export default async function emitUsage(
   let metadata: Metadata | undefined;
   if (sampleMetadata) metadata = await buildMetadata(appmapDir, sampleMetadata);
 
+  const appmapConfig = await loadAppMapConfig();
+  if (!appmapConfig) warn(`Unable to load appmap.yml config file`);
+
   const dto: UsageUpdateDto = {
     events: numEvents,
     appmaps: numAppMaps,
     metadata,
     ci: process.env.CI !== undefined,
-  };
+    appmapConfig,
+  } as UsageUpdateDto;
 
   try {
     const stats = await stat('.appmap');
