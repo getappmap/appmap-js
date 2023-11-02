@@ -37,7 +37,7 @@ pie showData
 
 <details>
 <summary>
-<h3><a id="code-profile">Code profile</a></h3>
+<h3><a id="code-profile">Code recording settings</a></h3>
 </summary>
 
 Your _appmap.yml_ configuration file specifies all the code that you want AppMap to instrument and record.
@@ -164,7 +164,8 @@ the better the AppMap data will be for analyzing the SQL changes in each pull re
 <h3><a id="large-appmaps">Large AppMaps</a></h3>
 </summary>
 
-Some tests can produce large AppMaps. AppMap runtime code review is optimized for AppMaps that 
+Some tests can produce large AppMaps, because those they exercise longer or highly repeated code paths. 
+AppMap runtime code review is optimized for AppMaps that 
 are less than 10 MB in size. You may want to consider disabling AppMap for tests that produce really
 large AppMaps, since they can slow down your CI job and they are hard to analyze. Also, note that
 AppMaps greater than 50 MB in size will not be analyzed at all.
@@ -208,7 +209,7 @@ Learn how by visiting the
 {{#if (length frequentFunctions)}}
 Here are some of the most frequently recorded functions in this project:
 
-| Number of occurrances | Function name | Source location |
+| Number of occurrences | Function name | Source location |
 | --- | --- | --- |
 {{#each frequentFunctions}}
 | {{ count }} | {{ function_name @key }} | {{ location }} |
