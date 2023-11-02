@@ -306,5 +306,42 @@
       "modifiedDate": "2023-09-10T20:02:46.000Z",
       "hash_v2": "dec2f1f3aeaf200346646793c43adbd4ae255cc04fb2b9d09d0a4b24864ab924"
     }
-  ]
+  ],
+  "largeAppMaps": {
+    "minitest/Microposts_interface_micropost_interface.appmap.json": 2039187,
+    "minitest/Users_login_login_with_valid_information_followed_by_logout.appmap.json": 982768,
+    "minitest/Users_signup_valid_signup_information_with_account_activation.appmap.json": 786291
+  },
+  "frequentFunctions": {
+    "function:ruby/Array#pack": {
+      "function": "function:ruby/Array#pack",
+      "count": 3410,
+      "size": 1428513,
+      "location": "<internal:pack>:133"
+    },
+    "function:app/helpers/SessionsHelper#current_user": {
+      "function": "function:app/helpers/SessionsHelper#current_user",
+      "count": 1387,
+      "size": 111328,
+      "location": "app/helpers/sessions_helper.rb:16"
+    },
+    "function:logger/Logger::LogDevice#write": {
+      "function": "function:logger/Logger::LogDevice#write",
+      "count": 1200,
+      "size": 620728,
+      "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/3.0.0/logger/log_device.rb:31"
+    },
+    "function:actionview/ActionView::Resolver#find_all": {
+      "function": "function:actionview/ActionView::Resolver#find_all",
+      "count": 338,
+      "size": 362956,
+      "location": "/Users/kgilpin/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/actionview-6.0.4.1/lib/action_view/template/resolver.rb:116"
+    },
+    "function:app/helpers/UsersHelper#gravatar_for": {
+      "function": "function:app/helpers/UsersHelper#gravatar_for",
+      "count": 231,
+      "size": 113797,
+      "location": "app/helpers/users_helper.rb:4"
+    }
+  }
 }

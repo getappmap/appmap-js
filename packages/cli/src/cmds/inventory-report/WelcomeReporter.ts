@@ -2,11 +2,13 @@ import { join } from 'path';
 import assert from 'assert';
 import { Report } from '../inventory/Report';
 import { AppMapConfig, ConfiguredPackage } from '../../lib/loadAppMapConfig';
-import { Reporter, TemplateDirectory, AugmentedReportData } from './Reporter';
+import { Reporter, TemplateDirectory } from './Reporter';
+import { AppMapInfo, WelcomeReport } from './WelcomeReport';
 import { ReportTemplate } from '../../report/ReportTemplate';
 import loadReportTemplate from '../../report/loadReportTemplate';
 import urlHelpers from '../../report/urlHelpers';
 import helpers from '../../report/helpers';
+import readIndexFile from '../inventory/readIndexFile';
 
 export default class WelcomeReporter implements Reporter {
   constructor(public appmapURL: string, public sourceURL?: string) {}
@@ -21,11 +23,51 @@ export default class WelcomeReporter implements Reporter {
       ...urlHelpers({ appmapURL: this.appmapURL, sourceURL: this.sourceURL }),
       ...WelcomeReporter.helpers(),
     });
-    const data: AugmentedReportData = { ...reportData, appmapConfig };
+
+    const largeAppMapsGreaterThan1MB = Object.entries(reportData.largeAppMaps)
+      .filter((entry) => entry[1] > 1024 * 1024)
+      .reduce((acc, entry) => ((acc[entry[0]] = entry[1]), acc), {});
+
+    const largeAppMaps: Record<string, AppMapInfo> = {};
+    for (const appmap of Object.keys(largeAppMapsGreaterThan1MB)) {
+      const metadata = await readIndexFile(appmap, 'metadata.json');
+      const name = metadata.name;
+      const sourceLocation = metadata.source_location;
+      largeAppMaps[appmap] = { name, sourceLocation, size: reportData.largeAppMaps[appmap] };
+    }
+
+    const frequentlyOccurringFunctionsMoreThan1000 = Object.entries(reportData.frequentFunctions)
+      .filter((entry) => entry[1].count > 1000)
+      .reduce((acc, entry) => ((acc[entry[0]] = entry[1]), acc), {});
+
+    const data: WelcomeReport = {
+      ...reportData,
+      ...{ largeAppMaps, frequentFunctions: frequentlyOccurringFunctionsMoreThan1000 },
+      appmapConfig,
+    };
     return template.generateMarkdown(data);
   }
 
   static helpers(): { [name: string]: Function } | undefined {
+    const agent_reference_name = (language: string) => {
+      if (language === 'javascript') return 'agent-js';
+      else return language;
+    };
+
+    const format_mb = (sizeInBytes: number) => {
+      const sizeInMB = Math.round((sizeInBytes / 1024 / 1024) * 100) / 100;
+      return `${sizeInMB} MB`;
+    };
+
+    const function_name = (functionId: string) => {
+      // Example: function:ruby/Array#pack
+
+      if (!functionId.startsWith('function:')) return functionId;
+
+      const parts = functionId.split('/');
+      return parts[parts.length - 1];
+    };
+
     const select_values_by_key_range = (
       data: Record<number, number>,
       keyMin: number,
@@ -64,6 +106,9 @@ export default class WelcomeReporter implements Reporter {
     };
 
     return {
+      agent_reference_name,
+      format_mb,
+      function_name,
       packages_matching_configuration,
       select_values_by_key_range,
       sum_values_by_key_range,
