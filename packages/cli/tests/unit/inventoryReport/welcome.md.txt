@@ -99,9 +99,9 @@ Here are the SQL tables that are present in the observed queries:
 <h3><a id="large-appmaps">Large AppMaps</a></h3>
 </summary>
 
-Some tests can produce large AppMaps, because those they exercise longer or highly repeated code paths. 
+Some tests can produce large AppMaps, because they exercise longer or highly repeated code paths. 
 AppMap runtime code review is optimized for AppMaps that 
-are less than 10 MB in size. You may want to consider disabling AppMap for tests that produce really
+are less than 10 MB in size. You may want to consider disabling AppMap for tests that produce
 large AppMaps, since they can slow down your CI job and they are hard to analyze. Also, note that
 AppMaps greater than 50 MB in size will not be analyzed at all.
 
@@ -127,11 +127,11 @@ Some functions may be called very frequently, adding little to the understandabi
 while adding a lot of overhead to the AppMap recording process. 
 
 Note that some functions are automatically added to the recording by
-the AppMap agent. For example, the AppMap agent automatically functions that are
+the AppMap agent. For example, the AppMap agent automatically records functions that are
 relevant to detecting security flaws and performance problems. If you disable recording of these
 functions, then some problems may become undetectable.
 
-You can disable recording of a class or functions by updating the _appmap.yml_ configuration file.
+You can disable recording of a class or function by updating the _appmap.yml_ configuration file.
 Learn how by visiting the 
 [reference documentation for `appmap-ruby`](https://appmap.io/docs/reference/appmap-ruby.html).
 
