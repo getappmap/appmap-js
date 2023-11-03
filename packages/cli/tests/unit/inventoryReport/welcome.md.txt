@@ -25,11 +25,7 @@ test cases. Here's how the AppMaps in this project were created:
 
 <details>
 <summary>
-<<<<<<< HEAD
-<h3><a id="code-profile">Code profile</a></h3>
-=======
 <h3><a id="code-profile">Code recording settings</a></h3>
->>>>>>> 163cf624e (feat: Report large appmaps and frequent functions)
 </summary>
 
 Your _appmap.yml_ configuration file specifies all the code that you want AppMap to instrument and record.
@@ -141,11 +137,7 @@ Learn how by visiting the
 
 Here are some of the most frequently recorded functions in this project:
 
-<<<<<<< HEAD
-| Number of occurrances | Function name | Source location |
-=======
 | Number of occurrences | Function name | Source location |
->>>>>>> 163cf624e (feat: Report large appmaps and frequent functions)
 | --- | --- | --- |
 | 3410 | Array#pack | &lt;internal:pack&gt;:133 |
 | 1387 | SessionsHelper#current_user | app/helpers/sessions_helper.rb:16 |

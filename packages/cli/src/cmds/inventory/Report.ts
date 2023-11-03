@@ -5,6 +5,7 @@ export type Dependency = {
 
 export type FindingExample = {
   appmap: string;
+  ruleId: string;
   modifiedDate: Date;
   hash_v2: string;
   impactDomain?: string;

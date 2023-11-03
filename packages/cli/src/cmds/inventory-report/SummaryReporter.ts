@@ -10,16 +10,26 @@ import readIndexFile from '../inventory/readIndexFile';
 import loadReportTemplate from '../../report/loadReportTemplate';
 import urlHelpers from '../../report/urlHelpers';
 import helpers from '../../report/helpers';
+import { Rule, SummaryReport } from './SummaryReport';
+import { SafeString } from 'handlebars';
 
-type ReportData = {
-  findingCount: number;
-  findingCountByImpactDomain: Record<string, number>;
-  findings: FindingChange[];
-};
+async function buildReportData(
+  inventoryReport: Report,
+  findingLimit: number
+): Promise<SummaryReport> {
+  const distinctRuleIds = new Set<string>();
 
-async function buildReportData(inventoryReport: Report, findingLimit: number): Promise<ReportData> {
-  const findingCountByImpactDomain = inventoryReport.findings.reduce((acc, finding) => {
-    const domain = finding.impactDomain;
+  const findingRules = inventoryReport.findings.reduce((acc, f) => {
+    if (f.impactDomain && !distinctRuleIds.has(f.ruleId)) {
+      distinctRuleIds.add(f.ruleId);
+      acc.push({ ruleId: f.ruleId, impactDomain: f.impactDomain });
+    }
+    return acc;
+  }, new Array<Rule>());
+  findingRules.sort((a, b) => a.ruleId.localeCompare(b.ruleId));
+
+  const findingRuleCountByImpactDomain = findingRules.reduce((acc, rule) => {
+    const { impactDomain: domain } = rule;
     if (domain) {
       if (!acc[domain]) acc[domain] = 1;
       else acc[domain] = acc[domain] + 1;
@@ -56,8 +66,9 @@ async function buildReportData(inventoryReport: Report, findingLimit: number): P
   }
 
   return {
+    findingRules,
+    findingRuleCountByImpactDomain,
     findingCount,
-    findingCountByImpactDomain,
     findings: newFindings,
   };
 }
@@ -81,6 +92,10 @@ export default class SummaryReporter implements Reporter {
   }
 
   static helpers(): Record<string, Function> {
+    const rule_url = (rule: string) => {
+      return new SafeString(`[${rule}](https://appmap.io/docs/reference/rules/${rule})`);
+    };
+
     const time_ago = (...dates: (Date | string)[]): string => {
       const firstDate = dates.find(Boolean);
       if (!firstDate) return 'an unknown time';
@@ -102,6 +117,6 @@ export default class SummaryReporter implements Reporter {
       return `${Math.floor(seconds)} seconds`;
     };
 
-    return { time_ago };
+    return { rule_url, time_ago };
   }
 }

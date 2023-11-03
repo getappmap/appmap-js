@@ -248,60 +248,70 @@
   "findings": [
     {
       "appmap": "minitest/Microposts_interface_micropost_interface.appmap.json",
+      "ruleId": "n-plus-one-query",
       "impactDomain": "Performance",
       "modifiedDate": "2023-09-10T20:02:46.000Z",
       "hash_v2": "0f1a411f223c6f6f1754d096d5aa1cbbc824b6ba6dfcc2a1aaa0b8be352ecaa7"
     },
     {
       "appmap": "minitest/Microposts_interface_micropost_interface.appmap.json",
+      "ruleId": "n-plus-one-query",
       "impactDomain": "Performance",
       "modifiedDate": "2023-09-10T20:02:46.000Z",
       "hash_v2": "bdcf9e3293453c9cb59c68fbcfa958c6baec625bf707f927ae8ffd3ba0853e47"
     },
     {
       "appmap": "minitest/Microposts_interface_micropost_interface.appmap.json",
+      "ruleId": "n-plus-one-query",
       "impactDomain": "Performance",
       "modifiedDate": "2023-09-10T20:02:46.000Z",
       "hash_v2": "f54a43f0c83d77a3b61021072d9b8e27b47ba0e37826c59009cb74c291e4f6a8"
     },
     {
       "appmap": "minitest/Microposts_interface_micropost_interface.appmap.json",
+      "ruleId": "n-plus-one-query",
       "impactDomain": "Performance",
       "modifiedDate": "2023-09-10T20:02:46.000Z",
       "hash_v2": "020ccbf3f4b88376999f1450fedac83c92dd00b51c93ef9a1bdd8910f696a3ba"
     },
     {
       "appmap": "minitest/Users_login_login_with_valid_information_followed_by_logout.appmap.json",
+      "ruleId": "n-plus-one-query",
       "impactDomain": "Performance",
       "modifiedDate": "2023-09-10T20:02:46.000Z",
       "hash_v2": "5e45ba35b57a3ec7ddb97f8ed8f7ae3834a4019fbdc07940c72beaeeac61f9eb"
     },
     {
       "appmap": "minitest/Users_profile_profile_display_while_logged_in_as_the_user.appmap.json",
+      "ruleId": "missing-authentication",
       "impactDomain": "Security",
       "modifiedDate": "2023-09-10T20:02:46.000Z",
       "hash_v2": "1841f78bb8eb2e9a88b405d2baa3642953115f0dbe3588aaa0c8037730613b27"
     },
     {
       "appmap": "minitest/Users_signup_valid_signup_information_with_account_activation.appmap.json",
+      "ruleId": "missing-authentication",
       "impactDomain": "Security",
       "modifiedDate": "2023-09-10T20:02:46.000Z",
       "hash_v2": "c3b296f0049b9f08ea79d9df8fba74341575a30de6b5f39da0a8762c334cdc0b"
     },
     {
       "appmap": "minitest/Users_signup_valid_signup_information_with_account_activation.appmap.json",
+      "ruleId": "missing-authentication",
       "impactDomain": "Security",
       "modifiedDate": "2023-09-10T20:02:46.000Z",
       "hash_v2": "4f012b5f96a448545f8bc0393e2599e034baf41b107545eec9f02bf362785271"
     },
     {
       "appmap": "minitest/Users_signup_valid_signup_information_with_account_activation.appmap.json",
+      "ruleId": "http-500",
       "impactDomain": "Maintainability",
       "modifiedDate": "2023-09-10T20:02:46.000Z",
       "hash_v2": "0cd8e6544a38bc99297dcb906524ffa7cbdd71cad1d8e2b8b8056ffc84b0d4fe"
     },
     {
       "appmap": "minitest/Users_signup_valid_signup_information_with_account_activation.appmap.json",
+      "ruleId": "http-500",
       "impactDomain": "Maintainability",
       "modifiedDate": "2023-09-10T20:02:46.000Z",
       "hash_v2": "dec2f1f3aeaf200346646793c43adbd4ae255cc04fb2b9d09d0a4b24864ab924"
