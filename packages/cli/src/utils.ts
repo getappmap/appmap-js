@@ -5,8 +5,7 @@ import { promisify } from 'util';
 import { join } from 'path';
 import assert from 'assert';
 import { Event, ReturnValueObject } from '@appland/models';
-import { readdir, stat } from 'fs/promises';
-import { warn } from 'console';
+import { readdir } from 'fs/promises';
 
 const StartTime = Date.now();
 const renameFile = promisify(gracefulFs.rename);
@@ -116,6 +115,7 @@ export async function processFiles(
 
 /**
  * Finds all occurrances of `fileName` within a base directory. Each match must be a file, not a directory.
+ * If a searched file is found, the sibling subdirectories are not recursed into.
  * This is optimized compared to `processFiles` because it does not use `glob`, which is pretty slow for this use case.
  * It also begins processing right away, rather than waiting for all files to be enumerated.
  */
@@ -128,7 +128,7 @@ export async function processNamedFiles(
 
   const stats = async (fileName: string): Promise<Stats | undefined> => {
     try {
-      return await stat(fileName);
+      return await fsp.lstat(fileName);
     } catch {
       // Ignore
     }

@@ -1,18 +1,53 @@
 import { open, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { writeFileAtomic } from '../../src/utils';
+import { dirname, join } from 'node:path';
 
-function randFilename(len: number): string {
-  return Math.random().toString(36).padEnd(len, '-');
-}
+import { dirSync as makeTempDir } from 'tmp-promise';
 
-async function tryFilename(name: string): Promise<void> {
-  const path = join(tmpdir(), name);
-  const file = await open(path, 'w');
-  await file.close();
-  await rm(path);
-}
+import { processNamedFiles, writeFileAtomic } from '../../src/utils';
+import { mkdirSync, symlinkSync, writeFileSync } from 'node:fs';
+import assert from 'node:assert';
+
+describe(processNamedFiles, () => {
+  it('enumerates named files', async () => {
+    expect.assertions(1);
+
+    const tmp = makeTempDir({ unsafeCleanup: true }).name;
+    touch(tmp, 'bar');
+    touch(tmp, 'foo', 'bar');
+    touch(tmp, 'other', 'foo');
+    touch(tmp, 'other', 'bar');
+    touch(tmp, 'other', 'sub', 'foo');
+    touch(tmp, 'outer', 'foo');
+
+    const results: string[] = [];
+
+    await processNamedFiles(tmp, 'foo', async (path) => results.push(path));
+
+    results.sort();
+
+    expect(results).toEqual([join(tmp, 'other', 'foo'), join(tmp, 'outer', 'foo')]);
+  });
+
+  if (process.platform !== 'win32')
+    it('does not follow filesystem loops', async () => {
+      expect.assertions(1);
+
+      const tmp = makeTempDir({ unsafeCleanup: true }).name;
+      mkdirSync(join(tmp, 'a', 'b', 'c', 'd', 'e', 'f'), { recursive: true });
+      touch(tmp, 'a', 'b', 'c', 'bar', 'foo');
+      mkdirSync(join(tmp, 'g', 'h', 'i', 'j', 'k', 'l'), { recursive: true });
+
+      symlinkSync('../../../../../../a', join(tmp, 'g', 'h', 'i', 'j', 'k', 'l', 'a'));
+      symlinkSync('../../../../../../g', join(tmp, 'a', 'b', 'c', 'd', 'e', 'f', 'g'));
+
+      const results: string[] = [];
+
+      await processNamedFiles(tmp, 'foo', async (path) => results.push(path));
+
+      expect(results).toEqual([join(tmp, 'a', 'b', 'c', 'bar', 'foo')]);
+    });
+});
 
 describe(writeFileAtomic, () => {
   it('works correctly even if target file is at maximum name length already', async () => {
@@ -40,3 +75,21 @@ describe(writeFileAtomic, () => {
     await Promise.all(filenames.map((name) => rm(join(tmpdir(), name))));
   });
 });
+
+function randFilename(len: number): string {
+  return Math.random().toString(36).padEnd(len, '-');
+}
+
+async function tryFilename(name: string): Promise<void> {
+  const path = join(tmpdir(), name);
+  const file = await open(path, 'w');
+  await file.close();
+  await rm(path);
+}
+
+function touch(...path: string[]) {
+  const filename = path.pop();
+  assert(filename);
+  mkdirSync(join(...path), { recursive: true });
+  writeFileSync(join(...path, filename), '');
+}
