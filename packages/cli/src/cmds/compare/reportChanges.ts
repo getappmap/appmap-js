@@ -75,6 +75,7 @@ export default async function reportChanges(
   if (changeAnalysis.findingDiff) result.findingDiff = changeAnalysis.findingDiff;
   if (sqlDiff) result.sqlDiff = sqlDiff;
   if (apiDiff) result.apiDiff = apiDiff;
+  if (Object.keys(generator.warnings).length > 0) result.warnings = generator.warnings;
 
   return result;
 }

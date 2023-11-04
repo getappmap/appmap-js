@@ -1,11 +1,5 @@
 import { queue } from 'async';
-import {
-  DiffOutcomeFailure,
-  DiffOutcomeSuccess,
-  DiffResult,
-  DiffResultType,
-  default as openapiDiff,
-} from 'openapi-diff';
+import { default as openapiDiff } from 'openapi-diff';
 import { mkdir, readFile, writeFile } from 'fs/promises';
 import { dirname, join, relative } from 'path';
 
@@ -25,6 +19,7 @@ import { exists } from '../../utils';
 
 export default class ReportFieldCalculator {
   sourceDiff: SourceDiff;
+  warnings: Record<string, string[]> = {};
 
   constructor(public changeAnalysis: ChangeAnalysis) {
     this.sourceDiff = new SourceDiff(
@@ -87,47 +82,46 @@ export default class ReportFieldCalculator {
   }
 
   async apiDiff(reportRemoved: boolean): Promise<openapiDiff.DiffOutcome | undefined> {
-    const readOpenAPI = async (revision: RevisionName) => {
-      const openapiPath = this.changeAnalysis.paths.openapiPath(revision);
+    const baseDefinitions = await this.readOpenAPI(RevisionName.Base);
+    const headDefinitions = await this.readOpenAPI(RevisionName.Head);
+    if (!baseDefinitions || !headDefinitions) return;
+
+    const diffOpenAPI = async (): Promise<openapiDiff.DiffOutcome | undefined> => {
       try {
-        return await readFile(openapiPath, 'utf-8');
+        return await openapiDiff.diffSpecs({
+          sourceSpec: {
+            content: baseDefinitions,
+            location: 'base',
+            format: 'openapi3',
+          },
+          destinationSpec: {
+            content: headDefinitions,
+            location: 'head',
+            format: 'openapi3',
+          },
+        });
       } catch (e) {
-        if ((e as any).code === 'ENOENT') return undefined;
-        throw e;
+        const message = e instanceof Error ? e.message : `${e}`;
+        if (!this.warnings['apiDiff']) this.warnings['apiDiff'] = [];
+        this.warnings['apiDiff'].push(`Error comparing OpenAPI definitions: ${message}`);
       }
     };
 
-    const baseDefinitions = await readOpenAPI(RevisionName.Base);
-    const headDefinitions = await readOpenAPI(RevisionName.Head);
-    if (!baseDefinitions || !headDefinitions) return;
-
-    let apiDiff: openapiDiff.DiffOutcome;
-    {
-      const result = await openapiDiff.diffSpecs({
-        sourceSpec: {
-          content: baseDefinitions,
-          location: 'base',
-          format: 'openapi3',
-        },
-        destinationSpec: {
-          content: headDefinitions,
-          location: 'head',
-          format: 'openapi3',
-        },
-      });
-
-      if (!reportRemoved && result.breakingDifferencesFound) {
-        const diffOutcomeFailure = result as any;
+    let result: openapiDiff.DiffOutcome | undefined;
+    const computedOpenAPIDiff = await diffOpenAPI();
+    if (computedOpenAPIDiff) {
+      if (!reportRemoved && computedOpenAPIDiff.breakingDifferencesFound) {
+        const diffOutcomeFailure = computedOpenAPIDiff as any;
         diffOutcomeFailure.breakingDifferencesFound = false;
         delete diffOutcomeFailure['breakingDifferences'];
       }
 
-      if (result.breakingDifferencesFound) {
+      if (computedOpenAPIDiff.breakingDifferencesFound) {
         console.log('Breaking change found!');
       }
-      apiDiff = result;
+      result = computedOpenAPIDiff;
     }
-    return apiDiff;
+    return result;
   }
 
   async sqlDiff(reportRemoved: boolean): Promise<SQLDiff | undefined> {
@@ -272,5 +266,15 @@ export default class ReportFieldCalculator {
       }, new Array<SQLQueryReference>());
 
     return { newQueries: newQueryAppMaps, removedQueries, newTables, removedTables };
+  }
+
+  protected async readOpenAPI(revision: RevisionName): Promise<string | undefined> {
+    const openapiPath = this.changeAnalysis.paths.openapiPath(revision);
+    try {
+      return await readFile(openapiPath, 'utf-8');
+    } catch (e) {
+      if ((e as any).code === 'ENOENT') return undefined;
+      throw e;
+    }
   }
 }

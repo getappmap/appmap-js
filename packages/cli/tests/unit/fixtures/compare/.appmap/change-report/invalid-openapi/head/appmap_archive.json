@@ -1,0 +1,39 @@
+{
+  "versions": {
+    "archive": "1.3.0",
+    "index": "1.2.0"
+  },
+  "workingDirectory": "/home/runner/work/sample_app_6th_ed/sample_app_6th_ed",
+  "appMapDir": "tmp/appmap",
+  "commandArguments": {
+    "_": [
+      "archive"
+    ],
+    "revision": "f10d69374a84271075ddb1a666a1062e67beac1d",
+    "r": "f10d69374a84271075ddb1a666a1062e67beac1d",
+    "type": "auto",
+    "t": "auto",
+    "analyze": true,
+    "index": true,
+    "max-size": 50,
+    "maxSize": 50,
+    "$0": "/usr/local/bin/appmap"
+  },
+  "revision": "f10d69374a84271075ddb1a666a1062e67beac1d",
+  "timestamp": "1694376283034",
+  "failedTests": [],
+  "oversizedAppMaps": [],
+  "config": {
+    "name": "sample_app_6th_ed",
+    "language": "ruby",
+    "appmap_dir": "tmp/appmap",
+    "packages": [
+      {
+        "path": "app"
+      },
+      {
+        "path": "lib"
+      }
+    ]
+  }
+}

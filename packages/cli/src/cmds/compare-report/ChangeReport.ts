@@ -178,6 +178,11 @@ export class FindingDiff {
   constructor(public newFindings: FindingChange[], public resolvedFindings: FindingChange[]) {}
 }
 
+export type Warning = {
+  field: string;
+  message: string;
+};
+
 export default class ChangeReport {
   constructor(
     public readonly testFailures: TestFailure[],
@@ -187,6 +192,7 @@ export default class ChangeReport {
     public readonly openapiDiff?: OpenAPIDiff,
     public readonly sqlDiff?: SQLDiff,
     public readonly findingDiff?: FindingDiff,
+    public readonly warnings: Warning[] = [],
     public pruned = false
   ) {}
 
@@ -321,6 +327,17 @@ export default class ChangeReport {
       return memo;
     }, {});
 
+    const warnings = changeReportData.warnings
+      ? Object.keys(changeReportData.warnings).reduce((memo, field) => {
+          assert(changeReportData.warnings);
+          const warnings = changeReportData.warnings[field] || [];
+          for (const message of warnings) {
+            memo.push({ field, message });
+          }
+          return memo;
+        }, new Array<Warning>())
+      : [];
+
     return new ChangeReport(
       testFailures,
       newAppMaps,
@@ -328,7 +345,8 @@ export default class ChangeReport {
       changedAppMaps,
       apiDiff,
       sqlDiff,
-      findingDiff
+      findingDiff,
+      warnings
     );
   }
 }
