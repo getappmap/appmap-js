@@ -4,7 +4,7 @@ import assert from 'assert';
 import { format as sqlFormatFn } from 'sql-formatter';
 import { DiffResult, DiffResultType, default as openapiDiff } from 'openapi-diff';
 
-import { ChangeReport as ChangeReportData } from '../compare/ChangeReport';
+import { ChangeReport as ChangeReportData, Warning } from '../compare/ChangeReport';
 import { RevisionName } from '../../diffArchive/RevisionName';
 import { executeCommand } from '../../lib/executeCommand';
 import { verbose } from '../../utils';
@@ -187,6 +187,7 @@ export default class ChangeReport {
     public readonly openapiDiff?: OpenAPIDiff,
     public readonly sqlDiff?: SQLDiff,
     public readonly findingDiff?: FindingDiff,
+    public readonly warnings: Warning[] = [],
     public pruned = false
   ) {}
 
@@ -328,7 +329,8 @@ export default class ChangeReport {
       changedAppMaps,
       apiDiff,
       sqlDiff,
-      findingDiff
+      findingDiff,
+      changeReportData.warnings
     );
   }
 }

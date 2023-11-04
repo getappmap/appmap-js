@@ -70,6 +70,7 @@ export default async function reportChanges(
       [RevisionName.Base]: mapToRecord(appMapMetadata[RevisionName.Base]),
       [RevisionName.Head]: mapToRecord(appMapMetadata[RevisionName.Head]),
     },
+    warnings: [...generator.warnings],
   };
 
   if (changeAnalysis.findingDiff) result.findingDiff = changeAnalysis.findingDiff;

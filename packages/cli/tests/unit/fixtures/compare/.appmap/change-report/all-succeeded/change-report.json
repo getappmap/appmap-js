@@ -773,5 +773,6 @@
     "newTables": [],
     "removedQueries": ["begin transaction", "rollback transaction"],
     "removedTables": []
-  }
+  },
+  "warnings": []
 }

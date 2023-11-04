@@ -37,6 +37,11 @@ export type SQLDiff = {
   removedTables: string[];
 };
 
+export type Warning = {
+  field: string;
+  message: string;
+};
+
 export type ChangeReport = {
   testFailures: TestFailure[];
   newAppMaps: AppMapLink[];
@@ -50,4 +55,5 @@ export type ChangeReport = {
     head: Record<AppMapName, Metadata>;
   };
   sequenceDiagramDiff: Record<string, AppMapLink[]>;
+  warnings: Warning[];
 };
