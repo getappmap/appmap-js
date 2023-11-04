@@ -1,3 +1,10 @@
+# [@appland/client-v1.8.1](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.8.0...@appland/client-v1.8.1) (2023-11-04)
+
+
+### Bug Fixes
+
+* emitUsage reports metadata as an object ([d07e795](https://github.com/getappmap/appmap-js/commit/d07e795ccb084024d4abe1e724c3147c46f2b7e1))
+
 # [@appland/client-v1.8.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.7.0...@appland/client-v1.8.0) (2023-08-29)
 
 
