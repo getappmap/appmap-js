@@ -1,3 +1,20 @@
+# [@appland/appmap-v3.107.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.106.0...@appland/appmap-v3.107.0) (2023-11-04)
+
+
+### Bug Fixes
+
+* emitUsage reports metadata as an object ([d07e795](https://github.com/getappmap/appmap-js/commit/d07e795ccb084024d4abe1e724c3147c46f2b7e1))
+
+
+### Features
+
+* Apply wording update suggestions from code review ([5be8529](https://github.com/getappmap/appmap-js/commit/5be852954cb5b1e9a6cb16e2728aa3f27aa32bb5))
+* Include AppMap config in run-stats report ([4ffe1a4](https://github.com/getappmap/appmap-js/commit/4ffe1a47cf2ffbe9b36caac3e9eae1cb8ac3a60b))
+* Report large appmaps and frequent functions ([ccf7b6c](https://github.com/getappmap/appmap-js/commit/ccf7b6c40e9ffad9ceeaa57393d9e0c3890136c7))
+* Report large appmaps and frequent functions ([b576e64](https://github.com/getappmap/appmap-js/commit/b576e649d7c48a78ab086d1201817ca84fb6937f))
+* Report large appmaps and frequent functions ([5b31a58](https://github.com/getappmap/appmap-js/commit/5b31a583872f1cb884e7b6243d498d692a8d59d0))
+* Show a rule summary rather than finding summary ([ccf88bb](https://github.com/getappmap/appmap-js/commit/ccf88bbad9b3b23baeddda9b79078fde5268247d))
+
 # [@appland/appmap-v3.106.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.105.0...@appland/appmap-v3.106.0) (2023-10-31)
 
 
