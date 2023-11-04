@@ -1,7 +1,7 @@
 import path from 'path';
-import { EventInfo } from '../../../src/cmds/stats/directory/statsForMap';
 import StatsCommand from '../../../src/cmds/stats/stats';
 import { withStubbedTelemetry } from '../../helper';
+import { EventInfo } from '../../../src/cmds/stats/accumulateEvents';
 
 const fixtureDir = path.join(__dirname, '../', 'fixtures', 'stats');
 const mapPath = path.join('Microposts_interface_micropost_interface.appmap.json');

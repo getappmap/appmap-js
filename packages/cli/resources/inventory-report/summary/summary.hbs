@@ -45,18 +45,17 @@ AppMap runtime code review scans the AppMaps for security flaws, performance
 problems, and code anti-patterns. When you use AppMap runtime code review on a pull request, 
 only the new problems and resolved problems are shown in the report. 
 
-{{#if findings.length}}
+{{#if findingRules.length}}
 ### Overview of problems and flaws
 
-AppMap detected {{ findingCount }} problems and flaws in the runtime code review of your project. 
-Here's an overview of the types of problems that have been found:
+AppMap detected {{ length findingRules }} types of problems and flaws in the runtime code review of your project. 
+Here's a list of the types of problems that have been found:
 
-```mermaid
-pie showData
-{{#each findingCountByImpactDomain}}
-  "{{@key}}" : {{@this}}
+| Rule | Impact Domain |
+| --- | --- |
+{{#each findingRules }}
+| {{ rule_url ruleId }} | {{impactDomain}} |
 {{/each}}
-```
 
 ### Recently introduced code flaws and problems
 

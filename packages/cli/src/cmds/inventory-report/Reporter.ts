@@ -39,8 +39,6 @@ export default function buildReporter(
   return report;
 }
 
-export type AugmentedReportData = Report & { appmapConfig: AppMapConfig };
-
 export interface Reporter {
   generateReport(report: Report, appmapConfig: AppMapConfig): Promise<string>;
 }

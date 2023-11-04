@@ -1,28 +1,37 @@
-import { Usage } from '@appland/client';
 import { Metadata } from '@appland/models';
 import { Git } from '../telemetry';
 import type { UsageUpdateDto } from '@appland/client';
 import sanitizeURL from './repositoryInfo';
 import { mkdir, stat, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import loadAppMapConfig from './loadAppMapConfig';
+import { warn } from 'node:console';
 
-async function buildMetadata(appmapDir: string, metadata?: Metadata): Promise<string> {
+async function buildMetadata(appmapDir: string, metadata: Metadata): Promise<Metadata> {
   const repository = await Git.repository(appmapDir);
-  const branch = await Git.branch(appmapDir);
-  const commit = await Git.commit(appmapDir);
 
-  return JSON.stringify({
-    app: metadata?.app,
-    language: metadata?.language,
-    client: metadata?.client,
-    frameworks: metadata?.frameworks,
-    git: {
-      repository: repository ? sanitizeURL(repository) : undefined,
-      branch: branch,
-      commit: commit,
-    },
-    recorder: metadata?.recorder,
-  });
+  const result: Metadata = {
+    name: metadata.name,
+    app: metadata.app,
+    language: metadata.language,
+    client: metadata.client,
+    frameworks: metadata.frameworks,
+    recorder: metadata.recorder,
+  };
+
+  if (repository) {
+    const branch = await Git.branch(appmapDir);
+    const commit = await Git.commit(appmapDir);
+    const git = {
+      repository: sanitizeURL(repository),
+    } as Metadata.Git; // Technically, branch and commit are required
+    if (branch) git.branch = branch;
+    if (commit) git.commit = commit;
+
+    result.git = git;
+  }
+
+  return result;
 }
 
 export default async function emitUsage(
@@ -31,12 +40,19 @@ export default async function emitUsage(
   numAppMaps: number,
   sampleMetadata?: Metadata
 ): Promise<string | undefined> {
+  let metadata: Metadata | undefined;
+  if (sampleMetadata) metadata = await buildMetadata(appmapDir, sampleMetadata);
+
+  const appmapConfig = await loadAppMapConfig();
+  if (!appmapConfig) warn(`Unable to load appmap.yml config file`);
+
   const dto: UsageUpdateDto = {
     events: numEvents,
     appmaps: numAppMaps,
-    metadata: await buildMetadata(appmapDir, sampleMetadata),
+    metadata,
     ci: process.env.CI !== undefined,
-  };
+    appmapConfig,
+  } as UsageUpdateDto;
 
   try {
     const stats = await stat('.appmap');

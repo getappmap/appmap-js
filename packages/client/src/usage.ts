@@ -1,3 +1,4 @@
+import { Metadata } from '@appland/models';
 import { ServiceEndpoint } from './configuration';
 import makeRequest from './makeRequest';
 
@@ -23,7 +24,7 @@ export interface UsageUpdateDto {
   readonly events?: number;
   readonly appmaps?: number;
   readonly contributors?: number;
-  readonly metadata?: string;
+  readonly metadata?: Metadata;
   readonly ci?: boolean;
 }
 

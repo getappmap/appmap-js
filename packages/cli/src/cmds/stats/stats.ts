@@ -1,16 +1,15 @@
 import { existsSync } from 'fs';
 import path from 'path';
-import glob from 'glob';
 import chalk from 'chalk';
 import yargs from 'yargs';
-import { statsForDirectory } from './directory/statsForDirectory';
-import { EventInfo, statsForMap } from './directory/statsForMap';
+import { statsForDirectory } from './statsForDirectory';
+import { statsForMap } from './statsForMap';
 import { SortedAppMapSize } from './types/appMapSize';
 import { SlowestExecutionTime } from './types/functionExecutionTime';
 import { locateAppMapDir } from '../../lib/locateAppMapDir';
-import UI from '../userInteraction';
 import { verbose } from '../../utils';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
+import { EventInfo } from './accumulateEvents';
 
 export const command = 'stats [directory]';
 export const describe =

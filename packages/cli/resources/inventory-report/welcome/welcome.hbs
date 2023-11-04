@@ -7,12 +7,12 @@ you run your tests.
 
 <hr/>
 
+The following sections contain detailed information about the AppMap integration with your project.
+
 <details>
 <summary>
-View details
-</summary>
-
 <h3><a id="data-sources">AppMap data sources</a></h3>
+</summary>
 
 In GitHub Actions and other CI systems, AppMaps are created by recording
 test cases. Here's how the AppMaps in this project were created:
@@ -33,7 +33,12 @@ pie showData
 ```
 {{/if}}
 
-<h3><a id="code-profile">Code profile</a></h3>
+</details>
+
+<details>
+<summary>
+<h3><a id="code-profile">Code recording settings</a></h3>
+</summary>
 
 Your _appmap.yml_ configuration file specifies all the code that you want AppMap to instrument and record.
 By default, sub-modules of any requested code are recorded as well. In this project, the packages specified
@@ -47,7 +52,12 @@ following packages and modules:
 
 {{#each (packages_matching_configuration packages appmapConfig.packages) }}`{{ @this }}` {{/each}}
 
+</details>
+
+<details>
+<summary>
 <h3><a id="ws-api-profile">Web service API profile</a></h3>
+</summary>
 
 When you record AppMaps that include HTTP server requests, AppMap automatically generates OpenAPI definitions
 based on the observed data.
@@ -99,7 +109,12 @@ the better the AppMap data will be for generating OpenAPI definitions and compar
 changes in each pull request.
 {{/if}}
 
+</details>
+
+<details>
+<summary>
 <h3><a id="sql-profile">SQL profile</a></h3>
+</summary>
 
 When your code makes a SQL query, AppMap records the SQL query in detail. It even parses the queries
 to figure out which tables your app is using, and how it's using them.
@@ -142,9 +157,70 @@ and you don't see SQL queries here, you can add some test cases that interact wi
 the better the AppMap data will be for analyzing the SQL changes in each pull request.
 {{/if}}
 
+</details>
+
+<details>
+<summary>
+<h3><a id="large-appmaps">Large AppMaps</a></h3>
+</summary>
+
+Some tests can produce large AppMaps, because they exercise longer or highly repeated code paths. 
+AppMap runtime code review is optimized for AppMaps that 
+are less than 10 MB in size. You may want to consider disabling AppMap for tests that produce
+large AppMaps, since they can slow down your CI job and they are hard to analyze. Also, note that
+AppMaps greater than 50 MB in size will not be analyzed at all.
+
+You can disable recording of a test case by adding a code comment or annotation to the test case file.
+Learn how by visiting the 
+[reference documentation for `appmap-{{ appmapConfig.language }}`](https://appmap.io/docs/reference/appmap-{{ agent_reference_name appmapConfig.language }}.html).
+
+{{#if (length largeAppMaps)}}
+Here are the largest AppMaps that are greater than 1 MB:
+
+| Size | Location | Test name | AppMap path |
+| --- | --- | --- | --- |
+{{#each largeAppMaps}}
+| {{ format_mb size }} | {{ sourceLocation }} | {{ name }} | {{ @key}} |
+{{/each}}
+{{else}}
+This project doesn't have any AppMaps that are greater than 1 MB in size.
+{{/if}}
+
+</details>
+
+<details>
+<summary>
+<h3><a id="frequent-functions">Frequently recorded functions</a></h3>
+</summary>
+
+The AppMap configuration file _appmap.yml_ specifies which functions to record. 
+Some functions may be called very frequently, adding little to the understandability of the code
+while adding a lot of overhead to the AppMap recording process. 
+
+Note that some functions are automatically added to the recording by
+the AppMap agent. For example, the AppMap agent automatically records functions that are
+relevant to detecting security flaws and performance problems. If you disable recording of these
+functions, then some problems may become undetectable.
+
+You can disable recording of a class or function by updating the _appmap.yml_ configuration file.
+Learn how by visiting the 
+[reference documentation for `appmap-{{ appmapConfig.language }}`](https://appmap.io/docs/reference/appmap-{{ agent_reference_name appmapConfig.language }}.html).
+
+{{#if (length frequentFunctions)}}
+Here are some of the most frequently recorded functions in this project:
+
+| Number of occurrences | Function name | Source location |
+| --- | --- | --- |
+{{#each frequentFunctions}}
+| {{ count }} | {{ function_name @key }} | {{ location }} |
+{{/each}}
+{{else}}
+This project doesn't have any recorded functions that occur more than 1000 times.
+{{/if}}
+
+</details>
+
 ### Learn more
 
 To learn more about AppMap, visit
 [appmap.io/docs](https://appmap.io/docs).
-
-</details>

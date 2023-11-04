@@ -1,23 +1,13 @@
-export type Dependency = {
-  caller: string;
-  callee: string;
-};
+import { AppMapConfig } from '../../lib/loadAppMapConfig';
+import { Dependency, FindingExample, FunctionInfo } from '../inventory/Report';
 
-export type FindingExample = {
-  appmap: string;
-  ruleId: string;
-  modifiedDate: Date;
-  hash_v2: string;
-  impactDomain?: string;
-};
-
-export type FunctionInfo = {
-  count: number;
+export type AppMapInfo = {
+  name: string;
+  sourceLocation?: string;
   size: number;
-  location: string;
 };
 
-export type Report = {
+export type WelcomeReport = {
   appmapCountByRecorderName: Record<string, number>;
   appmapCountByHTTPServerRequestCount: Record<number, number>;
   routeCountByResource: Record<string, number>;
@@ -29,6 +19,7 @@ export type Report = {
   packages: string[];
   packageDependencies: Dependency[];
   findings: FindingExample[];
-  largeAppMaps: Record<string, number>;
+  largeAppMaps: Record<string, AppMapInfo>;
   frequentFunctions: Record<string, FunctionInfo>;
+  appmapConfig: AppMapConfig;
 };

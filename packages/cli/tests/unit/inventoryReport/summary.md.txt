@@ -6,15 +6,14 @@ only the new problems and resolved problems are shown in the report.
 
 ### Overview of problems and flaws
 
-AppMap detected 10 problems and flaws in the runtime code review of your project. 
-Here's an overview of the types of problems that have been found:
+AppMap detected 3 types of problems and flaws in the runtime code review of your project. 
+Here's a list of the types of problems that have been found:
 
-```mermaid
-pie showData
-  "Performance" : 5
-  "Security" : 3
-  "Maintainability" : 2
-```
+| Rule | Impact Domain |
+| --- | --- |
+| [http-500](https://appmap.io/docs/reference/rules/http-500) | Maintainability |
+| [missing-authentication](https://appmap.io/docs/reference/rules/missing-authentication) | Security |
+| [n-plus-one-query](https://appmap.io/docs/reference/rules/n-plus-one-query) | Performance |
 
 ### Recently introduced code flaws and problems
 

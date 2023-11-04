@@ -1,10 +1,10 @@
 import * as fs from 'fs';
-import UI from '../../userInteraction';
-import Telemetry from '../../../telemetry';
-import { findFiles, verbose } from '../../../utils';
+import UI from '../userInteraction';
+import Telemetry from '../../telemetry';
+import { findFiles, verbose } from '../../utils';
 import { Event, buildAppMap } from '@appland/models';
-import { AppMapSizeTable, SortedAppMapSize } from '../types/appMapSize';
-import { FunctionExecutionTime, SlowestExecutionTime } from '../types/functionExecutionTime';
+import { AppMapSizeTable, SortedAppMapSize } from './types/appMapSize';
+import { FunctionExecutionTime, SlowestExecutionTime } from './types/functionExecutionTime';
 import chalk from 'chalk';
 import { relative } from 'path';
 
