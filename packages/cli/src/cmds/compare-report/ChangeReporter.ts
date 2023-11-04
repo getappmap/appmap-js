@@ -1,4 +1,4 @@
-import Report from './Report';
+import Reporter from './Reporter';
 import { ChangeReport as ChangeReportData } from '../compare/ChangeReport';
 import ChangeReport from './ChangeReport';
 import ReportSection, { ExperimentalSection, ReportOptions, Section } from './ReportSection';
@@ -18,7 +18,7 @@ export const EXPERIMENTAL_SECTIONS: ExperimentalSection[] = [
   ExperimentalSection.SQLDiff,
 ];
 
-export default class MarkdownReport implements Report {
+export default class ChangeReporter implements Reporter {
   public excludeSections: string[] | undefined;
   public includeSections: string[] | undefined;
 
@@ -57,6 +57,19 @@ export default class MarkdownReport implements Report {
       '',
     ].join('\n');
 
+    const warnings: string[] = [];
+    if (changeReport.warnings.length > 0) {
+      warnings.push('');
+      warnings.push('**Warnings occurred during analysis:**');
+      for (const warning of changeReport.warnings) {
+        warnings.push('');
+        warnings.push('```');
+        warnings.push(`(${warning.field}) ${warning.message}`);
+        warnings.push('```');
+      }
+      warnings.push('');
+    }
+
     const comments: string[] = [];
     if (changeReport.testFailures.length > 0) {
       comments.push('');
@@ -68,6 +81,6 @@ export default class MarkdownReport implements Report {
       comments.push('');
     }
 
-    return [heading, ...comments, ...details].join('\n');
+    return [heading, ...warnings, ...comments, ...details].join('\n');
   }
 }
