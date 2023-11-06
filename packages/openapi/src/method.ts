@@ -4,6 +4,7 @@ import Response from './response';
 import { headerValue, RPCRequest } from './rpcRequest';
 import ObjectSchema from './objectSchema';
 import { messageToOpenAPISchema, parseScheme } from './util';
+import { warn } from 'console';
 
 const bodyParamMethods = new Set(['options', 'put', 'post', 'patch']);
 
@@ -141,6 +142,20 @@ export default class Method {
 
   addRpcRequest(request: RPCRequest): void {
     const { status } = request;
+
+    const statusError = (): string | undefined => {
+      if (!status) return `Ignoring response with missing or undefined HTTP status`;
+
+      if (status < 100 || status >= 600)
+        return `Ignoring response with invalid HTTP status: ${status}`;
+    };
+
+    const error = statusError();
+    if (error) {
+      warn(error);
+      return;
+    }
+
     if (!this.responses[status]) {
       this.responses[status] = new Response(status);
     }

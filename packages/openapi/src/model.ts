@@ -11,7 +11,10 @@ export default class Model {
       .sort()
       .reduce((memo, path) => {
         // eslint-disable-next-line no-param-reassign
-        memo[path] = this.paths[path].openapi();
+        const pathItem = this.paths[path].openapi();
+        if (Object.keys(pathItem).length) {
+          memo[path] = this.paths[path].openapi();
+        }
         return memo;
       }, {} as Record<string, OpenAPIV3.PathItemObject>);
     return paths;
