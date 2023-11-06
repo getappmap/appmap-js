@@ -1,3 +1,15 @@
+# [@appland/openapi-v1.7.0](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.6.1...@appland/openapi-v1.7.0) (2023-11-06)
+
+
+### Bug Fixes
+
+* Ignore missing or invalid HTTP status ([b430cd5](https://github.com/getappmap/appmap-js/commit/b430cd586cfaded49e679f963f48d310e12df61a))
+
+
+### Features
+
+* Report OpenAPI warnings ([1698bb0](https://github.com/getappmap/appmap-js/commit/1698bb01957a5bf9718a5f92cd58bd7d71ea8f90))
+
 # [@appland/openapi-v1.6.1](https://github.com/getappmap/appmap-js/compare/@appland/openapi-v1.6.0...@appland/openapi-v1.6.1) (2023-09-09)
 
 
