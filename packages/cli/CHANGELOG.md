@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.108.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.107.0...@appland/appmap-v3.108.0) (2023-11-06)
+
+
+### Features
+
+* Report OpenAPI warnings ([2fb737d](https://github.com/getappmap/appmap-js/commit/2fb737d4a447a2b166bde20751042b030d5e80a7))
+* Report OpenAPI warnings ([1698bb0](https://github.com/getappmap/appmap-js/commit/1698bb01957a5bf9718a5f92cd58bd7d71ea8f90))
+
 # [@appland/appmap-v3.107.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.106.0...@appland/appmap-v3.107.0) (2023-11-04)
 
 
