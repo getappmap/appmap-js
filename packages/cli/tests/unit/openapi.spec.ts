@@ -5,13 +5,14 @@ import path from 'path';
 import { fileSizeFilter } from '../../src/lib/fileSizeFilter';
 
 describe('OpenAPI', () => {
-  const malformedHTTPServerRequestDir = 'tests/unit/fixtures/malformedHTTPServerRequest';
+  const missingPathInfoDir = 'tests/unit/fixtures/missingPathInfo';
+  const invalidStatusCode = 'tests/unit/fixtures/invalidStatusCode';
   const rubyDir = 'tests/unit/fixtures/ruby';
 
   beforeAll(async () => verbose(process.env.DEBUG === 'true'));
 
   it('handles valid and malformed HTTP server requests', async () => {
-    const cmd = new openapi.OpenAPICommand(malformedHTTPServerRequestDir);
+    const cmd = new openapi.OpenAPICommand(missingPathInfoDir);
     const [result, numAppMaps] = await cmd.execute();
     assert.deepStrictEqual(result, {
       paths: {
@@ -27,6 +28,73 @@ describe('OpenAPI', () => {
         },
       },
       securitySchemes: {},
+      warnings: {},
+    });
+    assert.deepStrictEqual(numAppMaps, 1);
+  });
+
+  it('handles warnings encountered in processing', async () => {
+    const cmd = new openapi.OpenAPICommand(invalidStatusCode);
+    const [result, numAppMaps] = await cmd.execute();
+    assert.deepStrictEqual(result, {
+      paths: {
+        '/users/{id}': {
+          patch: {
+            responses: {
+              '200': {
+                content: {
+                  'text/html': {},
+                },
+                description: 'OK',
+              },
+            },
+            requestBody: {
+              content: {
+                'application/x-www-form-urlencoded': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      user: {
+                        type: 'object',
+                        properties: {
+                          name: {
+                            type: 'string',
+                          },
+                          email: {
+                            type: 'string',
+                          },
+                          password: {
+                            type: 'string',
+                          },
+                          password_confirmation: {
+                            type: 'string',
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        '/users/{id}/edit': {
+          get: {
+            responses: {
+              '200': {
+                content: {
+                  'text/html': {},
+                },
+                description: 'OK',
+              },
+            },
+          },
+        },
+      },
+      securitySchemes: {},
+      warnings: {
+        'POST /login': ['Invalid HTTP status code: -1'],
+      },
     });
     assert.deepStrictEqual(cmd.errors, []);
     assert.deepStrictEqual(numAppMaps, 1);

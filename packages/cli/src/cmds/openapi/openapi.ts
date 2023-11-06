@@ -1,6 +1,6 @@
 import { join } from 'path';
 
-import { existsSync, openSync, write } from 'fs';
+import { existsSync } from 'fs';
 import { promises as fsp } from 'fs';
 import { readFile } from 'fs/promises';
 import yaml, { load } from 'js-yaml';
@@ -27,6 +27,7 @@ class OpenAPICommand {
   async execute(): Promise<
     [
       {
+        warnings: Record<string, string[]>;
         paths: OpenAPIV3.PathsObject;
         securitySchemes: Record<string, OpenAPIV3.SecuritySchemeObject>;
       },
@@ -67,13 +68,14 @@ class OpenAPICommand {
     await dataStore.closeAll();
 
     const definitionGenerator = new DefinitionGenerator(dataStore);
-    const { paths, securitySchemes } = await definitionGenerator.generate();
+    const { warnings, paths, securitySchemes } = await definitionGenerator.generate();
 
     // Leave the files in place if an error occurs.
     await dataStore.cleanup();
 
     return [
       {
+        warnings,
         paths,
         securitySchemes,
       },
@@ -180,10 +182,19 @@ export default {
     if (overrides) applySchemaOverrides(template.paths, overrides);
     if (template.paths) sortProperties(template.paths);
 
+    let warnings = ['#'];
+    if (Object.keys(openapi.warnings).length) {
+      warnings.push('# OpenAPI generator reported warnings during processing:');
+      for (const [path, messages] of Object.entries(openapi.warnings)) {
+        for (const message of messages) {
+          warnings.push(`#   ${path}: ${message}`);
+        }
+      }
+      warnings.push('#');
+    }
+
     const fileContents = `# This document can be generated with the following command: 
-# npx @appland/appmap@latest openapi
-#
-# NOTE: You will need Node.js installed on your machine to run the above command
+#   appmap openapi
 #
 # Some helpful options:
 #   --output-file        output file name
@@ -191,10 +202,10 @@ export default {
 #   --openapi-version    version field of the OpenAPI document
 #
 # For more info, run:
-# npx @appland/appmap@latest openapi --help
+#   appmap openapi --help
 #
 # Visit our docs: https://appmap.io/docs/openapi.html
-#
+${warnings.join('\n')}
 ${yaml.dump(template)}
 `;
     if (argv.outputFile) {

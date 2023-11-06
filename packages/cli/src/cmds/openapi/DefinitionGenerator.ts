@@ -9,11 +9,14 @@ export default class DefinitionGenerator {
   constructor(public dataStore: DataStore) {}
 
   async generate(): Promise<{
+    warnings: Record<string, string[]>;
     paths: OpenAPIV3.PathsObject;
     securitySchemes: Record<string, OpenAPIV3.SecuritySchemeObject>;
   }> {
     const securitySchemes = new SecuritySchemes();
     const paths: Record<string, OpenAPIV3.PathItemObject> = {};
+    const warnings: Record<string, string[]> = {};
+    const warningStrings = new Set<string>();
 
     for (const requestFileName of this.dataStore.requestFileNames) {
       let requestData: any[];
@@ -37,11 +40,23 @@ export default class DefinitionGenerator {
       for (const [path, pathItem] of Object.entries(openapi)) {
         if (pathItem) paths[path] = pathItem;
       }
-      for (const error of model.errors) {
-        console.warn(`Warning: ${error}`);
+
+      const collectedWarnings = model.collectWarnings();
+      for (const key of Object.keys(collectedWarnings)) {
+        if (!warnings[key]) warnings[key] = [];
+        for (const warning of collectedWarnings[key]) {
+          const warningString = [key, warning].join(':');
+          if (!warningStrings.has(warningString)) {
+            warningStrings.add(warningString);
+
+            console.warn(`OpenAPI warning generating ${key}: ${warning}`);
+            warnings[key].push(warning);
+          }
+        }
       }
     }
     return {
+      warnings,
       paths: Object.keys(paths)
         .sort()
         .reduce((memo, path) => ((memo[path] = paths[path]), memo), {}),

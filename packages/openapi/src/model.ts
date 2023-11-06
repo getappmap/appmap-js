@@ -1,17 +1,27 @@
 import { OpenAPIV3 } from 'openapi-types';
 import Path from './path';
-import { RPCRequest } from './rpcRequest';
+import { RPCRequest, routeId } from './rpcRequest';
+import Warnings from './Warnings';
 
 export default class Model {
   paths: Record<string, Path> = {};
-  errors: string[] = [];
+  warnings = new Warnings();
+
+  collectWarnings(): Record<string, string[]> {
+    const warnings = this.warnings.dup();
+    warnings.merge(Object.values(this.paths));
+    return warnings.warnings;
+  }
 
   openapi(): OpenAPIV3.PathsObject {
     const paths = Object.keys(this.paths)
       .sort()
       .reduce((memo, path) => {
         // eslint-disable-next-line no-param-reassign
-        memo[path] = this.paths[path].openapi();
+        const pathItem = this.paths[path].openapi();
+        if (Object.keys(pathItem).length) {
+          memo[path] = this.paths[path].openapi();
+        }
         return memo;
       }, {} as Record<string, OpenAPIV3.PathItemObject>);
     return paths;
@@ -20,9 +30,7 @@ export default class Model {
   addRpcRequest(rpcRequest: RPCRequest): void {
     const path = Model.basePath(rpcRequest.requestPath);
     if (!path.startsWith('/')) {
-      this.errors.push(
-        `Invalid path '${rpcRequest.requestPath}'. OpenAPI path must start with '/'.`
-      );
+      this.warnings.add(routeId(rpcRequest), `Path must start with '/'`);
       return;
     }
 

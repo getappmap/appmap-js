@@ -89,7 +89,11 @@ describe(FingerprintWatchCommand, () => {
 
       await cmd.execute();
       await verifyIndexSuccess();
+
       await rm(appMapPath);
+      // For good measure. Anything to do with these events just seems to be unreliable.
+      cmd.removed(appMapPath);
+
       return retry({ interval: 100, times: 10 }, async () => {
         try {
           await access(indexPath);
