@@ -1,12 +1,14 @@
+import { OpenAPIV3 } from 'openapi-types';
+import { Event } from '@appland/models';
+
 import Model from './model';
 import SecuritySchemes from './securitySchemes';
 import { headerValue, rpcRequestForEvent } from './rpcRequest';
-import { Event } from '@appland/models';
-import { OpenAPIV3 } from 'openapi-types';
 export { default as parseHTTPServerRequests } from './parseHTTPServerRequests';
 export { classNameToOpenAPIType, verbose } from './util';
 
 interface OpenAPIV3Fragment {
+  warnings: Record<string, string[]>;
   paths: OpenAPIV3.PathItemObject;
   securitySchemes: Record<string, OpenAPIV3.SecuritySchemeObject>;
 }
@@ -25,7 +27,11 @@ const forClientRequest = (event: Event): OpenAPIV3Fragment | undefined => {
   }
   model.addRpcRequest(rpcRequest);
 
-  return { paths: model.openapi(), securitySchemes: securitySchemes.openapi() };
+  return {
+    warnings: model.collectWarnings(),
+    paths: model.openapi(),
+    securitySchemes: securitySchemes.openapi(),
+  };
 };
 
 export { Model, forClientRequest, rpcRequestForEvent, SecuritySchemes };

@@ -1,6 +1,7 @@
 import { OpenAPIV3 } from 'openapi-types';
 import Method from '../src/method';
 import { RPCRequest } from '../src/rpcRequest';
+import Warnings from '../src/Warnings';
 
 describe('Method', () => {
   describe('requestBody', () => {
@@ -57,8 +58,10 @@ describe('Method', () => {
       responses: {},
     };
 
+    let m: Method;
     let request: RPCRequest;
 
+    beforeEach(() => (m = new Method()));
     beforeEach(() => {
       request = {
         requestMethod: OpenAPIV3.HttpMethods.GET,
@@ -79,15 +82,24 @@ describe('Method', () => {
     });
 
     function openapi() {
-      const m = new Method();
       m.addRpcRequest(request);
       return m.openapi();
+    }
+
+    function warnings(): Record<string, string[]> {
+      return m.warnings.warnings;
     }
 
     describe('when missing', () => {
       it('the request is ignored', () => {
         expect(Object.keys(request)).not.toContain('status');
         expect(openapi()).toEqual(emptyResponse);
+        expect(warnings()).toEqual({
+          'GET /foo': ['Missing or undefined HTTP status code'],
+        });
+        expect(Warnings.messages(warnings())).toEqual([
+          'GET /foo: Missing or undefined HTTP status code',
+        ]);
       });
     });
     describe('when undefined', () => {
@@ -95,12 +107,22 @@ describe('Method', () => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         (request as any).status = undefined;
         expect(openapi()).toEqual(emptyResponse);
+        expect(warnings()).toEqual({
+          'GET /foo': ['Missing or undefined HTTP status code'],
+        });
+        expect(Warnings.messages(warnings())).toEqual([
+          'GET /foo: Missing or undefined HTTP status code',
+        ]);
       });
     });
     describe('when invalid', () => {
       it('the request is ignored', () => {
         request.status = -1;
         expect(openapi()).toEqual(emptyResponse);
+        expect(warnings()).toEqual({
+          'GET /foo': ['Invalid HTTP status code: -1'],
+        });
+        expect(Warnings.messages(warnings())).toEqual(['GET /foo: Invalid HTTP status code: -1']);
       });
     });
   });

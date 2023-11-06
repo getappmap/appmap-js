@@ -1,10 +1,10 @@
 import { ParameterObject } from '@appland/models';
 import { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
 import Response from './response';
-import { headerValue, RPCRequest } from './rpcRequest';
+import { headerValue, routeId, RPCRequest } from './rpcRequest';
 import ObjectSchema from './objectSchema';
 import { messageToOpenAPISchema, parseScheme } from './util';
-import { warn } from 'console';
+import Warnings, { WarningProvider } from './Warnings';
 
 const bodyParamMethods = new Set(['options', 'put', 'post', 'patch']);
 
@@ -22,6 +22,11 @@ function openapiIn(rpcRequest: RPCRequest, name: string) {
 export default class Method {
   rpcRequests: RPCRequest[] = [];
   responses: Record<string, Response> = {};
+  warnings = new Warnings();
+
+  get containedWarningProviders(): WarningProvider[] {
+    return Object.values(this.responses);
+  }
 
   get summaries(): string[] {
     return this.rpcRequests
@@ -144,15 +149,14 @@ export default class Method {
     const { status } = request;
 
     const statusError = (): string | undefined => {
-      if (!status) return `Ignoring response with missing or undefined HTTP status`;
+      if (!status) return `Missing or undefined HTTP status code`;
 
-      if (status < 100 || status >= 600)
-        return `Ignoring response with invalid HTTP status: ${status}`;
+      if (status < 100 || status >= 600) return `Invalid HTTP status code: ${status}`;
     };
 
     const error = statusError();
     if (error) {
-      warn(error);
+      this.warnings.add(routeId(request), error);
       return;
     }
 

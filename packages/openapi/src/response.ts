@@ -2,11 +2,17 @@ import StatusCodes from './statusCodes';
 import { OpenAPIV3 } from 'openapi-types';
 import { RPCRequest } from './rpcRequest';
 import SchemaInferrer from './schemaInferrer';
+import Warnings, { WarningProvider } from './Warnings';
 
 export default class Response {
   rpcRequests: RPCRequest[] = [];
+  warnings: Warnings = new Warnings();
 
   constructor(public statusCode: number) {}
+
+  get containedWarningProviders(): WarningProvider[] {
+    return [];
+  }
 
   openapi(): OpenAPIV3.ResponseObject {
     // eslint-disable-next-line arrow-body-style

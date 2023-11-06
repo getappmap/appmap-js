@@ -113,6 +113,10 @@ function isClientEvent(event: Event): event is ClientRpcEvent {
   return !!event.httpClientRequest && !!event.httpClientResponse && !!event.httpClientRequest.url;
 }
 
+export function routeId(request: RPCRequest): string {
+  return [request.requestMethod.toUpperCase(), request.requestPath].join(' ');
+}
+
 export function headerValue(headers: Record<string, string>, name: string): string | undefined {
   const nameLower = name.toLowerCase();
   const key = Object.keys(headers).find((header) => header.toLowerCase() === nameLower);

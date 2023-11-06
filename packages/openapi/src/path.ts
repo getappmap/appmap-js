@@ -1,9 +1,15 @@
 import { OpenAPIV3 } from 'openapi-types';
 import Method from './method';
 import { RPCRequest } from './rpcRequest';
+import Warnings, { WarningProvider } from './Warnings';
 
 export default class Path {
   methods: Record<string, Method> = {};
+  warnings = new Warnings();
+
+  get containedWarningProviders(): WarningProvider[] {
+    return Object.values(this.methods);
+  }
 
   openapi(): OpenAPIV3.PathItemObject {
     return Object.keys(this.methods)

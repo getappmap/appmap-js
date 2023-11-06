@@ -181,9 +181,7 @@ export default {
     if (template.paths) sortProperties(template.paths);
 
     const fileContents = `# This document can be generated with the following command: 
-# npx @appland/appmap@latest openapi
-#
-# NOTE: You will need Node.js installed on your machine to run the above command
+#   appmap openapi
 #
 # Some helpful options:
 #   --output-file        output file name
@@ -191,7 +189,7 @@ export default {
 #   --openapi-version    version field of the OpenAPI document
 #
 # For more info, run:
-# npx @appland/appmap@latest openapi --help
+#   appmap openapi --help
 #
 # Visit our docs: https://appmap.io/docs/openapi.html
 #
