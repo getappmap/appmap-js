@@ -1,3 +1,10 @@
+# [@appland/sequence-diagram-v1.10.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.9.0...@appland/sequence-diagram-v1.10.0) (2023-11-07)
+
+
+### Features
+
+* Update @appland/openapi to 1.7.0 ([1718173](https://github.com/getappmap/appmap-js/commit/17181733221e46a371266b6b3d9c18966b4db099))
+
 # [@appland/sequence-diagram-v1.9.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.8.1...@appland/sequence-diagram-v1.9.0) (2023-10-16)
 
 
