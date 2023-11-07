@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.109.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.108.0...@appland/appmap-v3.109.0) (2023-11-07)
+
+
+### Features
+
+* Update @appland/openapi to 1.7.0 ([1718173](https://github.com/getappmap/appmap-js/commit/17181733221e46a371266b6b3d9c18966b4db099))
+
 # [@appland/appmap-v3.108.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.107.0...@appland/appmap-v3.108.0) (2023-11-06)
 
 
