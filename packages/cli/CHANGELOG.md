@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.110.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.109.0...@appland/appmap-v3.110.0) (2023-11-08)
+
+
+### Features
+
+* Provide compare report warnings ([370bc2b](https://github.com/getappmap/appmap-js/commit/370bc2bf331512ead0dfbd82b633f8926a57fc45))
+
 # [@appland/appmap-v3.109.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.108.0...@appland/appmap-v3.109.0) (2023-11-07)
 
 
