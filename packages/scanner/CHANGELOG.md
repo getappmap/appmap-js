@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.84.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.84.0...@appland/scanner-v1.84.1) (2023-11-08)
+
+
+### Bug Fixes
+
+* Catch and report errors that occur in the matcher function ([b558170](https://github.com/getappmap/appmap-js/commit/b558170aa49c3b874c5b46f504a1db1a0120bacb))
+
 # [@appland/scanner-v1.84.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.83.1...@appland/scanner-v1.84.0) (2023-11-07)
 
 
