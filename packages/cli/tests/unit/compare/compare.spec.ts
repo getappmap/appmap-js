@@ -102,4 +102,26 @@ describe('compare command', () => {
       assert.deepStrictEqual(actualReport, expectedReport);
     });
   });
+  describe('when an OpenAPI document is invalid', () => {
+    const scenarioName = 'invalid-openapi';
+    const [baseRevision, headRevision] = scenarioName.split('-');
+
+    it('a warning is reported', async () => {
+      mockBaseAndHeadAppMaps(scenarioName);
+
+      const expectedReport = JSON.parse(readFileSync(changeReportFile(scenarioName), 'utf-8'));
+      await handler({
+        directory: projectDir,
+        baseRevision,
+        headRevision,
+        sourceDir: '.',
+        deleteUnreferenced: true,
+        reportRemoved: true,
+        clobberOutputDir: false,
+      });
+      assert(existsSync(changeReportFile(scenarioName)));
+      const actualReport = JSON.parse(readFileSync(changeReportFile(scenarioName), 'utf-8'));
+      assert.deepStrictEqual(actualReport, expectedReport);
+    });
+  });
 });

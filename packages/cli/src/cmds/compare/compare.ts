@@ -105,16 +105,19 @@ export const handler = async (argv: any) => {
     const changeAnalysis = await analyzeChanges(outputDir, srcDir, baseRevision, headRevision);
     const report = await reportChanges(changeAnalysis, options);
 
-    // const changeReporter = new ChangeReporter(baseRevision, headRevision, outputDir, srcDir);
-    // await changeReporter.initialize();
-
-    // const report = await changeReporter.report(options);
-
     if (deleteUnreferenced) {
       const isPathReferenced = (revisionName: RevisionName, appmap: string): boolean =>
         changeAnalysis.referencedAppMaps.test(revisionName, appmap);
 
       await deleteUnreferencedAppMaps(changeAnalysis.paths, isPathReferenced);
+    }
+
+    if (report.warnings) {
+      for (const [key, messages] of Object.entries(report.warnings)) {
+        for (const message of messages) {
+          console.warn(`Warning (${key}): ${message}`);
+        }
+      }
     }
 
     await writeFile(join(outputDir, 'change-report.json'), JSON.stringify(report, null, 2));

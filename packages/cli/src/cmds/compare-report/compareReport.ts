@@ -3,7 +3,7 @@ import yargs from 'yargs';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { verbose } from '../../utils';
 import { ChangeReport } from '../compare/ChangeReport';
-import MarkdownReport, { SECTIONS, EXPERIMENTAL_SECTIONS } from './MarkdownReport';
+import ChangeReporter, { SECTIONS, EXPERIMENTAL_SECTIONS } from './ChangeReporter';
 
 export const command = 'compare-report <report-directory>';
 export const describe =
@@ -64,7 +64,7 @@ export const handler = async (argv: any) => {
   };
 
   const report = JSON.parse(await readFile('change-report.json', 'utf-8')) as ChangeReport;
-  const mdReport = new MarkdownReport(appmapUrl, sourceUrl);
+  const mdReport = new ChangeReporter(appmapUrl, sourceUrl);
   if (includeSections) mdReport.includeSections = makeArray(includeSections);
   if (excludeSections) mdReport.excludeSections = makeArray(excludeSections);
 

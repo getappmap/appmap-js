@@ -1,7 +1,7 @@
 import { Event, EventNavigator } from '@appland/models';
 import Check from './check';
 import { AbortError } from './errors';
-import { AppMapIndex } from './types';
+import { AppMapIndex, MatchResult } from './types';
 import { Finding } from './index';
 import { fileExists, verbose } from './rules/lib/util';
 import ScopeIterator from './scope/scopeIterator';
@@ -281,11 +281,17 @@ export default class RuleChecker {
     };
 
     if (this.progress) await this.progress.matchEvent(event, appMapIndex);
-    const matchResult = await checkInstance.ruleLogic.matcher(
-      event,
-      appMapIndex,
-      checkInstance.filterEvent.bind(checkInstance)
-    );
+    let matchResult: string | boolean | MatchResult[] | undefined;
+    try {
+      matchResult = await checkInstance.ruleLogic.matcher(
+        event,
+        appMapIndex,
+        checkInstance.filterEvent.bind(checkInstance)
+      );
+    } catch (e) {
+      warn(e);
+    }
+
     if (this.progress) await this.progress.matchResult(event, matchResult);
     const numFindings = findings.length;
     if (matchResult === true) {
