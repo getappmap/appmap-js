@@ -1,11 +1,5 @@
 import { queue } from 'async';
-import {
-  DiffOutcomeFailure,
-  DiffOutcomeSuccess,
-  DiffResult,
-  DiffResultType,
-  default as openapiDiff,
-} from 'openapi-diff';
+import OpenApiDiff, { default as openapiDiff } from 'openapi-diff';
 import { mkdir, readFile, writeFile } from 'fs/promises';
 import { dirname, join, relative } from 'path';
 
@@ -24,6 +18,7 @@ import { warn } from 'console';
 import { exists } from '../../utils';
 
 export default class ReportFieldCalculator {
+  warnings: Record<string, string[]> = {};
   sourceDiff: SourceDiff;
 
   constructor(public changeAnalysis: ChangeAnalysis) {
@@ -101,31 +96,40 @@ export default class ReportFieldCalculator {
     const headDefinitions = await readOpenAPI(RevisionName.Head);
     if (!baseDefinitions || !headDefinitions) return;
 
-    let apiDiff: openapiDiff.DiffOutcome;
+    let apiDiff: openapiDiff.DiffOutcome | undefined;
     {
-      const result = await openapiDiff.diffSpecs({
-        sourceSpec: {
-          content: baseDefinitions,
-          location: 'base',
-          format: 'openapi3',
-        },
-        destinationSpec: {
-          content: headDefinitions,
-          location: 'head',
-          format: 'openapi3',
-        },
-      });
-
-      if (!reportRemoved && result.breakingDifferencesFound) {
-        const diffOutcomeFailure = result as any;
-        diffOutcomeFailure.breakingDifferencesFound = false;
-        delete diffOutcomeFailure['breakingDifferences'];
+      let diffResult: OpenApiDiff.DiffOutcome | undefined;
+      try {
+        diffResult = await openapiDiff.diffSpecs({
+          sourceSpec: {
+            content: baseDefinitions,
+            location: 'base',
+            format: 'openapi3',
+          },
+          destinationSpec: {
+            content: headDefinitions,
+            location: 'head',
+            format: 'openapi3',
+          },
+        });
+      } catch (e) {
+        const message = e instanceof Error ? e.message : `${e}`;
+        if (!this.warnings['apiDiff']) this.warnings['apiDiff'] = [];
+        this.warnings['apiDiff'].push(`Error comparing OpenAPI definitions: ${message}`);
       }
 
-      if (result.breakingDifferencesFound) {
-        console.log('Breaking change found!');
+      if (diffResult) {
+        if (!reportRemoved && diffResult.breakingDifferencesFound) {
+          const diffOutcomeFailure = diffResult as any;
+          diffOutcomeFailure.breakingDifferencesFound = false;
+          delete diffOutcomeFailure['breakingDifferences'];
+        }
+
+        if (diffResult.breakingDifferencesFound) {
+          console.log('Breaking change found!');
+        }
+        apiDiff = diffResult;
       }
-      apiDiff = result;
     }
     return apiDiff;
   }

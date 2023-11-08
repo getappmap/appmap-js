@@ -1,0 +1,63 @@
+{
+  "versions": {
+    "archive": "1.3.0",
+    "index": "1.2.0"
+  },
+  "workingDirectory": "/home/runner/work/sample_app_6th_ed/sample_app_6th_ed",
+  "appMapDir": "tmp/appmap",
+  "commandArguments": {
+    "_": [
+      "archive"
+    ],
+    "revision": "9745c3074776f1c102f193eec2a80ed7153a1412",
+    "r": "9745c3074776f1c102f193eec2a80ed7153a1412",
+    "type": "auto",
+    "t": "auto",
+    "analyze": true,
+    "index": true,
+    "max-size": 50,
+    "maxSize": 50,
+    "$0": "/usr/local/bin/appmap"
+  },
+  "revision": "9745c3074776f1c102f193eec2a80ed7153a1412",
+  "timestamp": "1694307741396",
+  "failedTests": [],
+  "oversizedAppMaps": [],
+  "config": {
+    "name": "sample_app_6th_ed",
+    "language": "ruby",
+    "appmap_dir": "tmp/appmap",
+    "packages": [
+      {
+        "path": "app"
+      },
+      {
+        "path": "lib"
+      }
+    ],
+    "compare": {
+      "filter": {
+        "hideExternal": true,
+        "dependencyFolders": [
+          "vendor"
+        ],
+        "hideName": [
+          "/^external-route:.*\\bhttp:\\/\\/127\\.0\\.0\\.1:\\d+\\/session\\/[a-f0-9]{32,}\\//",
+          "/^query:[\\s\\S]*\\bSAVEPOINT\\b/",
+          "/^query:[\\s\\S]*\\bPRAGMA\\b/,",
+          "/^query:[\\s\\S]*\\bsqlite_master\\b/"
+        ]
+      }
+    },
+    "update": {
+      "test_folders": [
+        "test"
+      ],
+      "test_commands": {
+        "test": [
+          "env DISABLE_SPRING=true rails test {testFiles}"
+        ]
+      }
+    }
+  }
+}

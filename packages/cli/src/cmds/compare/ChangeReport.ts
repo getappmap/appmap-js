@@ -50,4 +50,5 @@ export type ChangeReport = {
     head: Record<AppMapName, Metadata>;
   };
   sequenceDiagramDiff: Record<string, AppMapLink[]>;
+  warnings?: Record<string, string[]>;
 };
