@@ -22,10 +22,27 @@
             ref="toggleButton"
           ></component>
           <div class="dropdown" v-if="showDropdown" ref="dropdown">
-            <a @click="sortBy('Name')">Name</a>
-            <a @click="sortBy('Execution order')">Execution order</a>
-            <a @click="sortBy('Occurrences')">Occurrences</a>
-            <a @click="sortBy('Elapsed time')">Elapsed time</a>
+            <a @click="sortBy('Name')" :class="[selectedSortCriteria === 'Name' ? 'active' : '']">
+              Name
+            </a>
+            <a
+              @click="sortBy('Execution order')"
+              :class="[selectedSortCriteria === 'Execution order' ? 'active' : '']"
+            >
+              Execution order
+            </a>
+            <a
+              @click="sortBy('Occurrences')"
+              :class="[selectedSortCriteria === 'Occurrences' ? 'active' : '']"
+            >
+              Occurrences
+            </a>
+            <a
+              @click="sortBy('Elapsed time')"
+              :class="[selectedSortCriteria === 'Elapsed time' ? 'active' : '']"
+            >
+              Elapsed time
+            </a>
           </div>
         </div>
       </div>
@@ -511,41 +528,19 @@ export default {
       }
     }
   }
-  .control-button {
-    border: none;
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25rem;
-    background: transparent;
-    color: $lightgray2;
-    font: inherit;
-    font-family: $appland-text-font-family;
-    font-size: 0.75rem;
-    outline: none;
-    appearance: none;
+
+  &__sort-button {
     cursor: pointer;
-    transition: color 0.3s ease-in;
-
-    &:hover,
-    &:active {
-      color: $gray5;
-      transition-timing-function: ease-out;
-    }
-
-    &__icon {
-      width: 16px;
-      height: 14px;
-      fill: currentColor;
-    }
   }
 
   .dropdown {
     position: absolute;
     background-color: $gray2;
     z-index: 1;
-    width: 120px;
+    width: 155px;
     right: 0;
     left: auto;
+    padding: 3px;
   }
 
   .dropdown a {
@@ -554,10 +549,24 @@ export default {
     text-decoration: none;
     display: block;
     font-size: 0.85em;
+    cursor: pointer;
+    margin-left: 1rem;
+
+    &.active {
+      font-weight: 900;
+      color: $gray5;
+
+      &::before {
+        content: '»';
+        position: absolute;
+        margin-left: -1rem;
+      }
+    }
   }
 
   .dropdown a:hover {
-    background-color: $light-purple;
+    color: $light-purple;
+    transition: 0.2s ease-in-out all;
   }
 }
 </style>
