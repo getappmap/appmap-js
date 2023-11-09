@@ -136,11 +136,23 @@ describe('appMapFilter', () => {
       }
     });
 
-    it('is a nop if there are no HTTP server requests in the AppMap', () => {
+    it('recognizes ROOT_EVENT_LABELS', () => {
+      const augmentedModelData = { ...modelData };
+      const validateFunction = augmentedModelData.classMap[0].children[0].children[0].children[1];
+      expect(validateFunction.name).toEqual('validate');
+      validateFunction.labels = ['job.perform'];
+      const augmentedModelAppMap = buildAppMap().source(augmentedModelData).build();
+      filter.declutter.limitRootEvents.on = true;
+      const filteredAppMap = filter.filter(augmentedModelAppMap);
+      expect(filteredAppMap.events.length).toEqual(8);
+    });
+
+    it('is a nop if there are no "commands" in the AppMap', () => {
       const eventCount = modelAppMap.events.length;
+      expect(eventCount).toEqual(10);
       filter.declutter.limitRootEvents.on = true;
       const filteredAppMap = filter.filter(modelAppMap);
-      expect(filteredAppMap.events.length).toEqual(eventCount);
+      expect(filteredAppMap.events.length).toEqual(10);
     });
   });
 });
