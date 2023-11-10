@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.111.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.110.0...@appland/appmap-v3.111.0) (2023-11-10)
+
+
+### Features
+
+* Update sequence diagram import from @appland/components ([c0f6e0b](https://github.com/getappmap/appmap-js/commit/c0f6e0bd31d323c23f86ef3cf5e426f9da30744b))
+
 # [@appland/appmap-v3.110.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.109.0...@appland/appmap-v3.110.0) (2023-11-08)
 
 
