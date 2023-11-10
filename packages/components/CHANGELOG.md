@@ -1,3 +1,10 @@
+# [@appland/components-v3.12.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.11.0...@appland/components-v3.12.0) (2023-11-10)
+
+
+### Features
+
+* Export sequence diagram with the store ([15f64a2](https://github.com/getappmap/appmap-js/commit/15f64a2ddd5197530baf4cac248de7aad7c832b6))
+
 # [@appland/components-v3.11.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.10.0...@appland/components-v3.11.0) (2023-10-30)
 
 
