@@ -511,5 +511,97 @@ context('AppMap sidebar', () => {
           });
       });
     });
+
+    it('check if all items are sorted by execution order ascending', () => {
+      cy.get('.details-search__sort-button svg').should('have.class', 'bi-sort-down');
+
+      cy.get('.details-search__sort-button').click();
+      cy.get('.details-search__sort-button').contains('Execution order').click();
+      cy.get('.details-search__sort-button svg').should('have.class', 'bi-sort-up-alt');
+
+      cy.get('ul.details-search__block-list').each(($ul) => {
+        cy.wrap($ul)
+          .find('li')
+          .then(($li) => {
+            const executionOrders = $li.toArray().map((el) => parseInt(el.dataset.executionOrder));
+            const isSortedAsc = executionOrders.every((item, idx, array) => {
+              return idx === 0 || item >= array[idx - 1];
+            });
+
+            expect(isSortedAsc).to.be.true;
+          });
+      });
+    });
+
+    it('check if all items are sorted by execution order descending', () => {
+      cy.get('.details-search__sort-button svg').should('have.class', 'bi-sort-down');
+
+      cy.get('.details-search__sort-button').click();
+      cy.get('.details-search__sort-button .dropdown a').contains('Execution order').click();
+      cy.get('.details-search__sort-button svg').should('have.class', 'bi-sort-up-alt');
+
+      cy.get('.details-search__sort-button').click();
+      cy.get('.details-search__sort-button .dropdown a').contains('Execution order').click();
+      cy.get('.details-search__sort-button svg').should('have.class', 'bi-sort-down');
+
+      cy.get('ul.details-search__block-list').each(($ul) => {
+        cy.wrap($ul)
+          .find('li')
+          .then(($li) => {
+            const executionOrders = $li.toArray().map((el) => parseInt(el.dataset.executionOrder));
+            const isSortedDesc = executionOrders.every((item, idx, array) => {
+              return idx === 0 || item <= array[idx - 1];
+            });
+
+            expect(isSortedDesc).to.be.true;
+          });
+      });
+    });
+
+    it('check if all items are sorted by elapsed time ascending', () => {
+      cy.get('.details-search__sort-button svg').should('have.class', 'bi-sort-down');
+
+      cy.get('.details-search__sort-button').click();
+      cy.get('.details-search__sort-button').contains('Elapsed time').click();
+      cy.get('.details-search__sort-button svg').should('have.class', 'bi-sort-up-alt');
+
+      cy.get('ul.details-search__block-list').each(($ul) => {
+        cy.wrap($ul)
+          .find('li')
+          .then(($li) => {
+            const elapsedTimes = $li.toArray().map((el) => parseFloat(el.dataset.elapsedTime));
+            const isSortedAsc = elapsedTimes.every((item, idx, array) => {
+              return idx === 0 || item >= array[idx - 1];
+            });
+
+            expect(isSortedAsc).to.be.true;
+          });
+      });
+    });
+
+    it('check if all items are sorted by elapsed time descending', () => {
+      cy.get('.details-search__sort-button svg').should('have.class', 'bi-sort-down');
+
+      cy.get('.details-search__sort-button').click();
+      cy.get('.details-search__sort-button .dropdown a').contains('Elapsed time').click();
+      cy.get('.details-search__sort-button svg').should('have.class', 'bi-sort-up-alt');
+
+      cy.get('.details-search__sort-button').click();
+      cy.get('.details-search__sort-button .dropdown a').contains('Elapsed time').click();
+      cy.get('.details-search__sort-button svg').should('have.class', 'bi-sort-down');
+
+      cy.get('ul.details-search__block-list').each(($ul) => {
+        cy.wrap($ul)
+          .find('li')
+          .then(($li) => {
+            const elapsedTimes = $li.toArray().map((el) => parseFloat(el.dataset.elapsedTime));
+            const isSortedDesc = elapsedTimes.every((item, idx, array) => {
+              return idx === 0 || item <= array[idx - 1];
+            });
+
+            expect(isSortedDesc).to.be.true;
+          });
+      });
+    });
   });
 });

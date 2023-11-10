@@ -61,6 +61,8 @@
           v-for="(item, index) in listItems[type].data"
           :key="index"
           @click="selectObject(type, item.object)"
+          :data-execution-order="getExecutionOrder(item)"
+          :data-elapsed-time="getElapsedTime(item)"
         >
           {{
             type !== 'query' && item.object.prettyName
@@ -337,6 +339,20 @@ export default {
         this.sortAscending = false;
       }
       this.showDropdown = false;
+    },
+    getExecutionOrder(item) {
+      return item.object instanceof CodeObject &&
+        item.object.events &&
+        item.object.events.length > 0
+        ? item.object.events[0].id
+        : 0; // Return a default value if it doesn't exist
+    },
+    getElapsedTime(item) {
+      return item.object instanceof CodeObject &&
+        item.object.events &&
+        item.object.events.length > 0
+        ? item.object.events[0].elapsedTime
+        : 0; // Return a default value if it doesn't exist
     },
   },
 };
