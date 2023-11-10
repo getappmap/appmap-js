@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import plugin, { VDiagramSequence } from '@appland/components';
+import plugin, { VSequenceDiagram } from '@appland/components';
 
 import '@appland/diagrams/dist/style.css';
 
@@ -16,7 +16,7 @@ async function initializeApp() {
   return new Vue({
     el: '#app',
     render: (h) =>
-      h(VDiagramSequence, {
+      h(VSequenceDiagram, {
         ref: 'ui',
         props: {
           interactive: false,
