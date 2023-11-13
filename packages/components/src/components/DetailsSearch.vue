@@ -14,6 +14,37 @@
           v-model="filter"
           @focus="searchFocused"
         />
+        <div class="details-search__sort-button">
+          <component
+            :is="sortAscending ? 'SortDownIcon' : 'SortUpIcon'"
+            class="control-button__icon"
+            @click="toggleDropdown"
+            ref="toggleButton"
+          ></component>
+          <div class="dropdown" v-if="showDropdown" ref="dropdown">
+            <a @click="sortBy('Name')" :class="[selectedSortCriteria === 'Name' ? 'active' : '']">
+              Name
+            </a>
+            <a
+              @click="sortBy('Execution order')"
+              :class="[selectedSortCriteria === 'Execution order' ? 'active' : '']"
+            >
+              Execution order
+            </a>
+            <a
+              @click="sortBy('Occurrences')"
+              :class="[selectedSortCriteria === 'Occurrences' ? 'active' : '']"
+            >
+              Occurrences
+            </a>
+            <a
+              @click="sortBy('Elapsed time')"
+              :class="[selectedSortCriteria === 'Elapsed time' ? 'active' : '']"
+            >
+              Elapsed time
+            </a>
+          </div>
+        </div>
       </div>
     </form>
     <section
@@ -30,12 +61,10 @@
           v-for="(item, index) in listItems[type].data"
           :key="index"
           @click="selectObject(type, item.object)"
+          :data-execution-order="getExecutionOrder(item)"
+          :data-elapsed-time="getElapsedTime(item)"
         >
-          {{
-            type !== 'query' && item.object.prettyName
-              ? item.object.prettyName
-              : item.object.name || item.object
-          }}
+          {{ getName(item, type) }}
           <span v-if="item.childrenCount > 1" class="details-search__block-item-count">
             {{ item.childrenCount }}
           </span>
@@ -50,12 +79,16 @@ import { CodeObject, AppMap, CodeObjectType } from '@appland/models';
 import SearchIcon from '@/assets/search.svg';
 import toListItem from '@/lib/finding';
 import { SELECT_CODE_OBJECT, SELECT_LABEL } from '../store/vsCode';
+import SortDownIcon from '@/assets/sort-down.svg';
+import SortUpIcon from '@/assets/sort-up.svg';
 
 export default {
   name: 'v-details-search',
 
   components: {
     SearchIcon,
+    SortDownIcon,
+    SortUpIcon,
   },
 
   props: {
@@ -69,7 +102,14 @@ export default {
   data() {
     return {
       filter: '',
+      selectedSortCriteria: 'Name',
+      sortAscending: true,
+      showDropdown: false,
     };
+  },
+
+  beforeDestroy() {
+    document.removeEventListener('click', this.closeDropdownWhenClickedOutside);
   },
 
   computed: {
@@ -173,13 +213,36 @@ export default {
           delete items[key];
           return;
         }
-        item.data = item.data.sort((a, b) => {
-          const aStr = a.object instanceof CodeObject ? a.object.prettyName : String(a.object);
-          const bStr = b.object instanceof CodeObject ? b.object.prettyName : String(b.object);
-          return aStr.localeCompare(bStr);
-        });
-      });
 
+        const multiplier = this.sortAscending ? 1 : -1;
+
+        switch (this.selectedSortCriteria) {
+          case 'Name':
+            item.data = item.data.sort(
+              (a, b) => this.getName(a, key).localeCompare(this.getName(b, key)) * multiplier
+            );
+            break;
+          case 'Execution order':
+            item.data = item.data.sort(
+              (a, b) => (this.getExecutionOrder(b) - this.getExecutionOrder(a)) * multiplier
+            );
+            break;
+          case 'Occurrences':
+            item.data = item.data.sort((a, b) => {
+              const aCount = a.childrenCount || 0;
+              const bCount = b.childrenCount || 0;
+              return (bCount - aCount) * multiplier;
+            });
+            break;
+          case 'Elapsed time':
+            item.data = item.data.sort(
+              (a, b) => (this.getElapsedTime(b) - this.getElapsedTime(a)) * multiplier
+            );
+            break;
+          default:
+            break;
+        }
+      });
       return items;
     },
 
@@ -229,6 +292,52 @@ export default {
 
     searchFocused() {
       this.$root.$emit('sidebarSearchFocused');
+    },
+    toggleDropdown() {
+      this.showDropdown = !this.showDropdown;
+
+      if (this.showDropdown) {
+        // Add the event listener if the dropdown is open.
+        document.addEventListener('click', this.closeDropdownWhenClickedOutside);
+      } else {
+        // Remove the event listener if the dropdown is closed.
+        document.removeEventListener('click', this.closeDropdownWhenClickedOutside);
+      }
+    },
+    closeDropdownWhenClickedOutside(event) {
+      // Check if the click was outside the dropdown or the toggle button.
+      if (
+        this.$refs.dropdown &&
+        !this.$refs.dropdown.contains(event.target) &&
+        !this.$refs.toggleButton.contains(event.target)
+      ) {
+        this.showDropdown = false;
+        document.removeEventListener('click', this.closeDropdownWhenClickedOutside);
+      }
+    },
+    sortBy(criteria) {
+      if (this.selectedSortCriteria === criteria) {
+        this.sortAscending = !this.sortAscending;
+      } else {
+        this.selectedSortCriteria = criteria;
+        this.sortAscending = false;
+      }
+      this.showDropdown = false;
+    },
+    getExecutionOrder(item) {
+      return item?.object instanceof CodeObject && item.object?.events?.length > 0
+        ? item.object.events[0]?.id
+        : 0; // Return a default value if it doesn't exist
+    },
+    getElapsedTime(item) {
+      return item?.object instanceof CodeObject && item.object?.events?.length > 0
+        ? item.object.events[0]?.elapsedTime
+        : 0; // Return a default value if it doesn't exist
+    },
+    getName(item, key) {
+      return key !== 'query' && item.object?.prettyName
+        ? item.object.prettyName
+        : item.object?.name || String(item.object);
     },
   },
 };
@@ -419,6 +528,46 @@ export default {
         }
       }
     }
+  }
+
+  &__sort-button {
+    cursor: pointer;
+  }
+
+  .dropdown {
+    position: absolute;
+    background-color: $gray2;
+    z-index: 1;
+    width: 155px;
+    right: 0;
+    left: auto;
+    padding: 3px;
+  }
+
+  .dropdown a {
+    color: $gray6;
+    padding: 8px 12px;
+    text-decoration: none;
+    display: block;
+    font-size: 0.85em;
+    cursor: pointer;
+    margin-left: 1rem;
+
+    &.active {
+      font-weight: 900;
+      color: $gray5;
+
+      &::before {
+        content: '»';
+        position: absolute;
+        margin-left: -1rem;
+      }
+    }
+  }
+
+  .dropdown a:hover {
+    color: $light-purple;
+    transition: 0.2s ease-in-out all;
   }
 }
 </style>
