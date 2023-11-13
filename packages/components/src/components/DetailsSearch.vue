@@ -64,11 +64,7 @@
           :data-execution-order="getExecutionOrder(item)"
           :data-elapsed-time="getElapsedTime(item)"
         >
-          {{
-            type !== 'query' && item.object.prettyName
-              ? item.object.prettyName
-              : item.object.name || item.object
-          }}
+          {{ getName(item, type) }}
           <span v-if="item.childrenCount > 1" class="details-search__block-item-count">
             {{ item.childrenCount }}
           </span>
@@ -222,24 +218,14 @@ export default {
 
         switch (this.selectedSortCriteria) {
           case 'Name':
-            item.data = item.data.sort((a, b) => {
-              const aStr =
-                a.object instanceof CodeObject && key !== 'query'
-                  ? a.object.prettyName
-                  : a.object.name || String(a.object);
-              const bStr =
-                b.object instanceof CodeObject && key !== 'query'
-                  ? b.object.prettyName
-                  : b.object.name || String(b.object);
-              return aStr.localeCompare(bStr) * multiplier;
-            });
+            item.data = item.data.sort(
+              (a, b) => this.getName(a, key).localeCompare(this.getName(b, key)) * multiplier
+            );
             break;
           case 'Execution order':
-            item.data = item.data.sort((a, b) => {
-              const aCount = a.object instanceof CodeObject ? a.object.events?.[0]?.id : 0;
-              const bCount = b.object instanceof CodeObject ? b.object.events?.[0]?.id : 0;
-              return (bCount - aCount) * multiplier;
-            });
+            item.data = item.data.sort(
+              (a, b) => (this.getExecutionOrder(b) - this.getExecutionOrder(a)) * multiplier
+            );
             break;
           case 'Occurrences':
             item.data = item.data.sort((a, b) => {
@@ -249,11 +235,9 @@ export default {
             });
             break;
           case 'Elapsed time':
-            item.data = item.data.sort((a, b) => {
-              const aCount = a.object instanceof CodeObject ? a.object.events?.[0]?.elapsedTime : 0;
-              const bCount = b.object instanceof CodeObject ? b.object.events?.[0]?.elapsedTime : 0;
-              return (bCount - aCount) * multiplier;
-            });
+            item.data = item.data.sort(
+              (a, b) => (this.getElapsedTime(b) - this.getElapsedTime(a)) * multiplier
+            );
             break;
           default:
             break;
@@ -341,18 +325,19 @@ export default {
       this.showDropdown = false;
     },
     getExecutionOrder(item) {
-      return item.object instanceof CodeObject &&
-        item.object.events &&
-        item.object.events.length > 0
-        ? item.object.events[0].id
+      return item?.object instanceof CodeObject && item.object?.events?.length > 0
+        ? item.object.events[0]?.id
         : 0; // Return a default value if it doesn't exist
     },
     getElapsedTime(item) {
-      return item.object instanceof CodeObject &&
-        item.object.events &&
-        item.object.events.length > 0
-        ? item.object.events[0].elapsedTime
+      return item?.object instanceof CodeObject && item.object?.events?.length > 0
+        ? item.object.events[0]?.elapsedTime
         : 0; // Return a default value if it doesn't exist
+    },
+    getName(item, key) {
+      return key !== 'query' && item.object?.prettyName
+        ? item.object.prettyName
+        : item.object?.name || String(item.object);
     },
   },
 };
