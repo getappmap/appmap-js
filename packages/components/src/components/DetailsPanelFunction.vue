@@ -2,6 +2,7 @@
   <div>
     <v-details-panel-header object-type="Function" :object="object" :title="object.name">
     </v-details-panel-header>
+    <v-details-panel-context :object="object" />
     <v-details-panel-filters :object="object" :is-root-object="isRootObject" />
     <v-details-panel-list title="Events" :items="object.events" :event-quickview="true" />
     <v-details-panel-list title="Inbound Calls" :items="object.inboundConnections" />
@@ -14,6 +15,7 @@
 import { CodeObjectType } from '@appland/models';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelFilters from '@/components/DetailsPanelFilters.vue';
+import VDetailsPanelContext from '@/components/DetailsPanelContext.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 
 export default {
@@ -21,6 +23,7 @@ export default {
   components: {
     VDetailsPanelList,
     VDetailsPanelFilters,
+    VDetailsPanelContext,
     VDetailsPanelHeader,
   },
   props: {

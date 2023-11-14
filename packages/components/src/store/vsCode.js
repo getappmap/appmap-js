@@ -22,6 +22,7 @@ export const VIEW_COMPONENT = 'viewComponent';
 export const VIEW_SEQUENCE = 'viewSequence';
 export const VIEW_FLOW = 'viewFlow';
 export const VIEW_FLAMEGRAPH = 'viewFlamegraph';
+export const VIEW_AI = 'viewAI';
 export const ADD_EXPANDED_PACKAGE = 'addExpandedPackage';
 export const REMOVE_EXPANDED_PACKAGE = 'removeExpandedPackage';
 export const SET_EXPANDED_PACKAGES = 'setExpandedPackage';
@@ -34,6 +35,8 @@ export const ADD_ROOT_OBJECT = 'addRootObject';
 export const REMOVE_ROOT_OBJECT = 'removeRootObject';
 export const ADD_HIDDEN_NAME = 'addHiddenName';
 export const REMOVE_HIDDEN_NAME = 'removeHiddenName';
+export const TOGGLE_AI_CONTEXT = 'toggleAIContext';
+export const RESET_AI_CONTEXT = 'resetAIContext';
 export const SET_SAVED_FILTERS = 'setSavedFilters';
 export const SET_SELECTED_SAVED_FILTER = 'setselectedSavedFilter';
 export const SET_HIGHLIGHTED_EVENTS = 'setHighlightedEvents';
@@ -70,6 +73,7 @@ export function buildStore() {
       defaultFilter: null,
       highlightedEvents: [],
       collapsedActionState: [],
+      aiContext: [],
     },
 
     getters: {
@@ -202,8 +206,8 @@ export function buildStore() {
         state.filters.rootObjects.splice(index, 1);
       },
 
-      [ADD_HIDDEN_NAME](state, nameToRemove) {
-        const objectName = nameToRemove.trim();
+      [ADD_HIDDEN_NAME](state, nameToAdd) {
+        const objectName = nameToAdd.trim();
         if (!objectName || state.filters.declutter.hideName.names.includes(objectName)) return;
 
         state.filters.declutter.hideName.names.push(objectName);
@@ -212,6 +216,16 @@ export function buildStore() {
 
       [REMOVE_HIDDEN_NAME](state, index) {
         state.filters.declutter.hideName.names.splice(index, 1);
+      },
+
+      [TOGGLE_AI_CONTEXT](state, codeObject) {
+        if (state.aiContext.includes(codeObject))
+          state.aiContext = state.aiContext.filter((obj) => obj !== codeObject);
+        else state.aiContext.push(codeObject);
+      },
+
+      [RESET_AI_CONTEXT](state) {
+        state.aiContext = [];
       },
 
       [SET_SAVED_FILTERS](state, savedFilters) {

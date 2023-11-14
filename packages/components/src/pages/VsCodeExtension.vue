@@ -126,6 +126,16 @@
           />
         </v-tab>
 
+        <v-tab
+          name="AI"
+          :is-active="isViewingAI"
+          :ref="VIEW_AI"
+          :tabName="VIEW_AI"
+          :allow-scroll="false"
+        >
+          <VDiagramAI ref="viewChat_diagram" />
+        </v-tab>
+
         <template v-slot:notification>
           <v-notification
             v-if="version"
@@ -377,6 +387,7 @@ import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramSequence from '../components/DiagramSequence.vue';
 import VDiagramFlamegraph from '../components/DiagramFlamegraph.vue';
 import VDiagramTrace from '../components/DiagramTrace.vue';
+import VDiagramAI from '../components/DiagramAI.vue';
 import VDownloadSequenceDiagram from '../components/sequence/DownloadSequenceDiagram.vue';
 import VFilterMenu from '../components/FilterMenu.vue';
 import VInstructions from '../components/Instructions.vue';
@@ -396,6 +407,7 @@ import {
   VIEW_SEQUENCE,
   VIEW_FLOW,
   VIEW_FLAMEGRAPH,
+  VIEW_AI,
   SELECT_CODE_OBJECT,
   SELECT_LABEL,
   POP_SELECTION_STACK,
@@ -432,6 +444,7 @@ export default {
     VDiagramSequence,
     VDiagramTrace,
     VDiagramFlamegraph,
+    VDiagramAI,
     VDownloadSequenceDiagram,
     VFilterMenu,
     VInstructions,
@@ -463,6 +476,7 @@ export default {
       VIEW_SEQUENCE,
       VIEW_FLOW,
       VIEW_FLAMEGRAPH,
+      VIEW_AI,
       eventFilterText: '',
       eventFilterMatchIndex: 0,
       showShareModal: false,
@@ -782,6 +796,10 @@ export default {
 
     isViewingFlamegraph() {
       return this.currentView === VIEW_FLAMEGRAPH;
+    },
+
+    isViewingAI() {
+      return this.currentView === VIEW_AI;
     },
 
     showDownload() {
