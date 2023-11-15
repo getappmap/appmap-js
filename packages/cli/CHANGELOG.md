@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.111.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.111.0...@appland/appmap-v3.111.1) (2023-11-15)
+
+
+### Bug Fixes
+
+* Gracefully handle filesystem symlink loops ([980e7ba](https://github.com/getappmap/appmap-js/commit/980e7baee56258aa023fa5ea11f3c3f96f035b3c))
+
 # [@appland/appmap-v3.111.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.110.0...@appland/appmap-v3.111.0) (2023-11-10)
 
 
