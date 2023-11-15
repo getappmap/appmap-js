@@ -14,9 +14,11 @@ class DeclutterProperty {
 }
 
 class DeclutterTimeProperty extends DeclutterProperty {
-  time = 100;
+  DEFAULT_TIME = 100;
 
-  constructor(on = true, defaultValue = true, time = 100) {
+  time = this.DEFAULT_TIME;
+
+  constructor(on = true, defaultValue = true, time = DeclutterTimeProperty.DEFAULT_TIME) {
     super(on, defaultValue);
 
     this.time = time;
@@ -45,6 +47,8 @@ class DeclutterExternalPathsProperty extends DeclutterProperty {
     this.dependencyFolders = dependencyFolders || DependencyFolders;
   }
 }
+
+const ROOT_EVENT_LABELS = ['cli.command', 'job.perform', 'message.handle'];
 
 class Declutter {
   limitRootEvents = new DeclutterProperty();
@@ -130,9 +134,24 @@ export default class AppMapFilter {
       }, new Set());
     }
 
-    // Include only subtrees of an HTTP server request, unless there are no HTTP server requests.
+    // Include only subtrees of "command"-type events, unless there are no commands.
     if (this.declutter.limitRootEvents.on) {
-      events = includeSubtrees(events, (e) => e.httpServerRequest, false);
+      // Return true if the event is a "command". Types of commands recognized by this test include:
+      // - HTTP server request - the event has http_server_request data
+      // - cli.command - command of a CLI application
+      // - job.perform - a background job
+      // - message.handle - a handler for a message queue
+      //
+      // @param {Event} e
+      const isCommand = (e) => {
+        if (e.httpServerRequest) return true;
+
+        const { labels } = e.codeObject;
+
+        return ROOT_EVENT_LABELS.find((label) => labels.has(label));
+      };
+
+      events = includeSubtrees(events, isCommand, false);
     }
 
     // Include only subtrees of a specified root object. This could also be stored and managed
