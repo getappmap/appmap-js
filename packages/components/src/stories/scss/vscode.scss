@@ -565,3 +565,14 @@
   --vscode-errorLens-statusBarInfoForeground: #00b7e4;
   --vscode-errorLens-statusBarHintForeground: #2faf64;
 }
+
+@font-face {
+  font-family: system-ui;
+  font-style: normal;
+  src: local('system-ui'), local('-apple-system'), local('BlinkMacSystemFont'), local('Segoe WPC'),
+    local('Segoe UI'), local('Ubuntu'), local('Droid Sans'), local('sans-serif');
+}
+
+body {
+  font-family: system-ui;
+}

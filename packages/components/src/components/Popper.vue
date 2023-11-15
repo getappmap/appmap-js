@@ -34,6 +34,9 @@ export default {
       default: 'center',
       validator: (value) => ['left', 'right', 'center'].indexOf(value) !== -1,
     },
+    disabled: {
+      default: false,
+    },
   },
 
   data() {
@@ -56,7 +59,9 @@ export default {
 
   computed: {
     isVisible() {
-      return (this.displayFlash && this.flashText) || (this.hover && this.textValue);
+      return (
+        !this.disabled && ((this.displayFlash && this.flashText) || (this.hover && this.textValue))
+      );
     },
     textValue() {
       return this.flashText || this.text;
