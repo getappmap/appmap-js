@@ -1,3 +1,10 @@
+# [@appland/models-v2.8.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.7.0...@appland/models-v2.8.0) (2023-11-15)
+
+
+### Features
+
+* Recognize certain labeled functions as roots ([77de691](https://github.com/getappmap/appmap-js/commit/77de6912ca76f4d0ef5963ee5ecd4fb2f5ee7d34))
+
 # [@appland/models-v2.7.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.6.5...@appland/models-v2.7.0) (2023-10-16)
 
 
