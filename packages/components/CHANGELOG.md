@@ -1,3 +1,10 @@
+# [@appland/components-v3.13.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.12.0...@appland/components-v3.13.0) (2023-11-15)
+
+
+### Features
+
+* AppMap code objects sorting ([#1454](https://github.com/getappmap/appmap-js/issues/1454)) ([f196dd0](https://github.com/getappmap/appmap-js/commit/f196dd0e6855869c3b37f5101513e514731befd6))
+
 # [@appland/components-v3.12.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.11.0...@appland/components-v3.12.0) (2023-11-10)
 
 
