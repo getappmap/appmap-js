@@ -16,6 +16,10 @@ const renameFile = promisify(gracefulFs.rename);
 /**
  * CHANGELOG
  *
+ * * # 1.4.0
+ *
+ * * Include parameter names in the index.
+ *
  * * # 1.3.0
  *
  * * Include exceptions in the index.
@@ -49,7 +53,7 @@ const renameFile = promisify(gracefulFs.rename);
  * * Fix handling of parent assignment in normalization.
  * * sql can contain the analysis (action, tables, columns), and/or the normalized query string.
  */
-export const VERSION = '1.2.0';
+export const VERSION = '1.4.0';
 
 const MAX_APPMAP_SIZE = 50 * 1024 * 1024;
 
