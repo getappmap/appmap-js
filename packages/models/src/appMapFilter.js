@@ -379,7 +379,9 @@ export default class AppMapFilter {
    * @returns boolean
    */
   static codeObjectIsMatched(object, query) {
-    if (query.startsWith('label:')) {
+    if (query === object.fqid) {
+      return true;
+    } else if (query.startsWith('label:')) {
       const pattern = filterRegExp(query, () => [
         `^${query.replace('label:', '').replace('*', '.*')}$`,
         'ig',
@@ -391,15 +393,13 @@ export default class AppMapFilter {
       if (pattern.test(object.fqid)) {
         return true;
       }
-    }
-    if (query.includes('*')) {
-      const pattern = filterRegExp(query, () => [`^${query.replace('*', '.*')}$`, 'ig']);
+    } else if (query.endsWith('*')) {
+      const pattern = filterRegExp(query, () => [`^${query.slice(0, query.length - 1)}.*`, 'ig']);
       if (pattern.test(object.fqid)) {
         return true;
       }
-    } else if (query === object.fqid) {
-      return true;
     }
+
     return false;
   }
 

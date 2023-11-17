@@ -58,7 +58,7 @@ context('AppMap view filter', () => {
       cy.get('.tabs .tab-btn').first().click();
       cy.get('.nodes .node').should('have.length', 9);
       cy.get('.tabs__controls .popper__button').click();
-      cy.get('.filters__form-input').first().type('package:*/controllers').parent().submit();
+      cy.get('.filters__form-input').first().type('package:app/controllers').parent().submit();
       cy.get('.nodes .node').should('have.length', 3);
     });
 
