@@ -3,7 +3,7 @@ import EventEmitter from 'events';
 import { default as FunctionStatsImpl } from '../functionStats';
 import FindCodeObjects from '../search/findCodeObjects';
 import FindEvents from '../search/findEvents';
-import { FunctionStats, Filter, CodeObjectMatch } from '../search/types';
+import { FunctionStats, Filter, CodeObjectMatch, EventMatch } from '../search/types';
 
 export default class Context extends EventEmitter {
   public filters: Filter[] = [];
@@ -38,12 +38,12 @@ export default class Context extends EventEmitter {
     this.emit('stop');
   }
 
-  async buildStats() {
+  async buildStats(): Promise<FunctionStats> {
     assert(this.codeObjectMatches, `codeObjectMatches is not yet computed`);
 
     this.emit('start', this.codeObjectMatches.length);
 
-    const result: any[] = [];
+    const result: EventMatch[] = [];
     await Promise.all(
       this.codeObjectMatches.map(async (codeObjectMatch) => {
         const findEvents = new FindEvents(codeObjectMatch.appmap, codeObjectMatch.codeObject);
@@ -57,6 +57,7 @@ export default class Context extends EventEmitter {
 
     this.emit('collate');
     this.stats = new FunctionStatsImpl(result);
+    return this.stats;
   }
 
   save() {

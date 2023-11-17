@@ -95,6 +95,7 @@ export interface Filter {
 }
 
 export interface FunctionStats {
+  appmaps: string[];
   eventMatches: EventMatch[];
   returnValues: string[];
   httpServerRequests: string[];

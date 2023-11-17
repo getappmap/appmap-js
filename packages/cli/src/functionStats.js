@@ -41,6 +41,7 @@ class FunctionStats {
     const trigram = (/** @type {Trigram} */ t) =>
       [t.callerId, t.codeObjectId, t.calleeId].join(' ->\n');
     return {
+      appmaps: this.appMapNames,
       returnValues: this.returnValues,
       httpServerRequests: this.httpServerRequests,
       sqlQueries: this.sqlQueries,
@@ -56,6 +57,10 @@ class FunctionStats {
 
   get appMapNames() {
     return [...new Set(this.eventMatches.map((e) => e.appmap))].sort();
+  }
+
+  get appmaps() {
+    return this.appMapNames;
   }
 
   get returnValues() {
