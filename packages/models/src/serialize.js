@@ -1,4 +1,4 @@
-import AppMapFilter from './appMapFilter';
+import AppMapFilter, { DEFAULT_CONTEXT_DEPTH } from './appMapFilter';
 import { base64UrlDecode } from './util';
 
 function mergeLists(a, b) {
@@ -56,10 +56,17 @@ export function serializeFilter(filter) {
     hideElapsedTimeUnder: declutter.hideElapsedTimeUnder.on
       ? declutter.hideElapsedTimeUnder.time
       : false,
+    context: declutter.context.on ? declutter.context.names : false,
+    contextDepth:
+      declutter.context.on && declutter.context.depth !== DEFAULT_CONTEXT_DEPTH
+        ? declutter.context.depth
+        : false,
     hideName: declutter.hideName.on ? declutter.hideName.names : false,
   }).reduce((memo, [k, v]) => {
     const filter = declutter[k];
     if (Array.isArray(v) && v.length !== 0) {
+      memo[k] = v;
+    } else if (typeof v === 'number') {
       memo[k] = v;
     } else if (filter && filter.default !== v) {
       memo[k] = v;
@@ -138,6 +145,13 @@ export function deserializeFilter(filterState) {
       filter.declutter.hideName.names = filterState[key];
     }
   });
+  if ('context' in filterState && filterState.context !== false) {
+    filter.declutter.context.on = true;
+    filter.declutter.context.names = filterState.context;
+    if ('contextDepth' in filterState && filterState.contextDepth !== false) {
+      filter.declutter.context.depth = filterState.contextDepth;
+    }
+  }
   if ('hideTree' in filterState && filterState.hideTree !== false) {
     filter.declutter.hideTree.on = true;
     filter.declutter.hideTree.names = filterState.hideTree;

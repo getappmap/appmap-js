@@ -3,6 +3,8 @@ import AppMap from './appMap';
 import CodeObject from './codeObject';
 import { isLocalPath } from './util';
 
+export const DEFAULT_CONTEXT_DEPTH = 1;
+
 class DeclutterProperty {
   on = true;
   default = true;
@@ -35,6 +37,16 @@ class DeclutterNamesProperty extends DeclutterProperty {
   }
 }
 
+class DeclutterContextNamesProperty extends DeclutterNamesProperty {
+  depth = DEFAULT_CONTEXT_DEPTH;
+
+  constructor(on = true, defaultValue = true, names = [], depth = undefined) {
+    super(on, defaultValue, names);
+
+    if (depth !== undefined) this.depth = depth;
+  }
+}
+
 // Directories inside the project tree that may contain bundled dependencies.
 const DependencyFolders = ['vendor', 'node_modules'];
 
@@ -58,6 +70,7 @@ class Declutter {
   hideElapsedTimeUnder = new DeclutterTimeProperty(false, false, 1);
   hideName = new DeclutterNamesProperty(false, false, []);
   hideTree = new DeclutterNamesProperty(false, false, []);
+  context = new DeclutterContextNamesProperty(false, false, []);
 }
 
 const FilterRegExps = {};
@@ -68,21 +81,37 @@ function filterRegExp(filterExpression, regexpConstructorArgs) {
   return FilterRegExps[filterExpression];
 }
 
-function markSubtrees(events, filterFn) {
-  const matchEvents = new Set();
-  const matchEventStack = [];
-  const markEvents = (e) => {
-    if (e.isCall() && filterFn(e)) matchEventStack.push(e);
-    if (matchEventStack.length > 0) {
-      matchEvents.add(e);
-      if (e.returnEvent) matchEvents.add(e.returnEvent);
-    }
-    if (e.isReturn() && filterFn(e.callEvent)) matchEventStack.pop();
+// events: Array of events to process.
+// filterFn: A test function to apply to each event. If the function returns true, the event is
+//   included in the result. If an ancestor of a descendant event has matched the filterFn, and distance to the
+//   ancestor is within the maxDepth, then the descendant is included as well.
+// maxDepth: The maximum depth of a descendant event to include. If undefined, all descendants are included.
+// Returns: A set of events that matched the filterFn.
+function markSubtrees(events, filterFn, maxDepth) {
+  const matchingEvents = new Set();
+
+  // Collect all 'call' events that match explicitly.
+  events.filter((e) => e.isCall() && filterFn(e)).forEach((e) => matchingEvents.add(e));
+
+  // Match all descendants of matching events, down to maxDepth.
+  const matchDescendant = (e, depth) => {
+    // Already marked before by some other traversal.
+    if (matchingEvents.has(e)) return;
+
+    // Below the maxDepth.
+    if (maxDepth !== undefined && depth > maxDepth) return;
+
+    matchingEvents.add(e);
+    if (e.children) e.children.forEach((child) => matchDescendant(child, depth + 1));
   };
 
-  events.forEach(markEvents);
+  [...matchingEvents]
+    .filter((e) => e.children)
+    .forEach((e) => e.children.forEach((child) => matchDescendant(child, 1)));
 
-  return matchEvents;
+  [...matchingEvents].forEach((e) => matchingEvents.add(e.returnEvent));
+
+  return matchingEvents;
 }
 
 // Collect all code objects that match a filter expressions.
@@ -158,7 +187,27 @@ export default class AppMapFilter {
     // as a declutter filter, but it isn't, for some reason. It works the same way.
     if (this.rootObjects.length) {
       const includeCodeObjects = matchCodeObjects(this.rootObjects, true);
-      events = includeSubtrees(events, (e) => includeCodeObjects.has(e.codeObject), true);
+      const filterFn = (e) => includeCodeObjects.has(e.codeObject);
+
+      events = includeSubtrees(events, filterFn, true);
+    }
+
+    if (this.declutter.context.on && this.declutter.context.names.length) {
+      const includeCodeObjects = matchCodeObjects(this.declutter.context.names, true);
+      const filterFn = (e) => includeCodeObjects.has(e.codeObject);
+
+      const contextEvents = markSubtrees(events, filterFn, this.declutter.context.depth);
+      const ancestorEvents = new Set();
+      const includeAncestors = (e) => {
+        if (ancestorEvents.has(e)) return;
+
+        ancestorEvents.add(e);
+        ancestorEvents.add(e.returnEvent);
+
+        if (e.parent) includeAncestors(e.parent);
+      };
+      events.filter((e) => filterFn(e)).forEach((e) => includeAncestors(e));
+      events = events.filter((e) => contextEvents.has(e) || ancestorEvents.has(e));
     }
 
     // Hide descendent events from named, pattern-matched or labeled code objects. The matching

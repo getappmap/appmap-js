@@ -1,0 +1,243 @@
+{
+  "events": [
+    {
+      "event": "call",
+      "http_server_request": {
+        "headers": {},
+        "path_info": "/owners/*/pets/1/visits",
+        "protocol": "http",
+        "request_method": "GET"
+      },
+      "id": 2,
+      "thread_id": 1
+    },
+    {
+      "defined_class": "org.springframework.samples.petclinic.web.VisitController",
+      "event": "call",
+      "id": 5,
+      "lineno": 69,
+      "method_id": "loadPetWithVisit",
+      "parameters": [
+        {
+          "class": "java.lang.Integer",
+          "kind": "req",
+          "name": "petId",
+          "object_id": 375039034,
+          "value": "1"
+        }
+      ],
+      "path": "org/springframework/samples/petclinic/web/VisitController.java",
+      "receiver": {
+        "class": "org.springframework.samples.petclinic.web.VisitController",
+        "object_id": 1837377655,
+        "value": "org.springframework.samples.petclinic.web.VisitController@6d842877"
+      },
+      "static": false,
+      "thread_id": 1
+    },
+    {
+      "defined_class": "org.springframework.samples.petclinic.service.ClinicServiceImpl",
+      "event": "call",
+      "id": 6,
+      "lineno": 92,
+      "method_id": "findPetById",
+      "parameters": [
+        {
+          "class": "java.lang.Integer",
+          "kind": "req",
+          "name": "id",
+          "object_id": 375039034,
+          "value": "1"
+        }
+      ],
+      "path": "org/springframework/samples/petclinic/service/ClinicServiceImpl.java",
+      "receiver": {
+        "class": "org.springframework.samples.petclinic.service.ClinicServiceImpl",
+        "object_id": 786716359,
+        "value": "org.springframework.samples.petclinic.service.ClinicServiceImpl@2ee456c7"
+      },
+      "static": false,
+      "thread_id": 1
+    },
+    {
+      "elapsed": 0.0006,
+      "event": "return",
+      "id": 15,
+      "parent_id": 6,
+      "return_value": {
+        "class": "org.springframework.samples.petclinic.model.Pet",
+        "object_id": 715099463,
+        "value": "Leo"
+      },
+      "thread_id": 1
+    },
+    {
+      "defined_class": "org.springframework.samples.petclinic.model.Pet",
+      "event": "call",
+      "id": 16,
+      "lineno": 109,
+      "method_id": "addVisit",
+      "parameters": [
+        {
+          "class": "org.springframework.samples.petclinic.model.Visit",
+          "kind": "req",
+          "name": "visit",
+          "object_id": 1257785974,
+          "value": "org.springframework.samples.petclinic.model.Visit@4af84a76"
+        }
+      ],
+      "path": "org/springframework/samples/petclinic/model/Pet.java",
+      "receiver": {
+        "class": "org.springframework.samples.petclinic.model.Pet",
+        "object_id": 715099463,
+        "value": "Leo"
+      },
+      "static": false,
+      "thread_id": 1
+    },
+    {
+      "elapsed": 0,
+      "event": "return",
+      "id": 17,
+      "parent_id": 16,
+      "thread_id": 1
+    },
+    {
+      "elapsed": 0.0006,
+      "event": "return",
+      "id": 18,
+      "parent_id": 5,
+      "return_value": {
+        "class": "org.springframework.samples.petclinic.model.Visit",
+        "object_id": 1257785974,
+        "value": "org.springframework.samples.petclinic.model.Visit@4af84a76"
+      },
+      "thread_id": 1
+    },
+    {
+      "elapsed": 0.0021,
+      "event": "return",
+      "http_server_response": {
+        "headers": {},
+        "status": 200
+      },
+      "id": 35,
+      "parent_id": 2,
+      "thread_id": 1
+    }
+  ],
+  "metadata": {
+    "name": "Visit controllers test show visits",
+    "app": "spring-petclinic",
+    "language": {
+      "name": "java",
+      "version": "25.241-b07",
+      "engine": "Java HotSpot(TM) 64-Bit Server VM"
+    },
+    "client": {
+      "name": "appmap-java",
+      "url": "https://github.com/appland/appmap-java"
+    },
+    "recorder": {
+      "name": "junit",
+      "type": "tests"
+    },
+    "recording": {
+      "defined_class": "org.springframework.samples.petclinic.web.VisitControllerTests",
+      "method_id": "testShowVisits"
+    },
+    "source_location": "org/springframework/samples/petclinic/web/VisitControllerTests.java:72",
+    "framework": {},
+    "test_status": "succeeded"
+  },
+  "classMap": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "name": "loadPetWithVisit",
+                              "type": "function",
+                              "static": false,
+                              "location": "org/springframework/samples/petclinic/web/VisitController.java:69"
+                            }
+                          ],
+                          "name": "VisitController",
+                          "type": "class"
+                        }
+                      ],
+                      "name": "web",
+                      "type": "package"
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "name": "addVisit",
+                              "type": "function",
+                              "static": false,
+                              "location": "org/springframework/samples/petclinic/model/Pet.java:109"
+                            }
+                          ],
+                          "name": "Pet",
+                          "type": "class"
+                        }
+                      ],
+                      "name": "model",
+                      "type": "package"
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "name": "findPetById",
+                              "type": "function",
+                              "static": false,
+                              "location": "org/springframework/samples/petclinic/service/ClinicServiceImpl.java:92"
+                            }
+                          ],
+                          "name": "ClinicServiceImpl",
+                          "type": "class"
+                        }
+                      ],
+                      "name": "service",
+                      "type": "package"
+                    }
+                  ],
+                  "name": "petclinic",
+                  "type": "package"
+                }
+              ],
+              "name": "samples",
+              "type": "package"
+            }
+          ],
+          "name": "springframework",
+          "type": "package"
+        }
+      ],
+      "name": "org",
+      "type": "package"
+    },
+    {
+      "type": "http",
+      "name": "HTTP server requests",
+      "children": [
+        {
+          "type": "route",
+          "name": "GET /owners/*/pets/1/visits"
+        }
+      ]
+    }
+  ]
+}

@@ -36,6 +36,29 @@ describe('serializeFilter', () => {
     const serialized = serializeFilter(filter);
     expect(serialized).toStrictEqual(TEST_STATE);
   });
+
+  it(`populates 'context' key'`, () => {
+    const filter = new AppMapFilter();
+    filter.declutter.context.on = true;
+    filter.declutter.context.names = ['package:app/controllers'];
+
+    const serialized = serializeFilter(filter);
+    expect(serialized).toStrictEqual({
+      context: ['package:app/controllers'],
+    });
+  });
+  it(`populates 'contextDepth' key'`, () => {
+    const filter = new AppMapFilter();
+    filter.declutter.context.on = true;
+    filter.declutter.context.names = ['package:app/controllers'];
+    filter.declutter.context.depth = 3;
+
+    const serialized = serializeFilter(filter);
+    expect(serialized).toStrictEqual({
+      context: ['package:app/controllers'],
+      contextDepth: 3,
+    });
+  });
 });
 
 describe('deserializeFilter', () => {
@@ -105,6 +128,46 @@ describe('deserializeFilter', () => {
     expectedFilter.declutter.hideExternalPaths.dependencyFolders = ['vendor', 'node_modules'];
 
     expect(deserialized).toStrictEqual(expectedFilter);
+  });
+
+  describe('context', () => {
+    it(`names can be specified via 'context' key`, () => {
+      const serialized = stateObjectToBase64({
+        context: ['package:app/controllers'],
+      });
+
+      const expectedFilter = new AppMapFilter();
+      expectedFilter.declutter.context.on = true;
+      expectedFilter.declutter.context.names = ['package:app/controllers'];
+      expectedFilter.declutter.context.depth = 1;
+
+      const deserialized = deserializeFilter(serialized);
+      expect(deserialized).toStrictEqual(expectedFilter);
+    });
+    it(`depth can be specified via 'contextDepth' key`, () => {
+      const serialized = stateObjectToBase64({
+        context: ['package:app/controllers'],
+        contextDepth: 3,
+      });
+
+      const expectedFilter = new AppMapFilter();
+      expectedFilter.declutter.context.on = true;
+      expectedFilter.declutter.context.names = ['package:app/controllers'];
+      expectedFilter.declutter.context.depth = 3;
+
+      const deserialized = deserializeFilter(serialized);
+      expect(deserialized).toStrictEqual(expectedFilter);
+    });
+    it(`depth is ignored without 'context' key`, () => {
+      const serialized = stateObjectToBase64({
+        contextDepth: 3,
+      });
+
+      const expectedFilter = new AppMapFilter();
+
+      const deserialized = deserializeFilter(serialized);
+      expect(deserialized).toStrictEqual(expectedFilter);
+    });
   });
 
   describe('hideExternal', () => {

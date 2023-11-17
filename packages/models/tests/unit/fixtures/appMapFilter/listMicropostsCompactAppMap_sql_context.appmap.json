@@ -1,0 +1,177 @@
+{
+  "events": [
+    {
+      "id": 4355,
+      "event": "call",
+      "thread_id": 4460,
+      "http_server_request": {
+        "request_method": "DELETE",
+        "path_info": "/microposts/1033843181",
+        "normalized_path_info": "/microposts/{id}",
+        "headers": {
+          "Version": "HTTP/1.0",
+          "Host": "www.example.com",
+          "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
+          "Cookie": "_sample_app_session=98Ls4WoaBDL%2F4TzVGLhseBvBuwhZEr56tNJJAXrhcERB6jjAFZ9oKXJtJqmXbwSQzsLTVrDPYKQRx9t7m5alKDX%2BCqpzTyEaOiJvK3dO8nRZYnKf9fncu3ciunQYVEfxDhM%2F9Jo743RwHH%2FOhLyIsxnWxZgYDlv%2FghUiuwl62JpiBmz%2FZrHWuKjIgvX6YcQoKR0rrcKH6KKZC7jl%2BQK9wIZxpNSDn1uWUu0Kg8%2F2KoL52kXAlwCddet9joegiBKe1iJI1ABvydIkED%2FGIR1%2Btvc2H2dpiWuxBRLkl%2FG1p4VkuVB9SpvmWE1dSzvNM5gyz7r5JZMCyK%2BsfpS9hUZcszaMHqB0NuoQJOUVydcv5g%3D%3D--dx2A%2FL7tOgNkkDe4--ygX2fMSES9OmcUEXvzi9Ng%3D%3D; remember_token=VKO3fbS86t9dDjXToNT7YA; user_id=SAPt2lnF%2BYOLbutVtKqkFVx6VRtUgg5fwobse2XHKEafvYnoemXqyJ3SAqnUeD5lAP2VlTKgZ73ogLAp8id5x2l1YPBFyqo%3D--OZ%2BoUcjibrjvLFSv--W%2FCE40ifkZXobL4hWM2wig%3D%3D",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Length": "0"
+        }
+      }
+    },
+    {
+      "id": 4434,
+      "event": "call",
+      "thread_id": 4460,
+      "defined_class": "MicropostsController",
+      "method_id": "destroy",
+      "path": "app/controllers/microposts_controller.rb",
+      "lineno": 17,
+      "static": false,
+      "receiver": {
+        "class": "MicropostsController",
+        "object_id": 100360,
+        "value": "#<MicropostsController:0x00000001164355a0>"
+      }
+    },
+    {
+      "id": 4447,
+      "event": "call",
+      "thread_id": 4460,
+      "sql_query": {
+        "sql": "DELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = ?",
+        "database_type": "sqlite"
+      }
+    },
+    {
+      "id": 4448,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 4447,
+      "elapsed": 0.000191,
+      "elapsed_instrumentation": 0.000017000013031065464
+    },
+    {
+      "id": 4465,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 4434,
+      "elapsed": 0.0024689999409019947,
+      "elapsed_instrumentation": 0.00010000006295740604,
+      "return_value": {
+        "class": "String",
+        "value": "<html><body>You are being <a href=\"http://www.example.com/\">redirected</a>.</body></html>",
+        "object_id": 101280
+      }
+    },
+    {
+      "id": 4508,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 4355,
+      "elapsed": 0.009745000046677887,
+      "elapsed_instrumentation": 0.0003359998809173703,
+      "http_server_response": {
+        "status_code": 303,
+        "headers": {
+          "X-Frame-Options": "SAMEORIGIN",
+          "X-XSS-Protection": "0",
+          "X-Content-Type-Options": "nosniff",
+          "X-Download-Options": "noopen",
+          "X-Permitted-Cross-Domain-Policies": "none",
+          "Referrer-Policy": "strict-origin-when-cross-origin",
+          "Location": "http://www.example.com/",
+          "Content-Type": "text/html; charset=utf-8",
+          "Cache-Control": "no-cache",
+          "Set-Cookie": "_sample_app_session=yT8%2BdG8oIwWOOsNOLkIMaR1LcjSJWH6yjFhtD3%2BoKN3dtzoijErO4tlS7krud387N4GmQwzA%2Fvlc6ZJbibqX%2BhL%2FESvuJFrFQnH3q7aYIx2er0zxYEHmoNmEbBykGg7ybE0%2FIZEn84EQ%2FNELDd8Q%2F3wEXHbTznPT%2Fu65xXFwGcNlf%2F1e%2F1NpMj2CzB5dOa3eFJA%2FrqMxD5d4TFNW0HRrKIOo0rde%2B6T6GaNu59ycAFFMOApkp9iVPT2r64Kht5quHK%2FinizWPbD8fXqDB2B44U3YWol4z2dwgmKYkBrbtoy1H4XYipTfvOLMvIASE5LhsPp7xSNZx5o4PbFkOVk1xWatBaDYm%2BCZNtZ15fxIkjo25HiPcDRCvwd6wG6zGWueb30LeB6b3%2BFEA2HtGirs88%2FmG5bhAAOVO5wt9c4rJGZxCLS2Q7AjYUADoBspcQCNnBEVZ08xQqwUJx9qpcpSskum%2Fg%3D%3D--orKBfEwZeIRCyKXa--64amVbysKnZ5esXjULrSIQ%3D%3D; path=/; HttpOnly; SameSite=Lax",
+          "X-Request-Id": "442e62ee-e4e8-4fc8-ab64-44c24517c827",
+          "X-Runtime": "0.009499"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "app": "sample_rails_app",
+    "language": {
+      "name": "ruby",
+      "engine": "ruby",
+      "version": "3.1.2"
+    },
+    "client": {
+      "name": "appmap",
+      "url": "https://github.com/applandinc/appmap-ruby",
+      "version": "0.102.1"
+    },
+    "frameworks": [
+      {
+        "name": "rails",
+        "version": "7.0.4"
+      },
+      {
+        "name": "minitest",
+        "version": "5.15.0"
+      }
+    ],
+    "git": {
+      "repository": "git@github.com:land-of-apps/sample_rails_app.git",
+      "branch": "appmap",
+      "commit": "220d384b761c11391cab70adbed33bc350140840",
+      "git_last_annotated_tag": null,
+      "git_last_tag": null,
+      "git_commits_since_last_annotated_tag": null,
+      "git_commits_since_last_tag": null
+    },
+    "name": "Microposts_interface micropost interface",
+    "source_location": "test/integration/microposts_interface_test.rb:9",
+    "recorder": {
+      "name": "minitest",
+      "type": "tests"
+    },
+    "test_status": "succeeded"
+  },
+  "classMap": [
+    {
+      "name": "app",
+      "type": "package",
+      "children": [
+        {
+          "name": "controllers",
+          "type": "package",
+          "children": [
+            {
+              "name": "MicropostsController",
+              "type": "class",
+              "children": [
+                {
+                  "name": "destroy",
+                  "type": "function",
+                  "static": false,
+                  "location": "app/controllers/microposts_controller.rb:17"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "database",
+      "name": "Database",
+      "children": [
+        {
+          "type": "query",
+          "name": "DELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = ?"
+        }
+      ]
+    },
+    {
+      "type": "http",
+      "name": "HTTP server requests",
+      "children": [
+        {
+          "type": "route",
+          "name": "DELETE /microposts/{id}"
+        }
+      ]
+    }
+  ]
+}
