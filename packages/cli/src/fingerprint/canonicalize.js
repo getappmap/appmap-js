@@ -10,6 +10,7 @@ const algorithms = {
   packageDependencies: require('./canonicalize/packageDependencies'),
   sqlNormalized: require('./canonicalize/sqlNormalized'),
   sqlTables: require('./canonicalize/sqlTables'),
+  parameters: require('./canonicalize/parameters'),
 };
 /* eslint-enable global-require */
 
