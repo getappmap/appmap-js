@@ -9,15 +9,6 @@ const TEST_STATE = {
   hideExternalPaths: ['vendor', 'node_modules'],
 };
 
-const TEST_STATE_BOOL = {
-  hideElapsedTimeUnder: 1,
-  hideMediaRequests: false,
-  hideName: ['package:activesupport'],
-  hideUnlabeled: true,
-  limitRootEvents: false,
-  hideExternal: true,
-};
-
 function stateObjectToBase64(stateObject) {
   return Buffer.from(JSON.stringify(stateObject), 'utf-8').toString('base64url');
 }
@@ -116,22 +107,35 @@ describe('deserializeFilter', () => {
     expect(deserialized).toStrictEqual(expectedFilter);
   });
 
-  it('can deserialise when hideExternal is a boolean value', () => {
-    const base64Encoded = stateObjectToBase64(TEST_STATE_BOOL);
-    const deserialized = deserializeFilter(base64Encoded);
+  describe('hideExternal', () => {
+    describe('is a boolean value', () => {
+      const testState = {
+        hideElapsedTimeUnder: 1,
+        hideMediaRequests: false,
+        hideName: ['package:activesupport'],
+        hideUnlabeled: true,
+        limitRootEvents: false,
+        hideExternal: true,
+      };
 
-    const expectedFilter = new AppMapFilter();
+      it('can deserialise', () => {
+        const base64Encoded = stateObjectToBase64(testState);
+        const deserialized = deserializeFilter(base64Encoded);
 
-    expectedFilter.declutter.limitRootEvents.on = false;
-    expectedFilter.declutter.hideMediaRequests.on = false;
-    expectedFilter.declutter.hideUnlabeled.on = true;
-    expectedFilter.declutter.hideElapsedTimeUnder.on = true;
-    expectedFilter.declutter.hideElapsedTimeUnder.time = 1;
-    expectedFilter.declutter.hideName.on = true;
-    expectedFilter.declutter.hideName.names = ['package:activesupport'];
-    expectedFilter.declutter.hideExternalPaths.on = true;
-    expectedFilter.declutter.hideExternalPaths.dependencyFolders = ['vendor', 'node_modules'];
+        const expectedFilter = new AppMapFilter();
 
-    expect(deserialized).toStrictEqual(expectedFilter);
+        expectedFilter.declutter.limitRootEvents.on = false;
+        expectedFilter.declutter.hideMediaRequests.on = false;
+        expectedFilter.declutter.hideUnlabeled.on = true;
+        expectedFilter.declutter.hideElapsedTimeUnder.on = true;
+        expectedFilter.declutter.hideElapsedTimeUnder.time = 1;
+        expectedFilter.declutter.hideName.on = true;
+        expectedFilter.declutter.hideName.names = ['package:activesupport'];
+        expectedFilter.declutter.hideExternalPaths.on = true;
+        expectedFilter.declutter.hideExternalPaths.dependencyFolders = ['vendor', 'node_modules'];
+
+        expect(deserialized).toStrictEqual(expectedFilter);
+      });
+    });
   });
 });
