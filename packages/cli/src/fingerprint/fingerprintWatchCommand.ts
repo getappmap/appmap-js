@@ -4,7 +4,7 @@ import path, { join, resolve } from 'path';
 import EventAggregator, { PendingEvent } from '../lib/eventAggregator';
 import { verbose } from '../utils';
 import FingerprintQueue from './fingerprintQueue';
-import Globber from './globber';
+import Globber, { GlobberOptions } from './globber';
 import Telemetry from '../telemetry';
 import emitUsage from '../lib/emitUsage';
 import { FingerprintEvent } from './fingerprinter';
@@ -190,7 +190,9 @@ export default class FingerprintWatchCommand {
     this.watcher.add(glob);
     await watchReady;
 
-    this.poller = new Globber(glob, { statDelayMs })
+    const globberOptions: GlobberOptions = {};
+    if (statDelayMs) globberOptions.statDelayMs = statDelayMs;
+    this.poller = new Globber(glob, globberOptions)
       .on('add', this.added.bind(this))
       .on('change', this.changed.bind(this))
       .on('unlink', this.removed.bind(this));
