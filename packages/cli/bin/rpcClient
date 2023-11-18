@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+const assert = require('assert');
+const { warn, log } = require('console');
+const jayson = require('jayson');
+
+process.argv.shift();
+process.argv.shift();
+const command = process.argv.shift();
+assert(command, 'command is required');
+const args = process.argv.shift();
+
+const client = jayson.Client.http({
+  port: 30001,
+});
+
+client.request(command, args ? JSON.parse(args) : undefined, function (err, result) {
+  if (err) {
+    warn(err);
+    return;
+  }
+  log(JSON.stringify(result.result, null, 2));
+});

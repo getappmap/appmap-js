@@ -108,6 +108,7 @@
     "graceful-fs": "^4.2.10",
     "handlebars": "^4.7.7",
     "inquirer": "^8.1.2",
+    "jayson": "^4.1.0",
     "js-yaml": "^4.0.3",
     "jsdom": "^16.6.0",
     "lunr": "^2.3.9",
