@@ -1,6 +1,12 @@
 <template>
   <section>
     <p>
+      The more AppMaps you record, the more information you will have about your running
+      application. No matter which method you start with, you can add more AppMaps or remove old
+      AppMaps at any time.
+    </p>
+    <br />
+    <p>
       Use the <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap" option
       from the "Run" menu to start your run configurations with AppMap enabled.
     </p>
@@ -22,6 +28,12 @@
             >recommended</span
           >
         </h3>
+        <br />
+        <p>
+          Recording your test run will provide a broad range of AppMaps that trace important
+          behaviors.
+        </p>
+        <br />
         <p>
           When you run your JUnit tests with the AppMap <code class="inline">javaagent</code> JVM
           argument, an AppMap will be created for each test.
@@ -31,13 +43,14 @@
           <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap". This will
           add the required JVM argument to enable AppMap recording.
         </p>
+        <br />
         <p>
-          For more information, visit
+          Docs:
           <a
             href="https://appmap.io/docs/reference/jetbrains.html#create-appmaps-from-junit-test-runs"
             target="_blank"
-            >AppMap docs - IntelliJ Tests recording</a
-          >.
+            >IntelliJ tests recording</a
+          >
         </p>
       </section>
       <br />
@@ -48,6 +61,12 @@
         <h3>
           <i class="header-icon"><RemoteRecordingIcon /></i>Remote recording
         </h3>
+        <br />
+        <p>
+          Create AppMaps as you interact with your applications UI or API. This is helpful for
+          tracing the backend during specific usage scenarios.
+        </p>
+        <br />
         <p>
           When your application uses {{ this.webFramework.name }}, and you run your application with
           the AppMap <code class="inline">javaagent</code> JVM argument, remote recording is
@@ -58,12 +77,11 @@
           click the "Record" button again to stop the recording and view the AppMap.
         </p>
         <p>
-          For more information, visit
-          <a
-            href="https://appmap.io/docs/reference/jetbrains.html#running-a-java-application-with-appmap"
-            target="_blank"
-            >AppMap docs - IntelliJ Remote recording</a
-          >.
+          <br />
+          Docs:
+          <a href="https://appmap.io/docs/reference/jetbrains.html#remote-recording" target="_blank"
+            >Java remote recording</a
+          >
         </p>
       </section>
     </template>
@@ -72,52 +90,55 @@
         <h3>
           <i class="header-icon header-icon--disabled"><RemoteRecordingIcon /></i>Remote recording
         </h3>
+        <br />
         <p>
-          Did you know? When you run a Spring app, you can make AppMaps of all the HTTP requests
-          served by your app. Spring wasn't detected in this project, though.
+          When you run a Spring app, you can make AppMaps of all the HTTP requests served by your
+          app.
         </p>
+        <p>Spring was not detected in this project.</p>
       </div> </template
     ><br />
     <section class="recording-method">
       <h3>
         <i class="header-icon"><ProcessIcon /></i>Process recording
       </h3>
+      <br />
+      <p>Record an entire Java process from startup to teardown.</p>
+      <br />
       <p>
-        AppMap can record an entire Java process from start to finish. To use process recording, run
-        your application using
+        To use process recording, run your application using
         <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap". When your
         application exits, the AppMap will be saved and opened.
       </p>
+      <br />
       <p>
-        Visit
+        Docs:
         <a
           href="https://appmap.io/docs/reference/appmap-java.html#process-recording"
           target="_blank"
-          >AppMap Docs - Java Process recording</a
+          >Java process recording</a
         >
-        for more information.
       </p>
     </section>
     <br />
     <section class="recording-method">
       <h3>
-        <i class="header-icon"><PlayIcon /></i>Code Block recording
+        <i class="header-icon"><CodeBlockIcon /></i>Code Block recording
       </h3>
+      <br />
+      <p>With this method, you can control exactly which code spans are recorded.</p>
+      <br />
       <p>
-        You can use the AppMap Java library directly to record a specific span of code. With this
-        method, you can control exactly what code is recorded, and where the recording is saved. To
-        use code block recording, add an AppMap code snippet to the section of code you want to
-        record, then run your application using
-        <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap".
-      </p>
-      <p>
-        Visit
+        You can use the AppMap Java library directly to record a specific span of code. To use code
+        block recording, add an AppMap code snippet to the section of code you want to record, then
+        run your application using
+        <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap". Instructions
+        for adding the AppMap code snippet to a span of code can be
         <a
           href="https://appmap.io/docs/reference/appmap-java.html#code-block-recording"
           target="_blank"
-          >AppMap Docs - Java Code Block recording</a
-        >
-        for more information.
+          >found in our documentation</a
+        >.
       </p>
     </section>
   </section>
@@ -126,7 +147,7 @@
 import TestsIcon from '@/assets/tests-icon.svg';
 import RemoteRecordingIcon from '@/assets/remote-recording-icon.svg';
 import ProcessIcon from '@/assets/process-icon.svg';
-import PlayIcon from '@/assets/play-icon.svg';
+import CodeBlockIcon from '@/assets/code-block-icon.svg';
 import VRunConfigDark from '@/assets/jetbrains_run_config_execute_dark.svg';
 import VRunConfigLight from '@/assets/jetbrains_run_config_execute.svg';
 import VTestsPrompt from './TestsPrompt.vue';
@@ -144,7 +165,7 @@ export default {
     VRunConfigDark,
     VRunConfigLight,
     VTestsPrompt,
-    PlayIcon,
+    CodeBlockIcon,
     ProcessIcon,
     RemoteRecordingIcon,
     TestsIcon,

@@ -3,10 +3,12 @@
     <h3>
       <i class="header-icon header-icon--disabled"><RequestsIcon /></i>Requests recording
     </h3>
+    <br />
     <p>
-      Did you know? When you run a {{ this.frameworks }} app, you can make AppMaps of all the HTTP
-      requests served by your app. {{ this.frameworks }} wasn't detected in this project, though.
+      When you run a {{ this.frameworks }} app, you can make AppMaps of all the HTTP requests served
+      by your app.
     </p>
+    <p>{{ this.frameworks }} was not detected in this project.</p>
   </div>
 </template>
 <script>
