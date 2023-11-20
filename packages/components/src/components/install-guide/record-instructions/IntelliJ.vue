@@ -1,8 +1,11 @@
 <template>
   <section>
     <p>
-      The more AppMaps you record, the more information you will have about your running application. No matter which method you start with, you can add more AppMaps or remove old AppMaps at any time.
-    </p><br/>
+      The more AppMaps you record, the more information you will have about your running
+      application. No matter which method you start with, you can add more AppMaps or remove old
+      AppMaps at any time.
+    </p>
+    <br />
     <p>
       Use the <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap" option
       from the "Run" menu to start your run configurations with AppMap enabled.
@@ -24,8 +27,13 @@
           <i class="header-icon"><TestsIcon /></i>Tests recording<span class="recommended-badge"
             >recommended</span
           >
-        </h3><br/>
-        <p>Recording your test run will provide a broad range of AppMaps that trace important behaviors.</p><br/>
+        </h3>
+        <br />
+        <p>
+          Recording your test run will provide a broad range of AppMaps that trace important
+          behaviors.
+        </p>
+        <br />
         <p>
           When you run your JUnit tests with the AppMap <code class="inline">javaagent</code> JVM
           argument, an AppMap will be created for each test.
@@ -34,7 +42,8 @@
           Right-click on any test class or package, and choose
           <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap". This will
           add the required JVM argument to enable AppMap recording.
-        </p><br/>
+        </p>
+        <br />
         <p>
           Docs:
           <a
@@ -51,8 +60,13 @@
       <section class="recording-method">
         <h3>
           <i class="header-icon"><RemoteRecordingIcon /></i>Remote recording
-        </h3><br/>
-        <p>Create AppMaps as you interact with your applications UI or API. This is helpful for tracing the backend during specific usage scenarios.</p><br/>
+        </h3>
+        <br />
+        <p>
+          Create AppMaps as you interact with your applications UI or API. This is helpful for
+          tracing the backend during specific usage scenarios.
+        </p>
+        <br />
         <p>
           When your application uses {{ this.webFramework.name }}, and you run your application with
           the AppMap <code class="inline">javaagent</code> JVM argument, remote recording is
@@ -62,11 +76,10 @@
           interface and/or by making API requests using a tool such as Postman. When you are done,
           click the "Record" button again to stop the recording and view the AppMap.
         </p>
-        <p><br/>
+        <p>
+          <br />
           Docs:
-          <a
-            href="https://appmap.io/docs/reference/jetbrains.html#remote-recording"
-            target="_blank"
+          <a href="https://appmap.io/docs/reference/jetbrains.html#remote-recording" target="_blank"
             >Java remote recording</a
           >
         </p>
@@ -76,24 +89,28 @@
       <div class="recording-method recording-method--disabled">
         <h3>
           <i class="header-icon header-icon--disabled"><RemoteRecordingIcon /></i>Remote recording
-        </h3><br/>
+        </h3>
+        <br />
         <p>
-          When you run a Spring app, you can make AppMaps of all the HTTP requests
-          served by your app.</p>
-          <p>Spring was not detected in this project.</p>
+          When you run a Spring app, you can make AppMaps of all the HTTP requests served by your
+          app.
         </p>
+        <p>Spring was not detected in this project.</p>
       </div> </template
     ><br />
     <section class="recording-method">
       <h3>
         <i class="header-icon"><ProcessIcon /></i>Process recording
-      </h3><br/>
-      <p>Record an entire Java process from startup to teardown.</p><br/>
+      </h3>
+      <br />
+      <p>Record an entire Java process from startup to teardown.</p>
+      <br />
       <p>
         To use process recording, run your application using
         <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap". When your
         application exits, the AppMap will be saved and opened.
-      </p><br/>
+      </p>
+      <br />
       <p>
         Docs:
         <a
@@ -107,16 +124,21 @@
     <section class="recording-method">
       <h3>
         <i class="header-icon"><CodeBlockIcon /></i>Code Block recording
-      </h3><br/>
+      </h3>
+      <br />
+      <p>With this method, you can control exactly which code spans are recorded.</p>
+      <br />
       <p>
-        With this method, you can control exactly which code spans are recorded.
-      </p><br/>
-      <p>
-        You can use the AppMap Java library directly to record a specific span of code. To
-        use code block recording, add an AppMap code snippet to the section of code you want to
-        record, then run your application using
-        <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap". Instructions for adding the AppMap code snippet to a span of code can be
-        <a href="https://appmap.io/docs/reference/appmap-java.html#code-block-recording" target="_blank">found in our documentation</a>.
+        You can use the AppMap Java library directly to record a specific span of code. To use code
+        block recording, add an AppMap code snippet to the section of code you want to record, then
+        run your application using
+        <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap". Instructions
+        for adding the AppMap code snippet to a span of code can be
+        <a
+          href="https://appmap.io/docs/reference/appmap-java.html#code-block-recording"
+          target="_blank"
+          >found in our documentation</a
+        >.
       </p>
     </section>
   </section>

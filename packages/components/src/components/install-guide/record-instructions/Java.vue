@@ -1,8 +1,11 @@
 <template>
   <section>
     <p>
-      The more AppMaps you record, the more information you will have about your running application.
-      No matter which method you start with, you can add more AppMaps or remove old AppMaps at any time.</p><br/>
+      The more AppMaps you record, the more information you will have about your running
+      application. No matter which method you start with, you can add more AppMaps or remove old
+      AppMaps at any time.
+    </p>
+    <br />
     <p>
       Use the "Run with AppMap" debug configuration to launch your application or run your tests
       through Microsoft's Test Runner for Java extension.
@@ -26,8 +29,13 @@
           <i class="header-icon"><TestsIcon /></i>
           Tests recording
           <span class="recommended-badge">recommended</span>
-        </h3><br/>
-        <p>Recording your test run will provide a broad range of AppMaps that trace important behaviors.</p><br/>
+        </h3>
+        <br />
+        <p>
+          Recording your test run will provide a broad range of AppMaps that trace important
+          behaviors.
+        </p>
+        <br />
         <p>
           When you run your {{ testFramework.name }} tests with the AppMap
           <code class="inline">javaagent</code> JVM argument, an AppMap will be created for each
@@ -37,7 +45,8 @@
           This will automatically be configured for you by running your tests via the "Testing"
           button available in the sidebar or by pressing F1 and running the
           <code class="inline">Test: Run All Tests</code> command.
-        </p><br/>
+        </p>
+        <br />
         <p>
           Docs:
           <a
@@ -59,8 +68,13 @@
         <h3>
           <i class="header-icon"><RemoteRecordingIcon /></i>
           Remote recording
-        </h3><br/>
-        <p>Create AppMaps as you interact with your applications UI or API. This is helpful for tracing the backend during specific usage scenarios.</p><br/>
+        </h3>
+        <br />
+        <p>
+          Create AppMaps as you interact with your applications UI or API. This is helpful for
+          tracing the backend during specific usage scenarios.
+        </p>
+        <br />
         <p>
           When your application uses {{ this.webFramework.name }}, and you run your application with
           the AppMap <code class="inline">javaagent</code> JVM argument, remote recording is
@@ -69,7 +83,8 @@
           with your application, through its user interface and/or by making API requests using a
           tool such as Postman. When you are done, click the "Record" button again to save the
           recording and view the AppMap.
-        </p><br/>
+        </p>
+        <br />
         <p>
           Docs:
           <a
@@ -96,21 +111,23 @@
     <section class="recording-method">
       <h3>
         <i class="header-icon"><ProcessIcon /></i>Process recording
-      </h3><br/>
+      </h3>
+      <br />
       <p>
         AppMap can record an entire Java process from start to finish. To use process recording,
         modify <code class="inline">.vscode/launch.json</code> to include
         <code class="inline">-Dappmap.recording.auto=true</code> in
         <code class="inline">vmArgs</code>. After running this configuration, an AppMap will be
         saved once your application exits.
-      </p><br/>
+      </p>
+      <br />
       <p>
         Docs:
         <a
           href="https://appmap.io/docs/reference/appmap-java.html#process-recording"
           target="_blank"
         >
-         Java process recording
+          Java process recording
         </a>
       </p>
     </section>
@@ -119,15 +136,16 @@
       <h3>
         <i class="header-icon"><CodeBlockIcon /></i>
         Code Block recording
-      </h3><br/>
+      </h3>
+      <br />
+      <p>With this method, you can control exactly which code spans are recorded.</p>
+      <br />
       <p>
-        With this method, you can control exactly which code spans are recorded.
-      </p><br/>
-      <p>
-        You can use the AppMap Java library directly to record a specific span of code. To use code block recording, add an
-        AppMap code snippet to the section of code you want to record, then run your application
-        using the Debug Configuration with AppMap.
-      </p><br/>
+        You can use the AppMap Java library directly to record a specific span of code. To use code
+        block recording, add an AppMap code snippet to the section of code you want to record, then
+        run your application using the Debug Configuration with AppMap.
+      </p>
+      <br />
       <p>
         Docs:
         <a
