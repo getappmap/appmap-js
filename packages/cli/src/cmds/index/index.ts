@@ -1,17 +1,17 @@
 import readline from 'readline';
 import yargs from 'yargs';
-import jayson from 'jayson';
+import jayson, { MethodLike } from 'jayson';
 
 import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
 import FingerprintWatchCommand from '../../fingerprint/fingerprintWatchCommand';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../lib/locateAppMapDir';
 import { verbose } from '../../utils';
-import searchSingleAppMap from '../search/searchSingleAppMap';
-import searchAppMaps from '../search/searchAppMaps';
 import { warn } from 'console';
-import { buildAppMap, deserializeFilter } from '@appland/models';
-import { readFile } from 'fs/promises';
+import { numProcessed } from '../../rpc/index/numProcessed';
+import { search } from '../../rpc/search/search';
+import appmapFilter from '../../rpc/appmap/filter';
+import { RpcCallback, RpcError } from '../../rpc/rpc';
 
 export const command = 'index';
 export const describe =
@@ -47,6 +47,22 @@ export const builder = (args: yargs.Argv) => {
   return args.strict();
 };
 
+function handlerMiddleware(
+  name: string,
+  handler: (args: any, callback: RpcCallback<any>) => void | Promise<void>
+): (args: any, callback: RpcCallback<any>) => Promise<void> {
+  return async (args, callback) => {
+    warn(`Handling JSON-RPC request for ${name} (${JSON.stringify(args)})`);
+    try {
+      await handler(args, callback);
+    } catch (err) {
+      const error: RpcError = { code: 500 };
+      if (err instanceof Error) error.message = err.message;
+      callback(error);
+    }
+  };
+}
+
 export const handler = async (argv) => {
   verbose(argv.verbose);
   handleWorkingDirectory(argv.directory);
@@ -63,66 +79,17 @@ export const handler = async (argv) => {
 
     if (port) {
       warn(`Running JSON-RPC server on port ${port}`);
-      const rpc_searchAppMaps = (args, callback) => {
-        warn(`Handling JSON-RPC request for search.appmaps (${JSON.stringify(args)})`);
-        const { query, options } = args;
-        searchAppMaps(appmapDir, query, options || {})
-          .then((result) => callback(null, result))
-          .catch((err) => callback({ code: 500, message: err.message }));
-      };
 
-      const rpc_searchEvents = (args, callback) => {
-        warn(`Handling JSON-RPC request for search.codeObjects (${JSON.stringify(args)})`);
-        const { appmap, query, options } = args;
-        searchSingleAppMap(appmap, query, options || {})
-          .then((result) => callback(null, result))
-          .catch((err) => callback({ code: 500, message: err.message }));
-      };
+      const rpcMethods: Record<string, MethodLike> = [
+        numProcessed(cmd),
+        search(appmapDir),
+        appmapFilter(),
+      ].reduce((acc, handler) => {
+        acc[handler.name] = handlerMiddleware(handler.name, handler.handler);
+        return acc;
+      }, {});
 
-      const rpc_indexNumProcessed = (args, callback) => {
-        warn(`Handling JSON-RPC request for index.numProcessed (${JSON.stringify(args)})`);
-        callback(null, cmd.numProcessed);
-      };
-
-      const rpc_appmapFilter = (args, callback) => {
-        warn(`Handling JSON-RPC request for appmap.filter (${JSON.stringify(args)})`);
-        let { appmap: appmapId } = args;
-        const { filter: filterArg } = args;
-
-        const loadFilterObj = () => {
-          if (typeof filterArg === 'object') return filterArg;
-        };
-
-        const loadFilterString = () => {
-          try {
-            return deserializeFilter(filterArg);
-          } catch (err) {
-            return null;
-          }
-        };
-
-        const filter = loadFilterString() || loadFilterObj();
-        if (!filter) {
-          callback({ code: 422, message: 'Invalid filter' });
-          return;
-        }
-
-        if (!appmapId.endsWith('.appmap.json')) appmapId = appmapId + '.appmap.json';
-        readFile(appmapId, 'utf8')
-          .then((appmapStr) => {
-            const appmap = buildAppMap().source(appmapStr).build();
-            const filteredAppMap = filter.filter(appmap, []);
-            callback(null, filteredAppMap);
-          })
-          .catch((err) => callback({ code: 500, message: err.message }));
-      };
-
-      const rpcMethods = {
-        'search.appmaps': rpc_searchAppMaps,
-        'search.events': rpc_searchEvents,
-        'index.numProcessed': rpc_indexNumProcessed,
-        'appmap.filter': rpc_appmapFilter,
-      };
+      warn(`Available JSON-RPC methods: ${Object.keys(rpcMethods).sort().join(', ')}`);
 
       const server = new jayson.Server(rpcMethods);
       server.http().listen(port);
