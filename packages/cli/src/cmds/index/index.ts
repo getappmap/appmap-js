@@ -12,6 +12,7 @@ import { numProcessed } from '../../rpc/index/numProcessed';
 import { search } from '../../rpc/search/search';
 import appmapFilter from '../../rpc/appmap/filter';
 import { RpcCallback, RpcError } from '../../rpc/rpc';
+import assert from 'assert';
 
 export const command = 'index';
 export const describe =
@@ -68,17 +69,18 @@ export const handler = async (argv) => {
   handleWorkingDirectory(argv.directory);
   const appmapDir = await locateAppMapDir(argv.appmapDir);
 
-  const { watchStatDelay } = argv;
+  const { watchStatDelay, watch, port } = argv;
 
-  if (argv.watch) {
-    const { port } = argv;
+  const runServer = watch || port;
+  if (port && !watch) warn(`Note: --port option implies --watch`);
 
+  if (runServer) {
     warn(`Running indexer in watch mode`);
     const cmd = new FingerprintWatchCommand(appmapDir);
     await cmd.execute(watchStatDelay);
 
     if (port) {
-      warn(`Running JSON-RPC server on port ${port}`);
+      warn(`Running JSON-RPC server on port ${port}.`);
 
       const rpcMethods: Record<string, MethodLike> = [
         numProcessed(cmd),
@@ -90,6 +92,7 @@ export const handler = async (argv) => {
       }, {});
 
       warn(`Available JSON-RPC methods: ${Object.keys(rpcMethods).sort().join(', ')}`);
+      warn(`Consult @appland/rpc for request and response data types.`);
 
       const server = new jayson.Server(rpcMethods);
       server.http().listen(port);

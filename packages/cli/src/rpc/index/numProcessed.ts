@@ -1,13 +1,16 @@
-import { NumProcessedOptions, NumProcessedResponse } from './index';
+import { IndexRpc } from '@appland/rpc';
 import FingerprintWatchCommand from '../../fingerprint/fingerprintWatchCommand';
 import { RpcCallback, RpcHandler } from '../rpc';
 
 export function numProcessed(
   cmd: FingerprintWatchCommand
-): RpcHandler<NumProcessedOptions, NumProcessedResponse> {
-  function handler(args: NumProcessedOptions, callback: RpcCallback<NumProcessedResponse>) {
+): RpcHandler<IndexRpc.NumProcessedOptions, IndexRpc.NumProcessedResponse> {
+  function handler(
+    args: IndexRpc.NumProcessedOptions,
+    callback: RpcCallback<IndexRpc.NumProcessedResponse>
+  ) {
     callback(null, cmd.numProcessed);
   }
 
-  return { name: 'index.numProcessed', handler };
+  return { name: IndexRpc.NumProcessedFunctionName, handler };
 }

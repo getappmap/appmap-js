@@ -128,6 +128,7 @@ __metadata:
     "@appland/diagrams": "workspace:^1.7.0"
     "@appland/models": "workspace:^2.6.3"
     "@appland/openapi": "workspace:^1.7.0"
+    "@appland/rpc": "workspace:*"
     "@appland/sequence-diagram": "workspace:^1.7.0"
     "@craftamap/esbuild-plugin-html": ^0.4.0
     "@octokit/rest": ^20.0.1
@@ -412,7 +413,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/rpc@workspace:packages/rpc":
+"@appland/rpc@workspace:*, @appland/rpc@workspace:packages/rpc":
   version: 0.0.0-use.local
   resolution: "@appland/rpc@workspace:packages/rpc"
   dependencies:

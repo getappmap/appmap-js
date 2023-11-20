@@ -1,5 +1,6 @@
 import assert from 'assert';
 
+import { SearchRpc } from '@appland/rpc';
 import { RpcCallback, RpcError, RpcHandler } from '../rpc';
 import searchAppMaps from '../../cmds/search/searchAppMaps';
 import {
@@ -11,10 +12,14 @@ import {
   SearchResponse as EventsSearchResponse,
   SearchResult as EventSearchResult,
 } from '../../fulltext/FindEvents';
-import { SearchOptions, SearchResult, SearchResponse } from './index';
 
-export function search(appmapDir: string): RpcHandler<SearchOptions, SearchResponse> {
-  async function handler(args: SearchOptions, callback: RpcCallback<SearchResponse>) {
+export function search(
+  appmapDir: string
+): RpcHandler<SearchRpc.SearchOptions, SearchRpc.SearchResponse> {
+  async function handler(
+    args: SearchRpc.SearchOptions,
+    callback: RpcCallback<SearchRpc.SearchResponse>
+  ) {
     const { query, maxResults } = args;
 
     // Search across all AppMaps, creating a map from AppMap id to AppMapSearchResult
@@ -62,7 +67,7 @@ export function search(appmapDir: string): RpcHandler<SearchOptions, SearchRespo
       delete filteredEvent['appmap'];
       acc.get(appmapId)!.events.push(filteredEvent);
       return acc;
-    }, new Map<string, SearchResult>());
+    }, new Map<string, SearchRpc.SearchResult>());
 
     // The final result is AppMaps sorted by search score, along with the events
     // within each AppMap, also sorted by search score.
@@ -75,5 +80,5 @@ export function search(appmapDir: string): RpcHandler<SearchOptions, SearchRespo
     });
   }
 
-  return { name: 'search', handler };
+  return { name: SearchRpc.FunctionName, handler };
 }

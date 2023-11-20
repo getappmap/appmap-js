@@ -1,10 +1,16 @@
+import { AppMapRpc } from '@appland/rpc';
 import { buildAppMap, deserializeFilter } from '@appland/models';
-import { FilterOptions, FilterResponse } from '.';
 import { readFile } from 'fs/promises';
 import { RpcCallback, RpcHandler } from '../rpc';
 
-export default function appmapFilter(): RpcHandler<FilterOptions, FilterResponse> {
-  async function handler(args: FilterOptions, callback: RpcCallback<FilterResponse>) {
+export default function appmapFilter(): RpcHandler<
+  AppMapRpc.FilterOptions,
+  AppMapRpc.FilterResponse
+> {
+  async function handler(
+    args: AppMapRpc.FilterOptions,
+    callback: RpcCallback<AppMapRpc.FilterResponse>
+  ) {
     let { appmap: appmapId } = args;
     const { filter: filterArg } = args;
 
@@ -34,5 +40,5 @@ export default function appmapFilter(): RpcHandler<FilterOptions, FilterResponse
     callback(null, filteredAppMap);
   }
 
-  return { name: 'appmap.filter', handler };
+  return { name: AppMapRpc.FilterFunctionName, handler };
 }
