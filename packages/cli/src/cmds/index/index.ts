@@ -13,6 +13,7 @@ import { search } from '../../rpc/search/search';
 import appmapFilter from '../../rpc/appmap/filter';
 import { RpcCallback, RpcError } from '../../rpc/rpc';
 import assert from 'assert';
+import metadata from '../../rpc/appmap/metadata';
 
 export const command = 'index';
 export const describe =
@@ -84,6 +85,7 @@ export const handler = async (argv) => {
         numProcessed(cmd),
         search(appmapDir),
         appmapFilter(),
+        metadata(),
       ].reduce((acc, handler) => {
         acc[handler.name] = handlerMiddleware(handler.name, handler.handler);
         return acc;
