@@ -7,10 +7,8 @@
 /* eslint-disable max-classes-per-file */
 
 const yargs = require('yargs');
-const yaml = require('js-yaml');
 const { promises: fsp, readFileSync } = require('fs');
 const { queue } = require('async');
-const readline = require('readline');
 const { join } = require('path');
 import { setSQLErrorHandler } from '@appland/models';
 

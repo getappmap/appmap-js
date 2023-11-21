@@ -7,7 +7,7 @@ import FingerprintWatchCommand from '../../fingerprint/fingerprintWatchCommand';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../lib/locateAppMapDir';
 import { verbose } from '../../utils';
-import { warn } from 'console';
+import { log, warn } from 'console';
 import { numProcessed } from '../../rpc/index/numProcessed';
 import { search } from '../../rpc/search/search';
 import appmapFilter from '../../rpc/appmap/filter';
@@ -71,17 +71,15 @@ export const handler = async (argv) => {
 
   const { watchStatDelay, watch, port } = argv;
 
-  const runServer = watch || port;
+  const runServer = watch || port !== undefined;
   if (port && !watch) warn(`Note: --port option implies --watch`);
 
   if (runServer) {
-    warn(`Running indexer in watch mode`);
+    log(`Running indexer in watch mode`);
     const cmd = new FingerprintWatchCommand(appmapDir);
     await cmd.execute(watchStatDelay);
 
-    if (port) {
-      warn(`Running JSON-RPC server on port ${port}.`);
-
+    if (port !== undefined) {
       const rpcMethods: Record<string, MethodLike> = [
         numProcessed(cmd),
         search(appmapDir),
@@ -91,11 +89,21 @@ export const handler = async (argv) => {
         return acc;
       }, {});
 
-      warn(`Available JSON-RPC methods: ${Object.keys(rpcMethods).sort().join(', ')}`);
+      log(`Available JSON-RPC methods: ${Object.keys(rpcMethods).sort().join(', ')}`);
       warn(`Consult @appland/rpc for request and response data types.`);
 
-      const server = new jayson.Server(rpcMethods);
-      server.http().listen(port);
+      const server = new jayson.Server(rpcMethods).http();
+      server.listen(port).on('listening', () => {
+        const address = server.address();
+        if (address === null) {
+          throw new Error(`Failed to listen on port ${port} (address is null)`);
+        } else if (typeof address === 'string') {
+          log(`Running JSON-RPC server on: ${address}`);
+        } else {
+          const { address: addressStr, port } = address;
+          log(`Running JSON-RPC server on port: ${port}`);
+        }
+      });
     } else {
       if (!argv.verbose && process.stdout.isTTY) {
         process.stdout.write('\x1B[?25l');
