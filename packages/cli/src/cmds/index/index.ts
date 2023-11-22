@@ -14,6 +14,7 @@ import appmapFilter from '../../rpc/appmap/filter';
 import { RpcCallback, RpcError } from '../../rpc/rpc';
 import assert from 'assert';
 import metadata from '../../rpc/appmap/metadata';
+import sequenceDiagram from '../../rpc/appmap/sequenceDiagram';
 
 export const command = 'index';
 export const describe =
@@ -86,6 +87,7 @@ export const handler = async (argv) => {
         search(appmapDir),
         appmapFilter(),
         metadata(),
+        sequenceDiagram(),
       ].reduce((acc, handler) => {
         acc[handler.name] = handlerMiddleware(handler.name, handler.handler);
         return acc;

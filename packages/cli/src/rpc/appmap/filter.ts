@@ -1,7 +1,9 @@
 import { AppMapRpc } from '@appland/rpc';
-import { buildAppMap, deserializeFilter } from '@appland/models';
+import { buildAppMap } from '@appland/models';
 import { readFile } from 'fs/promises';
 import { RpcCallback, RpcHandler } from '../rpc';
+import { appmapFile } from './appmapFile';
+import interpretFilter from './interpretFilter';
 
 export default function appmapFilter(): RpcHandler<
   AppMapRpc.FilterOptions,
@@ -14,28 +16,15 @@ export default function appmapFilter(): RpcHandler<
     let { appmap: appmapId } = args;
     const { filter: filterArg } = args;
 
-    const loadFilterObj = () => {
-      if (typeof filterArg === 'object') return filterArg;
-    };
-
-    const loadFilterString = () => {
-      try {
-        return deserializeFilter(filterArg);
-      } catch (err) {
-        return null;
-      }
-    };
-
-    const filter = loadFilterString() || loadFilterObj();
+    const filter = interpretFilter(filterArg);
     if (!filter) {
       callback({ code: 422, message: 'Invalid filter' });
       return;
     }
 
-    if (!appmapId.endsWith('.appmap.json')) appmapId = appmapId + '.appmap.json';
-    const appmapStr = await readFile(appmapId, 'utf8');
-
+    const appmapStr = await readFile(appmapFile(appmapId), 'utf8');
     const appmap = buildAppMap().source(appmapStr).build();
+
     const filteredAppMap = filter.filter(appmap, []);
     callback(null, filteredAppMap);
   }
