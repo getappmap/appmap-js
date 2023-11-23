@@ -22,11 +22,12 @@ const DisplayCharLimit = 50;
 
 export const extension = '.uml';
 
-function formatElapsed(elapsed: number): string {
+function formatElapsed(elapsed: number, markupEnabled: boolean): string {
   const timeStr = (): string => {
     return `${+(elapsed * 1000).toPrecision(3)} ms`;
   };
-  return `<color:gray> ${timeStr()}</color>`;
+  if (markupEnabled) return `<color:gray> ${timeStr()}</color>`;
+  else return `(${timeStr()})`;
 }
 
 function singleLine(str: string): string {
@@ -54,7 +55,7 @@ class Label {
     return nodeName(this.action).length > DisplayCharLimit;
   }
 
-  requestLabel(): string {
+  requestLabel(markupEnabled: boolean): string {
     const { action } = this;
 
     const label = singleLine(nodeName(this.action)).slice(0, DisplayCharLimit);
@@ -66,20 +67,20 @@ class Label {
     const tokens: string[] = [];
     // PlantUML / Creole doesn't successfully combine strikethrough with underline.
     // Only the underline ends up being rendered.
-    if (isFunction(action) && action.static && action.diffMode !== DiffMode.Delete)
+    if (markupEnabled && isFunction(action) && action.static && action.diffMode !== DiffMode.Delete)
       tokens.push('<u>');
     tokens.push(formattedLabel);
-    if (isFunction(action) && action.static && action.diffMode !== DiffMode.Delete)
+    if (markupEnabled && isFunction(action) && action.static && action.diffMode !== DiffMode.Delete)
       tokens.push('</u>');
 
     if (action.elapsed && action.diffMode !== DiffMode.Delete) {
       tokens.push(' ');
-      tokens.push(formatElapsed(action.elapsed));
+      tokens.push(formatElapsed(action.elapsed, markupEnabled));
     }
     return tokens.join('');
   }
 
-  responseLabel(): string | undefined {
+  responseLabel(markupEnabled: boolean): string | undefined {
     const response = actionResponse(this.action);
     if (!response) return;
 
@@ -96,9 +97,9 @@ class Label {
 
     const tokens: string[] = [];
 
-    if (response.raisesException) tokens.push('<i>');
+    if (markupEnabled && response.raisesException) tokens.push('<i>');
     tokens.push(formattedLabel);
-    if (response.raisesException) tokens.push('</i>');
+    if (markupEnabled && response.raisesException) tokens.push('</i>');
 
     return tokens.join('');
   }
@@ -187,7 +188,9 @@ function alias(id: string): string {
   return id.replace(/[^a-zA-Z0-9]/g, '_');
 }
 
-function color(action: Action): string | undefined {
+function color(action: Action, markupEnabled: boolean): string | undefined {
+  if (!markupEnabled) return;
+
   switch (action.diffMode) {
     case DiffMode.Delete:
       return 'red';
@@ -198,8 +201,8 @@ function color(action: Action): string | undefined {
   }
 }
 
-function arrowColor(tail: string, head: string, action: Action): string {
-  let c = color(action);
+function arrowColor(tail: string, head: string, action: Action, markupEnabled: boolean): string {
+  let c = color(action, markupEnabled);
   if (c) {
     c = ['[#', c, ']'].join('');
   }
@@ -228,7 +231,7 @@ function fold(line: string, limit: number): string[] {
   return output;
 }
 
-const requestArrow = (action: Action): string => {
+const requestArrow = (action: Action, markupEnabled: boolean): string => {
   const [caller, callee] = actionActors(action);
   let arrowTokens: { tail: string; head: string };
   if (caller && callee) {
@@ -238,10 +241,10 @@ const requestArrow = (action: Action): string => {
   } else {
     arrowTokens = { tail: '[-', head: '>' };
   }
-  return arrowColor(arrowTokens.tail, arrowTokens.head, action);
+  return arrowColor(arrowTokens.tail, arrowTokens.head, action, markupEnabled);
 };
 
-const responseArrow = (action: Action): string => {
+const responseArrow = (action: Action, markupEnabled: boolean): string => {
   const [caller, callee] = actionActors(action);
   let arrowTokens: { tail: string; head: string };
   if (caller && callee) {
@@ -251,7 +254,7 @@ const responseArrow = (action: Action): string => {
   } else {
     arrowTokens = { head: '[<', tail: '--' };
   }
-  return arrowColor(arrowTokens.head, arrowTokens.tail, action);
+  return arrowColor(arrowTokens.head, arrowTokens.tail, action, markupEnabled);
 };
 
 class EventLines {
@@ -275,7 +278,15 @@ class EventLines {
   }
 }
 
-export function format(diagram: Diagram, _source: string): string {
+export type Options = {
+  disableMarkup?: boolean;
+  disableNotes?: boolean;
+};
+
+export function format(diagram: Diagram, _source: string, options: Options = {}): string {
+  const markupEnabled = options.disableMarkup !== true;
+  const notesEnabled = options.disableNotes !== true;
+
   const events = new EventLines();
 
   const renderChildren = (action: Action) =>
@@ -285,13 +296,13 @@ export function format(diagram: Diagram, _source: string): string {
     events.indent();
 
     if (isLoop(action)) {
-      const colorTag = color(action) ? `#${color(action)}` : '';
+      const colorTag = color(action, markupEnabled) ? `#${color(action, markupEnabled)}` : '';
       let countStr = action.count.toString();
       if (hasAncestor(action, (action) => isLoop(action))) countStr = `~${countStr}`;
 
       const tokens = [`${countStr} times`];
       if (action.elapsed) {
-        tokens.push(` ${formatElapsed(action.elapsed)}`);
+        tokens.push(` ${formatElapsed(action.elapsed, markupEnabled)}`);
       }
       events.print(`Loop${colorTag} ${tokens.join('')}`);
 
@@ -304,11 +315,11 @@ export function format(diagram: Diagram, _source: string): string {
       const actors = actionActors(action);
       {
         const incomingTokens = actors.map((actor) => (actor ? alias(actor.name) : ''));
-        const arrow = requestArrow(action);
-        events.print([incomingTokens.join(arrow), label.requestLabel()].join(': '));
+        const arrow = requestArrow(action, markupEnabled);
+        events.print([incomingTokens.join(arrow), label.requestLabel(markupEnabled)].join(': '));
       }
       {
-        if (label.actionNameIsTrimmed) {
+        if (label.actionNameIsTrimmed && notesEnabled) {
           events.print('Note right');
           events.indent();
           events.printLeftAligned(label.note(80));
@@ -327,8 +338,8 @@ export function format(diagram: Diagram, _source: string): string {
 
       if (response) {
         const outgoingTokens = actors.map((actor) => (actor ? alias(actor.name) : ''));
-        const arrow = responseArrow(action);
-        const responseLabel = label.responseLabel();
+        const arrow = responseArrow(action, markupEnabled);
+        const responseLabel = label.responseLabel(markupEnabled);
 
         const tokens = [outgoingTokens.join(arrow)];
         if (responseLabel) tokens.push(responseLabel);
