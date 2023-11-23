@@ -1,6 +1,12 @@
 import { AppMapRpc } from '@appland/rpc';
 import { RpcCallback, RpcHandler } from '../rpc';
-import { SequenceDiagramOptions, Specification, buildDiagram } from '@appland/sequence-diagram';
+import {
+  FormatType,
+  SequenceDiagramOptions,
+  Specification,
+  buildDiagram,
+  format,
+} from '@appland/sequence-diagram';
 import { buildAppMap } from '@appland/models';
 import { readFile } from 'fs/promises';
 import { appmapFile } from './appmapFile';
@@ -14,7 +20,15 @@ export default function sequenceDiagram(): RpcHandler<
     args: AppMapRpc.SequenceDiagramOptions,
     callback: RpcCallback<AppMapRpc.SequenceDiagramResponse>
   ) {
-    let { appmap: appmapId, filter: filterArg } = args;
+    let {
+      appmap: appmapId,
+      filter: filterArg,
+      format: formatArg,
+      formatOptions: formatOptionsArg,
+    } = args;
+
+    const diagramFormat = (formatArg || FormatType.JSON) as FormatType;
+    const diagramFormatOptions: Record<string, boolean | string> = formatOptionsArg || {};
 
     const filter = interpretFilter(filterArg);
 
@@ -31,7 +45,9 @@ export default function sequenceDiagram(): RpcHandler<
 
     const specification = Specification.build(appmap, options);
     const diagram = buildDiagram(appmapFile(appmapId), appmap, specification);
-    return callback(null, diagram);
+    let result = format(diagramFormat, diagram, appmapFile(appmapId), diagramFormatOptions).diagram;
+    if (diagramFormat === FormatType.JSON) result = JSON.parse(result);
+    return callback(null, result);
   }
 
   return { name: AppMapRpc.SequenceDiagramFunctionName, handler };

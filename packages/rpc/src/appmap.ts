@@ -20,7 +20,9 @@ export namespace AppMapRpc {
     appmap: string;
     filter?: string | Record<string, any>;
     options?: Record<string, any>;
+    format?: string;
+    formatOptions?: Record<string, any>;
   };
 
-  export type SequenceDiagramResponse = Record<string, any>;
+  export type SequenceDiagramResponse = Record<string, any> | string;
 }
