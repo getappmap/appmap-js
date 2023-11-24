@@ -1,0 +1,941 @@
+{
+  "events": [
+    {
+      "id": 187,
+      "event": "call",
+      "thread_id": 4460,
+      "http_server_request": {
+        "request_method": "GET",
+        "path_info": "/",
+        "normalized_path_info": "",
+        "headers": {
+          "Version": "HTTP/1.0",
+          "Host": "www.example.com",
+          "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
+          "Cookie": "_sample_app_session=tWCMwCMLkb%2FNHvFtizDJGlheHkO7yU2erHfeciedR4ez%2FjGm2Iftc%2B3JcfrOiQVg%2BNqXAk%2F9IffbV1sNWMN3Pnzqz97Pco%2BO3mISnJAFR1HgYCwKgJzDizkQgc7Kn0BhL9sJaz8NSX2xTbALnUE2DWV4yuovmtEzKFiUemJBSoA7NoK5ZRPAgoDWZgpPXZ3ld6km12JasFQ3PwWWlqBiVq4WP3iPaa9gxS4Hd55JlOHKlAhJvafbkO5N19dlasklZGkOVbwPrjB2OMIY9iqqq7sfTe3EbjuT%2FlZmOpIzvmfmPWmg6iOz%2FOUFGkGtE7U6WhethcPRmdDGCLRN8vE8tIpy6IiygwGEGk2rIDQYYg%3D%3D--mpZgBQP6%2Fu%2F3kuZw--10bTyqkpdE062oqeFhj1aQ%3D%3D; remember_token=VKO3fbS86t9dDjXToNT7YA; user_id=SAPt2lnF%2BYOLbutVtKqkFVx6VRtUgg5fwobse2XHKEafvYnoemXqyJ3SAqnUeD5lAP2VlTKgZ73ogLAp8id5x2l1YPBFyqo%3D--OZ%2BoUcjibrjvLFSv--W%2FCE40ifkZXobL4hWM2wig%3D%3D",
+          "Content-Length": "0"
+        }
+      }
+    },
+    {
+      "id": 279,
+      "event": "call",
+      "thread_id": 4460,
+      "defined_class": "app_views_static_pages_home_html_erb",
+      "method_id": "render",
+      "path": "app/views/static_pages/home.html.erb",
+      "static": true,
+      "receiver": {
+        "class": "ActionView::TemplateRenderer",
+        "object_id": 105520,
+        "value": "#<ActionView::TemplateRenderer:0x00000001163241e8>"
+      }
+    },
+    {
+      "id": 406,
+      "event": "call",
+      "thread_id": 4460,
+      "defined_class": "app_views_shared__micropost_form_html_erb",
+      "method_id": "render",
+      "path": "app/views/shared/_micropost_form.html.erb",
+      "static": true,
+      "receiver": {
+        "class": "ActionView::PartialRenderer",
+        "object_id": 105580,
+        "value": "#<ActionView::PartialRenderer:0x000000011648b068>"
+      }
+    },
+    {
+      "id": 409,
+      "event": "call",
+      "thread_id": 4460,
+      "defined_class": "app_views_shared__error_messages_html_erb",
+      "method_id": "render",
+      "path": "app/views/shared/_error_messages.html.erb",
+      "static": true,
+      "receiver": {
+        "class": "ActionView::PartialRenderer",
+        "object_id": 105600,
+        "value": "#<ActionView::PartialRenderer:0x000000011649aa68>"
+      }
+    },
+    {
+      "id": 414,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 409,
+      "elapsed": 0.012881000060588121,
+      "elapsed_instrumentation": 0.00003499991726130247
+    },
+    {
+      "id": 417,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 406,
+      "elapsed": 0.022320999996736646,
+      "elapsed_instrumentation": 0.000023999949917197227
+    },
+    {
+      "id": 1584,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 279,
+      "elapsed": 1.555034999968484,
+      "elapsed_instrumentation": 0.0000980000477284193
+    },
+    {
+      "id": 1624,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 187,
+      "elapsed": 1.6186769999330863,
+      "elapsed_instrumentation": 0.0006020000437274575,
+      "http_server_response": {
+        "status_code": 200,
+        "headers": {
+          "X-Frame-Options": "SAMEORIGIN",
+          "X-XSS-Protection": "0",
+          "X-Content-Type-Options": "nosniff",
+          "X-Download-Options": "noopen",
+          "X-Permitted-Cross-Domain-Policies": "none",
+          "Referrer-Policy": "strict-origin-when-cross-origin",
+          "Link": "</assets/application-cdc3bed7911b8306994a416a4c2682e340e553fd434035cdc35c53e1200df70a.css>; rel=preload; as=style; nopush,</assets/es-module-shims.min-606ae9c3279013fe751cee30f719a592f759e705edb66496812f3d9dbce3d850.js>; rel=preload; as=script; nopush",
+          "Content-Type": "text/html; charset=utf-8",
+          "ETag": "W/\"1390029d37eeff198aee965e98ec5714\"",
+          "Cache-Control": "max-age=0, private, must-revalidate",
+          "Set-Cookie": "_sample_app_session=CyZrylsqaV5CPueaHVQqBpNhpjb7pOXJ7GiqMSj%2BatIZph8dCArhfVRFIjl1nJnFCn%2BlC5Vs4acY%2Fjn7KlKPU%2BL2nCnwV9rIxd2OYyGUdkRqTBmO%2Bdbv2ojX922y1tjsd1U3ujR6Rnd0K7effz1y%2F9rX%2BAtq5FI4ZDKb%2FFNco4x75PpBmCNphlLqGpXeuF0J%2BD1QzxZrUCgIuDQC6aqugLDS0i5nKJWQXgyaV%2BvkRdZqT1%2BzO3ssI7QkbI8ynNEiXV4SAZa6DgqgNdBurn8feWs4vjiBplLosAPVXj58naP%2FGZn85303DLweyzJ1%2BCEOuW9t89shjCPjT299dliJBRmpB7gJu%2BNKf9XH2lt73w%3D%3D--vkM7W%2B%2BuqVLmas8m--rbSRvsyEASOBB7yo6IsZXw%3D%3D; path=/; HttpOnly; SameSite=Lax",
+          "X-Request-Id": "49172bd4-03f0-42ac-9050-d9abc6d868b5",
+          "X-Runtime": "1.618341"
+        }
+      }
+    },
+    {
+      "id": 2463,
+      "event": "call",
+      "thread_id": 4460,
+      "http_server_request": {
+        "request_method": "POST",
+        "path_info": "/microposts",
+        "normalized_path_info": "/microposts",
+        "headers": {
+          "Version": "HTTP/1.0",
+          "Host": "www.example.com",
+          "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
+          "Cookie": "_sample_app_session=CyZrylsqaV5CPueaHVQqBpNhpjb7pOXJ7GiqMSj%2BatIZph8dCArhfVRFIjl1nJnFCn%2BlC5Vs4acY%2Fjn7KlKPU%2BL2nCnwV9rIxd2OYyGUdkRqTBmO%2Bdbv2ojX922y1tjsd1U3ujR6Rnd0K7effz1y%2F9rX%2BAtq5FI4ZDKb%2FFNco4x75PpBmCNphlLqGpXeuF0J%2BD1QzxZrUCgIuDQC6aqugLDS0i5nKJWQXgyaV%2BvkRdZqT1%2BzO3ssI7QkbI8ynNEiXV4SAZa6DgqgNdBurn8feWs4vjiBplLosAPVXj58naP%2FGZn85303DLweyzJ1%2BCEOuW9t89shjCPjT299dliJBRmpB7gJu%2BNKf9XH2lt73w%3D%3D--vkM7W%2B%2BuqVLmas8m--rbSRvsyEASOBB7yo6IsZXw%3D%3D; remember_token=VKO3fbS86t9dDjXToNT7YA; user_id=SAPt2lnF%2BYOLbutVtKqkFVx6VRtUgg5fwobse2XHKEafvYnoemXqyJ3SAqnUeD5lAP2VlTKgZ73ogLAp8id5x2l1YPBFyqo%3D--OZ%2BoUcjibrjvLFSv--W%2FCE40ifkZXobL4hWM2wig%3D%3D",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Length": "19"
+        }
+      },
+      "message": [
+        {
+          "name": "micropost",
+          "class": "ActiveSupport::HashWithIndifferentAccess",
+          "value": "{content=>}",
+          "object_id": 105700,
+          "properties": [
+            {
+              "name": "content",
+              "class": "String"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2526,
+      "event": "call",
+      "thread_id": 4460,
+      "defined_class": "MicropostsController",
+      "method_id": "create",
+      "path": "app/controllers/microposts_controller.rb",
+      "lineno": 5,
+      "static": false,
+      "receiver": {
+        "class": "MicropostsController",
+        "object_id": 83860,
+        "value": "#<MicropostsController:0x00000001176af230>"
+      }
+    },
+    {
+      "id": 2527,
+      "event": "call",
+      "thread_id": 4460,
+      "defined_class": "SessionsHelper",
+      "method_id": "current_user",
+      "path": "app/helpers/sessions_helper.rb",
+      "lineno": 19,
+      "static": false,
+      "receiver": {
+        "class": "MicropostsController",
+        "object_id": 83860,
+        "value": "#<MicropostsController:0x00000001176af230>"
+      }
+    },
+    {
+      "id": 2538,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 2527,
+      "elapsed": 0.0003980000037699938,
+      "elapsed_instrumentation": 0.00003400002606213093,
+      "return_value": {
+        "class": "User",
+        "value": "#<User:0x00000001176ecd38>",
+        "object_id": 84480
+      }
+    },
+    {
+      "id": 2543,
+      "event": "call",
+      "thread_id": 4460,
+      "defined_class": "SessionsHelper",
+      "method_id": "current_user",
+      "path": "app/helpers/sessions_helper.rb",
+      "lineno": 19,
+      "static": false,
+      "receiver": {
+        "class": "MicropostsController",
+        "object_id": 83860,
+        "value": "#<MicropostsController:0x00000001176af230>"
+      }
+    },
+    {
+      "id": 2554,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 2543,
+      "elapsed": 0.0007659998955205083,
+      "elapsed_instrumentation": 0.00009200000204145908,
+      "return_value": {
+        "class": "User",
+        "value": "#<User:0x0000000117716660>",
+        "object_id": 84640
+      }
+    },
+    {
+      "id": 2555,
+      "event": "call",
+      "thread_id": 4460,
+      "defined_class": "User",
+      "method_id": "feed",
+      "path": "app/models/user.rb",
+      "lineno": 88,
+      "static": false,
+      "receiver": {
+        "class": "User",
+        "object_id": 84640,
+        "value": "#<User:0x0000000117716660>"
+      }
+    },
+    {
+      "id": 2556,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 2555,
+      "elapsed": 0.0002300000051036477,
+      "elapsed_instrumentation": 0.00005300005432218313,
+      "return_value": {
+        "class": "ActiveRecord::Relation",
+        "value": "#<Micropost::ActiveRecord_Relation:0x000000011771ef40>",
+        "object_id": 84680
+      }
+    },
+    {
+      "id": 2558,
+      "event": "call",
+      "thread_id": 4460,
+      "defined_class": "app_views_static_pages_home_html_erb",
+      "method_id": "render",
+      "path": "app/views/static_pages/home.html.erb",
+      "static": true,
+      "receiver": {
+        "class": "ActionView::TemplateRenderer",
+        "object_id": 105720,
+        "value": "#<ActionView::TemplateRenderer:0x0000000117725e08>"
+      }
+    },
+    {
+      "id": 2685,
+      "event": "call",
+      "thread_id": 4460,
+      "defined_class": "app_views_shared__micropost_form_html_erb",
+      "method_id": "render",
+      "path": "app/views/shared/_micropost_form.html.erb",
+      "static": true,
+      "receiver": {
+        "class": "ActionView::PartialRenderer",
+        "object_id": 105780,
+        "value": "#<ActionView::PartialRenderer:0x00000001177cf340>"
+      }
+    },
+    {
+      "id": 2688,
+      "event": "call",
+      "thread_id": 4460,
+      "defined_class": "app_views_shared__error_messages_html_erb",
+      "method_id": "render",
+      "path": "app/views/shared/_error_messages.html.erb",
+      "static": true,
+      "receiver": {
+        "class": "ActionView::PartialRenderer",
+        "object_id": 105800,
+        "value": "#<ActionView::PartialRenderer:0x00000001177d70e0>"
+      }
+    },
+    {
+      "id": 2693,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 2688,
+      "elapsed": 0.001294999965466559,
+      "elapsed_instrumentation": 0.00001500011421740055
+    },
+    {
+      "id": 2696,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 2685,
+      "elapsed": 0.0025759999407455325,
+      "elapsed_instrumentation": 0.000014999997802078724
+    },
+    {
+      "id": 3267,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 2558,
+      "elapsed": 0.056702999980188906,
+      "elapsed_instrumentation": 0.000025999965146183968
+    },
+    {
+      "id": 3269,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 2526,
+      "elapsed": 0.0726910000666976,
+      "elapsed_instrumentation": 0.0001039999770000577,
+      "return_value": {
+        "class": "ActionView::OutputBuffer",
+        "value": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Ruby on Rails Tutorial Sample App</title>\n    <meta chars (...21416 more characters)",
+        "object_id": 90460
+      }
+    },
+    {
+      "id": 3308,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 2463,
+      "elapsed": 0.0782140000956133,
+      "elapsed_instrumentation": 0.0005849999142810702,
+      "http_server_response": {
+        "status_code": 422,
+        "headers": {
+          "X-Frame-Options": "SAMEORIGIN",
+          "X-XSS-Protection": "0",
+          "X-Content-Type-Options": "nosniff",
+          "X-Download-Options": "noopen",
+          "X-Permitted-Cross-Domain-Policies": "none",
+          "Referrer-Policy": "strict-origin-when-cross-origin",
+          "Link": "</assets/application-cdc3bed7911b8306994a416a4c2682e340e553fd434035cdc35c53e1200df70a.css>; rel=preload; as=style; nopush,</assets/es-module-shims.min-606ae9c3279013fe751cee30f719a592f759e705edb66496812f3d9dbce3d850.js>; rel=preload; as=script; nopush",
+          "Content-Type": "text/html; charset=utf-8",
+          "Cache-Control": "no-cache",
+          "Set-Cookie": "_sample_app_session=HwmN%2B%2BH1ko5SAdGa%2BdY9wExYCdmZYmeQty7yIxwP%2B4gT7IyVp%2Bc3IPCF02zjgj%2FT6OSGANHpCauHpqi2KJmjUjUGpe9FHC3kuT46jgz7bhObRrYVDaZrpQtmVC1hTWknXH%2BOITKPJCpU0TSJIIkXyLRC6NuCY5ov4yrHqPrLA0FMFsAP9bCRDU16SJP1KzlcElAaIlIgBkqCldwBxafI%2BuWOSsDJX6aze%2B%2BpUNRrtavfQ%2F20wzaBtHwAfbe2bi5dnXSO5ADfvUgnNPTYhJPJ2B1hu4CqVzpIgW8d3WNOM%2BKVeiqQchDCSOcPMbuz9tFPTlhJ3li9NzDOFOdIHg1TZDB9UJUrivcSqW9%2Fidn%2FLw%3D%3D--k6ijQAnadlc8fj7L--mdHVjJmZDELJ9%2BWbf7dnlg%3D%3D; path=/; HttpOnly; SameSite=Lax",
+          "X-Request-Id": "b3816de3-3177-43d0-a4a4-26b9ed6f99b1",
+          "X-Runtime": "0.077888"
+        }
+      }
+    },
+    {
+      "id": 3325,
+      "event": "call",
+      "thread_id": 4460,
+      "http_server_request": {
+        "request_method": "POST",
+        "path_info": "/microposts",
+        "normalized_path_info": "/microposts",
+        "headers": {
+          "Version": "HTTP/1.0",
+          "Host": "www.example.com",
+          "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
+          "Cookie": "_sample_app_session=HwmN%2B%2BH1ko5SAdGa%2BdY9wExYCdmZYmeQty7yIxwP%2B4gT7IyVp%2Bc3IPCF02zjgj%2FT6OSGANHpCauHpqi2KJmjUjUGpe9FHC3kuT46jgz7bhObRrYVDaZrpQtmVC1hTWknXH%2BOITKPJCpU0TSJIIkXyLRC6NuCY5ov4yrHqPrLA0FMFsAP9bCRDU16SJP1KzlcElAaIlIgBkqCldwBxafI%2BuWOSsDJX6aze%2B%2BpUNRrtavfQ%2F20wzaBtHwAfbe2bi5dnXSO5ADfvUgnNPTYhJPJ2B1hu4CqVzpIgW8d3WNOM%2BKVeiqQchDCSOcPMbuz9tFPTlhJ3li9NzDOFOdIHg1TZDB9UJUrivcSqW9%2Fidn%2FLw%3D%3D--k6ijQAnadlc8fj7L--mdHVjJmZDELJ9%2BWbf7dnlg%3D%3D; remember_token=VKO3fbS86t9dDjXToNT7YA; user_id=SAPt2lnF%2BYOLbutVtKqkFVx6VRtUgg5fwobse2XHKEafvYnoemXqyJ3SAqnUeD5lAP2VlTKgZ73ogLAp8id5x2l1YPBFyqo%3D--OZ%2BoUcjibrjvLFSv--W%2FCE40ifkZXobL4hWM2wig%3D%3D",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Length": "63"
+        }
+      },
+      "message": [
+        {
+          "name": "micropost",
+          "class": "ActiveSupport::HashWithIndifferentAccess",
+          "value": "{content=>This micropost really ties the room together}",
+          "object_id": 105900,
+          "properties": [
+            {
+              "name": "content",
+              "class": "String"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3388,
+      "event": "call",
+      "thread_id": 4460,
+      "defined_class": "MicropostsController",
+      "method_id": "create",
+      "path": "app/controllers/microposts_controller.rb",
+      "lineno": 5,
+      "static": false,
+      "receiver": {
+        "class": "MicropostsController",
+        "object_id": 91240,
+        "value": "#<MicropostsController:0x0000000117b643e8>"
+      }
+    },
+    {
+      "id": 3389,
+      "event": "call",
+      "thread_id": 4460,
+      "defined_class": "SessionsHelper",
+      "method_id": "current_user",
+      "path": "app/helpers/sessions_helper.rb",
+      "lineno": 19,
+      "static": false,
+      "receiver": {
+        "class": "MicropostsController",
+        "object_id": 91240,
+        "value": "#<MicropostsController:0x0000000117b643e8>"
+      }
+    },
+    {
+      "id": 3400,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 3389,
+      "elapsed": 0.0005399999208748341,
+      "elapsed_instrumentation": 0.000033000134862959385,
+      "return_value": {
+        "class": "User",
+        "value": "#<User:0x0000000117bae2b8>",
+        "object_id": 91860
+      }
+    },
+    {
+      "id": 3411,
+      "event": "call",
+      "thread_id": 4460,
+      "sql_query": {
+        "sql": "SAVEPOINT active_record_1",
+        "database_type": "sqlite"
+      }
+    },
+    {
+      "id": 3412,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 3411,
+      "elapsed": 0.000201,
+      "elapsed_instrumentation": 0.00003199989441782236
+    },
+    {
+      "id": 3415,
+      "event": "call",
+      "thread_id": 4460,
+      "sql_query": {
+        "sql": "INSERT INTO \"microposts\" (\"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (?, ?, ?, ?)",
+        "database_type": "sqlite"
+      }
+    },
+    {
+      "id": 3416,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 3415,
+      "elapsed": 0.001703,
+      "elapsed_instrumentation": 0.000055999960750341415
+    },
+    {
+      "id": 3427,
+      "event": "call",
+      "thread_id": 4460,
+      "sql_query": {
+        "sql": "RELEASE SAVEPOINT active_record_1",
+        "database_type": "sqlite"
+      }
+    },
+    {
+      "id": 3428,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 3427,
+      "elapsed": 0.000115,
+      "elapsed_instrumentation": 0.000018000020645558834
+    },
+    {
+      "id": 3439,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 3388,
+      "elapsed": 0.009457000065594912,
+      "elapsed_instrumentation": 0.0000339999096468091,
+      "return_value": {
+        "class": "String",
+        "value": "<html><body>You are being <a href=\"http://www.example.com/\">redirected</a>.</body></html>",
+        "object_id": 92300
+      }
+    },
+    {
+      "id": 3482,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 3325,
+      "elapsed": 0.01589299994520843,
+      "elapsed_instrumentation": 0.00048500008415430784,
+      "http_server_response": {
+        "status_code": 302,
+        "headers": {
+          "X-Frame-Options": "SAMEORIGIN",
+          "X-XSS-Protection": "0",
+          "X-Content-Type-Options": "nosniff",
+          "X-Download-Options": "noopen",
+          "X-Permitted-Cross-Domain-Policies": "none",
+          "Referrer-Policy": "strict-origin-when-cross-origin",
+          "Location": "http://www.example.com/",
+          "Content-Type": "text/html; charset=utf-8",
+          "Cache-Control": "no-cache",
+          "Set-Cookie": "_sample_app_session=jUKiSsTGGU1V%2B6sfrx%2BmBdZdjW6%2FMCuBsxXuhuO0PZZaPq3WEhHXtVcxMhrP5BjW85kQOGPSszSWYHm%2BmOPMVDb239Mi2BR19aSzFbPY0uUviqKB2Nmt7MSQFfigbPZwKr3Ixu3RBATtdTz4VcNBoO0XSYHPVOrNwjlpX0rfcnO2ZNORQ8Cs4XSFDqJQGsTG%2BCKw2%2BHVml6p0QjPpY5KJwqKOd6uiY%2FX08t4C0F3Wc89eIqFZG%2BNore2lts8e0SaKHYu2szIf%2BJAmD7WspZFhKfhO8zlzwnTsQh7shw43PZHQmxIAUCMVC0CFzNYdgz0J%2BYoqow6eLa43IEBVNni%2BX9jwv8hsJJQbWVRmG0c1grDnDkstxDzzSU7mksQLisZ5lp5JoxSUv7Czu8RrE2P8nHoZs0pJG430sIRRxDAq3EiISq7zvLUAH0Faur90oDi5cuMF4Mlrr60ChDP2I%2FRX9ujnFOu%2F%2BQ%3D--uY75IV%2F0hMKC8dBy--rCuuuWNevWEfpR2cYrd3Lw%3D%3D; path=/; HttpOnly; SameSite=Lax",
+          "X-Request-Id": "d2b74dc3-b3ff-4185-b1ec-5d3e69698c43",
+          "X-Runtime": "0.015602"
+        }
+      }
+    },
+    {
+      "id": 3493,
+      "event": "call",
+      "thread_id": 4460,
+      "http_server_request": {
+        "request_method": "GET",
+        "path_info": "/",
+        "normalized_path_info": "",
+        "headers": {
+          "Version": "HTTP/1.0",
+          "Host": "www.example.com",
+          "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
+          "Cookie": "_sample_app_session=jUKiSsTGGU1V%2B6sfrx%2BmBdZdjW6%2FMCuBsxXuhuO0PZZaPq3WEhHXtVcxMhrP5BjW85kQOGPSszSWYHm%2BmOPMVDb239Mi2BR19aSzFbPY0uUviqKB2Nmt7MSQFfigbPZwKr3Ixu3RBATtdTz4VcNBoO0XSYHPVOrNwjlpX0rfcnO2ZNORQ8Cs4XSFDqJQGsTG%2BCKw2%2BHVml6p0QjPpY5KJwqKOd6uiY%2FX08t4C0F3Wc89eIqFZG%2BNore2lts8e0SaKHYu2szIf%2BJAmD7WspZFhKfhO8zlzwnTsQh7shw43PZHQmxIAUCMVC0CFzNYdgz0J%2BYoqow6eLa43IEBVNni%2BX9jwv8hsJJQbWVRmG0c1grDnDkstxDzzSU7mksQLisZ5lp5JoxSUv7Czu8RrE2P8nHoZs0pJG430sIRRxDAq3EiISq7zvLUAH0Faur90oDi5cuMF4Mlrr60ChDP2I%2FRX9ujnFOu%2F%2BQ%3D--uY75IV%2F0hMKC8dBy--rCuuuWNevWEfpR2cYrd3Lw%3D%3D; remember_token=VKO3fbS86t9dDjXToNT7YA; user_id=SAPt2lnF%2BYOLbutVtKqkFVx6VRtUgg5fwobse2XHKEafvYnoemXqyJ3SAqnUeD5lAP2VlTKgZ73ogLAp8id5x2l1YPBFyqo%3D--OZ%2BoUcjibrjvLFSv--W%2FCE40ifkZXobL4hWM2wig%3D%3D",
+          "Content-Length": "0"
+        }
+      }
+    },
+    {
+      "id": 3585,
+      "event": "call",
+      "thread_id": 4460,
+      "defined_class": "app_views_static_pages_home_html_erb",
+      "method_id": "render",
+      "path": "app/views/static_pages/home.html.erb",
+      "static": true,
+      "receiver": {
+        "class": "ActionView::TemplateRenderer",
+        "object_id": 105920,
+        "value": "#<ActionView::TemplateRenderer:0x0000000117cae1b8>"
+      }
+    },
+    {
+      "id": 3712,
+      "event": "call",
+      "thread_id": 4460,
+      "defined_class": "app_views_shared__micropost_form_html_erb",
+      "method_id": "render",
+      "path": "app/views/shared/_micropost_form.html.erb",
+      "static": true,
+      "receiver": {
+        "class": "ActionView::PartialRenderer",
+        "object_id": 105980,
+        "value": "#<ActionView::PartialRenderer:0x0000000115d8b2e0>"
+      }
+    },
+    {
+      "id": 3715,
+      "event": "call",
+      "thread_id": 4460,
+      "defined_class": "app_views_shared__error_messages_html_erb",
+      "method_id": "render",
+      "path": "app/views/shared/_error_messages.html.erb",
+      "static": true,
+      "receiver": {
+        "class": "ActionView::PartialRenderer",
+        "object_id": 106000,
+        "value": "#<ActionView::PartialRenderer:0x0000000115d836a8>"
+      }
+    },
+    {
+      "id": 3720,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 3715,
+      "elapsed": 0.00034499994944781065,
+      "elapsed_instrumentation": 0.000016000005416572094
+    },
+    {
+      "id": 3723,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 3712,
+      "elapsed": 0.0014400000218302011,
+      "elapsed_instrumentation": 0.000019000028260052204
+    },
+    {
+      "id": 4294,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 3585,
+      "elapsed": 0.08557599992491305,
+      "elapsed_instrumentation": 0.000021000043489038944
+    },
+    {
+      "id": 4340,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 3493,
+      "elapsed": 0.10065799998119473,
+      "elapsed_instrumentation": 0.00030499999411404133,
+      "http_server_response": {
+        "status_code": 200,
+        "headers": {
+          "X-Frame-Options": "SAMEORIGIN",
+          "X-XSS-Protection": "0",
+          "X-Content-Type-Options": "nosniff",
+          "X-Download-Options": "noopen",
+          "X-Permitted-Cross-Domain-Policies": "none",
+          "Referrer-Policy": "strict-origin-when-cross-origin",
+          "Link": "</assets/application-cdc3bed7911b8306994a416a4c2682e340e553fd434035cdc35c53e1200df70a.css>; rel=preload; as=style; nopush,</assets/es-module-shims.min-606ae9c3279013fe751cee30f719a592f759e705edb66496812f3d9dbce3d850.js>; rel=preload; as=script; nopush",
+          "Content-Type": "text/html; charset=utf-8",
+          "ETag": "W/\"72b8c2d91ae79a807f2d03030ae9118a\"",
+          "Cache-Control": "max-age=0, private, must-revalidate",
+          "Set-Cookie": "_sample_app_session=98Ls4WoaBDL%2F4TzVGLhseBvBuwhZEr56tNJJAXrhcERB6jjAFZ9oKXJtJqmXbwSQzsLTVrDPYKQRx9t7m5alKDX%2BCqpzTyEaOiJvK3dO8nRZYnKf9fncu3ciunQYVEfxDhM%2F9Jo743RwHH%2FOhLyIsxnWxZgYDlv%2FghUiuwl62JpiBmz%2FZrHWuKjIgvX6YcQoKR0rrcKH6KKZC7jl%2BQK9wIZxpNSDn1uWUu0Kg8%2F2KoL52kXAlwCddet9joegiBKe1iJI1ABvydIkED%2FGIR1%2Btvc2H2dpiWuxBRLkl%2FG1p4VkuVB9SpvmWE1dSzvNM5gyz7r5JZMCyK%2BsfpS9hUZcszaMHqB0NuoQJOUVydcv5g%3D%3D--dx2A%2FL7tOgNkkDe4--ygX2fMSES9OmcUEXvzi9Ng%3D%3D; path=/; HttpOnly; SameSite=Lax",
+          "X-Request-Id": "7e9a476f-ac19-47aa-9891-baed3f20d735",
+          "X-Runtime": "0.100365"
+        }
+      }
+    },
+    {
+      "id": 4355,
+      "event": "call",
+      "thread_id": 4460,
+      "http_server_request": {
+        "request_method": "DELETE",
+        "path_info": "/microposts/1033843181",
+        "normalized_path_info": "/microposts/{id}",
+        "headers": {
+          "Version": "HTTP/1.0",
+          "Host": "www.example.com",
+          "Accept": "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
+          "Cookie": "_sample_app_session=98Ls4WoaBDL%2F4TzVGLhseBvBuwhZEr56tNJJAXrhcERB6jjAFZ9oKXJtJqmXbwSQzsLTVrDPYKQRx9t7m5alKDX%2BCqpzTyEaOiJvK3dO8nRZYnKf9fncu3ciunQYVEfxDhM%2F9Jo743RwHH%2FOhLyIsxnWxZgYDlv%2FghUiuwl62JpiBmz%2FZrHWuKjIgvX6YcQoKR0rrcKH6KKZC7jl%2BQK9wIZxpNSDn1uWUu0Kg8%2F2KoL52kXAlwCddet9joegiBKe1iJI1ABvydIkED%2FGIR1%2Btvc2H2dpiWuxBRLkl%2FG1p4VkuVB9SpvmWE1dSzvNM5gyz7r5JZMCyK%2BsfpS9hUZcszaMHqB0NuoQJOUVydcv5g%3D%3D--dx2A%2FL7tOgNkkDe4--ygX2fMSES9OmcUEXvzi9Ng%3D%3D; remember_token=VKO3fbS86t9dDjXToNT7YA; user_id=SAPt2lnF%2BYOLbutVtKqkFVx6VRtUgg5fwobse2XHKEafvYnoemXqyJ3SAqnUeD5lAP2VlTKgZ73ogLAp8id5x2l1YPBFyqo%3D--OZ%2BoUcjibrjvLFSv--W%2FCE40ifkZXobL4hWM2wig%3D%3D",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Length": "0"
+        }
+      }
+    },
+    {
+      "id": 4434,
+      "event": "call",
+      "thread_id": 4460,
+      "defined_class": "MicropostsController",
+      "method_id": "destroy",
+      "path": "app/controllers/microposts_controller.rb",
+      "lineno": 17,
+      "static": false,
+      "receiver": {
+        "class": "MicropostsController",
+        "object_id": 100360,
+        "value": "#<MicropostsController:0x00000001164355a0>"
+      }
+    },
+    {
+      "id": 4443,
+      "event": "call",
+      "thread_id": 4460,
+      "sql_query": {
+        "sql": "SAVEPOINT active_record_1",
+        "database_type": "sqlite"
+      }
+    },
+    {
+      "id": 4444,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 4443,
+      "elapsed": 0.000362,
+      "elapsed_instrumentation": 0.000022000051103532314
+    },
+    {
+      "id": 4447,
+      "event": "call",
+      "thread_id": 4460,
+      "sql_query": {
+        "sql": "DELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = ?",
+        "database_type": "sqlite"
+      }
+    },
+    {
+      "id": 4448,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 4447,
+      "elapsed": 0.000191,
+      "elapsed_instrumentation": 0.000017000013031065464
+    },
+    {
+      "id": 4453,
+      "event": "call",
+      "thread_id": 4460,
+      "sql_query": {
+        "sql": "RELEASE SAVEPOINT active_record_1",
+        "database_type": "sqlite"
+      }
+    },
+    {
+      "id": 4454,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 4453,
+      "elapsed": 0.000106,
+      "elapsed_instrumentation": 0.000016000005416572094
+    },
+    {
+      "id": 4465,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 4434,
+      "elapsed": 0.0024689999409019947,
+      "elapsed_instrumentation": 0.00010000006295740604,
+      "return_value": {
+        "class": "String",
+        "value": "<html><body>You are being <a href=\"http://www.example.com/\">redirected</a>.</body></html>",
+        "object_id": 101280
+      }
+    },
+    {
+      "id": 4508,
+      "event": "return",
+      "thread_id": 4460,
+      "parent_id": 4355,
+      "elapsed": 0.009745000046677887,
+      "elapsed_instrumentation": 0.0003359998809173703,
+      "http_server_response": {
+        "status_code": 303,
+        "headers": {
+          "X-Frame-Options": "SAMEORIGIN",
+          "X-XSS-Protection": "0",
+          "X-Content-Type-Options": "nosniff",
+          "X-Download-Options": "noopen",
+          "X-Permitted-Cross-Domain-Policies": "none",
+          "Referrer-Policy": "strict-origin-when-cross-origin",
+          "Location": "http://www.example.com/",
+          "Content-Type": "text/html; charset=utf-8",
+          "Cache-Control": "no-cache",
+          "Set-Cookie": "_sample_app_session=yT8%2BdG8oIwWOOsNOLkIMaR1LcjSJWH6yjFhtD3%2BoKN3dtzoijErO4tlS7krud387N4GmQwzA%2Fvlc6ZJbibqX%2BhL%2FESvuJFrFQnH3q7aYIx2er0zxYEHmoNmEbBykGg7ybE0%2FIZEn84EQ%2FNELDd8Q%2F3wEXHbTznPT%2Fu65xXFwGcNlf%2F1e%2F1NpMj2CzB5dOa3eFJA%2FrqMxD5d4TFNW0HRrKIOo0rde%2B6T6GaNu59ycAFFMOApkp9iVPT2r64Kht5quHK%2FinizWPbD8fXqDB2B44U3YWol4z2dwgmKYkBrbtoy1H4XYipTfvOLMvIASE5LhsPp7xSNZx5o4PbFkOVk1xWatBaDYm%2BCZNtZ15fxIkjo25HiPcDRCvwd6wG6zGWueb30LeB6b3%2BFEA2HtGirs88%2FmG5bhAAOVO5wt9c4rJGZxCLS2Q7AjYUADoBspcQCNnBEVZ08xQqwUJx9qpcpSskum%2Fg%3D%3D--orKBfEwZeIRCyKXa--64amVbysKnZ5esXjULrSIQ%3D%3D; path=/; HttpOnly; SameSite=Lax",
+          "X-Request-Id": "442e62ee-e4e8-4fc8-ab64-44c24517c827",
+          "X-Runtime": "0.009499"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "app": "sample_rails_app",
+    "language": {
+      "name": "ruby",
+      "engine": "ruby",
+      "version": "3.1.2"
+    },
+    "client": {
+      "name": "appmap",
+      "url": "https://github.com/applandinc/appmap-ruby",
+      "version": "0.102.1"
+    },
+    "frameworks": [
+      {
+        "name": "rails",
+        "version": "7.0.4"
+      },
+      {
+        "name": "minitest",
+        "version": "5.15.0"
+      }
+    ],
+    "git": {
+      "repository": "git@github.com:land-of-apps/sample_rails_app.git",
+      "branch": "appmap",
+      "commit": "220d384b761c11391cab70adbed33bc350140840",
+      "git_last_annotated_tag": null,
+      "git_last_tag": null,
+      "git_commits_since_last_annotated_tag": null,
+      "git_commits_since_last_tag": null
+    },
+    "name": "Microposts_interface micropost interface",
+    "source_location": "test/integration/microposts_interface_test.rb:9",
+    "recorder": {
+      "name": "minitest",
+      "type": "tests"
+    },
+    "test_status": "succeeded"
+  },
+  "classMap": [
+    {
+      "name": "app",
+      "type": "package",
+      "children": [
+        {
+          "name": "controllers",
+          "type": "package",
+          "children": [
+            {
+              "name": "MicropostsController",
+              "type": "class",
+              "children": [
+                {
+                  "name": "create",
+                  "type": "function",
+                  "static": false,
+                  "location": "app/controllers/microposts_controller.rb:5"
+                },
+                {
+                  "name": "destroy",
+                  "type": "function",
+                  "static": false,
+                  "location": "app/controllers/microposts_controller.rb:17"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "helpers",
+          "type": "package",
+          "children": [
+            {
+              "name": "SessionsHelper",
+              "type": "class",
+              "children": [
+                {
+                  "name": "current_user",
+                  "type": "function",
+                  "static": false,
+                  "location": "app/helpers/sessions_helper.rb:19"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "models",
+          "type": "package",
+          "children": [
+            {
+              "name": "User",
+              "type": "class",
+              "children": [
+                {
+                  "name": "feed",
+                  "type": "function",
+                  "static": false,
+                  "location": "app/models/user.rb:88"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "views",
+          "type": "package",
+          "children": [
+            {
+              "name": "app_views_static_pages_home_html_erb",
+              "type": "class",
+              "children": [
+                {
+                  "name": "render",
+                  "type": "function",
+                  "labels": [
+                    "mvc.template"
+                  ],
+                  "static": true,
+                  "location": "app/views/static_pages/home.html.erb"
+                }
+              ]
+            },
+            {
+              "name": "app_views_shared__micropost_form_html_erb",
+              "type": "class",
+              "children": [
+                {
+                  "name": "render",
+                  "type": "function",
+                  "labels": [
+                    "mvc.template"
+                  ],
+                  "static": true,
+                  "location": "app/views/shared/_micropost_form.html.erb"
+                }
+              ]
+            },
+            {
+              "name": "app_views_shared__error_messages_html_erb",
+              "type": "class",
+              "children": [
+                {
+                  "name": "render",
+                  "type": "function",
+                  "labels": [
+                    "mvc.template"
+                  ],
+                  "static": true,
+                  "location": "app/views/shared/_error_messages.html.erb"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "database",
+      "name": "Database",
+      "children": [
+        {
+          "type": "query",
+          "name": "SAVEPOINT active_record_1"
+        },
+        {
+          "type": "query",
+          "name": "RELEASE SAVEPOINT active_record_1"
+        },
+        {
+          "type": "query",
+          "name": "INSERT INTO \"microposts\" (\"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (?, ?, ?, ?)"
+        },
+        {
+          "type": "query",
+          "name": "DELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = ?"
+        }
+      ]
+    },
+    {
+      "type": "http",
+      "name": "HTTP server requests",
+      "children": [
+        {
+          "type": "route",
+          "name": "GET /"
+        },
+        {
+          "type": "route",
+          "name": "POST /microposts"
+        },
+        {
+          "type": "route",
+          "name": "DELETE /microposts/{id}"
+        }
+      ]
+    }
+  ]
+}

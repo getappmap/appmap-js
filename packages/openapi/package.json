@@ -5,7 +5,7 @@
   "files": [
     "dist"
   ],
-  "license": "MIT",
+  "license": "Commons Clause + MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

@@ -2,10 +2,17 @@ import buildAppMap from '../../src/appMapBuilder';
 import AppMapFilter from '../../src/appMapFilter';
 import checkoutUpdatePaymentData from './fixtures/checkout_update_payment.appmap.json';
 import petClinicData from './fixtures/org_springframework_samples_petclinic_web_VisitControllerTests_testShowVisits.appmap.json';
+import listMicropostsCompactData from './fixtures/list_microposts_compact.appmap.json';
 import modelData from './fixtures/appland/DAO_Scenario_validation_fails_when_raw_data_is_larger_than_limit.appmap.json';
+
+import loadPetWithVisit from './fixtures/appMapFilter/loadPetWithVisit.appmap.json';
+import loadPetWithVisit_depth_1 from './fixtures/appMapFilter/loadPetWithVisit_depth_1.appmap.json';
+import listMicropostsCompactAppMap_sql_context from './fixtures/appMapFilter/listMicropostsCompactAppMap_sql_context.appmap.json';
+import { writeFileSync } from 'fs';
 
 const checkoutUpdatePaymentAppMap = buildAppMap().source(checkoutUpdatePaymentData).build();
 const petClinicAppMap = buildAppMap().source(petClinicData).build();
+const listMicropostsCompactAppMap = buildAppMap().source(listMicropostsCompactData).build();
 const modelAppMap = buildAppMap().source(modelData).build();
 
 describe('appMapFilter', () => {
@@ -111,6 +118,46 @@ describe('appMapFilter', () => {
       expect(firstEvent.codeObject.parent.fqid).toEqual(classId);
       expect(lastEvent.codeObject.parent.fqid).toEqual(classId);
       expect(filteredAppMap.events.length).toEqual(32);
+    });
+  });
+
+  describe('context events', () => {
+    it('can be applied', () => {
+      const functionId =
+        'function:org/springframework/samples/petclinic/web/VisitController#loadPetWithVisit';
+      filter.declutter.context.on = true;
+      filter.declutter.context.names = [functionId];
+
+      delete petClinicAppMap.metadata['fingerprints'];
+
+      const filteredAppMap = filter.filter(petClinicAppMap);
+      expect(JSON.stringify(filteredAppMap, null, 2)).toEqual(
+        JSON.stringify(loadPetWithVisit_depth_1, null, 2)
+      );
+    });
+    it('depth can be configured', () => {
+      const functionId =
+        'function:org/springframework/samples/petclinic/web/VisitController#loadPetWithVisit';
+      filter.declutter.context.on = true;
+      filter.declutter.context.names = [functionId];
+      filter.declutter.context.depth = 3;
+
+      delete petClinicAppMap.metadata['fingerprints'];
+
+      const filteredAppMap = filter.filter(petClinicAppMap);
+      expect(JSON.stringify(filteredAppMap, null, 2)).toEqual(
+        JSON.stringify(loadPetWithVisit, null, 2)
+      );
+    });
+    it('can apply to SQL', () => {
+      const functionId = 'query:DELETE FROM "microposts" WHERE "microposts"."id" = ?';
+      filter.declutter.context.on = true;
+      filter.declutter.context.names = [functionId];
+
+      const filteredAppMap = filter.filter(listMicropostsCompactAppMap);
+      expect(JSON.stringify(filteredAppMap, null, 2)).toEqual(
+        JSON.stringify(listMicropostsCompactAppMap_sql_context, null, 2)
+      );
     });
   });
 

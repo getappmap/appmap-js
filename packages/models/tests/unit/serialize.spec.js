@@ -9,15 +9,6 @@ const TEST_STATE = {
   hideExternalPaths: ['vendor', 'node_modules'],
 };
 
-const TEST_STATE_BOOL = {
-  hideElapsedTimeUnder: 1,
-  hideMediaRequests: false,
-  hideName: ['package:activesupport'],
-  hideUnlabeled: true,
-  limitRootEvents: false,
-  hideExternal: true,
-};
-
 function stateObjectToBase64(stateObject) {
   return Buffer.from(JSON.stringify(stateObject), 'utf-8').toString('base64url');
 }
@@ -44,6 +35,29 @@ describe('serializeFilter', () => {
 
     const serialized = serializeFilter(filter);
     expect(serialized).toStrictEqual(TEST_STATE);
+  });
+
+  it(`populates 'context' key'`, () => {
+    const filter = new AppMapFilter();
+    filter.declutter.context.on = true;
+    filter.declutter.context.names = ['package:app/controllers'];
+
+    const serialized = serializeFilter(filter);
+    expect(serialized).toStrictEqual({
+      context: ['package:app/controllers'],
+    });
+  });
+  it(`populates 'contextDepth' key'`, () => {
+    const filter = new AppMapFilter();
+    filter.declutter.context.on = true;
+    filter.declutter.context.names = ['package:app/controllers'];
+    filter.declutter.context.depth = 3;
+
+    const serialized = serializeFilter(filter);
+    expect(serialized).toStrictEqual({
+      context: ['package:app/controllers'],
+      contextDepth: 3,
+    });
   });
 });
 
@@ -116,22 +130,75 @@ describe('deserializeFilter', () => {
     expect(deserialized).toStrictEqual(expectedFilter);
   });
 
-  it('can deserialise when hideExternal is a boolean value', () => {
-    const base64Encoded = stateObjectToBase64(TEST_STATE_BOOL);
-    const deserialized = deserializeFilter(base64Encoded);
+  describe('context', () => {
+    it(`names can be specified via 'context' key`, () => {
+      const serialized = stateObjectToBase64({
+        context: ['package:app/controllers'],
+      });
 
-    const expectedFilter = new AppMapFilter();
+      const expectedFilter = new AppMapFilter();
+      expectedFilter.declutter.context.on = true;
+      expectedFilter.declutter.context.names = ['package:app/controllers'];
+      expectedFilter.declutter.context.depth = 1;
 
-    expectedFilter.declutter.limitRootEvents.on = false;
-    expectedFilter.declutter.hideMediaRequests.on = false;
-    expectedFilter.declutter.hideUnlabeled.on = true;
-    expectedFilter.declutter.hideElapsedTimeUnder.on = true;
-    expectedFilter.declutter.hideElapsedTimeUnder.time = 1;
-    expectedFilter.declutter.hideName.on = true;
-    expectedFilter.declutter.hideName.names = ['package:activesupport'];
-    expectedFilter.declutter.hideExternalPaths.on = true;
-    expectedFilter.declutter.hideExternalPaths.dependencyFolders = ['vendor', 'node_modules'];
+      const deserialized = deserializeFilter(serialized);
+      expect(deserialized).toStrictEqual(expectedFilter);
+    });
+    it(`depth can be specified via 'contextDepth' key`, () => {
+      const serialized = stateObjectToBase64({
+        context: ['package:app/controllers'],
+        contextDepth: 3,
+      });
 
-    expect(deserialized).toStrictEqual(expectedFilter);
+      const expectedFilter = new AppMapFilter();
+      expectedFilter.declutter.context.on = true;
+      expectedFilter.declutter.context.names = ['package:app/controllers'];
+      expectedFilter.declutter.context.depth = 3;
+
+      const deserialized = deserializeFilter(serialized);
+      expect(deserialized).toStrictEqual(expectedFilter);
+    });
+    it(`depth is ignored without 'context' key`, () => {
+      const serialized = stateObjectToBase64({
+        contextDepth: 3,
+      });
+
+      const expectedFilter = new AppMapFilter();
+
+      const deserialized = deserializeFilter(serialized);
+      expect(deserialized).toStrictEqual(expectedFilter);
+    });
+  });
+
+  describe('hideExternal', () => {
+    describe('is a boolean value', () => {
+      const testState = {
+        hideElapsedTimeUnder: 1,
+        hideMediaRequests: false,
+        hideName: ['package:activesupport'],
+        hideUnlabeled: true,
+        limitRootEvents: false,
+        hideExternal: true,
+      };
+
+      it('can deserialise', () => {
+        const base64Encoded = stateObjectToBase64(testState);
+        const deserialized = deserializeFilter(base64Encoded);
+
+        const expectedFilter = new AppMapFilter();
+
+        expectedFilter.declutter.limitRootEvents.on = false;
+        expectedFilter.declutter.hideMediaRequests.on = false;
+        expectedFilter.declutter.hideUnlabeled.on = true;
+        expectedFilter.declutter.hideElapsedTimeUnder.on = true;
+        expectedFilter.declutter.hideElapsedTimeUnder.time = 1;
+        expectedFilter.declutter.hideName.on = true;
+        expectedFilter.declutter.hideName.names = ['package:activesupport'];
+        expectedFilter.declutter.hideExternalPaths.on = true;
+        expectedFilter.declutter.hideExternalPaths.dependencyFolders = ['vendor', 'node_modules'];
+
+        expect(deserialized).toStrictEqual(expectedFilter);
+      });
+    });
   });
 });

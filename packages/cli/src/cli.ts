@@ -7,16 +7,13 @@
 /* eslint-disable max-classes-per-file */
 
 const yargs = require('yargs');
-const yaml = require('js-yaml');
 const { promises: fsp, readFileSync } = require('fs');
 const { queue } = require('async');
-const readline = require('readline');
 const { join } = require('path');
 import { setSQLErrorHandler } from '@appland/models';
 
 const { verbose } = require('./utils');
-const FingerprintDirectoryCommand = require('./fingerprint/fingerprintDirectoryCommand').default;
-const FingerprintWatchCommand = require('./fingerprint/fingerprintWatchCommand').default;
+const IndexCommand = require('./cmds/index/index');
 const Depends = require('./depends');
 import InstallCommand from './cmds/agentInstaller/install-agent';
 import StatusCommand from './cmds/agentInstaller/status';
@@ -36,6 +33,7 @@ const CompareCommand = require('./cmds/compare/compare');
 const CompareReportCommand = require('./cmds/compare-report/compareReport');
 const InventoryCommand = require('./cmds/inventory/inventory');
 const InventoryReportCommand = require('./cmds/inventory-report/inventoryReport');
+const SearchCommand = require('./cmds/search/search');
 import UploadCommand from './cmds/upload';
 import { default as sqlErrorLog } from './lib/sqlErrorLog';
 
@@ -121,60 +119,7 @@ yargs(process.argv.slice(2))
       console.log(Array.from(new Set(values)).sort().join('\n'));
     }
   )
-  .command(
-    'index',
-    'Compute fingerprints and update index files for all appmaps in a directory',
-    (args) => {
-      args.showHidden();
-
-      args.option('directory', {
-        describe: 'program working directory',
-        type: 'string',
-        alias: 'd',
-      });
-      args.option('appmap-dir', {
-        describe: 'directory to recursively inspect for AppMaps',
-      });
-      args.option('watch', {
-        describe: 'watch the directory for changes to appmaps',
-        boolean: true,
-      });
-      args.options('watch-stat-delay', {
-        type: 'number',
-        default: 10,
-        describe: 'delay between stat calls when watching, in milliseconds',
-        hidden: true,
-      });
-      return args.strict();
-    },
-    async (argv) => {
-      verbose(argv.verbose);
-      handleWorkingDirectory(argv.directory);
-      const appmapDir = await locateAppMapDir(argv.appmapDir);
-
-      if (argv.watch) {
-        const cmd = new FingerprintWatchCommand(appmapDir);
-        await cmd.execute({ statDelayMs: argv.watchDelay });
-
-        if (!argv.verbose && process.stdout.isTTY) {
-          process.stdout.write('\x1B[?25l');
-          const consoleLabel = 'AppMaps processed: 0';
-          process.stdout.write(consoleLabel);
-          setInterval(() => {
-            readline.cursorTo(process.stdout, consoleLabel.length - 1);
-            process.stdout.write(`${cmd.numProcessed}`);
-          }, 1000);
-
-          process.on('beforeExit', (/* _code */) => {
-            process.stdout.write(`\x1B[?25h`);
-          });
-        }
-      } else {
-        const cmd = new FingerprintDirectoryCommand(appmapDir);
-        await cmd.execute();
-      }
-    }
-  )
+  .command(IndexCommand)
   .command(OpenAPICommand)
   .command(InstallCommand)
   .command(OpenCommand)
@@ -192,6 +137,7 @@ yargs(process.argv.slice(2))
   .command(CompareReportCommand)
   .command(InventoryCommand)
   .command(InventoryReportCommand)
+  .command(SearchCommand)
   .option('verbose', {
     alias: 'v',
     type: 'boolean',

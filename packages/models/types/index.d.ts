@@ -365,6 +365,12 @@ declare module '@appland/models' {
       constructor(on: boolean, defaultValue: boolean, names: string[]);
     }
 
+    export class DeclutterContextNamesProperty extends DeclutterNamesProperty {
+      public depth: number;
+
+      constructor(on: boolean, defaultValue: boolean, names: string[], depth?: number);
+    }
+
     export class DeclutterExternalPathsProperty extends DeclutterProperty {
       public dependencyFolders: string[];
 
@@ -379,6 +385,7 @@ declare module '@appland/models' {
       public hideElapsedTimeUnder: DeclutterTimeProperty;
       public hideName: DeclutterNamesProperty;
       public hideTree: DeclutterNamesProperty;
+      public context: DeclutterContextNamesProperty;
     }
   }
 

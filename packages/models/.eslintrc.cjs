@@ -3,7 +3,7 @@ module.exports = {
     es2021: true,
     'shared-node-browser': true,
   },
-  extends: ['../../eslintrc.js', 'plugin:import/recommended', 'plugin:import/typescript'],
+  extends: ['../../eslintrc.js', 'plugin:import/recommended'],
   ignorePatterns: ['**/*.cjs'],
   rules: {
     'no-undef': ['warn'],
@@ -17,6 +17,24 @@ module.exports = {
       files: ['**/__tests__/*.{j,t}s?(x)', '**/tests/unit/**/*.spec.{j,t}s?(x)'],
       env: {
         jest: true,
+      },
+    },
+    // typescript
+    {
+      files: ['*.ts'],
+      excludedFiles: ['*.test.js'],
+      plugins: ['@typescript-eslint'],
+      extends: [
+        'plugin:@typescript-eslint/eslint-recommended',
+        'plugin:@typescript-eslint/recommended',
+        'plugin:react/recommended',
+      ],
+      rules: {
+        '@typescript-eslint/no-explicit-any': 0,
+        '@typescript-eslint/member-delimiter-style': 0,
+        '@typescript-eslint/interface-name-prefix': 0,
+        '@typescript-eslint/no-use-before-define': 0,
+        'react/prop-types': 0,
       },
     },
     {

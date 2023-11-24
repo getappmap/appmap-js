@@ -5,6 +5,12 @@ import { Glob, IGlob } from 'glob';
 import { EventEmitter } from 'stream';
 import { verbose } from '../utils';
 
+export type GlobberOptions = {
+  statDelayMs?: number;
+  interval?: number;
+  fs?: typeof defaultfs;
+};
+
 class Globber extends EventEmitter {
   private interval: number;
   private fs: typeof defaultfs;
@@ -17,7 +23,7 @@ class Globber extends EventEmitter {
       statDelayMs = 10,
       interval = 1000,
       fs = defaultfs,
-    }: { statDelayMs?: number; interval?: number; fs?: typeof defaultfs } = {}
+    }: GlobberOptions = {}
   ) {
     super();
     this.interval = interval;

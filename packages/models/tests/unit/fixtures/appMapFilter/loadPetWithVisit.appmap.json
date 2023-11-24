@@ -1,0 +1,329 @@
+{
+  "events": [
+    {
+      "event": "call",
+      "http_server_request": {
+        "headers": {},
+        "path_info": "/owners/*/pets/1/visits",
+        "protocol": "http",
+        "request_method": "GET"
+      },
+      "id": 2,
+      "thread_id": 1
+    },
+    {
+      "defined_class": "org.springframework.samples.petclinic.web.VisitController",
+      "event": "call",
+      "id": 5,
+      "lineno": 69,
+      "method_id": "loadPetWithVisit",
+      "parameters": [
+        {
+          "class": "java.lang.Integer",
+          "kind": "req",
+          "name": "petId",
+          "object_id": 375039034,
+          "value": "1"
+        }
+      ],
+      "path": "org/springframework/samples/petclinic/web/VisitController.java",
+      "receiver": {
+        "class": "org.springframework.samples.petclinic.web.VisitController",
+        "object_id": 1837377655,
+        "value": "org.springframework.samples.petclinic.web.VisitController@6d842877"
+      },
+      "static": false,
+      "thread_id": 1
+    },
+    {
+      "defined_class": "org.springframework.samples.petclinic.service.ClinicServiceImpl",
+      "event": "call",
+      "id": 6,
+      "lineno": 92,
+      "method_id": "findPetById",
+      "parameters": [
+        {
+          "class": "java.lang.Integer",
+          "kind": "req",
+          "name": "id",
+          "object_id": 375039034,
+          "value": "1"
+        }
+      ],
+      "path": "org/springframework/samples/petclinic/service/ClinicServiceImpl.java",
+      "receiver": {
+        "class": "org.springframework.samples.petclinic.service.ClinicServiceImpl",
+        "object_id": 786716359,
+        "value": "org.springframework.samples.petclinic.service.ClinicServiceImpl@2ee456c7"
+      },
+      "static": false,
+      "thread_id": 1
+    },
+    {
+      "event": "call",
+      "id": 7,
+      "sql_query": {
+        "database_type": "HSQL Database Engine",
+        "sql": "select pet0_.id as id1_1_, pet0_.name as name2_1_, pet0_.birth_date as birth_da3_1_, pet0_.owner_id as owner_id4_1_, pet0_.type_id as type_id5_1_ from pets pet0_ where pet0_.id=?"
+      },
+      "thread_id": 1
+    },
+    {
+      "elapsed": 0.0002,
+      "event": "return",
+      "id": 8,
+      "parent_id": 7,
+      "thread_id": 1
+    },
+    {
+      "event": "call",
+      "id": 9,
+      "sql_query": {
+        "database_type": "HSQL Database Engine",
+        "sql": "select owner0_.id as id1_0_0_, owner0_.first_name as first_na2_0_0_, owner0_.last_name as last_nam3_0_0_, owner0_.address as address4_0_0_, owner0_.city as city5_0_0_, owner0_.telephone as telephon6_0_0_ from owners owner0_ where owner0_.id=?"
+      },
+      "thread_id": 1
+    },
+    {
+      "elapsed": 0.0001,
+      "event": "return",
+      "id": 10,
+      "parent_id": 9,
+      "thread_id": 1
+    },
+    {
+      "event": "call",
+      "id": 11,
+      "sql_query": {
+        "database_type": "HSQL Database Engine",
+        "sql": "select pettype0_.id as id1_3_0_, pettype0_.name as name2_3_0_ from types pettype0_ where pettype0_.id=?"
+      },
+      "thread_id": 1
+    },
+    {
+      "elapsed": 0.0001,
+      "event": "return",
+      "id": 12,
+      "parent_id": 11,
+      "thread_id": 1
+    },
+    {
+      "event": "call",
+      "id": 13,
+      "sql_query": {
+        "database_type": "HSQL Database Engine",
+        "sql": "select visits0_.pet_id as pet_id4_1_0_, visits0_.id as id1_6_0_, visits0_.id as id1_6_1_, visits0_.visit_date as visit_da2_6_1_, visits0_.description as descript3_6_1_, visits0_.pet_id as pet_id4_6_1_ from visits visits0_ where visits0_.pet_id=?"
+      },
+      "thread_id": 1
+    },
+    {
+      "elapsed": 0,
+      "event": "return",
+      "id": 14,
+      "parent_id": 13,
+      "thread_id": 1
+    },
+    {
+      "elapsed": 0.0006,
+      "event": "return",
+      "id": 15,
+      "parent_id": 6,
+      "return_value": {
+        "class": "org.springframework.samples.petclinic.model.Pet",
+        "object_id": 715099463,
+        "value": "Leo"
+      },
+      "thread_id": 1
+    },
+    {
+      "defined_class": "org.springframework.samples.petclinic.model.Pet",
+      "event": "call",
+      "id": 16,
+      "lineno": 109,
+      "method_id": "addVisit",
+      "parameters": [
+        {
+          "class": "org.springframework.samples.petclinic.model.Visit",
+          "kind": "req",
+          "name": "visit",
+          "object_id": 1257785974,
+          "value": "org.springframework.samples.petclinic.model.Visit@4af84a76"
+        }
+      ],
+      "path": "org/springframework/samples/petclinic/model/Pet.java",
+      "receiver": {
+        "class": "org.springframework.samples.petclinic.model.Pet",
+        "object_id": 715099463,
+        "value": "Leo"
+      },
+      "static": false,
+      "thread_id": 1
+    },
+    {
+      "elapsed": 0,
+      "event": "return",
+      "id": 17,
+      "parent_id": 16,
+      "thread_id": 1
+    },
+    {
+      "elapsed": 0.0006,
+      "event": "return",
+      "id": 18,
+      "parent_id": 5,
+      "return_value": {
+        "class": "org.springframework.samples.petclinic.model.Visit",
+        "object_id": 1257785974,
+        "value": "org.springframework.samples.petclinic.model.Visit@4af84a76"
+      },
+      "thread_id": 1
+    },
+    {
+      "elapsed": 0.0021,
+      "event": "return",
+      "http_server_response": {
+        "headers": {},
+        "status": 200
+      },
+      "id": 35,
+      "parent_id": 2,
+      "thread_id": 1
+    }
+  ],
+  "metadata": {
+    "name": "Visit controllers test show visits",
+    "app": "spring-petclinic",
+    "language": {
+      "name": "java",
+      "version": "25.241-b07",
+      "engine": "Java HotSpot(TM) 64-Bit Server VM"
+    },
+    "client": {
+      "name": "appmap-java",
+      "url": "https://github.com/appland/appmap-java"
+    },
+    "recorder": {
+      "name": "junit",
+      "type": "tests"
+    },
+    "recording": {
+      "defined_class": "org.springframework.samples.petclinic.web.VisitControllerTests",
+      "method_id": "testShowVisits"
+    },
+    "source_location": "org/springframework/samples/petclinic/web/VisitControllerTests.java:72",
+    "framework": {},
+    "test_status": "succeeded"
+  },
+  "classMap": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "name": "loadPetWithVisit",
+                              "type": "function",
+                              "static": false,
+                              "location": "org/springframework/samples/petclinic/web/VisitController.java:69"
+                            }
+                          ],
+                          "name": "VisitController",
+                          "type": "class"
+                        }
+                      ],
+                      "name": "web",
+                      "type": "package"
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "name": "addVisit",
+                              "type": "function",
+                              "static": false,
+                              "location": "org/springframework/samples/petclinic/model/Pet.java:109"
+                            }
+                          ],
+                          "name": "Pet",
+                          "type": "class"
+                        }
+                      ],
+                      "name": "model",
+                      "type": "package"
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "name": "findPetById",
+                              "type": "function",
+                              "static": false,
+                              "location": "org/springframework/samples/petclinic/service/ClinicServiceImpl.java:92"
+                            }
+                          ],
+                          "name": "ClinicServiceImpl",
+                          "type": "class"
+                        }
+                      ],
+                      "name": "service",
+                      "type": "package"
+                    }
+                  ],
+                  "name": "petclinic",
+                  "type": "package"
+                }
+              ],
+              "name": "samples",
+              "type": "package"
+            }
+          ],
+          "name": "springframework",
+          "type": "package"
+        }
+      ],
+      "name": "org",
+      "type": "package"
+    },
+    {
+      "type": "http",
+      "name": "HTTP server requests",
+      "children": [
+        {
+          "type": "route",
+          "name": "GET /owners/*/pets/1/visits"
+        }
+      ]
+    },
+    {
+      "type": "database",
+      "name": "Database",
+      "children": [
+        {
+          "type": "query",
+          "name": "select pet0_.id as id1_1_, pet0_.name as name2_1_, pet0_.birth_date as birth_da3_1_, pet0_.owner_id as owner_id4_1_, pet0_.type_id as type_id5_1_ from pets pet0_ where pet0_.id=?"
+        },
+        {
+          "type": "query",
+          "name": "select owner0_.id as id1_0_0_, owner0_.first_name as first_na2_0_0_, owner0_.last_name as last_nam3_0_0_, owner0_.address as address4_0_0_, owner0_.city as city5_0_0_, owner0_.telephone as telephon6_0_0_ from owners owner0_ where owner0_.id=?"
+        },
+        {
+          "type": "query",
+          "name": "select pettype0_.id as id1_3_0_, pettype0_.name as name2_3_0_ from types pettype0_ where pettype0_.id=?"
+        },
+        {
+          "type": "query",
+          "name": "select visits0_.pet_id as pet_id4_1_0_, visits0_.id as id1_6_0_, visits0_.id as id1_6_1_, visits0_.visit_date as visit_da2_6_1_, visits0_.description as descript3_6_1_, visits0_.pet_id as pet_id4_6_1_ from visits visits0_ where visits0_.pet_id=?"
+        }
+      ]
+    }
+  ]
+}
