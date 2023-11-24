@@ -5,7 +5,7 @@ export namespace AppMapRpc {
 
   export type FilterOptions = {
     appmap: string;
-    filter: string | Record<string, any>;
+    filter: string | Record<string, unknown>;
   };
 
   export type FilterResponse = Record<string, any>;
@@ -14,15 +14,15 @@ export namespace AppMapRpc {
     appmap: string;
   };
 
-  export type MetadataResponse = Record<string, any>;
+  export type MetadataResponse = Record<string, unknown>;
 
   export type SequenceDiagramOptions = {
     appmap: string;
-    filter?: string | Record<string, any>;
+    filter?: string | Record<string, string | boolean | string[]>;
     options?: Record<string, any>;
     format?: string;
-    formatOptions?: Record<string, any>;
+    formatOptions?: Record<string, string | boolean>;
   };
 
-  export type SequenceDiagramResponse = Record<string, any> | string;
+  export type SequenceDiagramResponse = Record<string, unknown> | string;
 }

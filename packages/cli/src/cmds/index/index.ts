@@ -52,15 +52,19 @@ export const builder = (args: yargs.Argv) => {
 
 function handlerMiddleware(
   name: string,
-  handler: (args: any, callback: RpcCallback<any>) => void | Promise<void>
-): (args: any, callback: RpcCallback<any>) => Promise<void> {
+  handler: (args: any) => unknown | Promise<unknown>
+): (args: any, callback: RpcCallback<unknown>) => Promise<void> {
   return async (args, callback) => {
     warn(`Handling JSON-RPC request for ${name} (${JSON.stringify(args)})`);
     try {
-      await handler(args, callback);
+      callback(null, await handler(args));
     } catch (err) {
-      const error: RpcError = { code: 500 };
-      if (err instanceof Error) error.message = err.message;
+      let error: RpcError | undefined;
+      if (err instanceof RpcError) {
+        error = err;
+      } else {
+        error = new RpcError(500, RpcError.errorMessage(err));
+      }
       callback(error);
     }
   };
@@ -104,7 +108,7 @@ export const handler = async (argv) => {
         } else if (typeof address === 'string') {
           log(`Running JSON-RPC server on: ${address}`);
         } else {
-          const { address: addressStr, port } = address;
+          const { port } = address;
           log(`Running JSON-RPC server on port: ${port}`);
         }
       });

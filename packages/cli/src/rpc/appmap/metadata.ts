@@ -1,16 +1,13 @@
 import { AppMapRpc } from '@appland/rpc';
 import { readFile } from 'fs/promises';
-import { RpcCallback, RpcHandler } from '../rpc';
+import { RpcError, RpcHandler } from '../rpc';
 import { join } from 'path';
 
 export default function metadata(): RpcHandler<
   AppMapRpc.MetadataOptions,
   AppMapRpc.MetadataResponse
 > {
-  async function handler(
-    args: AppMapRpc.MetadataOptions,
-    callback: RpcCallback<AppMapRpc.MetadataResponse>
-  ) {
+  async function handler(args: AppMapRpc.MetadataOptions): Promise<AppMapRpc.MetadataResponse> {
     let { appmap: appmapId } = args;
 
     if (appmapId.endsWith('.appmap.json')) appmapId = appmapId.slice(0, -'.appmap.json'.length);
@@ -19,11 +16,9 @@ export default function metadata(): RpcHandler<
     try {
       metadataStr = await readFile(join(appmapId, 'metadata.json'), 'utf8');
     } catch {
-      callback({ code: 404, message: `${appmapId} metadata not found` });
-      return;
+      throw new RpcError(404, `${appmapId} metadata not found`);
     }
-    const metadata = JSON.parse(metadataStr);
-    callback(null, metadata);
+    return JSON.parse(metadataStr);
   }
 
   return { name: AppMapRpc.MetadataFunctionName, handler };
