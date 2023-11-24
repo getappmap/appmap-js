@@ -31,7 +31,7 @@
     ]
   },
   "author": "AppLand, Inc",
-  "license": "MIT",
+  "license": "Commons Clause + MIT",
   "devDependencies": {
     "@appland/appmap-agent-js": "^13.9.0",
     "@craftamap/esbuild-plugin-html": "^0.4.0",
