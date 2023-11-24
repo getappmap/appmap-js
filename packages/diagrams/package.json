@@ -22,7 +22,7 @@
     ]
   },
   "author": "",
-  "license": "MIT",
+  "license": "Commons Clause + MIT",
   "files": [
     "dist/index.js",
     "dist/index.cjs",

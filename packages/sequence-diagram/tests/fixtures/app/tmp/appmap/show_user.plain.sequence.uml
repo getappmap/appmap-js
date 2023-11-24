@@ -1,0 +1,42 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
+participant controllers as "controllers"
+participant models as "models"
+participant database as "database"
+participant users as "users"
+participant posts as "posts"
+  [->controllers: show (0.628 ms)
+  activate controllers
+    controllers->models: find (0.094 ms)
+    activate models
+      models->database: query (0.002 ms)
+      activate database
+      models<--database: void
+      deactivate database
+    controllers<--models: User
+    deactivate models
+    controllers->users: show (0.299 ms)
+    activate users
+      users->models: posts (0.12 ms)
+      activate models
+        models->models: find_for_user (0.034 ms)
+        activate models
+          models->database: query (0.001 ms)
+          activate database
+          models<--database: void
+          deactivate database
+        models<--models: array
+        deactivate models
+      users<--models: array
+      deactivate models
+      Loop 2 times (0.004 ms)
+        users->posts: show (0.004 ms)
+        activate posts
+        users<--posts: string
+        deactivate posts
+      End
+    controllers<--users: object
+    deactivate users
+  [<--controllers: array
+  deactivate controllers
+@enduml

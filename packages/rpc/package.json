@@ -1,0 +1,45 @@
+{
+  "name": "@appland/rpc",
+  "version": "1.0.0",
+  "author": "AppLand, Inc.",
+  "license": "Commons Clause + MIT",
+  "description": "AppMap RPC client and server",
+  "scripts": {
+    "build": "tsc",
+    "semantic-release": "semantic-release",
+    "test": "jest",
+    "watch": "tsc --watch"
+  },
+  "main": "built/index.js",
+  "types": "built/index.d.ts",
+  "files": [
+    "built"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "packageManager": "yarn@3.2.1",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "tsc": "^2.0.4",
+    "typescript": "^5.3.2"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "test",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  }
+}

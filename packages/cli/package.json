@@ -31,7 +31,7 @@
     ]
   },
   "author": "AppLand, Inc",
-  "license": "MIT",
+  "license": "Commons Clause + MIT",
   "devDependencies": {
     "@appland/appmap-agent-js": "^13.9.0",
     "@craftamap/esbuild-plugin-html": "^0.4.0",
@@ -85,6 +85,7 @@
     "@appland/diagrams": "workspace:^1.7.0",
     "@appland/models": "workspace:^2.6.3",
     "@appland/openapi": "workspace:^1.7.0",
+    "@appland/rpc": "workspace:*",
     "@appland/sequence-diagram": "workspace:^1.7.0",
     "@octokit/rest": "^20.0.1",
     "@sidvind/better-ajv-errors": "^0.9.1",
@@ -108,6 +109,7 @@
     "graceful-fs": "^4.2.10",
     "handlebars": "^4.7.7",
     "inquirer": "^8.1.2",
+    "jayson": "^4.1.0",
     "js-yaml": "^4.0.3",
     "jsdom": "^16.6.0",
     "lunr": "^2.3.9",

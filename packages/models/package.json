@@ -27,7 +27,7 @@
   ],
   "types": "types/index.d.ts",
   "author": "",
-  "license": "MIT",
+  "license": "Commons Clause + MIT",
   "devDependencies": {
     "@appland/appmap-agent-js": "^13.9.0",
     "@types/crypto-js": "^4.1.1",
