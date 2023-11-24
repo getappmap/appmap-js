@@ -11,10 +11,11 @@ import { log, warn } from 'console';
 import { numProcessed } from '../../rpc/index/numProcessed';
 import { search } from '../../rpc/search/search';
 import appmapFilter from '../../rpc/appmap/filter';
-import { RpcCallback, RpcError } from '../../rpc/rpc';
+import { RpcCallback, RpcError, RpcHandler } from '../../rpc/rpc';
 import assert from 'assert';
 import metadata from '../../rpc/appmap/metadata';
 import sequenceDiagram from '../../rpc/appmap/sequenceDiagram';
+import RPCServer from './rpcServer';
 
 export const command = 'index';
 export const describe =
@@ -50,26 +51,6 @@ export const builder = (args: yargs.Argv) => {
   return args.strict();
 };
 
-function handlerMiddleware(
-  name: string,
-  handler: (args: any) => unknown | Promise<unknown>
-): (args: any, callback: RpcCallback<unknown>) => Promise<void> {
-  return async (args, callback) => {
-    warn(`Handling JSON-RPC request for ${name} (${JSON.stringify(args)})`);
-    try {
-      callback(null, await handler(args));
-    } catch (err) {
-      let error: RpcError | undefined;
-      if (err instanceof RpcError) {
-        error = err;
-      } else {
-        error = new RpcError(500, RpcError.errorMessage(err));
-      }
-      callback(error);
-    }
-  };
-}
-
 export const handler = async (argv) => {
   verbose(argv.verbose);
   handleWorkingDirectory(argv.directory);
@@ -86,32 +67,15 @@ export const handler = async (argv) => {
     await cmd.execute(watchStatDelay);
 
     if (port !== undefined) {
-      const rpcMethods: Record<string, MethodLike> = [
+      const rpcMethods: RpcHandler<any, any>[] = [
         numProcessed(cmd),
         search(appmapDir),
         appmapFilter(),
         metadata(),
         sequenceDiagram(),
-      ].reduce((acc, handler) => {
-        acc[handler.name] = handlerMiddleware(handler.name, handler.handler);
-        return acc;
-      }, {});
-
-      log(`Available JSON-RPC methods: ${Object.keys(rpcMethods).sort().join(', ')}`);
-      warn(`Consult @appland/rpc for request and response data types.`);
-
-      const server = new jayson.Server(rpcMethods).http();
-      server.listen(port).on('listening', () => {
-        const address = server.address();
-        if (address === null) {
-          throw new Error(`Failed to listen on port ${port} (address is null)`);
-        } else if (typeof address === 'string') {
-          log(`Running JSON-RPC server on: ${address}`);
-        } else {
-          const { port } = address;
-          log(`Running JSON-RPC server on port: ${port}`);
-        }
-      });
+      ];
+      const rpcServer = new RPCServer(port, rpcMethods);
+      rpcServer.start();
     } else {
       if (!argv.verbose && process.stdout.isTTY) {
         process.stdout.write('\x1B[?25l');
