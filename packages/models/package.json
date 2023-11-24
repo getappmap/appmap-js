@@ -1,6 +1,6 @@
 {
   "name": "@appland/models",
-  "version": "2.8.0",
+  "version": "2.9.0",
   "description": "",
   "module": "dist/index.js",
   "main": "dist/index.cjs",

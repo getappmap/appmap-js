@@ -1,3 +1,16 @@
+# [@appland/models-v2.9.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.8.0...@appland/models-v2.9.0) (2023-11-24)
+
+
+### Bug Fixes
+
+* Allow '*' only at the end of a filter name ([3c4d75d](https://github.com/getappmap/appmap-js/commit/3c4d75de1403c88e5e1a593276ee724074d2d976))
+
+
+### Features
+
+* Filter map around context events ([4e93cdf](https://github.com/getappmap/appmap-js/commit/4e93cdfa90d93833709ae2eec5a8c3a6af58eb05))
+* Filter map around context events ([303dce4](https://github.com/getappmap/appmap-js/commit/303dce48a46ae370d4969cc02f060882477bfe65))
+
 # [@appland/models-v2.8.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.7.0...@appland/models-v2.8.0) (2023-11-15)
 
 
