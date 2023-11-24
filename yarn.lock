@@ -140,6 +140,7 @@ __metadata:
     "@types/jest": ^29.5.4
     "@types/jest-sinon": ^1.0.2
     "@types/jsdom": ^16.2.13
+    "@types/lunr": ^2.3.7
     "@types/moo": ^0.5.5
     "@types/node": ^16
     "@types/semver": ^7.3.10
@@ -178,6 +179,7 @@ __metadata:
     js-yaml: ^4.0.3
     jsdom: ^16.6.0
     lint-staged: ^10.5.4
+    lunr: ^2.3.9
     memfs: ^3.4.13
     minimatch: ^5.1.2
     moo: ^0.5.1
@@ -8305,6 +8307,13 @@ __metadata:
   version: 5.1.1
   resolution: "@types/lru-cache@npm:5.1.1"
   checksum: e1d6c0085f61b16ec5b3073ec76ad1be4844ea036561c3f145fc19f71f084b58a6eb600b14128aa95809d057d28f1d147c910186ae51219f58366ffd2ff2e118
+  languageName: node
+  linkType: hard
+
+"@types/lunr@npm:^2.3.7":
+  version: 2.3.7
+  resolution: "@types/lunr@npm:2.3.7"
+  checksum: 188a18f035e042f4c23e807ae752bfdb0076a0446ff8285b3c10572008fb00282dfeebdbbd566bfcf65dbb073daf552477a0ccbf426ebaa5ce88c0088a860924
   languageName: node
   linkType: hard
 
@@ -25118,6 +25127,13 @@ __metadata:
   version: 9.1.2
   resolution: "lru-cache@npm:9.1.2"
   checksum: d3415634be3908909081fc4c56371a8d562d9081eba70543d86871b978702fffd0e9e362b83921b27a29ae2b37b90f55675aad770a54ac83bb3e4de5049d4b15
+  languageName: node
+  linkType: hard
+
+"lunr@npm:^2.3.9":
+  version: 2.3.9
+  resolution: "lunr@npm:2.3.9"
+  checksum: 176719e24fcce7d3cf1baccce9dd5633cd8bdc1f41ebe6a180112e5ee99d80373fe2454f5d4624d437e5a8319698ca6837b9950566e15d2cae5f2a543a3db4b8
   languageName: node
   linkType: hard
 
