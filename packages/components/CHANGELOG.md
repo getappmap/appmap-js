@@ -1,3 +1,10 @@
+# [@appland/components-v3.13.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.13.0...@appland/components-v3.13.1) (2023-11-26)
+
+
+### Bug Fixes
+
+* Allow '*' only at the end of a filter name ([3c4d75d](https://github.com/getappmap/appmap-js/commit/3c4d75de1403c88e5e1a593276ee724074d2d976))
+
 # [@appland/components-v3.13.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.12.0...@appland/components-v3.13.0) (2023-11-15)
 
 
