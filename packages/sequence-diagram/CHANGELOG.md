@@ -1,3 +1,10 @@
+# [@appland/sequence-diagram-v1.11.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.10.0...@appland/sequence-diagram-v1.11.0) (2023-11-26)
+
+
+### Features
+
+* Option to disable PlantUML markup & notes ([1f56c4f](https://github.com/getappmap/appmap-js/commit/1f56c4faf3d90e61ecddcc3294f3fc41aa5a22de))
+
 # [@appland/sequence-diagram-v1.10.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.9.0...@appland/sequence-diagram-v1.10.0) (2023-11-07)
 
 
