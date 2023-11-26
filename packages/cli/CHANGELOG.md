@@ -1,3 +1,22 @@
+# [@appland/appmap-v3.112.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.111.1...@appland/appmap-v3.112.0) (2023-11-26)
+
+
+### Bug Fixes
+
+* Refactor index command ([f9aff32](https://github.com/getappmap/appmap-js/commit/f9aff320b300b939014fff9601ceb1b86f036925))
+
+
+### Features
+
+* 'search' command ([961c4c0](https://github.com/getappmap/appmap-js/commit/961c4c0f23267833398f384ad751317e14b499f0))
+* Add JSON-RPC interface ([c41c417](https://github.com/getappmap/appmap-js/commit/c41c417e97693014a9c37bcf0c50f4ae1bb5df37))
+* Fetch AppMap metadata via RPC ([f81944b](https://github.com/getappmap/appmap-js/commit/f81944b47b82cb7d2271a91d3bf274df16c3f596))
+* Include parameter names in the index ([3bab0f2](https://github.com/getappmap/appmap-js/commit/3bab0f25a0ac61eda6824fb14625191ce69519ce))
+* JSON-RPC server ([309ca96](https://github.com/getappmap/appmap-js/commit/309ca96c3efaf94b32b7ec1e89c3c8db91106e89))
+* RPC accepts port = 0 ([60ce4d7](https://github.com/getappmap/appmap-js/commit/60ce4d781153938ff5a2ce02d84daac9821dfe4a))
+* RPC function to build a sequence diagram ([45f0abc](https://github.com/getappmap/appmap-js/commit/45f0abcbc45ff6aa160a2f3b7c150f947d6d86cf))
+* Support sequence diagram format via RPC ([101ca7e](https://github.com/getappmap/appmap-js/commit/101ca7e4bf5ed0cd417b313ae37f8fec686ccec0))
+
 # [@appland/appmap-v3.111.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.111.0...@appland/appmap-v3.111.1) (2023-11-15)
 
 
