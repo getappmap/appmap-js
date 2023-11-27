@@ -1318,6 +1318,7 @@ export default {
     },
 
     setMaxSeqDiagramCollapseDepth(maxDepth) {
+      if (!maxDepth) return;
       if (maxDepth < this.seqDiagramCollapseDepth) this.seqDiagramCollapseDepth = maxDepth;
       this.maxSeqDiagramCollapseDepth = maxDepth;
     },

@@ -119,3 +119,27 @@ export const extensionWithoutHTTP = (args, { argTypes }) => ({
     this.$refs.vsCode.loadData(diffScenario);
   },
 });
+
+export const extensionWithSlowLoad = (args, { argTypes }) => {
+  return {
+    props: Object.keys(argTypes),
+    components: { VVsCodeExtension },
+    template: '<v-vs-code-extension v-bind="$props" ref="vsCode" />',
+    mounted() {
+      const scenario = scenarioData[args.scenario];
+      const sequenceDiagram = sequenceDiagramData[args.scenario];
+      if (scenario) {
+        // The delay mimics the time it takes to load an appmap in the VS Code extension
+        setTimeout(() => {
+          this.$refs.vsCode.loadData(scenario, sequenceDiagram);
+        }, 1000);
+      }
+
+      bindResolvePath(this);
+    },
+  };
+};
+
+extensionWithSlowLoad.args = {
+  defaultView: VIEW_SEQUENCE,
+};

@@ -269,6 +269,7 @@ export default {
       rootActionSpecs.forEach((h) => visit(h.action));
     },
     getMaxActionDepth() {
+      if (this.actions.length === 0) return undefined;
       return this.actions.reduce((maxDepth, action) => {
         const depth = action.ancestorIndexes.length;
         if (depth > maxDepth) return depth;
