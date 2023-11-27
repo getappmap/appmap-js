@@ -12,6 +12,13 @@ module.exports = {
       vue$: 'vue/dist/vue.common.dev.js', // This must match the alias in packages/components/babel.config.js
     };
 
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      http: require.resolve('stream-http'),
+      https: require.resolve('https-browserify'),
+      buffer: require.resolve('buffer'),
+    };
+
     config.module.rules.push({
       test: /\.scss$/,
       use: [

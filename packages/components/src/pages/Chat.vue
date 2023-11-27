@@ -5,7 +5,7 @@
       <v-user-message
         v-for="(message, i) in messages"
         :key="i"
-        :message="message.body"
+        :message="message.message"
         :is-user="message.isUser"
       />
       <v-chat-input
@@ -24,10 +24,12 @@
 import VUserMessage from '@/components/chat/UserMessage.vue';
 import VChatInput from '@/components/chat/ChatInput.vue';
 import VSuggestionGrid from '@/components/chat/SuggestionGrid.vue';
+import { AI, setConfiguration, DefaultApiURL } from '@appland/client';
 
 type Message = {
+  id?: string;
   isUser: boolean;
-  body: string;
+  message: string;
   attachments?: string[];
 };
 
@@ -38,11 +40,24 @@ export default {
     VChatInput,
     VSuggestionGrid,
   },
+  props: {
+    apiKey: {
+      type: String,
+    },
+    apiUrl: {
+      type: String,
+      default: DefaultApiURL,
+    },
+  },
+  watch: {
+    apiKey() {
+      this.updateConfiguration();
+    },
+  },
   data() {
     return {
-      messages: [],
-    } as {
-      messages: Message[];
+      messages: [] as Message[],
+      threadId: undefined as string | undefined,
     };
   },
   computed: {
@@ -57,28 +72,48 @@ export default {
         chatting: this.isChatting,
       };
     },
+    clientConfiguration() {
+      return {
+        apiKey: this.apiKey,
+      };
+    },
   },
   methods: {
-    onMessage(message, isUser) {
-      this.messages.push({
+    onReceiveToken(token: string, systemMessage: Message) {
+      systemMessage.message += token;
+      this.scrollToBottom();
+    },
+    addMessage(isUser: boolean, content?: string) {
+      const message = {
         isUser,
-        body: message,
-      });
+        message: content || '',
+      };
+      this.messages.push(message);
 
       this.scrollToBottom();
       this.$root.$emit('message', message, isUser);
+
+      return message;
     },
-    onSend(message: string) {
-      this.onMessage(message, true);
+    async onSend(message: string) {
+      const userMessage = this.addMessage(true, message);
+      const stream = await AI.conversation(message, this.threadId);
+      const systemMessage = this.addMessage(false);
+      this.threadId = stream.threadId;
+      userMessage.id = stream.userMessageId;
+      systemMessage.id = stream.systemMessageId;
+      console.log('stream', JSON.stringify(stream, null, 2));
+      stream.response.subscribe((message) => this.onReceiveToken(message, systemMessage));
     },
     onReceive(message: string) {
-      this.onMessage(message, false);
+      this.addMessage(message, false);
     },
     onSuggestion(prompt: string) {
       // Make it look like the AI is typing
-      this.onMessage(prompt, false);
+      this.addMessage(prompt, false);
     },
     clear() {
+      this.threadId = undefined;
       this.$set(this, 'messages', []);
     },
     scrollToBottom() {
@@ -87,6 +122,12 @@ export default {
         this.$el.scrollTop = this.$el.scrollHeight;
       });
     },
+    updateConfiguration() {
+      setConfiguration({ apiKey: this.apiKey, apiURL: this.apiUrl });
+    },
+  },
+  mounted() {
+    this.updateConfiguration();
   },
 };
 </script>
@@ -98,25 +139,27 @@ export default {
   min-height: 100%;
   max-height: 100%;
   overflow-y: auto;
+  overflow-x: hidden;
   background-color: $gray2;
 }
 
 .chat {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  position: relative;
   min-height: 100%;
   padding: 1rem;
   max-width: 58rem;
   margin: 0 auto;
-  overflow-y: auto;
   padding-bottom: 5rem;
 
   .chatting {
     position: fixed;
     bottom: 0;
-    left: 0;
-    width: 100%;
+    left: 2rem;
+    right: 2rem;
+    max-width: 58rem;
+    margin: 0 auto;
   }
 
   .clear {
@@ -125,7 +168,10 @@ export default {
     margin-left: auto;
     position: fixed;
     top: 1rem;
-    right: 1rem;
+    max-width: 58rem;
+    width: 100%;
+    padding-right: 2rem;
+    text-align: right;
 
     &:hover {
       color: lighten(#0097fa, 10%);

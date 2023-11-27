@@ -27,6 +27,7 @@
     "dist/index.js"
   ],
   "dependencies": {
+    "@appland/client": "workspace:^1.8.1",
     "@appland/diagrams": "workspace:^1.7.0",
     "@appland/models": "workspace:^2.7.0",
     "@appland/sequence-diagram": "workspace:^1.9.0",
@@ -63,6 +64,7 @@
     "@types/dompurify": "^3.0.5",
     "@types/yargs": "^16.0.0",
     "@typescript-eslint/parser": "^5.51.0",
+    "@vue/babel-preset-app": "^5.0.8",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-unit-jest": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
@@ -86,6 +88,7 @@
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^9.9.0",
     "geometry-interfaces": "^1.1.4",
+    "https-browserify": "^1.0.0",
     "jest-extended": "^0.11.5",
     "lint-staged": "^10.5.3",
     "mathjs": "^9.0.0",
@@ -101,6 +104,7 @@
     "sass-loader": "^8.0.2",
     "sass-resources-loader": "^2.1.1",
     "start-server-and-test": "^1.14.0",
+    "stream-http": "^3.2.0",
     "svg-to-vue": "^0.7.0",
     "typescript": "^4.9.5",
     "vue-jest": "^3.0.7",

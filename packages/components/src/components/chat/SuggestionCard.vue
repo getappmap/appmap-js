@@ -44,7 +44,6 @@ export default {
   grid-template-rows: 16px 1fr;
   background-color: rgba(0, 0, 0, 0.4);
   padding: 1rem;
-  width: 100%;
   row-gap: 0.5rem;
   color: #ececec;
 
