@@ -310,6 +310,14 @@ export default {
         }
       },
     },
+    '$store.getters.selectedObject': {
+      handler(newVal) {
+        if (newVal) {
+          this.expandCollapsedAncestors(newVal.id);
+          this.focusHighlighted();
+        }
+      },
+    },
     '$store.state.currentView': {
       handler(newVal) {
         if (newVal === 'viewSequence') {
