@@ -3,6 +3,11 @@ import Configuration from './configuration';
 export const DefaultURL = 'https://app.land';
 export const DefaultApiURL = 'https://api.getappmap.com';
 
+const DefaultConfiguration: Configuration = {
+  baseURL: DefaultURL,
+  apiURL: DefaultApiURL,
+};
+
 class Settings {
   baseURL = DefaultURL;
   apiURL = DefaultApiURL;
@@ -31,7 +36,10 @@ function loadFromEnvironment(): Settings {
 let configuration: Configuration;
 
 export function setConfiguration(value: Configuration): void {
-  configuration = value;
+  configuration = {
+    ...DefaultConfiguration,
+    ...value,
+  };
 }
 
 export default function loadConfiguration(requireApiKey = true): Configuration {
