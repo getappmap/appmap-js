@@ -321,6 +321,14 @@ context('AppMap sequence diagram', () => {
       cy.get('div.depth-text').first().contains('1');
       cy.get('div[data-event-ids="64"]').should('have.class', 'selected');
     });
+
+    it('shows the selected event even if it is collapsed', () => {
+      cy.get('button[data-cy="decrease-collapse-depth"]').click().click().click();
+      cy.get('div.depth-text').first().contains('0');
+      cy.get('.details-search__block-item').contains('OpenSSL::Cipher#final').click();
+      cy.get('li.list-item').first().click();
+      cy.get('div.selected').contains('final').should('be.visible');
+    });
   });
 
   context('default collapse depth check', () => {
