@@ -14,3 +14,4 @@ export { default as Mapset, CreateMapsetOptions, CreateMapsetResponse } from './
 export { default as AppMapListItem } from './appMapListItem';
 export { default as FindingStatusListItem } from './findingStatusListItem';
 export { default as Usage, UsageReport, UsageUpdateDto } from './usage';
+export { default as AI } from './ai';
