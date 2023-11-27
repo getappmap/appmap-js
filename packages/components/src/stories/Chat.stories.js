@@ -14,6 +14,8 @@ export const chat = (args, { argTypes }) => ({
 });
 let id = 0;
 chat.args = {
+  apiKey: '',
+  apiUrl: '',
   chatters: [],
   messages: [
     {

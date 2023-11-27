@@ -10,7 +10,7 @@
       ref="input"
     />
     <v-popper text="Send message" placement="top" text-align="left" :disabled="!hasInput">
-      <button class="send" :disabled="!hasInput">
+      <button class="send" :disabled="!hasInput" @click="send">
         <v-send-icon />
       </button>
     </v-popper>
@@ -106,7 +106,6 @@ $border-color: #7289c5;
 
   span[contenteditable] {
     width: 100%;
-    min-height: 3rem;
     border: 3px solid $border-color;
     padding: 0.66rem;
     padding-right: 3rem;
@@ -132,8 +131,8 @@ $border-color: #7289c5;
 
   .popper {
     position: absolute;
-    right: 1.5rem;
-    bottom: 1.5rem;
+    right: 1.8rem;
+    bottom: 1.45rem;
 
     &__text {
       border: none;

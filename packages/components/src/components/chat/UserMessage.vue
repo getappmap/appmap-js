@@ -47,6 +47,9 @@ export default {
   },
 
   computed: {
+    dynamicMessage() {
+      return this.message || '...';
+    },
     avatar() {
       return this.isUser ? VUserAvatar : VAppmapLogo;
     },
@@ -54,7 +57,7 @@ export default {
       return this.isUser ? 'You' : 'AppMap';
     },
     renderedMarkdown() {
-      const sanitizedMessage = DOMPurify.sanitize(this.message);
+      const sanitizedMessage = DOMPurify.sanitize(this.dynamicMessage);
       return marked.parse(sanitizedMessage);
     },
   },
