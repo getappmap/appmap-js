@@ -1,3 +1,11 @@
+# [@appland/components-v3.13.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.13.1...@appland/components-v3.13.2) (2023-11-28)
+
+
+### Bug Fixes
+
+* Correctly set initial collapse depth ([40bc025](https://github.com/getappmap/appmap-js/commit/40bc0252c3b5bd77a88b6bf8c08dedfdac17cccb))
+* Reliably pan to selected event ([0aec8eb](https://github.com/getappmap/appmap-js/commit/0aec8ebd4ba609ac396bfd2ff3c460173a554342))
+
 # [@appland/components-v3.13.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.13.0...@appland/components-v3.13.1) (2023-11-26)
 
 
