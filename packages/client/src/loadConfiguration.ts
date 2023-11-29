@@ -57,3 +57,7 @@ export default function loadConfiguration(requireApiKey = true): Configuration {
   configuration = { baseURL: settings.baseURL, apiURL: settings.apiURL, apiKey: settings.apiKey };
   return configuration;
 }
+
+export function getConfiguration(): Configuration {
+  return configuration;
+}

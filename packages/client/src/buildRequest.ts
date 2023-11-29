@@ -1,6 +1,5 @@
 import { request as httpRequest, ClientRequest, RequestOptions, IncomingMessage } from 'http';
 import { request as httpsRequest } from 'https';
-import { URL } from 'url';
 import loadConfiguration from './loadConfiguration';
 import { ServiceEndpoint, getServiceUrl } from './configuration';
 
