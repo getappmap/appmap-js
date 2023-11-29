@@ -79,7 +79,12 @@ export default {
     },
   },
   methods: {
-    onReceiveToken(token: string, systemMessage: Message) {
+    onReceiveToken(token: string, messageId: string) {
+      let systemMessage = this.messages.find((m) => m.id === messageId);
+      if (!systemMessage) {
+        systemMessage = this.addMessage(false);
+        systemMessage.id = messageId;
+      }
       systemMessage.message += token;
       this.scrollToBottom();
     },
@@ -97,13 +102,19 @@ export default {
     },
     async onSend(message: string) {
       const userMessage = this.addMessage(true, message);
-      const stream = await AI.conversation(message, this.threadId);
-      const systemMessage = this.addMessage(false);
-      this.threadId = stream.threadId;
-      userMessage.id = stream.userMessageId;
-      systemMessage.id = stream.systemMessageId;
-      console.log('stream', JSON.stringify(stream, null, 2));
-      stream.response.subscribe((message) => this.onReceiveToken(message, systemMessage));
+      const client = await AI.connect({
+        onAck: (messageId, threadId) => {
+          userMessage.id = messageId;
+          this.threadId = threadId;
+        },
+        onToken: (token, messageId) => {
+          this.onReceiveToken(token, messageId);
+        },
+        onError: (error) => {
+          this.addMessage(false, error);
+        },
+      });
+      client.inputPrompt(message, { threadId: this.threadId });
     },
     onReceive(message: string) {
       this.addMessage(message, false);
