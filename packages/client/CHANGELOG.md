@@ -1,3 +1,10 @@
+# [@appland/client-v1.9.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.8.1...@appland/client-v1.9.0) (2023-11-30)
+
+
+### Features
+
+* LicenseKey.check ([eec5d75](https://github.com/getappmap/appmap-js/commit/eec5d754730339062c74bb0bef33e8519deeb35c))
+
 # [@appland/client-v1.8.1](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.8.0...@appland/client-v1.8.1) (2023-11-04)
 
 
