@@ -1,36 +1,19 @@
 import { IncomingMessage } from 'http';
-import Mapset from './mapset';
-import FindingStatusListItem from './findingStatusListItem';
-import reportJson from './reportJson';
-import get from './get';
-import { RetryOptions } from './retryOptions';
-import verbose from './verbose';
-import retry from './retry';
 import buildRequest from './buildRequest';
+import { RetryOptions } from './retryOptions';
+import retry from './retry';
 import retryOnError from './retryOnError';
 import { retryOn503 } from '.';
+import verbose from './verbose';
 
-export default class {
-  constructor(public fqname: string) {}
-
-  mapset(mapsetId: number) {
-    return new Mapset(this, mapsetId);
-  }
-
-  async listFindingStatus(): Promise<FindingStatusListItem[]> {
-    const requestPath = ['api', this.fqname, 'finding_status'].join('/');
-    return get(requestPath).then((response) => reportJson<FindingStatusListItem[]>(response));
-  }
-
-  async exists(retryOptions: RetryOptions = {}): Promise<boolean> {
-    const commandDescription = `Checking if app ${this.fqname} exists`;
-
-    if (verbose()) console.log(commandDescription);
-
+export default {
+  async check(licenseKey: string, retryOptions: RetryOptions = {}): Promise<boolean> {
+    const commandDescription = `Checking if API key is valid`;
     const makeRequest = async (): Promise<IncomingMessage> => {
       const retrier = retry(commandDescription, retryOptions, makeRequest);
-      const requestPath = ['api', this.fqname].join('/');
-      const request = buildRequest(requestPath);
+      const requestPath = ['api', 'api_keys', 'check'].join('/');
+      const request = buildRequest(requestPath, { requireApiKey: false });
+      request.headers.authorization = `Bearer ${licenseKey}`;
       return new Promise<IncomingMessage>((resolve, reject) => {
         const interaction = request.requestFunction(
           request.url,
@@ -60,5 +43,5 @@ export default class {
       }
       throw new Error(`Unexpected status code: ${response.statusCode}`);
     });
-  }
-}
+  },
+};

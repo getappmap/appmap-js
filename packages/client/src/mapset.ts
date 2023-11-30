@@ -55,7 +55,7 @@ export default class Mapset {
 
     async function makeRequest(): Promise<IncomingMessage> {
       const retrier = retry(`Create Mapset`, retryOptions, makeRequest);
-      const request = await buildRequest('api/mapsets');
+      const request = buildRequest('api/mapsets');
       return new Promise<IncomingMessage>((resolve, reject) => {
         const interaction = request.requestFunction(
           request.url,
