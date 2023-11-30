@@ -30,7 +30,7 @@ export default class {
     const makeRequest = async (): Promise<IncomingMessage> => {
       const retrier = retry(commandDescription, retryOptions, makeRequest);
       const requestPath = ['api', this.fqname].join('/');
-      const request = await buildRequest(requestPath);
+      const request = buildRequest(requestPath);
       return new Promise<IncomingMessage>((resolve, reject) => {
         const interaction = request.requestFunction(
           request.url,

@@ -11,7 +11,6 @@ import buildRequest from './buildRequest';
 import retryOnError from './retryOnError';
 import retryOn503 from './retryOn503';
 import handleError from './handleError';
-import reportJson from './reportJson';
 
 // Returned when the AppMap is uploaded.
 export type UploadAppMapResponse = {
@@ -117,7 +116,7 @@ export default class AppMap {
     };
 
     const handleUpload = async (response: IncomingMessage): Promise<UploadCreateAppMapResponse> => {
-      const appmap = await reportJson<{ id?: string; token?: string; uuid?: string }>(response);
+      const appmap = await reportJSON<{ id?: string; token?: string; uuid?: string }>(response);
       if (appmap.uuid) {
         return {
           completed: { uuid: appmap.uuid },
