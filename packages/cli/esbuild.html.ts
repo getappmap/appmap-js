@@ -12,6 +12,11 @@ esbuild
     logLevel: 'info',
     define: {
       'process.env.NODE_ENV': '"production"',
+      global: 'window',
+    },
+    alias: {
+      http: 'stream-http',
+      https: 'https-browserify',
     },
     entryPoints: ['src/html/appmap.js'],
     plugins: [
@@ -43,6 +48,11 @@ esbuild
     logLevel: 'info',
     define: {
       'process.env.NODE_ENV': '"production"',
+      global: 'window',
+    },
+    alias: {
+      http: 'stream-http',
+      https: 'https-browserify',
     },
     entryPoints: ['src/html/sequenceDiagram.js'],
     plugins: [
