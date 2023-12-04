@@ -181,7 +181,7 @@ context('AppMap findings', () => {
         cy.get('li.list-item').contains('app_views_microposts__micropost_html_erb.render').click();
 
         // go back to last selection
-        cy.get('.details-btn').contains('Back to').click();
+        cy.get('.details-panel__selection-nav-icon.arrow-left').click();
 
         // the common ancestory should be focused
         cy.get('.flamegraph-item-crown').should(
@@ -202,7 +202,7 @@ context('AppMap findings', () => {
         // all related events should be highlighted
         cy.get('.highlighted').should('have.length', 31);
 
-        cy.get('.details-btn').contains('Clear selection').click();
+        cy.get('.clear-selections-icon').click();
 
         // now nothing should be highlighted
         cy.get('.highlighted').should('have.length', 0);
@@ -226,8 +226,8 @@ context('AppMap findings', () => {
         // all related events should be highlighted
         cy.get('.highlighted').should('have.length', 31);
 
-        // go back to last selection
-        cy.get('.details-btn').contains('Back to previous').click();
+        // go back to last selection (it was seleccted after the finding so it requires advancing)
+        cy.get('.details-panel__selection-nav-icon.arrow-right').click();
         cy.get('.highlighted').should('have.length', 0);
       });
 

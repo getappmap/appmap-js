@@ -70,22 +70,4 @@ export default {
     }
   }
 }
-
-.icon {
-  margin-right: 0.5em;
-
-  &--clear:before {
-    content: 'x';
-    font-family: $appland-text-font-family;
-    font-style: initial;
-    color: $gray4;
-  }
-
-  &--back:before {
-    content: '◄ ';
-    font-family: $appland-text-font-family;
-    font-style: initial;
-    color: $gray4;
-  }
-}
 </style>

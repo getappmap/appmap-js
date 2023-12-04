@@ -60,6 +60,7 @@ export function buildStore() {
       appMap: new AppMap(),
       precomputedSequenceDiagram: null,
       selectionStack: [],
+      currentSelection: null,
       currentView: DEFAULT_VIEW,
       selectedLabel: null,
       focusedEvent: null,
@@ -74,15 +75,8 @@ export function buildStore() {
 
     getters: {
       selectedObject(state) {
+        if (state.currentSelection) return state.currentSelection;
         return state.selectionStack[state.selectionStack.length - 1];
-      },
-      canPopStack(state) {
-        return state.selectionStack.length > 1;
-      },
-      prevSelectedObject(state) {
-        return state.selectionStack.length > 1
-          ? state.selectionStack[state.selectionStack.length - 2]
-          : null;
       },
     },
 
@@ -103,8 +97,22 @@ export function buildStore() {
       // be a specific event. These code object selections are stored in a stack, so that
       // the user can navigate back to the previous selection.
       [SELECT_CODE_OBJECT](state, selection) {
-        let selectionStack = Array.isArray(selection) ? selection : [selection];
-        state.selectionStack.push(...selectionStack);
+        let selectionProperty = 'fqid';
+        if (selection && selection.type === 'analysis-finding') selectionProperty = 'name';
+
+        const existingSelection = state.selectionStack.find(
+          (selectedObject) =>
+            selection && selection[selectionProperty] === selectedObject[selectionProperty]
+        );
+
+        if (existingSelection) {
+          state.currentSelection = existingSelection;
+        } else {
+          let selectionStack = Array.isArray(selection) ? selection : [selection];
+          state.selectionStack.push(...selectionStack);
+          state.currentSelection = null;
+        }
+
         state.selectedLabel = null;
         state.focusedEvent = null;
         state.highlightedEvents = [];
@@ -122,6 +130,7 @@ export function buildStore() {
         state.selectedLabel = null;
         state.focusedEvent = null;
         state.highlightedEvents = [];
+        state.currentSelection = null;
       },
 
       [SELECT_LABEL](state, label) {

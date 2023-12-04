@@ -319,16 +319,6 @@ context('AppMap sidebar', () => {
     cy.get('.details-panel-header__parent').should('have.length', 3);
   });
 
-  it('does not back link to a large query when clicking a query from the search panel', () => {
-    cy.get('.details-search__block--query > .details-search__block-list > :nth-child(1)').click();
-
-    cy.get('.list-item:nth-child(1)').click();
-
-    cy.get('.details-panel__buttons')
-      .invoke('text')
-      .should('not.match', /SELECT.*FROM/);
-  });
-
   it('renders HTTP client requests correctly', () => {
     cy.get('.details-search__block--external-service')
       .contains('External services')
@@ -338,7 +328,7 @@ context('AppMap sidebar', () => {
 
     cy.get('.node.external-service.highlight').should('exist');
     cy.get('.list-item').contains('POST http://127.0.0.1:9515');
-    cy.get('button').contains('Clear selection').click();
+    cy.get('.clear-selections-icon').click();
 
     cy.get('.node.external-service')
       .should('not.have.class', 'highlight')
