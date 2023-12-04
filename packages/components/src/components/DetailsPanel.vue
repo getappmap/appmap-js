@@ -37,7 +37,7 @@
       </div>
     </div>
 
-    <div class="details-panel__notification">
+    <div class="details-panel__notification" v-if="!selectedObject">
       <FeedbackIcon />
       Help us improve AppMap.
       <a href="https://appmap.io/product/feedback/general.html">Send your feedback.</a>
