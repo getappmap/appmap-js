@@ -1,5 +1,15 @@
 <template>
   <div class="details-panel-header" data-cy="left-panel-header">
+    <h4 class="details-panel-header__details-type" :data-type="objectType.toLowerCase()">
+      {{ objectType }}
+      <span v-if="objectId">{{ objectId }}</span>
+    </h4>
+    <h4 class="details-panel-header__details-name" :if="title">{{ title }}</h4>
+    <v-source-code-link :object="object" />
+    <div class="details-panel-header__ghost-link">
+      <slot name="links" />
+    </div>
+    <h5 class="details-panel-header__parents-header" v-if="parents.length">Parents</h5>
     <div class="details-panel-header__parents" v-if="parents.length">
       <div
         class="details-panel-header__parent"
@@ -12,15 +22,6 @@
         </div>
         {{ item.name }}
       </div>
-    </div>
-    <h4 class="details-panel-header__details-type" :data-type="objectType.toLowerCase()">
-      {{ objectType }}
-      <span v-if="objectId">{{ objectId }}</span>
-    </h4>
-    <h4 class="details-panel-header__details-name" :if="title">{{ title }}</h4>
-    <v-source-code-link :object="object" />
-    <div class="details-panel-header__ghost-link">
-      <slot name="links" />
     </div>
   </div>
 </template>
@@ -111,14 +112,23 @@ export default {
 
 <style scoped lang="scss">
 .details-panel-header {
-  margin: 0 0 24px;
+  margin: 2.2rem 0;
 
   &__parents {
+    &-header {
+      margin-bottom: 0.9rem;
+      font-size: 0.9rem;
+      color: $gray4;
+      text-transform: uppercase;
+    }
+
     margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
     flex-wrap: wrap;
+    border-bottom: 1px solid $gray3;
   }
 
   &__parent {
