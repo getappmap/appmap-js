@@ -14,18 +14,18 @@ context('AppMap event search', () => {
     cy.get('.trace-filter__arrow').first().click();
     cy.get('.trace-filter__arrows-text').contains('27 / 27 results');
     cy.get('.trace-node.highlight').should('have.length', 1);
-    cy.get('.details-panel__buttons').contains('Clear selection').click();
+    cy.get('.clear-selections-icon').click();
     cy.get('.trace-filter__arrows-text').contains('27 results');
     cy.get('.trace-node.highlight').should('not.exist');
     cy.get('.trace-node.filtered').should('have.length', 19);
 
     cy.get('.trace-filter__arrow').first().click();
     cy.get('.trace-filter__arrows-text').contains('27 / 27 results');
-    cy.get('.details-panel__buttons').contains('Clear selection').click();
+    cy.get('.clear-selections-icon').click();
 
     cy.get('.trace-filter__arrow').last().click();
     cy.get('.trace-filter__arrows-text').contains('1 / 27 results');
-    cy.get('.details-panel__buttons').contains('Clear selection').click();
+    cy.get('.clear-selections-icon').click();
 
     cy.get('.trace-node[data-event-id="28"]').click();
     cy.get('.trace-filter__arrows-text').contains('27 results');

@@ -49,8 +49,37 @@
       <v-source-code-link :object="sourceLocationObject" />
     </div>
     <div class="details-panel__content">
-      <div class="details-panel__buttons">
-        <slot name="buttons" />
+      <div v-if="selectedObject">
+        <div class="details-panel__selection-nav">
+          <NavArrow
+            @click="goBack"
+            :class="[
+              'details-panel__selection-nav-icon',
+              'arrow-left',
+              canGoBack ? '' : 'disabled',
+            ]"
+          />
+          <NavArrow
+            @click="goForward"
+            :class="[
+              'details-panel__selection-nav-icon',
+              'arrow-right',
+              canGoForward ? '' : 'disabled',
+            ]"
+          />
+          <select v-model="currentSelection" class="selection-nav-menu" @change="selectObject">
+            <option v-for="selection in selectionStack" :key="selection.fqid" :value="selection">
+              {{ displayName(selection) }}
+            </option>
+          </select>
+          <div class="details-panel__selection-nav-icon-container">
+            <ClearIcon
+              class="details-panel__selection-nav-icon clear-selections-icon"
+              @click="() => this.$emit('clearSelections')"
+            />
+            <div class="tooltip">Clear all selections</div>
+          </div>
+        </div>
       </div>
       <keep-alive>
         <v-details-search
@@ -100,6 +129,11 @@ import VSourceCodeLink from '@/components/SourceCodeLink.vue';
 import FeedbackIcon from '@/assets/feedback-icon.svg';
 import ExclamationIcon from '@/assets/exclamation-circle.svg';
 import ScissorsIcon from '@/assets/scissors-icon.svg';
+import NavArrow from '@/assets/nav-arrow.svg';
+import ClearIcon from '@/assets/x-icon.svg';
+import { SELECT_CODE_OBJECT } from '@/store/vsCode';
+
+const MAX_DISPLAY_NAME_LENGTH = 150;
 
 export default {
   name: 'v-details-panel',
@@ -124,6 +158,8 @@ export default {
     FeedbackIcon,
     ExclamationIcon,
     ScissorsIcon,
+    NavArrow,
+    ClearIcon,
   },
   props: {
     subtitle: String,
@@ -153,10 +189,17 @@ export default {
   },
 
   data() {
-    return { sourceLocation: null, sourceLocationError: null };
+    return {
+      sourceLocation: null,
+      sourceLocationError: null,
+      currentSelection: null,
+    };
   },
 
   computed: {
+    selectionStack() {
+      return this.$store.state.selectionStack;
+    },
     detailsType() {
       let kind = 'null';
       window.e = Event;
@@ -180,11 +223,53 @@ export default {
       }
       return sourceLocation;
     },
+    currentSelectionIndex() {
+      return this.selectionStack?.findIndex(
+        (selection) => selection.id === this.currentSelection?.id
+      );
+    },
+    canGoBack() {
+      return this.currentSelectionIndex > 0;
+    },
+    canGoForward() {
+      return this.selectionStack.length > this.currentSelectionIndex + 1;
+    },
   },
   methods: {
     openStatsPanel() {
       this.$emit('openStatsPanel');
     },
+    displayName(selection) {
+      let displayName = '';
+
+      if (selection.event === 'call') {
+        displayName = String(selection);
+      } else if (selection.type === 'analysis-finding') {
+        displayName = selection.name;
+      } else if (selection.type === 'edge') {
+        displayName = this.displayName(selection.from) + ' -> ' + this.displayName(selection.to);
+      } else {
+        displayName = selection.prettyName || selection.name;
+      }
+
+      return displayName.length > MAX_DISPLAY_NAME_LENGTH
+        ? displayName.slice(0, MAX_DISPLAY_NAME_LENGTH) + '...'
+        : displayName;
+    },
+    goBack() {
+      const selection = this.selectionStack[this.currentSelectionIndex - 1];
+      this.$store.commit(SELECT_CODE_OBJECT, selection);
+    },
+    goForward() {
+      const selection = this.selectionStack[this.currentSelectionIndex + 1];
+      this.$store.commit(SELECT_CODE_OBJECT, selection);
+    },
+    selectObject() {
+      this.$store.commit(SELECT_CODE_OBJECT, this.currentSelection);
+    },
+  },
+  updated() {
+    this.currentSelection = this.selectedObject;
   },
 };
 </script>
@@ -239,15 +324,86 @@ export default {
     padding: 0;
   }
 
-  &__buttons {
+  &__selection-nav {
     display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-end;
-    align-items: flex-start;
-    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.7rem;
 
-    button {
-      margin-bottom: 1rem;
+    &-icon {
+      margin: 0 0.3rem;
+      fill: white;
+
+      &:hover {
+        cursor: pointer;
+        fill: $blue;
+        transition: $transition;
+      }
+
+      &-container {
+        overflow: hidden;
+        white-space: nowrap;
+
+        .clear-selections-icon {
+          width: 1.2rem;
+        }
+
+        .tooltip {
+          position: absolute;
+          background-color: #fff;
+          color: #000;
+          font-size: 0.9rem;
+          border: 1px solid #ccc;
+          padding: 5px;
+          z-index: 5;
+          opacity: 0.9;
+          display: none;
+        }
+        &:hover .tooltip {
+          display: inline-block;
+        }
+      }
+    }
+
+    .arrow-left,
+    .arrow-right {
+      width: 1.7rem;
+    }
+
+    .arrow-left {
+      transform: rotate(180deg);
+    }
+
+    .disabled {
+      fill: $gray3;
+      pointer-events: none;
+
+      &:hover {
+        cursor: default;
+        fill: $gray3;
+      }
+    }
+
+    select {
+      margin: 0 0.5rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: $border-radius;
+      background-color: $gray2;
+      color: $gray6;
+      border: 1px solid $gray3;
+      font-size: 0.9rem;
+      font-weight: 400;
+      width: 100%;
+
+      &:hover {
+        cursor: pointer;
+        background-color: $gray3;
+        transition: $transition;
+      }
+
+      &:focus-visible {
+        outline: none;
+      }
     }
   }
 

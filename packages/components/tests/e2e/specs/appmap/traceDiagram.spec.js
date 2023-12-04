@@ -123,7 +123,7 @@ context('AppMap trace diagram', () => {
       cy.get('.trace-node[data-event-id="15"]').should('not.have.class', 'highlight');
       cy.get('.trace-filter__arrows-text').should('contain.text', '32 results');
 
-      cy.get('.details-panel__buttons').contains('Clear selection').click();
+      cy.get('.clear-selections-icon').click();
 
       cy.get('.trace-node[data-event-id="13"]').should('not.have.class', 'highlight');
       cy.get('.trace-node[data-event-id="1"]').should('not.have.class', 'highlight');

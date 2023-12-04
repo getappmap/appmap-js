@@ -13,7 +13,7 @@ context('AppMap component diagram', () => {
     it('clears when "Clear selection" button was clicked', () => {
       cy.get(`.nodes .node[data-type="http"]`).click().should('have.class', 'highlight');
 
-      cy.get('.details-panel__buttons').contains('Clear selection').click();
+      cy.get('.clear-selections-icon').click();
 
       cy.get(`.nodes .node[data-type="http"]`).should('not.have.class', 'highlight');
     });

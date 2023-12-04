@@ -27,31 +27,9 @@
             this.showStatsPanel = true;
           }
         "
+        @clearSelections="clearSelection"
         data-cy="sidebar"
-      >
-        <template v-slot:buttons>
-          <v-details-button
-            icon="clear"
-            v-if="selectedObject || selectedLabel"
-            @click.native="clearSelection"
-          >
-            Clear selection
-          </v-details-button>
-          <v-details-button icon="back" v-if="canGoBack" @click.native="goBack">
-            Back to
-            <b
-              v-if="prevSelectedObject && (prevSelectedObject.shortName || prevSelectedObject.name)"
-            >
-              {{
-                prevSelectedObject.type === 'query'
-                  ? prevSelectedObject.prettyName
-                  : prevSelectedObject.shortName || prevSelectedObject.name
-              }}
-            </b>
-            <span v-else>previous</span>
-          </v-details-button>
-        </template>
-      </v-details-panel>
+      />
       <div class="main-column--drag" @mousedown="startResizing"></div>
     </div>
 
@@ -372,7 +350,6 @@ import StatsIcon from '@/assets/stats-icon.svg';
 import ExclamationIcon from '@/assets/exclamation-circle.svg';
 import ScissorsIcon from '@/assets/scissors-icon.svg';
 import VDetailsPanel from '../components/DetailsPanel.vue';
-import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
 import VDiagramSequence from '../components/DiagramSequence.vue';
 import VDiagramFlamegraph from '../components/DiagramFlamegraph.vue';
@@ -398,7 +375,6 @@ import {
   VIEW_FLAMEGRAPH,
   SELECT_CODE_OBJECT,
   SELECT_LABEL,
-  POP_SELECTION_STACK,
   CLEAR_SELECTION_STACK,
   SET_EXPANDED_PACKAGES,
   CLEAR_EXPANDED_PACKAGES,
@@ -427,7 +403,6 @@ export default {
     ExportIcon,
     FilterIcon,
     VDetailsPanel,
-    VDetailsButton,
     VDiagramComponent,
     VDiagramSequence,
     VDiagramTrace,
@@ -552,7 +527,10 @@ export default {
     filteredAppMap: {
       handler() {
         if (this.selectedObject) {
-          this.setSelectedObject(this.selectedObject.fqid);
+          // Keep the currently selected object only, discard the rest
+          const selection = this.selectedObject;
+          this.$store.commit(CLEAR_SELECTION_STACK);
+          this.setSelectedObject(selection.fqid);
         }
       },
     },
@@ -786,14 +764,6 @@ export default {
 
     showDownload() {
       return this.isViewingSequence;
-    },
-
-    prevSelectedObject() {
-      return this.$store.getters.prevSelectedObject;
-    },
-
-    canGoBack() {
-      return this.$store.getters.canPopStack;
     },
 
     isEmptyAppMap() {
@@ -1087,10 +1057,6 @@ export default {
       this.eventFilterMatchIndex = 0;
       this.$store.commit(CLEAR_SELECTION_STACK);
       this.$root.$emit('clearSelection');
-    },
-
-    goBack() {
-      this.$store.commit(POP_SELECTION_STACK);
     },
 
     resetDiagram() {
