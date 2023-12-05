@@ -726,6 +726,10 @@ export default {
       return this.$store.getters.selectedObject;
     },
 
+    selectionStack() {
+      return this.$store.state.selectionStack;
+    },
+
     selectedEvent() {
       return this.selectedObject instanceof Event ? [this.selectedObject] : [];
     },
@@ -887,6 +891,16 @@ export default {
       }
     },
 
+    codeObjectToIdentifier(codeObject) {
+      if (!codeObject) return '';
+
+      if (codeObject.fqid) {
+        return codeObject.fqid;
+      } else if (codeObject.type === 'analysis-finding') {
+        return `analysis-finding:${codeObject.resolvedFinding?.finding?.hash_v2}`;
+      }
+    },
+
     getState() {
       const state = {};
 
@@ -894,8 +908,10 @@ export default {
       if (this.expandedPackages.length > 0)
         state.expandedPackages = this.expandedPackages.map((expandedPackage) => expandedPackage.id);
 
-      if (this.selectedObject && this.selectedObject.fqid) {
-        state.selectedObject = this.selectedObject.fqid;
+      if (this.selectionStack.length > 1) {
+        state.selectedObjects = this.selectionStack.map(this.codeObjectToIdentifier);
+      } else if (this.selectionStack.length === 1) {
+        state.selectedObject = this.codeObjectToIdentifier(this.selectedObject);
       } else if (this.selectedLabel) {
         state.selectedObject = `label:${this.selectedLabel}`;
       }
@@ -953,6 +969,47 @@ export default {
       this.$store.commit(SELECT_CODE_OBJECT, selectedObject);
     },
 
+    selectObjectFromState(fqid) {
+      const [match, type, object] = fqid.match(/^([a-z\-]+):(.+)/);
+      if (!match) return;
+
+      if (type === 'label') {
+        this.$store.commit(SELECT_LABEL, object);
+        return;
+      }
+
+      const { classMap, events } = this.filteredAppMap;
+      let selectedObject = null;
+
+      if (type === 'event') {
+        const eventId = parseInt(object, 10);
+
+        if (Number.isNaN(eventId)) return;
+
+        selectedObject = events.find((e) => e.id === eventId);
+
+        // It's possible that we're trying to select an object that does not exist in the filtered
+        // set. If we're unable to find an object, we'll look for it in the unfiltered set.
+        if (!selectedObject) {
+          selectedObject = this.$store.state.appMap.events.find((e) => e.id === eventId);
+
+          if (selectedObject) {
+            Object.keys(this.filters.declutter).forEach((declutterProperty) => {
+              this.$store.commit(SET_DECLUTTER_ON, { declutterProperty, value: false });
+            });
+          }
+        }
+      } else if (type === 'analysis-finding') {
+        const hash_v2 = object;
+        const finding = this.findings.find(({ finding }) => finding.hash_v2 === hash_v2);
+        if (finding) this.$store.commit(SELECT_CODE_OBJECT, toListItem(finding));
+      } else {
+        selectedObject = classMap.codeObjects.find((obj) => obj.fqid === fqid);
+      }
+
+      if (selectedObject) this.$store.commit(SELECT_CODE_OBJECT, selectedObject);
+    },
+
     setState(serializedState) {
       return new Promise((resolve) => {
         if (!serializedState) {
@@ -960,59 +1017,11 @@ export default {
           return;
         }
 
-        const filteredMap = this.filteredAppMap;
-
         const state = filterStringToFilterState(serializedState);
-        if (state.selectedObject) {
-          do {
-            const fqid = state.selectedObject;
-            const [match, type, object] = fqid.match(/^([a-z\-]+):(.+)/);
+        if (state.selectedObject) this.selectObjectFromState(state.selectedObject);
 
-            if (!match) {
-              break;
-            }
-
-            if (type === 'label') {
-              this.$store.commit(SELECT_LABEL, object);
-              break;
-            }
-
-            const { classMap, events } = filteredMap;
-            let selectedObject = null;
-
-            if (type === 'event') {
-              const eventId = parseInt(object, 10);
-
-              if (Number.isNaN(eventId)) {
-                break;
-              }
-
-              selectedObject = events.find((e) => e.id === eventId);
-
-              // It's possible that we're trying to select an object that does not exist in the filtered
-              // set. If we're unable to find an object, we'll look for it in the unfiltered set.
-              if (!selectedObject) {
-                selectedObject = this.$store.state.appMap.events.find((e) => e.id === eventId);
-
-                if (selectedObject) {
-                  Object.keys(this.filters.declutter).forEach((declutterProperty) => {
-                    this.$store.commit(SET_DECLUTTER_ON, { declutterProperty, value: false });
-                  });
-                }
-              }
-            } else if (type === 'analysis-finding') {
-              const hash_v2 = object;
-              const finding = this.findings.find(({ finding }) => finding.hash_v2 === hash_v2);
-              if (finding) this.$store.commit(SELECT_CODE_OBJECT, toListItem(finding));
-            } else {
-              selectedObject = classMap.codeObjects.find((obj) => obj.fqid === fqid);
-            }
-
-            if (selectedObject) {
-              this.$store.commit(SELECT_CODE_OBJECT, selectedObject);
-            }
-          } while (false);
-        }
+        if (state.selectedObjects)
+          state.selectedObjects.forEach((obj) => this.selectObjectFromState(obj));
 
         const { filters, expandedPackages } = state;
         if (filters) this.$store.commit(SET_FILTER, deserializeFilter(filters));
@@ -1027,7 +1036,7 @@ export default {
 
         if (expandedPackages) {
           const codeObjects = expandedPackages.map((expandedPackageId) =>
-            filteredMap.classMap.codeObjectFromId(expandedPackageId)
+            this.filteredAppMap.classMap.codeObjectFromId(expandedPackageId)
           );
           this.$store.commit(SET_EXPANDED_PACKAGES, codeObjects);
         }
