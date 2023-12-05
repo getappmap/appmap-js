@@ -1,3 +1,12 @@
+# [@appland/client-v1.10.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.9.0...@appland/client-v1.10.0) (2023-12-05)
+
+
+### Features
+
+* Add the conversational AI API ([6f93d9b](https://github.com/getappmap/appmap-js/commit/6f93d9bb3f3a5feb8103c4132bc393c7f8983bf7))
+* Expose API to set configuration directly ([d6c13a7](https://github.com/getappmap/appmap-js/commit/d6c13a774a691629b5cfdf1908ff9eee5130f65d))
+* Websocket AI client ([db7ab09](https://github.com/getappmap/appmap-js/commit/db7ab097eeb4c1859f0c31610e018d49f764c930))
+
 # [@appland/client-v1.9.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.8.1...@appland/client-v1.9.0) (2023-11-30)
 
 
