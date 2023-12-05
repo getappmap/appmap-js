@@ -1,3 +1,11 @@
+# [@appland/components-v3.14.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.13.2...@appland/components-v3.14.0) (2023-12-05)
+
+
+### Features
+
+* Add a chat interface ([1d77a70](https://github.com/getappmap/appmap-js/commit/1d77a70cf995f51f8c0563d9178421c987e1c38a))
+* Integrate the conversational AI API to chat ([b2cab36](https://github.com/getappmap/appmap-js/commit/b2cab36650271074248bf041fdb1cb046c147701))
+
 # [@appland/components-v3.13.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.13.1...@appland/components-v3.13.2) (2023-11-28)
 
 
