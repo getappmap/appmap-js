@@ -29,15 +29,31 @@ describe('VsCodeExtension.vue', () => {
   it('sets the selected object by FQID', () => {
     wrapper.vm.setState('{"selectedObject":"label:json"}');
     expect(wrapper.vm.selectedLabel).toMatch('json');
+    expect(wrapper.vm.getState()).toEqual(
+      base64UrlEncode('{"currentView":"viewComponent","selectedObject":"label:json"}')
+    );
 
     wrapper.vm.setState('{"selectedObject":"event:44"}');
     expect(wrapper.vm.selectedObject.toString()).toMatch('User.find_by_id!');
+    expect(wrapper.vm.getState()).toEqual(
+      base64UrlEncode('{"currentView":"viewComponent","selectedObject":"event:44"}')
+    );
 
     wrapper.vm.setState('{"selectedObject":"class:app/models/User"}');
     expect(wrapper.vm.selectedObject.id).toMatch('app/models/User');
+    expect(wrapper.vm.getState()).toEqual(
+      base64UrlEncode(
+        '{"currentView":"viewComponent","selectedObjects":["event:44","class:app/models/User"]}'
+      )
+    );
 
     wrapper.vm.setState('{"selectedObject":"analysis-finding:fakeHash"}');
     expect(wrapper.vm.selectedObject.id).toMatch('fakeHash');
+    expect(wrapper.vm.getState()).toEqual(
+      base64UrlEncode(
+        '{"currentView":"viewComponent","selectedObjects":["event:44","class:app/models/User","analysis-finding:fakeHash"]}'
+      )
+    );
 
     wrapper.vm.clearSelection();
 
@@ -182,5 +198,35 @@ describe('VsCodeExtension.vue', () => {
     const actual = rootWrapper.emitted().saveFilter;
     expect(actual).toBeArrayOfSize(1);
     expect(actual[0][0]).toEqual(expectedFilterObject);
+  });
+
+  it('sets a single selected object by fqid when passed as an array', () => {
+    wrapper.vm.setState('{"selectedObjects":["label:json"]}');
+    expect(wrapper.vm.selectedLabel).toMatch('json');
+
+    wrapper.vm.setState('{"selectedObjects":["event:44"]}');
+    expect(wrapper.vm.selectedObject.toString()).toMatch('User.find_by_id!');
+
+    wrapper.vm.setState('{"selectedObjects":["class:app/models/User"]}');
+    expect(wrapper.vm.selectedObject.id).toMatch('app/models/User');
+
+    wrapper.vm.setState('{"selectedObjects":["analysis-finding:fakeHash"]}');
+    expect(wrapper.vm.selectedObject.id).toMatch('fakeHash');
+
+    wrapper.vm.clearSelection();
+  });
+
+  it('sets multiple objects as selected when passed an array', () => {
+    const objectsToSelect = ['event:44', 'class:app/models/User', 'analysis-finding:fakeHash'];
+    const objectsToSelectString = JSON.stringify({ selectedObjects: objectsToSelect });
+    wrapper.vm.setState(objectsToSelectString);
+
+    const actualSelectedObjects = wrapper.vm.selectionStack.map(wrapper.vm.codeObjectToIdentifier);
+    const actualSelectedObjectsString = JSON.stringify({ selectedObjects: actualSelectedObjects });
+    expect(actualSelectedObjectsString).toMatch(objectsToSelectString);
+
+    expect(wrapper.vm.selectedObject.id).toMatch('fakeHash');
+
+    wrapper.vm.clearSelection();
   });
 });
