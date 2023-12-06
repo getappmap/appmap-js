@@ -62,7 +62,7 @@ export default {
   },
   computed: {
     inputPlaceholder() {
-      return 'Where do you want to go?';
+      return 'How can I help?';
     },
     isChatting(): boolean {
       return this.messages.length > 0;
