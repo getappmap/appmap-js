@@ -110,6 +110,7 @@ export default {
     clear() {
       this.threadId = undefined;
       this.$set(this, 'messages', []);
+      this.$emit('clear');
     },
     scrollToBottom() {
       // Allow one tick to progress to allow any DOM changes to be applied
