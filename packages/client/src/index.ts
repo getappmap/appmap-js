@@ -15,3 +15,4 @@ export { default as AppMapListItem } from './appMapListItem';
 export { default as FindingStatusListItem } from './findingStatusListItem';
 export { default as Usage, UsageReport, UsageUpdateDto } from './usage';
 export { default as AI } from './ai';
+export { Callbacks as AICallbacks } from './aiClient';

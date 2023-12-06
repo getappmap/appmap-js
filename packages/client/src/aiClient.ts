@@ -7,6 +7,7 @@ type InputPromptOptions = {
 
 export type Callbacks = {
   onToken: (token: string, messageId: string) => void;
+  onComplete(): void;
   onRequestContext?: (
     data: Record<string, unknown>
   ) => Record<string, unknown> | Promise<Record<string, unknown>>;
@@ -61,6 +62,7 @@ export default class AIClient {
         break;
       }
       case 'end':
+        this.callbacks.onComplete();
         this.disconnect();
         break;
       default:
