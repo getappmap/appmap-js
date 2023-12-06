@@ -1,4 +1,5 @@
 export namespace AppMapRpc {
+  export const DataFunctionName = 'appmap.data';
   export const FilterFunctionName = 'appmap.filter';
   export const MetadataFunctionName = 'appmap.metadata';
   export const SequenceDiagramFunctionName = 'appmap.sequenceDiagram';
