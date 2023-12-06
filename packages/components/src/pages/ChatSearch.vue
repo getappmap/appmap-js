@@ -79,6 +79,7 @@ export default {
           this.vchat.addMessage(false, error);
         },
         onComplete: async () => {
+          this.vchat.onComplete();
           this.searchResponse = await search.searchResults();
           this.selectedSearchResult = this.searchResponse.results[0];
         },
