@@ -196,18 +196,22 @@ export default class AppMapFilter {
       const includeCodeObjects = matchCodeObjects(this.declutter.context.names, true);
       const filterFn = (e) => includeCodeObjects.has(e.codeObject);
 
-      const contextEvents = markSubtrees(events, filterFn, this.declutter.context.depth);
+      const subtreeEvents = markSubtrees(events, filterFn, this.declutter.context.depth);
       const ancestorEvents = new Set();
-      const includeAncestors = (e) => {
+      const includeAncestors = (e, distance = 1) => {
+        if (!e) return;
+
         if (ancestorEvents.has(e)) return;
 
-        ancestorEvents.add(e);
-        ancestorEvents.add(e.returnEvent);
+        if (distance <= this.declutter.context.depth || !e.parent) {
+          ancestorEvents.add(e);
+          ancestorEvents.add(e.returnEvent);
+        }
 
-        if (e.parent) includeAncestors(e.parent);
+        if (e.parent) includeAncestors(e.parent, distance + 1);
       };
-      events.filter((e) => filterFn(e)).forEach((e) => includeAncestors(e));
-      events = events.filter((e) => contextEvents.has(e) || ancestorEvents.has(e));
+      events.filter((e) => filterFn(e)).forEach((e) => includeAncestors(e.parent));
+      events = events.filter((e) => subtreeEvents.has(e) || ancestorEvents.has(e));
     }
 
     // Hide descendent events from named, pattern-matched or labeled code objects. The matching
