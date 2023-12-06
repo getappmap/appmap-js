@@ -145,11 +145,11 @@ export default {
     color: #0097fa;
     cursor: pointer;
     margin-left: auto;
-    position: fixed;
+    position: absolute;
     top: 1rem;
     max-width: 58rem;
     width: 100%;
-    padding-right: 2rem;
+    padding-right: 3rem;
     text-align: right;
 
     &:hover {
