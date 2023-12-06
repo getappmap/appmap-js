@@ -1,16 +1,16 @@
-import VChat from '@/pages/Chat.vue';
+import { default as VChatPage } from '@/pages/Chat.vue';
 import './scss/vscode.scss';
 
 export default {
   title: 'Pages/Chat',
-  component: VChat,
+  component: VChatPage,
   argTypes: {},
 };
 
 export const chat = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  components: { VChat },
-  template: `<v-chat v-bind="$props"></v-chat>`,
+  components: { VChatPage },
+  template: `<v-chat-page v-bind="$props"></v-chat-page>`,
 });
 let id = 0;
 chat.args = {
