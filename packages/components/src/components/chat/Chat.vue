@@ -7,6 +7,9 @@
       :message="message.message"
       :is-user="message.isUser"
     />
+    <v-spinner v-if="loading" class="status-container"
+      ><v-loader-icon class="status-icon"
+    /></v-spinner>
     <v-chat-input
       @send="onSend"
       :placeholder="inputPlaceholder"
@@ -23,6 +26,8 @@ import VUserMessage from '@/components/chat/UserMessage.vue';
 import VChatInput from '@/components/chat/ChatInput.vue';
 import VSuggestionGrid from '@/components/chat/SuggestionGrid.vue';
 import { UserMessageHandler } from '@/components/chat/UserMessageHandler';
+import VSpinner from '@/components/Spinner.vue';
+import VLoaderIcon from '@/assets/eva_loader-outline.svg';
 
 type Message = {
   id?: string;
@@ -37,6 +42,8 @@ export default {
     VUserMessage,
     VChatInput,
     VSuggestionGrid,
+    VSpinner,
+    VLoaderIcon,
   },
   props: {
     sendMessage: {
@@ -47,6 +54,7 @@ export default {
     return {
       messages: [] as Message[],
       threadId: undefined as string | undefined,
+      loading: false,
     };
   },
   computed: {
@@ -86,8 +94,8 @@ export default {
     },
     async onSend(message: string) {
       const userMessage = this.addMessage(true, message);
-      this.sendMessage(message, (messageId: string, threadId: string) => {
-        userMessage.id = messageId;
+      this.loading = true;
+      this.sendMessage(message, (_messageId: string, threadId: string) => {
         this.threadId = threadId;
         this.$root.$emit('send', message, { threadId });
       });
@@ -95,6 +103,9 @@ export default {
     onSuggestion(prompt: string) {
       // Make it look like the AI is typing
       this.addMessage(false, prompt);
+    },
+    onComplete() {
+      this.loading = false;
     },
     clear() {
       this.threadId = undefined;
@@ -144,6 +155,21 @@ export default {
       color: lighten(#0097fa, 10%);
       text-decoration: underline;
     }
+  }
+}
+
+.status-container {
+  display: inline-block;
+  width: 22px;
+  height: 2px;
+  margin: -4px 0.5em -4px 0.5em;
+
+  path {
+    fill: $lightblue;
+  }
+
+  &--failure path {
+    fill: $bad-status;
   }
 }
 </style>

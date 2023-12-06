@@ -50,6 +50,9 @@ export default {
         onError: (error) => {
           this.vchat.addMessage(false, error);
         },
+        onComplete: () => {
+          this.vchat.onComplete();
+        },
       });
       client.inputPrompt(message, { threadId: vchat.threadId });
     },
