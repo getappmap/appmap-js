@@ -93,7 +93,7 @@ export default {
       return message;
     },
     async onSend(message: string) {
-      const userMessage = this.addMessage(true, message);
+      this.addMessage(true, message);
       this.loading = true;
       this.sendMessage(message, (_messageId: string, threadId: string) => {
         this.threadId = threadId;
