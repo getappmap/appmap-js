@@ -63,7 +63,6 @@ export default {
 
   .grid {
     display: grid;
-    grid-template-columns: 26rem 26rem;
     gap: 1rem;
     font-family: system-ui;
   }
