@@ -1,6 +1,5 @@
 import readline from 'readline';
 import yargs from 'yargs';
-import jayson, { MethodLike } from 'jayson';
 
 import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
 import FingerprintWatchCommand from '../../fingerprint/fingerprintWatchCommand';
@@ -11,11 +10,11 @@ import { log, warn } from 'console';
 import { numProcessed } from '../../rpc/index/numProcessed';
 import { search } from '../../rpc/search/search';
 import appmapFilter from '../../rpc/appmap/filter';
-import { RpcCallback, RpcError, RpcHandler } from '../../rpc/rpc';
-import assert from 'assert';
+import { RpcHandler } from '../../rpc/rpc';
 import metadata from '../../rpc/appmap/metadata';
 import sequenceDiagram from '../../rpc/appmap/sequenceDiagram';
 import RPCServer from './rpcServer';
+import appmapData from '../../rpc/appmap/data';
 
 export const command = 'index';
 export const describe =
@@ -71,6 +70,7 @@ export const handler = async (argv) => {
         numProcessed(cmd),
         search(appmapDir),
         appmapFilter(),
+        appmapData(),
         metadata(),
         sequenceDiagram(),
       ];
