@@ -1,8 +1,12 @@
+import connect from 'connect';
+import { json as jsonParser } from 'body-parser';
+import cors from 'connect-cors';
 import jayson, { MethodLike } from 'jayson';
 import { log, warn } from 'console';
+import assert from 'assert';
 
 import { RpcCallback, RpcError, RpcHandler } from '../../rpc/rpc';
-import assert from 'assert';
+import { Server } from 'http';
 
 function handlerMiddleware(
   name: string,
@@ -26,7 +30,7 @@ function handlerMiddleware(
 
 export default class RPCServer {
   bindPort: number;
-  server: jayson.HttpServer | undefined;
+  app: Server | undefined;
 
   public port: number | undefined;
 
@@ -35,7 +39,7 @@ export default class RPCServer {
   }
 
   start() {
-    assert(this.server === undefined, 'RPC server already started');
+    assert(this.app === undefined, 'RPC server already started');
 
     const rpcMethods: Record<string, MethodLike> = this.rpcHandlers.reduce((acc, handler) => {
       acc[handler.name] = handlerMiddleware(handler.name, handler.handler);
@@ -45,10 +49,14 @@ export default class RPCServer {
     log(`Available JSON-RPC methods: ${Object.keys(rpcMethods).sort().join(', ')}`);
     warn(`Consult @appland/rpc for request and response data types.`);
 
-    this.server = new jayson.Server(rpcMethods).http();
-    this.server.listen(this.bindPort).on('listening', () => {
-      assert(this.server);
-      const address = this.server.address();
+    const server = new jayson.Server(rpcMethods);
+    const app = connect();
+    app.use(cors({ methods: ['POST'] }));
+    app.use(jsonParser());
+    app.use(server.middleware());
+    const listener = app.listen(this.bindPort);
+    listener.on('listening', () => {
+      const address = listener.address();
       if (address === null) {
         throw new Error(`Failed to listen on port ${this.port} (address is null)`);
       } else if (typeof address === 'string') {
@@ -58,11 +66,12 @@ export default class RPCServer {
         log(`Running JSON-RPC server on port: ${this.port}`);
       }
     });
+    this.app = listener;
   }
 
   stop() {
-    if (this.server) {
-      this.server.close();
+    if (this.app) {
+      this.app.close();
     }
   }
 }
