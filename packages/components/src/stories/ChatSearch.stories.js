@@ -12,7 +12,6 @@ export const chatSearch = (args, { argTypes }) => ({
   components: { VChatSearch },
   template: `<v-chat-search v-bind="$props"></v-chat-search>`,
 });
-let id = 0;
 chatSearch.args = {
   apiKey: '',
   apiUrl: 'https://api.getappmap.com',

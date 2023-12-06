@@ -39,7 +39,7 @@ export default {
     VSuggestionGrid,
   },
   props: {
-    userMessageHandler: {
+    sendMessage: {
       type: UserMessageHandler,
     },
   },
@@ -86,18 +86,15 @@ export default {
     },
     async onSend(message: string) {
       const userMessage = this.addMessage(true, message);
-      this.userMessageHandler(message, (messageId: string, threadId: string) => {
+      this.sendMessage(message, (messageId: string, threadId: string) => {
         userMessage.id = messageId;
         this.threadId = threadId;
         this.$root.$emit('send', message, { threadId });
       });
     },
-    onReceive(message: string) {
-      this.addMessage(message, false);
-    },
     onSuggestion(prompt: string) {
       // Make it look like the AI is typing
-      this.addMessage(prompt, false);
+      this.addMessage(false, prompt);
     },
     clear() {
       this.threadId = undefined;
@@ -125,12 +122,11 @@ export default {
   padding-bottom: 5rem;
 
   .chatting {
-    position: fixed;
     bottom: 0;
     left: 2rem;
     right: 2rem;
-    max-width: 58rem;
     margin: 0 auto;
+    width: 100%;
   }
 
   .clear {
