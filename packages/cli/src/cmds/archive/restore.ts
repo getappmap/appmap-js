@@ -50,6 +50,12 @@ export const builder = (args: yargs.Argv) => {
     default: false,
   });
 
+  args.option('check', {
+    describe: 'only check to see if the specific revision requested is available to be restored',
+    type: 'boolean',
+    default: false,
+  });
+
   return args.strict();
 };
 
@@ -58,7 +64,14 @@ export const handler = async (argv: any) => {
 
   handleWorkingDirectory(argv.directory);
 
-  const { revision: revisionArg, outputDir: outputDirArg, githubRepo, archiveDir, exact } = argv;
+  const {
+    revision: revisionArg,
+    outputDir: outputDirArg,
+    githubRepo,
+    archiveDir,
+    exact,
+    check,
+  } = argv;
 
   const revision = revisionArg !== undefined ? revisionArg.toString() : await gitRevision();
   const outputDir = outputDirArg || join('.appmap', 'work', revision);
@@ -83,6 +96,12 @@ export const handler = async (argv: any) => {
   ].find((archive) => archive.revision === revision);
   if (mostRecentArchiveAvailable) {
     console.log(`Found exact match full AppMap archive ${revision}`);
+    if (check) {
+      console.log(
+        `Found exact match full AppMap archive ${revision}. Check option is enabled, not continuing to download.`
+      );
+      process.exit(0);
+    }
   } else {
     ancestors = await gitAncestors(revision);
     {
