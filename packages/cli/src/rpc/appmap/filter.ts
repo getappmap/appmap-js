@@ -1,28 +1,33 @@
 import { AppMapRpc } from '@appland/rpc';
-import { buildAppMap } from '@appland/models';
+import { AppMapFilter, buildAppMap } from '@appland/models';
 import { readFile } from 'fs/promises';
 import { RpcError, RpcHandler } from '../rpc';
 import { appmapFile } from './appmapFile';
 import interpretFilter from './interpretFilter';
+import { warn } from 'console';
 
+export async function appmapFilterHandler(
+  args: AppMapRpc.FilterOptions
+): Promise<AppMapRpc.FilterResponse> {
+  let { appmap: appmapId } = args;
+  const { filter: filterArg } = args;
+
+  let filter = interpretFilter(filterArg);
+  if (!filter) {
+    filter = new AppMapFilter();
+  }
+
+  const appmapStr = await readFile(appmapFile(appmapId), 'utf8');
+  const appmap = buildAppMap().source(appmapStr).build();
+
+  return filter.filter(appmap, []);
+}
 export default function appmapFilter(): RpcHandler<
   AppMapRpc.FilterOptions,
   AppMapRpc.FilterResponse
 > {
-  async function handler(args: AppMapRpc.FilterOptions): Promise<AppMapRpc.FilterResponse> {
-    let { appmap: appmapId } = args;
-    const { filter: filterArg } = args;
-
-    const filter = interpretFilter(filterArg);
-    if (!filter) {
-      throw new RpcError(422, 'Invalid filter');
-    }
-
-    const appmapStr = await readFile(appmapFile(appmapId), 'utf8');
-    const appmap = buildAppMap().source(appmapStr).build();
-
-    return filter.filter(appmap, []);
-  }
-
-  return { name: AppMapRpc.FilterFunctionName, handler };
+  warn(
+    `RPC handler ${AppMapRpc.FilterFunctionName} is deprecated, use ${AppMapRpc.DataFunctionName} instead`
+  );
+  return { name: AppMapRpc.FilterFunctionName, handler: appmapFilterHandler };
 }
