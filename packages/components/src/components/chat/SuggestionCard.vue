@@ -41,7 +41,6 @@ export default {
 .suggestion-card {
   display: inline-grid;
   grid-template-columns: 32px 1fr;
-  grid-template-rows: 16px 1fr;
   background-color: rgba(0, 0, 0, 0.4);
   padding: 1rem;
   row-gap: 0.5rem;

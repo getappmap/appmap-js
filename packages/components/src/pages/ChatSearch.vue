@@ -1,8 +1,9 @@
 <template>
   <div class="chat-search-container">
-    <v-chat class="chat" ref="vchat" :send-message="sendMessage"> </v-chat>
-    <div class="appmaps">
-      <div class="appmaps-header">
+    <v-chat class="chat-search-chat" ref="vchat" :send-message="sendMessage" @clear="clear">
+    </v-chat>
+    <div class="chat-search-appmaps">
+      <div class="chat-search-search-results">
         <h2>AppMap search results</h2>
         <ul v-if="searchResponse.numResults">
           <span>
@@ -18,7 +19,7 @@
         <p v-else>Start a conversation to find and explore AppMaps</p>
       </div>
       <div v-if="selectedSearchResult">
-        <v-app-map ref="vappmap" class="appmap"> </v-app-map>
+        <v-app-map ref="vappmap" class="chat-search-appmap"> </v-app-map>
       </div>
     </div>
   </div>
@@ -108,13 +109,32 @@ export default {
   background-color: $gray2;
 }
 
-.chat {
-  min-width: auto;
-  width: 50%;
+.chat-search-search-results {
+  a {
+    color: $gray6;
+  }
 }
 
-.appmaps {
+.chat-search-chat {
+  min-width: auto;
+  width: 50%;
+  flex: 1;
+  padding: 2rem;
+}
+
+.chat-search-appmaps {
   font-size: 1rem;
   color: white;
+  flex: 2;
+}
+
+// TODO: It's not great that these styles need to be overridden and referenced as the id 'app'.
+// This could be made more integartion-friendly by refactoring VsCodeExtension.vue into an
+// id-less reusable component plus a wrapper class that adds the id.
+#app .main-column--left {
+  width: auto;
+}
+#app .main-column--right {
+  width: auto;
 }
 </style>

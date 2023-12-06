@@ -114,6 +114,8 @@ export default {
 
 <style lang="scss">
 .message .message-body {
+  line-height: 1.3rem;
+
   hr {
     border: none;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
