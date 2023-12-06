@@ -87,6 +87,10 @@ export default {
 
       search.ask(this.vchat.threadId, message);
     },
+    clear() {
+      this.searchResponse = { numResults: 0, results: [] };
+      this.selectedSearchResult = undefined;
+    },
   },
 };
 </script>
