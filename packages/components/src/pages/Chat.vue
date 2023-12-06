@@ -1,6 +1,6 @@
 <template>
   <div class="chat-container">
-    <v-chat ref="vchat" class="chat" :user-message-handler="userMessageHandler" />
+    <v-chat ref="vchat" class="chat" :send-message="sendMessage" />
   </div>
 </template>
 
@@ -35,17 +35,20 @@ export default {
         apiKey: this.apiKey,
       };
     },
+    vchat() {
+      return this.$refs.vchat as VChat;
+    },
   },
   methods: {
-    async userMessageHandler(message: string, ack: AckCallback) {
-      const vchat = this.$refs.vchat as VChat;
+    async sendMessage(message: string, ack: AckCallback) {
+      const { vchat } = this;
       const client = await AI.connect({
         onAck: ack,
         onToken: (token, messageId) => {
-          vchat.addToken(token, messageId);
+          this.vchat.addToken(token, messageId);
         },
         onError: (error) => {
-          vchat.addMessage(false, error);
+          this.vchat.addMessage(false, error);
         },
       });
       client.inputPrompt(message, { threadId: vchat.threadId });
