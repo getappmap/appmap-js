@@ -411,6 +411,7 @@ import {
   SET_SELECTED_SAVED_FILTER,
   SET_HIGHLIGHTED_EVENTS,
   SET_FOCUSED_EVENT,
+  SET_COLLAPSED_ACTION_STATE,
 } from '../store/vsCode';
 import isPrecomputedSequenceDiagram from '@/lib/isPrecomputedSequenceDiagram';
 import { SAVED_FILTERS_STORAGE_ID } from '../components/FilterMenu.vue';
@@ -1094,6 +1095,7 @@ export default {
     },
 
     resetDiagram() {
+      this.$store.commit(SET_COLLAPSED_ACTION_STATE, []);
       this.seqDiagramCollapseDepth =
         DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH > this.maxSeqDiagramCollapseDepth
           ? this.maxSeqDiagramCollapseDepth
