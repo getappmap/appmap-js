@@ -242,6 +242,22 @@
               <ReloadIcon class="control-button__icon" />
             </button>
           </v-popper>
+          <v-popper
+            class="hover-text-popper"
+            text="Toggle fullscreen"
+            placement="left"
+            text-align="left"
+            v-if="allowFullscreen"
+          >
+            <button
+              data-cy="fullscreen-button"
+              class="control-button"
+              :data-enabled="isFullscreen"
+              @click="toggleFullscreen"
+            >
+              <component :is="fullscreenIcon" class="control-button__stroke" />
+            </button>
+          </v-popper>
         </template>
       </v-tabs>
 
@@ -371,6 +387,8 @@ import DiagramGray from '@/assets/diagram-empty.svg';
 import StatsIcon from '@/assets/stats-icon.svg';
 import ExclamationIcon from '@/assets/exclamation-circle.svg';
 import ScissorsIcon from '@/assets/scissors-icon.svg';
+import FullscreenEnterIcon from '@/assets/fullscreen.svg';
+import FullscreenExitIcon from '@/assets/fullscreen-exit.svg';
 import VDetailsPanel from '../components/DetailsPanel.vue';
 import VDetailsButton from '../components/DetailsButton.vue';
 import VDiagramComponent from '../components/DiagramComponent.vue';
@@ -446,6 +464,8 @@ export default {
     StatsIcon,
     ExclamationIcon,
     ScissorsIcon,
+    FullscreenEnterIcon,
+    FullscreenExitIcon,
   },
 
   store,
@@ -473,6 +493,7 @@ export default {
       maxSeqDiagramCollapseDepth: 9,
       sequenceDiagramDiffMode: false,
       isActive: true,
+      isFullscreen: false,
     };
   },
 
@@ -488,6 +509,10 @@ export default {
     savedFilters: {
       type: Array,
       default: () => [],
+    },
+    allowFullscreen: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -834,6 +859,10 @@ export default {
 
     hasStats() {
       return this.stats && this.stats.functions && this.stats.functions.length > 0;
+    },
+
+    fullscreenIcon() {
+      return this.isFullscreen ? FullscreenExitIcon : FullscreenEnterIcon;
     },
   },
 
@@ -1325,6 +1354,43 @@ export default {
     handleNewCollapseDepth(newDepth) {
       this.seqDiagramCollapseDepth = newDepth;
     },
+    async enterFullscreen() {
+      const body = document.body;
+      const requestMethod =
+        body.requestFullScreen ||
+        body.webkitRequestFullScreen ||
+        body.mozRequestFullScreen ||
+        body.msRequestFullScreen;
+      if (requestMethod) {
+        try {
+          await requestMethod.call(body);
+        } catch (e) {
+          console.warn(e);
+        }
+      }
+    },
+    async exitFullscreen() {
+      const requestMethod =
+        document.exitFullscreen ||
+        document.webkitExitFullscreen ||
+        document.mozCancelFullScreen ||
+        document.msExitFullscreen;
+      if (requestMethod) {
+        try {
+          await requestMethod.call(document);
+        } catch (e) {
+          console.warn(e);
+        }
+      }
+    },
+    toggleFullscreen() {
+      if (this.isFullscreen) {
+        this.exitFullscreen();
+      } else {
+        this.enterFullscreen();
+      }
+      this.isFullscreen = !this.isFullscreen;
+    },
   },
 
   mounted() {
@@ -1599,6 +1665,17 @@ code {
         &:active {
           color: $gray5;
           transition-timing-function: ease-out;
+        }
+
+        svg path {
+          stroke: $lightgray2;
+        }
+
+        &__stroke {
+          width: 16px;
+          height: 14px;
+          stroke-width: 4;
+          fill: none;
         }
 
         &__icon {
