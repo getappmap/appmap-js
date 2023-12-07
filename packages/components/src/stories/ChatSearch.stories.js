@@ -49,7 +49,7 @@ Overall, this code provides functionality for user authentication, user creation
 
 const mockSearch = (method, params, callback) => {
   if (method === 'ask') {
-    callback(null, null, MOCK_EXPLANATION);
+    setTimeout(() => callback(null, null, MOCK_EXPLANATION), 3000);
   } else if (method === 'searchResults') {
     callback(null, null, {
       // TODO: Return SearchRpc.SearchResponse
