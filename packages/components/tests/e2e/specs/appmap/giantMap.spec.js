@@ -36,7 +36,7 @@ context('giant AppMap', () => {
     cy.get('.tab-content').should('not.exist');
     cy.get('[data-cy="stats-panel"]').should('be.visible');
 
-    cy.get('.tab-btn').contains('Sequence').click();
+    cy.get('.tab-btn').contains('Sequence').click({ force: true });
     cy.get('.tab-content').should('not.exist');
     cy.get('[data-cy="stats-panel"]').should('be.visible');
 
