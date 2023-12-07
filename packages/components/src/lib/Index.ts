@@ -20,4 +20,14 @@ export default class Index {
       );
     });
   }
+
+  appmapMetadata(appmapId: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.client.request('appmap.metadata', { appmap: appmapId }, function (err, error, result) {
+        if (err || error) return reportError(reject, err, error);
+
+        resolve(result as string);
+      });
+    });
+  }
 }

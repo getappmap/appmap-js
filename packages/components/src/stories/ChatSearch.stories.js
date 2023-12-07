@@ -1,6 +1,8 @@
 import VChatSearch from '@/pages/ChatSearch.vue';
 import './scss/vscode.scss';
-import defaultData from './data/scenario.json';
+import orderData from './data/scenario.json';
+import petclinicData from './data/java_scenario.json';
+import longPackageData from './data/long-package.appmap.json';
 
 export default {
   title: 'Pages/ChatSearch',
@@ -47,15 +49,23 @@ const MOCK_EXPLANATION = `Based on the code snippets provided, it appears that t
 Overall, this code provides functionality for user authentication, user creation, and user profile management in a Rails application.
 `;
 
+const DATA_BY_PATH = {
+  'tmp/appmap/rspec/order_test': orderData,
+  'tmp/appmap/junit/petclinic_test': petclinicData,
+  'tmp/appmap/minitest/Users_signup_valid_signup_information_with_account_activation':
+    longPackageData,
+};
+const DATA_KEYS = Object.keys(DATA_BY_PATH);
+
 const mockSearch = (method, params, callback) => {
   if (method === 'ask') {
-    setTimeout(() => callback(null, null, MOCK_EXPLANATION), 3000);
+    setTimeout(() => callback(null, null, MOCK_EXPLANATION), 1500);
   } else if (method === 'searchResults') {
     callback(null, null, {
       // TODO: Return SearchRpc.SearchResponse
       results: [
         {
-          appmap: 'tmp/appmap/rspec/checkout',
+          appmap: DATA_KEYS[0],
           events: [
             {
               fqid: 'function:app/controllers/Spree::Admin::OrdersController#edit',
@@ -67,7 +77,7 @@ const mockSearch = (method, params, callback) => {
           score: 5.0,
         },
         {
-          appmap: 'tmp/appmap/junit/petclinic_test',
+          appmap: DATA_KEYS[1],
           events: [
             {
               fqid: 'function:com.example.petclinic.model.Owner#find',
@@ -79,8 +89,7 @@ const mockSearch = (method, params, callback) => {
           score: 4.0,
         },
         {
-          appmap:
-            'tmp/appmap/minitest/Users_signup_valid_signup_information_with_account_activation',
+          appmap: DATA_KEYS[2],
           events: [],
           score: 1.0,
         },
@@ -91,8 +100,13 @@ const mockSearch = (method, params, callback) => {
 };
 
 const mockIndex = (method, params, callback) => {
+  const appmapId = params.appmap;
+  const data = DATA_BY_PATH[appmapId];
   if (method === 'appmap.data') {
-    callback(null, null, defaultData);
+    callback(null, null, data);
+  }
+  if (method === 'appmap.metadata') {
+    callback(null, null, data.metadata);
   }
 };
 
