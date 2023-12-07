@@ -1,10 +1,10 @@
 import { browserClient, reportError } from './RPC';
 
-export default class IndexClient {
+export default class Index {
   client: any;
 
-  constructor(port: number) {
-    this.client = browserClient(port);
+  constructor(portOrClient: number | any) {
+    this.client = typeof portOrClient === 'number' ? browserClient(portOrClient) : portOrClient;
   }
 
   appmapData(appmapId: string, filter: any): Promise<string> {

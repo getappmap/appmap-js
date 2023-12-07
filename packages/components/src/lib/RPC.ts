@@ -13,7 +13,7 @@ export function reportError(callback: any, err: any, error: any) {
 }
 
 export function browserClient(port: number) {
-  const callServer = function (request, callback) {
+  const callServer = function (request: any, callback: (err: Error | null, result?: any) => void) {
     const options = {
       method: 'POST',
       body: request,
