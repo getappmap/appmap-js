@@ -7,12 +7,14 @@
         <h2>AppMap search results</h2>
         <ul v-if="searchResponse.numResults">
           <span>
-            Showing {{ searchResponse.results.length }} of
-            {{ searchResponse.numResults }}
+            <i>
+              Showing top {{ searchResponse.results.length }} of
+              {{ searchResponse.numResults }}
+            </i>
           </span>
           <li v-for="result in searchResponse.results" :key="result.id">
             <a href="#" @click.prevent="selectedSearchResult = result">
-              {{ result.appmap }}
+              {{ result.metadata.name || result.appmap }}
             </a>
           </li>
         </ul>
@@ -62,11 +64,31 @@ export default {
   },
   watch: {
     selectedSearchResult: async function (newVal, _oldVal) {
-      if (!newVal) return;
+      const updateAppMapData = async () => {
+        // Something like this may be needed to successfully show the AppMap after
+        // "New Chat", but since this isn't working yet, it's commented out.
+        // if (!this.defaultState) {
+        //   const store = this.vappmap.$store;
+        //   this.defaultState = { ...store.state };
+        // }
 
-      const index = new Index(this.indexFn ? { request: this.indexFn } : this.indexPort || 30101);
-      const appmapData = await index.appmapData(newVal.appmap);
-      this.vappmap.loadData(appmapData);
+        if (!newVal) {
+          // for (const key of Object.keys(this.vappmap.$store.state)) {
+          //   this.vappmap.$store[key] = this.defaultState[key];
+          // }
+          this.vappmap.resetDiagram();
+          return;
+        }
+
+        const index = this.newIndex();
+        const appmapData = await index.appmapData(newVal.appmap);
+        this.vappmap.loadData(appmapData);
+        for (const result of newVal.events) {
+          this.vappmap.setSelectedObject(result.fqid);
+        }
+      };
+
+      this.$nextTick(updateAppMapData.bind(this));
     },
   },
   computed: {
@@ -79,7 +101,8 @@ export default {
   },
   methods: {
     async sendMessage(message: string, ack: AckCallback) {
-      const search = new Search(this.searchFn ? { request: this.searchFn } : this.aiPort || 30102);
+      const search = this.newSearch();
+      const index = this.newIndex();
       const ask = search.ask();
       ask.on('ack', ack);
       ask.on('token', (token, messageId) => {
@@ -90,14 +113,25 @@ export default {
       });
       ask.on('complete', async () => {
         this.vchat.onComplete();
-        this.searchResponse = await search.searchResults();
-        this.selectedSearchResult = this.searchResponse.results[0];
+        const searchResponse = await search.searchResults();
+        for (const result of searchResponse.results) {
+          const metadata = await index.appmapMetadata(result.appmap);
+          (result as any).metadata = metadata;
+        }
+        this.searchResponse = searchResponse;
+        this.selectedSearchResult = searchResponse.results[0];
       });
       ask.ask(message, this.vchat.threadId);
     },
     clear() {
       this.searchResponse = { numResults: 0, results: [] };
       this.selectedSearchResult = undefined;
+    },
+    newSearch(): Search {
+      return new Search(this.searchFn ? { request: this.searchFn } : this.aiPort || 30102);
+    },
+    newIndex(): Index {
+      return new Index(this.indexFn ? { request: this.indexFn } : this.indexPort || 30101);
     },
   },
 };
@@ -117,6 +151,15 @@ export default {
 }
 
 .chat-search-search-results {
+  ul {
+    padding-left: 1rem;
+  }
+
+  li {
+    margin: 4px 0;
+    list-style-type: none;
+    cursor: pointer;
+  }
   a {
     color: $gray6;
   }
