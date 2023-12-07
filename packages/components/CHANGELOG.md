@@ -1,3 +1,10 @@
+# [@appland/components-v3.15.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.14.0...@appland/components-v3.15.0) (2023-12-07)
+
+
+### Features
+
+* Add a fullscreen toggle ([e0ebae1](https://github.com/getappmap/appmap-js/commit/e0ebae1b140e49b164214d90039bf284310992db))
+
 # [@appland/components-v3.14.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.13.2...@appland/components-v3.14.0) (2023-12-05)
 
 
