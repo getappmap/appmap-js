@@ -1,22 +1,24 @@
 <template>
   <div class="chat">
     <small class="clear" @click="clear" v-if="isChatting">New chat</small>
-    <v-user-message
-      v-for="(message, i) in messages"
-      :key="i"
-      :message="message.message"
-      :is-user="message.isUser"
-    />
-    <v-spinner v-if="loading" class="status-container"
-      ><v-loader-icon class="status-icon"
-    /></v-spinner>
+    <div class="messages">
+      <v-user-message
+        v-for="(message, i) in messages"
+        :key="i"
+        :message="message.message"
+        :is-user="message.isUser"
+      />
+      <v-spinner v-if="loading" class="status-container">
+        <v-loader-icon class="status-icon" />
+      </v-spinner>
+      <v-suggestion-grid @suggest="onSuggestion" v-if="!isChatting" />
+    </div>
     <v-chat-input
       @send="onSend"
       :placeholder="inputPlaceholder"
       :class="inputClasses"
       ref="input"
     />
-    <v-suggestion-grid @suggest="onSuggestion" v-if="!isChatting" />
   </div>
 </template>
 
@@ -126,36 +128,28 @@ export default {
 .chat {
   display: flex;
   flex-direction: column;
-  position: relative;
-  min-height: 100%;
-  padding: 1rem;
+  justify-content: space-between;
+  height: 100vh;
+  padding: 1rem 0rem 2rem 0rem;
   max-width: 58rem;
   margin: 0 auto;
-  padding-bottom: 5rem;
-
-  .chatting {
-    bottom: 0;
-    left: 2rem;
-    right: 2rem;
-    margin: 0 auto;
-    width: 100%;
-  }
-
   .clear {
     color: #0097fa;
     cursor: pointer;
     margin-left: auto;
-    position: absolute;
-    top: 1rem;
+    margin-bottom: 1rem;
     max-width: 58rem;
     width: 100%;
     padding-right: 3rem;
     text-align: right;
-
     &:hover {
       color: lighten(#0097fa, 10%);
       text-decoration: underline;
     }
+  }
+  .messages {
+    height: 100%;
+    overflow-y: auto;
   }
 }
 
