@@ -97,9 +97,7 @@ export const handler = async (argv: any) => {
   if (mostRecentArchiveAvailable) {
     console.log(`Found exact match full AppMap archive ${revision}`);
     if (check) {
-      console.log(
-        `Found exact match full AppMap archive ${revision}. Check option is enabled, not continuing to download.`
-      );
+      console.log(`Check option is enabled, not continuing to download.`);
       process.exit(0);
     }
   } else {
