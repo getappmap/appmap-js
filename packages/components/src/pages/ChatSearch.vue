@@ -45,6 +45,14 @@ export default {
     indexPort: {
       type: Number,
     },
+    // Provide a custom search function, e.g. for mocking
+    searchFn: {
+      type: Function,
+    },
+    // Provide a custom index function, e.g. for mocking
+    indexFn: {
+      type: Function,
+    },
   },
   data() {
     return {
@@ -56,7 +64,7 @@ export default {
     selectedSearchResult: async function (newVal, _oldVal) {
       if (!newVal) return;
 
-      const index = new Index(this.indexPort || 30101);
+      const index = new Index(this.indexFn ? { request: this.indexFn } : this.indexPort || 30101);
       const appmapData = await index.appmapData(newVal.appmap);
       this.vappmap.loadData(appmapData);
     },
@@ -71,22 +79,21 @@ export default {
   },
   methods: {
     async sendMessage(message: string, ack: AckCallback) {
-      const search = new Search(this.aiPort || 30102, {
-        onAck: ack,
-        onToken: (token, messageId) => {
-          this.vchat.addToken(token, messageId);
-        },
-        onError: (error) => {
-          this.vchat.addMessage(false, error);
-        },
-        onComplete: async () => {
-          this.vchat.onComplete();
-          this.searchResponse = await search.searchResults();
-          this.selectedSearchResult = this.searchResponse.results[0];
-        },
+      const search = new Search(this.searchFn ? { request: this.searchFn } : this.aiPort || 30102);
+      const ask = search.ask();
+      ask.on('ack', ack);
+      ask.on('token', (token, messageId) => {
+        this.vchat.addToken(token, messageId);
       });
-
-      search.ask(this.vchat.threadId, message);
+      ask.on('error', (error) => {
+        this.vchat.addMessage(false, error);
+      });
+      ask.on('complete', async () => {
+        this.vchat.onComplete();
+        this.searchResponse = await search.searchResults();
+        this.selectedSearchResult = this.searchResponse.results[0];
+      });
+      ask.ask(message, this.vchat.threadId);
     },
     clear() {
       this.searchResponse = { numResults: 0, results: [] };
