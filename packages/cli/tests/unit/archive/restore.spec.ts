@@ -87,7 +87,7 @@ describe('restore command', () => {
   it('should log a message and exit if check option is enabled', async () => {
     const consoleSpy = jest.spyOn(console, 'log');
     const exitSpy = jest.spyOn(process, 'exit').mockImplementation(() => {
-      throw new Error('process.exit was called with code 0');
+      throw new Error('process.exit called with "0"');
     });
 
     // Call the handler function with check set to true
@@ -99,7 +99,7 @@ describe('restore command', () => {
         check: true,
       });
     } catch (error) {
-      expect(error).toEqual(new Error('process.exit was called with code 0'));
+      expect(error).toEqual(new Error('process.exit called with "0"'));
     }
 
     // Verify that the correct messages were logged
