@@ -102,7 +102,9 @@ $border-color: #7289c5;
 .chat-input {
   position: relative;
   display: flex;
-  padding: 1rem;
+  padding: 2rem 1rem 1rem 1rem;
+  margin-top: 1rem;
+  border-top: 1px solid $border-color;
 
   span[contenteditable] {
     width: 100%;

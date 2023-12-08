@@ -1,7 +1,8 @@
 <template>
   <div class="chat-search-container">
-    <v-chat class="chat-search-chat" ref="vchat" :send-message="sendMessage" @clear="clear">
-    </v-chat>
+    <div class="chat-container">
+      <v-chat class="chat-search-chat" ref="vchat" :send-message="sendMessage" @clear="clear" />
+    </div>
     <div class="chat-search-appmaps">
       <div class="chat-search-search-results">
         <h2>AppMap search results</h2>
@@ -38,9 +39,7 @@
         </div>
         <p v-else>Start a conversation to find and explore AppMaps</p>
       </div>
-      <div v-if="selectedSearchResult">
-        <v-app-map ref="vappmap" class="chat-search-appmap"> </v-app-map>
-      </div>
+      <v-app-map v-if="selectedSearchResult" ref="vappmap" class="chat-search-appmap"> </v-app-map>
     </div>
   </div>
 </template>
@@ -84,7 +83,7 @@ export default {
     };
   },
   watch: {
-    selectedSearchResultId: async function (newVal, _oldVal) {
+    selectedSearchResultId: async function (newVal) {
       const updateAppMapData = async () => {
         // Something like this may be needed to successfully show the AppMap after
         // "New Chat", but since this isn't working yet, it's commented out.
@@ -182,31 +181,41 @@ export default {
   flex-direction: row;
   min-width: 100%;
   max-width: 100%;
-  min-height: 100%;
-  max-height: 100%;
+  min-height: 100vh;
+  max-height: 100vh;
   overflow-y: auto;
-  overflow-x: hidden;
   background-color: $gray2;
-}
 
-.chat-search-search-results {
-  .search-results-list {
-    margin: 1rem 0;
-    width: 30em;
+  .chat-container {
+    overflow: auto;
+    width: 40%;
+    min-width: 375px;
+    .chat-search-chat {
+      min-width: auto;
+      width: 95%;
+      flex: 1;
+    }
   }
-}
+  .chat-search-appmaps {
+    font-size: 1rem;
+    height: 100vh;
+    color: white;
+    padding: 0 1rem 1rem 0;
+    flex: 2;
+    display: flex;
+    flex-direction: column;
 
-.chat-search-chat {
-  min-width: auto;
-  width: 50%;
-  flex: 1;
-  padding: 2rem;
-}
+    .search-results-list {
+      margin: 1rem 0;
+      width: 30em;
+    }
 
-.chat-search-appmaps {
-  font-size: 1rem;
-  color: white;
-  flex: 2;
+    .chat-search-appmap {
+      overflow-y: auto;
+      width: 100%;
+      border-radius: 10px;
+    }
+  }
 }
 
 // TODO: It's not great that these styles need to be overridden and referenced as the id 'app'.
