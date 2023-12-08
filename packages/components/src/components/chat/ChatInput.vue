@@ -102,9 +102,9 @@ $border-color: #7289c5;
 .chat-input {
   position: relative;
   display: flex;
-  padding: 2rem 1rem 1rem 1rem;
+  padding: 2rem 2rem 1rem 2rem;
   margin-top: 1rem;
-  border-top: 1px solid $border-color;
+  border-top: 1px solid darken($gray4, 10%);
 
   span[contenteditable] {
     width: 100%;
@@ -133,7 +133,7 @@ $border-color: #7289c5;
 
   .popper {
     position: absolute;
-    right: 1.8rem;
+    right: 2.4rem;
     bottom: 1.45rem;
 
     &__text {
