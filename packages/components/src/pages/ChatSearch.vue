@@ -1,8 +1,14 @@
 <template>
-  <div class="chat-search-container">
-    <div class="chat-container">
+  <div
+    class="chat-search-container"
+    @mousemove="makeResizing"
+    @mouseup="stopResizing"
+    @mouseleave="stopResizing"
+  >
+    <div class="chat-container" ref="chatContainer">
       <v-chat class="chat-search-chat" ref="vchat" :send-message="sendMessage" @clear="clear" />
     </div>
+    <div class="chat-search-container--drag" @mousedown="startResizing"></div>
     <div class="search-container">
       <div class="search-results-container">
         <h2>AppMap search results</h2>
@@ -16,12 +22,12 @@
 
           <div class="search-results-list-container">
             <div class="search-results-list-label">AppMaps:</div>
-          <select class="search-results-list" v-model="selectedSearchResultId">
-            <option v-for="result in searchResponse.results" :value="result.id" :key="result.id">
-              {{ result.metadata.name || result.appmap }}
-            </option>
-          </select>
-        </div>
+            <select class="search-results-list" v-model="selectedSearchResultId">
+              <option v-for="result in searchResponse.results" :value="result.id" :key="result.id">
+                {{ result.metadata.name || result.appmap }}
+              </option>
+            </select>
+          </div>
         </div>
         <div class="search-results-header" v-else>
           <i v-if="!searching">Start a conversation to find and explore AppMaps</i>
@@ -105,6 +111,9 @@ export default {
       searchId: 0,
       selectedSearchResultId: undefined,
       showDiagnostics: false,
+      isPanelResizing: false,
+      initialPanelWidth: 0,
+      initialClientX: 0,
     };
   },
   watch: {
@@ -199,11 +208,36 @@ export default {
     newIndex(): Index {
       return new Index(this.indexFn ? { request: this.indexFn } : this.indexPort || 30101);
     },
+    startResizing(event) {
+      console.log('startResizing');
+      document.body.style.userSelect = 'none';
+      this.isPanelResizing = true;
+      this.initialPanelWidth = this.$refs.chatContainer.offsetWidth;
+      this.initialClientX = event.clientX;
+    },
+    makeResizing(event) {
+      if (this.isPanelResizing) {
+        const MIN_PANEL_WIDTH = 280;
+        const MAX_PANEL_WIDTH = window.innerWidth * 0.75;
+
+        let newWidth = this.initialPanelWidth + (event.clientX - this.initialClientX);
+        newWidth = Math.max(MIN_PANEL_WIDTH, newWidth);
+        newWidth = Math.min(MAX_PANEL_WIDTH, newWidth);
+
+        this.$refs.chatContainer.style.width = `${newWidth}px`;
+      }
+    },
+    stopResizing() {
+      document.body.style.userSelect = '';
+      this.isPanelResizing = false;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+$border-color: darken($gray4, 10%);
+
 .chat-search-container {
   display: flex;
   flex-direction: row;
@@ -223,8 +257,16 @@ export default {
       min-width: auto;
       border-right: 1px solid $border-color;
       margin: 0;
-      width: 95%;
-      flex: 1;
+    }
+  }
+  .chat-search-container--drag {
+    width: 2px;
+    background: transparent;
+    cursor: col-resize;
+    z-index: 100;
+
+    &:hover {
+      background: $gray5;
     }
   }
   .search-container {
@@ -260,9 +302,9 @@ export default {
         margin-right: 1rem;
       }
 
-    .search-results-list {
+      .search-results-list {
         margin: 0.5rem 0;
-      width: 30em;
+        width: 30em;
         color: white;
         background-color: lighten($gray3, 5%);
         border-radius: 10px;
