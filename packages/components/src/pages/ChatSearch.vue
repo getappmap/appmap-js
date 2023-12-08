@@ -28,13 +28,14 @@
               Showing top {{ searchResponse.results.length }} of
               {{ searchResponse.numResults }}
             </i>
-          </span>
-          <li v-for="result in searchResponse.results" :key="result.id">
-            <a href="#" @click.prevent="selectedSearchResult = result">
+          </div>
+
+          <select class="search-results-list" v-model="selectedSearchResultId">
+            <option v-for="result in searchResponse.results" :value="result.id" :key="result.id">
               {{ result.metadata.name || result.appmap }}
-            </a>
-          </li>
-        </ul>
+            </option>
+          </select>
+        </div>
         <p v-else>Start a conversation to find and explore AppMaps</p>
       </div>
       <div v-if="selectedSearchResult">
@@ -75,12 +76,15 @@ export default {
   },
   data() {
     return {
+      searchResponse: undefined,
+      searching: false,
       searchStatus: undefined,
       searchId: 0,
+      selectedSearchResultId: undefined,
     };
   },
   watch: {
-    selectedSearchResult: async function (newVal, _oldVal) {
+    selectedSearchResultId: async function (newVal, _oldVal) {
       const updateAppMapData = async () => {
         // Something like this may be needed to successfully show the AppMap after
         // "New Chat", but since this isn't working yet, it's commented out.
@@ -98,10 +102,11 @@ export default {
         }
 
         const index = this.newIndex();
-        const appmapData = await index.appmapData(newVal.appmap);
+        const searchResult = this.selectedSearchResult;
+        const appmapData = await index.appmapData(searchResult.appmap);
         this.vappmap.loadData(appmapData);
-        for (const result of newVal.events) {
-          this.vappmap.setSelectedObject(result.fqid);
+        for (const event of searchResult.events) {
+          this.vappmap.setSelectedObject(event.fqid);
         }
       };
 
@@ -114,6 +119,13 @@ export default {
     },
     vappmap() {
       return this.$refs.vappmap as VsCodeExtensionVue;
+    },
+    selectedSearchResult() {
+      if (!this.searchResponse || !this.selectedSearchResultId) return;
+
+      return this.searchResponse.results.find(
+        (result) => result.id === this.selectedSearchResultId
+      );
     },
   },
   methods: {
@@ -154,6 +166,7 @@ export default {
       this.selectedSearchResult = undefined;
     },
     newSearch(): Search {
+      this.searchId += 1;
       return new Search(this.searchFn ? { request: this.searchFn } : this.aiPort || 30102);
     },
     newIndex(): Index {
@@ -177,17 +190,9 @@ export default {
 }
 
 .chat-search-search-results {
-  ul {
-    padding-left: 1rem;
-  }
-
-  li {
-    margin: 4px 0;
-    list-style-type: none;
-    cursor: pointer;
-  }
-  a {
-    color: $gray6;
+  .search-results-list {
+    margin: 1rem 0;
+    width: 30em;
   }
 }
 
