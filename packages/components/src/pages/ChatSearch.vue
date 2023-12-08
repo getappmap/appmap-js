@@ -3,26 +3,9 @@
     <div class="chat-container">
       <v-chat class="chat-search-chat" ref="vchat" :send-message="sendMessage" @clear="clear" />
     </div>
-    <div class="chat-search-appmaps">
-      <div class="chat-search-search-results">
+    <div class="search-container">
+      <div class="search-results-container">
         <h2>AppMap search results</h2>
-        <div v-if="searching">
-          <ul v-if="searchStatus">
-            <li>Step: {{ searchStatus.step }}</li>
-            <li v-if="searchStatus.vectorTerms">
-              Vector terms: {{ searchStatus.vectorTerms.join(' ') }}
-            </li>
-            <li v-if="searchStatus.sequenceDiagrams">
-              Sequence diagrams: {{ searchStatus.sequenceDiagrams.length }}
-            </li>
-            <li v-if="searchStatus.codeSnippets">
-              Code snippets: {{ Object.keys(searchStatus.codeSnippets).length }}
-            </li>
-            <li v-if="searchStatus.codeObjects">
-              Code objects: {{ searchStatus.codeObjects.length }}
-            </li>
-          </ul>
-        </div>
         <div v-if="searchResponse">
           <div>
             <i>
@@ -37,9 +20,33 @@
             </option>
           </select>
         </div>
-        <p v-else>Start a conversation to find and explore AppMaps</p>
+        <div v-else>
+          <div v-if="!searching">Start a conversation to find and explore AppMaps</div>
+          <div v-else>Searching...</div>
+        </div>
       </div>
-      <v-app-map v-if="selectedSearchResult" ref="vappmap" class="chat-search-appmap"> </v-app-map>
+      <v-app-map v-if="selectedSearchResult" ref="vappmap" class="appmap"> </v-app-map>
+      <v-accordion class="diagnostics" :open="showDiagnostics" @toggle="toggleDiagonstics">
+        <template #header>
+          <a href="" @click.prevent>Diagnostics &raquo;</a>
+        </template>
+
+        <ul v-if="searchStatus">
+          <li>Step: {{ searchStatus.step }}</li>
+          <li v-if="searchStatus.vectorTerms">
+            Vector terms: {{ searchStatus.vectorTerms.join(' ') }}
+          </li>
+          <li v-if="searchStatus.sequenceDiagrams">
+            Sequence diagrams: {{ searchStatus.sequenceDiagrams.length }}
+          </li>
+          <li v-if="searchStatus.codeSnippets">
+            Code snippets: {{ Object.keys(searchStatus.codeSnippets).length }}
+          </li>
+          <li v-if="searchStatus.codeObjects">
+            Code objects: {{ searchStatus.codeObjects.length }}
+          </li>
+        </ul>
+      </v-accordion>
     </div>
   </div>
 </template>
@@ -47,6 +54,7 @@
 <script lang="ts">
 //@ts-nocheck
 import VChat from '@/components/chat/Chat.vue';
+import VAccordion from '@/components/Accordion.vue';
 import VAppMap from './VsCodeExtension.vue';
 import Search from '@/lib/Search';
 import Index from '@/lib/Index';
@@ -56,6 +64,7 @@ export default {
   components: {
     VChat,
     VAppMap,
+    VAccordion,
   },
   props: {
     aiPort: {
@@ -80,6 +89,7 @@ export default {
       searchStatus: undefined,
       searchId: 0,
       selectedSearchResultId: undefined,
+      showDiagnostics: false,
     };
   },
   watch: {
@@ -164,6 +174,9 @@ export default {
       this.searchResponse = undefined;
       this.selectedSearchResult = undefined;
     },
+    toggleDiagonstics() {
+      this.showDiagnostics = !this.showDiagnostics;
+    },
     newSearch(): Search {
       this.searchId += 1;
       return new Search(this.searchFn ? { request: this.searchFn } : this.aiPort || 30102);
@@ -195,7 +208,7 @@ export default {
       flex: 1;
     }
   }
-  .chat-search-appmaps {
+  .search-container {
     font-size: 1rem;
     height: 100vh;
     color: white;
@@ -217,11 +230,38 @@ export default {
         color: $gray6;
       }
     }
-    .chat-search-appmap {
+
+    .appmap {
       overflow-y: auto;
       width: 100%;
       border-radius: 10px;
     }
+  }
+}
+
+.diagnostics {
+  background-color: $gray3;
+  margin-top: 1rem;
+  padding: 0.5rem;
+
+  a {
+    color: $lightblue;
+    text-decoration: none;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    color: $gray6;
+  }
+}
+</style>
+<style lang="scss">
+.diagnostics {
+  .accordion__header,
+  .accordion__body {
+    padding: 0.5rem 0;
   }
 }
 
