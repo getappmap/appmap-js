@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.113.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.112.0...@appland/appmap-v3.113.0) (2023-12-08)
+
+
+### Features
+
+* Add check option to check if the file exists ([#1484](https://github.com/getappmap/appmap-js/issues/1484)) ([40be3a8](https://github.com/getappmap/appmap-js/commit/40be3a8cb3c5bd4ff806adbe03e3b7174c05c8f9))
+
 # [@appland/appmap-v3.112.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.111.1...@appland/appmap-v3.112.0) (2023-11-26)
 
 
