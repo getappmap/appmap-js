@@ -12,22 +12,43 @@ export class Ask extends EventEmitter {
     this.client = client;
   }
 
-  ask(input: string, threadId?: string): void {
+  ask(input: string, threadId?: string): Promise<string> {
     // eslint-disable-next-line no-param-reassign
     threadId ||= Math.random().toString(36).substring(2, 15);
 
-    const messageId = Math.random().toString(36).substring(2, 15);
-    this.client.request(
-      'ask',
-      { threadId, question: input },
-      (err: any, error: any, explanation: string) => {
-        if (err || error) return reportError(this.onError.bind(this), err, error);
+    return new Promise<string>((resolve, reject) => {
+      this.client.request(
+        'ask',
+        { threadId, question: input },
+        (err: any, error: any, requestId: string) => {
+          if (err || error) return reportError(reject, err, error);
 
-        this.onAck(messageId, threadId!);
-        this.onToken(explanation, messageId);
-        this.onComplete();
-      }
-    );
+          this.pollForStatus(requestId);
+          this.onAck(requestId, threadId!);
+
+          resolve(requestId);
+        }
+      );
+    });
+  }
+
+  protected pollForStatus(requestId: string) {
+    const statusInterval = setInterval(() => {
+      this.client.request(
+        'ask.status',
+        { requestId },
+        (err: any, error: any, statusResponse: any) => {
+          if (err || error) return reportError(this.onError.bind(this), err, error);
+
+          this.emit('status', statusResponse);
+          if (statusResponse.step === 'complete') {
+            clearInterval(statusInterval);
+            this.onToken(statusResponse.explanation, requestId);
+            this.onComplete();
+          }
+        }
+      );
+    }, 1000);
   }
 
   protected onError(err: any) {

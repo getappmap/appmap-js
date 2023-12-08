@@ -5,8 +5,25 @@
     <div class="chat-search-appmaps">
       <div class="chat-search-search-results">
         <h2>AppMap search results</h2>
-        <ul v-if="searchResponse.numResults">
-          <span>
+        <div v-if="searching">
+          <ul v-if="searchStatus">
+            <li>Step: {{ searchStatus.step }}</li>
+            <li v-if="searchStatus.vectorTerms">
+              Vector terms: {{ searchStatus.vectorTerms.join(' ') }}
+            </li>
+            <li v-if="searchStatus.sequenceDiagrams">
+              Sequence diagrams: {{ searchStatus.sequenceDiagrams.length }}
+            </li>
+            <li v-if="searchStatus.codeSnippets">
+              Code snippets: {{ Object.keys(searchStatus.codeSnippets).length }}
+            </li>
+            <li v-if="searchStatus.codeObjects">
+              Code objects: {{ searchStatus.codeObjects.length }}
+            </li>
+          </ul>
+        </div>
+        <div v-if="searchResponse">
+          <div>
             <i>
               Showing top {{ searchResponse.results.length }} of
               {{ searchResponse.numResults }}
@@ -58,8 +75,8 @@ export default {
   },
   data() {
     return {
-      searchResponse: { numResults: 0, results: [] },
-      selectedSearchResult: undefined,
+      searchStatus: undefined,
+      searchId: 0,
     };
   },
   watch: {
@@ -104,27 +121,36 @@ export default {
       const search = this.newSearch();
       const index = this.newIndex();
       const ask = search.ask();
+      this.searching = true;
       ask.on('ack', ack);
       ask.on('token', (token, messageId) => {
         this.vchat.addToken(token, messageId);
       });
       ask.on('error', (error) => {
+        this.searching = false;
         this.vchat.addMessage(false, error);
       });
+      ask.on('status', (status) => {
+        this.searchStatus = status;
+      });
       ask.on('complete', async () => {
+        this.searching = false;
         this.vchat.onComplete();
         const searchResponse = await search.searchResults();
+        let resultId = 0;
         for (const result of searchResponse.results) {
           const metadata = await index.appmapMetadata(result.appmap);
+          (result as any).id = ['search-result', this.searchId, resultId].join('_');
           (result as any).metadata = metadata;
+          resultId += 1;
         }
         this.searchResponse = searchResponse;
-        this.selectedSearchResult = searchResponse.results[0];
+        this.selectedSearchResultId = searchResponse.results[0].id;
       });
       ask.ask(message, this.vchat.threadId);
     },
     clear() {
-      this.searchResponse = { numResults: 0, results: [] };
+      this.searchResponse = undefined;
       this.selectedSearchResult = undefined;
     },
     newSearch(): Search {
