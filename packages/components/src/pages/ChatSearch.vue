@@ -45,6 +45,17 @@
           <li v-if="searchStatus.codeObjects">
             Code objects: {{ searchStatus.codeObjects.length }}
           </li>
+          <li v-if="searchStatus.prompt">
+            Prompt:
+            <ul class="prompt">
+              <li v-for="msg in searchStatus.prompt" :key="[msg.role, msg.content].join('->')">
+                <code class="role">{{ msg.role }}</code>
+                <div class="content">
+                  {{ msg.content }}
+                </div>
+              </li>
+            </ul>
+          </li>
         </ul>
       </v-accordion>
     </div>
