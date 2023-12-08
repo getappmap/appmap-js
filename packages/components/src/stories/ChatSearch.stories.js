@@ -57,9 +57,22 @@ const DATA_BY_PATH = {
 };
 const DATA_KEYS = Object.keys(DATA_BY_PATH);
 
+const requestId = 'the-request-id';
+let statusIndex = 0;
+
 const mockSearch = (method, params, callback) => {
   if (method === 'ask') {
-    setTimeout(() => callback(null, null, MOCK_EXPLANATION), 1500);
+    callback(null, null, requestId);
+  } else if (method === 'ask.status') {
+    const responseIndex = statusIndex % 3;
+    statusIndex += 1;
+    if (responseIndex === 0) callback(null, null, { step: 'build-vector-terms' });
+    if (responseIndex === 1) setTimeout(() => callback(null, null, { step: 'explain' }), 500);
+    if (responseIndex === 2)
+      setTimeout(
+        () => callback(null, null, { step: 'complete', explanation: MOCK_EXPLANATION }),
+        500
+      );
   } else if (method === 'searchResults') {
     callback(null, null, {
       // TODO: Return SearchRpc.SearchResponse
