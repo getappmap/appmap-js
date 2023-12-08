@@ -7,25 +7,29 @@
       <div class="search-results-container">
         <h2>AppMap search results</h2>
         <div v-if="searchResponse">
-          <div>
+          <div class="search-results-header">
             <i>
               Showing top {{ searchResponse.results.length }} of
               {{ searchResponse.numResults }}
             </i>
           </div>
 
+          <div class="search-results-list-container">
+            <div class="search-results-list-label">AppMaps:</div>
           <select class="search-results-list" v-model="selectedSearchResultId">
             <option v-for="result in searchResponse.results" :value="result.id" :key="result.id">
               {{ result.metadata.name || result.appmap }}
             </option>
           </select>
         </div>
-        <div v-else>
-          <div v-if="!searching">Start a conversation to find and explore AppMaps</div>
-          <div v-else>Searching...</div>
+        </div>
+        <div class="search-results-header" v-else>
+          <i v-if="!searching">Start a conversation to find and explore AppMaps</i>
+          <i v-else>Searching...</i>
         </div>
       </div>
       <v-app-map v-if="selectedSearchResult" ref="vappmap" class="appmap"> </v-app-map>
+      <div v-else class="appmap-empty"></div>
       <v-accordion class="diagnostics" :open="showDiagnostics" @toggle="toggleDiagonstics">
         <template #header>
           <a href="" @click.prevent>Diagnostics &raquo;</a>
@@ -211,11 +215,14 @@ export default {
   background-color: $gray2;
 
   .chat-container {
-    overflow: auto;
+    overflow: hidden;
     width: 40%;
     min-width: 375px;
+
     .chat-search-chat {
       min-width: auto;
+      border-right: 1px solid $border-color;
+      margin: 0;
       width: 95%;
       flex: 1;
     }
@@ -224,20 +231,66 @@ export default {
     font-size: 1rem;
     height: 100vh;
     color: white;
-    padding: 0 1rem 1rem 0;
+    padding: 0 1rem 1rem 2rem;
     flex: 2;
     display: flex;
     flex-direction: column;
 
+    h2 {
+      font-size: 1.2rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .search-results-header {
+      font-size: 0.9rem;
+      color: $gray4;
+      margin-bottom: 1rem;
+      margin-left: 0.05rem;
+    }
+
+    .search-results-list-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-content: center;
+      margin-bottom: 0.5rem;
+
+      .search-results-list-label {
+        align-self: center;
+        margin-right: 1rem;
+      }
+
     .search-results-list {
-      margin: 1rem 0;
+        margin: 0.5rem 0;
       width: 30em;
+        color: white;
+        background-color: lighten($gray3, 5%);
+        border-radius: 10px;
+        padding: 0.3rem;
+        border: none;
+
+        &:hover {
+          background-color: lighten($gray3, 10%);
+          transition: all 0.2s ease-in-out;
+        }
+
+        &:focus-visible {
+          outline: none;
+        }
+      }
     }
 
     .appmap {
       overflow-y: auto;
-      width: 100%;
       border-radius: 10px;
+      border: 2px solid $border-color;
+    }
+
+    .appmap-empty {
+      height: 100%;
+      background-color: darken($gray2, 3%);
+      border-radius: 10px;
+      margin-top: 3rem;
     }
   }
 }
@@ -259,22 +312,11 @@ export default {
     color: $gray6;
   }
 }
-</style>
-<style lang="scss">
+
 .diagnostics {
   .accordion__header,
   .accordion__body {
     padding: 0.5rem 0;
   }
-}
-
-// TODO: It's not great that these styles need to be overridden and referenced as the id 'app'.
-// This could be made more integartion-friendly by refactoring VsCodeExtension.vue into an
-// id-less reusable component plus a wrapper class that adds the id.
-#app .main-column--left {
-  width: auto;
-}
-#app .main-column--right {
-  width: auto;
 }
 </style>

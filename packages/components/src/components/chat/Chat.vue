@@ -1,6 +1,6 @@
 <template>
   <div class="chat">
-    <small class="clear" @click="clear" v-if="isChatting">New chat</small>
+    <button class="clear" @click="clear" v-if="isChatting">New chat</button>
     <div class="messages">
       <v-user-message
         v-for="(message, i) in messages"
@@ -125,6 +125,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$border-color: darken($gray4, 10%);
 .chat {
   display: flex;
   flex-direction: column;
@@ -134,22 +135,34 @@ export default {
   max-width: 58rem;
   margin: 0 auto;
   .clear {
-    color: #0097fa;
+    color: white;
     cursor: pointer;
     margin-left: auto;
-    margin-bottom: 1rem;
-    max-width: 58rem;
-    width: 100%;
-    padding-right: 3rem;
+    margin-bottom: 0.5rem;
+    margin-right: 3rem;
+    padding: 0.2rem 0.5rem;
     text-align: right;
+    border: none;
+    border-radius: 10px;
+    background-color: lighten($gray3, 5%);
     &:hover {
-      color: lighten(#0097fa, 10%);
-      text-decoration: underline;
+      background-color: lighten($gray3, 10%);
+      transition: all 0.2s ease-in-out;
     }
   }
   .messages {
     height: 100%;
-    overflow-y: auto;
+    overflow: auto;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: lighten($gray4, 25%);
+  }
+  ::-webkit-scrollbar-thumb:hover,
+  ::-webkit-scrollbar-thumb:active {
+    background: white;
+  }
+  ::-webkit-scrollbar-track {
+    background: $border-color;
   }
 }
 
