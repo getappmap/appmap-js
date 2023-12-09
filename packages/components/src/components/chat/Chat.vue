@@ -8,9 +8,16 @@
         :message="message.message"
         :is-user="message.isUser"
       />
-      <v-spinner v-if="loading" class="status-container">
-        <v-loader-icon class="status-icon" />
-      </v-spinner>
+      <div v-if="loading" class="status-container">
+        <div class="spinner-container">
+          <v-spinner>
+            <v-loader-icon class="status-icon" />
+          </v-spinner>
+        </div>
+        <div class="status-label" v-if="statusLabel">
+          {{ statusLabel }}
+        </div>
+      </div>
       <v-suggestion-grid @suggest="onSuggestion" v-if="!isChatting" />
     </div>
     <v-chat-input
@@ -50,6 +57,9 @@ export default {
   props: {
     sendMessage: {
       type: UserMessageHandler,
+    },
+    statusLabel: {
+      type: String,
     },
   },
   data() {
@@ -168,9 +178,22 @@ $border-color: darken($gray4, 10%);
 
 .status-container {
   display: inline-block;
-  width: 22px;
-  height: 2px;
+  position: relative;
+  left: 54px;
   margin: -4px 0.5em -4px 0.5em;
+  display: flex;
+
+  .spinner-container {
+    .spinner {
+      height: 22px;
+      width: 22px;
+    }
+  }
+
+  .status-label {
+    margin-left: 0.5rem;
+    color: white;
+  }
 
   path {
     fill: $lightblue;

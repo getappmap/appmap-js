@@ -6,7 +6,13 @@
     @mouseleave="stopResizing"
   >
     <div class="chat-container" ref="chatContainer">
-      <v-chat class="chat-search-chat" ref="vchat" :send-message="sendMessage" @clear="clear" />
+      <v-chat
+        class="chat-search-chat"
+        ref="vchat"
+        :send-message="sendMessage"
+        :status-label="searchStatusLabel"
+        @clear="clear"
+      />
     </div>
     <div class="chat-search-container--drag" @mousedown="startResizing"></div>
     <div class="search-container">
@@ -114,6 +120,15 @@ export default {
       isPanelResizing: false,
       initialPanelWidth: 0,
       initialClientX: 0,
+      searchStatusLabel: undefined,
+      searchStatusLabels: {
+        'build-vector-terms': 'Building vector terms',
+        'search-appmaps': 'Searching AppMaps',
+        'collect-context': 'Collecting context',
+        'expand-context': 'Expanding context',
+        'build-prompt': 'Building prompt',
+        explain: 'Explaining with AI',
+      },
     };
   },
   watch: {
@@ -145,6 +160,21 @@ export default {
 
       this.$nextTick(updateAppMapData.bind(this));
     },
+    statusStep: function (newVal) {
+      if (!newVal) {
+        this.searchStatusLabel = undefined;
+        return;
+      }
+
+      if (newVal) {
+        if (this.searchStatus?.step) {
+          const label = this.searchStatusLabels[this.searchStatus.step];
+          if (label) this.searchStatusLabel = [label, '...'].join('');
+        } else {
+          this.searchStatusLabel = undefined;
+        }
+      }
+    },
   },
   computed: {
     vchat() {
@@ -152,6 +182,9 @@ export default {
     },
     vappmap() {
       return this.$refs.vappmap as VsCodeExtensionVue;
+    },
+    statusStep() {
+      return this.searchStatus ? this.searchStatus.step : undefined;
     },
     selectedSearchResult() {
       if (!this.searchResponse || !this.selectedSearchResultId) return;
@@ -167,6 +200,7 @@ export default {
       const index = this.newIndex();
       const ask = search.ask();
       this.searching = true;
+      this.lastStatusLabel = undefined;
       ask.on('ack', ack);
       ask.on('token', (token, messageId) => {
         this.vchat.addToken(token, messageId);

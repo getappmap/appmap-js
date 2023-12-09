@@ -73,7 +73,7 @@ export default {
   grid-template-rows: 16px 1fr;
   background-color: $gray2;
   row-gap: 0.5rem;
-  padding: 1rem;
+  padding: 0 1rem;
   color: #ececec;
 
   .avatar {
