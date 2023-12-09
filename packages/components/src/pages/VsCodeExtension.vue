@@ -8,7 +8,7 @@
     @mouseleave="stopResizing"
   >
     <div class="loader"></div>
-    <div class="main-column main-column--left" ref="mainColumnLeft">
+    <div :class="leftColumnClasses" ref="mainColumnLeft">
       <v-details-panel
         :appMap="filteredAppMap"
         :selected-object="selectedObject"
@@ -464,6 +464,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    hideDetailsPanel: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   watch: {
@@ -548,6 +552,14 @@ export default {
     isPrecomputedSequenceDiagram,
     classes() {
       return this.isLoading ? 'app--loading' : '';
+    },
+
+    leftColumnClasses() {
+      const classes = ['main-column', 'main-column--left'];
+      if (this.hideDetailsPanel) {
+        classes.push('main-column--left--hidden');
+      }
+      return classes;
     },
 
     isInBrowser() {
@@ -1537,11 +1549,15 @@ code {
   }
 
   .main-column {
+    &--left--hidden {
+      display: none;
+    }
+
     &--left {
       position: relative;
       grid-column: 1;
       width: 420px;
-      @media (max-width: 900px) {
+      @media (max-width: 1000px) {
         display: none;
       }
     }
