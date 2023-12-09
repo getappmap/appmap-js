@@ -122,7 +122,7 @@ export default {
       initialClientX: 0,
       searchStatusLabel: undefined,
       searchStatusLabels: {
-        'build-vector-terms': 'Building vector terms',
+        'build-vector-terms': 'Optimizing search terms',
         'search-appmaps': 'Searching AppMaps',
         'collect-context': 'Collecting context',
         'expand-context': 'Expanding context',
