@@ -182,6 +182,7 @@ $border-color: darken($gray4, 10%);
   left: 54px;
   margin: -4px 0.5em -4px 0.5em;
   display: flex;
+  width: 18rem;
 
   .spinner-container {
     .spinner {
