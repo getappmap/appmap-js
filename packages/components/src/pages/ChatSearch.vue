@@ -293,8 +293,8 @@ $border-color: darken($gray4, 10%);
     }
   }
   .chat-search-container--drag {
-    width: 2px;
-    background: transparent;
+    width: 3px;
+    background: darken($gray4, 10%);
     cursor: col-resize;
     z-index: 100;
 
@@ -317,10 +317,9 @@ $border-color: darken($gray4, 10%);
     }
 
     .search-results-header {
-      font-size: 0.9rem;
+      font-size: 1.1rem;
       color: $gray4;
-      margin-bottom: 1rem;
-      margin-left: 0.05rem;
+      margin: 0.5rem 0 0.5rem 0.05rem;
     }
 
     .search-results-list-container {
@@ -365,7 +364,7 @@ $border-color: darken($gray4, 10%);
       height: 100%;
       background-color: darken($gray2, 3%);
       border-radius: 10px;
-      margin-top: 3rem;
+      margin-top: 0rem;
     }
   }
 }
