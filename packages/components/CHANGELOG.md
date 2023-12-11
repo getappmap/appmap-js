@@ -1,3 +1,10 @@
+# [@appland/components-v3.15.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.15.0...@appland/components-v3.15.1) (2023-12-11)
+
+
+### Bug Fixes
+
+* Reset collapse depth on diagram refresh ([0289d3d](https://github.com/getappmap/appmap-js/commit/0289d3daea18de593647e6b27c25826a9bfd3cf9))
+
 # [@appland/components-v3.15.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.14.0...@appland/components-v3.15.0) (2023-12-07)
 
 
