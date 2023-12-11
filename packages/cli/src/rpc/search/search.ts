@@ -11,6 +11,8 @@ export function search(
   appmapDir: string
 ): RpcHandler<SearchRpc.SearchOptions, SearchRpc.SearchResponse> {
   async function handler(args: SearchRpc.SearchOptions): Promise<SearchRpc.SearchResponse> {
+    // TODO: Add extra keywords which are searched across all the functions that are included
+    // in the AppMaps.
     const { query, maxResults } = args;
 
     // Search across all AppMaps, creating a map from AppMap id to AppMapSearchResult

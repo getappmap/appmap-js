@@ -7,7 +7,7 @@
 <script lang="ts">
 //@ts-nocheck
 import VChat from '@/components/chat/Chat.vue';
-import { AckCallback } from '@/components/chat/UserMessageHandler';
+import { AckCallback } from '@appland/client';
 import { AI, setConfiguration, DefaultApiURL } from '@appland/client';
 
 export default {
