@@ -1,7 +1,7 @@
 <template>
   <div class="chat">
     <button class="clear" @click="clear" v-if="isChatting">New chat</button>
-    <div class="messages">
+    <div class="messages" ref="messages">
       <v-user-message
         v-for="(message, i) in messages"
         :key="i"
@@ -127,9 +127,12 @@ export default {
     scrollToBottom() {
       // Allow one tick to progress to allow any DOM changes to be applied
       this.$nextTick(() => {
-        this.$el.scrollTop = this.$el.scrollHeight;
+        this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
       });
     },
+  },
+  updated() {
+    this.scrollToBottom();
   },
 };
 </script>
