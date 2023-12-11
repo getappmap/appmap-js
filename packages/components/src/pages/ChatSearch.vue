@@ -243,7 +243,6 @@ export default {
       return new Index(this.indexFn ? { request: this.indexFn } : this.indexPort || 30101);
     },
     startResizing(event) {
-      console.log('startResizing');
       document.body.style.userSelect = 'none';
       this.isPanelResizing = true;
       this.initialPanelWidth = this.$refs.chatContainer.offsetWidth;
