@@ -12,7 +12,7 @@ export default class Index {
       this.client.request(
         'appmap.data',
         { appmap: appmapId, filter },
-        function (err, error, result) {
+        function (err: any, error: any, result: any) {
           if (err || error) return reportError(reject, err, error);
 
           resolve(result as string);
@@ -23,11 +23,15 @@ export default class Index {
 
   appmapMetadata(appmapId: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      this.client.request('appmap.metadata', { appmap: appmapId }, function (err, error, result) {
-        if (err || error) return reportError(reject, err, error);
+      this.client.request(
+        'appmap.metadata',
+        { appmap: appmapId },
+        function (err: any, error: any, result: any) {
+          if (err || error) return reportError(reject, err, error);
 
-        resolve(result as string);
-      });
+          resolve(result as string);
+        }
+      );
     });
   }
 }

@@ -34,7 +34,6 @@
 import VUserMessage from '@/components/chat/UserMessage.vue';
 import VChatInput from '@/components/chat/ChatInput.vue';
 import VSuggestionGrid from '@/components/chat/SuggestionGrid.vue';
-import { UserMessageHandler } from '@/components/chat/UserMessageHandler';
 import VSpinner from '@/components/Spinner.vue';
 import VLoaderIcon from '@/assets/eva_loader-outline.svg';
 
@@ -56,7 +55,7 @@ export default {
   },
   props: {
     sendMessage: {
-      type: UserMessageHandler,
+      type: Function, // UserMessageHandler
     },
     statusLabel: {
       type: String,
