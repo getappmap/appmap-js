@@ -311,12 +311,12 @@ $border-color: darken($gray4, 10%);
   }
   .search-container {
     font-size: 1rem;
-    height: 100vh;
     color: white;
     padding: 0 1rem 1rem 2rem;
     flex: 2;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
 
     h2 {
       font-size: 1.2rem;
