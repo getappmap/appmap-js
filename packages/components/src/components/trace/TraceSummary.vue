@@ -32,7 +32,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .trace-summary {
   user-select: none;
   -moz-user-select: none;

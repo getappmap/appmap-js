@@ -15,7 +15,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .details-panel-text {
   p {
     padding: 0 0.5rem;

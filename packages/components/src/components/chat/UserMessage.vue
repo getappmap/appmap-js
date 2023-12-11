@@ -110,9 +110,6 @@ export default {
     margin-left: 1rem;
   }
 }
-</style>
-
-<style lang="scss">
 .message .message-body {
   hr {
     border: none;

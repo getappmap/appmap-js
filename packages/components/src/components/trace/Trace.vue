@@ -65,7 +65,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .trace {
   width: max-content;
   display: inline-block;

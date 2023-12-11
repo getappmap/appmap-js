@@ -6,7 +6,7 @@
 export default { name: 'v-details-panel-list-header' };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 h5.details-panel-list-header {
   border-bottom: 1px solid $gray2;
   color: $gray4;

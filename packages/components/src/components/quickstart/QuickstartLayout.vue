@@ -41,7 +41,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 html,
 body {
   width: 100%;

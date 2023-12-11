@@ -220,7 +220,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .event-block {
   display: flex;
   flex-shrink: 0;

@@ -145,7 +145,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 @import '~@appland/diagrams/dist/style.css';
 .diagram-component {
   width: 100%;

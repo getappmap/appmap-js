@@ -239,7 +239,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .flamegraph-main {
   cursor: grab;
   display: flex;

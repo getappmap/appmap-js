@@ -255,7 +255,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .trace-filter {
   padding: 1rem 1.25rem;
   display: flex;

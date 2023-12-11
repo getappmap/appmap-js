@@ -222,7 +222,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped lang="scss">
 .status-message {
   border-radius: 0.5rem;
   background-color: #69ad34;
