@@ -296,6 +296,7 @@ $border-color: darken($gray4, 10%);
       min-width: auto;
       border-right: 1px solid $border-color;
       margin: 0;
+      max-width: none !important;
     }
   }
   .chat-search-container--drag {
