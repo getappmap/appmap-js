@@ -1,0 +1,116 @@
+{
+  "version": "1.12",
+  "events": [
+    {
+      "event": "call",
+      "id": 1,
+      "thread_id": 0,
+      "method_id": "wait",
+      "static": true,
+      "parameters": [
+        {
+          "class": "Number",
+          "value": "20",
+          "name": "ms"
+        }
+      ],
+      "defined_class": "test",
+      "path": "test.js",
+      "lineno": 22
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 2,
+      "parent_id": 1,
+      "return_value": {
+        "class": "Promise",
+        "value": "Promise { <pending> }",
+        "object_id": 4
+      },
+      "elapsed": 0.00001354399137198925
+    },
+    {
+      "event": "call",
+      "id": 3,
+      "thread_id": 0,
+      "method_id": "wait",
+      "static": true,
+      "parameters": [
+        {
+          "class": "Number",
+          "value": "5",
+          "name": "ms"
+        }
+      ],
+      "defined_class": "test",
+      "path": "test.js",
+      "lineno": 22
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 4,
+      "parent_id": 3,
+      "return_value": {
+        "class": "Promise",
+        "value": "Promise { <pending> }",
+        "object_id": 5
+      },
+      "elapsed": 0.000017941929399967194
+    }
+  ],
+  "classMap": [
+    {
+      "name": "test",
+      "type": "package",
+      "children": [
+        {
+          "type": "class",
+          "name": "test",
+          "children": [
+            {
+              "type": "function",
+              "name": "wait",
+              "static": true,
+              "location": "test.js:22"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "client": {
+      "name": "appmap-node",
+      "version": "2.7.2",
+      "url": "https://github.com/getappmap/appmap-node"
+    },
+    "language": {
+      "name": "javascript",
+      "engine": "Node.js",
+      "version": "v20.6.1"
+    },
+    "app": "jest-appmap-node-test",
+    "recorder": {
+      "type": "tests",
+      "name": "jest"
+    },
+    "name": "drops a promise",
+    "test_status": "succeeded"
+  },
+  "eventUpdates": {
+    "4": {
+      "event": "return",
+      "thread_id": 0,
+      "id": 4,
+      "parent_id": 3,
+      "return_value": {
+        "class": "Promise",
+        "value": "Promise { undefined }",
+        "object_id": 5
+      },
+      "elapsed": 0.005439589964225888
+    }
+  }
+}
