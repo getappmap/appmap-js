@@ -8,3 +8,4 @@ export namespace IndexRpc {
 
 export * from './search';
 export * from './appmap';
+export * from './explain';

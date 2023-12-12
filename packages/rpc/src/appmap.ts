@@ -20,7 +20,7 @@ export namespace AppMapRpc {
   export type SequenceDiagramOptions = {
     appmap: string;
     filter?: string | Record<string, string | boolean | string[]>;
-    options?: Record<string, any>;
+    diagramOptions?: Record<string, any>;
     format?: string;
     formatOptions?: Record<string, string | boolean>;
   };
