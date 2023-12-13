@@ -2,12 +2,17 @@
   <div class="chat-container">
     <div class="chat">
       <small class="clear" @click="clear" v-if="isChatting">New chat</small>
-      <v-user-message
-        v-for="(message, i) in messages"
-        :key="i"
-        :message="message.message"
-        :is-user="message.isUser"
-      />
+      <div>
+        <v-user-message
+          v-for="(message, i) in messages"
+          :key="i"
+          :message="message.message"
+          :is-user="message.isUser"
+          :id="message.id"
+          :sentiment="message.sentiment"
+          @change-sentiment="onSentimentChange"
+        />
+      </div>
       <v-chat-input
         @send="onSend"
         :placeholder="inputPlaceholder"
@@ -31,6 +36,7 @@ type Message = {
   isUser: boolean;
   message: string;
   attachments?: string[];
+  sentiment: number;
 };
 
 export default {
@@ -92,6 +98,7 @@ export default {
       const message = {
         isUser,
         message: content || '',
+        sentiment: 0,
       };
       this.messages.push(message);
 
@@ -135,6 +142,16 @@ export default {
     },
     updateConfiguration() {
       setConfiguration({ apiKey: this.apiKey, apiURL: this.apiUrl });
+    },
+    async onSentimentChange(messageId: string, sentiment: number) {
+      if (!messageId) return;
+
+      const message = this.messages.find((m) => m.id === messageId);
+      if (!message || message.sentiment === sentiment) return;
+
+      await AI.sendMessageFeedback(message.id, sentiment);
+
+      message.sentiment = sentiment;
     },
   },
   mounted() {
