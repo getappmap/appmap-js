@@ -30,7 +30,10 @@ export default class AIClient {
       try {
         const message = JSON.parse(data) as Record<string, unknown>;
         if (!('type' in message)) throw new Error('No message type');
-        this.handleMessage(message as { type: string });
+
+        this.handleMessage(message as { type: string }).catch((error) => {
+          this.panic(error as Error);
+        });
       } catch (error) {
         this.panic(error as Error);
       }
