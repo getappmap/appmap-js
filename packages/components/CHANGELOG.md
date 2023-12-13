@@ -1,3 +1,10 @@
+# [@appland/components-v3.16.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.16.0...@appland/components-v3.16.1) (2023-12-13)
+
+
+### Bug Fixes
+
+* Control button styling ([fe38296](https://github.com/getappmap/appmap-js/commit/fe38296bf5c40ea8f68b0872f56fd0f798c6bd4d))
+
 # [@appland/components-v3.16.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.15.1...@appland/components-v3.16.0) (2023-12-13)
 
 
