@@ -97,8 +97,8 @@ export default {
       return this.isUser ? 'You' : 'AppMap';
     },
     renderedMarkdown() {
-      const sanitizedMessage = DOMPurify.sanitize(this.dynamicMessage);
-      return marked.parse(sanitizedMessage);
+      const markdown = marked.parse(this.dynamicMessage);
+      return DOMPurify.sanitize(markdown);
     },
   },
 
