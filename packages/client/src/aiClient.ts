@@ -37,7 +37,7 @@ export default class AIClient {
     });
   }
 
-  handleMessage(message: { type: string; [key: string]: unknown }): void {
+  async handleMessage(message: { type: string; [key: string]: unknown }): Promise<void> {
     switch (message.type) {
       case 'ack':
         if (!('userMessageId' in message))
@@ -57,7 +57,7 @@ export default class AIClient {
         }
         if (!('data' in message)) this.panic(new Error('Unexpected response: no data'));
         const data = message.data as Record<string, unknown>;
-        const context = this.callbacks.onRequestContext(data);
+        const context = await this.callbacks.onRequestContext(data);
         this.socket.emit(JSON.stringify({ type: 'context', context }));
         break;
       }
