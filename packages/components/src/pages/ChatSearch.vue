@@ -152,7 +152,8 @@ export default {
         (result as any).metadata = metadata;
         resultId += 1;
       }
-      this.selectedSearchResultId = searchResponse.results[0].id;
+      if (searchResponse.results.length > 0)
+        this.selectedSearchResultId = searchResponse.results[0].id;
     },
     selectedSearchResultId: async function (newVal) {
       const updateAppMapData = async () => {
@@ -176,7 +177,7 @@ export default {
         const appmapData = await index.appmapData(searchResult.appmap);
         this.vappmap.loadData(appmapData);
         for (const event of searchResult.events) {
-          this.vappmap.setSelectedObject(event.fqid);
+          this.vappmap.selectObjectFromState(event.fqid);
         }
       };
 
