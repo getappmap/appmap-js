@@ -44,14 +44,7 @@
           <i v-else>Searching...</i>
         </div>
       </div>
-      <v-app-map
-        v-if="selectedSearchResult"
-        ref="vappmap"
-        class="appmap"
-        :hide-details-panel="true"
-        :allow-fullscreen="true"
-      >
-      </v-app-map>
+      <v-app-map v-if="selectedSearchResult" ref="vappmap" class="appmap"> </v-app-map>
       <div v-else class="appmap-empty"></div>
       <v-accordion class="diagnostics" :open="showDiagnostics" @toggle="toggleDiagonstics">
         <template #header>
