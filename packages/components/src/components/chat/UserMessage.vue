@@ -51,7 +51,6 @@ const marked = new Marked(
     langPrefix: 'hljs language-',
     highlight(code: string, lang: string) {
       const language = hljs.getLanguage(lang) ? lang : 'plaintext';
-      console.log(language);
       return hljs.highlight(code, { language }).value;
     },
   })
@@ -254,18 +253,24 @@ export default {
     }
   }
 
-  pre code.hljs {
-    border-radius: $border-radius;
-    background-color: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  code:not(.hljs) {
+  code {
     border-radius: 6px;
     background-color: rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 0.375rem 0.25rem 0 0.25rem;
+    padding: 0.25em 0.25rem 0 0.25rem;
     color: #e2e4e5;
+  }
+
+  pre {
+    padding: 1rem;
+    border-radius: $border-radius;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    code {
+      border: 0;
+      background-color: transparent;
+      padding: 0;
+    }
   }
 
   p:first-child {
