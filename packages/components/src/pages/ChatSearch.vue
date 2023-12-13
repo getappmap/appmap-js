@@ -49,6 +49,7 @@
         ref="vappmap"
         class="appmap"
         :hide-details-panel="true"
+        :allow-fullscreen="true"
       >
       </v-app-map>
       <div v-else class="appmap-empty"></div>
