@@ -1308,15 +1308,14 @@ export default {
       this.seqDiagramCollapseDepth = newDepth;
     },
     async enterFullscreen() {
-      const body = document.body;
       const requestMethod =
-        body.requestFullScreen ||
-        body.webkitRequestFullScreen ||
-        body.mozRequestFullScreen ||
-        body.msRequestFullScreen;
+        this.$el.requestFullScreen ||
+        this.$el.webkitRequestFullScreen ||
+        this.$el.mozRequestFullScreen ||
+        this.$el.msRequestFullScreen;
       if (requestMethod) {
         try {
-          await requestMethod.call(body);
+          await requestMethod.call(this.$el);
         } catch (e) {
           console.warn(e);
         }
