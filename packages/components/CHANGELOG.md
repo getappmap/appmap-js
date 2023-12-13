@@ -1,3 +1,12 @@
+# [@appland/components-v3.16.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.15.1...@appland/components-v3.16.0) (2023-12-13)
+
+
+### Features
+
+* Better navigation for selected code objects ([558ae75](https://github.com/getappmap/appmap-js/commit/558ae751bce3f8b1e80d747480d7f3085e1c0be9))
+* Only show feedback request when nothing is selected ([e361a64](https://github.com/getappmap/appmap-js/commit/e361a645e9cd621c5f2ecf7691616afaf96a3ac6))
+* Open appmap with multiple selected objects ([ad772b3](https://github.com/getappmap/appmap-js/commit/ad772b3d724bc08e4dbe24c30822cc7f65d069b1))
+
 # [@appland/components-v3.15.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.15.0...@appland/components-v3.15.1) (2023-12-11)
 
 
