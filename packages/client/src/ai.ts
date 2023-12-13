@@ -24,4 +24,27 @@ export default class AI {
       });
     });
   }
+
+  static async sendMessageFeedback(messageId: string, sentiment: number) {
+    const configuration = getConfiguration();
+    if (!configuration.apiKey) {
+      throw new Error('Authentication is required to send feedback');
+    }
+
+    const response = await fetch(`${configuration.apiURL}/v1/ai/feedback`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${configuration.apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        messageId,
+        sentiment,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to send feedback');
+    }
+  }
 }
