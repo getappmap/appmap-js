@@ -554,16 +554,6 @@ export default {
         this.selectCurrentHighlightedEvent();
       },
     },
-    filteredAppMap: {
-      handler() {
-        if (this.selectedObject) {
-          // Keep the currently selected object only, discard the rest
-          const selection = this.selectedObject;
-          this.$store.commit(CLEAR_SELECTION_STACK);
-          this.setSelectedObject(selection.fqid);
-        }
-      },
-    },
     isActive: {
       handler() {
         clearTimeout(this.seqDiagramTimeoutId);
