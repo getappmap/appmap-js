@@ -1,11 +1,37 @@
 <template>
-  <div class="message">
+  <div class="message" :data-actor="isUser ? 'user' : 'system'">
     <div class="avatar">
       <!-- <img :src="avatar" /> -->
       <v-component :is="avatar" />
     </div>
     <div class="name">{{ name }}</div>
     <div class="message-body" v-html="renderedMarkdown" />
+    <div class="buttons">
+      <span
+        v-if="!isUser"
+        :class="{
+          button: 1,
+          sentiment: 1,
+          'sentiment--good': 1,
+          'sentiment--selected': sentiment > 0,
+        }"
+        @click="setSentiment(1)"
+      >
+        <v-thumb-icon />
+      </span>
+      <span
+        v-if="!isUser"
+        :class="{
+          button: 1,
+          sentiment: 1,
+          'sentiment--bad': 1,
+          'sentiment--selected': sentiment < 0,
+        }"
+        @click="setSentiment(-1)"
+      >
+        <v-thumb-icon />
+      </span>
+    </div>
   </div>
 </template>
 
@@ -13,6 +39,8 @@
 //@ts-nocheck
 import VAppmapLogo from '@/assets/appmap-logomark.svg';
 import VUserAvatar from '@/assets/user-avatar.svg';
+import VThumbIcon from '@/assets/thumb.svg';
+import VButton from '@/components/Button.vue';
 import { Marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
 import DOMPurify from 'dompurify';
@@ -35,15 +63,27 @@ export default {
   components: {
     VAppmapLogo,
     VUserAvatar,
+    VThumbIcon,
+    VButton,
   },
 
   props: {
+    id: {
+      required: false,
+    },
     isUser: {
       default: false,
     },
     message: {
       default: '',
     },
+    sentiment: {
+      default: 0,
+    },
+  },
+
+  data() {
+    return { sentimentTimeout: undefined };
   },
 
   computed: {
@@ -61,6 +101,23 @@ export default {
       return marked.parse(sanitizedMessage);
     },
   },
+
+  methods: {
+    setSentiment(sentiment: number) {
+      // Throttle sentiment changes to avoid spamming the server
+      if (this.sentimentTimeout) return;
+      this.sentimentTimeout = setTimeout(() => {
+        this.sentimentTimeout = undefined;
+      }, 250);
+
+      // This shouldn't ever happen, but just in case
+      if (!this.id) return;
+
+      // If the sentiment is already set to this value, unset it
+      const newSentiment = this.sentiment === sentiment ? 0 : sentiment;
+      this.$emit('change-sentiment', this.id, newSentiment);
+    },
+  },
 };
 </script>
 
@@ -72,15 +129,14 @@ export default {
   grid-template-columns: 32px 1fr;
   grid-template-rows: 16px 1fr;
   background-color: $gray2;
-  row-gap: 0.5rem;
-  padding: 1rem;
+  gap: 0.5rem 1.5rem;
+  padding: 0 0.5rem;
   color: #ececec;
 
   .avatar {
     width: 32px;
     height: 32px;
     overflow: hidden;
-    margin-right: 1rem;
     grid-column: 1;
     border-radius: 50%;
 
@@ -101,13 +157,81 @@ export default {
   .name {
     font-weight: bold;
     grid-column: 2;
-    margin-left: 1rem;
   }
 
   .message-body {
     grid-column: 2;
     grid-row: 2;
-    margin-left: 1rem;
+  }
+
+  &:hover {
+    .buttons .button {
+      opacity: 100%;
+    }
+  }
+
+  &:last-of-type {
+    .buttons .button {
+      opacity: 100%;
+    }
+  }
+
+  .buttons {
+    grid-column: 2;
+    height: 1.5rem;
+    margin-bottom: 0.5rem;
+
+    .button {
+      opacity: 0%;
+      transition: opacity 0.25s ease-in-out;
+    }
+
+    .sentiment {
+      display: inline-block;
+      width: 1.5rem;
+      cursor: pointer;
+      padding: 1px;
+      transform-origin: center center;
+
+      svg {
+        width: 100%;
+        height: 100%;
+        path {
+          stroke: desaturate(lighten($gray2, 25%), 10%);
+          fill: none;
+        }
+      }
+
+      &:hover {
+        svg path {
+          stroke: white;
+        }
+      }
+
+      &--good {
+        &:hover {
+          transform: scale(1.1);
+        }
+      }
+
+      &--bad {
+        transform: rotate(180deg);
+        &:hover {
+          transform: rotate(180deg) scale(1.1);
+        }
+      }
+
+      &--selected {
+        border-radius: $border-radius;
+        background: rgba(white, 0.05);
+        border: 1px solid rgba(white, 0.02);
+        padding: 0px;
+        opacity: 100% !important;
+        svg path {
+          stroke: white;
+        }
+      }
+    }
   }
 }
 </style>
@@ -146,6 +270,10 @@ export default {
 
   p:first-child {
     margin-top: 0;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
   }
 }
 </style>
