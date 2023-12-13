@@ -1644,15 +1644,21 @@ code {
           transition-timing-function: ease-out;
         }
 
-        svg path {
-          stroke: $lightgray2;
-        }
-
         &__stroke {
           width: 16px;
           height: 14px;
           stroke-width: 4;
           fill: none;
+
+          path {
+            stroke: $lightgray2;
+          }
+
+          &:hover {
+            path {
+              stroke: $gray5;
+            }
+          }
         }
 
         &__icon {
