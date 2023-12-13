@@ -1,7 +1,7 @@
 <template>
   <div class="chat-input">
     <span
-      contenteditable
+      contenteditable="plaintext-only"
       :placeholder="placeholder"
       role="textbox"
       @input="onInput"
