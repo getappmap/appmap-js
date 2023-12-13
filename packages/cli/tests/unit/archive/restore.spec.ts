@@ -83,4 +83,33 @@ describe('restore command', () => {
       assert(existsSync(fullPath), `Expecting path ${fullPath} to exist.`);
     });
   });
+
+  it('should log a message and exit if check option is enabled', async () => {
+    const consoleSpy = jest.spyOn(console, 'log');
+    const exitSpy = jest.spyOn(process, 'exit').mockImplementation(() => {
+      throw new Error('process.exit called with "0"');
+    });
+
+    // Call the handler function with check set to true
+    try {
+      await handler({
+        directory: rubyFixturePath,
+        archiveDir: '.appmap/archive',
+        revision: 'fakeCommitName',
+        check: true,
+      });
+    } catch (error) {
+      expect(error).toEqual(new Error('process.exit called with "0"'));
+    }
+
+    // Verify that the correct messages were logged
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'Restoring AppMaps of revision fakeCommitName to .appmap/work/fakeCommitName'
+    );
+    expect(consoleSpy).toHaveBeenCalledWith('Found exact match full AppMap archive fakeCommitName');
+    expect(consoleSpy).toHaveBeenCalledWith('Check option is enabled, not continuing to download.');
+
+    // Restore the original process.exit function
+    exitSpy.mockRestore();
+  });
 });

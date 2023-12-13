@@ -1,3 +1,26 @@
+# [@appland/components-v3.16.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.15.1...@appland/components-v3.16.0) (2023-12-13)
+
+
+### Features
+
+* Better navigation for selected code objects ([558ae75](https://github.com/getappmap/appmap-js/commit/558ae751bce3f8b1e80d747480d7f3085e1c0be9))
+* Only show feedback request when nothing is selected ([e361a64](https://github.com/getappmap/appmap-js/commit/e361a645e9cd621c5f2ecf7691616afaf96a3ac6))
+* Open appmap with multiple selected objects ([ad772b3](https://github.com/getappmap/appmap-js/commit/ad772b3d724bc08e4dbe24c30822cc7f65d069b1))
+
+# [@appland/components-v3.15.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.15.0...@appland/components-v3.15.1) (2023-12-11)
+
+
+### Bug Fixes
+
+* Reset collapse depth on diagram refresh ([0289d3d](https://github.com/getappmap/appmap-js/commit/0289d3daea18de593647e6b27c25826a9bfd3cf9))
+
+# [@appland/components-v3.15.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.14.0...@appland/components-v3.15.0) (2023-12-07)
+
+
+### Features
+
+* Add a fullscreen toggle ([e0ebae1](https://github.com/getappmap/appmap-js/commit/e0ebae1b140e49b164214d90039bf284310992db))
+
 # [@appland/components-v3.14.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.13.2...@appland/components-v3.14.0) (2023-12-05)
 
 

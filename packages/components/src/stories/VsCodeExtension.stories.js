@@ -56,6 +56,7 @@ export default {
   },
   args: {
     appMapUploadable: true,
+    allowFullscreen: true,
     savedFilters: [savedFilters[0]],
   },
 };
