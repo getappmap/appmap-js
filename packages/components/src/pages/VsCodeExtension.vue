@@ -7,6 +7,7 @@
     @mousemove="makeResizing"
     @mouseup="stopResizing"
     @mouseleave="stopResizing"
+    data-cy="app"
   >
     <div class="loader"></div>
     <div
@@ -429,6 +430,8 @@ import {
 import isPrecomputedSequenceDiagram from '@/lib/isPrecomputedSequenceDiagram';
 import { SAVED_FILTERS_STORAGE_ID } from '../components/FilterMenu.vue';
 import { DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH } from '../components/DiagramSequence.vue';
+
+const browserPrefixes = ['', 'webkit', 'moz'];
 
 export default {
   name: 'VSCodeExtension',
@@ -1323,10 +1326,7 @@ export default {
     },
     async exitFullscreen() {
       const requestMethod =
-        document.exitFullscreen ||
-        document.webkitExitFullscreen ||
-        document.mozCancelFullScreen ||
-        document.msExitFullscreen;
+        document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen;
       if (requestMethod) {
         try {
           await requestMethod.call(document);
@@ -1341,7 +1341,13 @@ export default {
       } else {
         this.enterFullscreen();
       }
-      this.isFullscreen = !this.isFullscreen;
+    },
+    checkFullscreen() {
+      const fullscreenElement =
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement;
+      this.isFullscreen = fullscreenElement === this.$el;
     },
   },
   mounted() {
@@ -1352,12 +1358,21 @@ export default {
       this.$store.commit(REMOVE_ROOT_OBJECT, this.filters.rootObjects.indexOf(fqid));
     });
     this.resetDetailsPanel();
+    browserPrefixes.forEach((prefix) => {
+      this.$el.addEventListener(prefix + 'fullscreenchange', this.checkFullscreen);
+    });
   },
   beforeUpdate() {
     if (this.isGiantAppMap) {
       this.showStatsPanel = true;
       this.setView(null);
     }
+  },
+
+  beforeDestroy() {
+    browserPrefixes.forEach((prefix) => {
+      document.removeEventListener(prefix + 'fullscreenchange', this.checkFullscreen);
+    });
   },
 };
 </script>
@@ -1652,6 +1667,7 @@ code {
           width: 16px;
           height: 14px;
           stroke-width: 4;
+          stroke: $lightgray2;
           fill: none;
 
           path {
