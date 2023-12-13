@@ -3,12 +3,12 @@ context('AppMap sidebar', () => {
   const height = 844;
 
   beforeEach(() => {
-    cy.visit('http://localhost:6006/iframe.html?id=pages-vs-code--extension&viewMode=story');
     cy.viewport(width, height);
+    cy.visit('http://localhost:6006/iframe.html?id=pages-vs-code--extension&viewMode=story');
   });
 
   it('should not display the sidebar', () => {
-    cy.get('[data-cy="sidebar"]').should('not.be.visible');
+    cy.get('[data-cy="sidebar-menu"]').should('be.visible');
   });
 
   it('can scroll the tabs', () => {

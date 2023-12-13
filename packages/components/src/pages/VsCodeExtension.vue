@@ -1,6 +1,7 @@
 <template>
   <div
     id="app"
+    ref="app"
     :key="renderKey"
     :class="classes"
     @mousemove="makeResizing"
@@ -8,29 +9,45 @@
     @mouseleave="stopResizing"
   >
     <div class="loader"></div>
-    <div class="main-column main-column--left" ref="mainColumnLeft">
-      <v-details-panel
-        :appMap="filteredAppMap"
-        :selected-object="selectedObject"
-        :selected-label="selectedLabel"
-        :filters-root-objects="filters.rootObjects"
-        :findings="findings"
-        :wasAutoPruned="wasAutoPruned"
-        :isGiantAppMap="isGiantAppMap"
-        @onChangeFilter="
-          (value) => {
-            this.eventFilterText = value;
-          }
-        "
-        @openStatsPanel="
-          () => {
-            this.showStatsPanel = true;
-          }
-        "
-        @clearSelections="clearSelection"
-        data-cy="sidebar"
-      />
-      <div class="main-column--drag" @mousedown="startResizing"></div>
+    <div
+      :class="['main-column main-column--left', isPanelResizing ? 'manual-resizing' : '']"
+      ref="mainColumnLeft"
+    >
+      <transition name="slide-in-from-left">
+        <v-details-panel
+          v-if="showDetailsPanel"
+          class="slide-in-from-left"
+          :appMap="filteredAppMap"
+          :selected-object="selectedObject"
+          :selected-label="selectedLabel"
+          :filters-root-objects="filters.rootObjects"
+          :findings="findings"
+          :wasAutoPruned="wasAutoPruned"
+          :isGiantAppMap="isGiantAppMap"
+          @onChangeFilter="
+            (value) => {
+              this.eventFilterText = value;
+            }
+          "
+          @openStatsPanel="
+            () => {
+              this.showStatsPanel = true;
+            }
+          "
+          @clearSelections="clearSelection"
+          @hideDetailsPanel="hideDetailsPanel"
+          data-cy="sidebar"
+        />
+      </transition>
+      <div v-if="showDetailsPanel" class="main-column--drag" @mousedown="startResizing"></div>
+      <div v-if="!showDetailsPanel" class="sidebar-menu" data-cy="sidebar-menu">
+        <AppMapLogo class="sidebar-menu__icon" width="30" />
+        <HamburgerMenu
+          class="sidebar-menu__icon sidebar-menu__hamburger-menu"
+          width="30"
+          @click="revealDetailsPanel"
+        />
+      </div>
     </div>
 
     <div class="main-column main-column--right">
@@ -355,6 +372,8 @@ import {
 } from '@appland/models';
 import { unparseDiagram } from '@appland/sequence-diagram';
 
+import AppMapLogo from '@/assets/appmap-logomark.svg';
+import HamburgerMenu from '@/assets/hamburger-menu.svg';
 import CopyIcon from '@/assets/copy-icon.svg';
 import CloseIcon from '@/assets/close.svg';
 import ReloadIcon from '@/assets/reload.svg';
@@ -414,6 +433,8 @@ import { DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH } from '../components/DiagramSequenc
 export default {
   name: 'VSCodeExtension',
   components: {
+    AppMapLogo,
+    HamburgerMenu,
     CloseIcon,
     CopyIcon,
     ReloadIcon,
@@ -467,6 +488,7 @@ export default {
       sequenceDiagramDiffMode: false,
       isActive: true,
       isFullscreen: false,
+      showDetailsPanel: false,
     };
   },
   props: {
@@ -510,6 +532,7 @@ export default {
         }
 
         this.$root.$emit('stateChanged', 'selectedObject');
+        this.revealDetailsPanel();
       },
     },
     '$store.state.selectedLabel': {
@@ -1070,6 +1093,14 @@ export default {
     closeStatsPanel() {
       this.showStatsPanel = false;
     },
+    hideDetailsPanel() {
+      this.showDetailsPanel = false;
+      this.autoResizeLeftPanel();
+    },
+    revealDetailsPanel() {
+      this.showDetailsPanel = true;
+      this.autoResizeLeftPanel();
+    },
     uniqueFindings(findings) {
       if (!findings) return undefined;
 
@@ -1120,6 +1151,9 @@ export default {
     stopResizing() {
       document.body.style.userSelect = '';
       this.isPanelResizing = false;
+    },
+    autoResizeLeftPanel() {
+      this.$refs.mainColumnLeft.style.width = this.showDetailsPanel ? '420px' : '50px';
     },
     prevTraceFilter() {
       if (this.eventFilterMatches.length === 0) {
@@ -1298,10 +1332,12 @@ export default {
     this.$root.$on('makeRoot', (codeObject) => {
       this.$store.commit(ADD_ROOT_OBJECT, codeObject.fqid);
     });
-
     this.$root.$on('removeRoot', (fqid) => {
       this.$store.commit(REMOVE_ROOT_OBJECT, this.filters.rootObjects.indexOf(fqid));
     });
+    const width = this.$refs.app.offsetWidth;
+    this.showDetailsPanel = width > 900;
+    this.autoResizeLeftPanel();
   },
   beforeUpdate() {
     if (this.isGiantAppMap) {
@@ -1532,9 +1568,40 @@ code {
       position: relative;
       grid-column: 1;
       width: 420px;
-      @media (max-width: 900px) {
-        display: none;
+      transition: width 0.5s ease-in-out;
+
+      .slide-in-from-left {
+        animation: slide-in-from-left 0.5s ease-out forwards;
       }
+
+      .sidebar-menu {
+        display: flex;
+        flex-direction: column;
+        margin-top: 0.5rem;
+        border-right: 1px solid $gray2;
+        height: 100%;
+
+        &__icon {
+          margin: 0.6rem auto;
+        }
+
+        &__hamburger-menu {
+          &:hover {
+            cursor: pointer;
+            stroke: $blue;
+
+            circle,
+            path {
+              stroke: $blue;
+              transition: $transition;
+            }
+          }
+        }
+      }
+    }
+
+    &--left.manual-resizing {
+      transition: none !important;
     }
 
     &--right {
@@ -1771,6 +1838,15 @@ code {
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes slide-in-from-left {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
   }
 }
 

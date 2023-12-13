@@ -2,6 +2,10 @@
   <div class="details-panel">
     <h3 class="details-panel__title">
       <AppMapLogo width="70" />
+      <ChevronDownIcon
+        class="details-panel__hide-panel-icon"
+        @click="() => this.$emit('hideDetailsPanel')"
+      />
     </h3>
 
     <div
@@ -131,6 +135,7 @@ import ExclamationIcon from '@/assets/exclamation-circle.svg';
 import ScissorsIcon from '@/assets/scissors-icon.svg';
 import NavArrow from '@/assets/nav-arrow.svg';
 import ClearIcon from '@/assets/x-icon.svg';
+import ChevronDownIcon from '@/assets/fa-solid_chevron-down.svg';
 import { SELECT_CODE_OBJECT } from '@/store/vsCode';
 
 const MAX_DISPLAY_NAME_LENGTH = 150;
@@ -160,6 +165,7 @@ export default {
     ScissorsIcon,
     NavArrow,
     ClearIcon,
+    ChevronDownIcon,
   },
   props: {
     subtitle: String,
@@ -271,6 +277,9 @@ export default {
   updated() {
     this.currentSelection = this.selectedObject;
   },
+  mounted() {
+    this.currentSelection = this.selectedObject;
+  },
 };
 </script>
 
@@ -292,10 +301,23 @@ export default {
     font-size: 0;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 
     svg {
       max-width: 20rem;
       width: 100%;
+    }
+  }
+
+  &__hide-panel-icon {
+    fill: $gray6;
+    width: 14px !important;
+    transform: rotate(90deg);
+
+    &:hover {
+      cursor: pointer;
+      fill: $blue;
+      transition: $transition;
     }
   }
 
