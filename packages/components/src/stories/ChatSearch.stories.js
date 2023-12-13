@@ -61,6 +61,41 @@ let requestIndex = 0;
 let statusIndex = 0;
 const requestId = () => `request-${requestIndex}`;
 
+const searchResponse = {
+  results: [
+    {
+      appmap: DATA_KEYS[0],
+      events: [
+        {
+          fqid: 'function:app/controllers/Spree::Admin::OrdersController#edit',
+          location: 'app/controllers/spree/admin/orders_controller.rb:10',
+          score: 1.0,
+          eventIds: [340],
+        },
+      ],
+      score: 5.0,
+    },
+    {
+      appmap: DATA_KEYS[1],
+      events: [
+        {
+          fqid: 'function:com.example.petclinic.model.Owner#find',
+          location: 'src/main/java/com/example/petclinic/model/Owner.java:1',
+          score: 1.0,
+          eventIds: [1],
+        },
+      ],
+      score: 4.0,
+    },
+    {
+      appmap: DATA_KEYS[2],
+      events: [],
+      score: 1.0,
+    },
+  ],
+  numResults: 20,
+};
+
 const mockSearch = (method, params, callback) => {
   if (method === 'ask') {
     callback(null, null, requestId());
@@ -68,48 +103,13 @@ const mockSearch = (method, params, callback) => {
     const responseIndex = statusIndex % 3;
     statusIndex += 1;
     if (responseIndex === 0) callback(null, null, { step: 'build-vector-terms' });
-    if (responseIndex === 1) setTimeout(() => callback(null, null, { step: 'explain' }), 500);
+    if (responseIndex === 1)
+      setTimeout(() => callback(null, null, { step: 'explain', searchResponse }), 500);
     if (responseIndex === 2)
       setTimeout(() => {
         requestIndex += 1;
-        callback(null, null, { step: 'complete', explanation: MOCK_EXPLANATION });
+        callback(null, null, { step: 'complete', searchResponse, explanation: MOCK_EXPLANATION });
       }, 500);
-  } else if (method === 'searchResults') {
-    callback(null, null, {
-      // TODO: Return SearchRpc.SearchResponse
-      results: [
-        {
-          appmap: DATA_KEYS[0],
-          events: [
-            {
-              fqid: 'function:app/controllers/Spree::Admin::OrdersController#edit',
-              location: 'app/controllers/spree/admin/orders_controller.rb:10',
-              score: 1.0,
-              eventIds: [340],
-            },
-          ],
-          score: 5.0,
-        },
-        {
-          appmap: DATA_KEYS[1],
-          events: [
-            {
-              fqid: 'function:com.example.petclinic.model.Owner#find',
-              location: 'src/main/java/com/example/petclinic/model/Owner.java:1',
-              score: 1.0,
-              eventIds: [1],
-            },
-          ],
-          score: 4.0,
-        },
-        {
-          appmap: DATA_KEYS[2],
-          events: [],
-          score: 1.0,
-        },
-      ],
-      numResults: 20,
-    });
   }
 };
 

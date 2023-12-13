@@ -28,7 +28,11 @@
 
           <div class="search-results-list-container">
             <div class="search-results-list-label">AppMaps:</div>
-            <select class="search-results-list" v-model="selectedSearchResultId">
+            <select
+              class="search-results-list"
+              v-model="selectedSearchResultId"
+              v-if="selectedSearchResultId"
+            >
               <option v-for="result in searchResponse.results" :value="result.id" :key="result.id">
                 {{ result.metadata.name || result.appmap }}
               </option>
@@ -138,6 +142,24 @@ export default {
     };
   },
   watch: {
+    searchResponse: async function (newVal) {
+      if (!newVal) {
+        this.selectedSearchResultId = undefined;
+        return;
+      }
+
+      const searchResponse = newVal;
+      const index = this.newIndex();
+
+      let resultId = 0;
+      for (const result of searchResponse.results) {
+        const metadata = await index.appmapMetadata(result.appmap);
+        (result as any).id = ['search-result', this.searchId, resultId].join('_');
+        (result as any).metadata = metadata;
+        resultId += 1;
+      }
+      this.selectedSearchResultId = searchResponse.results[0].id;
+    },
     selectedSearchResultId: async function (newVal) {
       const updateAppMapData = async () => {
         // Something like this may be needed to successfully show the AppMap after
@@ -203,7 +225,6 @@ export default {
   methods: {
     async sendMessage(message: string, ack: AckCallback) {
       const search = this.newSearch();
-      const index = this.newIndex();
       const ask = search.ask();
       this.searching = true;
       this.lastStatusLabel = undefined;
@@ -217,26 +238,17 @@ export default {
       });
       ask.on('status', (status) => {
         this.searchStatus = status;
+        if (!this.searchResponse && status.searchResponse)
+          this.searchResponse = status.searchResponse;
       });
       ask.on('complete', async () => {
         this.searching = false;
         this.vchat.onComplete();
-        const searchResponse = await search.searchResults();
-        let resultId = 0;
-        for (const result of searchResponse.results) {
-          const metadata = await index.appmapMetadata(result.appmap);
-          (result as any).id = ['search-result', this.searchId, resultId].join('_');
-          (result as any).metadata = metadata;
-          resultId += 1;
-        }
-        this.searchResponse = searchResponse;
-        this.selectedSearchResultId = searchResponse.results[0].id;
       });
       ask.ask(message, this.vchat.threadId);
     },
     clear() {
       this.searchResponse = undefined;
-      this.selectedSearchResult = undefined;
     },
     toggleDiagonstics() {
       this.showDiagnostics = !this.showDiagnostics;
