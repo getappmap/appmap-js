@@ -1,6 +1,5 @@
 import { browserClient, reportError } from './RPC';
 
-import { SearchRpc } from '@appland/rpc';
 import { EventEmitter } from 'events';
 
 export class Ask extends EventEmitter {
@@ -13,37 +12,44 @@ export class Ask extends EventEmitter {
   }
 
   ask(input: string, threadId?: string): Promise<string> {
-    // eslint-disable-next-line no-param-reassign
-    threadId ||= Math.random().toString(36).substring(2, 15);
-
     return new Promise<string>((resolve, reject) => {
       this.client.request(
         'ask',
         { threadId, question: input },
-        (err: any, error: any, requestId: string) => {
+        (err: any, error: any, response: { userMessageId: string; threadId: string }) => {
           if (err || error) return reportError(reject, err, error);
 
-          this.pollForStatus(requestId);
-          this.onAck(requestId, threadId!);
+          this.pollForStatus(response.userMessageId);
+          this.onAck(response.userMessageId, response.threadId);
 
-          resolve(requestId);
+          resolve(response.userMessageId);
         }
       );
     });
   }
 
-  protected pollForStatus(requestId: string) {
+  protected pollForStatus(userMessageId: string) {
+    let numTokens = 0;
+
     const statusInterval = setInterval(() => {
       this.client.request(
         'ask.status',
-        { requestId },
+        { userMessageId },
         (err: any, error: any, statusResponse: any) => {
           if (err || error) return reportError(this.onError.bind(this), err, error);
 
           this.emit('status', statusResponse);
+
+          const explanation = statusResponse.explanation || [];
+          const newTokenCount = explanation.length - numTokens;
+          if (newTokenCount > 0) {
+            const newTokens = explanation.slice(-newTokenCount);
+            for (const token of newTokens) this.onToken(token, userMessageId);
+          }
+          numTokens = explanation.length;
+
           if (statusResponse.step === 'complete') {
             clearInterval(statusInterval);
-            this.onToken(statusResponse.explanation, requestId);
             this.onComplete();
           }
         }
@@ -77,19 +83,5 @@ export default class Search {
 
   ask(): Ask {
     return new Ask(this.client);
-  }
-
-  async searchResults(): Promise<SearchRpc.SearchResponse> {
-    return new Promise((resolve, reject) => {
-      this.client.request(
-        'searchResults',
-        {},
-        function (err: any, error: any, result: SearchRpc.SearchResponse) {
-          if (err || error) return reportError(reject, err, error);
-
-          resolve(result as SearchRpc.SearchResponse);
-        }
-      );
-    });
   }
 }
