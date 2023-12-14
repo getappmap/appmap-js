@@ -205,6 +205,10 @@ export default {
     grid-row: 2;
     max-width: 100%;
     overflow: hidden;
+
+    :last-child {
+      margin-bottom: 0;
+    }
   }
 
   &:hover {
