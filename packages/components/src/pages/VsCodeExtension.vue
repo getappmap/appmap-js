@@ -1080,6 +1080,7 @@ export default {
 
       this.renderKey += 1;
       this.eventFilterText = '';
+      this.resetDetailsPanel();
     },
     toggleShareModal() {
       this.showShareModal = !this.showShareModal;
@@ -1099,6 +1100,11 @@ export default {
     },
     revealDetailsPanel() {
       this.showDetailsPanel = true;
+      this.autoResizeLeftPanel();
+    },
+    resetDetailsPanel() {
+      const width = this.$refs.app.offsetWidth;
+      this.showDetailsPanel = width > 900;
       this.autoResizeLeftPanel();
     },
     uniqueFindings(findings) {
@@ -1153,7 +1159,18 @@ export default {
       this.isPanelResizing = false;
     },
     autoResizeLeftPanel() {
-      this.$refs.mainColumnLeft.style.width = this.showDetailsPanel ? '420px' : '50px';
+      this.$nextTick(() => {
+        let result = '50px';
+
+        const width = this.$refs.app.offsetWidth;
+        console.log('width: ', width);
+        if (width < 600 && this.showDetailsPanel) {
+          result = `${width}px`;
+        } else if (this.showDetailsPanel) {
+          result = '420px';
+        }
+        this.$refs.mainColumnLeft.style.width = result;
+      });
     },
     prevTraceFilter() {
       if (this.eventFilterMatches.length === 0) {
@@ -1335,9 +1352,7 @@ export default {
     this.$root.$on('removeRoot', (fqid) => {
       this.$store.commit(REMOVE_ROOT_OBJECT, this.filters.rootObjects.indexOf(fqid));
     });
-    const width = this.$refs.app.offsetWidth;
-    this.showDetailsPanel = width > 900;
-    this.autoResizeLeftPanel();
+    this.resetDetailsPanel();
   },
   beforeUpdate() {
     if (this.isGiantAppMap) {
