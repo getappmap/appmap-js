@@ -10,6 +10,7 @@
     <div class="buttons">
       <span
         v-if="!isUser"
+        data-cy="feedback-good"
         :class="{
           button: 1,
           sentiment: 1,
@@ -22,6 +23,7 @@
       </span>
       <span
         v-if="!isUser"
+        data-cy="feedback-bad"
         :class="{
           button: 1,
           sentiment: 1,
@@ -53,12 +55,12 @@ import hljs from 'highlight.js';
 // TODO: Can we do this in a more elegant way? E.g. with a Vue component?
 const customRenderer = new Renderer();
 const originalRenderer = customRenderer.code.bind(customRenderer);
-customRenderer.code = (code: string, language: string, escaped) => {
+customRenderer.code = (code: string, language: string, escaped: boolean) => {
   const content = originalRenderer(code, language, escaped);
-  return `<div class="md-code-snippet">
+  return `<div class="md-code-snippet" data-cy="code-snippet">
     <div class="md-code-snippet__header">
       <span class="md-code-snippet__language">${language}</span>
-      <span class="md-code-snippet__copy">
+      <span class="md-code-snippet__copy" data-cy="copy">
         <svg viewBox="0 0 17 20" xmlns="http://www.w3.org/2000/svg">
           <path d="M5.46626 18.6334H1.36657V6.33434H12.2991V9.06747H13.6657V5.65106L12.9824 4.96778H10.9325V3.60121H9.56596C9.56291 2.87751 9.27295 2.18456 8.75969 1.67435C8.2476 1.1653 7.55488 0.879578 6.83283 0.879578C6.11077 0.879578 5.41806 1.1653 4.90597 1.67435C4.39271 2.18456 4.10275 2.87751 4.0997 3.60121H2.65114V4.96778H0.683283L0 5.65106V19.3167L0.683283 20H5.46626V18.6334ZM5.46626 3.3279C5.51679 3.05659 5.64828 2.80694 5.84342 2.6118C6.03856 2.41666 6.28821 2.28517 6.55952 2.23464C6.826 2.18263 7.10193 2.21118 7.35212 2.31664C7.60356 2.4122 7.81866 2.58427 7.96708 2.8086C8.14611 3.07172 8.2277 3.38908 8.19776 3.70592C8.16782 4.02276 8.02824 4.31921 7.80309 4.54414C7.57816 4.76929 7.28171 4.90887 6.96487 4.93881C6.64803 4.96875 6.33067 4.88716 6.06755 4.70813C5.84322 4.55971 5.67115 4.34461 5.57559 4.09317C5.46625 3.85392 5.42829 3.58819 5.46626 3.3279ZM15.1415 16.2556L13.6656 17.7451V10.434H12.299V17.7315L10.8231 16.2556L9.85289 17.2259L12.504 19.8633H13.4743L16.1118 17.2259L15.1415 16.2556ZM7.05145 10.5707H8.02171L10.6592 13.2081L9.68892 14.1784L8.21303 12.7025V20H6.84646V12.6888L5.37057 14.1784L4.40031 13.2081L7.05145 10.5707Z"/>
         </svg>
@@ -121,7 +123,9 @@ export default {
     },
     renderedMarkdown() {
       const markdown = marked.parse(this.dynamicMessage);
-      return DOMPurify.sanitize(markdown);
+      return DOMPurify.sanitize(markdown, {
+        USE_PROFILES: { html: true },
+      });
     },
   },
 
@@ -140,25 +144,33 @@ export default {
       const newSentiment = this.sentiment === sentiment ? 0 : sentiment;
       this.$emit('change-sentiment', this.id, newSentiment);
     },
+
+    bindCopyButtons() {
+      if (
+        !navigator ||
+        !navigator.clipboard ||
+        typeof navigator.clipboard.writeText !== 'function'
+      ) {
+        return;
+      }
+
+      this.$el.querySelectorAll('.md-code-snippet__copy').forEach((copyButton) => {
+        copyButton.addEventListener('click', async () => {
+          const codeSnippet = copyButton.closest('.md-code-snippet');
+          const code = codeSnippet.querySelector('code');
+          if (!code) return;
+
+          await navigator.clipboard.writeText(code.innerText.replace(/\n/g, '\n'));
+        });
+      });
+    },
   },
 
-  // Bind the copy button to the clipboard API if it's available
-  // This is sort of a hack as it'll re-run on every new token,
-  // but this works for now.
   updated() {
-    if (!navigator || !navigator.clipboard || typeof navigator.clipboard.writeText !== 'function') {
-      return;
-    }
-
-    this.$el.querySelectorAll('.md-code-snippet__copy').forEach((copyButton) => {
-      copyButton.addEventListener('click', async () => {
-        const codeSnippet = copyButton.closest('.md-code-snippet');
-        const code = codeSnippet.querySelector('code');
-        if (!code) return;
-
-        await navigator.clipboard.writeText(code.innerText.replace(/\n/g, '\n'));
-      });
-    });
+    // Bind the copy button to the clipboard API if it's available
+    // This is sort of a hack as it'll re-run on every new token,
+    // but this works for now.
+    this.bindCopyButtons();
   },
 };
 </script>
