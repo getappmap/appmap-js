@@ -5,7 +5,8 @@
       <v-component :is="avatar" />
     </div>
     <div class="name">{{ name }}</div>
-    <div class="message-body" v-html="renderedMarkdown" />
+    <div class="message-body" data-cy="message" v-if="isUser">{{ message }}</div>
+    <div class="message-body" data-cy="message" v-else v-html="renderedMarkdown" />
     <div class="buttons">
       <span
         v-if="!isUser"
@@ -173,6 +174,10 @@ export default {
   gap: 0.5rem 1.5rem;
   padding: 0 0.5rem;
   color: #ececec;
+
+  &[data-actor='user'] .message-body {
+    white-space: preserve;
+  }
 
   .avatar {
     width: 32px;
