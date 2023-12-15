@@ -113,7 +113,7 @@ export default {
 
   computed: {
     dynamicMessage() {
-      return this.message || '...';
+      return this.message.toString() || '...';
     },
     avatar() {
       return this.isUser ? VUserAvatar : VAppmapLogo;
