@@ -35,7 +35,7 @@ function loadFromEnvironment(): Settings {
 
 let configuration: Configuration;
 
-export function setConfiguration(value: Configuration): void {
+export function setConfiguration(value: Partial<Configuration>): void {
   configuration = {
     ...DefaultConfiguration,
     ...value,
