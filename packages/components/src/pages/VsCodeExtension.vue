@@ -13,34 +13,31 @@
       :class="['main-column main-column--left', isPanelResizing ? 'manual-resizing' : '']"
       ref="mainColumnLeft"
     >
-      <transition name="slide-in-from-left">
-        <v-details-panel
-          v-if="showDetailsPanel"
-          class="slide-in-from-left"
-          :appMap="filteredAppMap"
-          :selected-object="selectedObject"
-          :selected-label="selectedLabel"
-          :filters-root-objects="filters.rootObjects"
-          :findings="findings"
-          :wasAutoPruned="wasAutoPruned"
-          :isGiantAppMap="isGiantAppMap"
-          @onChangeFilter="
-            (value) => {
-              this.eventFilterText = value;
-            }
-          "
-          @openStatsPanel="
-            () => {
-              this.showStatsPanel = true;
-            }
-          "
-          @clearSelections="clearSelection"
-          @hideDetailsPanel="hideDetailsPanel"
-          data-cy="sidebar"
-        />
-      </transition>
+      <v-details-panel
+        :class="['slide-in-from-left', showDetailsPanel ? 'show' : '']"
+        :appMap="filteredAppMap"
+        :selected-object="selectedObject"
+        :selected-label="selectedLabel"
+        :filters-root-objects="filters.rootObjects"
+        :findings="findings"
+        :wasAutoPruned="wasAutoPruned"
+        :isGiantAppMap="isGiantAppMap"
+        @onChangeFilter="
+          (value) => {
+            this.eventFilterText = value;
+          }
+        "
+        @openStatsPanel="
+          () => {
+            this.showStatsPanel = true;
+          }
+        "
+        @clearSelections="clearSelection"
+        @hideDetailsPanel="hideDetailsPanel"
+        data-cy="sidebar"
+      />
       <div v-if="showDetailsPanel" class="main-column--drag" @mousedown="startResizing"></div>
-      <div v-if="!showDetailsPanel" class="sidebar-menu" data-cy="sidebar-menu">
+      <div class="sidebar-menu" data-cy="sidebar-menu">
         <AppMapLogo class="sidebar-menu__icon" width="30" />
         <HamburgerMenu
           class="sidebar-menu__icon sidebar-menu__hamburger-menu"
@@ -72,6 +69,7 @@
             ref="viewSequence_diagram"
             :app-map="filteredAppMap"
             :collapse-depth="seqDiagramCollapseDepth"
+            :is-details-panel-open="showDetailsPanel"
             @setMaxSeqDiagramCollapseDepth="setMaxSeqDiagramCollapseDepth"
             @updateCollapseDepth="handleNewCollapseDepth"
           />
@@ -1080,7 +1078,6 @@ export default {
 
       this.renderKey += 1;
       this.eventFilterText = '';
-      this.resetDetailsPanel();
     },
     toggleShareModal() {
       this.showShareModal = !this.showShareModal;
@@ -1096,16 +1093,9 @@ export default {
     },
     hideDetailsPanel() {
       this.showDetailsPanel = false;
-      this.autoResizeLeftPanel();
     },
     revealDetailsPanel() {
       this.showDetailsPanel = true;
-      this.autoResizeLeftPanel();
-    },
-    resetDetailsPanel() {
-      const width = this.$refs.app.offsetWidth;
-      this.showDetailsPanel = width > 900;
-      this.autoResizeLeftPanel();
     },
     uniqueFindings(findings) {
       if (!findings) return undefined;
@@ -1157,20 +1147,6 @@ export default {
     stopResizing() {
       document.body.style.userSelect = '';
       this.isPanelResizing = false;
-    },
-    autoResizeLeftPanel() {
-      this.$nextTick(() => {
-        let result = '50px';
-
-        const width = this.$refs.app.offsetWidth;
-        console.log('width: ', width);
-        if (width < 600 && this.showDetailsPanel) {
-          result = `${width}px`;
-        } else if (this.showDetailsPanel) {
-          result = '420px';
-        }
-        this.$refs.mainColumnLeft.style.width = result;
-      });
     },
     prevTraceFilter() {
       if (this.eventFilterMatches.length === 0) {
@@ -1352,7 +1328,6 @@ export default {
     this.$root.$on('removeRoot', (fqid) => {
       this.$store.commit(REMOVE_ROOT_OBJECT, this.filters.rootObjects.indexOf(fqid));
     });
-    this.resetDetailsPanel();
   },
   beforeUpdate() {
     if (this.isGiantAppMap) {
@@ -1582,11 +1557,23 @@ code {
     &--left {
       position: relative;
       grid-column: 1;
-      width: 420px;
+      width: 50px;
       transition: width 0.5s ease-in-out;
 
       .slide-in-from-left {
-        animation: slide-in-from-left 0.5s ease-out forwards;
+        position: fixed;
+        left: -420px;
+        top: 0;
+        width: 420px;
+        height: 100%;
+        transition: left 0.3s ease-in-out;
+        z-index: 1000;
+        background: $gray1;
+        box-shadow: 7px 0px 15px rgba(0, 0, 0, 3);
+      }
+
+      .slide-in-from-left.show {
+        left: 0;
       }
 
       .sidebar-menu {
@@ -1853,15 +1840,6 @@ code {
   }
   100% {
     transform: rotate(360deg);
-  }
-}
-
-@keyframes slide-in-from-left {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(0);
   }
 }
 

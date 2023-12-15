@@ -5,7 +5,7 @@
       <div class="sequence-diagram-loading"></div>
     </template>
     <template v-else>
-      <div class="sequence-diagram" id="sequence-diagram-ui">
+      <div ref="sequenceDiagram" class="sequence-diagram" id="sequence-diagram-ui">
         <template v-for="(actor, index) in visuallyReachableActors">
           <VActor
             :actor="actor"
@@ -89,6 +89,16 @@ export default {
       type: Number,
       default: DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH,
     },
+    isDetailsPanelOpen: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
+  data() {
+    return {
+      smoothMarginTransition: false,
+    };
   },
 
   computed: {
@@ -298,6 +308,28 @@ export default {
         });
       }
     },
+    handleLeftMargin() {
+      // this.$refs.sequenceDiagram.style.transition = '';
+      const currentLeft = this.$root.$el.querySelector('.tab-content-scroll').scrollLeft;
+      if (this.isDetailsPanelOpen) {
+        this.$root.$el.querySelector('.tab-content-scroll').scrollLeft = 370;
+        // currentLeft <= 370 ? currentLeft + 370 : 370;
+        // this.$refs.sequenceDiagram.classList.add('details-panel-open');
+      } else {
+        const scrollOpts = { left: currentLeft > 370 ? currentLeft + 370 : 370 };
+        if (this.smoothMarginTransition) {
+          // this.$refs.sequenceDiagram.style.transition = 'margin-left 0.3s ease-in-out';
+          scrollOpts.behavior = 'smooth';
+        }
+        // this.$refs.sequenceDiagram.classList.remove('details-panel-open');
+        // this.$root.$el.querySelector('.tab-content-scroll').scrollLeft -= 370;
+        this.$root.$el.querySelector('.tab-content-scroll').scrollTo(scrollOpts);
+        this.smoothMarginTransition = false;
+      }
+      // setTimeout(() => {
+      //   this.focusHighlighted();
+      // }, 300);
+    },
   },
   watch: {
     collapseDepth() {
@@ -315,7 +347,14 @@ export default {
       handler(newVal) {
         if (newVal) {
           this.expandCollapsedAncestors(newVal.id);
-          this.focusHighlighted();
+          const detailsPanel = this.$root.$el.querySelector('.details-panel');
+          const leftValStr = getComputedStyle(detailsPanel).getPropertyValue('left');
+          const leftVal = Number(leftValStr.replace('px', ''));
+          const timeout = leftVal < 0 ? 250 : 0;
+          this.smoothMarginTransition = true;
+          setTimeout(() => {
+            this.focusHighlighted();
+          }, timeout);
         }
       },
     },
@@ -328,6 +367,9 @@ export default {
         }
       },
     },
+    isDetailsPanelOpen() {
+      this.handleLeftMargin();
+    },
   },
   mounted() {
     this.$emit('setMaxSeqDiagramCollapseDepth', this.getMaxActionDepth());
@@ -335,10 +377,12 @@ export default {
   },
   activated() {
     this.focusHighlighted();
+    this.handleLeftMargin();
   },
   updated() {
     this.$emit('setMaxSeqDiagramCollapseDepth', this.getMaxActionDepth());
     this.focusHighlighted();
+    this.handleLeftMargin();
   },
   created() {
     if (!this.diagram || this.diagram.actors.length === 0 || this.collapsedActionState.length > 0)
@@ -399,5 +443,10 @@ export default {
   font-size: 10pt;
   color: white;
   contain: paint;
+  margin-left: 370px;
+
+  // &.details-panel-open {
+  // margin-left: 370px;
+  // }
 }
 </style>
