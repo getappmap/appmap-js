@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io-client';
 
-type InputPromptOptions = {
+export type InputPromptOptions = {
   threadId?: string;
   tool?: string;
 };
