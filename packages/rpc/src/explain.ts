@@ -28,10 +28,16 @@ export namespace ExplainRpc {
     threadId: string;
   };
 
+  export type RpcError = {
+    code: number;
+    message: string;
+    data?: object;
+  };
+
   export type ExplainStatusResponse = {
     step: Step;
     threadId?: string;
-    err?: Error | any | undefined;
+    err?: Error | RpcError;
     vectorTerms?: string[];
     searchResponse?: SearchRpc.SearchResponse;
     sequenceDiagrams?: string[];

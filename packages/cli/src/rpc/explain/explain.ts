@@ -1,6 +1,6 @@
 import { AI } from '@appland/client';
 import { ExplainRpc } from '@appland/rpc';
-import { RpcError, RpcHandler } from '../rpc';
+import { RpcError, RpcHandler, errorMessage, isRpcError } from '../rpc';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
@@ -60,9 +60,13 @@ export default class Explain extends EventEmitter {
           self.status.step = ExplainRpc.Step.COMPLETE;
           self.emit('complete');
         },
-        onError(err) {
+        onError(err: Error) {
           if (verbose()) warn(`Error handled by Explain: ${err}`);
-          self.emit('error', err);
+          self.status.step = ExplainRpc.Step.ERROR;
+          const rpcError = RpcError.fromException(err);
+          if (!self.status.err)
+            self.status.err = { code: rpcError.code, message: rpcError.message };
+          self.emit('error', rpcError);
         },
       })
     ).inputPrompt(this.question, { threadId: self.status.threadId, tool: 'explain' });
@@ -117,14 +121,27 @@ async function explain(
   };
   const explain = new Explain(appmapDir, question, status);
   return new Promise<ExplainRpc.ExplainResponse>((resolve, reject) => {
-    explain.once('ack', (userMessageId: string, threadId: string) => {
+    let isFirst = true;
+
+    const first = (): boolean => {
+      if (isFirst) {
+        isFirst = false;
+        return true;
+      }
+
+      return false;
+    };
+
+    // TODO: These could be collected into status errors
+    explain.on('error', (err: Error) => first() && reject(RpcError.fromException(err)));
+    explain.on('ack', (userMessageId: string, threadId: string) => {
       status.threadId = threadId;
       const cleanupFn = () => searchStatusByUserMessageId.delete(userMessageId);
       setTimeout(cleanupFn, 1000 * 60 * 5).unref();
       searchStatusByUserMessageId.set(userMessageId, status);
-      resolve({ userMessageId });
+      first() && resolve({ userMessageId });
     });
-    explain.explain().catch(reject);
+    explain.explain().catch((err: Error) => first() && reject(RpcError.fromException(err)));
   });
 }
 

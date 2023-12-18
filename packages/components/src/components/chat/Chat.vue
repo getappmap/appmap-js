@@ -103,6 +103,9 @@ export default {
 
       return message;
     },
+    async ask(message: string) {
+      this.onSend(message);
+    },
     async onSend(message: string) {
       this.addMessage(true, message);
       this.loading = true;

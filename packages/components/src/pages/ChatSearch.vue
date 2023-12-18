@@ -87,8 +87,7 @@
 import VChat from '@/components/chat/Chat.vue';
 import VAccordion from '@/components/Accordion.vue';
 import VAppMap from './VsCodeExtension.vue';
-import Search from '@/lib/Search';
-import Index from '@/lib/Index';
+import AppMapRPC from '@/lib/AppMapRPC';
 
 export default {
   name: 'v-chat-search',
@@ -98,18 +97,14 @@ export default {
     VAccordion,
   },
   props: {
-    aiPort: {
-      type: Number,
+    question: {
+      type: String,
     },
-    indexPort: {
+    appmapRpcPort: {
       type: Number,
     },
     // Provide a custom search function, e.g. for mocking
-    searchFn: {
-      type: Function,
-    },
-    // Provide a custom index function, e.g. for mocking
-    indexFn: {
+    appmapRpcFn: {
       type: Function,
     },
   },
@@ -143,11 +138,11 @@ export default {
       }
 
       const searchResponse = newVal;
-      const index = this.newIndex();
+      const rpc = this.rpcClient();
 
       let resultId = 0;
       for (const result of searchResponse.results) {
-        const metadata = await index.appmapMetadata(result.appmap);
+        const metadata = await rpc.appmapMetadata(result.appmap);
         (result as any).id = ['search-result', this.searchId, resultId].join('_');
         (result as any).metadata = metadata;
         resultId += 1;
@@ -172,7 +167,7 @@ export default {
           return;
         }
 
-        const index = this.newIndex();
+        const index = this.rpcClient();
         const searchResult = this.selectedSearchResult;
         const appmapData = await index.appmapData(searchResult.appmap);
         this.vappmap.loadData(appmapData);
@@ -199,6 +194,14 @@ export default {
       }
     },
   },
+  // When the component is ready, submit the question if it's defined
+  async mounted() {
+    if (this.question) {
+      this.$nextTick(() => {
+        this.vchat.ask(this.question);
+      });
+    }
+  },
   computed: {
     vchat() {
       return this.$refs.vchat as VChat;
@@ -219,8 +222,8 @@ export default {
   },
   methods: {
     async sendMessage(message: string, ack: AckCallback) {
-      const search = this.newSearch();
-      const ask = search.ask();
+      const search = this.rpcClient();
+      const ask = search.explain();
       this.searching = true;
       this.lastStatusLabel = undefined;
       ask.on('ack', ack);
@@ -240,7 +243,7 @@ export default {
         this.searching = false;
         this.vchat.onComplete();
       });
-      ask.ask(message, this.vchat.threadId);
+      ask.explain(message, this.vchat.threadId);
     },
     clear() {
       this.searchResponse = undefined;
@@ -248,12 +251,10 @@ export default {
     toggleDiagonstics() {
       this.showDiagnostics = !this.showDiagnostics;
     },
-    newSearch(): Search {
-      this.searchId += 1;
-      return new Search(this.searchFn ? { request: this.searchFn } : this.aiPort || 30102);
-    },
-    newIndex(): Index {
-      return new Index(this.indexFn ? { request: this.indexFn } : this.indexPort || 30101);
+    rpcClient(): AppMapRPC {
+      return new AppMapRPC(
+        this.appmapRpcFn ? { request: this.appmapRpcFn } : this.appmapRpcPort || 30101
+      );
     },
     startResizing(event) {
       document.body.style.userSelect = 'none';

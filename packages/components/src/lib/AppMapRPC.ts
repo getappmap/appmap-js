@@ -2,7 +2,7 @@ import { browserClient, reportError } from './RPC';
 
 import { EventEmitter } from 'events';
 
-export class Ask extends EventEmitter {
+export class ExplainRequest extends EventEmitter {
   client: any;
 
   constructor(client: any) {
@@ -11,10 +11,10 @@ export class Ask extends EventEmitter {
     this.client = client;
   }
 
-  ask(input: string, threadId?: string): Promise<string> {
+  explain(input: string, threadId?: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       this.client.request(
-        'ask',
+        'explain',
         { threadId, question: input },
         (err: any, error: any, response: { userMessageId: string; threadId: string }) => {
           if (err || error) return reportError(reject, err, error);
@@ -33,7 +33,7 @@ export class Ask extends EventEmitter {
 
     const statusInterval = setInterval(() => {
       this.client.request(
-        'ask.status',
+        'explain.status',
         { userMessageId },
         (err: any, error: any, statusResponse: any) => {
           if (err || error) return reportError(this.onError.bind(this), err, error);
@@ -74,14 +74,42 @@ export class Ask extends EventEmitter {
   }
 }
 
-export default class Search {
+export default class AppMapRPC {
   client: any;
 
   constructor(portOrClient: number | any) {
     this.client = typeof portOrClient === 'number' ? browserClient(portOrClient) : portOrClient;
   }
 
-  ask(): Ask {
-    return new Ask(this.client);
+  appmapData(appmapId: string, filter: any): Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.client.request(
+        'appmap.data',
+        { appmap: appmapId, filter },
+        function (err: any, error: any, result: any) {
+          if (err || error) return reportError(reject, err, error);
+
+          resolve(result as string);
+        }
+      );
+    });
+  }
+
+  appmapMetadata(appmapId: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.client.request(
+        'appmap.metadata',
+        { appmap: appmapId },
+        function (err: any, error: any, result: any) {
+          if (err || error) return reportError(reject, err, error);
+
+          resolve(result as string);
+        }
+      );
+    });
+  }
+
+  explain(): ExplainRequest {
+    return new ExplainRequest(this.client);
   }
 }

@@ -14,16 +14,18 @@ function handlerMiddleware(
 ): (args: any, callback: RpcCallback<unknown>) => Promise<void> {
   return async (args, callback) => {
     warn(`Handling JSON-RPC request for ${name} (${JSON.stringify(args)})`);
+    let err: any, result: any;
     try {
-      callback(null, await handler(args));
-    } catch (err) {
-      let error: RpcError | undefined;
-      if (err instanceof RpcError) {
-        error = err;
-      } else {
-        error = new RpcError(500, RpcError.errorMessage(err));
-      }
+      result = await handler(args);
+    } catch (error) {
+      err = error;
+    }
+
+    if (err) {
+      const error = RpcError.fromException(err);
       callback(error);
+    } else {
+      callback(null, result);
     }
   };
 }

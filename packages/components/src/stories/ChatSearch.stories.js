@@ -17,10 +17,15 @@ export const chatSearch = (args, { argTypes }) => ({
 });
 chatSearch.args = {
   apiKey: '',
-  apiUrl: 'https://api.getappmap.com',
 };
 
 export const chatSearchMock = (args, { argTypes }) => ({
+  props: Object.keys(argTypes),
+  components: { VChatSearch },
+  template: `<v-chat-search v-bind="$props"></v-chat-search>`,
+});
+
+export const chatSearchMockSearchNow = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VChatSearch },
   template: `<v-chat-search v-bind="$props"></v-chat-search>`,
@@ -96,10 +101,10 @@ const searchResponse = {
   numResults: 20,
 };
 
-const mockSearch = (method, params, callback) => {
-  if (method === 'ask') {
+const mockRpc = (method, params, callback) => {
+  if (method === 'explain') {
     callback(null, null, requestId());
-  } else if (method === 'ask.status') {
+  } else if (method === 'explain.status') {
     const responseIndex = statusIndex % 3;
     statusIndex += 1;
     if (responseIndex === 0) callback(null, null, { step: 'build-vector-terms' });
@@ -110,21 +115,24 @@ const mockSearch = (method, params, callback) => {
         requestIndex += 1;
         callback(null, null, { step: 'complete', searchResponse, explanation: MOCK_EXPLANATION });
       }, 500);
-  }
-};
+  } else if (method.split('.')[0] === 'appmap') {
+    const appmapId = params.appmap;
+    const data = DATA_BY_PATH[appmapId];
 
-const mockIndex = (method, params, callback) => {
-  const appmapId = params.appmap;
-  const data = DATA_BY_PATH[appmapId];
-  if (method === 'appmap.data') {
-    callback(null, null, data);
-  }
-  if (method === 'appmap.metadata') {
-    callback(null, null, data.metadata);
+    if (method === 'appmap.data') {
+      callback(null, null, data);
+    }
+    if (method === 'appmap.metadata') {
+      callback(null, null, data.metadata);
+    }
   }
 };
 
 chatSearchMock.args = {
-  searchFn: mockSearch,
-  indexFn: mockIndex,
+  appmapRpcFn: mockRpc,
+};
+
+chatSearchMockSearchNow.args = {
+  appmapRpcFn: mockRpc,
+  question: 'How does password reset work?',
 };

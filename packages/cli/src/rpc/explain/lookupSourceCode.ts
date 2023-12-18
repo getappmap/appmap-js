@@ -4,7 +4,7 @@ import { readFile } from 'fs/promises';
 import { glob } from 'glob';
 
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
-import { verbose } from '../../utils';
+import { exists, verbose } from '../../utils';
 import { promisify } from 'util';
 
 export const LANGUAGE_BY_FILE_EXTENSION: Record<string, 'js' | 'java' | 'ruby' | 'python'> = {
@@ -49,6 +49,11 @@ export default async function lookupSourceCode(location: string): Promise<string
   candidates.sort((a, b) => a.length - b.length);
 
   const fileName = candidates[0];
+  if (!(await exists(fileName))) {
+    warn(chalk.gray(`File ${fileName} does not exist`));
+    return;
+  }
+
   const fileContent = await readFile(fileName, 'utf-8');
   if (!lineNoStr) return [fileContent];
 
