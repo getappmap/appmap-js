@@ -13,10 +13,10 @@ import { appmapFile } from './appmapFile';
 import interpretFilter from './interpretFilter';
 
 export type HandlerOptions = {
-  filter?: string | Record<string, string | boolean | string[]> | FilterState;
-  diagramOptions?: Record<string, any>;
+  filter?: string | Record<string, unknown> | FilterState;
+  diagramOptions?: Record<string, unknown>;
   format?: string;
-  formatOptions?: Record<string, string | boolean>;
+  formatOptions?: Record<string, unknown>;
 };
 
 export async function handler(
@@ -31,7 +31,7 @@ export async function handler(
   } = options;
 
   const diagramFormat = (formatArg || FormatType.JSON) as FormatType;
-  const diagramFormatOptions: Record<string, boolean | string> = formatOptionsArg || {};
+  const diagramFormatOptions: Record<string, unknown> = formatOptionsArg || {};
 
   const filter = interpretFilter(filterArg);
 
@@ -47,7 +47,12 @@ export async function handler(
 
   const specification = Specification.build(appmap, sequenceDiagramOptions);
   const diagram = buildDiagram(appmapFile(appmapId), appmap, specification);
-  let result = format(diagramFormat, diagram, appmapFile(appmapId), diagramFormatOptions).diagram;
+  let result = format(
+    diagramFormat,
+    diagram,
+    appmapFile(appmapId),
+    diagramFormatOptions as unknown as Record<string, boolean | string>
+  ).diagram;
   if (diagramFormat === FormatType.JSON) result = JSON.parse(result);
   return result;
 }

@@ -13,8 +13,10 @@ import appmapFilter from '../../rpc/appmap/filter';
 import { RpcHandler } from '../../rpc/rpc';
 import metadata from '../../rpc/appmap/metadata';
 import sequenceDiagram from '../../rpc/appmap/sequenceDiagram';
+import { explainHandler, explainStatusHandler } from '../../rpc/explain/explain';
 import RPCServer from './rpcServer';
 import appmapData from '../../rpc/appmap/data';
+import { loadConfiguration } from '@appland/client';
 
 export const command = 'index';
 export const describe =
@@ -61,6 +63,8 @@ export const handler = async (argv) => {
   if (port && !watch) warn(`Note: --port option implies --watch`);
 
   if (runServer) {
+    loadConfiguration();
+
     log(`Running indexer in watch mode`);
     const cmd = new FingerprintWatchCommand(appmapDir);
     await cmd.execute(watchStatDelay);
@@ -73,6 +77,8 @@ export const handler = async (argv) => {
         appmapData(),
         metadata(),
         sequenceDiagram(),
+        explainHandler(appmapDir),
+        explainStatusHandler(),
       ];
       const rpcServer = new RPCServer(port, rpcMethods);
       rpcServer.start();

@@ -1,7 +1,7 @@
 import { AppMapRpc } from '@appland/rpc';
 import { AppMapFilter, buildAppMap } from '@appland/models';
 import { readFile } from 'fs/promises';
-import { RpcError, RpcHandler } from '../rpc';
+import { RpcHandler } from '../rpc';
 import { appmapFile } from './appmapFile';
 import interpretFilter from './interpretFilter';
 import { warn } from 'console';
@@ -20,7 +20,7 @@ export async function appmapFilterHandler(
   const appmapStr = await readFile(appmapFile(appmapId), 'utf8');
   const appmap = buildAppMap().source(appmapStr).build();
 
-  return filter.filter(appmap, []);
+  return filter.filter(appmap, []) as unknown as Record<string, unknown>;
 }
 export default function appmapFilter(): RpcHandler<
   AppMapRpc.FilterOptions,

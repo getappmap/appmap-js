@@ -69,9 +69,11 @@ export default class RPCServer {
     this.app = listener;
   }
 
+  unref() {
+    if (this.app) this.app.unref();
+  }
+
   stop() {
-    if (this.app) {
-      this.app.close();
-    }
+    if (this.app) this.app.close(warn);
   }
 }
