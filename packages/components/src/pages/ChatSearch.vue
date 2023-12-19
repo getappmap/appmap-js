@@ -140,27 +140,19 @@ export default {
   watch: {
     selectedSearchResultId: async function (newVal) {
       const updateAppMapData = async () => {
-        // Something like this may be needed to successfully show the AppMap after
-        // "New Chat", but since this isn't working yet, it's commented out.
-        // if (!this.defaultState) {
-        //   const store = this.vappmap.$store;
-        //   this.defaultState = { ...store.state };
-        // }
+        if (!this.$refs.vappmap) return;
 
         if (!newVal) {
-          // for (const key of Object.keys(this.vappmap.$store.state)) {
-          //   this.vappmap.$store[key] = this.defaultState[key];
-          // }
-          this.vappmap.resetDiagram();
+          this.$refs.vappmap.resetDiagram();
           return;
         }
 
         const index = this.newIndex();
         const searchResult = this.selectedSearchResult;
         const appmapData = await index.appmapData(searchResult.appmap);
-        this.vappmap.loadData(appmapData);
+        this.$refs.vappmap.loadData(appmapData);
         for (const event of searchResult.events) {
-          this.vappmap.setSelectedObject(event.fqid);
+          this.$refs.vappmap.setSelectedObject(event.fqid);
         }
       };
 
@@ -183,12 +175,6 @@ export default {
     },
   },
   computed: {
-    vchat() {
-      return this.$refs.vchat as VChat;
-    },
-    vappmap() {
-      return this.$refs.vappmap as VsCodeExtensionVue;
-    },
     statusStep() {
       return this.searchStatus ? this.searchStatus.step : undefined;
     },
@@ -209,18 +195,18 @@ export default {
       this.lastStatusLabel = undefined;
       ask.on('ack', ack);
       ask.on('token', (token, messageId) => {
-        this.vchat.addToken(token, messageId);
+        this.$refs.vchat.addToken(token, messageId);
       });
       ask.on('error', (error) => {
         this.searching = false;
-        this.vchat.addMessage(false, error);
+        this.$refs.vchat.addMessage(false, error);
       });
       ask.on('status', (status) => {
         this.searchStatus = status;
       });
       ask.on('complete', async () => {
         this.searching = false;
-        this.vchat.onComplete();
+        this.$refs.vchat.onComplete();
         const searchResponse = await search.searchResults();
         let resultId = 0;
         for (const result of searchResponse.results) {
@@ -232,11 +218,11 @@ export default {
         this.searchResponse = searchResponse;
         this.selectedSearchResultId = searchResponse.results[0].id;
       });
-      ask.ask(message, this.vchat.threadId);
+      ask.ask(message, this.$refs.vchat.threadId);
     },
     clear() {
       this.searchResponse = undefined;
-      this.selectedSearchResult = undefined;
+      this.selectedSearchResultId = undefined;
     },
     toggleDiagonstics() {
       this.showDiagnostics = !this.showDiagnostics;
