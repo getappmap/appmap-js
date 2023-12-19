@@ -1,3 +1,10 @@
+# [@appland/components-v3.17.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.16.1...@appland/components-v3.17.0) (2023-12-19)
+
+
+### Features
+
+* Collapsible sidebar ([#1495](https://github.com/getappmap/appmap-js/issues/1495)) ([15acdfa](https://github.com/getappmap/appmap-js/commit/15acdfaca92b819e86de2173f87777bd99128f86))
+
 # [@appland/components-v3.16.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.16.0...@appland/components-v3.16.1) (2023-12-13)
 
 
