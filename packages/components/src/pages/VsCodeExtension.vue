@@ -1,6 +1,7 @@
 <template>
   <div
     id="app"
+    ref="app"
     :key="renderKey"
     :class="classes"
     @mousemove="makeResizing"
@@ -8,29 +9,45 @@
     @mouseleave="stopResizing"
   >
     <div class="loader"></div>
-    <div class="main-column main-column--left" ref="mainColumnLeft">
-      <v-details-panel
-        :appMap="filteredAppMap"
-        :selected-object="selectedObject"
-        :selected-label="selectedLabel"
-        :filters-root-objects="filters.rootObjects"
-        :findings="findings"
-        :wasAutoPruned="wasAutoPruned"
-        :isGiantAppMap="isGiantAppMap"
-        @onChangeFilter="
-          (value) => {
-            this.eventFilterText = value;
-          }
-        "
-        @openStatsPanel="
-          () => {
-            this.showStatsPanel = true;
-          }
-        "
-        @clearSelections="clearSelection"
-        data-cy="sidebar"
-      />
-      <div class="main-column--drag" @mousedown="startResizing"></div>
+    <div
+      :class="['main-column main-column--left', isPanelResizing ? 'manual-resizing' : '']"
+      ref="mainColumnLeft"
+    >
+      <transition name="slide-in-from-left">
+        <v-details-panel
+          v-if="showDetailsPanel"
+          class="slide-in-from-left"
+          :appMap="filteredAppMap"
+          :selected-object="selectedObject"
+          :selected-label="selectedLabel"
+          :filters-root-objects="filters.rootObjects"
+          :findings="findings"
+          :wasAutoPruned="wasAutoPruned"
+          :isGiantAppMap="isGiantAppMap"
+          @onChangeFilter="
+            (value) => {
+              this.eventFilterText = value;
+            }
+          "
+          @openStatsPanel="
+            () => {
+              this.showStatsPanel = true;
+            }
+          "
+          @clearSelections="clearSelection"
+          @hideDetailsPanel="hideDetailsPanel"
+          data-cy="sidebar"
+        />
+      </transition>
+      <div v-if="showDetailsPanel" class="main-column--drag" @mousedown="startResizing"></div>
+      <div v-if="!showDetailsPanel" class="sidebar-menu" data-cy="sidebar-menu">
+        <AppMapLogo class="sidebar-menu__icon" width="30" />
+        <HamburgerMenu
+          class="sidebar-menu__icon sidebar-menu__hamburger-menu"
+          width="30"
+          @click="revealDetailsPanel"
+        />
+      </div>
     </div>
 
     <div class="main-column main-column--right">
@@ -355,6 +372,8 @@ import {
 } from '@appland/models';
 import { unparseDiagram } from '@appland/sequence-diagram';
 
+import AppMapLogo from '@/assets/appmap-logomark.svg';
+import HamburgerMenu from '@/assets/hamburger-menu.svg';
 import CopyIcon from '@/assets/copy-icon.svg';
 import CloseIcon from '@/assets/close.svg';
 import ReloadIcon from '@/assets/reload.svg';
@@ -413,8 +432,9 @@ import { DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH } from '../components/DiagramSequenc
 
 export default {
   name: 'VSCodeExtension',
-
   components: {
+    AppMapLogo,
+    HamburgerMenu,
     CloseIcon,
     CopyIcon,
     ReloadIcon,
@@ -443,9 +463,7 @@ export default {
     FullscreenEnterIcon,
     FullscreenExitIcon,
   },
-
   store,
-
   data() {
     return {
       renderKey: 0,
@@ -470,9 +488,9 @@ export default {
       sequenceDiagramDiffMode: false,
       isActive: true,
       isFullscreen: false,
+      showDetailsPanel: false,
     };
   },
-
   props: {
     defaultView: {
       type: String,
@@ -491,7 +509,6 @@ export default {
       default: false,
     },
   },
-
   watch: {
     '$store.state.currentView': {
       handler(view) {
@@ -515,6 +532,7 @@ export default {
         }
 
         this.$root.$emit('stateChanged', 'selectedObject');
+        this.revealDetailsPanel();
       },
     },
     '$store.state.selectedLabel': {
@@ -569,17 +587,14 @@ export default {
       },
     },
   },
-
   computed: {
     isPrecomputedSequenceDiagram,
     classes() {
       return this.isLoading ? 'app--loading' : '';
     },
-
     isInBrowser() {
       return window.location.protocol.includes('http');
     },
-
     pruneFilter() {
       const { appMap } = this.$store.state;
       const {
@@ -587,11 +602,9 @@ export default {
       } = appMap;
       return pruneFilter || {};
     },
-
     wasAutoPruned() {
       return this.pruneFilter.auto;
     },
-
     findings() {
       const { appMap } = this.$store.state;
       const {
@@ -599,7 +612,6 @@ export default {
       } = appMap;
       return this.uniqueFindings(findings);
     },
-
     stats() {
       const { appMap } = this.$store.state;
       const {
@@ -607,30 +619,25 @@ export default {
       } = appMap;
       return stats;
     },
-
     filters() {
       return this.$store.state.filters;
     },
-
     filteredAppMap() {
       const { appMap } = this.$store.state;
       return this.filters.filter(appMap, this.findings);
     },
-
     rootObjectsSuggestions() {
       const filters = this.filters;
       return this.$store.state.appMap.classMap.codeObjects
         .map((co) => co.fqid)
         .filter((fqid) => !filters.rootObjects.includes(fqid));
     },
-
     hideNamesSuggestions() {
       const filters = this.filters;
       return this.filteredAppMap.classMap.codeObjects
         .map((co) => co.fqid)
         .filter((fqid) => !filters.declutter.hideName.names.includes(fqid));
     },
-
     eventsSuggestions() {
       const highlightedIds = new Set(this.eventFilterMatches.map((e) => e.id));
       const uniqueEventNames = new Set(
@@ -640,14 +647,12 @@ export default {
       );
       return Array.from(uniqueEventNames);
     },
-
     eventsById() {
       return this.filteredAppMap.events.reduce((map, e) => {
         map[e.id] = e.callEvent;
         return map;
       }, {});
     },
-
     eventsByLabel() {
       return this.filteredAppMap.events
         .filter((e) => e.isCall())
@@ -659,7 +664,6 @@ export default {
           return map;
         }, {});
     },
-
     eventFilterMatches() {
       const nodes = new Set();
 
@@ -743,59 +747,45 @@ export default {
 
       return Array.from(nodes).sort((a, b) => a.id - b.id);
     },
-
     eventFilterMatch() {
       return this.eventFilterMatches[this.eventFilterMatchIndex];
     },
-
     selectedObject() {
       return this.$store.getters.selectedObject;
     },
-
     selectionStack() {
       return this.$store.state.selectionStack;
     },
-
     selectedEvent() {
       return this.selectedObject instanceof Event ? [this.selectedObject] : [];
     },
-
     selectedLabel() {
       return this.$store.state.selectedLabel;
     },
-
     currentView() {
       return this.$store.state.currentView;
     },
-
     expandedPackages() {
       return this.$store.state.expandedPackages;
     },
-
     baseActors() {
       return this.$store.state.baseActors;
     },
-
     isViewingComponent() {
       return this.currentView === VIEW_COMPONENT;
     },
-
     isViewingSequence() {
       return this.currentView === VIEW_SEQUENCE;
     },
-
     isViewingFlow() {
       return this.currentView === VIEW_FLOW;
     },
-
     isViewingFlamegraph() {
       return this.currentView === VIEW_FLAMEGRAPH;
     },
-
     showDownload() {
       return this.isViewingSequence;
     },
-
     isEmptyAppMap() {
       const appMap = this.filteredAppMap;
       const hasEvents = Array.isArray(appMap.events) && appMap.events.length;
@@ -804,11 +794,9 @@ export default {
 
       return !this.filtersChanged && !this.eventFilterText && (!hasEvents || !hasClassMap);
     },
-
     isGiantAppMap() {
       return this.isEmptyAppMap && this.hasStats;
     },
-
     filtersChanged() {
       return (
         this.filters.rootObjects.length > 0 ||
@@ -826,21 +814,17 @@ export default {
         })
       );
     },
-
     shareURLmessage() {
       if (this.shareURL) return this.shareURL;
       return 'Retrieving link...';
     },
-
     hasStats() {
       return this.stats && this.stats.functions && this.stats.functions.length > 0;
     },
-
     fullscreenIcon() {
       return this.isFullscreen ? FullscreenExitIcon : FullscreenEnterIcon;
     },
   },
-
   methods: {
     loadData(appMap, sequenceDiagram) {
       if (sequenceDiagram) {
@@ -867,27 +851,22 @@ export default {
 
       this.isLoading = false;
     },
-
     showInstructions() {
       this.$refs.instructions.open();
       this.$root.$emit('showInstructions');
     },
-
     showVersionNotification(version, versionText = '') {
       this.version = version;
       this.versionText = versionText;
     },
-
     onNotificationOpen() {
       this.$root.$emit('notificationOpen');
     },
-
     onNotificationClose() {
       this.version = null;
       this.versionText = '';
       this.$root.$emit('notificationClose');
     },
-
     onChangeTab(tab) {
       // 'tab' can be the tab name or the actual tab.
       let index = Object.values(this.$refs).findIndex((ref) => ref === tab);
@@ -907,20 +886,17 @@ export default {
         clearTimeout(this.seqDiagramTimeoutId);
       }
     },
-
     startSeqDiagramTimer() {
       // prompt for feedback after viewing a sequence diagram for 1 minute
       this.seqDiagramTimeoutId = setTimeout(() => {
         this.$root.$emit('seq-diagram-feedback');
       }, 60 * 1000);
     },
-
     setView(view) {
       if (this.currentView !== view) {
         this.$store.commit(SET_VIEW, view);
       }
     },
-
     codeObjectToIdentifier(codeObject) {
       if (!codeObject) return '';
 
@@ -930,7 +906,6 @@ export default {
         return `analysis-finding:${codeObject.resolvedFinding?.finding?.hash_v2}`;
       }
     },
-
     getState() {
       const state = {};
 
@@ -962,11 +937,9 @@ export default {
 
       return base64UrlEncode(JSON.stringify(state));
     },
-
     openFilterModal() {
       this.$root.$emit('clickFilterButton');
     },
-
     setSelectedObject(fqid) {
       const matchResult = fqid.match(/^([a-z\-]+):(.+)/);
 
@@ -998,7 +971,6 @@ export default {
 
       this.$store.commit(SELECT_CODE_OBJECT, selectedObject);
     },
-
     selectObjectFromState(fqid) {
       const [match, type, object] = fqid.match(/^([a-z\-]+):(.+)/);
       if (!match) return;
@@ -1039,7 +1011,6 @@ export default {
 
       if (selectedObject) this.$store.commit(SELECT_CODE_OBJECT, selectedObject);
     },
-
     setState(serializedState) {
       return new Promise((resolve) => {
         if (!serializedState) {
@@ -1091,13 +1062,11 @@ export default {
         });
       });
     },
-
     clearSelection() {
       this.eventFilterMatchIndex = 0;
       this.$store.commit(CLEAR_SELECTION_STACK);
       this.$root.$emit('clearSelection');
     },
-
     resetDiagram() {
       this.$store.commit(SET_COLLAPSED_ACTION_STATE, []);
       this.seqDiagramCollapseDepth =
@@ -1111,23 +1080,33 @@ export default {
 
       this.renderKey += 1;
       this.eventFilterText = '';
+      this.resetDetailsPanel();
     },
-
     toggleShareModal() {
       this.showShareModal = !this.showShareModal;
       this.$root.$emit('uploadAppmap');
       if (this.showShareModal && this.showStatsPanel) this.showStatsPanel = false;
     },
-
     toggleStatsPanel() {
       this.showStatsPanel = !this.showStatsPanel;
       if (this.showShareModal && this.showStatsPanel) this.showShareModal = false;
     },
-
     closeStatsPanel() {
       this.showStatsPanel = false;
     },
-
+    hideDetailsPanel() {
+      this.showDetailsPanel = false;
+      this.autoResizeLeftPanel();
+    },
+    revealDetailsPanel() {
+      this.showDetailsPanel = true;
+      this.autoResizeLeftPanel();
+    },
+    resetDetailsPanel() {
+      const width = this.$refs.app.offsetWidth;
+      this.showDetailsPanel = width > 900;
+      this.autoResizeLeftPanel();
+    },
     uniqueFindings(findings) {
       if (!findings) return undefined;
 
@@ -1138,19 +1117,15 @@ export default {
         }, {})
       );
     },
-
     closeShareModal() {
       this.showShareModal = false;
     },
-
     setShareURL(url) {
       this.shareURL = url;
     },
-
     copyToClipboard(input) {
       this.$root.$emit('copyToClipboard', input);
     },
-
     onFlamegraphSelect(event) {
       if (event) {
         this.onClickTraceEvent(event);
@@ -1158,18 +1133,15 @@ export default {
         this.clearSelection();
       }
     },
-
     onClickTraceEvent(e) {
       this.$store.commit(SELECT_CODE_OBJECT, e);
     },
-
     startResizing(event) {
       document.body.style.userSelect = 'none';
       this.isPanelResizing = true;
       this.initialPanelWidth = this.$refs.mainColumnLeft.offsetWidth;
       this.initialClientX = event.clientX;
     },
-
     makeResizing(event) {
       if (this.isPanelResizing) {
         const MIN_PANEL_WIDTH = 280;
@@ -1182,12 +1154,24 @@ export default {
         this.$refs.mainColumnLeft.style.width = `${newWidth}px`;
       }
     },
-
     stopResizing() {
       document.body.style.userSelect = '';
       this.isPanelResizing = false;
     },
+    autoResizeLeftPanel() {
+      this.$nextTick(() => {
+        let result = '50px';
 
+        const width = this.$refs.app.offsetWidth;
+        console.log('width: ', width);
+        if (width < 600 && this.showDetailsPanel) {
+          result = `${width}px`;
+        } else if (this.showDetailsPanel) {
+          result = '420px';
+        }
+        this.$refs.mainColumnLeft.style.width = result;
+      });
+    },
     prevTraceFilter() {
       if (this.eventFilterMatches.length === 0) {
         return;
@@ -1213,7 +1197,6 @@ export default {
         this.eventFilterMatchIndex = this.eventFilterMatches.length - 1;
       }
     },
-
     nextTraceFilter() {
       if (this.eventFilterMatches.length === 0) {
         return;
@@ -1242,13 +1225,11 @@ export default {
         this.eventFilterMatchIndex = 0;
       }
     },
-
     selectCurrentHighlightedEvent() {
       if (this.eventFilterMatch) {
         this.$store.commit(SELECT_CODE_OBJECT, this.eventFilterMatch);
       }
     },
-
     initializeSavedFilters() {
       let savedFilters = this.savedFilters;
 
@@ -1290,11 +1271,9 @@ export default {
         this.setState(defaultFilter.state);
       }
     },
-
     updateFilters(updatedFilters) {
       this.$store.commit(SET_SAVED_FILTERS, updatedFilters);
     },
-
     analysisFindingSelection(findingObject) {
       const finding = findingObject.resolvedFinding && findingObject.resolvedFinding.finding;
       if (!finding) return;
@@ -1313,16 +1292,13 @@ export default {
       const event = this.filteredAppMap.eventsById[eventToFocus.id];
       this.$store.commit(SET_FOCUSED_EVENT, event);
     },
-
     increaseSeqDiagramCollapseDepth() {
       if (this.seqDiagramCollapseDepth < this.maxSeqDiagramCollapseDepth)
         this.seqDiagramCollapseDepth++;
     },
-
     decreaseSeqDiagramCollapseDepth() {
       if (this.seqDiagramCollapseDepth > 0) this.seqDiagramCollapseDepth--;
     },
-
     setMaxSeqDiagramCollapseDepth(maxDepth) {
       if (!maxDepth) return;
       if (maxDepth < this.seqDiagramCollapseDepth) this.seqDiagramCollapseDepth = maxDepth;
@@ -1369,17 +1345,15 @@ export default {
       this.isFullscreen = !this.isFullscreen;
     },
   },
-
   mounted() {
     this.$root.$on('makeRoot', (codeObject) => {
       this.$store.commit(ADD_ROOT_OBJECT, codeObject.fqid);
     });
-
     this.$root.$on('removeRoot', (fqid) => {
       this.$store.commit(REMOVE_ROOT_OBJECT, this.filters.rootObjects.indexOf(fqid));
     });
+    this.resetDetailsPanel();
   },
-
   beforeUpdate() {
     if (this.isGiantAppMap) {
       this.showStatsPanel = true;
@@ -1609,9 +1583,40 @@ code {
       position: relative;
       grid-column: 1;
       width: 420px;
-      @media (max-width: 900px) {
-        display: none;
+      transition: width 0.5s ease-in-out;
+
+      .slide-in-from-left {
+        animation: slide-in-from-left 0.5s ease-out forwards;
       }
+
+      .sidebar-menu {
+        display: flex;
+        flex-direction: column;
+        margin-top: 0.5rem;
+        border-right: 1px solid $gray2;
+        height: 100%;
+
+        &__icon {
+          margin: 0.6rem auto;
+        }
+
+        &__hamburger-menu {
+          &:hover {
+            cursor: pointer;
+            stroke: $blue;
+
+            circle,
+            path {
+              stroke: $blue;
+              transition: $transition;
+            }
+          }
+        }
+      }
+    }
+
+    &--left.manual-resizing {
+      transition: none !important;
     }
 
     &--right {
@@ -1848,6 +1853,15 @@ code {
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes slide-in-from-left {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
   }
 }
 
