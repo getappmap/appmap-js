@@ -152,27 +152,19 @@ export default {
     },
     selectedSearchResultId: async function (newVal) {
       const updateAppMapData = async () => {
-        // Something like this may be needed to successfully show the AppMap after
-        // "New Chat", but since this isn't working yet, it's commented out.
-        // if (!this.defaultState) {
-        //   const store = this.vappmap.$store;
-        //   this.defaultState = { ...store.state };
-        // }
+        if (!this.$refs.vappmap) return;
 
         if (!newVal) {
-          // for (const key of Object.keys(this.vappmap.$store.state)) {
-          //   this.vappmap.$store[key] = this.defaultState[key];
-          // }
-          this.vappmap.resetDiagram();
+          this.$refs.vappmap.resetDiagram();
           return;
         }
 
         const index = this.rpcClient();
         const searchResult = this.selectedSearchResult;
         const appmapData = await index.appmapData(searchResult.appmap);
-        this.vappmap.loadData(appmapData);
+        this.$refs.vappmap.loadData(appmapData);
         for (const event of searchResult.events) {
-          this.vappmap.selectObjectFromState(event.fqid);
+          this.$refs.vappmap.setSelectedObject(event.fqid);
         }
       };
 
@@ -198,17 +190,11 @@ export default {
   async mounted() {
     if (this.question) {
       this.$nextTick(() => {
-        this.vchat.ask(this.question);
+        this.$refs.vchat.ask(this.question);
       });
     }
   },
   computed: {
-    vchat() {
-      return this.$refs.vchat as VChat;
-    },
-    vappmap() {
-      return this.$refs.vappmap as VsCodeExtensionVue;
-    },
     statusStep() {
       return this.searchStatus ? this.searchStatus.step : undefined;
     },
@@ -229,17 +215,17 @@ export default {
 
       const onComplete = () => {
         this.searching = false;
-        this.vchat.onComplete();
+        this.$refs.vchat.onComplete();
       };
 
       const onError = (err) => {
         onComplete();
-        this.vchat.addMessage(false, err);
+        this.$refs.vchat.addMessage(false, err);
       };
 
       ask.on('ack', ack);
       ask.on('token', (token, messageId) => {
-        this.vchat.addToken(token, messageId);
+        this.$refs.vchat.addToken(token, messageId);
       });
       ask.on('error', onError);
       ask.on('status', (status) => {
@@ -248,7 +234,7 @@ export default {
           this.searchResponse = status.searchResponse;
       });
       ask.on('complete', onComplete);
-      ask.explain(message, this.vchat.threadId).catch(onError);
+      ask.explain(message, this.$refs.vchat.threadId).catch(onError);
     },
     clear() {
       this.searchResponse = undefined;
