@@ -1,0 +1,468 @@
+{
+  "actors": [
+    {
+      "id": "http:HTTP server requests",
+      "name": "HTTP server requests",
+      "order": 0
+    },
+    {
+      "id": "package:app/models",
+      "name": "app/models",
+      "order": 1000
+    },
+    {
+      "id": "package:app/controllers",
+      "name": "app/controllers",
+      "order": 2000
+    },
+    {
+      "id": "package:json",
+      "name": "json",
+      "order": 3000
+    },
+    {
+      "id": "database:Database",
+      "name": "Database",
+      "order": 6000
+    }
+  ],
+  "rootActions": [
+    {
+      "nodeType": 3,
+      "callee": "package:app/models",
+      "name": "issue",
+      "static": true,
+      "digest": "bcfa28c53d87d7889e42e472fb8354ae800a5430b1e7bc3dadc4363e6d154d82",
+      "subtreeDigest": "457a1d41d91271faeda045d528532a25131831391696e54723f0752d2bbc6b50",
+      "stableProperties": {
+        "event_type": "function",
+        "id": "app/models/ApiKey.issue",
+        "raises_exception": false
+      },
+      "returnValue": {
+        "returnValueType": {
+          "name": "string"
+        },
+        "raisesException": false
+      },
+      "children": [
+        {
+          "nodeType": 6,
+          "caller": "package:app/models",
+          "callee": "database:Database",
+          "query": "INSERT INTO \"api_keys\" (\"login\", \"description\") VALUES ('admin', 'example api key') RETURNING *",
+          "digest": "68c11357d4de63349897cf97abd0b9d47acc7dc7419bf93d89e1e884f06bc995",
+          "subtreeDigest": "d1590890dcf838399ea58f3d3cda79f9b120368334ba035d2d514626053203a6",
+          "children": [],
+          "elapsed": 0.001786,
+          "eventIds": [
+            2
+          ]
+        },
+        {
+          "nodeType": 3,
+          "caller": "package:app/models",
+          "callee": "package:app/models",
+          "name": "encode",
+          "static": true,
+          "digest": "ee653e717cb1e95828003a5133ddd042375c9b1e23e22a8c25b6b49a1d58fe96",
+          "subtreeDigest": "4b114cdfcd839af1908a0a73cab4d56de3306eccd8907adde893a114a1e88054",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/models/ApiKey.encode",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "string"
+            },
+            "raisesException": false
+          },
+          "children": [],
+          "elapsed": 0.000024,
+          "eventIds": [
+            4
+          ]
+        }
+      ],
+      "elapsed": 0.038045,
+      "eventIds": [
+        1
+      ]
+    },
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "DELETE /api/api_keys",
+      "status": 200,
+      "digest": "cd2b4b0dc223b099b33a5c64b2b3f4c42616f3ea17c919ae676d7a7cddaaa3b0",
+      "subtreeDigest": "9e6ca608c8b1f7a01b62fd67d973d9da274fdf5d188096254e23513cbc8d8c4a",
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:app/models",
+          "name": "authenticate",
+          "static": true,
+          "digest": "54259769fc7b554024c267444b7d33beb4d6c5c9acffaa5f02ad25e5c8b6e8bd",
+          "subtreeDigest": "11241f386528f197453d905a8eb4dd53a284e81e0ffef26b26975be68e36f6bf",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/models/ApiKey.authenticate",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "User::Show"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 3,
+              "caller": "package:app/models",
+              "callee": "package:app/models",
+              "name": "decode",
+              "static": true,
+              "digest": "1f1e7564c92a3ac01d78ec472cdc200372959ac76f770f7f0decffc3d2ef0774",
+              "subtreeDigest": "dd25335d12768104b3282c8fcddeb44bf0b43ddabae922660f730ccf3038eef6",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/models/ApiKey.decode",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "array"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.000019,
+              "eventIds": [
+                9
+              ]
+            },
+            {
+              "nodeType": 6,
+              "caller": "package:app/models",
+              "callee": "database:Database",
+              "query": "SELECT * FROM \"api_keys\" WHERE (\"login\" = 'admin')",
+              "digest": "3ea3b24b1c6c0aa89cc5aa5f4e3dd87c345b0785f8989a375dd7e3d3c858fcfa",
+              "subtreeDigest": "403ee8d04b8c2c6754e5b0e378ddd53ecc2acfb21641aa24fd6a3b6e41407879",
+              "children": [],
+              "elapsed": 0.001087,
+              "eventIds": [
+                11
+              ]
+            },
+            {
+              "nodeType": 3,
+              "caller": "package:app/models",
+              "callee": "package:app/models",
+              "name": "touch",
+              "static": true,
+              "digest": "f3cf666b52e1380befb4eb273897281f2ed4b07fb2db6b4667571adb98663f7a",
+              "subtreeDigest": "196b85806803354e150eb7aa06e8604094307adc20ba1688f1756df1d2ba19f2",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/models/ApiKey.touch",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "DAO::ApiKey"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 6,
+                  "caller": "package:app/models",
+                  "callee": "database:Database",
+                  "query": "UPDATE \"api_keys\" SET \"last_used\" = '2021-01-12 18:48:00.281150+0000' WHERE (\"id\" = 9)",
+                  "digest": "7f898725862ba792fb976f1255613cdf56cf0484e5f01d73e06b17fc602051cc",
+                  "subtreeDigest": "1e44e99961b9b11b6e4e06d29573b7d39ed0ec89c098b47a8a1b17bf93f5449c",
+                  "children": [],
+                  "elapsed": 0.000805,
+                  "eventIds": [
+                    14
+                  ]
+                }
+              ],
+              "elapsed": 0.005023,
+              "eventIds": [
+                13
+              ]
+            },
+            {
+              "nodeType": 6,
+              "caller": "package:app/models",
+              "callee": "database:Database",
+              "query": "SELECT * FROM \"users\" WHERE (\"users\".\"login\" = 'admin') LIMIT 1",
+              "digest": "af9d5f27317d2034635b85f505fb424d4c226edb6f779de28510075e41938693",
+              "subtreeDigest": "b7cade3f1e64df092dc72ff9cca8112460acf23e0d983856595732a14060d3ee",
+              "children": [],
+              "elapsed": 0.00103,
+              "eventIds": [
+                17
+              ]
+            },
+            {
+              "nodeType": 1,
+              "count": 2,
+              "digest": "loop",
+              "subtreeDigest": "loop:fe0466d8bc4900773ff8911859b1e476e8485e682d008f0d31e4036139b75eed",
+              "children": [
+                {
+                  "nodeType": 6,
+                  "caller": "package:app/models",
+                  "callee": "database:Database",
+                  "query": "SELECT \"pg_type\".\"oid\", \"typrelid\", \"typarray\" FROM \"pg_type\" WHERE ((\"typtype\" = 'c') AND (\"typname\" = 'q_class')) LIMIT 1",
+                  "digest": "daaa3b15425ec3b930e6fc038a2de18546d61f057f388100c6cb00f9d127f4a8",
+                  "subtreeDigest": "3d1e787a4cdd85d7fc702af4aa9a5e4302838fe44db4be09640431ab646b0a1d",
+                  "children": [],
+                  "elapsed": 0.002072,
+                  "eventIds": [
+                    19,
+                    23
+                  ]
+                },
+                {
+                  "nodeType": 6,
+                  "caller": "package:app/models",
+                  "callee": "database:Database",
+                  "query": "SELECT \"attname\", (CASE \"pg_type\".\"typbasetype\" WHEN 0 THEN \"atttypid\" ELSE \"pg_type\".\"typbasetype\" END) AS \"atttypid\" FROM \"pg_attribute\" INNER JOIN \"pg_type\" ON (\"pg_type\".\"oid\" = \"pg_attribute\".\"atttypid\") WHERE ((\"attrelid\" = 223731) AND (\"attnum\" > 0) AND NOT \"attisdropped\") ORDER BY \"attnum\"",
+                  "digest": "6a37031e444b635e83d307bfb63996beecff00c64ad24cc62e6036538644d394",
+                  "subtreeDigest": "c526c9db05b77fbb53875e9546de510d45ce7f159c1b7357a5c53cea892b767a",
+                  "children": [],
+                  "elapsed": 0.0022979999999999997,
+                  "eventIds": [
+                    21,
+                    25
+                  ]
+                }
+              ],
+              "elapsed": 0.00437,
+              "eventIds": []
+            }
+          ],
+          "elapsed": 0.150356,
+          "eventIds": [
+            8
+          ]
+        },
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:app/controllers",
+          "name": "destroy",
+          "static": false,
+          "digest": "625220f5a9ec46da0f6af3cc5055f44d0eae27132eab26b0830aa4447a00a855",
+          "subtreeDigest": "3289eeae8b210ddac47e25f86c3160e27d3b4a6291d38e05073766656e053084",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/controllers/API::APIKeysController#destroy",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "string"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 3,
+              "caller": "package:app/controllers",
+              "callee": "package:app/models",
+              "name": "revoke",
+              "static": true,
+              "digest": "6d3b7ae5d92bc6738aa0dff9f01e5ba5d1741e364900c3805e4941ce96edb9da",
+              "subtreeDigest": "e7e745cda70035c6f2019f579c3dcd373472e21cf8c43e10607ab61fb892a019",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/models/ApiKey.revoke",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "DAO::ApiKey"
+                },
+                "raisesException": false
+              },
+              "children": [
+                {
+                  "nodeType": 3,
+                  "caller": "package:app/models",
+                  "callee": "package:app/models",
+                  "name": "decode",
+                  "static": true,
+                  "digest": "1f1e7564c92a3ac01d78ec472cdc200372959ac76f770f7f0decffc3d2ef0774",
+                  "subtreeDigest": "dd25335d12768104b3282c8fcddeb44bf0b43ddabae922660f730ccf3038eef6",
+                  "stableProperties": {
+                    "event_type": "function",
+                    "id": "app/models/ApiKey.decode",
+                    "raises_exception": false
+                  },
+                  "returnValue": {
+                    "returnValueType": {
+                      "name": "array"
+                    },
+                    "raisesException": false
+                  },
+                  "children": [],
+                  "elapsed": 0.000011,
+                  "eventIds": [
+                    30
+                  ]
+                },
+                {
+                  "nodeType": 6,
+                  "caller": "package:app/models",
+                  "callee": "database:Database",
+                  "query": "SELECT * FROM \"api_keys\" WHERE (\"login\" = 'admin')",
+                  "digest": "3ea3b24b1c6c0aa89cc5aa5f4e3dd87c345b0785f8989a375dd7e3d3c858fcfa",
+                  "subtreeDigest": "403ee8d04b8c2c6754e5b0e378ddd53ecc2acfb21641aa24fd6a3b6e41407879",
+                  "children": [],
+                  "elapsed": 0.001134,
+                  "eventIds": [
+                    32
+                  ]
+                },
+                {
+                  "nodeType": 6,
+                  "caller": "package:app/models",
+                  "callee": "database:Database",
+                  "query": "DELETE FROM \"api_keys\" WHERE \"id\" = 9",
+                  "digest": "f13d9776f8963b9f5e49e9d7c4381705d92cef82e995b3ec64a08eba33a4cac6",
+                  "subtreeDigest": "675badfcdb72cfe76fdcd7e861923e301d6cb8cac98d9581477fd596e4ba9486",
+                  "children": [],
+                  "elapsed": 0.001028,
+                  "eventIds": [
+                    34
+                  ]
+                }
+              ],
+              "elapsed": 0.008962,
+              "eventIds": [
+                29
+              ]
+            }
+          ],
+          "elapsed": 0.009195,
+          "eventIds": [
+            28
+          ]
+        }
+      ],
+      "elapsed": 0.163302,
+      "eventIds": [
+        7
+      ]
+    },
+    {
+      "nodeType": 4,
+      "callee": "http:HTTP server requests",
+      "route": "DELETE /api/api_keys",
+      "status": 401,
+      "digest": "4f3707852b0368d4717fd2e68a429f246d419fc9aff6847081f2a0300e228b1d",
+      "subtreeDigest": "a45e658dcf2261e9a025ce0aa3546adc1de06ec15e50aeb4657a3b3155bdf226",
+      "children": [
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:app/models",
+          "name": "authenticate",
+          "static": true,
+          "digest": "54259769fc7b554024c267444b7d33beb4d6c5c9acffaa5f02ad25e5c8b6e8bd",
+          "subtreeDigest": "8abc66d333ab184f937782dc289984adae681ef45f9e97eb418d4132ad597288",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "app/models/ApiKey.authenticate",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "void"
+            },
+            "raisesException": false
+          },
+          "children": [
+            {
+              "nodeType": 3,
+              "caller": "package:app/models",
+              "callee": "package:app/models",
+              "name": "decode",
+              "static": true,
+              "digest": "1f1e7564c92a3ac01d78ec472cdc200372959ac76f770f7f0decffc3d2ef0774",
+              "subtreeDigest": "dd25335d12768104b3282c8fcddeb44bf0b43ddabae922660f730ccf3038eef6",
+              "stableProperties": {
+                "event_type": "function",
+                "id": "app/models/ApiKey.decode",
+                "raises_exception": false
+              },
+              "returnValue": {
+                "returnValueType": {
+                  "name": "array"
+                },
+                "raisesException": false
+              },
+              "children": [],
+              "elapsed": 0.000015,
+              "eventIds": [
+                41
+              ]
+            },
+            {
+              "nodeType": 6,
+              "caller": "package:app/models",
+              "callee": "database:Database",
+              "query": "SELECT * FROM \"api_keys\" WHERE (\"login\" = 'admin')",
+              "digest": "3ea3b24b1c6c0aa89cc5aa5f4e3dd87c345b0785f8989a375dd7e3d3c858fcfa",
+              "subtreeDigest": "403ee8d04b8c2c6754e5b0e378ddd53ecc2acfb21641aa24fd6a3b6e41407879",
+              "children": [],
+              "elapsed": 0.001356,
+              "eventIds": [
+                43
+              ]
+            }
+          ],
+          "elapsed": 0.005355,
+          "eventIds": [
+            40
+          ]
+        },
+        {
+          "nodeType": 3,
+          "caller": "http:HTTP server requests",
+          "callee": "package:json",
+          "name": "generate",
+          "static": false,
+          "digest": "0e192381b79dc632befb86a432a84fc7a6e273e83a37e56cc47c39db307cf986",
+          "subtreeDigest": "80d7103dde51a7c3012f796f038077590f1c4f5b04dea481b76ff77f6d670395",
+          "stableProperties": {
+            "event_type": "function",
+            "id": "json/JSON::Ext::Generator::State#generate",
+            "raises_exception": false
+          },
+          "returnValue": {
+            "returnValueType": {
+              "name": "string"
+            },
+            "raisesException": false
+          },
+          "children": [],
+          "elapsed": 0.00005,
+          "eventIds": [
+            46
+          ]
+        }
+      ],
+      "elapsed": 0.006339,
+      "eventIds": [
+        39
+      ]
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
+participant HTTP_server_requests as "HTTP server requests"
+participant app_models as "app/models"
+participant app_controllers as "app/controllers"
+participant Database as "Database"
+  [->HTTP_server_requests: DELETE /api/api_keys (163 ms)
+  activate HTTP_server_requests
+    HTTP_server_requests->app_models: authenticate (150 ms)
+    activate app_models
+      app_models->app_models: decode (0.019 ms)
+      activate app_models
+      app_models<--app_models: array
+      deactivate app_models
+      app_models->Database: SELECT * FROM "api_keys" WHERE ("login" = 'admin') (1.09 ms)
+      app_models->app_models: touch (5.02 ms)
+      activate app_models
+        app_models->Database: UPDATE "api_keys" SET "last_used" = '2021-01-12 18 (0.805 ms)
+        Note right
+UPDATE "api_keys" SET "last_used" = '2021-01-12 18:48:00.281150+0000' WHERE
+("id" = 9)
+        End note
+      app_models<--app_models: DAO::ApiKey
+      deactivate app_models
+      app_models->Database: SELECT * FROM "users" WHERE ("users"."login" = 'ad (1.03 ms)
+      Note right
+SELECT * FROM "users" WHERE ("users"."login" = 'admin') LIMIT 1
+      End note
+      app_models->Database: SELECT "pg_type"."oid", "typrelid", "typarray" FRO (1.23 ms)
+      Note right
+SELECT "pg_type"."oid", "typrelid", "typarray" FROM "pg_type" WHERE (("typtype"
+= 'c') AND ("typname" = 'q_class')) LIMIT 1
+      End note
+      app_models->Database: SELECT "attname", (CASE "pg_type"."typbasetype" WH (1.28 ms)
+      Note right
+SELECT "attname", (CASE "pg_type"."typbasetype" WHEN 0 THEN "atttypid" ELSE
+"pg_type"."typbasetype" END) AS "atttypid" FROM "pg_attribute" INNER JOIN
+"pg_type" ON ("pg_type"."oid" = "pg_attribute"."atttypid") WHERE (("attrelid" =
+223731) AND ("attnum" > 0) AND NOT "attisdropped") ORDER BY "attnum"
+      End note
+      app_models->Database: SELECT "pg_type"."oid", "typrelid", "typarray" FRO (0.838 ms)
+      Note right
+SELECT "pg_type"."oid", "typrelid", "typarray" FROM "pg_type" WHERE (("typtype"
+= 'c') AND ("typname" = 'fn_call')) LIMIT 1
+      End note
+      app_models->Database: SELECT "attname", (CASE "pg_type"."typbasetype" WH (1.02 ms)
+      Note right
+SELECT "attname", (CASE "pg_type"."typbasetype" WHEN 0 THEN "atttypid" ELSE
+"pg_type"."typbasetype" END) AS "atttypid" FROM "pg_attribute" INNER JOIN
+"pg_type" ON ("pg_type"."oid" = "pg_attribute"."atttypid") WHERE (("attrelid" =
+223734) AND ("attnum" > 0) AND NOT "attisdropped") ORDER BY "attnum"
+      End note
+    HTTP_server_requests<--app_models: User::Show
+    deactivate app_models
+    HTTP_server_requests->app_controllers: destroy (9.2 ms)
+    activate app_controllers
+      app_controllers->app_models: revoke (8.96 ms)
+      activate app_models
+        app_models->app_models: decode (0.011 ms)
+        activate app_models
+        app_models<--app_models: array
+        deactivate app_models
+        app_models->Database: SELECT * FROM "api_keys" WHERE ("login" = 'admin') (1.13 ms)
+        app_models->Database: DELETE FROM "api_keys" WHERE "id" = 9 (1.03 ms)
+      app_controllers<--app_models: DAO::ApiKey
+      deactivate app_models
+    HTTP_server_requests<--app_controllers: string
+    deactivate app_controllers
+  [<--HTTP_server_requests: 200
+  deactivate HTTP_server_requests
+  [->HTTP_server_requests: DELETE /api/api_keys (6.34 ms)
+  activate HTTP_server_requests
+    HTTP_server_requests->app_models: authenticate (5.36 ms)
+    activate app_models
+      app_models->app_models: decode (0.015 ms)
+      activate app_models
+      app_models<--app_models: array
+      deactivate app_models
+      app_models->Database: SELECT * FROM "api_keys" WHERE ("login" = 'admin') (1.36 ms)
+    HTTP_server_requests<--app_models: void
+    deactivate app_models
+  [<--HTTP_server_requests: 401
+  deactivate HTTP_server_requests
+@enduml

@@ -1,7 +1,7 @@
 language: node_js
 os: linux
 dist: focal
-node_js: 16
+node_js: 18
 
 cache:
   npm: false
@@ -21,11 +21,9 @@ script: yarn run ci
 jobs:
   include:
     - node_js: 18
-      script: # also run lint on node 18
+      script:
         - yarn run lint
         - yarn run ci
-
-    - node_js: 16
 
     - os: windows
       node_js: 18
