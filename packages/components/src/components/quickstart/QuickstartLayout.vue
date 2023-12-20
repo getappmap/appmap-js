@@ -3,6 +3,7 @@
     <div class="qs-container">
       <div class="appmap-header">
         <AppMapLogo width="120" />
+        <v-ai-help-button :style="{ float: 'right' }" v-if="displayAiHelp" />
       </div>
       <div class="qs-content">
         <slot />
@@ -11,9 +12,19 @@
         <HelpIcon class="qs-help__icon" />
         <div class="qs-help__text">
           Stuck?
-          <a href="mailto:support@appmap.io" target="_blank">
-            Send us an email at support@appmap.io
-          </a>
+          <template v-if="displayAiHelp">
+            <a href="#" data-cy="ai-help-secondary" @click.stop.prevent="onClickHelp">
+              Ask AppMap AI
+              <v-badge>NEW</v-badge>
+            </a>
+            or send us an email at
+            <a href="mailto:support@appmap.io" target="_blank"> support@appmap.io </a>
+          </template>
+          <template v-else>
+            <a href="mailto:support@appmap.io" target="_blank">
+              Send us an email at support@appmap.io
+            </a>
+          </template>
         </div>
       </div>
     </div>
@@ -23,6 +34,8 @@
 <script>
 import HelpIcon from '@/assets/quickstart/help.svg';
 import AppMapLogo from '@/assets/appmap-full-logo.svg';
+import VAiHelpButton from '@/components/install-guide/AiHelp.vue';
+import VBadge from '@/components/Badge.vue';
 
 export default {
   name: 'QuickstartLayout',
@@ -30,12 +43,24 @@ export default {
   components: {
     HelpIcon,
     AppMapLogo,
+    VAiHelpButton,
+    VBadge,
   },
 
   props: {
     displayHelp: {
       type: Boolean,
       default: true,
+    },
+  },
+
+  inject: {
+    displayAiHelp: { default: false },
+  },
+
+  methods: {
+    onClickHelp() {
+      this.$root.$emit('ai-help');
     },
   },
 };

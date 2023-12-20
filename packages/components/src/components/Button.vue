@@ -140,7 +140,17 @@ export default {
     }
   }
   &--secondary {
-    background-color: $blue;
+    background-color: darken(desaturate($color: $brightblue, $amount: 75%), 25%);
+    color: $white;
+
+    &:hover {
+      color: $gray1;
+      background-color: $white;
+    }
+
+    &:active {
+      background-color: rgba(255, 255, 255, 0.65);
+    }
   }
   &--ghost {
     background-color: inherit;
@@ -173,6 +183,7 @@ export default {
   }
   &--small {
     font-size: 12px;
+    padding: 0.5em 0.75rem;
   }
 }
 </style>
