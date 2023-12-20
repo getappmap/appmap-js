@@ -1,6 +1,6 @@
 import Configuration from './configuration';
 
-export const DefaultURL = 'https://app.land';
+export const DefaultURL = 'https://getappmap.com';
 export const DefaultApiURL = 'https://api.getappmap.com';
 
 const DefaultConfiguration: Configuration = {

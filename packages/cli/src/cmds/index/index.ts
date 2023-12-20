@@ -1,6 +1,5 @@
 import readline from 'readline';
 import yargs from 'yargs';
-import jayson, { MethodLike } from 'jayson';
 
 import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
 import FingerprintWatchCommand from '../../fingerprint/fingerprintWatchCommand';
@@ -11,11 +10,13 @@ import { log, warn } from 'console';
 import { numProcessed } from '../../rpc/index/numProcessed';
 import { search } from '../../rpc/search/search';
 import appmapFilter from '../../rpc/appmap/filter';
-import { RpcCallback, RpcError, RpcHandler } from '../../rpc/rpc';
-import assert from 'assert';
+import { RpcHandler } from '../../rpc/rpc';
 import metadata from '../../rpc/appmap/metadata';
 import sequenceDiagram from '../../rpc/appmap/sequenceDiagram';
+import { explainHandler, explainStatusHandler } from '../../rpc/explain/explain';
 import RPCServer from './rpcServer';
+import appmapData from '../../rpc/appmap/data';
+import { loadConfiguration } from '@appland/client';
 
 export const command = 'index';
 export const describe =
@@ -62,6 +63,8 @@ export const handler = async (argv) => {
   if (port && !watch) warn(`Note: --port option implies --watch`);
 
   if (runServer) {
+    loadConfiguration();
+
     log(`Running indexer in watch mode`);
     const cmd = new FingerprintWatchCommand(appmapDir);
     await cmd.execute(watchStatDelay);
@@ -71,8 +74,11 @@ export const handler = async (argv) => {
         numProcessed(cmd),
         search(appmapDir),
         appmapFilter(),
+        appmapData(),
         metadata(),
         sequenceDiagram(),
+        explainHandler(appmapDir),
+        explainStatusHandler(),
       ];
       const rpcServer = new RPCServer(port, rpcMethods);
       rpcServer.start();

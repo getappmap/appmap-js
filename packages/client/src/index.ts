@@ -14,4 +14,10 @@ export { default as Mapset, CreateMapsetOptions, CreateMapsetResponse } from './
 export { default as AppMapListItem } from './appMapListItem';
 export { default as FindingStatusListItem } from './findingStatusListItem';
 export { default as Usage, UsageReport, UsageUpdateDto } from './usage';
+export { AckCallback, UserMessageHandler } from './userMessageHandler';
 export { default as AI } from './ai';
+export {
+  default as AIClient,
+  Callbacks as AICallbacks,
+  InputPromptOptions as AIInputPromptOptions,
+} from './aiClient';

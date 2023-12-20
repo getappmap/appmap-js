@@ -1,12 +1,13 @@
 import { Socket } from 'socket.io-client';
 
-type InputPromptOptions = {
+export type InputPromptOptions = {
   threadId?: string;
   tool?: string;
 };
 
 export type Callbacks = {
   onToken: (token: string, messageId: string) => void;
+  onComplete(): void;
   onRequestContext?: (
     data: Record<string, unknown>
   ) => Record<string, unknown> | Promise<Record<string, unknown>>;
@@ -29,14 +30,17 @@ export default class AIClient {
       try {
         const message = JSON.parse(data) as Record<string, unknown>;
         if (!('type' in message)) throw new Error('No message type');
-        this.handleMessage(message as { type: string });
+
+        this.handleMessage(message as { type: string }).catch((error) => {
+          this.panic(error as Error);
+        });
       } catch (error) {
         this.panic(error as Error);
       }
     });
   }
 
-  handleMessage(message: { type: string; [key: string]: unknown }): void {
+  async handleMessage(message: { type: string; [key: string]: unknown }): Promise<void> {
     switch (message.type) {
       case 'ack':
         if (!('userMessageId' in message))
@@ -56,11 +60,12 @@ export default class AIClient {
         }
         if (!('data' in message)) this.panic(new Error('Unexpected response: no data'));
         const data = message.data as Record<string, unknown>;
-        const context = this.callbacks.onRequestContext(data);
+        const context = await this.callbacks.onRequestContext?.(data);
         this.socket.emit(JSON.stringify({ type: 'context', context }));
         break;
       }
       case 'end':
+        this.callbacks.onComplete();
         this.disconnect();
         break;
       default:
@@ -77,9 +82,9 @@ export default class AIClient {
     });
   }
 
-  panic(error: Error): never {
+  panic(error: Error): void {
     this.disconnect();
-    throw error;
+    this.callbacks.onError?.(error);
   }
 
   disconnect(): void {
