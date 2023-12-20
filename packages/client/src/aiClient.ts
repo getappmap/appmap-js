@@ -20,7 +20,8 @@ export default class AIClient {
     this.socket.on('exception', (error: Error) => {
       this.panic(error);
     });
-    this.socket.onAny((data: string, ...args: any[]) => {
+    // eslint-disable-next-line unicorn/prevent-abbreviations
+    this.socket.onAny((data: string, ...args: unknown[]) => {
       if (data === 'exception') {
         const { message } = args[0] as { message: string };
         this.callbacks.onError?.(new Error(message));
@@ -61,7 +62,7 @@ export default class AIClient {
         if (!('data' in message)) this.panic(new Error('Unexpected response: no data'));
         const data = message.data as Record<string, unknown>;
         const context = await this.callbacks.onRequestContext?.(data);
-        this.socket.emit(JSON.stringify({ type: 'context', context }));
+        this.socket.emit('message', JSON.stringify({ type: 'context', context }));
         break;
       }
       case 'end':
