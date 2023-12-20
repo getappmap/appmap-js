@@ -7,6 +7,7 @@
       :message-success="messageCopiedCommand"
       :editor="editor"
       :status-states="statusStates"
+      :display-ai-help="displayAiHelp"
     />
     <v-record-app-maps
       id="record-appmaps"
@@ -16,6 +17,7 @@
       :feature-flags="featureFlags"
       :theme="theme"
       :status-states="statusStates"
+      :display-ai-help="displayAiHelp"
     />
     <v-open-app-maps
       id="open-appmaps"
@@ -25,6 +27,7 @@
       :project-name="projectName"
       :num-app-maps="numAppMaps"
       :complete="hasExplored"
+      :display-ai-help="displayAiHelp"
     />
     <v-investigate-findings
       id="investigate-findings"
@@ -97,6 +100,16 @@ export default {
       validator: (value) => ['dark', 'light'].indexOf(value) !== -1,
     },
     javaAgentStatus: Number,
+    displayAiHelp: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
+  provide() {
+    return {
+      displayAiHelp: this.displayAiHelp,
+    };
   },
 
   watch: {

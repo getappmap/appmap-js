@@ -91,3 +91,6 @@ export const installGuide = (args, { argTypes }) => ({
     });
   },
 });
+installGuide.args = {
+  displayAiHelp: true,
+};
