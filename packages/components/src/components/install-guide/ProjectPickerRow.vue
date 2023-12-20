@@ -95,23 +95,12 @@
           </ol>
         </template>
         <template v-if="isJS">
-          <h3 class="install-heading">Run the AppMap Installer</h3>
-          To make AppMaps of your JavaScript project, you need to install the
-          <code class="inline">appmap-agent-js</code>
-          package from NPM and configure your project to use it. We provide an open source
-          installer, or you can install manually. Advantages of using the installer include:
-          <ol>
-            <li>Verifies that your Node.js version is supported by AppMap.</li>
-            <li>
-              Verify that your Express, Jest and Mocha versions (if present) are supported by
-              AppMap.
-            </li>
-            <li>
-              Detects and supports <i>package-lock.json</i> (npm) and <i>yarn.lock</i> (yarn).
-            </li>
-            <li>Creates the configuration file <i>appmap.yml</i>.</li>
-            <li>Has built-in support if you encounter any problems.</li>
-          </ol>
+          <h3 class="install-heading">Launch your application or tests with AppMap</h3>
+          To make AppMaps of your Node.js project, launch your application or tests with the
+          <code class="inline">appmap-node</code> command. For example, if your application is
+          normally run with the command <code class="inline">node app.ts</code>, you should run the
+          command <code class="inline">npx appmap-node app.ts</code>.
+          <br />
         </template>
       </p>
       <template v-if="supported">
@@ -197,6 +186,7 @@
             <v-navigation-buttons :first="true" :last="!supported" :complete="installComplete" />
           </div>
         </template>
+        <template v-else-if="isJS"> </template>
         <template v-else>
           <div class="center-block" data-cy="automated-install">
             <v-button :kind="installButtonType" @click.native="performInstall" :timeout="2000">
