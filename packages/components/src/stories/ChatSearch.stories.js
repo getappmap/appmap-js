@@ -15,9 +15,7 @@ export const chatSearch = (args, { argTypes }) => ({
   components: { VChatSearch },
   template: `<v-chat-search v-bind="$props"></v-chat-search>`,
 });
-chatSearch.args = {
-  apiKey: '',
-};
+chatSearch.args = {};
 
 export const chatSearchMock = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
