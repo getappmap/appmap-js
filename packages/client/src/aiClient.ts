@@ -60,7 +60,7 @@ export default class AIClient {
         }
         if (!('data' in message)) this.panic(new Error('Unexpected response: no data'));
         const data = message.data as Record<string, unknown>;
-        const context = await this.callbacks.onRequestContext(data);
+        const context = await this.callbacks.onRequestContext?.(data);
         this.socket.emit(JSON.stringify({ type: 'context', context }));
         break;
       }
@@ -82,9 +82,9 @@ export default class AIClient {
     });
   }
 
-  panic(error: Error): never {
+  panic(error: Error): void {
     this.disconnect();
-    throw error;
+    this.callbacks.onError?.(error);
   }
 
   disconnect(): void {

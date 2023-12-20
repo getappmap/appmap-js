@@ -226,24 +226,29 @@ export default {
       const ask = search.explain();
       this.searching = true;
       this.lastStatusLabel = undefined;
+
+      const onComplete = () => {
+        this.searching = false;
+        this.vchat.onComplete();
+      };
+
+      const onError = (err) => {
+        onComplete();
+        this.vchat.addMessage(false, err);
+      };
+
       ask.on('ack', ack);
       ask.on('token', (token, messageId) => {
         this.vchat.addToken(token, messageId);
       });
-      ask.on('error', (error) => {
-        this.searching = false;
-        this.vchat.addMessage(false, error);
-      });
+      ask.on('error', onError);
       ask.on('status', (status) => {
         this.searchStatus = status;
         if (!this.searchResponse && status.searchResponse)
           this.searchResponse = status.searchResponse;
       });
-      ask.on('complete', async () => {
-        this.searching = false;
-        this.vchat.onComplete();
-      });
-      ask.explain(message, this.vchat.threadId);
+      ask.on('complete', onComplete);
+      ask.explain(message, this.vchat.threadId).catch(onError);
     },
     clear() {
       this.searchResponse = undefined;

@@ -6,11 +6,12 @@ export function reportError(callback: any, err: any, error: any) {
   } else if (error) {
     if (error.code) {
       const { message } = error;
-      let errorMessage = `RPC error ${error.code}`;
-      if (message) errorMessage += `: ${message}`;
-      if (callback) callback(new Error(errorMessage));
+      const errorTokens = [];
+      if (message) errorTokens.push(message);
+      if (error.code) errorTokens.push(`(${error.code})`);
+      if (callback) callback(new Error(errorTokens.join(' ')));
     } else {
-      if (callback) callback(`Unknown error: ${error}`);
+      if (callback) callback(`Unknown error (${error})`);
     }
   }
 }

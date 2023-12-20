@@ -28,7 +28,7 @@ export class ExplainRequest extends EventEmitter {
     });
   }
 
-  protected pollForStatus(userMessageId: string) {
+  protected pollForStatus(userMessageId: string, pollInterval = 500) {
     let numTokens = 0;
 
     const statusInterval = setInterval(() => {
@@ -48,13 +48,13 @@ export class ExplainRequest extends EventEmitter {
           }
           numTokens = explanation.length;
 
-          if (statusResponse.step === 'complete') {
+          if (['complete', 'error'].includes(statusResponse.step)) {
             clearInterval(statusInterval);
             this.onComplete();
           }
         }
       );
-    }, 1000);
+    }, pollInterval);
   }
 
   protected onError(err: any) {
