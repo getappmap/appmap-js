@@ -504,10 +504,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    hideDetailsPanel: {
-      type: Boolean,
-      default: false,
-    },
     allowFullscreen: {
       type: Boolean,
       default: false,
@@ -601,7 +597,6 @@ export default {
       return {
         'main-column': true,
         'main-column--left': true,
-        'main-column--left--hidden': this.hideDetailsPanel,
         'manual-resizing': this.isPanelResizing,
       };
     },
