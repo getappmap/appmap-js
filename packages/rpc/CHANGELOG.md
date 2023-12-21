@@ -1,3 +1,10 @@
+# [@appland/rpc-v1.1.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.0.0...@appland/rpc-v1.1.0) (2023-12-21)
+
+
+### Features
+
+* Provide RPC methods for 'explain' ([6e0b1ff](https://github.com/getappmap/appmap-js/commit/6e0b1ff6fab447f0c3b34eceeddf513dba428087))
+
 # @appland/rpc-v1.0.0 (2023-11-26)
 
 
