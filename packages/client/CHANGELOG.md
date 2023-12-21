@@ -1,3 +1,15 @@
+# [@appland/client-v1.12.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.11.0...@appland/client-v1.12.0) (2023-12-21)
+
+
+### Bug Fixes
+
+* Allow `setConfiguration` to accept partial configuration ([06b9a63](https://github.com/getappmap/appmap-js/commit/06b9a63700515eebde54a410452d9e83ba7b8ce0))
+
+
+### Features
+
+* Add an API to send AI message feedback ([d0b8ae0](https://github.com/getappmap/appmap-js/commit/d0b8ae02953f8d03754c00f2fd3bf27ebc226557))
+
 # [@appland/client-v1.11.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.10.0...@appland/client-v1.11.0) (2023-12-21)
 
 
