@@ -1,3 +1,11 @@
+# [@appland/components-v3.17.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.17.0...@appland/components-v3.17.1) (2023-12-21)
+
+
+### Bug Fixes
+
+* Full screen now works directly on the AppMap viewer ([e5a1eec](https://github.com/getappmap/appmap-js/commit/e5a1eec3425dc992df1d3822337e77317aa05571))
+* Reactive fixes to full screen state ([8a1eb82](https://github.com/getappmap/appmap-js/commit/8a1eb8260c38aee023a6f5c4e7fc84342887fabd))
+
 # [@appland/components-v3.17.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.16.1...@appland/components-v3.17.0) (2023-12-19)
 
 
