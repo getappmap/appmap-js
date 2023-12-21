@@ -4,7 +4,12 @@ module.exports = {
     es2020: true,
     browser: true,
   },
-  extends: ['plugin:vue/essential', '@vue/eslint-config-typescript', 'prettier'],
+  extends: [
+    'plugin:vue/essential',
+    '@vue/eslint-config-typescript',
+    'prettier',
+    'plugin:storybook/recommended',
+  ],
   plugins: ['prettier'],
   parserOptions: {
     parser: '@typescript-eslint/parser',
