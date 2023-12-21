@@ -9,7 +9,7 @@
     <div class="message-body" data-cy="message" v-else v-html="renderedMarkdown" />
     <div class="buttons">
       <span
-        v-if="!isUser"
+        v-if="!isUser && id"
         data-cy="feedback-good"
         :class="{
           button: 1,
@@ -22,7 +22,7 @@
         <v-thumb-icon />
       </span>
       <span
-        v-if="!isUser"
+        v-if="!isUser && id"
         data-cy="feedback-bad"
         :class="{
           button: 1,
@@ -182,9 +182,8 @@ export default {
   display: grid;
   grid-template-columns: 32px 1fr;
   grid-template-rows: 16px 1fr;
-  background-color: $gray2;
-  gap: 0.5rem 1.5rem;
-  padding: 0 0.5rem;
+  gap: 0.5rem 1rem;
+  padding: 0 1rem;
   color: #ececec;
 
   &[data-actor='user'] .message-body {
@@ -234,7 +233,12 @@ export default {
     }
   }
 
+  &:first-of-type {
+    margin-top: 2rem;
+  }
+
   &:last-of-type {
+    margin-bottom: 2rem;
     .buttons .button {
       opacity: 100%;
     }
@@ -302,6 +306,8 @@ export default {
 
 <style lang="scss">
 .message .message-body {
+  line-height: 1.3rem;
+
   hr {
     border: none;
     border-top: 1px solid rgba(255, 255, 255, 0.1);

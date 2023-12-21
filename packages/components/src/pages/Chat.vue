@@ -1,50 +1,19 @@
 <template>
   <div class="chat-container">
-    <div class="chat">
-      <small class="clear" @click="clear" v-if="isChatting">New chat</small>
-      <div>
-        <v-user-message
-          v-for="(message, i) in messages"
-          :key="i"
-          :message="message.message"
-          :is-user="message.isUser"
-          :id="message.id"
-          :sentiment="message.sentiment"
-          @change-sentiment="onSentimentChange"
-        />
-      </div>
-      <v-chat-input
-        @send="onSend"
-        :placeholder="inputPlaceholder"
-        :class="inputClasses"
-        ref="input"
-      />
-      <v-suggestion-grid @suggest="onSuggestion" v-if="!isChatting" />
-    </div>
+    <v-chat ref="vchat" class="chat" :send-message="sendMessage" />
   </div>
 </template>
 
 <script lang="ts">
 //@ts-nocheck
-import VUserMessage from '@/components/chat/UserMessage.vue';
-import VChatInput from '@/components/chat/ChatInput.vue';
-import VSuggestionGrid from '@/components/chat/SuggestionGrid.vue';
+import VChat from '@/components/chat/Chat.vue';
+import { AckCallback } from '@appland/client';
 import { AI, setConfiguration, DefaultApiURL } from '@appland/client';
 
-type Message = {
-  id?: string;
-  isUser: boolean;
-  message: string;
-  attachments?: string[];
-  sentiment: number;
-};
-
 export default {
-  name: 'v-chat',
+  name: 'v-chat-page',
   components: {
-    VUserMessage,
-    VChatInput,
-    VSuggestionGrid,
+    VChat,
   },
   props: {
     apiKey: {
@@ -60,98 +29,35 @@ export default {
       this.updateConfiguration();
     },
   },
-  data() {
-    return {
-      messages: [] as Message[],
-      threadId: undefined as string | undefined,
-    };
-  },
   computed: {
-    inputPlaceholder() {
-      return 'Where do you want to go?';
-    },
-    isChatting(): boolean {
-      return this.messages.length > 0;
-    },
-    inputClasses() {
-      return {
-        chatting: this.isChatting,
-      };
-    },
     clientConfiguration() {
       return {
         apiKey: this.apiKey,
       };
     },
+    vchat() {
+      return this.$refs.vchat as VChat;
+    },
   },
   methods: {
-    onReceiveToken(token: string, messageId: string) {
-      let systemMessage = this.messages.find((m) => m.id === messageId);
-      if (!systemMessage) {
-        systemMessage = this.addMessage(false);
-        systemMessage.id = messageId;
-      }
-      systemMessage.message += token;
-      this.scrollToBottom();
-    },
-    addMessage(isUser: boolean, content?: string) {
-      const message = {
-        isUser,
-        message: content || '',
-        sentiment: 0,
-      };
-      this.messages.push(message);
-
-      this.scrollToBottom();
-      this.$root.$emit('message', message, isUser);
-
-      return message;
-    },
-    async onSend(message: string) {
-      const userMessage = this.addMessage(true, message);
+    async sendMessage(message: string, ack: AckCallback) {
+      const { vchat } = this;
       const client = await AI.connect({
-        onAck: (messageId, threadId) => {
-          userMessage.id = messageId;
-          this.threadId = threadId;
-        },
+        onAck: ack,
         onToken: (token, messageId) => {
-          this.onReceiveToken(token, messageId);
+          this.vchat.addToken(token, messageId);
         },
         onError: (error) => {
-          this.addMessage(false, error);
+          this.vchat.addMessage(false, error);
+        },
+        onComplete: () => {
+          this.vchat.onComplete();
         },
       });
-      client.inputPrompt(message, { threadId: this.threadId });
-    },
-    onReceive(message: string) {
-      this.addMessage(message, false);
-    },
-    onSuggestion(prompt: string) {
-      // Make it look like the AI is typing
-      this.addMessage(prompt, false);
-    },
-    clear() {
-      this.threadId = undefined;
-      this.$set(this, 'messages', []);
-    },
-    scrollToBottom() {
-      // Allow one tick to progress to allow any DOM changes to be applied
-      this.$nextTick(() => {
-        this.$el.scrollTop = this.$el.scrollHeight;
-      });
+      client.inputPrompt(message, { threadId: vchat.threadId });
     },
     updateConfiguration() {
       setConfiguration({ apiKey: this.apiKey, apiURL: this.apiUrl });
-    },
-    async onSentimentChange(messageId: string, sentiment: number) {
-      if (!messageId) return;
-
-      const message = this.messages.find((m) => m.id === messageId);
-      if (!message || message.sentiment === sentiment) return;
-
-      await AI.sendMessageFeedback(message.id, sentiment);
-
-      message.sentiment = sentiment;
     },
   },
   mounted() {
@@ -168,43 +74,9 @@ export default {
   max-height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
+  background: radial-gradient(circle, lighten($gray2, 10%) 0%, rgba(0, 0, 0, 0) 80%);
   background-color: $gray2;
-}
-
-.chat {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  min-height: 100%;
-  padding: 1rem;
-  max-width: 58rem;
-  margin: 0 auto;
-  padding-bottom: 5rem;
-
-  .chatting {
-    position: fixed;
-    bottom: 0;
-    left: 2rem;
-    right: 2rem;
-    max-width: 58rem;
-    margin: 0 auto;
-  }
-
-  .clear {
-    color: #0097fa;
-    cursor: pointer;
-    margin-left: auto;
-    position: fixed;
-    top: 1rem;
-    max-width: 58rem;
-    width: 100%;
-    padding-right: 2rem;
-    text-align: right;
-
-    &:hover {
-      color: lighten(#0097fa, 10%);
-      text-decoration: underline;
-    }
-  }
+  background-repeat: no-repeat, repeat, repeat;
+  background-size: 100% 200%;
 }
 </style>

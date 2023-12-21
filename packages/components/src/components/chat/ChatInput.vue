@@ -93,7 +93,7 @@ export default {
     filter: drop-shadow(0 0 0.5rem #4983e0);
   }
   50% {
-    filter: drop-shadow(0 0 0.75rem #7289c5);
+    filter: drop-shadow(0 0 1rem #7289c5);
   }
 }
 
@@ -102,7 +102,10 @@ $border-color: #7289c5;
 .chat-input {
   position: relative;
   display: flex;
-  padding: 1rem;
+  padding: 1.5rem;
+  border-top: 1px solid darken($gray4, 10%);
+  box-shadow: 0 0 1rem 0rem $gray1;
+  border-radius: $border-radius $border-radius 0 0;
 
   span[contenteditable] {
     width: 100%;
@@ -112,7 +115,7 @@ $border-color: #7289c5;
     background-color: #171b25;
     font-size: 1rem;
     color: white;
-    animation: glow 8s infinite ease-in-out;
+    animation: glow 4s infinite ease-in-out;
     font-family: inherit;
     resize: none;
     max-height: 200px;
@@ -131,8 +134,9 @@ $border-color: #7289c5;
 
   .popper {
     position: absolute;
-    right: 1.8rem;
-    bottom: 1.45rem;
+    top: 50%;
+    right: 1rem;
+    transform: translate(-50%, -50%);
 
     &__text {
       border: none;
@@ -157,8 +161,12 @@ $border-color: #7289c5;
         background-color: white;
       }
 
-      svg path {
-        fill: black;
+      svg {
+        transform: rotate(90deg) translateY(-1px);
+        transform-origin: center center;
+        path {
+          fill: black;
+        }
       }
     }
   }

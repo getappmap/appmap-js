@@ -10,10 +10,7 @@
     data-cy="app"
   >
     <div class="loader"></div>
-    <div
-      :class="['main-column main-column--left', isPanelResizing ? 'manual-resizing' : '']"
-      ref="mainColumnLeft"
-    >
+    <div :class="leftColumnClasses" ref="mainColumnLeft">
       <transition name="slide-in-from-left">
         <v-details-panel
           v-if="showDetailsPanel"
@@ -507,6 +504,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    hideDetailsPanel: {
+      type: Boolean,
+      default: false,
+    },
     allowFullscreen: {
       type: Boolean,
       default: false,
@@ -595,6 +596,16 @@ export default {
     classes() {
       return this.isLoading ? 'app--loading' : '';
     },
+
+    leftColumnClasses() {
+      return {
+        'main-column': true,
+        'main-column--left': true,
+        'main-column--left--hidden': this.hideDetailsPanel,
+        'manual-resizing': this.isPanelResizing,
+      };
+    },
+
     isInBrowser() {
       return window.location.protocol.includes('http');
     },
@@ -1593,6 +1604,10 @@ code {
   }
 
   .main-column {
+    &--left--hidden {
+      display: none;
+    }
+
     &--left {
       position: relative;
       grid-column: 1;
