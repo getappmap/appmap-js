@@ -1,3 +1,21 @@
+# [@appland/components-v3.18.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.17.1...@appland/components-v3.18.0) (2023-12-21)
+
+
+### Bug Fixes
+
+* Code blocks now render in an expected manner ([f0136ac](https://github.com/getappmap/appmap-js/commit/f0136ac6d9b9b03a9805979656bae3ac43cd911d))
+* Don't allow rich text formatting in the chat input ([4651acb](https://github.com/getappmap/appmap-js/commit/4651acbc65e8c26f38a6e59dfb72ceb0eba5cd89))
+* Preserve whitespaces in user messages ([f565cff](https://github.com/getappmap/appmap-js/commit/f565cff239bfd37c0f1f0de1dac3f950fb850a32))
+* Prevent unnecessary stripping of characters ([24691ba](https://github.com/getappmap/appmap-js/commit/24691bad4fb603ad2bda6a35b7495530b53a80e1))
+* Render errors as messages ([7ad2bb6](https://github.com/getappmap/appmap-js/commit/7ad2bb626437d9d64bef9ca9caff4eece303c368))
+* Spacing between messages should always be consistent ([388557a](https://github.com/getappmap/appmap-js/commit/388557a166bdd1b5a2f6bda2cc4728893f1159e4))
+
+
+### Features
+
+* Add a copy button to code snippets provided in response ([49f0bb3](https://github.com/getappmap/appmap-js/commit/49f0bb3731f5dc3e7a8dbc810320f71b5d40945e))
+* Add buttons to send message feedback ([1385472](https://github.com/getappmap/appmap-js/commit/13854723e87ecefb8b595ee8c312da842fa7e572))
+
 # [@appland/components-v3.17.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.17.0...@appland/components-v3.17.1) (2023-12-21)
 
 
