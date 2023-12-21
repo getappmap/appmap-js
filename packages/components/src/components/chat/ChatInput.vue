@@ -30,6 +30,9 @@ export default {
     VPopper,
   },
   props: {
+    question: {
+      type: String,
+    },
     placeholder: {
       default: '',
     },
@@ -81,6 +84,11 @@ export default {
     this.focus();
   },
   mounted() {
+    if (this.question) {
+      this.$refs.input.innerText = this.question;
+      this.input = this.question;
+    }
+
     this.focus();
   },
 };
