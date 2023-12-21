@@ -1,3 +1,10 @@
+# [@appland/client-v1.11.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.10.0...@appland/client-v1.11.0) (2023-12-21)
+
+
+### Features
+
+* Provide RPC methods for 'explain' ([6e0b1ff](https://github.com/getappmap/appmap-js/commit/6e0b1ff6fab447f0c3b34eceeddf513dba428087))
+
 # [@appland/client-v1.10.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.9.0...@appland/client-v1.10.0) (2023-12-05)
 
 
