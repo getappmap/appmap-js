@@ -10,10 +10,7 @@
     data-cy="app"
   >
     <div class="loader"></div>
-    <div
-      :class="['main-column main-column--left', isPanelResizing ? 'manual-resizing' : '']"
-      ref="mainColumnLeft"
-    >
+    <div :class="leftColumnClasses" ref="mainColumnLeft">
       <transition name="slide-in-from-left">
         <v-details-panel
           v-if="showDetailsPanel"
@@ -507,6 +504,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    hideDetailsPanel: {
+      type: Boolean,
+      default: false,
+    },
     allowFullscreen: {
       type: Boolean,
       default: false,
@@ -571,16 +572,6 @@ export default {
         this.selectCurrentHighlightedEvent();
       },
     },
-    filteredAppMap: {
-      handler() {
-        if (this.selectedObject) {
-          // Keep the currently selected object only, discard the rest
-          const selection = this.selectedObject;
-          this.$store.commit(CLEAR_SELECTION_STACK);
-          this.setSelectedObject(selection.fqid);
-        }
-      },
-    },
     isActive: {
       handler() {
         clearTimeout(this.seqDiagramTimeoutId);
@@ -595,6 +586,16 @@ export default {
     classes() {
       return this.isLoading ? 'app--loading' : '';
     },
+
+    leftColumnClasses() {
+      return {
+        'main-column': true,
+        'main-column--left': true,
+        'main-column--left--hidden': this.hideDetailsPanel,
+        'manual-resizing': this.isPanelResizing,
+      };
+    },
+
     isInBrowser() {
       return window.location.protocol.includes('http');
     },
@@ -1593,6 +1594,10 @@ code {
   }
 
   .main-column {
+    &--left--hidden {
+      display: none;
+    }
+
     &--left {
       position: relative;
       grid-column: 1;

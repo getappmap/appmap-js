@@ -325,6 +325,7 @@ __metadata:
     "@appland/client": "workspace:^1.12.0"
     "@appland/diagrams": "workspace:^1.7.0"
     "@appland/models": "workspace:^2.10.0"
+    "@appland/rpc": "workspace:^1.0.0"
     "@appland/sequence-diagram": "workspace:^1.11.0"
     "@babel/core": ^7.22.5
     "@babel/node": ^7.22.5
@@ -343,6 +344,7 @@ __metadata:
     "@storybook/vue": ^6.5.14
     "@types/assert": ^1.5.6
     "@types/dompurify": ^3.0.5
+    "@types/events": ^3.0.3
     "@types/yargs": ^16.0.0
     "@typescript-eslint/parser": ^5.51.0
     "@vue/babel-preset-app": ^5.0.8
@@ -374,9 +376,11 @@ __metadata:
     eslint-plugin-import: ^2.20.2
     eslint-plugin-prettier: ^3.3.1
     eslint-plugin-vue: ^9.9.0
+    events: ^3.3.0
     geometry-interfaces: ^1.1.4
     highlight.js: ^11.9.0
     https-browserify: ^1.0.0
+    jayson: ^4.1.0
     jest-extended: ^0.11.5
     lint-staged: ^10.5.3
     marked: ^10.0.0
@@ -483,7 +487,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/rpc@workspace:^1.1.0, @appland/rpc@workspace:packages/rpc":
+"@appland/rpc@workspace:^1.0.0, @appland/rpc@workspace:^1.1.0, @appland/rpc@workspace:packages/rpc":
   version: 0.0.0-use.local
   resolution: "@appland/rpc@workspace:packages/rpc"
   dependencies:
@@ -9807,6 +9811,13 @@ __metadata:
   version: 1.0.1
   resolution: "@types/estree@npm:1.0.1"
   checksum: e9aa175eacb797216fafce4d41e8202c7a75555bc55232dee0f9903d7171f8f19f0ae7d5191bb1a88cb90e65468be508c0df850a9fb81b4433b293a5a749899d
+  languageName: node
+  linkType: hard
+
+"@types/events@npm:^3.0.3":
+  version: 3.0.3
+  resolution: "@types/events@npm:3.0.3"
+  checksum: 50af9312fab001fd6bd4bb3ff65830f940877e6778de140a92481a0d9bf5f4853d44ec758a8800ef60e0598ac43ed1b5688116a3c65906ae54e989278d6c7c82
   languageName: node
   linkType: hard
 
@@ -19926,7 +19937,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"events@npm:^3.0.0, events@npm:^3.2.0":
+"events@npm:^3.0.0, events@npm:^3.2.0, events@npm:^3.3.0":
   version: 3.3.0
   resolution: "events@npm:3.3.0"
   checksum: f6f487ad2198aa41d878fa31452f1a3c00958f46e9019286ff4787c84aac329332ab45c9cdc8c445928fc6d7ded294b9e005a7fce9426488518017831b272780
