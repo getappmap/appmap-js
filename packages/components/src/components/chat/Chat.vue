@@ -29,6 +29,7 @@
       @send="onSend"
       :placeholder="inputPlaceholder"
       :class="inputClasses"
+      :question="question"
       ref="input"
     />
   </div>
@@ -62,6 +63,10 @@ export default {
     VButton,
   },
   props: {
+    // Initial question to ask
+    question: {
+      type: String,
+    },
     sendMessage: {
       type: Function, // UserMessageHandler
     },
