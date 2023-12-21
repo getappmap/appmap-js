@@ -196,15 +196,42 @@ export default {
         element.scrollIntoView(SCROLL_OPTIONS);
       });
     },
+    scrollElementIntoView(element) {
+      const boundingRect = element.getBoundingClientRect();
+
+      let intervalId;
+      let retries = 0;
+      let lastScrollTop = boundingRect.top;
+      let lastScrollLeft = boundingRect.left;
+
+      // Once scrolling has started or we've retried more than 5 times, stop retrying
+      const tryToScrollIntoView = () => {
+        element.scrollIntoView(SCROLL_OPTIONS);
+        const newBoundingRect = element.getBoundingClientRect();
+
+        if (
+          lastScrollTop !== newBoundingRect.top ||
+          lastScrollLeft !== newBoundingRect.left ||
+          retries > 5
+        ) {
+          clearInterval(intervalId);
+        } else {
+          lastScrollLeft = newBoundingRect.left;
+          lastScrollTop = newBoundingRect.top;
+          retries += 1;
+        }
+      };
+
+      intervalId = setInterval(tryToScrollIntoView, 100);
+    },
     focusHighlighted() {
-      setTimeout(() => {
+      this.$nextTick(() => {
         if (!this.$el || !this.$el.querySelector) return;
 
         const selected = this.$el.querySelector('.selected');
-        if (selected && selected.firstElementChild) {
-          selected.firstElementChild.scrollIntoView(SCROLL_OPTIONS);
-        }
-      }, 16);
+        if (selected && selected.firstElementChild)
+          this.scrollElementIntoView(selected.firstElementChild);
+      });
     },
     returnValue(action: ActionSpec): string {
       if (!action.eventIds || !this.appMap || !this.appMap.eventsById) {
