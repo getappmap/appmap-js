@@ -12,6 +12,7 @@
         :send-message="sendMessage"
         :status-label="searchStatusLabel"
         @clear="clear"
+        :question="question"
       />
     </div>
     <div class="chat-search-container--drag" @mousedown="startResizing"></div>
@@ -186,14 +187,6 @@ export default {
         }
       }
     },
-  },
-  // When the component is ready, submit the question if it's defined
-  async mounted() {
-    if (this.question) {
-      this.$nextTick(() => {
-        this.$refs.vchat.ask(this.question);
-      });
-    }
   },
   computed: {
     statusStep() {

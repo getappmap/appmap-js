@@ -23,7 +23,7 @@ export const chatSearchMock = (args, { argTypes }) => ({
   template: `<v-chat-search v-bind="$props"></v-chat-search>`,
 });
 
-export const chatSearchMockSearchNow = (args, { argTypes }) => ({
+export const chatSearchMockSearchPrepopulated = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VChatSearch },
   template: `<v-chat-search v-bind="$props"></v-chat-search>`,
@@ -130,7 +130,7 @@ chatSearchMock.args = {
   appmapRpcFn: mockRpc,
 };
 
-chatSearchMockSearchNow.args = {
+chatSearchMockSearchPrepopulated.args = {
   appmapRpcFn: mockRpc,
   question: 'How does password reset work?',
 };
