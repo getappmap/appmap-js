@@ -1167,7 +1167,6 @@ export default {
         let result = '50px';
 
         const width = this.$refs.app.offsetWidth;
-        console.log('width: ', width);
         if (width < 600 && this.showDetailsPanel) {
           result = `${width}px`;
         } else if (this.showDetailsPanel) {
