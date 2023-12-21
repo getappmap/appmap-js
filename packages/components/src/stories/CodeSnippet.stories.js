@@ -6,12 +6,14 @@ export default {
   argTypes: {
     disabled: {
       control: { type: 'boolean' },
-      defaultValue: false,
     },
     clipboardText: {
       control: { type: 'text' },
-      defaultValue: 'npx @appland/appmap install-agent ruby',
     },
+  },
+  args: {
+    disabled: false,
+    clipboardText: 'npx @appland/appmap install-agent ruby',
   },
 };
 

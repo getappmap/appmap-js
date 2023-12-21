@@ -6,15 +6,15 @@ export default {
   argTypes: {
     currentStatus: {
       control: { type: 'range', min: 0, max: 2 },
-      defaultValue: 0,
+      default: 0,
     },
     debugConfigurationStatus: {
       control: { type: 'range', min: 0, max: 2 },
-      defaultValue: 0,
+      default: 0,
     },
     javaAgentStatus: {
       control: { type: 'range', min: 0, max: 3 },
-      defaultValue: 0,
+      default: 0,
     },
   },
 };

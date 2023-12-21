@@ -49,15 +49,15 @@ export default {
     scenario: {
       control: {
         type: 'select',
-        options: Object.keys(scenarioData),
       },
-      defaultValue: 'default',
+      options: Object.keys(scenarioData),
     },
   },
   args: {
     appMapUploadable: true,
     allowFullscreen: true,
     savedFilters: [savedFilters[0]],
+    scenario: 'default',
   },
 };
 
@@ -68,6 +68,7 @@ const Template = (args, { argTypes }) => ({
   mounted() {
     const scenario = scenarioData[args.scenario];
     const sequenceDiagram = sequenceDiagramData[args.scenario];
+    console.log(args);
     if (scenario) {
       this.$refs.vsCode.loadData(scenario, sequenceDiagram);
     }

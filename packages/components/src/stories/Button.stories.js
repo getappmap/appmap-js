@@ -5,10 +5,12 @@ export default {
   component: VButton,
   argTypes: {
     kind: {
-      control: { type: 'select', options: ['primary', 'secondary', 'ghost'] },
+      control: { type: 'select' },
+      options: ['primary', 'secondary', 'ghost'],
     },
     size: {
-      control: { type: 'select', options: ['small', 'medium', 'large'] },
+      control: { type: 'select' },
+      options: ['small', 'medium', 'large'],
     },
   },
 };
