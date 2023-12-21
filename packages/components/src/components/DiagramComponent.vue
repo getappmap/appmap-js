@@ -122,7 +122,6 @@ export default {
 
     selectCodeObject(codeObject) {
       if (this.$store) {
-        this.$store.commit(CLEAR_SELECTION_STACK);
         this.$store.commit(SELECT_CODE_OBJECT, codeObject);
       }
     },
