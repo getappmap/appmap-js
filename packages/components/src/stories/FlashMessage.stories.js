@@ -5,13 +5,16 @@ export default {
   component: VFlashMessage,
   argTypes: {
     type: {
-      control: { type: 'select', options: ['info', 'success', 'warning', 'error'] },
-      defaultValue: 'info',
+      control: { type: 'select' },
+      options: ['info', 'success', 'warning', 'error'],
     },
     message: {
       control: { type: 'text' },
-      defaultValue: 'This is a flash message',
     },
+  },
+  args: {
+    type: 'info',
+    message: 'This is a flash message',
   },
 };
 

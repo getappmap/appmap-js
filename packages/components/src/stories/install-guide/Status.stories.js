@@ -7,23 +7,23 @@ export default {
   argTypes: {
     currentStep: {
       control: { type: 'range', min: 0, max: InstructionStep.NumSteps - 1 },
-      defaultValue: 0,
+      default: 0,
     },
     viewingStep: {
       control: { type: 'range', min: 0, max: InstructionStep.NumSteps - 1 },
-      defaultValue: 1,
+      default: 1,
     },
     currentStepState: {
       control: { type: 'range', min: 0, max: StepStatus.NumStatuses - 1 },
-      defaultValue: StepStatus.InProgress,
+      default: StepStatus.InProgress,
     },
     projectName: {
       control: { type: 'text' },
-      defaultValue: 'my-project',
+      default: 'my-project',
     },
     numAppMaps: {
       control: { type: 'number' },
-      defaultValue: 256,
+      default: 256,
     },
     statusStates: { control: { type: null } },
   },

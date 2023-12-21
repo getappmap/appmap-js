@@ -6,7 +6,7 @@ export default {
   argTypes: {
     projectName: {
       control: { type: 'text' },
-      defaultValue: 'MyProject',
+      default: 'MyProject',
     },
   },
 };

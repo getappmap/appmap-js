@@ -11,7 +11,7 @@ export default {
   argTypes: {
     currentStep: {
       control: { type: 'range', min: 0, max: InstructionStep.NumSteps },
-      defaultValue: 0,
+      default: 0,
     },
   },
 };

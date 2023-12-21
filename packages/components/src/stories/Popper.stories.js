@@ -5,13 +5,16 @@ export default {
   component: VPopper,
   argTypes: {
     placement: {
-      control: { type: 'select', options: ['top', 'bottom', 'left', 'right'] },
-      defaultValue: 'top',
+      control: { type: 'select' },
+      options: ['top', 'bottom', 'left', 'right'],
     },
     text: {
       control: 'text',
-      defaultValue: 'Hello world!',
     },
+  },
+  args: {
+    placement: 'top',
+    text: 'Hello world!',
   },
 };
 

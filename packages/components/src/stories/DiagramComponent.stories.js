@@ -16,7 +16,7 @@ export default {
     },
   },
   argTypes: {
-    theme: { control: { type: 'select', options: ['dark', 'light'] } },
+    theme: { control: { type: 'select' }, options: ['dark', 'light'] },
   },
   args: {
     classMap: store.state.appMap.classMap,
