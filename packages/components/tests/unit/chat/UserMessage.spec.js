@@ -67,7 +67,9 @@ describe('UserMessage.vue', () => {
           message: snippets.htmlTag,
         },
       });
-      expect(wrapper.get('[data-cy="message"]').text()).toBe(snippets.htmlTag.replace(/`/g, ''));
+      expect(wrapper.get('[data-cy="message-text"]').text()).toBe(
+        snippets.htmlTag.replace(/`/g, '')
+      );
     });
 
     it('does not allow script injection', () => {
@@ -76,7 +78,7 @@ describe('UserMessage.vue', () => {
           message: snippets.xss,
         },
       });
-      expect(wrapper.get('[data-cy="message"]').text()).not.toContain(snippets.xss);
+      expect(wrapper.get('[data-cy="message-text"]').text()).not.toContain(snippets.xss);
     });
 
     it('renders the user message as plain text', () => {
@@ -86,7 +88,7 @@ describe('UserMessage.vue', () => {
           isUser: true,
         },
       });
-      expect(wrapper.get('[data-cy="message"]').text()).toBe(snippets.xss);
+      expect(wrapper.get('[data-cy="message-text"]').text()).toBe(snippets.xss);
     });
   });
 

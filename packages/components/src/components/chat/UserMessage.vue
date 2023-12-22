@@ -1,12 +1,12 @@
 <template>
-  <div class="message" :data-actor="isUser ? 'user' : 'system'">
+  <div class="message" data-cy="message" :data-actor="isUser ? 'user' : 'system'">
     <div class="avatar">
       <!-- <img :src="avatar" /> -->
       <v-component :is="avatar" />
     </div>
     <div class="name">{{ name }}</div>
-    <div class="message-body" data-cy="message" v-if="isUser">{{ message }}</div>
-    <div class="message-body" data-cy="message" v-else v-html="renderedMarkdown" />
+    <div class="message-body" data-cy="message-text" v-if="isUser">{{ message }}</div>
+    <div class="message-body" data-cy="message-text" v-else v-html="renderedMarkdown" />
     <div class="buttons">
       <span
         v-if="!isUser && id"
