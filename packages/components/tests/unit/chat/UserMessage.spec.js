@@ -67,7 +67,9 @@ describe('UserMessage.vue', () => {
           message: snippets.htmlTag,
         },
       });
-      expect(wrapper.get('[data-cy="message"]').text()).toBe(snippets.htmlTag.replace(/`/g, ''));
+      expect(wrapper.get('[data-cy="message-text"]').text()).toBe(
+        snippets.htmlTag.replace(/`/g, '')
+      );
     });
 
     it('does not allow script injection', () => {
@@ -76,7 +78,7 @@ describe('UserMessage.vue', () => {
           message: snippets.xss,
         },
       });
-      expect(wrapper.get('[data-cy="message"]').text()).not.toContain(snippets.xss);
+      expect(wrapper.get('[data-cy="message-text"]').text()).not.toContain(snippets.xss);
     });
 
     it('renders the user message as plain text', () => {
@@ -86,13 +88,19 @@ describe('UserMessage.vue', () => {
           isUser: true,
         },
       });
-      expect(wrapper.get('[data-cy="message"]').text()).toBe(snippets.xss);
+      expect(wrapper.get('[data-cy="message-text"]').text()).toBe(snippets.xss);
     });
   });
 
   describe('Message Feedback Buttons', () => {
-    it('should display feedback buttons after a system message', () => {
+    it('should not display feedback buttons if the message is unidentified', () => {
       const wrapper = mount(VUserMessage);
+      expect(wrapper.find('[data-cy="feedback-good"]').exists()).toBe(false);
+      expect(wrapper.find('[data-cy="feedback-bad"]').exists()).toBe(false);
+    });
+
+    it('should display feedback buttons after an identified system message', () => {
+      const wrapper = mount(VUserMessage, { propsData: { id: 'id' } });
       expect(wrapper.find('[data-cy="feedback-good"]').exists()).toBe(true);
       expect(wrapper.find('[data-cy="feedback-bad"]').exists()).toBe(true);
     });
