@@ -25,4 +25,5 @@ checks:
   - rule: too-many-updates
   # - rule: unbatched-materialized-query
   - rule: unauthenticated-encryption
+  - rule: unfulfilled-promise
   - rule: update-in-get-request
