@@ -1,5 +1,5 @@
 <template>
-  <div class="suggestion-card" @click="onClick">
+  <div class="suggestion-card" data-cy="prompt-suggestion" @click="onClick">
     <v-pin class="pin" />
     <div class="title">{{ title }}</div>
     <div class="sub-title">{{ subTitle }}</div>

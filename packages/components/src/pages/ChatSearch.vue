@@ -5,7 +5,7 @@
     @mouseup="stopResizing"
     @mouseleave="stopResizing"
   >
-    <div class="chat-container" ref="chatContainer">
+    <div class="chat-container" data-cy="resize-left" ref="chatContainer">
       <v-chat
         class="chat-search-chat"
         ref="vchat"
@@ -15,7 +15,11 @@
         :question="question"
       />
     </div>
-    <div class="chat-search-container--drag" @mousedown="startResizing"></div>
+    <div
+      class="chat-search-container--drag"
+      data-cy="resize-handle"
+      @mousedown="startResizing"
+    ></div>
     <div class="search-container">
       <div class="search-results-container">
         <div class="search-results-header">
@@ -37,6 +41,7 @@
               class="search-results-list"
               v-model="selectedSearchResultId"
               v-if="selectedSearchResultId"
+              data-cy="appmap-list"
             >
               <option v-for="result in searchResponse.results" :value="result.id" :key="result.id">
                 {{ result.metadata.name || result.appmap }}
@@ -207,28 +212,32 @@ export default {
       this.searching = true;
       this.lastStatusLabel = undefined;
 
-      const onComplete = () => {
-        this.searching = false;
-        this.$refs.vchat.onComplete();
-      };
+      return new Promise((resolve, reject) => {
+        const onComplete = () => {
+          this.searching = false;
+          this.$refs.vchat.onComplete();
+          resolve();
+        };
 
-      const onError = (err) => {
-        onComplete();
-        this.$refs.vchat.addMessage(false, err);
-      };
+        const onError = (err) => {
+          onComplete();
+          this.$refs.vchat.addMessage(false, err);
+          reject();
+        };
 
-      ask.on('ack', ack);
-      ask.on('token', (token, messageId) => {
-        this.$refs.vchat.addToken(token, messageId);
+        ask.on('ack', ack);
+        ask.on('token', (token, messageId) => {
+          this.$refs.vchat.addToken(token, messageId);
+        });
+        ask.on('error', onError);
+        ask.on('status', (status) => {
+          this.searchStatus = status;
+          if (!this.searchResponse && status.searchResponse)
+            this.searchResponse = status.searchResponse;
+        });
+        ask.on('complete', onComplete);
+        ask.explain(message, this.$refs.vchat.threadId).catch(onError);
       });
-      ask.on('error', onError);
-      ask.on('status', (status) => {
-        this.searchStatus = status;
-        if (!this.searchResponse && status.searchResponse)
-          this.searchResponse = status.searchResponse;
-      });
-      ask.on('complete', onComplete);
-      ask.explain(message, this.$refs.vchat.threadId).catch(onError);
     },
     clear() {
       this.searchResponse = undefined;

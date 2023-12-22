@@ -8,9 +8,10 @@
       @keydown="onKeyDown"
       tabindex="0"
       ref="input"
+      data-cy="chat-input"
     />
     <v-popper text="Send message" placement="top" text-align="left" :disabled="!hasInput">
-      <button class="send" :disabled="!hasInput" @click="send">
+      <button class="send" data-cy="send-message" :disabled="!hasInput" @click="send">
         <v-send-icon />
       </button>
     </v-popper>

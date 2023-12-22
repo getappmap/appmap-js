@@ -3,7 +3,7 @@
     <div class="button-panel" v-if="isChatting">
       <v-button class="clear" size="small" kind="ghost" @click.native="clear">New chat</v-button>
     </div>
-    <div class="messages" ref="messages">
+    <div class="messages" data-cy="messages" ref="messages">
       <v-user-message
         v-for="(message, i) in messages"
         :key="i"
@@ -19,7 +19,7 @@
             <v-loader-icon class="status-icon" />
           </v-spinner>
         </div>
-        <div class="status-label" v-if="statusLabel">
+        <div class="status-label" v-if="statusLabel" data-cy="explain-status">
           {{ statusLabel }}
         </div>
       </div>
@@ -79,6 +79,10 @@ export default {
       messages: [] as Message[],
       threadId: undefined as string | undefined,
       loading: false,
+
+      // This is used for differentiating messages not ACK'd by the server.
+      // E.g., in a mocked environment.
+      pendingMessageId: 0,
     };
   },
   computed: {
@@ -106,6 +110,7 @@ export default {
     },
     addMessage(isUser: boolean, content?: string) {
       const message = {
+        id: this.pendingMessageId++,
         isUser,
         message: content || '',
         sentiment: 0,
