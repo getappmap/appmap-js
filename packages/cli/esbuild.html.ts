@@ -15,8 +15,8 @@ esbuild
       global: 'window',
     },
     alias: {
-      http: 'stream-http',
-      https: 'https-browserify',
+      http: require.resolve('stream-http'),
+      https: require.resolve('https-browserify'),
     },
     entryPoints: ['src/html/appmap.js'],
     plugins: [
@@ -36,7 +36,6 @@ esbuild
     console.warn(err);
     process.exit(1);
   });
-
 esbuild
   .build({
     minify: true,
@@ -47,12 +46,14 @@ esbuild
     bundle: true,
     logLevel: 'info',
     define: {
+      'process.env': '{}',
       'process.env.NODE_ENV': '"production"',
       global: 'window',
     },
+    // inject: [require.resolve('process/browser')],
     alias: {
-      http: 'stream-http',
-      https: 'https-browserify',
+      http: require.resolve('stream-http'),
+      https: require.resolve('https-browserify'),
     },
     entryPoints: ['src/html/sequenceDiagram.js'],
     plugins: [
