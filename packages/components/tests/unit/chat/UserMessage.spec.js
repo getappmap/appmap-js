@@ -93,8 +93,14 @@ describe('UserMessage.vue', () => {
   });
 
   describe('Message Feedback Buttons', () => {
-    it('should display feedback buttons after a system message', () => {
+    it('should not display feedback buttons if the message is unidentified', () => {
       const wrapper = mount(VUserMessage);
+      expect(wrapper.find('[data-cy="feedback-good"]').exists()).toBe(false);
+      expect(wrapper.find('[data-cy="feedback-bad"]').exists()).toBe(false);
+    });
+
+    it('should display feedback buttons after an identified system message', () => {
+      const wrapper = mount(VUserMessage, { propsData: { id: 'id' } });
       expect(wrapper.find('[data-cy="feedback-good"]').exists()).toBe(true);
       expect(wrapper.find('[data-cy="feedback-bad"]').exists()).toBe(true);
     });
