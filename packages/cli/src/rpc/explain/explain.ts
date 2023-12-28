@@ -65,7 +65,12 @@ export default class Explain extends EventEmitter {
           self.status.step = ExplainRpc.Step.ERROR;
           const rpcError = RpcError.fromException(err);
           if (!self.status.err)
-            self.status.err = { code: rpcError.code, message: rpcError.message };
+            self.status.err = {
+              code: rpcError.code,
+              message: rpcError.message,
+              stack: err.stack,
+              cause: err.cause,
+            };
           self.emit('error', rpcError);
         },
       })

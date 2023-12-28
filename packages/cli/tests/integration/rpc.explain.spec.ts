@@ -5,6 +5,8 @@ import { AIClient, AICallbacks, AIInputPromptOptions } from '@appland/client';
 import { SearchContextOptions } from '../../src/rpc/explain/explain';
 import { waitFor } from './waitFor';
 import RPCTest from './RPCTest';
+import assert from 'assert';
+import { warn } from 'console';
 
 describe('RPC', () => {
   const rpcTest = new RPCTest();
@@ -197,7 +199,13 @@ describe('RPC', () => {
         expect(response.error).toBeFalsy();
 
         await waitFor(async () => (await queryStatus()).step === ExplainRpc.Step.ERROR);
-        expect((await queryStatus()).err).toEqual({
+        const err: any = (await queryStatus()).err;
+
+        assert(err);
+        const { stack } = err;
+        delete err.stack;
+        expect(stack).toContain('Error: GPT service unavailable');
+        expect(err).toEqual({
           message: 'GPT service unavailable',
           code: 500,
         });

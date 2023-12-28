@@ -7,13 +7,16 @@ import assert from 'assert';
 
 import { RpcCallback, RpcError, RpcHandler } from '../../rpc/rpc';
 import { Server } from 'http';
+import { inspect } from 'util';
+import { verbose } from '../../utils';
 
 function handlerMiddleware(
   name: string,
   handler: (args: any) => unknown | Promise<unknown>
 ): (args: any, callback: RpcCallback<unknown>) => Promise<void> {
   return async (args, callback) => {
-    warn(`Handling JSON-RPC request for ${name} (${JSON.stringify(args)})`);
+    if (verbose())
+      log(`[RPCServer] Handling JSON-RPC request for ${name} (${JSON.stringify(args)})`);
     let err: any, result: any;
     try {
       result = await handler(args);
@@ -22,6 +25,7 @@ function handlerMiddleware(
     }
 
     if (err) {
+      warn(`[RPCServer] An error occurred handling ${name}: ${inspect(err)}`);
       const error = RpcError.fromException(err);
       callback(error);
     } else {
