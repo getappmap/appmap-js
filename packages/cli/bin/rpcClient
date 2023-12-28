@@ -21,5 +21,6 @@ client.request(command, args ? JSON.parse(args) : undefined, function (err, resu
     warn(err);
     return;
   }
-  log(JSON.stringify(result.result, null, 2));
+
+  log(JSON.stringify(result, null, 2));
 });
