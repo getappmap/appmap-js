@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.116.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.115.0...@appland/appmap-v3.116.0) (2023-12-28)
+
+
+### Features
+
+* Update @appland/client in @appland/appmap ([953872f](https://github.com/getappmap/appmap-js/commit/953872f398b856348a5897929a08f0e695a5ec81))
+
 # [@appland/appmap-v3.115.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.114.0...@appland/appmap-v3.115.0) (2023-12-28)
 
 
