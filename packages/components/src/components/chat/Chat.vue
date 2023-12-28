@@ -9,6 +9,7 @@
         :key="i"
         :message="message.message"
         :is-user="message.isUser"
+        :is-error="message.isError"
         :id="message.id"
         :sentiment="message.sentiment"
         @change-sentiment="onSentimentChange"
@@ -126,10 +127,11 @@ export default {
     setAuthorized(v: boolean) {
       this.authorized = v;
     },
-    addMessage(isUser: boolean, content?: string) {
+    addMessage(isUser: boolean, content?: string, isError?: boolean) {
       const message = {
         id: this.pendingMessageId++,
         isUser,
+        isError,
         message: content || '',
         sentiment: 0,
       };
@@ -147,7 +149,7 @@ export default {
       if (error.code === 401) {
         this.setAuthorized(false);
       } else {
-        this.addMessage(false, error.message); // TODO: Handle error.message not defined
+        this.addMessage(false, error.message, true); // TODO: Handle error.message not defined
       }
     },
     async onSend(message: string) {

@@ -7,7 +7,8 @@ export function reportError(callback: any, err: any, error: any) {
     if (error.code) {
       if (callback) callback(error);
     } else {
-      if (callback) callback({ message: `Unknown error (${error})` });
+      const message = error.message || error.toString();
+      if (callback) callback({ message: `An unexpected error occurred: ${message}` });
     }
   }
 }

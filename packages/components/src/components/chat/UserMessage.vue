@@ -1,5 +1,10 @@
 <template>
-  <div class="message" data-cy="message" :data-actor="isUser ? 'user' : 'system'">
+  <div
+    class="message"
+    data-cy="message"
+    :data-actor="isUser ? 'user' : 'system'"
+    :data-error="isError"
+  >
     <div class="avatar">
       <!-- <img :src="avatar" /> -->
       <v-component :is="avatar" />
@@ -97,6 +102,9 @@ export default {
       required: false,
     },
     isUser: {
+      default: false,
+    },
+    isError: {
       default: false,
     },
     message: {
