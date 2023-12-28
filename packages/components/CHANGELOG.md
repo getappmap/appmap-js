@@ -1,3 +1,10 @@
+# [@appland/components-v3.19.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.18.0...@appland/components-v3.19.0) (2023-12-28)
+
+
+### Features
+
+* Update @appland/client in @appland/appmap ([953872f](https://github.com/getappmap/appmap-js/commit/953872f398b856348a5897929a08f0e695a5ec81))
+
 # [@appland/components-v3.18.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.17.1...@appland/components-v3.18.0) (2023-12-21)
 
 
