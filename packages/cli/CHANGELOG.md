@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.115.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.114.0...@appland/appmap-v3.115.0) (2023-12-28)
+
+
+### Features
+
+* Log errors in the RPC server ([8fb7b9c](https://github.com/getappmap/appmap-js/commit/8fb7b9c4958ed4d6b2df23dd01cfdf353d5ff68f))
+
 # [@appland/appmap-v3.114.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.113.0...@appland/appmap-v3.114.0) (2023-12-21)
 
 
