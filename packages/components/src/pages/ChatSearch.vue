@@ -219,9 +219,9 @@ export default {
           resolve();
         };
 
-        const onError = (err) => {
+        const onError = (error) => {
           onComplete();
-          this.$refs.vchat.addMessage(false, err);
+          this.$refs.vchat.onError(error);
           reject();
         };
 

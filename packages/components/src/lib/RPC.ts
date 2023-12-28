@@ -2,16 +2,13 @@ const jaysonBrowserClient = require('jayson/lib/client/browser');
 
 export function reportError(callback: any, err: any, error: any) {
   if (err) {
-    if (callback) callback(err);
+    if (callback) callback({ message: err.toString() });
   } else if (error) {
     if (error.code) {
-      const { message } = error;
-      const errorTokens = [];
-      if (message) errorTokens.push(message);
-      if (error.code) errorTokens.push(`(${error.code})`);
-      if (callback) callback(new Error(errorTokens.join(' ')));
+      if (callback) callback(error);
     } else {
-      if (callback) callback(`Unknown error (${error})`);
+      const message = error.message || error.toString();
+      if (callback) callback({ message: `An unexpected error occurred: ${message}` });
     }
   }
 }
