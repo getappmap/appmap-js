@@ -83,6 +83,42 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@appland/appmap-agent-js@npm:14.2.0":
+  version: 14.2.0
+  resolution: "@appland/appmap-agent-js@npm:14.2.0"
+  dependencies:
+    "@appland/appmap-validate": ^2.3.0
+    "@babel/parser": ^7.15.8
+    ajv: ^8.6.3
+    ajv-error-tree: 0.0.5
+    astring: ^1.8.4
+    chalk: ^5.0.1
+    fswin: ^3.23.311
+    glob: ^8.0.3
+    htmlparser2: ^8.0.1
+    klaw-sync: ^6.0.0
+    minimatch: ^5.1.0
+    minimist: ^1.2.7
+    net-socket-messaging: ^0.1.6
+    posix-socket: ^1.1.3
+    posix-socket-messaging: 0.0.1
+    prompts: ^2.4.2
+    semver: ^7.3.5
+    treeify: ^1.1.0
+    vlq: ^2.0.4
+    ws: ^8.13.0
+    yaml: ^2.1.1
+  dependenciesMeta:
+    posix-socket:
+      optional: true
+    posix-socket-messaging:
+      optional: true
+  bin:
+    appmap-agent-js: bin/appmap-agent-js.cjs
+  checksum: bc2200cf5269963a9422a5f3b2af56bedcac7ebe790f4e5b15fbc38dc8e6623e4eadcba516e54393b93031ec6de890c6bc66e82e8f944a00a30b25e11b1e3ef4
+  languageName: node
+  linkType: hard
+
 "@appland/appmap-agent-js@npm:^13.9.0":
   version: 13.9.0
   resolution: "@appland/appmap-agent-js@npm:13.9.0"
@@ -139,14 +175,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/appmap@workspace:packages/cli"
   dependencies:
-    "@appland/appmap-agent-js": ^13.9.0
-    "@appland/client": "workspace:^1.8.0"
-    "@appland/components": "workspace:^3"
+    "@appland/appmap-agent-js": 14.2.0
+    "@appland/client": "workspace:^1.12.0"
+    "@appland/components": "workspace:^3.18.0"
     "@appland/diagrams": "workspace:^1.7.0"
-    "@appland/models": "workspace:^2.6.3"
+    "@appland/models": "workspace:^2.10.0"
     "@appland/openapi": "workspace:^1.7.0"
-    "@appland/rpc": "workspace:*"
-    "@appland/sequence-diagram": "workspace:^1.7.0"
+    "@appland/rpc": "workspace:^1.1.0"
+    "@appland/sequence-diagram": "workspace:^1.11.0"
     "@craftamap/esbuild-plugin-html": ^0.4.0
     "@octokit/rest": ^20.0.1
     "@octokit/types": ^11.1.0
@@ -245,12 +281,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/client@^1.5.0, @appland/client@workspace:^1.8.0, @appland/client@workspace:^1.8.1, @appland/client@workspace:packages/client":
+"@appland/client@^1.12.0, @appland/client@workspace:^1.12.0, @appland/client@workspace:packages/client":
   version: 0.0.0-use.local
   resolution: "@appland/client@workspace:packages/client"
   dependencies:
     "@appland/appmap-agent-js": ^13.9.0
-    "@appland/models": "workspace:*"
+    "@appland/models": "workspace:^2.10.0"
     "@types/form-data": ^2.5.0
     "@types/jest": ^29.4.1
     "@types/js-yaml": ^4.0.5
@@ -282,14 +318,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/components@workspace:^3, @appland/components@workspace:packages/components":
+"@appland/components@workspace:^3.18.0, @appland/components@workspace:packages/components":
   version: 0.0.0-use.local
   resolution: "@appland/components@workspace:packages/components"
   dependencies:
-    "@appland/client": "workspace:^1.8.1"
+    "@appland/client": "workspace:^1.12.0"
     "@appland/diagrams": "workspace:^1.7.0"
-    "@appland/models": "workspace:^2.7.0"
-    "@appland/sequence-diagram": "workspace:^1.9.0"
+    "@appland/models": "workspace:^2.10.0"
+    "@appland/sequence-diagram": "workspace:^1.11.0"
     "@babel/core": ^7.22.5
     "@babel/node": ^7.22.5
     "@babel/preset-env": ^7.22.5
@@ -376,7 +412,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/diagrams@workspace:packages/diagrams"
   dependencies:
-    "@appland/models": "workspace:^2.2.0"
+    "@appland/models": "workspace:^2.10.0"
     "@rollup/plugin-commonjs": ^18.1.0
     "@rollup/plugin-node-resolve": ^13.0.0
     "@rollup/plugin-replace": ^2.4.2
@@ -404,7 +440,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/models@workspace:*, @appland/models@workspace:^2.2.0, @appland/models@workspace:^2.6.3, @appland/models@workspace:^2.7.0, @appland/models@workspace:packages/models":
+"@appland/models@workspace:^2.10.0, @appland/models@workspace:packages/models":
   version: 0.0.0-use.local
   resolution: "@appland/models@workspace:packages/models"
   dependencies:
@@ -433,7 +469,7 @@ __metadata:
   resolution: "@appland/openapi@workspace:packages/openapi"
   dependencies:
     "@appland/appmap-agent-js": ^13.9.0
-    "@appland/models": "workspace:^2.6.3"
+    "@appland/models": "workspace:^2.10.0"
     "@types/jest": ^29.4.1
     "@types/js-yaml": ^4.0.5
     "@typescript-eslint/eslint-plugin": ^5.7.0
@@ -447,7 +483,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/rpc@workspace:*, @appland/rpc@workspace:packages/rpc":
+"@appland/rpc@workspace:^1.1.0, @appland/rpc@workspace:packages/rpc":
   version: 0.0.0-use.local
   resolution: "@appland/rpc@workspace:packages/rpc"
   dependencies:
@@ -463,8 +499,8 @@ __metadata:
   resolution: "@appland/scanner@workspace:packages/scanner"
   dependencies:
     "@appland/appmap-agent-js": ^13.9.0
-    "@appland/client": ^1.5.0
-    "@appland/models": "workspace:^2.6.3"
+    "@appland/client": ^1.12.0
+    "@appland/models": "workspace:^2.10.0"
     "@appland/openapi": "workspace:^1.7.0"
     "@appland/sql-parser": ^1.5.0
     "@semantic-release/changelog": ^6.0.1
@@ -527,12 +563,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/sequence-diagram@workspace:^1.7.0, @appland/sequence-diagram@workspace:^1.9.0, @appland/sequence-diagram@workspace:packages/sequence-diagram":
+"@appland/sequence-diagram@workspace:^1.11.0, @appland/sequence-diagram@workspace:packages/sequence-diagram":
   version: 0.0.0-use.local
   resolution: "@appland/sequence-diagram@workspace:packages/sequence-diagram"
   dependencies:
     "@appland/appmap-agent-js": ^13.9.0
-    "@appland/models": "workspace:^2.7.0"
+    "@appland/models": "workspace:^2.10.0"
     "@appland/openapi": "workspace:^1.7.0"
     "@datastructures-js/priority-queue": ^6.1.3
     "@types/diff": ^5.0.2
@@ -21056,6 +21092,13 @@ __metadata:
   dependencies:
     node-gyp: latest
   conditions: os=darwin
+  languageName: node
+  linkType: hard
+
+"fswin@npm:^3.23.311":
+  version: 3.23.311
+  resolution: "fswin@npm:3.23.311"
+  checksum: 8712a89da690a030a771fa3ad474805e2c7d1b72c11eedbd9d84fd0f4621fc771b46c3213300836fcee1d4c6573c7c927e70030a3333b14c430593d6ef6fa191
   languageName: node
   linkType: hard
 
