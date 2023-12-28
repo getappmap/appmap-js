@@ -71,7 +71,12 @@
               canGoForward ? '' : 'disabled',
             ]"
           />
-          <select v-model="currentSelection" class="selection-nav-menu" @change="selectObject">
+          <select
+            v-model="currentSelection"
+            class="selection-nav-menu"
+            data-cy="select-object"
+            @change="selectObject"
+          >
             <option v-for="selection in selectionStack" :key="selection.fqid" :value="selection">
               {{ displayName(selection) }}
             </option>

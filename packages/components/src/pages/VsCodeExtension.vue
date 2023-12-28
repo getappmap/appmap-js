@@ -570,12 +570,15 @@ export default {
     },
     filteredAppMap: {
       handler() {
-        if (this.selectedObject) {
-          // Keep the currently selected object only, discard the rest
-          const selection = this.selectedObject;
-          this.$store.commit(CLEAR_SELECTION_STACK);
-          this.setSelectedObject(selection.fqid);
-        }
+        let selectedObjects = [];
+        // TODO: Why are we doing this?
+        //       We should standardize on `selectedObjects`.
+        if (this.selectedObject) selectedObjects.push(this.selectedObject);
+        if (this.selectedObjects) selectedObjects.push(...this.selectedObjects);
+
+        this.$store.commit(CLEAR_SELECTION_STACK);
+
+        selectedObjects.forEach(({ fqid }) => this.setSelectedObject(fqid));
       },
     },
     isActive: {
@@ -859,6 +862,10 @@ export default {
       }
 
       this.isLoading = false;
+
+      // Return a promise that resolves next tick.
+      // This allows the caller to wait for computed properties and watchers to run.
+      return this.$nextTick();
     },
     showInstructions() {
       this.$refs.instructions.open();
