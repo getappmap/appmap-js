@@ -9,6 +9,7 @@
         :key="i"
         :message="message.message"
         :is-user="message.isUser"
+        :is-error="message.isError"
         :id="message.id"
         :sentiment="message.sentiment"
         @change-sentiment="onSentimentChange"
@@ -24,6 +25,20 @@
         </div>
       </div>
       <v-suggestion-grid @suggest="onSuggestion" v-if="!isChatting" />
+    </div>
+    <div v-if="!authorized" class="status-unauthorized status-container">
+      <div class="status-label">
+        <p>You must be logged in to AppMap to use this feature.</p>
+        <p>
+          <b>VSCode</b>
+          To login with VSCode, run the command <tt>AppMap: Login</tt>, or click the Sign In link
+          from the AppMap panel.
+        </p>
+        <p>
+          <b>JetBrains</b>
+          To login with JetBrains, click the Sign In link from the AppMap panel.
+        </p>
+      </div>
     </div>
     <v-chat-input
       @send="onSend"
@@ -83,6 +98,7 @@ export default {
       // This is used for differentiating messages not ACK'd by the server.
       // E.g., in a mocked environment.
       pendingMessageId: 0,
+      authorized: true,
     };
   },
   computed: {
@@ -108,10 +124,14 @@ export default {
       systemMessage.message += token;
       this.scrollToBottom();
     },
-    addMessage(isUser: boolean, content?: string) {
+    setAuthorized(v: boolean) {
+      this.authorized = v;
+    },
+    addMessage(isUser: boolean, content?: string, isError?: boolean) {
       const message = {
         id: this.pendingMessageId++,
         isUser,
+        isError,
         message: content || '',
         sentiment: 0,
       };
@@ -125,10 +145,18 @@ export default {
     async ask(message: string) {
       this.onSend(message);
     },
+    onError(error) {
+      if (error.code === 401) {
+        this.setAuthorized(false);
+      } else {
+        this.addMessage(false, error.message, true); // TODO: Handle error.message not defined
+      }
+    },
     async onSend(message: string) {
       this.addMessage(true, message);
       this.loading = true;
       this.sendMessage(message, (_messageId: string, threadId: string) => {
+        this.setAuthorized(true);
         this.threadId = threadId;
         this.$root.$emit('send', message, { threadId });
       });
@@ -202,18 +230,9 @@ $border-color: darken($gray4, 10%);
   }
 
   .clear {
-    //   color: white;
-    //   cursor: pointer;
     padding: 0.5rem 1rem;
-    //   text-align: right;
-    //   border: none;
-    //   border-radius: 10px;
-    //   background-color: lighten($gray3, 5%);
-    //   &:hover {
-    //     background-color: lighten($gray3, 10%);
-    //     transition: all 0.2s ease-in-out;
-    //   }
   }
+
   .messages {
     height: 100%;
     overflow: auto;

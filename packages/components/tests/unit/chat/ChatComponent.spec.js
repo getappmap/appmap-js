@@ -120,4 +120,18 @@ describe('Chat.vue', () => {
     // Once for the new message
     expect(spy).toBeCalledTimes(2);
   });
+
+  describe('setAuthorized', () => {
+    describe('(false)', () => {
+      it('activates the login prompt', async () => {
+        const wrapper = mount(VChat);
+
+        wrapper.vm.setAuthorized(false);
+
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.find('.status-unauthorized').exists()).toBe(true);
+      });
+    });
+  });
 });

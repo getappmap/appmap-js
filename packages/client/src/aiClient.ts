@@ -1,9 +1,16 @@
+// eslint-disable-next-line max-classes-per-file
 import { Socket } from 'socket.io-client';
 
 export type InputPromptOptions = {
   threadId?: string;
   tool?: string;
 };
+
+export class CodedError extends Error {
+  constructor(message: string, public readonly code?: number) {
+    super(message);
+  }
+}
 
 export type Callbacks = {
   onToken: (token: string, messageId: string) => void;
@@ -23,8 +30,9 @@ export default class AIClient {
     // eslint-disable-next-line unicorn/prevent-abbreviations
     this.socket.onAny((data: string, ...args: unknown[]) => {
       if (data === 'exception') {
-        const { message } = args[0] as { message: string };
-        this.callbacks.onError?.(new Error(message));
+        const { code, message } = args[0] as { message: string; code?: number };
+        const error: Error = code ? new CodedError(message, code) : new Error(message);
+        this.callbacks.onError?.(error);
         return;
       }
 

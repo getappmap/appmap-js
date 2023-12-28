@@ -48,7 +48,7 @@ export default {
           this.vchat.addToken(token, messageId);
         },
         onError: (error) => {
-          this.vchat.addMessage(false, error);
+          this.vchat.onError(error);
         },
         onComplete: () => {
           this.vchat.onComplete();
