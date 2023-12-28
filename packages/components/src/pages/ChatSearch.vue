@@ -169,7 +169,7 @@ export default {
         const index = this.rpcClient();
         const searchResult = this.selectedSearchResult;
         const appmapData = await index.appmapData(searchResult.appmap);
-        this.$refs.vappmap.loadData(appmapData);
+        await this.$refs.vappmap.loadData(appmapData);
         for (const event of searchResult.events) {
           this.$refs.vappmap.setSelectedObject(event.fqid);
         }

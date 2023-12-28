@@ -75,6 +75,12 @@ const searchResponse = {
           score: 1.0,
           eventIds: [340],
         },
+        {
+          fqid: 'route:GET /admin',
+          location: 'app/controllers/spree/admin/orders_controller.rb:9',
+          score: 0.9,
+          eventIds: [1],
+        },
       ],
       score: 5.0,
     },

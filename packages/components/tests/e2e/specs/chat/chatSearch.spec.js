@@ -3,6 +3,7 @@ context('Component Diagram', () => {
     cy.visit(
       'http://localhost:6006/iframe.html?args=&id=pages-chatsearch--chat-search-mock&viewMode=story'
     );
+    cy.viewport(1280, 720);
   });
 
   it('renders the current state', () => {
@@ -30,7 +31,7 @@ context('Component Diagram', () => {
     cy.get('[data-cy="chat-input"]', { timeout: 25000 }).type('Hello world{enter}');
 
     // Ruby AppMap
-    cy.get('[data-cy="app"] [data-id="app/controllers/Spree::Admin::OrdersController"]', {
+    cy.get('[data-cy="app"] [data-id="GET /admin"]', {
       timeout: 10000,
     }).should('be.visible');
 
@@ -39,5 +40,18 @@ context('Component Diagram', () => {
     cy.get('[data-cy="app"] [data-id="org/springframework/samples/petclinic/owner"]').should(
       'be.visible'
     );
+  });
+
+  it('selects multiple objects in the AppMap', () => {
+    cy.get('[data-cy="chat-input"]', { timeout: 25000 }).type('Hello world{enter}');
+
+    // Initial state
+    cy.get('[data-cy="app"] [data-id="GET /admin"].highlight');
+
+    cy.get('[data-cy="select-object"]').select(0);
+    cy.get('[data-cy="app"] [data-id="app/controllers/Spree::Admin::OrdersController"].highlight');
+
+    cy.get('[data-cy="select-object"]').select(1);
+    cy.get('[data-cy="app"] [data-id="GET /admin"].highlight');
   });
 });
