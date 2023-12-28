@@ -29,7 +29,7 @@
     "dist/style.css"
   ],
   "dependencies": {
-    "@appland/models": "workspace:^2.2.0",
+    "@appland/models": "workspace:^2.10.0",
     "d3-interpolate": "^3.0.1",
     "d3-selection": "^3.0.0",
     "d3-shape": "^3.2.0",
