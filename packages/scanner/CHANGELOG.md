@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.85.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.84.1...@appland/scanner-v1.85.0) (2023-12-28)
+
+
+### Features
+
+* Scanner rule for unfulfilled promises ([df6afe8](https://github.com/getappmap/appmap-js/commit/df6afe8e2cbc1f677ad1313309fb365971806204)), closes [#1477](https://github.com/getappmap/appmap-js/issues/1477)
+
 # [@appland/scanner-v1.84.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.84.0...@appland/scanner-v1.84.1) (2023-11-08)
 
 
