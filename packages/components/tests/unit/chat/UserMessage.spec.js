@@ -20,7 +20,7 @@ const snippets = {
   xss: '<script>alert("hello world!")</script>',
 };
 
-describe('UserMessage.vue', () => {
+describe('components/UserMessage.vue', () => {
   describe('Copy Button for Code Snippets', () => {
     let wrapper;
     let clipboardText;
