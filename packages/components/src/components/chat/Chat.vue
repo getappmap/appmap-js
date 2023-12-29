@@ -104,10 +104,6 @@ export default {
       messages: [] as Message[],
       threadId: undefined as string | undefined,
       loading: false,
-
-      // This is used for differentiating messages not ACK'd by the server.
-      // E.g., in a mocked environment.
-      pendingMessageId: 0,
       authorized: true,
     };
   },
@@ -125,6 +121,7 @@ export default {
     },
   },
   methods: {
+    // Creates-or-appends a message.
     addToken(token: string, messageId: string) {
       let systemMessage = this.messages.find((m) => m.id === messageId);
       if (!systemMessage) {
@@ -137,18 +134,13 @@ export default {
     setAuthorized(v: boolean) {
       this.authorized = v;
     },
-    addMessage(isUser: boolean, content?: string, isError?: boolean) {
-      const message = {
-        id: this.pendingMessageId++,
-        isUser,
-        isError,
-        message: content || '',
-        sentiment: 0,
-      };
-      this.messages.push(message);
-
+    addUserMessage(content: string) {
+      this.messages.push(new UserMessage(content));
       this.scrollToBottom();
-      this.$root.$emit('message', message, isUser);
+    },
+    addErrorMessage(error: Error) {
+      this.messages.push(new ErrorMessage(error));
+      this.scrollToBottom();
 
       return message;
     },
@@ -180,8 +172,7 @@ export default {
     },
     clear() {
       this.threadId = undefined;
-      this.$set(this, 'messages', []);
-      this.$emit('clear');
+      this.messages.splice(0);
     },
     scrollToBottom() {
       // Allow one tick to progress to allow any DOM changes to be applied
