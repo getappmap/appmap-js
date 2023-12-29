@@ -25,7 +25,7 @@ export default {
     },
     suggestions: {
       type: Array,
-      default: () => [],
+      required: false,
     },
   },
   watch: {

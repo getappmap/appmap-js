@@ -96,7 +96,7 @@ export default {
     },
     suggestions: {
       type: Array,
-      default: () => [] as Suggestion[],
+      required: false,
     },
   },
   data() {
