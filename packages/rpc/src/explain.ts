@@ -21,6 +21,7 @@ export namespace ExplainRpc {
 
   export type ExplainResponse = {
     userMessageId: string;
+    threadId: string;
   };
 
   export type ExplainStatusOptions = {

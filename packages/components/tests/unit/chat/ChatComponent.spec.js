@@ -1,24 +1,29 @@
 import VChat from '@/components/chat/Chat.vue';
 import { createWrapper, mount } from '@vue/test-utils';
+import { warn } from 'console';
 
 describe('components/Chat.vue', () => {
-  describe('addMessage', () => {
-    it('updates the DOM', async () => {
-      const wrapper = mount(VChat);
-      const userMessage = 'Hello from the user';
-      const systemMessage = 'Hello from the system';
+  const threadId = 'the-thread-id';
+  const messageId = 'the-message-id';
 
-      wrapper.vm.addMessage(true, userMessage);
-      wrapper.vm.addMessage(false, systemMessage);
-      await wrapper.vm.$nextTick();
+  describe('onAck', () => {
+    it('persists a thread id', async () => {
+      const wrapper = mount(VChat, {
+        propsData: {
+          sendMessage() {
+            wrapper.vm.onAck(messageId, threadId);
+          },
+        },
+      });
 
-      expect(wrapper.find('[data-actor="user"] [data-cy="message-text"]').text()).toBe(userMessage);
-      expect(wrapper.find('[data-actor="system"] [data-cy="message-text"]').text()).toBe(
-        systemMessage
-      );
+      await wrapper.vm.onSend('Hello from the user');
+
+      expect(wrapper.vm.threadId).toBe(threadId);
     });
+  });
 
-    it('scrolls to the bottom of the chat when a new message is added', async () => {
+  describe('addUserMessage', () => {
+    it('scrolls to the bottom of the chat', async () => {
       let timesScrolled = 0;
       const wrapper = mount(VChat, {
         global: {
@@ -30,7 +35,8 @@ describe('components/Chat.vue', () => {
 
       const spy = jest.spyOn(wrapper.find('[data-cy="messages"]').element, 'scrollTop', 'set');
 
-      wrapper.vm.addMessage(true, 'Hello from the user');
+      wrapper.vm.onAck('the-user-message-id', threadId);
+      wrapper.vm.addUserMessage('Hello from the user');
       await wrapper.vm.$nextTick();
 
       // Once on update
@@ -42,12 +48,30 @@ describe('components/Chat.vue', () => {
   describe('addToken', () => {
     it('updates the DOM', async () => {
       const wrapper = mount(VChat);
+      const userMessage = 'Hello from the user';
+      const systemMessage = 'Hello from the system';
+
+      wrapper.vm.addUserMessage(userMessage);
+      wrapper.vm.onAck('the-user-message-id', threadId);
+      wrapper.vm.addToken(systemMessage, threadId, messageId);
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('[data-actor="user"] [data-cy="message-text"]').text()).toBe(userMessage);
+      expect(wrapper.find('[data-actor="system"] [data-cy="message-text"]').text()).toBe(
+        systemMessage
+      );
+    });
+
+    it('updates the DOM on each tick', async () => {
+      const wrapper = mount(VChat);
       const tokens = ['Hello ', 'from ', 'the ', 'system'];
-      const message = wrapper.vm.addMessage(false);
+
+      wrapper.vm.onAck('the-user-message-id', threadId);
+      wrapper.vm.addToken('', threadId, messageId);
 
       await wrapper.vm.$nextTick();
       for (let i = 0; i < tokens.length; i++) {
-        wrapper.vm.addToken(tokens[i], message.id);
+        wrapper.vm.addToken(tokens[i], threadId, messageId);
         await wrapper.vm.$nextTick();
         expect(wrapper.find('[data-cy="message-text"]').text()).toBe(
           tokens
@@ -71,32 +95,63 @@ describe('components/Chat.vue', () => {
       const spy = jest.spyOn(wrapper.find('[data-cy="messages"]').element, 'scrollTop', 'set');
       const tokens = ['Hello ', 'from ', 'the ', 'system'];
 
-      tokens.forEach((token) => wrapper.vm.addToken(token));
+      wrapper.vm.onAck('the-user-message-id', threadId);
+      tokens.forEach((token) => wrapper.vm.addToken(token, threadId, messageId));
 
       await wrapper.vm.$nextTick();
 
       // Once on update
       // Once for each token
-      // Once for the new message
-      expect(spy).toBeCalledTimes(tokens.length + 2);
+      expect(spy).toBeCalledTimes(tokens.length + 1);
     });
   });
 
-  describe('onAck', () => {
-    it('persists a thread id', async () => {
-      const userMessageId = 'the-user-message-id';
-      const threadId = 'the-thread-id';
-      const wrapper = mount(VChat, {
+  describe('Clear ("New Chat")', () => {
+    const newThreadId = 'new-thread-id';
+    let wrapper;
+
+    beforeEach(async () => {
+      wrapper = mount(VChat, {
         propsData: {
-          sendMessage() {
-            wrapper.vm.onAck(userMessageId, threadId);
+          sendMessage: (_message) => {
+            wrapper.vm.onAck('the-user-message-id', threadId);
           },
         },
       });
 
-      await wrapper.vm.onSend();
+      wrapper.vm.onSend('Hello from the user');
+      wrapper.vm.addToken('Hello from the system', threadId, messageId);
+      await wrapper.vm.$nextTick();
 
-      expect(wrapper.vm.threadId).toBe(threadId);
+      expect(wrapper.vm.loading).toBe(true);
+      expect(wrapper.find('[data-actor="user"] [data-cy="message-text"]').exists()).toBe(true);
+      expect(wrapper.find('[data-actor="system"] [data-cy="message-text"]').exists()).toBe(true);
+
+      wrapper.vm.clear();
+      await wrapper.vm.$nextTick();
+    });
+
+    it('removes the DOM elements', async () => {
+      expect(wrapper.find('[data-actor="user"] [data-cy="message-text"]').exists()).toBe(false);
+      expect(wrapper.find('[data-actor="system"] [data-cy="message-text"]').exists()).toBe(false);
+    });
+
+    it('clears the thread id', async () => {
+      expect(wrapper.vm.threadId).toBeUndefined();
+    });
+
+    it('hides the progress indicator', () => {
+      expect(wrapper.vm.loading).toBe(false);
+      expect(wrapper.find('[data-cy="status-container"]').exists()).toBe(false);
+    });
+
+    it('ignores subsequent messages on the old thread-id', async () => {
+      wrapper.vm.onAck('new-user-message-id', newThreadId);
+      wrapper.vm.addToken('Hello from the system', threadId, messageId);
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('[data-actor="user"] [data-cy="message-text"]').exists()).toBe(false);
+      expect(wrapper.find('[data-actor="system"] [data-cy="message-text"]').exists()).toBe(false);
     });
   });
 

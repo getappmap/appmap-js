@@ -144,7 +144,7 @@ async function explain(
       const cleanupFn = () => searchStatusByUserMessageId.delete(userMessageId);
       setTimeout(cleanupFn, 1000 * 60 * 5).unref();
       searchStatusByUserMessageId.set(userMessageId, status);
-      first() && resolve({ userMessageId });
+      first() && resolve({ userMessageId, threadId });
     });
     explain.explain().catch((err: Error) => first() && reject(RpcError.fromException(err)));
   });

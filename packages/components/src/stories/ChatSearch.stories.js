@@ -62,7 +62,8 @@ const DATA_KEYS = Object.keys(DATA_BY_PATH);
 
 let requestIndex = 0;
 let statusIndex = 0;
-const requestId = () => `request-${requestIndex}`;
+const userMessageId = 'user-message-id';
+const threadId = 'thread-id';
 
 const searchResponse = {
   results: [
@@ -107,7 +108,7 @@ const searchResponse = {
 
 const mockRpc = (method, params, callback) => {
   if (method === 'explain') {
-    callback(null, null, requestId());
+    callback(null, null, { userMessageId, threadId });
   } else if (method === 'explain.status') {
     const responseIndex = statusIndex % 3;
     statusIndex += 1;

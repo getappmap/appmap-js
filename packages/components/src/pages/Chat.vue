@@ -7,7 +7,7 @@
 <script lang="ts">
 //@ts-nocheck
 import VChat from '@/components/chat/Chat.vue';
-import { AIClient, AckCallback } from '@appland/client';
+import { AIClient } from '@appland/client';
 import { AI, setConfiguration, DefaultApiURL } from '@appland/client';
 
 export default {
@@ -49,10 +49,14 @@ export default {
   methods: {
     async sendMessage(message: string) {
       const { vchat } = this;
+      let myThreadId: string | undefined;
       const client = await this.aiClient({
-        onAck: vchat.onAck.bind(vchat),
+        onAck: (_messageId: string, threadId: string) => {
+          myThreadId = threadId;
+          vchat.onAck(_messageId, threadId);
+        },
         onToken: (token, messageId) => {
-          vchat.addToken(token, messageId);
+          vchat.addToken(token, myThreadId, messageId);
         },
         onError: vchat.onError.bind(vchat),
         onComplete: vchat.onComplete.bind(vchat),
