@@ -220,10 +220,8 @@ $border-color: darken($gray4, 10%);
 
   .button-panel {
     $panel-bg: rgba(0, 0, 0, 0.1);
-    position: relative;
     justify-content: end;
     display: flex;
-    width: 100%;
     padding: 0.25rem 0.5rem;
     background-color: $panel-bg;
     border-bottom: 1px solid fade-in($panel-bg, 0.11);
