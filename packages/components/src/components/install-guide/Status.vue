@@ -263,6 +263,9 @@ export default {
 .status-message {
   background-color: black;
   display: flex;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0;
+
   &__next-step {
     margin: 0.75rem 1rem 0.75rem auto;
   }

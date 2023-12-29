@@ -221,19 +221,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.status-message {
-  border-radius: 0.5rem;
-  background-color: #69ad34;
-  padding: 0.5rem 0;
-}
-
-.bold {
-  font-weight: bold;
-}
-.run-config-icon {
-  width: 22px;
-  transform: translateY(25%);
-}
-</style>
