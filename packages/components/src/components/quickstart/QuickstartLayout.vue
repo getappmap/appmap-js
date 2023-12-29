@@ -143,6 +143,7 @@ body {
   border-radius: 8px;
   margin: 1em auto;
   padding: 2em;
+  overflow-x: hidden;
 }
 
 .qs-help {
