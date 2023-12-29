@@ -42,6 +42,9 @@ export default {
 </script>
 
 <style lang="scss">
+// TODO: Please scope me!
+//       I shouldn't be modifying the global styles!
+
 html,
 body {
   width: 100%;
@@ -70,7 +73,7 @@ body {
   font-weight: $font-weight;
   line-height: 1.75;
   color: $white;
-  background-color: $vs-code-gray1;
+  background-color: $black;
 
   h1,
   h2,
