@@ -1,3 +1,20 @@
+# [@appland/components-v3.20.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.19.0...@appland/components-v3.20.0) (2023-12-29)
+
+
+### Bug Fixes
+
+* `loadData` now returns a Promise ([cb5ff10](https://github.com/getappmap/appmap-js/commit/cb5ff1009a63af3c3eeb25fedbebb5bb99ca24d6))
+* Remove conflicting and unused property ([75edf7f](https://github.com/getappmap/appmap-js/commit/75edf7fe1af04b5588c959471796a9ea2d5c8b70))
+* Remove console.log ([8ea4cc1](https://github.com/getappmap/appmap-js/commit/8ea4cc1ef27a833b141873a0fb251dfe94835f43))
+* Remove instances of components relying on cascading styles ([24d5d6b](https://github.com/getappmap/appmap-js/commit/24d5d6bd3c4aa97523f60ad90d86c3e4050f33dd))
+
+
+### Features
+
+* Add ChatSearch UI ([ba28f54](https://github.com/getappmap/appmap-js/commit/ba28f5437e1f2c39d4fc46b8a2da920b039e1395))
+* Enable population of initial question ([2fede65](https://github.com/getappmap/appmap-js/commit/2fede65a1b4f7f724658631cce136edc693892f9))
+* Handle coded error including 401 ([8f855f8](https://github.com/getappmap/appmap-js/commit/8f855f8c0eaa1cde2c2d75c51ee90907d33694b0))
+
 # [@appland/components-v3.19.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.18.0...@appland/components-v3.19.0) (2023-12-28)
 
 
