@@ -1,3 +1,10 @@
+# [@appland/client-v1.14.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.13.0...@appland/client-v1.14.0) (2023-12-29)
+
+
+### Features
+
+* Handle coded error including 401 ([8f855f8](https://github.com/getappmap/appmap-js/commit/8f855f8c0eaa1cde2c2d75c51ee90907d33694b0))
+
 # [@appland/client-v1.13.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.12.0...@appland/client-v1.13.0) (2023-12-28)
 
 
