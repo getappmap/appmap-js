@@ -1,7 +1,7 @@
 import VChat from '@/components/chat/Chat.vue';
 import { createWrapper, mount } from '@vue/test-utils';
 
-describe('Chat.vue', () => {
+describe('components/Chat.vue', () => {
   it('appends messages as expected', async () => {
     const wrapper = mount(VChat);
     const userMessage = 'Hello from the user';
@@ -36,11 +36,12 @@ describe('Chat.vue', () => {
   });
 
   it('persists a thread id', async () => {
-    const threadId = '123';
+    const userMessageId = 'the-user-message-id';
+    const threadId = 'the-thread-id';
     const wrapper = mount(VChat, {
       propsData: {
-        sendMessage(_, cb) {
-          cb(null, threadId);
+        sendMessage() {
+          wrapper.vm.onAck(userMessageId, threadId);
         },
       },
     });
@@ -48,25 +49,6 @@ describe('Chat.vue', () => {
     await wrapper.vm.onSend();
 
     expect(wrapper.vm.threadId).toBe(threadId);
-  });
-
-  it('emits a `send` event with the expected arguments', async () => {
-    const threadId = '123';
-    const message = 'Hello';
-    const wrapper = mount(VChat, {
-      propsData: {
-        sendMessage(_, cb) {
-          cb(null, threadId);
-        },
-      },
-    });
-    const rootWrapper = createWrapper(wrapper.vm.$root);
-
-    await wrapper.vm.onSend(message);
-
-    const events = rootWrapper.emitted().send;
-    expect(events).toBeArrayOfSize(1);
-    expect(events[0]).toEqual([message, { threadId }]);
   });
 
   it('adds a fake message to the chat after clicking a suggestion', async () => {

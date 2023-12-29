@@ -7,7 +7,7 @@
 <script lang="ts">
 //@ts-nocheck
 import VChat from '@/components/chat/Chat.vue';
-import { AckCallback } from '@appland/client';
+import { AIClient, AckCallback } from '@appland/client';
 import { AI, setConfiguration, DefaultApiURL } from '@appland/client';
 
 export default {
@@ -22,6 +22,9 @@ export default {
     apiUrl: {
       type: String,
       default: DefaultApiURL,
+    },
+    aiClientFn: {
+      type: Function,
     },
   },
   watch: {
@@ -40,21 +43,20 @@ export default {
     },
   },
   methods: {
-    async sendMessage(message: string, ack: AckCallback) {
+    async sendMessage(message: string) {
       const { vchat } = this;
-      const client = await AI.connect({
-        onAck: ack,
+      const client = await this.aiClient({
+        onAck: vchat.onAck.bind(vchat),
         onToken: (token, messageId) => {
-          this.vchat.addToken(token, messageId);
+          vchat.addToken(token, messageId);
         },
-        onError: (error) => {
-          this.vchat.onError(error);
-        },
-        onComplete: () => {
-          this.vchat.onComplete();
-        },
+        onError: vchat.onError.bind(vchat),
+        onComplete: vchat.onComplete.bind(vchat),
       });
       client.inputPrompt(message, { threadId: vchat.threadId });
+    },
+    async aiClient(callbacks: Callbacks): Promise<AIClient> {
+      return this.aiClientFn ? this.aiClientFn(callbacks) : AI.connect(callbacks);
     },
     updateConfiguration() {
       setConfiguration({ apiKey: this.apiKey, apiURL: this.apiUrl });
