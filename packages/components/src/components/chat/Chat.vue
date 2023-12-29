@@ -165,11 +165,11 @@ export default {
     async onSend(message: string) {
       this.addMessage(true, message);
       this.loading = true;
-      this.sendMessage(message, (_messageId: string, threadId: string) => {
-        this.setAuthorized(true);
-        this.threadId = threadId;
-        this.$root.$emit('send', message, { threadId });
-      });
+      this.sendMessage(message);
+    },
+    onAck(_messageId: string, threadId: string) {
+      this.setAuthorized(true);
+      this.threadId = threadId;
     },
     onSuggestion(prompt: string) {
       // Make it look like the AI is typing
