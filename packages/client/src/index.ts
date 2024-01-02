@@ -1,5 +1,5 @@
 export { default as Configuration } from './configuration';
-export { default as loadConfiguration, setConfiguration } from './loadConfiguration';
+export { default as loadConfiguration, setConfiguration, DefaultApiURL } from './loadConfiguration';
 export { default as get } from './get';
 export { default as handleError } from './handleError';
 export { default as retryOn503 } from './retryOn503';

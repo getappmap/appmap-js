@@ -95,6 +95,7 @@ import VChat from '@/components/chat/Chat.vue';
 import VAccordion from '@/components/Accordion.vue';
 import VAppMap from './VsCodeExtension.vue';
 import AppMapRPC from '@/lib/AppMapRPC';
+import authenticatedClient from '@/components/mixins/authenticatedClient';
 
 export default {
   name: 'v-chat-search',
@@ -103,6 +104,7 @@ export default {
     VAppMap,
     VAccordion,
   },
+  mixins: [authenticatedClient],
   props: {
     question: {
       type: String,

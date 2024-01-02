@@ -7,8 +7,8 @@
 <script lang="ts">
 //@ts-nocheck
 import VChat from '@/components/chat/Chat.vue';
-import { AIClient } from '@appland/client';
-import { AI, setConfiguration, DefaultApiURL } from '@appland/client';
+import { AI, AIClient } from '@appland/client';
+import authenticatedClient from '@/components/mixins/authenticatedClient';
 
 export default {
   name: 'v-chat-page',
@@ -16,13 +16,6 @@ export default {
     VChat,
   },
   props: {
-    apiKey: {
-      type: String,
-    },
-    apiUrl: {
-      type: String,
-      default: DefaultApiURL,
-    },
     suggestions: {
       type: Array,
       required: false,
@@ -31,17 +24,8 @@ export default {
       type: Function,
     },
   },
-  watch: {
-    apiKey() {
-      this.updateConfiguration();
-    },
-  },
+  mixins: [authenticatedClient],
   computed: {
-    clientConfiguration() {
-      return {
-        apiKey: this.apiKey,
-      };
-    },
     vchat() {
       return this.$refs.vchat as VChat;
     },
@@ -66,12 +50,6 @@ export default {
     async aiClient(callbacks: Callbacks): Promise<AIClient> {
       return this.aiClientFn ? this.aiClientFn(callbacks) : AI.connect(callbacks);
     },
-    updateConfiguration() {
-      setConfiguration({ apiKey: this.apiKey, apiURL: this.apiUrl });
-    },
-  },
-  mounted() {
-    this.updateConfiguration();
   },
 };
 </script>
