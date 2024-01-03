@@ -1,3 +1,16 @@
+# [@appland/components-v3.21.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.20.0...@appland/components-v3.21.0) (2024-01-03)
+
+
+### Bug Fixes
+
+* 'New chat' button no longer jitters position ([d26c272](https://github.com/getappmap/appmap-js/commit/d26c272ff95e12e79851444444f8135925d77fcb))
+* Prevent overflow in "Add AppMap to your project" page ([007a611](https://github.com/getappmap/appmap-js/commit/007a611d57b8062f6f9789695dbbf5f24bdfc977))
+
+
+### Features
+
+* Prompt suggestions are now parameterized ([af41fbf](https://github.com/getappmap/appmap-js/commit/af41fbf68f067632042fdfbc46f77ecb4ac49a99))
+
 # [@appland/components-v3.20.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.19.0...@appland/components-v3.20.0) (2023-12-29)
 
 
