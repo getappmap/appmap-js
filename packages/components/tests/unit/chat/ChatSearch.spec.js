@@ -1,7 +1,7 @@
 import VChatSearch from '@/pages/ChatSearch.vue';
 import { mount } from '@vue/test-utils';
 
-describe('ChatSearch.vue', () => {
+describe('pages/ChatSearch.vue', () => {
   it('can be resized', async () => {
     const wrapper = mount(VChatSearch);
     const lhsPanel = wrapper.find('[data-cy="resize-left"]');
@@ -62,7 +62,7 @@ describe('ChatSearch.vue', () => {
         },
       });
 
-      await wrapper.vm.sendMessage('How do I reset my password?', () => {});
+      await wrapper.vm.sendMessage('How do I reset my password?');
       await wrapper.vm.$nextTick();
 
       Object.values(messagesCalled).forEach((calls) => {
@@ -83,7 +83,7 @@ describe('ChatSearch.vue', () => {
           },
         });
 
-        await wrapper.vm.sendMessage('How do I reset my password?', () => {});
+        await wrapper.vm.sendMessage('How do I reset my password?');
         await wrapper.vm.$nextTick();
 
         return wrapper;

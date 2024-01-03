@@ -204,9 +204,13 @@ export default {
         (result) => result.id === this.selectedSearchResultId
       );
     },
+    vchat() {
+      return this.$refs.vchat as VChat;
+    },
   },
   methods: {
-    async sendMessage(message: string, ack: AckCallback) {
+    async sendMessage(message: string) {
+      const { vchat } = this;
       const search = this.rpcClient();
       const ask = search.explain();
       this.searching = true;
@@ -225,7 +229,7 @@ export default {
           reject();
         };
 
-        ask.on('ack', ack);
+        ask.on('ack', vchat.onAck.bind(vchat));
         ask.on('token', (token, messageId) => {
           this.$refs.vchat.addToken(token, messageId);
         });
