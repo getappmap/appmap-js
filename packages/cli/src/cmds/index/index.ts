@@ -63,7 +63,7 @@ export const handler = async (argv) => {
   if (port && !watch) warn(`Note: --port option implies --watch`);
 
   if (runServer) {
-    loadConfiguration();
+    loadConfiguration(false);
 
     log(`Running indexer in watch mode`);
     const cmd = new FingerprintWatchCommand(appmapDir);
