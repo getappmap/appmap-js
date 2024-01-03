@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.116.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.116.0...@appland/appmap-v3.116.1) (2024-01-03)
+
+
+### Bug Fixes
+
+* Make API key optional for index watch mode ([5eab95d](https://github.com/getappmap/appmap-js/commit/5eab95da3daae8351b9663188116ed4cde8f484b))
+
 # [@appland/appmap-v3.116.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.115.0...@appland/appmap-v3.116.0) (2023-12-28)
 
 
