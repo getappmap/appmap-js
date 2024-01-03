@@ -24,7 +24,7 @@
           {{ statusLabel }}
         </div>
       </div>
-      <v-suggestion-grid @suggest="onSuggestion" v-if="!isChatting" />
+      <v-suggestion-grid :suggestions="suggestions" @suggest="onSuggestion" v-if="!isChatting" />
     </div>
     <div v-if="!authorized" class="status-unauthorized status-container">
       <div class="status-label">
@@ -67,6 +67,12 @@ type Message = {
   sentiment: number;
 };
 
+type Suggestion = {
+  title: string;
+  subTitle: string;
+  prompt: string;
+};
+
 export default {
   name: 'v-chat',
   components: {
@@ -87,6 +93,10 @@ export default {
     },
     statusLabel: {
       type: String,
+    },
+    suggestions: {
+      type: Array,
+      required: false,
     },
   },
   data() {

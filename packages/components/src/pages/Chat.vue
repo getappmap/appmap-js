@@ -1,6 +1,6 @@
 <template>
   <div class="chat-container">
-    <v-chat ref="vchat" class="chat" :send-message="sendMessage" />
+    <v-chat ref="vchat" class="chat" :send-message="sendMessage" :suggestions="suggestions" />
   </div>
 </template>
 
@@ -22,6 +22,10 @@ export default {
     apiUrl: {
       type: String,
       default: DefaultApiURL,
+    },
+    suggestions: {
+      type: Array,
+      required: false,
     },
   },
   watch: {

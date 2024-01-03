@@ -12,6 +12,7 @@ export const Chat = (args, { argTypes }) => ({
   components: { VChatPage },
   template: `<v-chat-page v-bind="$props"></v-chat-page>`,
 });
+
 Chat.args = {
   apiKey: '',
   apiUrl: 'https://api.getappmap.com',
