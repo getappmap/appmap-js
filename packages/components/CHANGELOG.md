@@ -1,3 +1,10 @@
+# [@appland/components-v3.21.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.21.0...@appland/components-v3.21.1) (2024-01-03)
+
+
+### Bug Fixes
+
+* Ensure that the loading indicator is hidden on error ([2dda0b0](https://github.com/getappmap/appmap-js/commit/2dda0b09aee5e8edad4161924282a4c4dcbf5bcd))
+
 # [@appland/components-v3.21.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.20.0...@appland/components-v3.21.0) (2024-01-03)
 
 
