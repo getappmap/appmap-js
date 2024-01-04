@@ -1,106 +1,169 @@
 import VChat from '@/components/chat/Chat.vue';
 import { createWrapper, mount } from '@vue/test-utils';
+import { warn } from 'console';
 
 describe('components/Chat.vue', () => {
-  it('appends messages as expected', async () => {
-    const wrapper = mount(VChat);
-    const userMessage = 'Hello from the user';
-    const systemMessage = 'Hello from the system';
+  const threadId = 'the-thread-id';
+  const messageId = 'the-message-id';
 
-    wrapper.vm.addMessage(true, userMessage);
-    wrapper.vm.addMessage(false, systemMessage);
-    await wrapper.vm.$nextTick();
+  describe('onAck', () => {
+    it('persists a thread id', async () => {
+      const wrapper = mount(VChat, {
+        propsData: {
+          sendMessage() {
+            wrapper.vm.onAck(messageId, threadId);
+          },
+        },
+      });
 
-    expect(wrapper.find('[data-actor="user"] [data-cy="message-text"]').text()).toBe(userMessage);
-    expect(wrapper.find('[data-actor="system"] [data-cy="message-text"]').text()).toBe(
-      systemMessage
-    );
+      await wrapper.vm.onSend('Hello from the user');
+
+      expect(wrapper.vm.threadId).toBe(threadId);
+    });
   });
 
-  it('streams tokens', async () => {
-    const wrapper = mount(VChat);
-    const tokens = ['Hello ', 'from ', 'the ', 'system'];
-    const message = wrapper.vm.addMessage(false);
+  describe('addUserMessage', () => {
+    it('scrolls to the bottom of the chat', async () => {
+      let timesScrolled = 0;
+      const wrapper = mount(VChat, {
+        global: {
+          stubs: {
+            scrollToBottom: () => ++timesScrolled,
+          },
+        },
+      });
 
-    await wrapper.vm.$nextTick();
-    for (let i = 0; i < tokens.length; i++) {
-      wrapper.vm.addToken(tokens[i], message.id);
+      const spy = jest.spyOn(wrapper.find('[data-cy="messages"]').element, 'scrollTop', 'set');
+
+      wrapper.vm.onAck('the-user-message-id', threadId);
+      wrapper.vm.addUserMessage('Hello from the user');
       await wrapper.vm.$nextTick();
-      expect(wrapper.find('[data-cy="message-text"]').text()).toBe(
-        tokens
-          .map((t) => t.trim())
-          .slice(0, i + 1)
-          .join(' ')
+
+      // Once on update
+      // Once for the new message
+      expect(spy).toBeCalledTimes(2);
+    });
+  });
+
+  describe('addToken', () => {
+    it('updates the DOM', async () => {
+      const wrapper = mount(VChat);
+      const userMessage = 'Hello from the user';
+      const systemMessage = 'Hello from the system';
+
+      wrapper.vm.addUserMessage(userMessage);
+      wrapper.vm.onAck('the-user-message-id', threadId);
+      wrapper.vm.addToken(systemMessage, threadId, messageId);
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('[data-actor="user"] [data-cy="message-text"]').text()).toBe(userMessage);
+      expect(wrapper.find('[data-actor="system"] [data-cy="message-text"]').text()).toBe(
+        systemMessage
       );
-    }
-  });
-
-  it('persists a thread id', async () => {
-    const userMessageId = 'the-user-message-id';
-    const threadId = 'the-thread-id';
-    const wrapper = mount(VChat, {
-      propsData: {
-        sendMessage() {
-          wrapper.vm.onAck(userMessageId, threadId);
-        },
-      },
     });
 
-    await wrapper.vm.onSend();
+    it('updates the DOM on each tick', async () => {
+      const wrapper = mount(VChat);
+      const tokens = ['Hello ', 'from ', 'the ', 'system'];
 
-    expect(wrapper.vm.threadId).toBe(threadId);
-  });
+      wrapper.vm.onAck('the-user-message-id', threadId);
+      wrapper.vm.addToken('', threadId, messageId);
 
-  it('adds a fake message to the chat after clicking a suggestion', async () => {
-    const wrapper = mount(VChat);
-
-    wrapper.find('[data-cy="prompt-suggestion"]').trigger('click');
-    await wrapper.vm.$nextTick();
-
-    expect(wrapper.find('[data-actor="system"] [data-cy="message-text"]').exists()).toBe(true);
-  });
-
-  it('scrolls to the bottom of the chat when a new token is added', async () => {
-    let timesScrolled = 0;
-    const wrapper = mount(VChat, {
-      global: {
-        stubs: {
-          scrollToBottom: () => ++timesScrolled,
-        },
-      },
+      await wrapper.vm.$nextTick();
+      for (let i = 0; i < tokens.length; i++) {
+        wrapper.vm.addToken(tokens[i], threadId, messageId);
+        await wrapper.vm.$nextTick();
+        expect(wrapper.find('[data-cy="message-text"]').text()).toBe(
+          tokens
+            .map((t) => t.trim())
+            .slice(0, i + 1)
+            .join(' ')
+        );
+      }
     });
 
-    const spy = jest.spyOn(wrapper.find('[data-cy="messages"]').element, 'scrollTop', 'set');
-    const tokens = ['Hello ', 'from ', 'the ', 'system'];
+    it('scrolls to the bottom of the chat', async () => {
+      let timesScrolled = 0;
+      const wrapper = mount(VChat, {
+        global: {
+          stubs: {
+            scrollToBottom: () => ++timesScrolled,
+          },
+        },
+      });
 
-    tokens.forEach((token) => wrapper.vm.addToken(token));
+      const spy = jest.spyOn(wrapper.find('[data-cy="messages"]').element, 'scrollTop', 'set');
+      const tokens = ['Hello ', 'from ', 'the ', 'system'];
 
-    await wrapper.vm.$nextTick();
+      wrapper.vm.onAck('the-user-message-id', threadId);
+      tokens.forEach((token) => wrapper.vm.addToken(token, threadId, messageId));
 
-    // Once on update
-    // Once for each token
-    // Once for the new message
-    expect(spy).toBeCalledTimes(tokens.length + 2);
+      await wrapper.vm.$nextTick();
+
+      // Once on update
+      // Once for each token
+      expect(spy).toBeCalledTimes(tokens.length + 1);
+    });
   });
 
-  it('scrolls to the bottom of the chat when a new message is added', async () => {
-    let timesScrolled = 0;
-    const wrapper = mount(VChat, {
-      global: {
-        stubs: {
-          scrollToBottom: () => ++timesScrolled,
+  describe('Clear ("New Chat")', () => {
+    const newThreadId = 'new-thread-id';
+    let wrapper;
+
+    beforeEach(async () => {
+      wrapper = mount(VChat, {
+        propsData: {
+          sendMessage: (_message) => {
+            wrapper.vm.onAck('the-user-message-id', threadId);
+          },
         },
-      },
+      });
+
+      wrapper.vm.onSend('Hello from the user');
+      wrapper.vm.addToken('Hello from the system', threadId, messageId);
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.vm.loading).toBe(true);
+      expect(wrapper.find('[data-actor="user"] [data-cy="message-text"]').exists()).toBe(true);
+      expect(wrapper.find('[data-actor="system"] [data-cy="message-text"]').exists()).toBe(true);
+
+      wrapper.vm.clear();
+      await wrapper.vm.$nextTick();
     });
 
-    const spy = jest.spyOn(wrapper.find('[data-cy="messages"]').element, 'scrollTop', 'set');
+    it('removes the DOM elements', async () => {
+      expect(wrapper.find('[data-actor="user"] [data-cy="message-text"]').exists()).toBe(false);
+      expect(wrapper.find('[data-actor="system"] [data-cy="message-text"]').exists()).toBe(false);
+    });
 
-    wrapper.vm.addMessage(true, 'Hello from the user');
-    await wrapper.vm.$nextTick();
+    it('clears the thread id', async () => {
+      expect(wrapper.vm.threadId).toBeUndefined();
+    });
 
-    // Once on update
-    // Once for the new message
-    expect(spy).toBeCalledTimes(2);
+    it('hides the progress indicator', () => {
+      expect(wrapper.vm.loading).toBe(false);
+      expect(wrapper.find('[data-cy="status-container"]').exists()).toBe(false);
+    });
+
+    it('ignores subsequent messages on the old thread-id', async () => {
+      wrapper.vm.onAck('new-user-message-id', newThreadId);
+      wrapper.vm.addToken('Hello from the system', threadId, messageId);
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('[data-actor="user"] [data-cy="message-text"]').exists()).toBe(false);
+      expect(wrapper.find('[data-actor="system"] [data-cy="message-text"]').exists()).toBe(false);
+    });
+  });
+
+  describe('clicking a suggestion', () => {
+    it('adds a fake message to the chat', async () => {
+      const wrapper = mount(VChat);
+
+      wrapper.find('[data-cy="prompt-suggestion"]').trigger('click');
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('[data-actor="system"] [data-cy="message-text"]').exists()).toBe(true);
+    });
   });
 
   describe('setAuthorized', () => {

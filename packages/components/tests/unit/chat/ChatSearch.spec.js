@@ -1,5 +1,6 @@
 import VChatSearch from '@/pages/ChatSearch.vue';
 import { mount } from '@vue/test-utils';
+import { warn } from 'console';
 
 describe('pages/ChatSearch.vue', () => {
   it('can be resized', async () => {

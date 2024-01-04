@@ -1,6 +1,5 @@
 import VChatHelp from '@/pages/Chat.vue';
 import { mount } from '@vue/test-utils';
-import { log, warn } from 'console';
 import { waitFor } from '../support/waitFor';
 
 describe('pages/Chat.vue', () => {
@@ -13,7 +12,6 @@ describe('pages/Chat.vue', () => {
         while (messages.length) {
           const message = messages.shift();
           const [methodName, ...args] = message;
-          warn(`Calling ${methodName} with ${args} on ${Object.keys(callbacks)}`);
           callbacks[methodName](...args);
           await vm().$nextTick();
         }
@@ -41,7 +39,7 @@ describe('pages/Chat.vue', () => {
   describe('when asked a question', () => {
     it('handles the callback messages', async () => {
       const wrapper = await simulateInteraction(question, [
-        ['onAck', 'the-message-id', 'the-thread-id'],
+        ['onAck', 'the-user-message-id', 'the-thread-id'],
         ['onToken', 'Begin by installing the AppMap agent', 'the-message-id'],
         ['onToken', ' then configure your project per the instructions', 'the-message-id'],
         ['onComplete'],

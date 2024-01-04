@@ -95,6 +95,7 @@ import VChat from '@/components/chat/Chat.vue';
 import VAccordion from '@/components/Accordion.vue';
 import VAppMap from './VsCodeExtension.vue';
 import AppMapRPC from '@/lib/AppMapRPC';
+import _ from 'cypress/types/lodash';
 
 export default {
   name: 'v-chat-search',
@@ -216,6 +217,7 @@ export default {
       this.searching = true;
       this.lastStatusLabel = undefined;
 
+      let myThreadId: string | undefined;
       return new Promise((resolve, reject) => {
         const onComplete = () => {
           this.searching = false;
@@ -229,9 +231,12 @@ export default {
           reject();
         };
 
-        ask.on('ack', vchat.onAck.bind(vchat));
+        ask.on('ack', (_messageId: string, threadId: string) => {
+          myThreadId = threadId;
+          vchat.onAck(_messageId, threadId);
+        });
         ask.on('token', (token, messageId) => {
-          this.$refs.vchat.addToken(token, messageId);
+          this.$refs.vchat.addToken(token, myThreadId, messageId);
         });
         ask.on('error', onError);
         ask.on('status', (status) => {

@@ -7,10 +7,10 @@
       <v-user-message
         v-for="(message, i) in messages"
         :key="i"
-        :message="message.message"
+        :message="message.content"
         :is-user="message.isUser"
         :is-error="message.isError"
-        :id="message.id"
+        :id="message.messageId"
         :sentiment="message.sentiment"
         @change-sentiment="onSentimentChange"
       />
@@ -52,6 +52,7 @@
 
 <script lang="ts">
 //@ts-nocheck
+import Vue from 'vue';
 import VUserMessage from '@/components/chat/UserMessage.vue';
 import VChatInput from '@/components/chat/ChatInput.vue';
 import VSuggestionGrid from '@/components/chat/SuggestionGrid.vue';
@@ -60,12 +61,48 @@ import VLoaderIcon from '@/assets/eva_loader-outline.svg';
 import VButton from '@/components/Button.vue';
 import { AI } from '@appland/client';
 
-type Message = {
-  id?: string;
-  isUser: boolean;
+interface IMessage {
   message: string;
-  sentiment: number;
-};
+  isUser: boolean;
+  isError: boolean;
+  messageId?: string;
+  sentiment?: number;
+}
+
+class UserMessage implements IMessage {
+  public readonly messageId = undefined;
+  public readonly sentiment = undefined;
+  public readonly isUser = true;
+  public readonly isError = false;
+
+  constructor(public content: string) {}
+}
+
+class AssistantMessage implements IMessage {
+  public content = '';
+  public sentiment = undefined;
+  public readonly isUser = false;
+  public readonly isError = false;
+
+  constructor(public messageId: string) {}
+
+  append(token: string) {
+    Vue.set(this, 'content', [this.content, token].join(''));
+  }
+}
+
+class ErrorMessage implements IMessage {
+  public readonly messageId = undefined;
+  public readonly sentiment = undefined;
+  public readonly isUser = false;
+  public readonly isError = true;
+
+  constructor(private error: Error) {}
+
+  get content() {
+    return this.error.message;
+  }
+}
 
 type Suggestion = {
   title: string;
@@ -101,13 +138,9 @@ export default {
   },
   data() {
     return {
-      messages: [] as Message[],
+      messages: [] as IMessage[],
       threadId: undefined as string | undefined,
       loading: false,
-
-      // This is used for differentiating messages not ACK'd by the server.
-      // E.g., in a mocked environment.
-      pendingMessageId: 0,
       authorized: true,
     };
   },
@@ -125,32 +158,32 @@ export default {
     },
   },
   methods: {
-    addToken(token: string, messageId: string) {
-      let systemMessage = this.messages.find((m) => m.id === messageId);
-      if (!systemMessage) {
-        systemMessage = this.addMessage(false);
-        systemMessage.id = messageId;
+    // Creates-or-appends a message.
+    addToken(token: string, threadId: string, messageId: string) {
+      if (threadId !== this.threadId) return;
+
+      if (!messageId) console.warn('messageId is undefined');
+      if (!threadId) console.warn('threadId is undefined');
+
+      let assistantMessage = this.messages.find((m) => m.messageId && m.messageId === messageId);
+      if (!assistantMessage) {
+        assistantMessage = new AssistantMessage(messageId);
+        this.messages.push(assistantMessage);
       }
-      systemMessage.message += token;
+
+      assistantMessage.append(token);
       this.scrollToBottom();
     },
     setAuthorized(v: boolean) {
       this.authorized = v;
     },
-    addMessage(isUser: boolean, content?: string, isError?: boolean) {
-      const message = {
-        id: this.pendingMessageId++,
-        isUser,
-        isError,
-        message: content || '',
-        sentiment: 0,
-      };
-      this.messages.push(message);
-
+    addUserMessage(content: string) {
+      this.messages.push(new UserMessage(content));
       this.scrollToBottom();
-      this.$root.$emit('message', message, isUser);
-
-      return message;
+    },
+    addErrorMessage(error: Error) {
+      this.messages.push(new ErrorMessage(error));
+      this.scrollToBottom();
     },
     async ask(message: string) {
       this.onSend(message);
@@ -159,11 +192,12 @@ export default {
       if (error.code === 401) {
         this.setAuthorized(false);
       } else {
-        this.addMessage(false, error.message, true); // TODO: Handle error.message not defined
+        this.addErrorMessage(error);
       }
+      this.loading = false;
     },
     async onSend(message: string) {
-      this.addMessage(true, message);
+      this.addUserMessage(message);
       this.loading = true;
       this.sendMessage(message);
     },
@@ -173,15 +207,17 @@ export default {
     },
     onSuggestion(prompt: string) {
       // Make it look like the AI is typing
-      this.addMessage(false, prompt);
+      const assistantMessage = new AssistantMessage('suggested-message');
+      assistantMessage.append(prompt);
+      this.messages.push(assistantMessage);
     },
     onComplete() {
       this.loading = false;
     },
     clear() {
       this.threadId = undefined;
-      this.$set(this, 'messages', []);
-      this.$emit('clear');
+      this.messages.splice(0);
+      this.loading = false;
     },
     scrollToBottom() {
       // Allow one tick to progress to allow any DOM changes to be applied
