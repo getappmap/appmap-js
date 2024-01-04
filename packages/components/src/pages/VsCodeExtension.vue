@@ -377,6 +377,7 @@ import VTab from '../components/Tab.vue';
 import VTraceFilter from '../components/trace/TraceFilter.vue';
 import VNoDataNotice from '../components/notices/NoDataNotice.vue';
 import VUnlicensedNotice from '../components/notices/UnlicensedNotice.vue';
+import EmitLinkMixin from '@/components/mixins/emitLink';
 import toListItem from '@/lib/finding';
 import {
   store,
@@ -471,6 +472,7 @@ export default {
       showDetailsPanel: false,
     };
   },
+  mixins: [EmitLinkMixin],
   props: {
     defaultView: {
       type: String,

@@ -29,6 +29,7 @@
 //@ts-nocheck
 import VAppmapLogo from '@/assets/appmap-full-logo.svg';
 import VButton from '@/components/Button.vue';
+import EmitLinkMixin from '@/components/mixins/emitLink';
 
 export default {
   components: {
@@ -41,6 +42,13 @@ export default {
       required: false,
     },
   },
+  mixins: [
+    // This should also be included via the parent page (VsCodeExtension).
+    // However, we want to validate that the behavior provided by the mixin
+    // is applied, so it's included here as well. The Mixin is built to allow
+    // this.
+    EmitLinkMixin,
+  ],
 };
 </script>
 
