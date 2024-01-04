@@ -176,13 +176,13 @@ __metadata:
   resolution: "@appland/appmap@workspace:packages/cli"
   dependencies:
     "@appland/appmap-agent-js": 14.2.0
-    "@appland/client": "workspace:^1.12.0"
-    "@appland/components": "workspace:^3.18.0"
-    "@appland/diagrams": "workspace:^1.7.0"
+    "@appland/client": "workspace:^1.14.0"
+    "@appland/components": "workspace:^3.21.2"
+    "@appland/diagrams": "workspace:^1.8.0"
     "@appland/models": "workspace:^2.10.0"
-    "@appland/openapi": "workspace:^1.7.0"
+    "@appland/openapi": "workspace:^1.8.0"
     "@appland/rpc": "workspace:^1.1.0"
-    "@appland/sequence-diagram": "workspace:^1.11.0"
+    "@appland/sequence-diagram": "workspace:^1.12.0"
     "@craftamap/esbuild-plugin-html": ^0.4.0
     "@octokit/rest": ^20.0.1
     "@octokit/types": ^11.1.0
@@ -281,7 +281,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/client@^1.12.0, @appland/client@workspace:^1.12.0, @appland/client@workspace:packages/client":
+"@appland/client@^1.12.0, @appland/client@workspace:^1.12.0, @appland/client@workspace:^1.14.0, @appland/client@workspace:packages/client":
   version: 0.0.0-use.local
   resolution: "@appland/client@workspace:packages/client"
   dependencies:
@@ -318,7 +318,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/components@workspace:^3.18.0, @appland/components@workspace:packages/components":
+"@appland/components@workspace:^3.21.2, @appland/components@workspace:packages/components":
   version: 0.0.0-use.local
   resolution: "@appland/components@workspace:packages/components"
   dependencies:
@@ -415,7 +415,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/diagrams@workspace:^1.7.0, @appland/diagrams@workspace:packages/diagrams":
+"@appland/diagrams@workspace:^1.7.0, @appland/diagrams@workspace:^1.8.0, @appland/diagrams@workspace:packages/diagrams":
   version: 0.0.0-use.local
   resolution: "@appland/diagrams@workspace:packages/diagrams"
   dependencies:
@@ -471,7 +471,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/openapi@workspace:^1.7.0, @appland/openapi@workspace:packages/openapi":
+"@appland/openapi@workspace:^1.7.0, @appland/openapi@workspace:^1.8.0, @appland/openapi@workspace:packages/openapi":
   version: 0.0.0-use.local
   resolution: "@appland/openapi@workspace:packages/openapi"
   dependencies:
@@ -570,7 +570,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/sequence-diagram@workspace:^1.11.0, @appland/sequence-diagram@workspace:packages/sequence-diagram":
+"@appland/sequence-diagram@workspace:^1.11.0, @appland/sequence-diagram@workspace:^1.12.0, @appland/sequence-diagram@workspace:packages/sequence-diagram":
   version: 0.0.0-use.local
   resolution: "@appland/sequence-diagram@workspace:packages/sequence-diagram"
   dependencies:
