@@ -7,11 +7,12 @@ export default {
 
 // Controls cannot be set in the URL params until Storybook 6.2 (next release).
 // Until then, use this story for testing Java appmaps.
-export const ExtensionEmpty = (args, { argTypes }) => ({
+export const ExtensionUnlicensed = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VExtension },
   template: '<v-extension v-bind="$props" ref="vsCode" />',
-  mounted() {
-    this.$refs.vsCode.loadData('{}');
-  },
 });
+ExtensionUnlicensed.args = {
+  isLicensed: false,
+  purchaseUrl: 'https://appmap.io/pricing',
+};
