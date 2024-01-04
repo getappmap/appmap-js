@@ -1,3 +1,10 @@
+# [@appland/rpc-v1.1.1](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.1.0...@appland/rpc-v1.1.1) (2024-01-04)
+
+
+### Bug Fixes
+
+* Ignore messages outside the current thread ([5607918](https://github.com/getappmap/appmap-js/commit/56079183c5f875211c4495fe117849dd7fcf55dd))
+
 # [@appland/rpc-v1.1.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.0.0...@appland/rpc-v1.1.0) (2023-12-21)
 
 
