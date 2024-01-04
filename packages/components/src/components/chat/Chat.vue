@@ -60,7 +60,6 @@ import VSpinner from '@/components/Spinner.vue';
 import VLoaderIcon from '@/assets/eva_loader-outline.svg';
 import VButton from '@/components/Button.vue';
 import { AI } from '@appland/client';
-import { randomBytes } from 'crypto';
 
 interface IMessage {
   message: string;
