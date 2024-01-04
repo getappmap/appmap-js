@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.116.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.116.1...@appland/appmap-v3.116.2) (2024-01-04)
+
+
+### Bug Fixes
+
+* Ignore messages outside the current thread ([5607918](https://github.com/getappmap/appmap-js/commit/56079183c5f875211c4495fe117849dd7fcf55dd))
+
 # [@appland/appmap-v3.116.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.116.0...@appland/appmap-v3.116.1) (2024-01-03)
 
 
