@@ -3,7 +3,7 @@
     <div class="button-panel" v-if="isChatting">
       <v-button class="clear" size="small" kind="ghost" @click.native="clear">New chat</v-button>
     </div>
-    <div class="messages" data-cy="messages" ref="messages">
+    <div class="messages" data-cy="messages" ref="messages" @scroll="manageScroll">
       <v-user-message
         v-for="(message, i) in messages"
         :key="i"
@@ -136,6 +136,9 @@ export default {
       threadId: undefined as string | undefined,
       loading: false,
       authorized: true,
+      autoScrollTop: 0,
+      enableScrollLog: false, // Auto-scroll can be tricky, so there is special logging to help debug it.
+      scrollLog: (message: string) => (this.enableScrollLog ? console.log(message) : undefined),
     };
   },
   computed: {
@@ -149,6 +152,9 @@ export default {
       return {
         chatting: this.isChatting,
       };
+    },
+    userMessageCount() {
+      return this.messages.filter((m) => m.isUser).length;
     },
   },
   methods: {
@@ -173,6 +179,12 @@ export default {
     },
     addUserMessage(content: string) {
       this.messages.push(new UserMessage(content));
+      // Ensure that for the first user message, the auto-scroll position is reset to the top.
+      // This is to account for the fact that there may be an auto-scroll applied when the
+      // placeholder content is show during the chat initialization or when the user clears the chat.
+      if (this.userMessageCount === 1) {
+        this.autoScrollTop = 0;
+      }
       this.scrollToBottom();
     },
     addErrorMessage(error: Error) {
@@ -188,7 +200,7 @@ export default {
       } else {
         this.addErrorMessage(error);
       }
-      this.loading = false;
+      this.resetStateVariables();
     },
     async onSend(message: string) {
       this.addUserMessage(message);
@@ -206,17 +218,34 @@ export default {
       this.messages.push(assistantMessage);
     },
     onComplete() {
-      this.loading = false;
+      this.resetStateVariables();
     },
     clear() {
       this.threadId = undefined;
       this.messages.splice(0);
+      this.autoScrollTop = 0;
+      this.resetStateVariables();
+    },
+    resetStateVariables() {
       this.loading = false;
     },
     scrollToBottom() {
       // Allow one tick to progress to allow any DOM changes to be applied
       this.$nextTick(() => {
-        this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
+        // If the scrollTop is less than the autoScrollTop, the user has scrolled up.
+        // When the user scrolls up, stop auto-scrolling to the bottom until they scroll back down
+        // beyond a threshold point at which auto-scrolling can "re-grab" the scroll position.
+        // That's handled by manageScroll(), which is bound to the .messages scroll event.
+        const scrollUp = this.autoScrollTop - this.$refs.messages.scrollTop;
+        if (this.autoScrollTop != 0 && scrollUp > 5) {
+          this.scrollLog('User scrolled up, disabling auto-scroll');
+          return;
+        }
+
+        const targetScrollTop = this.$refs.messages.scrollHeight - this.$refs.messages.clientHeight;
+        this.$refs.messages.scrollTop = targetScrollTop;
+        this.autoScrollTop = targetScrollTop;
+        this.scrollLog('Auto-scrolling to bottom');
       });
     },
     async onSentimentChange(messageId: string, sentiment: number) {
@@ -229,9 +258,28 @@ export default {
 
       message.sentiment = sentiment;
     },
-  },
-  updated() {
-    this.scrollToBottom();
+    // If the scroll point has been set beyond where auto-scroll was canceled, and the
+    // content is now fully scrolled, re-enable auto-scrolling.
+    manageScroll() {
+      const isScrolledBelowLastAutoScroll = this.$refs.messages.scrollTop > this.autoScrollTop;
+      if (isScrolledBelowLastAutoScroll) {
+        this.scrollLog('User scrolled down');
+        if (this.isFullyScrolled()) {
+          this.scrollLog('Content is fully scrolled, re-enabling auto-scroll');
+          this.autoScrollTop = this.$refs.messages.scrollTop;
+        } else {
+          this.scrollLog('Content is not fully scrolled');
+        }
+      }
+    },
+    // Returns true if the content is fully scrolled to the bottom (with a fairly generous buffer).
+    isFullyScrolled() {
+      const { messages } = this.$refs;
+
+      const fullyScrolled = messages.scrollHeight - messages.clientHeight;
+      const fullyScrolledDelta = Math.abs(messages.scrollTop - fullyScrolled);
+      return fullyScrolledDelta < 40;
+    },
   },
 };
 </script>
