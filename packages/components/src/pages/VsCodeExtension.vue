@@ -330,32 +330,7 @@
       </div>
     </div>
 
-    <div class="no-data-notice" v-if="isEmptyAppMap && !isLoading && !hasStats">
-      <div class="notice">
-        <p class="no-data-notice__title">Sorry, but there's no data to display :(</p>
-        <ul class="why-me">
-          <strong>Top 3 reasons why this appmap is empty:</strong>
-          <li>appmap.yml did not list packages/modules/folders of your application logic</li>
-          <li>
-            If this AppMap was recorded from a test, the test did not provide sufficient coverage
-            for good data
-          </li>
-          <li>
-            If other manual method was used to record this AppMap, the instrumented code objects
-            were not executed during the recording.
-          </li>
-        </ul>
-        <p class="no-data-notice__text">
-          Check our
-          <a href="https://appmap.io/docs" target="_blank" rel="noopener noreferrer">
-            documentation</a
-          >,<br />
-          or ask for help in
-          <a href="https://appmap.io/slack" target="_blank" rel="noopener noreferrer"> Slack</a>.
-        </p>
-      </div>
-      <DiagramGray class="empty-state-diagram" />
-    </div>
+    <v-no-data-notice v-if="isEmptyAppMap && !isLoading && !hasStats" />
   </div>
 </template>
 
@@ -399,6 +374,7 @@ import VStatsPanel from '../components/StatsPanel.vue';
 import VTabs from '../components/Tabs.vue';
 import VTab from '../components/Tab.vue';
 import VTraceFilter from '../components/trace/TraceFilter.vue';
+import VNoDataNotice from '../components/notices/NoDataNotice.vue';
 import toListItem from '@/lib/finding';
 import {
   store,
@@ -462,6 +438,7 @@ export default {
     ScissorsIcon,
     FullscreenEnterIcon,
     FullscreenExitIcon,
+    VNoDataNotice,
   },
   store,
   data() {
@@ -1819,62 +1796,6 @@ code {
     flex-direction: column;
     width: 100%;
     height: 100%;
-  }
-
-  .no-data-notice {
-    display: flex;
-    position: absolute;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-family: $appland-text-font-family;
-    line-height: 1.5;
-    color: $base03;
-    background-color: $vs-code-gray1;
-    z-index: 2147483647;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-
-    &__title,
-    &__text {
-      margin: 0;
-    }
-
-    &__title {
-      margin-bottom: 1rem;
-      font-size: 2rem;
-      font-weight: 700;
-      background: linear-gradient(to right, $royal, $hotpink);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    &__text {
-      a {
-        color: $blue;
-        text-decoration: none;
-
-        &:hover,
-        &:active {
-          color: $lightblue;
-        }
-      }
-    }
-
-    .empty-state-diagram {
-      margin-top: 4rem;
-    }
-
-    .why-me {
-      padding: 1rem;
-      strong {
-        margin-left: -1rem;
-        color: $royal;
-        margin-bottom: 0.5rem;
-      }
-    }
   }
 }
 
