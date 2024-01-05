@@ -155,6 +155,9 @@ export default {
       font-size: 0.6rem;
       pointer-events: none;
     }
+    &:last-child::after {
+      display: none;
+    }
     &-icon {
       margin-right: 0.5rem;
       width: 1rem;
