@@ -1,41 +1,475 @@
 <template>
-  <div :classes="classes">
-    <!--
-      Don't render distinct states on top of the AppMap viewer.
-      Instead, replace it entirely.
-    -->
-    <div class="loader" v-if="appState === 'LOADING'" />
-    <v-no-data-notice v-else-if="appState === 'DATA_EMPTY'" />
-    <v-unlicensed-notice v-else-if="appState === 'UNLICENSED'" :purchase-url="purchaseUrl" />
-    <v-appmap-viewer
-      v-else
-      :default-view="defaultView"
-      :appMapUploadable="appMapUploadable"
-      :saved-filters="savedFilters"
-      :allow-fullscreen="allowFullscreen"
-    />
+  <div class="appmap-viewer">
+    <!-- I.e. ['DATA_TOO_LARGE', 'READY'].includes(appState) -->
+    <!-- TODO: I should be my own component -->
+    <div
+      :key="renderKey"
+      :class="classes"
+      @mousemove="makeResizing"
+      @mouseup="stopResizing"
+      @mouseleave="stopResizing"
+      data-cy="app"
+    >
+      <div :class="leftColumnClasses" ref="mainColumnLeft">
+        <transition name="slide-in-from-left">
+          <v-details-panel
+            v-if="showDetailsPanel"
+            class="slide-in-from-left"
+            :appMap="filteredAppMap"
+            :selected-object="selectedObject"
+            :selected-label="selectedLabel"
+            :filters-root-objects="filters.rootObjects"
+            :findings="findings"
+            :wasAutoPruned="wasAutoPruned"
+            :isGiantAppMap="isGiantAppMap"
+            @onChangeFilter="
+              (value) => {
+                this.eventFilterText = value;
+              }
+            "
+            @openStatsPanel="
+              () => {
+                this.showStatsPanel = true;
+              }
+            "
+            @clearSelections="clearSelection"
+            @hideDetailsPanel="hideDetailsPanel"
+            data-cy="sidebar"
+          />
+        </transition>
+        <div v-if="showDetailsPanel" class="main-column--drag" @mousedown="startResizing"></div>
+        <div v-if="!showDetailsPanel" class="sidebar-menu" data-cy="sidebar-menu">
+          <AppMapLogo class="sidebar-menu__icon" width="30" />
+          <HamburgerMenu
+            class="sidebar-menu__icon sidebar-menu__hamburger-menu"
+            width="30"
+            @click="revealDetailsPanel"
+          />
+        </div>
+      </div>
+
+      <div class="main-column main-column--right">
+        <v-tabs @activateTab="onChangeTab" ref="tabs" :initial-tab="defaultView">
+          <v-tab
+            name="Dependency Map"
+            :is-active="isViewingComponent"
+            :tabName="VIEW_COMPONENT"
+            :ref="VIEW_COMPONENT"
+          >
+            <v-diagram-component :class-map="filteredAppMap.classMap" />
+          </v-tab>
+
+          <v-tab
+            name="Sequence Diagram"
+            :is-active="isViewingSequence"
+            :ref="VIEW_SEQUENCE"
+            :tabName="VIEW_SEQUENCE"
+            :allow-scroll="true"
+          >
+            <v-diagram-sequence
+              ref="viewSequence_diagram"
+              :app-map="filteredAppMap"
+              :collapse-depth="seqDiagramCollapseDepth"
+              @setMaxSeqDiagramCollapseDepth="setMaxSeqDiagramCollapseDepth"
+              @updateCollapseDepth="handleNewCollapseDepth"
+            />
+          </v-tab>
+
+          <v-tab name="Trace View" :is-active="isViewingFlow" :tabName="VIEW_FLOW" :ref="VIEW_FLOW">
+            <div class="trace-view">
+              <v-trace-filter
+                ref="traceFilter"
+                :nodesLength="eventFilterMatches.length"
+                :currentIndex="eventFilterMatchIndex"
+                :suggestions="eventsSuggestions"
+                :initialFilterValue="eventFilterText"
+                @onChange="
+                  (value) => {
+                    this.eventFilterText = value;
+                  }
+                "
+                @onPrevArrow="prevTraceFilter"
+                @onNextArrow="nextTraceFilter"
+              />
+              <v-diagram-trace
+                ref="viewFlow_diagram"
+                :events="filteredAppMap.rootEvents()"
+                :event-filter-matches="new Set(eventFilterMatches)"
+                :event-filter-match="eventFilterMatch"
+                :event-filter-match-index="eventFilterMatchIndex + 1"
+                :name="VIEW_FLOW"
+                :zoom-controls="true"
+                @clickEvent="onClickTraceEvent"
+              />
+            </div>
+          </v-tab>
+
+          <v-tab
+            name="Flame Graph"
+            :is-active="isViewingFlamegraph"
+            :ref="VIEW_FLAMEGRAPH"
+            :tabName="VIEW_FLAMEGRAPH"
+            :allow-scroll="false"
+          >
+            <v-diagram-flamegraph
+              ref="viewFlamegraph_diagram"
+              :events="filteredAppMap.rootEvents()"
+              :title="filteredAppMap.name"
+              @select="onFlamegraphSelect"
+            />
+          </v-tab>
+
+          <template v-slot:notification>
+            <v-notification
+              v-if="version"
+              :version="version"
+              :body="versionText"
+              @openEvent="onNotificationOpen"
+              @closeEvent="onNotificationClose"
+            />
+          </template>
+          <template v-slot:controls>
+            <v-popper
+              class="hover-text-popper"
+              text="Collapse actions below this depth"
+              placement="left"
+              text-align="left"
+            >
+              <div v-if="isViewingSequence && !sequenceDiagramDiffMode" class="depth-control">
+                <button
+                  class="depth-button depth-button__decrease"
+                  @click="decreaseSeqDiagramCollapseDepth"
+                  data-cy="decrease-collapse-depth"
+                >
+                  -
+                </button>
+                <div class="depth-text">
+                  {{ seqDiagramCollapseDepth }}
+                </div>
+                <button
+                  class="depth-button depth-button__increase"
+                  @click="increaseSeqDiagramCollapseDepth"
+                  data-cy="increase-collapse-depth"
+                >
+                  +
+                </button>
+              </div>
+            </v-popper>
+
+            <v-popper
+              v-if="appMapUploadable && !isGiantAppMap"
+              class="hover-text-popper"
+              text="Create a link to this AppMap"
+              placement="left"
+              text-align="left"
+            >
+              <button
+                class="control-button"
+                data-cy="share-button"
+                @click="toggleShareModal"
+                title=""
+              >
+                <UploadIcon class="control-button__icon" />
+              </button>
+            </v-popper>
+            <v-popper
+              v-if="showDownload && !isGiantAppMap"
+              class="hover-text-popper"
+              text="Export in SVG format"
+              placement="left"
+              text-align="left"
+            >
+              <v-download-sequence-diagram ref="export">
+                <button class="control-button" @click="$refs.export.download()" title="">
+                  <ExportIcon class="control-button__icon" />
+                </button>
+              </v-download-sequence-diagram>
+            </v-popper>
+            <v-popper
+              v-if="hasStats"
+              class="hover-text-popper hide-small"
+              text="Show statistics about this AppMap"
+              placement="left"
+              text-align="left"
+              data-cy="stats-button"
+            >
+              <button class="control-button" @click="toggleStatsPanel" title="">
+                <StatsIcon class="control-button__icon" />
+              </button>
+            </v-popper>
+            <v-popper-menu
+              v-if="!isPrecomputedSequenceDiagram && !isGiantAppMap"
+              :isHighlight="filtersChanged"
+              data-cy="filters-button"
+            >
+              <template v-slot:icon>
+                <v-popper
+                  class="hover-text-popper"
+                  text="Filter your view"
+                  placement="left"
+                  text-align="left"
+                >
+                  <FilterIcon
+                    class="control-button__icon"
+                    data-cy="filter-button"
+                    @click="openFilterModal"
+                  />
+                </v-popper>
+              </template>
+              <template v-slot:body>
+                <v-filter-menu
+                  :filteredAppMap="filteredAppMap"
+                  :isInBrowser="isInBrowser"
+                  @setState="(stateString) => setState(stateString)"
+                ></v-filter-menu>
+              </template>
+            </v-popper-menu>
+            <v-popper
+              class="hover-text-popper"
+              text="Reload map"
+              placement="left"
+              text-align="left"
+            >
+              <button
+                v-if="!isGiantAppMap"
+                data-cy="reload-button"
+                class="control-button diagram-reload"
+                @click="resetDiagram"
+                title="Clear"
+              >
+                <ReloadIcon class="control-button__icon" />
+              </button>
+            </v-popper>
+            <v-popper
+              class="hover-text-popper"
+              text="Toggle fullscreen"
+              placement="left"
+              text-align="left"
+              v-if="allowFullscreen"
+            >
+              <button
+                data-cy="fullscreen-button"
+                class="control-button"
+                :data-enabled="isFullscreen"
+                @click="toggleFullscreen"
+              >
+                <component :is="fullscreenIcon" class="control-button__stroke" />
+              </button>
+            </v-popper>
+          </template>
+        </v-tabs>
+
+        <div v-if="showShareModal" class="share-appmap">
+          <div class="heading">
+            <h1>Share this AppMap</h1>
+            <CloseIcon class="close-me" @click.stop="closeShareModal" />
+          </div>
+          <div class="content">
+            <p>
+              This link can be used to view this AppMap in a browser. You can share it with other
+              collaborators, or put it into a Pull Request.
+            </p>
+            <div class="share-url">
+              <div class="share-link">
+                <span class="url">{{ shareURLmessage }}</span>
+                <span class="icon copy" @click="copyToClipboard(shareURL)">
+                  <CopyIcon />
+                </span>
+              </div>
+              <p>This link has been copied to your clipboard.</p>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="showStatsPanel" class="appmap-stats">
+          <v-stats-panel
+            :stats="stats"
+            :appMap="filteredAppMap"
+            :pruneFilter="pruneFilter"
+            @closeStatsPanel="closeStatsPanel"
+          >
+            <template v-slot:notification>
+              <div
+                v-if="isGiantAppMap"
+                class="notification blocked"
+                data-cy="giant-map-stats-notification"
+              >
+                <div class="content">
+                  <p class="notification-head">
+                    <ExclamationIcon /><strong>This AppMap is too large to open.</strong>
+                  </p>
+                  <p>
+                    To learn more about making your AppMaps smaller, please see our
+                    <a href="https://appmap.io/docs/reference/handling-large-appmaps.html">
+                      documentation
+                    </a>
+                    .
+                  </p>
+                </div>
+              </div>
+              <div
+                v-if="wasAutoPruned"
+                class="notification trimmed"
+                data-cy="pruned-map-stats-notification"
+              >
+                <div class="content">
+                  <p class="notification-head">
+                    <ScissorsIcon /><strong>This AppMap has been automatically pruned.</strong>
+                  </p>
+                  <p>
+                    This AppMap is too large, so we removed the highlighted functions below. Please
+                    see our
+                    <a href="https://appmap.io/docs/reference/handling-large-appmaps.html">
+                      documentation
+                    </a>
+                    for more information on how to optimize your AppMaps.
+                  </p>
+                </div>
+              </div>
+            </template>
+          </v-stats-panel>
+        </div>
+
+        <div class="diagram-instructions hide-small" data-cy="instructions-button">
+          <v-instructions ref="instructions" :currentView="currentView" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import VAppmapViewer from '@/components/AppmapViewer.vue';
-import VNoDataNotice from '../components/notices/NoDataNotice.vue';
-import VUnlicensedNotice from '../components/notices/UnlicensedNotice.vue';
+import {
+  Event,
+  serializeFilter,
+  deserializeFilter,
+  filterStringToFilterState,
+  base64UrlEncode,
+  AppMapFilter,
+} from '@appland/models';
+import { unparseDiagram } from '@appland/sequence-diagram';
+
+import AppMapLogo from '@/assets/appmap-logomark.svg';
+import HamburgerMenu from '@/assets/hamburger-menu.svg';
+import CopyIcon from '@/assets/copy-icon.svg';
+import CloseIcon from '@/assets/close.svg';
+import ReloadIcon from '@/assets/reload.svg';
+import UploadIcon from '@/assets/link-icon.svg';
+import ExportIcon from '@/assets/export.svg';
+import FilterIcon from '@/assets/filter.svg';
+import DiagramGray from '@/assets/diagram-empty.svg';
+import StatsIcon from '@/assets/stats-icon.svg';
+import ExclamationIcon from '@/assets/exclamation-circle.svg';
+import ScissorsIcon from '@/assets/scissors-icon.svg';
+import FullscreenEnterIcon from '@/assets/fullscreen.svg';
+import FullscreenExitIcon from '@/assets/fullscreen-exit.svg';
+import VDetailsPanel from '../components/DetailsPanel.vue';
+import VDiagramComponent from '../components/DiagramComponent.vue';
+import VDiagramSequence from '../components/DiagramSequence.vue';
+import VDiagramFlamegraph from '../components/DiagramFlamegraph.vue';
+import VDiagramTrace from '../components/DiagramTrace.vue';
+import VDownloadSequenceDiagram from '../components/sequence/DownloadSequenceDiagram.vue';
+import VFilterMenu from '../components/FilterMenu.vue';
+import VInstructions from '../components/Instructions.vue';
+import VNotification from '../components/Notification.vue';
+import VPopperMenu from '../components/PopperMenu.vue';
+import VPopper from '../components/Popper.vue';
+import VStatsPanel from '../components/StatsPanel.vue';
+import VTabs from '../components/Tabs.vue';
+import VTab from '../components/Tab.vue';
+import VTraceFilter from '../components/trace/TraceFilter.vue';
+import toListItem from '@/lib/finding';
 import {
   store,
-
+  SET_APPMAP_DATA,
+  SET_VIEW,
+  VIEW_COMPONENT,
+  VIEW_SEQUENCE,
+  VIEW_FLOW,
+  VIEW_FLAMEGRAPH,
+  SELECT_CODE_OBJECT,
+  SELECT_LABEL,
+  CLEAR_SELECTION_STACK,
+  SET_EXPANDED_PACKAGES,
+  CLEAR_EXPANDED_PACKAGES,
+  SET_FILTER,
+  SET_DECLUTTER_ON,
+  RESET_FILTERS,
+  ADD_ROOT_OBJECT,
+  REMOVE_ROOT_OBJECT,
+  SET_SAVED_FILTERS,
+  SET_SELECTED_SAVED_FILTER,
+  SET_HIGHLIGHTED_EVENTS,
+  SET_FOCUSED_EVENT,
+  SET_COLLAPSED_ACTION_STATE,
 } from '../store/vsCode';
+import isPrecomputedSequenceDiagram from '@/lib/isPrecomputedSequenceDiagram';
+import { SAVED_FILTERS_STORAGE_ID } from '../components/FilterMenu.vue';
+import { DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH } from '../components/DiagramSequence.vue';
+
 const browserPrefixes = ['', 'webkit', 'moz'];
 
 export default {
-  name: 'VSCodeExtension',
+  name: 'v-appmap-viewer',
   components: {
-    VAppmapViewer,
-    VNoDataNotice,
-    VUnlicensedNotice,
+    AppMapLogo,
+    HamburgerMenu,
+    CloseIcon,
+    CopyIcon,
+    ReloadIcon,
+    UploadIcon,
+    ExportIcon,
+    FilterIcon,
+    VDetailsPanel,
+    VDiagramComponent,
+    VDiagramSequence,
+    VDiagramTrace,
+    VDiagramFlamegraph,
+    VDownloadSequenceDiagram,
+    VFilterMenu,
+    VInstructions,
+    VNotification,
+    VPopperMenu,
+    VPopper,
+    VStatsPanel,
+    VTabs,
+    VTab,
+    VTraceFilter,
+    DiagramGray,
+    StatsIcon,
+    ExclamationIcon,
+    ScissorsIcon,
+    FullscreenEnterIcon,
+    FullscreenExitIcon,
+  },
+  store,
+  data() {
+    return {
+      renderKey: 0,
+      isPanelResizing: false,
+      initialPanelWidth: 0,
+      initialClientX: 0,
+      version: null,
+      versionText: '',
+      VIEW_COMPONENT,
+      VIEW_SEQUENCE,
+      VIEW_FLOW,
+      VIEW_FLAMEGRAPH,
+      eventFilterText: '',
+      eventFilterMatchIndex: 0,
+      showShareModal: false,
+      showStatsPanel: false,
+      shareURL: undefined,
+      seqDiagramTimeoutId: undefined,
+      seqDiagramCollapseDepth: DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH,
+      maxSeqDiagramCollapseDepth: 9,
+      sequenceDiagramDiffMode: false,
+      isActive: true,
+      isFullscreen: false,
+      showDetailsPanel: false,
+    };
   },
   mixins: [EmitLinkMixin],
-  store,
   props: {
     defaultView: {
       type: String,
@@ -53,21 +487,301 @@ export default {
       type: Boolean,
       default: false,
     },
-    isLicensed: {
-      type: Boolean,
-      default: true,
+  },
+  watch: {
+    '$store.state.currentView': {
+      handler(view) {
+        this.$refs.tabs.activateTab(this.$refs[view]);
+        this.$root.$emit('stateChanged', 'currentView');
+      },
     },
-    purchaseUrl: {
-      type: String,
-      required: false,
+    '$store.getters.selectedObject': {
+      handler(selectedObject) {
+        if (selectedObject) {
+          if (selectedObject instanceof Event) {
+            const highlightedIndex = this.eventFilterMatches.findIndex((e) => e === selectedObject);
+
+            this.eventFilterMatchIndex = highlightedIndex >= 0 ? highlightedIndex : undefined;
+          }
+
+          if (selectedObject.type === 'analysis-finding')
+            this.analysisFindingSelection(selectedObject);
+        } else {
+          this.eventFilterMatchIndex = undefined;
+        }
+
+        this.$root.$emit('stateChanged', 'selectedObject');
+        this.revealDetailsPanel();
+      },
+    },
+    '$store.state.selectedLabel': {
+      handler() {
+        this.$root.$emit('stateChanged', 'selectedObject');
+      },
+    },
+    '$store.state.focusedEvent': {
+      handler(event) {
+        if (event) {
+          if (this.currentView === VIEW_COMPONENT) {
+            let { defaultView } = this;
+            if (this.isPrecomputedSequenceDiagram) defaultView = VIEW_SEQUENCE;
+
+            this.setView(defaultView === VIEW_SEQUENCE ? VIEW_SEQUENCE : VIEW_FLOW);
+          }
+          this.$nextTick(() => {
+            Object.keys(this.$refs)
+              .filter((ref) => ref.endsWith('_diagram') && ref !== 'viewFlamegraph_diagram')
+              .forEach((ref) => this.$refs[ref].showFocusEffect());
+          });
+        }
+      },
+    },
+    highlightedNodes: {
+      handler() {
+        this.eventFilterMatchIndex = 0;
+        this.selectCurrentHighlightedEvent();
+      },
+    },
+    eventFilterMatchIndex: {
+      handler() {
+        this.selectCurrentHighlightedEvent();
+      },
+    },
+    filteredAppMap: {
+      handler() {
+        let selectedObjects = [];
+        // TODO: Why are we doing this?
+        //       We should standardize on `selectedObjects`.
+        if (this.selectedObject) selectedObjects.push(this.selectedObject);
+        if (this.selectedObjects) selectedObjects.push(...this.selectedObjects);
+
+        this.$store.commit(CLEAR_SELECTION_STACK);
+
+        selectedObjects.forEach(({ fqid }) => this.setSelectedObject(fqid));
+      },
+    },
+    isActive: {
+      handler() {
+        clearTimeout(this.seqDiagramTimeoutId);
+        if (this.isActive && this.isViewingSequence) {
+          this.startSeqDiagramTimer();
+        }
+      },
+    },
+    async appState() {
+      // Allow refs to resolve
+      await this.$nextTick();
+
+      this.resetDetailsPanel();
     },
   },
   computed: {
+    isPrecomputedSequenceDiagram,
     classes() {
+      return this.isLoading ? 'app--loading' : '';
+    },
+
+    leftColumnClasses() {
       return {
-        app: true,
-        'app--loading': state === 'LOADING',
+        'main-column': true,
+        'main-column--left': true,
+        'manual-resizing': this.isPanelResizing,
       };
+    },
+
+    isInBrowser() {
+      return window.location.protocol.includes('http');
+    },
+    pruneFilter() {
+      const { appMap } = this.$store.state;
+      const {
+        data: { pruneFilter },
+      } = appMap;
+      return pruneFilter || {};
+    },
+    wasAutoPruned() {
+      return this.pruneFilter.auto;
+    },
+    findings() {
+      const { appMap } = this.$store.state;
+      const {
+        data: { findings },
+      } = appMap;
+      return this.uniqueFindings(findings);
+    },
+    stats() {
+      const { appMap } = this.$store.state;
+      const {
+        data: { stats },
+      } = appMap;
+      return stats;
+    },
+    filters() {
+      return this.$store.state.filters;
+    },
+    filteredAppMap() {
+      const { appMap } = this.$store.state;
+      return this.filters.filter(appMap, this.findings);
+    },
+    rootObjectsSuggestions() {
+      const filters = this.filters;
+      return this.$store.state.appMap.classMap.codeObjects
+        .map((co) => co.fqid)
+        .filter((fqid) => !filters.rootObjects.includes(fqid));
+    },
+    hideNamesSuggestions() {
+      const filters = this.filters;
+      return this.filteredAppMap.classMap.codeObjects
+        .map((co) => co.fqid)
+        .filter((fqid) => !filters.declutter.hideName.names.includes(fqid));
+    },
+    eventsSuggestions() {
+      const highlightedIds = new Set(this.eventFilterMatches.map((e) => e.id));
+      const uniqueEventNames = new Set(
+        this.filteredAppMap.events
+          .filter((e) => e.isCall() && !highlightedIds.has(e.id))
+          .map((e) => e.toString())
+      );
+      return Array.from(uniqueEventNames);
+    },
+    eventsById() {
+      return this.filteredAppMap.events.reduce((map, e) => {
+        map[e.id] = e.callEvent;
+        return map;
+      }, {});
+    },
+    eventsByLabel() {
+      return this.filteredAppMap.events
+        .filter((e) => e.isCall())
+        .reduce((map, e) => {
+          e.labels.forEach((label) => {
+            map[label] = map[label] || [];
+            map[label].push(e.callEvent);
+          });
+          return map;
+        }, {});
+    },
+    eventFilterMatches() {
+      const nodes = new Set();
+
+      if (this.eventFilterText) {
+        const queryTerms = this.eventFilterText.match(/(?:[^\s"]+|"[^"]*"|"[^"]*)+/g);
+
+        if (queryTerms) {
+          if (!this.eventFilterText.endsWith(' ')) {
+            queryTerms.pop();
+          }
+
+          queryTerms.forEach((term) => {
+            // search for event name
+            if (/^".+"$/g.test(term)) {
+              const eventName = term.slice(1, -1);
+
+              this.filteredAppMap.events.forEach((e) => {
+                if (e.isCall() && e.toString() === eventName) {
+                  nodes.add(e);
+                }
+              });
+
+              return;
+            }
+
+            const [query, text] = term.split(':');
+            switch (query) {
+              case 'id': {
+                const eventId = parseInt(text, 10);
+                if (Number.isNaN(eventId)) {
+                  break;
+                }
+
+                const event = this.eventsById[eventId];
+                if (event) {
+                  nodes.add(event);
+                } else if (this.filters.declutter.limitRootEvents.on) {
+                  // when event is not present in filtered AppMap, but it's a root event - disable "Limit root events to HTTP" filter
+                  const rootEvents = this.$store.state.appMap.rootEvents();
+                  if (rootEvents.some((e) => e.id === eventId)) {
+                    this.$nextTick(() => {
+                      this.$store.commit(SET_DECLUTTER_ON, {
+                        declutterProperty: 'limitRootEvents',
+                        value: false,
+                      });
+                    });
+                  }
+                }
+
+                break;
+              }
+
+              case 'label': {
+                const events = this.eventsByLabel[text];
+
+                if (events) {
+                  events.forEach((e) => nodes.add(e));
+                }
+
+                break;
+              }
+
+              default: {
+                // Perform a full text search using query
+                if (term.length < 3) {
+                  break;
+                }
+                this.filteredAppMap.events.forEach((e) => {
+                  if (
+                    e.isCall() &&
+                    e.toString().toLowerCase().includes(term.toString().toLowerCase())
+                  ) {
+                    nodes.add(e);
+                  }
+                });
+              }
+            }
+          });
+        }
+      }
+
+      return Array.from(nodes).sort((a, b) => a.id - b.id);
+    },
+    eventFilterMatch() {
+      return this.eventFilterMatches[this.eventFilterMatchIndex];
+    },
+    selectedObject() {
+      return this.$store.getters.selectedObject;
+    },
+    selectionStack() {
+      return this.$store.state.selectionStack;
+    },
+    selectedEvent() {
+      return this.selectedObject instanceof Event ? [this.selectedObject] : [];
+    },
+    selectedLabel() {
+      return this.$store.state.selectedLabel;
+    },
+    currentView() {
+      return this.$store.state.currentView;
+    },
+    expandedPackages() {
+      return this.$store.state.expandedPackages;
+    },
+    baseActors() {
+      return this.$store.state.baseActors;
+    },
+    isViewingComponent() {
+      return this.currentView === VIEW_COMPONENT;
+    },
+    isViewingSequence() {
+      return this.currentView === VIEW_SEQUENCE;
+    },
+    isViewingFlow() {
+      return this.currentView === VIEW_FLOW;
+    },
+    isViewingFlamegraph() {
+      return this.currentView === VIEW_FLAMEGRAPH;
+    },
+    showDownload() {
+      return this.isViewingSequence;
     },
     isEmptyAppMap() {
       const appMap = this.filteredAppMap;
@@ -77,18 +791,35 @@ export default {
 
       return !this.filtersChanged && !this.eventFilterText && (!hasEvents || !hasClassMap);
     },
-    stats() {
-      const { appMap } = this.$store.state;
-      const {
-        data: { stats },
-      } = appMap;
-      return stats;
+    isGiantAppMap() {
+      return this.isEmptyAppMap && this.hasStats;
+    },
+    filtersChanged() {
+      return (
+        this.filters.rootObjects.length > 0 ||
+        Object.keys(this.filters.declutter).some((declutterPropertyName) => {
+          // This might get set to a non-default value if the map does not have an HTTP root
+          if (declutterPropertyName === 'limitRootEvents') return false;
+
+          const declutterProperty = this.filters.declutter[declutterPropertyName];
+          const on = declutterProperty.on;
+
+          return (
+            (typeof on === 'boolean' && on !== declutterProperty.default) ||
+            (typeof on === 'function' && on() !== declutterProperty.default)
+          );
+        })
+      );
+    },
+    shareURLmessage() {
+      if (this.shareURL) return this.shareURL;
+      return 'Retrieving link...';
     },
     hasStats() {
       return this.stats && this.stats.functions && this.stats.functions.length > 0;
     },
-    isGiantAppMap() {
-      return this.isEmptyAppMap && this.hasStats;
+    fullscreenIcon() {
+      return this.isFullscreen ? FullscreenExitIcon : FullscreenEnterIcon;
     },
     // The current state of the AppMap viewer.
     // These distinct states are not compatible with each other and affect
@@ -97,7 +828,7 @@ export default {
     //
     //
     // This is NOT the same as the filter/view state.
-    state() {
+    appState() {
       const [[state]] = Object.entries({
         LOADING: this.isLoading,
         UNLICENSED: !this.isLicensed,
@@ -426,7 +1157,7 @@ export default {
     startResizing(event) {
       document.body.style.userSelect = 'none';
       this.isPanelResizing = true;
-      this.initialPanelWidth = this.$refs.mainColumnLeft?.offsetWidth;
+      this.initialPanelWidth = this.$refs.mainColumnLeft.offsetWidth;
       this.initialClientX = event.clientX;
     },
     makeResizing(event) {
@@ -438,7 +1169,7 @@ export default {
         newWidth = Math.max(MIN_PANEL_WIDTH, newWidth);
         newWidth = Math.min(MAX_PANEL_WIDTH, newWidth);
 
-        this.$refs.mainColumnLeft?.style.width = `${newWidth}px`;
+        this.$refs.mainColumnLeft.style.width = `${newWidth}px`;
       }
     },
     stopResizing() {
@@ -455,7 +1186,7 @@ export default {
         } else if (this.showDetailsPanel) {
           result = '420px';
         }
-        this.$refs.mainColumnLeft?.style.width = result;
+        this.$refs.mainColumnLeft.style.width = result;
       });
     },
     prevTraceFilter() {

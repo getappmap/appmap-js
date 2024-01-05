@@ -229,4 +229,10 @@ describe('VsCodeExtension.vue', () => {
 
     wrapper.vm.clearSelection();
   });
+
+  it('does not render the entire app under a notice', () => {
+    // i.e., getting around the notice is not as simple as modifying the DOM
+    wrapper.setProps({ isLicensed: false });
+    expect(wrapper.find('[data-cy="app"]').exists()).toBe(false);
+  });
 });
