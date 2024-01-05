@@ -74,7 +74,6 @@ const Template = (args, { argTypes }) => ({
   mounted() {
     const scenario = scenarioData[args.scenario];
     const sequenceDiagram = sequenceDiagramData[args.scenario];
-    console.log(args);
     if (scenario) {
       this.$refs.vsCode.loadData(scenario, sequenceDiagram);
     }
