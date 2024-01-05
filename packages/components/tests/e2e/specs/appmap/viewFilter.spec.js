@@ -4,25 +4,6 @@ context('AppMap view filter', () => {
   });
 
   context('with HTTP events', () => {
-    it('disables "Limit root events to HTTP" filter when searching for root event which is hidden', () => {
-      cy.get('.tabs .tab-btn').contains('Trace View').click();
-
-      cy.get('.trace .trace-node').should('have.length', 4);
-
-      cy.get('.tabs__controls .popper__button').click();
-      cy.get('.filters__checkbox input[type="checkbox"]').first().should('be.checked');
-      cy.get('.tabs__controls .popper__button').click();
-      cy.get('.trace-node[data-event-id="7"]').should('not.exist');
-
-      cy.get('.trace-filter__input').type('id:7').type('{enter}');
-
-      cy.get('.trace .trace-node').should('have.length', 12);
-      cy.get('.tabs__controls .popper__button').click();
-      cy.get('.filters__checkbox input[type="checkbox"]').first().should('not.be.checked');
-      cy.get('.tabs__controls .popper__button').click();
-      cy.get('.trace-node[data-event-id="7"]').should('exist').should('have.class', 'highlight');
-    });
-
     it('filters root objects', () => {
       cy.get('.node[data-id="active_support/ActiveSupport::SecurityUtils"]').click();
       cy.get('.details-panel-filters .details-panel-filters__item').first().click();

@@ -1,23 +1,22 @@
 <template>
-  <div class="trace-filter">
+  <div class="search-bar">
     <form ref="form" :class="formClasses" @submit.prevent="onFormSubmit">
-      <span class="trace-filter__prefix">
+      <span class="search-bar__prefix">
         <SearchIcon />
       </span>
       <input
         ref="input"
-        v-model="filterValue"
-        class="trace-filter__input"
+        v-model="searchValue"
+        class="search-bar__input"
         type="text"
         autocomplete="off"
-        placeholder="search events..."
+        placeholder="search this AppMap..."
         @focus="onInputFocus"
-        @blur="onInputBlur"
       />
-      <span v-if="filterValue" class="trace-filter__suffix" @click="clearValue">
+      <span v-if="searchValue" class="search-bar__suffix" @click="clearValue">
         <CloseThinIcon />
       </span>
-      <ul ref="suggestionsList" v-if="suggestionsList.length" class="trace-filter__suggestions">
+      <ul ref="suggestionsList" v-if="suggestionsList.length" class="search-bar__suggestions">
         <li
           :class="getSuggestionClasses(index)"
           v-for="(item, index) in suggestionsList"
@@ -28,18 +27,18 @@
         </li>
       </ul>
     </form>
-    <div class="trace-filter__arrows" v-if="nodesLength">
-      <div class="trace-filter__arrow" @click="onPrevArrow">
+    <div class="search-bar__arrows" v-if="nodesLength">
+      <div class="search-bar__arrow search-bar__arrow-previous" @click="onPrevArrow">
         <ArrowSearchLeftIcon />
       </div>
-      <div class="trace-filter__arrows-text">
+      <div class="search-bar__arrows-text">
         <span v-if="Number.isInteger(currentIndex)">
           <b>{{ currentIndex + 1 }}</b>
           /
         </span>
         {{ nodesLength }} results
       </div>
-      <div class="trace-filter__arrow" @click="onNextArrow">
+      <div class="search-bar__arrow search-bar__arrow-next" @click="onNextArrow">
         <ArrowSearchRightIcon />
       </div>
     </div>
@@ -54,7 +53,7 @@ import SearchIcon from '@/assets/search.svg';
 import { getEventTarget } from '@appland/diagrams';
 
 export default {
-  name: 'v-trace-filter',
+  name: 'v-search-bar',
 
   components: {
     ArrowSearchLeftIcon,
@@ -71,13 +70,13 @@ export default {
     },
     currentIndex: {
       type: Number,
-      default: null,
+      default: undefined,
     },
     suggestions: {
       type: Array,
       default: () => [],
     },
-    initialFilterValue: {
+    initialSearchValue: {
       type: String,
       default: '',
     },
@@ -85,14 +84,14 @@ export default {
 
   data() {
     return {
-      filterValue: this.initialFilterValue,
+      searchValue: this.initialSearchValue,
       showSuggestions: false,
       selectedSuggestion: false,
     };
   },
 
   watch: {
-    filterValue: {
+    searchValue: {
       handler(value) {
         this.$emit('onChange', value);
       },
@@ -103,7 +102,8 @@ export default {
           return;
         }
 
-        const selected = this.$refs.suggestionsList.querySelectorAll('li')[selectedSuggestion];
+        const selected = this.$refs.suggestionsList?.querySelectorAll('li')[selectedSuggestion];
+        if (!selected) return;
 
         if (selected.offsetTop < this.$refs.suggestionsList.scrollTop) {
           this.$refs.suggestionsList.scrollTop = selected.offsetTop;
@@ -119,18 +119,18 @@ export default {
 
   computed: {
     formClasses() {
-      const classList = ['trace-filter__form'];
+      const classList = ['search-bar__form'];
 
       if (this.showSuggestions && this.suggestionsList.length) {
-        classList.push('trace-filter__form--show-suggestions');
+        classList.push('search-bar__form--show-suggestions');
       }
 
       return classList;
     },
     suggestionsList() {
       let { suggestions } = this;
-      const lastTermRegex = this.filterValue.includes('"') ? /([^"]*)$/ : /([^\s]*)$/;
-      const lastTerm = this.filterValue.match(lastTermRegex).pop().trim();
+      const lastTermRegex = this.searchValue.includes('"') ? /([^"]*)$/ : /([^\s]*)$/;
+      const lastTerm = this.searchValue.match(lastTermRegex).pop().trim();
 
       if (
         lastTerm &&
@@ -147,10 +147,11 @@ export default {
 
   methods: {
     setValue(newValue) {
-      this.filterValue = newValue;
+      this.searchValue = newValue;
     },
     clearValue() {
-      this.filterValue = '';
+      this.$emit('clearSearchBar');
+      this.searchValue = '';
     },
     onPrevArrow() {
       this.$emit('onPrevArrow');
@@ -159,9 +160,9 @@ export default {
       this.$emit('onNextArrow');
     },
     getSuggestionClasses(index) {
-      const classes = ['trace-filter__suggestions-item'];
+      const classes = ['search-bar__suggestions-item'];
       if (index === this.selectedSuggestion) {
-        classes.push('trace-filter__suggestions-item--selected');
+        classes.push('search-bar__suggestions-item--selected');
       }
       return classes;
     },
@@ -169,14 +170,9 @@ export default {
       this.showSuggestions = true;
       this.selectedSuggestion = false;
     },
-    onInputBlur() {
-      if (!this.filterValue.endsWith(' ')) {
-        this.filterValue += ' ';
-      }
-    },
     onFormSubmit() {
       if (
-        this.$refs.input === window.document.activeElement &&
+        this.isInputFocused() &&
         this.showSuggestions &&
         this.suggestionsList.length &&
         this.selectedSuggestion !== false
@@ -185,13 +181,15 @@ export default {
       }
 
       this.$refs.input.blur();
+      if (!this.searchValue.endsWith(' ')) this.searchValue += ' ';
       this.showSuggestions = false;
+      this.$emit('makeSelection');
     },
     makeSelection(eventName) {
-      const terms = this.filterValue.match(/(?:[^\s"]+|"[^"]*")+/g);
+      const terms = this.searchValue.match(/(?:[^\s"]+|"[^"]*")+/g);
       const lastTerm = terms ? terms[terms.length - 1] : null;
       if (
-        !this.filterValue.endsWith(' ') &&
+        !this.searchValue.endsWith(' ') &&
         lastTerm &&
         !/^".+"$/g.test(lastTerm) &&
         !/^id:.+$/g.test(lastTerm) &&
@@ -199,45 +197,62 @@ export default {
       ) {
         terms.pop();
       }
-      this.filterValue = `${terms ? `${terms.join(' ')} ` : ''}"${eventName}" `;
+      this.searchValue = `${terms ? `${terms.join(' ')} ` : ''}"${eventName}" `;
+      this.showSuggestions = false;
+      this.$emit('makeSelection');
+    },
+    incrementSelectedSuggestion() {
+      if (this.selectedSuggestion !== false && this.selectedSuggestion !== 0) {
+        this.selectedSuggestion -= 1;
+      } else {
+        this.selectedSuggestion = this.suggestionsList.length - 1;
+      }
+    },
+    decrementSelectedSuggestion() {
+      if (
+        this.selectedSuggestion !== false &&
+        this.selectedSuggestion !== this.suggestionsList.length - 1
+      ) {
+        this.selectedSuggestion += 1;
+      } else {
+        this.selectedSuggestion = 0;
+      }
+    },
+    isInputFocused() {
+      return this.$refs.input === window?.document?.activeElement;
     },
     onWindowClick(event) {
-      if (
-        !getEventTarget(event.target, this.$refs.form) &&
-        this.$refs.input !== window.document.activeElement
-      ) {
-        this.showSuggestions = false;
+      if (!getEventTarget(event.target, this.$refs.form)) {
+        if (this.$refs.input !== window.document.activeElement) this.showSuggestions = false;
+
+        if (
+          !event.target.classList.contains('search-bar__suggestions-item') &&
+          !this.searchValue.endsWith(' ')
+        )
+          this.searchValue += ' ';
       }
     },
-    onWindowKeyUp(event) {
-      if (this.$refs.input !== window.document.activeElement) {
-        return;
-      }
+    onWindowKeyUp() {
+      if (!this.isInputFocused()) return;
+    },
+    onWindowKeyDown(event) {
+      // prevent the cursor from moving when using the up and down arrow keys
+      if (this.isInputFocused() && ['ArrowUp', 'ArrowDown'].includes(event.key))
+        event.preventDefault();
+
+      if (!this.isInputFocused()) return;
 
       switch (event.key) {
         case 'Escape':
           this.showSuggestions = false;
           this.$refs.input.blur();
+          if (!this.searchValue.endsWith(' ')) this.searchValue += ' ';
           break;
         case 'ArrowDown':
-          if (
-            this.selectedSuggestion !== false &&
-            this.selectedSuggestion !== this.suggestionsList.length - 1
-          ) {
-            this.selectedSuggestion += 1;
-          } else {
-            this.selectedSuggestion = 0;
-          }
+          this.decrementSelectedSuggestion();
           break;
         case 'ArrowUp':
-          if (this.selectedSuggestion !== false && this.selectedSuggestion !== 0) {
-            this.selectedSuggestion -= 1;
-          } else {
-            this.selectedSuggestion = this.suggestionsList.length - 1;
-          }
-          break;
-        default:
-          this.selectedSuggestion = false;
+          this.incrementSelectedSuggestion();
           break;
       }
     },
@@ -246,17 +261,19 @@ export default {
   created() {
     window.addEventListener('click', this.onWindowClick);
     window.addEventListener('keyup', this.onWindowKeyUp, true);
+    window.addEventListener('keydown', this.onWindowKeyDown, true);
   },
 
   destroyed() {
     window.removeEventListener('click', this.onWindowClick);
     window.removeEventListener('keyup', this.onWindowKeyUp, true);
+    window.removeEventListener('keydown', this.onWindowKeyDown, true);
   },
 };
 </script>
 
 <style lang="scss">
-.trace-filter {
+.search-bar {
   padding: 1rem 1.25rem;
   display: flex;
   justify-content: flex-start;
@@ -357,7 +374,7 @@ export default {
     background: #191919;
     z-index: 1;
 
-    .trace-filter__form--show-suggestions & {
+    .search-bar__form--show-suggestions & {
       display: block;
     }
 

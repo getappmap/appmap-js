@@ -73,15 +73,13 @@ context('seleced objects navigation', () => {
       );
     });
 
-    it('keeps highlighting when returning to the finding', () => {
+    it('has highlighting when returning to the finding', () => {
       cy.get('.details-search__block-item').first().click();
       cy.get('.highlighted').should('have.length', 31);
       cy.get('li.list-item').first().click();
-      cy.get('.highlighted').should('have.length', 0);
       clickBackward();
       cy.get('.highlighted').should('have.length', 31);
       clickForward();
-      cy.get('.highlighted').should('have.length', 0);
       cy.get('.selection-nav-menu').select(
         'N plus 1 SQL query: app_views_microposts__micropost_html_erb.render[326] contains 30 occurrences of SQL: SELECT "active_storage_attachments".* FROM "a...'
       );

@@ -120,7 +120,6 @@ export function buildStore() {
 
         state.selectedLabel = null;
         state.focusedEvent = null;
-        state.highlightedEvents = [];
       },
 
       [POP_SELECTION_STACK](state) {

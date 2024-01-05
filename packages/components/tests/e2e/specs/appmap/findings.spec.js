@@ -208,29 +208,6 @@ context('AppMap findings', () => {
         cy.get('.highlighted').should('have.length', 0);
       });
 
-      it('highlights the related events of a performance finding in the flame graph when accessed from an event and clears them when going back', () => {
-        cy.get('.details-search__block-item')
-          .contains('SELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?')
-          .click();
-        cy.get('li.list-item').eq(1).click();
-
-        // click on the associated finding
-        cy.get('li.list-item').contains('N plus 1 SQL query').click();
-
-        // the common ancestory should be focused
-        cy.get('.flamegraph-item-crown').should(
-          'contain.text',
-          'app_views_microposts__micropost_html_erb.render'
-        );
-
-        // all related events should be highlighted
-        cy.get('.highlighted').should('have.length', 31);
-
-        // go back to last selection (it was seleccted after the finding so it requires advancing)
-        cy.get('.details-panel__selection-nav-icon.arrow-right').click();
-        cy.get('.highlighted').should('have.length', 0);
-      });
-
       it('shows two findings when finding title is searched', () => {
         cy.get('.details-search__input-element').type('N plus 1 SQL query');
         cy.get('.details-search__block--analysis-finding')

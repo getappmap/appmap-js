@@ -20,6 +20,9 @@ export default {
       default: true,
     },
     classMap: ClassMap,
+    highlightedEventIndex: {
+      type: Number,
+    },
   },
 
   data() {
@@ -30,10 +33,10 @@ export default {
   },
 
   watch: {
-    // If a prop changes, update the render key, causing a full re-render.
-    $props: {
+    classMap: {
       handler() {
         this.renderKey += 1;
+        this.renderDiagram();
       },
       deep: true,
     },
@@ -50,6 +53,28 @@ export default {
         this.highlightSelectedCodeObject();
       },
     },
+
+    '$store.state.highlightedEvents': {
+      handler() {
+        this.handleHighlightedEvent();
+      },
+    },
+
+    highlightedEventIndex() {
+      this.handleHighlightedEvent();
+    },
+  },
+
+  computed: {
+    highlightedEvent() {
+      return (
+        Number.isFinite(this.highlightedEventIndex) &&
+        this.$store?.state?.highlightedEvents[this.highlightedEventIndex]
+      );
+    },
+    selectedObject() {
+      return this.$store?.getters?.selectedObject;
+    },
   },
 
   methods: {
@@ -57,7 +82,7 @@ export default {
     // in the component view. Traverse up the code object's ancestors until we find a
     // code object that is visible in the component view.
     highlightSelectedCodeObject(expandParent = true) {
-      const { selectedObject } = this.$store.getters;
+      const { selectedObject } = this;
       if (!selectedObject) {
         if (this.componentDiagram) this.componentDiagram.highlight(null);
         return;
@@ -76,6 +101,22 @@ export default {
         codeObject = codeObject.classObject;
       }
 
+      this.highlightCodeObject(codeObject, expandParent);
+    },
+
+    handleHighlightedEvent(expandParent = true) {
+      let codeObject = this.highlightedEvent?.codeObject;
+      if (!(codeObject instanceof CodeObject)) {
+        this.highlightSelectedCodeObject();
+        return;
+      }
+      if (codeObject.type === CodeObjectType.FUNCTION) {
+        codeObject = codeObject.classObject;
+      }
+      this.highlightCodeObject(codeObject, expandParent);
+    },
+
+    highlightCodeObject(codeObject, expandParent) {
       if (this.componentDiagram.hasObject(codeObject)) {
         this.componentDiagram.highlight(codeObject);
       } else {
@@ -116,7 +157,11 @@ export default {
           .on('makeRoot', (codeObject) => {
             this.$root.$emit('makeRoot', codeObject);
           });
-        this.highlightSelectedCodeObject();
+        if (this.selectedObject) {
+          this.highlightSelectedCodeObject();
+        } else {
+          this.handleHighlightedEvent();
+        }
       });
     },
 
@@ -132,13 +177,17 @@ export default {
   },
 
   updated() {
-    this.renderDiagram();
+    this.handleHighlightedEvent();
   },
 
   activated() {
     if (this.componentDiagram) {
       this.componentDiagram.render(this.classMap);
-      this.highlightSelectedCodeObject();
+      if (this.selectedObject) {
+        this.highlightSelectedCodeObject();
+      } else {
+        this.handleHighlightedEvent();
+      }
     }
   },
 };

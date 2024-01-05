@@ -163,14 +163,25 @@ describe('VsCodeExtension.vue', () => {
     );
   });
 
-  it('changes views and modifies the trace filter after setState', async () => {
-    const appState = '{"currentView":"viewFlow","traceFilter":"id:44"}';
+  it('changes views and modifies the search bar after setState', async () => {
+    let appState = '{"currentView":"viewFlow","traceFilter":"id:44"}';
+    expect(wrapper.vm.isViewingFlow).toBe(false);
     wrapper.vm.setState(appState);
 
     await Vue.nextTick();
-
     expect(wrapper.vm.isViewingFlow).toBe(true);
-    expect(wrapper.vm.$refs.traceFilter).toBeTruthy();
+
+    await Vue.nextTick();
+    expect(wrapper.vm.eventFilterText).toBe('id:44 ');
+
+    appState = '{"currentView":"viewSequence","searchBar":"id:42"}';
+    wrapper.vm.setState(appState);
+
+    await Vue.nextTick();
+    expect(wrapper.vm.isViewingSequence).toBe(true);
+
+    await Vue.nextTick();
+    expect(wrapper.vm.eventFilterText).toBe('id:42 ');
   });
 
   it('toggles filters off if selectedObject is outside of the filtered set', async () => {

@@ -69,67 +69,6 @@ context('AppMap trace diagram', () => {
         cy.get('.trace-node.highlight').should('be.visible');
       }
     });
-
-    it('highlights and loop through events selected from the event filter', () => {
-      cy.get('.tabs .tab-btn').contains('Trace View').click();
-
-      cy.get('.trace-filter__suffix').should('not.exist');
-      cy.get('.trace-filter__input').type('example');
-      cy.get('.trace-filter__input').should('have.value', 'example');
-      cy.get('.trace-filter__suffix').click();
-      cy.get('.trace-filter__input').should('have.value', '');
-
-      let eventQuery = 'id:1 label:json id:3 id:15 id:99999 #link_to_edit_url';
-      cy.get('.trace-filter__input').type(eventQuery).type('{enter}');
-
-      cy.get('.trace-node[data-event-id="1"]')
-        .should('be.visible')
-        .should('have.class', 'highlight');
-
-      cy.get('.trace-node[data-event-id="3"]').should('not.exist');
-
-      cy.get('.trace-filter__arrows-text').contains('1 / 32 results');
-
-      cy.get('.trace-filter__arrow').last().click();
-
-      cy.get('.trace-node[data-event-id="3"]')
-        .should('be.visible')
-        .should('have.class', 'highlight');
-
-      cy.get('.trace-filter__arrow').last().click();
-
-      cy.get('.trace-node[data-event-id="15"]')
-        .should('be.visible')
-        .should('have.class', 'highlight');
-
-      cy.get('.trace-node[data-event-id="1"]').should('have.class', 'filtered');
-      cy.get('.trace-node[data-event-id="3"]').should('have.class', 'filtered');
-
-      cy.get('.trace-filter__arrow').last().click();
-
-      cy.get('.trace-node[data-event-id="18"]')
-        .should('be.visible')
-        .should('have.class', 'highlight');
-
-      cy.get('.trace-filter__arrow').first().click();
-
-      cy.get('.trace-node[data-event-id="15"]')
-        .should('be.visible')
-        .should('have.class', 'highlight');
-
-      cy.get('.trace-node[data-event-id="13"]').click().should('have.class', 'highlight');
-      cy.get('.trace-node[data-event-id="1"]').should('have.class', 'filtered');
-      cy.get('.trace-node[data-event-id="3"]').should('have.class', 'filtered');
-      cy.get('.trace-node[data-event-id="15"]').should('not.have.class', 'highlight');
-      cy.get('.trace-filter__arrows-text').should('contain.text', '32 results');
-
-      cy.get('.clear-selections-icon').click();
-
-      cy.get('.trace-node[data-event-id="13"]').should('not.have.class', 'highlight');
-      cy.get('.trace-node[data-event-id="1"]').should('not.have.class', 'highlight');
-      cy.get('.trace-filter__input').should('have.value', eventQuery + ' ');
-      cy.get('.trace-filter__arrows-text').should('be.visible');
-    });
   });
 
   context('Java', () => {

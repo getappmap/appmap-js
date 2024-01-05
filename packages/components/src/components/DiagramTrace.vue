@@ -67,12 +67,10 @@ export default {
       }
       this.$refs.container.clearScaleTarget();
     },
-
     focusNode(node) {
       const { container } = this.$refs;
       container.lazyPanToElement(node.$el);
     },
-
     focusNodeChildren(node) {
       setTimeout(() => {
         const { container } = this.$refs;
@@ -80,24 +78,19 @@ export default {
         container.lazyPanToElement($el.querySelector('.trace > *'));
       }, 16);
     },
-
     focusHighlighted() {
-      setTimeout(() => {
-        const { container, trace } = this.$refs;
-        const element = container.$el.querySelector('.trace-node.highlight');
-        if (!element) {
-          return;
-        }
-
-        container.setScaleTarget(element);
-        container.panToElement(element, trace.$el);
-      }, 16);
+      this.focusElement('.trace-node.highlight:not(.selected)');
     },
-
+    focusSelected() {
+      this.focusElement('.trace-node.selected');
+    },
     showFocusEffect() {
+      this.focusElement('.trace-node.focused');
+    },
+    focusElement(selector) {
       setTimeout(() => {
         const { container, trace } = this.$refs;
-        const element = container.$el.querySelector('.trace-node.focused');
+        const element = container.$el.querySelector(selector);
         if (!element) {
           return;
         }
@@ -106,7 +99,6 @@ export default {
         container.panToElement(element, trace.$el);
       }, 16);
     },
-
     focusSelector(selector) {
       const element = this.$el.querySelector(selector);
       if (element) {
@@ -114,17 +106,25 @@ export default {
         container.panToElement(element, trace.$el);
       }
     },
-
     onClickEvent(event) {
       this.$emit('clickEvent', event);
     },
-
     container() {
       return this.$refs.container;
     },
-
     clearTransform() {
       this.$refs.container.clearTransform();
+    },
+  },
+
+  watch: {
+    '$store.getters.selectedObject': {
+      handler() {
+        this.focusSelected();
+      },
+    },
+    eventFilterMatchIndex() {
+      this.focusHighlighted();
     },
   },
 
@@ -193,11 +193,7 @@ export default {
   },
 
   activated() {
-    this.focusHighlighted();
-  },
-
-  updated() {
-    this.focusHighlighted();
+    this.focusSelected();
   },
 };
 </script>

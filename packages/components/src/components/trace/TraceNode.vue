@@ -99,12 +99,16 @@ export default {
 
       return 'default';
     },
+    selected() {
+      return this.$store?.getters?.selectedObject?.fqid === this.event?.fqid;
+    },
     classes() {
       return {
         'trace-node': true,
         filtered: this.filtered,
         highlight: this.highlight,
         focused: this.focused,
+        selected: this.selected,
         exceptions: this.event.exceptions.length,
       };
     },
