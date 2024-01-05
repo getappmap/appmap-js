@@ -23,7 +23,7 @@ export default {
   argTypes: {},
 };
 
-export const flamegraph = (args, { argTypes }) => ({
+export const Flamegraph = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VDiagramFlamegraph },
   store,

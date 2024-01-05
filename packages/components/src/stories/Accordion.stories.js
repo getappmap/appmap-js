@@ -19,4 +19,4 @@ const Template = (args, { argTypes }) => ({
   `,
 });
 
-export const accordion = Template.bind({});
+export const Accordion = Template.bind({});

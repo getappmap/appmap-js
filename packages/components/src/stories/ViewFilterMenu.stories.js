@@ -27,5 +27,5 @@ const Template = (args, { argTypes }) => ({
   store,
 });
 
-export const filterMenu = Template.bind({});
-filterMenu.args = { filteredAppMap };
+export const FilterMenu = Template.bind({});
+FilterMenu.args = { filteredAppMap };

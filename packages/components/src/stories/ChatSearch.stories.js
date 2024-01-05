@@ -10,20 +10,20 @@ export default {
   argTypes: {},
 };
 
-export const chatSearch = (args, { argTypes }) => ({
+export const ChatSearch = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VChatSearch },
   template: `<v-chat-search v-bind="$props"></v-chat-search>`,
 });
-chatSearch.args = {};
+ChatSearch.args = {};
 
-export const chatSearchMock = (args, { argTypes }) => ({
+export const ChatSearchMock = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VChatSearch },
   template: `<v-chat-search v-bind="$props"></v-chat-search>`,
 });
 
-export const chatSearchMockSearchPrepopulated = (args, { argTypes }) => ({
+export const ChatSearchMockSearchPrepopulated = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VChatSearch },
   template: `<v-chat-search v-bind="$props"></v-chat-search>`,
@@ -133,11 +133,11 @@ const mockRpc = (method, params, callback) => {
   }
 };
 
-chatSearchMock.args = {
+ChatSearchMock.args = {
   appmapRpcFn: mockRpc,
 };
 
-chatSearchMockSearchPrepopulated.args = {
+ChatSearchMockSearchPrepopulated.args = {
   appmapRpcFn: mockRpc,
   question: 'How does password reset work?',
 };

@@ -10,7 +10,7 @@ export default {
   },
 };
 
-export const tabs = (args, { argTypes }) => ({
+export const Tabs = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VTabs, VTab },
   template: `

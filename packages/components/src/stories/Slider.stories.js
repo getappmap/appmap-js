@@ -19,4 +19,4 @@ const Template = (args, { argTypes }) => ({
   `,
 });
 
-export const slider = Template.bind({});
+export const Slider = Template.bind({});

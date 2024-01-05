@@ -5,7 +5,7 @@
 <script>
 import { ComponentDiagram } from '@appland/diagrams';
 import { CodeObject, Event, ClassMap, CodeObjectType } from '@appland/models';
-import { CLEAR_SELECTION_STACK, SELECT_CODE_OBJECT } from '@/store/vsCode';
+import { SELECT_CODE_OBJECT } from '@/store/vsCode';
 
 export default {
   name: 'v-diagram-component',

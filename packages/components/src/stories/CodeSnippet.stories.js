@@ -17,7 +17,7 @@ export default {
   },
 };
 
-export const codeSnippet = (args, { argTypes }) => ({
+export const CodeSnippet = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VCodeSnippet },
   template: `<div style="transform: translate(-50%, -50%);left: 50%;top: 50%;position: absolute;">

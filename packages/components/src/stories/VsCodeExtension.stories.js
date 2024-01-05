@@ -77,27 +77,27 @@ const Template = (args, { argTypes }) => ({
   },
 });
 
-export const extension = Template.bind({});
+export const Extension = Template.bind({});
 
-export const extensionWithDefaultSequenceView = Template.bind({});
-extensionWithDefaultSequenceView.args = {
+export const ExtensionWithDefaultSequenceView = Template.bind({});
+ExtensionWithDefaultSequenceView.args = {
   defaultView: VIEW_SEQUENCE,
 };
 
-export const extensionWithSequenceDiff = Template.bind({});
-extensionWithSequenceDiff.args = {
+export const ExtensionWithSequenceDiff = Template.bind({});
+ExtensionWithSequenceDiff.args = {
   defaultView: VIEW_SEQUENCE,
   scenario: 'mapWithDiff',
   interactive: false,
 };
 
-export const extensionWithSavedFilters = Template.bind({});
-extensionWithSavedFilters.args = {
+export const ExtensionWithSavedFilters = Template.bind({});
+ExtensionWithSavedFilters.args = {
   defaultView: VIEW_SEQUENCE,
   savedFilters,
 };
 
-export const extensionWithNotification = (args, { argTypes }) => ({
+export const ExtensionWithNotification = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VVsCodeExtension },
   template: '<v-vs-code-extension v-bind="$props" ref="vsCode" />',
@@ -113,7 +113,7 @@ export const extensionWithNotification = (args, { argTypes }) => ({
   },
 });
 
-export const extensionWithoutHTTP = (args, { argTypes }) => ({
+export const ExtensionWithoutHTTP = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VVsCodeExtension },
   template: '<v-vs-code-extension v-bind="$props" ref="vsCode" />',
@@ -122,7 +122,7 @@ export const extensionWithoutHTTP = (args, { argTypes }) => ({
   },
 });
 
-export const extensionWithSlowLoad = (args, { argTypes }) => {
+export const ExtensionWithSlowLoad = (args, { argTypes }) => {
   return {
     props: Object.keys(argTypes),
     components: { VVsCodeExtension },
@@ -142,6 +142,6 @@ export const extensionWithSlowLoad = (args, { argTypes }) => {
   };
 };
 
-extensionWithSlowLoad.args = {
+ExtensionWithSlowLoad.args = {
   defaultView: VIEW_SEQUENCE,
 };
