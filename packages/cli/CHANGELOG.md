@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.117.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.116.2...@appland/appmap-v3.117.0) (2024-01-05)
+
+
+### Features
+
+* Update appland dependency versions ([a5b990a](https://github.com/getappmap/appmap-js/commit/a5b990a9df30a33d702561d6aa07a47ec6ea79cb))
+
 # [@appland/appmap-v3.116.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.116.1...@appland/appmap-v3.116.2) (2024-01-04)
 
 
