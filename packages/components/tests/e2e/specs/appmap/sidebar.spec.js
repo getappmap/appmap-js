@@ -220,11 +220,11 @@ context('AppMap sidebar', () => {
 
     cy.get('.cluster[data-id="app/helpers"]')
       .click({
-        position: 'bottomLeft',
+        position: 'topLeft',
       })
       .should('have.class', 'highlight')
       .rightclick({
-        position: 'bottomLeft',
+        position: 'topLeft',
       });
 
     cy.get('.dropdown-item:not([style*="display"])').contains('Collapse').click();
@@ -242,7 +242,7 @@ context('AppMap sidebar', () => {
       .should('have.class', 'highlight');
 
     cy.get('.cluster[data-id="app/helpers"]').rightclick({
-      position: 'bottomLeft',
+      position: 'topLeft',
     });
 
     cy.get('.dropdown-item:not([style*="display"])').contains('Collapse').click();

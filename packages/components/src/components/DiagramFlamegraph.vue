@@ -6,6 +6,7 @@
         :events="events"
         :zoom="zoom"
         :title="title"
+        :highlighted-event-index="highlightedEventIndex"
         @select="propagateSelect"
         @hover="onHover"
       />
@@ -42,6 +43,10 @@ export default {
     title: {
       type: String,
       default: 'root',
+    },
+    highlightedEventIndex: {
+      type: Number,
+      default: undefined,
     },
   },
   data() {

@@ -24,6 +24,7 @@
               :key="actionKey(action)"
               :interactive="interactive"
               :appMap="appMap"
+              :highlighted-event-index="highlightedEventIndex"
             />
           </template>
           <template v-if="action.nodeType === 'return'">
@@ -88,6 +89,10 @@ export default {
     collapseDepth: {
       type: Number,
       default: DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH,
+    },
+    highlightedEventIndex: {
+      type: Number,
+      default: undefined,
     },
   },
 
@@ -197,6 +202,15 @@ export default {
       });
     },
     focusHighlighted() {
+      this.$nextTick(() => {
+        if (!this.$el || !this.$el.querySelector) return;
+
+        const selected = this.$el.querySelector('.highlighted');
+        if (selected && selected.firstElementChild)
+          selected.firstElementChild.scrollIntoView(SCROLL_OPTIONS);
+      });
+    },
+    focusSelected() {
       setTimeout(() => {
         if (!this.$el || !this.$el.querySelector) return;
 
@@ -304,6 +318,9 @@ export default {
       const diffMode = this.actions.some((a) => a.action.diffMode);
       if (!diffMode) this.collapseActionsForCompactLook(this.actions, this.collapseDepth);
     },
+    highlightedEventIndex(newVal, oldVal) {
+      if (newVal !== undefined && newVal !== oldVal) this.focusHighlighted();
+    },
     '$store.state.focusedEvent': {
       handler(newVal) {
         if (newVal) {
@@ -315,7 +332,7 @@ export default {
       handler(newVal) {
         if (newVal) {
           this.expandCollapsedAncestors(newVal.id);
-          this.focusHighlighted();
+          this.focusSelected();
         }
       },
     },
@@ -331,14 +348,15 @@ export default {
   },
   mounted() {
     this.$emit('setMaxSeqDiagramCollapseDepth', this.getMaxActionDepth());
+    this.focusSelected();
     this.focusHighlighted();
   },
   activated() {
+    this.focusSelected();
     this.focusHighlighted();
   },
   updated() {
     this.$emit('setMaxSeqDiagramCollapseDepth', this.getMaxActionDepth());
-    this.focusHighlighted();
   },
   created() {
     if (!this.diagram || this.diagram.actors.length === 0 || this.collapsedActionState.length > 0)

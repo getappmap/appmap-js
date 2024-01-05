@@ -62,6 +62,10 @@ export default {
       type: String,
       default: 'root',
     },
+    highlightedEventIndex: {
+      type: Number,
+      default: undefined,
+    },
   },
   computed: {
     focus() {
@@ -71,6 +75,12 @@ export default {
           ancestors: new Set(this.focusedEvent.ancestors()),
         };
 
+      if (this.highlightedEvent)
+        return {
+          target: this.highlightedEvent,
+          ancestors: new Set(this.highlightedEvent.ancestors()),
+        };
+
       if (this.selectedEvent)
         return {
           target: this.selectedEvent,
@@ -78,6 +88,12 @@ export default {
         };
 
       return null;
+    },
+    highlightedEvent() {
+      return (
+        Number.isFinite(this.highlightedEventIndex) &&
+        this.$store?.state?.highlightedEvents[this.highlightedEventIndex]
+      );
     },
     selectedEvent() {
       const selectedObj = this.$store.getters.selectedObject;

@@ -87,7 +87,10 @@ export default {
   flex-direction: column;
   gap: 0;
   background-color: $black;
-  overflow: hidden;
+  // Using overflow: hidden here was causing issues in our Cypress tests
+  // using overflow: clip instead
+  // see https://github.com/cypress-io/cypress/issues/23898
+  overflow: clip;
 
   &__header {
     width: 100%;
@@ -127,15 +130,14 @@ export default {
   &__content {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
     padding-top: 40px;
   }
 }
 
 @media (max-width: 1100px) {
   .tabs {
-    ::-webkit-scrollbar {
-      display: none;
-    }
     &__header {
       flex-direction: column-reverse;
       min-height: 70px;
@@ -143,7 +145,6 @@ export default {
       height: auto;
       gap: 0.4rem;
       justify-content: end;
-      overflow-x: scroll;
       overflow-y: hidden;
     }
     &__group {
@@ -154,7 +155,7 @@ export default {
       align-self: center;
     }
     &__content {
-      padding-top: 70px;
+      padding-top: 70px !important;
     }
     &__controls {
       gap: 1rem;

@@ -250,6 +250,7 @@ context('AppMap sequence diagram', () => {
       cy.visit(
         'http://localhost:6006/iframe.html?id=pages-vs-code--extension-with-default-sequence-view&viewMode=story'
       );
+      cy.disableSmoothScrolling();
     });
 
     it('action is collapsed when inside current depth', () => {

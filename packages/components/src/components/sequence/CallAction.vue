@@ -239,6 +239,10 @@ export default {
     appMap: {
       type: Object,
     },
+    highlightedEventIndex: {
+      type: Number,
+      default: undefined,
+    },
   },
 
   computed: {
@@ -248,6 +252,15 @@ export default {
         this.$store.getters.selectedObject instanceof Event &&
         this.actionSpec.eventIds.includes(this.$store.getters.selectedObject.id)
       );
+    },
+    highlighted() {
+      if (this.highlightedEventIndex !== undefined) {
+        const currentlyHighlighted =
+          this.$store.state?.highlightedEvents[this.highlightedEventIndex];
+        return currentlyHighlighted && this.actionSpec?.eventIds?.includes(currentlyHighlighted.id);
+      } else {
+        return undefined;
+      }
     },
     focusedEvent() {
       return this.$store.state.focusedEvent;
@@ -273,6 +286,7 @@ export default {
         result.push('focused');
 
       if (this.selected) result.push('selected');
+      if (this.highlighted) result.push('highlighted');
 
       return result;
     },
@@ -316,8 +330,9 @@ export default {
 }
 
 .call.selected > .call-line-segment,
-.call.selected > .self-call {
-  background-color: #ff27b6c4;
+.call.selected > .self-call,
+.call.highlighted > .call-line-segment,
+.call.highlighted > .self-call {
   border-top: 4px solid $black;
   &.arrow-base {
     border-radius: 0;
@@ -331,6 +346,16 @@ export default {
     border-radius: 0;
     border-top: 4px solid $black;
   }
+}
+
+.call.selected > .call-line-segment,
+.call.selected > .self-call {
+  background-color: #ff27b6c4 !important;
+}
+
+.call.highlighted > .call-line-segment,
+.call.highlighted > .self-call {
+  background-color: #7b4669;
 }
 
 @keyframes node-focused {

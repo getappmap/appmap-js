@@ -50,13 +50,33 @@
 
     <div class="main-column main-column--right">
       <v-tabs @activateTab="onChangeTab" ref="tabs" :initial-tab="defaultView">
+        <v-search-bar
+          v-if="!isGiantAppMap"
+          ref="searchBar"
+          :nodesLength="eventFilterMatches.length"
+          :suggestions="eventsSuggestions"
+          :currentIndex="eventFilterMatchIndex"
+          :initialSearchValue="eventFilterText"
+          @onChange="
+            (value) => {
+              this.eventFilterText = value;
+            }
+          "
+          @onPrevArrow="prevSearchBar"
+          @onNextArrow="nextSearchBar"
+          @clearSearchBar="() => (this.eventFilterMatchIndex = undefined)"
+          @makeSelection="searchBarSelection"
+        />
         <v-tab
           name="Dependency Map"
           :is-active="isViewingComponent"
           :tabName="VIEW_COMPONENT"
           :ref="VIEW_COMPONENT"
         >
-          <v-diagram-component :class-map="filteredAppMap.classMap" />
+          <v-diagram-component
+            :class-map="filteredAppMap.classMap"
+            :highlighted-event-index="eventFilterMatchIndex"
+          />
         </v-tab>
 
         <v-tab
@@ -70,6 +90,7 @@
             ref="viewSequence_diagram"
             :app-map="filteredAppMap"
             :collapse-depth="seqDiagramCollapseDepth"
+            :highlighted-event-index="eventFilterMatchIndex"
             @setMaxSeqDiagramCollapseDepth="setMaxSeqDiagramCollapseDepth"
             @updateCollapseDepth="handleNewCollapseDepth"
           />
@@ -77,20 +98,6 @@
 
         <v-tab name="Trace View" :is-active="isViewingFlow" :tabName="VIEW_FLOW" :ref="VIEW_FLOW">
           <div class="trace-view">
-            <v-trace-filter
-              ref="traceFilter"
-              :nodesLength="eventFilterMatches.length"
-              :currentIndex="eventFilterMatchIndex"
-              :suggestions="eventsSuggestions"
-              :initialFilterValue="eventFilterText"
-              @onChange="
-                (value) => {
-                  this.eventFilterText = value;
-                }
-              "
-              @onPrevArrow="prevTraceFilter"
-              @onNextArrow="nextTraceFilter"
-            />
             <v-diagram-trace
               ref="viewFlow_diagram"
               :events="filteredAppMap.rootEvents()"
@@ -115,6 +122,7 @@
             ref="viewFlamegraph_diagram"
             :events="filteredAppMap.rootEvents()"
             :title="filteredAppMap.name"
+            :highlighted-event-index="eventFilterMatchIndex"
             @select="onFlamegraphSelect"
           />
         </v-tab>
@@ -341,11 +349,11 @@ import VPopper from '../components/Popper.vue';
 import VStatsPanel from '../components/StatsPanel.vue';
 import VTabs from '../components/Tabs.vue';
 import VTab from '../components/Tab.vue';
-import VTraceFilter from '../components/trace/TraceFilter.vue';
 import VNoDataNotice from '../components/notices/NoDataNotice.vue';
 import VUnlicensedNotice from '../components/notices/UnlicensedNotice.vue';
 import VConfigurationRequired from '../components/notices/ConfigurationRequiredNotice.vue';
 import EmitLinkMixin from '@/components/mixins/emitLink';
+import VSearchBar from '../components/SearchBar.vue';
 import toListItem from '@/lib/finding';
 import {
   store,
@@ -402,7 +410,7 @@ export default {
     VStatsPanel,
     VTabs,
     VTab,
-    VTraceFilter,
+    VSearchBar,
     DiagramGray,
     StatsIcon,
     ExclamationIcon,
@@ -428,7 +436,7 @@ export default {
       VIEW_FLOW,
       VIEW_FLAMEGRAPH,
       eventFilterText: '',
-      eventFilterMatchIndex: 0,
+      eventFilterMatchIndex: undefined,
       showStatsPanel: false,
       seqDiagramTimeoutId: undefined,
       seqDiagramCollapseDepth: DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH,
@@ -525,12 +533,11 @@ export default {
     highlightedNodes: {
       handler() {
         this.eventFilterMatchIndex = 0;
-        this.selectCurrentHighlightedEvent();
       },
     },
-    eventFilterMatchIndex: {
-      handler() {
-        this.selectCurrentHighlightedEvent();
+    eventFilterMatches: {
+      handler(newVal) {
+        this.$store.commit(SET_HIGHLIGHTED_EVENTS, newVal);
       },
     },
     filteredAppMap: {
@@ -725,7 +732,10 @@ export default {
       return Array.from(nodes).sort((a, b) => a.id - b.id);
     },
     eventFilterMatch() {
-      return this.eventFilterMatches[this.eventFilterMatchIndex];
+      return (
+        Number.isFinite(this.eventFilterMatchIndex) &&
+        this.eventFilterMatches[this.eventFilterMatchIndex]
+      );
     },
     selectedObject() {
       return this.$store.getters.selectedObject;
@@ -1026,13 +1036,15 @@ export default {
             this.setView(state.currentView);
           }
 
-          if (state.traceFilter) {
+          // traceFilter is supported for backwards compatibility
+          let searchBarValue = state.searchBar || state.traceFilter;
+          if (searchBarValue) {
             this.$nextTick(() => {
-              if (!state.traceFilter.endsWith(' ')) {
-                state.traceFilter += ' ';
+              if (!searchBarValue.endsWith(' ')) {
+                searchBarValue += ' ';
               }
 
-              this.$refs.traceFilter.setValue(state.traceFilter);
+              this.$refs.searchBar.setValue(searchBarValue);
               resolve();
             });
           } else {
@@ -1042,7 +1054,7 @@ export default {
       });
     },
     clearSelection() {
-      this.eventFilterMatchIndex = 0;
+      this.eventFilterMatchIndex = undefined;
       this.$store.commit(CLEAR_SELECTION_STACK);
       this.$root.$emit('clearSelection');
     },
@@ -1135,7 +1147,7 @@ export default {
         this.$refs.mainColumnLeft.style.width = result;
       });
     },
-    prevTraceFilter() {
+    prevSearchBar() {
       if (this.eventFilterMatches.length === 0) {
         return;
       }
@@ -1152,7 +1164,7 @@ export default {
             (e) => e === previousEvent
           );
         } else {
-          this.eventFilterMatchIndex = -1;
+          this.eventFilterMatchIndex = undefined;
         }
       }
 
@@ -1160,10 +1172,12 @@ export default {
         this.eventFilterMatchIndex = this.eventFilterMatches.length - 1;
       }
     },
-    nextTraceFilter() {
+    nextSearchBar() {
       if (this.eventFilterMatches.length === 0) {
         return;
       }
+
+      this.$store.commit(SET_FOCUSED_EVENT, null);
 
       if (Number.isFinite(this.eventFilterMatchIndex)) {
         this.eventFilterMatchIndex += 1;
@@ -1188,10 +1202,8 @@ export default {
         this.eventFilterMatchIndex = 0;
       }
     },
-    selectCurrentHighlightedEvent() {
-      if (this.eventFilterMatch) {
-        this.$store.commit(SELECT_CODE_OBJECT, this.eventFilterMatch);
-      }
+    searchBarSelection() {
+      this.eventFilterMatchIndex = 0;
     },
     initializeSavedFilters() {
       let savedFilters = this.savedFilters;
@@ -1241,7 +1253,14 @@ export default {
       const finding = findingObject.resolvedFinding && findingObject.resolvedFinding.finding;
       if (!finding) return;
 
-      if (finding.relatedEvents) this.$store.commit(SET_HIGHLIGHTED_EVENTS, finding.relatedEvents);
+      if (finding.relatedEvents) {
+        const relatedEvents = finding.relatedEvents
+          .sort((a, b) => a.id - b.id)
+          .map((event) => this.filteredAppMap.eventsById[event.id]);
+        this.$refs.searchBar.setValue(
+          relatedEvents.map((event) => `id:${event.id}`).join(' ') + ' '
+        );
+      }
 
       if (finding.impactDomain === 'Performance') {
         this.$store.commit(SET_VIEW, VIEW_FLAMEGRAPH);
