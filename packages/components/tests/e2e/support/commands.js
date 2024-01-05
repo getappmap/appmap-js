@@ -23,3 +23,18 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+// Call this command after calling cy.visit() to disable smooth scrolling
+Cypress.Commands.add('disableSmoothScrolling', () => {
+  cy.window().then((win) => {
+    const originalScrollIntoView = win.Element.prototype.scrollIntoView;
+
+    // Calling scrollIntoView with { behavior: 'smooth' } causes problems with Cypress
+    // so we delete the behavior property before calling scrollIntoView
+    // see https://github.com/cypress-io/cypress/issues/805
+    cy.stub(win.Element.prototype, 'scrollIntoView').callsFake(async function (args) {
+      delete args.behavior;
+      originalScrollIntoView.apply(this, args);
+    });
+  });
+});
