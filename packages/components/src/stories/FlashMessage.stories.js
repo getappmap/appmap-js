@@ -24,4 +24,4 @@ const Template = (args, { argTypes }) => ({
   template: `<v-flash-message v-bind="$props">{{ message }}</v-flash-message>`,
 });
 
-export const flashMessage = Template.bind({});
+export const FlashMessage = Template.bind({});

@@ -13,7 +13,7 @@ export default {
   },
 };
 
-export const diff = (args, { argTypes }) => ({
+export const Diff = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VDiff },
   template: '<v-diff v-bind="$props" ref="vsCode" />',

@@ -16,6 +16,9 @@ export default {
   },
 };
 
+// We can't use InstallGuide here because that's the name of the Vue component,
+// so we'll just diable the eslint rule for this line.
+// eslint-disable-next-line storybook/prefer-pascal-case
 export const installGuide = (args, { argTypes }) => ({
   props: Object.keys(argTypes).filter((key) => key !== 'projects'),
   components: { InstallGuide },

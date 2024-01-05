@@ -19,4 +19,4 @@ const Template = (args, { argTypes }) => ({
   template: '<v-sign-in v-bind="$props" ref="vsCode" />',
 });
 
-export const signIn = Template.bind({});
+export const SignIn = Template.bind({});

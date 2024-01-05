@@ -23,7 +23,7 @@ export default {
   },
 };
 
-export const component = (args, { argTypes }) => ({
+export const Component = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VDiagramComponent },
   template: '<v-diagram-component v-bind="$props" />',

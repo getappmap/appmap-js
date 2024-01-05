@@ -95,7 +95,6 @@ import VChat from '@/components/chat/Chat.vue';
 import VAccordion from '@/components/Accordion.vue';
 import VAppMap from './VsCodeExtension.vue';
 import AppMapRPC from '@/lib/AppMapRPC';
-import _ from 'cypress/types/lodash';
 
 export default {
   name: 'v-chat-search',

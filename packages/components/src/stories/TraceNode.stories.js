@@ -15,22 +15,22 @@ const Template = (args, { argTypes }) => ({
   template: `<v-trace-node v-bind="$props" />`,
 });
 
-export const eventDefault = Template.bind({});
-eventDefault.args = {
+export const EventDefault = Template.bind({});
+EventDefault.args = {
   event: appMap.events.find((e) => e.parameters && e.parameters.length > 2),
 };
 
-export const eventSql = Template.bind({});
-eventSql.args = {
+export const EventSql = Template.bind({});
+EventSql.args = {
   event: appMap.events.find((e) => e.sql),
 };
 
-export const eventHttp = Template.bind({});
-eventHttp.args = {
+export const EventHttp = Template.bind({});
+EventHttp.args = {
   event: appMap.events.find((e) => e.httpServerRequest),
 };
 
-export const eventHttpClientRequest = Template.bind({});
-eventHttpClientRequest.args = {
+export const EventHttpClientRequest = Template.bind({});
+EventHttpClientRequest.args = {
   event: appMap.events.find((e) => e.httpClientRequest),
 };

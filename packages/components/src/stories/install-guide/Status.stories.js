@@ -50,4 +50,4 @@ const Template = (args, { argTypes }) => ({
   `,
 });
 
-export const installStatus = Template.bind({});
+export const InstallStatus = Template.bind({});

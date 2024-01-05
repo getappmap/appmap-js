@@ -17,8 +17,8 @@ const Template = (args, { argTypes }) => ({
   template: '<v-record-app-maps v-bind="$props" :status-states="statusStates"/>',
 });
 
-export const railsRspec = Template.bind({});
-railsRspec.args = {
+export const RailsRspec = Template.bind({});
+RailsRspec.args = {
   project: {
     name: 'MyOtherProject',
     score: 3,
@@ -40,8 +40,8 @@ railsRspec.args = {
   complete: true,
 };
 
-export const railsOnly = Template.bind({});
-railsOnly.args = {
+export const RailsOnly = Template.bind({});
+RailsOnly.args = {
   project: {
     name: 'MyOtherProject',
     score: 3,
@@ -63,8 +63,8 @@ railsOnly.args = {
   complete: true,
 };
 
-export const rspecOnly = Template.bind({});
-rspecOnly.args = {
+export const RspecOnly = Template.bind({});
+RspecOnly.args = {
   project: {
     name: 'MyOtherProject',
     score: 3,
@@ -86,8 +86,8 @@ rspecOnly.args = {
   complete: true,
 };
 
-export const rubyOnly = Template.bind({});
-rubyOnly.args = {
+export const RubyOnly = Template.bind({});
+RubyOnly.args = {
   project: {
     name: 'MyOtherProject',
     score: 3,
@@ -101,8 +101,8 @@ rubyOnly.args = {
   complete: true,
 };
 
-export const vscodeJUnitSpring = Template.bind({});
-vscodeJUnitSpring.args = {
+export const VscodeJUnitSpring = Template.bind({});
+VscodeJUnitSpring.args = {
   project: {
     name: 'MyOtherProject',
     score: 3,
@@ -124,8 +124,8 @@ vscodeJUnitSpring.args = {
   complete: true,
 };
 
-export const intellijJUnitSpring = Template.bind({});
-intellijJUnitSpring.args = {
+export const IntellijJUnitSpring = Template.bind({});
+IntellijJUnitSpring.args = {
   project: {
     name: 'MyOtherProject',
     score: 3,
@@ -147,8 +147,8 @@ intellijJUnitSpring.args = {
   complete: true,
 };
 
-export const intellijJUnit = Template.bind({});
-intellijJUnit.args = {
+export const IntellijJUnit = Template.bind({});
+IntellijJUnit.args = {
   project: {
     name: 'MyOtherProject',
     score: 3,
@@ -166,8 +166,8 @@ intellijJUnit.args = {
   complete: true,
 };
 
-export const intellijSpring = Template.bind({});
-intellijSpring.args = {
+export const IntellijSpring = Template.bind({});
+IntellijSpring.args = {
   project: {
     name: 'MyOtherProject',
     score: 3,
@@ -185,8 +185,8 @@ intellijSpring.args = {
   complete: true,
 };
 
-export const flaskUnittest = Template.bind({});
-flaskUnittest.args = {
+export const FlaskUnittest = Template.bind({});
+FlaskUnittest.args = {
   project: {
     name: 'MyProject',
     score: 3,
@@ -207,8 +207,8 @@ flaskUnittest.args = {
   editor: 'vscode',
 };
 
-export const pythonOnly = Template.bind({});
-pythonOnly.args = {
+export const PythonOnly = Template.bind({});
+PythonOnly.args = {
   project: {
     name: 'MyProject',
     score: 3,
@@ -221,8 +221,8 @@ pythonOnly.args = {
   editor: 'vscode',
 };
 
-export const noWebOrTestFramework = Template.bind({});
-noWebOrTestFramework.args = {
+export const NoWebOrTestFramework = Template.bind({});
+NoWebOrTestFramework.args = {
   project: {
     name: 'MyOtherProject',
     score: 3,
@@ -244,8 +244,8 @@ noWebOrTestFramework.args = {
   complete: true,
 };
 
-export const unsupportedLanguage = Template.bind({});
-unsupportedLanguage.args = {
+export const UnsupportedLanguage = Template.bind({});
+UnsupportedLanguage.args = {
   project: {
     name: 'MyOtherProject',
     score: 3,

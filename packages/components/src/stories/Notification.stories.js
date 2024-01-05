@@ -10,7 +10,7 @@ export default {
   },
 };
 
-export const notification = (args, { argTypes }) => ({
+export const Notification = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VNotification },
   template: '<v-notification v-bind="$props"/>',

@@ -25,7 +25,7 @@ export default {
   },
 };
 
-export const trace = (args, { argTypes }) => ({
+export const Trace = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VDiagramTrace },
   template: `<v-diagram-trace v-bind="$props" @clickEvent="(e) => $store.commit('selectCodeObject', e)" />`,

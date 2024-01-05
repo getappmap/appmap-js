@@ -104,12 +104,6 @@ class ErrorMessage implements IMessage {
   }
 }
 
-type Suggestion = {
-  title: string;
-  subTitle: string;
-  prompt: string;
-};
-
 export default {
   name: 'v-chat',
   components: {

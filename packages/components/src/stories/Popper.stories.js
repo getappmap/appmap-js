@@ -18,7 +18,7 @@ export default {
   },
 };
 
-export const popper = (args, { argTypes }) => ({
+export const Popper = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VPopper },
   template:
