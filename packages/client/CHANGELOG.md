@@ -1,3 +1,10 @@
+# [@appland/client-v1.14.1](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.14.0...@appland/client-v1.14.1) (2024-01-05)
+
+
+### Bug Fixes
+
+* Authenticate Chat/ChatSearch frontend clients ([d96eadb](https://github.com/getappmap/appmap-js/commit/d96eadb3d9d7355ffeffd6803f352840e2e80324))
+
 # [@appland/client-v1.14.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.13.0...@appland/client-v1.14.0) (2023-12-29)
 
 
