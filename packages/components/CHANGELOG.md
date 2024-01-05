@@ -1,3 +1,11 @@
+# [@appland/components-v3.21.3](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.21.2...@appland/components-v3.21.3) (2024-01-05)
+
+
+### Bug Fixes
+
+* Authenticate Chat/ChatSearch frontend clients ([d96eadb](https://github.com/getappmap/appmap-js/commit/d96eadb3d9d7355ffeffd6803f352840e2e80324))
+* Remove extra chevron in parents section of details panel ([2ce71e7](https://github.com/getappmap/appmap-js/commit/2ce71e7728624f697b6fb9523e1e1b55f2867e03))
+
 # [@appland/components-v3.21.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.21.1...@appland/components-v3.21.2) (2024-01-04)
 
 
