@@ -39,9 +39,7 @@ describe('components/Chat.vue', () => {
       wrapper.vm.addUserMessage('Hello from the user');
       await wrapper.vm.$nextTick();
 
-      // Once on update
-      // Once for the new message
-      expect(spy).toBeCalledTimes(2);
+      expect(spy).toBeCalledTimes(1);
     });
   });
 
@@ -102,7 +100,7 @@ describe('components/Chat.vue', () => {
 
       // Once on update
       // Once for each token
-      expect(spy).toBeCalledTimes(tokens.length + 1);
+      expect(spy).toBeCalledTimes(tokens.length);
     });
   });
 

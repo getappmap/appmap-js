@@ -29,7 +29,8 @@ export const ChatSearchMockSearchPrepopulated = (args, { argTypes }) => ({
   template: `<v-chat-search v-bind="$props"></v-chat-search>`,
 });
 
-const MOCK_EXPLANATION = `Based on the code snippets provided, it appears that the code is related to user management in a Rails application. Here is a summary of the functionality:
+const MOCK_EXPLANATION =
+  `Based on the code snippets provided, it appears that the code is related to user management in a Rails application. Here is a summary of the functionality:
 
 1. The \`UsersHelper\` module defines a helper method \`gravatar_for\` that generates a Gravatar URL for a given user.
 
@@ -50,7 +51,7 @@ const MOCK_EXPLANATION = `Based on the code snippets provided, it appears that t
 9. The \`edit.html.erb\` view displays a form for editing a user's profile.
 
 Overall, this code provides functionality for user authentication, user creation, and user profile management in a Rails application.
-`;
+`.split('\n');
 
 const DATA_BY_PATH = {
   'tmp/appmap/rspec/order_test': orderData,
@@ -108,18 +109,24 @@ const searchResponse = {
 
 const mockRpc = (method, params, callback) => {
   if (method === 'explain') {
+    statusIndex = 0;
     callback(null, null, { userMessageId, threadId });
   } else if (method === 'explain.status') {
-    const responseIndex = statusIndex % 3;
+    const responseIndex = statusIndex;
     statusIndex += 1;
     if (responseIndex === 0) callback(null, null, { step: 'build-vector-terms' });
-    if (responseIndex === 1)
+    else if (responseIndex === 1)
       setTimeout(() => callback(null, null, { step: 'explain', searchResponse }), 500);
-    if (responseIndex === 2)
+    else if (responseIndex < MOCK_EXPLANATION.length + 2)
       setTimeout(() => {
         requestIndex += 1;
-        callback(null, null, { step: 'complete', searchResponse, explanation: MOCK_EXPLANATION });
+        callback(null, null, {
+          step: 'explain',
+          searchResponse,
+          explanation: MOCK_EXPLANATION.slice(0, responseIndex - 2).map((line) => `${line}\n`),
+        });
       }, 500);
+    else callback(null, null, { step: 'complete', searchResponse, explanation: MOCK_EXPLANATION });
   } else if (method.split('.')[0] === 'appmap') {
     const appmapId = params.appmap;
     const data = DATA_BY_PATH[appmapId];
