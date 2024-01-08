@@ -229,4 +229,14 @@ describe('VsCodeExtension.vue', () => {
 
     wrapper.vm.clearSelection();
   });
+
+  it('renders the `unlicensed` notice when the user is unlicensed', async () => {
+    await wrapper.setProps({ isLicensed: false });
+    expect(wrapper.find('[data-cy="notice-unlicensed"]').exists()).toBe(true);
+  });
+
+  it('renders the `configuration required` notice when the user is unlicensed', async () => {
+    await wrapper.setProps({ isConfigured: false });
+    expect(wrapper.find('[data-cy="notice-configuration"]').exists()).toBe(true);
+  });
 });
