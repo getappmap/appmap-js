@@ -3,11 +3,11 @@
     <h5>{{ title }}</h5>
     <ul>
       <li v-for="(item, index) in items" :key="index" class="list-pair">
-        <span class="list-pair__object" @click.prevent="selectCodeObject(item.from)">
+        <span class="list-pair__object" @click.prevent="selectObject(item.from)">
           {{ nameOf(item.from) }}
         </span>
         to
-        <span class="list-pair__object" @click.prevent="selectCodeObject(item.to)">
+        <span class="list-pair__object" @click.prevent="selectObject(item.to)">
           {{ nameOf(item.to) }}
         </span>
       </li>
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { SELECT_CODE_OBJECT } from '@/store/vsCode';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'v-details-panel-list-pairs',
@@ -28,14 +28,10 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['selectObject']),
     nameOf(item) {
       const { codeObject } = item;
       return codeObject.prettyName || codeObject.name || codeObject.toString();
-    },
-    selectCodeObject(item) {
-      if (this.$store) {
-        this.$store.commit(SELECT_CODE_OBJECT, item);
-      }
     },
   },
 };

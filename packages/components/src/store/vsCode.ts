@@ -42,7 +42,8 @@ function savedFiltersSorter(a: any, b: any) {
   return a.filterName.localeCompare(b.filterName);
 }
 
-type Selectable = CodeObject | Event | FindingListItem;
+type FQID = string;
+type Selectable = FQID | CodeObject | Event | FindingListItem;
 type SavedFilter = {
   filterName: string;
   state: string;
@@ -52,6 +53,14 @@ type SavedFilter = {
 type SetAppMapDataOptions = {
   appMap: Record<string, unknown>;
   sequenceDiagram?: Diagram;
+};
+
+class ResolveResult<T> {
+  constructor(readonly fqid: string, readonly object: T) {}
+
+  public get type(): string {
+    return this.fqid.split(':')[0];
+  }
 };
 
 export function buildStore() {
@@ -81,13 +90,135 @@ export function buildStore() {
         return state.selectionStack[state.selectionStack.length - 1];
       },
       appMap: (state) => state.filteredAppMap,
+      resolveObject: (state) => (selection: Selectable, appMap?: AppMap): ResolveResult<Selectable | undefined> => {
+        const fqid = typeof selection === 'string' ? selection : selection.fqid;
+        if (!fqid) {
+          throw new Error('Invalid selection, FQID was undefined');
+        };
+
+        const [match, type, object] = fqid.match(/^([a-z\-]+):(.+)/) || [];
+        if (!match) {
+          throw new Error(`Invalid selection, FQID was malformed: ${fqid}`);
+        };
+
+        const scope = appMap || state.filteredAppMap;
+
+        switch (type) {
+          case 'event':
+          case 'id': {
+            const eventId = parseInt(object, 10);
+
+            if (Number.isNaN(eventId)) {
+              throw new Error(`Invalid selection, event ID was not a number: ${object}`);
+            };
+
+            const event = scope.events.find((e) => e.id === eventId);
+            return new ResolveResult(fqid, event);
+          }
+
+          case 'analysis-finding': {
+            const hash = object;
+            const resolvedFinding = state.findings.find(({ finding }) => finding.hash_v2 === hash || finding.hash === hash);
+            const obj = resolvedFinding ? toListItem(resolvedFinding) : undefined;
+            return new ResolveResult(fqid, obj);
+          }
+
+          case 'label': {
+            return new ResolveResult(fqid, object);
+          }
+
+          default: {
+            const obj = scope.classMap.codeObjects.find((obj) => obj.fqid === fqid);
+            return new ResolveResult(fqid, obj);
+          }
+        }
+      },
     },
 
     actions: {
       loadData({ commit }, appMap: Record<string, unknown>, sequenceDiagram?: Diagram) {
         commit('SET_APPMAP_DATA', { appMap, sequenceDiagram });
       },
-      selectObject({ commit, state }, fqid: string, modifyFilters?: boolean) {
+      selectObject({ commit, state, getters }, obj: Selectable, modifyFilters?: boolean) {
+        let res: ResolveResult<Selectable | undefined> = getters.resolveObject(obj);
+        if (!res.object && modifyFilters) {
+          // Attempt to resolve without filters applied
+          res = getters.resolveObject(obj, state.appMap);
+
+          if (res.object) {
+            commit('CLEAR_DECLUTTER_FILTERS');
+          }
+
+          res = getters.resolveObject(obj);
+          if (!res.object) {
+            // This should never happen. The object was found in the unfiltered set,
+            // filters were cleared, and it's not found again.
+            throw new Error(`Unable to resolve object: ${obj}`);
+          }
+        }
+
+        if (res.type === 'label') {
+          commit('SELECT_LABEL', res.object);
+        } else {
+          commit('SELECT_CODE_OBJECT', res.object);
+        }
+      },
+      clearSelectionStack({ commit }) {
+        commit('CLEAR_SELECTION_STACK');
+      },
+      popSelectionStack({ commit }) {
+        commit('POP_SELECTION_STACK');
+      },
+      focusEvent({ commit }, event: Event) {
+        commit('SET_FOCUSED_EVENT', event);
+      },
+      setView({ commit }, view: ViewType) {
+        commit('SET_VIEW', view);
+      },
+      hideObject({ commit }, fqid: string) {
+        commit('ADD_HIDDEN_NAME', fqid);
+      },
+      removeFilterRootObject({ commit, state }, fqid: string) {
+        const index = state.filters.rootObjects.findIndex((rootObject) => rootObject.fqid === fqid);
+        if (index === -1) return;
+
+        commit('REMOVE_ROOT_OBJECT', fqid);
+      },
+      toggleFilterRootObject({ commit, state }, fqid: string) {
+        const index = state.filters.rootObjects.findIndex((rootObject) => rootObject.fqid === fqid);
+        if (index === -1) {
+          commit('ADD_ROOT_OBJECT', fqid);
+        } else {
+          commit('REMOVE_ROOT_OBJECT', index);
+        }
+      },
+    },
+
+    mutations: {
+      // Stores the initial, complete AppMap.
+      SET_APPMAP_DATA(state, { appMap, sequenceDiagram }: SetAppMapDataOptions) {
+        if (sequenceDiagram) {
+          state.precomputedSequenceDiagram = unparseDiagram(sequenceDiagram);
+          appMap.sequenceDiagram = state.precomputedSequenceDiagram;
+        }
+
+        state.selectionStack = [];
+        state.appMap = buildAppMap(appMap).normalize().build();
+
+        // TODO: Is this needed? This looks like view model code
+        // state.appMap.callTree.rootEvent.forEach((e) => {
+        //   e.displayName = fullyQualifiedFunctionName(e.input);
+        // });
+      },
+
+      // Show information about a code object in the sidebar.
+      // The code object can be a package, class, function, SQL, etc, or it can
+      // be a specific event. These code object selections are stored in a stack, so that
+      // the user can navigate back to the previous selection.
+      SELECT_CODE_OBJECT(state, selection?: Selectable) {
+        if (selection typeof 'string') {
+          // It's a FQID
+          const fqid = obj;
         const [match, type, object] = fqid.match(/^([a-z\-]+):(.+)/) || [];
         if (!match) return;
 
@@ -124,43 +255,7 @@ export function buildStore() {
         }
 
         if (selectedObject) commit('SELECT_CODE_OBJECT', selectedObject);
-      },
-      clearSelectionStack({ commit }) {
-        commit('CLEAR_SELECTION_STACK');
-      },
-      popSelectionStack({ commit }) {
-        commit('POP_SELECTION_STACK');
-      },
-      focusEvent({ commit }, event: Event) {
-        commit('SET_FOCUSED_EVENT', event);
-      },
-      setView({ commit }, view: string) {
-        commit('SET_VIEW', view);
-      },
-    },
-
-    mutations: {
-      // Stores the initial, complete AppMap.
-      SET_APPMAP_DATA(state, { appMap, sequenceDiagram }: SetAppMapDataOptions) {
-        if (sequenceDiagram) {
-          state.precomputedSequenceDiagram = unparseDiagram(sequenceDiagram);
-          appMap.sequenceDiagram = state.precomputedSequenceDiagram;
         }
-
-        state.selectionStack = [];
-        state.appMap = buildAppMap(appMap).normalize().build();
-
-        // TODO: Is this needed? This looks like view model code
-        // state.appMap.callTree.rootEvent.forEach((e) => {
-        //   e.displayName = fullyQualifiedFunctionName(e.input);
-        // });
-      },
-
-      // Show information about a code object in the sidebar.
-      // The code object can be a package, class, function, SQL, etc, or it can
-      // be a specific event. These code object selections are stored in a stack, so that
-      // the user can navigate back to the previous selection.
-      SELECT_CODE_OBJECT(state, selection?: Selectable) {
         if (selection) {
           let selectionProperty: keyof CodeObject | keyof Event | keyof FindingListItem = 'fqid';
           if ('type' in selection && selection.type === 'analysis-finding') {
@@ -287,7 +382,7 @@ export function buildStore() {
         state.filters.rootObjects.push(objectFqid);
       },
 
-      REMOVE_ROOT_OBJECT(state, index) {
+      REMOVE_ROOT_OBJECT(state, index: number) {
         state.filters.rootObjects.splice(index, 1);
       },
 

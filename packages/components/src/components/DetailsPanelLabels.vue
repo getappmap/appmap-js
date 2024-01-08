@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { SELECT_LABEL } from '../store/vsCode';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'v-details-panel-labels',
@@ -26,8 +26,9 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['selectObject']),
     selectLabel(label) {
-      this.$store.commit(SELECT_LABEL, label);
+      this.selectObject(`label:${label}`);
     },
   },
 };

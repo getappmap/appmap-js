@@ -141,7 +141,7 @@ import ScissorsIcon from '@/assets/scissors-icon.svg';
 import NavArrow from '@/assets/nav-arrow.svg';
 import ClearIcon from '@/assets/x-icon.svg';
 import ChevronDownIcon from '@/assets/fa-solid_chevron-down.svg';
-import { SELECT_CODE_OBJECT } from '@/store/vsCode';
+import { mapActions } from 'vuex';
 
 const MAX_DISPLAY_NAME_LENGTH = 150;
 
@@ -247,6 +247,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['selectObject']),
     openStatsPanel() {
       this.$emit('openStatsPanel');
     },
@@ -269,14 +270,14 @@ export default {
     },
     goBack() {
       const selection = this.selectionStack[this.currentSelectionIndex - 1];
-      this.$store.commit(SELECT_CODE_OBJECT, selection);
+      this.selectObject(selection);
     },
     goForward() {
       const selection = this.selectionStack[this.currentSelectionIndex + 1];
-      this.$store.commit(SELECT_CODE_OBJECT, selection);
+      this.selectObject(selection);
     },
     selectObject() {
-      this.$store.commit(SELECT_CODE_OBJECT, this.currentSelection);
+      this.selectObject(this.currentSelection);
     },
   },
   updated() {

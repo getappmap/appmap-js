@@ -126,7 +126,8 @@ import VDetailsButton from '@/components/DetailsButton.vue';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
 import VSqlCode from '@/components/SqlCode.vue';
-import { SET_VIEW, VIEW_FLAMEGRAPH, VIEW_FLOW, VIEW_SEQUENCE } from '@/store/vsCode';
+import { VIEW_FLAMEGRAPH, VIEW_FLOW, VIEW_SEQUENCE } from '@/store/vsCode';
+import { mapActions } from 'vuex';
 import toListItem from '@/lib/finding';
 
 export default {
@@ -239,14 +240,15 @@ export default {
   },
 
   methods: {
+    ...mapActions(['setView']),
     viewEventInSequence() {
-      this.$store.commit(SET_VIEW, VIEW_SEQUENCE);
+      this.setView(VIEW_SEQUENCE);
     },
     viewEventInTrace() {
-      this.$store.commit(SET_VIEW, VIEW_FLOW);
+      this.setView(VIEW_FLOW);
     },
     viewEventInFlamegraph() {
-      this.$store.commit(SET_VIEW, VIEW_FLAMEGRAPH);
+      this.setView(VIEW_FLAMEGRAPH);
     },
   },
 };

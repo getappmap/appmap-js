@@ -9,7 +9,7 @@
 import { getSqlLabelFromString } from '@appland/models';
 import VDetailsPanelHeader from '@/components/DetailsPanelHeader.vue';
 import VDetailsPanelList from '@/components/DetailsPanelList.vue';
-import { SELECT_CODE_OBJECT, POP_SELECTION_STACK } from '../store/vsCode';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'v-details-panel-query',
@@ -24,6 +24,7 @@ export default {
     },
   },
   computed: {
+    ...mapActions(['selectObject', 'popSelectionStack']),
     title() {
       return getSqlLabelFromString(this.object.name);
     },
@@ -37,8 +38,8 @@ export default {
 
   created() {
     if (this.object.events.length === 1) {
-      this.$store.commit(POP_SELECTION_STACK);
-      this.$store.commit(SELECT_CODE_OBJECT, this.object.events[0]);
+      this.popSelectionStack();
+      this.selectObject(this.object.events[0]);
     }
   },
 };

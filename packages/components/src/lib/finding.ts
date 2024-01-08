@@ -1,10 +1,23 @@
-export type FindingListItem = {
-  type: 'analysis-finding';
-  id: string;
-  resolvedFinding: any;
-  name: string;
-  shortName: string;
-};
+export class FindingListItem {
+  public readonly type = 'analysis-finding';
+  constructor(public readonly resolvedFinding: ResolvedFinding) {}
+
+  public get id(): string {
+    return this.resolvedFinding.finding.hash_v2 || this.resolvedFinding.finding.hash;
+  }
+
+  public get fqid(): string {
+    return `${this.type}:${this.id}`;
+  }
+
+  public get name(): string {
+    return `${this.resolvedFinding.rule.title}: ${this.resolvedFinding.finding.message}`;
+  }
+
+  public get shortName(): string {
+    return this.resolvedFinding.rule.title;
+  }
+}
 
 export type ResolvedFinding = {
   finding: {
@@ -18,11 +31,5 @@ export type ResolvedFinding = {
 };
 
 export default function toListItem(resolvedFinding: ResolvedFinding) {
-  return {
-    type: 'analysis-finding',
-    id: resolvedFinding.finding.hash_v2 || resolvedFinding.finding.hash,
-    resolvedFinding,
-    name: `${resolvedFinding.rule.title}: ${resolvedFinding.finding.message}`,
-    shortName: resolvedFinding.rule.title,
-  };
+  return new FindingListItem(resolvedFinding);
 }

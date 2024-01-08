@@ -10,13 +10,12 @@
     </div>
     <div
       class="details-panel-filters__item"
-      :class="{ 'details-panel-filters__item--active': filters[key].isActive }"
-      v-for="key in Object.keys(filters)"
-      :key="key"
-      @click="toggleFilter(key)"
+      :class="{ 'details-panel-filters__item--active': isRootObject }"
+      @click="toggleRootObject()"
     >
-      {{ filters[key].title }}
+      Set as root
     </div>
+    <div class="details-panel-filters__item" @click="hideObject()">Hide</div>
   </div>
 </template>
 
@@ -24,7 +23,7 @@
 import FilterIcon from '@/assets/filter.svg';
 import ResetIcon from '@/assets/reset.svg';
 import isPrecomputedSequenceDiagram from '@/lib/isPrecomputedSequenceDiagram';
-import { ADD_HIDDEN_NAME } from '@/store/vsCode';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'v-details-panel-filters',
@@ -38,11 +37,6 @@ export default {
     object: {
       type: Object,
       required: true,
-    },
-    isRootObject: {
-      type: Boolean,
-      required: false,
-      default: false,
     },
     filterDisabled: {
       type: Boolean,
@@ -68,43 +62,27 @@ export default {
 
   computed: {
     isPrecomputedSequenceDiagram,
-    filters() {
-      const { filterItems } = this;
-
-      if (this.isRootObject) {
-        filterItems.setAsRoot.isActive = true;
-      } else {
-        filterItems.setAsRoot.isActive = false;
-      }
-
-      const filteredItems = this.isRootObject
-        ? Object.keys(filterItems).reduce((acc, key) => {
-            if (key !== 'hide') {
-              acc[key] = filterItems[key];
-            }
-            return acc;
-          }, {})
-        : filterItems;
-
-      return filteredItems;
+    isRootObject() {
+      return this.$store.filters.rootObjects.some((rootObject) => rootObject === this.object);
+    },
+    classes() {
+      return {
+        'details-panel-filters--disabled': this.filterDisabled,
+        'details-panel-filters__item--active': this.isRootObject,
+      };
     },
   },
 
   methods: {
-    toggleFilter(key) {
-      if (key === 'setAsRoot') {
-        if (this.isRootObject) {
-          this.$root.$emit('removeRoot', this.object.fqid);
-        } else {
-          this.$root.$emit('makeRoot', this.object);
-        }
-      }
-      if (key === 'hide') {
-        this.$store.commit(ADD_HIDDEN_NAME, this.object.fqid);
-      }
+    ...mapActions(['hideObject', 'toggleFilterRootObject', 'removeFilterRootObject']),
+    toggleRootObject() {
+      this.toggleFilterRootObject(this.object.fqid);
+    },
+    hideObject() {
+      this.hideObject(this.object.fqid);
     },
     resetFilters() {
-      this.$root.$emit('removeRoot', this.object.fqid);
+      this.removeFilterRootObject(this.object.fqid);
     },
   },
 };
