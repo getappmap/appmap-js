@@ -1,3 +1,10 @@
+# [@appland/components-v3.21.4](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.21.3...@appland/components-v3.21.4) (2024-01-08)
+
+
+### Bug Fixes
+
+* Release the scroll when the user scrolls up ([c0a20cf](https://github.com/getappmap/appmap-js/commit/c0a20cf389b643116ac14c2c431c105acd51a099))
+
 # [@appland/components-v3.21.3](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.21.2...@appland/components-v3.21.3) (2024-01-05)
 
 
