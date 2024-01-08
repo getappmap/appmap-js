@@ -379,33 +379,11 @@ import VTabs from '../components/Tabs.vue';
 import VTab from '../components/Tab.vue';
 import VTraceFilter from '../components/trace/TraceFilter.vue';
 import toListItem from '@/lib/finding';
-import {
-  store,
-  SET_APPMAP_DATA,
-  SET_VIEW,
-  VIEW_COMPONENT,
-  VIEW_SEQUENCE,
-  VIEW_FLOW,
-  VIEW_FLAMEGRAPH,
-  SELECT_CODE_OBJECT,
-  SELECT_LABEL,
-  CLEAR_SELECTION_STACK,
-  SET_EXPANDED_PACKAGES,
-  CLEAR_EXPANDED_PACKAGES,
-  SET_FILTER,
-  SET_DECLUTTER_ON,
-  RESET_FILTERS,
-  ADD_ROOT_OBJECT,
-  REMOVE_ROOT_OBJECT,
-  SET_SAVED_FILTERS,
-  SET_SELECTED_SAVED_FILTER,
-  SET_HIGHLIGHTED_EVENTS,
-  SET_FOCUSED_EVENT,
-  SET_COLLAPSED_ACTION_STATE,
-} from '../store/vsCode';
+import { store } from '../store/vsCode';
 import isPrecomputedSequenceDiagram from '@/lib/isPrecomputedSequenceDiagram';
 import { SAVED_FILTERS_STORAGE_ID } from '../components/FilterMenu.vue';
 import { DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH } from '../components/DiagramSequence.vue';
+import { mapActions } from 'vuex';
 
 const browserPrefixes = ['', 'webkit', 'moz'];
 
@@ -840,6 +818,10 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['loadData']),
+    ...mapActions({
+      setSelectedObject: 'selectObject',
+    }),
     loadData(appMap, sequenceDiagram) {
       if (sequenceDiagram) {
         this.sequenceDiagramDiffMode = true;
@@ -959,35 +941,7 @@ export default {
       this.$root.$emit('clickFilterButton');
     },
     setSelectedObject(fqid) {
-      const matchResult = fqid.match(/^([a-z\-]+):(.+)/);
-
-      if (!matchResult) {
-        return;
-      }
-
-      const [, type, object] = matchResult;
-
-      if (type === 'label') {
-        this.$store.commit(SELECT_LABEL, object);
-        return;
-      }
-
-      const { classMap, events } = this.filteredAppMap;
-      let selectedObject = null;
-
-      if (type === 'event') {
-        const eventId = parseInt(object, 10);
-
-        if (Number.isNaN(eventId)) {
-          return;
-        }
-
-        selectedObject = events.find((e) => e.id === eventId);
-      } else {
-        selectedObject = classMap.codeObjects.find((obj) => obj.fqid === fqid);
-      }
-
-      this.$store.commit(SELECT_CODE_OBJECT, selectedObject);
+      this.store.actions.selectObject(fqid);
     },
     selectObjectFromState(fqid) {
       const [match, type, object] = fqid.match(/^([a-z\-]+):(.+)/);

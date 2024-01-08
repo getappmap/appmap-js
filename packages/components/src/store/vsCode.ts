@@ -11,10 +11,22 @@ import {
   Filter,
 } from '@appland/models';
 import toListItem, { FindingListItem, ResolvedFinding } from '@/lib/finding';
+import { Diagram, unparseDiagram } from '@appland/sequence-diagram';
 
 Vue.use(Vuex);
 
-export const DEFAULT_VIEW = 'viewComponent';
+export const VIEW_COMPONENT = 'viewComponent';
+export const VIEW_SEQUENCE = 'viewSequence';
+export const VIEW_FLOW = 'viewFlow';
+export const VIEW_FLAMEGRAPH = 'viewFlamegraph';
+
+type ViewType =
+  | typeof VIEW_COMPONENT
+  | typeof VIEW_SEQUENCE
+  | typeof VIEW_FLOW
+  | typeof VIEW_FLAMEGRAPH;
+
+export const DEFAULT_VIEW: ViewType = 'viewComponent';
 export const DEFAULT_FILTER_NAME = 'AppMap default';
 
 // Always have the AppMap default filter as the top option
@@ -37,24 +49,29 @@ type SavedFilter = {
   default?: boolean;
 };
 
+type SetAppMapDataOptions = {
+  appMap: Record<string, unknown>;
+  sequenceDiagram?: Diagram;
+};
+
 export function buildStore() {
   return new Vuex.Store({
     state: {
       appMap: new AppMap(),
       filteredAppMap: new AppMap(),
-      precomputedSequenceDiagram: undefined,
+      precomputedSequenceDiagram: undefined as Diagram | undefined,
       selectionStack: [] as Selectable[],
       currentSelection: undefined as Selectable | undefined,
       currentView: DEFAULT_VIEW,
-      selectedLabel: undefined,
-      focusedEvent: undefined,
+      selectedLabel: undefined as string | undefined,
+      focusedEvent: undefined as Event | undefined,
       expandedPackages: [] as CodeObject[],
       filters: new AppMapFilter(),
       findings: [] as ResolvedFinding[],
       savedFilters: [] as SavedFilter[],
       selectedSavedFilter: undefined as SavedFilter | undefined,
       defaultFilter: undefined as SavedFilter | undefined,
-      highlightedEvents: [],
+      highlightedEvents: [] as Event[],
       collapsedActionState: [],
     },
 
@@ -67,8 +84,8 @@ export function buildStore() {
     },
 
     actions: {
-      loadAppMap({ commit }, data) {
-        commit('SET_APPMAP_DATA', data);
+      loadData({ commit }, appMap: Record<string, unknown>, sequenceDiagram?: Diagram) {
+        commit('SET_APPMAP_DATA', { appMap, sequenceDiagram });
       },
       selectObject({ commit, state }, fqid: string, modifyFilters?: boolean) {
         const [match, type, object] = fqid.match(/^([a-z\-]+):(.+)/) || [];
@@ -108,14 +125,30 @@ export function buildStore() {
 
         if (selectedObject) commit('SELECT_CODE_OBJECT', selectedObject);
       },
+      clearSelectionStack({ commit }) {
+        commit('CLEAR_SELECTION_STACK');
+      },
+      popSelectionStack({ commit }) {
+        commit('POP_SELECTION_STACK');
+      },
+      focusEvent({ commit }, event: Event) {
+        commit('SET_FOCUSED_EVENT', event);
+      },
+      setView({ commit }, view: string) {
+        commit('SET_VIEW', view);
+      },
     },
 
     mutations: {
       // Stores the initial, complete AppMap.
-      SET_APPMAP_DATA(state, data) {
+      SET_APPMAP_DATA(state, { appMap, sequenceDiagram }: SetAppMapDataOptions) {
+        if (sequenceDiagram) {
+          state.precomputedSequenceDiagram = unparseDiagram(sequenceDiagram);
+          appMap.sequenceDiagram = state.precomputedSequenceDiagram;
+        }
+
         state.selectionStack = [];
-        state.appMap = buildAppMap().source(data).normalize().build();
-        if (data.sequenceDiagram) state.precomputedSequenceDiagram = data.sequenceDiagram;
+        state.appMap = buildAppMap(appMap).normalize().build();
 
         // TODO: Is this needed? This looks like view model code
         // state.appMap.callTree.rootEvent.forEach((e) => {
@@ -189,7 +222,7 @@ export function buildStore() {
       // the current events view (sequence diagram or trace view). The viewport should be adjusted
       // so that this event is visible, and an effect can be rendered on the event.
       // This action does not imply that the sidebar display should be changed.
-      SET_FOCUSED_EVENT(state, event) {
+      SET_FOCUSED_EVENT(state, event: Event) {
         state.focusedEvent = event;
       },
 
@@ -287,7 +320,7 @@ export function buildStore() {
         state.selectedSavedFilter = selectedSavedFilter;
       },
 
-      SET_HIGHLIGHTED_EVENTS(state, highlightedEvents) {
+      SET_HIGHLIGHTED_EVENTS(state, highlightedEvents: Event[]) {
         state.highlightedEvents = highlightedEvents;
       },
 

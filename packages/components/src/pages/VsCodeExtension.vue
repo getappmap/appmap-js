@@ -21,10 +21,7 @@
 import VAppmapViewer from '@/components/AppmapViewer.vue';
 import VNoDataNotice from '../components/notices/NoDataNotice.vue';
 import VUnlicensedNotice from '../components/notices/UnlicensedNotice.vue';
-import {
-  store,
-
-} from '../store/vsCode';
+import { store } from '../store/vsCode';
 const browserPrefixes = ['', 'webkit', 'moz'];
 
 export default {
@@ -137,61 +134,6 @@ export default {
       // Return a promise that resolves next tick.
       // This allows the caller to wait for computed properties and watchers to run.
       return this.$nextTick();
-    },
-    showInstructions() {
-      this.$refs.instructions.open();
-      this.$root.$emit('showInstructions');
-    },
-    showVersionNotification(version, versionText = '') {
-      this.version = version;
-      this.versionText = versionText;
-    },
-    onNotificationOpen() {
-      this.$root.$emit('notificationOpen');
-    },
-    onNotificationClose() {
-      this.version = null;
-      this.versionText = '';
-      this.$root.$emit('notificationClose');
-    },
-    onChangeTab(tab) {
-      // 'tab' can be the tab name or the actual tab.
-      let index = Object.values(this.$refs).findIndex((ref) => ref === tab);
-      if (index === -1) index = Object.keys(this.$refs).findIndex((ref) => ref === tab);
-      if (index === -1) {
-        // There's no ref set up for this tab
-        return;
-      }
-
-      const viewKey = Object.keys(this.$refs)[index];
-      this.setView(viewKey);
-      this.$root.$emit('changeTab', viewKey);
-
-      if (viewKey === VIEW_SEQUENCE) {
-        this.startSeqDiagramTimer();
-      } else {
-        clearTimeout(this.seqDiagramTimeoutId);
-      }
-    },
-    startSeqDiagramTimer() {
-      // prompt for feedback after viewing a sequence diagram for 1 minute
-      this.seqDiagramTimeoutId = setTimeout(() => {
-        this.$root.$emit('seq-diagram-feedback');
-      }, 60 * 1000);
-    },
-    setView(view) {
-      if (this.currentView !== view) {
-        this.$store.commit(SET_VIEW, view);
-      }
-    },
-    codeObjectToIdentifier(codeObject) {
-      if (!codeObject) return '';
-
-      if (codeObject.fqid) {
-        return codeObject.fqid;
-      } else if (codeObject.type === 'analysis-finding') {
-        return `analysis-finding:${codeObject.resolvedFinding?.finding?.hash_v2}`;
-      }
     },
     getState() {
       const state = {};
@@ -426,7 +368,7 @@ export default {
     startResizing(event) {
       document.body.style.userSelect = 'none';
       this.isPanelResizing = true;
-      this.initialPanelWidth = this.$refs.mainColumnLeft?.offsetWidth;
+      this.initialPanelWidth = this.$refs.mainColumnLeft.offsetWidth;
       this.initialClientX = event.clientX;
     },
     makeResizing(event) {
@@ -438,7 +380,7 @@ export default {
         newWidth = Math.max(MIN_PANEL_WIDTH, newWidth);
         newWidth = Math.min(MAX_PANEL_WIDTH, newWidth);
 
-        this.$refs.mainColumnLeft?.style.width = `${newWidth}px`;
+        this.$refs.mainColumnLeft.style.width = `${newWidth}px`;
       }
     },
     stopResizing() {
@@ -455,7 +397,7 @@ export default {
         } else if (this.showDetailsPanel) {
           result = '420px';
         }
-        this.$refs.mainColumnLeft?.style.width = result;
+        this.$refs.mainColumnLeft.style.width = result;
       });
     },
     prevTraceFilter() {
