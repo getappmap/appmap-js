@@ -1,15 +1,13 @@
 <template>
-  <div class="unlicensed-notice" data-cy="notice-unlicensed">
+  <div class="configuration-required-notice" data-cy="notice-configuration">
     <div class="notice">
       <v-appmap-logo />
-      <p class="unlicensed-notice__title">License expired</p>
+      <p class="configuration-required-notice__title">Additional configuration required</p>
+      <p>To finish setting up this view, edit this macro and select an AppMap from the dropdown.</p>
       <p>
-        To continue enjoying all the great features of this software, an active license is required.
-        Your support is crucial in helping us enhance and develop new features for our community.
+        If you don't yet have an AppMap, drag one into this page in edit mode. Once uploaded, the
+        file can be removed from the page.
       </p>
-      <a :href="purchaseUrl" class="cta" data-cy="purchase" v-if="purchaseUrl" target="_blank">
-        <v-button class="cta" data-cy="purchase"> Purchase AppMap </v-button>
-      </a>
       <p>
         Need assistance or have questions? Join the
         <a href="https://appmap.io/slack" target="_blank" rel="noopener noreferrer">
@@ -20,40 +18,27 @@
         >. For more direct assistance, our support team is just an
         <a href="mailto:support@appmap.io">email</a> away.
       </p>
-      <p>Thank you for being a vital part of our community, we hope to see you again soon!</p>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-//@ts-nocheck
+import Vue from 'vue';
+
 import VAppmapLogo from '@/assets/appmap-full-logo.svg';
-import VButton from '@/components/Button.vue';
 import EmitLinkMixin from '@/components/mixins/emitLink';
 
-export default {
+export default Vue.extend({
+  name: 'v-configuration-required-notice',
   components: {
     VAppmapLogo,
-    VButton,
   },
-  props: {
-    purchaseUrl: {
-      type: String,
-      required: false,
-    },
-  },
-  mixins: [
-    // This should also be included via the parent page (VsCodeExtension).
-    // However, we want to validate that the behavior provided by the mixin
-    // is applied, so it's included here as well. The Mixin is built to allow
-    // this.
-    EmitLinkMixin,
-  ],
-};
+  mixins: [EmitLinkMixin],
+});
 </script>
 
 <style lang="scss" scoped>
-.unlicensed-notice {
+.configuration-required-notice {
   display: flex;
   position: absolute;
   flex-direction: column;
@@ -85,16 +70,6 @@ export default {
     -webkit-text-fill-color: transparent;
   }
 
-  .cta {
-    width: fit-content;
-    align-self: center;
-  }
-
-  p {
-    margin-block-start: 1em;
-    margin-block-end: 1em;
-  }
-
   a {
     color: $brightblue;
     text-decoration: none;
@@ -105,8 +80,9 @@ export default {
     }
   }
 
-  .empty-state-diagram {
-    margin-top: 4rem;
+  p {
+    margin-block-start: 1em;
+    margin-block-end: 1em;
   }
 }
 </style>

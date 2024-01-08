@@ -331,6 +331,7 @@
     </div>
 
     <v-no-data-notice v-if="isEmptyAppMap && !isLoading && !hasStats && isLicensed" />
+    <v-configuration-required v-if="!isConfigured" />
     <v-unlicensed-notice v-if="!isLicensed" :purchase-url="purchaseUrl" />
   </div>
 </template>
@@ -377,6 +378,7 @@ import VTab from '../components/Tab.vue';
 import VTraceFilter from '../components/trace/TraceFilter.vue';
 import VNoDataNotice from '../components/notices/NoDataNotice.vue';
 import VUnlicensedNotice from '../components/notices/UnlicensedNotice.vue';
+import VConfigurationRequired from '../components/notices/ConfigurationRequiredNotice.vue';
 import EmitLinkMixin from '@/components/mixins/emitLink';
 import toListItem from '@/lib/finding';
 import {
@@ -443,6 +445,7 @@ export default {
     FullscreenExitIcon,
     VNoDataNotice,
     VUnlicensedNotice,
+    VConfigurationRequired,
   },
   store,
   data() {
@@ -497,6 +500,10 @@ export default {
     purchaseUrl: {
       type: String,
       required: false,
+    },
+    isConfigured: {
+      type: Boolean,
+      default: true,
     },
   },
   watch: {
