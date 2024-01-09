@@ -1,3 +1,13 @@
+# [@appland/components-v3.23.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.22.0...@appland/components-v3.23.0) (2024-01-09)
+
+
+### Features
+
+* Add a notice for 'configuration required' ([f17878a](https://github.com/getappmap/appmap-js/commit/f17878afb2ab9c8a6d2bb10bfa949c3780aa1d77))
+* Add a notice for unlicensed use ([0bafd0f](https://github.com/getappmap/appmap-js/commit/0bafd0fbc0069bd2448df39bd01cfdb3a475efd3))
+* Allow toggling of the export button ([ffe0c83](https://github.com/getappmap/appmap-js/commit/ffe0c83ca968962929b9464b5748dad2e01a292b))
+* Emit `clink-link` events upon clicking a link ([4d80098](https://github.com/getappmap/appmap-js/commit/4d80098ac68c52313cbb21851895f6d574a4e416))
+
 # [@appland/components-v3.22.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.21.4...@appland/components-v3.22.0) (2024-01-09)
 
 
