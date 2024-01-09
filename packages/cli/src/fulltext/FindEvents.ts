@@ -64,14 +64,8 @@ export default class FindEvents {
     if (verbose()) warn(`Built AppMap with ${baseAppMap.events.length} events.`);
     if (verbose()) warn(`Applying default AppMap filters.`);
 
-    let filter = this.filter;
-    if (!filter) {
-      filter = new AppMapFilter();
-      if (baseAppMap.metadata.language?.name !== 'java')
-        filter.declutter.hideExternalPaths.on = true;
-      filter.declutter.limitRootEvents.on = true;
-    }
-    const filteredAppMap = filter.filter(baseAppMap, []);
+    const filteredAppMap = this.filter ? this.filter.filter(baseAppMap, []) : baseAppMap;
+
     if (verbose()) warn(`Filtered AppMap has ${filteredAppMap.events.length} events.`);
     if (verbose()) warn(`Indexing AppMap`);
 
