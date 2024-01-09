@@ -57,7 +57,8 @@ export default async function lookupSourceCode(location: string): Promise<string
   const fileContent = await readFile(fileName, 'utf-8');
   if (!lineNoStr) return [fileContent];
 
-  const lineNo = parseInt(lineNoStr, 10);
+  let lineNo = parseInt(lineNoStr, 10);
+  if (lineNo <= 0) return [fileContent];
 
   const fileExtension = fileName.slice(fileName.lastIndexOf('.'));
   const language = LANGUAGE_BY_FILE_EXTENSION[fileExtension];
