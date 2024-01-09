@@ -173,14 +173,19 @@
             </button>
           </v-popper>
           <v-popper
-            v-if="showDownload && !isGiantAppMap"
+            v-if="showDownload"
             class="hover-text-popper"
             text="Export in SVG format"
             placement="left"
             text-align="left"
           >
             <v-download-sequence-diagram ref="export">
-              <button class="control-button" @click="$refs.export.download()" title="">
+              <button
+                class="control-button"
+                @click="$refs.export.download()"
+                data-cy="export"
+                title=""
+              >
                 <ExportIcon class="control-button__icon" />
               </button>
             </v-download-sequence-diagram>
@@ -505,6 +510,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    allowExport: {
+      type: Boolean,
+      default: true,
+    },
   },
   watch: {
     '$store.state.currentView': {
@@ -793,7 +802,7 @@ export default {
       return this.currentView === VIEW_FLAMEGRAPH;
     },
     showDownload() {
-      return this.isViewingSequence;
+      return this.isViewingSequence && !this.isGiantAppMap && this.allowExport;
     },
     isEmptyAppMap() {
       const appMap = this.filteredAppMap;
