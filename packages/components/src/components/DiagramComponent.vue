@@ -59,7 +59,7 @@ export default {
     highlightSelectedCodeObject(expandParent = true) {
       const { selectedObject } = this.$store.getters;
       if (!selectedObject) {
-        this.componentDiagram.highlight(null);
+        if (this.componentDiagram) this.componentDiagram.highlight(null);
         return;
       }
 
