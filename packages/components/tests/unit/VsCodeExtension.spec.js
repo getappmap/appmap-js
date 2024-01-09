@@ -239,4 +239,19 @@ describe('VsCodeExtension.vue', () => {
     await wrapper.setProps({ isConfigured: false });
     expect(wrapper.find('[data-cy="notice-configuration"]').exists()).toBe(true);
   });
+
+  it('provides a button to export the sequence diagram by default', async () => {
+    const state = { currentView: 'viewSequence' };
+    await wrapper.vm.setState(JSON.stringify(state));
+
+    expect(wrapper.find('[data-cy="export"]').exists()).toBe(true);
+  });
+
+  it('hides the export button when `allowExport` is false', async () => {
+    const state = { currentView: 'viewSequence' };
+    await wrapper.vm.setState(JSON.stringify(state));
+    await wrapper.setProps({ allowExport: false });
+
+    expect(wrapper.find('[data-cy="export"]').exists()).toBe(false);
+  });
 });
