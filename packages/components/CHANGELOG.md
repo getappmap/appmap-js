@@ -1,3 +1,10 @@
+# [@appland/components-v3.22.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.21.4...@appland/components-v3.22.0) (2024-01-09)
+
+
+### Features
+
+* Add 'Ask AppMap' CTAs to install guide ([1d309c9](https://github.com/getappmap/appmap-js/commit/1d309c90d21c0226322c145cfde93778454fe323))
+
 # [@appland/components-v3.21.4](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.21.3...@appland/components-v3.21.4) (2024-01-08)
 
 
