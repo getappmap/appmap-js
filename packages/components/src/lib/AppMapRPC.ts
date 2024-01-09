@@ -36,6 +36,10 @@ export class ExplainRequest extends EventEmitter {
         'explain.status',
         { userMessageId },
         (err: any, error: any, statusResponse: any) => {
+          // Stop polling if the user message is no longer available from the server,
+          // for example if the RPC service has been restarted.
+          if (error && error.code === 404) clearInterval(statusInterval);
+
           if (err || error) return reportError(this.onError.bind(this), err, error);
 
           this.emit('status', statusResponse);
