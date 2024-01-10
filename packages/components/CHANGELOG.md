@@ -1,3 +1,12 @@
+# [@appland/components-v3.23.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.23.0...@appland/components-v3.23.1) (2024-01-10)
+
+
+### Bug Fixes
+
+* Guard against null selected object ([f256c04](https://github.com/getappmap/appmap-js/commit/f256c04ff22fb3f69703b2a8e8b461bcaa5cde24))
+* Stop polling for explain status on 404 ([d057396](https://github.com/getappmap/appmap-js/commit/d057396275c39079ca1168bb82c725771ac7d6e6))
+* Use setState to set selected objects ([9d03d86](https://github.com/getappmap/appmap-js/commit/9d03d86eded43d4449c971223364eeea83623513))
+
 # [@appland/components-v3.23.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.22.0...@appland/components-v3.23.0) (2024-01-09)
 
 
