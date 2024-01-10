@@ -1,6 +1,10 @@
 <template>
   <div class="chat">
     <div class="button-panel" v-if="isChatting">
+      <div id="header-logo">
+        <v-app-map-navie-logo />
+        <div id="header-navie-logo">Navie</div>
+      </div>
       <v-button class="clear" size="small" kind="ghost" @click.native="clear">New chat</v-button>
     </div>
     <div class="messages" data-cy="messages" ref="messages" @scroll="manageScroll">
@@ -58,6 +62,7 @@ import VChatInput from '@/components/chat/ChatInput.vue';
 import VSuggestionGrid from '@/components/chat/SuggestionGrid.vue';
 import VSpinner from '@/components/Spinner.vue';
 import VLoaderIcon from '@/assets/eva_loader-outline.svg';
+import VAppMapNavieLogo from '@/assets/appmap-full-logo.svg';
 import VButton from '@/components/Button.vue';
 import { AI } from '@appland/client';
 
@@ -112,6 +117,7 @@ export default {
     VSuggestionGrid,
     VSpinner,
     VLoaderIcon,
+    VAppMapNavieLogo,
     VButton,
   },
   props: {
@@ -287,6 +293,21 @@ export default {
 <style lang="scss" scoped>
 $border-color: darken($gray4, 10%);
 
+#header-logo {
+  margin-right: auto;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-weight: bold;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+#header-navie-logo {
+  padding-top: 3px;
+}
 .chat {
   display: flex;
   flex-direction: column;
