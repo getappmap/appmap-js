@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.117.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.117.0...@appland/appmap-v3.117.1) (2024-01-10)
+
+
+### Bug Fixes
+
+* Ignore lineNo <= 0 ([b048cd3](https://github.com/getappmap/appmap-js/commit/b048cd3f172be5ace10ea6eaa4f72b774e5beaf3))
+* Search/explain over unfiltered AppMaps ([98df0cd](https://github.com/getappmap/appmap-js/commit/98df0cd5f1a314f36f2e128e16a6d42f6c0b369b))
+
 # [@appland/appmap-v3.117.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.116.2...@appland/appmap-v3.117.0) (2024-01-05)
 
 
