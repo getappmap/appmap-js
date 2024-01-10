@@ -140,7 +140,6 @@ $border-color: #7289c5;
       outline: none !important;
     }
   }
-
   .popper {
     position: absolute;
     top: 50%;
@@ -150,7 +149,6 @@ $border-color: #7289c5;
     &__text {
       border: none;
     }
-
     .send {
       height: 2rem;
       width: 2rem;
@@ -159,13 +157,11 @@ $border-color: #7289c5;
       border-radius: $border-radius;
       background-color: #6c81ba;
       transition: background-color 0.5s ease-in-out;
-
       svg {
         path {
           fill: #fff;
         }
       }
-
       &:disabled {
         pointer-events: none;
         background-color: rgba($color: #7289c5, $alpha: 0.25);
@@ -176,7 +172,6 @@ $border-color: #7289c5;
           }
         }
       }
-
       &:hover {
         cursor: pointer;
         background-color: $hotpink;
