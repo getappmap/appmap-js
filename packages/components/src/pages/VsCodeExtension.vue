@@ -430,7 +430,6 @@ export default {
       eventFilterText: '',
       eventFilterMatchIndex: 0,
       showStatsPanel: false,
-      shareURL: undefined,
       seqDiagramTimeoutId: undefined,
       seqDiagramCollapseDepth: DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH,
       maxSeqDiagramCollapseDepth: 9,
@@ -792,10 +791,6 @@ export default {
         })
       );
     },
-    shareURLmessage() {
-      if (this.shareURL) return this.shareURL;
-      return 'Retrieving link...';
-    },
     hasStats() {
       return this.stats && this.stats.functions && this.stats.functions.length > 0;
     },
@@ -1094,12 +1089,6 @@ export default {
           return unique;
         }, {})
       );
-    },
-    setShareURL(url) {
-      this.shareURL = url;
-    },
-    copyToClipboard(input) {
-      this.$root.$emit('copyToClipboard', input);
     },
     onFlamegraphSelect(event) {
       if (event) {
