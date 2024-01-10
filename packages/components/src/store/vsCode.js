@@ -97,6 +97,11 @@ export function buildStore() {
       // be a specific event. These code object selections are stored in a stack, so that
       // the user can navigate back to the previous selection.
       [SELECT_CODE_OBJECT](state, selection) {
+        if (!selection) {
+          console.warn('SELECT_CODE_OBJECT called with falsey selection');
+          return;
+        }
+
         let selectionProperty = 'fqid';
         if (selection && selection.type === 'analysis-finding') selectionProperty = 'name';
 

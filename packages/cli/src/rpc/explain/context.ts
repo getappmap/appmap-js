@@ -20,7 +20,6 @@ export default async function context(
   const buildSequenceDiagram = async (result: SearchRpc.SearchResult) => {
     const codeObjects = result.events.map((event) => event.fqid);
     const appmapFilter = new AppMapFilter();
-    appmapFilter.declutter.hideExternalPaths.on = true;
     appmapFilter.declutter.context.on = true;
     appmapFilter.declutter.context.names = codeObjects;
     const filterState = serializeFilter(appmapFilter);

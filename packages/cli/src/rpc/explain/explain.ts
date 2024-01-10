@@ -43,8 +43,7 @@ export default class Explain extends EventEmitter {
           self.status.threadId = threadId;
           self.emit('ack', userMessageId, threadId);
         },
-        onToken(token, messageId) {
-          if (verbose()) warn(`Explain received token '${token}' (messageId=${messageId})`);
+        onToken(token, _messageId) {
           self.status.explanation ||= [];
           self.status.explanation.push(token);
         },

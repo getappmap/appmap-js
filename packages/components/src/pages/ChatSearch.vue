@@ -172,9 +172,9 @@ export default {
         const searchResult = this.selectedSearchResult;
         const appmapData = await index.appmapData(searchResult.appmap);
         await this.$refs.vappmap.loadData(appmapData);
-        for (const event of searchResult.events) {
-          this.$refs.vappmap.setSelectedObject(event.fqid);
-        }
+        this.$refs.vappmap.setState(
+          JSON.stringify({ selectedObjects: searchResult.events.map((e) => e.fqid) })
+        );
       };
 
       this.$nextTick(updateAppMapData.bind(this));

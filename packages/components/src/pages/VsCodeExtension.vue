@@ -991,7 +991,8 @@ export default {
         selectedObject = classMap.codeObjects.find((obj) => obj.fqid === fqid);
       }
 
-      this.$store.commit(SELECT_CODE_OBJECT, selectedObject);
+      if (selectedObject) this.$store.commit(SELECT_CODE_OBJECT, selectedObject);
+      else console.warn(`Unable to find object with fqid ${fqid}`);
     },
     selectObjectFromState(fqid) {
       const [match, type, object] = fqid.match(/^([a-z\-]+):(.+)/);
@@ -1026,12 +1027,13 @@ export default {
       } else if (type === 'analysis-finding') {
         const hash_v2 = object;
         const finding = this.findings.find(({ finding }) => finding.hash_v2 === hash_v2);
-        if (finding) this.$store.commit(SELECT_CODE_OBJECT, toListItem(finding));
+        if (finding) selectedObject = toListItem(finding);
       } else {
         selectedObject = classMap.codeObjects.find((obj) => obj.fqid === fqid);
       }
 
       if (selectedObject) this.$store.commit(SELECT_CODE_OBJECT, selectedObject);
+      else console.warn(`Unable to find object with fqid ${fqid}`);
     },
     setState(serializedState) {
       return new Promise((resolve) => {

@@ -207,6 +207,7 @@ export default {
 
         const event = this.appMap.events.find((e) => e.id === eventId);
         if (event) this.$store.commit(SELECT_CODE_OBJECT, event);
+        else console.warn(`Event ${eventId} not found`);
       }
     },
     startHoverExpandCollapse() {

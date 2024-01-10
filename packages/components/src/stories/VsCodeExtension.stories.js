@@ -36,6 +36,12 @@ const sequenceDiagramData = {
   mapWithDiff: diffSequenceDiagram,
 };
 
+const selectedObjects = [
+  `route:GET /admin`,
+  `function:app/controllers/Spree::Admin::OrdersController#index`,
+  `query:SELECT COUNT(*) FROM "spree_shipments" WHERE "spree_shipments"."order_id" = ? AND "spree_shipments"."state" = ?`,
+];
+
 export default {
   title: 'Pages/VS Code',
   component: VVsCodeExtension,
@@ -95,6 +101,20 @@ export const ExtensionWithSavedFilters = Template.bind({});
 ExtensionWithSavedFilters.args = {
   defaultView: VIEW_SEQUENCE,
   savedFilters,
+};
+
+export const ExtensionWithSelectedObjects = (args, { argTypes }) => ({
+  props: Object.keys(argTypes),
+  components: { VVsCodeExtension },
+  template: '<v-vs-code-extension v-bind="$props" ref="vsCode" />',
+  async mounted() {
+    const scenario = scenarioData[args.scenario];
+    await this.$refs.vsCode.loadData(scenario);
+    this.$refs.vsCode.setState(JSON.stringify({ selectedObjects }));
+  },
+});
+ExtensionWithSelectedObjects.args = {
+  defaultView: VIEW_SEQUENCE,
 };
 
 export const ExtensionWithNotification = (args, { argTypes }) => ({
