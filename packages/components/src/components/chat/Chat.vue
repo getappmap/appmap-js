@@ -20,7 +20,9 @@
       />
       <div v-if="loading" class="status-container">
         <div class="spinner-container">
-          <v-send-icon />
+          <v-spinner>
+            <v-loader-icon class="status-icon" />
+          </v-spinner>
         </div>
         <div class="status-label" v-if="statusLabel" data-cy="explain-status">
           {{ statusLabel }}
