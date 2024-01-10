@@ -352,6 +352,7 @@ import {
 } from '@appland/models';
 import { unparseDiagram } from '@appland/sequence-diagram';
 
+import NavieCompass from '@/assets/appmap-compass-rose.svg';
 import AppMapLogo from '@/assets/appmap-logomark.svg';
 import HamburgerMenu from '@/assets/hamburger-menu.svg';
 import CopyIcon from '@/assets/copy-icon.svg';
@@ -419,6 +420,7 @@ const browserPrefixes = ['', 'webkit', 'moz'];
 export default {
   name: 'VSCodeExtension',
   components: {
+    NavieCompass,
     AppMapLogo,
     HamburgerMenu,
     CloseIcon,
