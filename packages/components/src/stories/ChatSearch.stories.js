@@ -3,6 +3,7 @@ import './scss/vscode.scss';
 import orderData from './data/scenario.json';
 import petclinicData from './data/java_scenario.json';
 import longPackageData from './data/long-package.appmap.json';
+import savedFilters from './data/saved_filters.js';
 
 export default {
   title: 'Pages/ChatSearch',
@@ -18,6 +19,12 @@ export const ChatSearch = (args, { argTypes }) => ({
 ChatSearch.args = {};
 
 export const ChatSearchMock = (args, { argTypes }) => ({
+  props: Object.keys(argTypes),
+  components: { VChatSearch },
+  template: `<v-chat-search v-bind="$props"></v-chat-search>`,
+});
+
+export const ChatSearchMockWithFilters = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VChatSearch },
   template: `<v-chat-search v-bind="$props"></v-chat-search>`,
@@ -142,6 +149,11 @@ const mockRpc = (method, params, callback) => {
 
 ChatSearchMock.args = {
   appmapRpcFn: mockRpc,
+};
+
+ChatSearchMockWithFilters.args = {
+  appmapRpcFn: mockRpc,
+  savedFilters,
 };
 
 ChatSearchMockSearchPrepopulated.args = {
