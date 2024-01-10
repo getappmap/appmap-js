@@ -155,23 +155,6 @@
               </button>
             </div>
           </v-popper>
-
-          <v-popper
-            v-if="appMapUploadable && !isGiantAppMap"
-            class="hover-text-popper"
-            text="Create a link to this AppMap"
-            placement="left"
-            text-align="left"
-          >
-            <button
-              class="control-button"
-              data-cy="share-button"
-              @click="toggleShareModal"
-              title=""
-            >
-              <UploadIcon class="control-button__icon" />
-            </button>
-          </v-popper>
           <v-popper
             v-if="showDownload"
             class="hover-text-popper"
@@ -258,28 +241,6 @@
           </v-popper>
         </template>
       </v-tabs>
-
-      <div v-if="showShareModal" class="share-appmap">
-        <div class="heading">
-          <h1>Share this AppMap</h1>
-          <CloseIcon class="close-me" @click.stop="closeShareModal" />
-        </div>
-        <div class="content">
-          <p>
-            This link can be used to view this AppMap in a browser. You can share it with other
-            collaborators, or put it into a Pull Request.
-          </p>
-          <div class="share-url">
-            <div class="share-link">
-              <span class="url">{{ shareURLmessage }}</span>
-              <span class="icon copy" @click="copyToClipboard(shareURL)">
-                <CopyIcon />
-              </span>
-            </div>
-            <p>This link has been copied to your clipboard.</p>
-          </div>
-        </div>
-      </div>
 
       <div v-if="showStatsPanel" class="appmap-stats">
         <v-stats-panel
@@ -468,7 +429,6 @@ export default {
       VIEW_FLAMEGRAPH,
       eventFilterText: '',
       eventFilterMatchIndex: 0,
-      showShareModal: false,
       showStatsPanel: false,
       shareURL: undefined,
       seqDiagramTimeoutId: undefined,
@@ -1106,14 +1066,8 @@ export default {
       this.eventFilterText = '';
       this.resetDetailsPanel();
     },
-    toggleShareModal() {
-      this.showShareModal = !this.showShareModal;
-      this.$root.$emit('uploadAppmap');
-      if (this.showShareModal && this.showStatsPanel) this.showStatsPanel = false;
-    },
     toggleStatsPanel() {
       this.showStatsPanel = !this.showStatsPanel;
-      if (this.showShareModal && this.showStatsPanel) this.showShareModal = false;
     },
     closeStatsPanel() {
       this.showStatsPanel = false;
@@ -1140,9 +1094,6 @@ export default {
           return unique;
         }, {})
       );
-    },
-    closeShareModal() {
-      this.showShareModal = false;
     },
     setShareURL(url) {
       this.shareURL = url;
