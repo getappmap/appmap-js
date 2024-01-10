@@ -221,6 +221,15 @@ export default {
     },
   },
   methods: {
+    getAppMapState() {
+      return this.$refs.vappmap?.getState();
+    },
+    setAppMapState(state) {
+      this.$refs.vappmap?.setState(state);
+    },
+    updateFilters(updatedFilters) {
+      this.$store.commit(SET_SAVED_FILTERS, updatedFilters);
+    },
     async sendMessage(message: string) {
       const { vchat } = this;
       const search = this.rpcClient();
