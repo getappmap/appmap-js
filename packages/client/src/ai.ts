@@ -47,4 +47,32 @@ export default class AI {
       throw new Error('Failed to send feedback');
     }
   }
+
+  static async speakMessage(messageId: string, paragraphIndex?: number) {
+    const configuration = getConfiguration();
+    if (!configuration.apiKey) {
+      throw new Error('Authentication is required to send feedback');
+    }
+
+    const queryParameters = new URLSearchParams();
+    queryParameters.set('messageId', messageId);
+    if (paragraphIndex !== undefined) {
+      queryParameters.set('paragraphIndex', paragraphIndex.toString());
+    }
+    const response = await fetch(
+      `${configuration.apiURL}/v1/ai/speak?${queryParameters.toString()}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${configuration.apiKey}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to send feedback');
+    }
+
+    return response.arrayBuffer();
+  }
 }
