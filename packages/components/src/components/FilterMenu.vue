@@ -61,13 +61,6 @@
         </div>
         <div class="filters__block-row">
           <label class="filters__checkbox">
-            <input type="checkbox" v-model="hideUnlabeled" />
-            <CheckIcon class="filters__checkbox-icon" />
-          </label>
-          <div class="filters__block-row-content">Hide unlabeled</div>
-        </div>
-        <div class="filters__block-row">
-          <label class="filters__checkbox">
             <input type="checkbox" v-model="hideElapsedTimeUnder" />
             <CheckIcon class="filters__checkbox-icon" />
           </label>

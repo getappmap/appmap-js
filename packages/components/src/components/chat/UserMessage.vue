@@ -45,7 +45,7 @@
 
 <script lang="ts">
 //@ts-nocheck
-import VAppmapLogo from '@/assets/appmap-logomark.svg';
+import VNavieCompass from '@/assets/compass-icon.svg';
 import VUserAvatar from '@/assets/user-avatar.svg';
 import VThumbIcon from '@/assets/thumb.svg';
 import VButton from '@/components/Button.vue';
@@ -91,7 +91,7 @@ export default {
   name: 'v-user-message',
 
   components: {
-    VAppmapLogo,
+    VNavieCompass,
     VUserAvatar,
     VThumbIcon,
     VButton,
@@ -124,10 +124,10 @@ export default {
       return this.message.toString() || '...';
     },
     avatar() {
-      return this.isUser ? VUserAvatar : VAppmapLogo;
+      return this.isUser ? VUserAvatar : VNavieCompass;
     },
     name() {
-      return this.isUser ? 'You' : 'AppMap';
+      return this.isUser ? 'You' : 'Navie';
     },
     renderedMarkdown() {
       const markdown = marked.parse(this.dynamicMessage);
@@ -188,7 +188,7 @@ export default {
 
 .message {
   display: grid;
-  grid-template-columns: 32px 1fr;
+  grid-template-columns: 38px 1fr;
   grid-template-rows: 16px 1fr;
   gap: 0.5rem 1rem;
   padding: 0 1rem;
@@ -199,8 +199,8 @@ export default {
   }
 
   .avatar {
-    width: 32px;
-    height: 32px;
+    width: 38px;
+    height: 38px;
     overflow: hidden;
     grid-column: 1;
     border-radius: 50%;

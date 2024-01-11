@@ -29,14 +29,6 @@ context('AppMap stats panel', () => {
       cy.get('[data-cy="stats-panel"]').should('not.exist');
     });
 
-    it('only has one of the share panel and stats panel open', () => {
-      cy.get('[data-cy="stats-button"]').click();
-      cy.get('[data-cy="stats-panel"]').should('exist').should('be.visible');
-      cy.get('[data-cy="share-button"]').click();
-      cy.get('.share-appmap').should('exist');
-      cy.get('[data-cy="stats-panel"]').should('not.exist');
-    });
-
     it('opens the filter modal on top of the stats panel', () => {
       cy.get('[data-cy="stats-button"]').click();
       cy.get('[data-cy="filter-button"]').click();

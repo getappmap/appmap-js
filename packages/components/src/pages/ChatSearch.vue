@@ -50,7 +50,13 @@
           </div>
         </div>
       </div>
-      <v-app-map v-if="selectedSearchResult" :allow-fullscreen="true" ref="vappmap" class="appmap">
+      <v-app-map
+        v-if="selectedSearchResult"
+        :allow-fullscreen="true"
+        :saved-filters="savedFilters"
+        ref="vappmap"
+        class="appmap"
+      >
       </v-app-map>
       <div v-else class="appmap-empty"></div>
       <v-accordion class="diagnostics" :open="showDiagnostics" @toggle="toggleDiagonstics">
@@ -115,6 +121,10 @@ export default {
     // Provide a custom search function, e.g. for mocking
     appmapRpcFn: {
       type: Function,
+    },
+    savedFilters: {
+      type: Array,
+      default: () => [],
     },
   },
   data() {
@@ -211,6 +221,15 @@ export default {
     },
   },
   methods: {
+    getAppMapState() {
+      return this.$refs.vappmap?.getState();
+    },
+    setAppMapState(state) {
+      this.$refs.vappmap?.setState(state);
+    },
+    updateFilters(updatedFilters) {
+      this.$store.commit(SET_SAVED_FILTERS, updatedFilters);
+    },
     async sendMessage(message: string) {
       const { vchat } = this;
       const search = this.rpcClient();

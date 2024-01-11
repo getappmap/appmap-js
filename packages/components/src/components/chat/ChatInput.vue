@@ -21,7 +21,7 @@
 <script lang="ts">
 //@ts-nocheck
 
-import VSendIcon from '@/assets/send.svg';
+import VSendIcon from '@/assets/compass-icon.svg';
 import VPopper from '@/components/Popper.vue';
 
 export default {
@@ -140,7 +140,6 @@ $border-color: #7289c5;
       outline: none !important;
     }
   }
-
   .popper {
     position: absolute;
     top: 50%;
@@ -150,32 +149,32 @@ $border-color: #7289c5;
     &__text {
       border: none;
     }
-
     .send {
       height: 2rem;
       width: 2rem;
       padding: 0.25rem;
       border: none;
       border-radius: $border-radius;
-      background-color: lighten($border-color, 10%);
+      background-color: #6c81ba;
       transition: background-color 0.5s ease-in-out;
-
+      svg {
+        path {
+          fill: #fff;
+        }
+      }
       &:disabled {
         pointer-events: none;
         background-color: rgba($color: #7289c5, $alpha: 0.25);
-      }
 
+        svg {
+          path {
+            fill: #9aa9d3;
+          }
+        }
+      }
       &:hover {
         cursor: pointer;
-        background-color: white;
-      }
-
-      svg {
-        transform: rotate(90deg) translateY(-1px);
-        transform-origin: center center;
-        path {
-          fill: black;
-        }
+        background-color: $hotpink;
       }
     }
   }

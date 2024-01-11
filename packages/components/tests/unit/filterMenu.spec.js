@@ -32,7 +32,7 @@ const savedFilters = [
 
 const filterToSave = {
   filterName: 'test',
-  state: 'eyJmaWx0ZXJzIjp7ImhpZGVVbmxhYmVsZWQiOnRydWV9fQ',
+  state: 'eyJmaWx0ZXJzIjp7ImhpZGVFbGFwc2VkVGltZVVuZGVyIjoxfX0',
 };
 
 store.commit(SET_SAVED_FILTERS, savedFilters);
