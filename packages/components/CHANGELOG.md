@@ -1,3 +1,19 @@
+# [@appland/components-v3.24.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.23.1...@appland/components-v3.24.0) (2024-01-11)
+
+
+### Bug Fixes
+
+* Remove unused 'share' modal ([35a8da1](https://github.com/getappmap/appmap-js/commit/35a8da14dbcf37ed80d0d9bb3c8cafedcfae982b))
+
+
+### Features
+
+* Drop "Hide unlabeled" filter ([22f9b44](https://github.com/getappmap/appmap-js/commit/22f9b441d5de9a6f14ff9737daf0069e0fcf3ee6))
+* Navie branding ([a946114](https://github.com/getappmap/appmap-js/commit/a9461142da53f5d6f84733898e60b64567464216))
+* Provide get/set AppMap state ([84c0fc3](https://github.com/getappmap/appmap-js/commit/84c0fc3249292fe80510f5c9caf1a462c8f7ea4a))
+* Remove copyToClipboard and shareURL ([b6d2647](https://github.com/getappmap/appmap-js/commit/b6d26479cf68b08edbe8f7690bb43fd284acfc8a))
+* Specify saved filters for ChatSearch (Explain) view ([f0f8505](https://github.com/getappmap/appmap-js/commit/f0f8505dee7cc268cf6a64d9668c48937a15eddc))
+
 # [@appland/components-v3.23.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.23.0...@appland/components-v3.23.1) (2024-01-10)
 
 
