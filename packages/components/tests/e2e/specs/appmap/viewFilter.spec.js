@@ -125,23 +125,6 @@ context('AppMap view filter', () => {
       cy.get('.trace .trace-node').should('have.length', 5);
     });
 
-    it('hides unlabeled code', () => {
-      cy.get('.details-search__block--package .details-search__block-item').should(
-        'have.length',
-        6
-      );
-      cy.get('.details-search__block--class .details-search__block-item').should('have.length', 11);
-
-      cy.get('.tabs__controls .popper__button').click();
-      cy.get('.filters__checkbox').eq(3).click();
-
-      cy.get('.details-search__block--package .details-search__block-item').should(
-        'have.length',
-        3
-      );
-      cy.get('.details-search__block--class .details-search__block-item').should('have.length', 5);
-    });
-
     it('hides by elapsed time', () => {
       cy.get('.tabs .tab-btn').contains('Trace View').click();
 
@@ -150,7 +133,7 @@ context('AppMap view filter', () => {
       cy.get('.tabs__controls .popper__button').click();
 
       cy.get('.filters__elapsed input').type('00');
-      cy.get('.filters__checkbox').eq(4).click();
+      cy.get('.filters__checkbox').eq(3).click();
 
       cy.get('.trace .trace-node').should('have.length', 3);
     });
@@ -352,7 +335,7 @@ context('AppMap view filter', () => {
 
     it('does not show the hide external code checkbox', () => {
       cy.get('.popper__button').click();
-      cy.get('.filters__block-row-content').should('have.length', 8);
+      cy.get('.filters__block-row-content').should('have.length', 7);
       cy.get('.filters__block-row-content').each(($el) =>
         cy.wrap($el).should('not.contain.text', 'Hide external code')
       );
