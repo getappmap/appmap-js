@@ -39,6 +39,22 @@
       >
         <v-thumb-icon />
       </span>
+      <span
+        v-if="!isUser && id"
+        data-cy="speak-message"
+        :class="{
+          button: 1,
+        }"
+        @click="onClickSpeak"
+      >
+        <div class="loading" v-if="audioLoading">
+          <div class="dot" />
+          <div class="dot" :style="{ 'animation-delay': '0.15s' }" />
+          <div class="dot" :style="{ 'animation-delay': '0.3s' }" />
+        </div>
+        <v-play-icon v-else-if="!isPlaying" />
+        <v-stop-icon v-else />
+      </span>
     </div>
   </div>
 </template>
@@ -48,10 +64,13 @@
 import VAppmapLogo from '@/assets/appmap-logomark.svg';
 import VUserAvatar from '@/assets/user-avatar.svg';
 import VThumbIcon from '@/assets/thumb.svg';
+import VPlayIcon from '@/assets/play.svg';
+import VStopIcon from '@/assets/stop.svg';
 import VButton from '@/components/Button.vue';
 
 import { Marked, Renderer } from 'marked';
 import { markedHighlight } from 'marked-highlight';
+import { AI } from '@appland/client';
 import DOMPurify from 'dompurify';
 import hljs from 'highlight.js';
 
@@ -87,6 +106,9 @@ const marked = new Marked(
   { renderer: customRenderer }
 );
 
+const audioContext = new AudioContext();
+let audioSource: AudioBufferSourceNode | undefined;
+
 export default {
   name: 'v-user-message',
 
@@ -95,6 +117,8 @@ export default {
     VUserAvatar,
     VThumbIcon,
     VButton,
+    VPlayIcon,
+    VStopIcon,
   },
 
   props: {
@@ -113,10 +137,32 @@ export default {
     sentiment: {
       default: 0,
     },
+    complete: {
+      default: false,
+    },
+    preloadAudio: {
+      default: false,
+    },
+    autoplayAudio: {
+      default: true,
+    },
   },
 
   data() {
-    return { sentimentTimeout: undefined };
+    return {
+      sentimentTimeout: undefined,
+      audioBuffer: undefined,
+      audioLoading: false,
+      isPlaying: false,
+    };
+  },
+
+  watch: {
+    complete() {
+      if (this.complete && this.autoplayAudio) {
+        this.playMessage();
+      }
+    },
   },
 
   computed: {
@@ -172,6 +218,73 @@ export default {
         });
       });
     },
+
+    async loadAudio() {
+      if (!this.id) return;
+      if (this.audioBuffer) return;
+      if (this.audioLoading) return;
+
+      this.audioLoading = true;
+      const audio = await AI.speakMessage(this.id);
+      const audioBuffer = await audioContext.decodeAudioData(audio);
+      this.audioBuffer = audioBuffer;
+      this.audioLoading = false;
+    },
+
+    stopMessage() {
+      console.log('stopMessage', audioSource, audioSource && audioSource.buffer);
+      if (audioSource) {
+        audioSource.stop();
+        audioSource = undefined;
+      }
+    },
+
+    async playMessage() {
+      // Ensure the audio is loaded
+      await this.loadAudio();
+
+      console.log('playMessage', audioSource, audioSource && audioSource.buffer);
+
+      // This element was removed before the audio could be loaded
+      if (!this.$el) return;
+
+      if (audioSource) {
+        // Something is already playing
+        if (audioSource.buffer === this.audioBuffer) {
+          // It's us. Do nothing.
+          return;
+        } else {
+          // It's someone else. Stop them.
+          this.stopMessage();
+        }
+      }
+
+      audioSource = audioContext.createBufferSource();
+      audioSource.buffer = this.audioBuffer;
+      audioSource.connect(audioContext.destination);
+      audioSource.onended = () => {
+        this.isPlaying = false;
+        audioSource = undefined;
+      };
+      audioSource.start();
+      this.isPlaying = true;
+    },
+
+    onClickSpeak() {
+      if (this.audioLoading) return;
+
+      if (this.isPlaying) {
+        this.stopMessage();
+      } else {
+        this.playMessage();
+      }
+    },
+  },
+
+  mounted() {
+    if (this.preloadAudio) {
+      this.buildAudioBuffer();
+    }
   },
 
   updated() {
@@ -180,11 +293,29 @@ export default {
     // but this works for now.
     this.bindCopyButtons();
   },
+
+  beforeDestroy() {
+    if (this.audioSource) {
+      this.audioSource.stop();
+      this.audioSource = undefined;
+    }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 @import '~highlight.js/styles/base16/snazzy.css';
+
+@keyframes loading {
+  0%,
+  100% {
+    transform: translateY(50%) scaleX(1.2);
+  }
+
+  50% {
+    transform: translateY(-50%) scaleY(1.1);
+  }
+}
 
 .message {
   display: grid;
@@ -253,27 +384,57 @@ export default {
   }
 
   .buttons {
+    $button-color: desaturate(lighten($gray2, 25%), 10%);
+
     grid-column: 2;
     height: 1.5rem;
     margin-bottom: 0.5rem;
+    user-select: none;
 
     .button {
+      display: inline-block;
+      padding: 1px;
+      cursor: pointer;
       opacity: 0%;
       transition: opacity 0.25s ease-in-out;
+      width: 1.5rem;
+      height: 100%;
+      transform-origin: center center;
+      vertical-align: top;
+
+      svg {
+        path {
+          fill: $button-color;
+        }
+      }
+
+      &:hover {
+        svg path {
+          fill: white;
+        }
+      }
+    }
+
+    .loading {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+
+      .dot {
+        width: 4px;
+        height: 4px;
+        border-radius: 2rem;
+        background-color: $button-color;
+        margin: 1px;
+        animation: 1s infinite loading ease-in-out;
+      }
     }
 
     .sentiment {
-      display: inline-block;
-      width: 1.5rem;
-      cursor: pointer;
-      padding: 1px;
-      transform-origin: center center;
-
       svg {
-        width: 100%;
-        height: 100%;
         path {
-          stroke: desaturate(lighten($gray2, 25%), 10%);
+          stroke: $button-color;
           fill: none;
         }
       }
@@ -281,6 +442,7 @@ export default {
       &:hover {
         svg path {
           stroke: white;
+          fill: none;
         }
       }
 

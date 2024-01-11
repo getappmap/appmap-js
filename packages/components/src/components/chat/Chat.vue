@@ -12,6 +12,7 @@
         :is-error="message.isError"
         :id="message.messageId"
         :sentiment="message.sentiment"
+        :complete="message.complete"
         @change-sentiment="onSentimentChange"
       />
       <div v-if="loading" class="status-container">
@@ -67,6 +68,7 @@ interface IMessage {
   isError: boolean;
   messageId?: string;
   sentiment?: number;
+  complete?: boolean;
 }
 
 class UserMessage implements IMessage {
@@ -74,6 +76,7 @@ class UserMessage implements IMessage {
   public readonly sentiment = undefined;
   public readonly isUser = true;
   public readonly isError = false;
+  public readonly complete = true;
 
   constructor(public content: string) {}
 }
@@ -83,6 +86,7 @@ class AssistantMessage implements IMessage {
   public sentiment = undefined;
   public readonly isUser = false;
   public readonly isError = false;
+  public complete = false;
 
   constructor(public messageId: string) {}
 
@@ -152,6 +156,14 @@ export default {
     },
   },
   methods: {
+    getMessage(query: Partial<IMessage>) {
+      return this.messages.find((m) => {
+        for (const key in query) {
+          if (m[key] !== query[key]) return false;
+        }
+        return true;
+      });
+    },
     // Creates-or-appends a message.
     addToken(token: string, threadId: string, messageId: string) {
       if (threadId !== this.threadId) return;
@@ -195,8 +207,10 @@ export default {
       this.loading = true;
       this.sendMessage(message);
     },
-    onAck(_messageId: string, threadId: string) {
+    onAck(messageId: string, threadId: string) {
       this.setAuthorized(true);
+      const message = this.getMessage({ messageId: undefined, isUser: true });
+      if (message) message.messageId = messageId;
       this.threadId = threadId;
     },
     onSuggestion(prompt: string) {
@@ -205,7 +219,12 @@ export default {
       assistantMessage.append(prompt);
       this.messages.push(assistantMessage);
     },
-    onComplete() {
+    onComplete(messageId: string) {
+      const message = this.getMessage({ messageId, isUser: false });
+      console.log('onComplete', messageId, message, this.messages);
+      if (message) {
+        message.complete = true;
+      }
       this.loading = false;
     },
     clear() {
@@ -222,7 +241,7 @@ export default {
     async onSentimentChange(messageId: string, sentiment: number) {
       if (!messageId) return;
 
-      const message = this.messages.find((m) => m.id === messageId);
+      const message = this.getMessage(messageId);
       if (!message || message.sentiment === sentiment) return;
 
       await AI.sendMessageFeedback(message.id, sentiment);
