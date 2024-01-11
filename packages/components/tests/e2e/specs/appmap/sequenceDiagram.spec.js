@@ -15,7 +15,7 @@ context('AppMap sequence diagram', () => {
 
       cy.get('.sequence-actor[data-actor-id="package:openssl"]').should('not.exist');
 
-      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
       cy.get('.filters .filters__hide-item').should('have.length', 1);
     });
 

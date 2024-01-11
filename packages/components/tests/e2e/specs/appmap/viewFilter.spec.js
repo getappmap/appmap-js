@@ -9,7 +9,7 @@ context('AppMap view filter', () => {
       cy.get('.details-panel-filters .details-panel-filters__item').first().click();
       cy.get('.nodes .node').should('have.length', 2);
 
-      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
       cy.get('.filters .filters__root').should('have.length', 1);
 
       cy.get('.filters .filters__root .filters__root-icon').click();
@@ -26,20 +26,20 @@ context('AppMap view filter', () => {
       cy.get('.nodes .node').should('have.length', 3);
       cy.get('.filters .filters__root .filters__root-icon').click();
       cy.get('.nodes .node').should('have.length', 9);
-      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
 
       cy.get('.tabs .tab-btn').contains('Trace View').click();
       cy.get('.trace .trace-node').should('have.length', 4);
-      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
       cy.get('.filters__checkbox').first().click();
       cy.get('.filters__form-input').first().type('route:GET /admin/orders').parent().submit();
       cy.get('.trace .trace-node').should('have.length', 2);
       cy.get('.filters .filters__root .filters__root-icon').click();
 
-      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
       cy.get('.tabs .tab-btn').first().click();
       cy.get('.nodes .node').should('have.length', 9);
-      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
       cy.get('.filters__form-input').first().type('package:app/controllers').parent().submit();
       cy.get('.nodes .node').should('have.length', 3);
     });
@@ -47,7 +47,7 @@ context('AppMap view filter', () => {
     it('when child of package is set as root its children are filtered out', () => {
       cy.get('.nodes .node').should('have.length', 9);
 
-      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
 
       cy.get('.filters__form-input')
         .first()
@@ -63,7 +63,7 @@ context('AppMap view filter', () => {
     });
 
     it('keyboard navigates through filter suggestions', () => {
-      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
 
       cy.get('.filters__form-input').first().focus();
       cy.get('.filters__form-suggestions').should('be.visible');
@@ -90,7 +90,7 @@ context('AppMap view filter', () => {
 
       cy.get('.trace .trace-node').should('have.length', 4);
 
-      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
       cy.get('.filters__checkbox').eq(0).click();
 
       cy.get('.trace .trace-node').should('have.length', 12);
@@ -101,7 +101,7 @@ context('AppMap view filter', () => {
 
       cy.get('.trace .trace-node').should('have.length', 4);
 
-      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
       cy.get('.filters__checkbox').eq(1).click();
 
       cy.get('.trace .trace-node').should('have.length', 5);
@@ -112,7 +112,7 @@ context('AppMap view filter', () => {
 
       cy.get('.trace .trace-node').should('have.length', 4);
 
-      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
 
       cy.get('.filters__elapsed input').type('00');
       cy.get('.filters__checkbox').eq(3).click();
@@ -128,7 +128,7 @@ context('AppMap view filter', () => {
 
       cy.get('.nodes .node').should('have.length', 8);
 
-      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
       cy.get('.filters .filters__hide-item').should('have.length', 1);
 
       cy.get('.filters .filters__hide-item .filters__hide-item-icon').click();
@@ -139,13 +139,13 @@ context('AppMap view filter', () => {
       cy.get('.tabs .tab-btn').contains('Trace View').click();
       cy.get('.trace-node[data-event-id="1"]').click();
 
-      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
       cy.get('.filters__checkbox').eq(0).click();
 
-      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
       cy.get('.trace-node[data-event-id="1"].highlight').should('exist');
 
-      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
       cy.get('.filters__checkbox').eq(0).click();
 
       cy.get('.trace-node[data-event-id="1"].highlight').should('exist');
@@ -171,7 +171,7 @@ context('AppMap view filter', () => {
         cy.wrap($el).should('contain.text', expectedInitial[index]);
       });
 
-      cy.get('.popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
       cy.get('.filters__checkbox').eq(2).click();
       cy.get('.sequence-actor').should('have.length', 6);
 
@@ -200,7 +200,7 @@ context('AppMap view filter', () => {
     it('disables the delete and default buttons for AppMap default filter', () => {
       cy.get('.tabs .tab-btn').contains('Trace View').click();
       cy.get('.trace .trace-node').should('have.length', 4);
-      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
 
       cy.get('.filters__select').find(':selected').should('contain.text', 'AppMap default');
       cy.get('.filters__button-disabled').first().should('contain.text', 'Load');
@@ -212,7 +212,7 @@ context('AppMap view filter', () => {
     it('enables all buttons for a non-default filter', () => {
       cy.get('.tabs .tab-btn').contains('Trace View').click();
       cy.get('.trace .trace-node').should('have.length', 4);
-      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
 
       cy.get('.filters__select').select('filter');
       cy.get('.filters__select').find(':selected').should('contain.text', 'filter');
@@ -227,7 +227,7 @@ context('AppMap view filter', () => {
       cy.get('.tabs .tab-btn').first().click();
       cy.get('.nodes .node').should('have.length', 9);
 
-      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
       cy.get('.filters__select').select('filter');
       cy.get('[data-cy="apply-filter-button"]').click();
       cy.get('.nodes .node').should('have.length', 5);
@@ -248,7 +248,7 @@ context('AppMap view filter', () => {
     it('disables the delete and default buttons for AppMap default filter', () => {
       cy.get('.tabs .tab-btn').contains('Trace View').click();
       cy.get('.trace .trace-node').should('have.length', 4);
-      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
 
       cy.get('.filters__select').find(':selected').should('contain.text', 'AppMap default');
       cy.get('.filters__button-disabled').first().should('contain.text', 'Load');
@@ -258,7 +258,7 @@ context('AppMap view filter', () => {
     });
 
     it('saves a new filter and sets it as default', () => {
-      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
       cy.get('.filters__select > option').should('have.length', 1);
 
       // save new filter
@@ -279,7 +279,7 @@ context('AppMap view filter', () => {
     });
 
     it('overwrites an existing filter with the same name', () => {
-      cy.get('.tabs__controls .popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
 
       // save new filter
       cy.get('.filters__checkbox').eq(2).click();
@@ -303,7 +303,7 @@ context('AppMap view filter', () => {
     });
 
     it('"Limit root events to HTTP" filter is disabled', () => {
-      cy.get('.popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
       cy.get('.filters__checkbox input[type="checkbox"]').first().should('not.be.checked');
     });
   });
@@ -316,7 +316,7 @@ context('AppMap view filter', () => {
     });
 
     it('does not show the hide external code checkbox', () => {
-      cy.get('.popper__button').click();
+      cy.get('.tabs__controls [data-cy="filters-button"]').click();
       cy.get('.filters__block-row-content').should('have.length', 7);
       cy.get('.filters__block-row-content').each(($el) =>
         cy.wrap($el).should('not.contain.text', 'Hide external code')

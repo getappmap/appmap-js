@@ -17,6 +17,7 @@ import patchNotes from './data/patch_notes_html';
 import bindResolvePath from './support/resolvePath';
 import savedFilters from './data/saved_filters.js';
 import './scss/fullscreen.scss';
+import { filterStringToFilterState } from '@appland/models';
 
 const scenarioData = {
   default: defaultScenario,
@@ -35,12 +36,6 @@ const scenarioData = {
 const sequenceDiagramData = {
   mapWithDiff: diffSequenceDiagram,
 };
-
-const selectedObjects = [
-  `route:GET /admin`,
-  `function:app/controllers/Spree::Admin::OrdersController#index`,
-  `query:SELECT COUNT(*) FROM "spree_shipments" WHERE "spree_shipments"."order_id" = ? AND "spree_shipments"."state" = ?`,
-];
 
 export default {
   title: 'Pages/VS Code',
@@ -70,7 +65,19 @@ export default {
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VVsCodeExtension },
-  template: '<v-vs-code-extension v-bind="$props" style="overflow: hidden;" ref="vsCode" />',
+  template:
+    '<v-vs-code-extension v-bind="$props" style="overflow: hidden;" ref="vsCode" @exportJSON="exportJSON" />',
+  methods: {
+    exportJSON(appmapData) {
+      const blob = new Blob([JSON.stringify(appmapData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${appMap.metadata?.name || 'download'}.appmap.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+    },
+  },
   mounted() {
     const scenario = scenarioData[args.scenario];
     const sequenceDiagram = sequenceDiagramData[args.scenario];
@@ -102,19 +109,24 @@ ExtensionWithSavedFilters.args = {
   savedFilters,
 };
 
-export const ExtensionWithSelectedObjects = (args, { argTypes }) => ({
+export const ExtensionWithViewState = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VVsCodeExtension },
   template: '<v-vs-code-extension v-bind="$props" ref="vsCode" />',
-  async mounted() {
+  mounted() {
     const scenario = scenarioData[args.scenario];
-    await this.$refs.vsCode.loadData(scenario);
-    this.$refs.vsCode.setState(JSON.stringify({ selectedObjects }));
+    if (scenario) {
+      scenario.viewState = {
+        filters: {
+          hideElapsedTimeUnder: 2,
+        },
+      };
+      this.$refs.vsCode.loadData(scenario);
+    }
+
+    bindResolvePath(this);
   },
 });
-ExtensionWithSelectedObjects.args = {
-  defaultView: VIEW_SEQUENCE,
-};
 
 export const ExtensionWithNotification = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
