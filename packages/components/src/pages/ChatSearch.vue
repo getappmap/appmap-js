@@ -59,7 +59,12 @@
       >
       </v-app-map>
       <div v-else class="appmap-empty"></div>
-      <v-accordion class="diagnostics" :open="showDiagnostics" @toggle="toggleDiagonstics">
+      <v-accordion
+        v-if="enableDiagnostics"
+        class="diagnostics"
+        :open="showDiagnostics"
+        @toggle="toggleDiagonstics"
+      >
         <template #header>
           <a href="" @click.prevent>Diagnostics &raquo;</a>
         </template>
@@ -125,6 +130,10 @@ export default {
     savedFilters: {
       type: Array,
       default: () => [],
+    },
+    enableDiagnostics: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
