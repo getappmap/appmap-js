@@ -456,6 +456,11 @@ export default {
 <style lang="scss" scoped>
 $brightblue: rgba(255, 255, 255, 0.1);
 
+.run-config-icon {
+  width: 22px;
+  transform: translateY(25%);
+}
+
 .page-control-wrap {
   display: flex;
   flex-direction: row;
