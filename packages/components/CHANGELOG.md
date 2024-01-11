@@ -1,3 +1,10 @@
+# [@appland/components-v3.25.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.24.0...@appland/components-v3.25.0) (2024-01-11)
+
+
+### Features
+
+* Drop Diagnostics info from ChatSearch ([720f65a](https://github.com/getappmap/appmap-js/commit/720f65a40f0bd08493cc80884edef0b5dfe8d3da))
+
 # [@appland/components-v3.24.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.23.1...@appland/components-v3.24.0) (2024-01-11)
 
 
