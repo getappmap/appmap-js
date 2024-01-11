@@ -158,7 +158,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .run-config-icon {
   width: 22px;
   transform: translateY(25%);
