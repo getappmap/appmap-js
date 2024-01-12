@@ -137,8 +137,6 @@ jobs:
         run: |
           cd packages/cli
           yarn run lint
-          yarn run test
-          # TODO: Run only the appmap-node version of these tests
           npx appmap-node yarn run test
 
       # - name: Save AppMaps
