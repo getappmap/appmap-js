@@ -141,6 +141,25 @@ jobs:
           # TODO: Run only the appmap-node version of these tests
           npx appmap-node yarn run test
 
+      # - name: Save AppMaps
+      #   uses: actions/cache/save@v3
+      #   if: always()
+      #   with:
+      #     path: ./packages/cli/tmp/appmap
+      #     key: appmaps-${{ github.sha }}-${{ github.run_attempt }}
+
+      - name: Install AppMap tools
+        uses: getappmap/install-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          install-appmap-library: false
+
+      - name: AppMap Archive
+        uses: getappmap/archive-action@v1
+        with:
+          directory: packages/cli
+          revision: ${{ github.event.pull_request.head.sha }}
+
   test_scanner:
     runs-on: ubuntu-latest
 
@@ -217,3 +236,15 @@ jobs:
         run: |
           yarn workspaces foreach -v -t --exclude root --exclude @appland/appmap --exclude @appland/components --exclude @appland/scanner run lint
           yarn workspaces foreach -v -t --exclude root --exclude @appland/appmap --exclude @appland/components --exclude @appland/scanner run test
+
+  # appmap-analysis:
+  #   if: always()
+  #   needs: [test_cli]
+  #   uses: getappmap/analyze-action/.github/workflows/appmap-analysis-matrix.yml@v1
+  #   with:
+  #     directory: packages/cli
+  #   permissions:
+  #     actions: read
+  #     contents: read
+  #     checks: write
+  #     pull-requests: write
