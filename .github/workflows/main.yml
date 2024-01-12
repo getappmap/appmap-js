@@ -180,3 +180,40 @@ jobs:
           yarn run test
           # TODO: Run only the appmap-node version of these tests
           # npx appmap-node yarn run test
+
+  test_the_rest:
+    runs-on: ubuntu-latest
+
+    needs: [yarn_install]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Detect Yarn cache dir
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - name: Restore Yarn packages
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+      - name: Restore node_modules
+        uses: actions/cache@v3
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
+
+      - name: Build
+        run: |
+          yarn
+          yarn workspaces foreach -v -t --exclude root --exclude @appland/appmap --exclude @appland/components --exclude @appland/scanner run build
+
+      - name: Test
+        run: |
+          yarn workspaces foreach -v -t --exclude root --exclude @appland/appmap --exclude @appland/components --exclude @appland/scanner run lint
+          yarn workspaces foreach -v -t --exclude root --exclude @appland/appmap --exclude @appland/components --exclude @appland/scanner run test
