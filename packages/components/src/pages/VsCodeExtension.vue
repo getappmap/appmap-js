@@ -1208,7 +1208,7 @@ export default {
         }
       }
 
-      if (this.savedFilters.length === 0) {
+      if (savedFilters.length === 0) {
         const defaultFilter = new AppMapFilter();
         const serialized = serializeFilter(defaultFilter);
         const base64encoded = base64UrlEncode(JSON.stringify({ filters: serialized }));

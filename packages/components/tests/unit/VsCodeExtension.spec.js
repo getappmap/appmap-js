@@ -14,11 +14,26 @@ describe('VsCodeExtension.vue', () => {
     return Buffer.from(JSON.stringify(stateObject), 'utf-8').toString('base64url');
   }
 
+  const defaultFilter = new AppMapFilter();
+  const serialized = serializeFilter(defaultFilter);
+  const base64encoded = base64UrlEncode(JSON.stringify({ filters: serialized }));
+
+  const defaultFilterObject = {
+    filterName: 'AppMap default',
+    state: base64encoded,
+    default: true,
+  };
+
   beforeEach(() => {
     wrapper = mount(VsCodeExtension, {
       stubs: {
         'v-diagram-component': true,
         'v-diagram-trace': true,
+      },
+      computed: {
+        isInBrowser() {
+          return false;
+        },
       },
     });
     rootWrapper = createWrapper(wrapper.vm.$root);
@@ -185,19 +200,9 @@ describe('VsCodeExtension.vue', () => {
   });
 
   it('creates a default filter', () => {
-    const defaultFilter = new AppMapFilter();
-    const serialized = serializeFilter(defaultFilter);
-    const base64encoded = base64UrlEncode(JSON.stringify({ filters: serialized }));
-
-    const expectedFilterObject = {
-      filterName: 'AppMap default',
-      state: base64encoded,
-      default: true,
-    };
-
     const actual = rootWrapper.emitted().saveFilter;
     expect(actual).toBeArrayOfSize(1);
-    expect(actual[0][0]).toEqual(expectedFilterObject);
+    expect(actual[0][0]).toEqual(defaultFilterObject);
   });
 
   it('sets a single selected object by fqid when passed as an array', () => {
@@ -253,5 +258,42 @@ describe('VsCodeExtension.vue', () => {
     await wrapper.setProps({ allowExport: false });
 
     expect(wrapper.find('[data-cy="export"]').exists()).toBe(false);
+  });
+
+  describe('when in the browser', () => {
+    function mountWithProps(propsData) {
+      wrapper = mount(VsCodeExtension, {
+        stubs: {
+          'v-diagram-component': true,
+          'v-diagram-trace': true,
+        },
+        computed: {
+          isInBrowser() {
+            return true;
+          },
+        },
+        propsData,
+      });
+      rootWrapper = createWrapper(wrapper.vm.$root);
+      wrapper.vm.loadData(data);
+      wrapper.vm.$store.commit(RESET_FILTERS);
+    }
+
+    beforeEach(() => {
+      window.localStorage.clear();
+    });
+
+    it('does create a default filter when in the browser and one does not exist', () => {
+      mountWithProps();
+      const actual = rootWrapper.emitted().saveFilter;
+      expect(actual).toBeArrayOfSize(1);
+      expect(actual[0][0]).toEqual(defaultFilterObject);
+    });
+
+    it('does not create a default filter when in the browser and one already exists', () => {
+      mountWithProps({ savedFilters: [defaultFilterObject] });
+      const actual = rootWrapper.emitted().saveFilter;
+      expect(actual).toBeUndefined();
+    });
   });
 });
