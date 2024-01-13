@@ -1,3 +1,10 @@
+# [@appland/components-v3.25.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.25.0...@appland/components-v3.25.1) (2024-01-13)
+
+
+### Bug Fixes
+
+* Stop creating multiple default filters in the browser ([cbd4f20](https://github.com/getappmap/appmap-js/commit/cbd4f201d978e0aa9be368b5e065787ccd22055b))
+
 # [@appland/components-v3.25.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.24.0...@appland/components-v3.25.0) (2024-01-11)
 
 
