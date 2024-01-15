@@ -1,0 +1,26 @@
+name: Setup Node
+description: Sets up Node.js and restores Yarn and node_modules cache
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+    - name: Detect Yarn cache dir
+      id: yarn-cache-dir-path
+      shell: bash
+      run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+    - name: Restore Yarn packages
+      uses: actions/cache/restore@v3
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+    - name: Restore node_modules
+      uses: actions/cache@v3
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
+    - name: Yarn install
+      shell: bash
+      run: yarn
