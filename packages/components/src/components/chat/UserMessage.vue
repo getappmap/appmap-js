@@ -409,11 +409,17 @@ export default {
     }
   }
 
-  p:first-child {
+  ul {
+    margin: 1rem 0;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+  }
+
+  & > p:first-child {
     margin-top: 0;
   }
 
-  p:last-child {
+  & > p:last-child {
     margin-bottom: 0;
   }
 }
