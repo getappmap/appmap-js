@@ -224,10 +224,10 @@ export default {
     },
     onSuggestion(prompt: string) {
       if (this.suggestionSpeaker === 'system') {
-      // Make it look like the AI is typing
-      const assistantMessage = new AssistantMessage('suggested-message');
-      assistantMessage.append(prompt);
-      this.messages.push(assistantMessage);
+        // Make it look like the AI is typing
+        const assistantMessage = new AssistantMessage('suggested-message');
+        assistantMessage.append(prompt);
+        this.messages.push(assistantMessage);
       } else {
         this.ask(prompt);
       }
@@ -317,6 +317,7 @@ $border-color: darken($gray4, 10%);
 #header-navie-logo {
   padding-top: 3px;
 }
+
 .chat {
   display: flex;
   flex-direction: column;
@@ -336,6 +337,11 @@ $border-color: darken($gray4, 10%);
     background-color: transparent !important;
   }
 
+  ::-webkit-scrollbar-thumb:hover,
+  ::-webkit-scrollbar-thumb:active {
+    background: white;
+  }
+
   .button-panel {
     $panel-bg: rgba(0, 0, 0, 0.1);
     justify-content: end;
@@ -353,16 +359,6 @@ $border-color: darken($gray4, 10%);
     height: 100%;
     overflow: auto;
     padding-right: 1rem;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: lighten($gray4, 25%);
-  }
-  ::-webkit-scrollbar-thumb:hover,
-  ::-webkit-scrollbar-thumb:active {
-    background: white;
-  }
-  ::-webkit-scrollbar-track {
-    background: $border-color;
   }
 }
 
