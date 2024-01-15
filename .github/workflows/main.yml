@@ -101,6 +101,34 @@ jobs:
           yarn run lint
           yarn run test
 
+  test_chromatic:
+    runs-on: ubuntu-latest
+
+    if: github.event_name == 'pull_request'
+
+    needs: [yarn_install]
+
+    env:
+      CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: getappmap/appmap-js@actions/setup-node/v1
+
+      - name: Build
+        run: |
+          yarn workspaces foreach -v -t --exclude root --exclude @appland/appmap --exclude @appland/scanner run build
+
+      - name: Test
+        run: |
+          cd packages/components
+          yarn run chromatic
+
   test_cli:
     runs-on: ubuntu-latest
 
