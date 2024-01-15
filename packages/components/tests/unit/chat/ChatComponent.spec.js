@@ -1,6 +1,6 @@
 import VChat from '@/components/chat/Chat.vue';
-import { createWrapper, mount } from '@vue/test-utils';
-import { warn } from 'console';
+import { mount } from '@vue/test-utils';
+import { AI } from '@appland/client';
 
 describe('components/Chat.vue', () => {
   const threadId = 'the-thread-id';
@@ -175,6 +175,24 @@ describe('components/Chat.vue', () => {
 
         expect(wrapper.find('.status-unauthorized').exists()).toBe(true);
       });
+    });
+  });
+
+  describe('onSentimentChange', () => {
+    it('calls the API as expected', async () => {
+      const api = jest.spyOn(AI, 'sendMessageFeedback').mockResolvedValue({});
+      const wrapper = mount(VChat);
+      const messageId = 'the-message-id';
+      const threadId = 'the-thread-id';
+
+      wrapper.vm.onAck('Faking the thread ID', threadId);
+      wrapper.vm.addToken('Hello from the system', 'the-thread-id', messageId);
+
+      await wrapper.vm.$nextTick();
+
+      wrapper.find('[data-cy="feedback-good"]').trigger('click');
+
+      expect(api).toBeCalledWith(messageId, 1);
     });
   });
 });
