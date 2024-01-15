@@ -57,6 +57,7 @@ export default {
   .pin {
     width: 32px;
     height: 32px;
+    margin-bottom: -16px;
     border-radius: 50%;
     overflow: visible;
     margin-right: 1rem;
