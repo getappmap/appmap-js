@@ -257,10 +257,10 @@ export default {
     async onSentimentChange(messageId: string, sentiment: number) {
       if (!messageId) return;
 
-      const message = this.messages.find((m) => m.id === messageId);
+      const message = this.messages.find((m) => m.messageId === messageId);
       if (!message || message.sentiment === sentiment) return;
 
-      await AI.sendMessageFeedback(message.id, sentiment);
+      await AI.sendMessageFeedback(message.messageId, sentiment);
 
       message.sentiment = sentiment;
     },
