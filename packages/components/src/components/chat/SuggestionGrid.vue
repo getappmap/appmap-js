@@ -73,21 +73,16 @@ export default {
 
 <style lang="scss" scoped>
 .suggestion-grid {
-  width: fit-content;
   margin: 1rem auto;
   font-size: 0.8rem;
   color: #c2c2c2;
+  padding: 1rem;
 
   .grid {
     display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
     gap: 1rem;
     font-family: system-ui;
-  }
-}
-
-@media (max-width: 54rem) {
-  .suggestion-grid .grid {
-    grid-template-columns: 1fr;
   }
 }
 </style>
