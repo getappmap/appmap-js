@@ -135,6 +135,11 @@ export default {
       type: Array,
       required: false,
     },
+    suggestionSpeaker: {
+      type: String,
+      default: 'system',
+      validator: (v: string) => ['system', 'user'].includes(v),
+    },
   },
   data() {
     return {
@@ -197,7 +202,7 @@ export default {
       this.messages.push(new ErrorMessage(error));
       this.scrollToBottom();
     },
-    async ask(message: string) {
+    ask(message: string) {
       this.onSend(message);
     },
     onError(error) {
@@ -218,10 +223,14 @@ export default {
       this.threadId = threadId;
     },
     onSuggestion(prompt: string) {
+      if (this.suggestionSpeaker === 'system') {
       // Make it look like the AI is typing
       const assistantMessage = new AssistantMessage('suggested-message');
       assistantMessage.append(prompt);
       this.messages.push(assistantMessage);
+      } else {
+        this.ask(prompt);
+      }
     },
     onComplete() {
       this.resetStateVariables();

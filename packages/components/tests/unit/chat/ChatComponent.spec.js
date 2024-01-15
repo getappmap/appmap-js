@@ -195,4 +195,33 @@ describe('components/Chat.vue', () => {
       expect(api).toBeCalledWith(messageId, 1);
     });
   });
+
+  describe('suggested prompts', () => {
+    it('can emit the prompt as the user', async () => {
+      const sendMessage = jest.fn();
+      const prompt = 'the-prompt';
+      const wrapper = mount(VChat, {
+        propsData: {
+          suggestionSpeaker: 'user',
+          sendMessage,
+          suggestions: [{ title: 'title', subtitle: 'subtitle', prompt }],
+        },
+      });
+      wrapper.find('[data-cy="prompt-suggestion"]').trigger('click');
+
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('[data-actor="user"] [data-cy="message-text"]').exists()).toBe(true);
+      expect(sendMessage).toBeCalledWith(prompt);
+    });
+
+    it('can emit the prompt as the system', async () => {
+      const wrapper = mount(VChat); // default is system
+      wrapper.find('[data-cy="prompt-suggestion"]').trigger('click');
+
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('[data-actor="system"] [data-cy="message-text"]').exists()).toBe(true);
+    });
+  });
 });
