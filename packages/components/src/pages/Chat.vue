@@ -1,6 +1,12 @@
 <template>
   <div class="chat-container">
-    <v-chat ref="vchat" class="chat" :send-message="sendMessage" :suggestions="suggestions" />
+    <v-chat
+      ref="vchat"
+      class="chat"
+      suggestion-speaker="user"
+      :send-message="sendMessage"
+      :suggestions="suggestions"
+    />
   </div>
 </template>
 
