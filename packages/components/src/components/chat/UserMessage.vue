@@ -256,6 +256,7 @@ export default {
     grid-column: 2;
     height: 1.5rem;
     margin-bottom: 0.5rem;
+    user-select: none;
 
     .button {
       opacity: 0%;
