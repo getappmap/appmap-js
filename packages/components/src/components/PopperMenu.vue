@@ -121,9 +121,10 @@ export default {
         max-height: inherit !important;
         width: inherit !important;
         height: inherit !important;
-        margin-top: 0 !important;
+        margin: 0 !important;
         border-radius: 0 !important;
         z-index: 1000;
+        transform: none !important;
       }
     }
 
@@ -143,6 +144,11 @@ export default {
 
     .popper--h-right & {
       left: 0;
+    }
+    .narrow & {
+      left: unset !important;
+      right: unset !important;
+      transform: translateX(-50%);
     }
 
     h2 {

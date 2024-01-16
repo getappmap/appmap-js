@@ -10,7 +10,7 @@
     data-cy="app"
   >
     <div class="loader"></div>
-    <div :class="leftColumnClasses" ref="mainColumnLeft">
+    <div :class="leftColumnClasses" ref="mainColumnLeft" @transitionend="detailsPanelTransitionEnd">
       <transition name="slide-in-from-left">
         <v-details-panel
           v-if="showDetailsPanel"
@@ -48,8 +48,13 @@
       </div>
     </div>
 
-    <div class="main-column main-column--right">
-      <v-tabs @activateTab="onChangeTab" ref="tabs" :initial-tab="defaultView">
+    <div class="main-column main-column--right" ref="mainColumnRight">
+      <v-tabs
+        @activateTab="onChangeTab"
+        ref="tabs"
+        :initial-tab="defaultView"
+        :class="[isNarrow ? 'narrow' : '']"
+      >
         <v-search-bar
           v-if="!isGiantAppMap"
           ref="searchBar"
@@ -197,6 +202,7 @@
             v-if="!isPrecomputedSequenceDiagram && !isGiantAppMap"
             :isHighlight="filtersChanged"
             data-cy="filters-button"
+            :class="[isNarrow ? 'narrow' : '']"
           >
             <template v-slot:icon>
               <v-popper
@@ -445,6 +451,7 @@ export default {
       isActive: true,
       isFullscreen: false,
       showDetailsPanel: false,
+      rightColumnWidth: 0,
     };
   },
   mixins: [EmitLinkMixin],
@@ -567,7 +574,6 @@ export default {
     classes() {
       return this.isLoading ? 'app--loading' : '';
     },
-
     leftColumnClasses() {
       return {
         'main-column': true,
@@ -575,7 +581,6 @@ export default {
         'manual-resizing': this.isPanelResizing,
       };
     },
-
     isInBrowser() {
       return window.location.protocol.includes('http');
     },
@@ -807,8 +812,14 @@ export default {
     fullscreenIcon() {
       return this.isFullscreen ? FullscreenExitIcon : FullscreenEnterIcon;
     },
+    isNarrow() {
+      return Number.isFinite(this.rightColumnWidth) && this.rightColumnWidth < 685;
+    },
   },
   methods: {
+    detailsPanelTransitionEnd() {
+      this.rightColumnWidth = this.$refs.mainColumnRight.offsetWidth;
+    },
     loadData(appMap, sequenceDiagram) {
       if (sequenceDiagram) {
         this.sequenceDiagramDiffMode = true;
@@ -1131,6 +1142,7 @@ export default {
       }
     },
     stopResizing() {
+      this.rightColumnWidth = this.$refs.mainColumnRight.offsetWidth;
       document.body.style.userSelect = '';
       this.isPanelResizing = false;
     },
@@ -1340,6 +1352,7 @@ export default {
     browserPrefixes.forEach((prefix) => {
       this.$el.addEventListener(prefix + 'fullscreenchange', this.checkFullscreen);
     });
+    this.rightColumnWidth = this.$refs.mainColumnRight.offsetWidth;
   },
   beforeUpdate() {
     if (this.isGiantAppMap) {
