@@ -10,7 +10,8 @@
     "build": "yarn workspaces foreach -t --exclude root -v run build",
     "build-native": "yarn workspaces foreach -t --exclude root -v run build-native",
     "codesign": "yarn workspaces foreach -t --exclude root -v run codesign",
-    "ci": "yarn run test && ./smoketest.sh",
+    "ci": "yarn run test && yarn run smoketest",
+    "smoketest": "./smoketest.sh",
     "chromatic": "yarn workspaces foreach --exclude root -v run chromatic",
     "watch": "yarn workspaces foreach -t --exclude root -v -p -i run watch",
     "semantic-release": "yarn workspaces foreach -t --exclude '{root,@appland/telemetry}' -v exec semantic-release"

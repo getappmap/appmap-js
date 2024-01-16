@@ -182,6 +182,7 @@ __metadata:
     "@appland/models": "workspace:^2.10.0"
     "@appland/openapi": "workspace:^1.8.0"
     "@appland/rpc": "workspace:^1.1.0"
+    "@appland/scanner": "workspace:^1.86.0"
     "@appland/sequence-diagram": "workspace:^1.12.0"
     "@craftamap/esbuild-plugin-html": ^0.4.0
     "@octokit/rest": ^20.0.1
@@ -205,6 +206,7 @@ __metadata:
     JSONStream: ^1.3.5
     ajv: ^8.6.3
     applicationinsights: ^2.1.4
+    appmap-node: ^2.13.0
     async: ^3.2.4
     axios: ^0.27.2
     body-parser: ^1.20.2
@@ -501,7 +503,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/scanner@workspace:packages/scanner":
+"@appland/scanner@workspace:^1.86.0, @appland/scanner@workspace:packages/scanner":
   version: 0.0.0-use.local
   resolution: "@appland/scanner@workspace:packages/scanner"
   dependencies:
@@ -13833,6 +13835,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"acorn-walk@npm:^8.2.0":
+  version: 8.3.2
+  resolution: "acorn-walk@npm:8.3.2"
+  checksum: 3626b9d26a37b1b427796feaa5261faf712307a8920392c8dce9a5739fb31077667f4ad2ec71c7ac6aaf9f61f04a9d3d67ff56f459587206fc04aa31c27ef392
+  languageName: node
+  linkType: hard
+
 "acorn@npm:^5.5.3":
   version: 5.7.4
   resolution: "acorn@npm:5.7.4"
@@ -14314,6 +14323,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"appmap-node@npm:^2.13.0":
+  version: 2.13.0
+  resolution: "appmap-node@npm:2.13.0"
+  dependencies:
+    acorn-walk: ^8.2.0
+    astring: ^1.8.6
+    chalk: <5
+    convert-source-map: ^2.0.0
+    meriyah: ^4.3.7
+    source-map-js: ^1.0.2
+    yaml: ^2.3.4
+  bin:
+    appmap-node: bin/appmap-node.js
+  checksum: 4621c8516f9e1d5c272a89bc61268349a2a16c4e7c84cba2ae53d2f4931bef0094985d6c9bc87d9ec2b567639cfcb5c0b1098ab56db3d359275461861ea42516
+  languageName: node
+  linkType: hard
+
 "aproba@npm:^1.0.3 || ^2.0.0, aproba@npm:^2.0.0":
   version: 2.0.0
   resolution: "aproba@npm:2.0.0"
@@ -14762,6 +14788,15 @@ __metadata:
   bin:
     astring: bin/astring
   checksum: bc0b98087350c4a0c8a510d491d648cf8b299ec904629d5e0f5ae8d2ccc515cd27475327bb9729c7e92f4a4873adcd05cef15379d0f6f7293f1320319f0d24f0
+  languageName: node
+  linkType: hard
+
+"astring@npm:^1.8.6":
+  version: 1.8.6
+  resolution: "astring@npm:1.8.6"
+  bin:
+    astring: bin/astring
+  checksum: 6f034d2acef1dac8bb231e7cc26c573d3c14e1975ea6e04f20312b43d4f462f963209bc64187d25d477a182dc3c33277959a0156ab7a3617aa79b1eac4d88e1f
   languageName: node
   linkType: hard
 
@@ -16634,6 +16669,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chalk@npm:<5, chalk@npm:^4.0.0, chalk@npm:^4.0.2, chalk@npm:^4.1.0, chalk@npm:^4.1.1, chalk@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "chalk@npm:4.1.2"
+  dependencies:
+    ansi-styles: ^4.1.0
+    supports-color: ^7.1.0
+  checksum: fe75c9d5c76a7a98d45495b91b2172fa3b7a09e0cc9370e5c8feb1c567b85c4288e2b3fded7cfdd7359ac28d6b3844feb8b82b8686842e93d23c827c417e83fc
+  languageName: node
+  linkType: hard
+
 "chalk@npm:^1.1.3":
   version: 1.1.3
   resolution: "chalk@npm:1.1.3"
@@ -16665,16 +16710,6 @@ __metadata:
     ansi-styles: ^4.1.0
     supports-color: ^7.1.0
   checksum: 8e3ddf3981c4da405ddbd7d9c8d91944ddf6e33d6837756979f7840a29272a69a5189ecae0ff84006750d6d1e92368d413335eab4db5476db6e6703a1d1e0505
-  languageName: node
-  linkType: hard
-
-"chalk@npm:^4.0.0, chalk@npm:^4.0.2, chalk@npm:^4.1.0, chalk@npm:^4.1.1, chalk@npm:^4.1.2":
-  version: 4.1.2
-  resolution: "chalk@npm:4.1.2"
-  dependencies:
-    ansi-styles: ^4.1.0
-    supports-color: ^7.1.0
-  checksum: fe75c9d5c76a7a98d45495b91b2172fa3b7a09e0cc9370e5c8feb1c567b85c4288e2b3fded7cfdd7359ac28d6b3844feb8b82b8686842e93d23c827c417e83fc
   languageName: node
   linkType: hard
 
@@ -30422,6 +30457,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"meriyah@npm:^4.3.7":
+  version: 4.3.9
+  resolution: "meriyah@npm:4.3.9"
+  checksum: eb43c4ca2295cbdaa6f4d13412f42fa97c968cbb3171899b1afcf5419715433b2906558aaabd08660592c5731d80341d81ce7bea7fd562942677c15a7bcbea4a
+  languageName: node
+  linkType: hard
+
 "methods@npm:~1.1.2":
   version: 1.1.2
   resolution: "methods@npm:1.1.2"
@@ -41713,7 +41755,7 @@ typescript@~4.4.3:
   languageName: node
   linkType: hard
 
-"yaml@npm:^2.2.1":
+"yaml@npm:^2.2.1, yaml@npm:^2.3.4":
   version: 2.3.4
   resolution: "yaml@npm:2.3.4"
   checksum: e6d1dae1c6383bcc8ba11796eef3b8c02d5082911c6723efeeb5ba50fc8e881df18d645e64de68e421b577296000bea9c75d6d9097c2f6699da3ae0406c030d8

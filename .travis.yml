@@ -16,24 +16,20 @@ git:
 
 install:
   - yarn && yarn run build
-script: yarn run ci
 
 jobs:
   include:
-    - node_js: 18
+    # Linux testing is performed by GitHub Actions
+    - os: linux
+      node_js: 18
       script:
-        - yarn run lint
-        - yarn run ci
+        - yarn run smoketest
 
     - os: windows
       node_js: 18
       env:
         - YARN_GPG=no
       script: yarn test
-
-    - stage: deploy
-      if: branch != main
-      script: yarn run chromatic
 
     - stage: deploy
       if: branch = main
