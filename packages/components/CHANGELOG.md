@@ -1,3 +1,10 @@
+# [@appland/components-v3.26.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.25.1...@appland/components-v3.26.0) (2024-01-16)
+
+
+### Features
+
+* Search bar ([6e77fe4](https://github.com/getappmap/appmap-js/commit/6e77fe4e80ac5080569520b9d3163c662b56f657))
+
 # [@appland/components-v3.25.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.25.0...@appland/components-v3.25.1) (2024-01-13)
 
 
