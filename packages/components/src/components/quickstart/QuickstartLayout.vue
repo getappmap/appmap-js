@@ -14,7 +14,7 @@
           Stuck?
           <template v-if="displayAiHelp">
             <a href="#" data-cy="ai-help-secondary" @click.stop.prevent="onClickHelp">
-              Ask AppMap AI
+              Ask Navie: AppMap AI
               <v-badge>NEW</v-badge>
             </a>
             or send us an email at
