@@ -13,7 +13,7 @@ context('Sequence Diagram', () => {
   });
 
   it('sidebar buttons are disabled', () => {
-    cy.get('div:nth-child(40) > div.call-line-segment.label-span.arrow-base').click();
+    cy.get('.event-name').contains('gravatar_for').click();
     cy.get('.details-panel-header__ghost-link .details-btn').each(($btn) => {
       // For each button, check if it has the attribute 'disabled'
       cy.wrap($btn).should('have.attr', 'disabled');

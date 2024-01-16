@@ -37,23 +37,30 @@ export default {
   font-size: 9pt;
   font-family: 'IBM Plex Mono', monospace;
   margin-left: 1em;
-  white-space: nowrap;
   max-width: 160px;
+  width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   font-style: italic;
   color: lighten($gray4, 20);
-}
 
-.tooltip {
-  position: absolute;
-  background-color: #fff;
-  color: #000;
-  border: 1px solid #ccc;
-  padding: 5px;
-  z-index: 1;
-  opacity: 0.9;
-  display: none;
+  .name {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .tooltip {
+    position: fixed;
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #ccc;
+    padding: 5px;
+    z-index: 1;
+    opacity: 0.9;
+    display: none;
+    max-width: 450px;
+    overflow-wrap: break-word;
+  }
 }
 
 .label:hover .tooltip {
