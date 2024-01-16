@@ -59,7 +59,7 @@ context('AppMap sequence diagram', () => {
       cy.get('.call:nth-child(17) .name').trigger('mouseover');
       cy.get('.call:nth-child(17) span.tooltip').should('exist');
       cy.get('.call:nth-child(17) .name').trigger('mouseout');
-      cy.get('.call:nth-child(17) span.tooltip').should('not.exist');
+      cy.get('.call:nth-child(17) span.tooltip').should('not.be.visible');
     });
 
     it('should display the tooltip on hover on link_to_with_icon call label', () => {
@@ -67,7 +67,7 @@ context('AppMap sequence diagram', () => {
       cy.get('.call:nth-child(72) .name').trigger('mouseover');
       cy.get('.call:nth-child(72) span.tooltip').should('exist');
       cy.get('.call:nth-child(72) .name').trigger('mouseout');
-      cy.get('.call:nth-child(72) span.tooltip').should('not.exist');
+      cy.get('.call:nth-child(72) span.tooltip').should('not.be.visible');
     });
 
     it('should display the truncated tooltip on hover on generate call label', () => {
@@ -81,7 +81,7 @@ context('AppMap sequence diagram', () => {
           expect(trimmedText).to.have.lengthOf(75);
         });
       cy.get('.call:nth-child(67) .name').trigger('mouseout');
-      cy.get('.call:nth-child(67) span.tooltip').should('not.exist');
+      cy.get('.call:nth-child(67) span.tooltip').should('not.be.visible');
     });
 
     it('should display the truncated tooltip on hover on tab call label', () => {
@@ -91,7 +91,7 @@ context('AppMap sequence diagram', () => {
         .invoke('text')
         .should('include', '...,');
       cy.get('.call:nth-child(293) .name').trigger('mouseout');
-      cy.get('.call:nth-child(293) span.tooltip').should('not.exist');
+      cy.get('.call:nth-child(293) span.tooltip').should('not.be.visible');
     });
 
     it('should not display the tooltip on hover on index call label without parameters', () => {
@@ -210,11 +210,10 @@ context('AppMap sequence diagram', () => {
   // Navigate to the first common ancestor after finding the span
   // representing call label labelText, to find the .collapse-expand
   // div containing [+].
-  const getCollapseExpandElementOfActionLabel = (labelText, order = 0) =>
+  const getCollapseExpandElementOfActionLabel = (labelText) =>
     cy
       .get('span')
       .filter(':contains("' + labelText + '")')
-      .eq(order)
       .parent()
       .parent()
       .parent()
@@ -228,14 +227,11 @@ context('AppMap sequence diagram', () => {
     });
 
     it('becomes visible if panned with eyeball', () => {
-      // Ensure it's collapsed
-      let isCollapsed = false;
-      getCollapseExpandElementOfActionLabel('GET /admin/orders').then(
-        ($el) => (isCollapsed = $el.text() === '[+]')
+      getCollapseExpandElementOfActionLabel('GET /admin/orders/:id').click();
+      getCollapseExpandElementOfActionLabel('GET /admin/orders/:id').should(
+        'have.class',
+        'collapsed'
       );
-      if (!isCollapsed) getCollapseExpandElementOfActionLabel('GET /admin/orders').click();
-
-      getCollapseExpandElementOfActionLabel('GET /admin/orders').should('have.class', 'collapsed');
       // Click related items
       cy.get('.details-search__block-item').contains('SELECT COUNT(*) FROM "spree_stores"').click();
       cy.get('span.list-item__event-quickview').first().click();

@@ -34,15 +34,13 @@
           </span>
           <span
             @click="selectEvent"
-            :class="text.class"
+            :class="['event-name', text.class]"
             :key="actionSpec.index + text.text"
             :title="sqlize"
-            @mouseover="startHover"
-            @mouseout="stopHover"
           >
             {{ text.text }}
           </span>
-          <span v-if="hover && parameters" class="tooltip">{{ parameters }}</span>
+          <span v-if="parameters" class="tooltip parameters">{{ parameters }}</span>
         </div>
       </template>
     </div>
@@ -102,7 +100,6 @@ export default {
 
   data() {
     return {
-      hover: false,
       hoverExpandCollapse: false,
     };
   },
@@ -216,12 +213,6 @@ export default {
     stopHoverExpandCollapse() {
       this.hoverExpandCollapse = false;
     },
-    startHover() {
-      this.hover = true;
-    },
-    stopHover() {
-      this.hover = false;
-    },
     truncate(str) {
       const MAX_LENGTH = 75;
       const TRUNCATION_SUFFIX = '...';
@@ -249,18 +240,18 @@ export default {
 $bg-fade: rgba(0, 0, 0, 0.8);
 
 .label {
-  display: inline-block;
+  display: flex;
+  align-items: center;
   font-size: 9pt;
   font-family: 'IBM Plex Mono', monospace;
   margin-left: 0.5rem;
-  white-space: nowrap;
   max-width: 160px;
-  text-overflow: ellipsis;
 
   .collapse-expand {
     display: inline-block;
     width: 1.5em;
     text-align: center;
+    margin-right: 0.4rem;
   }
 
   .name {
@@ -269,6 +260,14 @@ $bg-fade: rgba(0, 0, 0, 0.8);
     color: lighten($gray4, 20);
     display: inline-block;
     padding: 2px 4px;
+
+    .event-name {
+      white-space: nowrap;
+    }
+
+    &:hover .parameters {
+      display: inline-block;
+    }
   }
 
   .name.static {
@@ -288,6 +287,7 @@ $bg-fade: rgba(0, 0, 0, 0.8);
     color: darken($gray4, 0);
     padding: 2px 4px;
     border-radius: 3px;
+    white-space: nowrap;
   }
 }
 
@@ -311,12 +311,18 @@ $bg-fade: rgba(0, 0, 0, 0.8);
   }
 }
 .tooltip {
-  position: absolute;
+  position: fixed;
   background-color: #fff;
   color: #000;
   border: 1px solid #ccc;
   padding: 5px;
   z-index: 99999;
-  opacity: 0.9;
+  overflow-wrap: break-word;
+  max-width: 450px;
+
+  &.parameters {
+    margin: 0.7rem 0 0 0.2rem;
+    display: none;
+  }
 }
 </style>

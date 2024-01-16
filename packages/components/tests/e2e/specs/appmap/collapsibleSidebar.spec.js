@@ -18,7 +18,7 @@ context('Collapsible sidebar', () => {
 
     it('opens the sidebar when selecting a code object', () => {
       cy.get('.details-panel__hide-panel-icon').click();
-      cy.get('span').contains('index').click();
+      cy.get('.event-name').contains('index').click();
       cy.get('.details-panel-header__details-name')
         .contains('Spree::Admin::RootController#index')
         .should('be.visible');
