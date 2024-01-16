@@ -70,4 +70,19 @@ context('Chat search', () => {
       timeout: 10000,
     }).should('not.exist');
   });
+
+  it('shows all toolbar icons', () => {
+    cy.get('[data-cy="chat-input"]', { timeout: 25000 }).type('Hello world{enter}');
+
+    // verify that the details panel is visible to ensure that the toolbar width is narrow
+    cy.get('.details-panel').should('be.visible');
+
+    // verify that the stats button, refresh button, and fullscreen button are visible
+    cy.get('.control-button')
+      .should('have.length', 3)
+      .each(($el) => cy.wrap($el).should('be.visible'));
+
+    // verify that the filters button is visible
+    cy.get('[data-cy="filters-button"]').should('be.visible');
+  });
 });

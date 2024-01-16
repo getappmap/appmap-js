@@ -104,6 +104,10 @@ export default {
     padding-top: 0.4rem;
     z-index: 100;
     position: absolute;
+
+    @media (max-width: 900px) {
+      overflow: auto;
+    }
   }
 
   &__group {
@@ -136,32 +140,29 @@ export default {
   }
 }
 
-@media (max-width: 1100px) {
-  .tabs {
-    &__header {
-      flex-direction: column-reverse;
-      min-height: 70px;
-      padding-top: 0.5rem;
-      height: auto;
-      gap: 0.4rem;
-      justify-content: end;
-      overflow-y: hidden;
-    }
-    &__group {
-      align-self: center;
-      justify-content: center;
-    }
-    &__notification {
-      align-self: center;
-    }
-    &__content {
-      padding-top: 70px !important;
-    }
-    &__controls {
-      gap: 1rem;
-      position: fixed;
-      top: 0.5rem;
-    }
+.narrow {
+  .tabs__header {
+    flex-direction: column-reverse;
+    min-height: 70px;
+    padding-top: 0.5rem;
+    height: auto;
+    gap: 0.4rem;
+    justify-content: end;
+  }
+  .tabs__group {
+    align-self: center;
+    justify-content: center;
+  }
+  .tabs__notification {
+    align-self: center;
+  }
+  .tabs__content {
+    padding-top: 70px;
+  }
+  .tabs__controls {
+    gap: 1rem;
+    top: 0.5rem;
+    margin-bottom: 0.3rem;
   }
 }
 </style>

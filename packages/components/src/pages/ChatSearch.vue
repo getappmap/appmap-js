@@ -358,7 +358,6 @@ $border-color: darken($gray4, 10%);
   .search-container {
     font-size: 1rem;
     color: $white;
-    // padding: 0 1rem 1rem 2rem;
     flex: 2;
     display: flex;
     flex-direction: column;
