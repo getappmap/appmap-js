@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.118.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.117.1...@appland/appmap-v3.118.0) (2024-01-16)
+
+
+### Features
+
+* Declare scanner dependency in CLI ([0448d23](https://github.com/getappmap/appmap-js/commit/0448d23c6ffca3a9f0505ac6712c020d184f47b1))
+
 # [@appland/appmap-v3.117.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.117.0...@appland/appmap-v3.117.1) (2024-01-10)
 
 
