@@ -182,6 +182,7 @@ __metadata:
     "@appland/models": "workspace:^2.10.0"
     "@appland/openapi": "workspace:^1.8.0"
     "@appland/rpc": "workspace:^1.1.0"
+    "@appland/scanner": "workspace:^1.86.0"
     "@appland/sequence-diagram": "workspace:^1.12.0"
     "@craftamap/esbuild-plugin-html": ^0.4.0
     "@octokit/rest": ^20.0.1
@@ -502,7 +503,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/scanner@workspace:packages/scanner":
+"@appland/scanner@workspace:^1.86.0, @appland/scanner@workspace:packages/scanner":
   version: 0.0.0-use.local
   resolution: "@appland/scanner@workspace:packages/scanner"
   dependencies:
