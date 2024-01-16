@@ -8,7 +8,7 @@
   >
     <span class="ask-ai--content">
       <v-ai-icon class="icon" />
-      &nbsp; Ask AppMap AI &nbsp;
+      &nbsp; Ask Navie: AppMap AI &nbsp;
       <v-badge>NEW</v-badge>
     </span>
   </v-button>
@@ -19,7 +19,7 @@
 
 import VBadge from '@/components/Badge.vue';
 import VButton from '@/components/Button.vue';
-import VAiIcon from '@/assets/ai.svg';
+import VAiIcon from '@/assets/compass-icon.svg';
 
 export default {
   name: 'v-ai-help',
