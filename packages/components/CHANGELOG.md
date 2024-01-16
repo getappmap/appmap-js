@@ -1,3 +1,21 @@
+# [@appland/components-v3.27.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.26.0...@appland/components-v3.27.0) (2024-01-16)
+
+
+### Bug Fixes
+
+* Don't allow text selection of buttons ([74d2f46](https://github.com/getappmap/appmap-js/commit/74d2f46e51be82fa8670cd823ab2afd4cd36d4a0))
+* Feedback buttons are now functional again ([bbe9627](https://github.com/getappmap/appmap-js/commit/bbe96274400e77b53e2ff098f9064ee00aaacdf3))
+* Fix inconsistent spacing in message body ([dbe5903](https://github.com/getappmap/appmap-js/commit/dbe5903d2d2e94e7e4832b166170645233114199))
+* Remove some empty space from the suggestion card ([dd200f4](https://github.com/getappmap/appmap-js/commit/dd200f4db3a669d407e96da564ca772c9734f9d4))
+* Restore the matrix grid display for prompt suggestions ([d3b3d5f](https://github.com/getappmap/appmap-js/commit/d3b3d5fee0148cf561c98cc2389e20c1a16ff138))
+* Update help desk CTA ([7df02a8](https://github.com/getappmap/appmap-js/commit/7df02a86f20e6420c3d26668f833a33c9a4137f5))
+
+
+### Features
+
+* `Chat` suggestions are now sent from the user ([1e274bd](https://github.com/getappmap/appmap-js/commit/1e274bdae89ea37f30c86876154c779fde4a7bf9))
+* Suggestions are now defined by the page ([289d83d](https://github.com/getappmap/appmap-js/commit/289d83dc7453be71ebc085b2daad8886e51bb947))
+
 # [@appland/components-v3.26.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.25.1...@appland/components-v3.26.0) (2024-01-16)
 
 
