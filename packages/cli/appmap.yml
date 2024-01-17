@@ -1,15 +1,7 @@
 name: '@appland/appmap'
-language: javascript
 appmap_dir: tmp/appmap
-ordering: chronological
-command: yarn exec jest -t ^(?!.*@appmap-fixme) --filter=./tests/testFilter.js
-recorder: jest
-exclude:
-  - \[anonymous\]
 packages:
-  - regexp: (^|/)node_modules/
-    enabled: false
-  - regexp: ^../
-    enabled: false
-  - regexp: ^
-    enabled: true
+  - path: .
+    exclude:
+      - node_modules
+      - .yarn
