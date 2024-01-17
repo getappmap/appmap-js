@@ -20,45 +20,46 @@
       data-cy="resize-handle"
       @mousedown="startResizing"
     ></div>
-    <div class="search-container">
-      <div class="search-results-container">
-        <div class="search-results-header">
-          <div>
-            <h2>AppMap search results</h2>
-            <div v-if="searchResponse">
-              <div class="search-results-subheader">
-                Showing top {{ searchResponse.results.length }} of
-                {{ searchResponse.numResults }}
-              </div>
+    <div class="search-container" v-if="searchResponse">
+      <template v-if="searchResponse.results.length">
+        <div class="search-results-container">
+          <div class="search-results-header">
+            <v-match-instructions :appmap-stats="appmapStats" :search-response="searchResponse" />
+            <div class="search-results-list-container">
+              <select
+                class="search-results-list"
+                v-model="selectedSearchResultId"
+                v-if="selectedSearchResultId"
+                data-cy="appmap-list"
+              >
+                <option
+                  v-for="result in searchResponse.results"
+                  :value="result.id"
+                  :key="result.id"
+                >
+                  {{ result.metadata.name || result.appmap }}
+                </option>
+              </select>
             </div>
-            <div class="search-results-subheader" v-else>
-              <p v-if="!searching">Start a conversation to find and explore AppMaps</p>
-              <p v-else>Searching...</p>
-            </div>
-          </div>
-          <div class="search-results-list-container" v-if="searchResponse">
-            <select
-              class="search-results-list"
-              v-model="selectedSearchResultId"
-              v-if="selectedSearchResultId"
-              data-cy="appmap-list"
-            >
-              <option v-for="result in searchResponse.results" :value="result.id" :key="result.id">
-                {{ result.metadata.name || result.appmap }}
-              </option>
-            </select>
           </div>
         </div>
-      </div>
-      <v-app-map
-        v-if="selectedSearchResult"
-        :allow-fullscreen="true"
-        :saved-filters="savedFilters"
-        ref="vappmap"
-        class="appmap"
-      >
-      </v-app-map>
-      <div v-else class="appmap-empty"></div>
+        <v-app-map
+          v-if="selectedSearchResult"
+          :allow-fullscreen="true"
+          :saved-filters="savedFilters"
+          ref="vappmap"
+          class="appmap"
+        >
+        </v-app-map>
+        <div v-else class="appmap-empty"></div>
+      </template>
+      <template v-else>
+        <v-no-match-instructions
+          class="no-match-instructions"
+          :appmap-stats="appmapStats"
+          v-if="appmapStats"
+        />
+      </template>
       <v-accordion
         v-if="enableDiagnostics"
         class="diagnostics"
@@ -97,6 +98,7 @@
         </ul>
       </v-accordion>
     </div>
+    <v-instructions v-else class="instructions" :appmap-stats="appmapStats" />
   </div>
 </template>
 
@@ -104,6 +106,9 @@
 //@ts-nocheck
 import VChat from '@/components/chat/Chat.vue';
 import VAccordion from '@/components/Accordion.vue';
+import VInstructions from '@/components/chat-search/Instructions.vue';
+import VMatchInstructions from '@/components/chat-search/MatchInstructions.vue';
+import VNoMatchInstructions from '@/components/chat-search/NoMatchInstructions.vue';
 import VAppMap from './VsCodeExtension.vue';
 import AppMapRPC from '@/lib/AppMapRPC';
 import authenticatedClient from '@/components/mixins/authenticatedClient';
@@ -114,6 +119,9 @@ export default {
     VChat,
     VAppMap,
     VAccordion,
+    VInstructions,
+    VMatchInstructions,
+    VNoMatchInstructions,
   },
   mixins: [authenticatedClient],
   props: {
@@ -148,6 +156,7 @@ export default {
       initialPanelWidth: 0,
       initialClientX: 0,
       searchStatusLabel: undefined,
+      appmapStats: undefined,
       searchStatusLabels: {
         'build-vector-terms': 'Optimizing search terms',
         'search-appmaps': 'Searching AppMaps',
@@ -176,8 +185,11 @@ export default {
         (result as any).metadata = metadata;
         resultId += 1;
       }
-      if (searchResponse.results.length > 0)
+      if (searchResponse.results.length > 0) {
         this.selectedSearchResultId = searchResponse.results[0].id;
+      } else {
+        this.$refs.vchat.onNoMatch();
+      }
     },
     selectedSearchResultId: async function (newVal) {
       const updateAppMapData = async () => {
@@ -238,8 +250,7 @@ export default {
       this.$store.commit(SET_SAVED_FILTERS, updatedFilters);
     },
     async sendMessage(message: string) {
-      const search = this.rpcClient();
-      this.ask = search.explain();
+      this.ask = this.rpcClient().explain();
       this.searching = true;
       this.lastStatusLabel = undefined;
 
@@ -267,14 +278,21 @@ export default {
         this.ask.on('error', onError);
         this.ask.on('status', (status) => {
           this.searchStatus = status;
-          if (!this.searchResponse && status.searchResponse)
+          if (!this.searchResponse && status.searchResponse) {
             this.searchResponse = status.searchResponse;
+          }
         });
         this.ask.on('complete', onComplete);
         this.ask.explain(message, this.$refs.vchat.threadId).catch(onError);
       });
     },
+    async loadAppMapStats() {
+      const rpc = this.rpcClient();
+      this.appmapStats = await rpc.appmapStats();
+    },
     clear() {
+      this.searching = false;
+      this.searchStatus = undefined;
       this.searchResponse = undefined;
       this.searchStatus = undefined;
       this.selectedSearchResultId = undefined;
@@ -282,6 +300,7 @@ export default {
       this.searchStatusLabel = undefined;
       this.ask?.removeAllListeners();
       this.searching = false;
+      this.loadAppMapStats();
     },
     toggleDiagonstics() {
       this.showDiagnostics = !this.showDiagnostics;
@@ -313,6 +332,9 @@ export default {
       document.body.style.userSelect = '';
       this.isPanelResizing = false;
     },
+  },
+  async mounted() {
+    this.loadAppMapStats();
   },
 };
 </script>
@@ -355,7 +377,9 @@ $border-color: darken($gray4, 10%);
       background: rgba(255, 255, 255, 0.1);
     }
   }
-  .search-container {
+
+  .search-container,
+  .context-container {
     font-size: 1rem;
     color: $white;
     // padding: 0 1rem 1rem 2rem;
@@ -364,7 +388,14 @@ $border-color: darken($gray4, 10%);
     flex-direction: column;
     overflow-y: auto;
     background-color: $black;
+  }
 
+  .instructions {
+    padding: 0 1rem;
+    margin: 1rem auto;
+  }
+
+  .search-container {
     h2 {
       font-size: 1.2rem;
       margin-bottom: 0.4rem;
@@ -375,11 +406,6 @@ $border-color: darken($gray4, 10%);
       display: grid;
       grid-template-columns: 1fr auto;
       margin-bottom: 1rem;
-    }
-
-    .search-results-subheader {
-      font-size: 0.8rem;
-      color: $gray4;
     }
 
     .search-results-list-container {

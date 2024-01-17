@@ -36,6 +36,12 @@ export const ChatSearchMockSearchPrepopulated = (args, { argTypes }) => ({
   template: `<v-chat-search v-bind="$props"></v-chat-search>`,
 });
 
+export const ChatSearchMockSearchPrepopulatedEmptyResults = (args, { argTypes }) => ({
+  props: Object.keys(argTypes),
+  components: { VChatSearch },
+  template: `<v-chat-search v-bind="$props"></v-chat-search>`,
+});
+
 const MOCK_EXPLANATION =
   `Based on the code snippets provided, it appears that the code is related to user management in a Rails application. Here is a summary of the functionality:
 
@@ -73,7 +79,7 @@ let statusIndex = 0;
 const userMessageId = 'user-message-id';
 const threadId = 'thread-id';
 
-const searchResponse = {
+const NonEmptySearchResponse = {
   results: [
     {
       appmap: DATA_KEYS[0],
@@ -114,49 +120,79 @@ const searchResponse = {
   numResults: 20,
 };
 
-const mockRpc = (method, params, callback) => {
-  if (method === 'explain') {
-    statusIndex = 0;
-    callback(null, null, { userMessageId, threadId });
-  } else if (method === 'explain.status') {
-    const responseIndex = statusIndex;
-    statusIndex += 1;
-    if (responseIndex === 0) callback(null, null, { step: 'build-vector-terms' });
-    else if (responseIndex === 1)
-      setTimeout(() => callback(null, null, { step: 'explain', searchResponse }), 500);
-    else if (responseIndex < MOCK_EXPLANATION.length + 2)
-      setTimeout(() => {
-        requestIndex += 1;
-        callback(null, null, {
-          step: 'explain',
-          searchResponse,
-          explanation: MOCK_EXPLANATION.slice(0, responseIndex - 2).map((line) => `${line}\n`),
-        });
-      }, 500);
-    else callback(null, null, { step: 'complete', searchResponse, explanation: MOCK_EXPLANATION });
-  } else if (method.split('.')[0] === 'appmap') {
-    const appmapId = params.appmap;
-    const data = DATA_BY_PATH[appmapId];
-
-    if (method === 'appmap.data') {
-      callback(null, null, data);
-    }
-    if (method === 'appmap.metadata') {
-      callback(null, null, data.metadata);
-    }
-  }
+const EmptySearchResponse = {
+  results: [],
+  numResults: 0,
 };
 
+function buildMockRpc(searchResponse, explanation) {
+  return (method, params, callback) => {
+    if (method === 'explain') {
+      statusIndex = 0;
+      callback(null, null, { userMessageId, threadId });
+    } else if (method === 'explain.status') {
+      const responseIndex = statusIndex;
+      statusIndex += 1;
+      if (responseIndex === 0) callback(null, null, { step: 'build-vector-terms' });
+      else if (responseIndex === 1)
+        setTimeout(() => callback(null, null, { step: 'explain', searchResponse }), 500);
+      else if (responseIndex < explanation.length + 2)
+        setTimeout(() => {
+          requestIndex += 1;
+          callback(null, null, {
+            step: 'explain',
+            searchResponse,
+            explanation: explanation.slice(0, responseIndex - 2).map((line) => `${line}\n`),
+          });
+        }, 500);
+      else
+        callback(null, null, {
+          step: 'complete',
+          searchResponse,
+          explanation,
+        });
+    } else if (method.split('.')[0] === 'appmap') {
+      const appmapId = params.appmap;
+      const data = DATA_BY_PATH[appmapId];
+
+      if (method === 'appmap.stats') {
+        callback(null, null, {
+          packages: ['a', 'b', 'c'],
+          classes: ['A', 'B', 'C'],
+          routes: ['GET /a', 'POST /b', 'PUT /c'],
+          tables: ['a', 'b', 'c'],
+          numAppMaps: 32,
+        });
+      }
+      if (method === 'appmap.data') {
+        callback(null, null, data);
+      }
+      if (method === 'appmap.metadata') {
+        callback(null, null, data.metadata);
+      }
+    }
+  };
+}
+
+const nonEmptyMockRpc = buildMockRpc(NonEmptySearchResponse, MOCK_EXPLANATION);
+
+const emptyMockRpc = buildMockRpc(EmptySearchResponse, []);
+
 ChatSearchMock.args = {
-  appmapRpcFn: mockRpc,
+  appmapRpcFn: nonEmptyMockRpc,
 };
 
 ChatSearchMockWithFilters.args = {
-  appmapRpcFn: mockRpc,
+  appmapRpcFn: nonEmptyMockRpc,
   savedFilters,
 };
 
 ChatSearchMockSearchPrepopulated.args = {
-  appmapRpcFn: mockRpc,
+  appmapRpcFn: nonEmptyMockRpc,
+  question: 'How does password reset work?',
+};
+
+ChatSearchMockSearchPrepopulatedEmptyResults.args = {
+  appmapRpcFn: emptyMockRpc,
   question: 'How does password reset work?',
 };
