@@ -25,7 +25,7 @@ describe('Authentication', () => {
   });
 
   it('authenticates ChatSearch', async () => {
-    const wrapper = mount(VChatSearch, { propsData: { apiKey, apiUrl } });
+    const wrapper = mount(VChatSearch, { propsData: { apiKey, apiUrl, appmapRpcFn: () => true } });
     await wrapper.vm.$nextTick();
     expect(loadConfiguration()).toStrictEqual({
       apiKey,

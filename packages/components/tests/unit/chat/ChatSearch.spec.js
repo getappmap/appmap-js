@@ -2,8 +2,55 @@ import VChatSearch from '@/pages/ChatSearch.vue';
 import { mount } from '@vue/test-utils';
 
 describe('pages/ChatSearch.vue', () => {
+  const chatSearchWrapper = (messagesCalled) => {
+    return mount(VChatSearch, {
+      propsData: {
+        appmapRpcFn: rpcFunction(messagesCalled),
+      },
+    });
+  };
+
+  const rpcFunction = (messages) => {
+    const availableMethods = Object.keys(messages);
+    return (method, _, callback) => {
+      if (!availableMethods.includes(method)) throw new Error(`Unknown method ${method}`);
+      const response = messages[method].shift();
+      if (!response) throw new Error(`No responses are left for ${method}`);
+      callback(...response);
+    };
+  };
+
+  const threadId = 'the-thread-id';
+  const userMessageId = 'the-user-message-id';
+
+  const appmapStatsHasAppMaps = () => [
+    [
+      null,
+      null,
+      {
+        packages: ['a', 'b', 'c'],
+        classes: ['d', 'e', 'f'],
+        routes: ['g', 'h', 'i'],
+        tables: ['j', 'k', 'l'],
+        numAppMaps: 100,
+      },
+    ],
+  ];
+
+  const appmapStatsNoAppMaps = () => [
+    [
+      null,
+      null,
+      {
+        numAppMaps: 0,
+      },
+    ],
+  ];
   it('can be resized', async () => {
-    const wrapper = mount(VChatSearch);
+    const wrapper = chatSearchWrapper({
+      'appmap.stats': appmapStatsHasAppMaps(),
+    });
+
     const lhsPanel = wrapper.find('[data-cy="resize-left"]');
     Object.defineProperty(lhsPanel.element, 'offsetWidth', { value: 300 });
 
@@ -22,65 +69,169 @@ describe('pages/ChatSearch.vue', () => {
     expect(newWidth).toBe(initialWidth + resizeBy);
   });
 
-  describe('when asked a question', () => {
-    let rpcFunction = (messages) => {
-      return (method, _, callback) => messages[method].shift()(callback);
-    };
+  describe('when no AppMaps are available', () => {
+    it('shows a warning that no AppMaps are available', async () => {
+      const wrapper = chatSearchWrapper({
+        'appmap.stats': appmapStatsNoAppMaps(),
+      });
+      await wrapper.vm.$nextTick();
+      expect(wrapper.find('.instructions [data-cy="no-appmaps"]').exists()).toBe(true);
+    });
+  });
 
-    it('makes expected RPC calls', async () => {
-      const searchResponse = {
-        results: [
-          {
-            appmap: 'example.appmap.json',
-            events: [],
-            score: 1.0,
-          },
-        ],
+  describe('when AppMaps are available', () => {
+    it('shows instructions', async () => {
+      const wrapper = chatSearchWrapper({
+        'appmap.stats': appmapStatsHasAppMaps(),
+      });
+      await wrapper.vm.$nextTick();
+      expect(wrapper.find('.instructions [data-cy="no-appmaps"]').exists()).toBe(false);
+    });
+
+    describe('and there are matching AppMaps', () => {
+      const buildComponent = () => {
+        const searchResponse = {
+          results: [
+            {
+              appmap: 'example.appmap.json',
+              events: [],
+              score: 1.0,
+            },
+          ],
+        };
+        const messagesCalled = {
+          'appmap.stats': appmapStatsHasAppMaps(),
+          explain: [[null, null, { userMessageId, threadId }]],
+          'explain.status': [
+            [null, null, { step: 'build-vector-terms' }],
+            [
+              null,
+              null,
+              {
+                step: 'explain',
+                searchResponse,
+              },
+            ],
+            [
+              null,
+              null,
+              {
+                step: 'complete',
+                searchResponse,
+                explanation: ['Contact IT'],
+              },
+            ],
+          ],
+          'appmap.metadata': [[null, null, {}]],
+          'appmap.data': [[null, null, '{}']],
+        };
+        const wrapper = chatSearchWrapper(messagesCalled);
+        return { messagesCalled, wrapper };
       };
-      const messagesCalled = {
-        explain: [(cb) => cb(null, null, 'the-request-id')],
-        'explain.status': [
-          (cb) => cb(null, null, { step: 'build-vector-terms' }),
-          (cb) =>
-            cb(null, null, {
-              step: 'explain',
-              searchResponse,
-            }),
-          (cb) =>
-            cb(null, null, {
-              step: 'complete',
-              searchResponse,
-              explaination: 'Contact IT',
-            }),
-        ],
-        'appmap.metadata': [(cb) => cb(null, null, {})],
-        'appmap.data': [(cb) => cb(null, null, '{}')],
+
+      const performSearch = async () => {
+        const { messagesCalled, wrapper } = buildComponent();
+
+        await wrapper.vm.sendMessage('How do I reset my password?');
+        await wrapper.vm.$nextTick();
+
+        return { messagesCalled, wrapper };
       };
-      const wrapper = mount(VChatSearch, {
-        propsData: {
-          appmapRpcFn: rpcFunction(messagesCalled),
-        },
+
+      it('makes expected RPC calls', async () => {
+        const { messagesCalled } = await performSearch();
+
+        Object.values(messagesCalled).forEach((calls) => {
+          // Callbacks are consumed on use, so we expect the array to be empty
+          expect(calls).toBeArrayOfSize(0);
+        });
       });
 
-      await wrapper.vm.sendMessage('How do I reset my password?');
-      await wrapper.vm.$nextTick();
+      it('retains the thread id', async () => {
+        const { wrapper } = await performSearch();
 
-      Object.values(messagesCalled).forEach((calls) => {
-        // Callbacks are consumed on use, so we expect the array to be empty
-        expect(calls).toBeArrayOfSize(0);
+        expect(wrapper.vm.$refs.vchat.threadId).toBe('the-thread-id');
+      });
+
+      it('shows the "match" instructions', async () => {
+        const { wrapper } = await performSearch();
+
+        expect(wrapper.find('[data-cy="match-instructions"]').exists()).toBe(true);
+        expect(wrapper.find('[data-cy="no-match-instructions"]').exists()).toBe(false);
+      });
+    });
+
+    describe('but no AppMaps match the question', () => {
+      const buildComponent = () => {
+        const emptySearchResponse = {
+          results: [],
+        };
+
+        const messagesCalled = {
+          'appmap.stats': appmapStatsHasAppMaps(),
+          explain: [[null, null, { userMessageId, threadId }]],
+          'explain.status': [
+            [null, null, { step: 'build-vector-terms' }],
+            [
+              null,
+              null,
+              {
+                step: 'explain',
+                searchResponse: emptySearchResponse,
+              },
+            ],
+            [
+              null,
+              null,
+              {
+                step: 'complete',
+                searchResponse: emptySearchResponse,
+                explanation: ['Contact IT'],
+              },
+            ],
+          ],
+        };
+        const wrapper = chatSearchWrapper(messagesCalled);
+        return { messagesCalled, wrapper };
+      };
+
+      const performSearch = async () => {
+        const { messagesCalled, wrapper } = buildComponent();
+
+        await wrapper.vm.sendMessage('How do I reset my password?');
+        await wrapper.vm.$nextTick();
+
+        return { messagesCalled, wrapper };
+      };
+
+      it('makes expected RPC calls', async () => {
+        const { messagesCalled } = await performSearch();
+
+        Object.values(messagesCalled).forEach((calls) => {
+          // Callbacks are consumed on use, so we expect the array to be empty
+          expect(calls).toBeArrayOfSize(0);
+        });
+      });
+
+      it('clears the thread id', async () => {
+        const { wrapper } = await performSearch();
+
+        expect(wrapper.vm.$refs.vchat.threadId).toBeUndefined();
+      });
+
+      it('shows the "no match" instructions', async () => {
+        const { wrapper } = await performSearch();
+
+        expect(wrapper.find('[data-cy="match-instructions"]').exists()).toBe(false);
+        expect(wrapper.find('[data-cy="no-match-instructions"]').exists()).toBe(true);
       });
     });
 
     describe('error handling', () => {
       async function simulateError(err, error) {
-        const messagesCalled = {
-          explain: [(cb) => cb(err, error)],
-        };
-
-        const wrapper = mount(VChatSearch, {
-          propsData: {
-            appmapRpcFn: rpcFunction(messagesCalled),
-          },
+        const wrapper = chatSearchWrapper({
+          'appmap.stats': appmapStatsHasAppMaps(),
+          explain: [[err, error]],
         });
 
         await wrapper.vm.sendMessage('How do I reset my password?');

@@ -1,6 +1,6 @@
 <template>
   <div class="suggestion-grid" v-if="suggestions.length">
-    <p>Not sure? Here are some useful starting points:</p>
+    <p>Here are some useful starting points:</p>
     <div class="grid">
       <v-suggestion-card
         v-for="(s, i) in suggestions"
