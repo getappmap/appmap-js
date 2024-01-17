@@ -85,6 +85,16 @@ export default class AppMapRPC {
     this.client = typeof portOrClient === 'number' ? browserClient(portOrClient) : portOrClient;
   }
 
+  appmapStats(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.client.request('appmap.stats', {}, function (err: any, error: any, result: any) {
+        if (err || error) return reportError(reject, err, error);
+
+        resolve(result);
+      });
+    });
+  }
+
   appmapData(appmapId: string, filter: any): Promise<string> {
     return new Promise((resolve, reject) => {
       this.client.request(
