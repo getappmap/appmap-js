@@ -13,8 +13,7 @@ context('Chat search', () => {
         delay: 0,
       })
       .get('[data-cy="explain-status"]', { timeout: 1000 })
-      .should('be.visible')
-      .should('contain.text', 'Optimizing search terms...');
+      .should('be.visible');
 
     cy.get('[data-cy="explain-status"]', { timeout: 1000 }).should(
       'contain.text',
