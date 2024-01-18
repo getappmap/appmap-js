@@ -66,16 +66,23 @@ export default {
     async sendMessage(message: string) {
       const { vchat } = this;
       let myThreadId: string | undefined;
+      const systemMessage = vchat.addSystemMessage();
       const client = await this.aiClient({
         onAck: (_messageId: string, threadId: string) => {
           myThreadId = threadId;
           vchat.onAck(_messageId, threadId);
         },
         onToken: (token, messageId) => {
+          if (!systemMessage.messageId) systemMessage.messageId = messageId;
+
           vchat.addToken(token, myThreadId, messageId);
         },
-        onError: vchat.onError.bind(vchat),
-        onComplete: vchat.onComplete.bind(vchat),
+        onError(error: Error) {
+          vchat.onError(error, systemMessage);
+        },
+        onComplete() {
+          systemMessage.complete = true;
+        },
       });
       client.inputPrompt(message, { threadId: vchat.threadId });
     },

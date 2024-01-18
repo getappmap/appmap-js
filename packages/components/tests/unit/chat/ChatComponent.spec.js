@@ -121,7 +121,6 @@ describe('components/Chat.vue', () => {
       wrapper.vm.addToken('Hello from the system', threadId, messageId);
       await wrapper.vm.$nextTick();
 
-      expect(wrapper.vm.loading).toBe(true);
       expect(wrapper.find('[data-actor="user"] [data-cy="message-text"]').exists()).toBe(true);
       expect(wrapper.find('[data-actor="system"] [data-cy="message-text"]').exists()).toBe(true);
 
@@ -136,11 +135,6 @@ describe('components/Chat.vue', () => {
 
     it('clears the thread id', async () => {
       expect(wrapper.vm.threadId).toBeUndefined();
-    });
-
-    it('hides the progress indicator', () => {
-      expect(wrapper.vm.loading).toBe(false);
-      expect(wrapper.find('[data-cy="status-container"]').exists()).toBe(false);
     });
 
     it('ignores subsequent messages on the old thread-id', async () => {
