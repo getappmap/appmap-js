@@ -227,67 +227,107 @@ describe('pages/ChatSearch.vue', () => {
       });
     });
 
-    describe('error handling', () => {
-      async function simulateError(err, error) {
-        const wrapper = chatSearchWrapper({
-          'appmap.stats': appmapStatsHasAppMaps(),
-          explain: [[err, error]],
+    it('renders the search status', async () => {
+      const title = '[data-cy="tool-status"] [data-cy="title"]';
+      const status = '[data-cy="tool-status"] [data-cy="status"]';
+      const wrapper = chatSearchWrapper({
+        'appmap.data': [[null, null, '{}']],
+        'appmap.metadata': [[null, null, {}]],
+        'appmap.stats': appmapStatsHasAppMaps(),
+        explain: [[null, null, { userMessageId, threadId }]],
+        'explain.status': [
+          [null, null, { step: 'complete', searchResponse: { results: [{ events: [] }] } }],
+        ],
+      });
+
+      const messageSent = wrapper.vm.sendMessage('How do I reset my password?');
+
+      await wrapper.vm.$nextTick();
+      expect(wrapper.find(title).text()).toBe('Searching for AppMaps');
+      expect(wrapper.find(status).text()).toBe('');
+
+      await messageSent;
+      expect(wrapper.find(title).text()).toBe('Searched for AppMaps');
+      expect(wrapper.find(status).text()).toBe('Found 1 relevant recording');
+    });
+  });
+
+  describe('error handling', () => {
+    async function simulateError(err, error) {
+      const wrapper = chatSearchWrapper({
+        'appmap.stats': appmapStatsHasAppMaps(),
+        explain: [[err, error]],
+      });
+
+      await wrapper.vm.sendMessage('How do I reset my password?');
+      await wrapper.vm.$nextTick();
+
+      return wrapper;
+    }
+
+    describe('401 code', () => {
+      it('activates the login instructions', async () => {
+        const wrapper = await simulateError(undefined, { code: 401, message: 'Unauthorized' });
+        expect(wrapper.find('.status-unauthorized').exists()).toBe(true);
+        expect(wrapper.find('.messages .message').exists()).toBe(false);
+        expect(wrapper.find('.messages [data-error="true"]').exists()).toBe(false);
+      });
+    });
+    describe('500 code', () => {
+      it('prints the error message', async () => {
+        const message = 'An unexpected error occurred';
+        const wrapper = await simulateError(undefined, {
+          code: 500,
+          message,
+        });
+        expect(wrapper.find('.status-unauthorized').exists()).toBe(false);
+        expect(wrapper.find(`.messages [data-cy="message-text"]`).text()).toContain(message);
+        expect(wrapper.find('.messages [data-error="true"]').exists()).toBe(true);
+      });
+      it('does not display a search status', async () => {
+        const wrapper = await simulateError(undefined, {
+          code: 500,
+          message: 'An unexpected error occurred',
         });
 
-        await wrapper.vm.sendMessage('How do I reset my password?');
-        await wrapper.vm.$nextTick();
-
-        return wrapper;
-      }
-
-      describe('401 code', () => {
-        it('activates the login instructions', async () => {
-          const wrapper = await simulateError(undefined, { code: 401, message: 'Unauthorized' });
-          expect(wrapper.find('.status-unauthorized').exists()).toBe(true);
-          expect(wrapper.find('.messages .message').exists()).toBe(false);
-          expect(wrapper.find('.messages [data-error="true"]').exists()).toBe(false);
-        });
+        expect(wrapper.find('.messages [data-error="true"]').exists()).toBe(true);
+        expect(wrapper.find('[data-cy="tool-status"]').exists()).toBe(false);
       });
-      describe('500 code', () => {
-        it('prints the error message', async () => {
-          const message = 'An unexpected error occurred';
-          const wrapper = await simulateError(undefined, {
-            code: 500,
-            message,
-          });
-          expect(wrapper.find('.status-unauthorized').exists()).toBe(false);
-          expect(wrapper.find(`.messages [data-cy="message-text"]`).text()).toContain(message);
-          expect(wrapper.find('.messages [data-error="true"]').exists()).toBe(true);
+      it('only contains a single error message', async () => {
+        const wrapper = await simulateError(undefined, {
+          code: 500,
+          message: 'An unexpected error occurred',
         });
+        expect(wrapper.findAll('.messages [data-cy="message"]').length).toBe(1);
       });
-      describe('uncoded error', () => {
-        it('prints the error message', async () => {
-          const message = 'An unexpected error occurred';
-          const wrapper = await simulateError(undefined, {
-            message,
-          });
-          expect(wrapper.find('.status-unauthorized').exists()).toBe(false);
-          expect(wrapper.find(`.messages [data-cy="message-text"]`).text()).toContain(message);
-          expect(wrapper.find('.messages [data-error="true"]').exists()).toBe(true);
+    });
+    describe('uncoded error', () => {
+      it('prints the error message', async () => {
+        const message = 'An unexpected error occurred';
+        const wrapper = await simulateError(undefined, {
+          message,
         });
+        expect(wrapper.find('.status-unauthorized').exists()).toBe(false);
+        expect(wrapper.find(`.messages [data-cy="message-text"]`).text()).toContain(message);
+        expect(wrapper.find('.messages [data-error="true"]').exists()).toBe(true);
       });
-      describe('malformed coded error', () => {
-        it('prints the error message', async () => {
-          const message = 'An unexpected error occurred';
-          const wrapper = await simulateError(undefined, message);
-          expect(wrapper.find('.status-unauthorized').exists()).toBe(false);
-          expect(wrapper.find(`.messages [data-cy="message-text"]`).text()).toContain(message);
-          expect(wrapper.find('.messages [data-error="true"]').exists()).toBe(true);
-        });
+    });
+    describe('malformed coded error', () => {
+      it('prints the error message', async () => {
+        const message = 'An unexpected error occurred';
+        const wrapper = await simulateError(undefined, message);
+        expect(wrapper.find('.status-unauthorized').exists()).toBe(false);
+        expect(wrapper.find(`.messages [data-cy="message-text"]`).text()).toContain(message);
+        expect(wrapper.find('.messages [data-error="true"]').exists()).toBe(true);
       });
-      describe('unstructured error', () => {
-        it('prints the error message', async () => {
-          const message = 'An unexpected error occurred';
-          const wrapper = await simulateError(message);
-          expect(wrapper.find('.status-unauthorized').exists()).toBe(false);
-          expect(wrapper.find(`.messages [data-cy="message-text"]`).text()).toContain(message);
-          expect(wrapper.find('.messages [data-error="true"]').exists()).toBe(true);
-        });
+    });
+    describe('unstructured error', () => {
+      it('prints the error message', async () => {
+        const message = 'An unexpected error occurred';
+        const wrapper = await simulateError(message);
+        expect(wrapper.find('.status-unauthorized').exists()).toBe(false);
+        expect(wrapper.find(`.messages [data-cy="message-text"]`).text()).toContain(message);
+        expect(wrapper.find('.messages [data-error="true"]').exists()).toBe(true);
       });
     });
   });

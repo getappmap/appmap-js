@@ -6,26 +6,6 @@ context('Chat search', () => {
     cy.viewport(1280, 720);
   });
 
-  it('renders the current state', () => {
-    cy.get('[data-cy="chat-input"]', { timeout: 25000 })
-      .type('Hello world{enter}', {
-        waitForAnimations: false,
-        delay: 0,
-      })
-      .get('[data-cy="explain-status"]', { timeout: 1000 })
-      .should('be.visible');
-
-    cy.get('[data-cy="explain-status"]', { timeout: 1000 }).should(
-      'contain.text',
-      'Explaining with AI...'
-    );
-
-    cy.get('[data-actor="system"] [data-cy="message-text"]').should(
-      'contain.text',
-      'Based on the code snippets provided'
-    );
-  });
-
   it('switches AppMaps', () => {
     cy.get('[data-cy="chat-input"]', { timeout: 25000 }).type('Hello world{enter}');
 

@@ -77,6 +77,7 @@ const DATA_KEYS = Object.keys(DATA_BY_PATH);
 let requestIndex = 0;
 let statusIndex = 0;
 const userMessageId = 'user-message-id';
+const systemMessageId = 'system-message-id';
 const threadId = 'thread-id';
 
 const NonEmptySearchResponse = {
