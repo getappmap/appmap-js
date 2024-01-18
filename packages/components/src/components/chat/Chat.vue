@@ -24,18 +24,9 @@
         :is-error="message.isError"
         :id="message.messageId"
         :sentiment="message.sentiment"
+        :tools="message.tools"
         @change-sentiment="onSentimentChange"
       />
-      <div v-if="loading" class="status-container">
-        <div class="spinner-container">
-          <v-spinner>
-            <v-loader-icon class="status-icon" />
-          </v-spinner>
-        </div>
-        <div class="status-label" v-if="statusLabel" data-cy="explain-status">
-          {{ statusLabel }}
-        </div>
-      </div>
       <v-suggestion-grid :suggestions="suggestions" @suggest="onSuggestion" v-if="!isChatting" />
     </div>
     <div v-if="!authorized" class="status-unauthorized status-container">
@@ -74,12 +65,19 @@ import VAppMapNavieLogo from '@/assets/appmap-full-logo.svg';
 import VButton from '@/components/Button.vue';
 import { AI } from '@appland/client';
 
+interface ITool {
+  title: string;
+  status: string;
+  complete?: boolean;
+}
+
 interface IMessage {
   message: string;
   isUser: boolean;
   isError: boolean;
   messageId?: string;
   sentiment?: number;
+  tools?: ITool[];
 }
 
 class UserMessage implements IMessage {
@@ -87,6 +85,7 @@ class UserMessage implements IMessage {
   public readonly sentiment = undefined;
   public readonly isUser = true;
   public readonly isError = false;
+  public readonly tools = undefined;
 
   constructor(public content: string) {}
 }
@@ -96,8 +95,9 @@ class AssistantMessage implements IMessage {
   public sentiment = undefined;
   public readonly isUser = false;
   public readonly isError = false;
+  public readonly tools = [];
 
-  constructor(public messageId: string) {}
+  constructor(public messageId?: string) {}
 
   append(token: string) {
     Vue.set(this, 'content', [this.content, token].join(''));
@@ -123,8 +123,6 @@ export default {
     VUserMessage,
     VChatInput,
     VSuggestionGrid,
-    VSpinner,
-    VLoaderIcon,
     VAppMapNavieLogo,
     VButton,
   },
@@ -135,9 +133,6 @@ export default {
     },
     sendMessage: {
       type: Function, // UserMessageHandler
-    },
-    statusLabel: {
-      type: String,
     },
     suggestions: {
       type: Array,
@@ -153,7 +148,6 @@ export default {
     return {
       messages: [] as IMessage[],
       threadId: undefined as string | undefined,
-      loading: false,
       authorized: true,
       autoScrollTop: 0,
       enableScrollLog: false, // Auto-scroll can be tricky, so there is special logging to help debug it.
@@ -177,6 +171,11 @@ export default {
     },
   },
   methods: {
+    getMessage(query: Partial<IMessage>): IMessage | undefined {
+      return this.messages.find((m) => {
+        return Object.keys(query).every((key) => m[key] === query[key]);
+      });
+    },
     // Creates-or-appends a message.
     addToken(token: string, threadId: string, messageId: string) {
       if (threadId !== this.threadId) return;
@@ -184,7 +183,7 @@ export default {
       if (!messageId) console.warn('messageId is undefined');
       if (!threadId) console.warn('threadId is undefined');
 
-      let assistantMessage = this.messages.find((m) => m.messageId && m.messageId === messageId);
+      let assistantMessage = this.getMessage({ messageId });
       if (!assistantMessage) {
         assistantMessage = new AssistantMessage(messageId);
         this.messages.push(assistantMessage);
@@ -206,6 +205,11 @@ export default {
       }
       this.scrollToBottom();
     },
+    addSystemMessage() {
+      const message = new AssistantMessage();
+      this.messages.push(message);
+      return message;
+    },
     addErrorMessage(error: Error) {
       this.messages.push(new ErrorMessage(error));
       this.scrollToBottom();
@@ -213,17 +217,20 @@ export default {
     ask(message: string) {
       this.onSend(message);
     },
-    onError(error) {
+    onError(error, assistantMessage?: AssistantMessage) {
+      const messageIndex = this.messages.findIndex((m) => m === assistantMessage);
+      if (messageIndex !== -1) {
+        this.messages.splice(messageIndex, 1);
+      }
+
       if (error.code === 401) {
         this.setAuthorized(false);
       } else {
         this.addErrorMessage(error);
       }
-      this.resetStateVariables();
     },
     async onSend(message: string) {
       this.addUserMessage(message);
-      this.loading = true;
       this.sendMessage(message);
     },
     onAck(_messageId: string, threadId: string) {
@@ -240,9 +247,6 @@ export default {
         this.ask(prompt);
       }
     },
-    onComplete() {
-      this.resetStateVariables();
-    },
     onNoMatch() {
       // If the AI was not able to produce a useful response, don't persist the thread.
       // This is used by Explain when no AppMaps can be found to match the question.
@@ -252,11 +256,7 @@ export default {
       this.threadId = undefined;
       this.messages.splice(0);
       this.autoScrollTop = 0;
-      this.resetStateVariables();
       this.$emit('clear');
-    },
-    resetStateVariables() {
-      this.loading = false;
     },
     scrollToBottom() {
       // Allow one tick to progress to allow any DOM changes to be applied
@@ -280,7 +280,7 @@ export default {
     async onSentimentChange(messageId: string, sentiment: number) {
       if (!messageId) return;
 
-      const message = this.messages.find((m) => m.messageId === messageId);
+      const message = this.getMessage({ messageId });
       if (!message || message.sentiment === sentiment) return;
 
       await AI.sendMessageFeedback(message.messageId, sentiment);

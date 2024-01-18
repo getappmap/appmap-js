@@ -11,7 +11,18 @@
     </div>
     <div class="name">{{ name }}</div>
     <div class="message-body" data-cy="message-text" v-if="isUser">{{ message }}</div>
-    <div class="message-body" data-cy="message-text" v-else v-html="renderedMarkdown" />
+    <div class="message-body" data-cy="message-text" v-else>
+      <div class="tools" v-if="tools.length">
+        <v-tool-status
+          v-for="(tool, i) in tools"
+          :key="i"
+          :complete="tool.complete"
+          :title="tool.title"
+          :status="tool.status"
+        />
+      </div>
+      <div v-html="renderedMarkdown" />
+    </div>
     <div class="buttons">
       <span
         v-if="!isUser && id"
@@ -49,6 +60,7 @@ import VNavieCompass from '@/assets/compass-icon.svg';
 import VUserAvatar from '@/assets/user-avatar.svg';
 import VThumbIcon from '@/assets/thumb.svg';
 import VButton from '@/components/Button.vue';
+import VToolStatus from '@/components/chat/ToolStatus.vue';
 
 import { Marked, Renderer } from 'marked';
 import { markedHighlight } from 'marked-highlight';
@@ -95,6 +107,7 @@ export default {
     VUserAvatar,
     VThumbIcon,
     VButton,
+    VToolStatus,
   },
 
   props: {
@@ -112,6 +125,9 @@ export default {
     },
     sentiment: {
       default: 0,
+    },
+    tools: {
+      default: () => [],
     },
   },
 
@@ -333,6 +349,10 @@ export default {
     }
   }
 
+  .tools {
+    padding-bottom: 0.5rem;
+  }
+
   .md-code-snippet {
     margin: 1rem 0;
     border-radius: $border-radius;
@@ -416,11 +436,11 @@ export default {
     margin-block-end: 1em;
   }
 
-  & > p:first-child {
+  span > :first-child {
     margin-top: 0;
   }
 
-  & > p:last-child {
+  span > :last-child {
     margin-bottom: 0;
   }
 }
