@@ -256,15 +256,21 @@ export default {
 
       let myThreadId: string | undefined;
       return new Promise((resolve, reject) => {
+        const systemMessage = this.$refs.vchat.addSystemMessage();
+        const tool = {
+          title: 'Searching for AppMaps',
+        };
+        systemMessage.tools.push(tool);
+
         const onComplete = () => {
           this.searching = false;
-          this.$refs.vchat.onComplete();
+          systemMessage.complete = true;
           resolve();
         };
 
         const onError = (error) => {
           onComplete();
-          this.$refs.vchat.onError(error);
+          this.$refs.vchat.onError(error, systemMessage);
           reject();
         };
 
@@ -273,13 +279,21 @@ export default {
           this.$refs.vchat.onAck(_messageId, threadId);
         });
         this.ask.on('token', (token, messageId) => {
+          if (!systemMessage.messageId) systemMessage.messageId = messageId;
+
           this.$refs.vchat.addToken(token, myThreadId, messageId);
         });
         this.ask.on('error', onError);
         this.ask.on('status', (status) => {
           this.searchStatus = status;
+
           if (!this.searchResponse && status.searchResponse) {
             this.searchResponse = status.searchResponse;
+
+            const numResults = this.searchResponse.results.length;
+            tool.title = 'Searched for AppMaps';
+            tool.status = `Found ${numResults} relevant recording${numResults === 1 ? '' : 's'}`;
+            tool.complete = true;
           }
         });
         this.ask.on('complete', onComplete);
