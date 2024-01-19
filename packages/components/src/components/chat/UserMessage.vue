@@ -21,7 +21,7 @@
           :status="tool.status"
         />
       </div>
-      <div v-html="renderedMarkdown" />
+      <span v-html="renderedMarkdown" />
     </div>
     <div class="buttons">
       <span
@@ -126,6 +126,9 @@ export default {
     sentiment: {
       default: 0,
     },
+    complete: {
+      default: false,
+    },
     tools: {
       default: () => [],
     },
@@ -136,9 +139,6 @@ export default {
   },
 
   computed: {
-    dynamicMessage() {
-      return this.message.toString() || '...';
-    },
     avatar() {
       return this.isUser ? VUserAvatar : VNavieCompass;
     },
@@ -146,10 +146,33 @@ export default {
       return this.isUser ? 'You' : 'Navie';
     },
     renderedMarkdown() {
-      const markdown = marked.parse(this.dynamicMessage);
-      return DOMPurify.sanitize(markdown, {
+      const markdown = marked.parse(this.message.toString());
+      const dom = DOMPurify.sanitize(markdown, {
         USE_PROFILES: { html: true },
+        RETURN_DOM: true,
       });
+
+      if (!this.complete) {
+        // This is pretty inefficient, but good luck doing this in CSS.
+        // It's possible, but I don't think it's worth the effort.
+        const i = dom.ownerDocument.createNodeIterator(dom, NodeFilter.SHOW_TEXT);
+        let node;
+        for (;;) {
+          const nextNode = i.nextNode();
+          if (!nextNode) {
+            const cursor = dom.ownerDocument.createElement('span');
+            cursor.classList.add('cursor');
+            node?.parentElement?.appendChild(cursor);
+            break;
+          }
+
+          if (nextNode.textContent?.trim() !== '') {
+            node = nextNode;
+          }
+        }
+      }
+
+      return dom.outerHTML;
     },
   },
 
@@ -407,6 +430,19 @@ export default {
         background-color: $blue;
         transition: background-color 0s;
       }
+    }
+  }
+
+  .cursor {
+    color: black;
+    &:after {
+      content: ' ';
+      display: inline-block;
+      width: 0.65rem;
+      height: 1rem;
+
+      background-color: #ececec;
+      vertical-align: text-bottom;
     }
   }
 
