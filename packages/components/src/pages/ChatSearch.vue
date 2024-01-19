@@ -156,6 +156,7 @@ export default {
         'build-prompt': 'Building prompt',
         explain: 'Explaining with AI',
       },
+      ask: undefined,
     };
   },
   watch: {
@@ -238,7 +239,7 @@ export default {
     },
     async sendMessage(message: string) {
       const search = this.rpcClient();
-      const ask = search.explain();
+      this.ask = search.explain();
       this.searching = true;
       this.lastStatusLabel = undefined;
 
@@ -256,25 +257,31 @@ export default {
           reject();
         };
 
-        ask.on('ack', (_messageId: string, threadId: string) => {
+        this.ask.on('ack', (_messageId: string, threadId: string) => {
           myThreadId = threadId;
           this.$refs.vchat.onAck(_messageId, threadId);
         });
-        ask.on('token', (token, messageId) => {
+        this.ask.on('token', (token, messageId) => {
           this.$refs.vchat.addToken(token, myThreadId, messageId);
         });
-        ask.on('error', onError);
-        ask.on('status', (status) => {
+        this.ask.on('error', onError);
+        this.ask.on('status', (status) => {
           this.searchStatus = status;
           if (!this.searchResponse && status.searchResponse)
             this.searchResponse = status.searchResponse;
         });
-        ask.on('complete', onComplete);
-        ask.explain(message, this.$refs.vchat.threadId).catch(onError);
+        this.ask.on('complete', onComplete);
+        this.ask.explain(message, this.$refs.vchat.threadId).catch(onError);
       });
     },
     clear() {
       this.searchResponse = undefined;
+      this.searchStatus = undefined;
+      this.selectedSearchResultId = undefined;
+      this.searchId = 0;
+      this.searchStatusLabel = undefined;
+      this.ask?.removeAllListeners();
+      this.searching = false;
     },
     toggleDiagonstics() {
       this.showDiagnostics = !this.showDiagnostics;

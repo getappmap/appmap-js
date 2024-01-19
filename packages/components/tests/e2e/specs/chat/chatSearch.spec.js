@@ -1,4 +1,4 @@
-context('Component Diagram', () => {
+context('Chat search', () => {
   beforeEach(() => {
     cy.visit(
       'http://localhost:6006/iframe.html?args=&id=pages-chatsearch--chat-search-mock&viewMode=story'
@@ -53,5 +53,21 @@ context('Component Diagram', () => {
 
     cy.get('[data-cy="select-object"]').select(1);
     cy.get('[data-cy="app"] [data-id="GET /admin"].highlight');
+  });
+
+  it('new chat button clears the state', () => {
+    cy.get('[data-cy="chat-input"]', { timeout: 25000 }).type('Hello world{enter}');
+
+    // Ruby AppMap should be visible
+    cy.get('[data-cy="app"] [data-id="GET /admin"]', {
+      timeout: 10000,
+    }).should('be.visible');
+
+    cy.get('[data-cy="new-chat-btn"]').click();
+
+    // Ruby AppMap should not be visible
+    cy.get('[data-cy="app"] [data-id="GET /admin"]', {
+      timeout: 10000,
+    }).should('not.exist');
   });
 });
