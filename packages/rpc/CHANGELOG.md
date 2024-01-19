@@ -1,3 +1,10 @@
+# [@appland/rpc-v1.2.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.1.1...@appland/rpc-v1.2.0) (2024-01-19)
+
+
+### Features
+
+* RPC command appmap.stats ([67e5550](https://github.com/getappmap/appmap-js/commit/67e55508538a3710b89d785ddcd373044bea725e))
+
 # [@appland/rpc-v1.1.1](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.1.0...@appland/rpc-v1.1.1) (2024-01-04)
 
 
