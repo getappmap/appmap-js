@@ -1,3 +1,10 @@
+# [@appland/components-v3.27.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.27.0...@appland/components-v3.27.1) (2024-01-19)
+
+
+### Bug Fixes
+
+* New chat button clears appmaps from search ([38a6a1b](https://github.com/getappmap/appmap-js/commit/38a6a1bc88b957782c97c0925059d86c45db388d))
+
 # [@appland/components-v3.27.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.26.0...@appland/components-v3.27.0) (2024-01-16)
 
 
