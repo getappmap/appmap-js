@@ -1,8 +1,19 @@
 export namespace AppMapRpc {
+  export const StatsFunctionName = 'appmap.stats';
   export const DataFunctionName = 'appmap.data';
   export const FilterFunctionName = 'appmap.filter';
   export const MetadataFunctionName = 'appmap.metadata';
   export const SequenceDiagramFunctionName = 'appmap.sequenceDiagram';
+
+  export type StatsOptions = {};
+
+  export type StatsResponse = {
+    packages: string[];
+    classes: string[];
+    routes: string[];
+    tables: string[];
+    numAppMaps: number;
+  };
 
   export type FilterOptions = {
     appmap: string;

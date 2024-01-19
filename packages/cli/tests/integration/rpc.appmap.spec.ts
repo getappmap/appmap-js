@@ -12,6 +12,31 @@ describe('RPC', () => {
   afterEach(async () => await rpcTest.teardownEach());
   afterAll(async () => await rpcTest.teardownAll());
 
+  describe('appmap.stats', () => {
+    it('can be retrieved', async () => {
+      const options: AppMapRpc.StatsOptions = {};
+      const response = await rpcTest.client.request(AppMapRpc.StatsFunctionName, options);
+      expect(response.error).toBeFalsy();
+      const stats = response.result;
+      expect(stats.numAppMaps).toEqual(2);
+      expect(stats.packages).toEqual(['app/controllers', 'app/models', 'json', 'openssl']);
+      expect(stats.classes).toEqual([
+        'app/controllers/API::APIKeysController',
+        'app/controllers/OrganizationsController',
+        'app/models/ApiKey',
+        'app/models/Configuration',
+        'app/models/User',
+        'app/models/User::Show',
+        'json/JSON::Ext::Generator::State',
+        'json/JSON::Ext::Parser',
+        'openssl/Digest::Instance',
+        'openssl/OpenSSL::Cipher',
+      ]);
+      expect(stats.routes).toEqual(['DELETE /api/api_keys', 'GET /organizations/new']);
+      expect(stats.tables).toEqual(['api_keys', 'pg_attribute', 'pg_type', 'users']);
+    });
+  });
+
   describe('appmap.metadata', () => {
     it('can be retrieved', async () => {
       const options: AppMapRpc.MetadataOptions = {

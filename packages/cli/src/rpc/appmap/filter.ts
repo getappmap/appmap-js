@@ -22,6 +22,7 @@ export async function appmapFilterHandler(
 
   return filter.filter(appmap, []) as unknown as Record<string, unknown>;
 }
+
 export default function appmapFilter(): RpcHandler<
   AppMapRpc.FilterOptions,
   AppMapRpc.FilterResponse
