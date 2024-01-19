@@ -225,9 +225,6 @@ export default {
         (result) => result.id === this.selectedSearchResultId
       );
     },
-    vchat() {
-      return this.$refs.vchat as VChat;
-    },
   },
   methods: {
     getAppMapState() {
@@ -240,7 +237,6 @@ export default {
       this.$store.commit(SET_SAVED_FILTERS, updatedFilters);
     },
     async sendMessage(message: string) {
-      const { vchat } = this;
       const search = this.rpcClient();
       const ask = search.explain();
       this.searching = true;
@@ -262,7 +258,7 @@ export default {
 
         ask.on('ack', (_messageId: string, threadId: string) => {
           myThreadId = threadId;
-          vchat.onAck(_messageId, threadId);
+          this.$refs.vchat.onAck(_messageId, threadId);
         });
         ask.on('token', (token, messageId) => {
           this.$refs.vchat.addToken(token, myThreadId, messageId);
