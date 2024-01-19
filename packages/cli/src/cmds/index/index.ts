@@ -17,6 +17,7 @@ import { explainHandler, explainStatusHandler } from '../../rpc/explain/explain'
 import RPCServer from './rpcServer';
 import appmapData from '../../rpc/appmap/data';
 import { loadConfiguration } from '@appland/client';
+import appmapStats from '../../rpc/appmap/stats';
 
 export const command = 'index';
 export const describe =
@@ -73,6 +74,7 @@ export const handler = async (argv) => {
       const rpcMethods: RpcHandler<any, any>[] = [
         numProcessed(cmd),
         search(appmapDir),
+        appmapStats(appmapDir),
         appmapFilter(),
         appmapData(),
         metadata(),

@@ -5,6 +5,7 @@ import { RpcHandler } from '../../src/rpc/rpc';
 import { numProcessed } from '../../src/rpc/index/numProcessed';
 import { search } from '../../src/rpc/search/search';
 import appmapData from '../../src/rpc/appmap/data';
+import appmapStats from '../../src/rpc/appmap/stats';
 import metadata from '../../src/rpc/appmap/metadata';
 import sequenceDiagram from '../../src/rpc/appmap/sequenceDiagram';
 import { explainHandler, explainStatusHandler } from '../../src/rpc/explain/explain';
@@ -24,6 +25,7 @@ export async function buildRPC(): Promise<RPC> {
   const handlers: RpcHandler<any, any>[] = [
     numProcessed(fingerprintWatchCommand),
     search('.'),
+    appmapStats('.'),
     appmapData(),
     metadata(),
     sequenceDiagram(),
