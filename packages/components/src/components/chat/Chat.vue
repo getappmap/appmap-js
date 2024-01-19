@@ -25,6 +25,7 @@
         :id="message.messageId"
         :sentiment="message.sentiment"
         :tools="message.tools"
+        :complete="message.complete"
         @change-sentiment="onSentimentChange"
       />
       <v-suggestion-grid :suggestions="suggestions" @suggest="onSuggestion" v-if="!isChatting" />
@@ -59,8 +60,6 @@ import Vue from 'vue';
 import VUserMessage from '@/components/chat/UserMessage.vue';
 import VChatInput from '@/components/chat/ChatInput.vue';
 import VSuggestionGrid from '@/components/chat/SuggestionGrid.vue';
-import VSpinner from '@/components/Spinner.vue';
-import VLoaderIcon from '@/assets/eva_loader-outline.svg';
 import VAppMapNavieLogo from '@/assets/appmap-full-logo.svg';
 import VButton from '@/components/Button.vue';
 import { AI } from '@appland/client';
@@ -75,6 +74,7 @@ interface IMessage {
   message: string;
   isUser: boolean;
   isError: boolean;
+  complete?: boolean;
   messageId?: string;
   sentiment?: number;
   tools?: ITool[];
@@ -86,6 +86,7 @@ class UserMessage implements IMessage {
   public readonly isUser = true;
   public readonly isError = false;
   public readonly tools = undefined;
+  public readonly complete = true;
 
   constructor(public content: string) {}
 }
@@ -93,6 +94,7 @@ class UserMessage implements IMessage {
 class AssistantMessage implements IMessage {
   public content = '';
   public sentiment = undefined;
+  public complete = false;
   public readonly isUser = false;
   public readonly isError = false;
   public readonly tools = [];
@@ -107,6 +109,7 @@ class AssistantMessage implements IMessage {
 class ErrorMessage implements IMessage {
   public readonly messageId = undefined;
   public readonly sentiment = undefined;
+  public readonly complete = true;
   public readonly isUser = false;
   public readonly isError = true;
 
@@ -240,7 +243,8 @@ export default {
     onSuggestion(prompt: string) {
       if (this.suggestionSpeaker === 'system') {
         // Make it look like the AI is typing
-        const assistantMessage = new AssistantMessage('suggested-message');
+        const assistantMessage = new AssistantMessage();
+        assistantMessage.complete = true;
         assistantMessage.append(prompt);
         this.messages.push(assistantMessage);
       } else {
