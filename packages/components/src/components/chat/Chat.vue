@@ -5,7 +5,15 @@
         <v-app-map-navie-logo />
         <div id="header-navie-logo">Navie</div>
       </div>
-      <v-button class="clear" size="small" kind="ghost" @click.native="clear">New chat</v-button>
+      <v-button
+        data-cy="new-chat-btn"
+        class="clear"
+        size="small"
+        kind="ghost"
+        @click.native="clear"
+      >
+        New chat
+      </v-button>
     </div>
     <div class="messages" data-cy="messages" ref="messages" @scroll="manageScroll">
       <v-user-message
@@ -240,6 +248,7 @@ export default {
       this.messages.splice(0);
       this.autoScrollTop = 0;
       this.resetStateVariables();
+      this.$emit('clear');
     },
     resetStateVariables() {
       this.loading = false;
