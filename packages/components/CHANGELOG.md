@@ -1,3 +1,10 @@
+# [@appland/components-v3.27.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.27.1...@appland/components-v3.27.2) (2024-01-22)
+
+
+### Bug Fixes
+
+* Map controls are responsive to appmap right column width ([35adc15](https://github.com/getappmap/appmap-js/commit/35adc15bfebd04bdeebaf47e3ebb74981595b043))
+
 # [@appland/components-v3.27.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.27.0...@appland/components-v3.27.1) (2024-01-19)
 
 
