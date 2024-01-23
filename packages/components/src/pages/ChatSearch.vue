@@ -325,6 +325,7 @@ export default {
       );
     },
     startResizing(event) {
+      console.log('start resizing');
       document.body.style.userSelect = 'none';
       this.isPanelResizing = true;
       this.initialPanelWidth = this.$refs.chatContainer.offsetWidth;
@@ -332,17 +333,21 @@ export default {
     },
     makeResizing(event) {
       if (this.isPanelResizing) {
+        console.log('resizing');
         const MIN_PANEL_WIDTH = 280;
         const MAX_PANEL_WIDTH = window.innerWidth * 0.75;
 
         let newWidth = this.initialPanelWidth + (event.clientX - this.initialClientX);
+        console.log(newWidth);
         newWidth = Math.max(MIN_PANEL_WIDTH, newWidth);
         newWidth = Math.min(MAX_PANEL_WIDTH, newWidth);
+        console.log(newWidth);
 
         this.$refs.chatContainer.style.width = `${newWidth}px`;
       }
     },
     stopResizing() {
+      console.log('stop resizing');
       document.body.style.userSelect = '';
       this.isPanelResizing = false;
     },
@@ -357,8 +362,8 @@ export default {
 $border-color: darken($gray4, 10%);
 
 .chat-search-container {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: auto auto auto;
   min-width: 100%;
   max-width: 100%;
   min-height: 100vh;
@@ -368,8 +373,8 @@ $border-color: darken($gray4, 10%);
 
   .chat-container {
     overflow: hidden;
-    width: 40%;
     min-width: 375px;
+    width: 40vw;
 
     background: radial-gradient(circle, lighten($gray2, 10%) 0%, rgba(0, 0, 0, 0) 80%);
     background-repeat: no-repeat, repeat, repeat;
