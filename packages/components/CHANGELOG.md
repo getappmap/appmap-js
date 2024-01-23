@@ -1,3 +1,10 @@
+# [@appland/components-v3.27.3](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.27.2...@appland/components-v3.27.3) (2024-01-23)
+
+
+### Bug Fixes
+
+* Clipping of hover labels in sequence diagram ([8912441](https://github.com/getappmap/appmap-js/commit/89124415e29db7d9b783adc6285b98e8b6a57cb6))
+
 # [@appland/components-v3.27.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.27.1...@appland/components-v3.27.2) (2024-01-22)
 
 
