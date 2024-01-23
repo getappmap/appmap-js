@@ -108,10 +108,10 @@ jobs:
         run: |
           yarn workspaces foreach -v -t --exclude root --exclude @appland/appmap --exclude @appland/scanner run build
 
-      - name: Test
-        run: |
-          cd packages/components
-          yarn run chromatic
+      - name: Publish to Chromatic
+        uses: chromaui/action@latest
+        with:
+          workingDir: packages/components
 
   test_cli:
     runs-on: ubuntu-latest
