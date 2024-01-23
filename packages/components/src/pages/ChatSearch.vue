@@ -325,7 +325,6 @@ export default {
       );
     },
     startResizing(event) {
-      console.log('start resizing');
       document.body.style.userSelect = 'none';
       this.isPanelResizing = true;
       this.initialPanelWidth = this.$refs.chatContainer.offsetWidth;
@@ -333,7 +332,6 @@ export default {
     },
     makeResizing(event) {
       if (this.isPanelResizing) {
-        console.log('resizing');
         const MIN_PANEL_WIDTH = 280;
         const MAX_PANEL_WIDTH = window.innerWidth * 0.75;
 
@@ -347,7 +345,6 @@ export default {
       }
     },
     stopResizing() {
-      console.log('stop resizing');
       document.body.style.userSelect = '';
       this.isPanelResizing = false;
     },
