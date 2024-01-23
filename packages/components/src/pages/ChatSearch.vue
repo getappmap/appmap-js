@@ -357,8 +357,8 @@ export default {
 $border-color: darken($gray4, 10%);
 
 .chat-search-container {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: auto auto auto;
   min-width: 100%;
   max-width: 100%;
   min-height: 100vh;
@@ -368,8 +368,8 @@ $border-color: darken($gray4, 10%);
 
   .chat-container {
     overflow: hidden;
-    width: 40%;
     min-width: 375px;
+    width: 40vw;
 
     background: radial-gradient(circle, lighten($gray2, 10%) 0%, rgba(0, 0, 0, 0) 80%);
     background-repeat: no-repeat, repeat, repeat;
