@@ -162,7 +162,13 @@ export default {
           if (!nextNode) {
             const cursor = dom.ownerDocument.createElement('span');
             cursor.classList.add('cursor');
-            node?.parentElement?.appendChild(cursor);
+
+            let target = node?.parentElement;
+            if (!target && this.tools.every((t) => t.complete)) {
+              target = dom;
+            }
+
+            target?.appendChild(cursor);
             break;
           }
 
