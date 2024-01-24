@@ -159,6 +159,18 @@ describe('pages/ChatSearch.vue', () => {
         expect(wrapper.find('[data-cy="match-instructions"]').exists()).toBe(true);
         expect(wrapper.find('[data-cy="no-match-instructions"]').exists()).toBe(false);
       });
+
+      it('only renders the search status once', async () => {
+        const { wrapper } = await performSearch();
+
+        expect(wrapper.findAll('[data-cy="tool-status"]').length).toBe(1);
+
+        wrapper.vm.sendMessage('How do I reset my password?');
+        await wrapper.vm.$nextTick();
+
+        console.log(wrapper.html());
+        expect(wrapper.findAll('[data-cy="tool-status"]').length).toBe(1);
+      });
     });
 
     describe('but no AppMaps match the question', () => {
