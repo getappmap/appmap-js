@@ -112,6 +112,7 @@ import VNoMatchInstructions from '@/components/chat-search/NoMatchInstructions.v
 import VAppMap from './VsCodeExtension.vue';
 import AppMapRPC from '@/lib/AppMapRPC';
 import authenticatedClient from '@/components/mixins/authenticatedClient';
+import type { ITool } from '@/components/chat/Chat.vue';
 
 export default {
   name: 'v-chat-search',
@@ -256,11 +257,19 @@ export default {
 
       let myThreadId: string | undefined;
       return new Promise((resolve, reject) => {
+        // If we can't find a system message, this is a new chat.
+        // We could potentially use the status to determine whether or not
+        // to add a new tool, but this will be more reactive.
+        const isNewChat = !Boolean(this.$refs.vchat.getMessage({ isUser: false }));
         const systemMessage = this.$refs.vchat.addSystemMessage();
-        const tool = {
-          title: 'Searching for AppMaps',
-        };
-        systemMessage.tools.push(tool);
+        let tool: ITool | undefined;
+
+        if (isNewChat) {
+          tool = {
+            title: 'Searching for AppMaps',
+          };
+          systemMessage.tools.push(tool);
+        }
 
         const onComplete = () => {
           this.searching = false;
@@ -290,10 +299,13 @@ export default {
           if (!this.searchResponse && status.searchResponse) {
             this.searchResponse = status.searchResponse;
 
-            const numResults = this.searchResponse.results.length;
-            tool.title = 'Searched for AppMaps';
-            tool.status = `Found ${numResults} relevant recording${numResults === 1 ? '' : 's'}`;
-            tool.complete = true;
+            // Update the tool status to reflect the fact that we've found some AppMaps
+            if (tool) {
+              const numResults = this.searchResponse.results.length;
+              tool.title = 'Searched for AppMaps';
+              tool.status = `Found ${numResults} relevant recording${numResults === 1 ? '' : 's'}`;
+              tool.complete = true;
+            }
           }
         });
         this.ask.on('complete', onComplete);
@@ -358,12 +370,13 @@ $border-color: darken($gray4, 10%);
 
 .chat-search-container {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto 1fr;
   min-width: 100%;
-  max-width: 100%;
-  min-height: 100vh;
+  max-width: 100vw;
+  min-height: 100%;
   max-height: 100vh;
-  overflow-y: auto;
+  height: 100%;
+  overflow-y: hidden;
   background-color: $gray2;
 
   .chat-container {
@@ -396,8 +409,8 @@ $border-color: darken($gray4, 10%);
   .context-container {
     font-size: 1rem;
     color: $white;
-    flex: 2;
-    display: flex;
+    grid-template-rows: auto 1fr;
+    display: grid;
     flex-direction: column;
     overflow-y: auto;
     background-color: $black;
@@ -409,6 +422,7 @@ $border-color: darken($gray4, 10%);
   }
 
   .search-container {
+    max-height: 100vh;
     h2 {
       font-size: 1.2rem;
       margin-bottom: 0.4rem;
@@ -448,6 +462,7 @@ $border-color: darken($gray4, 10%);
 
     .appmap {
       overflow-y: auto;
+      height: 100% !important;
     }
 
     .appmap-empty {

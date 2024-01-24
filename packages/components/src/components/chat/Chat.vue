@@ -64,9 +64,9 @@ import VAppMapNavieLogo from '@/assets/appmap-full-logo.svg';
 import VButton from '@/components/Button.vue';
 import { AI } from '@appland/client';
 
-interface ITool {
+export interface ITool {
   title: string;
-  status: string;
+  status?: string;
   complete?: boolean;
 }
 
