@@ -256,11 +256,14 @@ export default {
 
       let myThreadId: string | undefined;
       return new Promise((resolve, reject) => {
+        const isNewChat = !this.$refs.vchat.getMessage({ isUser: false });
         const systemMessage = this.$refs.vchat.addSystemMessage();
         const tool = {
           title: 'Searching for AppMaps',
         };
-        systemMessage.tools.push(tool);
+        if (isNewChat) {
+          systemMessage.tools.push(tool);
+        }
 
         const onComplete = () => {
           this.searching = false;
@@ -360,12 +363,13 @@ $border-color: darken($gray4, 10%);
 
 .chat-search-container {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto 1fr;
   min-width: 100%;
-  max-width: 100%;
-  min-height: 100vh;
+  max-width: 100vw;
+  min-height: 100%;
   max-height: 100vh;
-  overflow-y: auto;
+  height: 100%;
+  overflow-y: hidden;
   background-color: $gray2;
 
   .chat-container {
@@ -398,9 +402,8 @@ $border-color: darken($gray4, 10%);
   .context-container {
     font-size: 1rem;
     color: $white;
-    // padding: 0 1rem 1rem 2rem;
-    flex: 2;
-    display: flex;
+    grid-template-rows: auto 1fr;
+    display: grid;
     flex-direction: column;
     overflow-y: auto;
     background-color: $black;
@@ -412,6 +415,7 @@ $border-color: darken($gray4, 10%);
   }
 
   .search-container {
+    max-height: 100vh;
     h2 {
       font-size: 1.2rem;
       margin-bottom: 0.4rem;
@@ -451,6 +455,7 @@ $border-color: darken($gray4, 10%);
 
     .appmap {
       overflow-y: auto;
+      height: 100% !important;
     }
 
     .appmap-empty {
