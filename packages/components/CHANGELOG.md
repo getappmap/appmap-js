@@ -1,3 +1,10 @@
+# [@appland/components-v3.27.4](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.27.3...@appland/components-v3.27.4) (2024-01-24)
+
+
+### Bug Fixes
+
+* Don't attempt to load a font from URL ([180dd67](https://github.com/getappmap/appmap-js/commit/180dd6772f32d3f8db3d87b0bae137d67a3facd3))
+
 # [@appland/components-v3.27.3](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.27.2...@appland/components-v3.27.3) (2024-01-23)
 
 
