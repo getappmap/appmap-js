@@ -137,6 +137,11 @@ export default {
       return this.selectedProject?.numHttpRequests;
     },
     hasInstalled() {
+      // special case for appmap-node which doesn't need installation
+      // NOTE: remove after appmap-agent-js is deprecated
+      // and project state services in IDEs take that into account
+      if (this.selectedProject?.language.name === 'JavaScript') return true;
+
       return this.selectedProject?.agentInstalled;
     },
     hasRecorded() {

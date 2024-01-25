@@ -61,6 +61,25 @@ export const installGuide = (args, { argTypes }) => ({
         },
       },
       {
+        name: 'jsTest',
+        score: 2,
+        path: '/home/user/js_test',
+        agentInstalled: false,
+        appMapsRecorded: true,
+        language: {
+          name: 'JavaScript',
+          score: 2,
+        },
+        testFramework: {
+          name: 'jest',
+          score: 3,
+        },
+        webFramework: {
+          name: 'next.js',
+          score: 3,
+        },
+      },
+      {
         name: 'MyOtherProject',
         score: 3,
         path: '/home/user/my_other_project',

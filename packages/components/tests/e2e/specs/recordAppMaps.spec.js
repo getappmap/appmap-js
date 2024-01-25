@@ -39,16 +39,6 @@ context('Record AppMaps', () => {
     });
   }
 
-  describe('No supported web or test framework', () => {
-    beforeEach(() => {
-      cy.visit(
-        'http://localhost:6006/iframe.html?id=pages-vs-code-install-guide-pages-record-appmaps--no-web-or-test-framework&args=&viewMode=story'
-      );
-    });
-
-    testUnsupported();
-  });
-
   describe('Unsupported language', () => {
     beforeEach(() => {
       cy.visit(

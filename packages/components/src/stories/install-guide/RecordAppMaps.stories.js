@@ -221,23 +221,76 @@ PythonOnly.args = {
   editor: 'vscode',
 };
 
-export const NoWebOrTestFramework = Template.bind({});
-NoWebOrTestFramework.args = {
+export const JavaScriptOnly = Template.bind({});
+JavaScriptOnly.args = {
   project: {
-    name: 'MyOtherProject',
+    name: 'JSProject',
     score: 3,
-    path: '/home/user/my_other_project',
+    path: '/home/user/js_project',
+    language: {
+      name: 'JavaScript',
+      score: 2,
+    },
+  },
+  editor: 'vscode',
+  complete: true,
+};
+
+export const JavaScriptExpress = Template.bind({});
+JavaScriptExpress.args = {
+  project: {
+    name: 'JSExpress',
+    score: 3,
+    path: '/home/user/js_express',
+    language: {
+      name: 'JavaScript',
+      score: 2,
+    },
+    webFramework: {
+      name: 'express.js',
+      score: 2,
+    },
+  },
+  editor: 'vscode',
+  complete: true,
+};
+
+export const JavaScriptMocha = Template.bind({});
+JavaScriptMocha.args = {
+  project: {
+    name: 'JSMocha',
+    score: 3,
+    path: '/home/user/js_mocha',
     language: {
       name: 'JavaScript',
       score: 2,
     },
     testFramework: {
-      name: 'Unknown',
-      score: 0,
+      name: 'mocha',
+      score: 2,
+    },
+  },
+  editor: 'vscode',
+  complete: true,
+};
+
+export const JavaScriptMochaExpress = Template.bind({});
+JavaScriptMochaExpress.args = {
+  project: {
+    name: 'JSMochaExpress',
+    score: 3,
+    path: '/home/user/js_mocha_express',
+    language: {
+      name: 'JavaScript',
+      score: 2,
     },
     webFramework: {
-      name: 'Unknown',
-      score: 0,
+      name: 'express.js',
+      score: 2,
+    },
+    testFramework: {
+      name: 'mocha',
+      score: 2,
     },
   },
   editor: 'vscode',

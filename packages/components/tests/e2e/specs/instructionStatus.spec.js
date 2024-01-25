@@ -14,7 +14,7 @@ context('Instruction Status', () => {
     cy.get('.accordion--open [data-cy="status-indicator"] .in-progress').should('have.length', 1);
     cy.get('.accordion--open [data-cy="status"] [data-cy="header"]').should(
       'contain.text',
-      'AppMap has been added to DjangoTest'
+      'AppMap is ready to map DjangoTest'
     );
     cy.get('.accordion--open [data-cy="next-step"]').click();
     cy.get('[data-cy="status"] [data-cy="header"]').contains(

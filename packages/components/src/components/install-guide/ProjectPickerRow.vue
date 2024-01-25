@@ -95,23 +95,20 @@
           </ol>
         </template>
         <template v-if="isJS">
-          <h3 class="install-heading">Run the AppMap Installer</h3>
-          To make AppMaps of your JavaScript project, you need to install the
-          <code class="inline">appmap-agent-js</code>
-          package from NPM and configure your project to use it. We provide an open source
-          installer, or you can install manually. Advantages of using the installer include:
-          <ol>
-            <li>Verifies that your Node.js version is supported by AppMap.</li>
-            <li>
-              Verify that your Express, Jest and Mocha versions (if present) are supported by
-              AppMap.
-            </li>
-            <li>
-              Detects and supports <i>package-lock.json</i> (npm) and <i>yarn.lock</i> (yarn).
-            </li>
-            <li>Creates the configuration file <i>appmap.yml</i>.</li>
-            <li>Has built-in support if you encounter any problems.</li>
-          </ol>
+          <h3 class="install-heading">Use the <i>appmap-node</i> package</h3>
+          <p>
+            Using <i><a href="https://github.com/getappmap/appmap-node">appmap-node</a></i> is the
+            recommended way to record Node.js applications. It's suitable for most Node.js projects
+            and includes support for Express, NestJS, Next.js, Jest, Mocha and Vitest. You can
+            proceed directly to the next step; <i>appmap-node</i> does not require explicit
+            installation.
+          </p>
+
+          <p>
+            <code class="inline">appmap-node</code> also uses a configuration file called
+            <i>appmap.yml</i>. A default configuration file will be created automatically the first
+            time you run your application with <i>appmap-node</i>.
+          </p>
         </template>
       </p>
       <template v-if="supported">
@@ -197,6 +194,9 @@
             <v-navigation-buttons :first="true" :last="!supported" :complete="installComplete" />
           </div>
         </template>
+        <template v-else-if="isJS">
+          <v-navigation-buttons :first="true" :last="!supported" :complete="true" />
+        </template>
         <template v-else>
           <div class="center-block" data-cy="automated-install">
             <v-button :kind="installButtonType" @click.native="performInstall" :timeout="2000">
@@ -264,7 +264,6 @@ import VPopper from '@/components/Popper.vue';
 import VNavigationButtons from '@/components/install-guide/NavigationButtons.vue';
 import VRuby from '@/components/install-guide/install-instructions/Ruby.vue';
 import VPython from '@/components/install-guide/install-instructions/Python.vue';
-import VJavaScript from '@/components/install-guide/install-instructions/JavaScript.vue';
 import VIconChevron from '@/assets/fa-solid_chevron-down.svg';
 import VRunConfigDark from '@/assets/jetbrains_run_config_execute_dark.svg';
 import VRunConfigLight from '@/assets/jetbrains_run_config_execute.svg';
@@ -283,7 +282,6 @@ import { getAgentDocumentationUrl } from '@/lib/documentation';
 const manualInstructionComponents = {
   ruby: VRuby,
   python: VPython,
-  javascript: VJavaScript,
 };
 
 export default {

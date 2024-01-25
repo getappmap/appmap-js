@@ -55,6 +55,14 @@
               :complete="complete"
             />
           </template>
+          <template v-else-if="isJavaScript">
+            <VRecordInstructions_JavaScript
+              :theme="theme"
+              :web-framework="webFrameworkSupported ? webFramework : undefined"
+              :test-framework="testFrameworkSupported ? testFramework : undefined"
+              :complete="complete"
+            />
+          </template>
           <template v-else>
             <p class="mb20">
               For instructions on recording {{ language }} AppMaps, refer to our
@@ -77,6 +85,7 @@ import VRecordInstructions_IntelliJ from '@/components/install-guide/record-inst
 import VRecordInstructions_Ruby from '@/components/install-guide/record-instructions/Ruby.vue';
 import VRecordInstructions_Python from '@/components/install-guide/record-instructions/Python.vue';
 import VRecordInstructions_Java from '@/components/install-guide/record-instructions/Java.vue';
+import VRecordInstructions_JavaScript from '@/components/install-guide/record-instructions/JavaScript.vue';
 import Navigation from '@/components/mixins/navigation';
 import VStatus from '@/components/install-guide/Status.vue';
 import StatusState from '@/components/mixins/statusState.js';
@@ -94,6 +103,7 @@ export default {
     VRecordInstructions_Ruby,
     VRecordInstructions_Python,
     VRecordInstructions_Java,
+    VRecordInstructions_JavaScript,
     VStatus,
   },
 

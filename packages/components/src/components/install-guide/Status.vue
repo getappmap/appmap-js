@@ -86,7 +86,7 @@ export default {
     templates: {
       [InstructionStep.ProjectPicker]: {
         complete: {
-          header: 'AppMap has been added to {{projectName}}',
+          header: 'AppMap is ready to map {{projectName}}',
           prompt: 'Choose a recording method and record AppMaps',
         },
         incomplete: {

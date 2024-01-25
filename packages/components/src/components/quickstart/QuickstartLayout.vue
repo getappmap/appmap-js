@@ -89,6 +89,7 @@ body {
 }
 
 .qs {
+  $highlighted-code: #d7ba7d;
   position: relative;
   width: 100%;
   min-height: 100vh;
@@ -137,7 +138,7 @@ body {
     border-radius: 8px;
     max-width: 80%;
     padding: 12px 20px;
-    color: #d7ba7d;
+    color: $highlighted-code;
 
     &.inline {
       display: inline-block;
@@ -146,6 +147,11 @@ body {
       border: none;
       color: $base07;
       background-color: rgba(0, 0, 0, 0.25);
+
+      em {
+        color: $highlighted-code;
+        font-style: inherit;
+      }
     }
   }
 
