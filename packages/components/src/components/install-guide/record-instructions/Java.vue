@@ -4,19 +4,15 @@
       Use the "Run with AppMap" debug configuration to launch your application or run your tests
       through Microsoft's Test Runner for Java extension.
     </p>
-    <br />
     <p>
       This ensures that your Java code runs with the JVM option
       <code class="inline">-javaagent:~/.appmap/lib/java/appmap.jar</code>. This option is required
       to enable AppMap recording.
     </p>
-    <br />
     <div class="vscode-screenshot">
       <img src="../../../assets/vscode-java.gif" />
     </div>
-    <br />
     <h2>Choose the best recording method for this project</h2>
-    <br />
     <template v-if="testFramework">
       <section class="recording-method">
         <h3>
@@ -44,11 +40,9 @@
           </a>
         </p>
       </section>
-      <br />
     </template>
     <template v-else>
       <VTestsPrompt framework="JUnit or TestNG" />
-      <br />
     </template>
     <template v-if="webFramework">
       <section class="recording-method">
@@ -87,7 +81,6 @@
         </p>
       </div>
     </template>
-    <br />
     <section class="recording-method">
       <h3>
         <i class="header-icon"><ProcessIcon /></i>Process recording
@@ -110,7 +103,6 @@
         for more information.
       </p>
     </section>
-    <br />
     <section class="recording-method">
       <h3>
         <i class="header-icon"><PlayIcon /></i>

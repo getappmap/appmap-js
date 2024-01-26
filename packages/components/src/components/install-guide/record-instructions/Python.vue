@@ -4,9 +4,7 @@
       When you run your Python code with the <code class="inline"> appmap </code> package, AppMap
       will be enabled for recording.
     </p>
-    <br />
     <h2>Choose the best recording method for this project</h2>
-    <br />
     <template v-if="testFramework">
       <section class="recording-method">
         <h3>
@@ -33,7 +31,7 @@
         </p>
       </section>
     </template>
-    <template v-else> <VTestsPrompt framework="pytest or unittest" /> </template><br />
+    <template v-else> <VTestsPrompt framework="pytest or unittest" /> </template>
     <template v-if="webFramework">
       <section class="recording-method">
         <h3>
@@ -44,7 +42,6 @@
           enabled, HTTP server requests recording is enabled. To record requests, first run your
           application:
         </p>
-        <br />
         <p>
           Start your Django server:
           <v-code-snippet clipboard-text="python manage.py runserver" :kind="codeSnippetType" />
@@ -53,7 +50,6 @@
           Start your Flask server:
           <v-code-snippet clipboard-text="flask run" :kind="codeSnippetType" />
         </p>
-        <br />
         <p>
           Then, interact with your application through its user interface and/or by making API
           requests using a tool such as Postman. An AppMap will be created for each HTTP server
@@ -69,7 +65,7 @@
         </p>
       </section>
     </template>
-    <template v-else> <VWebFrameworkPrompt frameworks="Django or Flask" /> </template><br />
+    <template v-else> <VWebFrameworkPrompt frameworks="Django or Flask" /> </template>
     <section class="recording-method">
       <h3>
         <i class="header-icon"><CodeIcon /></i>Context manager recording

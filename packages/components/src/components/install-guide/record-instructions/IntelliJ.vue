@@ -4,17 +4,13 @@
       Use the <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap" option
       from the "Run" menu to start your run configurations with AppMap enabled.
     </p>
-    <br />
     <p>
       Using "Start with AppMap" ensures that your Java code runs with the JVM option
       <code class="inline">-javaagent:~/.appmap/lib/java/appmap.jar</code>. This option is required
       to enable AppMap recording.
     </p>
-    <br />
     <div id="IntelliJ-screenshot"><img src="../../../assets/run-with-appmap-menu-item.png" /></div>
-    <br />
     <h2>Choose the best recording method for this project</h2>
-    <br />
     <template v-if="testFramework">
       <section class="recording-method">
         <h3>
@@ -40,9 +36,8 @@
           >.
         </p>
       </section>
-      <br />
     </template>
-    <template v-else> <VTestsPrompt framework="JUnit or TestNG" /><br /> </template>
+    <template v-else> <VTestsPrompt framework="JUnit or TestNG" /></template>
     <template v-if="webFramework">
       <section class="recording-method">
         <h3>
@@ -76,8 +71,8 @@
           Did you know? When you run a Spring app, you can make AppMaps of all the HTTP requests
           served by your app. Spring wasn't detected in this project, though.
         </p>
-      </div> </template
-    ><br />
+      </div>
+    </template>
     <section class="recording-method">
       <h3>
         <i class="header-icon"><ProcessIcon /></i>Process recording
@@ -98,7 +93,6 @@
         for more information.
       </p>
     </section>
-    <br />
     <section class="recording-method">
       <h3>
         <i class="header-icon"><PlayIcon /></i>Code Block recording

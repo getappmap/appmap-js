@@ -33,7 +33,6 @@
               Once you have done that, AppMap will automatically scan your project and report
               findings.
             </article>
-            <br />
           </article>
           <article v-else-if="numFindings > 0">
             <p>
@@ -48,7 +47,6 @@
               </span>
               findings.
             </p>
-            <br />
             <p>
               <v-button
                 v-if="enableAnalysisReport"

@@ -5,15 +5,12 @@
       AppMap will be enabled for recording. By default, the <code class="inline">appmap</code> gem
       is only enabled in the "test" and "development" environments.
     </p>
-    <br />
     <p>
       Before you run your app with AppMap, stop or disable Spring. You can stop Spring with the
       command <code class="inline">spring stop</code>, or you can run your Ruby program with the
       environment variable <code class="inline">DISABLE_SPRING=true</code>.
     </p>
-    <br />
     <h2>Choose the best recording method for this project</h2>
-    <br />
     <template v-if="testFramework">
       <section class="recording-method">
         <h3>
@@ -51,7 +48,6 @@
     <template v-else>
       <VTestsPrompt framework="RSpec or Minitest" />
     </template>
-    <br />
     <template v-if="webFramework">
       <section class="recording-method">
         <h3>
@@ -87,7 +83,6 @@
     <template v-else>
       <VWebFrameworkPrompt frameworks="Rails" />
     </template>
-    <br />
     <section class="recording-method">
       <h3>
         <i class="header-icon"><CodeBlockIcon /></i>Block recording
