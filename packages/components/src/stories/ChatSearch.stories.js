@@ -24,6 +24,12 @@ export const ChatSearchMock = (args, { argTypes }) => ({
   template: `<v-chat-search v-bind="$props"></v-chat-search>`,
 });
 
+export const ChatSearchMockWithCodeSnippet = (args, { argTypes }) => ({
+  props: Object.keys(argTypes),
+  components: { VChatSearch },
+  template: `<v-chat-search v-bind="$props"></v-chat-search>`,
+});
+
 export const ChatSearchMockWithFilters = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VChatSearch },
@@ -181,6 +187,26 @@ const emptyMockRpc = buildMockRpc(EmptySearchResponse, []);
 
 ChatSearchMock.args = {
   appmapRpcFn: nonEmptyMockRpc,
+};
+
+const codeSnippet = `class UsersController < ApplicationController
+  before_action :correct_user,   only: [:edit, :update]
+  before_action :admin_user,     only: :destroy
+  
+  def index
+    @users = User.where(activated: true).paginate(page: params[:page])
+  end
+  
+  def show
+    @user = User.find(params[:id])
+    redirect_to root_url and return unless @user.activated?
+  end
+`;
+
+ChatSearchMockWithCodeSnippet.args = {
+  codeSnippet,
+  appmapRpcFn: nonEmptyMockRpc,
+  savedFilters,
 };
 
 ChatSearchMockWithFilters.args = {
