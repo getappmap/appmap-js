@@ -28,7 +28,11 @@
         :complete="message.complete"
         @change-sentiment="onSentimentChange"
       />
-      <v-suggestion-grid :suggestions="suggestions" @suggest="onSuggestion" v-if="!isChatting" />
+      <v-suggestion-grid
+        :suggestions="suggestions"
+        @suggest="onSuggestion"
+        v-if="suggestionsEnabled"
+      />
     </div>
     <div v-if="!authorized" class="status-unauthorized status-container">
       <div class="status-label">
@@ -141,6 +145,10 @@ export default {
       type: Array,
       required: false,
     },
+    disableSuggestions: {
+      type: Boolean,
+      default: false,
+    },
     suggestionSpeaker: {
       type: String,
       default: 'system',
@@ -160,6 +168,9 @@ export default {
   computed: {
     inputPlaceholder() {
       return 'How can I help?';
+    },
+    suggestionsEnabled() {
+      return this.disableSuggestions !== true && !this.isChatting;
     },
     isChatting(): boolean {
       return this.messages.length > 0;
