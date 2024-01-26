@@ -6,11 +6,19 @@
     @mouseleave="stopResizing"
   >
     <div class="chat-container" data-cy="resize-left" ref="chatContainer">
+      <v-code-snippet
+        v-if="codeSnippet"
+        ref="vcode-snippet"
+        class="chat-code-snippet"
+        :code="codeSnippet"
+      >
+      </v-code-snippet>
       <v-chat
         class="chat-search-chat"
         ref="vchat"
         :send-message="sendMessage"
         :status-label="searchStatusLabel"
+        :disable-suggestions="codeSnippet !== undefined"
         @clear="clear"
         :question="question"
       />
@@ -105,6 +113,7 @@
 <script lang="ts">
 //@ts-nocheck
 import VChat from '@/components/chat/Chat.vue';
+import VCodeSnippet from '@/components/chat-search/CodeSnippet.vue';
 import VAccordion from '@/components/Accordion.vue';
 import VInstructions from '@/components/chat-search/Instructions.vue';
 import VMatchInstructions from '@/components/chat-search/MatchInstructions.vue';
@@ -118,6 +127,7 @@ export default {
   name: 'v-chat-search',
   components: {
     VChat,
+    VCodeSnippet,
     VAppMap,
     VAccordion,
     VInstructions,
@@ -127,6 +137,9 @@ export default {
   mixins: [authenticatedClient],
   props: {
     question: {
+      type: String,
+    },
+    codeSnippet: {
       type: String,
     },
     appmapRpcPort: {
@@ -383,6 +396,9 @@ $border-color: darken($gray4, 10%);
     overflow: hidden;
     min-width: 375px;
     width: 40vw;
+
+    display: flex;
+    flex-direction: column;
 
     background: radial-gradient(circle, lighten($gray2, 10%) 0%, rgba(0, 0, 0, 0) 80%);
     background-repeat: no-repeat, repeat, repeat;
