@@ -100,10 +100,6 @@ export default {
   mixins: [Navigation, StatusState],
 
   props: {
-    clipboardSuccess: {
-      type: String,
-      default: '<b>Copied!</b><br/>Paste this command<br/>into your terminal.',
-    },
     complete: Boolean,
     project: Object,
     editor: {

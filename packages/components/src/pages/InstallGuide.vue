@@ -4,7 +4,6 @@
       id="project-picker"
       :projects="projects"
       :java-agent-status="javaAgentStatus"
-      :message-success="messageCopiedCommand"
       :editor="editor"
       :status-states="statusStates"
       :display-ai-help="displayAiHelp"
@@ -67,10 +66,6 @@ export default {
     disabledPages: {
       type: Set,
       default: () => new Set(),
-    },
-    messageCopiedCommand: {
-      type: String,
-      default: '<b>Copied!</b><br/>Paste this command<br/>into your terminal.',
     },
     projects: {
       default: () => [],

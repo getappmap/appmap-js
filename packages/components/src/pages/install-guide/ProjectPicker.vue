@@ -71,10 +71,6 @@ export default {
   mixins: [Navigation, StatusState],
 
   props: {
-    messageSuccess: {
-      type: String,
-      default: '<b>Copied!</b><br/>Paste this command<br/>into your terminal.',
-    },
     projects: {
       type: Array,
       default: () => [],
