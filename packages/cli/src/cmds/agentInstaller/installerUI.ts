@@ -76,6 +76,8 @@ export default class InstallerUI {
   }
 
   async selectSubprojects(projects: string[]): Promise<string[]> {
+    if (projects.length < 2) return projects;
+
     if (!this.interactive) {
       console.warn(
         `The installer should not be prompting for sub-projects in non-interactive mode!`

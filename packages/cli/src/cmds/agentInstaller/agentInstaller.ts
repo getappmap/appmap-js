@@ -8,6 +8,9 @@ export default abstract class AgentInstaller {
   public abstract buildFile: string;
   public abstract documentation: string;
 
+  /** whether the installer is noop, ie. no installation necessary */
+  public readonly isNoop: boolean = false;
+
   public path: string;
 
   constructor(readonly name: string, path: string) {
@@ -16,9 +19,9 @@ export default abstract class AgentInstaller {
 
   abstract get language(): string;
   abstract get appmap_dir(): string;
-  abstract installAgent(ui: InstallerUI): Promise<void>;
+  abstract installAgent(ui: InstallerUI): Promise<void> | void;
 
-  abstract checkConfigCommand(ui: InstallerUI): Promise<CommandStruct | undefined>;
+  abstract checkConfigCommand(ui: InstallerUI): Promise<CommandStruct | undefined> | void;
   async checkCurrentConfig(ui: InstallerUI): Promise<void> {
     const cmd = await this.checkConfigCommand(ui);
     if (!cmd) {
@@ -32,9 +35,9 @@ export default abstract class AgentInstaller {
     }
   }
 
-  abstract validateAgentCommand(): Promise<CommandStruct | undefined>;
-  abstract initCommand(): Promise<CommandStruct>;
-  abstract verifyCommand(): Promise<CommandStruct | undefined>;
-  abstract environment(): Promise<Record<string, string>>;
+  abstract validateAgentCommand(): Promise<CommandStruct | undefined> | void;
+  abstract initCommand(): Promise<CommandStruct> | void;
+  abstract verifyCommand(): Promise<CommandStruct | undefined> | void;
+  abstract environment(): Promise<Record<string, string>> | Record<string, string>;
   abstract available(): Promise<boolean>;
 }

@@ -1,7 +1,7 @@
+import NodeNoInstaller from './NodeNoInstaller';
 import AgentInstaller from './agentInstaller';
 import GradleInstaller from './gradleInstaller';
 import MavenInstaller from './mavenInstaller';
-import { NpmInstaller, YarnInstaller } from './javaScriptAgentInstaller';
 import { PipInstaller, PipenvInstaller, PoetryInstaller } from './pythonAgentInstaller';
 import { BundleInstaller } from './rubyAgentInstaller';
 import chalk from 'chalk';
@@ -15,11 +15,10 @@ export const INSTALLERS: readonly AgentInstallerConstructor[] = [
   BundleInstaller,
   GradleInstaller,
   MavenInstaller,
-  NpmInstaller,
+  NodeNoInstaller,
   PipInstaller,
   PipenvInstaller,
   PoetryInstaller,
-  YarnInstaller,
 ];
 
 export const INSTALLER_NAMES: readonly string[] = INSTALLERS.map((installer) =>
