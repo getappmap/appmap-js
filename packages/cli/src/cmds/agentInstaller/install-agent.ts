@@ -112,8 +112,18 @@ const _handler = async (
   try {
     const projects = await getProjects(ui, installers, directory, true, projectType);
 
+    const noopsInvoked = new Set<string>();
     for (let i = 0; i < projects.length; i++) {
       const project = projects[i];
+      if (project.selectedInstaller?.isNoop) {
+        // make sure we're not duplicating messages
+        if (noopsInvoked.has(project.selectedInstaller.name)) continue;
+        // just give the installer a chance to print a message
+        await project.selectedInstaller.installAgent(ui);
+        noopsInvoked.add(project.selectedInstaller.name);
+        continue;
+      }
+
       const installProcedure = new AgentInstallerProcedure(
         project.selectedInstaller as AgentInstaller,
         project.path

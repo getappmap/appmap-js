@@ -1,3 +1,5 @@
+import assert from 'node:assert';
+
 import chalk from 'chalk';
 import fs from 'fs';
 import Yargs from 'yargs';
@@ -71,6 +73,7 @@ export default class AgentInstallerProcedure extends AgentProcedure {
 
       if (!useExistingAppMapYml) {
         const initCommand = await this.installer.initCommand();
+        assert(initCommand);
         const { stdout } = await run(initCommand);
         const initCommandOutput = JSON.parse(stdout);
         const recommendedConfig = (load(initCommandOutput.configuration.contents) as any) || {};

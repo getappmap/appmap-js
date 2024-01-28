@@ -1,4 +1,3 @@
-import assert from 'assert';
 import chalk from 'chalk';
 import { promises as fs, constants as fsConstants } from 'fs';
 
@@ -7,9 +6,6 @@ import { AbortError, ChildProcessError, InvalidPathError } from '../errors';
 import InstallerUI from './installerUI';
 import AgentInstaller from './agentInstaller';
 import getAvailableInstallers from './installers';
-import { YarnInstaller } from './javaScriptAgentInstaller';
-import CommandStruct, { CommandReturn } from './commandStruct';
-import { run } from './commandRunner';
 
 export interface ProjectConfiguration {
   name: string;
@@ -17,6 +13,7 @@ export interface ProjectConfiguration {
   availableInstallers: AgentInstaller[];
   selectedInstaller?: AgentInstaller;
   writeAppMapYaml?: boolean;
+  noopOnly?: boolean;
 }
 
 async function resolveSelectedInstallers(
@@ -85,110 +82,6 @@ async function resolveSelectedInstallers(
   }
 }
 
-function yarn1Workspaces(info: unknown): [string, string][] {
-  assert(info && typeof info === 'object');
-  return Object.entries(info).map(([name, data]: [string, unknown]) => {
-    assert(data && typeof data === 'object');
-    assert('location' in data);
-    assert(typeof data['location'] === 'string');
-    return [name, data['location']];
-  });
-}
-// With yarn 1:
-// - if there's no "workspaces" key in package.json we get the following error:
-//   $ yarn workspaces info --json
-//   yarn workspaces v1.22.19
-//   error Cannot find the root of your workspace - are you sure you're currently in a workspace?
-//   info Visit https://yarnpkg.com/en/docs/cli/workspaces for documentation about this command.
-// - if there is a "workspaces" key in package.json the output contains text
-//   outside of json. Remove it:
-//   $ yarn workspaces info --json
-//   yarn workspaces v1.22.19
-//   {
-//    "workspace-a": {
-//      "location": "workspace-a",
-//      "workspaceDependencies": [],
-//      "mismatchedWorkspaceDependencies": []
-//    }
-//   }
-//   Done in 0.02s.
-async function getYarnSubprojectsVersionOne(
-  dir: string,
-  installer: YarnInstaller,
-  subprojects: ProjectConfiguration[]
-) {
-  const cmd = new CommandStruct('yarn', ['workspaces', 'info', '--json'], installer.path);
-  let output: CommandReturn;
-  try {
-    output = await run(cmd);
-  } catch (e) {
-    if (ChildProcessError.check(e)) return;
-    throw e;
-  }
-
-  // Remove any text before and after JSON
-  let lines = output.stdout.split('\n');
-  let outputClean = '';
-  for (const line of lines)
-    if (!(line.startsWith('yarn workspaces v') || line.startsWith('Done in '))) outputClean += line;
-
-  for (const [name, location] of yarn1Workspaces(JSON.parse(outputClean))) {
-    const subProjectPath = join(dir, location);
-    const subProjectName = basename(name);
-    const projectConfiguration: ProjectConfiguration = {
-      name: subProjectName,
-      path: subProjectPath,
-      // must set the new path in the installer
-      availableInstallers: [new YarnInstaller(subProjectPath)],
-    };
-    subprojects.push(projectConfiguration);
-  }
-}
-
-async function getYarnSubprojectsVersionAboveOne(
-  dir: string,
-  installer: YarnInstaller,
-  subprojects: ProjectConfiguration[]
-) {
-  const cmd = new CommandStruct('yarn', ['workspaces', 'list', '--json'], installer.path);
-  const output = await run(cmd);
-
-  for (const line of output.stdout.split('\n')) {
-    if (line !== '') {
-      const yarnWorkspace = JSON.parse(line);
-      const subProjectPath = join(dir, yarnWorkspace['location']);
-      const subProjectName = basename(yarnWorkspace['name']);
-      const projectConfiguration: ProjectConfiguration = {
-        name: subProjectName,
-        path: subProjectPath,
-        // must set the new path in the installer
-        availableInstallers: [new YarnInstaller(subProjectPath)],
-      };
-      subprojects.push(projectConfiguration);
-    }
-  }
-}
-
-export async function getYarnSubprojects(
-  dir: string,
-  availableInstallers: AgentInstaller[]
-): Promise<ProjectConfiguration[]> {
-  let subprojects: ProjectConfiguration[] = [];
-
-  for (const installer of availableInstallers) {
-    if (installer.name === 'yarn') {
-      const yarnInstaller = installer as YarnInstaller;
-      if (await yarnInstaller.isYarnVersionOne()) {
-        await getYarnSubprojectsVersionOne(dir, yarnInstaller, subprojects);
-      } else {
-        await getYarnSubprojectsVersionAboveOne(dir, yarnInstaller, subprojects);
-      }
-    }
-  }
-
-  return subprojects;
-}
-
 /**
  * Identifies subprojects and returns an array of ProjectConfigurations if the user chooses to
  * install to them. If the user opts not to install to any subprojects, undefined is returned. This
@@ -201,69 +94,63 @@ export async function getYarnSubprojects(
 async function getSubprojects(
   ui: InstallerUI,
   dir: string,
-  rootHasInstaller: boolean,
-  availableInstallers: AgentInstaller[]
+  rootHasInstaller: boolean
 ): Promise<ProjectConfiguration[] | undefined> {
-  let subprojects: ProjectConfiguration[] = [];
-  const yarnSubprojects: ProjectConfiguration[] = await getYarnSubprojects(
-    dir,
-    availableInstallers
-  );
+  // read directory to detect sub-projects
+  const ents = await fs.readdir(dir, { withFileTypes: true });
+  const subprojects = (
+    await Promise.all(
+      ents.map(async (ent): Promise<ProjectConfiguration | null> => {
+        if (!ent.isDirectory()) {
+          return null;
+        }
 
-  if (yarnSubprojects.length > 0) {
-    // detect yarn packages as sub-projects
-    subprojects = yarnSubprojects;
-  } else {
-    // read directory to detect sub-projects
-    const ents = await fs.readdir(dir, { withFileTypes: true });
-    subprojects = (
-      await Promise.all(
-        ents.map(async (ent): Promise<ProjectConfiguration | null> => {
-          if (!ent.isDirectory()) {
-            return null;
-          }
+        const subProjectPath = join(dir, ent.name);
+        try {
+          await fs.access(subProjectPath, fsConstants.R_OK);
+        } catch {
+          // This directory is not readable. Ignore it.
+          return null;
+        }
 
-          const subProjectPath = join(dir, ent.name);
-          try {
-            await fs.access(subProjectPath, fsConstants.R_OK);
-          } catch {
-            // This directory is not readable. Ignore it.
-            return null;
-          }
+        const installers = await getAvailableInstallers(subProjectPath);
+        if (!installers.length) {
+          return null;
+        }
 
-          const installers = await getAvailableInstallers(subProjectPath);
-          if (!installers.length) {
-            return null;
-          }
-
-          return {
-            name: ent.name,
-            path: subProjectPath,
-            availableInstallers: installers,
-          };
-        })
-      )
-    ).filter(Boolean) as ProjectConfiguration[];
-  }
+        return {
+          name: ent.name,
+          path: subProjectPath,
+          availableInstallers: installers,
+          noopOnly: installers.every(({ isNoop }) => isNoop),
+        };
+      })
+    )
+  ).filter(Boolean) as ProjectConfiguration[];
 
   if (!subprojects.length) {
     // There's nothing that we can do here.
     return undefined;
   }
 
-  const chooseSubprojects = await ui.chooseSubprojects(rootHasInstaller);
-  if (!chooseSubprojects) {
-    // The user has opted not to continue by not selecting subprojects.
-    return undefined;
-  }
+  // don't bother the user to select noop-only projects...
+  const selectableSubprojects = subprojects.filter(({ noopOnly }) => !noopOnly);
+
+  if (selectableSubprojects.length > 0 && !(await ui.chooseSubprojects(rootHasInstaller))) return;
 
   const subProjectConfigurations: ProjectConfiguration[] = [];
-  const selectedSubprojects = await ui.selectSubprojects(subprojects.map(({ name }) => name));
+
+  const selectedSubprojects = await ui.selectSubprojects(
+    selectableSubprojects.map(({ name }) => name)
+  );
   if (selectedSubprojects.length > 0) {
     subProjectConfigurations.push(
       ...subprojects.filter(({ name }) => selectedSubprojects.includes(name))
     );
   }
+
+  // ...but add them unconditionally so the called sees them
+  subProjectConfigurations.push(...subprojects.filter(({ noopOnly }) => noopOnly));
 
   return subProjectConfigurations;
 }
@@ -278,11 +165,11 @@ export async function getProjects(
   let projectConfigurations: ProjectConfiguration[] = [];
 
   const availableInstallers = await getAvailableInstallers(dir);
-  const rootHasInstaller = !!availableInstallers.length;
+  const rootHasInstaller = !!availableInstallers.find(({ isNoop }) => !isNoop);
   if (allowMulti) {
-    const subprojects = await getSubprojects(ui, dir, rootHasInstaller, availableInstallers);
+    const subprojects = await getSubprojects(ui, dir, rootHasInstaller);
     if (subprojects?.length) {
-      projectConfigurations.push(...(subprojects as ProjectConfiguration[]));
+      projectConfigurations.push(...subprojects);
     } else if (subprojects?.length === 0) {
       throw new InvalidPathError(
         'No sub-projects were chosen, so there is nothing to do. Exiting.',
@@ -299,6 +186,7 @@ export async function getProjects(
           name: basename(dir),
           path: resolve(dir),
           availableInstallers,
+          noopOnly: !rootHasInstaller,
         },
       ];
     } else {

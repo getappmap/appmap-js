@@ -12,7 +12,6 @@ import AgentInstallerProcedure from '../../../src/cmds/agentInstaller/agentInsta
 import * as commandRunner from '../../../src/cmds/agentInstaller/commandRunner';
 import CommandStruct, { CommandReturn } from '../../../src/cmds/agentInstaller/commandStruct';
 import * as ProjectConfiguration from '../../../src/cmds/agentInstaller/projectConfiguration';
-import { getYarnSubprojects } from '../../../src/cmds/agentInstaller/projectConfiguration';
 
 import UI from '../../../src/cmds/userInteraction';
 import { ValidationError } from '../../../src/cmds/errors';
@@ -26,7 +25,6 @@ import { dump } from 'js-yaml';
 
 import * as openTicket from '../../../src/lib/ticket/openTicket';
 import { withStubbedTelemetry } from '../../helper';
-import { YarnInstaller } from '../../../src/cmds/agentInstaller/javaScriptAgentInstaller';
 import assert from 'node:assert';
 
 const fixtureDir = path.join(__dirname, '..', 'fixtures');
@@ -34,7 +32,9 @@ tmp.setGracefulCleanup();
 
 const invokeCommand = (
   projectDir: string,
-  evalResults: (err: Error | undefined, argv: any, output: string) => void
+  evalResults: (err: Error | undefined, argv: any, output: string) => void = (err) => {
+    if (err) throw err;
+  }
 ) => {
   const debugSwitch: string = ''; // to debug, set debugSwitch to -v
 
@@ -43,16 +43,22 @@ const invokeCommand = (
     sinon.stub(UI, 'status').set(() => {});
   }
 
-  return yargs
-    .command(require('../../../src/cmds/agentInstaller/install-agent').default)
-    .option('verbose', {
-      alias: 'v',
-      type: 'boolean',
-      description: 'Run with verbose logging',
-    })
-    .parse(`install-agent ${debugSwitch} -d ${projectDir}`, {}, (err, argv, output) => {
-      evalResults(err, argv, output);
-    });
+  return new Promise((resolve, reject) =>
+    yargs
+      .command(require('../../../src/cmds/agentInstaller/install-agent').default)
+      .option('verbose', {
+        alias: 'v',
+        type: 'boolean',
+        description: 'Run with verbose logging',
+      })
+      .parse(`install-agent ${debugSwitch} -d ${projectDir}`, {}, (err, argv, output) => {
+        try {
+          resolve(evalResults(err, argv, output));
+        } catch (err) {
+          reject(err);
+        }
+      })
+  );
 };
 
 describe('install sub-command', () => {
@@ -751,337 +757,39 @@ appmap_dir: tmp/appmap
   });
 
   describe('A JavaScript project', () => {
-    const jsTestE2E = async (
-      installerName: string,
-      getVersion: (command: CommandStruct) => Promise<CommandReturn>,
-      getYarnWorkspaces: (command: CommandStruct) => Promise<CommandReturn>,
-      installAgent: (command: CommandStruct) => Promise<CommandReturn>,
-      initAgent: (command: CommandStruct) => Promise<CommandReturn>,
-      validateAgent: (command: CommandStruct) => Promise<CommandReturn>,
-      evalResults: (err: Error | undefined, argv: any, output: string) => void,
-      checkCurrentConfig: (command: CommandStruct) => Promise<CommandReturn>
-    ) => {
-      let callIdx = 0;
-      if (installerName === 'yarn') {
-        sinon
-          .stub(commandRunner, 'run')
-          .onCall(callIdx++)
-          .callsFake(getVersion)
-          .onCall(callIdx++)
-          .callsFake(getYarnWorkspaces)
-          .onCall(callIdx++)
-          // why must installAgent be here and twice for the yarn test to pass?
-          .callsFake(installAgent)
-          .onCall(callIdx++)
-          .callsFake(checkCurrentConfig)
-          .onCall(callIdx++)
-          .callsFake(installAgent)
-          .onCall(callIdx++)
-          .callsFake(initAgent)
-          .onCall(callIdx++)
-          .callsFake(validateAgent)
-          .onCall(callIdx++);
-      } else {
-        sinon
-          .stub(commandRunner, 'run')
-          .onCall(callIdx++)
-          .callsFake(getVersion)
-          .onCall(callIdx++)
-          .callsFake(checkCurrentConfig)
-          .onCall(callIdx++)
-          .callsFake(installAgent)
-          .onCall(callIdx++)
-          .callsFake(initAgent)
-          .onCall(callIdx++)
-          .callsFake(validateAgent)
-          .onCall(callIdx++);
-      }
+    const docUrl = 'https://appmap.io/docs/reference/appmap-node';
 
-      return invokeCommand(projectDir, evalResults);
-    };
+    it('tells the user there is no need for installation', async () => {
+      fse.writeFileSync(path.join(projectDir, 'package.json'), '{}');
 
-    const nodeVersion = (cmdStruct: CommandStruct) => {
-      expect(cmdStruct.program).toEqual('node');
-      expect(cmdStruct.args).toEqual(['--version']);
-      return Promise.resolve({ stdout: 'v16.11.1', stderr: '' });
-    };
+      const log = jest.spyOn(console, 'log');
+      await invokeCommand(projectDir);
 
-    const providedConfig = `name: fake-app
-packages:
-  - path: lib
-`;
-
-    const expectedConfig = `name: fake-app
-packages:
-  - path: lib
-language: javascript
-appmap_dir: tmp/appmap
-`;
-
-    const yarnVersion = (cmdStruct: CommandStruct) => {
-      expect(cmdStruct.program).toEqual('yarn');
-      const args = cmdStruct.args;
-      expect(args).toEqual(['--version']);
-      const ret = {
-        stdout: '3.2.1',
-        stderr: '',
-      };
-      return Promise.resolve(ret);
-    };
-
-    const getYarnWorkspaces = (cmdStruct: CommandStruct) => {
-      expect(cmdStruct.program).toEqual('yarn');
-      const args = cmdStruct.args;
-      expect(args).toEqual(['workspaces', 'list', '--json']);
-      const ret = {
-        stdout: '',
-        stderr: '',
-      };
-      return Promise.resolve(ret);
-    };
-
-    const initAgent = (cmdStruct: CommandStruct) => {
-      expect(cmdStruct.program).toEqual('npx');
-      const args = cmdStruct.args;
-      expect(args).toEqual([
-        '--prefer-online',
-        '@appland/appmap-agent-js@latest',
-        'init',
-        projectDir,
-      ]);
-      const fakeConfig = `
-    {
-       "configuration": {
-         "contents": "${providedConfig.replace(/[\n]/g, '\\n')}"
-       }
-    }`;
-      const ret = { stdout: fakeConfig, stderr: '' };
-      return Promise.resolve(ret);
-    };
-
-    const validateAgent = (cmdStruct: CommandStruct) => {
-      expect(cmdStruct.program).toEqual('npx');
-      const args = cmdStruct.args;
-      expect(args).toEqual([
-        '--prefer-online',
-        '@appland/appmap-agent-js@latest',
-        'status',
-        projectDir,
-      ]);
-      const ret = { stdout: '[]', stderr: '' };
-      return Promise.resolve(ret);
-    };
-
-    describe('managed with npm', () => {
-      const projectFixture = path.join(fixtureDir, 'javascript', 'npm');
-
-      beforeEach(() => {
-        fse.copySync(projectFixture, projectDir);
-        sinon.stub(inquirer, 'prompt').resolves({ result: 'npm', confirm: true });
-      });
-
-      const checkCurrentConfig = (cmdStruct: CommandStruct) => {
-        expect(cmdStruct.program).toEqual('npm');
-        const args = cmdStruct.args;
-        expect(args).toEqual(['install', '--dry-run']);
-        const ret = { stdout: '', stderr: '' };
-        return Promise.resolve(ret);
-      };
-
-      const installAgent = (cmdStruct: CommandStruct) => {
-        expect(cmdStruct.program).toEqual('npm');
-        expect(cmdStruct.args).toEqual(['install', '--saveDev', '@appland/appmap-agent-js@latest']);
-        const ret = { stdout: '', stderr: '' };
-        return Promise.resolve(ret);
-      };
-
-      it('installs as expected', async () => {
-        expect.assertions(12);
-        const evalResults = (err: Error | undefined, argv: any, output: string) => {
-          expect(err).toBeNull();
-
-          const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
-            encoding: 'utf-8',
-          });
-          expect(actualConfig).toEqual(expectedConfig);
-        };
-
-        await jsTestE2E(
-          'npm',
-          nodeVersion,
-          getYarnWorkspaces,
-          installAgent,
-          initAgent,
-          validateAgent,
-          evalResults,
-          checkCurrentConfig
-        );
-      });
-
-      it('fails when validation fails', async () => {
-        expect.assertions(9);
-        const msg = 'failValidate, validation failed';
-        const failValidate = () => Promise.reject(new Error(msg));
-        const evalResults = (err: Error | undefined, argv: any, output: string) => {
-          expect(err?.message).toMatch(msg);
-        };
-        await jsTestE2E(
-          'npm',
-          nodeVersion,
-          getYarnWorkspaces,
-          installAgent,
-          initAgent,
-          failValidate,
-          evalResults,
-          checkCurrentConfig
-        );
-      });
+      const output = log.mock.calls.map(([x]) => x).join('\n');
+      expect(output).toContain('No AppMap installation needed');
+      expect(output).toContain(docUrl);
     });
 
-    describe('managed with yarn', () => {
-      const projectFixture = path.join(fixtureDir, 'javascript', 'yarn');
+    it("doesn't bother the user to select subprojects", async () => {
+      fse.writeFileSync(path.join(projectDir, 'package.json'), '{}');
+      fse.mkdirSync(path.join(projectDir, 'sub1'));
+      fse.mkdirSync(path.join(projectDir, 'sub2'));
+      fse.writeFileSync(path.join(projectDir, 'sub1', 'package.json'), '{}');
+      fse.writeFileSync(path.join(projectDir, 'sub2', 'package.json'), '{}');
 
-      beforeEach(() => {
-        fse.copySync(projectFixture, projectDir);
-        sinon.stub(inquirer, 'prompt').resolves({ result: 'yarn', confirm: true });
-      });
+      const prompt = jest
+        .spyOn(UI, 'prompt')
+        .mockImplementation(() => Promise.reject(new Error('unexpected prompt')));
+      const log = jest.spyOn(console, 'log');
+      await invokeCommand(projectDir);
 
-      const checkCurrentConfig = (cmdStruct: CommandStruct) => {
-        expect(cmdStruct.program).toEqual('yarn');
-        const args = cmdStruct.args;
-        expect(args).toEqual(['install', '--immutable']);
-        const ret = { stdout: '', stderr: '' };
-        return Promise.resolve(ret);
-      };
+      expect(prompt).not.toHaveBeenCalled();
 
-      const installAgent = (cmdStruct: CommandStruct) => {
-        expect(cmdStruct.program).toEqual('yarn');
-        expect(cmdStruct.args).toEqual(['add', '--dev', '@appland/appmap-agent-js@latest']);
-        const ret = { stdout: '', stderr: '' };
-        return Promise.resolve(ret);
-      };
-
-      it('installs as expected', async () => {
-        expect.assertions(15);
-        const evalResults = (err: Error | undefined, argv: any, output: string) => {
-          expect(err).toBeNull();
-
-          const actualConfig = fse.readFileSync(path.join(projectDir, 'appmap.yml'), {
-            encoding: 'utf-8',
-          });
-          expect(actualConfig).toEqual(expectedConfig);
-        };
-
-        await jsTestE2E(
-          'yarn',
-          yarnVersion,
-          getYarnWorkspaces,
-          installAgent,
-          initAgent,
-          validateAgent,
-          evalResults,
-          checkCurrentConfig
-        );
-      });
-
-      it('fails when validation fails', async () => {
-        expect.assertions(12);
-        const msg = 'failValidate, validation failed';
-        const failValidate = () => Promise.reject(new Error(msg));
-        const evalResults = (err: Error | undefined, argv: any, output: string) => {
-          expect(err?.message).toMatch(msg);
-        };
-        await jsTestE2E(
-          'yarn',
-          yarnVersion,
-          getYarnWorkspaces,
-          installAgent,
-          initAgent,
-          failValidate,
-          evalResults,
-          checkCurrentConfig
-        );
-      });
-
-      it('yarn getYarnSubprojects for yarn 1, some workspaces', async () => {
-        expect.assertions(1);
-        const projectFixture = path.join(fixtureDir, 'javascript', 'yarn_with_subprojects');
-        const installer = new YarnInstaller(projectFixture);
-        jest.spyOn(installer, 'isYarnVersionOne').mockResolvedValue(true);
-        jest.spyOn(commandRunner, 'run').mockResolvedValueOnce({
-          stdout: `{
-            "subproject_one": {
-              "location": "packages/subproject_one",
-              "workspaceDependencies": [],
-              "mismatchedWorkspaceDependencies": []
-            },
-            "subproject_two": {
-              "location": "packages/subproject_two",
-              "workspaceDependencies": [],
-              "mismatchedWorkspaceDependencies": []
-            }
-          }`,
-          stderr: '',
-        });
-        expect(await getYarnSubprojects(projectFixture, [installer])).toStrictEqual([
-          // it doesn't detect the root workspace
-          {
-            name: 'subproject_one',
-            path: join(projectFixture, 'packages/subproject_one'),
-            availableInstallers: [
-              new YarnInstaller(join(projectFixture, 'packages/subproject_one')),
-            ],
-          },
-          {
-            name: 'subproject_two',
-            path: join(projectFixture, 'packages/subproject_two'),
-            availableInstallers: [
-              new YarnInstaller(join(projectFixture, 'packages/subproject_two')),
-            ],
-          },
-        ]);
-      });
-
-      it('yarn getYarnSubprojects for yarn 2', async () => {
-        expect.assertions(1);
-
-        sinon.restore(); // undo effects of beforeEach, to wrap run() differently
-        sinon
-          .stub(commandRunner, 'run')
-          // yarn workspaces list --json
-          .resolves({
-            stdout: `{"location":".","name":"yarn_with_subprojects"}
-{"location":"packages/subproject_one","name":"subproject_one"}
-{"location":"packages/subproject_two","name":"subproject_two"}`,
-            stderr: '',
-          });
-
-        const projectFixture = path.join(fixtureDir, 'javascript', 'yarn_with_subprojects');
-        const installer = new YarnInstaller(projectFixture);
-        sinon.stub(installer, 'isYarnVersionOne').resolves(false);
-        expect(await getYarnSubprojects(projectFixture, [installer])).toStrictEqual([
-          // it does detect the root workspace
-          {
-            name: 'yarn_with_subprojects',
-            path: projectFixture,
-            availableInstallers: [new YarnInstaller(projectFixture)],
-          },
-          {
-            name: 'subproject_one',
-            path: join(projectFixture, 'packages/subproject_one'),
-            availableInstallers: [
-              new YarnInstaller(join(projectFixture, 'packages/subproject_one')),
-            ],
-          },
-          {
-            name: 'subproject_two',
-            path: join(projectFixture, 'packages/subproject_two'),
-            availableInstallers: [
-              new YarnInstaller(join(projectFixture, 'packages/subproject_two')),
-            ],
-          },
-        ]);
-      });
+      // make sure we only print the message once
+      const output = log.mock.calls.map(([x]) => x).join('\n');
+      // count occurences of docUrl in the output
+      const count = output.split(docUrl).length - 1;
+      expect(count).toEqual(1);
     });
   });
 
@@ -1304,7 +1012,9 @@ appmap_dir: tmp/appmap
       expectedStubs = [GradleInstaller.prototype, MavenInstaller.prototype].flatMap((prototype) => [
         sinon.stub(prototype, 'environment').resolves(),
         sinon.stub(prototype, 'installAgent').resolves(),
-        sinon.stub(prototype, 'initCommand').resolves(),
+        sinon
+          .stub(prototype, 'initCommand')
+          .resolves({ args: [], environment: {}, path: '', program: '' }),
         sinon.stub(prototype, 'verifyCommand').resolves(),
         sinon.stub(prototype, 'validateAgentCommand').resolves(),
       ]);
@@ -1356,130 +1066,6 @@ appmap_dir: tmp/appmap
       });
 
       // Root project exists, should default to not choosing a sub-project.
-      expect(promptStub.getCall(0).args).toMatchObject([
-        {
-          type: 'confirm',
-          message: expect.stringMatching('This directory contains sub-projects'),
-          default: false,
-        },
-      ]);
-    });
-
-    it('yarn detects sub-projects', async () => {
-      expect.assertions(2);
-      const projectFixture = path.join(fixtureDir, 'javascript', 'yarn_with_subprojects');
-      fse.copySync(projectFixture, projectDir);
-
-      let callIdx = 0;
-      sinon.restore(); // undo effects of beforeEach, to wrap run() differently
-      sinon
-        .stub(commandRunner, 'run')
-        // yarn --version
-        .onCall(callIdx++)
-        .resolves({
-          stdout: '3.2.1',
-          stderr: '',
-        })
-        // yarn workspaces list --json
-        .onCall(callIdx++)
-        .resolves({
-          stdout: `{"location":".","name":"yarn_with_subprojects"}
-{"location":"packages/subproject_one","name":"subproject_one"}
-{"location":"packages/subproject_two","name":"subproject_two"}`,
-          stderr: '',
-        })
-        // installing root project
-        .onCall(callIdx++)
-        .resolves({
-          stdout: '{"configuration": { "contents": "" }, "errors": []}',
-          stderr: '',
-        })
-        .onCall(callIdx++)
-        .resolves({
-          stdout: '', // why wasn't '{}' necessary here?
-          stderr: '',
-        })
-        .onCall(callIdx++)
-        .resolves({
-          stdout: '',
-          stderr: '',
-        })
-        // installing first sub-project
-        .onCall(callIdx++)
-        .resolves({
-          stdout: '{"configuration": { "contents": "" }, "errors": []}',
-          stderr: '',
-        })
-        .onCall(callIdx++)
-        .resolves({
-          stdout: '{}',
-          stderr: '',
-        })
-        .onCall(callIdx++)
-        .resolves({
-          stdout: '',
-          stderr: '',
-        })
-        .onCall(callIdx++)
-        .resolves({
-          stdout: '',
-          stderr: '',
-        })
-        .onCall(callIdx++)
-        .resolves({
-          stdout: '',
-          stderr: '',
-        })
-        // installing second sub-project
-        .onCall(callIdx++)
-        .resolves({
-          stdout: '{"configuration": { "contents": "" }, "errors": []}',
-          stderr: '',
-        })
-        .onCall(callIdx++)
-        .resolves({
-          stdout: '{}',
-          stderr: '',
-        })
-        .onCall(callIdx++)
-        .resolves({
-          stdout: '',
-          stderr: '',
-        })
-        .onCall(callIdx++)
-        .resolves({
-          stdout: '',
-          stderr: '',
-        })
-        .onCall(callIdx++)
-        .resolves({
-          stdout: '',
-          stderr: '',
-        })
-        .onCall(callIdx++)
-        .resolves({
-          stdout: '{"configuration": { "contents": "" }, "errors": []}',
-          stderr: '',
-        })
-        .onCall(callIdx++)
-        .resolves({
-          stdout: '{}',
-          stderr: '',
-        });
-
-      const promptStub = sinon.stub(inquirer, 'prompt').resolves({
-        addSubprojects: true,
-        confirm: true,
-        selectedSubprojects: ['yarn_with_subprojects', 'subproject_one', 'subproject_two'],
-      });
-
-      sinon.stub(UI, 'success');
-
-      await invokeCommand(projectDir, (err) => {
-        expect(err).toBeNull();
-      });
-
-      // There's more than one sub-project, should default to not choosing a sub-project.
       expect(promptStub.getCall(0).args).toMatchObject([
         {
           type: 'confirm',
