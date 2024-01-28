@@ -1,3 +1,5 @@
+import { isNativeError } from 'node:util/types';
+
 import Yargs from 'yargs';
 import { promises as fs } from 'fs';
 import {
@@ -28,19 +30,20 @@ interface InstallCommandOptions {
   buildFile?: string;
 }
 
-class InstallerError {
+class InstallerError extends Error {
   readonly error: Error;
   readonly log: string;
 
   constructor(error: unknown, readonly duration: number, readonly project?: ProjectConfiguration) {
-    this.error = error instanceof Error ? error : new Error(String(error));
+    super();
+    this.error = isNativeError(error) ? error : new Error(String(error));
     this.log = ProcessLog.consumeBuffer();
   }
 
   get message(): string {
     if (this.error instanceof ValidationError || this.error instanceof ChildProcessError) {
       return this.error.message;
-    } else if (this.error instanceof Error) {
+    } else if (isNativeError(this.error)) {
       return this.error.stack || String(this.error);
     }
 
