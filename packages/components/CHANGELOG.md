@@ -1,3 +1,18 @@
+# [@appland/components-v3.29.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.28.0...@appland/components-v3.29.0) (2024-01-30)
+
+
+### Bug Fixes
+
+* Search status only renders for the first prompt ([5791569](https://github.com/getappmap/appmap-js/commit/57915695dba43274772a9e236be1c3b82478f8c8))
+* The chat can be resized in an expected manner ([011d4cd](https://github.com/getappmap/appmap-js/commit/011d4cdd4abfccdd459844abcc50303dbdfd57a2))
+
+
+### Features
+
+* Chat views now render a cursor during streaming ([f821145](https://github.com/getappmap/appmap-js/commit/f82114501e6d6aa6d7580ec5be4cfc4f9b0a4f10))
+* Display search instructions and status ([cf37937](https://github.com/getappmap/appmap-js/commit/cf37937d2560fbb5cdf457812fc4e5b9fb4f0c91))
+* Display search progress inline with response ([afb63de](https://github.com/getappmap/appmap-js/commit/afb63dec45dcd90db49a550bc73914063e8ebd6f))
+
 # [@appland/components-v3.28.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.27.4...@appland/components-v3.28.0) (2024-01-30)
 
 
