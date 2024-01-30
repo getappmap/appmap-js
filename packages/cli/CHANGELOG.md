@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.121.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.120.0...@appland/appmap-v3.121.0) (2024-01-30)
+
+
+### Features
+
+* Direct users to appmap-node in the installer ([eb9dd61](https://github.com/getappmap/appmap-js/commit/eb9dd616ee8ea67baba41584bf665814da0239fa)), closes [#1566](https://github.com/getappmap/appmap-js/issues/1566)
+
 # [@appland/appmap-v3.120.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.119.0...@appland/appmap-v3.120.0) (2024-01-30)
 
 
