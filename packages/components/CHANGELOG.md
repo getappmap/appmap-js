@@ -1,3 +1,10 @@
+# [@appland/components-v3.28.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.27.4...@appland/components-v3.28.0) (2024-01-30)
+
+
+### Features
+
+* Update IDE guide to use appmap-node ([8fabd9d](https://github.com/getappmap/appmap-js/commit/8fabd9d45b114d5649f47a0b5c9730b9bd2aa842)), closes [#1533](https://github.com/getappmap/appmap-js/issues/1533)
+
 # [@appland/components-v3.27.4](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.27.3...@appland/components-v3.27.4) (2024-01-24)
 
 
