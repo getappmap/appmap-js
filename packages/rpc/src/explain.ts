@@ -16,6 +16,7 @@ export namespace ExplainRpc {
 
   export type ExplainOptions = {
     question: string;
+    codeSelection?: string;
     threadId?: string;
   };
 
