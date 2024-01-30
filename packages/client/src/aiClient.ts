@@ -22,6 +22,18 @@ export type Callbacks = {
   onError?: (error: Error) => void;
 };
 
+type UserInput = {
+  question: string;
+  codeSelection?: string;
+};
+
+type Prompt = {
+  prompt: string;
+  codeSelection?: string;
+  threadId?: string;
+  tool?: string;
+};
+
 export default class AIClient {
   constructor(private readonly socket: Socket, private readonly callbacks: Callbacks) {
     this.socket.on('exception', (error: Error) => {
@@ -83,12 +95,15 @@ export default class AIClient {
     }
   }
 
-  inputPrompt(input: string, options?: InputPromptOptions): void {
-    this.socket.emit('prompt', {
-      prompt: input,
+  inputPrompt(input: string | UserInput, options?: InputPromptOptions): void {
+    const question = typeof input === 'string' ? input : input.question;
+    const prompt: Prompt = {
+      prompt: question,
+      codeSelection: typeof input === 'string' ? undefined : input.codeSelection,
       threadId: options?.threadId,
       tool: options?.tool,
-    });
+    };
+    this.socket.emit('prompt', prompt);
   }
 
   panic(error: Error): void {

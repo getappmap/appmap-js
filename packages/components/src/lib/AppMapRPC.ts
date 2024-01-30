@@ -2,6 +2,17 @@ import { browserClient, reportError } from './RPC';
 
 import { EventEmitter } from 'events';
 
+type ExplainOptions = {
+  question: string;
+  codeSelection?: string;
+  threadId?: string;
+};
+
+type UserInput = {
+  question: string;
+  codeSelection?: string;
+};
+
 export class ExplainRequest extends EventEmitter {
   client: any;
 
@@ -11,11 +22,25 @@ export class ExplainRequest extends EventEmitter {
     this.client = client;
   }
 
-  explain(input: string, threadId?: string): Promise<string> {
+  explain(input: string | UserInput, threadId?: string): Promise<string> {
+    let question: string;
+    let codeSelection: string | undefined;
+    if (typeof input === 'string') {
+      question = input;
+    } else {
+      question = input.question;
+      codeSelection = input.codeSelection;
+    }
+    const explainOptions: ExplainOptions = {
+      question,
+      threadId,
+      codeSelection,
+    };
+
     return new Promise<string>((resolve, reject) => {
       this.client.request(
         'explain',
-        { threadId, question: input },
+        explainOptions,
         (err: any, error: any, response: { userMessageId: string; threadId: string }) => {
           if (err || error) return reportError(reject, err, error);
 

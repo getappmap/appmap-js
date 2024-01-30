@@ -1,6 +1,6 @@
 <template>
-  <div class="code-snippet">
-    <h3>Explaining code snippet:</h3>
+  <div class="code-selection">
+    <h3>Explaining code selection:</h3>
     <div class="code">
       <pre>
         {{ code }}
@@ -10,7 +10,7 @@
 </template>
 <script lang="ts">
 export default {
-  name: 'v-code-snippet',
+  name: 'v-code-selection',
   props: {
     code: {
       type: String,
@@ -21,7 +21,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.code-snippet {
+.code-selection {
   margin-top: 1rem;
   margin-bottom: 1rem;
   padding: 1rem;

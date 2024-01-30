@@ -15,6 +15,13 @@
         New chat
       </v-button>
     </div>
+    <v-code-selection
+      v-if="codeSelection"
+      ref="vcode-snippet"
+      class="chat-code-snippet"
+      :code="codeSelection"
+    >
+    </v-code-selection>
     <div class="messages" data-cy="messages" ref="messages" @scroll="manageScroll">
       <v-user-message
         v-for="(message, i) in messages"
@@ -63,6 +70,7 @@
 import Vue from 'vue';
 import VUserMessage from '@/components/chat/UserMessage.vue';
 import VChatInput from '@/components/chat/ChatInput.vue';
+import VCodeSelection from '@/components/chat-search/CodeSelection.vue';
 import VSuggestionGrid from '@/components/chat/SuggestionGrid.vue';
 import VAppMapNavieLogo from '@/assets/appmap-full-logo.svg';
 import VButton from '@/components/Button.vue';
@@ -129,6 +137,7 @@ export default {
   components: {
     VUserMessage,
     VChatInput,
+    VCodeSelection,
     VSuggestionGrid,
     VAppMapNavieLogo,
     VButton,
@@ -137,6 +146,10 @@ export default {
     // Initial question to ask
     question: {
       type: String,
+    },
+    codeSelection: {
+      type: String,
+      required: false,
     },
     sendMessage: {
       type: Function, // UserMessageHandler

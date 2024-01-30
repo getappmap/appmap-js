@@ -6,21 +6,15 @@
     @mouseleave="stopResizing"
   >
     <div class="chat-container" data-cy="resize-left" ref="chatContainer">
-      <v-code-snippet
-        v-if="codeSnippet"
-        ref="vcode-snippet"
-        class="chat-code-snippet"
-        :code="codeSnippet"
-      >
-      </v-code-snippet>
       <v-chat
         class="chat-search-chat"
         ref="vchat"
         :send-message="sendMessage"
         :status-label="searchStatusLabel"
-        :disable-suggestions="codeSnippet !== undefined"
+        :disable-suggestions="codeSelection !== undefined"
         @clear="clear"
         :question="question"
+        :code-selection="codeSelection"
       />
     </div>
     <div
@@ -113,7 +107,6 @@
 <script lang="ts">
 //@ts-nocheck
 import VChat from '@/components/chat/Chat.vue';
-import VCodeSnippet from '@/components/chat-search/CodeSnippet.vue';
 import VAccordion from '@/components/Accordion.vue';
 import VInstructions from '@/components/chat-search/Instructions.vue';
 import VMatchInstructions from '@/components/chat-search/MatchInstructions.vue';
@@ -127,7 +120,6 @@ export default {
   name: 'v-chat-search',
   components: {
     VChat,
-    VCodeSnippet,
     VAppMap,
     VAccordion,
     VInstructions,
@@ -139,7 +131,7 @@ export default {
     question: {
       type: String,
     },
-    codeSnippet: {
+    codeSelection: {
       type: String,
     },
     appmapRpcPort: {
@@ -322,7 +314,12 @@ export default {
           }
         });
         this.ask.on('complete', onComplete);
-        this.ask.explain(message, this.$refs.vchat.threadId).catch(onError);
+        this.ask
+          .explain(
+            { question: message, codeSelection: this.codeSelection },
+            this.$refs.vchat.threadId
+          )
+          .catch(onError);
       });
     },
     async loadAppMapStats() {
@@ -435,6 +432,7 @@ $border-color: darken($gray4, 10%);
   .instructions {
     padding: 0 1rem;
     margin: 1rem auto;
+    min-width: 20rem;
   }
 
   .search-container {

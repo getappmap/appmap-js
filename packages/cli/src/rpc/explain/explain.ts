@@ -28,6 +28,7 @@ export default class Explain extends EventEmitter {
   constructor(
     public appmapDir: string,
     public question: string,
+    public codeSelection: string | undefined,
     public status: ExplainRpc.ExplainStatusResponse
   ) {
     super();
@@ -73,7 +74,10 @@ export default class Explain extends EventEmitter {
           self.emit('error', rpcError);
         },
       })
-    ).inputPrompt(this.question, { threadId: self.status.threadId, tool: 'explain' });
+    ).inputPrompt(
+      { question: this.question, codeSelection: this.codeSelection },
+      { threadId: self.status.threadId, tool: 'explain' }
+    );
   }
 
   async searchContext(data: SearchContextOptions): Promise<SearchContextResponse> {
@@ -117,13 +121,14 @@ export default class Explain extends EventEmitter {
 async function explain(
   appmapDir: string,
   question: string,
+  codeSelection: string | undefined,
   threadId: string | undefined
 ): Promise<ExplainRpc.ExplainResponse> {
   const status: ExplainRpc.ExplainStatusResponse = {
     step: ExplainRpc.Step.NEW,
     threadId,
   };
-  const explain = new Explain(appmapDir, question, status);
+  const explain = new Explain(appmapDir, question, codeSelection, status);
   return new Promise<ExplainRpc.ExplainResponse>((resolve, reject) => {
     let isFirst = true;
 
@@ -155,7 +160,7 @@ const explainHandler: (
   return {
     name: ExplainRpc.ExplainFunctionName,
     handler: async (options: ExplainRpc.ExplainOptions) =>
-      await explain(appmapDir, options.question, options.threadId),
+      await explain(appmapDir, options.question, options.codeSelection, options.threadId),
   };
 };
 
