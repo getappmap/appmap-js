@@ -18,6 +18,12 @@ export default {
       },
       immediate: true,
     },
+    apiUrl: {
+      handler() {
+        this.updateClientConfiguration();
+      },
+      immediate: true,
+    },
   },
   methods: {
     updateClientConfiguration() {
