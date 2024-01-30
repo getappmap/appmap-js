@@ -5,6 +5,20 @@ import petclinicData from './data/java_scenario.json';
 import longPackageData from './data/long-package.appmap.json';
 import savedFilters from './data/saved_filters.js';
 
+const codeSelection = `class UsersController < ApplicationController
+  before_action :correct_user,   only: [:edit, :update]
+  before_action :admin_user,     only: :destroy
+  
+  def index
+    @users = User.where(activated: true).paginate(page: params[:page])
+  end
+  
+  def show
+    @user = User.find(params[:id])
+    redirect_to root_url and return unless @user.activated?
+  end
+`;
+
 export default {
   title: 'Pages/ChatSearch',
   component: VChatSearch,
@@ -18,13 +32,22 @@ export const ChatSearch = (args, { argTypes }) => ({
 });
 ChatSearch.args = {};
 
+export const ChatSearchWithCodeSelection = (args, { argTypes }) => ({
+  props: Object.keys(argTypes),
+  components: { VChatSearch },
+  template: `<v-chat-search v-bind="$props"></v-chat-search>`,
+});
+ChatSearchWithCodeSelection.args = {
+  codeSelection,
+};
+
 export const ChatSearchMock = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VChatSearch },
   template: `<v-chat-search v-bind="$props"></v-chat-search>`,
 });
 
-export const ChatSearchMockWithCodeSnippet = (args, { argTypes }) => ({
+export const ChatSearchMockWithCodeSelection = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VChatSearch },
   template: `<v-chat-search v-bind="$props"></v-chat-search>`,
@@ -189,22 +212,8 @@ ChatSearchMock.args = {
   appmapRpcFn: nonEmptyMockRpc,
 };
 
-const codeSnippet = `class UsersController < ApplicationController
-  before_action :correct_user,   only: [:edit, :update]
-  before_action :admin_user,     only: :destroy
-  
-  def index
-    @users = User.where(activated: true).paginate(page: params[:page])
-  end
-  
-  def show
-    @user = User.find(params[:id])
-    redirect_to root_url and return unless @user.activated?
-  end
-`;
-
-ChatSearchMockWithCodeSnippet.args = {
-  codeSnippet,
+ChatSearchMockWithCodeSelection.args = {
+  codeSelection,
   appmapRpcFn: nonEmptyMockRpc,
   savedFilters,
 };
