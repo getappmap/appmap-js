@@ -149,7 +149,7 @@ async function getSubprojects(
     );
   }
 
-  // ...but add them unconditionally so the called sees them
+  // ...but add them unconditionally so the caller sees them
   subProjectConfigurations.push(...subprojects.filter(({ noopOnly }) => noopOnly));
 
   return subProjectConfigurations;
