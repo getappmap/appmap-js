@@ -168,31 +168,57 @@
               </button>
             </div>
           </v-popper>
-          <v-popper-menu position="bottom right" data-cy="export-button">
+          <v-popper-menu v-if="showDownload" position="bottom left" data-cy="export-button">
             <template v-slot:icon>
-              <ExportIcon class="control-button__icon" />
+              <v-popper
+                class="hover-text-popper"
+                text="View export options"
+                placement="left"
+                text-align="left"
+              >
+                <ExportIcon class="control-button__icon" />
+              </v-popper>
             </template>
             <template v-slot:body>
               <div class="export-options">
-                <v-export-json :app-map="filteredAppMap" :view-state="viewState" ref="exportJSON">
-                  <a
-                    href="#"
-                    ref="exportJSON"
-                    @click="$refs.exportJSON.download()"
-                    data-cy="exportJSON"
-                    >Export JSON</a
-                  >
-                </v-export-json>
-                <v-download-sequence-diagram
-                  ref="exportSVG"
-                  v-if="showDownload"
-                  text="Export in SVG format"
-                >
-                  <a href="#" @click="$refs.exportSVG.download()" data-cy="exportSVG">Export SVG</a>
-                </v-download-sequence-diagram>
+                <div class="export-options__header">Export as...</div>
+                <div class="export-options__body">
+                  <v-export-json :app-map="filteredAppMap" :view-state="viewState" ref="exportJSON">
+                    <button
+                      ref="exportJSON"
+                      @click="$refs.exportJSON.download()"
+                      data-cy="exportJSON"
+                    >
+                      JSON
+                    </button>
+                  </v-export-json>
+                  <v-download-sequence-diagram ref="exportSVG" text="Export in SVG format">
+                    <button @click="$refs.exportSVG.download()" data-cy="exportSVG">SVG</button>
+                  </v-download-sequence-diagram>
+                </div>
               </div>
             </template>
           </v-popper-menu>
+          <v-popper
+            v-else
+            class="hover-text-popper"
+            text="Export as JSON"
+            placement="left"
+            text-align="left"
+            data-cy="export-button"
+          >
+            <v-export-json :app-map="filteredAppMap" :view-state="viewState" ref="exportJSON">
+              <button
+                class="control-button"
+                href="#"
+                ref="exportJSON"
+                @click="$refs.exportJSON.download()"
+                data-cy="exportJSON"
+              >
+                <ExportIcon class="control-button__icon" />
+              </button>
+            </v-export-json>
+          </v-popper>
           <v-popper
             v-if="hasStats"
             class="hover-text-popper hide-small"
@@ -230,7 +256,8 @@
                 :filteredAppMap="filteredAppMap"
                 :isInBrowser="isInBrowser"
                 @setState="(stateString) => setState(stateString)"
-              ></v-filter-menu>
+                class="filter"
+              />
             </template>
           </v-popper-menu>
           <v-popper class="hover-text-popper" text="Reload map" placement="left" text-align="left">
@@ -1596,15 +1623,35 @@ code {
     }
   }
 
-  .export-options a {
-    color: $white;
-    text-decoration: none;
-    font-weight: 700;
-    font-family: $appland-text-font-family;
-    font-size: 0.75rem;
-    transition: $transition;
-    &:hover {
-      color: $blue;
+  .export-options {
+    &__header {
+      padding-bottom: 0.2rem;
+      margin-bottom: 0.7rem;
+      border-bottom: 1px solid lighten($gray3, 15%);
+    }
+
+    &__body {
+      display: flex;
+      margin-bottom: 0.2rem;
+
+      button {
+        background: $light-purple;
+        color: $gray5;
+        text-decoration: none;
+        font-weight: 700;
+        font-family: $appland-text-font-family;
+        font-size: 0.75rem;
+        transition: $transition;
+        border-radius: 5px;
+        border: 0px;
+        margin: 5px;
+        padding: 10px;
+
+        &:hover {
+          background: $dark-purple;
+          cursor: pointer;
+        }
+      }
     }
   }
 

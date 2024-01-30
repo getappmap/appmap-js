@@ -77,9 +77,9 @@ context('Chat search', () => {
     // verify that the details panel is visible to ensure that the toolbar width is narrow
     cy.get('.details-panel').should('be.visible');
 
-    // verify that the stats button, refresh button, and fullscreen button are visible
+    // verify that the stats, refresh, export, and fullscreen buttons are visible
     cy.get('.control-button')
-      .should('have.length', 3)
+      .should('have.length', 4)
       .each(($el) => cy.wrap($el).should('be.visible'));
 
     // verify that the filters button is visible

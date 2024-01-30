@@ -5,9 +5,7 @@ context('Export', () => {
     });
 
     it('shows the JSON option (only)', () => {
-      cy.get('[data-cy="export-button"] .popper__button').click();
-      cy.get('.popper__content').contains('Export JSON').should('exist');
-      cy.get('.popper__content').contains('Export SVG').should('not.exist');
+      cy.get('.popper[data-cy="export-button"]').should('exist');
     });
   });
   context('from the sequence diagram view', () => {
@@ -19,8 +17,8 @@ context('Export', () => {
 
     it('shows JSON and SVG options', () => {
       cy.get('[data-cy="export-button"] .popper__button').click();
-      cy.get('.popper__content').contains('Export JSON').should('exist');
-      cy.get('.popper__content').contains('Export SVG').should('exist');
+      cy.get('.popper__content').contains('JSON').should('exist');
+      cy.get('.popper__content').contains('SVG').should('exist');
     });
   });
 });

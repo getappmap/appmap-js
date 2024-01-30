@@ -269,7 +269,6 @@ describe('VsCodeExtension.vue', () => {
     await wrapper.vm.setState(JSON.stringify(state));
     await wrapper.setProps({ allowExport: false });
 
-    await wrapper.find('[data-cy="export-button"] .popper__button').trigger('click');
     expect(wrapper.find('[data-cy="exportSVG"]').exists()).toBe(false);
   });
 
@@ -277,7 +276,7 @@ describe('VsCodeExtension.vue', () => {
     const state = { filters: { hideExternalPaths: ['node_modules', 'vendor'] } };
     await wrapper.vm.setState(JSON.stringify(state));
 
-    await wrapper.find('[data-cy="export-button"] .popper__button').trigger('click');
+    await wrapper.find('[data-cy="export-button"]').trigger('click');
     const exportJSON = wrapper.find('[data-cy="exportJSON"]');
     expect(exportJSON.exists()).toBe(true);
     await exportJSON.trigger('click');

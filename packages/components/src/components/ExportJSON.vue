@@ -2,8 +2,6 @@
   <div><slot /></div>
 </template>
 <script>
-import { serializeFilter } from '@appland/models';
-
 export default {
   name: 'v-export-json',
   props: {

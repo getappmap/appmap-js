@@ -135,7 +135,7 @@ export default {
 
     .popper--v-bottom & {
       top: 100%;
-      margin-top: 1.5rem;
+      margin-top: 0.6rem;
     }
 
     .popper--h-left & {
