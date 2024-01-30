@@ -43,7 +43,7 @@ export default async function lookupSourceCode(location: string): Promise<string
     candidate.endsWith(requestedFileName)
   );
   if (candidates.length === 0) {
-    warn(chalk.gray(`Could not find file ${requestedFileName}`));
+    warn(chalk.gray(`File not found in the workspace: ${requestedFileName}`));
     return;
   }
   candidates.sort((a, b) => a.length - b.length);
