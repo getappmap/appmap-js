@@ -54,12 +54,7 @@ export default {
     user-select: none;
     width: 100%;
     display: block;
-    padding: 0.2rem 2rem;
     text-align: left;
-  }
-
-  &__body {
-    padding: 0 2rem;
   }
 }
 </style>
