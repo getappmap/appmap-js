@@ -47,6 +47,7 @@
           v-if="selectedSearchResult"
           :allow-fullscreen="true"
           :saved-filters="savedFilters"
+          :auto-expand-details-panel="false"
           ref="vappmap"
           class="appmap"
         >
