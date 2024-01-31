@@ -27,39 +27,31 @@ export default {
     },
 
     cleanUpDOM(node) {
-      [...node.querySelectorAll('.sequence-actor')].forEach(
-        (element) => (element.style.position = 'absolute')
-      );
+      node
+        .querySelectorAll('.sequence-actor')
+        .forEach((element) => (element.style.position = 'absolute'));
 
-      [
-        ...node
-          .querySelectorAll('.hide-container')
-          .forEach((element) => (element.style.display = 'none')),
-      ];
+      node
+        .querySelectorAll('.hide-container')
+        .forEach((element) => (element.style.display = 'none'));
 
-      [
-        ...node
-          .querySelectorAll('.collapse-expand')
-          .forEach((element) => (element.style.display = 'none')),
-      ];
+      node
+        .querySelectorAll('.collapse-expand')
+        .forEach((element) => (element.style.display = 'none'));
     },
 
     restoreDOM(node) {
-      [...node.querySelectorAll('.sequence-actor')].forEach(
-        (element) => (element.style.position = 'sticky')
-      );
+      node
+        .querySelectorAll('.sequence-actor')
+        .forEach((element) => (element.style.position = 'sticky'));
 
-      [
-        ...node
-          .querySelectorAll('.hide-container')
-          .forEach((element) => (element.style.display = 'inline-block')),
-      ];
+      node
+        .querySelectorAll('.hide-container')
+        .forEach((element) => (element.style.display = 'inline-block'));
 
-      [
-        ...node
-          .querySelectorAll('.collapse-expand')
-          .forEach((element) => (element.style.display = 'inline-block')),
-      ];
+      node
+        .querySelectorAll('.collapse-expand')
+        .forEach((element) => (element.style.display = 'inline-block'));
     },
   },
 };

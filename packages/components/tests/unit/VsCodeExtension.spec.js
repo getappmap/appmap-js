@@ -24,7 +24,7 @@ describe('VsCodeExtension.vue', () => {
     default: true,
   };
 
-  beforeEach(() => {
+  beforeEach(async () => {
     wrapper = mount(VsCodeExtension, {
       stubs: {
         'v-diagram-component': true,
@@ -37,7 +37,7 @@ describe('VsCodeExtension.vue', () => {
       },
     });
     rootWrapper = createWrapper(wrapper.vm.$root);
-    wrapper.vm.loadData(data);
+    await wrapper.vm.loadData(data);
     wrapper.vm.$store.commit(RESET_FILTERS);
   });
 
@@ -260,7 +260,8 @@ describe('VsCodeExtension.vue', () => {
     const state = { currentView: 'viewSequence' };
     await wrapper.vm.setState(JSON.stringify(state));
 
-    expect(wrapper.find('[data-cy="export"]').exists()).toBe(true);
+    await wrapper.find('[data-cy="export-button"] .popper__button').trigger('click');
+    expect(wrapper.find('[data-cy="exportSVG"]').exists()).toBe(true);
   });
 
   it('hides the export button when `allowExport` is false', async () => {
@@ -268,7 +269,35 @@ describe('VsCodeExtension.vue', () => {
     await wrapper.vm.setState(JSON.stringify(state));
     await wrapper.setProps({ allowExport: false });
 
-    expect(wrapper.find('[data-cy="export"]').exists()).toBe(false);
+    expect(wrapper.find('[data-cy="exportSVG"]').exists()).toBe(false);
+  });
+
+  it('can export the current AppMap data as JSON', async () => {
+    const state = { filters: { hideExternalPaths: ['node_modules', 'vendor'] } };
+    await wrapper.vm.setState(JSON.stringify(state));
+
+    await wrapper.find('[data-cy="export-button"]').trigger('click');
+    const exportJSON = wrapper.find('[data-cy="exportJSON"]');
+    expect(exportJSON.exists()).toBe(true);
+    await exportJSON.trigger('click');
+
+    const exportJSONEventParameters = rootWrapper.emitted()['exportJSON'];
+    expect(exportJSONEventParameters).toBeArrayOfSize(1);
+    const exportedData = exportJSONEventParameters[0][0];
+
+    expect(Object.keys(exportedData).sort()).toStrictEqual([
+      'classMap',
+      'events',
+      'metadata',
+      // 'version', TODO: version should be exported, but isn't somehow.
+      'viewState',
+    ]);
+
+    expect(exportedData.events.length).toEqual(22); // 36 without hideExternalPaths
+    expect(exportedData.viewState.filters.hideExternalPaths.sort()).toEqual([
+      'node_modules',
+      'vendor',
+    ]);
   });
 
   describe('when in the browser', () => {

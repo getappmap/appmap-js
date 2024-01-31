@@ -168,23 +168,56 @@
               </button>
             </div>
           </v-popper>
+          <v-popper-menu v-if="showDownload" position="bottom left" data-cy="export-button">
+            <template v-slot:icon>
+              <v-popper
+                class="hover-text-popper"
+                text="View export options"
+                placement="left"
+                text-align="left"
+              >
+                <ExportIcon class="control-button__icon" />
+              </v-popper>
+            </template>
+            <template v-slot:body>
+              <div class="export-options">
+                <div class="export-options__header">Export as...</div>
+                <div class="export-options__body">
+                  <v-export-json :app-map="filteredAppMap" :view-state="viewState" ref="exportJSON">
+                    <button
+                      ref="exportJSON"
+                      @click="$refs.exportJSON.download()"
+                      data-cy="exportJSON"
+                    >
+                      JSON
+                    </button>
+                  </v-export-json>
+                  <v-download-sequence-diagram ref="exportSVG" text="Export in SVG format">
+                    <button @click="$refs.exportSVG.download()" data-cy="exportSVG">SVG</button>
+                  </v-download-sequence-diagram>
+                </div>
+              </div>
+            </template>
+          </v-popper-menu>
           <v-popper
-            v-if="showDownload"
+            v-else
             class="hover-text-popper"
-            text="Export in SVG format"
+            text="Export as JSON"
             placement="left"
             text-align="left"
+            data-cy="export-button"
           >
-            <v-download-sequence-diagram ref="export">
+            <v-export-json :app-map="filteredAppMap" :view-state="viewState" ref="exportJSON">
               <button
                 class="control-button"
-                @click="$refs.export.download()"
-                data-cy="export"
-                title=""
+                href="#"
+                ref="exportJSON"
+                @click="$refs.exportJSON.download()"
+                data-cy="exportJSON"
               >
                 <ExportIcon class="control-button__icon" />
               </button>
-            </v-download-sequence-diagram>
+            </v-export-json>
           </v-popper>
           <v-popper
             v-if="hasStats"
@@ -223,7 +256,8 @@
                 :filteredAppMap="filteredAppMap"
                 :isInBrowser="isInBrowser"
                 @setState="(stateString) => setState(stateString)"
-              ></v-filter-menu>
+                class="filter"
+              />
             </template>
           </v-popper-menu>
           <v-popper class="hover-text-popper" text="Reload map" placement="left" text-align="left">
@@ -347,6 +381,7 @@ import VDiagramSequence from '../components/DiagramSequence.vue';
 import VDiagramFlamegraph from '../components/DiagramFlamegraph.vue';
 import VDiagramTrace from '../components/DiagramTrace.vue';
 import VDownloadSequenceDiagram from '../components/sequence/DownloadSequenceDiagram.vue';
+import VExportJson from '../components/ExportJSON.vue';
 import VFilterMenu from '../components/FilterMenu.vue';
 import VInstructions from '../components/Instructions.vue';
 import VNotification from '../components/Notification.vue';
@@ -408,6 +443,7 @@ export default {
     VDiagramTrace,
     VDiagramFlamegraph,
     VDownloadSequenceDiagram,
+    VExportJson,
     VFilterMenu,
     VInstructions,
     VNotification,
@@ -614,6 +650,9 @@ export default {
     filteredAppMap() {
       const { appMap } = this.$store.state;
       return this.filters.filter(appMap, this.findings);
+    },
+    viewState() {
+      return this.getStateObject();
     },
     rootObjectsSuggestions() {
       const filters = this.filters;
@@ -826,21 +865,36 @@ export default {
         appMap['sequenceDiagram'] = unparseDiagram(sequenceDiagram);
       }
 
+      const viewState = appMap.viewState;
+      delete appMap.viewState;
+
       this.$store.commit(SET_APPMAP_DATA, appMap);
 
-      this.initializeSavedFilters();
+      const applyViewState = () => {
+        this.setState(viewState);
+      };
 
-      const rootEvents = this.$store.state.appMap.rootEvents();
-      const hasHttpRoot = rootEvents.some((e) => e.httpServerRequest);
-      const isUsingAppMapDefault = this.$store.state.savedFilters.some(
-        (savedFilter) => savedFilter.filterName === 'AppMap default' && savedFilter.default
-      );
+      const applySavedFilters = () => {
+        this.initializeSavedFilters();
 
-      if (isUsingAppMapDefault && !hasHttpRoot) {
-        this.$store.commit(SET_DECLUTTER_ON, {
-          declutterProperty: 'limitRootEvents',
-          value: hasHttpRoot,
-        });
+        const rootEvents = this.$store.state.appMap.rootEvents();
+        const hasHttpRoot = rootEvents.some((e) => e.httpServerRequest);
+        const isUsingAppMapDefault = this.$store.state.savedFilters.some(
+          (savedFilter) => savedFilter.filterName === 'AppMap default' && savedFilter.default
+        );
+
+        if (isUsingAppMapDefault && !hasHttpRoot) {
+          this.$store.commit(SET_DECLUTTER_ON, {
+            declutterProperty: 'limitRootEvents',
+            value: hasHttpRoot,
+          });
+        }
+      };
+
+      if (viewState) {
+        applyViewState();
+      } else {
+        applySavedFilters();
       }
 
       this.isLoading = false;
@@ -904,7 +958,7 @@ export default {
         return `analysis-finding:${codeObject.resolvedFinding?.finding?.hash_v2}`;
       }
     },
-    getState() {
+    getStateObject() {
       const state = {};
 
       state.currentView = this.currentView;
@@ -928,6 +982,11 @@ export default {
       if (Object.keys(state.filters).length === 0) {
         delete state.filters;
       }
+
+      return state;
+    },
+    getState() {
+      const state = this.getStateObject();
 
       if (Object.keys(state).length === 0) {
         return '';
@@ -1018,7 +1077,10 @@ export default {
           return;
         }
 
-        const state = filterStringToFilterState(serializedState);
+        const state =
+          typeof serializedState === 'string'
+            ? filterStringToFilterState(serializedState)
+            : serializedState;
         if (state.selectedObject) this.selectObjectFromState(state.selectedObject);
 
         if (state.selectedObjects)
@@ -1558,6 +1620,38 @@ code {
       border: 6px solid transparent;
       border-color: $hotpink transparent $hotpink transparent;
       animation: loader-animation 1.2s linear infinite;
+    }
+  }
+
+  .export-options {
+    &__header {
+      padding-bottom: 0.2rem;
+      margin-bottom: 0.7rem;
+      border-bottom: 1px solid lighten($gray3, 15%);
+    }
+
+    &__body {
+      display: flex;
+      margin-bottom: 0.2rem;
+
+      button {
+        background: $light-purple;
+        color: $gray5;
+        text-decoration: none;
+        font-weight: 700;
+        font-family: $appland-text-font-family;
+        font-size: 0.75rem;
+        transition: $transition;
+        border-radius: 5px;
+        border: 0px;
+        margin: 5px;
+        padding: 10px;
+
+        &:hover {
+          background: $dark-purple;
+          cursor: pointer;
+        }
+      }
     }
   }
 
