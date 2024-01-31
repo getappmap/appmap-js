@@ -8,20 +8,29 @@
           <strong>None</strong> of them seem to be relevant enough to your question.
         </p>
         <p>
-          The best way to improve your search results is to record more AppMaps that are relevant to
-          the question you want to ask.
+          The best way to improve your search results is to
+          <a href="#" @click.prevent="openRecordInstructions">record more AppMaps</a> that are
+          relevant to the question you want to ask.
         </p>
       </div>
     </div>
   </div>
 </template>
-<script lang="ts">
+<script>
 export default {
   name: 'v-no-match-instructions',
+
   props: {
     appmapStats: {
       type: Object,
       required: true,
+      default: () => ({ numAppMaps: 0 }),
+    },
+  },
+
+  methods: {
+    openRecordInstructions() {
+      this.$root.$emit('open-record-instructions');
     },
   },
 };
@@ -33,6 +42,17 @@ export default {
 
   h2 {
     color: $white;
+  }
+
+  a {
+    text-decoration: none;
+    color: $lightblue;
+
+    &:hover {
+      color: $blue;
+      transition: $transition;
+      cursor: pointer;
+    }
   }
 }
 </style>
