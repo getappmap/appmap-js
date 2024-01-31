@@ -1,20 +1,39 @@
 <template>
   <div class="chat-input">
-    <span
-      contenteditable="plaintext-only"
-      :placeholder="placeholder"
-      role="textbox"
-      @input="onInput"
-      @keydown="onKeyDown"
-      tabindex="0"
-      ref="input"
-      data-cy="chat-input"
-    />
-    <v-popper text="Send message" placement="top" text-align="left" :disabled="!hasInput">
-      <button class="send" data-cy="send-message" :disabled="!hasInput" @click="send">
-        <v-send-icon />
-      </button>
-    </v-popper>
+    <div
+      v-if="codeSelections && codeSelections.length"
+      class="attachments"
+      data-cy="input-attachments"
+    >
+      <!-- <div>Including code snippet</div> -->
+      <v-code-selection
+        v-for="(selection, i) in codeSelections"
+        :key="i"
+        :path="selection.path"
+        :line-start="selection.lineStart"
+        :line-end="selection.lineEnd"
+        :language="selection.language"
+        :code="selection.code"
+        class="attachment"
+      />
+    </div>
+    <div class="input-container">
+      <div
+        contenteditable="plaintext-only"
+        :placeholder="placeholder"
+        role="textbox"
+        @input="onInput"
+        @keydown="onKeyDown"
+        tabindex="0"
+        ref="input"
+        data-cy="chat-input"
+      />
+      <v-popper text="Send message" placement="top" text-align="left" :disabled="!hasInput">
+        <button class="send" data-cy="send-message" :disabled="!hasInput" @click="send">
+          <v-send-icon />
+        </button>
+      </v-popper>
+    </div>
   </div>
 </template>
 
@@ -23,12 +42,14 @@
 
 import VSendIcon from '@/assets/compass-icon.svg';
 import VPopper from '@/components/Popper.vue';
+import VCodeSelection from '@/components/chat/CodeSelection.vue';
 
 export default {
   name: 'v-chat-input',
   components: {
     VSendIcon,
     VPopper,
+    VCodeSelection,
   },
   props: {
     question: {
@@ -36,6 +57,10 @@ export default {
     },
     placeholder: {
       default: '',
+    },
+    codeSelections: {
+      type: Array,
+      default: () => [],
     },
   },
   data() {
@@ -111,70 +136,86 @@ $border-color: #7289c5;
 .chat-input {
   position: relative;
   display: flex;
+  flex-direction: column;
+  gap: 1rem;
   padding: 1.5rem;
   border-top: 1px solid darken($gray4, 10%);
   box-shadow: 0 0 1rem 0rem $gray1;
   border-radius: $border-radius $border-radius 0 0;
 
-  span[contenteditable] {
-    width: 100%;
-    border: 3px solid $border-color;
-    padding: 0.66rem;
-    padding-right: 3rem;
-    background-color: #171b25;
-    font-size: 1rem;
-    color: white;
-    animation: glow 4s infinite ease-in-out;
-    font-family: inherit;
-    resize: none;
-    max-height: 200px;
-    overflow-y: auto;
-    overflow-x: hidden;
+  .attachments {
+    color: $gray5;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
 
-    &:empty:before {
-      content: attr(placeholder);
-      color: white;
-    }
-
-    &:focus-visible {
-      outline: none !important;
+    .attachment {
+      max-width: 100%;
     }
   }
-  .popper {
-    position: absolute;
-    top: 50%;
-    right: 1rem;
-    transform: translate(-50%, -50%);
 
-    &__text {
-      border: none;
-    }
-    .send {
-      height: 2rem;
-      width: 2rem;
-      padding: 0.25rem;
-      border: none;
-      border-radius: $border-radius;
-      background-color: #6c81ba;
-      transition: background-color 0.5s ease-in-out;
-      svg {
-        path {
-          fill: #fff;
-        }
+  .input-container {
+    position: relative;
+
+    div[contenteditable] {
+      border: 3px solid $border-color;
+      padding: 0.66rem;
+      padding-right: 3rem;
+      background-color: #171b25;
+      font-size: 1rem;
+      color: white;
+      animation: glow 4s infinite ease-in-out;
+      font-family: inherit;
+      resize: none;
+      max-height: 200px;
+      overflow-y: auto;
+      overflow-x: hidden;
+
+      &:empty:before {
+        content: attr(placeholder);
+        color: white;
       }
-      &:disabled {
-        pointer-events: none;
-        background-color: rgba($color: #7289c5, $alpha: 0.25);
 
+      &:focus-visible {
+        outline: none !important;
+      }
+    }
+    .popper {
+      position: absolute;
+      right: 1rem;
+      bottom: 0.45rem;
+      // transform: translate(-50%, -50%);
+
+      &__text {
+        border: none;
+      }
+      .send {
+        height: 2rem;
+        width: 2rem;
+        padding: 0.25rem;
+        border: none;
+        border-radius: $border-radius;
+        background-color: #6c81ba;
+        transition: background-color 0.5s ease-in-out;
         svg {
           path {
-            fill: #9aa9d3;
+            fill: #fff;
           }
         }
-      }
-      &:hover {
-        cursor: pointer;
-        background-color: $hotpink;
+        &:disabled {
+          pointer-events: none;
+          background-color: rgba($color: #7289c5, $alpha: 0.25);
+
+          svg {
+            path {
+              fill: #9aa9d3;
+            }
+          }
+        }
+        &:hover {
+          cursor: pointer;
+          background-color: $hotpink;
+        }
       }
     }
   }

@@ -1,6 +1,13 @@
 <template>
-  <div :class="{ 'tool-status': 1, 'tool-status--complete': complete }" data-cy="tool-status">
-    <v-check v-if="complete" class="tool-status__loader" />
+  <div
+    :class="{
+      'tool-status': 1,
+      'tool-status--complete': complete,
+      'tool-status--interactive': interactive,
+    }"
+    data-cy="tool-status"
+  >
+    <component :is="completeIconComponent" v-if="complete" class="tool-status__loader" />
     <v-loader v-else class="tool-status__loader" />
     <div class="tool-status__info">
       <div class="tool-status__action" data-cy="title">{{ title }}</div>
@@ -13,19 +20,35 @@
 import Vue from 'vue';
 import VLoader from '@/components/chat/Loader.vue';
 import VCheck from '@/assets/check.svg';
+import VDocument from '@/assets/document.svg';
 
 export default Vue.extend({
   name: 'v-tool-status',
   components: {
     VLoader,
     VCheck,
+    VDocument,
   },
   props: {
     title: String,
     status: String,
+    completeIcon: {
+      type: String,
+      default: 'check',
+      validator: (value: unknown) => !!['check', 'document'].find((x) => x === value),
+    },
     complete: {
       type: Boolean,
       default: false,
+    },
+    interactive: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    completeIconComponent(): Vue.Component {
+      return this.completeIcon === 'check' ? VCheck : VDocument;
     },
   },
 });
@@ -38,7 +61,7 @@ export default Vue.extend({
   flex-direction: column;
   border: 1px solid #7289c5;
   border-radius: $border-radius;
-  padding: 0.5rem;
+  padding: 0.25rem 0.5rem;
   width: fit-content;
   color: #ececec;
   align-items: stretch;
@@ -63,6 +86,13 @@ export default Vue.extend({
 
     path {
       fill: #ececec;
+    }
+  }
+
+  &--interactive {
+    &:hover {
+      cursor: pointer;
+      background-color: rgba(0, 0, 0, 0.8);
     }
   }
 }

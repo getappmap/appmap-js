@@ -1,0 +1,17 @@
+<!--
+Copyright (c) 2018 VMware, Inc.				
+
+The MIT license (the "License") set forth below applies to all parts of the clarity-assets project.  You may not use this file except in compliance with the License.
+
+MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<svg viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M15.89 0H1.83001C1.33488 0.013107 0.86493 0.221075 0.522271 0.578714C0.179611 0.936353 -0.00807099 1.41477 6.17074e-06 1.91V26.09C-0.00807099 26.5852 0.179611 27.0636 0.522271 27.4213C0.86493 27.7789 1.33488 27.9869 1.83001 28H22.17C22.6651 27.9869 23.1351 27.7789 23.4777 27.4213C23.8204 27.0636 24.0081 26.5852 24 26.09V7.92L15.89 0ZM15.59 2.49L21.59 8.39H15.59V2.49ZM2.00001 26V2H14V10H22V26H2.00001Z" fill="black"/>
+</svg>

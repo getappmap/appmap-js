@@ -11,10 +11,8 @@
         ref="vchat"
         :send-message="sendMessage"
         :status-label="searchStatusLabel"
-        :disable-suggestions="codeSelection !== undefined"
         @clear="clear"
         :question="question"
-        :code-selection="codeSelection"
       />
     </div>
     <div
@@ -115,7 +113,7 @@ import VNoMatchInstructions from '@/components/chat-search/NoMatchInstructions.v
 import VAppMap from './VsCodeExtension.vue';
 import AppMapRPC from '@/lib/AppMapRPC';
 import authenticatedClient from '@/components/mixins/authenticatedClient';
-import type { ITool } from '@/components/chat/Chat.vue';
+import type { ITool, CodeSelection } from '@/components/chat/Chat.vue';
 
 export default {
   name: 'v-chat-search',
@@ -130,9 +128,6 @@ export default {
   mixins: [authenticatedClient],
   props: {
     question: {
-      type: String,
-    },
-    codeSelection: {
       type: String,
     },
     appmapRpcPort: {
@@ -368,6 +363,10 @@ export default {
     stopResizing() {
       document.body.style.userSelect = '';
       this.isPanelResizing = false;
+    },
+    includeCodeSelection(codeSelection: CodeSelection) {
+      console.log(JSON.stringify(codeSelection, null, 2));
+      this.$refs.vchat.includeCodeSelection(codeSelection);
     },
   },
   async mounted() {
