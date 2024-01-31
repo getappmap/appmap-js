@@ -1,3 +1,10 @@
+# [@appland/components-v3.32.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.31.0...@appland/components-v3.32.0) (2024-01-31)
+
+
+### Features
+
+* Do not auto expand details panel with Navie ([aa5d5cd](https://github.com/getappmap/appmap-js/commit/aa5d5cd20d7d761d1d90bebe9c2bd83ba35f7761))
+
 # [@appland/components-v3.31.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.30.0...@appland/components-v3.31.0) (2024-01-31)
 
 
