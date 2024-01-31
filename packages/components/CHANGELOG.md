@@ -1,3 +1,10 @@
+# [@appland/components-v3.31.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.30.0...@appland/components-v3.31.0) (2024-01-31)
+
+
+### Features
+
+* Navie instructions link to record appmaps page ([696436c](https://github.com/getappmap/appmap-js/commit/696436c6707da87e2e251df58f22bf6443fc8caf))
+
 # [@appland/components-v3.30.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.29.0...@appland/components-v3.30.0) (2024-01-31)
 
 
