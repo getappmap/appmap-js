@@ -5,7 +5,10 @@
       <h3>How Navie Works</h3>
       <p>
         Each chat with Navie begins by analyzing your AppMaps. AppMaps are detailed recordings of
-        your code behavior that you create by running your app with the AppMap agent or language
+        your code behavior that
+        <a href="#" @click.prevent="openRecordInstructions"
+          >you create by running your app with the AppMap agent or language</a
+        >
         library enabled. Naive uses the data in AppMaps (which includes dynamic information like
         database queries and web requests) as well as snippets of your code, to provide tailored
         responses and suggestions.
@@ -38,7 +41,7 @@
       <div data-cy="no-appmaps" v-else>
         <p>
           ⚠️ You don't have any AppMaps in your workspace. Before you can use Navie, you'll need to
-          create some.
+          <a href="#" @click.prevent="openRecordInstructions">create some</a>.
         </p>
         <p>
           Navie uses AppMap diagrams, data, and snippets of your code code to understand your
@@ -84,12 +87,19 @@
     </div>
   </div>
 </template>
-<script lang="ts">
+<script>
 export default {
   name: 'v-instructions',
+
   props: {
     appmapStats: {
       type: Object,
+    },
+  },
+
+  methods: {
+    openRecordInstructions() {
+      this.$root.$emit('open-record-instructions');
     },
   },
 };
@@ -108,8 +118,14 @@ export default {
   }
 
   a {
-    color: $white;
-    text-decoration: underline;
+    text-decoration: none;
+    color: $lightblue;
+
+    &:hover {
+      color: $blue;
+      transition: $transition;
+      cursor: pointer;
+    }
   }
 }
 </style>
