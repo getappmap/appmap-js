@@ -473,7 +473,7 @@ $brightblue: rgba(255, 255, 255, 0.1);
 
 .project-picker-row {
   border-bottom: 1px solid lighten($gray2, 15);
-  padding: 0;
+  padding: 0.2rem 2rem;
 
   &.accordion--open {
     background-color: #171d2d;
