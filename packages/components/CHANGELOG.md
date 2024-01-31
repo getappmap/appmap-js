@@ -1,3 +1,10 @@
+# [@appland/components-v3.30.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.29.0...@appland/components-v3.30.0) (2024-01-31)
+
+
+### Features
+
+* Export AppMap data as JSON with filters ([#1532](https://github.com/getappmap/appmap-js/issues/1532)) ([44b53f6](https://github.com/getappmap/appmap-js/commit/44b53f608c2fbbcc6dae69723aefe10f3b1589ec))
+
 # [@appland/components-v3.29.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.28.0...@appland/components-v3.29.0) (2024-01-30)
 
 
