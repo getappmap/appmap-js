@@ -218,4 +218,53 @@ describe('components/Chat.vue', () => {
       expect(wrapper.find('[data-actor="system"] [data-cy="message-text"]').exists()).toBe(true);
     });
   });
+
+  describe('code snippet attachments', () => {
+    const codeSelection = {
+      path: 'app/controllers/users_controller.rb',
+      lineStart: 6,
+      lineEnd: 17,
+      code: '...',
+    };
+
+    it('includes pending code snippets in the input area', async () => {
+      const wrapper = mount(VChat);
+      const selector = '[data-cy="input-attachments"] [data-cy="code-selection"]';
+
+      expect(wrapper.find(selector).exists()).toBe(false);
+
+      wrapper.vm.includeCodeSelection(codeSelection);
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find(selector).exists()).toBe(true);
+    });
+
+    it('flushes pending code snippets from the input area when the user sends a message', async () => {
+      const wrapper = mount(VChat, { propsData: { sendMessage: jest.fn() } });
+      const selector = '[data-cy="input-attachments"] [data-cy="code-selection"]';
+
+      wrapper.vm.includeCodeSelection(codeSelection);
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find(selector).exists()).toBe(true);
+
+      wrapper.vm.onSend('Hello from the user');
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find(selector).exists()).toBe(false);
+    });
+
+    it('pipes pending code snippets to the next user message', async () => {
+      const wrapper = mount(VChat, { propsData: { sendMessage: jest.fn() } });
+      wrapper.vm.includeCodeSelection(codeSelection);
+      wrapper.vm.onSend('Hello from the user');
+
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.vm.messages[0].codeSelections).toStrictEqual([codeSelection]);
+      expect(
+        wrapper.find('[data-cy="message"][data-actor="user"] [data-cy="code-selection"]').exists()
+      ).toBe(true);
+    });
+  });
 });

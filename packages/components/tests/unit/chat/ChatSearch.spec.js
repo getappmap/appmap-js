@@ -168,7 +168,6 @@ describe('pages/ChatSearch.vue', () => {
         wrapper.vm.sendMessage('How do I reset my password?');
         await wrapper.vm.$nextTick();
 
-        console.log(wrapper.html());
         expect(wrapper.findAll('[data-cy="tool-status"]').length).toBe(1);
       });
     });
@@ -261,6 +260,19 @@ describe('pages/ChatSearch.vue', () => {
       await messageSent;
       expect(wrapper.find(title).text()).toBe('Searched for AppMaps');
       expect(wrapper.find(status).text()).toBe('Found 1 relevant recording');
+    });
+  });
+
+  describe('code selections', () => {
+    it('passes code selections to the chat', () => {
+      const wrapper = mount(VChatSearch, { propsData: { appmapRpcFn: jest.fn() } });
+      const codeSelection = { code: 'Hello world' };
+
+      expect(wrapper.vm.$refs.vchat.codeSelections).toBeArrayOfSize(0);
+
+      wrapper.vm.includeCodeSelection(codeSelection);
+
+      expect(wrapper.vm.$refs.vchat.codeSelections).toBeArrayOfSize(1);
     });
   });
 

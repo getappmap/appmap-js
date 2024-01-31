@@ -10,9 +10,22 @@
       <v-component :is="avatar" />
     </div>
     <div class="name">{{ name }}</div>
-    <div class="message-body" data-cy="message-text" v-if="isUser">{{ message }}</div>
+    <div class="message-body" data-cy="message-text" v-if="isUser">
+      <div class="tools" v-if="codeSelections">
+        <v-code-selection
+          v-for="(snippet, i) in codeSelections"
+          :key="i"
+          :path="snippet.path"
+          :lineStart="snippet.lineStart"
+          :lineEnd="snippet.lineEnd"
+          :language="snippet.language"
+          :code="snippet.code"
+        />
+      </div>
+      <span>{{ message }}</span>
+    </div>
     <div class="message-body" data-cy="message-text" v-else>
-      <div class="tools" v-if="tools.length">
+      <div class="tools" v-if="tools">
         <v-tool-status
           v-for="(tool, i) in tools"
           :key="i"
@@ -61,6 +74,7 @@ import VUserAvatar from '@/assets/user-avatar.svg';
 import VThumbIcon from '@/assets/thumb.svg';
 import VButton from '@/components/Button.vue';
 import VToolStatus from '@/components/chat/ToolStatus.vue';
+import VCodeSelection from '@/components/chat/CodeSelection.vue';
 
 import { Marked, Renderer } from 'marked';
 import { markedHighlight } from 'marked-highlight';
@@ -108,6 +122,7 @@ export default {
     VThumbIcon,
     VButton,
     VToolStatus,
+    VCodeSelection,
   },
 
   props: {
@@ -130,6 +145,9 @@ export default {
       default: false,
     },
     tools: {
+      default: () => [],
+    },
+    codeSelections: {
       default: () => [],
     },
   },
@@ -239,7 +257,7 @@ export default {
   padding: 0 1rem;
   color: #ececec;
 
-  &[data-actor='user'] .message-body {
+  &[data-actor='user'] .message-body span {
     white-space: preserve;
   }
 
@@ -360,130 +378,133 @@ export default {
 
 <style lang="scss">
 .message .message-body {
-  line-height: 1.3rem;
-
-  hr {
-    border: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    margin: 1rem 0;
-  }
-
-  a {
-    color: #0097fa;
-    text-decoration: none;
-
-    &:hover {
-      color: lighten(#0097fa, 10%);
-      text-decoration: underline;
-    }
-  }
-
   .tools {
     padding-bottom: 0.5rem;
+    line-height: normal;
   }
 
-  .md-code-snippet {
-    margin: 1rem 0;
-    border-radius: $border-radius;
-    background-color: rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    overflow: hidden;
+  span {
+    line-height: 1.3rem;
 
-    pre {
-      margin: 0;
-      border: 0;
-      border-radius: 0;
-      overflow: auto;
+    hr {
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin: 1rem 0;
     }
 
-    &__header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: rgba(0, 0, 0, 0.4);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    &__language {
-      display: inline-block;
-      padding: 0.25rem 1rem;
-      border-right: 1px solid rgba(255, 255, 255, 0.1);
-      color: #e2e4e5;
-    }
-
-    &__copy {
-      display: inline-block;
-      padding: 0.25rem 1rem;
-      border-left: 1px solid rgba(255, 255, 255, 0.1);
-      color: #e2e4e5;
-      cursor: pointer;
-      transition: background-color 0.5s ease-in-out;
-
-      svg {
-        height: 16px;
-        width: 16px;
-
-        path {
-          fill: #e2e4e5;
-        }
-      }
+    a {
+      color: #0097fa;
+      text-decoration: none;
 
       &:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-      }
-
-      &:active {
-        background-color: $blue;
-        transition: background-color 0s;
+        color: lighten(#0097fa, 10%);
+        text-decoration: underline;
       }
     }
-  }
 
-  .cursor {
-    color: black;
-    &:after {
-      content: ' ';
-      display: inline-block;
-      width: 0.65rem;
-      height: 1rem;
+    .md-code-snippet {
+      margin: 1rem 0;
+      border-radius: $border-radius;
+      background-color: rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      overflow: hidden;
 
-      background-color: #ececec;
-      vertical-align: text-bottom;
+      pre {
+        margin: 0;
+        border: 0;
+        border-radius: 0;
+        overflow: auto;
+      }
+
+      &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.4);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      &__language {
+        display: inline-block;
+        padding: 0.25rem 1rem;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        color: #e2e4e5;
+      }
+
+      &__copy {
+        display: inline-block;
+        padding: 0.25rem 1rem;
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+        color: #e2e4e5;
+        cursor: pointer;
+        transition: background-color 0.5s ease-in-out;
+
+        svg {
+          height: 16px;
+          width: 16px;
+
+          path {
+            fill: #e2e4e5;
+          }
+        }
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        &:active {
+          background-color: $blue;
+          transition: background-color 0s;
+        }
+      }
     }
-  }
 
-  code {
-    border-radius: 6px;
-    background-color: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 0.25em 0.25rem 0 0.25rem;
-    color: #e2e4e5;
-  }
+    .cursor {
+      color: black;
+      &:after {
+        content: ' ';
+        display: inline-block;
+        width: 0.65rem;
+        height: 1rem;
 
-  pre {
-    padding: 1rem;
-    border-radius: $border-radius;
-    background-color: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+        background-color: #ececec;
+        vertical-align: text-bottom;
+      }
+    }
+
     code {
-      border: 0;
-      background-color: transparent;
-      padding: 0;
+      border-radius: 6px;
+      background-color: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.25em 0.25rem 0 0.25rem;
+      color: #e2e4e5;
     }
-  }
 
-  ul {
-    margin: 1rem 0;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
-  }
+    pre {
+      padding: 1rem;
+      border-radius: $border-radius;
+      background-color: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      code {
+        border: 0;
+        background-color: transparent;
+        padding: 0;
+      }
+    }
 
-  span > :first-child {
-    margin-top: 0;
-  }
+    ul {
+      margin: 1rem 0;
+      margin-block-start: 1em;
+      margin-block-end: 1em;
+    }
 
-  span > :last-child {
-    margin-bottom: 0;
+    & > :first-child {
+      margin-top: 0;
+    }
+
+    & > :last-child {
+      margin-bottom: 0;
+    }
   }
 }
 </style>

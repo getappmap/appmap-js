@@ -15,13 +15,6 @@
         New chat
       </v-button>
     </div>
-    <v-code-selection
-      v-if="codeSelection"
-      ref="vcode-snippet"
-      class="chat-code-snippet"
-      :code="codeSelection"
-    >
-    </v-code-selection>
     <div class="messages" data-cy="messages" ref="messages" @scroll="manageScroll">
       <v-user-message
         v-for="(message, i) in messages"
@@ -33,6 +26,7 @@
         :sentiment="message.sentiment"
         :tools="message.tools"
         :complete="message.complete"
+        :code-selections="message.codeSelections"
         @change-sentiment="onSentimentChange"
       />
       <v-suggestion-grid
@@ -60,6 +54,7 @@
       :placeholder="inputPlaceholder"
       :class="inputClasses"
       :question="question"
+      :code-selections="codeSelections"
       ref="input"
     />
   </div>
@@ -70,11 +65,18 @@
 import Vue from 'vue';
 import VUserMessage from '@/components/chat/UserMessage.vue';
 import VChatInput from '@/components/chat/ChatInput.vue';
-import VCodeSelection from '@/components/chat-search/CodeSelection.vue';
 import VSuggestionGrid from '@/components/chat/SuggestionGrid.vue';
 import VAppMapNavieLogo from '@/assets/appmap-full-logo.svg';
 import VButton from '@/components/Button.vue';
 import { AI } from '@appland/client';
+
+export type CodeSelection = {
+  path: string;
+  lineStart: number;
+  lineEnd: number;
+  code: string;
+  language: string;
+};
 
 export interface ITool {
   title: string;
@@ -90,6 +92,7 @@ interface IMessage {
   messageId?: string;
   sentiment?: number;
   tools?: ITool[];
+  codeSelections?: CodeSelection[];
 }
 
 class UserMessage implements IMessage {
@@ -99,6 +102,7 @@ class UserMessage implements IMessage {
   public readonly isError = false;
   public readonly tools = undefined;
   public readonly complete = true;
+  public readonly codeSelections = [];
 
   constructor(public content: string) {}
 }
@@ -110,6 +114,7 @@ class AssistantMessage implements IMessage {
   public readonly isUser = false;
   public readonly isError = false;
   public readonly tools = [];
+  public readonly codeSelections = undefined;
 
   constructor(public messageId?: string) {}
 
@@ -121,6 +126,7 @@ class AssistantMessage implements IMessage {
 class ErrorMessage implements IMessage {
   public readonly messageId = undefined;
   public readonly sentiment = undefined;
+  public readonly codeSelections = undefined;
   public readonly complete = true;
   public readonly isUser = false;
   public readonly isError = true;
@@ -137,7 +143,6 @@ export default {
   components: {
     VUserMessage,
     VChatInput,
-    VCodeSelection,
     VSuggestionGrid,
     VAppMapNavieLogo,
     VButton,
@@ -146,10 +151,6 @@ export default {
     // Initial question to ask
     question: {
       type: String,
-    },
-    codeSelection: {
-      type: String,
-      required: false,
     },
     sendMessage: {
       type: Function, // UserMessageHandler
@@ -175,6 +176,7 @@ export default {
       authorized: true,
       autoScrollTop: 0,
       enableScrollLog: false, // Auto-scroll can be tricky, so there is special logging to help debug it.
+      codeSelections: [] as CodeSelection[],
       scrollLog: (message: string) => (this.enableScrollLog ? console.log(message) : undefined),
     };
   },
@@ -223,7 +225,8 @@ export default {
       this.authorized = v;
     },
     addUserMessage(content: string) {
-      this.messages.push(new UserMessage(content));
+      const userMessage = new UserMessage(content);
+      this.messages.push(userMessage);
       // Ensure that for the first user message, the auto-scroll position is reset to the top.
       // This is to account for the fact that there may be an auto-scroll applied when the
       // placeholder content is show during the chat initialization or when the user clears the chat.
@@ -231,6 +234,7 @@ export default {
         this.autoScrollTop = 0;
       }
       this.scrollToBottom();
+      return userMessage;
     },
     addSystemMessage() {
       const message = new AssistantMessage();
@@ -257,8 +261,14 @@ export default {
       }
     },
     async onSend(message: string) {
-      this.addUserMessage(message);
+      const userMessage = this.addUserMessage(message);
+      userMessage.codeSelections = this.codeSelections;
+
       this.sendMessage(message);
+
+      // Clear any pending code selection attachments.
+      // They've been 'sent'.
+      this.$set(this, 'codeSelections', []);
     },
     onAck(_messageId: string, threadId: string) {
       this.setAuthorized(true);
@@ -336,6 +346,9 @@ export default {
       const fullyScrolled = messages.scrollHeight - messages.clientHeight;
       const fullyScrolledDelta = Math.abs(messages.scrollTop - fullyScrolled);
       return fullyScrolledDelta < 40;
+    },
+    includeCodeSelection(codeSelection: CodeSelection) {
+      this.codeSelections.push(codeSelection);
     },
   },
 };

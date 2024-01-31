@@ -5,7 +5,7 @@ import petclinicData from './data/java_scenario.json';
 import longPackageData from './data/long-package.appmap.json';
 import savedFilters from './data/saved_filters.js';
 
-const codeSelection = `class UsersController < ApplicationController
+const code = `class UsersController < ApplicationController
   before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user,     only: :destroy
   
@@ -18,6 +18,13 @@ const codeSelection = `class UsersController < ApplicationController
     redirect_to root_url and return unless @user.activated?
   end
 `;
+
+const codeSelection = {
+  path: 'app/controllers/users_controller.rb',
+  lineStart: 6,
+  lineEnd: 17,
+  code,
+};
 
 export default {
   title: 'Pages/ChatSearch',
@@ -35,11 +42,11 @@ ChatSearch.args = {};
 export const ChatSearchWithCodeSelection = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VChatSearch },
-  template: `<v-chat-search v-bind="$props"></v-chat-search>`,
+  template: `<v-chat-search v-bind="$props" ref="chatSearch"></v-chat-search>`,
+  mounted() {
+    this.$refs.chatSearch.includeCodeSelection(codeSelection);
+  },
 });
-ChatSearchWithCodeSelection.args = {
-  codeSelection,
-};
 
 export const ChatSearchMock = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
@@ -50,7 +57,10 @@ export const ChatSearchMock = (args, { argTypes }) => ({
 export const ChatSearchMockWithCodeSelection = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VChatSearch },
-  template: `<v-chat-search v-bind="$props"></v-chat-search>`,
+  template: `<v-chat-search v-bind="$props" ref="chatSearch"></v-chat-search>`,
+  mounted() {
+    this.$refs.chatSearch.includeCodeSelection(codeSelection);
+  },
 });
 
 export const ChatSearchMockWithFilters = (args, { argTypes }) => ({
