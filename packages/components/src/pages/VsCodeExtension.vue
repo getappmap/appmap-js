@@ -524,6 +524,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    autoExpandDetailsPanel: {
+      type: Boolean,
+      default: true,
+    },
   },
   watch: {
     '$store.state.currentView': {
@@ -548,7 +552,7 @@ export default {
         }
 
         this.$root.$emit('stateChanged', 'selectedObject');
-        this.revealDetailsPanel();
+        if (this.autoExpandDetailsPanel) this.revealDetailsPanel();
       },
     },
     '$store.state.selectedLabel': {
@@ -1415,6 +1419,7 @@ export default {
       this.$el.addEventListener(prefix + 'fullscreenchange', this.checkFullscreen);
     });
     this.rightColumnWidth = this.$refs.mainColumnRight.offsetWidth;
+    if (!this.autoExpandDetailsPanel) this.hideDetailsPanel();
   },
   beforeUpdate() {
     if (this.isGiantAppMap) {
