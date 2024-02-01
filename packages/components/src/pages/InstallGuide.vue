@@ -18,27 +18,11 @@
       :status-states="statusStates"
       :display-ai-help="displayAiHelp"
     />
-    <v-open-app-maps
-      id="open-appmaps"
-      :app-maps="appMaps"
-      :sample-code-objects="sampleCodeObjects"
-      :status-states="statusStates"
+    <v-navie-introduction
+      id="navie-introduction"
       :project-name="projectName"
       :num-app-maps="numAppMaps"
-      :complete="hasExplored"
-      :display-ai-help="displayAiHelp"
-    />
-    <v-investigate-findings
-      id="investigate-findings"
-      :scanned="hasFindings"
-      :num-findings="numFindings"
-      :project-path="path"
-      :findingsDomainCounts="findingsDomainCounts"
-      :user-authenticated="userAuthenticated"
-      :analysis-enabled="analysisEnabled"
       :status-states="statusStates"
-      :project-name="projectName"
-      :num-app-maps="numAppMaps"
     />
   </v-multi-page>
 </template>
@@ -47,8 +31,7 @@
 import VMultiPage from '@/pages/MultiPage.vue';
 import VProjectPicker from '@/pages/install-guide/ProjectPicker.vue';
 import VRecordAppMaps from '@/pages/install-guide/RecordAppMaps.vue';
-import VOpenAppMaps from '@/pages/install-guide/OpenAppMaps.vue';
-import VInvestigateFindings from '@/pages/install-guide/InvestigateFindings.vue';
+import VNavieIntroduction from './install-guide/NavieIntroduction.vue';
 import { StepStatus } from '@/components/install-guide/Status.vue';
 
 export default {
@@ -58,8 +41,7 @@ export default {
     VMultiPage,
     VProjectPicker,
     VRecordAppMaps,
-    VInvestigateFindings,
-    VOpenAppMaps,
+    VNavieIntroduction,
   },
 
   props: {
@@ -80,10 +62,6 @@ export default {
     featureFlags: {
       type: Set,
       default: () => new Set(),
-    },
-    analysisEnabled: {
-      type: Boolean,
-      default: false,
     },
     userAuthenticated: {
       type: Boolean,
@@ -124,9 +102,6 @@ export default {
     hasFindings() {
       return this.selectedProject?.analysisPerformed;
     },
-    appMaps() {
-      return this.selectedProject?.appMaps || [];
-    },
     numFindings() {
       return this.selectedProject?.numFindings;
     },
@@ -147,20 +122,11 @@ export default {
     hasRecorded() {
       return this.numAppMaps > 0;
     },
-    hasExplored() {
-      return this.selectedProject?.appMapOpened;
-    },
-    hasInvestigatedFindings() {
-      return this.selectedProject?.investigatedFindings;
+    hasUsedNavie() {
+      return this.selectedProject?.openedNavie;
     },
     path() {
       return this.selectedProject?.path;
-    },
-    findingsDomainCounts() {
-      return this.selectedProject?.findingsDomainCounts;
-    },
-    sampleCodeObjects() {
-      return this.selectedProject?.sampleCodeObjects;
     },
     projectName() {
       return this.selectedProject?.name || '';
@@ -169,19 +135,16 @@ export default {
       return this.statusStates.findIndex((step) => step === StepStatus.InProgress);
     },
     statusStates() {
-      return [
-        this.hasInstalled,
-        this.hasRecorded,
-        this.hasExplored,
-        this.hasInvestigatedFindings,
-      ].map((stepComplete, index, statuses) => {
-        if (stepComplete) return StepStatus.Completed;
+      return [this.hasInstalled, this.hasRecorded, this.hasUsedNavie].map(
+        (stepComplete, index, statuses) => {
+          if (stepComplete) return StepStatus.Completed;
 
-        const previousStepComplete = Boolean(index > 0 ? statuses[index - 1] : true);
-        if (previousStepComplete) return StepStatus.InProgress;
+          const previousStepComplete = Boolean(index > 0 ? statuses[index - 1] : true);
+          if (previousStepComplete) return StepStatus.InProgress;
 
-        return StepStatus.NotStarted;
-      });
+          return StepStatus.NotStarted;
+        }
+      );
     },
   },
 

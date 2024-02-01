@@ -21,8 +21,10 @@ context('Instruction Status', () => {
       'No AppMaps have been recorded yet for DjangoTest'
     );
     cy.get('#record-appmaps [data-cy="next-button"]').click();
-    cy.get('#open-appmaps [data-cy="status"] [data-cy="prompt"]').contains('Go back and record');
-    cy.get('#open-appmaps [data-cy="go-back"]').click();
+    cy.get('#navie-introduction [data-cy="status"] [data-cy="prompt"]').contains(
+      'Go back and record'
+    );
+    cy.get('#navie-introduction [data-cy="go-back"]').click();
     cy.get('[data-cy="status"] [data-cy="header"]').contains(
       'No AppMaps have been recorded yet for DjangoTest'
     );

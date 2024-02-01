@@ -21,11 +21,6 @@ export default {
 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes).filter((key) => key !== 'projects'),
-  computed: {
-    statusStates() {
-      return [this.currentStatus, this.currentStatus == 2 ? 1 : 0, 0, 0, 0];
-    },
-  },
   data: () => ({
     projects: args.projects.map((project) => ({
       ...project,
@@ -114,9 +109,6 @@ UnsupportedProjectWithNoLanguage.args = {
       path: '/home/ahtrotta/projects/test-apps/pgvector',
       agentInstalled: false,
       appMapsRecorded: false,
-      investigatedFindings: false,
-      appMapOpened: false,
-      appMaps: [],
       numHttpRequests: 0,
       numAppMaps: 0,
       hasNode: false,

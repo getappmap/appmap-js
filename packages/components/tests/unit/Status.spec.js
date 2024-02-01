@@ -11,7 +11,7 @@ describe('Status.vue', () => {
       propsData: {
         currentStep: 0,
         viewingStep: InstructionStep.RecordAppMaps,
-        statusStates: [0, 0, 0, 0],
+        statusStates: [0, 0, 0],
         projectName,
         numAppMaps,
       },
@@ -30,7 +30,7 @@ describe('Status.vue', () => {
 
         await wrapper.setProps({ statusStates });
 
-        expect(wrapper.findAll('path.segment').length).toBe(4);
+        expect(wrapper.findAll('path.segment').length).toBe(3);
         expect(wrapper.findAll('path.segment.completed').length).toBe(
           stepIndex + (state == StepStatus.Completed ? 1 : 0)
         );
@@ -46,7 +46,7 @@ describe('Status.vue', () => {
 
   it('renders dynamic props correctly', async () => {
     await wrapper.setProps({
-      statusStates: [2, 2, 0, 0],
+      statusStates: [2, 2, 0],
       viewingStep: InstructionStep.RecordAppMaps,
     });
     expect(wrapper.text()).toContain(`${numAppMaps} AppMaps have been recorded for ${projectName}`);
@@ -54,15 +54,15 @@ describe('Status.vue', () => {
 
   it('informs the user to go back to a previous step if ahead', async () => {
     await wrapper.setProps({
-      statusStates: [2, 1, 0, 0],
-      viewingStep: InstructionStep.RuntimeAnalysis,
+      statusStates: [2, 0, 0],
+      viewingStep: InstructionStep.NavieIntroduction,
     });
     expect(wrapper.find('.status-message__prompt').text()).toMatch(/Go\s+back\s+and\s+record/gm);
   });
 
   it('emits an event when the user clicks the next step button', async () => {
     await wrapper.setProps({
-      statusStates: [2, 2, 0, 0],
+      statusStates: [2, 2, 0],
       viewingStep: InstructionStep.RecordAppMaps,
     });
 
@@ -70,13 +70,13 @@ describe('Status.vue', () => {
 
     const events = root.emitted();
     expect(events['status-jump']).toBeTruthy();
-    expect(events['status-jump']).toEqual([[InstructionStep.ExploreAppMaps]]);
+    expect(events['status-jump']).toEqual([[InstructionStep.NavieIntroduction]]);
   });
 
   it('emits an event when the user clicks "go back"', async () => {
     await wrapper.setProps({
-      statusStates: [2, 1, 0, 0],
-      viewingStep: InstructionStep.ExploreAppMaps,
+      statusStates: [2, 1, 0],
+      viewingStep: InstructionStep.NavieIntroduction,
     });
 
     wrapper.find('a').trigger('click');
@@ -88,8 +88,8 @@ describe('Status.vue', () => {
 
   it('displays the current in progress step if looking ahead', async () => {
     await wrapper.setProps({
-      statusStates: [2, 1, 0, 0],
-      viewingStep: InstructionStep.ExploreAppMaps,
+      statusStates: [2, 1, 0],
+      viewingStep: InstructionStep.NavieIntroduction,
     });
     expect(wrapper.find('.status-message__heading.status-message--warning').text()).toBe(
       `No AppMaps have been recorded yet for ${projectName}`
@@ -98,12 +98,14 @@ describe('Status.vue', () => {
 
   it('displays the next step when viewing a complete step', async () => {
     await wrapper.setProps({
-      statusStates: [2, 2, 0, 0],
+      statusStates: [2, 2, 0],
       viewingStep: InstructionStep.RecordAppMaps,
     });
 
-    expect(wrapper.find('.status-message__prompt').text()).toMatch(/Next step:\s+Open an AppMap/gm);
-    expect(wrapper.find('button').text()).toBe('Next step: Explore AppMaps');
+    expect(wrapper.find('.status-message__prompt').text()).toMatch(
+      /Next step:\s+Gain insight about your project using AppMap Navie/gm
+    );
+    expect(wrapper.find('button').text()).toBe('Next step: Navie Introduction');
   });
 
   it('has no next step on the final step once complete', async () => {
@@ -132,13 +134,13 @@ describe('Status.vue', () => {
     expect(wrapper.find('[data-cy="header"]').text()).toBe(
       `AppMap setup is complete for ${projectName}`
     );
-    expect(wrapper.find('[data-cy="next-step"]').text()).toBe('Next step: Explore AppMaps');
+    expect(wrapper.find('[data-cy="next-step"]').text()).toBe('Next step: Navie Introduction');
   });
 
-  it('does not show a next step when everything is complete and the page is runtime analysis', async () => {
+  it('does not show a next step when everything is complete and the page is navie intro', async () => {
     await wrapper.setProps({
       statusStates: Array(InstructionStep.NumSteps).fill(StepStatus.Completed),
-      viewingStep: InstructionStep.RuntimeAnalysis,
+      viewingStep: InstructionStep.NavieIntroduction,
     });
 
     expect(wrapper.find('[data-cy="header"]').text()).toBe(
@@ -149,8 +151,8 @@ describe('Status.vue', () => {
 
   it('prompts the user to go back if a previous step changes to be incomplete', async () => {
     await wrapper.setProps({
-      statusStates: [2, 1, 2, 2],
-      viewingStep: InstructionStep.ExploreAppMaps,
+      statusStates: [2, 1, 2],
+      viewingStep: InstructionStep.NavieIntroduction,
     });
 
     expect(wrapper.find('.status-message__prompt').text()).toMatch(/Go\s+back\s+and\s+record/gm);
@@ -158,7 +160,7 @@ describe('Status.vue', () => {
 
   it('uses proper pluralization', async () => {
     await wrapper.setProps({
-      statusStates: [2, 2, 0, 0],
+      statusStates: [2, 2, 0],
       viewingStep: InstructionStep.RecordAppMaps,
     });
     expect(wrapper.text()).toContain(`${numAppMaps} AppMaps have been recorded for ${projectName}`);

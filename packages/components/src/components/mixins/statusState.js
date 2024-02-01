@@ -5,7 +5,7 @@ export default {
   props: {
     statusStates: {
       type: Array,
-      default: () => Array.from({ length: 5 }, () => 0),
+      default: () => Array.from({ length: 4 }, () => 0),
       validator: (value) => value.every((v) => v >= 0 && v <= StepStatus.NumStatuses),
     },
   },
