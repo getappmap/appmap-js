@@ -43,7 +43,7 @@ describe('RPC', () => {
           constructor(public callbacks: AICallbacks) {}
 
           async inputPrompt(input: string, options?: AIInputPromptOptions): Promise<void> {
-            expect(input).toEqual(question);
+            expect(input).toEqual({ question, codeSelection: undefined });
             expect(options?.tool).toEqual('explain');
             this.callbacks.onAck!(userMessageId, threadId);
 
