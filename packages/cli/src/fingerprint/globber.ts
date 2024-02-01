@@ -15,15 +15,11 @@ class Globber extends EventEmitter {
   private interval: number;
   private fs: typeof defaultfs;
   private statDelayMs: number;
+  private initialDone = false;
 
   constructor(
     private pattern: string,
-    {
-      // This is the default for the constructor. Note that the cli has its own default value.
-      statDelayMs = 10,
-      interval = 1000,
-      fs = defaultfs,
-    }: GlobberOptions = {}
+    { statDelayMs = 1, interval = 5000, fs = defaultfs }: GlobberOptions = {}
   ) {
     super();
     this.interval = interval;
@@ -40,8 +36,11 @@ class Globber extends EventEmitter {
       ignore: ['**/node_modules/**', '**/.git/**'],
       strict: false,
       silent: !verbose(),
+      cwd: process.cwd(),
       fs: this.fs,
-    }).on('end', this.scanEnd.bind(this));
+    });
+
+    this.currentGlob.on('end', this.scanEnd.bind(this));
   }
 
   private running = false;
@@ -62,6 +61,8 @@ class Globber extends EventEmitter {
   timeout?: NodeJS.Timeout;
   private async scanEnd(found: string[]) {
     this.currentGlob = undefined;
+    const { initialDone } = this;
+    this.initialDone = true;
 
     const files = new Set(found);
     for (const f of this.mtimes.keys()) {
@@ -71,7 +72,7 @@ class Globber extends EventEmitter {
     for (const file of found) {
       try {
         await this.statFile(file);
-        await new Promise((r) => setTimeout(r, this.statDelayMs));
+        if (initialDone) await new Promise((r) => setTimeout(r, this.statDelayMs));
       } catch (e) {
         console.warn(e);
       }

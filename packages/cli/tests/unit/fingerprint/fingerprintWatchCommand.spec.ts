@@ -106,7 +106,7 @@ describe(FingerprintWatchCommand, () => {
 
     it('works eventually even if watching files is flaky', async () => {
       cmd = new FingerprintWatchCommand(appMapDir);
-      await cmd.execute();
+      await cmd.execute(0.01, 100);
       cmd.watcher?.removeAllListeners();
       placeMap();
       return verifyIndexSuccess(200, 20);

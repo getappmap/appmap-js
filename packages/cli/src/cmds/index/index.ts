@@ -44,12 +44,6 @@ export const builder = (args: yargs.Argv) => {
     type: 'number',
     alias: 'p',
   });
-  args.options('watch-stat-delay', {
-    type: 'number',
-    default: 10,
-    describe: 'delay between stat calls when watching, in milliseconds',
-    hidden: true,
-  });
   return args.strict();
 };
 
@@ -58,7 +52,7 @@ export const handler = async (argv) => {
   handleWorkingDirectory(argv.directory);
   const appmapDir = await locateAppMapDir(argv.appmapDir);
 
-  const { watchStatDelay, watch, port } = argv;
+  const { watch, port } = argv;
 
   const runServer = watch || port !== undefined;
   if (port && !watch) warn(`Note: --port option implies --watch`);
@@ -68,7 +62,7 @@ export const handler = async (argv) => {
 
     log(`Running indexer in watch mode`);
     const cmd = new FingerprintWatchCommand(appmapDir);
-    await cmd.execute(watchStatDelay);
+    await cmd.execute();
 
     if (port !== undefined) {
       const rpcMethods: RpcHandler<any, any>[] = [

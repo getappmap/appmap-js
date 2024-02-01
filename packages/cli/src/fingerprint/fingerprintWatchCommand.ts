@@ -170,7 +170,7 @@ export default class FingerprintWatchCommand {
     return basename === 'node_modules' || basename === '.git';
   }
 
-  async execute(statDelayMs?: number) {
+  async execute(statDelayMs?: number, interval?: number) {
     this.fpQueue.process().then(() => {
       this.fpQueue.handler.checkVersion = false;
     });
@@ -190,12 +190,14 @@ export default class FingerprintWatchCommand {
     this.watcher.add(glob);
     await watchReady;
 
-    const globberOptions: GlobberOptions = {};
-    if (statDelayMs) globberOptions.statDelayMs = statDelayMs;
-    this.poller = new Globber(glob, globberOptions)
+    const scheduledPollerOptions: GlobberOptions = {};
+    if (statDelayMs) scheduledPollerOptions.statDelayMs = statDelayMs;
+    if (interval) scheduledPollerOptions.interval = interval;
+    this.poller = new Globber(glob, scheduledPollerOptions)
       .on('add', this.added.bind(this))
       .on('change', this.changed.bind(this))
       .on('unlink', this.removed.bind(this));
+
     const pollReady = new Promise<void>((r) => this.poller?.once('end', r));
     this.poller.start();
     await pollReady;
@@ -215,20 +217,20 @@ export default class FingerprintWatchCommand {
   }
 
   added(file: string) {
-    if (verbose()) {
-      console.warn(`AppMap added: ${file}`);
-    }
+    if (verbose()) console.warn(`AppMap added: ${file}`);
+
     this.enqueue(file);
   }
 
   changed(file: string) {
-    if (verbose()) {
-      console.warn(`AppMap changed: ${file}`);
-    }
+    if (verbose()) console.warn(`AppMap changed: ${file}`);
+
     this.enqueue(file);
   }
 
   removed(file: string) {
+    if (verbose()) console.warn(`AppMap removed: ${file}`);
+
     const { indexDir } = new AppMapIndex(file);
     rm(indexDir, { force: true, recursive: true });
   }
