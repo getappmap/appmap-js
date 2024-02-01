@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.123.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.122.0...@appland/appmap-v3.123.0) (2024-02-01)
+
+
+### Features
+
+* Update client, rpc dependencies ([0ebee13](https://github.com/getappmap/appmap-js/commit/0ebee13727f8539ab13d0225ab8690609c3319e5))
+
 # [@appland/appmap-v3.122.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.121.0...@appland/appmap-v3.122.0) (2024-02-01)
 
 
