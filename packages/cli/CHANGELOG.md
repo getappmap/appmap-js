@@ -1,3 +1,15 @@
+# [@appland/appmap-v3.122.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.121.0...@appland/appmap-v3.122.0) (2024-02-01)
+
+
+### Bug Fixes
+
+* Make log message more accurate ([fd48a68](https://github.com/getappmap/appmap-js/commit/fd48a68a9c3d49390e89f0ddf90c0df7acbd0cd1))
+
+
+### Features
+
+* Live hookup for codeSelection ([3b55eef](https://github.com/getappmap/appmap-js/commit/3b55eef032071f84dc0ad5efe1187f961e77e91a))
+
 # [@appland/appmap-v3.121.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.120.0...@appland/appmap-v3.121.0) (2024-01-30)
 
 
