@@ -1,3 +1,17 @@
+# [@appland/components-v3.33.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.32.0...@appland/components-v3.33.0) (2024-02-01)
+
+
+### Bug Fixes
+
+* Update configuration on API url change ([4e0a929](https://github.com/getappmap/appmap-js/commit/4e0a92926d3763f2c2fff0066ddd86e9a6e37ac9))
+
+
+### Features
+
+* Display code snippet in Navie ([f669be4](https://github.com/getappmap/appmap-js/commit/f669be43e526fcd4279d34c81a2bb856a1863c71))
+* Integrate code selections as 'attachments' to a user message ([1a4cadf](https://github.com/getappmap/appmap-js/commit/1a4cadf6366c6ba9dd69c46a3650265972be3e88))
+* Live hookup for codeSelection ([3b55eef](https://github.com/getappmap/appmap-js/commit/3b55eef032071f84dc0ad5efe1187f961e77e91a))
+
 # [@appland/components-v3.32.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.31.0...@appland/components-v3.32.0) (2024-01-31)
 
 
