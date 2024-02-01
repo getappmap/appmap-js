@@ -1,3 +1,10 @@
+# [@appland/client-v1.15.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.14.1...@appland/client-v1.15.0) (2024-02-01)
+
+
+### Features
+
+* Live hookup for codeSelection ([3b55eef](https://github.com/getappmap/appmap-js/commit/3b55eef032071f84dc0ad5efe1187f961e77e91a))
+
 # [@appland/client-v1.14.1](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.14.0...@appland/client-v1.14.1) (2024-01-05)
 
 
