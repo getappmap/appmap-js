@@ -1,3 +1,10 @@
+# [@appland/rpc-v1.3.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.2.0...@appland/rpc-v1.3.0) (2024-02-01)
+
+
+### Features
+
+* Live hookup for codeSelection ([3b55eef](https://github.com/getappmap/appmap-js/commit/3b55eef032071f84dc0ad5efe1187f961e77e91a))
+
 # [@appland/rpc-v1.2.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.1.1...@appland/rpc-v1.2.0) (2024-01-19)
 
 
