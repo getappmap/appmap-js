@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.124.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.123.0...@appland/appmap-v3.124.0) (2024-02-02)
+
+
+### Features
+
+* Improve file watcher stat delay ([b857c7e](https://github.com/getappmap/appmap-js/commit/b857c7e213bf6e66ae76700cc35d6d59e8eb8782))
+
 # [@appland/appmap-v3.123.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.122.0...@appland/appmap-v3.123.0) (2024-02-01)
 
 
