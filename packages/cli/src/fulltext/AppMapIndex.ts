@@ -24,9 +24,17 @@ export type SearchResult = {
   score: number;
 };
 
+export type SearchStats = {
+  mean: number;
+  median: number;
+  stddev: number;
+  max: number;
+};
+
 export type SearchResponse = {
   type: 'appmap';
   results: SearchResult[];
+  stats: SearchStats;
   numResults: number;
 };
 
@@ -143,12 +151,52 @@ export default class AppMapIndex {
     const numResults = matches.length;
     if (verbose()) log(`[AppMapIndex] Got ${numResults} AppMap matches for search "${search}"`);
 
+    const maxScore = matches.reduce((acc, match) => Math.max(acc, match.score), 0);
+    const medianScore = matches[Math.floor(numResults / 2)].score;
+    const meanScore = matches.reduce((acc, match) => acc + match.score, 0) / numResults;
+    const stddevScore = Math.sqrt(
+      matches.reduce((acc, match) => acc + Math.pow(match.score, 2), 0) / numResults
+    );
+
+    if (verbose()) {
+      log(`[AppMapIndex] Score stats:`);
+      log(`  Max:    ${maxScore}`);
+      log(`  Median: ${medianScore}`);
+      log(`  Mean:   ${meanScore}`);
+      log(`  StdDev: ${stddevScore}`);
+      log(
+        `Number which are least 1 stddev above the mean: ${
+          matches.filter((match) => match.score > meanScore + stddevScore).length
+        }`
+      );
+      log(
+        `Number which are at least 2 stddev above the mean: ${
+          matches.filter((match) => match.score > meanScore + 2 * stddevScore).length
+        }`
+      );
+      log(
+        `Number which are at least 3 stddev above the mean: ${
+          matches.filter((match) => match.score > meanScore + 3 * stddevScore).length
+        }`
+      );
+    }
+
     if (options.maxResults && numResults > options.maxResults) {
       if (verbose()) log(`[FullText] Limiting to the top ${options.maxResults} matches`);
       matches = matches.slice(0, options.maxResults);
     }
     const searchResults = matches.map((match) => ({ appmap: match.ref, score: match.score }));
-    return { type: 'appmap', results: searchResults, numResults };
+    return {
+      type: 'appmap',
+      results: searchResults,
+      stats: {
+        mean: meanScore,
+        median: medianScore,
+        stddev: stddevScore,
+        max: maxScore,
+      },
+      numResults,
+    } as SearchResponse;
   }
 
   static async search(
