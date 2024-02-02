@@ -9,8 +9,10 @@ import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { verbose } from '../../utils';
 import { locateAppMapDir } from '../../lib/locateAppMapDir';
 import searchSingleAppMap, { SearchOptions as SingleSearchOptions } from './searchSingleAppMap';
-import searchAppMaps, { SearchOptions as MultiSearchOptions } from './searchAppMaps';
-import { SearchResponse as DiagramsSearchResponse } from '../../fulltext/FindAppMaps';
+import AppMapIndex, {
+  SearchResponse as DiagramsSearchResponse,
+  SearchOptions,
+} from '../../fulltext/AppMapIndex';
 import {
   SearchResult as EventSearchResult,
   SearchResponse as EventSearchResponse,
@@ -164,11 +166,11 @@ export const handler = async (argv: any) => {
     const response = await searchSingleAppMap(appmap, query, options);
     await presentResults(response);
   } else {
-    const options: MultiSearchOptions = {
+    const options: SearchOptions = {
       maxResults,
     };
     const appmapDir = await locateAppMapDir();
-    const response = await searchAppMaps(appmapDir, query, options);
+    const response = await AppMapIndex.search(appmapDir, query, options);
     if (findEvents) {
       const eventOptions: SingleSearchOptions = { maxResults };
       const { maxSize, filter: filterStr } = argv;

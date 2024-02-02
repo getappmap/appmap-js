@@ -2,8 +2,7 @@ import assert from 'assert';
 
 import { SearchRpc } from '@appland/rpc';
 import { RpcHandler } from '../rpc';
-import searchAppMaps from '../../cmds/search/searchAppMaps';
-import { SearchResult as AppMapSearchResult } from '../../fulltext/FindAppMaps';
+import AppMapIndex, { SearchResult as AppMapSearchResult } from '../../fulltext/AppMapIndex';
 import searchSingleAppMap from '../../cmds/search/searchSingleAppMap';
 import { SearchResult as EventSearchResult } from '../../fulltext/FindEvents';
 
@@ -22,7 +21,7 @@ export async function handler(
 
   // Search across all AppMaps, creating a map from AppMap id to AppMapSearchResult
   const searchOptions = maxResults ? { maxResults } : {};
-  const appmapSearchResponse = await searchAppMaps(appmapDir, query, searchOptions);
+  const appmapSearchResponse = await AppMapIndex.search(appmapDir, query, searchOptions);
   const appmapSearchResults = appmapSearchResponse.results.reduce((acc, result) => {
     acc.set(result.appmap, result);
     return acc;
