@@ -3,7 +3,7 @@ import { Metadata } from '@appland/models';
 import { readFile, rename, rm, stat, writeFile } from 'fs/promises';
 
 import { exists, processNamedFiles, splitCamelized, verbose } from '../utils';
-import { log } from 'console';
+import { log, warn } from 'console';
 import lunr from 'lunr';
 
 type SerializedCodeObject = {
@@ -123,6 +123,22 @@ export default class AppMapIndex {
 
   async search(search: string, options: SearchOptions = {}): Promise<SearchResponse> {
     let matches = this.idx.search(search);
+
+    // Eliminate matches that don't exist on disk.
+    // lunr doesn't have an API to remove a document from the index, so we have to do this manually.
+    const appmapExists = new Map<string, boolean>();
+    for (const match of matches) {
+      const appmapFileName = [match.ref, '.appmap.json'].join('');
+      const doesExist = await exists(appmapFileName);
+      if (!doesExist) {
+        if (verbose())
+          warn(
+            `[AppMapIndex] AppMap ${appmapFileName} does not exist, but we got it as a search match.`
+          );
+      }
+      appmapExists.set(match.ref, doesExist);
+    }
+    matches = matches.filter((match) => appmapExists.get(match.ref));
 
     const numResults = matches.length;
     if (verbose()) log(`[AppMapIndex] Got ${numResults} AppMap matches for search "${search}"`);
