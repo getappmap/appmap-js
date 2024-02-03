@@ -131,19 +131,7 @@ export default class RuleChecker {
       return;
     }
 
-    let appmapConfigDir: string | undefined;
-    {
-      let searchDir: string | undefined = dirname(resolve(appMapFileName));
-      while (!appmapConfigDir) {
-        if (await fileExists(join(searchDir, 'appmap.yml'))) {
-          appmapConfigDir = searchDir;
-        } else {
-          if (dirname(searchDir) === searchDir) break;
-
-          searchDir = dirname(searchDir);
-        }
-      }
-    }
+    const appmapConfigDir = await findConfigDir(appMapFileName);
 
     const resolvePath = async (path: string): Promise<string | undefined> => {
       const candidates = [path];
@@ -328,4 +316,26 @@ export default class RuleChecker {
       }
     }
   }
+}
+
+const configDirs = new Map<string, string | undefined>();
+async function findConfigDir(appMapFileName: string) {
+  if (configDirs.has(appMapFileName)) return configDirs.get(appMapFileName);
+
+  let appmapConfigDir: string | undefined;
+  {
+    let searchDir: string | undefined = dirname(resolve(appMapFileName));
+    while (!appmapConfigDir) {
+      if (await fileExists(join(searchDir, 'appmap.yml'))) {
+        appmapConfigDir = searchDir;
+      } else {
+        if (dirname(searchDir) === searchDir) break;
+
+        searchDir = dirname(searchDir);
+      }
+    }
+  }
+
+  configDirs.set(appMapFileName, appmapConfigDir);
+  return appmapConfigDir;
 }
