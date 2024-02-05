@@ -5,6 +5,7 @@ import { readFile, rename, rm, stat, writeFile } from 'fs/promises';
 import { exists, processNamedFiles, splitCamelized, verbose } from '../utils';
 import { log, warn } from 'console';
 import lunr from 'lunr';
+import UpToDate from '../lib/UpToDate';
 
 type SerializedCodeObject = {
   name: string;
@@ -87,13 +88,8 @@ async function buildIndex(appmapDir: string): Promise<AppMapIndex> {
   const documents = new Array<any>();
   if (verbose()) log(`[AppMapIndex] Adding AppMaps to full-text index`);
   const startTime = Date.now();
-  const appmaps = new Map<string, number>();
 
   await processNamedFiles(appmapDir, 'metadata.json', async (metadataFile: string) => {
-    const appmapName = dirname(metadataFile);
-    const appmapFileName = [appmapName, '.appmap.json'].join('');
-    const stats = await stat(appmapFileName);
-    appmaps.set(appmapName, stats.mtime.getTime());
     documents.push(await buildDocument(metadataFile));
   });
 
@@ -119,84 +115,158 @@ async function buildIndex(appmapDir: string): Promise<AppMapIndex> {
         endTime - startTime
       }ms`
     );
-  return new AppMapIndex(appmapDir, appmaps, idx);
+  return new AppMapIndex(appmapDir, idx);
+}
+
+enum ScoreStats {
+  StdDev = 'stddev',
+  Mean = 'mean',
+  Median = 'median',
+  Max = 'max',
+}
+
+enum ScoreFactors {
+  OutOfDateFactor = ScoreStats.StdDev,
+  OutOfDateMultipler = 0.5,
+}
+
+export async function removeNonExistentMatches(matches: lunr.Index.Result[]) {
+  const appmapExists = new Map<string, boolean>();
+  for (const match of matches) {
+    const appmapFileName = [match.ref, '.appmap.json'].join('');
+    const doesExist = await exists(appmapFileName);
+    if (!doesExist) {
+      if (verbose())
+        warn(
+          `[AppMapIndex] AppMap ${appmapFileName} does not exist, but we got it as a search match.`
+        );
+    }
+    appmapExists.set(match.ref, doesExist);
+  }
+  return matches.filter((match) => appmapExists.get(match.ref));
+}
+
+export function scoreMatches(matches: lunr.Index.Result[]): Map<ScoreStats, number> {
+  const numResults = matches.length;
+  const maxScore = matches.reduce((acc, match) => Math.max(acc, match.score), 0);
+  const medianScore = matches[Math.floor(numResults / 2)].score;
+  const meanScore = matches.reduce((acc, match) => acc + match.score, 0) / numResults;
+  const stddevScore = Math.sqrt(
+    matches.reduce((acc, match) => acc + Math.pow(match.score, 2), 0) / numResults
+  );
+
+  if (verbose()) {
+    log(`[AppMapIndex] Score stats:`);
+    log(`  Max:    ${maxScore}`);
+    log(`  Median: ${medianScore}`);
+    log(`  Mean:   ${meanScore}`);
+    log(`  StdDev: ${stddevScore}`);
+    log(
+      `Number which are least 1 stddev above the mean: ${
+        matches.filter((match) => match.score > meanScore + stddevScore).length
+      }`
+    );
+    log(
+      `Number which are at least 2 stddev above the mean: ${
+        matches.filter((match) => match.score > meanScore + 2 * stddevScore).length
+      }`
+    );
+    log(
+      `Number which are at least 3 stddev above the mean: ${
+        matches.filter((match) => match.score > meanScore + 3 * stddevScore).length
+      }`
+    );
+  }
+
+  const scoreStats = new Map<ScoreStats, number>();
+  scoreStats.set(ScoreStats.Max, maxScore);
+  scoreStats.set(ScoreStats.Median, medianScore);
+  scoreStats.set(ScoreStats.Mean, meanScore);
+  scoreStats.set(ScoreStats.StdDev, stddevScore);
+
+  return scoreStats;
+}
+
+async function downscoreOutOfDateMatches(
+  scoreStats: Map<ScoreStats, number>,
+  matches: lunr.Index.Result[],
+  maxResults: number
+): Promise<lunr.Index.Result[]> {
+  const upToDate = new UpToDate();
+  const sortedMatches = new Array<lunr.Index.Result>();
+  let i = 0;
+
+  const finishedIterating = () => i >= matches.length;
+  const matchBelowThreshold = () => {
+    if (sortedMatches.length < maxResults) return false;
+
+    const lastSortedMatch = sortedMatches[sortedMatches.length - 1];
+    const match = matches[i];
+    return match.score < lastSortedMatch.score;
+  };
+  const completed = () => finishedIterating() || matchBelowThreshold();
+
+  while (!completed()) {
+    const match = matches[i++];
+    const downscore = scoreStats.get(ScoreStats.StdDev)! * ScoreFactors.OutOfDateMultipler;
+    const outOfDateDependencies = await upToDate.isOutOfDate(match.ref);
+    if (outOfDateDependencies) {
+      if (verbose()) {
+        log(
+          `[AppMapIndex] AppMap ${match.ref} is out of date due to ${[
+            ...outOfDateDependencies,
+          ]}. Downscoring by ${downscore}.`
+        );
+      }
+      match.score -= downscore;
+    }
+
+    sortedMatches.push(match);
+    sortedMatches.sort((a, b) => b.score - a.score);
+  }
+
+  return sortedMatches;
+}
+
+export function reportMatches(
+  matches: lunr.Index.Result[],
+  scoreStats: Map<ScoreStats, number>,
+  numResults: number
+): SearchResponse {
+  const searchResults = matches.map((match) => ({ appmap: match.ref, score: match.score }));
+  return {
+    type: 'appmap',
+    results: searchResults,
+    stats: [...scoreStats.keys()].reduce((acc, key) => {
+      acc[key] = scoreStats.get(key as ScoreStats)!;
+      return acc;
+    }, {}) as SearchStats,
+    numResults,
+  };
 }
 
 export default class AppMapIndex {
-  constructor(
-    public appmapDir: string,
-    private appmaps: Map<string, number>,
-    private idx: lunr.Index
-  ) {}
+  constructor(public appmapDir: string, private idx: lunr.Index) {}
 
   async search(search: string, options: SearchOptions = {}): Promise<SearchResponse> {
     let matches = this.idx.search(search);
-
-    // Eliminate matches that don't exist on disk.
-    // lunr doesn't have an API to remove a document from the index, so we have to do this manually.
-    const appmapExists = new Map<string, boolean>();
-    for (const match of matches) {
-      const appmapFileName = [match.ref, '.appmap.json'].join('');
-      const doesExist = await exists(appmapFileName);
-      if (!doesExist) {
-        if (verbose())
-          warn(
-            `[AppMapIndex] AppMap ${appmapFileName} does not exist, but we got it as a search match.`
-          );
-      }
-      appmapExists.set(match.ref, doesExist);
-    }
-    matches = matches.filter((match) => appmapExists.get(match.ref));
-
+    matches = await removeNonExistentMatches(matches);
     const numResults = matches.length;
+
     if (verbose()) log(`[AppMapIndex] Got ${numResults} AppMap matches for search "${search}"`);
 
-    const maxScore = matches.reduce((acc, match) => Math.max(acc, match.score), 0);
-    const medianScore = matches[Math.floor(numResults / 2)].score;
-    const meanScore = matches.reduce((acc, match) => acc + match.score, 0) / numResults;
-    const stddevScore = Math.sqrt(
-      matches.reduce((acc, match) => acc + Math.pow(match.score, 2), 0) / numResults
+    const scoreStats = scoreMatches(matches);
+
+    if (options.maxResults && numResults > options.maxResults)
+      if (verbose()) log(`[FullText] Limiting to the top ${options.maxResults} matches`);
+
+    matches = await downscoreOutOfDateMatches(
+      scoreStats,
+      matches,
+      options.maxResults || matches.length
     );
 
-    if (verbose()) {
-      log(`[AppMapIndex] Score stats:`);
-      log(`  Max:    ${maxScore}`);
-      log(`  Median: ${medianScore}`);
-      log(`  Mean:   ${meanScore}`);
-      log(`  StdDev: ${stddevScore}`);
-      log(
-        `Number which are least 1 stddev above the mean: ${
-          matches.filter((match) => match.score > meanScore + stddevScore).length
-        }`
-      );
-      log(
-        `Number which are at least 2 stddev above the mean: ${
-          matches.filter((match) => match.score > meanScore + 2 * stddevScore).length
-        }`
-      );
-      log(
-        `Number which are at least 3 stddev above the mean: ${
-          matches.filter((match) => match.score > meanScore + 3 * stddevScore).length
-        }`
-      );
-    }
-
-    if (options.maxResults && numResults > options.maxResults) {
-      if (verbose()) log(`[FullText] Limiting to the top ${options.maxResults} matches`);
-      matches = matches.slice(0, options.maxResults);
-    }
-    const searchResults = matches.map((match) => ({ appmap: match.ref, score: match.score }));
-    return {
-      type: 'appmap',
-      results: searchResults,
-      stats: {
-        mean: meanScore,
-        median: medianScore,
-        stddev: stddevScore,
-        max: maxScore,
-      },
-      numResults,
-    } as SearchResponse;
+    return reportMatches(matches, scoreStats, numResults);
   }
 
   static async search(
