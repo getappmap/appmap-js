@@ -60,7 +60,7 @@ describe('Depends', () => {
     const result: any[] = [];
     const fn = new Depends(appMapDir);
     fn.files = ['app/models/user.rb'];
-    await fn.depends((file) => result.push(file));
+    await fn.depends((file: string) => result.push(file));
     expect(result).toEqual([expected]);
   });
 });

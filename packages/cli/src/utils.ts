@@ -59,13 +59,21 @@ async function statFile(filePath: PathLike): Promise<Stats | null> {
   }
 }
 
+export type CodedError = { code: string };
+
+export function isCodedError(error: any): error is CodedError {
+  if (!error.code) return false;
+
+  return typeof error.code === 'string';
+}
+
 /**
  * Gets the last modified time of a file.
  *
  * @returns file mtime in ms, or null if the file does not exist or
  * is not a file.
  */
-export async function mtime(filePath: PathLike): Promise<number | null> {
+export async function mtime(filePath: PathLike): Promise<number | undefined> {
   // NB: 'ctime' is actually the time that the stats of the file were last changed.
   // And 'birthtime' is not guaranteed across platforms.
   // Therefore mtime is the most reliable indicator of when the file was created,
@@ -74,7 +82,7 @@ export async function mtime(filePath: PathLike): Promise<number | null> {
 
   const fileStat = await statFile(filePath);
   if (!fileStat || !fileStat.isFile()) {
-    return null;
+    return;
   }
   return fileStat.mtimeMs;
 }
