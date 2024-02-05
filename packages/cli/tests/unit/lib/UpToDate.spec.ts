@@ -3,7 +3,7 @@ import { verbose } from '../../../src/utils';
 
 describe('UpToDate', () => {
   beforeAll(() => verbose(process.env.DEBUG === 'true'));
-  afterEach(() => jest.resetAllMocks());
+  afterEach(() => jest.restoreAllMocks());
 
   const aSecondAgo = Date.now() - 1000;
 

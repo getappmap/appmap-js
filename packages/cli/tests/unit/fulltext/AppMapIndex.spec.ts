@@ -1,50 +1,95 @@
 import sinon, { SinonSandbox } from 'sinon';
-jest.mock('../../../src/utils');
 import * as utils from '../../../src/utils';
 import AppMapIndex from '../../../src/fulltext/AppMapIndex';
+import UpToDate from '../../../src/lib/UpToDate';
 import lunr from 'lunr';
 import { PathLike } from 'fs';
 
+jest.mock('../../../src/utils');
+jest.mock('../../../src/lib/UpToDate');
+
 describe('AppMapIndex', () => {
-  let sandbox: SinonSandbox;
   let appMapIndex: AppMapIndex;
 
-  beforeEach(() => (sandbox = sinon.createSandbox()));
-  afterEach(() => sandbox.restore());
+  afterEach(() => jest.resetAllMocks());
 
-  it(`Reports statistics about the search results`, async () => {
-    const search = jest.fn().mockReturnValue([
-      { ref: 'appmap1', score: 1 },
-      { ref: 'appmap2', score: 2 },
-      { ref: 'appmap3', score: 3 },
-      { ref: 'appmap4', score: 4 },
-      { ref: 'appmap5', score: 5 },
-    ]);
-    const exists = jest.mocked(utils).exists;
-    exists.mockResolvedValue(true);
-    const mockLunr: lunr.Index = {
-      search,
-    } as unknown as lunr.Index;
-    appMapIndex = new AppMapIndex(
-      'appmapDir',
-      'mock appmaps list' as unknown as Map<string, number>,
-      mockLunr
-    );
+  function mockUpToDate() {
+    const upToDate = jest.mocked(UpToDate);
+    upToDate.prototype.isOutOfDate.mockResolvedValue(undefined);
+  }
 
-    const searchResults = await appMapIndex.search('login');
-    expect(searchResults.numResults).toEqual(5);
-    const stats: any = { ...searchResults.stats };
-    const stddev = stats.stddev;
-    delete stats.stddev;
-    expect(stats).toEqual({
-      max: 5,
-      median: 3,
-      mean: 3,
+  describe('when search results are found', () => {
+    beforeEach(() => {
+      const search = jest.fn().mockReturnValue([
+        { ref: 'appmap5', score: 5 },
+        { ref: 'appmap4', score: 4 },
+        { ref: 'appmap3', score: 3 },
+        { ref: 'appmap2', score: 2 },
+        { ref: 'appmap1', score: 1 },
+      ]);
+      const exists = jest.mocked(utils).exists;
+      exists.mockResolvedValue(true);
+      const mockLunr: lunr.Index = {
+        search,
+      } as unknown as lunr.Index;
+      appMapIndex = new AppMapIndex('appmapDir', mockLunr);
     });
-    expect(stddev).toBeCloseTo(3.3166);
+
+    describe('and some are out of date', () => {
+      let upToDate: jest.MockedObjectDeep<typeof UpToDate>;
+
+      beforeEach(() => {
+        upToDate = jest.mocked(UpToDate);
+        upToDate.prototype.isOutOfDate.mockImplementation(async (appmapName: string) => {
+          return appmapName === 'appmap4' ? new Set(['file4.rb']) : undefined;
+        });
+      });
+
+      it('downscores the out of date matches', async () => {
+        const searchResults = await appMapIndex.search('login');
+        expect(searchResults.numResults).toEqual(5);
+        expect(searchResults.results.map((r) => r.appmap)).toEqual([
+          'appmap5',
+          'appmap3',
+          'appmap4',
+          'appmap2',
+          'appmap1',
+        ]);
+        expect(searchResults.results[2].score).toBeCloseTo(2.341);
+        expect(upToDate.prototype.isOutOfDate).toHaveBeenCalledTimes(5);
+      });
+
+      it('only computes downscore until maxResults is reached', async () => {
+        const searchResults = await appMapIndex.search('login', { maxResults: 1 });
+        expect(searchResults.numResults).toEqual(5);
+        expect(searchResults.results.map((r) => r.appmap)).toEqual(['appmap5']);
+        expect(searchResults.results.map((r) => r.score)).toEqual([5]);
+        expect(upToDate.prototype.isOutOfDate).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    it(`reports statistics`, async () => {
+      mockUpToDate();
+
+      const searchResults = await appMapIndex.search('login');
+      expect(searchResults.numResults).toEqual(5);
+      expect(searchResults.results.map((r) => r.score)).toEqual([5, 4, 3, 2, 1]);
+
+      const stats: any = { ...searchResults.stats };
+      const stddev = stats.stddev;
+      delete stats.stddev;
+      expect(stats).toEqual({
+        max: 5,
+        median: 3,
+        mean: 3,
+      });
+      expect(stddev).toBeCloseTo(3.3166);
+    });
   });
 
   describe(`when a search result doesn't exist on disk`, () => {
+    beforeEach(() => mockUpToDate());
+
     it(`removes the search result from the reported matches`, async () => {
       const existingFileNames = ['appmap1.appmap.json'];
       const search = jest.fn().mockReturnValue([
@@ -58,11 +103,7 @@ describe('AppMapIndex', () => {
       const mockLunr: lunr.Index = {
         search,
       } as unknown as lunr.Index;
-      appMapIndex = new AppMapIndex(
-        'appmapDir',
-        'mock appmaps list' as unknown as Map<string, number>,
-        mockLunr
-      );
+      appMapIndex = new AppMapIndex('appmapDir', mockLunr);
 
       const searchResults = await appMapIndex.search('login');
       expect(searchResults.numResults).toEqual(1);
