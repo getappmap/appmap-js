@@ -76,7 +76,7 @@ export default class RPCServer {
   }
 
   unref() {
-    if (this.app) this.app.unref();
+    if (this.app) this.app.unref(); 
   }
 
   stop() {

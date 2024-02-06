@@ -3,10 +3,12 @@ import { join } from 'path';
 import { readFile } from 'fs/promises';
 
 import RPCTest from './RPCTest';
+import { verbose } from '../../src/utils';
 
 describe('RPC', () => {
   const rpcTest = new RPCTest();
 
+  beforeAll(() => verbose(process.env.DEBUG === 'true'));
   beforeAll(async () => await rpcTest.setupAll());
   beforeEach(async () => await rpcTest.setupEach());
   afterEach(async () => await rpcTest.teardownEach());

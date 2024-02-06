@@ -1,9 +1,9 @@
 import { AppMap, AppMapFilter, Event, buildAppMap } from '@appland/models';
-import { warn } from 'console';
+import { log, warn } from 'console';
 import { readFile } from 'fs/promises';
 import { verbose } from '../utils';
 import lunr from 'lunr';
-import { splitCamelized } from './FindAppMaps';
+import { splitCamelized } from '../utils';
 import { collectParameters } from './collectParameters';
 import assert from 'assert';
 
@@ -61,13 +61,18 @@ export default class FindEvents {
 
     const baseAppMap = builder.build();
 
-    if (verbose()) warn(`Built AppMap with ${baseAppMap.events.length} events.`);
-    if (verbose()) warn(`Applying default AppMap filters.`);
+    if (verbose()) log(`[FindEvents] Built AppMap with ${baseAppMap.events.length} events.`);
 
-    const filteredAppMap = this.filter ? this.filter.filter(baseAppMap, []) : baseAppMap;
+    let filteredAppMap: AppMap;
+    if (this.filter) {
+      if (verbose()) warn(`Applying custom AppMap filters.`);
+      filteredAppMap = this.filter.filter(baseAppMap, []);
+    } else {
+      filteredAppMap = baseAppMap;
+    }
 
-    if (verbose()) warn(`Filtered AppMap has ${filteredAppMap.events.length} events.`);
-    if (verbose()) warn(`Indexing AppMap`);
+    if (verbose()) log(`[FindEvents] Filtered AppMap has ${filteredAppMap.events.length} events.`);
+    if (verbose()) log(`[FindEvents] Indexing events in AppMap ${this.appmapId}`);
 
     const indexEvent = (event: Event, depth = 0) => {
       const co = event.codeObject;
@@ -116,9 +121,15 @@ export default class FindEvents {
     assert(this.idx);
     let matches = this.idx.search(search);
     const numResults = matches.length;
-    if (verbose()) warn(`Got ${numResults} matches for search ${search}`);
+    if (verbose())
+      log(
+        `[FindEvents] Got ${numResults} event matches for search "${search}" within AppMap "${this.appmapId}`
+      );
     if (options.maxResults && numResults > options.maxResults) {
-      if (verbose()) warn(`Limiting to the top ${options.maxResults} matches`);
+      if (verbose())
+        log(
+          `[FindEvents] Limiting to the top ${options.maxResults} event matches within AppMap "${this.appmapId}"`
+        );
       matches = matches.slice(0, options.maxResults);
     }
     const searchResults = matches.map((match) => {

@@ -26,6 +26,31 @@ export function baseName(fileName: string) {
   return fileName.substring(0, fileName.length - '.appmap.json'.length);
 }
 
+export function isCamelized(str: string): boolean {
+  if (str.length < 3) return false;
+
+  const testStr = str.slice(1);
+  return /[a-z][A-Z]/.test(testStr);
+}
+
+export function splitCamelized(str: string): string {
+  if (!isCamelized(str)) return str;
+
+  const result = new Array<string>();
+  let last = 0;
+  for (let i = 1; i < str.length; i++) {
+    const pc = str[i - 1];
+    const c = str[i];
+    const isUpper = c >= 'A' && c <= 'Z';
+    if (isUpper) {
+      result.push(str.slice(last, i));
+      last = i;
+    }
+  }
+  result.push(str.slice(last));
+  return result.join(' ');
+}
+
 async function statFile(filePath: PathLike): Promise<Stats | null> {
   try {
     return await fsp.stat(filePath);

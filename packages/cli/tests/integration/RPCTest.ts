@@ -29,10 +29,14 @@ export default class RPCTest {
     if (process.env.VERBOSE === 'true') verbose(true);
 
     this.rpc = await buildRPC();
+    // We will stop the server in teardownAll, but let's unref it anyway in case that doesn't happen.
+    this.rpc.server.unref();
   }
 
   async setupEach() {
     process.chdir(join(__dirname, '../unit/fixtures/ruby'));
+
+    await rm('appmap.index.json', { force: true });
 
     // Index the AppMaps because RPC commands will be expecting these files.
     this.appmaps = await promisify(glob)('*.appmap.json');
