@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.125.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.124.0...@appland/appmap-v3.125.0) (2024-02-06)
+
+
+### Features
+
+* Filter out non-existant AppMaps ([bd68de2](https://github.com/getappmap/appmap-js/commit/bd68de2caf3340368b98e873cfeccbee87952aa1))
+* Report statistics about the search results ([48bb77f](https://github.com/getappmap/appmap-js/commit/48bb77f361f4c0373aaa08ab94634b2f9d4e6cf0))
+
 # [@appland/appmap-v3.124.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.123.0...@appland/appmap-v3.124.0) (2024-02-02)
 
 
