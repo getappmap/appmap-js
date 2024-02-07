@@ -20,7 +20,7 @@ describe('GradleInstaller', () => {
     it('detects a gradle project', () => {
       const projectDirectory = path.join(fixtureDir, 'example-project');
       const maven = new GradleInstaller(projectDirectory);
-      expect(maven.available()).resolves.toBe(true);
+      return expect(maven.available()).resolves.toBe(true);
     });
   });
 

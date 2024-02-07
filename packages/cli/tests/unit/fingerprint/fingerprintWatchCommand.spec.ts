@@ -121,6 +121,7 @@ describe(FingerprintWatchCommand, () => {
     });
 
     async function testDisableFileWatching(errorMessage: string, code: string) {
+      expect.assertions(5);
       cmd = new FingerprintWatchCommand(appMapDir);
       const err = new Error(errorMessage);
       (err as NodeJS.ErrnoException).code = code;
@@ -137,13 +138,14 @@ describe(FingerprintWatchCommand, () => {
       mockWarn.mockRestore();
     }
 
-    it('does not raise if it hits the limit of the number of file watchers', async () => {
-      testDisableFileWatching('ENOSPC: System limit for number of file watchers reached', 'ENOSPC');
-    });
+    it('does not raise if it hits the limit of the number of file watchers', () =>
+      testDisableFileWatching(
+        'ENOSPC: System limit for number of file watchers reached',
+        'ENOSPC'
+      ));
 
-    it('does not raise if it hits the limit of the number of open files', async () => {
-      testDisableFileWatching('EMFILE: too many open files', 'EMFILE');
-    });
+    it('does not raise if it hits the limit of the number of open files', () =>
+      testDisableFileWatching('EMFILE: too many open files', 'EMFILE'));
 
     it('gets filenames from error messages', async () => {
       cmd = new FingerprintWatchCommand(appMapDir);

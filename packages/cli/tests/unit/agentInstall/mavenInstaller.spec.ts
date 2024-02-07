@@ -20,7 +20,7 @@ describe('MavenInstaller', () => {
     it('detects a maven project', () => {
       const projectDirectory = path.join(fixtureDir, 'example-project');
       const maven = new MavenInstaller(projectDirectory);
-      expect(maven.available()).resolves.toBe(true);
+      return expect(maven.available()).resolves.toBe(true);
     });
   });
 
