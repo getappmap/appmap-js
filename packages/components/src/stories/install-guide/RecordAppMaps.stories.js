@@ -11,7 +11,7 @@ const Template = (args, { argTypes }) => ({
   components: { VRecordAppMaps },
   computed: {
     statusStates() {
-      return [2, this.complete ? 2 : 1, this.complete ? 1 : 0, 0, 0];
+      return [2, this.complete ? 2 : 1, this.complete ? 1 : 0, 0];
     },
   },
   template: '<v-record-app-maps v-bind="$props" :status-states="statusStates"/>',
