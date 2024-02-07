@@ -47,4 +47,28 @@ export default class AI {
       throw new Error('Failed to send feedback');
     }
   }
+
+  static async classify(question: string): Promise<string> {
+    let resolve: (value: string) => void;
+    let reject: (error: Error) => void;
+
+    const tokens = new Array<string>();
+    const client = await AI.connect({
+      onToken(token: string) {
+        tokens.push(token);
+      },
+      onComplete() {
+        resolve(tokens.join(' '));
+      },
+      onError(error: Error) {
+        reject(error);
+      },
+    });
+    client.inputPrompt(question, { tool: 'classify' });
+
+    return new Promise<string>((_resolve, _reject) => {
+      resolve = _resolve;
+      reject = _reject;
+    });
+  }
 }

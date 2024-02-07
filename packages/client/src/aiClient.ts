@@ -15,6 +15,7 @@ export class CodedError extends Error {
 export type Callbacks = {
   onToken: (token: string, messageId: string) => void;
   onComplete(): void;
+  onClassify?: (classification: string, messageId: string) => void;
   onRequestContext?: (
     data: Record<string, unknown>
   ) => Record<string, unknown> | Promise<Record<string, unknown>>;
@@ -74,6 +75,11 @@ export default class AIClient {
         if (!('messageId' in message))
           this.panic(new Error('Unexpected token message: no messageId'));
         this.callbacks.onToken(message.token as string, message.messageId as string);
+        break;
+      case 'classification':
+        if (!('classification' in message))
+          this.panic(new Error('Unexpected classification message: no classification'));
+        this.callbacks.onClassify?.(message.classification as string, message.messageId as string);
         break;
       case 'request-context': {
         if (!this.callbacks.onRequestContext) {
