@@ -35,7 +35,7 @@
 <script lang="ts">
 //@ts-nocheck
 import VButton from '@/components/Button.vue';
-import ProgressIndicator from '@/assets/progress-indicator-4-segments.svg';
+import ProgressIndicator from '@/assets/progress-indicator-3-segments.svg';
 
 export enum StepStatus {
   NotStarted = 0,
@@ -47,8 +47,7 @@ export enum StepStatus {
 export enum InstructionStep {
   ProjectPicker = 0,
   RecordAppMaps,
-  ExploreAppMaps,
-  RuntimeAnalysis,
+  Navie,
   NumSteps,
 }
 
@@ -105,25 +104,15 @@ export default {
           prompt: 'Record AppMaps using one of the suggested methods',
         },
       },
-      [InstructionStep.ExploreAppMaps]: {
-        button: 'Explore AppMaps',
+      [InstructionStep.Navie]: {
+        button: 'Ask AppMap Navie AI',
         complete: {
-          header: `{{projectName}} has {{numAppMaps}} AppMap{{numAppMaps == 1 ? '' : 's'}}`,
-          prompt: 'Generate OpenAPI Definitions from AppMap data',
+          header: `{{projectName}} is ready for Navie`,
+          prompt: 'Gain insight about your project using AppMap Navie',
         },
         incomplete: {
-          header: `{{projectName}} has {{numAppMaps}} AppMap{{numAppMaps == 1 ? '' : 's'}}`,
-          prompt: 'Open an AppMap',
-        },
-      },
-      [InstructionStep.RuntimeAnalysis]: {
-        button: 'Runtime Analysis',
-        complete: {
-          header: 'AppMap setup is complete for {{projectName}}',
-        },
-        incomplete: {
-          header: `{{projectName}} has {{numAppMaps}} AppMap{{numAppMaps == 1 ? '' : 's'}}`,
-          prompt: 'View the runtime analysis report for {{projectName}}',
+          header: `{{projectName}} is ready for Navie`,
+          prompt: 'Gain insight about your project using AppMap Navie ',
         },
       },
     },

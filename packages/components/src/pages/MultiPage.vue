@@ -68,8 +68,12 @@ export default {
     },
 
     next() {
-      const nextId = this.getPageId(1);
-      this.jumpTo(nextId);
+      if (this.currentPage === 'record-appmaps') {
+        this.$root.$emit('open-navie');
+      } else {
+        const nextId = this.getPageId(1);
+        this.jumpTo(nextId);
+      }
     },
 
     previous() {
@@ -91,7 +95,6 @@ export default {
     const slots = this.slots();
     slots.forEach(({ componentInstance: vm }, i) => {
       vm.$set(vm, 'first', i === 0);
-      vm.$set(vm, 'last', i === slots.length - 1);
     });
   },
 };

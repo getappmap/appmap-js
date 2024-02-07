@@ -20,12 +20,7 @@ context('Instruction Status', () => {
     cy.get('[data-cy="status"] [data-cy="header"]').contains(
       'No AppMaps have been recorded yet for DjangoTest'
     );
-    cy.get('#record-appmaps [data-cy="next-button"]').click();
-    cy.get('#open-appmaps [data-cy="status"] [data-cy="prompt"]').contains('Go back and record');
-    cy.get('#open-appmaps [data-cy="go-back"]').click();
-    cy.get('[data-cy="status"] [data-cy="header"]').contains(
-      'No AppMaps have been recorded yet for DjangoTest'
-    );
+    // We can't test further because the next step just sends a message to the code editor
   });
 
   it('does not show the status bar for unsupported projects', () => {
