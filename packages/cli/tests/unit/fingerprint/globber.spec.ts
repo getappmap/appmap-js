@@ -36,7 +36,7 @@ describe('Globber', () => {
     });
     globber.on('change', (actual) => {
       expect(path.basename(actual)).toStrictEqual(appMap);
-      done();
+      globber.once('end', done);
     });
 
     fs.writeFileSync(appMapPath, '{"hello": "world"}');
