@@ -108,6 +108,8 @@ commit of the current git revision may not be the one that triggered the build.`
 };
 
 export const handler = async (argv: any) => {
+  let finalizers: Promise<unknown>[] = [];
+
   verbose(argv.verbose);
 
   if (!process.env.npm_package_version)
@@ -185,7 +187,7 @@ export const handler = async (argv: any) => {
         doScan
       );
     } finally {
-      workerPool.close();
+      finalizers.push(workerPool.close());
     }
   } else {
     await generateOpenAPI(appMapDir, maxAppMapSizeInBytes);
@@ -280,4 +282,5 @@ The base revision cannot be determined, so either use --type=auto or --type=full
     });
   }
   console.log(`Created AppMap archive ${join(outputDir, outputFileName)}`);
+  await Promise.all(finalizers);
 };
