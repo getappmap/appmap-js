@@ -5,7 +5,6 @@
       class="attachments"
       data-cy="input-attachments"
     >
-      <!-- <div>Including code snippet</div> -->
       <v-code-selection
         v-for="(selection, i) in codeSelections"
         :key="i"

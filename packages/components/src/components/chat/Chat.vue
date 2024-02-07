@@ -153,7 +153,7 @@ export default {
       type: String,
     },
     sendMessage: {
-      type: Function, // UserMessageHandler
+      type: Function, // (message: string, codeSelections?: string[]) => void
     },
     suggestions: {
       type: Array,
@@ -264,11 +264,12 @@ export default {
       const userMessage = this.addUserMessage(message);
       userMessage.codeSelections = this.codeSelections;
 
-      this.sendMessage(message);
+      this.sendMessage(
+        message,
+        this.codeSelections.map((s) => s.code)
+      );
 
-      // Clear any pending code selection attachments.
-      // They've been 'sent'.
-      this.$set(this, 'codeSelections', []);
+      this.codeSelections = [];
     },
     onAck(_messageId: string, threadId: string) {
       this.setAuthorized(true);

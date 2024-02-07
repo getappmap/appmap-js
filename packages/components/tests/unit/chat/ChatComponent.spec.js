@@ -206,7 +206,33 @@ describe('components/Chat.vue', () => {
       await wrapper.vm.$nextTick();
 
       expect(wrapper.find('[data-actor="user"] [data-cy="message-text"]').exists()).toBe(true);
-      expect(sendMessage).toBeCalledWith(prompt);
+      expect(sendMessage).toBeCalledWith(prompt, []);
+    });
+
+    it('emits the prompt along with a code selection', async () => {
+      const sendMessage = jest.fn();
+      const prompt = 'the-prompt';
+      const wrapper = mount(VChat, {
+        propsData: {
+          suggestionSpeaker: 'user',
+          sendMessage,
+          suggestions: [{ title: 'title', subtitle: 'subtitle', prompt }],
+        },
+      });
+      const code = `class User < ApplicationRecord`;
+      wrapper.vm.includeCodeSelection({
+        path: 'app/models/user.rb',
+        lineStart: 10,
+        lineEnd: 15,
+        code,
+        language: 'ruby',
+      });
+      wrapper.find('[data-cy="prompt-suggestion"]').trigger('click');
+
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('[data-actor="user"] [data-cy="message-text"]').exists()).toBe(true);
+      expect(sendMessage).toBeCalledWith(prompt, [code]);
     });
 
     it('can emit the prompt as the system', async () => {
@@ -226,6 +252,18 @@ describe('components/Chat.vue', () => {
       lineEnd: 17,
       code: '...',
     };
+
+    it('are emitted in sendMessage', async () => {
+      const sendMessage = jest.fn();
+      const wrapper = mount(VChat, { propsData: { sendMessage } });
+
+      wrapper.vm.includeCodeSelection(codeSelection);
+      wrapper.vm.onSend('Hello from the user');
+
+      await wrapper.vm.$nextTick();
+
+      expect(sendMessage).toBeCalledWith('Hello from the user', [codeSelection.code]);
+    });
 
     it('includes pending code snippets in the input area', async () => {
       const wrapper = mount(VChat);

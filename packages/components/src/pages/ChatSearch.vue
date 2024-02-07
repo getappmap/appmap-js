@@ -251,7 +251,7 @@ export default {
     updateFilters(updatedFilters) {
       this.$store.commit(SET_SAVED_FILTERS, updatedFilters);
     },
-    async sendMessage(message: string) {
+    async sendMessage(message: string, codeSelections: string[] = []) {
       this.ask = this.rpcClient().explain();
       this.searching = true;
       this.lastStatusLabel = undefined;
@@ -310,12 +310,13 @@ export default {
           }
         });
         this.ask.on('complete', onComplete);
-        this.ask
-          .explain(
-            { question: message, codeSelection: this.codeSelection },
-            this.$refs.vchat.threadId
-          )
-          .catch(onError);
+
+        const explainRequest = {
+          question: message,
+        };
+        if (codeSelections.length > 0) explainRequest.codeSelection = codeSelections.join('\n\n');
+
+        this.ask.explain(explainRequest, this.$refs.vchat.threadId).catch(onError);
       });
     },
     async loadAppMapStats() {
@@ -365,7 +366,6 @@ export default {
       this.isPanelResizing = false;
     },
     includeCodeSelection(codeSelection: CodeSelection) {
-      console.log(JSON.stringify(codeSelection, null, 2));
       this.$refs.vchat.includeCodeSelection(codeSelection);
     },
   },
