@@ -171,10 +171,6 @@ export default class FingerprintWatchCommand {
   }
 
   async execute(statDelayMs?: number, interval?: number) {
-    this.fpQueue.process().then(() => {
-      this.fpQueue.handler.checkVersion = false;
-    });
-
     const glob = `${this.directory}/**/*.appmap.json`;
 
     this.watcher = new FSWatcher({

@@ -9,6 +9,7 @@ function isNodeError(error: unknown, code?: string): error is NodeJS.ErrnoExcept
 export default class FingerprintQueue {
   public handler: Fingerprinter;
   public failOnError = true;
+  private lastError: unknown;
   private queue: QueueObject<string>;
   private pending = new Set<string>();
 
@@ -23,32 +24,28 @@ export default class FingerprintQueue {
       }
       this.pending.delete(appmapFileName);
     }, this.size);
-    this.queue.pause();
+    this.queue.drain(() => (this.handler.checkVersion = false));
+    this.queue.error((error) => {
+      if (error instanceof FileTooLargeError) {
+        console.warn(
+          [
+            `Skipped: ${error.message}`,
+            'Tip: consider recording a shorter interaction or removing some classes from appmap.yml.',
+          ].join('\n')
+        );
+      } else if (isNodeError(error, 'ENOENT')) {
+        console.warn(`Skipped: ${error.path}\nThe file does not exist.`);
+      } else if (this.failOnError) {
+        this.lastError = error;
+      } else {
+        console.warn(`Skipped: ${error}`);
+      }
+    });
   }
 
   async process() {
-    return new Promise<void>((resolve, reject) => {
-      this.queue.drain(resolve);
-      this.queue.error((error) => {
-        if (error instanceof FileTooLargeError) {
-          console.warn(
-            [
-              `Skipped: ${error.message}`,
-              'Tip: consider recording a shorter interaction or removing some classes from appmap.yml.',
-            ].join('\n')
-          );
-        } else if (isNodeError(error, 'ENOENT')) {
-          console.warn(`Skipped: ${error.path}\nThe file does not exist.`);
-        } else if (this.failOnError) {
-          reject(error);
-        } else {
-          console.warn(`Skipped: ${error}`);
-        }
-      });
-      // The queue will run continuously from here on out, which is what we want.
-      // Items will be added to the queue as they are discovered.
-      this.queue.resume();
-    });
+    if (!this.queue.idle()) await this.queue.drain();
+    if (this.lastError) throw this.lastError;
   }
 
   push(job: string) {
