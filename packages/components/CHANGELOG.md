@@ -1,3 +1,10 @@
+# [@appland/components-v3.33.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.33.0...@appland/components-v3.33.1) (2024-02-07)
+
+
+### Bug Fixes
+
+* Propagate codeSelections ([7100120](https://github.com/getappmap/appmap-js/commit/71001202c6dfcf81e4aea0b43cd27b7b5d465ddb))
+
 # [@appland/components-v3.33.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.32.0...@appland/components-v3.33.0) (2024-02-01)
 
 
