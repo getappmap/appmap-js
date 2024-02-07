@@ -36,9 +36,7 @@ describe('Ruby Agent Installation', () => {
       sinon.restore();
     });
 
-    it('detects bundler project', async () => {
-      expect(btInstaller.available()).resolves.toBe(true);
-    });
+    it('detects bundler project', () => expect(btInstaller.available()).resolves.toBe(true));
 
     it('provides the correct init command', async () => {
       const cmdStruct = await btInstaller.initCommand();
