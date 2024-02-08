@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.126.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.125.0...@appland/appmap-v3.126.0) (2024-02-08)
+
+
+### Features
+
+* Downscore out-of-date AppMaps ([684d6e8](https://github.com/getappmap/appmap-js/commit/684d6e8f42619cc19db152edd12cce4a933530b2))
+
 # [@appland/appmap-v3.125.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.124.0...@appland/appmap-v3.125.0) (2024-02-06)
 
 
