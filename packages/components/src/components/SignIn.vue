@@ -11,29 +11,17 @@
       </div>
 
       <ul class="signin-ctas">
-        <li @click="clickSignInLink('sequence-diagrams')">
-          <a href="https://appmap.io/docs/diagrams/sequence-diagrams">Sequence diagrams</a>
+        <li>
+          <a href="https://appmap.io/docs/navie">AppMap Navie AI</a>
         </li>
-        <li @click="clickSignInLink('trace-views')">
-          <a
-            href="https://appmap.io/docs/diagrams/how-to-use-appmaps.html#view-and-interact-with-the-trace-diagram"
-            >Trace views</a
-          >
+        <li>
+          <a href="https://appmap.io/docs/diagrams">Code visualizations</a>
         </li>
-        <li @click="clickSignInLink('dependency-maps')">
-          <a
-            href="https://appmap.io/docs/diagrams/how-to-use-appmaps.html#view-and-interact-with-the-dependency-map"
-            >Dependency maps</a
-          >
-        </li>
-        <li @click="clickSignInLink('flame-graphs')">
-          <a href="https://appmap.io/docs/diagrams/flamegraph.html">Flame graphs</a>
-        </li>
-        <li @click="clickSignInLink('runtime-analysis')">
-          <a href="https://appmap.io/docs/analysis/in-your-code-editor.html">Runtime analysis</a>
-        </li>
-        <li @click="clickSignInLink('appmap-ci')">
+        <li>
           <a href="https://appmap.io/docs/analysis/in-ci.html">AppMap in CI</a>
+        </li>
+        <li>
+          <a href="https://appmap.io/docs/analysis/in-your-code-editor.html">Runtime analysis</a>
         </li>
       </ul>
       <div class="signin-buttons">
@@ -68,10 +56,6 @@ export default {
   methods: {
     signIn() {
       this.$root.$emit('sign-in');
-    },
-
-    clickSignInLink(linkType) {
-      this.$root.$emit('click-sign-in-link', linkType);
     },
   },
 };
