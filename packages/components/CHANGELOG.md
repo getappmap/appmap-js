@@ -1,3 +1,20 @@
+# [@appland/components-v4.0.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.33.1...@appland/components-v4.0.0) (2024-02-12)
+
+
+### Features
+
+* Update instructions flow ([8d3e154](https://github.com/getappmap/appmap-js/commit/8d3e154794be7b0c1de7ba0ca7eea5f3299abf1b))
+* Update links on sign-in page ([7e8e4f4](https://github.com/getappmap/appmap-js/commit/7e8e4f4caf39803e2dd4dbb3af231c110438e425))
+
+
+### BREAKING CHANGES
+
+* Removed the Explore AppMaps and Runtime Analysis
+instructions pages. The code editor will need to handle the `open-navie`
+message by opening the Navie AI chat interface. The install guide
+expects the project metadata to have a new field `openedNavie` that is a
+Boolean indicating whether the user has opened Navie.
+
 # [@appland/components-v3.33.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.33.0...@appland/components-v3.33.1) (2024-02-07)
 
 
