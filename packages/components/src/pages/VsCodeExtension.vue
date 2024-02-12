@@ -39,7 +39,6 @@
       </transition>
       <div v-if="showDetailsPanel" class="main-column--drag" @mousedown="startResizing"></div>
       <div v-if="!showDetailsPanel" class="sidebar-menu" data-cy="sidebar-menu">
-        <AppMapLogo class="sidebar-menu__icon" width="30" />
         <HamburgerMenu
           class="sidebar-menu__icon sidebar-menu__hamburger-menu"
           width="30"

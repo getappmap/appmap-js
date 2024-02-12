@@ -61,7 +61,7 @@ export default Vue.extend({
   flex-direction: column;
   border: 1px solid #7289c5;
   border-radius: $border-radius;
-  padding: 0.25rem 0.5rem;
+  padding: 0.75rem;
   width: fit-content;
   color: #ececec;
   align-items: stretch;

@@ -77,6 +77,7 @@ export default {
   font-size: 0.8rem;
   color: #c2c2c2;
   padding: 1rem;
+  width: 90%;
 
   .grid {
     display: grid;

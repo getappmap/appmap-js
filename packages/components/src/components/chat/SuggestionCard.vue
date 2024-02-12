@@ -1,6 +1,5 @@
 <template>
   <div class="suggestion-card" data-cy="prompt-suggestion" @click="onClick">
-    <v-pin class="pin" />
     <div class="title">{{ title }}</div>
     <div class="sub-title">{{ subTitle }}</div>
   </div>
@@ -8,14 +7,8 @@
 
 <script lang="ts">
 //@ts-nocheck
-import VPin from '@/assets/map-pin.svg';
-
 export default {
   name: 'v-suggestion-card',
-
-  components: {
-    VPin,
-  },
 
   props: {
     title: {
@@ -39,41 +32,30 @@ export default {
 
 <style lang="scss" scoped>
 .suggestion-card {
-  display: inline-grid;
-  grid-template-columns: 32px 1fr;
-  background-color: rgba(0, 0, 0, 0.4);
-  padding: 1rem;
-  row-gap: 0.5rem;
-  color: #ececec;
+  background-color: #2d3546;
+  padding: 1rem 2rem;
+  color: #e3e5e8;
+  width: 100%;
+  box-shadow: 0 0 0.7rem 0rem darken(#2d3546, 7%);
+  box-sizing: border-box;
 
   &:hover {
     cursor: pointer;
     background-color: rgba(255, 255, 255, 0.1);
+    transition: $transition;
     * {
       color: white !important;
+      transition: $transition;
     }
-  }
-
-  .pin {
-    width: 32px;
-    height: 32px;
-    margin-bottom: -16px;
-    border-radius: 50%;
-    overflow: visible;
-    margin-right: 1rem;
-    grid-column: 1;
   }
 
   .title {
     font-weight: bold;
-    grid-column: 2;
-    margin-left: 1rem;
+    margin-bottom: 0.5rem;
   }
 
   .sub-title {
-    grid-column: 2;
-    grid-row: 2;
-    margin-left: 1rem;
+    color: #9094a3;
     font-size: 0.8rem;
   }
 }

@@ -1,19 +1,37 @@
 <template>
-  <div class="instructions" data-cy="match-instructions">
-    <h2>AppMap search results</h2>
+  <div class="match-instructions" data-cy="match-instructions">
     <div class="content">
+      <div class="content__header">
+        <p>{{ appmapStats.numAppMaps }} AppMaps available</p>
+        <div class="divider">|</div>
+        <v-button
+          data-cy="create-more-appmaps-btn"
+          class="create-more-appmaps"
+          size="small"
+          kind="ghost"
+          @click.native="openRecordInstructions"
+        >
+          Create more
+        </v-button>
+      </div>
       <p>
-        Of the <strong>{{ appmapStats.numAppMaps }}</strong> AppMaps available in your project,
-        <strong>{{ searchResponse.results.length }}</strong> of them have been selected to help
-        answer your question. <strong>Remember!</strong> The better your AppMaps match your
-        question, the better Navie's answers will be.
+        <strong>{{ searchResponse.results.length }} relevant AppMaps</strong> have been selected to
+        help answer your question.
       </p>
     </div>
   </div>
 </template>
-<script lang="ts">
+
+<script>
+import VButton from '@/components/Button.vue';
+
 export default {
   name: 'v-instructions',
+
+  components: {
+    VButton,
+  },
+
   props: {
     appmapStats: {
       type: Object,
@@ -24,21 +42,29 @@ export default {
       required: true,
     },
   },
+
+  methods: {
+    openRecordInstructions() {
+      this.$root.$emit('open-record-instructions');
+    },
+  },
 };
 </script>
+
 <style lang="scss" scoped>
-.instructions {
+.match-instructions {
   font-size: 0.9rem;
-  color: $gray4;
+  color: lighten($gray4, 20%);
 
-  h2 {
-    color: $white;
-    margin-bottom: 0;
-    margin-top: 0;
-  }
+  .content {
+    &__header {
+      display: flex;
+      align-items: center;
 
-  p {
-    margin: 0;
+      .divider {
+        margin: 0 0.75rem;
+      }
+    }
   }
 }
 </style>
