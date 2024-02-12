@@ -15,7 +15,12 @@
         New chat
       </v-button>
     </div>
-    <div class="messages" data-cy="messages" ref="messages" @scroll="manageScroll">
+    <div
+      :class="['messages', isChatting ? 'chatting' : '']"
+      data-cy="messages"
+      ref="messages"
+      @scroll="manageScroll"
+    >
       <v-user-message
         v-for="(message, i) in messages"
         :key="i"
@@ -399,22 +404,35 @@ $border-color: darken($gray4, 10%);
   }
 
   .button-panel {
-    $panel-bg: rgba(0, 0, 0, 0.1);
+    $panel-bg: #2c3545;
     justify-content: end;
     display: flex;
-    padding: 0.25rem 0.5rem;
+    padding: 1.15rem 0.75rem;
     background-color: $panel-bg;
     border-bottom: 1px solid fade-in($panel-bg, 0.11);
+    box-shadow: 0 0 0.7rem 0rem lighten($gray1, 5%);
+    border-radius: 0 0 $border-radius $border-radius;
   }
 
   .clear {
     padding: 0.5rem 1rem;
+    background-color: #262d3e;
+
+    &:hover {
+      background-color: darken(#262d3e, 10%);
+    }
   }
 
   .messages {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     height: 100%;
     overflow: auto;
-    padding-right: 1rem;
+  }
+
+  .chatting {
+    justify-content: flex-start;
   }
 }
 
@@ -422,9 +440,8 @@ $border-color: darken($gray4, 10%);
   display: inline-block;
   position: relative;
   left: 54px;
-  margin: -4px 0.5em -4px 0.5em;
+  margin: -4px 0.5rem 1rem 0.5rem;
   display: flex;
-  width: 18rem;
 
   .spinner-container {
     .spinner {

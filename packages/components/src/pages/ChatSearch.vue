@@ -26,6 +26,7 @@
           <div class="search-results-header">
             <v-match-instructions :appmap-stats="appmapStats" :search-response="searchResponse" />
             <div class="search-results-list-container">
+              <h2>AppMap Viewer:</h2>
               <select
                 class="search-results-list"
                 v-model="selectedSearchResultId"
@@ -383,10 +384,7 @@ $border-color: darken($gray4, 10%);
   grid-template-columns: auto auto 1fr;
   min-width: 100%;
   max-width: 100vw;
-  min-height: 100%;
-  max-height: 100vh;
-  height: 100%;
-  overflow-y: hidden;
+  height: 100vh;
   background-color: $gray2;
 
   .chat-container {
@@ -396,10 +394,7 @@ $border-color: darken($gray4, 10%);
 
     display: flex;
     flex-direction: column;
-
-    background: radial-gradient(circle, lighten($gray2, 10%) 0%, rgba(0, 0, 0, 0) 80%);
-    background-repeat: no-repeat, repeat, repeat;
-    background-size: 100% 200%;
+    background-color: #292c39;
 
     .chat-search-chat {
       min-width: auto;
@@ -430,52 +425,56 @@ $border-color: darken($gray4, 10%);
   }
 
   .instructions {
-    padding: 0 1rem;
-    margin: 1rem auto;
     min-width: 20rem;
   }
 
   .search-container {
     max-height: 100vh;
+
     h2 {
       font-size: 1.2rem;
-      margin-bottom: 0.4rem;
+      margin-right: 1rem;
     }
 
-    .search-results-header {
-      padding: 0 1rem;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      margin-bottom: 1rem;
-    }
+    .search-results-container {
+      background-color: darken($gray2, 8%);
 
-    .search-results-list-container {
-      display: flex;
-      flex-direction: column;
-      justify-content: end;
-
-      .search-results-list {
+      .search-results-header {
+        display: flex;
+        flex-direction: column;
         margin: 0.5rem 0;
-        width: 30em;
-        color: white;
-        background-color: lighten($gray3, 5%);
-        border-radius: 10px;
-        padding: 0.3rem;
-        border: none;
+        padding: 0 1.75rem;
 
-        &:hover {
-          background-color: lighten($gray3, 10%);
-          transition: all 0.2s ease-in-out;
-        }
+        .search-results-list-container {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
 
-        &:focus-visible {
-          outline: none;
+          .search-results-list {
+            margin: 0.5rem 0;
+            width: 30em;
+            height: 1.7rem;
+            color: white;
+            background-color: lighten($gray3, 5%);
+            border-radius: 10px;
+            padding: 0.3rem;
+            border: none;
+
+            &:hover {
+              background-color: lighten($gray3, 10%);
+              transition: all 0.2s ease-in-out;
+            }
+
+            &:focus-visible {
+              outline: none;
+            }
+          }
         }
       }
     }
 
     .appmap {
-      overflow-y: auto;
+      padding-top: 0.4rem;
       height: 100% !important;
     }
 

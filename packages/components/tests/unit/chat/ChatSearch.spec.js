@@ -1,5 +1,5 @@
 import VChatSearch from '@/pages/ChatSearch.vue';
-import { mount } from '@vue/test-utils';
+import { mount, createWrapper } from '@vue/test-utils';
 
 describe('pages/ChatSearch.vue', () => {
   const chatSearchWrapper = (messagesCalled) => {
@@ -77,6 +77,20 @@ describe('pages/ChatSearch.vue', () => {
       await wrapper.vm.$nextTick();
       expect(wrapper.find('.instructions [data-cy="no-appmaps"]').exists()).toBe(true);
     });
+
+    it('emits an event when the user clicks the "Create some" button', async () => {
+      const wrapper = chatSearchWrapper({
+        'appmap.stats': appmapStatsNoAppMaps(),
+      });
+      await wrapper.vm.$nextTick();
+
+      const createSomeButton = wrapper.find('[data-cy="create-some-appmaps-btn"]');
+      expect(createSomeButton.exists()).toBe(true);
+
+      await createSomeButton.trigger('click');
+      const rootWrapper = createWrapper(wrapper.vm.$root);
+      expect(rootWrapper.emitted()['open-record-instructions']).toEqual([[]]);
+    });
   });
 
   describe('when AppMaps are available', () => {
@@ -86,6 +100,20 @@ describe('pages/ChatSearch.vue', () => {
       });
       await wrapper.vm.$nextTick();
       expect(wrapper.find('.instructions [data-cy="no-appmaps"]').exists()).toBe(false);
+    });
+
+    it('emits an event when the user clicks the "Create more" button', async () => {
+      const wrapper = chatSearchWrapper({
+        'appmap.stats': appmapStatsHasAppMaps(),
+      });
+      await wrapper.vm.$nextTick();
+
+      const createMoreButton = wrapper.find('[data-cy="create-more-appmaps-btn"]');
+      expect(createMoreButton.exists()).toBe(true);
+
+      await createMoreButton.trigger('click');
+      const rootWrapper = createWrapper(wrapper.vm.$root);
+      expect(rootWrapper.emitted()['open-record-instructions']).toEqual([[]]);
     });
 
     describe('and there are matching AppMaps', () => {
@@ -169,6 +197,19 @@ describe('pages/ChatSearch.vue', () => {
         await wrapper.vm.$nextTick();
 
         expect(wrapper.findAll('[data-cy="tool-status"]').length).toBe(1);
+      });
+
+      it('emits an event when the user clicks the "Create more" button', async () => {
+        const { wrapper } = await performSearch();
+
+        await wrapper.vm.$nextTick();
+
+        const createMoreButton = wrapper.find('[data-cy="create-more-appmaps-btn"]');
+        expect(createMoreButton.exists()).toBe(true);
+
+        await createMoreButton.trigger('click');
+        const rootWrapper = createWrapper(wrapper.vm.$root);
+        expect(rootWrapper.emitted()['open-record-instructions']).toEqual([[]]);
       });
     });
 

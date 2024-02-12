@@ -379,7 +379,7 @@ export default {
 <style lang="scss">
 .message .message-body {
   .tools {
-    padding-bottom: 0.5rem;
+    padding: 0.5rem 0;
     line-height: normal;
   }
 

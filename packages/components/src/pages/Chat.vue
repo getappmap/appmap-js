@@ -101,9 +101,6 @@ export default {
   max-height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  background: radial-gradient(circle, lighten($gray2, 10%) 0%, rgba(0, 0, 0, 0) 80%);
-  background-color: $gray2;
-  background-repeat: no-repeat, repeat, repeat;
-  background-size: 100% 200%;
+  background-color: #292c39;
 }
 </style>
