@@ -40,6 +40,7 @@ export namespace ExplainRpc {
     step: Step;
     threadId?: string;
     err?: Error | RpcError;
+    classification?: string;
     vectorTerms?: string[];
     searchResponse?: SearchRpc.SearchResponse;
     sequenceDiagrams?: string[];

@@ -48,6 +48,9 @@ export default class Explain extends EventEmitter {
           self.status.explanation ||= [];
           self.status.explanation.push(token);
         },
+        onClassify(classification, _messageId) {
+          self.status.classification = classification;
+        },
         async onRequestContext(data) {
           const type = data['type'];
           const fnName = [type, 'Context'].join('');

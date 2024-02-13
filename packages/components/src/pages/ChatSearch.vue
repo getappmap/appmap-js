@@ -263,14 +263,7 @@ export default {
         // to add a new tool, but this will be more reactive.
         const isNewChat = !Boolean(this.$refs.vchat.getMessage({ isUser: false }));
         const systemMessage = this.$refs.vchat.addSystemMessage();
-        let tool: ITool | undefined;
-
-        if (isNewChat) {
-          tool = {
-            title: 'Searching for AppMaps',
-          };
-          systemMessage.tools.push(tool);
-        }
+        let searchTool: ITool | undefined;
 
         const onComplete = () => {
           this.searching = false;
@@ -295,17 +288,36 @@ export default {
         });
         this.ask.on('error', onError);
         this.ask.on('status', (status) => {
+          if (isNewChat && !searchTool && status.step === 'search-appmaps') {
+            searchTool = {
+              title: 'Searching for AppMaps',
+            };
+            systemMessage.tools.push(searchTool);
+          }
+
+          if (status.classification && !this.searchStatus.classification) {
+            // TODO: Re-implement this as it's own component, rather than piggybacking on "tools".
+            const classificationTool = {
+              title: `Classification`,
+              status: status.classification,
+              complete: true,
+            };
+            systemMessage.tools.push(classificationTool);
+          }
+
           this.searchStatus = status;
 
           if (!this.searchResponse && status.searchResponse) {
             this.searchResponse = status.searchResponse;
 
             // Update the tool status to reflect the fact that we've found some AppMaps
-            if (tool) {
+            if (searchTool) {
               const numResults = this.searchResponse.results.length;
-              tool.title = 'Searched for AppMaps';
-              tool.status = `Found ${numResults} relevant recording${numResults === 1 ? '' : 's'}`;
-              tool.complete = true;
+              searchTool.title = 'Searched for AppMaps';
+              searchTool.status = `Found ${numResults} relevant recording${
+                numResults === 1 ? '' : 's'
+              }`;
+              searchTool.complete = true;
             }
           }
         });
