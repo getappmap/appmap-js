@@ -68,6 +68,21 @@ describe('AppMapIndex', () => {
       });
     });
 
+    describe('when search results are not found', () => {
+      it('returns an expected result', async () => {
+        const index = new AppMapIndex('appmapDir', {
+          search: jest.fn().mockReturnValue([]),
+        } as any);
+        const searchResults = await index.search('');
+        expect(searchResults).toStrictEqual({
+          type: 'appmap',
+          results: [],
+          stats: {},
+          numResults: 0,
+        });
+      });
+    });
+
     it(`reports statistics`, async () => {
       mockUpToDate();
 
