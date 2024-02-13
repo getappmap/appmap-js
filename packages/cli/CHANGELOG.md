@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.126.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.126.0...@appland/appmap-v3.126.1) (2024-02-13)
+
+
+### Bug Fixes
+
+* Prevent read from undefined if no matches are found ([c50d80d](https://github.com/getappmap/appmap-js/commit/c50d80db54256f05bc9ffb5d3490ed3fb43839ca))
+
 # [@appland/appmap-v3.126.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.125.0...@appland/appmap-v3.126.0) (2024-02-08)
 
 
