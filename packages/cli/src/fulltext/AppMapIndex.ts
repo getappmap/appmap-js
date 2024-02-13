@@ -147,6 +147,9 @@ export async function removeNonExistentMatches(matches: lunr.Index.Result[]) {
 }
 
 export function scoreMatches(matches: lunr.Index.Result[]): Map<ScoreStats, number> {
+  const scoreStats = new Map<ScoreStats, number>();
+  if (!matches.length) return scoreStats;
+
   const numResults = matches.length;
   const maxScore = matches.reduce((acc, match) => Math.max(acc, match.score), 0);
   const medianScore = matches[Math.floor(numResults / 2)].score;
@@ -178,7 +181,6 @@ export function scoreMatches(matches: lunr.Index.Result[]): Map<ScoreStats, numb
     );
   }
 
-  const scoreStats = new Map<ScoreStats, number>();
   scoreStats.set(ScoreStats.Max, maxScore);
   scoreStats.set(ScoreStats.Median, medianScore);
   scoreStats.set(ScoreStats.Mean, meanScore);
