@@ -17,7 +17,7 @@ export default {
   },
   props: {
     aiClientFn: {
-      type: Function,
+      type: Function as (message: string, codeSelections?: string[]) => void,
     },
   },
   mixins: [authenticatedClient],
@@ -30,14 +30,17 @@ export default {
     async sendMessage(message: string) {
       const { vchat } = this;
       let myThreadId: string | undefined;
-      const systemMessage = vchat.addSystemMessage();
+      let systemMessage;
       const client = await this.aiClient({
         onAck: (_messageId: string, threadId: string) => {
           myThreadId = threadId;
           vchat.onAck(_messageId, threadId);
         },
         onToken: (token, messageId) => {
-          if (!systemMessage.messageId) systemMessage.messageId = messageId;
+          if (!systemMessage) {
+            systemMessage = vchat.addSystemMessage();
+            systemMessage.messageId = messageId;
+          }
 
           vchat.addToken(token, myThreadId, messageId);
         },
@@ -45,7 +48,12 @@ export default {
           vchat.onError(error, systemMessage);
         },
         onComplete() {
-          systemMessage.complete = true;
+          if (systemMessage) {
+            systemMessage.complete = true;
+          }
+        },
+        onReceiveQuota(quota) {
+          vchat.onReceiveQuota(quota);
         },
       });
       client.inputPrompt(message, { threadId: vchat.threadId });

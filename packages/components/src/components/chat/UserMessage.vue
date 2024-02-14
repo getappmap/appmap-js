@@ -22,7 +22,7 @@
           :code="snippet.code"
         />
       </div>
-      <span>{{ message }}</span>
+      <span>{{ content }}</span>
     </div>
     <div class="message-body" data-cy="message-text" v-else>
       <div class="tools" v-if="tools">
@@ -148,7 +148,7 @@ export default {
     isError: {
       default: false,
     },
-    message: {
+    content: {
       default: '',
     },
     sentiment: {
@@ -180,7 +180,7 @@ export default {
       return this.isUser ? 'You' : 'Navie';
     },
     renderedMarkdown() {
-      const markdown = marked.parse(this.message.toString());
+      const markdown = marked.parse(this.content.toString());
       const dom = DOMPurify.sanitize(markdown, {
         USE_PROFILES: { html: true },
         RETURN_DOM: true,
