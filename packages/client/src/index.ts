@@ -20,4 +20,5 @@ export {
   default as AIClient,
   Callbacks as AICallbacks,
   InputPromptOptions as AIInputPromptOptions,
+  Quota,
 } from './aiClient';
