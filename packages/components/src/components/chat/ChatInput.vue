@@ -18,16 +18,22 @@
     </div>
     <div class="input-container">
       <div
-        contenteditable="plaintext-only"
+        :contenteditable="disabled ? false : 'plaintext-only'"
         :placeholder="placeholder"
         role="textbox"
         @input="onInput"
         @keydown="onKeyDown"
         tabindex="0"
         ref="input"
+        :class="disabled ? 'disabled' : ''"
         data-cy="chat-input"
       />
-      <v-popper text="Send message" placement="top" text-align="left" :disabled="!hasInput">
+      <v-popper
+        text="Send message"
+        placement="top"
+        text-align="left"
+        :disabled="disabled || !hasInput"
+      >
         <button class="send" data-cy="send-message" :disabled="!hasInput" @click="send">
           <v-send-icon />
         </button>
@@ -60,6 +66,9 @@ export default {
     codeSelections: {
       type: Array,
       default: () => [],
+    },
+    disabled: {
+      default: false,
     },
   },
   data() {
@@ -177,6 +186,15 @@ $border-color: #7289c5;
 
       &:focus-visible {
         outline: none !important;
+      }
+
+      &.disabled {
+        animation: none;
+        border-color: rgba($color: #7289c5, $alpha: 0.25);
+        background-color: $gray3;
+        &:before {
+          color: $gray4;
+        }
       }
     }
     .popper {

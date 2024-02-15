@@ -15,6 +15,7 @@ export class CodedError extends Error {
 export type Callbacks = {
   onToken: (token: string, messageId: string) => void;
   onComplete(): void;
+  onReceiveQuota?: (quota: Quota) => void;
   onRequestContext?: (
     data: Record<string, unknown>
   ) => Record<string, unknown> | Promise<Record<string, unknown>>;
@@ -32,6 +33,15 @@ type Prompt = {
   codeSelection?: string;
   threadId?: string;
   tool?: string;
+};
+
+export type Quota = {
+  error?: { message: string };
+  quota: {
+    limit?: number;
+    used?: number;
+    reset: Date;
+  };
 };
 
 export default class AIClient {
@@ -85,13 +95,21 @@ export default class AIClient {
         this.socket.emit('message', JSON.stringify({ type: 'context', context }));
         break;
       }
+      case 'quota': {
+        const quota: Quota = {
+          error: message.error as Quota['error'],
+          quota: message.quota as Quota['quota'],
+        };
+        this.callbacks.onReceiveQuota?.(quota);
+        break;
+      }
       case 'end':
         this.callbacks.onComplete();
         this.disconnect();
         break;
       default:
-        console.error(`Unknown message type ${message.type}`);
-        this.disconnect();
+        console.warn(`Unknown message type ${message.type}`);
+      // this.disconnect();
     }
   }
 

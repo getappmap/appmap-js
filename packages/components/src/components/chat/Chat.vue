@@ -16,17 +16,11 @@
       </v-button>
     </div>
     <div class="messages" data-cy="messages" ref="messages" @scroll="manageScroll">
-      <v-user-message
+      <component
         v-for="(message, i) in messages"
         :key="i"
-        :message="message.content"
-        :is-user="message.isUser"
-        :is-error="message.isError"
-        :id="message.messageId"
-        :sentiment="message.sentiment"
-        :tools="message.tools"
-        :complete="message.complete"
-        :code-selections="message.codeSelections"
+        :is="message.component"
+        v-bind="{ ...message, component: undefined }"
         @change-sentiment="onSentimentChange"
       />
       <v-suggestion-grid
@@ -55,6 +49,7 @@
       :class="inputClasses"
       :question="question"
       :code-selections="codeSelections"
+      :disabled="disableInput"
       ref="input"
     />
   </div>
@@ -62,13 +57,14 @@
 
 <script lang="ts">
 //@ts-nocheck
-import Vue from 'vue';
+import Vue, { Component } from 'vue';
 import VUserMessage from '@/components/chat/UserMessage.vue';
+import VQuotaExceededMessage from '@/components/chat/QuotaExceededMessage.vue';
 import VChatInput from '@/components/chat/ChatInput.vue';
 import VSuggestionGrid from '@/components/chat/SuggestionGrid.vue';
 import VAppMapNavieLogo from '@/assets/appmap-full-logo.svg';
 import VButton from '@/components/Button.vue';
-import { AI } from '@appland/client';
+import { AI, Quota } from '@appland/client';
 
 export type CodeSelection = {
   path: string;
@@ -84,25 +80,30 @@ export interface ITool {
   complete?: boolean;
 }
 
-interface IMessage {
+interface IMessageComponent {
+  component: Component;
+}
+
+interface IMessage extends IMessageComponent {
+  id?: string;
   message: string;
   isUser: boolean;
   isError: boolean;
   complete?: boolean;
-  messageId?: string;
   sentiment?: number;
   tools?: ITool[];
   codeSelections?: CodeSelection[];
 }
 
 class UserMessage implements IMessage {
-  public readonly messageId = undefined;
+  public readonly id = undefined;
   public readonly sentiment = undefined;
   public readonly isUser = true;
   public readonly isError = false;
   public readonly tools = undefined;
   public readonly complete = true;
   public readonly codeSelections = [];
+  public readonly component = VUserMessage;
 
   constructor(public content: string) {}
 }
@@ -115,8 +116,9 @@ class AssistantMessage implements IMessage {
   public readonly isError = false;
   public readonly tools = [];
   public readonly codeSelections = undefined;
+  public readonly component = VUserMessage;
 
-  constructor(public messageId?: string) {}
+  constructor(public id?: string) {}
 
   append(token: string) {
     Vue.set(this, 'content', [this.content, token].join(''));
@@ -124,17 +126,33 @@ class AssistantMessage implements IMessage {
 }
 
 class ErrorMessage implements IMessage {
-  public readonly messageId = undefined;
+  public readonly id = undefined;
   public readonly sentiment = undefined;
   public readonly codeSelections = undefined;
   public readonly complete = true;
   public readonly isUser = false;
   public readonly isError = true;
+  public readonly component = VUserMessage;
 
   constructor(private error: Error) {}
 
   get content() {
     return this.error.message;
+  }
+}
+
+type CustomMessageConstructor = {
+  component: Component;
+  [key: string]: unknown;
+};
+
+// This class is used to insert an arbitrary component into the chat.
+class CustomMessage {
+  public readonly component: Component;
+  public readonly [key: string]: unknown;
+
+  constructor(propData: CustomMessageConstructor) {
+    Object.assign(this, propData);
   }
 }
 
@@ -146,6 +164,7 @@ export default {
     VSuggestionGrid,
     VAppMapNavieLogo,
     VButton,
+    VQuotaExceededMessage,
   },
   props: {
     // Initial question to ask
@@ -178,6 +197,7 @@ export default {
       enableScrollLog: false, // Auto-scroll can be tricky, so there is special logging to help debug it.
       codeSelections: [] as CodeSelection[],
       scrollLog: (message: string) => (this.enableScrollLog ? console.log(message) : undefined),
+      disableInput: false,
     };
   },
   computed: {
@@ -206,15 +226,15 @@ export default {
       });
     },
     // Creates-or-appends a message.
-    addToken(token: string, threadId: string, messageId: string) {
+    addToken(token: string, threadId: string, id: string) {
       if (threadId !== this.threadId) return;
 
-      if (!messageId) console.warn('messageId is undefined');
+      if (!id) console.warn('id is undefined');
       if (!threadId) console.warn('threadId is undefined');
 
-      let assistantMessage = this.getMessage({ messageId });
+      let assistantMessage = this.getMessage({ id });
       if (!assistantMessage) {
-        assistantMessage = new AssistantMessage(messageId);
+        assistantMessage = new AssistantMessage(id);
         this.messages.push(assistantMessage);
       }
 
@@ -241,9 +261,17 @@ export default {
       this.messages.push(message);
       return message;
     },
-    addErrorMessage(error: Error) {
-      this.messages.push(new ErrorMessage(error));
+    addErrorMessage(error: Error, component?: Component) {
+      const message = new ErrorMessage(error, component);
+      this.messages.push(message);
       this.scrollToBottom();
+      return message;
+    },
+    addCustomMessage(data: CustomMessageConstructor) {
+      const message = new CustomMessage(data);
+      this.messages.push(message);
+      this.scrollToBottom();
+      return message;
     },
     ask(message: string) {
       this.onSend(message);
@@ -286,6 +314,19 @@ export default {
         this.ask(prompt);
       }
     },
+    onReceiveQuota({ quota, error }: Quota) {
+      if (!error) return;
+
+      this.addCustomMessage({
+        component: VQuotaExceededMessage,
+        limit: quota.limit,
+        reset: quota.reset,
+        message: error.message,
+      });
+
+      // TODO: Re-enable input after the reset threshold has been reached
+      this.disableInput = true;
+    },
     onNoMatch() {
       // If the AI was not able to produce a useful response, don't persist the thread.
       // This is used by Explain when no AppMaps can be found to match the question.
@@ -295,6 +336,7 @@ export default {
       this.threadId = undefined;
       this.messages.splice(0);
       this.autoScrollTop = 0;
+      this.disableInput = false;
       this.$emit('clear');
     },
     scrollToBottom() {
@@ -319,10 +361,10 @@ export default {
     async onSentimentChange(messageId: string, sentiment: number) {
       if (!messageId) return;
 
-      const message = this.getMessage({ messageId });
+      const message = this.getMessage({ id: messageId });
       if (!message || message.sentiment === sentiment) return;
 
-      await AI.sendMessageFeedback(message.messageId, sentiment);
+      await AI.sendMessageFeedback(message.id, sentiment);
 
       message.sentiment = sentiment;
     },
