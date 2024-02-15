@@ -460,15 +460,27 @@ export default {
     }
 
     .cursor {
-      color: black;
       &:after {
-        content: ' ';
-        display: inline-block;
-        width: 0.65rem;
-        height: 1rem;
+        content: '▊';
+        animation-name: cursor-blink;
+        animation-duration: 530ms;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+      }
+    }
 
-        background-color: #ececec;
-        vertical-align: text-bottom;
+    @keyframes cursor-blink {
+      from {
+        opacity: 0;
+      }
+      50% {
+        opacity: 0;
+      }
+      51% {
+        opacity: 1;
+      }
+      to {
+        opacity: 1;
       }
     }
 
