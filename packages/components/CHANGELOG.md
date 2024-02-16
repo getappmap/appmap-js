@@ -1,3 +1,10 @@
+# [@appland/components-v4.1.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.0.0...@appland/components-v4.1.0) (2024-02-16)
+
+
+### Features
+
+* Navie chat interface style updates ([4642502](https://github.com/getappmap/appmap-js/commit/4642502dea6ff64a6df68ad6578c529835cd709b))
+
 # [@appland/components-v4.0.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v3.33.1...@appland/components-v4.0.0) (2024-02-12)
 
 
