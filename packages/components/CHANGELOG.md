@@ -1,3 +1,11 @@
+# [@appland/components-v4.2.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.1.0...@appland/components-v4.2.0) (2024-02-20)
+
+
+### Features
+
+* Open appmap to sequence diagram in Navie chat ([9d2383c](https://github.com/getappmap/appmap-js/commit/9d2383c0ec0138d44a36745e32b3f0ba7640b7ed))
+* Update Navie interface ([d3213a4](https://github.com/getappmap/appmap-js/commit/d3213a4b980f8824f024b144be43a86567ed2e67))
+
 # [@appland/components-v4.1.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.0.0...@appland/components-v4.1.0) (2024-02-16)
 
 
