@@ -47,6 +47,7 @@
         <v-app-map
           v-if="selectedSearchResult"
           :allow-fullscreen="true"
+          default-view="viewSequence"
           :saved-filters="savedFilters"
           :auto-expand-details-panel="false"
           ref="vappmap"

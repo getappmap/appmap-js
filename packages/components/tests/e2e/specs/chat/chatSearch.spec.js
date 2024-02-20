@@ -10,12 +10,15 @@ context('Chat search', () => {
     cy.get('[data-cy="chat-input"]', { timeout: 25000 }).type('Hello world{enter}');
 
     // Ruby AppMap
+    cy.get('.tabs .tab-btn').contains('Dependency Map').click();
+
     cy.get('[data-cy="app"] [data-id="GET /admin"]', {
       timeout: 10000,
     }).should('be.visible');
 
     // Java AppMap
     cy.get('[data-cy="appmap-list"]').select('Create Visit For Pet');
+    cy.get('.tabs .tab-btn').contains('Dependency Map').click();
     cy.get('[data-cy="app"] [data-id="org/springframework/samples/petclinic/owner"]').should(
       'be.visible'
     );
@@ -23,6 +26,9 @@ context('Chat search', () => {
 
   it('selects multiple objects in the AppMap', () => {
     cy.get('[data-cy="chat-input"]', { timeout: 25000 }).type('Hello world{enter}');
+
+    // open Dependency Map
+    cy.get('.tabs .tab-btn').contains('Dependency Map').click();
 
     // Initial state
     cy.get('[data-cy="app"] [data-id="GET /admin"].highlight');
@@ -39,6 +45,9 @@ context('Chat search', () => {
 
   it('new chat button clears the state', () => {
     cy.get('[data-cy="chat-input"]', { timeout: 25000 }).type('Hello world{enter}');
+
+    // open Dependency Map
+    cy.get('.tabs .tab-btn').contains('Dependency Map').click();
 
     // Ruby AppMap should be visible
     cy.get('[data-cy="app"] [data-id="GET /admin"]', {
@@ -62,9 +71,9 @@ context('Chat search', () => {
     // verify that the details panel is visible to ensure that the toolbar width is narrow
     cy.get('.details-panel').should('be.visible');
 
-    // verify that the stats, refresh, export, and fullscreen buttons are visible
+    // verify that the stats, refresh, and fullscreen buttons are visible
     cy.get('.control-button')
-      .should('have.length', 4)
+      .should('have.length', 3)
       .each(($el) => cy.wrap($el).should('be.visible'));
 
     // verify that the filters button is visible
