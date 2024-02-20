@@ -95,7 +95,7 @@ describe('Status.vue', () => {
     });
 
     expect(wrapper.find('.status-message__prompt').text()).toMatch(
-      /Next step:\s+Gain insight about your project using AppMap Navie/gm
+      /Next step:\s+Ask Navie, the AI coding assistant for Senior Engineers/gm
     );
     expect(wrapper.find('button').text()).toBe('Next step: Ask AppMap Navie AI');
   });

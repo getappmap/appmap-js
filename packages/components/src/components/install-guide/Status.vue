@@ -108,11 +108,11 @@ export default {
         button: 'Ask AppMap Navie AI',
         complete: {
           header: `{{projectName}} is ready for Navie`,
-          prompt: 'Gain insight about your project using AppMap Navie',
+          prompt: 'Ask Navie, the AI coding assistant for Senior Engineers',
         },
         incomplete: {
           header: `{{projectName}} is ready for Navie`,
-          prompt: 'Gain insight about your project using AppMap Navie ',
+          prompt: 'Ask Navie, the AI coding assistant for Senior Engineers',
         },
       },
     },
