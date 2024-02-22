@@ -91,7 +91,7 @@ export default class AIClient {
         break;
       default:
         console.error(`Unknown message type ${message.type}`);
-        this.disconnect();
+        console.warn(JSON.stringify(message));
     }
   }
 
