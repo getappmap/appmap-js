@@ -1,0 +1,45 @@
+4387 [Stderr] Got 5 matches for search options maxresults up-to-date parameters settings config
+maximumresults limit current updated latest
+
+4387 [Stderr] Indexing AppMap 4387 [Stderr] Got 1 matches for search options maxresults up-to-date
+parameters settings config maximumresults limit current updated latest 4387 [Stderr] Error handled
+by Explain: Error: return #1120 is missing call #1111 4387 [Stderr] Handling exception: Error:
+return #1120 is missing call #1111 4387 [Stderr] at Q.add (/Users/kgilpin/Library/Application
+Support/Code/User/globalStorage/appland.appmap/node_modules/@appland/models/dist/index.cjs:3:8289)
+4387 [Stderr] at B.add (/Users/kgilpin/Library/Application
+Support/Code/User/globalStorage/appland.appmap/node_modules/@appland/models/dist/index.cjs:3:8699)
+4387 [Stderr] at /Users/kgilpin/Library/Application
+Support/Code/User/globalStorage/appland.appmap/node_modules/@appland/models/dist/index.cjs:3:9879
+4387 [Stderr] at Array.forEach (<anonymous>) 4387 [Stderr] at Ee.source
+(/Users/kgilpin/Library/Application
+Support/Code/User/globalStorage/appland.appmap/node_modules/@appland/models/dist/index.cjs:3:9730)
+4387 [Stderr] at FindEvents.initialize (/Users/kgilpin/Library/Application
+Support/Code/User/globalStorage/appland.appmap/node_modules/@appland/appmap/built/fulltext/FindEvents.js:28:53)
+4387 [Stderr] at async searchSingleAppMap (/Users/kgilpin/Library/Application
+Support/Code/User/globalStorage/appland.appmap/node_modules/@appland/appmap/built/cmds/search/searchSingleAppMap.js:15:5)
+4387 [Stderr] at async handler (/Users/kgilpin/Library/Application
+Support/Code/User/globalStorage/appland.appmap/node_modules/@appland/appmap/built/rpc/search/search.js:27:38)
+4387 [Stderr] at async search (/Users/kgilpin/Library/Application
+Support/Code/User/globalStorage/appland.appmap/node_modules/@appland/appmap/built/rpc/explain/search.js:9:28)
+4387 [Stderr] at async Explain.searchContext (/Users/kgilpin/Library/Application
+Support/Code/User/globalStorage/appland.appmap/node_modules/@appland/appmap/built/rpc/explain/explain.js:78:32)
+4387 [Stderr] Stack trace: Error: return #1120 is missing call #1111 4387 [Stderr] at Q.add
+(/Users/kgilpin/Library/Application
+Support/Code/User/globalStorage/appland.appmap/node_modules/@appland/models/dist/index.cjs:3:8289)
+4387 [Stderr] at B.add (/Users/kgilpin/Library/Application
+Support/Code/User/globalStorage/appland.appmap/node_modules/@appland/models/dist/index.cjs:3:8699)
+4387 [Stderr] at /Users/kgilpin/Library/Application
+Support/Code/User/globalStorage/appland.appmap/node_modules/@appland/models/dist/index.cjs:3:9879
+4387 [Stderr] at Array.forEach (<anonymous>) 4387 [Stderr] at Ee.source
+(/Users/kgilpin/Library/Application
+Support/Code/User/globalStorage/appland.appmap/node_modules/@appland/models/dist/index.cjs:3:9730)
+4387 [Stderr] at FindEvents.initialize (/Users/kgilpin/Library/Application
+Support/Code/User/globalStorage/appland.appmap/node_modules/@appland/appmap/built/fulltext/FindEvents.js:28:53)
+4387 [Stderr] at async searchSingleAppMap (/Users/kgilpin/Library/Application
+Support/Code/User/globalStorage/appland.appmap/node_modules/@appland/appmap/built/cmds/search/searchSingleAppMap.js:15:5)
+4387 [Stderr] at async handler (/Users/kgilpin/Library/Application
+Support/Code/User/globalStorage/appland.appmap/node_modules/@appland/appmap/built/rpc/search/search.js:27:38)
+4387 [Stderr] at async search (/Users/kgilpin/Library/Application
+Support/Code/User/globalStorage/appland.appmap/node_modules/@appland/appmap/built/rpc/explain/search.js:9:28)
+4387 [Stderr] at async Explain.searchContext (/Users/kgilpin/Library/Application
+Support/Code/User/globalStorage/appland.appmap/node_modules/@appland/appmap/built/rpc/explain/explain.js:78:32)
