@@ -143,6 +143,7 @@ __metadata:
     "@appland/components": "workspace:^4.0.0"
     "@appland/diagrams": "workspace:^1.8.0"
     "@appland/models": "workspace:^2.10.0"
+    "@appland/navie": "workspace:*"
     "@appland/openapi": "workspace:^1.8.0"
     "@appland/rpc": "workspace:^1.3.0"
     "@appland/scanner": "workspace:^1.86.0"
@@ -436,7 +437,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/navie@workspace:packages/navie":
+"@appland/navie@workspace:*, @appland/navie@workspace:packages/navie":
   version: 0.0.0-use.local
   resolution: "@appland/navie@workspace:packages/navie"
   dependencies:
@@ -29114,8 +29115,8 @@ __metadata:
   linkType: hard
 
 "langsmith@npm:~0.1.1":
-  version: 0.1.6
-  resolution: "langsmith@npm:0.1.6"
+  version: 0.1.3
+  resolution: "langsmith@npm:0.1.3"
   dependencies:
     "@types/uuid": ^9.0.1
     commander: ^10.0.1
@@ -29124,7 +29125,7 @@ __metadata:
     uuid: ^9.0.0
   bin:
     langsmith: dist/cli/main.cjs
-  checksum: aa78c2071a5d1d42ad8f32d58a65defd2bfd3a26869b2764236084cc8e2a7afc17eb5a4391a68c02479889cd937a953104b0bcb211331eb0e581f47ac004369a
+  checksum: 1083e304f3abcbc3988e2b3fd3052cd8f3839415f82ec8e8e68f3edafbefd9ac7b92b14669dff924f969dd8483a28c036664a5d85a9d1e54ccc6f1b17e7c22a8
   languageName: node
   linkType: hard
 

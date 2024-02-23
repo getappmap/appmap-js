@@ -18,6 +18,11 @@ import RPCServer from './rpcServer';
 import appmapData from '../../rpc/appmap/data';
 import { loadConfiguration } from '@appland/client';
 import appmapStats from '../../rpc/appmap/stats';
+import LocalNavie from '../../rpc/explain/navie/navie-local';
+import RemoteNavie from '../../rpc/explain/navie/navie-remote';
+import { Context } from '@appland/navie';
+
+const AI_KEYS = ['OPENAI_API_KEY'];
 
 export const command = 'index';
 export const describe =
@@ -44,6 +49,17 @@ export const builder = (args: yargs.Argv) => {
     type: 'number',
     alias: 'p',
   });
+  args.option('navie-provider', {
+    describe: 'navie provider to use',
+    type: 'string',
+    choices: ['local', 'remote'],
+  });
+  args.option('ai-keys', {
+    describe: 'Space-delimited list of AI keys to use to initialize local Navie',
+    type: 'string',
+    default: AI_KEYS.join(' '),
+  });
+
   return args.strict();
 };
 
@@ -65,6 +81,39 @@ export const handler = async (argv) => {
     await cmd.execute();
 
     if (port !== undefined) {
+      const useLocalNavie = () => {
+        if (argv.navieProvider === 'local') {
+          log(`Using local Navie provider due to explicit --navie-provider=local option`);
+          return true;
+        }
+
+        if (argv.navieProvider === 'remote') {
+          log(`Using remote Navie provider due to explicit --navie-provider=remote option`);
+          return false;
+        }
+
+        const aiKeys = argv.aiKeys.split(' ');
+        const aiEnvVar = Object.keys(process.env).find((key) => aiKeys.includes(key));
+        if (aiEnvVar) {
+          log(`Using local Navie provider due to presence of environment variable '${aiEnvVar}'`);
+          return true;
+        }
+
+        log(`Using remote Navie provider due to absence of --navie-provider option and AI keys`);
+        return false;
+      };
+
+      const buildLocalNavie = (
+        threadId: string | undefined,
+        contextProvider: Context.ContextProvider
+      ) => new LocalNavie(threadId, contextProvider);
+      const buildRemoteNavie = (
+        threadId: string | undefined,
+        contextProvider: Context.ContextProvider
+      ) => new RemoteNavie(threadId, contextProvider);
+
+      const navieProvider = useLocalNavie() ? buildLocalNavie : buildRemoteNavie;
+
       const rpcMethods: RpcHandler<any, any>[] = [
         numProcessed(cmd),
         search(appmapDir),
@@ -73,7 +122,7 @@ export const handler = async (argv) => {
         appmapData(),
         metadata(),
         sequenceDiagram(),
-        explainHandler(appmapDir),
+        explainHandler(navieProvider, appmapDir),
         explainStatusHandler(),
       ];
       const rpcServer = new RPCServer(port, rpcMethods);

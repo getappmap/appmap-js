@@ -1,15 +1,16 @@
 import chalk from 'chalk';
-import { AI } from '@appland/client';
+import assert from 'assert';
+import EventEmitter from 'events';
 import { ExplainRpc } from '@appland/rpc';
+import { warn } from 'console';
+
 import { RpcError, RpcHandler } from '../rpc';
+import collectContext from './collectContext';
+import INavie, { INavieProvider } from './navie/inavie';
+import { verbose } from '../../utils';
+import { Context } from '@appland/navie';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
-
-import EventEmitter from 'events';
-import collectContext from './collectContext';
-import assert from 'assert';
-import { warn } from 'console';
-import { verbose } from '../../utils';
 
 export type SearchContextOptions = {
   tokenCount: number;
@@ -26,7 +27,7 @@ export type SearchContextResponse = {
   codeObjects: string[];
 };
 
-export default class Explain extends EventEmitter {
+export class Explain extends EventEmitter {
   constructor(
     public appmapDir: string,
     public question: string,
@@ -37,50 +38,34 @@ export default class Explain extends EventEmitter {
     super();
   }
 
-  async explain(): Promise<void> {
+  async explain(navie: INavie): Promise<void> {
     const self = this;
-    (
-      await AI.connect({
-        onAck(userMessageId, threadId) {
-          if (verbose())
-            warn(`Explain received ack (userMessageId=${userMessageId}, threadId=${threadId})`);
-          self.status.threadId = threadId;
-          self.emit('ack', userMessageId, threadId);
-        },
-        onToken(token, _messageId) {
-          self.status.explanation ||= [];
-          self.status.explanation.push(token);
-        },
-        async onRequestContext(data) {
-          const type = data['type'];
-          const fnName = [type, 'Context'].join('');
-          if (verbose()) warn(`Explain received context request: ${type}`);
-          const fn: (args: any) => any = self[fnName];
-          return await fn.call(self, data);
-        },
-        onComplete() {
-          if (verbose()) warn(`Explain is complete`);
-          self.status.step = ExplainRpc.Step.COMPLETE;
-          self.emit('complete');
-        },
-        onError(err: Error) {
-          if (verbose()) warn(`Error handled by Explain: ${err}`);
-          self.status.step = ExplainRpc.Step.ERROR;
-          const rpcError = RpcError.fromException(err);
-          if (!self.status.err)
-            self.status.err = {
-              code: rpcError.code,
-              message: rpcError.message,
-              stack: err.stack,
-              cause: err.cause,
-            };
-          self.emit('error', rpcError);
-        },
-      })
-    ).inputPrompt(
-      { question: this.question, codeSelection: this.codeSelection },
-      { threadId: self.status.threadId, tool: 'explain' }
-    );
+
+    navie.on('ack', (userMessageId, threadId) => {
+      this.status.threadId = threadId;
+      this.emit('ack', userMessageId, threadId);
+    });
+    navie.on('token', (token, _messageId) => {
+      this.status.explanation ||= [];
+      this.status.explanation.push(token);
+    });
+    navie.on('complete', () => {
+      this.status.step = ExplainRpc.Step.COMPLETE;
+      this.emit('complete');
+    });
+    navie.on('error', (err: Error) => {
+      this.status.step = ExplainRpc.Step.ERROR;
+      const rpcError = RpcError.fromException(err);
+      if (!this.status.err)
+        this.status.err = {
+          code: rpcError.code,
+          message: rpcError.message,
+          stack: err.stack,
+          cause: err.cause,
+        };
+      this.emit('error', rpcError);
+    });
+    await navie.ask(this.question, this.codeSelection);
   }
 
   async searchContext(data: SearchContextOptions): Promise<SearchContextResponse> {
@@ -132,6 +117,7 @@ export default class Explain extends EventEmitter {
 }
 
 async function explain(
+  navieProvider: INavieProvider,
   appmapDir: string,
   question: string,
   codeSelection: string | undefined,
@@ -143,6 +129,16 @@ async function explain(
     threadId,
   };
   const explain = new Explain(appmapDir, question, codeSelection, appmaps, status);
+
+  const contextProvider: Context.ContextProvider = async (data: any) => {
+    const type = data['type'];
+    const fnName = [type, 'Context'].join('');
+    if (verbose()) warn(`Explain received context request: ${type}`);
+    const fn: (args: any) => any = explain[fnName];
+    return await fn.call(explain, data);
+  };
+
+  const navie = navieProvider(threadId, contextProvider);
   return new Promise<ExplainRpc.ExplainResponse>((resolve, reject) => {
     let isFirst = true;
 
@@ -178,17 +174,22 @@ async function explain(
         )
     );
 
-    explain.explain().catch((err: Error) => first() && reject(RpcError.fromException(err)));
+    explain.explain(navie).catch((err: Error) => first() && reject(RpcError.fromException(err)));
   });
 }
 
 const explainHandler: (
+  navieProvider: INavieProvider,
   appmapDir: string
-) => RpcHandler<ExplainRpc.ExplainOptions, ExplainRpc.ExplainResponse> = (appmapDir: string) => {
+) => RpcHandler<ExplainRpc.ExplainOptions, ExplainRpc.ExplainResponse> = (
+  navieProvider: INavieProvider,
+  appmapDir: string
+) => {
   return {
     name: ExplainRpc.ExplainFunctionName,
     handler: async (options: ExplainRpc.ExplainOptions) =>
       await explain(
+        navieProvider,
         appmapDir,
         options.question,
         options.codeSelection,
