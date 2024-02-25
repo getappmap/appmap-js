@@ -484,6 +484,7 @@ __metadata:
     "@types/node": ^17.0.2
     "@typescript-eslint/eslint-plugin": ^5.51.0
     "@typescript-eslint/parser": ^5.7.0
+    appmap-node: ^2.15.0
     eslint: ^8.4.1
     eslint-config-airbnb-base: ^15.0.0
     eslint-config-airbnb-typescript: ^17.0.0
@@ -14472,6 +14473,23 @@ __metadata:
   bin:
     appmap-node: bin/appmap-node.js
   checksum: 4621c8516f9e1d5c272a89bc61268349a2a16c4e7c84cba2ae53d2f4931bef0094985d6c9bc87d9ec2b567639cfcb5c0b1098ab56db3d359275461861ea42516
+  languageName: node
+  linkType: hard
+
+"appmap-node@npm:^2.15.0":
+  version: 2.15.0
+  resolution: "appmap-node@npm:2.15.0"
+  dependencies:
+    acorn-walk: ^8.2.0
+    astring: ^1.8.6
+    chalk: <5
+    meriyah: ^4.3.7
+    source-map-js: ^1.0.2
+    strip-json-comments: ^3
+    yaml: ^2.3.4
+  bin:
+    appmap-node: bin/appmap-node.js
+  checksum: 547cd148af365bd1b083ec725fd98eabe6bacf15f958c28e5d6505034cdd8cf60686f1134f5da801d815620a02239ebb8f2ce2e76994280848539d524b885418
   languageName: node
   linkType: hard
 
@@ -38127,7 +38145,7 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
-"strip-json-comments@npm:^3.0.1, strip-json-comments@npm:^3.1.0, strip-json-comments@npm:^3.1.1":
+"strip-json-comments@npm:^3, strip-json-comments@npm:^3.0.1, strip-json-comments@npm:^3.1.0, strip-json-comments@npm:^3.1.1":
   version: 3.1.1
   resolution: "strip-json-comments@npm:3.1.1"
   checksum: 492f73e27268f9b1c122733f28ecb0e7e8d8a531a6662efbd08e22cccb3f9475e90a1b82cab06a392f6afae6d2de636f977e231296400d0ec5304ba70f166443
