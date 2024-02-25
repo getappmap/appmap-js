@@ -25,6 +25,7 @@ export type Callbacks = {
 type UserInput = {
   question: string;
   codeSelection?: string;
+  appmaps?: string[];
 };
 
 type Prompt = {
@@ -35,6 +36,8 @@ type Prompt = {
 };
 
 export default class AIClient {
+  appmaps: string[] | undefined = undefined;
+
   constructor(private readonly socket: Socket, private readonly callbacks: Callbacks) {
     this.socket.on('exception', (error: Error) => {
       this.panic(error);
@@ -81,6 +84,7 @@ export default class AIClient {
         }
         if (!('data' in message)) this.panic(new Error('Unexpected response: no data'));
         const data = message.data as Record<string, unknown>;
+        if (this.appmaps) data.appmaps = this.appmaps;
         const context = await this.callbacks.onRequestContext?.(data);
         this.socket.emit('message', JSON.stringify({ type: 'context', context }));
         break;
@@ -97,6 +101,7 @@ export default class AIClient {
 
   inputPrompt(input: string | UserInput, options?: InputPromptOptions): void {
     const question = typeof input === 'string' ? input : input.question;
+    if (typeof input !== 'string') this.appmaps = input.appmaps;
     const prompt: Prompt = {
       prompt: question,
       codeSelection: typeof input === 'string' ? undefined : input.codeSelection,

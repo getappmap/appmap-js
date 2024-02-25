@@ -16,9 +16,11 @@ type SerializedCodeObject = {
   sourceLocation?: string;
 };
 
-export type SearchOptions = {
-  maxResults?: number;
-};
+export const DEFAULT_MAX_SEARCH_RESULTS = 20;
+
+export class SearchOptions {
+  maxResults = DEFAULT_MAX_SEARCH_RESULTS;
+}
 
 export type SearchResult = {
   appmap: string;
@@ -250,15 +252,22 @@ export function reportMatches(
 export default class AppMapIndex {
   constructor(public appmapDir: string, private idx: lunr.Index) {}
 
-  async search(search: string, options: SearchOptions = {}): Promise<SearchResponse> {
+  async search(search: string, options: SearchOptions): Promise<SearchResponse> {
     let matches = this.idx.search(search);
     matches = await removeNonExistentMatches(matches);
     const numResults = matches.length;
-
     if (verbose()) log(`[AppMapIndex] Got ${numResults} AppMap matches for search "${search}"`);
 
-    const scoreStats = scoreMatches(matches);
+    if (!matches.length) {
+      return {
+        type: 'appmap',
+        stats: { mean: 0, median: 0, stddev: 0, max: 0 },
+        results: [],
+        numResults,
+      };
+    }
 
+    const scoreStats = scoreMatches(matches);
     if (options.maxResults && numResults > options.maxResults)
       if (verbose()) log(`[FullText] Limiting to the top ${options.maxResults} matches`);
 
@@ -274,7 +283,7 @@ export default class AppMapIndex {
   static async search(
     appmapDir: string,
     search: string,
-    options: SearchOptions = {}
+    options: SearchOptions
   ): Promise<SearchResponse> {
     const index = await buildIndex(appmapDir);
     return await index.search(search, options);

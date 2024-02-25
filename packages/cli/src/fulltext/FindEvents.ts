@@ -16,10 +16,11 @@ type IndexItem = {
   elapsed?: number;
 };
 
-export type SearchOptions = {
-  maxResults?: number;
-};
-
+export class SearchOptions {
+  constructor(public maxResults: number | undefined, public threshold: number | undefined) {
+    if (!this.maxResults && !threshold) throw new Error('maxResults or threshold must be provided');
+  }
+}
 export type SearchResult = {
   appmap: string;
   fqid: string;
@@ -29,11 +30,21 @@ export type SearchResult = {
   elapsed?: number;
 };
 
+export type Stats = {
+  mean: number;
+  median: number;
+  stddev: number;
+  max: number;
+};
+
 export type SearchResponse = {
   type: 'event';
   results: SearchResult[];
+  stats: Stats;
   numResults: number;
 };
+
+const MIN_MATCHES = 5;
 
 export default class FindEvents {
   public maxSize?: number;
@@ -117,7 +128,7 @@ export default class FindEvents {
     });
   }
 
-  search(search: string, options: SearchOptions = {}): SearchResponse {
+  search(search: string, options: SearchOptions): SearchResponse {
     assert(this.idx);
     let matches = this.idx.search(search);
     const numResults = matches.length;
@@ -125,13 +136,52 @@ export default class FindEvents {
       log(
         `[FindEvents] Got ${numResults} event matches for search "${search}" within AppMap "${this.appmapId}`
       );
-    if (options.maxResults && numResults > options.maxResults) {
+    if (!matches.length) {
+      return {
+        type: 'event',
+        stats: { mean: 0, median: 0, stddev: 0, max: 0 },
+        results: [],
+        numResults,
+      };
+    }
+
+    const mean = matches.reduce((acc, match) => acc + match.score, 0) / matches.length;
+    const median = matches[Math.floor(matches.length / 2)].score;
+    const stddev = Math.sqrt(
+      matches.reduce((acc, match) => acc + Math.pow(match.score - mean, 2), 0) / matches.length
+    );
+    const max = matches.reduce((acc, match) => Math.max(acc, match.score), 0);
+    const stats = {
+      mean,
+      median,
+      stddev,
+      max,
+    };
+
+    if (matches.
+      length <= MIN_MATCHES) {
+      if (verbose())
+        log(
+          `[FindEvents] Not enough matches to calculate threshold for search "${search}" within AppMap "${this.appmapId}"`
+        );
+    } else if (options.maxResults) {
       if (verbose())
         log(
           `[FindEvents] Limiting to the top ${options.maxResults} event matches within AppMap "${this.appmapId}"`
         );
       matches = matches.slice(0, options.maxResults);
+    } else {
+      assert(options.threshold);
+      if (verbose())
+        log(
+          `[FindEvents] Limiting events to ${options.threshold} stddev above the mean within AppMap "${this.appmapId}"`
+        );
+      const limit = mean + stddev * options.threshold;
+
+      matches = matches.filter((match) => match.score >= limit);
+      if (matches.length === 0) matches = matches.slice(0, 1);
     }
+
     const searchResults = matches.map((match) => {
       const indexItem = this.indexItemsByFqid.get(match.ref);
       assert(indexItem);
@@ -145,6 +195,7 @@ export default class FindEvents {
       if (indexItem?.location) result.location = indexItem.location;
       return result;
     });
-    return { type: 'event', results: searchResults, numResults };
+
+    return { type: 'event', stats, results: searchResults, numResults };
   }
 }

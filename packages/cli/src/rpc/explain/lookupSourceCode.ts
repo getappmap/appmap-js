@@ -6,6 +6,8 @@ import { glob } from 'glob';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { exists, verbose } from '../../utils';
 import { promisify } from 'util';
+import { relative, resolve } from 'path';
+import { request } from 'http';
 
 export const LANGUAGE_BY_FILE_EXTENSION: Record<string, 'js' | 'java' | 'ruby' | 'python'> = {
   '.js': 'js',
@@ -25,7 +27,14 @@ let FILE_NAMES = new Set<string>();
 // TODO: Reverse-strip comment that follow the function.
 export default async function lookupSourceCode(location: string): Promise<string[] | undefined> {
   if (verbose()) warn(chalk.gray(`Looking up source code for ${location}`));
-  const [requestedFileName, lineNoStr] = location.split(':');
+  const [requestedFileNameArg, lineNoStr] = location.split(':');
+
+  let requestedFileName = requestedFileNameArg;
+  if (requestedFileName.startsWith(process.cwd()))
+    requestedFileName = requestedFileName.slice(process.cwd().length + 1);
+
+  const relativeFileName = resolve(process.cwd(), requestedFileName);
+  console.log(requestedFileName, relativeFileName);
 
   const extension = requestedFileName.slice(requestedFileName.lastIndexOf('.'));
 

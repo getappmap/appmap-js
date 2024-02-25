@@ -8,7 +8,10 @@ import { AppMap, AppMapFilter, buildAppMap, deserializeFilter } from '@appland/m
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { verbose } from '../../utils';
 import { locateAppMapDir } from '../../lib/locateAppMapDir';
-import searchSingleAppMap, { SearchOptions as SingleSearchOptions } from './searchSingleAppMap';
+import searchSingleAppMap, {
+  SearchSingleMapOptions,
+  SearchSingleMapOptions as SingleSearchOptions,
+} from './searchSingleAppMap';
 import AppMapIndex, {
   SearchResponse as DiagramsSearchResponse,
   SearchOptions,
@@ -157,7 +160,7 @@ export const handler = async (argv: any) => {
   }
 
   if (appmap) {
-    const options: SingleSearchOptions = {
+    const options: SearchSingleMapOptions = {
       maxResults,
     };
     const { maxSize, filter: filterStr } = argv;
@@ -184,9 +187,16 @@ export const handler = async (argv: any) => {
         eventResults.push(...response.results);
       }
       const numResults = eventResults.length;
+      // TODO: Comparing scores across matches from different AppMaps is not a good idea.
+      // The scores are only directly comparable within the context of a single AppMap.
       eventResults.sort((a, b) => b.score - a.score);
       if (eventResults.length > maxResults) eventResults = eventResults.slice(0, maxResults);
-      await presentResults({ type: 'event', numResults: numResults, results: eventResults });
+      await presentResults({
+        type: 'event',
+        stats: response.stats,
+        numResults: numResults,
+        results: eventResults,
+      });
     } else {
       await presentResults(response);
     }

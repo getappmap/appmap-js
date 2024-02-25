@@ -7,7 +7,8 @@ export default async function search(
   vectorTerms: string[],
   numSearchResults = 10
 ): Promise<SearchRpc.SearchResponse> {
-  const searchResponse = await searchHandler(appmapDir, vectorTerms.join(' '), {
+  const searchResponse = await searchHandler(vectorTerms.join(' '), {
+    appmapDir,
     maxResults: numSearchResults,
   });
   console.log(chalk.gray(`Obtained ${searchResponse.results.length} results`));

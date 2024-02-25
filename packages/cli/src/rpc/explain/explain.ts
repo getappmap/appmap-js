@@ -14,8 +14,6 @@ const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResp
 export type SearchContextOptions = {
   tokenLimit: number;
   vectorTerms: string[];
-  numSearchResults?: number;
-  numDiagramsToAnalyze?: number;
 };
 
 export type SearchContextResponse = {
@@ -29,6 +27,7 @@ export class Explain extends EventEmitter {
     public appmapDir: string,
     public question: string,
     public codeSelection: string | undefined,
+    public appmaps: string[] | undefined,
     public status: ExplainRpc.ExplainStatusResponse
   ) {
     super();
@@ -66,19 +65,16 @@ export class Explain extends EventEmitter {
 
   async searchContext(data: SearchContextOptions): Promise<SearchContextResponse> {
     const { vectorTerms } = data;
-    let { numSearchResults, numDiagramsToAnalyze } = data;
-    if (!numSearchResults) numSearchResults = 10;
-    if (!numDiagramsToAnalyze) numDiagramsToAnalyze = 3;
 
     this.status.vectorTerms = vectorTerms;
 
     this.status.step = ExplainRpc.Step.SEARCH_APPMAPS;
 
-    const searchResponse = await search(this.appmapDir, vectorTerms, numSearchResults);
+    const searchResponse = await search(this.appmapDir, vectorTerms);
     this.status.searchResponse = searchResponse;
     this.status.step = ExplainRpc.Step.COLLECT_CONTEXT;
 
-    const contextStepResponse = await context(searchResponse, numDiagramsToAnalyze);
+    const contextStepResponse = await context(searchResponse);
 
     this.status.sequenceDiagrams = contextStepResponse.sequenceDiagrams;
     this.status.codeSnippets = Array.from<string>(contextStepResponse.codeSnippets.keys()).reduce(
@@ -107,6 +103,7 @@ async function explain(
   appmapDir: string,
   question: string,
   codeSelection: string | undefined,
+  appmaps: string[] | undefined,
   threadId: string | undefined
 ): Promise<ExplainRpc.ExplainResponse> {
   const status: ExplainRpc.ExplainStatusResponse = {
@@ -114,7 +111,7 @@ async function explain(
     threadId,
   };
 
-  const explain = new Explain(appmapDir, question, codeSelection, status);
+  const explain = new Explain(appmapDir, question, codeSelection, appmaps, status);
 
   const contextProvider: ContextProvider = async (data: any): Promise<Record<string, string>> => {
     const type = data['type'];
@@ -166,6 +163,7 @@ const explainHandler: (
         appmapDir,
         options.question,
         options.codeSelection,
+        options.appmaps,
         options.threadId
       ),
   };
