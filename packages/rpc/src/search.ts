@@ -2,6 +2,7 @@ export namespace SearchRpc {
   export const FunctionName = 'search';
 
   export type SearchOptions = {
+    appmaps?: string[];
     query: string;
     maxResults?: number;
   };
@@ -14,14 +15,23 @@ export namespace SearchRpc {
     elapsed?: number;
   };
 
+  export type Stats = {
+    mean: number;
+    median: number;
+    stddev: number;
+    max: number;
+  };
+
   export type SearchResult = {
     appmap: string;
     events: EventMatch[];
+    eventStats: Stats;
     score: number;
   };
 
   export type SearchResponse = {
     results: SearchResult[];
+    searchStats: Stats;
     numResults: number;
   };
 }
