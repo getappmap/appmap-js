@@ -10728,10 +10728,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/recommended@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@tsconfig/recommended@npm:1.0.1"
-  checksum: 5f781e6a26277ee86dd0f1d575d18133627908ddf7c78acdcab0e40d0b7f21f4e1462eb8f98b74cda1d05d15fb3629ceea4c622ee031d62e31e7a99281c49294
+"@tsconfig/recommended@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@tsconfig/recommended@npm:1.0.3"
+  checksum: cf2bf93d419e28b98ac82d9587035daf7dc1e0ef9b8db873a7962967d8744df352ebd2986b046911889e989d4f2caec3bf5826a4c8a4b61572d03329fdc56b34
   languageName: node
   linkType: hard
 
@@ -35609,7 +35609,7 @@ resolve@1.1.7:
     "@semantic-release/release-notes-generator": ^10
     "@storybook/builder-webpack5": ^6.5.14
     "@storybook/manager-webpack5": ^6.5.14
-    "@tsconfig/recommended": ^1.0.1
+    "@tsconfig/recommended": ^1.0.3
     "@types/jest": ^29.5.2
     "@types/node": ^17.0.2
     eslint: ^7.25.0
