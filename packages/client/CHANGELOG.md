@@ -1,3 +1,10 @@
+# [@appland/client-v1.15.1](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.15.0...@appland/client-v1.15.1) (2024-02-27)
+
+
+### Bug Fixes
+
+* Warn rather than disconnect on unrecognized event ([b3ee7dc](https://github.com/getappmap/appmap-js/commit/b3ee7dcb5df8f801420f4df7669f32f99ddd8e57))
+
 # [@appland/client-v1.15.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.14.1...@appland/client-v1.15.0) (2024-02-01)
 
 
