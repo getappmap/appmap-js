@@ -5,12 +5,14 @@ import { EventEmitter } from 'events';
 type ExplainOptions = {
   question: string;
   codeSelection?: string;
+  appmaps?: string[];
   threadId?: string;
 };
 
 type UserInput = {
   question: string;
   codeSelection?: string;
+  appmaps?: string[];
 };
 
 export class ExplainRequest extends EventEmitter {
@@ -25,14 +27,17 @@ export class ExplainRequest extends EventEmitter {
   explain(input: string | UserInput, threadId?: string): Promise<string> {
     let question: string;
     let codeSelection: string | undefined;
+    let appmaps: string[] | undefined;
     if (typeof input === 'string') {
       question = input;
     } else {
       question = input.question;
       codeSelection = input.codeSelection;
+      appmaps = input.appmaps;
     }
     const explainOptions: ExplainOptions = {
       question,
+      appmaps,
       threadId,
       codeSelection,
     };

@@ -29,5 +29,43 @@ describe('RPC', () => {
         )
       );
     });
+
+    it('returns multiple AppMaps', async () => {
+      const options: SearchRpc.SearchOptions = {
+        query: 'controller',
+        maxResults: 3,
+      };
+      const response = await rpcTest.client.request(SearchRpc.FunctionName, options);
+      expect(response.error).toBeFalsy();
+      const searchData = response.result;
+      expect(searchData).toEqual(
+        JSON.parse(
+          await readFile(
+            join(__dirname, 'fixtures', 'search', 'multiple_results.search.json'),
+            'utf-8'
+          )
+        )
+      );
+    });
+
+    it('can be limited to a specific AppMap', async () => {
+      const options: SearchRpc.SearchOptions = {
+        query: 'controller',
+        maxResults: 3,
+        appmaps: ['user_page_scenario'],
+      };
+      const response = await rpcTest.client.request(SearchRpc.FunctionName, options);
+      expect(response.error).toBeFalsy();
+      const searchData = response.result;
+      console.warn(JSON.stringify(searchData, null, 2));
+      expect(searchData).toEqual(
+        JSON.parse(
+          await readFile(
+            join(__dirname, 'fixtures', 'search', 'specific_appmaps.search.json'),
+            'utf-8'
+          )
+        )
+      );
+    });
   });
 });

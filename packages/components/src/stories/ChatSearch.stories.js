@@ -26,6 +26,10 @@ const codeSelection = {
   code,
 };
 
+const appmaps = [
+  'tmp/appmap/rspec/GET_organizations_join_by_code_when_logged_in_with_invalid_join_code_is_not_found',
+];
+
 export default {
   title: 'Pages/ChatSearch',
   component: VChatSearch,
@@ -45,6 +49,15 @@ export const ChatSearchWithCodeSelection = (args, { argTypes }) => ({
   template: `<v-chat-search v-bind="$props" ref="chatSearch"></v-chat-search>`,
   mounted() {
     this.$refs.chatSearch.includeCodeSelection(codeSelection);
+  },
+});
+
+export const ChatSearchWithAppMaps = (args, { argTypes }) => ({
+  props: Object.keys(argTypes),
+  components: { VChatSearch },
+  template: `<v-chat-search v-bind="$props" ref="chatSearch"></v-chat-search>`,
+  mounted() {
+    for (const appmap of appmaps) this.$refs.chatSearch.includeAppMap(appmap);
   },
 });
 

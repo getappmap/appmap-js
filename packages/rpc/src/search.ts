@@ -3,6 +3,7 @@ export namespace SearchRpc {
 
   export type SearchOptions = {
     query: string;
+    appmaps?: string[];
     maxResults?: number;
   };
 

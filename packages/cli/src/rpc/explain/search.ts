@@ -4,10 +4,11 @@ import { handler as searchHandler } from '../search/search';
 
 export default async function search(
   appmapDir: string,
+  appmaps: string[] | undefined,
   vectorTerms: string[],
   numSearchResults = 10
 ): Promise<SearchRpc.SearchResponse> {
-  const searchResponse = await searchHandler(appmapDir, vectorTerms.join(' '), {
+  const searchResponse = await searchHandler(appmapDir, appmaps, vectorTerms.join(' '), {
     maxResults: numSearchResults,
   });
   console.log(chalk.gray(`Obtained ${searchResponse.results.length} results`));

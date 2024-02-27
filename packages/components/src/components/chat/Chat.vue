@@ -182,6 +182,7 @@ export default {
       autoScrollTop: 0,
       enableScrollLog: false, // Auto-scroll can be tricky, so there is special logging to help debug it.
       codeSelections: [] as CodeSelection[],
+      appmaps: [] as string[],
       scrollLog: (message: string) => (this.enableScrollLog ? console.log(message) : undefined),
     };
   },
@@ -271,7 +272,8 @@ export default {
 
       this.sendMessage(
         message,
-        this.codeSelections.map((s) => s.code)
+        this.codeSelections.map((s) => s.code),
+        this.appmaps
       );
 
       this.codeSelections = [];
@@ -350,6 +352,9 @@ export default {
     },
     includeCodeSelection(codeSelection: CodeSelection) {
       this.codeSelections.push(codeSelection);
+    },
+    includeAppMap(appmap: string) {
+      this.appmaps.push(appmap);
     },
   },
 };

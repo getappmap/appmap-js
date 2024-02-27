@@ -29,6 +29,7 @@ export default class Explain extends EventEmitter {
     public appmapDir: string,
     public question: string,
     public codeSelection: string | undefined,
+    public appmaps: string[] | undefined,
     public status: ExplainRpc.ExplainStatusResponse
   ) {
     super();
@@ -90,7 +91,12 @@ export default class Explain extends EventEmitter {
 
     this.status.step = ExplainRpc.Step.SEARCH_APPMAPS;
 
-    const searchResponse = await search(this.appmapDir, vectorTerms, numSearchResults);
+    const searchResponse = await search(
+      this.appmapDir,
+      this.appmaps,
+      vectorTerms,
+      numSearchResults
+    );
     this.status.searchResponse = searchResponse;
     this.status.step = ExplainRpc.Step.COLLECT_CONTEXT;
 
@@ -122,13 +128,14 @@ async function explain(
   appmapDir: string,
   question: string,
   codeSelection: string | undefined,
+  appmaps: string[] | undefined,
   threadId: string | undefined
 ): Promise<ExplainRpc.ExplainResponse> {
   const status: ExplainRpc.ExplainStatusResponse = {
     step: ExplainRpc.Step.NEW,
     threadId,
   };
-  const explain = new Explain(appmapDir, question, codeSelection, status);
+  const explain = new Explain(appmapDir, question, codeSelection, appmaps, status);
   return new Promise<ExplainRpc.ExplainResponse>((resolve, reject) => {
     let isFirst = true;
 
@@ -174,7 +181,13 @@ const explainHandler: (
   return {
     name: ExplainRpc.ExplainFunctionName,
     handler: async (options: ExplainRpc.ExplainOptions) =>
-      await explain(appmapDir, options.question, options.codeSelection, options.threadId),
+      await explain(
+        appmapDir,
+        options.question,
+        options.codeSelection,
+        options.appmaps,
+        options.threadId
+      ),
   };
 };
 
