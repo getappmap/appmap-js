@@ -256,6 +256,14 @@ describe('pages/ChatSearch.vue', () => {
         return { messagesCalled, wrapper };
       };
 
+      it('states that no matches were found', async () => {
+        const { wrapper } = await performSearch();
+
+        expect(wrapper.find('[data-cy="tool-status"]').text()).toContain(
+          'Found 0 relevant recordings'
+        );
+      });
+
       it('makes expected RPC calls', async () => {
         const { messagesCalled } = await performSearch();
 
@@ -265,10 +273,10 @@ describe('pages/ChatSearch.vue', () => {
         });
       });
 
-      it('clears the thread id', async () => {
+      it('retains the thread id', async () => {
         const { wrapper } = await performSearch();
 
-        expect(wrapper.vm.$refs.vchat.threadId).toBeUndefined();
+        expect(wrapper.vm.$refs.vchat.threadId).toEqual(threadId);
       });
 
       it('shows the "no match" instructions', async () => {
