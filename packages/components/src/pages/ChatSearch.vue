@@ -191,8 +191,6 @@ export default {
       }
       if (searchResponse.results.length > 0) {
         this.selectedSearchResultId = searchResponse.results[0].id;
-      } else {
-        this.$refs.vchat.onNoMatch();
       }
     },
     selectedSearchResultId: async function (newVal) {

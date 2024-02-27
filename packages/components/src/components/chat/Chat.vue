@@ -291,11 +291,6 @@ export default {
         this.ask(prompt);
       }
     },
-    onNoMatch() {
-      // If the AI was not able to produce a useful response, don't persist the thread.
-      // This is used by Explain when no AppMaps can be found to match the question.
-      this.threadId = undefined;
-    },
     clear() {
       this.threadId = undefined;
       this.messages.splice(0);
