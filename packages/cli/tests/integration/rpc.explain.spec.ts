@@ -132,6 +132,38 @@ describe('RPC', () => {
       });
     });
 
+    describe('when the connection is terminated before ack', () => {
+      it('resolves the handler', async () => {
+        class MockAIClient {
+          constructor(public callbacks: AICallbacks) {}
+
+          async inputPrompt(): Promise<void> {
+            this.callbacks.onComplete!();
+          }
+        }
+
+        const aiClient = (callbacks: AICallbacks): AIClient => {
+          return new MockAIClient(callbacks) as unknown as AIClient;
+        };
+
+        jest
+          .spyOn(AI, 'connect')
+          .mockImplementation((callbacks: AICallbacks) => Promise.resolve(aiClient(callbacks)));
+
+        const explainOptions: ExplainRpc.ExplainOptions = {
+          question,
+        };
+        const response = await rpcTest.client.request(
+          ExplainRpc.ExplainFunctionName,
+          explainOptions
+        );
+        expect(response.error).toStrictEqual({
+          code: 500,
+          message: 'The response completed unexpectedly',
+        });
+      });
+    });
+
     describe('when an error occurs before ack', () => {
       it('is propagated as code 500', async () => {
         class MockAIClient {
