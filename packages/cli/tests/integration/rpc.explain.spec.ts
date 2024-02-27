@@ -49,7 +49,7 @@ describe('RPC', () => {
 
             const searchContextOptions: SearchContextOptions = {
               vectorTerms: ['api', 'key'],
-              tokenLimit: 4000,
+              tokenCount: 4000,
               numSearchResults: 1,
               numDiagramsToAnalyze: 1,
             };

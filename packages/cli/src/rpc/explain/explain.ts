@@ -1,19 +1,21 @@
+import chalk from 'chalk';
 import { AI } from '@appland/client';
 import { ExplainRpc } from '@appland/rpc';
-import { RpcError, RpcHandler, errorMessage, isRpcError } from '../rpc';
+import { RpcError, RpcHandler } from '../rpc';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
 import EventEmitter from 'events';
-import search from './search';
-import context from './context';
+import collectContext from './collectContext';
 import assert from 'assert';
 import { warn } from 'console';
 import { verbose } from '../../utils';
 
 export type SearchContextOptions = {
-  tokenLimit: number;
+  tokenCount: number;
   vectorTerms: string[];
+
+  // Deprecated
   numSearchResults?: number;
   numDiagramsToAnalyze?: number;
 };
@@ -83,6 +85,12 @@ export default class Explain extends EventEmitter {
 
   async searchContext(data: SearchContextOptions): Promise<SearchContextResponse> {
     const { vectorTerms } = data;
+    let { tokenCount } = data;
+    if (!tokenCount) {
+      warn(chalk.bold(`Warning: tokenCount not set, defaulting to 4000`));
+      tokenCount = 4000;
+    }
+
     let { numSearchResults, numDiagramsToAnalyze } = data;
     if (!numSearchResults) numSearchResults = 10;
     if (!numDiagramsToAnalyze) numDiagramsToAnalyze = 3;
@@ -90,29 +98,24 @@ export default class Explain extends EventEmitter {
     this.status.vectorTerms = vectorTerms;
 
     this.status.step = ExplainRpc.Step.SEARCH_APPMAPS;
-
-    const searchResponse = await search(
-      this.appmapDir,
-      this.appmaps,
-      vectorTerms,
-      numSearchResults
-    );
-    this.status.searchResponse = searchResponse;
     this.status.step = ExplainRpc.Step.COLLECT_CONTEXT;
 
-    const contextStepResponse = await context(searchResponse, numDiagramsToAnalyze);
-
-    this.status.sequenceDiagrams = contextStepResponse.sequenceDiagrams;
-    this.status.codeSnippets = Array.from<string>(contextStepResponse.codeSnippets.keys()).reduce(
+    // TODO: More accurate char limit? Probably doesn't matter because they will be
+    // pruned by the client AI anyway.
+    // The meaning of tokenCount is "try and get at least this many tokens"
+    const charLimit = tokenCount * 3;
+    const context = await collectContext(this.appmapDir, this.appmaps, vectorTerms, charLimit);
+    this.status.sequenceDiagrams = context.sequenceDiagrams;
+    this.status.codeSnippets = Array.from<string>(context.codeSnippets.keys()).reduce(
       (acc, key) => {
-        const snippet = contextStepResponse.codeSnippets.get(key);
+        const snippet = context.codeSnippets.get(key);
         assert(snippet !== undefined);
         if (snippet) acc[key] = snippet;
         return acc;
       },
       {} as Record<string, string>
     );
-    this.status.codeObjects = Array.from(contextStepResponse.codeObjects);
+    this.status.codeObjects = Array.from(context.codeObjects);
 
     this.status.step = ExplainRpc.Step.EXPLAIN;
 
