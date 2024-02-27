@@ -150,6 +150,20 @@ async function explain(
       searchStatusByUserMessageId.set(userMessageId, status);
       first() && resolve({ userMessageId, threadId });
     });
+
+    // If the request completes here, consider it an error. This would mean that the
+    // remote server terminated our connection early.
+    explain.on(
+      'complete',
+      () =>
+        first() &&
+        reject(
+          RpcError.fromException(
+            new Error(status.explanation?.join('') || 'The response completed unexpectedly')
+          )
+        )
+    );
+
     explain.explain().catch((err: Error) => first() && reject(RpcError.fromException(err)));
   });
 }
