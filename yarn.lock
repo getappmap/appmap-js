@@ -83,42 +83,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@appland/appmap-agent-js@npm:14.2.0":
-  version: 14.2.0
-  resolution: "@appland/appmap-agent-js@npm:14.2.0"
-  dependencies:
-    "@appland/appmap-validate": ^2.3.0
-    "@babel/parser": ^7.15.8
-    ajv: ^8.6.3
-    ajv-error-tree: 0.0.5
-    astring: ^1.8.4
-    chalk: ^5.0.1
-    fswin: ^3.23.311
-    glob: ^8.0.3
-    htmlparser2: ^8.0.1
-    klaw-sync: ^6.0.0
-    minimatch: ^5.1.0
-    minimist: ^1.2.7
-    net-socket-messaging: ^0.1.6
-    posix-socket: ^1.1.3
-    posix-socket-messaging: 0.0.1
-    prompts: ^2.4.2
-    semver: ^7.3.5
-    treeify: ^1.1.0
-    vlq: ^2.0.4
-    ws: ^8.13.0
-    yaml: ^2.1.1
-  dependenciesMeta:
-    posix-socket:
-      optional: true
-    posix-socket-messaging:
-      optional: true
-  bin:
-    appmap-agent-js: bin/appmap-agent-js.cjs
-  checksum: bc2200cf5269963a9422a5f3b2af56bedcac7ebe790f4e5b15fbc38dc8e6623e4eadcba516e54393b93031ec6de890c6bc66e82e8f944a00a30b25e11b1e3ef4
-  languageName: node
-  linkType: hard
-
 "@appland/appmap-agent-js@npm:^13.9.0":
   version: 13.9.0
   resolution: "@appland/appmap-agent-js@npm:13.9.0"
@@ -175,7 +139,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/appmap@workspace:packages/cli"
   dependencies:
-    "@appland/appmap-agent-js": 14.2.0
     "@appland/client": "workspace:^1.15.0"
     "@appland/components": "workspace:^4.0.0"
     "@appland/diagrams": "workspace:^1.8.0"
@@ -206,7 +169,7 @@ __metadata:
     JSONStream: ^1.3.5
     ajv: ^8.6.3
     applicationinsights: ^2.1.4
-    appmap-node: ^2.13.0
+    appmap-node: ^2.16.0
     async: ^3.2.4
     axios: ^0.27.2
     body-parser: ^1.20.2
@@ -14127,20 +14090,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"appmap-node@npm:^2.13.0":
-  version: 2.13.0
-  resolution: "appmap-node@npm:2.13.0"
+"appmap-node@npm:^2.16.0":
+  version: 2.16.0
+  resolution: "appmap-node@npm:2.16.0"
   dependencies:
     acorn-walk: ^8.2.0
     astring: ^1.8.6
     chalk: <5
-    convert-source-map: ^2.0.0
     meriyah: ^4.3.7
     source-map-js: ^1.0.2
+    strip-json-comments: ^3
     yaml: ^2.3.4
   bin:
     appmap-node: bin/appmap-node.js
-  checksum: 4621c8516f9e1d5c272a89bc61268349a2a16c4e7c84cba2ae53d2f4931bef0094985d6c9bc87d9ec2b567639cfcb5c0b1098ab56db3d359275461861ea42516
+  checksum: 90121e0b87995efc70196bbf9a2cd4c2f2bef8e3a58549a3d21b4713a04b14ad9a4fd74b57000b331165ac45e828a1d4cf70c1458b25d1a2484d6487e86b9643
   languageName: node
   linkType: hard
 
@@ -22744,13 +22707,6 @@ __metadata:
   dependencies:
     node-gyp: latest
   conditions: os=darwin
-  languageName: node
-  linkType: hard
-
-"fswin@npm:^3.23.311":
-  version: 3.23.311
-  resolution: "fswin@npm:3.23.311"
-  checksum: 8712a89da690a030a771fa3ad474805e2c7d1b72c11eedbd9d84fd0f4621fc771b46c3213300836fcee1d4c6573c7c927e70030a3333b14c430593d6ef6fa191
   languageName: node
   linkType: hard
 
@@ -37575,7 +37531,7 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
-"strip-json-comments@npm:^3.0.1, strip-json-comments@npm:^3.1.0, strip-json-comments@npm:^3.1.1":
+"strip-json-comments@npm:^3, strip-json-comments@npm:^3.0.1, strip-json-comments@npm:^3.1.0, strip-json-comments@npm:^3.1.1":
   version: 3.1.1
   resolution: "strip-json-comments@npm:3.1.1"
   checksum: 492f73e27268f9b1c122733f28ecb0e7e8d8a531a6662efbd08e22cccb3f9475e90a1b82cab06a392f6afae6d2de636f977e231296400d0ec5304ba70f166443
