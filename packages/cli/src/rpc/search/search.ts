@@ -2,9 +2,8 @@ import assert from 'assert';
 
 import { SearchRpc } from '@appland/rpc';
 import { RpcHandler } from '../rpc';
-import AppMapIndex, { SearchResult as AppMapSearchResult } from '../../fulltext/AppMapIndex';
+import AppMapIndex, { SearchResponse } from '../../fulltext/AppMapIndex';
 import searchSingleAppMap from '../../cmds/search/searchSingleAppMap';
-import { SearchResult as EventSearchResult } from '../../fulltext/FindEvents';
 
 export type HandlerOptions = {
   maxResults?: number;
@@ -12,6 +11,7 @@ export type HandlerOptions = {
 
 export async function handler(
   appmapDir: string,
+  appmaps: string[] | undefined,
   query: string,
   options: HandlerOptions
 ): Promise<SearchRpc.SearchResponse> {
@@ -19,42 +19,37 @@ export async function handler(
   // in the AppMaps.
   const { maxResults } = options;
 
-  // Search across all AppMaps, creating a map from AppMap id to AppMapSearchResult
-  const searchOptions = maxResults ? { maxResults } : {};
-  const appmapSearchResponse = await AppMapIndex.search(appmapDir, query, searchOptions);
-  const appmapSearchResults = appmapSearchResponse.results.reduce((acc, result) => {
-    acc.set(result.appmap, result);
-    return acc;
-  }, new Map<string, AppMapSearchResult>());
+  let appmapSearchResponse: SearchResponse;
+  if (appmaps) {
+    appmapSearchResponse = {
+      type: 'appmap',
+      stats: {
+        max: 1,
+        mean: 1,
+        median: 1,
+        stddev: 0,
+      },
+      results: appmaps.map((appmap) => ({ appmap, score: 1 })),
+      numResults: appmaps.length,
+    };
+  } else {
+    // Search across all AppMaps, creating a map from AppMap id to AppMapSearchResult
+    const searchOptions = maxResults ? { maxResults } : {};
+    appmapSearchResponse = await AppMapIndex.search(appmapDir, query, searchOptions);
+  }
 
   // For each AppMap, search for events within the map that match the query.
-  // Sort the events by score, then group by AppMap id.
-  const events = new Array<EventSearchResult>();
+  const results = new Array<SearchRpc.SearchResult>();
   for (const result of appmapSearchResponse.results) {
     const options = maxResults ? { maxResults } : {};
     const eventsSearchResponse = await searchSingleAppMap(result.appmap, query, options);
-    events.push(...eventsSearchResponse.results);
+    results.push({
+      appmap: result.appmap,
+      events: eventsSearchResponse.results,
+      score: result.score,
+    });
   }
 
-  events.sort((a, b) => b.score - a.score);
-
-  const resultsByAppmapId = events.reduce((acc, event) => {
-    const { appmap: appmapId } = event;
-
-    if (!acc.has(appmapId)) {
-      const appmapResult = appmapSearchResults.get(appmapId);
-      assert(appmapResult);
-      acc.set(appmapId, { appmap: appmapId, events: [], score: appmapResult.score });
-    }
-    const filteredEvent: any = { ...event };
-    delete filteredEvent['appmap'];
-    acc.get(appmapId)!.events.push(filteredEvent);
-    return acc;
-  }, new Map<string, SearchRpc.SearchResult>());
-
-  // The final result is AppMaps sorted by search score, along with the events
-  // within each AppMap, also sorted by search score.
-  const results = Array.from(resultsByAppmapId.values()).sort((a, b) => b.score - a.score);
   if (maxResults) results.splice(maxResults);
 
   return {
@@ -66,5 +61,8 @@ export async function handler(
 export function search(
   appmapDir: string
 ): RpcHandler<SearchRpc.SearchOptions, SearchRpc.SearchResponse> {
-  return { name: SearchRpc.FunctionName, handler: (args) => handler(appmapDir, args.query, args) };
+  return {
+    name: SearchRpc.FunctionName,
+    handler: (args) => handler(appmapDir, args.appmaps, args.query, args),
+  };
 }

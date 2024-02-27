@@ -147,6 +147,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    appmaps: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -251,7 +255,7 @@ export default {
     updateFilters(updatedFilters) {
       this.$store.commit(SET_SAVED_FILTERS, updatedFilters);
     },
-    async sendMessage(message: string, codeSelections: string[] = []) {
+    async sendMessage(message: string, codeSelections: string[] = [], appmaps: string[] = []) {
       this.ask = this.rpcClient().explain();
       this.searching = true;
       this.lastStatusLabel = undefined;
@@ -314,6 +318,7 @@ export default {
         const explainRequest = {
           question: message,
         };
+        if (appmaps.length > 0) explainRequest.appmaps = this.appmaps;
         if (codeSelections.length > 0) explainRequest.codeSelection = codeSelections.join('\n\n');
 
         this.ask.explain(explainRequest, this.$refs.vchat.threadId).catch(onError);
@@ -367,6 +372,9 @@ export default {
     },
     includeCodeSelection(codeSelection: CodeSelection) {
       this.$refs.vchat.includeCodeSelection(codeSelection);
+    },
+    includeAppMap(appmap: string) {
+      this.$refs.vchat.includeAppMap(appmap);
     },
   },
   async mounted() {

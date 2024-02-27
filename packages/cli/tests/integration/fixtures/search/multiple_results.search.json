@@ -1,0 +1,33 @@
+{
+  "numResults": 2,
+  "results": [
+    {
+      "appmap": "revoke_api_key",
+      "events": [
+        {
+          "appmap": "revoke_api_key",
+          "elapsed": 0.009195,
+          "eventIds": [28],
+          "fqid": "function:app/controllers/API::APIKeysController#destroy",
+          "location": "app/controllers/api/api_keys_controller.rb:15",
+          "score": 7.808
+        }
+      ],
+      "score": 0.752
+    },
+    {
+      "appmap": "user_page_scenario",
+      "events": [
+        {
+          "appmap": "user_page_scenario",
+          "elapsed": 0.000005,
+          "eventIds": [58],
+          "fqid": "function:app/controllers/OrganizationsController#new",
+          "location": "app/controllers/organizations_controller.rb:11",
+          "score": 6.74
+        }
+      ],
+      "score": 0.627
+    }
+  ]
+}
