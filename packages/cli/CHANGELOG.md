@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.126.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.126.1...@appland/appmap-v3.126.2) (2024-02-27)
+
+
+### Bug Fixes
+
+* Consider `complete` before `ack` an error ([752bde3](https://github.com/getappmap/appmap-js/commit/752bde362c77755f44d2df16328c5034ef72c3c3))
+
 # [@appland/appmap-v3.126.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.126.0...@appland/appmap-v3.126.1) (2024-02-13)
 
 
