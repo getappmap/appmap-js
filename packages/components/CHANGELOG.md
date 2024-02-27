@@ -1,3 +1,10 @@
+# [@appland/components-v4.2.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.2.0...@appland/components-v4.2.1) (2024-02-27)
+
+
+### Bug Fixes
+
+* Allow a response if no AppMaps were found ([715955e](https://github.com/getappmap/appmap-js/commit/715955e4fd148a6d35cceb293bc5fb8d2ba8a053))
+
 # [@appland/components-v4.2.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.1.0...@appland/components-v4.2.0) (2024-02-20)
 
 
