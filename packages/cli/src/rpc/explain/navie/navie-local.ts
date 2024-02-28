@@ -1,5 +1,5 @@
 import EventEmitter from 'events';
-import { Context, Explain, explain } from '@appland/navie';
+import { Context, Explain, ProjectInfo, explain } from '@appland/navie';
 
 import INavie from './inavie';
 import { randomUUID } from 'crypto';
@@ -8,7 +8,8 @@ import { verbose } from '../../../utils';
 export default class LocalNavie extends EventEmitter implements INavie {
   constructor(
     public threadId: string | undefined,
-    private readonly contextProvider: Context.ContextProvider
+    private readonly contextProvider: Context.ContextProvider,
+    private readonly projectInfoProvider: ProjectInfo.ProjectInfoProvider
   ) {
     super();
   }
@@ -29,7 +30,13 @@ export default class LocalNavie extends EventEmitter implements INavie {
     // TODO: Provide
     const chatHistory = [];
 
-    const explainFn = explain(clientRequest, this.contextProvider, options, chatHistory);
+    const explainFn = explain(
+      clientRequest,
+      this.contextProvider,
+      this.projectInfoProvider,
+      options,
+      chatHistory
+    );
     explainFn.on('event', (event) => {
       if (verbose()) console.log(event.message);
     });

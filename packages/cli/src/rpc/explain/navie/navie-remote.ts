@@ -4,12 +4,13 @@ import EventEmitter from 'events';
 import { AI } from '@appland/client';
 import { verbose } from '../../../utils';
 import { default as INavie } from './inavie';
-import { Context, ContextRequest } from '@appland/navie';
+import { Context, ProjectInfo } from '@appland/navie';
 
 export default class RemoteNavie extends EventEmitter implements INavie {
   constructor(
     public threadId: string | undefined,
-    private contextProvider: Context.ContextProvider
+    private contextProvider: Context.ContextProvider,
+    private projectInfoProvider: ProjectInfo.ProjectInfoProvider
   ) {
     super();
   }
@@ -28,7 +29,13 @@ export default class RemoteNavie extends EventEmitter implements INavie {
         },
         async onRequestContext(data) {
           if (data.type === 'search') {
-            return await self.contextProvider(data as unknown as ContextRequest);
+            return await self.contextProvider(data as unknown as Context.ContextRequest);
+          }
+          if (data.type === 'projectInfo') {
+            return (
+              (await self.projectInfoProvider(data as unknown as ProjectInfo.ProjectInfoRequest)) ||
+              {}
+            );
           } else {
             warn(`Unhandled context request type: ${data.type}`);
             // A response is required from this function.

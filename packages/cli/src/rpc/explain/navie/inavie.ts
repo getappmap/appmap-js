@@ -1,4 +1,4 @@
-import { ContextProvider } from '@appland/navie';
+import { Context, ContextProvider, ProjectInfo } from '@appland/navie';
 
 export default interface INavie {
   ask(question: string, codeSelection: string | undefined): Promise<void>;
@@ -11,5 +11,6 @@ export default interface INavie {
 
 export type INavieProvider = (
   threadId: string | undefined,
-  contextProvider: ContextProvider
+  contextProvider: Context.ContextProvider,
+  projectInfoProvider: ProjectInfo.ProjectInfoProvider
 ) => INavie;

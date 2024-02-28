@@ -8,7 +8,9 @@ import { RpcError, RpcHandler } from '../rpc';
 import collectContext from './collectContext';
 import INavie, { INavieProvider } from './navie/inavie';
 import { verbose } from '../../utils';
-import { Context } from '@appland/navie';
+import { Context, ProjectInfo } from '@appland/navie';
+import loadAppMapConfig from '../../lib/loadAppMapConfig';
+import { appmapStatsHandler } from '../appmap/stats';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
@@ -26,6 +28,8 @@ export type SearchContextResponse = {
   codeSnippets: { [key: string]: string };
   codeObjects: string[];
 };
+
+export const DEFAULT_TOKEN_LIMIT = 8000;
 
 export class Explain extends EventEmitter {
   constructor(
@@ -72,13 +76,9 @@ export class Explain extends EventEmitter {
     const { vectorTerms } = data;
     let { tokenCount } = data;
     if (!tokenCount) {
-      warn(chalk.bold(`Warning: tokenCount not set, defaulting to 4000`));
-      tokenCount = 4000;
+      warn(chalk.bold(`Warning: tokenCount not set, defaulting to ${DEFAULT_TOKEN_LIMIT}`));
+      tokenCount = DEFAULT_TOKEN_LIMIT;
     }
-
-    let { numSearchResults, numDiagramsToAnalyze } = data;
-    if (!numSearchResults) numSearchResults = 10;
-    if (!numDiagramsToAnalyze) numDiagramsToAnalyze = 3;
 
     this.status.vectorTerms = vectorTerms;
 
@@ -114,6 +114,16 @@ export class Explain extends EventEmitter {
       codeObjects: this.status.codeObjects,
     };
   }
+
+  async projectInfoContext(): Promise<ProjectInfo.ProjectInfoResponse> {
+    const appmapConfig = (await loadAppMapConfig(this.appmapDir)) || {};
+    const appmapStats: any = await appmapStatsHandler(this.appmapDir);
+    delete appmapStats.classes; // This is verbose and I don't see the utility of it
+    return Promise.resolve({
+      'appmap.yml': appmapConfig,
+      appmapStats: appmapStats,
+    });
+  }
 }
 
 async function explain(
@@ -130,7 +140,7 @@ async function explain(
   };
   const explain = new Explain(appmapDir, question, codeSelection, appmaps, status);
 
-  const contextProvider: Context.ContextProvider = async (data: any) => {
+  const invokeContextFunction = async (data: any) => {
     const type = data['type'];
     const fnName = [type, 'Context'].join('');
     if (verbose()) warn(`Explain received context request: ${type}`);
@@ -138,7 +148,11 @@ async function explain(
     return await fn.call(explain, data);
   };
 
-  const navie = navieProvider(threadId, contextProvider);
+  const contextProvider: Context.ContextProvider = async (data: any) => invokeContextFunction(data);
+  const projectInfoProvider: ProjectInfo.ProjectInfoProvider = async (data: any) =>
+    invokeContextFunction(data);
+
+  const navie = navieProvider(threadId, contextProvider, projectInfoProvider);
   return new Promise<ExplainRpc.ExplainResponse>((resolve, reject) => {
     let isFirst = true;
 
