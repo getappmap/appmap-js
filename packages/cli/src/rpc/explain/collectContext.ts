@@ -12,9 +12,12 @@ export default async function collectContext(
   vectorTerms: string[],
   charLimit: number
 ): Promise<{
-  sequenceDiagrams: string[];
-  codeSnippets: Map<string, string>;
-  codeObjects: Set<string>;
+  searchResponse: SearchRpc.SearchResponse;
+  context: {
+    sequenceDiagrams: string[];
+    codeSnippets: Map<string, string>;
+    codeObjects: Set<string>;
+  };
 }> {
   const query = vectorTerms.join(' ');
 
@@ -63,9 +66,12 @@ export default async function collectContext(
   }
 
   async function collectEvents(): Promise<{
-    sequenceDiagrams: string[];
-    codeSnippets: Map<string, string>;
-    codeObjects: Set<string>;
+    results: SearchRpc.SearchResult[];
+    context: {
+      sequenceDiagrams: string[];
+      codeSnippets: Map<string, string>;
+      codeObjects: Set<string>;
+    };
   }> {
     const results = new Array<SearchRpc.SearchResult>();
     for (const result of appmapSearchResponse.results) {
@@ -76,7 +82,8 @@ export default async function collectContext(
         score: result.score,
       });
     }
-    return await buildContext(results);
+    const context = await buildContext(results);
+    return { results, context };
   }
 
   function contextSize(context: {
@@ -92,16 +99,19 @@ export default async function collectContext(
   }
 
   let charCount = 0;
-  let context: {
-    sequenceDiagrams: string[];
-    codeSnippets: Map<string, string>;
-    codeObjects: Set<string>;
+  let result: {
+    results: SearchRpc.SearchResult[];
+    context: {
+      sequenceDiagrams: string[];
+      codeSnippets: Map<string, string>;
+      codeObjects: Set<string>;
+    };
   };
   log(`Requested char limit: ${charLimit}`);
   while (true) {
     log(`Collecting context with ${maxEventsPerDiagram} events per diagram.`);
-    context = await collectEvents();
-    const estimatedSize = contextSize(context);
+    result = await collectEvents();
+    const estimatedSize = contextSize(result.context);
     log(`Collected an estimated ${estimatedSize} characters.`);
     if (estimatedSize === charCount || estimatedSize > charLimit) {
       break;
@@ -111,5 +121,11 @@ export default async function collectContext(
     log(`Increasing max events per diagram to ${maxEventsPerDiagram}.`);
   }
 
-  return context;
+  return {
+    searchResponse: {
+      results: result.results,
+      numResults: appmapSearchResponse.numResults,
+    },
+    context: result.context,
+  };
 }

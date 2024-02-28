@@ -98,24 +98,28 @@ export default class Explain extends EventEmitter {
     this.status.vectorTerms = vectorTerms;
 
     this.status.step = ExplainRpc.Step.SEARCH_APPMAPS;
-    this.status.step = ExplainRpc.Step.COLLECT_CONTEXT;
 
     // TODO: More accurate char limit? Probably doesn't matter because they will be
     // pruned by the client AI anyway.
     // The meaning of tokenCount is "try and get at least this many tokens"
     const charLimit = tokenCount * 3;
-    const context = await collectContext(this.appmapDir, this.appmaps, vectorTerms, charLimit);
-    this.status.sequenceDiagrams = context.sequenceDiagrams;
-    this.status.codeSnippets = Array.from<string>(context.codeSnippets.keys()).reduce(
+    const searchResult = await collectContext(this.appmapDir, this.appmaps, vectorTerms, charLimit);
+
+    this.status.searchResponse = searchResult.searchResponse;
+
+    this.status.step = ExplainRpc.Step.COLLECT_CONTEXT;
+
+    this.status.sequenceDiagrams = searchResult.context.sequenceDiagrams;
+    this.status.codeSnippets = Array.from<string>(searchResult.context.codeSnippets.keys()).reduce(
       (acc, key) => {
-        const snippet = context.codeSnippets.get(key);
+        const snippet = searchResult.context.codeSnippets.get(key);
         assert(snippet !== undefined);
         if (snippet) acc[key] = snippet;
         return acc;
       },
       {} as Record<string, string>
     );
-    this.status.codeObjects = Array.from(context.codeObjects);
+    this.status.codeObjects = Array.from(searchResult.context.codeObjects);
 
     this.status.step = ExplainRpc.Step.EXPLAIN;
 
