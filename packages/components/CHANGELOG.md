@@ -1,3 +1,10 @@
+# [@appland/components-v4.3.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.2.1...@appland/components-v4.3.0) (2024-02-29)
+
+
+### Features
+
+* Ask about a specific AppMap ([e8555b8](https://github.com/getappmap/appmap-js/commit/e8555b81ba3fb030c0d7cb70aa4822905fe28b38))
+
 # [@appland/components-v4.2.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.2.0...@appland/components-v4.2.1) (2024-02-27)
 
 
