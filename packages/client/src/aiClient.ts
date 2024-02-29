@@ -22,12 +22,12 @@ export type Callbacks = {
   onError?: (error: Error) => void;
 };
 
-type UserInput = {
+export type UserInput = {
   question: string;
   codeSelection?: string;
 };
 
-type Prompt = {
+export type Prompt = {
   prompt: string;
   codeSelection?: string;
   threadId?: string;
