@@ -155,7 +155,6 @@ function buildHelpRequest(question: string, appmapConfig: any): () => AsyncItera
 }
 
 export const handler = async (argv) => {
-  warn(argv);
   verbose(argv.verbose);
   handleWorkingDirectory(argv.directory);
 
