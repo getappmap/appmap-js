@@ -1,3 +1,10 @@
+# [@appland/rpc-v1.4.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.3.0...@appland/rpc-v1.4.0) (2024-02-29)
+
+
+### Features
+
+* Ask about a specific AppMap ([e8555b8](https://github.com/getappmap/appmap-js/commit/e8555b81ba3fb030c0d7cb70aa4822905fe28b38))
+
 # [@appland/rpc-v1.3.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.2.0...@appland/rpc-v1.3.0) (2024-02-01)
 
 
