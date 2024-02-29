@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.127.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.126.2...@appland/appmap-v3.127.0) (2024-02-29)
+
+
+### Features
+
+* Ask about a specific AppMap ([e8555b8](https://github.com/getappmap/appmap-js/commit/e8555b81ba3fb030c0d7cb70aa4822905fe28b38))
+
 # [@appland/appmap-v3.126.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.126.1...@appland/appmap-v3.126.2) (2024-02-27)
 
 
