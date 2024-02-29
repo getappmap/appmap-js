@@ -1,3 +1,10 @@
+# [@appland/components-v4.4.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.3.0...@appland/components-v4.4.0) (2024-02-29)
+
+
+### Features
+
+* Navie main page explains and links to AppMap recordings ([f7584bf](https://github.com/getappmap/appmap-js/commit/f7584bfea1a19272033a86d73fb0c90af0b9b440))
+
 # [@appland/components-v4.3.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.2.1...@appland/components-v4.3.0) (2024-02-29)
 
 
