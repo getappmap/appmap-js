@@ -30,6 +30,21 @@ const appmaps = [
   'tmp/appmap/rspec/GET_organizations_join_by_code_when_logged_in_with_invalid_join_code_is_not_found',
 ];
 
+const mostRecentAppMaps = [orderData, petclinicData, longPackageData].map((appmap, i) => ({
+  recordingMethod: appmap.metadata.recorder.type || 'tests',
+  name: appmap.metadata.name,
+  createdAt: '2024-02-28T18:06:23Z',
+  path: `tmp/appmap/${i}.appmap.json`,
+}));
+
+const appmapStats = {
+  numAppMaps: appmaps.length,
+  packages: Array.from({ length: 4 }, (_, i) => `app/controllers/${i}`),
+  classes: Array.from({ length: 6 }, (_, i) => `Model${i}`),
+  routes: Array.from({ length: 8 }, (_, i) => `GET /users/${i}`),
+  tables: Array.from({ length: 7 }, (_, i) => `table_${i}`),
+};
+
 export default {
   title: 'Pages/ChatSearch',
   component: VChatSearch,
@@ -39,9 +54,15 @@ export default {
 export const ChatSearch = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VChatSearch },
-  template: `<v-chat-search v-bind="$props"></v-chat-search>`,
+  template: `<v-chat-search v-bind="$props" ref="chatSearch"></v-chat-search>`,
+  mounted() {
+    this.$refs.chatSearch.setAppMapStats(appmapStats);
+  },
 });
-ChatSearch.args = {};
+ChatSearch.args = {
+  mostRecentAppMaps,
+  appmapYmlPresent: true,
+};
 
 export const ChatSearchWithCodeSelection = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
@@ -51,6 +72,10 @@ export const ChatSearchWithCodeSelection = (args, { argTypes }) => ({
     this.$refs.chatSearch.includeCodeSelection(codeSelection);
   },
 });
+ChatSearchWithCodeSelection.args = {
+  mostRecentAppMaps,
+  appmapYmlPresent: true,
+};
 
 export const ChatSearchWithAppMaps = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
@@ -233,25 +258,35 @@ const emptyMockRpc = buildMockRpc(EmptySearchResponse, []);
 
 ChatSearchMock.args = {
   appmapRpcFn: nonEmptyMockRpc,
+  appmapYmlPresent: true,
+  mostRecentAppMaps,
 };
 
 ChatSearchMockWithCodeSelection.args = {
   codeSelection,
   appmapRpcFn: nonEmptyMockRpc,
   savedFilters,
+  appmapYmlPresent: true,
+  mostRecentAppMaps,
 };
 
 ChatSearchMockWithFilters.args = {
   appmapRpcFn: nonEmptyMockRpc,
   savedFilters,
+  appmapYmlPresent: true,
+  mostRecentAppMaps,
 };
 
 ChatSearchMockSearchPrepopulated.args = {
   appmapRpcFn: nonEmptyMockRpc,
   question: 'How does password reset work?',
+  appmapYmlPresent: true,
+  mostRecentAppMaps,
 };
 
 ChatSearchMockSearchPrepopulatedEmptyResults.args = {
   appmapRpcFn: emptyMockRpc,
   question: 'How does password reset work?',
+  appmapYmlPresent: true,
+  mostRecentAppMaps,
 };

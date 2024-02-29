@@ -3,8 +3,12 @@ import { mount, createWrapper } from '@vue/test-utils';
 
 describe('pages/ChatSearch.vue', () => {
   const chatSearchWrapper = (messagesCalled) => {
+    const extraPropsData = messagesCalled.propsData || {};
+    delete messagesCalled.propsData;
+
     return mount(VChatSearch, {
       propsData: {
+        ...extraPropsData,
         appmapRpcFn: rpcFunction(messagesCalled),
       },
     });
@@ -22,6 +26,10 @@ describe('pages/ChatSearch.vue', () => {
 
   const threadId = 'the-thread-id';
   const userMessageId = 'the-user-message-id';
+
+  const noIndexProcess = () => [
+    [new Error('No index process (testing - please ignore)'), undefined, undefined],
+  ];
 
   const appmapStatsHasAppMaps = () => [
     [
@@ -69,22 +77,52 @@ describe('pages/ChatSearch.vue', () => {
     expect(newWidth).toBe(initialWidth + resizeBy);
   });
 
+  describe('when the appmap.yml file is not present', () => {
+    it('shows an error that the appmap.yml file is not present', async () => {
+      const wrapper = chatSearchWrapper({
+        'appmap.stats': noIndexProcess(),
+      });
+      await wrapper.vm.$nextTick();
+      expect(wrapper.find('.instructions [data-cy="alert-no-config"]').exists()).toBe(true);
+    });
+
+    it('emits an event when the user clicks to view the install guide', async () => {
+      const wrapper = chatSearchWrapper({
+        'appmap.stats': noIndexProcess(),
+      });
+      await wrapper.vm.$nextTick();
+
+      const installGuideButton = wrapper.find('[data-cy="install-guide"]');
+      expect(installGuideButton.exists()).toBe(true);
+
+      await installGuideButton.trigger('click');
+      const rootWrapper = createWrapper(wrapper.vm.$root);
+      expect(rootWrapper.emitted()['open-install-instructions']).toEqual([[]]);
+    });
+  });
+
   describe('when no AppMaps are available', () => {
     it('shows a warning that no AppMaps are available', async () => {
       const wrapper = chatSearchWrapper({
         'appmap.stats': appmapStatsNoAppMaps(),
+        propsData: {
+          appmapYmlPresent: true,
+        },
       });
       await wrapper.vm.$nextTick();
-      expect(wrapper.find('.instructions [data-cy="no-appmaps"]').exists()).toBe(true);
+      expect(wrapper.find('.instructions [data-cy="alert-no-data"]').exists()).toBe(true);
     });
 
     it('emits an event when the user clicks the "Create some" button', async () => {
       const wrapper = chatSearchWrapper({
         'appmap.stats': appmapStatsNoAppMaps(),
+        propsData: {
+          appmapYmlPresent: true,
+        },
       });
       await wrapper.vm.$nextTick();
 
-      const createSomeButton = wrapper.find('[data-cy="create-some-appmaps-btn"]');
+      const createSomeButton = wrapper.find('[data-cy="record-guide"]');
       expect(createSomeButton.exists()).toBe(true);
 
       await createSomeButton.trigger('click');
@@ -102,13 +140,13 @@ describe('pages/ChatSearch.vue', () => {
       expect(wrapper.find('.instructions [data-cy="no-appmaps"]').exists()).toBe(false);
     });
 
-    it('emits an event when the user clicks the "Create more" button', async () => {
+    it('emits an event when the user clicks to view the recording guide', async () => {
       const wrapper = chatSearchWrapper({
         'appmap.stats': appmapStatsHasAppMaps(),
       });
       await wrapper.vm.$nextTick();
 
-      const createMoreButton = wrapper.find('[data-cy="create-more-appmaps-btn"]');
+      const createMoreButton = wrapper.find('[data-cy="record-guide"]');
       expect(createMoreButton.exists()).toBe(true);
 
       await createMoreButton.trigger('click');

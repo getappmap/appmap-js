@@ -13,7 +13,20 @@
         :status-label="searchStatusLabel"
         @clear="clear"
         :question="question"
-      />
+      >
+        <div class="navie-intro">
+          <h3>Introducing Navie</h3>
+          <p>Navie is a generative AI enhanced with runtime execution traces.</p>
+          <p>
+            This means Navie goes beyond code; it observes and understands how your application is
+            behaving in real time.
+          </p>
+          <p>
+            Ask Navie about <b>application performance</b>, <b>runtime behavior</b>,
+            <b>architecture</b> and more.
+          </p>
+        </div>
+      </v-chat>
     </div>
     <div
       class="chat-search-container--drag"
@@ -101,7 +114,13 @@
         </ul>
       </v-accordion>
     </div>
-    <v-instructions v-else class="instructions" :appmap-stats="appmapStats" />
+    <v-instructions
+      v-else
+      class="instructions"
+      :appmap-stats="appmapStats"
+      :appmaps="mostRecentAppMaps"
+      :appmap-yml-present="appmapYmlPresent"
+    />
   </div>
 </template>
 
@@ -151,6 +170,8 @@ export default {
       type: Array,
       default: () => [],
     },
+    appmapYmlPresent: Boolean,
+    mostRecentAppMaps: Array,
   },
   data() {
     return {
@@ -326,7 +347,14 @@ export default {
     },
     async loadAppMapStats() {
       const rpc = this.rpcClient();
-      this.appmapStats = await rpc.appmapStats();
+      try {
+        this.appmapStats = await rpc.appmapStats();
+      } catch (e) {
+        console.error('Error loading appmap stats', e);
+      }
+    },
+    setAppMapStats(stats) {
+      this.appmapStats = stats;
     },
     clear() {
       this.searching = false;
@@ -402,6 +430,23 @@ $border-color: darken($gray4, 10%);
     display: flex;
     flex-direction: column;
     background-color: #292c39;
+
+    .navie-intro {
+      padding: 1rem;
+      align-self: center;
+      margin: 0 auto;
+      padding: 2rem;
+      padding-bottom: 0;
+
+      a {
+        color: #768ecb;
+        text-decoration: none;
+
+        &:hover {
+          color: #4362b1;
+        }
+      }
+    }
 
     .chat-search-chat {
       min-width: auto;
