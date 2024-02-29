@@ -16,7 +16,7 @@
       </v-button>
     </div>
     <div
-      :class="['messages', isChatting ? 'chatting' : '']"
+      :class="['messages', isChatting ? 'chatting' : 'not-chatting']"
       data-cy="messages"
       ref="messages"
       @scroll="manageScroll"
@@ -34,6 +34,9 @@
         :code-selections="message.codeSelections"
         @change-sentiment="onSentimentChange"
       />
+      <div class="explainer" v-show="!isChatting">
+        <slot />
+      </div>
       <v-suggestion-grid
         :suggestions="suggestions"
         @suggest="onSuggestion"
@@ -403,6 +406,10 @@ $border-color: darken($gray4, 10%);
     background: white;
   }
 
+  .explainer {
+    color: #e3e5e8;
+  }
+
   .button-panel {
     $panel-bg: #2c3545;
     justify-content: end;
@@ -433,6 +440,10 @@ $border-color: darken($gray4, 10%);
 
   .chatting {
     justify-content: flex-start;
+  }
+
+  .not-chatting {
+    place-content: space-between;
   }
 }
 
