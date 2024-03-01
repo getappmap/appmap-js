@@ -1,7 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { log } from 'console';
-
-import Message from './message';
+import Message, { CHARACTERS_PER_TOKEN } from './message';
 import MemoryService from './services/memory-service';
 import VectorTermsService from './services/vector-terms-service';
 import CompletionService, { OpenAICompletionService } from './services/completion-service';
@@ -12,46 +10,55 @@ import InteractionHistory, {
 } from './interaction-history';
 import LookupContextService from './services/lookup-context-service';
 import ApplyContextService from './services/apply-context-service';
-import { ContextProvider } from './context';
+import { ContextProvider, ContextResponse } from './context';
 import ProjectInfoService from './services/project-info-service';
-import { HelpService } from './help';
 import { ProjectInfoProvider } from './project-info';
+import CodeSelectionService from './services/code-selection-service';
+import QuestionService from './services/question-service';
 
-const SYSTEM_PROMPTS = {
-  title: `**Task: Explaining Code, Ananlyzing Code, Generating Code**`,
-  aboutYou: `**About you**
+const AGENT_INFO_PROMPT = `**Task: Explaining Code, Analyzing Code, Generating Code**
+
+**About you**
 
 Your job is to explain code, analyze code, and generate code using a combination of 
 AppMap data and code snippets. Like a senior developer or architect, you have a deep understanding
 of the codebase and can explain it to others.
 
-You are created and maintained by AppMap Inc, and are available to AppMap users as a service.`,
-  aboutUser: `**About the user**
+You are created and maintained by AppMap Inc, and are available to AppMap users as a service.
+
+**About the user**
 
 The user is a software developer who is trying to understand, maintain and enhance a codebase. You can
-expect the user to be proficient in software development, but they don't have expertise how this code base works.`,
-  theUsersQuestion: `**The user's question**
+expect the user to be proficient in software development, but they don't have expertise how this code base works.
 
-The user's question is prefixed by "My question: ".`,
-  theProjectInfo: `**The project information**
+**Providing help with AppMap**
 
-Information about the state of the user's project, including the programming language, frameworks, libraries,
-tools, and other relevant information. This information is prefixed by "Project info: ".`,
-  theCodeSelection: `**The code selection**
+If the user needs assistance with making AppMaps, you should direct them based on the language in use:
 
-The user is asking about specific lines of code that they have selected in their 
-code editor. This code selection is prefixed by "My code selection: ".`,
-  additionalContext: `**Additional context information provided by another agent**
+- **Ruby** - https://appmap.io/docs/reference/appmap-ruby
+- **Python** - https://appmap.io/docs/reference/appmap-python
+- **Java** - https://appmap.io/docs/reference/appmap-java
+- **JavaScript, Node.js and TypeScript** - https://appmap.io/docs/reference/appmap-node
 
-You'll be provided with snippets of information including code snippets, database queries,
-and sequence diagrams. A different automated agent from yourself has determined this information
-to be relevant to the question and optional code selection; it's not provided directly to you by the user.
-You should strive to give the best answer you can, based on the information you're provided and your 
-own knowledge of software development, languages, frameworks, libraries, tools and best practices.
+\`appmap-node\` is the new AppMap agent for JavaScript, Node.js and TypeScript. To use it to make AppMaps, the
+user runs their command with the prefix \`npx appmap-node\`.
 
-The additional context information is provided as context for answering the user's question. It should 
-be used only as the context for answering the user's question, and not as the question itself.`,
-  yourResponse: `**Your response**
+Your guidance should be directed towards using AppMap in the developer's local environment, such as
+their code editor. Don't suggest configuration of production systems unless the user specifically asks
+about that. If the user asks about configuration of AppMap in production, make sure you include an advisory
+about the security and data protection implications of recording AppMaps in production.
+
+For Ruby environments, you do not generally need to advise the user to export the environment variable
+APPMAP=true, since AppMap will generally be enabled by default in development and test environments.
+
+When advising the user to use "remote recording", you should advise the user to utilize the AppMap
+extension features of their code editor. Remote recordings are not saved to the \`appmap_dir\` location.
+
+Do not suggest that the user upload any AppMaps to any AppMap-hosted service (e.g. "AppMap Cloud"), as no
+such services are offered at this time. If the user wants to upload and share AppMaps, you should suggest
+that they use the AppMap plugin for Atlassian Confluence.
+
+**Your response**
 
 1. **Markdown**: Respond using Markdown.
 
@@ -62,23 +69,7 @@ be used only as the context for answering the user's question, and not as the qu
 
 4. **Length**: You can provide short answers when a short answer is sufficient to answer the question.
   Otherwise, you should provide a long answer.
-`,
-};
-
-type SystemPromptKey = keyof typeof SYSTEM_PROMPTS;
-
-function systemPrompt(hasCodeSelection: boolean, hasProjectInfo: boolean): string {
-  const excludedSections = new Set();
-  if (!hasCodeSelection) excludedSections.add('theCodeSelection');
-  if (!hasProjectInfo) excludedSections.add('theProjectInfo');
-
-  const includeSection = (section: string) => !excludedSections.has(section);
-
-  const sectionKeys = Object.keys(SYSTEM_PROMPTS).filter((key) => includeSection(key));
-  return sectionKeys.map((key) => SYSTEM_PROMPTS[key as SystemPromptKey]).join('\n\n');
-}
-
-export const CHARS_PER_TOKEN = 3.0;
+`;
 
 export type ChatHistory = Message[];
 
@@ -98,6 +89,8 @@ export class CodeExplainerService {
   constructor(
     public readonly interactionHistory: InteractionHistory,
     private readonly completionService: CompletionService,
+    private readonly questionService: QuestionService,
+    private readonly codeSelectionService: CodeSelectionService,
     private readonly projectInfoService: ProjectInfoService,
     private readonly vectorTermsService: VectorTermsService,
     private readonly lookupContextService: LookupContextService,
@@ -112,97 +105,39 @@ export class CodeExplainerService {
   ): AsyncIterable<string> {
     const { question, codeSelection } = clientRequest;
 
+    this.interactionHistory.addEvent(
+      new PromptInteractionEvent('agentInfo', 'system', AGENT_INFO_PROMPT)
+    );
+    this.questionService.applyQuestion(question);
+    if (codeSelection) this.codeSelectionService.applyCodeSelection(codeSelection);
+
     const projectInfo = await this.projectInfoService.lookupProjectInfo();
 
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this;
-    async function* help(): AsyncIterable<string> {
-      const cachedProjectInfo = new ProjectInfoService(self.interactionHistory, () =>
-        Promise.resolve(projectInfo)
-      );
-
-      self.interactionHistory.clear();
-      const helpService = new HelpService(
-        self.interactionHistory,
-        self.completionService,
-        cachedProjectInfo,
-        self.memoryService
-      );
-      const response = helpService.execute(clientRequest, options);
-      for await (const token of response) {
-        yield token;
-      }
+    const hasAppMaps =
+      projectInfo.appmapStats?.numAppMaps && projectInfo.appmapStats.numAppMaps > 0;
+    if (!hasAppMaps) {
+      // TODO: For now, this is only advisory. We'll continue with the explanation,
+      // because the user may be asking a general programming question.
+      this.interactionHistory.log('No AppMaps exist in the project');
     }
+    const hasChatHistory = chatHistory && chatHistory.length > 0;
 
-    if (!projectInfo) {
-      this.interactionHistory.log('No project info could be obtained');
-      for await (const token of help()) {
-        yield token;
-      }
-      return;
-    }
-    if (!projectInfo['appmap.yml']) {
-      this.interactionHistory.log('No appmap.yml file found');
-      for await (const token of help()) {
-        yield token;
-      }
-      return;
-    }
-
-    this.interactionHistory.addEvent(
-      new PromptInteractionEvent(
-        'systemPrompt',
-        false,
-        systemPrompt(Boolean(codeSelection), Boolean(projectInfo))
-      )
-    );
-
-    this.interactionHistory.addEvent(
-      new PromptInteractionEvent('question', false, question, 'My question: ')
-    );
-    if (codeSelection) {
-      this.interactionHistory.addEvent(
-        new PromptInteractionEvent('codeSelection', false, codeSelection, 'My code selection: ')
-      );
-    }
-
-    if (!chatHistory || chatHistory?.length === 0) {
+    let context: ContextResponse | undefined;
+    if (hasAppMaps && !hasChatHistory) {
       const aggregateQuestion = [question, codeSelection].filter(Boolean).join('\n\n');
 
       const vectorTerms = await this.vectorTermsService.suggestTerms(aggregateQuestion);
-      if (!vectorTerms || vectorTerms.length === 0) {
-        log('No vector terms found');
-        for await (const token of help()) {
-          yield token;
-        }
-        return;
-      }
-
       const tokensRequested =
-        options.tokenLimit - aggregateQuestion.length / CHARS_PER_TOKEN - options.responseTokens;
+        options.tokenLimit - options.responseTokens - this.interactionHistory.computeTokenSize();
 
-      const context = await this.lookupContextService.lookupContext({
+      context = await this.lookupContextService.lookupContext({
         vectorTerms,
         tokenCount: tokensRequested,
         type: 'search',
       });
 
-      if (!context) {
-        log('No context could be obtained');
-        for await (const token of help()) {
-          yield token;
-        }
-        return;
-      }
-
-      const tokensRemaining =
-        options.tokenLimit -
-        aggregateQuestion.length / CHARS_PER_TOKEN -
-        options.responseTokens; /* response */
-      const charsRemaining = tokensRemaining * 3;
-
-      this.applyContextService.applyContext(context, charsRemaining);
-    } else {
+      this.applyContextService.applyContext(context, tokensRequested * CHARACTERS_PER_TOKEN);
+    } else if (hasChatHistory) {
       await this.memoryService.predictSummary(chatHistory);
     }
 
@@ -230,6 +165,8 @@ export default function explain(
     options.modelName,
     options.temperature
   );
+  const questionService = new QuestionService(interactionHistory);
+  const codeSelectionService = new CodeSelectionService(interactionHistory);
   const vectorTermsService = new VectorTermsService(
     interactionHistory,
     options.modelName,
@@ -247,6 +184,8 @@ export default function explain(
   const codeExplainerService = new CodeExplainerService(
     interactionHistory,
     completionService,
+    questionService,
+    codeSelectionService,
     projectInfoService,
     vectorTermsService,
     lookupContextService,

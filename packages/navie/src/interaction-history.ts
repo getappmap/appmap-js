@@ -1,21 +1,12 @@
 /* eslint-disable max-classes-per-file */
 import EventEmitter from 'events';
 import InteractionState from './interaction-state';
-import { ContextResponse } from './context';
-import { ContextItem } from './context';
+import { ContextItem, ContextResponse } from './context';
+import { PromptType } from './prompt';
+import { warn } from 'console';
+import { CHARACTERS_PER_TOKEN } from './message';
 
-type InteractionEventType =
-  | 'systemPrompt'
-  | 'question'
-  | 'codeSelection'
-  | 'vectorTerms'
-  | 'completion'
-  | 'contextLookup'
-  | 'contextItem'
-  | 'projectInfo'
-  | 'summary';
-
-const SNIPPET_LENGTH = 200;
+const SNIPPET_LENGTH = 800;
 
 function contentSnippet(content: string, maxLength = SNIPPET_LENGTH): string {
   if (content.length < maxLength) return content;
@@ -24,7 +15,7 @@ function contentSnippet(content: string, maxLength = SNIPPET_LENGTH): string {
 }
 
 export abstract class InteractionEvent {
-  constructor(public type: InteractionEventType) {}
+  constructor(public name: string) {}
 
   abstract get message(): string;
 
@@ -33,26 +24,16 @@ export abstract class InteractionEvent {
 
 export class PromptInteractionEvent extends InteractionEvent {
   constructor(
-    public type:
-      | 'systemPrompt'
-      | 'question'
-      | 'codeSelection'
-      | 'projectInfo'
-      | 'contextItem'
-      | 'summary',
-    public isUser: boolean,
+    public name: PromptType | string,
+    public role: 'user' | 'system',
     public content: string,
     public prefix?: string
   ) {
-    super(type);
+    super(name);
   }
 
   get message() {
     return `[prompt] ${this.role}: ${contentSnippet(this.fullContent)}`;
-  }
-
-  get role() {
-    return this.isUser ? 'user' : 'system';
   }
 
   get fullContent(): string {
@@ -102,10 +83,10 @@ export class ContextLookupEvent extends InteractionEvent {
     if (!this.context) return `[contextLookup] not found`;
 
     const diagramCount = this.context.sequenceDiagrams.length;
-    const snippetCount = this.context.codeSnippets.length;
-    const objectCount = this.context.codeObjects.length;
+    const snippetCount = Object.keys(this.context.codeSnippets).length;
+    const dataRequestCount = this.context.codeObjects.length;
 
-    return `[contextLookup] ${diagramCount} diagrams, ${snippetCount} snippets, ${objectCount} objects`;
+    return `[contextLookup] ${diagramCount} diagrams, ${snippetCount} snippets, ${dataRequestCount} data requests`;
   }
 
   updateState(state: InteractionState) {
@@ -114,22 +95,27 @@ export class ContextLookupEvent extends InteractionEvent {
 }
 
 export class ContextItemEvent extends InteractionEvent {
-  constructor(public contextItem: ContextItem) {
+  constructor(public contextItem: ContextItem, public file?: string) {
     super('contextItem');
-
-    if (contextItem.name === 'sequence-diagram') {
-      console.log(contextItem.content);
-      console.log('sequence-diagram');
-    }
   }
 
   get message() {
-    return `[contextItem] ${this.contextItem.name} ${contentSnippet(this.contextItem.content)}`;
+    return [
+      `[${this.contextItem.name}]`,
+      this.file ? `${this.file}: ` : undefined,
+      contentSnippet(this.contextItem.content),
+    ]
+      .filter(Boolean)
+      .join(' ');
   }
 
   updateState(state: InteractionState) {
-    // TODO: Prefix needed here?
-    const content = [this.contextItem.name, this.contextItem.content].filter(Boolean).join(' ');
+    const content = [
+      `[${this.contextItem.name}]`,
+      [this.file, this.contextItem.content].filter(Boolean).join(': '),
+    ]
+      .filter(Boolean)
+      .join(' ');
     state.messages.push({ content, role: 'user' });
   }
 }
@@ -153,6 +139,15 @@ export default class InteractionHistory extends EventEmitter implements Interact
 
   clear() {
     this.events.splice(0, this.events.length);
+  }
+
+  computeTokenSize(): number {
+    const state = this.buildState();
+    const tokenCharacters = state.messages
+      .map((message) => message.content.length)
+      .reduce((a, b) => a + b, 0);
+
+    return tokenCharacters / CHARACTERS_PER_TOKEN;
   }
 
   buildState(): InteractionState {

@@ -32,6 +32,6 @@ export default class MemoryService {
 
     // TODO: We never have an existing summary, so the second argument is always empty.
     const summary = await memory.predictNewSummary(lcMessages, '');
-    this.interactionHistory.addEvent(new PromptInteractionEvent('summary', false, summary));
+    this.interactionHistory.addEvent(new PromptInteractionEvent('summary', 'user', summary));
   }
 }

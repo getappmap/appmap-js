@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 import { warn } from 'console';
-import { ChatOpenAI } from 'langchain/chat_models/openai';
+import { ChatOpenAI } from '@langchain/openai';
 
 import buildChatOpenAI from '../chat-openai';
 import InteractionHistory, { VectorTermsInteractionEvent } from '../interaction-history';
@@ -76,14 +76,18 @@ export default class VectorTermsService {
     warn(`searchTermsObject: ${JSON.stringify(searchTermsObject)}`);
 
     const terms = new Set<string>();
-    if (!searchTermsObject || searchTermsObject === [] || searchTermsObject === {}) {
+    if (
+      !searchTermsObject ||
+      JSON.stringify(searchTermsObject) === '[]' ||
+      JSON.stringify(searchTermsObject) === '{}'
+    ) {
       warn(`Unable to obtain search terms from AI. Will use the raw user search.`);
       const words = question.split(/\s/);
       for (const word of words) terms.add(word);
     } else {
       const collectTerms = (obj: any) => {
         if (typeof obj === 'string') {
-          for (const term of obj.split('_')) terms.add(term);
+          for (const term of obj.split(/[._-]/)) terms.add(term);
         } else if (Array.isArray(obj)) {
           for (const term of obj) collectTerms(term);
         } else if (typeof obj === 'object') {

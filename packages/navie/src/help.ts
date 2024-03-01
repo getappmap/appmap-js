@@ -6,18 +6,23 @@ import InteractionHistory, {
 } from './interaction-history';
 import Message from './message';
 import { ProjectInfoProvider } from './project-info';
+import CodeSelectionService from './services/code-selection-service';
 import CompletionService, { OpenAICompletionService } from './services/completion-service';
 import MemoryService from './services/memory-service';
 import ProjectInfoService from './services/project-info-service';
+import QuestionService from './services/question-service';
 
-const SYSTEM_PROMPTS = {
-  title: `**Task: Provide User Assistance With AppMap**`,
-  aboutYou: `**About you**
+// TODO: Incorporate the language reference page into the prompt, when the language is known.
+
+const AGENT_INFO_PROMPT = `** Task: Provide User Assistance With AppMap**
+  
+**About you**
 
 Your job is to assist users with using AppMap. The AppMap docs are located at https://appmap.io/docs.
 
-You are created and maintained by AppMap Inc, and are available to AppMap users as a service.`,
-  aboutUser: `**About the user**
+You are created and maintained by AppMap Inc, and are available to AppMap users as a service.
+  
+**About the user**
 
 The user is a software developer who is trying to use AppMap. The user may be at different stages in
 their AppMap utilization. For example, they may have a general question about AppMap. They may have
@@ -40,59 +45,18 @@ extension features of their code editor. Remote recordings are not saved to the 
 Do not suggest that the user upload any AppMaps to any AppMap-hosted service (e.g. "AppMap Cloud"), as no
 such services are offered at this time. If the user wants to upload and share AppMaps, you should suggest
 that they use the AppMap plugin for Atlassian Confluence.
-`,
-  theUsersQuestion: `**The user's question**
 
-The user's question is prefixed by "My question: ".`,
-  theCodeSelection: `**The code selection**
-
-The user is asking about specific lines of code that they have selected in their 
-code editor. This code selection is prefixed by "My code selection: ".`,
-  projectContext: `**Project information**
-
-You'll be provided with information about the state of the user's project. This information includes:
-
-* **appmap.yml** Contents of the project file appmap.yml, if any.
-* **appmapStats** Information about the AppMaps that have been recorded. In addition to the number
-  of AppMaps, this information includes a list of code packages, HTTP routes and tables that have been
-  recorded.
-
-You should strive to give the best answer you can, based on the information you're provided and your 
-own knowledge of AppMap, software development, languages, frameworks, libraries, tools and best practices.
-
-The additional context information is provided as context for answering the user's question. It should 
-be used only as the context for answering the user's question, and not as the question itself.
-
-You don't need to describe how to install the AppMap language library / agent, or describe how to
-create appmap.yml, if the \`appmapConfig\` information is present in the project context information.
-
-Note that the \`appmap.yml\` setting \`appmap_dir\` should generally always be \`tmp/appmap\`.
-Don't advise the user to change this.
-`,
-  yourResponse: `**Your response**
+**Your response**
 
 1. **Markdown**: Respond using Markdown.
 
 2. **Command Line**: Provide command line examples using the user's project context.
 
-3. **Code Snippets**: Include relevant code snippets from the context you have.
-  Ensure that code formatting is consistent and easy to read.
-
 4. **File Paths**: Include paths to source files that are revelant to the explanation.
 
 5. **Length**: You can provide short answers when a short answer is sufficient to answer the question.
   Otherwise, you should provide a long answer.
-`,
-};
-
-type SystemPromptKey = keyof typeof SYSTEM_PROMPTS;
-
-function systemPrompt(hasCodeSelection: boolean): string {
-  const includeSection = (section: string) => section !== 'theCodeSelection' || hasCodeSelection;
-
-  const sectionKeys = Object.keys(SYSTEM_PROMPTS).filter((key) => includeSection(key));
-  return sectionKeys.map((key) => SYSTEM_PROMPTS[key as SystemPromptKey]).join('\n\n');
-}
+`;
 
 export type ChatHistory = Message[];
 
@@ -110,6 +74,8 @@ export class HelpService {
   constructor(
     public readonly interactionHistory: InteractionHistory,
     private readonly completionService: CompletionService,
+    private readonly questionService: QuestionService,
+    private readonly codeSelectionService: CodeSelectionService,
     private readonly projectInfoService: ProjectInfoService,
     private readonly memoryService: MemoryService
   ) {}
@@ -121,20 +87,14 @@ export class HelpService {
   ): AsyncIterable<string> {
     const { question, codeSelection } = clientRequest;
 
-    const projectInfo = await this.projectInfoService.lookupProjectInfo();
-    if (!projectInfo) this.interactionHistory.log('No project info could be obtained');
+    this.interactionHistory.addEvent(
+      new PromptInteractionEvent('agentInfo', 'system', AGENT_INFO_PROMPT)
+    );
 
-    this.interactionHistory.addEvent(
-      new PromptInteractionEvent('systemPrompt', false, systemPrompt(Boolean(codeSelection)))
-    );
-    this.interactionHistory.addEvent(
-      new PromptInteractionEvent('question', false, question, 'My question: ')
-    );
-    if (codeSelection) {
-      this.interactionHistory.addEvent(
-        new PromptInteractionEvent('codeSelection', false, codeSelection, 'My code selection: ')
-      );
-    }
+    this.questionService.applyQuestion(question);
+    if (codeSelection) this.codeSelectionService.applyCodeSelection(codeSelection);
+
+    await this.projectInfoService.lookupProjectInfo();
 
     if (!chatHistory || chatHistory?.length === 0) {
       // We fetch the project info on every question, in case the user
@@ -166,6 +126,8 @@ export default function explain(
     options.modelName,
     options.temperature
   );
+  const questionService = new QuestionService(interactionHistory);
+  const codeSelectionService = new CodeSelectionService(interactionHistory);
   const projectInfoService = new ProjectInfoService(interactionHistory, projectInfoProvider);
   const memoryService = new MemoryService(
     interactionHistory,
@@ -176,6 +138,8 @@ export default function explain(
   const helpService = new HelpService(
     interactionHistory,
     completionService,
+    questionService,
+    codeSelectionService,
     projectInfoService,
     memoryService
   );
