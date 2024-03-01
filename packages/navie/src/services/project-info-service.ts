@@ -13,7 +13,7 @@ export default class ProjectInfoService {
   ) {}
 
   async lookupProjectInfo(): Promise<ProjectInfoResponse | EmptyMap> {
-    const projectInfo = await this.projectInfoProvider({});
+    const projectInfo = await this.projectInfoProvider({ type: 'projectInfo' });
     if (!projectInfo) {
       this.interactionHistory.log('No project info found');
       return {};
