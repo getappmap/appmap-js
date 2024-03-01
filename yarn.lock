@@ -441,7 +441,7 @@ __metadata:
   resolution: "@appland/navie@workspace:packages/navie"
   dependencies:
     "@langchain/core": ^0.1.32
-    "@langchain/openai": ^0.0.15
+    "@langchain/openai": ^0.0.14
     "@types/jest": ^29.4.1
     "@types/node": ^17.0.2
     "@typescript-eslint/eslint-plugin": ^5.51.0
@@ -7457,39 +7457,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@langchain/core@npm:~0.1.39":
-  version: 0.1.40
-  resolution: "@langchain/core@npm:0.1.40"
-  dependencies:
-    ansi-styles: ^5.0.0
-    camelcase: 6
-    decamelize: 1.2.0
-    js-tiktoken: ^1.0.8
-    langsmith: ~0.1.7
-    ml-distance: ^4.0.0
-    p-queue: ^6.6.2
-    p-retry: 4
-    uuid: ^9.0.0
-    zod: ^3.22.4
-    zod-to-json-schema: ^3.22.3
-  checksum: dc3c1a20d3ba8f1e60cadc7d73d011245f35c473e8a30cf0355ec79e9c52069c9d894882220f14eed91f354d53b6c30f61b8bfb35aeceaaeb951fddced8d0037
-  languageName: node
-  linkType: hard
-
-"@langchain/openai@npm:^0.0.15":
-  version: 0.0.15
-  resolution: "@langchain/openai@npm:0.0.15"
-  dependencies:
-    "@langchain/core": ~0.1.39
-    js-tiktoken: ^1.0.7
-    openai: ^4.26.0
-    zod: ^3.22.4
-    zod-to-json-schema: ^3.22.3
-  checksum: ec186df8d39ffaa8082b3b44669da88e1280c1d961891cab4c7d961e753056a1ddb9aec00aa58dacc65daaa1f7f2948da2b03cc73bfadc58bba624f911a89b3b
-  languageName: node
-  linkType: hard
-
-"@langchain/openai@npm:~0.0.14":
+"@langchain/openai@npm:^0.0.14, @langchain/openai@npm:~0.0.14":
   version: 0.0.14
   resolution: "@langchain/openai@npm:0.0.14"
   dependencies:
@@ -29157,21 +29125,6 @@ __metadata:
   bin:
     langsmith: dist/cli/main.cjs
   checksum: aa78c2071a5d1d42ad8f32d58a65defd2bfd3a26869b2764236084cc8e2a7afc17eb5a4391a68c02479889cd937a953104b0bcb211331eb0e581f47ac004369a
-  languageName: node
-  linkType: hard
-
-"langsmith@npm:~0.1.7":
-  version: 0.1.8
-  resolution: "langsmith@npm:0.1.8"
-  dependencies:
-    "@types/uuid": ^9.0.1
-    commander: ^10.0.1
-    p-queue: ^6.6.2
-    p-retry: 4
-    uuid: ^9.0.0
-  bin:
-    langsmith: dist/cli/main.cjs
-  checksum: cfa211ebfbf0b723efe8fa3c85cb2bdb434396256ca210545b4629d06cde6aec92187073d0aaa709955ae79d66aa154469744401975ae324c96d4c6f594c798e
   languageName: node
   linkType: hard
 

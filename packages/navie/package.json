@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@langchain/core": "^0.1.32",
-    "@langchain/openai": "^0.0.15",
+    "@langchain/openai": "^0.0.14",
     "langchain": "^0.1.21",
     "openai": "^4.28.0"
   }
