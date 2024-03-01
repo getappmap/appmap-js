@@ -81,11 +81,11 @@ function logRequest(events: InteractionHistory.InteractionHistoryEvents) {
 
 function collectProjectInfo(appmapConfig: any): () => Promise<ProjectInfo.ProjectInfoResponse> {
   return async () => {
-    const appmapDir = appmapConfig.appmap_dir || 'tmp/appmap';
+    const appmapDir = appmapConfig?.appmap_dir || 'tmp/appmap';
     const appmapStats: any = await appmapStatsHandler(appmapDir);
     delete appmapStats.classes; // This is verbose and I don't see the utility of it
     return {
-      'appmap.yml': appmapConfig,
+      appmapConfig,
       appmapStats,
     };
   };
@@ -104,10 +104,12 @@ function buildExplainRequest(
     question,
   };
   if (codeFiles) {
-    if (codeFiles.length > 1) {
-      throw new Error('Only one code selection is supported');
-    }
-    clientRequest.codeSelection = readFileSync(codeFiles[0], 'utf-8');
+    clientRequest.codeSelection = codeFiles
+      .map((fileName) => {
+        const content = readFileSync(fileName, 'utf-8');
+        return [fileName, content].join(' :');
+      })
+      .join('\n');
   }
 
   const contextProvider = async (request: Context.ContextRequest) => {
