@@ -121,6 +121,8 @@ import AppMapRPC from '@/lib/AppMapRPC';
 import authenticatedClient from '@/components/mixins/authenticatedClient';
 import type { ITool, CodeSelection } from '@/components/chat/Chat.vue';
 
+import debounce from '@/lib/debounce';
+
 export default {
   name: 'v-chat-search',
   components: {
@@ -182,9 +184,26 @@ export default {
       },
       ask: undefined,
       isChatting: false,
+      loadAppMapStats: debounce(
+        async () => {
+          const rpc = this.rpcClient();
+          try {
+            this.appmapStats = await rpc.appmapStats();
+          } catch (e) {
+            console.error('Error loading appmap stats', e);
+          }
+        },
+        () => {
+          // 1000ms or 5ms per appmap, whichever is greater
+          return Math.min(1000, this.appmapStats?.numAppMaps ?? 0 * 5);
+        }
+      ),
     };
   },
   watch: {
+    mostRecentAppMaps() {
+      this.loadAppMapStats();
+    },
     searchResponse: async function (newVal) {
       if (!newVal) {
         this.selectedSearchResultId = undefined;
@@ -344,14 +363,6 @@ export default {
 
         this.ask.explain(explainRequest, this.$refs.vchat.threadId).catch(onError);
       });
-    },
-    async loadAppMapStats() {
-      const rpc = this.rpcClient();
-      try {
-        this.appmapStats = await rpc.appmapStats();
-      } catch (e) {
-        console.error('Error loading appmap stats', e);
-      }
     },
     setAppMapStats(stats) {
       this.appmapStats = stats;

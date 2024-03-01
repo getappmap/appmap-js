@@ -340,6 +340,47 @@ describe('pages/ChatSearch.vue', () => {
     });
   });
 
+  describe('reactiveness', () => {
+    it('reloads stats as most recent AppMaps are updated', async () => {
+      jest.useFakeTimers();
+
+      const [first] = appmapStatsNoAppMaps();
+      const [second] = appmapStatsHasAppMaps();
+      const wrapper = chatSearchWrapper({
+        'appmap.stats': [first, second],
+        propsData: {
+          appmapYmlPresent: true,
+        },
+      });
+
+      await wrapper.vm.$nextTick();
+
+      console.log(wrapper.html());
+      expect(wrapper.find('[data-cy="status-no-data"]').exists()).toBe(true);
+
+      wrapper.setProps({
+        mostRecentAppMaps: [
+          {
+            name: 'appmap1',
+            path: 'path1',
+            createdAt: new Date(2020, 0, 1).toUTCString(),
+            recordingMethod: 'tests',
+          },
+        ],
+      });
+
+      await wrapper.vm.$nextTick();
+
+      // The stats request should have been debounced - it'll still say no data
+      expect(wrapper.find('[data-cy="status-no-data"]').exists()).toBe(true);
+
+      jest.advanceTimersByTime(1100);
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('[data-cy="status-no-data"]').exists()).toBe(false);
+    });
+  });
+
   describe('error handling', () => {
     async function simulateError(err, error) {
       const wrapper = chatSearchWrapper({
