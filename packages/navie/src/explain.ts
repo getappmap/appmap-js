@@ -69,6 +69,10 @@ that they use the AppMap plugin for Atlassian Confluence.
 
 4. **Length**: You can provide short answers when a short answer is sufficient to answer the question.
   Otherwise, you should provide a long answer.
+
+Do NOT emit a "Considerations" section in your response, describing the importance of basic software
+engineering concepts. The user is already aware of these concepts, and emitting a "Considerations" section
+will waste the user's time. The user wants direct answers to their questions.
 `;
 
 export type ChatHistory = Message[];
