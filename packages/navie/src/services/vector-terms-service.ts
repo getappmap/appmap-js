@@ -105,7 +105,10 @@ export default class VectorTermsService {
       .map((word) => word.trim())
       .filter((word) => word.length > 2)
       .map((word) => word.toLowerCase());
-    const result = [...new Set(wordList)];
+    const uniqueWords = new Set(wordList);
+    // As a search term, this is useless.
+    uniqueWords.delete('code');
+    const result = [...uniqueWords];
     this.interactionHistory.addEvent(new VectorTermsInteractionEvent(result));
     return result;
   }
