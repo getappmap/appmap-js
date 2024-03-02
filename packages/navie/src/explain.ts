@@ -127,11 +127,18 @@ export class CodeExplainerService {
       // because the user may be asking a general programming question.
       this.interactionHistory.log('No AppMaps exist in the project');
     }
-    const hasChatHistory = chatHistory && chatHistory.length > 0;
 
     let context: ContextResponse | undefined;
-    if (hasAppMaps && !hasChatHistory) {
-      const aggregateQuestion = [question, codeSelection].filter(Boolean).join('\n\n');
+    if (hasAppMaps) {
+      const aggregateQuestion = [
+        question,
+        ...(chatHistory || [])
+          .filter((message) => message.role === 'user')
+          .map((message) => message.content),
+        codeSelection,
+      ]
+        .filter(Boolean)
+        .join('\n\n');
 
       const vectorTerms = await this.vectorTermsService.suggestTerms(aggregateQuestion);
       const tokensRequested =
@@ -144,7 +151,10 @@ export class CodeExplainerService {
       });
 
       this.applyContextService.applyContext(context, tokensRequested * CHARACTERS_PER_TOKEN);
-    } else if (hasChatHistory) {
+    }
+
+    const hasChatHistory = chatHistory && chatHistory.length > 0;
+    if (hasChatHistory) {
       await this.memoryService.predictSummary(chatHistory);
     }
 
