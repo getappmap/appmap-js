@@ -1,5 +1,6 @@
 import readline from 'readline';
 import yargs from 'yargs';
+import chalk from 'chalk';
 
 import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
 import FingerprintWatchCommand from '../../fingerprint/fingerprintWatchCommand';
@@ -21,6 +22,7 @@ import appmapStats from '../../rpc/appmap/stats';
 import LocalNavie from '../../rpc/explain/navie/navie-local';
 import RemoteNavie from '../../rpc/explain/navie/navie-remote';
 import { Context, ProjectInfo } from '@appland/navie';
+import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 
 const AI_KEYS = ['OPENAI_API_KEY'];
 
@@ -59,6 +61,11 @@ export const builder = (args: yargs.Argv) => {
     type: 'string',
     default: AI_KEYS.join(' '),
   });
+  args.option('log-navie', {
+    describe: 'Log Navie events to stderr',
+    boolean: true,
+    default: false,
+  });
 
   return args.strict();
 };
@@ -68,7 +75,7 @@ export const handler = async (argv) => {
   handleWorkingDirectory(argv.directory);
   const appmapDir = await locateAppMapDir(argv.appmapDir);
 
-  const { watch, port } = argv;
+  const { watch, port, logNavie } = argv;
 
   const runServer = watch || port !== undefined;
   if (port && !watch) warn(`Note: --port option implies --watch`);
@@ -107,7 +114,25 @@ export const handler = async (argv) => {
         threadId: string | undefined,
         contextProvider: Context.ContextProvider,
         projectInfoProvider: ProjectInfo.ProjectInfoProvider
-      ) => new LocalNavie(threadId, contextProvider, projectInfoProvider);
+      ) => {
+        const navie = new LocalNavie(threadId, contextProvider, projectInfoProvider);
+
+        let START: number | undefined;
+
+        const logEvent = (event: InteractionEvent) => {
+          if (!logNavie) return;
+
+          if (!START) START = Date.now();
+
+          const elapsed = Date.now() - START;
+          process.stderr.write(chalk.gray(`${elapsed}ms `));
+          process.stderr.write(chalk.gray(event.message));
+          process.stderr.write(chalk.gray('\n'));
+        };
+
+        navie.on('event', logEvent);
+        return navie;
+      };
       const buildRemoteNavie = (
         threadId: string | undefined,
         contextProvider: Context.ContextProvider,
