@@ -116,7 +116,7 @@ export class Explain extends EventEmitter {
   }
 
   async projectInfoContext(): Promise<ProjectInfo.ProjectInfoResponse> {
-    const appmapConfig: ProjectInfo.AppMapConfig = ((await loadAppMapConfig(this.appmapDir)) ||
+    const appmapConfig: ProjectInfo.AppMapConfig = ((await loadAppMapConfig()) ||
       {}) as any as ProjectInfo.AppMapConfig;
     const stats = await appmapStatsHandler(this.appmapDir);
     delete (stats as any).classes; // This is verbose and I don't see the utility of it
