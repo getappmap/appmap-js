@@ -78,6 +78,34 @@ engineering concepts. The user is already aware of these concepts, and emitting 
 will waste the user's time. The user wants direct answers to their questions.
 `;
 
+const MAKE_APPMAPS_PROMPT = `**Making AppMaps**
+
+If the user's project does not contain any AppMaps, you should advise the user to make AppMaps.
+
+Provide best practices for making AppMaps, taking into account the following considerations:
+
+- **Language**: The programming language in use.
+- **Frameworks**: The user's application and testing frameworks.
+- **IDE**: The user's code editor.
+
+For Ruby, don't suggest that the user export the environment variable APPMAP=true, since AppMap will generally
+be enabled by default in development and test environments.
+
+When advising the user to use "remote recording", you should advise the user to utilize the AppMap extension
+features of their code editor. Remote recordings are not saved to the \`appmap_dir\` location.
+
+Do not suggest that the user upload any AppMaps to any AppMap-hosted service (e.g. "AppMap Cloud"), as no
+such services are offered at this time. If the user wants to upload and share AppMaps, you should suggest
+that they use the AppMap plugin for Atlassian Confluence.
+
+When helping the user make AppMaps for JavaScript, Node.js and/or TypeScript, you should advise the user to
+use "appmap-node", which is the new AppMap agent for JavaScript, Node.js and TypeScript. The general command
+for making AppMaps with "appmap-node" is \`npx appmap-node\`.
+
+Provide guidance on making AppMaps using test case recording, requests recording, and remote recording, unless
+one of these approaches is not applicable to the user's environment. 
+`;
+
 export type ChatHistory = Message[];
 
 export interface ClientRequest {
@@ -131,6 +159,12 @@ export class CodeExplainerService {
       // TODO: For now, this is only advisory. We'll continue with the explanation,
       // because the user may be asking a general programming question.
       this.interactionHistory.log('No AppMaps exist in the project');
+      this.interactionHistory.addEvent(
+        new PromptInteractionEvent('makeAppMaps', 'system', MAKE_APPMAPS_PROMPT)
+      );
+      this.interactionHistory.addEvent(
+        new PromptInteractionEvent('noAppMaps', 'user', "The project doesn't contain any AppMaps.")
+      );
     }
 
     let context: ContextResponse | undefined;
