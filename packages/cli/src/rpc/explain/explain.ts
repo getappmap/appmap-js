@@ -1,21 +1,24 @@
-import { AI } from '@appland/client';
-import { AppMapRpc, ExplainRpc } from '@appland/rpc';
+import chalk from 'chalk';
+import assert from 'assert';
+import EventEmitter from 'events';
+import { ExplainRpc } from '@appland/rpc';
+import { warn } from 'console';
+
 import { RpcError, RpcHandler } from '../rpc';
+import collectContext from './collectContext';
+import INavie, { INavieProvider } from './navie/inavie';
+import { verbose } from '../../utils';
+import { Context, ProjectInfo } from '@appland/navie';
+import loadAppMapConfig from '../../lib/loadAppMapConfig';
+import { appmapStatsHandler } from '../appmap/stats';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
-import EventEmitter from 'events';
-import search from './search';
-import context from './context';
-import assert from 'assert';
-import { log, warn } from 'console';
-import { verbose } from '../../utils';
-import { appmapStatsHandler } from '../appmap/stats';
-import loadAppMapConfig, { AppMapConfig } from '../../lib/loadAppMapConfig';
-
 export type SearchContextOptions = {
-  tokenLimit: number;
+  tokenCount: number;
   vectorTerms: string[];
+
+  // Deprecated
   numSearchResults?: number;
   numDiagramsToAnalyze?: number;
 };
@@ -26,14 +29,9 @@ export type SearchContextResponse = {
   codeObjects: string[];
 };
 
-export type AppMapStatsContext = Exclude<AppMapRpc.StatsOptions, 'classes'>;
+export const DEFAULT_TOKEN_LIMIT = 8000;
 
-export type ProjectInfoResponse = {
-  appmapConfig: AppMapConfig;
-  appmapStats: AppMapStatsContext;
-};
-
-export default class Explain extends EventEmitter {
+export class Explain extends EventEmitter {
   constructor(
     public appmapDir: string,
     public question: string,
@@ -44,95 +42,69 @@ export default class Explain extends EventEmitter {
     super();
   }
 
-  async explain(): Promise<void> {
+  async explain(navie: INavie): Promise<void> {
     const self = this;
-    (
-      await AI.connect({
-        onAck(userMessageId, threadId) {
-          if (verbose())
-            warn(`Explain received ack (userMessageId=${userMessageId}, threadId=${threadId})`);
-          self.status.threadId = threadId;
-          self.emit('ack', userMessageId, threadId);
-        },
-        onToken(token, _messageId) {
-          self.status.explanation ||= [];
-          self.status.explanation.push(token);
-        },
-        async onRequestContext(data) {
-          const type = data['type'];
-          if (verbose()) log(`Explain received context request: ${type}`);
 
-          const fnName = [type, 'Context'].join('');
-          const fn: (args: any) => any = self[fnName];
-          if (!fn) {
-            warn(`Explain context function ${fnName} not found`);
-            return {};
-          }
-          try {
-            return await fn.call(self, data);
-          } catch (e) {
-            warn(`Explain context function ${fnName} threw an error: ${e}`);
-            // TODO: Report an error object instead?
-            return {};
-          }
-        },
-        onComplete() {
-          if (verbose()) warn(`Explain is complete`);
-          self.status.step = ExplainRpc.Step.COMPLETE;
-          self.emit('complete');
-        },
-        onError(err: Error) {
-          if (verbose()) warn(`Error handled by Explain: ${err}`);
-          self.status.step = ExplainRpc.Step.ERROR;
-          const rpcError = RpcError.fromException(err);
-          if (!self.status.err)
-            self.status.err = {
-              code: rpcError.code,
-              message: rpcError.message,
-              stack: err.stack,
-              cause: err.cause,
-            };
-          self.emit('error', rpcError);
-        },
-      })
-    ).inputPrompt(
-      { question: this.question, codeSelection: this.codeSelection },
-      { threadId: self.status.threadId, tool: 'explain' }
-    );
+    navie.on('ack', (userMessageId, threadId) => {
+      this.status.threadId = threadId;
+      this.emit('ack', userMessageId, threadId);
+    });
+    navie.on('token', (token, _messageId) => {
+      this.status.explanation ||= [];
+      this.status.explanation.push(token);
+    });
+    navie.on('complete', () => {
+      this.status.step = ExplainRpc.Step.COMPLETE;
+      this.emit('complete');
+    });
+    navie.on('error', (err: Error) => {
+      this.status.step = ExplainRpc.Step.ERROR;
+      const rpcError = RpcError.fromException(err);
+      if (!this.status.err)
+        this.status.err = {
+          code: rpcError.code,
+          message: rpcError.message,
+          stack: err.stack,
+          cause: err.cause,
+        };
+      this.emit('error', rpcError);
+    });
+    await navie.ask(this.question, this.codeSelection);
   }
 
   async searchContext(data: SearchContextOptions): Promise<SearchContextResponse> {
     const { vectorTerms } = data;
-    let { numSearchResults, numDiagramsToAnalyze } = data;
-    if (!numSearchResults) numSearchResults = 10;
-    if (!numDiagramsToAnalyze) numDiagramsToAnalyze = 3;
+    let { tokenCount } = data;
+    if (!tokenCount) {
+      warn(chalk.bold(`Warning: tokenCount not set, defaulting to ${DEFAULT_TOKEN_LIMIT}`));
+      tokenCount = DEFAULT_TOKEN_LIMIT;
+    }
 
     this.status.vectorTerms = vectorTerms;
 
     this.status.step = ExplainRpc.Step.SEARCH_APPMAPS;
 
-    const searchResponse = await search(
-      this.appmapDir,
-      this.appmaps,
-      vectorTerms,
-      numSearchResults
-    );
-    this.status.searchResponse = searchResponse;
+    // TODO: More accurate char limit? Probably doesn't matter because they will be
+    // pruned by the client AI anyway.
+    // The meaning of tokenCount is "try and get at least this many tokens"
+    const charLimit = tokenCount * 3;
+    const searchResult = await collectContext(this.appmapDir, this.appmaps, vectorTerms, charLimit);
+
+    this.status.searchResponse = searchResult.searchResponse;
+
     this.status.step = ExplainRpc.Step.COLLECT_CONTEXT;
 
-    const contextStepResponse = await context(searchResponse, numDiagramsToAnalyze);
-
-    this.status.sequenceDiagrams = contextStepResponse.sequenceDiagrams;
-    this.status.codeSnippets = Array.from<string>(contextStepResponse.codeSnippets.keys()).reduce(
+    this.status.sequenceDiagrams = searchResult.context.sequenceDiagrams;
+    this.status.codeSnippets = Array.from<string>(searchResult.context.codeSnippets.keys()).reduce(
       (acc, key) => {
-        const snippet = contextStepResponse.codeSnippets.get(key);
+        const snippet = searchResult.context.codeSnippets.get(key);
         assert(snippet !== undefined);
         if (snippet) acc[key] = snippet;
         return acc;
       },
       {} as Record<string, string>
     );
-    this.status.codeObjects = Array.from(contextStepResponse.codeObjects);
+    this.status.codeObjects = Array.from(searchResult.context.codeObjects);
 
     this.status.step = ExplainRpc.Step.EXPLAIN;
 
@@ -143,11 +115,12 @@ export default class Explain extends EventEmitter {
     };
   }
 
-  async projectInfoContext(): Promise<ProjectInfoResponse> {
-    const appmapConfig: AppMapConfig = (await loadAppMapConfig()) || ({} as AppMapConfig);
+  async projectInfoContext(): Promise<ProjectInfo.ProjectInfoResponse> {
+    const appmapConfig: ProjectInfo.AppMapConfig = ((await loadAppMapConfig()) ||
+      {}) as any as ProjectInfo.AppMapConfig;
     const stats = await appmapStatsHandler(this.appmapDir);
     delete (stats as any).classes; // This is verbose and I don't see the utility of it
-    const appmapStats = stats;
+    const appmapStats: ProjectInfo.AppMapStats = stats;
     return Promise.resolve({
       appmapConfig,
       appmapStats,
@@ -156,6 +129,7 @@ export default class Explain extends EventEmitter {
 }
 
 async function explain(
+  navieProvider: INavieProvider,
   appmapDir: string,
   question: string,
   codeSelection: string | undefined,
@@ -167,6 +141,20 @@ async function explain(
     threadId,
   };
   const explain = new Explain(appmapDir, question, codeSelection, appmaps, status);
+
+  const invokeContextFunction = async (data: any) => {
+    const type = data['type'];
+    const fnName = [type, 'Context'].join('');
+    if (verbose()) warn(`Explain received context request: ${type}`);
+    const fn: (args: any) => any = explain[fnName];
+    return await fn.call(explain, data);
+  };
+
+  const contextProvider: Context.ContextProvider = async (data: any) => invokeContextFunction(data);
+  const projectInfoProvider: ProjectInfo.ProjectInfoProvider = async (data: any) =>
+    invokeContextFunction(data);
+
+  const navie = navieProvider(threadId, contextProvider, projectInfoProvider);
   return new Promise<ExplainRpc.ExplainResponse>((resolve, reject) => {
     let isFirst = true;
 
@@ -202,17 +190,22 @@ async function explain(
         )
     );
 
-    explain.explain().catch((err: Error) => first() && reject(RpcError.fromException(err)));
+    explain.explain(navie).catch((err: Error) => first() && reject(RpcError.fromException(err)));
   });
 }
 
 const explainHandler: (
+  navieProvider: INavieProvider,
   appmapDir: string
-) => RpcHandler<ExplainRpc.ExplainOptions, ExplainRpc.ExplainResponse> = (appmapDir: string) => {
+) => RpcHandler<ExplainRpc.ExplainOptions, ExplainRpc.ExplainResponse> = (
+  navieProvider: INavieProvider,
+  appmapDir: string
+) => {
   return {
     name: ExplainRpc.ExplainFunctionName,
     handler: async (options: ExplainRpc.ExplainOptions) =>
       await explain(
+        navieProvider,
         appmapDir,
         options.question,
         options.codeSelection,

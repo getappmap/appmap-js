@@ -20,4 +20,5 @@ export {
   default as AIClient,
   Callbacks as AICallbacks,
   InputPromptOptions as AIInputPromptOptions,
+  UserInput as AIUserInput,
 } from './aiClient';

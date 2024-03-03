@@ -178,7 +178,13 @@ export async function processNamedFiles(
     }
 
     // Otherwise, recurse on all subdirectories.
-    for (const childName of await readdir(dir)) {
+    let children: string[];
+    try {
+      children = await readdir(dir);
+    } catch (err) {
+      children = [];
+    }
+    for (const childName of children) {
       const child = await stats(join(dir, childName));
       if (child && child.isDirectory()) {
         await processDir(join(dir, childName));
