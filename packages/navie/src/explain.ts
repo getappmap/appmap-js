@@ -115,9 +115,12 @@ export class CodeExplainerService {
     this.interactionHistory.addEvent(
       new PromptInteractionEvent('agentInfo', 'system', AGENT_INFO_PROMPT)
     );
+    this.questionService.addSystemPrompt();
     this.questionService.applyQuestion(question);
-    if (codeSelection) this.codeSelectionService.applyCodeSelection(codeSelection);
-
+    if (codeSelection) {
+      this.codeSelectionService.addSystemPrompt();
+      this.codeSelectionService.applyCodeSelection(codeSelection);
+    }
     const projectInfo = await this.projectInfoService.lookupProjectInfo();
 
     const hasAppMaps =

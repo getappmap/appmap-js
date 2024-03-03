@@ -3,12 +3,12 @@ import { ContextItem, ContextResponse } from './context';
 import Message from './message';
 
 export default class InteractionState {
-  messages: Message[] = [];
+  public readonly messages: Message[] = [];
 
-  vectorTerms = new Array<string>();
-  completionModel?: string;
-  completionTemperature?: number;
-  contextAvailable?: ContextResponse;
+  public readonly vectorTerms = new Array<string>();
+  public completionModel?: string;
+  public completionTemperature?: number;
+  public contextAvailable?: ContextResponse;
 
   addContextItem(contextItem: ContextItem) {
     // const items = this.contextItems.get(contextItem.type);

@@ -4,7 +4,7 @@ import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 export default class QuestionService {
   constructor(public interactionHistory: InteractionHistory) {}
 
-  applyQuestion(question: string) {
+  addSystemPrompt() {
     this.interactionHistory.addEvent(
       new PromptInteractionEvent(
         PromptType.Question,
@@ -12,7 +12,9 @@ export default class QuestionService {
         buildPromptDescriptor(PromptType.Question)
       )
     );
+  }
 
+  applyQuestion(question: string) {
     this.interactionHistory.addEvent(
       new PromptInteractionEvent(
         PromptType.Question,

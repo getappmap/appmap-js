@@ -147,7 +147,7 @@ export default class InteractionHistory extends EventEmitter implements Interact
       .map((message) => message.content.length)
       .reduce((a, b) => a + b, 0);
 
-    return tokenCharacters / CHARACTERS_PER_TOKEN;
+    return Math.round(tokenCharacters / CHARACTERS_PER_TOKEN);
   }
 
   buildState(): InteractionState {

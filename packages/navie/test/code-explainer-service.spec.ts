@@ -9,6 +9,8 @@ import LookupContextService from '../src/services/lookup-context-service';
 import ApplyContextService from '../src/services/apply-context-service';
 import CodeSelectionService from '../src/services/code-selection-service';
 import QuestionService from '../src/services/question-service';
+import ProjectInfoService from '../src/services/project-info-service';
+import { ProjectInfoProvider } from '../src/project-info';
 
 const SEQUENCE_DIAGRAMS = [`diagram-1`, `diagram-2`];
 const CODE_SNIPPETS = {
@@ -47,6 +49,7 @@ describe('CodeExplainerService', () => {
   let completionService: CompletionService;
   let questionService: QuestionService;
   let codeSelectionService: CodeSelectionService;
+  let projectInfoService: ProjectInfoService;
   let memoryService: MemoryService;
   let lookupContextService: LookupContextService;
   let applyContextService: ApplyContextService;
@@ -88,7 +91,7 @@ describe('CodeExplainerService', () => {
 
   describe('without chat history', () => {
     beforeEach(() => {
-      tokenCount = 3970;
+      tokenCount = 2242;
       const lookupProvider: ContextProvider = jest
         .fn()
         .mockImplementation((request: ContextRequest) => {
@@ -97,6 +100,23 @@ describe('CodeExplainerService', () => {
           return Promise.resolve(SEARCH_CONTEXT);
         });
       lookupContextService = new LookupContextService(interactionHistory, lookupProvider);
+
+      const projectInfoProvider: ProjectInfoProvider = jest.fn().mockResolvedValue({
+        appmapConfig: {
+          name: 'mock-project',
+          language: 'ruby',
+          appmap_dir: 'tmp/appmap',
+          packages: ['lib'],
+        },
+        appmapStats: {
+          classes: 7,
+          methods: 10,
+          packages: 3,
+          numAppMaps: 5,
+        },
+      });
+      projectInfoService = new ProjectInfoService(interactionHistory, projectInfoProvider);
+
       memoryService = new MemoryService(interactionHistory, 'gpt-4', 0.5);
       jest
         .spyOn(memoryService, 'predictSummary')
@@ -107,6 +127,7 @@ describe('CodeExplainerService', () => {
         completionService,
         questionService,
         codeSelectionService,
+        projectInfoService,
         vectorTermsService,
         lookupContextService,
         applyContextService,
@@ -122,6 +143,22 @@ describe('CodeExplainerService', () => {
         EXPLAIN_OPTIONS,
         []
       );
+
+      expect(
+        interactionHistory
+          .buildState()
+          .messages.filter((msg) => msg.role === 'system')
+          .map((msg) => msg.content.split('\n')[0])
+      ).toEqual([
+        '**Task: Explaining Code, Analyzing Code, Generating Code**',
+        `**The user's question**`,
+        `**AppMap configuration**`,
+        `**AppMap statistics**`,
+        `**Sequence diagrams**`,
+        `**Code snippets**`,
+        `**Data requests**`,
+      ]);
+
       expect(result).toEqual([
         'The user management system is a system ',
         'that allows users to create and manage their own accounts.',
@@ -130,7 +167,7 @@ describe('CodeExplainerService', () => {
 
     describe('with code selection', () => {
       beforeEach(() => {
-        tokenCount = 3931;
+        tokenCount = 2163;
         codeSelection = `class UserController { create() { } }`;
       });
 
@@ -143,6 +180,22 @@ describe('CodeExplainerService', () => {
           EXPLAIN_OPTIONS,
           []
         );
+        expect(
+          interactionHistory
+            .buildState()
+            .messages.filter((msg) => msg.role === 'system')
+            .map((msg) => msg.content.split('\n')[0])
+        ).toEqual([
+          '**Task: Explaining Code, Analyzing Code, Generating Code**',
+          `**The user's question**`,
+          `**The user's code selection**`,
+          `**AppMap configuration**`,
+          `**AppMap statistics**`,
+          `**Sequence diagrams**`,
+          `**Code snippets**`,
+          `**Data requests**`,
+        ]);
+
         expect(result).toEqual([
           'The user management system is a system ',
           'that allows users to create and manage their own accounts.',
@@ -186,6 +239,7 @@ describe('CodeExplainerService', () => {
         completionService,
         questionService,
         codeSelectionService,
+        projectInfoService,
         vectorTermsService,
         lookupContextService,
         applyContextService,

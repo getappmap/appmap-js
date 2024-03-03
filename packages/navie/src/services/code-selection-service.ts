@@ -4,7 +4,7 @@ import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 export default class CodeSelectionService {
   constructor(public interactionHistory: InteractionHistory) {}
 
-  applyCodeSelection(codeSelection: string) {
+  addSystemPrompt() {
     this.interactionHistory.addEvent(
       new PromptInteractionEvent(
         PromptType.CodeSelection,
@@ -12,7 +12,9 @@ export default class CodeSelectionService {
         buildPromptDescriptor(PromptType.CodeSelection)
       )
     );
+  }
 
+  applyCodeSelection(codeSelection: string) {
     this.interactionHistory.addEvent(
       new PromptInteractionEvent(
         PromptType.CodeSelection,
