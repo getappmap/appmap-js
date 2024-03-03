@@ -8,14 +8,15 @@ import InteractionHistory, {
   PromptInteractionEvent,
 } from '../interaction-history';
 import { PROMPTS, PromptType, buildPromptDescriptor } from '../prompt';
-import { CHARACTERS_PER_TOKEN } from '../message';
 
 type ContextItemWithFile = ContextItem & { file?: string };
+
+type Selector = () => boolean;
 
 export default class ApplyContextService {
   constructor(public readonly interactionHistory: InteractionHistory) {}
 
-  applyContext(context: ContextResponse | undefined, promptPlusContextCharacterLimit: number) {
+  applyContext(context: ContextResponse | undefined, characterLimit: number) {
     if (!context) {
       this.interactionHistory.addEvent(
         new PromptInteractionEvent(
@@ -28,14 +29,6 @@ export default class ApplyContextService {
     }
 
     const { sequenceDiagrams, codeSnippets, codeObjects } = context;
-
-    let characterLimit: number;
-    {
-      const beforeTokenCount = this.interactionHistory.computeTokenSize();
-      this.addSystemPrompts(context);
-      const promptTokens = this.interactionHistory.computeTokenSize() - beforeTokenCount;
-      characterLimit = promptPlusContextCharacterLimit - promptTokens * CHARACTERS_PER_TOKEN;
-    }
 
     const availableContent = new Array<ContextItemWithFile | undefined>();
     const availableDiagrams = [...sequenceDiagrams];
@@ -51,40 +44,59 @@ export default class ApplyContextService {
         0
       );
 
+    // Select items in a round-robin fashion, to ensure a mix of content types. Heuristically, we
+    // want to see one sequence diagram, 5 code snippets, and 2 data request. If we run out of
+    // one type of content type, we'll continue adding the other types.
+    const roundSize = 1 + 5 + 2;
     let index = 0;
     while (availableItemCount() > 0) {
-      const itemType = index % 5;
+      const itemType = index % roundSize;
+      index += 1;
+
       let item: [string, string] | undefined;
-      let name: string;
+      let name: string | undefined;
       let content: string | undefined;
       let file: string | undefined;
-      switch (itemType) {
-        case 0:
-          name = PROMPTS[PromptType.SequenceDiagram].prefix;
-          content = availableDiagrams.shift();
-          if (content || availableDiagrams.length === 0) index += 1;
-          break;
-        case 1:
-        case 2:
-        case 3:
-          name = PROMPTS[PromptType.CodeSnippet].prefix;
-          item = availableCodeSnippets.shift();
-          if (item) {
-            [file, content] = item;
-          } else if (availableCodeSnippets.length === 0) {
-            index += 1;
-          }
-          break;
-        case 4:
-          name = PROMPTS[PromptType.DataRequest].prefix;
-          content = availableDataRequests.shift();
-          if (content || availableDataRequests.length === 0) index += 1;
-          break;
-        default:
-          assert(itemType < 5);
-          name = 'Invalid';
+
+      const selectDiagram = (): boolean => {
+        if (availableDiagrams.length === 0) return false;
+
+        name = PROMPTS[PromptType.SequenceDiagram].prefix;
+        content = availableDiagrams.shift();
+        return true;
+      };
+
+      const selectCodeSnippet = (): boolean => {
+        if (availableCodeSnippets.length === 0) return false;
+
+        name = PROMPTS[PromptType.CodeSnippet].prefix;
+        item = availableCodeSnippets.shift();
+        assert(item);
+        [file, content] = item;
+        return true;
+      };
+
+      const selectDataRequest = (): boolean => {
+        if (availableDataRequests.length === 0) return false;
+
+        name = PROMPTS[PromptType.DataRequest].prefix;
+        content = availableDataRequests.shift();
+        return true;
+      };
+
+      let selectionMade: boolean;
+      if (itemType === 0) {
+        selectionMade = selectDiagram() || selectCodeSnippet() || selectDataRequest();
+      } else if (itemType >= 1 && itemType <= 5) {
+        selectionMade = selectCodeSnippet() || selectDataRequest();
+      } else {
+        selectionMade = selectDataRequest() || selectCodeSnippet();
       }
-      if (content) availableContent.push({ name, content, file });
+
+      if (selectionMade) {
+        assert(name && content);
+        availableContent.push({ name, content, file });
+      }
     }
 
     let charsRemaining = characterLimit;
@@ -99,7 +111,12 @@ export default class ApplyContextService {
       if (charsRemaining - contextItem.content.length < 0) return false;
 
       charsRemaining -= contextItem.content.length;
-      this.interactionHistory.addEvent(new ContextItemEvent(contextItem, contextItem.file));
+      this.interactionHistory.addEvent(
+        new ContextItemEvent(
+          { name: contextItem.name, content: contextItem.content },
+          contextItem.file
+        )
+      );
       messages.push(contextItem);
       return true;
     };

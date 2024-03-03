@@ -141,16 +141,22 @@ export class CodeExplainerService {
         .join('\n\n');
 
       const vectorTerms = await this.vectorTermsService.suggestTerms(aggregateQuestion);
-      const tokensRequested =
+      let tokensAvailable =
         options.tokenLimit - options.responseTokens - this.interactionHistory.computeTokenSize();
 
       context = await this.lookupContextService.lookupContext({
         vectorTerms,
-        tokenCount: tokensRequested,
+        tokenCount: tokensAvailable,
         type: 'search',
       });
+      if (context) {
+        this.applyContextService.addSystemPrompts(context);
 
-      this.applyContextService.applyContext(context, tokensRequested * CHARACTERS_PER_TOKEN);
+        tokensAvailable =
+          options.tokenLimit - options.responseTokens - this.interactionHistory.computeTokenSize();
+
+        this.applyContextService.applyContext(context, tokensAvailable * CHARACTERS_PER_TOKEN);
+      }
     }
 
     const hasChatHistory = chatHistory && chatHistory.length > 0;

@@ -33,68 +33,80 @@ describe('collectContext', () => {
 
   it('collects samples of context into the output', () => {
     collect(1000 * 1000);
-    expect(interactionHistory.events.map((e) => ({ ...e }))).toEqual([
+    expect(
+      interactionHistory.events.filter((e) => e.name === 'contextItem').map((e) => ({ ...e }))
+    ).toEqual([
       {
-        type: 'contextItem',
+        name: 'contextItem',
         contextItem: {
-          name: 'sequence-diagram',
-          content: `Sequence diagram: diagram-1`,
+          content: `diagram-1`,
+          name: 'Sequence diagram',
         },
+        file: undefined,
       },
       {
-        type: 'contextItem',
+        name: 'contextItem',
         contextItem: {
-          name: 'code-snippet',
-          content: `app/user.rb: class User < ApplicationRecord; end`,
+          content: `class User < ApplicationRecord; end`,
+          name: 'Code snippet',
         },
+        file: 'app/user.rb',
       },
       {
-        type: 'contextItem',
+        name: 'contextItem',
         contextItem: {
-          name: 'code-snippet',
-          content: `app/post.rb: class Post < ApplicationRecord; end`,
+          content: `class Post < ApplicationRecord; end`,
+          name: 'Code snippet',
         },
+        file: 'app/post.rb',
       },
       {
-        type: 'contextItem',
+        name: 'contextItem',
         contextItem: {
-          name: 'code-snippet',
           content: `SELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1`,
+          name: 'Data request',
         },
+        file: undefined,
       },
       {
-        type: 'contextItem',
+        name: 'contextItem',
         contextItem: {
-          name: 'code-snippet',
           content: `SELECT "posts".* FROM "posts" WHERE "posts"."user_id" = $1`,
+          name: 'Data request',
         },
+        file: undefined,
       },
       {
-        type: 'contextItem',
+        name: 'contextItem',
         contextItem: {
-          name: 'sequence-diagram',
-          content: `Sequence diagram: diagram-2`,
+          content: `diagram-2`,
+          name: 'Sequence diagram',
         },
+        file: undefined,
       },
     ]);
   });
 
   it('limits the output to the character limit', () => {
-    collect(100);
-    expect(interactionHistory.events.map((e) => ({ ...e }))).toEqual([
+    collect(75);
+    expect(
+      interactionHistory.events.filter((e) => e.name === 'contextItem').map((e) => ({ ...e }))
+    ).toEqual([
       {
-        type: 'contextItem',
+        name: 'contextItem',
         contextItem: {
-          name: 'sequence-diagram',
-          content: `Sequence diagram: diagram-1`,
+          content: `diagram-1`,
+          name: 'Sequence diagram',
         },
+        file: undefined,
       },
       {
-        type: 'contextItem',
+        name: 'contextItem',
         contextItem: {
-          name: 'code-snippet',
-          content: `app/user.rb: class User < ApplicationRecord; end`,
+          content: `class User < ApplicationRecord; end`,
+          name: 'Code snippet',
         },
+        file: 'app/user.rb',
       },
     ]);
   });

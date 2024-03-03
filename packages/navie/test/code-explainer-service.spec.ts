@@ -7,6 +7,8 @@ import Message from '../src/message';
 import InteractionHistory from '../src/interaction-history';
 import LookupContextService from '../src/services/lookup-context-service';
 import ApplyContextService from '../src/services/apply-context-service';
+import CodeSelectionService from '../src/services/code-selection-service';
+import QuestionService from '../src/services/question-service';
 
 const SEQUENCE_DIAGRAMS = [`diagram-1`, `diagram-2`];
 const CODE_SNIPPETS = {
@@ -43,6 +45,8 @@ describe('CodeExplainerService', () => {
   let requestContext: (request: ContextRequest) => Promise<ContextResponse>;
   let vectorTermsService: VectorTermsService;
   let completionService: CompletionService;
+  let questionService: QuestionService;
+  let codeSelectionService: CodeSelectionService;
   let memoryService: MemoryService;
   let lookupContextService: LookupContextService;
   let applyContextService: ApplyContextService;
@@ -56,6 +60,8 @@ describe('CodeExplainerService', () => {
     completionService = {
       complete: () => TOKEN_STREAM,
     };
+    questionService = new QuestionService(interactionHistory);
+    codeSelectionService = new CodeSelectionService(interactionHistory);
     vectorTermsService = new VectorTermsService(interactionHistory, 'gpt-4', 0.5);
     jest.spyOn(vectorTermsService, 'suggestTerms').mockImplementation((query: string) => {
       const expectedAggregateQuestion = [question, codeSelection].filter(Boolean).join('\n\n');
@@ -99,6 +105,8 @@ describe('CodeExplainerService', () => {
       codeExplainerService = new CodeExplainerService(
         interactionHistory,
         completionService,
+        questionService,
+        codeSelectionService,
         vectorTermsService,
         lookupContextService,
         applyContextService,
@@ -176,6 +184,8 @@ describe('CodeExplainerService', () => {
       codeExplainerService = new CodeExplainerService(
         interactionHistory,
         completionService,
+        questionService,
+        codeSelectionService,
         vectorTermsService,
         lookupContextService,
         applyContextService,
