@@ -15,6 +15,8 @@ import ProjectInfoService from './services/project-info-service';
 import { ProjectInfoProvider } from './project-info';
 import CodeSelectionService from './services/code-selection-service';
 import QuestionService from './services/question-service';
+import ScopeService, { ScopeType } from './services/scope-type-service';
+import { warn } from 'console';
 
 const AGENT_INFO_PROMPT = `**Task: Explaining Code, Analyzing Code, Generating Code**
 
@@ -114,6 +116,24 @@ export class CodeExplainerService {
     const tokensAvailable = (): number =>
       options.tokenLimit - options.responseTokens - this.interactionHistory.computeTokenSize();
 
+    let scopeTypeProvider: Promise<ScopeType> | undefined;
+    if (codeSelection) {
+      scopeTypeProvider = Promise.resolve(ScopeType.Feature);
+    } else {
+      const questions = [
+        question,
+        ...(chatHistory || [])
+          .filter((message) => message.role === 'user')
+          .map((message) => message.content),
+      ].join('\n\n');
+      const scopeTypeService = new ScopeService(
+        this.interactionHistory,
+        options.modelName,
+        options.temperature
+      );
+      scopeTypeProvider = scopeTypeService.classifyQuestion(questions);
+    }
+
     this.interactionHistory.addEvent(
       new PromptInteractionEvent('agentInfo', 'system', AGENT_INFO_PROMPT)
     );
@@ -134,7 +154,11 @@ export class CodeExplainerService {
     }
 
     let context: ContextResponse | undefined;
-    if (hasAppMaps) {
+    const scopeType = await scopeTypeProvider;
+    warn(`Scope type: ${scopeType}`);
+    const performContextLookup = hasAppMaps && scopeType === ScopeType.Feature;
+
+    if (performContextLookup) {
       const aggregateQuestion = [
         question,
         ...(chatHistory || [])
