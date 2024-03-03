@@ -24,7 +24,7 @@ import RemoteNavie from '../../rpc/explain/navie/navie-remote';
 import { Context, ProjectInfo } from '@appland/navie';
 import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 
-const AI_KEYS = ['OPENAI_API_KEY'];
+const AI_KEY_ENV_VARS = ['OPENAI_API_KEY'];
 
 export const command = 'index';
 export const describe =
@@ -55,11 +55,6 @@ export const builder = (args: yargs.Argv) => {
     describe: 'navie provider to use',
     type: 'string',
     choices: ['local', 'remote'],
-  });
-  args.option('ai-keys', {
-    describe: 'Space-delimited list of AI keys to use to initialize local Navie',
-    type: 'string',
-    default: AI_KEYS.join(' '),
   });
   args.option('log-navie', {
     describe: 'Log Navie events to stderr',
@@ -99,14 +94,17 @@ export const handler = async (argv) => {
           return false;
         }
 
-        const aiKeys = argv.aiKeys.split(' ');
-        const aiEnvVar = Object.keys(process.env).find((key) => aiKeys.includes(key));
+        const aiEnvVar = Object.keys(process.env).find((key) => AI_KEY_ENV_VARS.includes(key));
         if (aiEnvVar) {
-          log(`Using local Navie provider due to presence of environment variable '${aiEnvVar}'`);
+          log(`Using local Navie provider due to presence of environment variable ${aiEnvVar}`);
           return true;
         }
 
-        log(`Using remote Navie provider due to absence of --navie-provider option and AI keys`);
+        log(
+          `--navie-provider option not provided, and none of ${AI_KEY_ENV_VARS.join(
+            ' '
+          )} are available. Using remote Navie provider.`
+        );
         return false;
       };
 
