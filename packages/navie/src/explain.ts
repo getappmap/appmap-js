@@ -111,6 +111,8 @@ export class CodeExplainerService {
     chatHistory?: ChatHistory
   ): AsyncIterable<string> {
     const { question, codeSelection } = clientRequest;
+    const tokensAvailable = (): number =>
+      options.tokenLimit - options.responseTokens - this.interactionHistory.computeTokenSize();
 
     this.interactionHistory.addEvent(
       new PromptInteractionEvent('agentInfo', 'system', AGENT_INFO_PROMPT)
@@ -144,21 +146,15 @@ export class CodeExplainerService {
         .join('\n\n');
 
       const vectorTerms = await this.vectorTermsService.suggestTerms(aggregateQuestion);
-      let tokensAvailable =
-        options.tokenLimit - options.responseTokens - this.interactionHistory.computeTokenSize();
-
       context = await this.lookupContextService.lookupContext({
         vectorTerms,
-        tokenCount: tokensAvailable,
+        tokenCount: tokensAvailable(),
         type: 'search',
       });
       if (context) {
         this.applyContextService.addSystemPrompts(context);
 
-        tokensAvailable =
-          options.tokenLimit - options.responseTokens - this.interactionHistory.computeTokenSize();
-
-        this.applyContextService.applyContext(context, tokensAvailable * CHARACTERS_PER_TOKEN);
+        this.applyContextService.applyContext(context, tokensAvailable() * CHARACTERS_PER_TOKEN);
       }
     }
 
