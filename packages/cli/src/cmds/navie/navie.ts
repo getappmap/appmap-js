@@ -10,6 +10,7 @@ import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import loadAppMapConfig from '../../lib/loadAppMapConfig';
 import collectContext from '../../rpc/explain/collectContext';
 import { appmapStatsHandler } from '../../rpc/appmap/stats';
+import sampleContext from '../../rpc/explain/sampleContext';
 
 export const command = 'navie [question]';
 export const describe = 'Generate a test case using Navie AI';
@@ -103,7 +104,7 @@ function buildExplainRequest(
       .join('\n');
   }
 
-  const contextProvider = async (request: Context.ContextRequest) => {
+  const searchContextProvider = async (request: Context.ContextRequest) => {
     const charLimit = request.tokenCount * 3;
     const result = await collectContext(appmapDir, appmaps, request.vectorTerms, charLimit);
     return {
@@ -118,6 +119,9 @@ function buildExplainRequest(
     };
   };
 
+  const sampleContextProvider = async (request: Context.SampleContextRequest) =>
+    sampleContext(appmapDir, appmaps, request.tokenCount * 3);
+
   const projectInfoProvider = collectProjectInfo(appmapConfig);
 
   const options = new Explain.ExplainOptions();
@@ -125,7 +129,14 @@ function buildExplainRequest(
   if (tokenLimit) options.tokenLimit = tokenLimit;
   const chatHistory = [];
   return () => {
-    const fn = explain(clientRequest, contextProvider, projectInfoProvider, options, chatHistory);
+    const fn = explain(
+      clientRequest,
+      searchContextProvider,
+      sampleContextProvider,
+      projectInfoProvider,
+      options,
+      chatHistory
+    );
     logRequest(fn);
     return fn.execute();
   };

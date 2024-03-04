@@ -10,6 +10,7 @@ export default class RemoteNavie extends EventEmitter implements INavie {
   constructor(
     public threadId: string | undefined,
     private contextProvider: Context.ContextProvider,
+    private sampleContextProvider: Context.SampleContextProvider,
     private projectInfoProvider: ProjectInfo.ProjectInfoProvider
   ) {
     super();
@@ -30,8 +31,11 @@ export default class RemoteNavie extends EventEmitter implements INavie {
         async onRequestContext(data) {
           if (data.type === 'search') {
             return await self.contextProvider(data as unknown as Context.ContextRequest);
-          }
-          if (data.type === 'projectInfo') {
+          } else if (data.type === 'sample') {
+            return await self.sampleContextProvider(
+              data as unknown as Context.SampleContextRequest
+            );
+          } else if (data.type === 'projectInfo') {
             return (
               (await self.projectInfoProvider(data as unknown as ProjectInfo.ProjectInfoRequest)) ||
               {}

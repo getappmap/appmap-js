@@ -45,6 +45,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
   constructor(
     public threadId: string | undefined,
     private readonly contextProvider: Context.ContextProvider,
+    private readonly sampleContextProvider: Context.SampleContextProvider,
     private readonly projectInfoProvider: ProjectInfo.ProjectInfoProvider
   ) {
     super();
@@ -68,6 +69,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
     const explainFn = explain(
       clientRequest,
       this.contextProvider,
+      this.sampleContextProvider,
       this.projectInfoProvider,
       options,
       history

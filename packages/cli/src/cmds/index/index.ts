@@ -111,9 +111,15 @@ export const handler = async (argv) => {
       const buildLocalNavie = (
         threadId: string | undefined,
         contextProvider: Context.ContextProvider,
+        sampleContextProvider: Context.SampleContextProvider,
         projectInfoProvider: ProjectInfo.ProjectInfoProvider
       ) => {
-        const navie = new LocalNavie(threadId, contextProvider, projectInfoProvider);
+        const navie = new LocalNavie(
+          threadId,
+          contextProvider,
+          sampleContextProvider,
+          projectInfoProvider
+        );
 
         let START: number | undefined;
 
@@ -134,8 +140,9 @@ export const handler = async (argv) => {
       const buildRemoteNavie = (
         threadId: string | undefined,
         contextProvider: Context.ContextProvider,
+        sampleContextProvider: Context.SampleContextProvider,
         projectInfoProvider: ProjectInfo.ProjectInfoProvider
-      ) => new RemoteNavie(threadId, contextProvider, projectInfoProvider);
+      ) => new RemoteNavie(threadId, contextProvider, sampleContextProvider, projectInfoProvider);
 
       const navieProvider = useLocalNavie() ? buildLocalNavie : buildRemoteNavie;
 

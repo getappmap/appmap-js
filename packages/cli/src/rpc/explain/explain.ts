@@ -8,9 +8,10 @@ import { RpcError, RpcHandler } from '../rpc';
 import collectContext from './collectContext';
 import INavie, { INavieProvider } from './navie/inavie';
 import { verbose } from '../../utils';
-import { Context, ProjectInfo } from '@appland/navie';
+import { Context, ProjectInfo, SampleContextRequest } from '@appland/navie';
 import loadAppMapConfig from '../../lib/loadAppMapConfig';
 import { appmapStatsHandler } from '../appmap/stats';
+import { default as sampleContextImpl } from './sampleContext';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
@@ -28,6 +29,8 @@ export type SearchContextResponse = {
   codeSnippets: { [key: string]: string };
   codeObjects: string[];
 };
+
+export type SampleContextResponse = SearchContextResponse;
 
 export const DEFAULT_TOKEN_LIMIT = 8000;
 
@@ -115,6 +118,10 @@ export class Explain extends EventEmitter {
     };
   }
 
+  async sampleContext(data: SampleContextRequest): Promise<SampleContextResponse> {
+    return sampleContextImpl(this.appmapDir, this.appmaps, data.tokenCount);
+  }
+
   async projectInfoContext(): Promise<ProjectInfo.ProjectInfoResponse> {
     const appmapConfig: ProjectInfo.AppMapConfig = ((await loadAppMapConfig()) ||
       {}) as any as ProjectInfo.AppMapConfig;
@@ -153,8 +160,14 @@ async function explain(
   const contextProvider: Context.ContextProvider = async (data: any) => invokeContextFunction(data);
   const projectInfoProvider: ProjectInfo.ProjectInfoProvider = async (data: any) =>
     invokeContextFunction(data);
+  const sampleContextProvider = async (data: SampleContextRequest) => invokeContextFunction(data);
 
-  const navie = navieProvider(threadId, contextProvider, projectInfoProvider);
+  const navie = navieProvider(
+    threadId,
+    contextProvider,
+    sampleContextProvider,
+    projectInfoProvider
+  );
   return new Promise<ExplainRpc.ExplainResponse>((resolve, reject) => {
     let isFirst = true;
 

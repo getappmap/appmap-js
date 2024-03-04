@@ -12,5 +12,6 @@ export default interface INavie {
 export type INavieProvider = (
   threadId: string | undefined,
   contextProvider: Context.ContextProvider,
+  sampleContextProvider: Context.SampleContextProvider,
   projectInfoProvider: ProjectInfo.ProjectInfoProvider
 ) => INavie;
