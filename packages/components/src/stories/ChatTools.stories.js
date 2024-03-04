@@ -13,7 +13,7 @@ export const Search = (args, { argTypes }) => ({
   template: `<v-tool-status v-bind="$props" />`,
 });
 Search.args = {
-  title: 'Searched for AppMaps',
-  status: 'Found 3 relevant recordings',
+  title: 'Project analysis complete',
+  status: 'Found 3 relevant AppMaps',
   complete: true,
 };
