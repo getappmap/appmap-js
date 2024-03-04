@@ -145,9 +145,19 @@ async function explain(
   const invokeContextFunction = async (data: any) => {
     const type = data['type'];
     const fnName = [type, 'Context'].join('');
-    if (verbose()) warn(`Explain received context request: ${type}`);
+    warn(`Explain received context request: ${type}`);
     const fn: (args: any) => any = explain[fnName];
-    return await fn.call(explain, data);
+    if (!fn) {
+      warn(`Explain context function ${fnName} not found`);
+      return {};
+    }
+
+    try {
+      return await fn.call(explain, data);
+    } catch (e) {
+      warn(`Explain context function ${fnName} threw an error: ${e}`);
+      return {};
+    }
   };
 
   const contextProvider: Context.ContextProvider = async (data: any) => invokeContextFunction(data);
