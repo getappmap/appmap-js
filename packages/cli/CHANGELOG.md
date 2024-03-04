@@ -1,3 +1,16 @@
+# [@appland/appmap-v3.128.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.127.0...@appland/appmap-v3.128.0) (2024-03-04)
+
+
+### Bug Fixes
+
+* Properly apply maxResults limit ([30fbadc](https://github.com/getappmap/appmap-js/commit/30fbadcfb35f91f7fc773fe2eb19ce0c7141ae6d))
+
+
+### Features
+
+* Handle project info request ([4ede025](https://github.com/getappmap/appmap-js/commit/4ede02587f23b396d2085e17220005802ac3870a))
+* Handle unrecognized context functions ([e8dbcf6](https://github.com/getappmap/appmap-js/commit/e8dbcf6951f7596780804a07c376b7411fd86ff4))
+
 # [@appland/appmap-v3.127.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.126.2...@appland/appmap-v3.127.0) (2024-02-29)
 
 
