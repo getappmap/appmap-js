@@ -8,7 +8,7 @@ import EventEmitter from 'events';
 import search from './search';
 import context from './context';
 import assert from 'assert';
-import { warn } from 'console';
+import { log, warn } from 'console';
 import { verbose } from '../../utils';
 
 export type SearchContextOptions = {
@@ -51,10 +51,21 @@ export default class Explain extends EventEmitter {
         },
         async onRequestContext(data) {
           const type = data['type'];
+          if (verbose()) log(`Explain received context request: ${type}`);
+
           const fnName = [type, 'Context'].join('');
-          if (verbose()) warn(`Explain received context request: ${type}`);
           const fn: (args: any) => any = self[fnName];
-          return await fn.call(self, data);
+          if (!fn) {
+            warn(`Explain context function ${fnName} not found`);
+            return {};
+          }
+          try {
+            return await fn.call(self, data);
+          } catch (e) {
+            warn(`Explain context function ${fnName} threw an error: ${e}`);
+            // TODO: Report an error object instead?
+            return {};
+          }
         },
         onComplete() {
           if (verbose()) warn(`Explain is complete`);
