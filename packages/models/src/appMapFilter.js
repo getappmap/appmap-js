@@ -151,9 +151,13 @@ export default class AppMapFilter {
 
     // Collect all code objects that match a filter expression. When a code object matches an
     // expression, the entire subtree rooted at that code object is included as well.
-    function matchCodeObjects(expressions, matchSelf) {
+    function matchCodeObjects(expressions, matchSelf, matchTrailingWildcard) {
       return classMap.codeObjects.reduce((memo, codeObject) => {
-        if (expressions.some((expr) => AppMapFilter.codeObjectIsMatched(codeObject, expr))) {
+        if (
+          expressions.some((expr) =>
+            AppMapFilter.codeObjectIsMatched(codeObject, expr, matchTrailingWildcard)
+          )
+        ) {
           codeObject.visit((co) => {
             if (co !== codeObject || matchSelf) memo.add(co);
           });
@@ -193,7 +197,7 @@ export default class AppMapFilter {
     }
 
     if (this.declutter.context.on && this.declutter.context.names.length) {
-      const includeCodeObjects = matchCodeObjects(this.declutter.context.names, true);
+      const includeCodeObjects = matchCodeObjects(this.declutter.context.names, true, false);
       const filterFn = (e) => includeCodeObjects.has(e.codeObject);
 
       const subtreeEvents = markSubtrees(events, filterFn, this.declutter.context.depth);
@@ -380,9 +384,13 @@ export default class AppMapFilter {
    *
    * @param {CodeObject} object
    * @param {string} query
+   * @param {boolean} matchTrailingWildcard this is a legacy option that's here for compatibility.
+   * When the "query" can be a complex string like a SQL query, a trailing "*" character is not a reliable
+   * indicate that the user wants to match a prefix. This is because the query itself may contain a "*".
+   * So for cases like this, matchTrailingWildcard can be disabled.
    * @returns boolean
    */
-  static codeObjectIsMatched(object, query) {
+  static codeObjectIsMatched(object, query, matchTrailingWildcard) {
     if (query === object.fqid) {
       return true;
     } else if (query.startsWith('label:')) {
@@ -397,7 +405,7 @@ export default class AppMapFilter {
       if (pattern.test(object.fqid)) {
         return true;
       }
-    } else if (query.endsWith('*')) {
+    } else if (matchTrailingWildcard && query.endsWith('*')) {
       const pattern = filterRegExp(query, () => [`^${query.slice(0, query.length - 1)}.*`, 'ig']);
       if (pattern.test(object.fqid)) {
         return true;

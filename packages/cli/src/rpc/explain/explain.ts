@@ -1,6 +1,6 @@
 import { AI } from '@appland/client';
-import { ExplainRpc } from '@appland/rpc';
-import { RpcError, RpcHandler, errorMessage, isRpcError } from '../rpc';
+import { AppMapRpc, ExplainRpc } from '@appland/rpc';
+import { RpcError, RpcHandler } from '../rpc';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
@@ -8,8 +8,10 @@ import EventEmitter from 'events';
 import search from './search';
 import context from './context';
 import assert from 'assert';
-import { warn } from 'console';
+import { log, warn } from 'console';
 import { verbose } from '../../utils';
+import { appmapStatsHandler } from '../appmap/stats';
+import loadAppMapConfig, { AppMapConfig } from '../../lib/loadAppMapConfig';
 
 export type SearchContextOptions = {
   tokenLimit: number;
@@ -22,6 +24,13 @@ export type SearchContextResponse = {
   sequenceDiagrams: string[];
   codeSnippets: { [key: string]: string };
   codeObjects: string[];
+};
+
+export type AppMapStatsContext = Exclude<AppMapRpc.StatsOptions, 'classes'>;
+
+export type ProjectInfoResponse = {
+  appmapConfig: AppMapConfig;
+  appmapStats: AppMapStatsContext;
 };
 
 export default class Explain extends EventEmitter {
@@ -51,10 +60,21 @@ export default class Explain extends EventEmitter {
         },
         async onRequestContext(data) {
           const type = data['type'];
+          if (verbose()) log(`Explain received context request: ${type}`);
+
           const fnName = [type, 'Context'].join('');
-          if (verbose()) warn(`Explain received context request: ${type}`);
           const fn: (args: any) => any = self[fnName];
-          return await fn.call(self, data);
+          if (!fn) {
+            warn(`Explain context function ${fnName} not found`);
+            return {};
+          }
+          try {
+            return await fn.call(self, data);
+          } catch (e) {
+            warn(`Explain context function ${fnName} threw an error: ${e}`);
+            // TODO: Report an error object instead?
+            return {};
+          }
         },
         onComplete() {
           if (verbose()) warn(`Explain is complete`);
@@ -121,6 +141,17 @@ export default class Explain extends EventEmitter {
       codeSnippets: this.status.codeSnippets,
       codeObjects: this.status.codeObjects,
     };
+  }
+
+  async projectInfoContext(): Promise<ProjectInfoResponse> {
+    const appmapConfig: AppMapConfig = (await loadAppMapConfig()) || ({} as AppMapConfig);
+    const stats = await appmapStatsHandler(this.appmapDir);
+    delete (stats as any).classes; // This is verbose and I don't see the utility of it
+    const appmapStats = stats;
+    return Promise.resolve({
+      appmapConfig,
+      appmapStats,
+    });
   }
 }
 
