@@ -1,9 +1,7 @@
-/* eslint-disable max-classes-per-file */
 import EventEmitter from 'events';
 import InteractionState from './interaction-state';
 import { ContextItem, ContextResponse } from './context';
 import { PromptType } from './prompt';
-import { warn } from 'console';
 import { CHARACTERS_PER_TOKEN } from './message';
 
 const SNIPPET_LENGTH = 800;

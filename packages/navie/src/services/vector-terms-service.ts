@@ -45,7 +45,7 @@ export default class VectorTermsService {
       },
     ];
 
-    let searchTermsObject: any;
+    let searchTermsObject: Record<string, unknown> | string | string[] | undefined;
     let attemptNumber = 3;
     // eslint-disable-next-line no-plusplus
     while (!searchTermsObject && attemptNumber-- > 0) {
@@ -76,25 +76,21 @@ export default class VectorTermsService {
     warn(`searchTermsObject: ${JSON.stringify(searchTermsObject)}`);
 
     const terms = new Set<string>();
-    if (
-      !searchTermsObject ||
-      JSON.stringify(searchTermsObject) === '[]' ||
-      JSON.stringify(searchTermsObject) === '{}'
-    ) {
+    if (!searchTermsObject || !Object.keys(searchTermsObject).length) {
       warn(`Unable to obtain search terms from AI. Will use the raw user search.`);
       const words = question.split(/\s/);
       for (const word of words) terms.add(word);
     } else {
-      const collectTerms = (obj: any) => {
+      const collectTerms = (obj: unknown) => {
+        if (!obj) return;
+
         if (typeof obj === 'string') {
           for (const term of obj.split(/[._-]/)) terms.add(term);
         } else if (Array.isArray(obj)) {
           for (const term of obj) collectTerms(term);
         } else if (typeof obj === 'object') {
-          // eslint-disable-next-line guard-for-in
-          for (const key in obj) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            collectTerms(obj[key]);
+          for (const term of Object.values(obj)) {
+            collectTerms(term);
           }
         }
       };

@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import Message, { CHARACTERS_PER_TOKEN } from './message';
 import MemoryService from './services/memory-service';
 import VectorTermsService from './services/vector-terms-service';

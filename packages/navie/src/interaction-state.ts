@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { ContextItem, ContextResponse } from './context';
 import Message from './message';
 

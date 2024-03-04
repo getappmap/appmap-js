@@ -1,4 +1,3 @@
-/* eslint-disable no-plusplus */
 import { log } from 'console';
 import assert from 'assert';
 
@@ -10,8 +9,6 @@ import InteractionHistory, {
 import { PROMPTS, PromptType, buildPromptDescriptor } from '../prompt';
 
 type ContextItemWithFile = ContextItem & { file?: string };
-
-type Selector = () => boolean;
 
 export default class ApplyContextService {
   constructor(public readonly interactionHistory: InteractionHistory) {}

@@ -1,10 +1,10 @@
-export type ProjectInfoRequest = {};
+export type ProjectInfoRequest = { [key: string]: unknown };
 
 export type AppMapConfig = {
   name: string;
   language: string;
   appmap_dir: string;
-  packages: any;
+  packages: unknown;
 };
 
 export type AppMapStats = {

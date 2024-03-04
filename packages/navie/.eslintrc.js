@@ -31,6 +31,7 @@ module.exports = {
     'no-restricted-syntax': 'off',
     'import/no-cycle': 'off',
     'prettier/prettier': ['error'],
+    'max-classes-per-file': 'off',
   },
   overrides: [
     {
