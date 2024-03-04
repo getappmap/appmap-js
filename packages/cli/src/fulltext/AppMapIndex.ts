@@ -259,14 +259,16 @@ export default class AppMapIndex {
 
     const scoreStats = scoreMatches(matches);
 
-    if (options.maxResults && numResults > options.maxResults)
-      if (verbose()) log(`[FullText] Limiting to the top ${options.maxResults} matches`);
-
     matches = await downscoreOutOfDateMatches(
       scoreStats,
       matches,
       options.maxResults || matches.length
     );
+
+    if (options.maxResults && numResults > options.maxResults) {
+      if (verbose()) log(`[FullText] Limiting to the top ${options.maxResults} matches`);
+      matches = matches.slice(0, options.maxResults);
+    }
 
     return reportMatches(matches, scoreStats, numResults);
   }
