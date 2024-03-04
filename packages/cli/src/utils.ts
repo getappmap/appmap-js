@@ -39,7 +39,6 @@ export function splitCamelized(str: string): string {
   const result = new Array<string>();
   let last = 0;
   for (let i = 1; i < str.length; i++) {
-    const pc = str[i - 1];
     const c = str[i];
     const isUpper = c >= 'A' && c <= 'Z';
     if (isUpper) {
