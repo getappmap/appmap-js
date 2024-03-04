@@ -26,8 +26,7 @@ export const builder = (args: yargs.Argv) => {
     alias: 't',
     type: 'string',
     choices: ['explain', 'help'],
-    requiresArg: true,
-    demandOption: true,
+    default: 'explain',
   });
 
   args.option('appmap-file', {
