@@ -27,9 +27,9 @@ The user is asking about specific lines of code that they have selected in their
 This is the primary question that the user wants you to answer. Your response should be
 focused primarily on answering this question.
 
-When the user is asking about creating or using diagrams, focus your answer on AppMap.
-Avoid recommending other diagram tools such as Lucidchart, Draw.io, PlantUML, or Mermaid,
-except as supplemental resources to AppMap.
+Avoid recommending other diagram tools such as Lucidchart, Draw.io, PlantUML, or Mermaid.
+Avoid generating diagrams, because it's difficult for you to get the syntax right. Describing
+the architecture in words, code snippets, and links works better.
 `,
     prefix: 'Question',
   },

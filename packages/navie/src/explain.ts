@@ -1,4 +1,6 @@
 /* eslint-disable max-classes-per-file */
+import { warn } from 'console';
+
 import Message, { CHARACTERS_PER_TOKEN } from './message';
 import MemoryService from './services/memory-service';
 import VectorTermsService from './services/vector-terms-service';
@@ -10,13 +12,13 @@ import InteractionHistory, {
 } from './interaction-history';
 import LookupContextService from './services/lookup-context-service';
 import ApplyContextService from './services/apply-context-service';
-import { ContextProvider, ContextResponse } from './context';
+import { ContextProvider, ContextResponse, SampleContextProvider } from './context';
 import ProjectInfoService from './services/project-info-service';
 import { ProjectInfoProvider } from './project-info';
 import CodeSelectionService from './services/code-selection-service';
 import QuestionService from './services/question-service';
 import ScopeService, { ScopeType } from './services/scope-type-service';
-import { warn } from 'console';
+import SampleContextService from './services/sample-context-service';
 
 const AGENT_INFO_PROMPT = `**Task: Explaining Code, Analyzing Code, Generating Code**
 
@@ -101,6 +103,7 @@ export class CodeExplainerService {
     private readonly questionService: QuestionService,
     private readonly codeSelectionService: CodeSelectionService,
     private readonly projectInfoService: ProjectInfoService,
+    private readonly sampleContextService: SampleContextService,
     private readonly vectorTermsService: VectorTermsService,
     private readonly lookupContextService: LookupContextService,
     private readonly applyContextService: ApplyContextService,
@@ -153,12 +156,10 @@ export class CodeExplainerService {
       this.interactionHistory.log('No AppMaps exist in the project');
     }
 
-    let context: ContextResponse | undefined;
     const scopeType = await scopeTypeProvider;
     warn(`Scope type: ${scopeType}`);
-    const performContextLookup = hasAppMaps && scopeType === ScopeType.Feature;
 
-    if (performContextLookup) {
+    const searchContext = async () => {
       const aggregateQuestion = [
         question,
         ...(chatHistory || [])
@@ -170,14 +171,26 @@ export class CodeExplainerService {
         .join('\n\n');
 
       const vectorTerms = await this.vectorTermsService.suggestTerms(aggregateQuestion);
-      context = await this.lookupContextService.lookupContext({
+      return this.lookupContextService.lookupContext({
         vectorTerms,
         tokenCount: tokensAvailable(),
         type: 'search',
       });
+    };
+
+    const sampleContext = async () =>
+      this.sampleContextService.lookupContext({
+        type: 'sample',
+        tokenCount: tokensAvailable(),
+      });
+
+    if (hasAppMaps) {
+      let context: ContextResponse | undefined;
+      if (scopeType === ScopeType.Feature) context = await searchContext();
+      else context = await sampleContext();
+
       if (context) {
         this.applyContextService.addSystemPrompts(context);
-
         this.applyContextService.applyContext(context, tokensAvailable() * CHARACTERS_PER_TOKEN);
       }
     }
@@ -200,7 +213,8 @@ export interface IExplain extends InteractionHistoryEvents {
 
 export default function explain(
   clientRequest: ClientRequest,
-  contextProvider: ContextProvider,
+  searchContextProvider: ContextProvider,
+  sampleContextProvider: SampleContextProvider,
   projectInfoProvider: ProjectInfoProvider,
   options: ExplainOptions,
   chatHistory?: ChatHistory
@@ -219,7 +233,8 @@ export default function explain(
     options.temperature
   );
   const projectInfoService = new ProjectInfoService(interactionHistory, projectInfoProvider);
-  const lookupContextService = new LookupContextService(interactionHistory, contextProvider);
+  const lookupContextService = new LookupContextService(interactionHistory, searchContextProvider);
+  const sampleContextService = new SampleContextService(interactionHistory, sampleContextProvider);
   const applyContextService = new ApplyContextService(interactionHistory);
   const memoryService = new MemoryService(
     interactionHistory,
@@ -233,6 +248,7 @@ export default function explain(
     questionService,
     codeSelectionService,
     projectInfoService,
+    sampleContextService,
     vectorTermsService,
     lookupContextService,
     applyContextService,

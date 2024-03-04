@@ -1,19 +1,23 @@
 import assert from 'assert';
 import glob from 'glob';
 import jayson from 'jayson/promise';
+import { rm } from 'fs/promises';
 import { AppMapFilter, serializeFilter } from '@appland/models';
+import { join } from 'path';
+import { promisify } from 'util';
+
 import { RPC, buildRPC } from './buildRPC';
 import RPCServer from '../../src/cmds/index/rpcServer';
-import { join } from 'path';
 import { verbose } from '../../src/utils';
 import FingerprintDirectoryCommand from '../../src/fingerprint/fingerprintDirectoryCommand';
-import { promisify } from 'util';
-import { rm } from 'fs/promises';
+import { INavieProvider } from '../../src/rpc/explain/navie/inavie';
 
 export default class RPCTest {
   workingDir = process.cwd();
   rpc: RPC | undefined;
   appmaps: string[] | undefined;
+
+  constructor(public navieProvider: INavieProvider) {}
 
   get server(): RPCServer {
     assert(this.rpc);
@@ -28,7 +32,7 @@ export default class RPCTest {
   async setupAll() {
     if (process.env.VERBOSE === 'true') verbose(true);
 
-    this.rpc = await buildRPC();
+    this.rpc = await buildRPC(this.navieProvider);
     // We will stop the server in teardownAll, but let's unref it anyway in case that doesn't happen.
     this.rpc.server.unref();
   }

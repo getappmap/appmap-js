@@ -5,8 +5,13 @@ import { RpcHandler } from '../rpc';
 import AppMapIndex, { SearchResponse } from '../../fulltext/AppMapIndex';
 import searchSingleAppMap from '../../cmds/search/searchSingleAppMap';
 
+export const DEFAULT_MAX_DIAGRAMS = 10;
+export const DEFAULT_MAX_EVENTS_PER_DIAGRAM = 100;
+
 export type HandlerOptions = {
   maxResults?: number;
+  maxDiagrams?: number;
+  maxEventsPerDiagram?: number;
 };
 
 export async function handler(
@@ -15,10 +20,6 @@ export async function handler(
   query: string,
   options: HandlerOptions
 ): Promise<SearchRpc.SearchResponse> {
-  // TODO: Add extra keywords which are searched across all the functions that are included
-  // in the AppMaps.
-  const { maxResults } = options;
-
   let appmapSearchResponse: SearchResponse;
   if (appmaps) {
     appmapSearchResponse = {
@@ -34,23 +35,26 @@ export async function handler(
     };
   } else {
     // Search across all AppMaps, creating a map from AppMap id to AppMapSearchResult
-    const searchOptions = maxResults ? { maxResults } : {};
+    const searchOptions = {
+      maxResults: options.maxDiagrams || options.maxResults || DEFAULT_MAX_DIAGRAMS,
+    };
     appmapSearchResponse = await AppMapIndex.search(appmapDir, query, searchOptions);
   }
 
   // For each AppMap, search for events within the map that match the query.
   const results = new Array<SearchRpc.SearchResult>();
   for (const result of appmapSearchResponse.results) {
-    const options = maxResults ? { maxResults } : {};
-    const eventsSearchResponse = await searchSingleAppMap(result.appmap, query, options);
+    const searchOptions = {
+      maxResults:
+        options.maxEventsPerDiagram || options.maxResults || DEFAULT_MAX_EVENTS_PER_DIAGRAM,
+    };
+    const eventsSearchResponse = await searchSingleAppMap(result.appmap, query, searchOptions);
     results.push({
       appmap: result.appmap,
       events: eventsSearchResponse.results,
       score: result.score,
     });
   }
-
-  if (maxResults) results.splice(maxResults);
 
   return {
     results,

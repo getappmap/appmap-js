@@ -4,6 +4,11 @@ export type ContextRequest = {
   tokenCount: number;
 };
 
+export type SampleContextRequest = {
+  type: 'sample';
+  tokenCount: number;
+};
+
 export type ContextItem = {
   name: string;
   score?: number;
@@ -17,3 +22,5 @@ export type ContextResponse = {
 };
 
 export type ContextProvider = (request: ContextRequest) => Promise<ContextResponse>;
+
+export type SampleContextProvider = (request: SampleContextRequest) => Promise<ContextResponse>;

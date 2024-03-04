@@ -11,13 +11,14 @@ import sequenceDiagram from '../../src/rpc/appmap/sequenceDiagram';
 import { explainHandler, explainStatusHandler } from '../../src/rpc/explain/explain';
 import { waitFor } from './waitFor';
 import FingerprintWatchCommand from '../../src/fingerprint/fingerprintWatchCommand';
+import { INavieProvider } from '../../src/rpc/explain/navie/inavie';
 
 export type RPC = {
   server: RPCServer;
   client: jayson.Client;
 };
 
-export async function buildRPC(): Promise<RPC> {
+export async function buildRPC(navieProvider: INavieProvider): Promise<RPC> {
   const fingerprintWatchCommand = {
     numProcessed: 0,
   } as FingerprintWatchCommand;
@@ -29,7 +30,7 @@ export async function buildRPC(): Promise<RPC> {
     appmapData(),
     metadata(),
     sequenceDiagram(),
-    explainHandler('.'),
+    explainHandler(navieProvider, '.'),
     explainStatusHandler(),
   ];
 

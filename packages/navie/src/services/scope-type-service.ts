@@ -68,9 +68,10 @@ export default class ScopeService {
       tokens.push(token.choices.map((choice) => choice.delta.content).join(''));
     }
     const words = tokens.join('').toLowerCase().split(' ');
+
     if (words.includes('overview')) return ScopeType.Overview;
 
-    if (words.includes('explain')) return ScopeType.Feature;
+    if (words.includes('feature')) return ScopeType.Feature;
 
     this.interactionHistory.log(`Unrecognized question type: ${tokens.join('')}`);
     return ScopeType.Feature;

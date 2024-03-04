@@ -34,6 +34,7 @@ const CompareReportCommand = require('./cmds/compare-report/compareReport');
 const InventoryCommand = require('./cmds/inventory/inventory');
 const InventoryReportCommand = require('./cmds/inventory-report/inventoryReport');
 const SearchCommand = require('./cmds/search/search');
+const NavieCommand = require('./cmds/navie/navie');
 import UploadCommand from './cmds/upload';
 import { default as sqlErrorLog } from './lib/sqlErrorLog';
 
@@ -138,6 +139,7 @@ yargs(process.argv.slice(2))
   .command(InventoryCommand)
   .command(InventoryReportCommand)
   .command(SearchCommand)
+  .command(NavieCommand)
   .option('verbose', {
     alias: 'v',
     type: 'boolean',

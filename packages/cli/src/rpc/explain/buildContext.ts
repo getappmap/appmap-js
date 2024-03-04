@@ -5,10 +5,7 @@ import assert from 'assert';
 import { handler as sequenceDiagramHandler } from '../appmap/sequenceDiagram';
 import lookupSourceCode from './lookupSourceCode';
 
-export default async function context(
-  searchResponse: SearchRpc.SearchResponse,
-  numDiagramsToAnalyze: number
-): Promise<{
+export default async function buildContext(searchResults: SearchRpc.SearchResult[]): Promise<{
   sequenceDiagrams: string[];
   codeSnippets: Map<string, string>;
   codeObjects: Set<string>;
@@ -34,7 +31,7 @@ export default async function context(
   };
 
   const examinedLocations = new Set<string>();
-  for (const result of searchResponse.results.slice(0, numDiagramsToAnalyze)) {
+  for (const result of searchResults) {
     await buildSequenceDiagram(result);
     for (const event of result.events) {
       if (!event.location) {
