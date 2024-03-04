@@ -1,3 +1,10 @@
+# [@appland/models-v2.10.1](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.10.0...@appland/models-v2.10.1) (2024-03-04)
+
+
+### Bug Fixes
+
+* Limit recognition of a possible wildcard expression ([0ae2668](https://github.com/getappmap/appmap-js/commit/0ae266872f2c8bea86c2391b8a87d2fc649e0634))
+
 # [@appland/models-v2.10.0](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.9.0...@appland/models-v2.10.0) (2023-12-21)
 
 
