@@ -6908,11 +6908,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@langchain/community@npm:~0.0.32":
-  version: 0.0.32
-  resolution: "@langchain/community@npm:0.0.32"
+"@langchain/community@npm:~0.0.33":
+  version: 0.0.34
+  resolution: "@langchain/community@npm:0.0.34"
   dependencies:
-    "@langchain/core": ~0.1.32
+    "@langchain/core": ~0.1.36
     "@langchain/openai": ~0.0.14
     flat: ^5.0.2
     langsmith: ~0.1.1
@@ -7172,11 +7172,11 @@ __metadata:
       optional: true
     ws:
       optional: true
-  checksum: ef357bf51fb603fc3e4a53ba81d42d4dfe45ebb073e21a4f62b27be4ead0feaa5ab01584f8cf698e71fc3f48901ab2213fc43035bbbecbe810eebe0f8d18cc10
+  checksum: caf56c76fd3a6fa8c827a14a5226e36d9733c6aa37740f1840fc45deb246119f1c6da6551214f5a4bd42e8af2038122401b63c40f1a37f358757933bab2c48dc
   languageName: node
   linkType: hard
 
-"@langchain/core@npm:^0.1.32, @langchain/core@npm:~0.1.39":
+"@langchain/core@npm:^0.1.32, @langchain/core@npm:~0.1.36, @langchain/core@npm:~0.1.39":
   version: 0.1.40
   resolution: "@langchain/core@npm:0.1.40"
   dependencies:
@@ -7192,25 +7192,6 @@ __metadata:
     zod: ^3.22.4
     zod-to-json-schema: ^3.22.3
   checksum: dc3c1a20d3ba8f1e60cadc7d73d011245f35c473e8a30cf0355ec79e9c52069c9d894882220f14eed91f354d53b6c30f61b8bfb35aeceaaeb951fddced8d0037
-  languageName: node
-  linkType: hard
-
-"@langchain/core@npm:~0.1.32":
-  version: 0.1.32
-  resolution: "@langchain/core@npm:0.1.32"
-  dependencies:
-    ansi-styles: ^5.0.0
-    camelcase: 6
-    decamelize: 1.2.0
-    js-tiktoken: ^1.0.8
-    langsmith: ~0.1.1
-    ml-distance: ^4.0.0
-    p-queue: ^6.6.2
-    p-retry: 4
-    uuid: ^9.0.0
-    zod: ^3.22.4
-    zod-to-json-schema: ^3.22.3
-  checksum: bdb1fc7aa2169285c896f9efa82b9ec2d4b57db5aba584e8a6e223f39e52c6a2cc67b546176375bca64ebbc7014636ecc3f905d0a83769455e4cf68816f7d687
   languageName: node
   linkType: hard
 
@@ -28473,8 +28454,8 @@ __metadata:
   resolution: "langchain@npm:0.1.25"
   dependencies:
     "@anthropic-ai/sdk": ^0.9.1
-    "@langchain/community": ~0.0.32
-    "@langchain/core": ~0.1.32
+    "@langchain/community": ~0.0.33
+    "@langchain/core": ~0.1.36
     "@langchain/openai": ~0.0.14
     binary-extensions: ^2.2.0
     expr-eval: ^2.0.2
@@ -28482,7 +28463,7 @@ __metadata:
     js-yaml: ^4.1.0
     jsonpointer: ^5.0.1
     langchainhub: ~0.0.8
-    langsmith: ~0.1.1
+    langsmith: ~0.1.7
     ml-distance: ^4.0.0
     openapi-types: ^12.1.3
     p-retry: 4
@@ -28540,7 +28521,7 @@ __metadata:
     web-auth-library: ^1.0.3
     ws: ^8.14.2
     youtube-transcript: ^1.0.6
-    youtubei.js: ^5.8.0
+    youtubei.js: ^9.1.0
   peerDependenciesMeta:
     "@aws-sdk/client-s3":
       optional: true
@@ -41138,7 +41119,16 @@ typescript@~4.4.3:
   languageName: node
   linkType: hard
 
-"yaml@npm:^2.2.1, yaml@npm:^2.3.4":
+"yaml@npm:^2.2.1":
+  version: 2.4.0
+  resolution: "yaml@npm:2.4.0"
+  bin:
+    yaml: bin.mjs
+  checksum: 3c25ebae34ee702af772ebbd1855a980b1487cd21d6220d952592edb4f7d89322aafd14753d99924ba7076eb4c5b3d809c64bb532402b01af280f7af674277f1
+  languageName: node
+  linkType: hard
+
+"yaml@npm:^2.3.4":
   version: 2.3.4
   resolution: "yaml@npm:2.3.4"
   checksum: e6d1dae1c6383bcc8ba11796eef3b8c02d5082911c6723efeeb5ba50fc8e881df18d645e64de68e421b577296000bea9c75d6d9097c2f6699da3ae0406c030d8
