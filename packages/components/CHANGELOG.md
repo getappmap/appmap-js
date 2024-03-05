@@ -1,3 +1,10 @@
+# [@appland/components-v4.5.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.4.0...@appland/components-v4.5.0) (2024-03-05)
+
+
+### Features
+
+* Navie may not always search for AppMaps ([1d39b37](https://github.com/getappmap/appmap-js/commit/1d39b377c79a8dc3896325553e920360e1cfcc62))
+
 # [@appland/components-v4.4.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.3.0...@appland/components-v4.4.0) (2024-02-29)
 
 
