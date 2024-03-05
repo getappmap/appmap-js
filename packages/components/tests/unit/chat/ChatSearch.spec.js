@@ -298,7 +298,7 @@ describe('pages/ChatSearch.vue', () => {
         const { wrapper } = await performSearch();
 
         expect(wrapper.find('[data-cy="tool-status"]').text()).toContain(
-          'Found 0 relevant recordings'
+          'Found 0 relevant AppMaps'
         );
       });
 
@@ -341,12 +341,12 @@ describe('pages/ChatSearch.vue', () => {
       const messageSent = wrapper.vm.sendMessage('How do I reset my password?');
 
       await wrapper.vm.$nextTick();
-      expect(wrapper.find(title).text()).toBe('Searching for AppMaps');
+      expect(wrapper.find(title).text()).toBe('Analyzing your project');
       expect(wrapper.find(status).text()).toBe('');
 
       await messageSent;
-      expect(wrapper.find(title).text()).toBe('Searched for AppMaps');
-      expect(wrapper.find(status).text()).toBe('Found 1 relevant recording');
+      expect(wrapper.find(title).text()).toBe('Project analysis complete');
+      expect(wrapper.find(status).text()).toBe('Found 1 relevant AppMap');
     });
   });
 

@@ -290,15 +290,24 @@ export default {
         const systemMessage = this.$refs.vchat.addSystemMessage();
         let tool: ITool | undefined;
 
+        const contextToolTitle = 'Analyzing your project';
         if (isNewChat) {
           tool = {
-            title: 'Searching for AppMaps',
+            title: contextToolTitle,
           };
           systemMessage.tools.push(tool);
         }
 
+        const onProjectContextComplete = () => {
+          if (tool && tool.title === contextToolTitle) {
+            tool.title = 'Project analysis complete';
+            tool.complete = true;
+          }
+        };
+
         const onComplete = () => {
           this.searching = false;
+          onProjectContextComplete();
           systemMessage.complete = true;
           resolve();
         };
@@ -316,6 +325,7 @@ export default {
         this.ask.on('token', (token, messageId) => {
           if (!systemMessage.messageId) systemMessage.messageId = messageId;
 
+          onProjectContextComplete();
           this.$refs.vchat.addToken(token, myThreadId, messageId);
         });
         this.ask.on('error', onError);
@@ -328,8 +338,8 @@ export default {
             // Update the tool status to reflect the fact that we've found some AppMaps
             if (tool) {
               const numResults = this.searchResponse.results.length;
-              tool.title = 'Searched for AppMaps';
-              tool.status = `Found ${numResults} relevant recording${numResults === 1 ? '' : 's'}`;
+              tool.title = 'Project analysis complete';
+              tool.status = `Found ${numResults} relevant AppMap${numResults === 1 ? '' : 's'}`;
               tool.complete = true;
             }
           }
