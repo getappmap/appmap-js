@@ -1,5 +1,6 @@
 import assert from 'assert';
 import { ExplainRpc } from '@appland/rpc';
+import { explain } from '@appland/navie';
 import { AI } from '@appland/client';
 import { AIClient, AICallbacks, AIInputPromptOptions, AIUserInput } from '@appland/client';
 
@@ -7,43 +8,108 @@ import { waitFor } from './waitFor';
 import RPCTest from './RPCTest';
 import { SearchContextOptions } from '../../src/rpc/explain/explain';
 import RemoteNavie from '../../src/rpc/explain/navie/navie-remote';
+import LocalNavie from '../../src/rpc/explain/navie/navie-local';
 import { INavieProvider } from '../../src/rpc/explain/navie/inavie';
 import { ContextProvider } from '@appland/navie';
 import { ProjectInfoProvider } from '@appland/navie/dist/project-info';
+import { InteractionEvent } from '@appland/navie/dist/interaction-history';
+
+jest.mock('@appland/navie');
 
 describe('RPC', () => {
   describe('explain', () => {
-    describe('via remote AI service', () => {
-      const navieProvider: INavieProvider = (
-        threadId: string | undefined,
-        contextProvider: ContextProvider,
-        projectInfoProvider: ProjectInfoProvider
-      ) => new RemoteNavie(threadId, contextProvider, projectInfoProvider);
-      const rpcTest = new RPCTest(navieProvider);
+    let navieProvider: INavieProvider;
+    let rpcTest: RPCTest;
+
+    const question = 'How is the API key verified?';
+    const answer = `A useful explanation of API key verification`;
+
+    const queryStatusWithArgs = async (
+      userMessageId: string,
+      threadId: string
+    ): Promise<ExplainRpc.ExplainStatusResponse> => {
+      const statusOptions: ExplainRpc.ExplainStatusOptions = {
+        userMessageId,
+        threadId,
+      };
+      const statusResponse = await rpcTest.client.request(
+        ExplainRpc.ExplainStatusFunctionName,
+        statusOptions
+      );
+      expect(statusResponse.error).toBeFalsy();
+      const statusResult: ExplainRpc.ExplainStatusResponse = statusResponse.result;
+      return statusResult;
+    };
+
+    describe('via local AI service', () => {
+      beforeAll(() => {
+        navieProvider = (
+          threadId: string | undefined,
+          contextProvider: ContextProvider,
+          projectInfoProvider: ProjectInfoProvider
+        ) => new LocalNavie(threadId, contextProvider, projectInfoProvider);
+        rpcTest = new RPCTest(navieProvider);
+      });
 
       beforeAll(async () => await rpcTest.setupAll());
       beforeEach(async () => await rpcTest.setupEach());
       afterEach(async () => await rpcTest.teardownEach());
       afterAll(async () => await rpcTest.teardownAll());
 
-      const question = 'How is the API key verified?';
-      const answer = `A useful explanation of API key verification`;
+      it('answers the question', async () => {
+        const explainImpl = {
+          on(_event: 'event', _listener: (event: InteractionEvent) => void) {},
+          execute(): AsyncIterable<string> {
+            return (async function* () {
+              yield answer;
+            })();
+          },
+        };
+
+        jest.mocked(explain).mockReturnValue(explainImpl);
+
+        const explainOptions: ExplainRpc.ExplainOptions = {
+          question,
+        };
+        const response = (await rpcTest.client.request(
+          ExplainRpc.ExplainFunctionName,
+          explainOptions
+        ));
+        expect(response.error).toBeFalsy();
+        
+        const explainResponse: ExplainRpc.ExplainResponse = response.result;
+        expect(explainResponse.userMessageId).toBeTruthy();
+        expect(explainResponse.threadId).toBeTruthy();
+
+        const queryStatus = queryStatusWithArgs.bind(
+          null,
+          explainResponse.userMessageId,
+          explainResponse.threadId
+        );
+
+        await waitFor(async () => (await queryStatus()).step === ExplainRpc.Step.COMPLETE);
+        const statusResult = await queryStatus();
+        expect(statusResult.explanation).toEqual([answer]);
+      });
+    });
+
+    describe('via remote AI service', () => {
+      beforeAll(() => {
+        navieProvider = (
+          threadId: string | undefined,
+          contextProvider: ContextProvider,
+          projectInfoProvider: ProjectInfoProvider
+        ) => new RemoteNavie(threadId, contextProvider, projectInfoProvider);
+        rpcTest = new RPCTest(navieProvider);
+      });
+
+      beforeAll(async () => await rpcTest.setupAll());
+      beforeEach(async () => await rpcTest.setupEach());
+      afterEach(async () => await rpcTest.teardownEach());
+      afterAll(async () => await rpcTest.teardownAll());
+
       const threadId = 'the-thread-id';
       const userMessageId = 'the-user-message-id';
-
-      const queryStatus = async (): Promise<ExplainRpc.ExplainStatusResponse> => {
-        const statusOptions: ExplainRpc.ExplainStatusOptions = {
-          userMessageId,
-          threadId,
-        };
-        const statusResponse = await rpcTest.client.request(
-          ExplainRpc.ExplainStatusFunctionName,
-          statusOptions
-        );
-        expect(statusResponse.error).toBeFalsy();
-        const statusResult: ExplainRpc.ExplainStatusResponse = statusResponse.result;
-        return statusResult;
-      };
 
       it(
         'answers the question',
@@ -95,13 +161,20 @@ describe('RPC', () => {
           const explainOptions: ExplainRpc.ExplainOptions = {
             question,
           };
-          const explainResponse = await rpcTest.client.request(
+          const response = await rpcTest.client.request(
             ExplainRpc.ExplainFunctionName,
             explainOptions
           );
-          expect(explainResponse.error).toBeFalsy();
-          const explainResult: ExplainRpc.ExplainResponse = explainResponse.result;
-          expect(explainResult.userMessageId).toEqual(userMessageId);
+          expect(response.error).toBeFalsy();
+
+          const explainResponse: ExplainRpc.ExplainResponse = response.result;
+          expect(explainResponse.userMessageId).toEqual(userMessageId);
+
+          const queryStatus = queryStatusWithArgs.bind(
+            null,
+            explainResponse.userMessageId,
+            explainResponse.threadId
+          );
 
           await waitFor(async () => (await queryStatus()).step === ExplainRpc.Step.COMPLETE);
 
@@ -241,6 +314,13 @@ describe('RPC', () => {
             explainOptions
           );
           expect(response.error).toBeFalsy();
+          const explainResponse: ExplainRpc.ExplainResponse = response.result;
+
+          const queryStatus = queryStatusWithArgs.bind(
+            null,
+            explainResponse.userMessageId,
+            explainResponse.threadId
+          );
 
           await waitFor(async () => (await queryStatus()).step === ExplainRpc.Step.ERROR);
           const err: any = (await queryStatus()).err;
