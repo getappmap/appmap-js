@@ -209,7 +209,6 @@ export default {
         }
       } else {
         this.verificationCode = '';
-        this.submitted = false;
         this.error =
           response.status < 500 && response.status >= 400
             ? this.generateInvalidFieldMsg('verification code')
@@ -352,6 +351,7 @@ export default {
     .error {
       color: $hotpink;
       font-size: 0.9rem;
+      margin: 0;
     }
 
     .accept-tos {

@@ -78,9 +78,6 @@ describe('Sidebar activation page', () => {
       statusCode: 422,
     });
     cy.get('#verification-code-input').type('1234').type('{enter}');
-
-    // Go back to activate page and show error message
-    cy.get('#email-input').should('have.value', TEST_EMAIL);
     cy.get('.error').should('contain.text', 'Invalid verification code, please try again.');
   });
 });
