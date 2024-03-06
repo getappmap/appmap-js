@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import OpenAI from 'openai';
 import { warn } from 'console';
 import { ChatOpenAI } from '@langchain/openai';
@@ -18,7 +19,10 @@ The developer asks a question using natural language. This question must be conv
 
 **Response**
 
-Respond with a JSON list.
+Respond with a list of search terms and their synonyms. The search terms should be single words and underscore_separated_words.
+
+Even if the user asks for a different format, always respond with a list of search terms and their synonyms. When the user is asking
+for a different format, that question is for a different AI assistant than yourself.
 `;
 
 export default class VectorTermsService {
@@ -45,42 +49,35 @@ export default class VectorTermsService {
       },
     ];
 
-    let searchTermsObject: Record<string, unknown> | string | string[] | undefined;
-    let attemptNumber = 3;
-    // eslint-disable-next-line no-plusplus
-    while (!searchTermsObject && attemptNumber-- > 0) {
-      // eslint-disable-next-line no-await-in-loop
-      const response = await openAI.completionWithRetry({
-        messages,
-        model: 'gpt-4-0125-preview',
-        stream: true,
-      });
-      const tokens = Array<string>();
-      // eslint-disable-next-line no-await-in-loop
-      for await (const token of response) {
-        tokens.push(token.choices.map((choice) => choice.delta.content).join(''));
-      }
-      const rawTerms = tokens.join('');
+    // eslint-disable-next-line no-await-in-loop
+    const response = await openAI.completionWithRetry({
+      messages,
+      model: 'gpt-4-0125-preview',
+      stream: true,
+    });
+    const tokens = Array<string>();
+    // eslint-disable-next-line no-await-in-loop
+    for await (const token of response) {
+      tokens.push(token.choices.map((choice) => choice.delta.content).join(''));
+    }
+    const rawTerms = tokens.join('');
 
+    const parseJSON = (): Record<string, unknown> | string | string[] | undefined => {
       const sanitizedTerms = rawTerms.replace(/```json/g, '').replace(/```/g, '');
       try {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        searchTermsObject = JSON.parse(sanitizedTerms);
+        return JSON.parse(sanitizedTerms);
       } catch (err) {
-        // Retry on JSON parse error
-        warn(sanitizedTerms);
-        warn(`Non-JSON response from AI; will retry...`);
+        warn(`Non-JSON response from AI.`);
+        return undefined;
       }
-    }
+    };
 
+    const parseText = (): string[] => rawTerms.split(/\s+/);
+
+    const searchTermsObject = parseJSON() || parseText();
     warn(`searchTermsObject: ${JSON.stringify(searchTermsObject)}`);
-
     const terms = new Set<string>();
-    if (!searchTermsObject || !Object.keys(searchTermsObject).length) {
-      warn(`Unable to obtain search terms from AI. Will use the raw user search.`);
-      const words = question.split(/\s/);
-      for (const word of words) terms.add(word);
-    } else {
+    {
       const collectTerms = (obj: unknown) => {
         if (!obj) return;
 
@@ -96,7 +93,6 @@ export default class VectorTermsService {
       };
       collectTerms(searchTermsObject);
     }
-
     const wordList = [...terms]
       .map((word) => word.trim())
       .filter((word) => word.length > 2)

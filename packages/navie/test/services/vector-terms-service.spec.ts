@@ -97,26 +97,11 @@ describe('DefaultVectorTermsService', () => {
     });
 
     describe('are invalid JSON', () => {
-      it('retries', async () => {
-        mockAIResponse(['invalid json']);
-        mockAIResponse(['["user", "management"]']);
+      it('is accepted and processed', async () => {
+        mockAIResponse(['-user -mgmt']);
         const terms = await service.suggestTerms('user management');
-        expect(terms).toEqual(['user', 'management']);
-        expect(completionWithRetry).toHaveBeenCalledTimes(2);
-      });
-      it('retries three times and then uses the raw search terms', async () => {
-        mockAIResponse(['invalid json']);
-        mockAIResponse(['invalid json']);
-        mockAIResponse(['invalid json']);
-        const terms = await service.suggestTerms('managing a user');
-        expect(terms).toEqual(['managing', 'user']);
-        expect(completionWithRetry).toHaveBeenCalledTimes(3);
-        expect(interactionHistory.events.map((e) => ({ ...e }))).toEqual([
-          {
-            terms: ['managing', 'user'],
-            name: 'vectorTerms',
-          },
-        ]);
+        expect(terms).toEqual(['user', 'mgmt']);
+        expect(completionWithRetry).toHaveBeenCalledTimes(1);
       });
     });
   });
