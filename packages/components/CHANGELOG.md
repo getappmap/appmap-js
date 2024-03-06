@@ -1,3 +1,10 @@
+# [@appland/components-v4.6.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.5.0...@appland/components-v4.6.0) (2024-03-06)
+
+
+### Features
+
+* Users can activate with an email ([#1620](https://github.com/getappmap/appmap-js/issues/1620)) ([3368d5f](https://github.com/getappmap/appmap-js/commit/3368d5fcd06f10c97ccff32bae9241a703fab40f))
+
 # [@appland/components-v4.5.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.4.0...@appland/components-v4.5.0) (2024-03-05)
 
 
