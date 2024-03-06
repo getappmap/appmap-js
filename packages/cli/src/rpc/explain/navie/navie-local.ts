@@ -1,11 +1,12 @@
+import { log } from 'console';
 import EventEmitter from 'events';
-import { Context, Explain, Message, ProjectInfo, explain } from '@appland/navie';
-
-import INavie from './inavie';
+import { mkdir, readFile, readdir, writeFile } from 'fs/promises';
 import { randomUUID } from 'crypto';
 import { join } from 'path';
 import { homedir } from 'os';
-import { mkdir, readFile, readdir, writeFile } from 'fs/promises';
+import { Context, Explain, Message, ProjectInfo, explain } from '@appland/navie';
+
+import INavie from './inavie';
 
 class LocalHistory {
   constructor(public readonly threadId: string) {}
@@ -49,12 +50,20 @@ export default class LocalNavie extends EventEmitter implements INavie {
   ) {
     super();
 
+    if ( threadId ) {
+      log(`[local-navie] Continuing thread ${threadId}`)
+      this.threadId = threadId;
+    } else {
+      this.threadId = randomUUID();
+      log(`[local-navie] Starting new thread ${this.threadId}`)
+    }
     this.threadId = threadId || randomUUID();
     this.history = new LocalHistory(this.threadId);
   }
 
   async ask(question: string, codeSelection: string | undefined): Promise<void> {
     const messageId = randomUUID();
+    log(`[local-navie] Processing question ${messageId} in thread ${this.threadId}`)
     this.emit('ack', messageId, this.threadId);
 
     const clientRequest: Explain.ClientRequest = {
