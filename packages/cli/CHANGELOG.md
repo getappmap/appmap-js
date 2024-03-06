@@ -1,3 +1,17 @@
+# [@appland/appmap-v3.129.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.128.0...@appland/appmap-v3.129.0) (2024-03-06)
+
+
+### Bug Fixes
+
+* Add missing 'langchain' dependency to the CLI ([2e2bf95](https://github.com/getappmap/appmap-js/commit/2e2bf952caaccc3f29b2480ea1f8a21c2e9b8eb2))
+
+
+### Features
+
+* Add navie CLI command and RPC updates ([2341a1f](https://github.com/getappmap/appmap-js/commit/2341a1faad7829c6dd21251a45abcd9e69d553fb))
+* Handle missing or errored context function ([df0d9e4](https://github.com/getappmap/appmap-js/commit/df0d9e41b50b1854638bbac126c805534dfd1be3))
+* Navie CLI command performs 'explain' by default ([c3c0343](https://github.com/getappmap/appmap-js/commit/c3c0343a2a6915d03768312c3569760e7eb2f6dd))
+
 # [@appland/appmap-v3.128.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.127.0...@appland/appmap-v3.128.0) (2024-03-04)
 
 
