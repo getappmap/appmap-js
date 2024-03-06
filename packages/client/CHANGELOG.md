@@ -1,3 +1,10 @@
+# [@appland/client-v1.16.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.15.1...@appland/client-v1.16.0) (2024-03-06)
+
+
+### Features
+
+* Add navie CLI command and RPC updates ([2341a1f](https://github.com/getappmap/appmap-js/commit/2341a1faad7829c6dd21251a45abcd9e69d553fb))
+
 # [@appland/client-v1.15.1](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.15.0...@appland/client-v1.15.1) (2024-02-27)
 
 
