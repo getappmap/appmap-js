@@ -5,10 +5,23 @@ import assert from 'assert';
 import { handler as sequenceDiagramHandler } from '../appmap/sequenceDiagram';
 import lookupSourceCode from './lookupSourceCode';
 
-export default async function context(
-  searchResponse: SearchRpc.SearchResponse,
-  numDiagramsToAnalyze: number
-): Promise<{
+/**
+ * Processes search results to build sequence diagrams, code snippets, and code object sets. This is the format
+ * expected by the Navie AI.
+ *
+ * Given a list of search results, `buildContext` asynchronously:
+ *
+ * - Generates sequence diagrams for each result using event data and a filtered appmap,
+ *   formatting the output as PlantUML and storing it in an array. The filtered sequence diagram
+ *   includes only the code objects associated with the events in the search result, and their near neighbors.
+ *
+ * - Collects and de-duplicates code snippets tied to specific events' locations, storing them in a map with the location as the key.
+ *
+ * - Gathers a set of unique code objects identified by their fully qualified identifiers (fqid) from the events.
+ *   These code objects are most commonly SQL queries and HTTP requests (client and server), since code snipptes are stored separately.
+ *   The term "data requests" is being phased in to replace "codeObjects".
+ */
+export default async function buildContext(searchResults: SearchRpc.SearchResult[]): Promise<{
   sequenceDiagrams: string[];
   codeSnippets: Map<string, string>;
   codeObjects: Set<string>;
@@ -34,7 +47,7 @@ export default async function context(
   };
 
   const examinedLocations = new Set<string>();
-  for (const result of searchResponse.results.slice(0, numDiagramsToAnalyze)) {
+  for (const result of searchResults) {
     await buildSequenceDiagram(result);
     for (const event of result.events) {
       if (!event.location) {

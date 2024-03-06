@@ -2,9 +2,10 @@ import { IndexRpc } from '@appland/rpc';
 
 import { RpcResponse } from './RpcResponse';
 import RPCTest from './RPCTest';
+import RemoteNavie from '../../src/rpc/explain/navie/navie-remote';
 
 describe('RPC', () => {
-  const rpcTest = new RPCTest();
+  const rpcTest = new RPCTest(jest.fn() as any);
 
   beforeAll(async () => await rpcTest.setupAll());
   beforeEach(async () => await rpcTest.setupEach());

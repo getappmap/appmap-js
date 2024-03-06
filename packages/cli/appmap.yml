@@ -5,3 +5,9 @@ packages:
     exclude:
       - node_modules
       - .yarn
+      - splitCamelized
+      - isCamelized
+  - path: ../navie
+    exclude:
+      - node_modules
+      - .yarn

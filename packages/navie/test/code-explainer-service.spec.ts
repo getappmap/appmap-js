@@ -91,7 +91,7 @@ describe('CodeExplainerService', () => {
 
   describe('without chat history', () => {
     beforeEach(() => {
-      tokenCount = 2242;
+      tokenCount = 2231;
       const lookupProvider: ContextProvider = jest
         .fn()
         .mockImplementation((request: ContextRequest) => {
@@ -167,7 +167,7 @@ describe('CodeExplainerService', () => {
 
     describe('with code selection', () => {
       beforeEach(() => {
-        tokenCount = 2163;
+        tokenCount = 2152;
         codeSelection = `class UserController { create() { } }`;
       });
 

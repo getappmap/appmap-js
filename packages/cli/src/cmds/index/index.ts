@@ -1,5 +1,6 @@
 import readline from 'readline';
 import yargs from 'yargs';
+import chalk from 'chalk';
 
 import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
 import FingerprintWatchCommand from '../../fingerprint/fingerprintWatchCommand';
@@ -18,6 +19,12 @@ import RPCServer from './rpcServer';
 import appmapData from '../../rpc/appmap/data';
 import { loadConfiguration } from '@appland/client';
 import appmapStats from '../../rpc/appmap/stats';
+import LocalNavie from '../../rpc/explain/navie/navie-local';
+import RemoteNavie from '../../rpc/explain/navie/navie-remote';
+import { Context, ProjectInfo } from '@appland/navie';
+import { InteractionEvent } from '@appland/navie/dist/interaction-history';
+
+const AI_KEY_ENV_VARS = ['OPENAI_API_KEY'];
 
 export const command = 'index';
 export const describe =
@@ -44,6 +51,17 @@ export const builder = (args: yargs.Argv) => {
     type: 'number',
     alias: 'p',
   });
+  args.option('navie-provider', {
+    describe: 'navie provider to use',
+    type: 'string',
+    choices: ['local', 'remote'],
+  });
+  args.option('log-navie', {
+    describe: 'Log Navie events to stderr',
+    boolean: true,
+    default: false,
+  });
+
   return args.strict();
 };
 
@@ -52,7 +70,7 @@ export const handler = async (argv) => {
   handleWorkingDirectory(argv.directory);
   const appmapDir = await locateAppMapDir(argv.appmapDir);
 
-  const { watch, port } = argv;
+  const { watch, port, logNavie } = argv;
 
   const runServer = watch || port !== undefined;
   if (port && !watch) warn(`Note: --port option implies --watch`);
@@ -65,6 +83,62 @@ export const handler = async (argv) => {
     await cmd.execute();
 
     if (port !== undefined) {
+      const useLocalNavie = () => {
+        if (argv.navieProvider === 'local') {
+          log(`Using local Navie provider due to explicit --navie-provider=local option`);
+          return true;
+        }
+
+        if (argv.navieProvider === 'remote') {
+          log(`Using remote Navie provider due to explicit --navie-provider=remote option`);
+          return false;
+        }
+
+        const aiEnvVar = Object.keys(process.env).find((key) => AI_KEY_ENV_VARS.includes(key));
+        if (aiEnvVar) {
+          log(`Using local Navie provider due to presence of environment variable ${aiEnvVar}`);
+          return true;
+        }
+
+        log(
+          `--navie-provider option not provided, and none of ${AI_KEY_ENV_VARS.join(
+            ' '
+          )} are available. Using remote Navie provider.`
+        );
+        return false;
+      };
+
+      const buildLocalNavie = (
+        threadId: string | undefined,
+        contextProvider: Context.ContextProvider,
+        projectInfoProvider: ProjectInfo.ProjectInfoProvider
+      ) => {
+        const navie = new LocalNavie(threadId, contextProvider, projectInfoProvider);
+
+        let START: number | undefined;
+
+        const logEvent = (event: InteractionEvent) => {
+          if (!logNavie) return;
+
+          if (!START) START = Date.now();
+
+          const elapsed = Date.now() - START;
+          process.stderr.write(chalk.gray(`${elapsed}ms `));
+          process.stderr.write(chalk.gray(event.message));
+          process.stderr.write(chalk.gray('\n'));
+        };
+
+        navie.on('event', logEvent);
+        return navie;
+      };
+      const buildRemoteNavie = (
+        threadId: string | undefined,
+        contextProvider: Context.ContextProvider,
+        projectInfoProvider: ProjectInfo.ProjectInfoProvider
+      ) => new RemoteNavie(threadId, contextProvider, projectInfoProvider);
+
+      const navieProvider = useLocalNavie() ? buildLocalNavie : buildRemoteNavie;
+
       const rpcMethods: RpcHandler<any, any>[] = [
         numProcessed(cmd),
         search(appmapDir),
@@ -73,7 +147,7 @@ export const handler = async (argv) => {
         appmapData(),
         metadata(),
         sequenceDiagram(),
-        explainHandler(appmapDir),
+        explainHandler(navieProvider, appmapDir),
         explainStatusHandler(),
       ];
       const rpcServer = new RPCServer(port, rpcMethods);
