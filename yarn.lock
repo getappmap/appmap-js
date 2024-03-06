@@ -170,7 +170,7 @@ __metadata:
     JSONStream: ^1.3.5
     ajv: ^8.6.3
     applicationinsights: ^2.1.4
-    appmap-node: ^2.16.0
+    appmap-node: ^2.18.0
     async: ^3.2.4
     axios: ^0.27.2
     body-parser: ^1.20.2
@@ -14145,20 +14145,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"appmap-node@npm:^2.16.0":
-  version: 2.16.0
-  resolution: "appmap-node@npm:2.16.0"
+"appmap-node@npm:^2.18.0":
+  version: 2.18.0
+  resolution: "appmap-node@npm:2.18.0"
   dependencies:
     acorn-walk: ^8.2.0
     astring: ^1.8.6
     chalk: <5
+    json5: ^2.2.3
     meriyah: ^4.3.7
     source-map-js: ^1.0.2
-    strip-json-comments: ^3
     yaml: ^2.3.4
   bin:
     appmap-node: bin/appmap-node.js
-  checksum: 90121e0b87995efc70196bbf9a2cd4c2f2bef8e3a58549a3d21b4713a04b14ad9a4fd74b57000b331165ac45e828a1d4cf70c1458b25d1a2484d6487e86b9643
+  checksum: 4efb482fac808b06ffbc37faf835b43ad2ecae09423afb208e9f398e2389b181ca30901b062a049e76977ebc34fb2d1d38adc7603c61515109b155c56a0e25f4
   languageName: node
   linkType: hard
 
@@ -37591,7 +37591,7 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
-"strip-json-comments@npm:^3, strip-json-comments@npm:^3.0.1, strip-json-comments@npm:^3.1.0, strip-json-comments@npm:^3.1.1":
+"strip-json-comments@npm:^3.0.1, strip-json-comments@npm:^3.1.0, strip-json-comments@npm:^3.1.1":
   version: 3.1.1
   resolution: "strip-json-comments@npm:3.1.1"
   checksum: 492f73e27268f9b1c122733f28ecb0e7e8d8a531a6662efbd08e22cccb3f9475e90a1b82cab06a392f6afae6d2de636f977e231296400d0ec5304ba70f166443
