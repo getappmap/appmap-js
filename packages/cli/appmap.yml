@@ -2,6 +2,5 @@ name: '@appland/appmap'
 appmap_dir: tmp/appmap
 packages:
   - path: .
-    exclude:
-      - node_modules
-      - .yarn
+    exclude: [ splitCamelized, isCamelized ]
+  - path: ../navie
