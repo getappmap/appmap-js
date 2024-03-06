@@ -1,3 +1,15 @@
+# [@appland/rpc-v1.5.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.4.0...@appland/rpc-v1.5.0) (2024-03-06)
+
+
+### Bug Fixes
+
+* Back out unused RPC types ([1aba693](https://github.com/getappmap/appmap-js/commit/1aba69370d3af0a8590872990949da5f3b9db689))
+
+
+### Features
+
+* Add navie CLI command and RPC updates ([2341a1f](https://github.com/getappmap/appmap-js/commit/2341a1faad7829c6dd21251a45abcd9e69d553fb))
+
 # [@appland/rpc-v1.4.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.3.0...@appland/rpc-v1.4.0) (2024-02-29)
 
 
