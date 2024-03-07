@@ -45,15 +45,15 @@
     </div>
     <div v-if="!authorized" class="status-unauthorized status-container">
       <div class="status-label">
-        <p>You must be logged in to AppMap to use this feature.</p>
+        <p>You must have activated AppMap to use this feature.</p>
         <p>
           <b>VSCode</b>
-          To login with VSCode, run the command <tt>AppMap: Login</tt>, or click the Sign In link
-          from the AppMap panel.
+          To activate AppMap for VSCode use the AppMap sidebar, or run the
+          <tt>AppMap: Login</tt> command using the command palette.
         </p>
         <p>
           <b>JetBrains</b>
-          To login with JetBrains, click the Sign In link from the AppMap panel.
+          To activate AppMap for JetBrains, use the AppMap tool window.
         </p>
       </div>
     </div>
