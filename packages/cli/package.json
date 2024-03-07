@@ -149,7 +149,9 @@
       "node18-macos-arm64"
     ],
     "scripts": [
-      "built/cmds/record/state/record_*.js"
+      "built/cmds/record/state/record_*.js",
+      "node_modules/openai/_shims/auto/runtime-node.js",
+      "../../node_modules/openai/_shims/auto/runtime-node.js"
     ],
     "assets": [
       "package.json",
