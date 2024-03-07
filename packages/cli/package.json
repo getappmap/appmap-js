@@ -18,7 +18,7 @@
     "lint:fix": "eslint 'src/**/*.js' 'tests/**/*.js' --fix",
     "pre-commit": "lint-staged",
     "test": "jest --filter=./tests/testFilter.js",
-    "jest": "jest --filter=./tests/testFilter.js",
+    "test:binary": "jest -c tests/binary/jest.config.js",
     "build": "tsc && yarn build:html",
     "watch": "tsc --watch",
     "build:html": "ts-node esbuild.html.ts",
