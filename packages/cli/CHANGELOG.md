@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.129.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.129.0...@appland/appmap-v3.129.1) (2024-03-07)
+
+
+### Bug Fixes
+
+* Add missing dynamic import ([84e422b](https://github.com/getappmap/appmap-js/commit/84e422b32d87987777de59ef0e0580997e898b12))
+
 # [@appland/appmap-v3.129.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.128.0...@appland/appmap-v3.129.0) (2024-03-06)
 
 
