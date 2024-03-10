@@ -6,6 +6,7 @@ import { exists, processNamedFiles, splitCamelized, verbose } from '../utils';
 import { log, warn } from 'console';
 import lunr from 'lunr';
 import UpToDate from '../lib/UpToDate';
+import loadAppMapConfig from '../lib/loadAppMapConfig';
 
 type SerializedCodeObject = {
   name: string;
@@ -84,14 +85,28 @@ async function buildDocument(metadataFile: string): Promise<any> {
   };
 }
 
-async function buildIndex(appmapDir: string): Promise<AppMapIndex> {
+async function buildIndex(directories: string[]): Promise<AppMapIndex> {
   const documents = new Array<any>();
   if (verbose()) log(`[AppMapIndex] Adding AppMaps to full-text index`);
   const startTime = Date.now();
 
-  await processNamedFiles(appmapDir, 'metadata.json', async (metadataFile: string) => {
-    documents.push(await buildDocument(metadataFile));
-  });
+  for (const directory of directories) {
+    const appmapDir = (await loadAppMapConfig(join(directory, 'appmap.yml')))?.appmap_dir;
+    if (!appmapDir) {
+      if (verbose())
+        log(
+          `[AppMapIndex] Skipping directory ${directory} because it does not contain an AppMap configuration`
+        );
+      continue;
+    }
+    await processNamedFiles(
+      join(directory, appmapDir),
+      'metadata.json',
+      async (metadataFile: string) => {
+        documents.push(await buildDocument(metadataFile));
+      }
+    );
+  }
 
   const idx = lunr(function () {
     this.ref('id');
@@ -115,7 +130,7 @@ async function buildIndex(appmapDir: string): Promise<AppMapIndex> {
         endTime - startTime
       }ms`
     );
-  return new AppMapIndex(appmapDir, idx);
+  return new AppMapIndex(directories, idx);
 }
 
 enum ScoreStats {
@@ -248,7 +263,7 @@ export function reportMatches(
 }
 
 export default class AppMapIndex {
-  constructor(public appmapDir: string, private idx: lunr.Index) {}
+  constructor(public directories: string[], private idx: lunr.Index) {}
 
   async search(search: string, options: SearchOptions = {}): Promise<SearchResponse> {
     let matches = this.idx.search(search);
@@ -274,11 +289,11 @@ export default class AppMapIndex {
   }
 
   static async search(
-    appmapDir: string,
+    directories: string[],
     search: string,
     options: SearchOptions = {}
   ): Promise<SearchResponse> {
-    const index = await buildIndex(appmapDir);
+    const index = await buildIndex(directories);
     return await index.search(search, options);
   }
 }

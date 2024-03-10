@@ -2,10 +2,10 @@
   "numResults": 2,
   "results": [
     {
-      "appmap": "revoke_api_key",
+      "appmap": "$cwd/revoke_api_key",
       "events": [
         {
-          "appmap": "revoke_api_key",
+          "appmap": "$cwd/revoke_api_key",
           "elapsed": 0.009195,
           "eventIds": [28],
           "fqid": "function:app/controllers/API::APIKeysController#destroy",
@@ -16,10 +16,10 @@
       "score": 0.752
     },
     {
-      "appmap": "user_page_scenario",
+      "appmap": "$cwd/user_page_scenario",
       "events": [
         {
-          "appmap": "user_page_scenario",
+          "appmap": "$cwd/user_page_scenario",
           "elapsed": 0.000005,
           "eventIds": [58],
           "fqid": "function:app/controllers/OrganizationsController#new",

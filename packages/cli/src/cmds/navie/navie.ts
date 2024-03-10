@@ -1,4 +1,4 @@
-import yargs from 'yargs';
+import yargs, { config } from 'yargs';
 import chalk from 'chalk';
 import assert from 'assert';
 import { readFileSync } from 'fs';
@@ -6,10 +6,12 @@ import { error, log, warn } from 'console';
 import { Context, explain, Explain, InteractionHistory, ProjectInfo } from '@appland/navie';
 
 import { verbose } from '../../utils';
-import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
-import loadAppMapConfig from '../../lib/loadAppMapConfig';
+import { configureRpcDirectories, handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
+import loadAppMapConfig, { AppMapConfig } from '../../lib/loadAppMapConfig';
 import collectContext from '../../rpc/explain/collectContext';
 import { appmapStatsHandler } from '../../rpc/appmap/stats';
+import configuration from '../../rpc/configuration';
+import { join } from 'path';
 
 export const command = 'navie [question]';
 export const describe = 'Generate a test case using Navie AI';
@@ -70,13 +72,24 @@ function logRequest(events: InteractionHistory.InteractionHistoryEvents) {
   });
 }
 
-function collectProjectInfo(appmapConfig: any): () => Promise<ProjectInfo.ProjectInfoResponse> {
+// TODO: Support Project Info as an Array.
+function collectProjectInfo(): () => Promise<ProjectInfo.ProjectInfoResponse> {
   return async () => {
-    const appmapDir = appmapConfig?.appmap_dir || 'tmp/appmap';
-    const appmapStats: any = await appmapStatsHandler(appmapDir);
+    const appmapStats: any = await appmapStatsHandler();
     delete appmapStats.classes; // This is verbose and I don't see the utility of it
+
+    const appmapConfigs = new Array<any>();
+    const { directories } = configuration();
+    for (const dir of directories) {
+      const appmapConfig = await loadAppMapConfig(join(dir, 'appmap.yml'));
+      appmapConfigs.push(appmapConfig);
+    }
+
+    // Lie that this array is an AppMap Config.
+    // TODO: Update this type to expect or allow an Array.
     return {
-      appmapConfig,
+      appmapConfig: appmapConfigs[0],
+      appmapConfigs,
       appmapStats,
     };
   };
@@ -84,8 +97,6 @@ function collectProjectInfo(appmapConfig: any): () => Promise<ProjectInfo.Projec
 
 function buildExplainRequest(
   question: string,
-  appmapConfig: any,
-  appmapDir: string,
   appmaps: string[] | undefined,
   codeFiles?: string[],
   model?: string,
@@ -105,7 +116,8 @@ function buildExplainRequest(
 
   const contextProvider = async (request: Context.ContextRequest) => {
     const charLimit = request.tokenCount * 3;
-    const result = await collectContext(appmapDir, appmaps, request.vectorTerms, charLimit);
+    const { directories } = configuration();
+    const result = await collectContext(directories, appmaps, request.vectorTerms, charLimit);
     return {
       sequenceDiagrams: result.context.sequenceDiagrams,
       codeSnippets: Array.from<string>(result.context.codeSnippets.keys()).reduce((acc, key) => {
@@ -118,7 +130,7 @@ function buildExplainRequest(
     };
   };
 
-  const projectInfoProvider = collectProjectInfo(appmapConfig);
+  const projectInfoProvider = collectProjectInfo();
 
   const options = new Explain.ExplainOptions();
   if (model) options.modelName = model;
@@ -134,9 +146,7 @@ function buildExplainRequest(
 export const handler = async (argv) => {
   verbose(argv.verbose);
   handleWorkingDirectory(argv.directory);
-
-  const appmapConfig: any = (await loadAppMapConfig()) || {};
-  const appmapDir = appmapConfig.appmap_dir || 'tmp/appmap';
+  configureRpcDirectories(argv.directory);
 
   const { appmapFile: appmapFiles, codeFile: codeFiles, tool, model, tokenLimit } = argv;
   const question = argv.question || argv._.pop();
@@ -147,15 +157,7 @@ export const handler = async (argv) => {
   log('\n');
 
   if (tool === 'explain') {
-    const generator = buildExplainRequest(
-      question,
-      appmapConfig,
-      appmapDir,
-      appmapFiles,
-      codeFiles,
-      model,
-      tokenLimit
-    );
+    const generator = buildExplainRequest(question, appmapFiles, codeFiles, model, tokenLimit);
     for await (const token of generator()) {
       process.stdout.write(token);
     }

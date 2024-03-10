@@ -7,7 +7,6 @@ import { AppMap, AppMapFilter, buildAppMap, deserializeFilter } from '@appland/m
 
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { verbose } from '../../utils';
-import { locateAppMapDir } from '../../lib/locateAppMapDir';
 import searchSingleAppMap, { SearchOptions as SingleSearchOptions } from './searchSingleAppMap';
 import AppMapIndex, {
   SearchResponse as DiagramsSearchResponse,
@@ -169,8 +168,7 @@ export const handler = async (argv: any) => {
     const options: SearchOptions = {
       maxResults,
     };
-    const appmapDir = await locateAppMapDir();
-    const response = await AppMapIndex.search(appmapDir, query, options);
+    const response = await AppMapIndex.search([process.cwd()], query, options);
     if (findEvents) {
       const eventOptions: SingleSearchOptions = { maxResults };
       const { maxSize, filter: filterStr } = argv;

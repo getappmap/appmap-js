@@ -11,41 +11,13 @@ describe('ContextCollector', () => {
   let contextCollector: ContextCollector;
 
   beforeEach(() => {
-    contextCollector = new ContextCollector(appmapDir, vectorTerms, charLimit);
-  });
-
-  it('initializes with given parameters', () => {
-    expect(contextCollector.appmapDir).toBe(appmapDir);
-    expect(contextCollector.vectorTerms).toEqual(vectorTerms);
-    expect(contextCollector.charLimit).toBe(charLimit);
-    expect(contextCollector.query).toBe(vectorTerms.join(' '));
+    contextCollector = new ContextCollector(['project-dir'], vectorTerms, charLimit);
   });
 
   describe('collectContext', () => {
     it('returns context for specified appmaps', async () => {
       const mockAppmaps = ['appmap1', 'appmap2'];
       contextCollector.appmaps = mockAppmaps;
-
-      const mockSearchResponse: SearchResponse = {
-        type: 'appmap',
-        results: [
-          {
-            appmap: 'appmap1',
-            score: 1,
-          },
-          {
-            appmap: 'appmap2',
-            score: 1,
-          }
-        ],
-        stats: {
-          max: 1,
-          mean: 1,
-          median: 1,
-          stddev: 0,
-        },
-        numResults: mockAppmaps.length,
-      };
 
       const mockContext = {
         sequenceDiagrams: ['diagram1', 'diagram2'],
@@ -105,7 +77,7 @@ describe('ContextCollector', () => {
 
       const collectedContext = await contextCollector.collectContext();
 
-      expect(AppMapIndex.search).toHaveBeenCalledWith(appmapDir, vectorTerms.join(' '), {
+      expect(AppMapIndex.search).toHaveBeenCalledWith(['project-dir'], vectorTerms.join(' '), {
         maxResults: expect.any(Number),
       });
       expect(collectedContext.searchResponse.numResults).toBe(10);

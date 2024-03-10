@@ -7,10 +7,10 @@ import { warn } from 'console';
 import { RpcError, RpcHandler } from '../rpc';
 import collectContext from './collectContext';
 import INavie, { INavieProvider } from './navie/inavie';
-import { verbose } from '../../utils';
 import { Context, ProjectInfo } from '@appland/navie';
 import loadAppMapConfig from '../../lib/loadAppMapConfig';
 import { appmapStatsHandler } from '../appmap/stats';
+import configuration from '../configuration';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
@@ -33,7 +33,7 @@ export const DEFAULT_TOKEN_LIMIT = 8000;
 
 export class Explain extends EventEmitter {
   constructor(
-    public appmapDir: string,
+    public directories: string[],
     public question: string,
     public codeSelection: string | undefined,
     public appmaps: string[] | undefined,
@@ -88,7 +88,12 @@ export class Explain extends EventEmitter {
     // pruned by the client AI anyway.
     // The meaning of tokenCount is "try and get at least this many tokens"
     const charLimit = tokenCount * 3;
-    const searchResult = await collectContext(this.appmapDir, this.appmaps, vectorTerms, charLimit);
+    const searchResult = await collectContext(
+      this.directories,
+      this.appmaps,
+      vectorTerms,
+      charLimit
+    );
 
     this.status.searchResponse = searchResult.searchResponse;
 
@@ -118,7 +123,7 @@ export class Explain extends EventEmitter {
   async projectInfoContext(): Promise<ProjectInfo.ProjectInfoResponse> {
     const appmapConfig: ProjectInfo.AppMapConfig = ((await loadAppMapConfig()) ||
       {}) as any as ProjectInfo.AppMapConfig;
-    const stats = await appmapStatsHandler(this.appmapDir);
+    const stats = await appmapStatsHandler();
     delete (stats as any).classes; // This is verbose and I don't see the utility of it
     const appmapStats: ProjectInfo.AppMapStats = stats;
     return Promise.resolve({
@@ -130,7 +135,6 @@ export class Explain extends EventEmitter {
 
 async function explain(
   navieProvider: INavieProvider,
-  appmapDir: string,
   question: string,
   codeSelection: string | undefined,
   appmaps: string[] | undefined,
@@ -140,7 +144,8 @@ async function explain(
     step: ExplainRpc.Step.NEW,
     threadId,
   };
-  const explain = new Explain(appmapDir, question, codeSelection, appmaps, status);
+  const { directories } = configuration();
+  const explain = new Explain(directories, question, codeSelection, appmaps, status);
 
   const invokeContextFunction = async (data: any) => {
     const type = data['type'];
@@ -205,18 +210,15 @@ async function explain(
 }
 
 const explainHandler: (
-  navieProvider: INavieProvider,
-  appmapDir: string
+  navieProvider: INavieProvider
 ) => RpcHandler<ExplainRpc.ExplainOptions, ExplainRpc.ExplainResponse> = (
-  navieProvider: INavieProvider,
-  appmapDir: string
+  navieProvider: INavieProvider
 ) => {
   return {
     name: ExplainRpc.ExplainFunctionName,
     handler: async (options: ExplainRpc.ExplainOptions) =>
       await explain(
         navieProvider,
-        appmapDir,
         options.question,
         options.codeSelection,
         options.appmaps,
