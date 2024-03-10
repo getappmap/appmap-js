@@ -14,6 +14,9 @@ describe('RPC', () => {
   afterEach(async () => await rpcTest.teardownEach());
   afterAll(async () => await rpcTest.teardownAll());
 
+  const normalizeSearchData = (searchData: SearchRpc.SearchResponse): SearchRpc.SearchResponse =>
+    JSON.parse(JSON.stringify(searchData).replaceAll(process.cwd(), "$cwd"));
+
   describe('search', () => {
     it('finds AppMaps by keyword', async () => {
       const options: SearchRpc.SearchOptions = {
@@ -23,7 +26,7 @@ describe('RPC', () => {
       const response = await rpcTest.client.request(SearchRpc.FunctionName, options);
       expect(response.error).toBeFalsy();
       const searchData = response.result;
-      expect(searchData).toEqual(
+      expect(normalizeSearchData(searchData)).toEqual(
         JSON.parse(
           await readFile(join(__dirname, 'fixtures', 'search', 'api_key.search.json'), 'utf-8')
         )
@@ -38,7 +41,7 @@ describe('RPC', () => {
       const response = await rpcTest.client.request(SearchRpc.FunctionName, options);
       expect(response.error).toBeFalsy();
       const searchData = response.result;
-      expect(searchData).toEqual(
+      expect(normalizeSearchData(searchData)).toEqual(
         JSON.parse(
           await readFile(
             join(__dirname, 'fixtures', 'search', 'multiple_results.search.json'),
@@ -57,8 +60,7 @@ describe('RPC', () => {
       const response = await rpcTest.client.request(SearchRpc.FunctionName, options);
       expect(response.error).toBeFalsy();
       const searchData = response.result;
-      console.warn(JSON.stringify(searchData, null, 2));
-      expect(searchData).toEqual(
+      expect(normalizeSearchData(searchData)).toEqual(
         JSON.parse(
           await readFile(
             join(__dirname, 'fixtures', 'search', 'specific_appmaps.search.json'),

@@ -4,6 +4,7 @@ import { SearchRpc } from '@appland/rpc';
 import { RpcHandler } from '../rpc';
 import AppMapIndex, { SearchResponse } from '../../fulltext/AppMapIndex';
 import searchSingleAppMap from '../../cmds/search/searchSingleAppMap';
+import configuration from '../configuration';
 
 export const DEFAULT_MAX_DIAGRAMS = 10;
 export const DEFAULT_MAX_EVENTS_PER_DIAGRAM = 100;
@@ -15,11 +16,11 @@ export type HandlerOptions = {
 };
 
 export async function handler(
-  appmapDir: string,
-  appmaps: string[] | undefined,
   query: string,
+  appmaps: string[] | undefined,
   options: HandlerOptions
 ): Promise<SearchRpc.SearchResponse> {
+  const config = configuration();
   let appmapSearchResponse: SearchResponse;
   if (appmaps) {
     appmapSearchResponse = {
@@ -34,11 +35,12 @@ export async function handler(
       numResults: appmaps.length,
     };
   } else {
+    const { directories } = config;
     // Search across all AppMaps, creating a map from AppMap id to AppMapSearchResult
     const searchOptions = {
       maxResults: options.maxDiagrams || options.maxResults || DEFAULT_MAX_DIAGRAMS,
     };
-    appmapSearchResponse = await AppMapIndex.search(appmapDir, query, searchOptions);
+    appmapSearchResponse = await AppMapIndex.search(directories, query, searchOptions);
   }
 
   // For each AppMap, search for events within the map that match the query.
@@ -62,11 +64,9 @@ export async function handler(
   };
 }
 
-export function search(
-  appmapDir: string
-): RpcHandler<SearchRpc.SearchOptions, SearchRpc.SearchResponse> {
+export function search(): RpcHandler<SearchRpc.SearchOptions, SearchRpc.SearchResponse> {
   return {
     name: SearchRpc.FunctionName,
-    handler: (args) => handler(appmapDir, args.appmaps, args.query, args),
+    handler: (args) => handler(args.query, args.appmaps, args),
   };
 }

@@ -25,12 +25,12 @@ export async function buildRPC(navieProvider: INavieProvider): Promise<RPC> {
 
   const handlers: RpcHandler<any, any>[] = [
     numProcessed(fingerprintWatchCommand),
-    search('.'),
-    appmapStats('.'),
+    search(),
+    appmapStats(),
     appmapData(),
     metadata(),
     sequenceDiagram(),
-    explainHandler(navieProvider, '.'),
+    explainHandler(navieProvider),
     explainStatusHandler(),
   ];
 

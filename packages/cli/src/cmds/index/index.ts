@@ -141,13 +141,13 @@ export const handler = async (argv) => {
 
       const rpcMethods: RpcHandler<any, any>[] = [
         numProcessed(cmd),
-        search(appmapDir),
-        appmapStats(appmapDir),
+        search(),
+        appmapStats(),
         appmapFilter(),
         appmapData(),
         metadata(),
         sequenceDiagram(),
-        explainHandler(navieProvider, appmapDir),
+        explainHandler(navieProvider),
         explainStatusHandler(),
       ];
       const rpcServer = new RPCServer(port, rpcMethods);

@@ -7,7 +7,5 @@ export default function appmapData(): RpcHandler<
   AppMapRpc.FilterOptions,
   AppMapRpc.FilterResponse
 > {
-  warn(`RPC handler ${AppMapRpc.DataFunctionName}`);
-
   return { name: AppMapRpc.DataFunctionName, handler: appmapFilterHandler };
 }

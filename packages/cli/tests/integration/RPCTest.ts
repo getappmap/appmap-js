@@ -11,6 +11,7 @@ import RPCServer from '../../src/cmds/index/rpcServer';
 import { verbose } from '../../src/utils';
 import FingerprintDirectoryCommand from '../../src/fingerprint/fingerprintDirectoryCommand';
 import { INavieProvider } from '../../src/rpc/explain/navie/inavie';
+import { configureRpcDirectories } from '../../src/lib/handleWorkingDirectory';
 
 export default class RPCTest {
   public navieProvider: INavieProvider;
@@ -52,6 +53,7 @@ export default class RPCTest {
 
   async setupEach() {
     process.chdir(join(__dirname, '../unit/fixtures/ruby'));
+    configureRpcDirectories([process.cwd()]);
 
     await rm('appmap.index.json', { force: true });
 
@@ -74,6 +76,7 @@ export default class RPCTest {
       }
     }
 
+    configureRpcDirectories([]);
     process.chdir(this.workingDir);
   }
 

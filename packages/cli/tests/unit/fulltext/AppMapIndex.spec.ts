@@ -32,7 +32,7 @@ describe('AppMapIndex', () => {
       const mockLunr: lunr.Index = {
         search,
       } as unknown as lunr.Index;
-      appMapIndex = new AppMapIndex('appmapDir', mockLunr);
+      appMapIndex = new AppMapIndex(['project-dir'], mockLunr);
     });
 
     describe('and some are out of date', () => {
@@ -70,7 +70,7 @@ describe('AppMapIndex', () => {
 
     describe('when search results are not found', () => {
       it('returns an expected result', async () => {
-        const index = new AppMapIndex('appmapDir', {
+        const index = new AppMapIndex(['project-dir'], {
           search: jest.fn().mockReturnValue([]),
         } as any);
         const searchResults = await index.search('');
@@ -118,7 +118,7 @@ describe('AppMapIndex', () => {
       const mockLunr: lunr.Index = {
         search,
       } as unknown as lunr.Index;
-      appMapIndex = new AppMapIndex('appmapDir', mockLunr);
+      appMapIndex = new AppMapIndex(['project-dir'], mockLunr);
 
       const searchResults = await appMapIndex.search('login');
       expect(searchResults.numResults).toEqual(1);

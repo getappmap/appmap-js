@@ -76,15 +76,13 @@ export class EventCollector {
 export class ContextCollector {
   public appmaps: string[] | undefined;
 
-  appmapDir: string;
-  vectorTerms: string[];
   query: string;
-  charLimit: number;
 
-  constructor(appmapDir: string, vectorTerms: string[], charLimit: number) {
-    this.appmapDir = appmapDir;
-    this.vectorTerms = vectorTerms;
-    this.charLimit = charLimit;
+  constructor(
+    private directories: string[],
+    private vectorTerms: string[],
+    private charLimit: number
+  ) {
     this.query = vectorTerms.join(' ');
   }
 
@@ -116,7 +114,7 @@ export class ContextCollector {
       const searchOptions = {
         maxResults: DEFAULT_MAX_DIAGRAMS,
       };
-      appmapSearchResponse = await AppMapIndex.search(this.appmapDir, query, searchOptions);
+      appmapSearchResponse = await AppMapIndex.search(this.directories, query, searchOptions);
     }
 
     const eventsCollector = new EventCollector(this.query, appmapSearchResponse);
@@ -157,7 +155,7 @@ export class ContextCollector {
 }
 
 export default async function collectContext(
-  appmapDir: string,
+  directories: string[],
   appmaps: string[] | undefined,
   vectorTerms: string[],
   charLimit: number
@@ -169,7 +167,7 @@ export default async function collectContext(
     codeObjects: Set<string>;
   };
 }> {
-  const contextCollector = new ContextCollector(appmapDir, vectorTerms, charLimit);
-  if( appmaps ) contextCollector.appmaps = appmaps;
+  const contextCollector = new ContextCollector(directories, vectorTerms, charLimit);
+  if (appmaps) contextCollector.appmaps = appmaps;
   return contextCollector.collectContext();
 }
