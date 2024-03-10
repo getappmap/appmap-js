@@ -82,7 +82,8 @@ export default class VectorTermsService {
         if (!obj) return;
 
         if (typeof obj === 'string') {
-          for (const term of obj.split(/[._-]/)) terms.add(term);
+          for (const term of obj.split(/[._-]/))
+            terms.add(term.match(/[\p{Alphabetic}|\p{Number}]+/u)?.[0] || '');
         } else if (Array.isArray(obj)) {
           for (const term of obj) collectTerms(term);
         } else if (typeof obj === 'object') {
