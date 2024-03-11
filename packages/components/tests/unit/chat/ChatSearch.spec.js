@@ -143,6 +143,9 @@ describe('pages/ChatSearch.vue', () => {
     it('emits an event when the user clicks to view the recording guide', async () => {
       const wrapper = chatSearchWrapper({
         'appmap.stats': appmapStatsHasAppMaps(),
+        propsData: {
+          appmapYmlPresent: true,
+        },
       });
       await wrapper.vm.$nextTick();
 
