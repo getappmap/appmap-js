@@ -11,7 +11,7 @@ import LookupContextService from './services/lookup-context-service';
 import ApplyContextService from './services/apply-context-service';
 import { ContextProvider, ContextResponse } from './context';
 import ProjectInfoService from './services/project-info-service';
-import { ProjectInfoProvider, toV2ProjectInfoResponse } from './project-info';
+import { ProjectInfoProvider } from './project-info';
 import CodeSelectionService from './services/code-selection-service';
 import QuestionService from './services/question-service';
 
@@ -149,11 +149,8 @@ export class CodeExplainerService {
       this.codeSelectionService.addSystemPrompt();
       this.codeSelectionService.applyCodeSelection(codeSelection);
     }
-    const projectInfo = toV2ProjectInfoResponse(await this.projectInfoService.lookupProjectInfo());
-
-    const hasAppMaps = Object.values(projectInfo).some(
-      ({ appmapStats }) => appmapStats.numAppMaps > 0
-    );
+    const projectInfo = await this.projectInfoService.lookupProjectInfo();
+    const hasAppMaps = projectInfo.some((info) => info.appmapStats.numAppMaps > 0);
     if (!hasAppMaps) {
       // TODO: For now, this is only advisory. We'll continue with the explanation,
       // because the user may be asking a general programming question.

@@ -1,10 +1,8 @@
-import { ProjectInfoProvider, ProjectInfoResponse, toV2ProjectInfoResponse } from '../project-info';
+import { ProjectInfo, ProjectInfoProvider, ProjectInfoResponse } from '../project-info';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 
 type Test = () => boolean;
-
-type EmptyMap = Record<string, never>;
 
 export default class ProjectInfoService {
   constructor(
@@ -12,28 +10,27 @@ export default class ProjectInfoService {
     public projectInfoProvider: ProjectInfoProvider
   ) {}
 
-  async lookupProjectInfo(): Promise<ProjectInfoResponse | EmptyMap> {
+  async lookupProjectInfo(): Promise<ProjectInfo[]> {
     const response = await this.projectInfoProvider({ type: 'projectInfo' });
     if (!response) {
       this.interactionHistory.log('No project info found');
-      return {};
+      return [];
     }
 
-    const projectInfo = toV2ProjectInfoResponse(response);
-
+    const projectInfo = Array.isArray(response) ? response : [response];
     this.interactionHistory.log('Project info obtained');
 
-    const projectInfoKeys: [PromptType, keyof ProjectInfoResponse, Test, string][] = [
+    const projectInfoKeys: [PromptType, keyof ProjectInfo, Test, string][] = [
       [
         PromptType.AppMapConfig,
         'appmapConfig',
-        () => Object.values(projectInfo).some(({ appmapConfig }) => Boolean(appmapConfig)),
+        () => projectInfo.some(({ appmapConfig }) => Boolean(appmapConfig)),
         `The user's project does not contain an AppMap config file (appmap.yml).`,
       ],
       [
         PromptType.AppMapStats,
         'appmapStats',
-        () => Object.values(projectInfo).some(({ appmapStats }) => appmapStats.numAppMaps > 0),
+        () => projectInfo.some(({ appmapStats }) => appmapStats.numAppMaps > 0),
         `The user's project does not contain any AppMaps.`,
       ],
     ];
@@ -45,10 +42,14 @@ export default class ProjectInfoService {
         return;
       }
 
-      const promptValue = Object.entries(projectInfo).reduce((acc, [project, info]) => {
-        acc[project] = info[projectInfoKey];
-        return acc;
-      }, {} as Record<string, unknown>);
+      const promptValue = projectInfo.map((info) => {
+        let value: Record<string, unknown> | undefined = info[projectInfoKey];
+        const hasName = 'name' in info;
+        if (!hasName && info.appmapConfig?.name) {
+          value = { ...value, name: info.appmapConfig.name };
+        }
+        return value;
+      });
       this.interactionHistory.addEvent(
         new PromptInteractionEvent(promptType, 'system', buildPromptDescriptor(promptType))
       );
