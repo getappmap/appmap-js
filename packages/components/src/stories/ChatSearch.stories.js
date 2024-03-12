@@ -203,7 +203,23 @@ const EmptySearchResponse = {
   numResults: 0,
 };
 
-function buildMockRpc(searchResponse, explanation) {
+const AppmapStats = {
+  packages: ['a', 'b', 'c'],
+  classes: ['A', 'B', 'C'],
+  routes: ['GET /a', 'POST /b', 'PUT /c'],
+  tables: ['a', 'b', 'c'],
+  numAppMaps: 32,
+};
+
+const EmptyAppmapStats = {
+  packages: [],
+  classes: [],
+  routes: [],
+  tables: [],
+  numAppMaps: 0,
+};
+
+function buildMockRpc(searchResponse, explanation, appmapStats = AppmapStats) {
   return (method, params, callback) => {
     if (method === 'explain') {
       statusIndex = 0;
@@ -234,13 +250,7 @@ function buildMockRpc(searchResponse, explanation) {
       const data = DATA_BY_PATH[appmapId];
 
       if (method === 'appmap.stats') {
-        callback(null, null, {
-          packages: ['a', 'b', 'c'],
-          classes: ['A', 'B', 'C'],
-          routes: ['GET /a', 'POST /b', 'PUT /c'],
-          tables: ['a', 'b', 'c'],
-          numAppMaps: 32,
-        });
+        callback(null, null, appmapStats);
       }
       if (method === 'appmap.data') {
         callback(null, null, data);
@@ -254,7 +264,7 @@ function buildMockRpc(searchResponse, explanation) {
 
 const nonEmptyMockRpc = buildMockRpc(NonEmptySearchResponse, MOCK_EXPLANATION);
 
-const emptyMockRpc = buildMockRpc(EmptySearchResponse, []);
+const emptyMockRpc = buildMockRpc(EmptySearchResponse, [], EmptyAppmapStats);
 
 ChatSearchMock.args = {
   appmapRpcFn: nonEmptyMockRpc,
@@ -288,5 +298,4 @@ ChatSearchMockSearchPrepopulatedEmptyResults.args = {
   appmapRpcFn: emptyMockRpc,
   question: 'How does password reset work?',
   appmapYmlPresent: true,
-  mostRecentAppMaps,
 };

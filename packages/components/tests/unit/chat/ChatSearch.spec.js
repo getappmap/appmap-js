@@ -77,48 +77,19 @@ describe('pages/ChatSearch.vue', () => {
     expect(newWidth).toBe(initialWidth + resizeBy);
   });
 
-  describe('when the appmap.yml file is not present', () => {
-    it('shows an error that the appmap.yml file is not present', async () => {
-      const wrapper = chatSearchWrapper({
-        'appmap.stats': noIndexProcess(),
-      });
-      await wrapper.vm.$nextTick();
-      expect(wrapper.find('.instructions [data-cy="alert-no-config"]').exists()).toBe(true);
-    });
-
-    it('emits an event when the user clicks to view the install guide', async () => {
-      const wrapper = chatSearchWrapper({
-        'appmap.stats': noIndexProcess(),
-      });
-      await wrapper.vm.$nextTick();
-
-      const installGuideButton = wrapper.find('[data-cy="install-guide"]');
-      expect(installGuideButton.exists()).toBe(true);
-
-      await installGuideButton.trigger('click');
-      const rootWrapper = createWrapper(wrapper.vm.$root);
-      expect(rootWrapper.emitted()['open-install-instructions']).toEqual([[]]);
-    });
-  });
-
   describe('when no AppMaps are available', () => {
     it('shows a warning that no AppMaps are available', async () => {
       const wrapper = chatSearchWrapper({
         'appmap.stats': appmapStatsNoAppMaps(),
-        propsData: {
-          appmapYmlPresent: true,
-        },
       });
       await wrapper.vm.$nextTick();
-      expect(wrapper.find('.instructions [data-cy="alert-no-data"]').exists()).toBe(true);
+      wrapper.find('[data-cy="status-bar-header"]').trigger('click');
+      expect(wrapper.find('[data-cy="status-no-data"]').exists()).toBe(true);
     });
 
     it('emits an event when the user clicks the "Create some" button', async () => {
       const wrapper = chatSearchWrapper({
         'appmap.stats': appmapStatsNoAppMaps(),
-        propsData: {
-          appmapYmlPresent: true,
-        },
       });
       await wrapper.vm.$nextTick();
 
@@ -128,6 +99,16 @@ describe('pages/ChatSearch.vue', () => {
       await createSomeButton.trigger('click');
       const rootWrapper = createWrapper(wrapper.vm.$root);
       expect(rootWrapper.emitted()['open-record-instructions']).toEqual([[]]);
+    });
+
+    it("shows Navie's context", async () => {
+      const wrapper = chatSearchWrapper({
+        'appmap.stats': appmapStatsNoAppMaps(),
+      });
+      await wrapper.vm.$nextTick();
+
+      wrapper.find('[data-cy="status-bar-header"]').trigger('click');
+      expect(wrapper.findAll('[data-cy="fail-icon"]').length).toBe(3);
     });
   });
 
@@ -140,21 +121,14 @@ describe('pages/ChatSearch.vue', () => {
       expect(wrapper.find('.instructions [data-cy="no-appmaps"]').exists()).toBe(false);
     });
 
-    it('emits an event when the user clicks to view the recording guide', async () => {
+    it("shows Navie's context", async () => {
       const wrapper = chatSearchWrapper({
         'appmap.stats': appmapStatsHasAppMaps(),
-        propsData: {
-          appmapYmlPresent: true,
-        },
       });
       await wrapper.vm.$nextTick();
 
-      const createMoreButton = wrapper.find('[data-cy="record-guide"]');
-      expect(createMoreButton.exists()).toBe(true);
-
-      await createMoreButton.trigger('click');
-      const rootWrapper = createWrapper(wrapper.vm.$root);
-      expect(rootWrapper.emitted()['open-record-instructions']).toEqual([[]]);
+      wrapper.find('[data-cy="status-bar-header"]').trigger('click');
+      expect(wrapper.findAll('[data-cy="success-icon"]').length).toBe(3);
     });
 
     describe('and there are matching AppMaps', () => {

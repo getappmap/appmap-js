@@ -13,19 +13,9 @@
         :status-label="searchStatusLabel"
         @clear="clear"
         :question="question"
+        @isChatting="setIsChatting"
       >
-        <div class="navie-intro">
-          <h3>Introducing Navie</h3>
-          <p>Navie is a generative AI enhanced with runtime execution traces.</p>
-          <p>
-            This means Navie goes beyond code; it observes and understands how your application is
-            behaving in real time.
-          </p>
-          <p>
-            Ask Navie about <b>application performance</b>, <b>runtime behavior</b>,
-            <b>architecture</b> and more.
-          </p>
-        </div>
+        <v-context-status v-if="!hasAppMaps || !isChatting" :appmap-stats="appmapStats" />
       </v-chat>
     </div>
     <div
@@ -114,13 +104,7 @@
         </ul>
       </v-accordion>
     </div>
-    <v-instructions
-      v-else
-      class="instructions"
-      :appmap-stats="appmapStats"
-      :appmaps="mostRecentAppMaps"
-      :appmap-yml-present="appmapYmlPresent"
-    />
+    <v-instructions v-else class="instructions" :appmaps="mostRecentAppMaps" />
   </div>
 </template>
 
@@ -131,6 +115,7 @@ import VAccordion from '@/components/Accordion.vue';
 import VInstructions from '@/components/chat-search/Instructions.vue';
 import VMatchInstructions from '@/components/chat-search/MatchInstructions.vue';
 import VNoMatchInstructions from '@/components/chat-search/NoMatchInstructions.vue';
+import VContextStatus from '@/components/chat-search/ContextStatus.vue';
 import VAppMap from './VsCodeExtension.vue';
 import AppMapRPC from '@/lib/AppMapRPC';
 import authenticatedClient from '@/components/mixins/authenticatedClient';
@@ -145,6 +130,7 @@ export default {
     VInstructions,
     VMatchInstructions,
     VNoMatchInstructions,
+    VContextStatus,
   },
   mixins: [authenticatedClient],
   props: {
@@ -195,6 +181,7 @@ export default {
         explain: 'Explaining with AI',
       },
       ask: undefined,
+      isChatting: false,
     };
   },
   watch: {
@@ -264,6 +251,9 @@ export default {
       return this.searchResponse.results.find(
         (result) => result.id === this.selectedSearchResultId
       );
+    },
+    hasAppMaps() {
+      return this.appmapStats?.numAppMaps > 0;
     },
   },
   methods: {
@@ -413,6 +403,9 @@ export default {
     },
     includeAppMap(appmap: string) {
       this.$refs.vchat.includeAppMap(appmap);
+    },
+    setIsChatting(isChatting: boolean) {
+      this.isChatting = isChatting;
     },
   },
   async mounted() {

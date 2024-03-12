@@ -39,8 +39,10 @@ export default {
 .instructions {
   font-size: 0.9rem;
   color: $gray4;
+  padding: 2rem;
 
   h2 {
+    margin-top: 0;
     color: $white;
   }
 
