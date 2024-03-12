@@ -8,9 +8,8 @@ import { RpcError, RpcHandler } from '../rpc';
 import collectContext from './collectContext';
 import INavie, { INavieProvider } from './navie/inavie';
 import { Context, ProjectInfo } from '@appland/navie';
-import loadAppMapConfig from '../../lib/loadAppMapConfig';
-import { appmapStatsHandler } from '../appmap/stats';
 import configuration from '../configuration';
+import collectProjectInfos from '../../cmds/navie/projectInfo';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
@@ -120,16 +119,8 @@ export class Explain extends EventEmitter {
     };
   }
 
-  async projectInfoContext(): Promise<ProjectInfo.ProjectInfoResponse> {
-    const appmapConfig: ProjectInfo.AppMapConfig = ((await loadAppMapConfig()) ||
-      {}) as any as ProjectInfo.AppMapConfig;
-    const stats = await appmapStatsHandler();
-    delete (stats as any).classes; // This is verbose and I don't see the utility of it
-    const appmapStats: ProjectInfo.AppMapStats = stats;
-    return Promise.resolve({
-      appmapConfig,
-      appmapStats,
-    });
+  projectInfoContext(): Promise<ProjectInfo.ProjectInfoResponse> {
+    return collectProjectInfos();
   }
 }
 

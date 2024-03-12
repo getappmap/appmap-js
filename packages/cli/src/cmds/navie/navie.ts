@@ -12,6 +12,7 @@ import collectContext from '../../rpc/explain/collectContext';
 import { appmapStatsHandler } from '../../rpc/appmap/stats';
 import configuration from '../../rpc/configuration';
 import { join } from 'path';
+import collectProjectInfos from './projectInfo';
 
 export const command = 'navie [question]';
 export const describe = 'Generate a test case using Navie AI';
@@ -72,27 +73,8 @@ function logRequest(events: InteractionHistory.InteractionHistoryEvents) {
   });
 }
 
-// TODO: Support Project Info as an Array.
 function collectProjectInfo(): () => Promise<ProjectInfo.ProjectInfoResponse> {
-  return async () => {
-    const appmapStats: any = await appmapStatsHandler();
-    delete appmapStats.classes; // This is verbose and I don't see the utility of it
-
-    const appmapConfigs = new Array<any>();
-    const { directories } = configuration();
-    for (const dir of directories) {
-      const appmapConfig = await loadAppMapConfig(join(dir, 'appmap.yml'));
-      appmapConfigs.push(appmapConfig);
-    }
-
-    // Lie that this array is an AppMap Config.
-    // TODO: Update this type to expect or allow an Array.
-    return {
-      appmapConfig: appmapConfigs[0],
-      appmapConfigs,
-      appmapStats,
-    };
-  };
+  return () => collectProjectInfos();
 }
 
 function buildExplainRequest(
