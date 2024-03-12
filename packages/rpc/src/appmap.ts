@@ -7,13 +7,16 @@ export namespace AppMapRpc {
 
   export type StatsOptions = {};
 
-  export type StatsResponse = {
+  export type Stats = {
+    name?: string;
     packages: string[];
     classes: string[];
     routes: string[];
     tables: string[];
     numAppMaps: number;
   };
+
+  export type StatsResponse = Stats | Stats[];
 
   export type FilterOptions = {
     appmap: string;
