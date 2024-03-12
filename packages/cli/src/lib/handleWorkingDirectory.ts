@@ -1,5 +1,5 @@
-import { join } from "path";
-import { setConfiguration } from "../rpc/configuration";
+import { join } from 'path';
+import { setConfiguration } from '../rpc/configuration';
 
 export function handleWorkingDirectory(directory?: string) {
   if (directory) process.chdir(directory);
