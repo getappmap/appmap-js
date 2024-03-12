@@ -15,6 +15,9 @@
         New chat
       </v-button>
     </div>
+    <div class="explainer">
+      <slot />
+    </div>
     <div
       :class="['messages', isChatting ? 'chatting' : 'not-chatting']"
       data-cy="messages"
@@ -34,9 +37,6 @@
         :code-selections="message.codeSelections"
         @change-sentiment="onSentimentChange"
       />
-      <div class="explainer" v-show="!isChatting">
-        <slot />
-      </div>
       <v-suggestion-grid
         :suggestions="suggestions"
         @suggest="onSuggestion"
@@ -360,6 +360,11 @@ export default {
       this.appmaps.push(appmap);
     },
   },
+  watch: {
+    isChatting() {
+      this.$emit('isChatting', this.isChatting);
+    },
+  },
 };
 </script>
 
@@ -414,7 +419,7 @@ $border-color: darken($gray4, 10%);
     $panel-bg: #2c3545;
     justify-content: end;
     display: flex;
-    padding: 1.15rem 0.75rem;
+    padding: 1rem 0.75rem;
     background-color: $panel-bg;
     border-bottom: 1px solid fade-in($panel-bg, 0.11);
     box-shadow: 0 0 0.7rem 0rem lighten($gray1, 5%);
@@ -440,10 +445,6 @@ $border-color: darken($gray4, 10%);
 
   .chatting {
     justify-content: flex-start;
-  }
-
-  .not-chatting {
-    place-content: space-between;
   }
 }
 

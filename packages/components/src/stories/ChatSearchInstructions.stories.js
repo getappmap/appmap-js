@@ -12,20 +12,8 @@ const Template = (args, { argTypes }) => ({
   template: `<div style="font-family: system-ui;"><v-instructions v-bind="$props"></v-instructions></div>`,
 });
 
-export const InstructionsBeforeAppMapStats = Template.bind({});
-
-const appmapStats = {
-  packages: ['app/controllers', 'app/helpers', 'app/models'],
-  classes: ['User', 'UsersController', 'SessionsController'],
-  routes: ['GET /users', 'GET /users/:id', 'GET /signup', 'POST /signup'],
-  tables: ['users', 'microposts'],
-  numAppMaps: 100,
-};
-
 export const Instructions = Template.bind({});
 Instructions.args = {
-  appmapStats,
-  appmapYmlPresent: true,
   appmaps: [
     {
       recordingMethod: 'requests',
@@ -67,13 +55,3 @@ Instructions.args = {
 };
 
 export const InstructionsNoAppMaps = Template.bind({});
-InstructionsNoAppMaps.args = {
-  appmapStats: { numAppMaps: 0 },
-  appmapYmlPresent: true,
-};
-
-export const InstructionsNotInstalled = Template.bind({});
-InstructionsNotInstalled.args = {
-  appmapStats: { numAppMaps: 0 },
-  appmapYmlPresent: false,
-};

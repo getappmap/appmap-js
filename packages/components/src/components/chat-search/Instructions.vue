@@ -1,10 +1,6 @@
 <template>
   <div class="instructions">
     <div class="instructions__container">
-      <div class="instructions__alerts">
-        <v-context-status :appmap-stats="appmapStats" :appmap-yml-present="appmapYmlPresent" />
-      </div>
-
       <div class="instructions__appmaps">
         <h2>Most recent AppMap recordings</h2>
         <p>
@@ -46,16 +42,6 @@
 // @ts-nocheck
 import Vue, { PropType } from 'vue';
 import VAppmapListItem from '@/components/AppmapListItem.vue';
-import VContextStatus from '@/components/chat-search/ContextStatus.vue';
-
-type AppmapStats = {
-  numAppMaps: number;
-  packages: string[];
-  classes: string[];
-  routes: string[];
-  tables: string[];
-  appmaps: any[];
-};
 
 type AppMapMetadata = {
   recordingMethod: string;
@@ -69,12 +55,9 @@ export default Vue.extend({
 
   components: {
     VAppmapListItem,
-    VContextStatus,
   },
 
   props: {
-    appmapStats: Object as PropType<AppmapStats>,
-    appmapYmlPresent: Boolean as PropType<boolean>,
     appmaps: Array as PropType<AppMapMetadata[]>,
   },
 
@@ -96,7 +79,6 @@ export default Vue.extend({
   background-color: $gray1;
   max-height: 100%;
   overflow-y: auto;
-  padding: 1rem 0;
 
   .mb-0 {
     margin-bottom: 0;
@@ -111,12 +93,6 @@ export default Vue.extend({
       transition: $transition;
       cursor: pointer;
     }
-  }
-
-  &__alerts {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
   }
 
   &__appmap-list {
