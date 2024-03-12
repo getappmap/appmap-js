@@ -1,4 +1,4 @@
-import { ProjectInfoProvider, ProjectInfoResponse } from '../project-info';
+import { ProjectInfoProvider, ProjectInfoResponse, toV2ProjectInfoResponse } from '../project-info';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 
@@ -13,24 +13,27 @@ export default class ProjectInfoService {
   ) {}
 
   async lookupProjectInfo(): Promise<ProjectInfoResponse | EmptyMap> {
-    const projectInfo = await this.projectInfoProvider({ type: 'projectInfo' });
-    if (!projectInfo) {
+    const response = await this.projectInfoProvider({ type: 'projectInfo' });
+    if (!response) {
       this.interactionHistory.log('No project info found');
       return {};
     }
 
+    const projectInfo = toV2ProjectInfoResponse(response);
+
     this.interactionHistory.log('Project info obtained');
+
     const projectInfoKeys: [PromptType, keyof ProjectInfoResponse, Test, string][] = [
       [
         PromptType.AppMapConfig,
         'appmapConfig',
-        () => !!projectInfo.appmapConfig?.appmap_dir,
+        () => Object.values(projectInfo).some(({ appmapConfig }) => Boolean(appmapConfig)),
         `The user's project does not contain an AppMap config file (appmap.yml).`,
       ],
       [
         PromptType.AppMapStats,
         'appmapStats',
-        () => projectInfo.appmapStats?.numAppMaps > 0,
+        () => Object.values(projectInfo).some(({ appmapStats }) => appmapStats.numAppMaps > 0),
         `The user's project does not contain any AppMaps.`,
       ],
     ];
@@ -42,7 +45,10 @@ export default class ProjectInfoService {
         return;
       }
 
-      const promptValue = projectInfo[projectInfoKey];
+      const promptValue = Object.entries(projectInfo).reduce((acc, [project, info]) => {
+        acc[project] = info[projectInfoKey];
+        return acc;
+      }, {} as Record<string, unknown>);
       this.interactionHistory.addEvent(
         new PromptInteractionEvent(promptType, 'system', buildPromptDescriptor(promptType))
       );
