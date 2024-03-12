@@ -91,7 +91,11 @@ async function buildIndex(directories: string[]): Promise<AppMapIndex> {
   const startTime = Date.now();
 
   for (const directory of directories) {
-    const appmapDir = (await loadAppMapConfig(join(directory, 'appmap.yml')))?.appmap_dir;
+    const appmapConfig = await loadAppMapConfig(join(directory, 'appmap.yml'));
+    let appmapDir: string | undefined;
+    if (appmapConfig) {
+      appmapDir = appmapConfig.appmap_dir ?? 'tmp/appmap';
+    }
     if (!appmapDir) {
       if (verbose())
         log(
