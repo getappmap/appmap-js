@@ -55,7 +55,13 @@ export const builder = (args: yargs.Argv) => {
 export const handler = async (argv) => {
   verbose(argv.verbose);
 
-  const directories = Array.isArray(argv.directory) ? argv.directory : [argv.directory];
+  let directories: string[] = [];
+  if (argv.directory) {
+    Array.isArray(argv.directory)
+      ? directories.push(...argv.directory)
+      : directories.push(argv.directory);
+  }
+
   const { port, logNavie } = argv;
 
   const useLocalNavie = () => {
