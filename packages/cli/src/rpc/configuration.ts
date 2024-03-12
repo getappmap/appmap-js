@@ -1,7 +1,11 @@
 import { ConfigurationRpc } from '@appland/rpc';
 import { RpcHandler } from './rpc';
 import { dirname, join } from 'path';
-import loadAppMapConfig from '../lib/loadAppMapConfig';
+import loadAppMapConfig, { AppMapConfig } from '../lib/loadAppMapConfig';
+
+export type AppMapConfigWithPath = AppMapConfig & {
+  path: string;
+};
 
 export class Configuration {
   constructor(public configurationData: ConfigurationRpc.Configuration) {}
@@ -15,10 +19,21 @@ export class Configuration {
       await Promise.all(
         this.configurationData.appmapConfigFiles.map(async (file) => {
           const appmapDir = (await loadAppMapConfig(file))?.appmap_dir;
-          if ( appmapDir ) return join(dirname(file), appmapDir);
+          if (appmapDir) return join(dirname(file), appmapDir);
         })
       )
     ).filter(Boolean) as string[];
+  }
+
+  async configs(): Promise<AppMapConfigWithPath[]> {
+    return (
+      await Promise.all(
+        this.configurationData.appmapConfigFiles.map(async (file) => {
+          const config = await loadAppMapConfig(file);
+          if (config) return { ...config, path: dirname(file) };
+        })
+      )
+    ).filter(Boolean) as AppMapConfigWithPath[];
   }
 }
 
