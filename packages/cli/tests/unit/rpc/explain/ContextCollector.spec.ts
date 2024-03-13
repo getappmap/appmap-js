@@ -11,7 +11,7 @@ describe('ContextCollector', () => {
   let contextCollector: ContextCollector;
 
   beforeEach(() => {
-    contextCollector = new ContextCollector(['project-dir'], vectorTerms, charLimit);
+    contextCollector = new ContextCollector(['a', 'b'], vectorTerms, charLimit);
   });
 
   describe('collectContext', () => {
@@ -45,16 +45,19 @@ describe('ContextCollector', () => {
         results: [
           {
             appmap: 'appmap1',
+            directory: 'a',
             score: 1,
             events: [{ fqid: 'function:1', score: 1, eventIds: [1, 2] }],
           },
           {
             appmap: 'appmap2',
+            directory: 'a',
             score: 1,
             events: [{ fqid: 'function:2', score: 1, eventIds: [3, 4] }],
           },
           {
             appmap: 'appmap3',
+            directory: 'b',
             score: 1,
             events: [{ fqid: 'function:3', score: 1, eventIds: [5, 6] }],
           }
@@ -77,7 +80,7 @@ describe('ContextCollector', () => {
 
       const collectedContext = await contextCollector.collectContext();
 
-      expect(AppMapIndex.search).toHaveBeenCalledWith(['project-dir'], vectorTerms.join(' '), {
+      expect(AppMapIndex.search).toHaveBeenCalledWith(['a', 'b'], vectorTerms.join(' '), {
         maxResults: expect.any(Number),
       });
       expect(collectedContext.searchResponse.numResults).toBe(10);

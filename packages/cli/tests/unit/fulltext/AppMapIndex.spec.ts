@@ -4,6 +4,7 @@ import AppMapIndex from '../../../src/fulltext/AppMapIndex';
 import UpToDate from '../../../src/lib/UpToDate';
 import lunr from 'lunr';
 import { PathLike } from 'fs';
+import { packRef } from '../../../src/fulltext/ref';
 
 jest.mock('../../../src/utils');
 jest.mock('../../../src/lib/UpToDate');
@@ -21,11 +22,11 @@ describe('AppMapIndex', () => {
   describe('when search results are found', () => {
     beforeEach(() => {
       const search = jest.fn().mockReturnValue([
-        { ref: 'appmap5', score: 5 },
-        { ref: 'appmap4', score: 4 },
-        { ref: 'appmap3', score: 3 },
-        { ref: 'appmap2', score: 2 },
-        { ref: 'appmap1', score: 1 },
+        { ref: packRef('the-dir', 'appmap5'), score: 5 },
+        { ref: packRef('the-dir', 'appmap4'), score: 4 },
+        { ref: packRef('the-dir', 'appmap3'), score: 3 },
+        { ref: packRef('the-dir', 'appmap2'), score: 2 },
+        { ref: packRef('the-dir', 'appmap1'), score: 1 },
       ]);
       const exists = jest.mocked(utils).exists;
       exists.mockResolvedValue(true);
@@ -106,10 +107,10 @@ describe('AppMapIndex', () => {
     beforeEach(() => mockUpToDate());
 
     it(`removes the search result from the reported matches`, async () => {
-      const existingFileNames = ['appmap1.appmap.json'];
+      const existingFileNames = ['the-dir/appmap1.appmap.json'];
       const search = jest.fn().mockReturnValue([
-        { ref: 'appmap1', score: 1 },
-        { ref: 'appmap2', score: 2 },
+        { ref: packRef('the-dir', 'appmap1'), score: 1 },
+        { ref: packRef('the-dir', 'appmap2'), score: 2 },
       ]);
       const exists = jest.mocked(utils).exists;
       exists.mockImplementation(async (appmapFileName: PathLike): Promise<boolean> => {
@@ -122,7 +123,7 @@ describe('AppMapIndex', () => {
 
       const searchResults = await appMapIndex.search('login');
       expect(searchResults.numResults).toEqual(1);
-      expect(searchResults.results).toEqual([{ appmap: 'appmap1', score: 1 }]);
+      expect(searchResults.results).toEqual([{ appmap: 'appmap1', directory: 'the-dir', score: 1 }]);
     });
   });
 });

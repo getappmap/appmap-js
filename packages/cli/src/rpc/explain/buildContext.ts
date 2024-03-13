@@ -60,7 +60,7 @@ export default async function buildContext(searchResults: SearchRpc.SearchResult
 
       if (codeSnippets.has(event.location)) continue;
 
-      const snippets = await lookupSourceCode(event.location);
+      const snippets = await lookupSourceCode(result.directory, event.location);
       if (snippets) {
         codeSnippets.set(event.location, snippets.join('\n'));
       }

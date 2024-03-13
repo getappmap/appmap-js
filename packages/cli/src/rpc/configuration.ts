@@ -3,6 +3,7 @@ import { RpcHandler } from './rpc';
 import { dirname, join } from 'path';
 import loadAppMapConfig, { AppMapConfig } from '../lib/loadAppMapConfig';
 
+// KEG: What is the extra 'path' argument for? Isn't that provided by Configuration.directories?
 export type AppMapConfigWithPath = AppMapConfig & {
   path: string;
 };

@@ -2,9 +2,9 @@
   "results": [
     {
       "appmap": "$cwd/revoke_api_key",
+      "directory": "$cwd",
       "events": [
         {
-          "appmap": "$cwd/revoke_api_key",
           "fqid": "function:app/models/ApiKey.authenticate",
           "score": 2.526492529179534,
           "elapsed": 0.155711,
@@ -12,7 +12,6 @@
           "location": "app/models/api_key.rb:51"
         },
         {
-          "appmap": "$cwd/revoke_api_key",
           "fqid": "function:app/models/ApiKey.decode",
           "score": 2.526492529179534,
           "elapsed": 0.000045,
@@ -20,7 +19,6 @@
           "location": "app/models/api_key.rb:24"
         },
         {
-          "appmap": "$cwd/revoke_api_key",
           "fqid": "route:DELETE /api/api_keys",
           "score": 1.9961624432896234,
           "elapsed": 0.16964100000000001,
