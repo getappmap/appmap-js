@@ -175,9 +175,12 @@ export default {
       this.verificationCode = '';
       this.submitted = false;
     },
+    trimWhitespace(stringToTrim) {
+      return String(stringToTrim).trim();
+    },
     async activateWithEmail() {
       const url = new URL('/api/activations', this.appmapServerUrl);
-      this.addParamsToUrl(url, { email: this.email });
+      this.addParamsToUrl(url, { email: this.trimWhitespace(this.email) });
       const response = await fetch(url, { method: 'POST' });
 
       if (response.status === 201) {
@@ -194,8 +197,8 @@ export default {
     async completeActivation() {
       const url = new URL('/api/activations/verify', this.appmapServerUrl);
       this.addParamsToUrl(url, {
-        email: this.email,
-        code: this.verificationCode,
+        email: this.trimWhitespace(this.email),
+        code: this.trimWhitespace(this.verificationCode),
       });
       const response = await fetch(url, { method: 'POST' });
 
