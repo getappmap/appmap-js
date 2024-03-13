@@ -17,6 +17,7 @@ export namespace SearchRpc {
 
   export type SearchResult = {
     appmap: string;
+    directory: string;
     events: EventMatch[];
     score: number;
   };

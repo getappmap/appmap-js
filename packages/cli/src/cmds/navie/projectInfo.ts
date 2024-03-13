@@ -4,6 +4,7 @@ import configuration from '../../rpc/configuration';
 
 export default async function collectProjectInfos(): Promise<ProjectInfo.ProjectInfo[]> {
   const projectInfoByPath: { [key: string]: ProjectInfo.ProjectInfo } = {};
+  // KEG: I'm not sure the point of this, since the appmapStatsHandler will also check the configuration.
   const appmapConfigs = await configuration().configs();
   const appmapStats = await appmapStatsHandler(appmapConfigs);
   appmapStats.forEach((stats) => {
@@ -25,5 +26,6 @@ export default async function collectProjectInfos(): Promise<ProjectInfo.Project
     };
   });
 
-  return Object.values(projectInfoByPath);
+  // It's good when results are stable.
+  return Object.values(projectInfoByPath).sort((a, b) => (a.appmapConfig?.name || '').localeCompare(b.appmapConfig?.name || ''));
 }

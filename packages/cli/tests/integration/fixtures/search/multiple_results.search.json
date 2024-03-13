@@ -3,9 +3,9 @@
   "results": [
     {
       "appmap": "$cwd/revoke_api_key",
+      "directory": "$cwd",
       "events": [
         {
-          "appmap": "$cwd/revoke_api_key",
           "elapsed": 0.009195,
           "eventIds": [28],
           "fqid": "function:app/controllers/API::APIKeysController#destroy",
@@ -17,9 +17,9 @@
     },
     {
       "appmap": "$cwd/user_page_scenario",
+      "directory": "$cwd",
       "events": [
         {
-          "appmap": "$cwd/user_page_scenario",
           "elapsed": 0.000005,
           "eventIds": [58],
           "fqid": "function:app/controllers/OrganizationsController#new",

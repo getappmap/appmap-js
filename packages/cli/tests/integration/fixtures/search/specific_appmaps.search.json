@@ -2,10 +2,10 @@
   "numResults": 1,
   "results": [
     {
-      "appmap": "user_page_scenario",
+      "appmap": "$cwd/user_page_scenario",
+      "directory": "$cwd",
       "events": [
         {
-          "appmap": "user_page_scenario",
           "elapsed": 0.000005,
           "eventIds": [58],
           "fqid": "function:app/controllers/OrganizationsController#new",

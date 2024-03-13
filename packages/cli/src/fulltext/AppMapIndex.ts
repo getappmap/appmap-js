@@ -7,6 +7,8 @@ import { log, warn } from 'console';
 import lunr from 'lunr';
 import UpToDate from '../lib/UpToDate';
 import loadAppMapConfig from '../lib/loadAppMapConfig';
+import { packRef, refToAppMapDir, unpackRef } from './ref';
+import assert from 'assert';
 
 type SerializedCodeObject = {
   name: string;
@@ -23,6 +25,7 @@ export type SearchOptions = {
 
 export type SearchResult = {
   appmap: string;
+  directory: string;
   score: number;
 };
 
@@ -40,7 +43,7 @@ export type SearchResponse = {
   numResults: number;
 };
 
-async function buildDocument(metadataFile: string): Promise<any> {
+async function buildDocument(directory: string, metadataFile: string): Promise<any> {
   const metadata = JSON.parse(await readFile(metadataFile, 'utf-8')) as Metadata;
   const indexDir = dirname(metadataFile);
   const classMap = JSON.parse(
@@ -73,8 +76,12 @@ async function buildDocument(metadataFile: string): Promise<any> {
     });
   }
 
+  let appmapId = indexDir;
+  if (appmapId.startsWith(directory)) appmapId = appmapId.substring(directory.length + 1);
+
+  const id = packRef(directory, appmapId);
   return {
-    id: indexDir,
+    id,
     name: metadata.name,
     source_location: metadata.source_location,
     code_objects: codeObjects.join(' '),
@@ -107,7 +114,7 @@ async function buildIndex(directories: string[]): Promise<AppMapIndex> {
       join(directory, appmapDir),
       'metadata.json',
       async (metadataFile: string) => {
-        documents.push(await buildDocument(metadataFile));
+        documents.push(await buildDocument(directory, metadataFile));
       }
     );
   }
@@ -152,7 +159,8 @@ enum ScoreFactors {
 export async function removeNonExistentMatches(matches: lunr.Index.Result[]) {
   const appmapExists = new Map<string, boolean>();
   for (const match of matches) {
-    const appmapFileName = [match.ref, '.appmap.json'].join('');
+    const appmapDir = refToAppMapDir(match.ref);
+    const appmapFileName = [appmapDir, '.appmap.json'].join('');
     const doesExist = await exists(appmapFileName);
     if (!doesExist) {
       if (verbose())
@@ -213,7 +221,6 @@ async function downscoreOutOfDateMatches(
   matches: lunr.Index.Result[],
   maxResults: number
 ): Promise<lunr.Index.Result[]> {
-  const upToDate = new UpToDate();
   const sortedMatches = new Array<lunr.Index.Result>();
   let i = 0;
 
@@ -230,11 +237,14 @@ async function downscoreOutOfDateMatches(
   while (!completed()) {
     const match = matches[i++];
     const downscore = scoreStats.get(ScoreStats.StdDev)! * ScoreFactors.OutOfDateMultipler;
-    const outOfDateDependencies = await upToDate.isOutOfDate(match.ref);
+    const { directory, appmapId } = unpackRef(match.ref);
+    const upToDate = new UpToDate();
+    upToDate.baseDir = directory;
+    const outOfDateDependencies = await upToDate.isOutOfDate(appmapId);
     if (outOfDateDependencies) {
       if (verbose()) {
         log(
-          `[AppMapIndex] AppMap ${match.ref} is out of date due to ${[
+          `[AppMapIndex] AppMap ${refToAppMapDir(match.ref)} is out of date due to ${[
             ...outOfDateDependencies,
           ]}. Downscoring by ${downscore}.`
         );
@@ -254,7 +264,14 @@ export function reportMatches(
   scoreStats: Map<ScoreStats, number>,
   numResults: number
 ): SearchResponse {
-  const searchResults = matches.map((match) => ({ appmap: match.ref, score: match.score }));
+  const searchResults = matches.map((match) => {
+    const { directory, appmapId } = unpackRef(match.ref);
+    return {
+      appmap: appmapId,
+      directory,
+      score: match.score,
+    };
+  });
   return {
     type: 'appmap',
     results: searchResults,

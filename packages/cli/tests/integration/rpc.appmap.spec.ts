@@ -17,7 +17,9 @@ describe('RPC', () => {
       const options: AppMapRpc.StatsOptions = {};
       const response = await rpcTest.client.request(AppMapRpc.StatsFunctionName, options);
       expect(response.error).toBeFalsy();
-      const stats = response.result;
+      expect(Array.isArray(response.result)).toBeTruthy();
+      expect(response.result.length).toEqual(1);
+      const stats = response.result.shift();
       expect(stats.numAppMaps).toEqual(2);
       expect(stats.packages).toEqual(['app/controllers', 'app/models', 'json', 'openssl']);
       expect(stats.classes).toEqual([

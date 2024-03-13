@@ -5,6 +5,8 @@ import { RpcHandler } from '../rpc';
 import AppMapIndex, { SearchResponse } from '../../fulltext/AppMapIndex';
 import searchSingleAppMap from '../../cmds/search/searchSingleAppMap';
 import configuration from '../configuration';
+import { dir } from 'console';
+import { isAbsolute, join } from 'path';
 
 export const DEFAULT_MAX_DIAGRAMS = 10;
 export const DEFAULT_MAX_EVENTS_PER_DIAGRAM = 100;
@@ -21,8 +23,24 @@ export async function handler(
   options: HandlerOptions
 ): Promise<SearchRpc.SearchResponse> {
   const config = configuration();
+  const { directories } = config;
   let appmapSearchResponse: SearchResponse;
   if (appmaps) {
+    const results = appmaps
+      .map((appmap) => {
+        let directory: string | undefined;
+        if (directories.length === 1) directory = directories[0];
+        else directory = directories.find((dir) => appmap.startsWith(dir));
+        if (!directory) return undefined;
+
+        const appmapId = isAbsolute(appmap) ? appmap : join(directory, appmap);
+        return {
+          appmap: appmapId,
+          directory,
+          score: 1,
+        };
+      })
+      .filter(Boolean) as SearchRpc.SearchResult[];
     appmapSearchResponse = {
       type: 'appmap',
       stats: {
@@ -31,11 +49,10 @@ export async function handler(
         median: 1,
         stddev: 0,
       },
-      results: appmaps.map((appmap) => ({ appmap, score: 1 })),
+      results,
       numResults: appmaps.length,
     };
   } else {
-    const { directories } = config;
     // Search across all AppMaps, creating a map from AppMap id to AppMapSearchResult
     const searchOptions = {
       maxResults: options.maxDiagrams || options.maxResults || DEFAULT_MAX_DIAGRAMS,
@@ -52,8 +69,12 @@ export async function handler(
     };
     const eventsSearchResponse = await searchSingleAppMap(result.appmap, query, searchOptions);
     results.push({
-      appmap: result.appmap,
-      events: eventsSearchResponse.results,
+      appmap: isAbsolute(result.appmap) ? result.appmap : join(result.directory, result.appmap),
+      directory: result.directory,
+      events: eventsSearchResponse.results.map((event) => {
+        delete (event as any).appmap;
+        return event;
+      }),
       score: result.score,
     });
   }

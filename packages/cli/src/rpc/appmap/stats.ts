@@ -44,9 +44,11 @@ async function getAppmapStats(config: AppMapConfigWithPath): Promise<Stats> {
     numAppMaps,
   };
 }
+
 export async function appmapStatsHandler(cachedConfigs?: AppMapConfigWithPath[]): Promise<Stats[]> {
   const configs = cachedConfigs ?? (await configuration().configs());
-  return Promise.all(configs.map((config) => getAppmapStats(config)));
+  const stats = await Promise.all(configs.map((config) => getAppmapStats(config)));
+  return stats.sort((a, b) => a.name.localeCompare(b.name));
 }
 
 export default function appmapStats(): RpcHandler<AppMapRpc.StatsOptions, AppMapRpc.StatsResponse> {

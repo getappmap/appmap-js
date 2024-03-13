@@ -41,6 +41,7 @@ export class EventCollector {
       const eventsSearchResponse = await this.findEvents(result.appmap, maxEvents);
       results.push({
         appmap: result.appmap,
+        directory: result.directory,
         events: eventsSearchResponse.results.map(textSearchResultToRpcSearchResult),
         score: result.score,
       });
@@ -98,6 +99,18 @@ export class ContextCollector {
 
     let appmapSearchResponse: SearchResponse;
     if (this.appmaps) {
+      const results = this.appmaps
+        .map((appmap) => {
+          const directory = this.directories.find((dir) => appmap.startsWith(dir));
+          if (!directory) return undefined;
+
+          return {
+            appmap,
+            directory,
+            score: 1,
+          };
+        })
+        .filter(Boolean) as SearchRpc.SearchResult[];
       appmapSearchResponse = {
         type: 'appmap',
         stats: {
@@ -106,7 +119,7 @@ export class ContextCollector {
           median: 1,
           stddev: 0,
         },
-        results: this.appmaps.map((appmap) => ({ appmap, score: 1 })),
+        results,
         numResults: this.appmaps.length,
       };
     } else {

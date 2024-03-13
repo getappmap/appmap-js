@@ -44,7 +44,7 @@ describe('EventCollector', () => {
     type: 'appmap',
     numResults: 1,
     stats: { max: 1, mean: 1, median: 1, stddev: 0 },
-    results: [{ appmap: 'appMapId1', score: 1 }],
+    results: [{ appmap: 'appMapId1', directory: 'a', score: 1 }],
   };
 
   const multiSearchResponse: AppMapSearchResponse = {
@@ -52,8 +52,8 @@ describe('EventCollector', () => {
     numResults: 2, // Indicating two appmaps are present
     stats: { max: 1, mean: 1, median: 1, stddev: 0 },
     results: [
-      { appmap: 'appMapId1', score: 1 },
-      { appmap: 'appMapId2', score: 1 },
+      { appmap: 'appMapId1', directory: 'a', score: 1 },
+      { appmap: 'appMapId2', directory: 'b', score: 1 },
     ],
   };
 
@@ -103,11 +103,13 @@ describe('EventCollector', () => {
       results: [
         {
           appmap: 'appMapId1',
+          directory: 'a',
           score: 1,
           events: mockFindEventsResponses[0].results.map(textSearchResultToRpcSearchResult),
         },
         {
           appmap: 'appMapId2',
+          directory: 'b',
           score: 1,
           events: mockFindEventsResponses[1].results.map(textSearchResultToRpcSearchResult),
         },
