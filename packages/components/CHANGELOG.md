@@ -1,3 +1,10 @@
+# [@appland/components-v4.7.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.6.0...@appland/components-v4.7.0) (2024-03-14)
+
+
+### Features
+
+* Move Navie context status into chat window ([7dd9e38](https://github.com/getappmap/appmap-js/commit/7dd9e38d5a2fd026dc72a6984ae8f5baa85196b1))
+
 # [@appland/components-v4.6.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.5.0...@appland/components-v4.6.0) (2024-03-06)
 
 
