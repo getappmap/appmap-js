@@ -151,7 +151,8 @@ async function explain(
     try {
       return await fn.call(explain, data);
     } catch (e) {
-      warn(`Explain context function ${fnName} threw an error: ${e}`);
+      warn(`Explain context function ${fnName} threw an error:`);
+      warn(e);
       return {};
     }
   };
