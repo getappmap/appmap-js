@@ -4,7 +4,7 @@ import chalk from 'chalk';
 
 import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
 import FingerprintWatchCommand from '../../fingerprint/fingerprintWatchCommand';
-import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
+import { configureRpcDirectories, handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../lib/locateAppMapDir';
 import { verbose } from '../../utils';
 import { log, warn } from 'console';
@@ -138,6 +138,8 @@ export const handler = async (argv) => {
       ) => new RemoteNavie(threadId, contextProvider, projectInfoProvider);
 
       const navieProvider = useLocalNavie() ? buildLocalNavie : buildRemoteNavie;
+
+      configureRpcDirectories([process.cwd()]);
 
       const rpcMethods: RpcHandler<any, any>[] = [
         numProcessed(cmd),
