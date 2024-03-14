@@ -3,22 +3,21 @@ import { RpcHandler } from './rpc';
 import { dirname, join } from 'path';
 import loadAppMapConfig, { AppMapConfig } from '../lib/loadAppMapConfig';
 
-// KEG: What is the extra 'path' argument for? Isn't that provided by Configuration.directories?
-export type AppMapConfigWithPath = AppMapConfig & {
-  path: string;
+export type AppMapConfigWithDirectory = AppMapConfig & {
+  directory: string;
 };
 
 export class Configuration {
-  constructor(public configurationData: ConfigurationRpc.Configuration) {}
+  constructor(public appmapConfigFiles: string[] = []) {}
 
   get directories() {
-    return this.configurationData.appmapConfigFiles.map(dirname);
+    return this.appmapConfigFiles.map(dirname);
   }
 
   async appmapDirs(): Promise<string[]> {
     return (
       await Promise.all(
-        this.configurationData.appmapConfigFiles.map(async (file) => {
+        this.appmapConfigFiles.map(async (file) => {
           const appmapDir = (await loadAppMapConfig(file))?.appmap_dir;
           if (appmapDir) return join(dirname(file), appmapDir);
         })
@@ -26,37 +25,43 @@ export class Configuration {
     ).filter(Boolean) as string[];
   }
 
-  async configs(): Promise<AppMapConfigWithPath[]> {
+  async configs(): Promise<AppMapConfigWithDirectory[]> {
     return (
       await Promise.all(
-        this.configurationData.appmapConfigFiles.map(async (file) => {
+        this.appmapConfigFiles.map(async (file) => {
           const config = await loadAppMapConfig(file);
-          if (config) return { ...config, path: dirname(file) };
+          if (config) return { ...config, directory: dirname(file) };
         })
       )
-    ).filter(Boolean) as AppMapConfigWithPath[];
+    ).filter(Boolean) as AppMapConfigWithDirectory[];
   }
 }
 
-let config = new Configuration({ appmapConfigFiles: [] });
+let config = new Configuration();
 
 export default function configuration(): Configuration {
   return config;
 }
 
-export function setConfiguration(): RpcHandler<ConfigurationRpc.Configuration, {}> {
+export function setConfigurationV1(): RpcHandler<
+  ConfigurationRpc.V1.Set.Params,
+  ConfigurationRpc.V1.Set.Response
+> {
   return {
-    name: ConfigurationRpc.SetFunctionName,
-    handler: (args) => {
-      config = new Configuration(args);
-      return {};
+    name: ConfigurationRpc.V1.Set.Method,
+    handler: ({ appmapConfigFiles }) => {
+      config = new Configuration(appmapConfigFiles);
+      return undefined;
     },
   };
 }
 
-export function getConfiguration(): RpcHandler<{}, ConfigurationRpc.Configuration> {
+export function getConfigurationV1(): RpcHandler<
+  ConfigurationRpc.V1.Get.Params,
+  ConfigurationRpc.V1.Get.Response
+> {
   return {
-    name: ConfigurationRpc.GetFunctionName,
-    handler: () => config.configurationData,
+    name: ConfigurationRpc.V1.Get.Method,
+    handler: () => ({ appmapConfigFiles: config.appmapConfigFiles }),
   };
 }

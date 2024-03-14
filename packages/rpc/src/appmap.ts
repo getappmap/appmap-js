@@ -1,22 +1,32 @@
 export namespace AppMapRpc {
-  export const StatsFunctionName = 'appmap.stats';
+  export namespace Stats {
+    export namespace V1 {
+      export const Method = 'v1.appmap.stats';
+      export type Params = undefined;
+      export type Response = {
+        packages: string[];
+        classes: string[];
+        routes: string[];
+        tables: string[];
+        numAppMaps: number;
+      };
+    }
+
+    export namespace V2 {
+      export const Method = 'v2.appmap.stats';
+      export type Params = undefined;
+      export type Response = Array<
+        Stats.V1.Response & {
+          name?: string;
+        }
+      >;
+    }
+  }
+
   export const DataFunctionName = 'appmap.data';
   export const FilterFunctionName = 'appmap.filter';
   export const MetadataFunctionName = 'appmap.metadata';
   export const SequenceDiagramFunctionName = 'appmap.sequenceDiagram';
-
-  export type StatsOptions = {};
-
-  export type Stats = {
-    name?: string;
-    packages: string[];
-    classes: string[];
-    routes: string[];
-    tables: string[];
-    numAppMaps: number;
-  };
-
-  export type StatsResponse = Stats | Stats[];
 
   export type FilterOptions = {
     appmap: string;

@@ -11,14 +11,14 @@ import sequenceDiagram from '../../rpc/appmap/sequenceDiagram';
 import { explainHandler, explainStatusHandler } from '../../rpc/explain/explain';
 import RPCServer from './rpcServer';
 import appmapData from '../../rpc/appmap/data';
-import appmapStats from '../../rpc/appmap/stats';
+import { appmapStatsV1, appmapStatsV2 } from '../../rpc/appmap/stats';
 import LocalNavie from '../../rpc/explain/navie/navie-local';
 import RemoteNavie from '../../rpc/explain/navie/navie-remote';
 import { Context, ProjectInfo } from '@appland/navie';
 import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 import { configureRpcDirectories } from '../../lib/handleWorkingDirectory';
 import { loadConfiguration } from '@appland/client';
-import { getConfiguration, setConfiguration } from '../../rpc/configuration';
+import { getConfigurationV1, setConfigurationV1 } from '../../rpc/configuration';
 
 const AI_KEY_ENV_VARS = ['OPENAI_API_KEY'];
 
@@ -128,15 +128,16 @@ export const handler = async (argv) => {
 
   const rpcMethods: RpcHandler<any, any>[] = [
     search(),
-    appmapStats(),
+    appmapStatsV1(),
+    appmapStatsV2(),
     appmapFilter(),
     appmapData(),
     metadata(),
     sequenceDiagram(),
     explainHandler(navieProvider),
     explainStatusHandler(),
-    setConfiguration(),
-    getConfiguration(),
+    setConfigurationV1(),
+    getConfigurationV1(),
   ];
   const rpcServer = new RPCServer(port, rpcMethods);
   rpcServer.start();

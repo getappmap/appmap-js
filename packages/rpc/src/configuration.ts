@@ -1,8 +1,19 @@
 export namespace ConfigurationRpc {
-  export const SetFunctionName = 'configuration.set';
-  export const GetFunctionName = 'configuration.get';
+  export namespace V1 {
+    export namespace Set {
+      export const Method = 'v1.configuration.set';
+      export type Params = {
+        appmapConfigFiles: string[];
+      };
+      export type Response = void;
+    }
 
-  export type Configuration = {
-    appmapConfigFiles: string[];
-  };
+    export namespace Get {
+      export const Method = 'v1.configuration.get';
+      export type Params = undefined;
+      export type Response = {
+        appmapConfigFiles: string[];
+      };
+    }
+  }
 }
