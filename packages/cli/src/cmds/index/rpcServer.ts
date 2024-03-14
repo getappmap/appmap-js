@@ -48,7 +48,10 @@ export default class RPCServer {
     assert(this.app === undefined, 'RPC server already started');
 
     const rpcMethods: Record<string, MethodLike> = this.rpcHandlers.reduce((acc, handler) => {
-      acc[handler.name] = handlerMiddleware(handler.name, handler.handler);
+      const methodNames = Array.isArray(handler.name) ? handler.name : [handler.name];
+      methodNames.forEach((methodName) => {
+        acc[methodName] = handlerMiddleware(methodName, handler.handler);
+      });
       return acc;
     }, {});
 
@@ -76,7 +79,7 @@ export default class RPCServer {
   }
 
   unref() {
-    if (this.app) this.app.unref(); 
+    if (this.app) this.app.unref();
   }
 
   stop() {
