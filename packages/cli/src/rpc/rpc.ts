@@ -3,7 +3,7 @@ import jayson from 'jayson';
 import { inspect } from 'util';
 
 export type RpcHandler<CallT, ResponseT> = {
-  name: string;
+  name: string | string[];
   handler: (args: CallT) => ResponseT | Promise<ResponseT>;
 };
 
