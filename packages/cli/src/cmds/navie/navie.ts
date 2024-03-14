@@ -7,11 +7,8 @@ import { Context, explain, Explain, InteractionHistory, ProjectInfo } from '@app
 
 import { verbose } from '../../utils';
 import { configureRpcDirectories, handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
-import loadAppMapConfig, { AppMapConfig } from '../../lib/loadAppMapConfig';
 import collectContext from '../../rpc/explain/collectContext';
-import { appmapStatsHandler } from '../../rpc/appmap/stats';
 import configuration from '../../rpc/configuration';
-import { join } from 'path';
 import collectProjectInfos from './projectInfo';
 
 export const command = 'navie [question]';
