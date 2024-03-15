@@ -14,7 +14,12 @@ describe('appmap', () => {
     });
 
     it('runs the installer', async () => {
-      const res = await runUntilCompletion(['install', '--interactive=false', projectPath]);
+      const res = await runUntilCompletion([
+        'install',
+        '--interactive=false',
+        '--overwrite-appmap-config',
+        projectPath,
+      ]);
       expect(res.stdout).toStrictEqual(
         expect.stringContaining('Success! AppMap has finished installing.')
       );
