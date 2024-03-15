@@ -195,7 +195,7 @@ export default {
         },
         () => {
           // 1000ms or 5ms per appmap, whichever is greater
-          return Math.min(1000, this.appmapStats?.numAppMaps ?? 0 * 5);
+          return Math.max(1000, this.appmapStats?.numAppMaps ?? 0 * 5);
         }
       ),
     };
