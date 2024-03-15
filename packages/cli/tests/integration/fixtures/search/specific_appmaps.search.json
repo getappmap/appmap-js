@@ -2,8 +2,8 @@
   "numResults": 1,
   "results": [
     {
-      "appmap": "$cwd/user_page_scenario",
-      "directory": "$cwd",
+      "appmap": "$cwd/tests/unit/fixtures/ruby/user_page_scenario",
+      "directory": "$cwd/tests/unit/fixtures/ruby",
       "events": [
         {
           "elapsed": 0.000005,

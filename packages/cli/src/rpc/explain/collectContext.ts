@@ -7,6 +7,7 @@ import FindEvents, {
 import { DEFAULT_MAX_DIAGRAMS } from '../search/search';
 import buildContext from './buildContext';
 import { log } from 'console';
+import { isAbsolute, join } from 'path';
 
 export function textSearchResultToRpcSearchResult(
   eventResult: EventSearchResult
@@ -38,9 +39,12 @@ export class EventCollector {
     const results = new Array<SearchRpc.SearchResult>();
 
     for (const result of this.appmapSearchResponse.results) {
-      const eventsSearchResponse = await this.findEvents(result.appmap, maxEvents);
+      let { appmap } = result;
+      if (!isAbsolute(appmap)) appmap = join(result.directory, appmap);
+
+      const eventsSearchResponse = await this.findEvents(appmap, maxEvents);
       results.push({
-        appmap: result.appmap,
+        appmap: appmap,
         directory: result.directory,
         events: eventsSearchResponse.results.map(textSearchResultToRpcSearchResult),
         score: result.score,

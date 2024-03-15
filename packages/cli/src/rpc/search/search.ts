@@ -67,9 +67,12 @@ export async function handler(
       maxResults:
         options.maxEventsPerDiagram || options.maxResults || DEFAULT_MAX_EVENTS_PER_DIAGRAM,
     };
-    const eventsSearchResponse = await searchSingleAppMap(result.appmap, query, searchOptions);
+    let appmap = result.appmap;
+    if (!isAbsolute(appmap)) appmap = join(result.directory, appmap);
+
+    const eventsSearchResponse = await searchSingleAppMap(appmap, query, searchOptions);
     results.push({
-      appmap: isAbsolute(result.appmap) ? result.appmap : join(result.directory, result.appmap),
+      appmap,
       directory: result.directory,
       events: eventsSearchResponse.results.map((event) => {
         delete (event as any).appmap;
