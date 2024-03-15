@@ -1,5 +1,5 @@
 import { AppMapRpc } from '@appland/rpc';
-import { RpcHandler } from '../rpc';
+import { RpcError, RpcHandler } from '../rpc';
 import {
   FormatType,
   SequenceDiagramOptions,
@@ -11,6 +11,8 @@ import { FilterState, buildAppMap } from '@appland/models';
 import { readFile } from 'fs/promises';
 import { appmapFile } from './appmapFile';
 import interpretFilter from './interpretFilter';
+import { isAbsolute, join } from 'path';
+import configuration from '../configuration';
 
 export type HandlerOptions = {
   filter?: string | Record<string, unknown> | FilterState;
@@ -35,7 +37,13 @@ export async function handler(
 
   const filter = interpretFilter(filterArg);
 
-  const appmapStr = await readFile(appmapFile(appmapId), 'utf8');
+  let filePath = appmapFile(appmapId);
+  if (!isAbsolute(filePath)) {
+    const { directories } = configuration();
+    if (directories.length === 1) filePath = join(directories[0], filePath);
+  }
+
+  const appmapStr = await readFile(filePath, 'utf8');
   let appmap = buildAppMap().source(appmapStr).build();
   if (filter) {
     appmap = filter.filter(appmap, []);

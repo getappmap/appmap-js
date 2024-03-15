@@ -1,10 +1,12 @@
 import { AppMapRpc } from '@appland/rpc';
 import { AppMapFilter, buildAppMap } from '@appland/models';
 import { readFile } from 'fs/promises';
-import { RpcHandler } from '../rpc';
+import { RpcError, RpcHandler } from '../rpc';
 import { appmapFile } from './appmapFile';
 import interpretFilter from './interpretFilter';
 import { warn } from 'console';
+import configuration from '../configuration';
+import { isAbsolute, join } from 'path';
 
 export async function appmapFilterHandler(
   args: AppMapRpc.FilterOptions
@@ -17,7 +19,13 @@ export async function appmapFilterHandler(
     filter = new AppMapFilter();
   }
 
-  const appmapStr = await readFile(appmapFile(appmapId), 'utf8');
+  let filePath = appmapFile(appmapId);
+  if (!isAbsolute(filePath)) {
+    const { directories } = configuration();
+    if (directories.length === 1) filePath = join(directories[0], filePath);
+  }
+
+  const appmapStr = await readFile(filePath, 'utf8');
   const appmap = buildAppMap().source(appmapStr).build();
 
   return filter.filter(appmap, []) as unknown as Record<string, unknown>;

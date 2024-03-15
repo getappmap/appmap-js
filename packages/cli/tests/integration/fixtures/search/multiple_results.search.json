@@ -2,8 +2,8 @@
   "numResults": 2,
   "results": [
     {
-      "appmap": "$cwd/revoke_api_key",
-      "directory": "$cwd",
+      "appmap": "$cwd/tests/unit/fixtures/ruby/revoke_api_key",
+      "directory": "$cwd/tests/unit/fixtures/ruby",
       "events": [
         {
           "elapsed": 0.009195,
@@ -16,8 +16,8 @@
       "score": 0.752
     },
     {
-      "appmap": "$cwd/user_page_scenario",
-      "directory": "$cwd",
+      "appmap": "$cwd/tests/unit/fixtures/ruby/user_page_scenario",
+      "directory": "$cwd/tests/unit/fixtures/ruby",
       "events": [
         {
           "elapsed": 0.000005,

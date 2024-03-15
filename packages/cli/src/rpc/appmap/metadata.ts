@@ -1,16 +1,22 @@
 import { AppMapRpc } from '@appland/rpc';
 import { readFile } from 'fs/promises';
 import { RpcError, RpcHandler } from '../rpc';
-import { join } from 'path';
+import { isAbsolute, join } from 'path';
+import configuration from '../configuration';
 
 export default function metadata(): RpcHandler<
   AppMapRpc.MetadataOptions,
   AppMapRpc.MetadataResponse
 > {
   async function handler(args: AppMapRpc.MetadataOptions): Promise<AppMapRpc.MetadataResponse> {
-    let { appmap: appmapId } = args;
+    let { appmap: appmapArg } = args;
 
-    if (appmapId.endsWith('.appmap.json')) appmapId = appmapId.slice(0, -'.appmap.json'.length);
+    let appmapId = appmapArg;
+    if (appmapId.endsWith('.appmap.json')) appmapId = appmapId.slice(0, '.appmap.json'.length * -1);
+    if (!isAbsolute(appmapId)) {
+      const { directories } = configuration();
+      if (directories.length === 1) appmapId = join(directories[0], appmapId);
+    }
 
     let metadataStr: string | undefined;
     try {

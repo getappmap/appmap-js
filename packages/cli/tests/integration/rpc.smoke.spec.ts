@@ -1,10 +1,10 @@
 import { IndexRpc } from '@appland/rpc';
 
 import { RpcResponse } from './RpcResponse';
-import { SingleDirectoryRPCTest as RPCTest } from './RPCTest';
+import { DEFAULT_WORKING_DIR, SingleDirectoryRPCTest as RPCTest } from './RPCTest';
 
 describe('RPC', () => {
-  const rpcTest = new RPCTest('.');
+  const rpcTest = new RPCTest(DEFAULT_WORKING_DIR);
 
   beforeAll(async () => await rpcTest.setupAll());
   beforeEach(async () => await rpcTest.setupEach());

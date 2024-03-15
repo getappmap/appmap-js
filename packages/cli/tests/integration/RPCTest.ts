@@ -55,13 +55,12 @@ export default abstract class RPCTest {
   }
 
   async setupEach() {
-    process.chdir(this.workingDir);
     configureRpcDirectories(this.directories);
 
     this.appmaps = new Array<string>();
-    for ( const dir of this.directories ) {
+    for (const dir of this.directories) {
       // Index the AppMaps because RPC commands will be expecting these files.
-      this.appmaps.concat(...await promisify(glob)(`${dir}/**/*.appmap.json`))
+      this.appmaps.concat(...(await promisify(glob)(`${dir}/**/*.appmap.json`)));
       const cmd = new FingerprintDirectoryCommand(dir);
       await cmd.execute();
     }
@@ -80,14 +79,14 @@ export default abstract class RPCTest {
       }
     }
 
+    // Reset the RPC configuration.
     configureRpcDirectories([]);
 
+    // RPC services should not rely on setting cwd. Warn if the cwd has been changed.
     const cwd = process.cwd();
-    if (cwd !== this.workingDir) {
-      // Ultimately, it would be nice to avoid having any dependency on the working directory
-      // in the RPC server, and go strictly by the RPC function arguments and/or the server configuration.
-      console.log(`RPCTest: Restoring working directory to ${this.workingDir}`);
-      process.chdir(this.workingDir);
+    if (cwd !== this.restoreDirectory) {
+      console.warn(`RPCTest: Restoring working directory to ${this.restoreDirectory}`);
+      process.chdir(this.restoreDirectory);
     }
   }
 
@@ -103,7 +102,6 @@ export default abstract class RPCTest {
 export const DEFAULT_WORKING_DIR = join(__dirname, '../unit/fixtures/ruby');
 
 export class SingleDirectoryRPCTest extends RPCTest {
-
   constructor(public workingDir = DEFAULT_WORKING_DIR, navieProvider?: INavieProvider) {
     super(workingDir, navieProvider);
   }
@@ -114,7 +112,11 @@ export class SingleDirectoryRPCTest extends RPCTest {
 }
 
 export class MultiDirectoryRPCTest extends RPCTest {
-  constructor(public workingDir: string, public directories: string[], navieProvider?: INavieProvider) {
+  constructor(
+    public workingDir: string,
+    public directories: string[],
+    navieProvider?: INavieProvider
+  ) {
     super(workingDir, navieProvider);
   }
 }

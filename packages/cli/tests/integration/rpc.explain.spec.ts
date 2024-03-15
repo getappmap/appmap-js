@@ -3,6 +3,7 @@ import { ExplainRpc } from '@appland/rpc';
 import { explain } from '@appland/navie';
 import { AI } from '@appland/client';
 import { AIClient, AICallbacks, AIInputPromptOptions, AIUserInput } from '@appland/client';
+import { ContextProvider, InteractionHistory, ProjectInfo } from '@appland/navie';
 
 import { waitFor } from './waitFor';
 import { DEFAULT_WORKING_DIR, default as RPCTest, SingleDirectoryRPCTest } from './RPCTest';
@@ -10,9 +11,6 @@ import { SearchContextOptions } from '../../src/rpc/explain/explain';
 import RemoteNavie from '../../src/rpc/explain/navie/navie-remote';
 import LocalNavie from '../../src/rpc/explain/navie/navie-local';
 import { INavieProvider } from '../../src/rpc/explain/navie/inavie';
-import { ContextProvider } from '@appland/navie';
-import { ProjectInfoProvider } from '@appland/navie/dist/project-info';
-import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 
 jest.mock('@appland/navie');
 
@@ -46,7 +44,7 @@ describe('RPC', () => {
         navieProvider = (
           threadId: string | undefined,
           contextProvider: ContextProvider,
-          projectInfoProvider: ProjectInfoProvider
+          projectInfoProvider: ProjectInfo.ProjectInfoProvider
         ) => new LocalNavie(threadId, contextProvider, projectInfoProvider);
         rpcTest = new SingleDirectoryRPCTest(DEFAULT_WORKING_DIR, navieProvider);
       });
@@ -58,7 +56,7 @@ describe('RPC', () => {
 
       it('answers the question', async () => {
         const explainImpl = {
-          on(_event: 'event', _listener: (event: InteractionEvent) => void) {},
+          on(_event: 'event', _listener: (event: InteractionHistory.InteractionEvent) => void) {},
           execute(): AsyncIterable<string> {
             return (async function* () {
               yield answer;
@@ -98,7 +96,7 @@ describe('RPC', () => {
         navieProvider = (
           threadId: string | undefined,
           contextProvider: ContextProvider,
-          projectInfoProvider: ProjectInfoProvider
+          projectInfoProvider: ProjectInfo.ProjectInfoProvider
         ) => new RemoteNavie(threadId, contextProvider, projectInfoProvider);
         rpcTest = new SingleDirectoryRPCTest(DEFAULT_WORKING_DIR, navieProvider);
       });
