@@ -5,7 +5,7 @@ import { AI } from '@appland/client';
 import { AIClient, AICallbacks, AIInputPromptOptions, AIUserInput } from '@appland/client';
 
 import { waitFor } from './waitFor';
-import RPCTest from './RPCTest';
+import { DEFAULT_WORKING_DIR, default as RPCTest, SingleDirectoryRPCTest } from './RPCTest';
 import { SearchContextOptions } from '../../src/rpc/explain/explain';
 import RemoteNavie from '../../src/rpc/explain/navie/navie-remote';
 import LocalNavie from '../../src/rpc/explain/navie/navie-local';
@@ -48,7 +48,7 @@ describe('RPC', () => {
           contextProvider: ContextProvider,
           projectInfoProvider: ProjectInfoProvider
         ) => new LocalNavie(threadId, contextProvider, projectInfoProvider);
-        rpcTest = new RPCTest(navieProvider);
+        rpcTest = new SingleDirectoryRPCTest(DEFAULT_WORKING_DIR, navieProvider);
       });
 
       beforeAll(async () => await rpcTest.setupAll());
@@ -100,7 +100,7 @@ describe('RPC', () => {
           contextProvider: ContextProvider,
           projectInfoProvider: ProjectInfoProvider
         ) => new RemoteNavie(threadId, contextProvider, projectInfoProvider);
-        rpcTest = new RPCTest(navieProvider);
+        rpcTest = new SingleDirectoryRPCTest(DEFAULT_WORKING_DIR, navieProvider);
       });
 
       beforeAll(async () => await rpcTest.setupAll());

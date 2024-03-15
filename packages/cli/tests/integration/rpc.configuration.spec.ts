@@ -1,7 +1,7 @@
 import { ConfigurationRpc } from '@appland/rpc';
 import { join, resolve } from 'path';
 
-import RPCTest from './RPCTest';
+import { SingleDirectoryRPCTest as RPCTest } from './RPCTest';
 import configuration from '../../src/rpc/configuration';
 
 describe('RPC', () => {

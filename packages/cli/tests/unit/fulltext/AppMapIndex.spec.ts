@@ -5,6 +5,7 @@ import UpToDate from '../../../src/lib/UpToDate';
 import lunr from 'lunr';
 import { PathLike } from 'fs';
 import { packRef } from '../../../src/fulltext/ref';
+import { join } from 'path';
 
 jest.mock('../../../src/utils');
 jest.mock('../../../src/lib/UpToDate');
@@ -107,7 +108,7 @@ describe('AppMapIndex', () => {
     beforeEach(() => mockUpToDate());
 
     it(`removes the search result from the reported matches`, async () => {
-      const existingFileNames = ['the-dir/appmap1.appmap.json'];
+      const existingFileNames = [join('the-dir', 'appmap1.appmap.json')];
       const search = jest.fn().mockReturnValue([
         { ref: packRef('the-dir', 'appmap1'), score: 1 },
         { ref: packRef('the-dir', 'appmap2'), score: 2 },
@@ -123,7 +124,9 @@ describe('AppMapIndex', () => {
 
       const searchResults = await appMapIndex.search('login');
       expect(searchResults.numResults).toEqual(1);
-      expect(searchResults.results).toEqual([{ appmap: 'appmap1', directory: 'the-dir', score: 1 }]);
+      expect(searchResults.results).toEqual([
+        { appmap: 'appmap1', directory: 'the-dir', score: 1 },
+      ]);
     });
   });
 });

@@ -2,7 +2,7 @@ import { AppMapRpc } from '@appland/rpc';
 import { join } from 'path';
 import { readFile } from 'fs/promises';
 
-import RPCTest from './RPCTest';
+import { SingleDirectoryRPCTest as RPCTest } from './RPCTest';
 
 describe('RPC', () => {
   const rpcTest = new RPCTest();

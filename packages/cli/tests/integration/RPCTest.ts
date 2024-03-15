@@ -13,13 +13,16 @@ import FingerprintDirectoryCommand from '../../src/fingerprint/fingerprintDirect
 import { INavieProvider } from '../../src/rpc/explain/navie/inavie';
 import { configureRpcDirectories } from '../../src/lib/handleWorkingDirectory';
 
-export default class RPCTest {
+export default abstract class RPCTest {
   public navieProvider: INavieProvider;
-  workingDir = process.cwd();
+
+  restoreDirectory = process.cwd();
   rpc: RPC | undefined;
   appmaps: string[] | undefined;
 
-  constructor(navieProvider?: INavieProvider) {
+  // workingDir is needed because some RPC functions (may?) depend on the working directory.
+  // Let's work to phase this out.
+  constructor(public workingDir: string, navieProvider?: INavieProvider) {
     this.navieProvider =
       navieProvider ||
       ({
@@ -52,15 +55,16 @@ export default class RPCTest {
   }
 
   async setupEach() {
-    process.chdir(join(__dirname, '../unit/fixtures/ruby'));
-    configureRpcDirectories([process.cwd()]);
+    process.chdir(this.workingDir);
+    configureRpcDirectories(this.directories);
 
-    await rm('appmap.index.json', { force: true });
-
-    // Index the AppMaps because RPC commands will be expecting these files.
-    this.appmaps = await promisify(glob)('*.appmap.json');
-    const cmd = new FingerprintDirectoryCommand('.');
-    await cmd.execute();
+    this.appmaps = new Array<string>();
+    for ( const dir of this.directories ) {
+      // Index the AppMaps because RPC commands will be expecting these files.
+      this.appmaps.concat(...await promisify(glob)(`${dir}/**/*.appmap.json`))
+      const cmd = new FingerprintDirectoryCommand(dir);
+      await cmd.execute();
+    }
   }
 
   async teardownAll() {
@@ -77,12 +81,40 @@ export default class RPCTest {
     }
 
     configureRpcDirectories([]);
-    process.chdir(this.workingDir);
+
+    const cwd = process.cwd();
+    if (cwd !== this.workingDir) {
+      // Ultimately, it would be nice to avoid having any dependency on the working directory
+      // in the RPC server, and go strictly by the RPC function arguments and/or the server configuration.
+      console.log(`RPCTest: Restoring working directory to ${this.workingDir}`);
+      process.chdir(this.workingDir);
+    }
   }
 
   hideExternalFilterState() {
     const filter = new AppMapFilter();
     filter.declutter.hideExternalPaths.on = true;
     return serializeFilter(filter);
+  }
+
+  abstract get directories(): string[];
+}
+
+export const DEFAULT_WORKING_DIR = join(__dirname, '../unit/fixtures/ruby');
+
+export class SingleDirectoryRPCTest extends RPCTest {
+
+  constructor(public workingDir = DEFAULT_WORKING_DIR, navieProvider?: INavieProvider) {
+    super(workingDir, navieProvider);
+  }
+
+  get directories() {
+    return [this.workingDir];
+  }
+}
+
+export class MultiDirectoryRPCTest extends RPCTest {
+  constructor(public workingDir: string, public directories: string[], navieProvider?: INavieProvider) {
+    super(workingDir, navieProvider);
   }
 }

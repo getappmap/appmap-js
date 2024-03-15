@@ -19,6 +19,11 @@ export type RPC = {
   client: jayson.Client;
 };
 
+// Runs an RPC server in-process with the given navieProvider. Because the RPC server
+// is in-process, the server functionality (e.g. connections to remote services) can be
+// mocked as needed.
+//
+// Returns an RPC client that can be used to make requests to the server.
 export async function buildRPC(navieProvider: INavieProvider): Promise<RPC> {
   const fingerprintWatchCommand = {
     numProcessed: 0,

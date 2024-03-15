@@ -8,6 +8,7 @@ import FindEvents, {
   SearchResponse as EventSearchResponse,
 } from '../../../../src/fulltext/FindEvents';
 import { SearchRpc } from '@appland/rpc';
+import { join } from 'path';
 
 jest.mock('../../../../src/fulltext/FindEvents');
 jest.mock('../../../../src/rpc/explain/buildContext');
@@ -75,9 +76,10 @@ describe('EventCollector', () => {
     const collector = new EventCollector('query', oneSearchResponse);
     await collector.collectEvents(10);
 
-    expect(FindEvents).toHaveBeenCalledWith('appMapId1');
+    const appmap = join('a', 'appMapId1');
+    expect(FindEvents).toHaveBeenCalledWith(appmap);
     expect(FindEvents.prototype.initialize).toHaveBeenCalled();
-    expect(collector.appmapIndexes.has('appMapId1')).toBe(true);
+    expect(collector.appmapIndexes.has(appmap)).toBe(true);
   });
 
   it('collects events based on provided maxEvents', async () => {
@@ -102,13 +104,13 @@ describe('EventCollector', () => {
       numResults: 2,
       results: [
         {
-          appmap: 'appMapId1',
+          appmap: join('a', 'appMapId1'),
           directory: 'a',
           score: 1,
           events: mockFindEventsResponses[0].results.map(textSearchResultToRpcSearchResult),
         },
         {
-          appmap: 'appMapId2',
+          appmap: join('b', 'appMapId2'),
           directory: 'b',
           score: 1,
           events: mockFindEventsResponses[1].results.map(textSearchResultToRpcSearchResult),
