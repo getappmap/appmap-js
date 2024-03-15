@@ -171,4 +171,52 @@ describe('components/UserMessage.vue', () => {
       expect(wrapper.find('.sentiment--selected[data-cy="feedback-bad"]').exists()).toBe(true);
     });
   });
+
+  describe('Copy Button for entire message', () => {
+    let wrapper;
+    let clipboardText;
+
+    beforeEach(() => {
+      Object.assign(navigator, {
+        clipboard: {
+          async writeText(val) {
+            clipboardText = val;
+            return Promise.resolve();
+          },
+          async readText() {
+            return Promise.resolve(clipboardText);
+          },
+        },
+      });
+      wrapper = mount(VUserMessage, {
+        propsData: {
+          message: snippets.tsCode,
+          id: 'id',
+        },
+      });
+    });
+
+    it('copies the entire message when the copy button is clicked', () => {
+      wrapper.get('[data-cy="copy-message"]').trigger('click');
+      return expect(navigator.clipboard.readText()).resolves.toBe(snippets.tsCode.trim());
+    });
+
+    it('shows a check icon for 2.5s when the code is copied', async () => {
+      expect(wrapper.find('.copy-icon').exists()).toBe(true);
+
+      // click the copy button
+      await wrapper.get('[data-cy="copy-message"]').trigger('click');
+
+      // check that the check icon is displayed
+      expect(wrapper.find('.copy-icon').exists()).toBe(false);
+      expect(wrapper.find('.check-icon').exists()).toBe(true);
+
+      // wait for check to go away
+      await new Promise((resolve) => setTimeout(resolve, 2100));
+
+      // check that the copy icon is displayed
+      expect(wrapper.find('.check-icon').exists()).toBe(false);
+      expect(wrapper.find('.copy-icon').exists()).toBe(true);
+    });
+  });
 });

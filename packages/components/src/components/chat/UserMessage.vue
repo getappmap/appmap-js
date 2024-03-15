@@ -38,6 +38,15 @@
     </div>
     <div class="buttons">
       <span
+        v-if="!isUser && id && hasClipboardAPI"
+        class="button"
+        data-cy="copy-message"
+        @click="copyToClipboard"
+      >
+        <v-check-icon v-if="copiedMessageTimeout" class="check-icon" />
+        <v-clipboard-icon v-else class="copy-icon" />
+      </span>
+      <span
         v-if="!isUser && id"
         data-cy="feedback-good"
         :class="{
@@ -72,6 +81,8 @@
 import VNavieCompass from '@/assets/compass-icon.svg';
 import VUserAvatar from '@/assets/user-avatar.svg';
 import VThumbIcon from '@/assets/thumb.svg';
+import VClipboardIcon from '@/assets/plain-clipboard.svg';
+import VCheckIcon from '@/assets/success-checkmark.svg';
 import VButton from '@/components/Button.vue';
 import VToolStatus from '@/components/chat/ToolStatus.vue';
 import VCodeSelection from '@/components/chat/CodeSelection.vue';
@@ -123,6 +134,8 @@ export default {
     VButton,
     VToolStatus,
     VCodeSelection,
+    VClipboardIcon,
+    VCheckIcon,
   },
 
   props: {
@@ -153,7 +166,10 @@ export default {
   },
 
   data() {
-    return { sentimentTimeout: undefined };
+    return {
+      sentimentTimeout: undefined,
+      copiedMessageTimeout: undefined,
+    };
   },
 
   computed: {
@@ -198,6 +214,11 @@ export default {
 
       return dom.outerHTML;
     },
+    hasClipboardAPI() {
+      return (
+        navigator && navigator.clipboard && typeof navigator.clipboard.writeText === 'function'
+      );
+    },
   },
 
   methods: {
@@ -215,15 +236,12 @@ export default {
       const newSentiment = this.sentiment === sentiment ? 0 : sentiment;
       this.$emit('change-sentiment', this.id, newSentiment);
     },
-
+    async writeToClipboard(text) {
+      if (text && typeof text === 'string' && this.hasClipboardAPI)
+        await navigator.clipboard.writeText(text.replace(/\n/g, '\n'));
+    },
     bindCopyButtons() {
-      if (
-        !navigator ||
-        !navigator.clipboard ||
-        typeof navigator.clipboard.writeText !== 'function'
-      ) {
-        return;
-      }
+      if (!this.hasClipboardAPI) return;
 
       this.$el.querySelectorAll('.md-code-snippet__copy').forEach((copyButton) => {
         copyButton.addEventListener('click', async () => {
@@ -231,9 +249,21 @@ export default {
           const code = codeSnippet.querySelector('code');
           if (!code) return;
 
-          await navigator.clipboard.writeText(code.innerText.replace(/\n/g, '\n'));
+          await this.writeToClipboard(code.innerText);
         });
       });
+    },
+    async copyToClipboard() {
+      if (this.copiedMessageTimeout) return;
+
+      const text = this.message.trim();
+      if (text && this.hasClipboardAPI) {
+        this.copiedMessageTimeout = setTimeout(() => {
+          this.copiedMessageTimeout = undefined;
+        }, 2000);
+
+        await this.writeToClipboard(text);
+      }
     },
   },
 
@@ -324,18 +354,36 @@ export default {
     .button {
       opacity: 0%;
       transition: opacity 0.25s ease-in-out;
-    }
-
-    .sentiment {
       display: inline-block;
       width: 1.5rem;
       cursor: pointer;
       padding: 1px;
+    }
+
+    .copy-icon {
+      fill: desaturate(lighten($gray2, 20%), 10%);
+      width: 90%;
+
+      &:hover {
+        fill: white;
+      }
+    }
+
+    .check-icon {
+      width: 85%;
+
+      path {
+        fill: white;
+      }
+    }
+
+    .sentiment {
       transform-origin: center center;
 
       svg {
         width: 100%;
         height: 100%;
+
         path {
           stroke: desaturate(lighten($gray2, 25%), 10%);
           fill: none;
