@@ -5,13 +5,14 @@ import { RpcHandler } from '../../src/rpc/rpc';
 import { numProcessed } from '../../src/rpc/index/numProcessed';
 import { search } from '../../src/rpc/search/search';
 import appmapData from '../../src/rpc/appmap/data';
-import appmapStats from '../../src/rpc/appmap/stats';
+import { appmapStatsV1, appmapStatsV2 } from '../../src/rpc/appmap/stats';
 import metadata from '../../src/rpc/appmap/metadata';
 import sequenceDiagram from '../../src/rpc/appmap/sequenceDiagram';
 import { explainHandler, explainStatusHandler } from '../../src/rpc/explain/explain';
 import { waitFor } from './waitFor';
 import FingerprintWatchCommand from '../../src/fingerprint/fingerprintWatchCommand';
 import { INavieProvider } from '../../src/rpc/explain/navie/inavie';
+import { getConfigurationV1, setConfigurationV1 } from '../../src/rpc/configuration';
 
 export type RPC = {
   server: RPCServer;
@@ -26,12 +27,15 @@ export async function buildRPC(navieProvider: INavieProvider): Promise<RPC> {
   const handlers: RpcHandler<any, any>[] = [
     numProcessed(fingerprintWatchCommand),
     search(),
-    appmapStats(),
+    appmapStatsV1(),
+    appmapStatsV2(),
     appmapData(),
     metadata(),
     sequenceDiagram(),
     explainHandler(navieProvider),
     explainStatusHandler(),
+    getConfigurationV1(),
+    setConfigurationV1(),
   ];
 
   const rpcServer = new RPCServer(0, handlers);
