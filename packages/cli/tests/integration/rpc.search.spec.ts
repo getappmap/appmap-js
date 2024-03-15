@@ -2,7 +2,7 @@ import { SearchRpc } from '@appland/rpc';
 import { join } from 'path';
 import { readFile } from 'fs/promises';
 
-import RPCTest from './RPCTest';
+import { SingleDirectoryRPCTest as RPCTest } from './RPCTest';
 import { verbose } from '../../src/utils';
 
 describe('RPC', () => {
@@ -14,8 +14,10 @@ describe('RPC', () => {
   afterEach(async () => await rpcTest.teardownEach());
   afterAll(async () => await rpcTest.teardownAll());
 
+  // Windows path separators will be escaped in JSON serialized form
+  const cwd = process.cwd().replace(/\\/g, '\\\\');
   const normalizeSearchData = (searchData: SearchRpc.SearchResponse): SearchRpc.SearchResponse =>
-    JSON.parse(JSON.stringify(searchData).replaceAll(process.cwd(), "$cwd"));
+    JSON.parse(JSON.stringify(searchData).replaceAll(cwd, '$cwd').replace(/\\\\/g, '/'));
 
   describe('search', () => {
     it('finds AppMaps by keyword', async () => {
