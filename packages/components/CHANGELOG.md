@@ -1,3 +1,10 @@
+# [@appland/components-v4.8.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.8.0...@appland/components-v4.8.1) (2024-03-15)
+
+
+### Bug Fixes
+
+* AppMap stats reload a minimum of 1s apart ([33a4fe2](https://github.com/getappmap/appmap-js/commit/33a4fe25cc2f77741743297231a0306b1c2c295a))
+
 # [@appland/components-v4.8.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.7.0...@appland/components-v4.8.0) (2024-03-15)
 
 
