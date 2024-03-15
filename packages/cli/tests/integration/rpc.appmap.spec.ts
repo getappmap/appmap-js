@@ -12,30 +12,56 @@ describe('RPC', () => {
   afterEach(async () => await rpcTest.teardownEach());
   afterAll(async () => await rpcTest.teardownAll());
 
-  describe('appmap.stats', () => {
+  describe('v1.appmap.stats', () => {
     it('can be retrieved', async () => {
-      const options: AppMapRpc.StatsOptions = {};
-      const response = await rpcTest.client.request(AppMapRpc.StatsFunctionName, options);
+      const response = await rpcTest.client.request(AppMapRpc.Stats.V1.Method, {});
       expect(response.error).toBeFalsy();
-      expect(Array.isArray(response.result)).toBeTruthy();
-      expect(response.result.length).toEqual(1);
-      const stats = response.result.shift();
-      expect(stats.numAppMaps).toEqual(2);
-      expect(stats.packages).toEqual(['app/controllers', 'app/models', 'json', 'openssl']);
-      expect(stats.classes).toEqual([
-        'app/controllers/API::APIKeysController',
-        'app/controllers/OrganizationsController',
-        'app/models/ApiKey',
-        'app/models/Configuration',
-        'app/models/User',
-        'app/models/User::Show',
-        'json/JSON::Ext::Generator::State',
-        'json/JSON::Ext::Parser',
-        'openssl/Digest::Instance',
-        'openssl/OpenSSL::Cipher',
+      expect(response.result).toStrictEqual({
+        packages: ['app/controllers', 'app/models', 'json', 'openssl'],
+        classes: [
+          'app/controllers/API::APIKeysController',
+          'app/controllers/OrganizationsController',
+          'app/models/ApiKey',
+          'app/models/Configuration',
+          'app/models/User',
+          'app/models/User::Show',
+          'json/JSON::Ext::Generator::State',
+          'json/JSON::Ext::Parser',
+          'openssl/Digest::Instance',
+          'openssl/OpenSSL::Cipher',
+        ],
+        routes: ['DELETE /api/api_keys', 'GET /organizations/new'],
+        tables: ['api_keys', 'pg_attribute', 'pg_type', 'users'],
+        numAppMaps: 2,
+      });
+    });
+  });
+
+  describe('v2.appmap.stats', () => {
+    it('can be retrieved', async () => {
+      const response = await rpcTest.client.request(AppMapRpc.Stats.V2.Method, {});
+      expect(response.error).toBeFalsy();
+      expect(response.result).toStrictEqual([
+        {
+          name: 'fixture-config',
+          packages: ['app/controllers', 'app/models', 'json', 'openssl'],
+          classes: [
+            'app/controllers/API::APIKeysController',
+            'app/controllers/OrganizationsController',
+            'app/models/ApiKey',
+            'app/models/Configuration',
+            'app/models/User',
+            'app/models/User::Show',
+            'json/JSON::Ext::Generator::State',
+            'json/JSON::Ext::Parser',
+            'openssl/Digest::Instance',
+            'openssl/OpenSSL::Cipher',
+          ],
+          routes: ['DELETE /api/api_keys', 'GET /organizations/new'],
+          tables: ['api_keys', 'pg_attribute', 'pg_type', 'users'],
+          numAppMaps: 2,
+        },
       ]);
-      expect(stats.routes).toEqual(['DELETE /api/api_keys', 'GET /organizations/new']);
-      expect(stats.tables).toEqual(['api_keys', 'pg_attribute', 'pg_type', 'users']);
     });
   });
 
