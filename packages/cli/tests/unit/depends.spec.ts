@@ -25,6 +25,11 @@ describe('Depends', () => {
 
     fs.copySync(fixtureDir, appMapDir);
 
+    // Copying files will update mtime, so we need to re-index.
+    // Otherwise, the source code will always be considered more
+    // recent than an our index after the copy.
+    await findFiles(appMapDir, 'mtime', (fileName) => fs.rm(fileName));
+
     const fingerprinter = new Fingerprinter();
     await findFiles(appMapDir, '.appmap.json', async (fileName) => {
       utimesSync(fileName, now, now);
