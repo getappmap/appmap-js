@@ -1,3 +1,10 @@
+# [@appland/components-v4.8.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.7.0...@appland/components-v4.8.0) (2024-03-15)
+
+
+### Features
+
+* AppMap stats in the Navie view are reactive ([4fa28b8](https://github.com/getappmap/appmap-js/commit/4fa28b8105e6d4d70ebb40fc5d433f7c74b9210e))
+
 # [@appland/components-v4.7.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.6.0...@appland/components-v4.7.0) (2024-03-14)
 
 
