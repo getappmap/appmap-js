@@ -1,3 +1,4 @@
+import { AppMapRpc } from '@appland/rpc';
 import { browserClient, reportError } from './RPC';
 
 import { EventEmitter } from 'events';
@@ -117,11 +118,15 @@ export default class AppMapRPC {
 
   appmapStats(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.client.request('appmap.stats', {}, function (err: any, error: any, result: any) {
-        if (err || error) return reportError(reject, err, error);
+      this.client.request(
+        AppMapRpc.Stats.V2.Method,
+        {},
+        function (err: any, error: any, result: any) {
+          if (err || error) return reportError(reject, err, error);
 
-        resolve(result);
-      });
+          resolve(result);
+        }
+      );
     });
   }
 

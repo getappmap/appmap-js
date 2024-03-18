@@ -37,13 +37,16 @@ const mostRecentAppMaps = [orderData, petclinicData, longPackageData].map((appma
   path: `tmp/appmap/${i}.appmap.json`,
 }));
 
-const appmapStats = {
-  numAppMaps: appmaps.length,
-  packages: Array.from({ length: 4 }, (_, i) => `app/controllers/${i}`),
-  classes: Array.from({ length: 6 }, (_, i) => `Model${i}`),
-  routes: Array.from({ length: 8 }, (_, i) => `GET /users/${i}`),
-  tables: Array.from({ length: 7 }, (_, i) => `table_${i}`),
-};
+const appmapStats = [
+  {
+    name: 'example',
+    numAppMaps: mostRecentAppMaps.length,
+    packages: Array.from({ length: 4 }, (_, i) => `app/controllers/${i}`),
+    classes: Array.from({ length: 6 }, (_, i) => `Model${i}`),
+    routes: Array.from({ length: 8 }, (_, i) => `GET /users/${i}`),
+    tables: Array.from({ length: 7 }, (_, i) => `table_${i}`),
+  },
+];
 
 export default {
   title: 'Pages/ChatSearch',
@@ -89,7 +92,10 @@ export const ChatSearchWithAppMaps = (args, { argTypes }) => ({
 export const ChatSearchMock = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VChatSearch },
-  template: `<v-chat-search v-bind="$props"></v-chat-search>`,
+  template: `<v-chat-search v-bind="$props" ref="chatSearch"></v-chat-search>`,
+  mounted() {
+    this.$refs.chatSearch.setAppMapStats(appmapStats);
+  },
 });
 
 export const ChatSearchMockWithCodeSelection = (args, { argTypes }) => ({
@@ -110,13 +116,19 @@ export const ChatSearchMockWithFilters = (args, { argTypes }) => ({
 export const ChatSearchMockSearchPrepopulated = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VChatSearch },
-  template: `<v-chat-search v-bind="$props"></v-chat-search>`,
+  template: `<v-chat-search v-bind="$props" ref="chatSearch"></v-chat-search>`,
+  mounted() {
+    this.$refs.chatSearch.setAppMapStats(appmapStats);
+  },
 });
 
 export const ChatSearchMockSearchPrepopulatedEmptyResults = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VChatSearch },
-  template: `<v-chat-search v-bind="$props"></v-chat-search>`,
+  template: `<v-chat-search v-bind="$props" ref="chatSearch"></v-chat-search>`,
+  mounted() {
+    this.$refs.chatSearch.setAppMapStats([{ numAppMaps: 0 }]);
+  },
 });
 
 const MOCK_EXPLANATION =

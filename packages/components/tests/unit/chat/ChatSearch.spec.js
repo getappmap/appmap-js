@@ -27,21 +27,20 @@ describe('pages/ChatSearch.vue', () => {
   const threadId = 'the-thread-id';
   const userMessageId = 'the-user-message-id';
 
-  const noIndexProcess = () => [
-    [new Error('No index process (testing - please ignore)'), undefined, undefined],
-  ];
-
   const appmapStatsHasAppMaps = () => [
     [
       null,
       null,
-      {
-        packages: ['a', 'b', 'c'],
-        classes: ['d', 'e', 'f'],
-        routes: ['g', 'h', 'i'],
-        tables: ['j', 'k', 'l'],
-        numAppMaps: 100,
-      },
+      [
+        {
+          name: 'project',
+          packages: ['a', 'b', 'c'],
+          classes: ['d', 'e', 'f'],
+          routes: ['g', 'h', 'i'],
+          tables: ['j', 'k', 'l'],
+          numAppMaps: 100,
+        },
+      ],
     ],
   ];
 
@@ -49,14 +48,17 @@ describe('pages/ChatSearch.vue', () => {
     [
       null,
       null,
-      {
-        numAppMaps: 0,
-      },
+      [
+        {
+          numAppMaps: 0,
+        },
+      ],
     ],
   ];
+
   it('can be resized', async () => {
     const wrapper = chatSearchWrapper({
-      'appmap.stats': appmapStatsHasAppMaps(),
+      'v2.appmap.stats': appmapStatsHasAppMaps(),
     });
 
     const lhsPanel = wrapper.find('[data-cy="resize-left"]');
@@ -80,7 +82,7 @@ describe('pages/ChatSearch.vue', () => {
   describe('when no AppMaps are available', () => {
     it('shows a warning that no AppMaps are available', async () => {
       const wrapper = chatSearchWrapper({
-        'appmap.stats': appmapStatsNoAppMaps(),
+        'v2.appmap.stats': appmapStatsNoAppMaps(),
       });
       await wrapper.vm.$nextTick();
       wrapper.find('[data-cy="status-bar-header"]').trigger('click');
@@ -89,7 +91,7 @@ describe('pages/ChatSearch.vue', () => {
 
     it('emits an event when the user clicks the "Create some" button', async () => {
       const wrapper = chatSearchWrapper({
-        'appmap.stats': appmapStatsNoAppMaps(),
+        'v2.appmap.stats': appmapStatsNoAppMaps(),
       });
       await wrapper.vm.$nextTick();
 
@@ -103,7 +105,7 @@ describe('pages/ChatSearch.vue', () => {
 
     it("shows Navie's context", async () => {
       const wrapper = chatSearchWrapper({
-        'appmap.stats': appmapStatsNoAppMaps(),
+        'v2.appmap.stats': appmapStatsNoAppMaps(),
       });
       await wrapper.vm.$nextTick();
 
@@ -115,7 +117,7 @@ describe('pages/ChatSearch.vue', () => {
   describe('when AppMaps are available', () => {
     it('shows instructions', async () => {
       const wrapper = chatSearchWrapper({
-        'appmap.stats': appmapStatsHasAppMaps(),
+        'v2.appmap.stats': appmapStatsHasAppMaps(),
       });
       await wrapper.vm.$nextTick();
       expect(wrapper.find('.instructions [data-cy="no-appmaps"]').exists()).toBe(false);
@@ -123,7 +125,7 @@ describe('pages/ChatSearch.vue', () => {
 
     it("shows Navie's context", async () => {
       const wrapper = chatSearchWrapper({
-        'appmap.stats': appmapStatsHasAppMaps(),
+        'v2.appmap.stats': appmapStatsHasAppMaps(),
       });
       await wrapper.vm.$nextTick();
 
@@ -143,7 +145,7 @@ describe('pages/ChatSearch.vue', () => {
           ],
         };
         const messagesCalled = {
-          'appmap.stats': appmapStatsHasAppMaps(),
+          'v2.appmap.stats': appmapStatsHasAppMaps(),
           explain: [[null, null, { userMessageId, threadId }]],
           'explain.status': [
             [null, null, { step: 'build-vector-terms' }],
@@ -235,7 +237,7 @@ describe('pages/ChatSearch.vue', () => {
         };
 
         const messagesCalled = {
-          'appmap.stats': appmapStatsHasAppMaps(),
+          'v2.appmap.stats': appmapStatsHasAppMaps(),
           explain: [[null, null, { userMessageId, threadId }]],
           'explain.status': [
             [null, null, { step: 'build-vector-terms' }],
@@ -308,7 +310,7 @@ describe('pages/ChatSearch.vue', () => {
       const wrapper = chatSearchWrapper({
         'appmap.data': [[null, null, '{}']],
         'appmap.metadata': [[null, null, {}]],
-        'appmap.stats': appmapStatsHasAppMaps(),
+        'v2.appmap.stats': appmapStatsHasAppMaps(),
         explain: [[null, null, { userMessageId, threadId }]],
         'explain.status': [
           [null, null, { step: 'complete', searchResponse: { results: [{ events: [] }] } }],
@@ -341,13 +343,35 @@ describe('pages/ChatSearch.vue', () => {
   });
 
   describe('reactiveness', () => {
+    it('does not display stats until they are available', async () => {
+      jest.useFakeTimers();
+
+      const delay = 1000;
+      const wrapper = mount(VChatSearch, {
+        propsData: {
+          appmapRpcFn: (method, __, callback) => {
+            expect(method).toBe('v2.appmap.stats');
+            const [args] = appmapStatsHasAppMaps();
+            setTimeout(() => callback(...args), delay);
+          },
+        },
+      });
+
+      await wrapper.vm.$nextTick();
+      expect(wrapper.find('[data-cy="status-bar"]').exists()).toBe(false);
+
+      jest.advanceTimersByTime(delay + 1);
+      await wrapper.vm.$nextTick();
+      expect(wrapper.find('[data-cy="status-bar"]').exists()).toBe(true);
+    });
+
     it('reloads stats as most recent AppMaps are updated', async () => {
       jest.useFakeTimers();
 
       const [first] = appmapStatsNoAppMaps();
       const [second] = appmapStatsHasAppMaps();
       const wrapper = chatSearchWrapper({
-        'appmap.stats': [first, second],
+        'v2.appmap.stats': [first, second],
         propsData: {
           appmapYmlPresent: true,
         },
@@ -355,7 +379,6 @@ describe('pages/ChatSearch.vue', () => {
 
       await wrapper.vm.$nextTick();
 
-      console.log(wrapper.html());
       expect(wrapper.find('[data-cy="status-no-data"]').exists()).toBe(true);
 
       wrapper.setProps({
@@ -384,7 +407,7 @@ describe('pages/ChatSearch.vue', () => {
   describe('error handling', () => {
     async function simulateError(err, error) {
       const wrapper = chatSearchWrapper({
-        'appmap.stats': appmapStatsHasAppMaps(),
+        'v2.appmap.stats': appmapStatsHasAppMaps(),
         explain: [[err, error]],
       });
 

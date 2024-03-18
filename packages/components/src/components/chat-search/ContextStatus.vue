@@ -1,8 +1,8 @@
 <template>
-  <v-status-bar v-if="appmapStats && appmapStats.numAppMaps" level="success">
+  <v-status-bar v-if="numAppMaps" level="success">
     <template v-slot:header>
       <div class="context__header">
-        {{ appmapStats.numAppMaps }} AppMap{{ appmapStats.numAppMaps === 1 ? '' : 's' }} available
+        {{ numAppMaps }} AppMap{{ numAppMaps === 1 ? '' : 's' }} available
       </div>
     </template>
     <template v-slot:body>
@@ -47,11 +47,7 @@
           You can still ask Navie questions, but Navie only has partial information about your
           project.
         </p>
-        <p
-          v-if="appmapStats && appmapStats.numAppMaps === 0"
-          class="mt-0 mb-0"
-          data-cy="status-no-data"
-        >
+        <p v-if="appmapStats && numAppMaps === 0" class="mt-0 mb-0" data-cy="status-no-data">
           You need to
           <a href="#" @click.prevent="openRecordInstructions" data-cy="record-guide">
             record runtime data
@@ -68,15 +64,7 @@ import Vue, { PropType } from 'vue';
 import VStatusBar from '@/components/chat-search/StatusBar.vue';
 import VFailIcon from '@/assets/close.svg';
 import VSuccessIcon from '@/assets/success-checkmark.svg';
-
-type AppmapStats = {
-  numAppMaps: number;
-  packages: string[];
-  classes: string[];
-  routes: string[];
-  tables: string[];
-  appmaps: any[];
-};
+import { AppMapRpc } from '@appland/rpc';
 
 export default Vue.extend({
   name: 'v-context-status',
@@ -94,7 +82,13 @@ export default Vue.extend({
   },
 
   props: {
-    appmapStats: Object as PropType<AppmapStats>,
+    appmapStats: Array as PropType<AppMapRpc.Stats.V2.Response | undefined>,
+  },
+
+  computed: {
+    numAppMaps(): number {
+      return (this.appmapStats || []).reduce((acc, { numAppMaps }) => acc + numAppMaps, 0);
+    },
   },
 
   methods: {

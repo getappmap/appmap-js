@@ -2,7 +2,7 @@
   <div class="match-instructions" data-cy="match-instructions">
     <div class="content">
       <div class="content__header">
-        <p>{{ appmapStats.numAppMaps }} AppMaps available</p>
+        <p>{{ numAppMaps }} AppMaps available</p>
         <div class="divider">|</div>
         <v-button
           data-cy="create-more-appmaps-btn"
@@ -34,12 +34,18 @@ export default {
 
   props: {
     appmapStats: {
-      type: Object,
-      required: true,
+      type: Array,
+      required: false,
     },
     searchResponse: {
       type: Object,
       required: true,
+    },
+  },
+
+  computed: {
+    numAppMaps() {
+      return (this.appmapStats || []).reduce((acc, { numAppMaps }) => acc + numAppMaps, 0);
     },
   },
 
