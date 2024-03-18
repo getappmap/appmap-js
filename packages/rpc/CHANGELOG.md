@@ -1,3 +1,12 @@
+# [@appland/rpc-v1.6.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.5.0...@appland/rpc-v1.6.0) (2024-03-18)
+
+
+### Features
+
+* RPC service requires configuration with directory list ([8fb1fe5](https://github.com/getappmap/appmap-js/commit/8fb1fe5e658226fc826c6ce78614c8a2fa8b0f87))
+* Stats can be an array and include a project name ([7dc833f](https://github.com/getappmap/appmap-js/commit/7dc833f6afcd2b07d77f3382c3b557be385d914e))
+* Version `appmap.stats`, `configuration.[sg]et` ([4e80af8](https://github.com/getappmap/appmap-js/commit/4e80af8cf744f49b26afa972ad4b81bc5a5b9c84))
+
 # [@appland/rpc-v1.5.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.4.0...@appland/rpc-v1.5.0) (2024-03-06)
 
 
