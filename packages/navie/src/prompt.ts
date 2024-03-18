@@ -22,7 +22,7 @@ The user is asking about specific lines of code that they have selected in their
     prefix: 'Code selection',
   },
   [PromptType.Question]: {
-    content: `**The user's question**
+    content: `**The task**
 
 This is the primary question that the user wants you to answer. Your response should be
 focused primarily on answering this question.
@@ -67,7 +67,7 @@ each project:
   [PromptType.SequenceDiagram]: {
     content: `**Sequence diagrams**
 
-You're provided with sequence diagrams that are relevant to the user's question.
+You're provided with sequence diagrams that are relevant to the task.
 Each sequence diagram represents the actual flow of code that was recorded by the AppMap language library
 which is integrated into the project.
 `,
@@ -77,7 +77,7 @@ which is integrated into the project.
   [PromptType.CodeSnippet]: {
     content: `**Code snippets**
 
-You're provided with code snippets that are relevant to the user's question. Each code snippet represents
+You're provided with code snippets that are relevant to the task. Each code snippet represents
 a piece of code that was recorded by the AppMap language library which is integrated into the project.
 
 Sequence diagrams, if available, provide more context about how each code snippet is used in the overall program.
@@ -91,7 +91,7 @@ followed by the code itself.
   [PromptType.DataRequest]: {
     content: `**Data requests**
 
-You're provided with data requests that are relevant to the user's question. A data request
+You're provided with data requests that are relevant to the task. A data request
 is an outbound request to a database, API, or other data source that was made by the program.
 Each data request was recorded by the AppMap language library which is integrated into the project.
 

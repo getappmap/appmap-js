@@ -42,6 +42,9 @@ class LocalHistory {
 
 export default class LocalNavie extends EventEmitter implements INavie {
   public history: LocalHistory;
+  public explainMode: Explain.Mode | undefined;
+  public tokenLimit: number | undefined;
+  public temperature: number | undefined;
 
   constructor(
     public threadId: string | undefined,
@@ -61,6 +64,18 @@ export default class LocalNavie extends EventEmitter implements INavie {
     this.history = new LocalHistory(this.threadId);
   }
 
+  setOption(key: string, value: string | number) {
+    if ( key === 'tokenLimit' ) {
+      this.tokenLimit = value as number;
+    } else if ( key === 'temperature' ) {
+      this.temperature = value as number;
+    } else if ( key === 'explainMode' ) {
+      this.explainMode = value as Explain.Mode;
+    } else {
+      throw new Error(`LocalNavie does not support option '${key}'`);
+    }
+  }
+
   async ask(question: string, codeSelection: string | undefined): Promise<void> {
     const messageId = randomUUID();
     log(`[local-navie] Processing question ${messageId} in thread ${this.threadId}`)
@@ -71,6 +86,10 @@ export default class LocalNavie extends EventEmitter implements INavie {
       codeSelection,
     };
     const options = new Explain.ExplainOptions();
+    if ( this.explainMode ) options.mode = this.explainMode;
+    if ( this.tokenLimit ) options.tokenLimit = this.tokenLimit;
+    if ( this.temperature) options.temperature = this.temperature;
+
     const history = await this.history.restoreMessages();
     this.history.saveMessage({ content: question, role: 'user' });
 

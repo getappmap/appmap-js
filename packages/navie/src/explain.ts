@@ -15,7 +15,7 @@ import { ProjectInfoProvider } from './project-info';
 import CodeSelectionService from './services/code-selection-service';
 import QuestionService from './services/question-service';
 
-const AGENT_INFO_PROMPT = `**Task: Explaining Code, Analyzing Code, Generating Code**
+const EXPLAIN_AGENT_PROMPT = `**Task: Explaining Code, Analyzing Code, Generating Code**
 
 **About you**
 
@@ -76,6 +76,35 @@ engineering concepts. The user is already aware of these concepts, and emitting 
 will waste the user's time. The user wants direct answers to their questions.
 `;
 
+export const GENERATE_AGENT_PROMPT = `**Task: Generation of Code and Test Cases**
+
+**About you**
+
+Your name is Navie. You are code generation AI created and maintained by AppMap Inc, and are available to AppMap users as a service.
+
+Your job is to generate code and test cases. Like a senior developer or architect, you have a deep understanding of the codebase.
+
+**About the user**
+
+The user is an experienced software developer who will review the generated code and test cases. You can expect the user to be proficient
+in software development.
+
+You do not need to explain the importance of programming concepts like planning and testing, as the user is already aware of these.
+
+**Response Format**
+
+Your solution must be provided as a series of code files and/or patches that implement the desired functionality within the project 
+code. Do not propose wrapping the project with other code, running the project in a different environment, wrapping the project with
+shell commands, or other workarounds. Your solution must be suitable for use as a pull request to the project.
+
+* Your response should be provided as series of code files and/or patches that implement the desired functionality.
+* You should emit code that is designed to solve the problem described by the user.
+* To modify existing code, emit a patch that can be applied to the existing codebase.
+* To create new code, emit a new file that can be added to the existing codebase.
+* At the beginning of every patch file or code file you emit, you must print the path to the code file within the workspace.
+
+`;
+
 const MAKE_APPMAPS_PROMPT = `**Making AppMaps**
 
 If the user's project does not contain any AppMaps, you should advise the user to make AppMaps.
@@ -111,7 +140,23 @@ export interface ClientRequest {
   codeSelection?: string;
 }
 
+export enum Mode {
+  Explain = 'explain',
+  Generate = 'generate',
+}
+
+const AGENT_PROMPTS: Record<Mode, string> = {
+  [Mode.Explain]: EXPLAIN_AGENT_PROMPT,
+  [Mode.Generate]: GENERATE_AGENT_PROMPT,
+};
+
+const APPLY_MAKE_APPMAPS_PROMPT: Record<Mode, boolean> = {
+  [Mode.Explain]: true,
+  [Mode.Generate]: false,
+};
+
 export class ExplainOptions {
+  mode: Mode = Mode.Explain;
   modelName = 'gpt-4-0125-preview';
   tokenLimit = 8000;
   temperature = 0.4;
@@ -140,9 +185,15 @@ export class CodeExplainerService {
     const tokensAvailable = (): number =>
       options.tokenLimit - options.responseTokens - this.interactionHistory.computeTokenSize();
 
-    this.interactionHistory.addEvent(
-      new PromptInteractionEvent('agentInfo', 'system', AGENT_INFO_PROMPT)
-    );
+    {
+      let { mode } = options;
+      if (!mode) mode = Mode.Explain;
+
+      const agentPrompt = AGENT_PROMPTS[mode];
+      this.interactionHistory.addEvent(
+        new PromptInteractionEvent('agentInfo', 'system', agentPrompt)
+      );
+    }
     this.questionService.addSystemPrompt();
     this.questionService.applyQuestion(question);
     if (codeSelection) {
@@ -152,12 +203,16 @@ export class CodeExplainerService {
     const projectInfo = await this.projectInfoService.lookupProjectInfo();
     const hasAppMaps = projectInfo.some((info) => info.appmapStats.numAppMaps > 0);
     if (!hasAppMaps) {
-      // TODO: For now, this is only advisory. We'll continue with the explanation,
-      // because the user may be asking a general programming question.
-      this.interactionHistory.log('No AppMaps exist in the project');
-      this.interactionHistory.addEvent(
-        new PromptInteractionEvent('makeAppMaps', 'system', MAKE_APPMAPS_PROMPT)
-      );
+      const shouldEmitPrompt = APPLY_MAKE_APPMAPS_PROMPT[options.mode];
+      if (shouldEmitPrompt) {
+        // TODO: For now, this is only advisory. We'll continue with the explanation,
+        // because the user may be asking a general programming question.
+        this.interactionHistory.log('No AppMaps exist in the project');
+        this.interactionHistory.addEvent(
+          new PromptInteractionEvent('makeAppMaps', 'system', MAKE_APPMAPS_PROMPT)
+        );
+      }
+
       this.interactionHistory.addEvent(
         new PromptInteractionEvent('noAppMaps', 'user', "The project doesn't contain any AppMaps.")
       );

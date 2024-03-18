@@ -14,7 +14,7 @@ import appmapData from '../../rpc/appmap/data';
 import { appmapStatsV1, appmapStatsV2 } from '../../rpc/appmap/stats';
 import LocalNavie from '../../rpc/explain/navie/navie-local';
 import RemoteNavie from '../../rpc/explain/navie/navie-remote';
-import { Context, ProjectInfo } from '@appland/navie';
+import { Context, Explain, ProjectInfo } from '@appland/navie';
 import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 import { configureRpcDirectories } from '../../lib/handleWorkingDirectory';
 import { loadConfiguration } from '@appland/client';
@@ -32,7 +32,7 @@ export const builder = (args: yargs.Argv) => {
     describe: 'program working directory',
     type: 'string',
     alias: 'd',
-    multiple: true,
+    array: true,
   });
   args.option('port', {
     describe: 'port to listen on for JSON-RPC requests',
@@ -49,6 +49,17 @@ export const builder = (args: yargs.Argv) => {
     boolean: true,
     default: false,
   });
+  args.option('ai-option', {
+    describe:
+      'Provide an extended option to the AI provider, in the form of a key=value pair. May be repeated.',
+    type: 'string',
+    array: true,
+  });
+  args.option('explain-mode', {
+    describe: 'Mode in which to run the Explain AI.',
+    choices: ['explain', 'generate'],
+    default: 'explain',
+  });
 
   return args.strict();
 };
@@ -64,6 +75,14 @@ export const handler = async (argv) => {
   }
 
   const { port, logNavie } = argv;
+  let aiOptions: string[] | undefined = argv.aiOption;
+  if (aiOptions) {
+    aiOptions = Array.isArray(aiOptions) ? aiOptions : [aiOptions];
+  }
+  let explainModeStr: string | undefined = argv.explainMode;
+  let explainMode: Explain.Mode | undefined;
+  if (explainModeStr)
+    explainMode = Explain.Mode[explainModeStr.toUpperCase() as keyof typeof Explain.Mode];
 
   const useLocalNavie = () => {
     if (argv.navieProvider === 'local') {
@@ -90,15 +109,29 @@ export const handler = async (argv) => {
     return false;
   };
 
+  const applyAIOptions = (navie: LocalNavie | RemoteNavie) => {
+    if (aiOptions) {
+      for (const option of aiOptions) {
+        const [key, value] = option.split('=');
+        if (key && value) {
+          navie.setOption(key, value);
+        }
+      }
+    }
+    if ( explainMode ) {
+      navie.setOption('explainMode', explainMode);
+    }
+  };
+
   const buildLocalNavie = (
     threadId: string | undefined,
     contextProvider: Context.ContextProvider,
     projectInfoProvider: ProjectInfo.ProjectInfoProvider
   ) => {
     const navie = new LocalNavie(threadId, contextProvider, projectInfoProvider);
+    applyAIOptions(navie);
 
     let START: number | undefined;
-
     const logEvent = (event: InteractionEvent) => {
       if (!logNavie) return;
 
@@ -113,13 +146,16 @@ export const handler = async (argv) => {
     navie.on('event', logEvent);
     return navie;
   };
+
   const buildRemoteNavie = (
     threadId: string | undefined,
     contextProvider: Context.ContextProvider,
     projectInfoProvider: ProjectInfo.ProjectInfoProvider
   ) => {
     loadConfiguration(false);
-    return new RemoteNavie(threadId, contextProvider, projectInfoProvider);
+    const navie = new RemoteNavie(threadId, contextProvider, projectInfoProvider);
+    applyAIOptions(navie);
+    return navie;
   };
 
   const navieProvider = useLocalNavie() ? buildLocalNavie : buildRemoteNavie;

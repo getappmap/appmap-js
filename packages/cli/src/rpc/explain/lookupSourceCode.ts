@@ -31,7 +31,8 @@ export default async function lookupSourceCode(directory: string, location: stri
 
   if (!scannedExtensions.has(extension)) {
     scannedExtensions.add(extension);
-    const fileNames = await promisify(glob)(`${directory}/**/*${extension}`);
+    // dot: true is present to include the .tox directory for Python
+    const fileNames = await promisify(glob)(`${directory}/**/*${extension}`, { dot: true});
     if (verbose())
       warn(chalk.gray(`Found ${fileNames.length} files with extension "${extension}"`));
     for (const fileName of fileNames) {
