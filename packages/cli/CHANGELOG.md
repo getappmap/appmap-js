@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.130.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.130.0...@appland/appmap-v3.130.1) (2024-03-18)
+
+
+### Bug Fixes
+
+* Update navie, rpc ([5c08dcf](https://github.com/getappmap/appmap-js/commit/5c08dcf6cb8abf156b485a1bcc8c0c7120e57895))
+
 # [@appland/appmap-v3.130.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.129.1...@appland/appmap-v3.130.0) (2024-03-18)
 
 
