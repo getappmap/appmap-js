@@ -1,3 +1,18 @@
+# [@appland/appmap-v3.130.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.129.1...@appland/appmap-v3.130.0) (2024-03-18)
+
+
+### Bug Fixes
+
+* Fall back to default appmap_dir if unspecified ([17b204a](https://github.com/getappmap/appmap-js/commit/17b204a3b45870fa55e5f1572c91a6321eed93d2))
+* Log the full stack if a context function fails ([120a0e1](https://github.com/getappmap/appmap-js/commit/120a0e1394404c9a1fc21d0f228d673bdf45f5c4))
+
+
+### Features
+
+* RPC service requires configuration with directory list ([8fb1fe5](https://github.com/getappmap/appmap-js/commit/8fb1fe5e658226fc826c6ce78614c8a2fa8b0f87))
+* Support multi-project workspaces via an array of project info ([ac2fbee](https://github.com/getappmap/appmap-js/commit/ac2fbee45ea98722c1f197fbc522040f483aff3c))
+* Version `appmap.stats`, `configuration.[sg]et` ([4e80af8](https://github.com/getappmap/appmap-js/commit/4e80af8cf744f49b26afa972ad4b81bc5a5b9c84))
+
 # [@appland/appmap-v3.129.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.129.0...@appland/appmap-v3.129.1) (2024-03-07)
 
 
