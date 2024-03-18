@@ -1,3 +1,10 @@
+# [@appland/components-v4.9.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.8.2...@appland/components-v4.9.0) (2024-03-18)
+
+
+### Features
+
+* Use activation terminology in Navie ([1c62ed3](https://github.com/getappmap/appmap-js/commit/1c62ed3dcf11b8edb3e692157de9b24a7f9972ae))
+
 # [@appland/components-v4.8.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.8.1...@appland/components-v4.8.2) (2024-03-18)
 
 
