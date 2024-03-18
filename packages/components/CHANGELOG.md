@@ -1,3 +1,10 @@
+# [@appland/components-v4.8.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.8.1...@appland/components-v4.8.2) (2024-03-18)
+
+
+### Bug Fixes
+
+* Better whitespace handling in sign-in forms ([f97dfed](https://github.com/getappmap/appmap-js/commit/f97dfed86025b857efb4551a0123b6be647d7d9e))
+
 # [@appland/components-v4.8.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.8.0...@appland/components-v4.8.1) (2024-03-15)
 
 
