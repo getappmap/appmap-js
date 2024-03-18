@@ -15,7 +15,10 @@
         :question="question"
         @isChatting="setIsChatting"
       >
-        <v-context-status v-if="!hasAppMaps || !isChatting" :appmap-stats="appmapStats" />
+        <v-context-status
+          v-if="appmapStats && (!hasAppMaps || !isChatting)"
+          :appmap-stats="appmapStats"
+        />
       </v-chat>
     </div>
     <div
@@ -195,7 +198,7 @@ export default {
         },
         () => {
           // 1000ms or 5ms per appmap, whichever is greater
-          return Math.max(1000, this.appmapStats?.numAppMaps ?? 0 * 5);
+          return Math.max(1000, (this.appmapStats?.numAppMaps ?? 0) * 5);
         }
       ),
     };
@@ -272,7 +275,7 @@ export default {
       );
     },
     hasAppMaps() {
-      return this.appmapStats?.numAppMaps > 0;
+      return this.appmapStats?.some(({ numAppMaps }) => numAppMaps > 0) ?? false;
     },
   },
   methods: {

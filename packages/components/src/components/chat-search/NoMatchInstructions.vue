@@ -4,7 +4,7 @@
       <h2>No relevant AppMaps found</h2>
       <div class="content">
         <p>
-          Of the <strong>{{ appmapStats.numAppMaps }}</strong> AppMaps available in your project,
+          Of the <strong>{{ numAppMaps }}</strong> AppMaps available in your project,
           <strong>None</strong> of them seem to be relevant enough to your question.
         </p>
         <p>
@@ -22,9 +22,14 @@ export default {
 
   props: {
     appmapStats: {
-      type: Object,
-      required: true,
-      default: () => ({ numAppMaps: 0 }),
+      type: Array,
+      required: false,
+    },
+  },
+
+  computed: {
+    numAppMaps() {
+      return (this.appmapStats || []).reduce((acc, { numAppMaps }) => acc + numAppMaps, 0);
     },
   },
 

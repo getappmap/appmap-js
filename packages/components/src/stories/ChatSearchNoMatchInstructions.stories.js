@@ -6,9 +6,12 @@ export default {
   argTypes: {},
 };
 
-const appmapStats = {
-  numAppMaps: 100,
-};
+const appmapStats = [
+  {
+    name: 'project',
+    numAppMaps: 100,
+  },
+];
 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
