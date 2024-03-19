@@ -85,14 +85,16 @@
               :suggestions="hideNamesSuggestions"
               suggestions-placement="top"
             />
-            <div class="filters__hide" v-if="hiddenNames.length">
-              <div class="filters__hide-item" v-for="(name, index) in hiddenNames" :key="name">
-                {{ name }}
-                <CloseThinIcon
-                  class="filters__hide-item-icon"
-                  @click.stop="removeHiddenName(index)"
-                />
-              </div>
+          </div>
+        </div>
+        <div class="filters__block-row">
+          <div class="filters__hide" v-if="hiddenNames.length">
+            <div class="filters__hide-item" v-for="(name, index) in hiddenNames" :key="name">
+              {{ name }}
+              <CloseThinIcon
+                class="filters__hide-item-icon"
+                @click.stop="removeHiddenName(index)"
+              />
             </div>
           </div>
         </div>
@@ -740,7 +742,7 @@ export default {
     margin-top: 0.75rem;
     width: 100%;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
     gap: 0.5rem;
@@ -751,6 +753,8 @@ export default {
       justify-content: flex-start;
       align-items: center;
       padding: 5px 10px;
+      overflow-wrap: break-word;
+      max-width: 310px;
       background: $light-purple;
       color: $gray6;
       line-height: 1;
