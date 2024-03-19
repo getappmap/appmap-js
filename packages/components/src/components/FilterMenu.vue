@@ -537,7 +537,7 @@ export default {
     border-bottom: 1px solid $gray2;
     display: flex;
     justify-content: flex-start;
-    align-items: center;
+    align-items: baseline;
 
     svg {
       width: 1em;
@@ -588,12 +588,6 @@ export default {
       margin-left: 2rem;
       svg {
         fill: white;
-      }
-    }
-
-    @media (min-width: 900px) {
-      &-close {
-        display: none;
       }
     }
   }
