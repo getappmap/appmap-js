@@ -1904,7 +1904,7 @@ code {
   height: 0px;
 }
 ::-webkit-scrollbar-thumb {
-  background: $gray2;
+  background: $gray4;
   border: 0;
   border-radius: 50px;
 }
