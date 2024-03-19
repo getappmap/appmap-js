@@ -83,7 +83,7 @@ export default {
 };
 </script>
 
-<style scoped lang="css">
+<style lang="scss" scoped>
 .slider {
   height: fit-content;
   width: fit-content;
@@ -95,11 +95,11 @@ export default {
   border-radius: 0.5rem;
   padding: 0.25rem 0.5rem;
   appearance: none;
-  background: #242c41;
-  color: #808b98;
+  background: lighten($gray2, 10%);
+  color: $gray5;
   font-weight: bold;
   cursor: pointer;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .handle {
@@ -114,8 +114,8 @@ export default {
   width: 6px;
   height: 100%;
   margin: auto;
-  background: #242c41;
-  opacity: 0.8;
+  background: lighten($gray2, 10%);
+  opacity: 0.9;
 }
 
 .grab {
@@ -124,7 +124,7 @@ export default {
   position: absolute;
   transform: translateY(3px);
   border-radius: 3px;
-  background: #808b98;
+  background: $gray5;
   cursor: grab;
   z-index: 10;
 }

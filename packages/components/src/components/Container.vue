@@ -104,11 +104,11 @@ export default {
     border-radius: 0.5rem;
     padding: 0.25rem 0.5rem;
     appearance: none;
-    background: $gray2;
-    color: #808b98;
+    background: lighten($gray2, 10%);
+    color: $gray5;
     font-weight: bold;
     cursor: pointer;
-    opacity: 0.8;
+    opacity: 0.9;
 
     &:hover {
       opacity: 1;
@@ -130,8 +130,8 @@ export default {
       bottom: -3px;
       margin-left: -3px;
       width: 6px;
-      background: $gray2;
-      opacity: 0.8;
+      background: lighten($gray2, 10%);
+      opacity: 0.9;
     }
   }
 
@@ -141,7 +141,7 @@ export default {
     left: 0;
     width: 100%;
     height: 6px;
-    background: $gray4;
+    background: $gray5;
     cursor: grab;
   }
 }
