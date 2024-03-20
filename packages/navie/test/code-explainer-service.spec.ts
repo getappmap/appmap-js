@@ -8,9 +8,10 @@ import InteractionHistory from '../src/interaction-history';
 import LookupContextService from '../src/services/lookup-context-service';
 import ApplyContextService from '../src/services/apply-context-service';
 import CodeSelectionService from '../src/services/code-selection-service';
-import QuestionService from '../src/services/question-service';
 import ProjectInfoService from '../src/services/project-info-service';
 import { ProjectInfoProvider } from '../src/project-info';
+import { ExplainMode } from '../dist/mode';
+import { GenerateMode, IMode, Mode } from '../src/mode';
 
 const SEQUENCE_DIAGRAMS = [`diagram-1`, `diagram-2`];
 const CODE_SNIPPETS = {
@@ -36,6 +37,7 @@ const TOKEN_STREAM: AsyncIterable<string> = {
 };
 
 const EXPLAIN_OPTIONS: ExplainOptions = {
+  mode: Mode.Explain,
   modelName: 'gpt-3.5-turbo',
   responseTokens: 1000,
   tokenLimit: 5000,
@@ -47,7 +49,7 @@ describe('CodeExplainerService', () => {
   let requestContext: (request: ContextRequest) => Promise<ContextResponse>;
   let vectorTermsService: VectorTermsService;
   let completionService: CompletionService;
-  let questionService: QuestionService;
+  let mode: IMode;
   let codeSelectionService: CodeSelectionService;
   let projectInfoService: ProjectInfoService;
   let memoryService: MemoryService;
@@ -56,21 +58,73 @@ describe('CodeExplainerService', () => {
   let codeExplainerService: CodeExplainerService;
   let tokenCount: number;
   const question = 'How does user management work?';
-  let codeSelection: string | undefined = undefined;
+  let codeSelection: string | undefined;
+
+  function suggestsVectorTerms() {
+    jest.spyOn(vectorTermsService, 'suggestTerms').mockImplementation((query: string) => {
+      expect(query).toEqual([question, codeSelection].filter(Boolean).join('\n\n'));
+      return Promise.resolve(['user', 'management']);
+    });
+  }
+
+  function providesContextLookup(): LookupContextService {
+    const lookupProvider: ContextProvider = jest
+      .fn()
+      .mockImplementation((request: ContextRequest) => {
+        expect(request.vectorTerms).toEqual(['user', 'management']);
+        expect(request.tokenCount).toEqual(tokenCount);
+        return Promise.resolve(SEARCH_CONTEXT);
+      });
+    return new LookupContextService(interactionHistory, lookupProvider);
+  }
+
+  function providesProjectInfo(): ProjectInfoProvider {
+    return jest.fn().mockResolvedValue({
+      appmapConfig: {
+        name: 'mock-project',
+        language: 'ruby',
+        appmap_dir: 'tmp/appmap',
+        packages: ['lib'],
+      },
+      appmapStats: {
+        classes: 7,
+        methods: 10,
+        packages: 3,
+        numAppMaps: 5,
+      },
+    });
+  }
+
+  function doesNotPredictSummary() {
+    jest
+      .spyOn(memoryService, 'predictSummary')
+      .mockRejectedValue('predictSummary should not be called for the initial question');
+  }
+
+  function doesNotRequestContext() {
+    requestContext = jest
+      .fn()
+      .mockRejectedValue('requestContext should not be called for follow-up questions');
+  }
+
+  function predictsSummary(userMessage: string, aiMessage: string) {
+    memoryService.predictSummary = jest.fn().mockImplementation((messages: Message[]) => {
+      expect(messages.map((msg) => msg.content)).toEqual([userMessage, aiMessage]);
+      return Promise.resolve(
+        'The user asked about user management. The AI responded with a description of the user management subsystem.'
+      );
+    });
+  }
 
   beforeEach(async () => {
     interactionHistory = new InteractionHistory();
     completionService = {
       complete: () => TOKEN_STREAM,
     };
-    questionService = new QuestionService(interactionHistory);
+    codeSelection = undefined;
     codeSelectionService = new CodeSelectionService(interactionHistory);
+    memoryService = new MemoryService(interactionHistory, 'gpt-4', 0.5);
     vectorTermsService = new VectorTermsService(interactionHistory, 'gpt-4', 0.5);
-    jest.spyOn(vectorTermsService, 'suggestTerms').mockImplementation((query: string) => {
-      const expectedAggregateQuestion = [question, codeSelection].filter(Boolean).join('\n\n');
-      expect(query).toEqual(expectedAggregateQuestion);
-      return Promise.resolve(['user', 'management']);
-    });
     applyContextService = new ApplyContextService(interactionHistory);
   });
 
@@ -89,97 +143,41 @@ describe('CodeExplainerService', () => {
     return resultArray;
   }
 
-  describe('without chat history', () => {
-    beforeEach(() => {
-      tokenCount = 2161;
-      const lookupProvider: ContextProvider = jest
-        .fn()
-        .mockImplementation((request: ContextRequest) => {
-          expect(request.vectorTerms).toEqual(['user', 'management']);
-          expect(request.tokenCount).toEqual(tokenCount);
-          return Promise.resolve(SEARCH_CONTEXT);
-        });
-      lookupContextService = new LookupContextService(interactionHistory, lookupProvider);
+  describe('in "explain" mode', () => {
+    beforeEach(() => (mode = new ExplainMode(interactionHistory)));
 
-      const projectInfoProvider: ProjectInfoProvider = jest.fn().mockResolvedValue({
-        appmapConfig: {
-          name: 'mock-project',
-          language: 'ruby',
-          appmap_dir: 'tmp/appmap',
-          packages: ['lib'],
-        },
-        appmapStats: {
-          classes: 7,
-          methods: 10,
-          packages: 3,
-          numAppMaps: 5,
-        },
-      });
-      projectInfoService = new ProjectInfoService(interactionHistory, projectInfoProvider);
-
-      memoryService = new MemoryService(interactionHistory, 'gpt-4', 0.5);
-      jest
-        .spyOn(memoryService, 'predictSummary')
-        .mockRejectedValue('predictSummary should not be called for the initial question');
-
-      codeExplainerService = new CodeExplainerService(
-        interactionHistory,
-        completionService,
-        questionService,
-        codeSelectionService,
-        projectInfoService,
-        vectorTermsService,
-        lookupContextService,
-        applyContextService,
-        memoryService
-      );
-    });
-
-    it('produces an explanation', async () => {
-      const result = await explain(
-        {
-          question,
-        },
-        EXPLAIN_OPTIONS,
-        []
-      );
-
-      expect(
-        interactionHistory
-          .buildState()
-          .messages.filter((msg) => msg.role === 'system')
-          .map((msg) => msg.content.split('\n')[0])
-      ).toEqual([
-        '**Task: Explaining Code, Analyzing Code, Generating Code**',
-        `**The user's question**`,
-        `**AppMap configuration**`,
-        `**AppMap statistics**`,
-        `**Sequence diagrams**`,
-        `**Code snippets**`,
-        `**Data requests**`,
-      ]);
-
-      expect(result).toEqual([
-        'The user management system is a system ',
-        'that allows users to create and manage their own accounts.',
-      ]);
-    });
-
-    describe('with code selection', () => {
+    describe('without chat history', () => {
       beforeEach(() => {
-        tokenCount = 2082;
-        codeSelection = `class UserController { create() { } }`;
+        tokenCount = 2158;
+
+        suggestsVectorTerms();
+        lookupContextService = providesContextLookup();
+        const projectInfoProvider = providesProjectInfo();
+        projectInfoService = new ProjectInfoService(interactionHistory, projectInfoProvider);
+        doesNotPredictSummary();
+
+        codeExplainerService = new CodeExplainerService(
+          interactionHistory,
+          completionService,
+          mode,
+          codeSelectionService,
+          projectInfoService,
+          vectorTermsService,
+          lookupContextService,
+          applyContextService,
+          memoryService
+        );
       });
 
-      it('includes the code selection in the prompt', async () => {
+      it('produces an explanation', async () => {
         const result = await explain(
           {
             question,
-            codeSelection,
           },
           EXPLAIN_OPTIONS,
           []
         );
+
         expect(
           interactionHistory
             .buildState()
@@ -188,7 +186,6 @@ describe('CodeExplainerService', () => {
         ).toEqual([
           '**Task: Explaining Code, Analyzing Code, Generating Code**',
           `**The user's question**`,
-          `**The user's code selection**`,
           `**AppMap configuration**`,
           `**AppMap statistics**`,
           `**Sequence diagrams**`,
@@ -201,65 +198,151 @@ describe('CodeExplainerService', () => {
           'that allows users to create and manage their own accounts.',
         ]);
       });
+
+      describe('with code selection', () => {
+        beforeEach(() => {
+          tokenCount = 2078;
+          codeSelection = `class UserController { create() { } }`;
+        });
+
+        it('includes the code selection in the prompt', async () => {
+          const result = await explain(
+            {
+              question,
+              codeSelection,
+            },
+            EXPLAIN_OPTIONS,
+            []
+          );
+          expect(
+            interactionHistory
+              .buildState()
+              .messages.filter((msg) => msg.role === 'system')
+              .map((msg) => msg.content.split('\n')[0])
+          ).toEqual([
+            '**Task: Explaining Code, Analyzing Code, Generating Code**',
+            `**The user's question**`,
+            `**The user's code selection**`,
+            `**AppMap configuration**`,
+            `**AppMap statistics**`,
+            `**Sequence diagrams**`,
+            `**Code snippets**`,
+            `**Data requests**`,
+          ]);
+
+          expect(result).toEqual([
+            'The user management system is a system ',
+            'that allows users to create and manage their own accounts.',
+          ]);
+        });
+      });
     });
-  });
 
-  describe('with chat history', () => {
-    const userMessage = {
-      id: '1',
-      isUser: true,
-      text: 'What is user management?',
-    };
-    const aiMessage = {
-      id: '2',
-      isUser: false,
-      text: 'The user management system is a system that allows users to create and manage their own accounts.',
-    };
+    describe('with chat history', () => {
+      const userMessage = {
+        id: '1',
+        isUser: true,
+        text: 'What is user management?',
+      };
+      const aiMessage = {
+        id: '2',
+        isUser: false,
+        text: 'The user management system is a system that allows users to create and manage their own accounts.',
+      };
 
-    const history: ChatHistory = [userMessage, aiMessage].map((msg) => ({
-      content: msg.text,
-      role: msg.isUser ? 'user' : 'system',
-    }));
+      const history: ChatHistory = [userMessage, aiMessage].map((msg) => ({
+        content: msg.text,
+        role: msg.isUser ? 'user' : 'system',
+      }));
 
-    beforeEach(() => {
-      requestContext = jest
-        .fn()
-        .mockRejectedValue('requestContext should not be called for follow-up questions');
+      beforeEach(() => {
+        doesNotRequestContext();
+        predictsSummary(userMessage.text, aiMessage.text);
 
-      memoryService = new MemoryService(interactionHistory, 'gpt-4', 0.5);
-      memoryService.predictSummary = jest.fn().mockImplementation((messages: Message[]) => {
-        expect(messages.map((msg) => msg.content)).toEqual([userMessage.text, aiMessage.text]);
-        return Promise.resolve(
-          'The user asked about user management. The AI responded with a description of the user management subsystem.'
+        codeExplainerService = new CodeExplainerService(
+          interactionHistory,
+          completionService,
+          mode,
+          codeSelectionService,
+          projectInfoService,
+          vectorTermsService,
+          lookupContextService,
+          applyContextService,
+          memoryService
         );
       });
 
-      codeExplainerService = new CodeExplainerService(
-        interactionHistory,
-        completionService,
-        questionService,
-        codeSelectionService,
-        projectInfoService,
-        vectorTermsService,
-        lookupContextService,
-        applyContextService,
-        memoryService
-      );
+      it('summarizes the chat history in the messages', async () => {
+        const result = await explain({ question }, EXPLAIN_OPTIONS, history);
+        expect(result).toEqual([
+          'The user management system is a system ',
+          'that allows users to create and manage their own accounts.',
+        ]);
+        expect(memoryService.predictSummary).toHaveBeenCalledWith(history);
+      });
+
+      it('does not request context from the client', async () => {
+        await explain({ question }, EXPLAIN_OPTIONS, history);
+
+        expect(requestContext).not.toHaveBeenCalled();
+      });
     });
+  });
 
-    it('summarizes the chat history in the messages', async () => {
-      const result = await explain({ question }, EXPLAIN_OPTIONS, history);
-      expect(result).toEqual([
-        'The user management system is a system ',
-        'that allows users to create and manage their own accounts.',
-      ]);
-      expect(memoryService.predictSummary).toHaveBeenCalledWith(history);
-    });
+  describe('in "generate" mode', () => {
+    beforeEach(() => (mode = new GenerateMode(interactionHistory)));
 
-    it('does not request context from the client', async () => {
-      await explain({ question }, EXPLAIN_OPTIONS, history);
+    describe('without chat history', () => {
+      beforeEach(() => {
+        tokenCount = 2778;
 
-      expect(requestContext).not.toHaveBeenCalled();
+        suggestsVectorTerms();
+        doesNotPredictSummary();
+        lookupContextService = providesContextLookup();
+        projectInfoService = new ProjectInfoService(interactionHistory, providesProjectInfo());
+
+        codeExplainerService = new CodeExplainerService(
+          interactionHistory,
+          completionService,
+          mode,
+          codeSelectionService,
+          projectInfoService,
+          vectorTermsService,
+          lookupContextService,
+          applyContextService,
+          memoryService
+        );
+      });
+
+      it('produces a code suggestion', async () => {
+        const result = await explain(
+          {
+            question,
+          },
+          EXPLAIN_OPTIONS,
+          []
+        );
+
+        expect(
+          interactionHistory
+            .buildState()
+            .messages.filter((msg) => msg.role === 'system')
+            .map((msg) => msg.content.split('\n')[0])
+        ).toEqual([
+          '**Task: Generation of Code and Test Cases**',
+          `**The code generation task**`,
+          `**AppMap configuration**`,
+          `**AppMap statistics**`,
+          `**Sequence diagrams**`,
+          `**Code snippets**`,
+          `**Data requests**`,
+        ]);
+
+        expect(result).toEqual([
+          'The user management system is a system ',
+          'that allows users to create and manage their own accounts.',
+        ]);
+      });
     });
   });
 });

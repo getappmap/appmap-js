@@ -4,7 +4,7 @@ import { mkdir, readFile, readdir, writeFile } from 'fs/promises';
 import { randomUUID } from 'crypto';
 import { join } from 'path';
 import { homedir } from 'os';
-import { Context, Explain, Message, ProjectInfo, explain } from '@appland/navie';
+import { Context, Explain, ExplainMode, Message, ProjectInfo, explain } from '@appland/navie';
 
 import INavie from './inavie';
 
@@ -40,7 +40,10 @@ class LocalHistory {
   }
 }
 
-const OPTION_SETTERS: Record<string, (explainOptions: Explain.ExplainOptions, value: string | number) => void> = {
+const OPTION_SETTERS: Record<
+  string,
+  (explainOptions: Explain.ExplainOptions, value: string | number) => void
+> = {
   tokenLimit: (explainOptions, value) => {
     explainOptions.tokenLimit = value as number;
   },
@@ -50,7 +53,10 @@ const OPTION_SETTERS: Record<string, (explainOptions: Explain.ExplainOptions, va
   modelName: (explainOptions, value) => {
     explainOptions.modelName = String(value);
   },
-}
+  explainMode: (explainOptions, value) => {
+    explainOptions.mode = value as ExplainMode;
+  },
+};
 
 export default class LocalNavie extends EventEmitter implements INavie {
   public history: LocalHistory;
@@ -74,7 +80,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
     this.history = new LocalHistory(this.threadId);
   }
 
-  setOption(key: keyof typeof OPTION_SETTERS, value: string | number) { 
+  setOption(key: keyof typeof OPTION_SETTERS, value: string | number) {
     const setter = OPTION_SETTERS[key];
     if (setter) {
       setter(this.explainOptions, value);

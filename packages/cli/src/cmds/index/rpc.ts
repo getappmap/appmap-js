@@ -14,7 +14,7 @@ import appmapData from '../../rpc/appmap/data';
 import { appmapStatsV1, appmapStatsV2 } from '../../rpc/appmap/stats';
 import LocalNavie from '../../rpc/explain/navie/navie-local';
 import RemoteNavie from '../../rpc/explain/navie/navie-remote';
-import { Context, ProjectInfo } from '@appland/navie';
+import { Context, ExplainMode, ProjectInfo } from '@appland/navie';
 import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 import { configureRpcDirectories } from '../../lib/handleWorkingDirectory';
 import { loadConfiguration } from '@appland/client';
@@ -26,16 +26,14 @@ export const command = 'rpc';
 export const describe = 'Run AppMap JSON-RPC server';
 
 export const builder = (args: yargs.Argv) => {
-  args.showHidden();
-
   args.option('directory', {
     describe: 'program working directory',
     type: 'string',
     alias: 'd',
-    multiple: true,
+    array: true,
   });
   args.option('port', {
-    describe: 'port to listen on for JSON-RPC requests',
+    describe: 'port to listen on for JSON-RPC requests. Use port 0 to let the OS choose a port. The port number will be printed to stdout on startup.',
     type: 'number',
     alias: 'p',
   });
@@ -56,6 +54,11 @@ export const builder = (args: yargs.Argv) => {
     array: true,
   });
 
+  args.option('explain-mode', {
+    describe: `Mode in which to run the Explain AI. The mode can also be controlled by starting the question with '@<mode> '.`,
+    choices: Object.values(ExplainMode).map((mode) => mode.toLowerCase()),
+  });
+
   return args.strict();
 };
 
@@ -74,6 +77,9 @@ export const handler = async (argv) => {
   if (aiOptions) {
     aiOptions = Array.isArray(aiOptions) ? aiOptions : [aiOptions];
   }
+  let explainModeStr: string | undefined = argv.explainMode;
+  let explainMode: ExplainMode | undefined;
+  if (explainModeStr) explainMode = ExplainMode[explainModeStr];
 
   const useLocalNavie = () => {
     if (argv.navieProvider === 'local') {
@@ -108,6 +114,9 @@ export const handler = async (argv) => {
           navie.setOption(key, value);
         }
       }
+    }
+    if (explainMode) {
+      navie.setOption('explainMode', explainMode);
     }
   };
 
