@@ -1,4 +1,4 @@
-import { ProjectInfo, ProjectInfoProvider, ProjectInfoResponse } from '../project-info';
+import { ProjectInfo, ProjectInfoProvider } from '../project-info';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 
