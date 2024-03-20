@@ -42,9 +42,12 @@ export default class ApplyContextService {
       );
 
     // Select items in a round-robin fashion, to ensure a mix of content types. Heuristically, we
-    // want to see one sequence diagram, 5 code snippets, and 2 data request. If we run out of
+    // want to see one sequence diagram, N code snippets, and M data requests. If we run out of
     // one type of content type, we'll continue adding the other types.
-    const roundSize = 1 + 5 + 2;
+    const numDiagrams = 1;
+    const numSnippets = 7;
+    const numDataRequests = 2;
+    const roundSize = numDiagrams + numSnippets + numDataRequests;
     let index = 0;
     while (availableItemCount() > 0) {
       const itemType = index % roundSize;
@@ -84,7 +87,7 @@ export default class ApplyContextService {
       let selectionMade: boolean;
       if (itemType === 0) {
         selectionMade = selectDiagram() || selectCodeSnippet() || selectDataRequest();
-      } else if (itemType >= 1 && itemType <= 5) {
+      } else if (itemType >= numDiagrams && itemType <= numSnippets) {
         selectionMade = selectCodeSnippet() || selectDataRequest();
       } else {
         selectionMade = selectDataRequest() || selectCodeSnippet();
