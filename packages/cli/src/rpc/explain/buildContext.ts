@@ -4,6 +4,7 @@ import assert from 'assert';
 
 import { handler as sequenceDiagramHandler } from '../appmap/sequenceDiagram';
 import lookupSourceCode from './lookupSourceCode';
+import { warn } from 'console';
 
 /**
  * Processes search results to build sequence diagrams, code snippets, and code object sets. This is the format
@@ -48,7 +49,13 @@ export default async function buildContext(searchResults: SearchRpc.SearchResult
 
   const examinedLocations = new Set<string>();
   for (const result of searchResults) {
-    await buildSequenceDiagram(result);
+    try {
+      await buildSequenceDiagram(result);
+    } catch (e) {
+      warn(`Failed to build sequence diagram for ${result.appmap}`)
+      warn(e);
+      continue;
+    }
     for (const event of result.events) {
       if (!event.location) {
         codeObjects.add(event.fqid);
