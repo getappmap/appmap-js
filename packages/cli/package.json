@@ -50,7 +50,7 @@
     "@types/tmp": "^0.2.3",
     "@types/validator": "^13.7.10",
     "@types/w3c-xmlserializer": "^2.0.2",
-    "appmap-node": "^2.18.0",
+    "appmap-node": "^2.19.0",
     "esbuild": "0.19.8",
     "eslint": "^7.25.0",
     "eslint-config-airbnb-base": "^14.2.1",
