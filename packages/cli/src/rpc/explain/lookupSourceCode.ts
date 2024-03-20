@@ -23,7 +23,10 @@ let FILE_NAMES = new Set<string>();
 
 // TODO: Return source code up to the next location in the class map.
 // TODO: Reverse-strip comment that follow the function.
-export default async function lookupSourceCode(directory: string, location: string): Promise<string[] | undefined> {
+export default async function lookupSourceCode(
+  directory: string,
+  location: string
+): Promise<string[] | undefined> {
   if (verbose()) warn(chalk.gray(`Looking up source code for ${location}`));
   const [requestedFileName, lineNoStr] = location.split(':');
 
@@ -31,7 +34,19 @@ export default async function lookupSourceCode(directory: string, location: stri
 
   if (!scannedExtensions.has(extension)) {
     scannedExtensions.add(extension);
-    const fileNames = await promisify(glob)(`${directory}/**/*${extension}`);
+    // dot: true is present to include the .tox directory for Python
+    const fileNames = await promisify(glob)(`${directory}/**/*${extension}`, {
+      dot: true,
+      ignore: [
+        '**/node_modules/**',
+        '**/vendor/**',
+        '**/tmp/**',
+        '**/build/**',
+        '**/dist/**',
+        '**/target/**',
+        '**/.git/**',
+      ],
+    });
     if (verbose())
       warn(chalk.gray(`Found ${fileNames.length} files with extension "${extension}"`));
     for (const fileName of fileNames) {
