@@ -15,6 +15,10 @@ export default class RemoteNavie extends EventEmitter implements INavie {
     super();
   }
 
+  setOption(key: string, _value: string | number) {
+    throw new Error(`RemoteNavie does not support option '${key}'`);
+  }
+
   async ask(question: string, codeSelection: string | undefined) {
     const self = this;
     (
