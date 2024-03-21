@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.130.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.130.1...@appland/appmap-v3.130.2) (2024-03-21)
+
+
+### Bug Fixes
+
+* Fix examined file list when looking up source files ([8a62cd2](https://github.com/getappmap/appmap-js/commit/8a62cd2582168a9f012389f64515fc88b8bfab14))
+* Trap errors that may occur building a sequence diagram ([b596719](https://github.com/getappmap/appmap-js/commit/b596719f0f4ce01c13da15efeb3207d4ab1dba8d))
+
 # [@appland/appmap-v3.130.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.130.0...@appland/appmap-v3.130.1) (2024-03-18)
 
 
