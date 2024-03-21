@@ -1,3 +1,18 @@
+# [@appland/components-v4.10.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.9.0...@appland/components-v4.10.0) (2024-03-21)
+
+
+### Bug Fixes
+
+* Always show close icon for filter menu ([4a48a0a](https://github.com/getappmap/appmap-js/commit/4a48a0ad9353ea5278f9dc05604fb58fffaf9bec))
+* Hiding long code objects doesn't expand filter menu ([d1e5d35](https://github.com/getappmap/appmap-js/commit/d1e5d3523a107dbac605e49410cc7989822e1dd7))
+* Increase contrast of scrollbar ([6f42b51](https://github.com/getappmap/appmap-js/commit/6f42b5177572a07e65efc7c3371100442897d9b4))
+* Increase contrast of zoom controls ([e14c937](https://github.com/getappmap/appmap-js/commit/e14c93793225e8ca72cdc90252081172869f2628))
+
+
+### Features
+
+* Copy Navie message ([2e41f84](https://github.com/getappmap/appmap-js/commit/2e41f8423f6806279dea3546f842d26dd26fd6d9))
+
 # [@appland/components-v4.9.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.8.2...@appland/components-v4.9.0) (2024-03-18)
 
 
