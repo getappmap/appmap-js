@@ -18,7 +18,7 @@ import { explainHandler, explainStatusHandler } from '../../rpc/explain/explain'
 import RPCServer from './rpcServer';
 import appmapData from '../../rpc/appmap/data';
 import { loadConfiguration } from '@appland/client';
-import { appmapStatsV1 } from '../../rpc/appmap/stats';
+import { appmapStatsV1, appmapStatsV2 } from '../../rpc/appmap/stats';
 import LocalNavie from '../../rpc/explain/navie/navie-local';
 import RemoteNavie from '../../rpc/explain/navie/navie-remote';
 import { Context, ProjectInfo } from '@appland/navie';
@@ -145,6 +145,7 @@ export const handler = async (argv) => {
         numProcessed(cmd),
         search(),
         appmapStatsV1(),
+        appmapStatsV2(), // Forwards compatibility for @appland/components v4.11.0 and onwards
         appmapFilter(),
         appmapData(),
         metadata(),
