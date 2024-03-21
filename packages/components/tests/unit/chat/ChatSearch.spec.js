@@ -1,5 +1,6 @@
 import VChatSearch from '@/pages/ChatSearch.vue';
 import { mount, createWrapper } from '@vue/test-utils';
+import appmapData from '../fixtures/user_page_scenario.appmap.json';
 
 describe('pages/ChatSearch.vue', () => {
   const chatSearchWrapper = (messagesCalled) => {
@@ -77,6 +78,53 @@ describe('pages/ChatSearch.vue', () => {
     const newWidth = Number.parseInt(lhsPanel.element.style.width.replace('px', ''), 10);
 
     expect(newWidth).toBe(initialWidth + resizeBy);
+  });
+
+  describe('when opened with a target Appmap', () => {
+    let wrapper;
+
+    beforeEach(() => {
+      wrapper = chatSearchWrapper({
+        'v2.appmap.stats': appmapStatsNoAppMaps(),
+        propsData: {
+          targetAppmapData: appmapData,
+          targetAppmapFsPath: 'test',
+        },
+      });
+    });
+
+    it('shows the target Appmap without ask navie buttons', async () => {
+      expect(wrapper.find('[data-cy="appmap"]').exists()).toBe(true);
+
+      expect(wrapper.find('[data-cy="ask-navie-control-button"]').exists()).toBe(false);
+      expect(wrapper.find('[data-cy="collapsed-sidebar-ask-navie"]').exists()).toBe(false);
+
+      // Open the details panel
+      wrapper.find('[data-cy="sidebar-hamburger-menu-icon');
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('[data-cy="details-panel-ask-navie-button"]').exists()).toBe(false);
+    });
+
+    it('changes the placeholder text', () => {
+      const placeholder = wrapper.find('[data-cy="chat-input"]').attributes('placeholder');
+      expect(placeholder).toBe('What do you want to know about this AppMap?');
+    });
+
+    it('does not show the status bar', () => {
+      expect(wrapper.find('[data-cy="status-bar"]').exists()).toBe(false);
+    });
+
+    it('has a button to switch the context to the full workspace', async () => {
+      const fullWorkspaceContextButton = wrapper.find('[data-cy="full-workspace-context-button"]');
+      expect(fullWorkspaceContextButton.exists()).toBe(true);
+      fullWorkspaceContextButton.trigger('click');
+      await wrapper.vm.$nextTick();
+      expect(wrapper.find('[data-cy="appmap"]').exists()).toBe(false);
+      expect(wrapper.find('[data-cy="status-bar"]').exists()).toBe(true);
+      const placeholder = wrapper.find('[data-cy="chat-input"]').attributes('placeholder');
+      expect(placeholder).toBe('How can I help?');
+    });
   });
 
   describe('when no AppMaps are available', () => {

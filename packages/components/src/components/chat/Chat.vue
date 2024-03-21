@@ -176,6 +176,10 @@ export default {
       default: 'system',
       validator: (v: string) => ['system', 'user'].includes(v),
     },
+    inputPlaceholder: {
+      type: String,
+      default: 'How can I help?',
+    },
   },
   data() {
     return {
@@ -190,9 +194,6 @@ export default {
     };
   },
   computed: {
-    inputPlaceholder() {
-      return 'How can I help?';
-    },
     suggestionsEnabled() {
       return this.disableSuggestions !== true && !this.isChatting;
     },
@@ -358,6 +359,9 @@ export default {
     },
     includeAppMap(appmap: string) {
       this.appmaps.push(appmap);
+    },
+    resetAppMaps() {
+      this.appmaps = [];
     },
   },
   watch: {

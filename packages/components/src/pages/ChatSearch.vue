@@ -14,11 +14,9 @@
         @clear="clear"
         :question="question"
         @isChatting="setIsChatting"
+        :input-placeholder="inputPlaceholder"
       >
-        <v-context-status
-          v-if="appmapStats && (!hasAppMaps || !isChatting)"
-          :appmap-stats="appmapStats"
-        />
+        <v-context-status v-if="showStatus" :appmap-stats="appmapStats" />
       </v-chat>
     </div>
     <div
@@ -26,36 +24,67 @@
       data-cy="resize-handle"
       @mousedown="startResizing"
     ></div>
-    <div class="search-container" v-if="searchResponse">
-      <template v-if="searchResponse.results.length">
+    <div class="search-container" v-if="targetAppmap || searchResponse">
+      <template v-if="targetAppmap || searchResponse.results.length">
         <div class="search-results-container">
-          <div class="search-results-header">
-            <v-match-instructions :appmap-stats="appmapStats" :search-response="searchResponse" />
-            <div class="search-results-list-container">
-              <h2>AppMap Viewer:</h2>
-              <select
-                class="search-results-list"
-                v-model="selectedSearchResultId"
-                v-if="selectedSearchResultId"
-                data-cy="appmap-list"
-              >
-                <option
-                  v-for="result in searchResponse.results"
-                  :value="result.id"
-                  :key="result.id"
+          <template v-if="targetAppmap">
+            <div class="search-results-header">
+              <div class="single-appmap-notification">
+                <p>You're asking Navie about a single AppMap</p>
+                <div class="divider">|</div>
+                <v-button
+                  data-cy="full-workspace-context-button"
+                  class="create-more-appmaps"
+                  size="small"
+                  kind="ghost"
+                  @click.native="askAboutWorkspace"
                 >
-                  {{ result.metadata.name || result.appmap }}
-                </option>
-              </select>
+                  Include the whole workspace
+                </v-button>
+              </div>
+              <div class="search-results-single-appmap">
+                <h2>AppMap Viewer:</h2>
+                <p class="target-appmap-name">
+                  {{ targetAppmapName }}
+                </p>
+              </div>
             </div>
-          </div>
+          </template>
+          <template v-else>
+            <div class="search-results-header">
+              <v-match-instructions
+                v-if="searchResponse"
+                :appmap-stats="appmapStats"
+                :search-response="searchResponse"
+              />
+              <div class="search-results-list-container">
+                <h2>AppMap Viewer:</h2>
+                <select
+                  class="search-results-list"
+                  v-model="selectedSearchResultId"
+                  v-if="selectedSearchResultId"
+                  data-cy="appmap-list"
+                >
+                  <option
+                    v-for="result in searchResponse.results"
+                    :value="result.id"
+                    :key="result.id"
+                  >
+                    {{ result.metadata.name || result.appmap }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </template>
         </div>
         <v-app-map
-          v-if="selectedSearchResult"
+          v-if="selectedSearchResult || targetAppmap"
           :allow-fullscreen="true"
           default-view="viewSequence"
+          :show-ask-navie="false"
           :saved-filters="savedFilters"
           :auto-expand-details-panel="false"
+          data-cy="appmap"
           ref="vappmap"
           class="appmap"
         >
@@ -120,6 +149,7 @@ import VMatchInstructions from '@/components/chat-search/MatchInstructions.vue';
 import VNoMatchInstructions from '@/components/chat-search/NoMatchInstructions.vue';
 import VContextStatus from '@/components/chat-search/ContextStatus.vue';
 import VAppMap from './VsCodeExtension.vue';
+import VButton from '@/components/Button.vue';
 import AppMapRPC from '@/lib/AppMapRPC';
 import authenticatedClient from '@/components/mixins/authenticatedClient';
 import type { ITool, CodeSelection } from '@/components/chat/Chat.vue';
@@ -136,6 +166,7 @@ export default {
     VMatchInstructions,
     VNoMatchInstructions,
     VContextStatus,
+    VButton,
   },
   mixins: [authenticatedClient],
   props: {
@@ -160,6 +191,12 @@ export default {
     appmaps: {
       type: Array,
       default: () => [],
+    },
+    targetAppmapData: {
+      type: Object,
+    },
+    targetAppmapFsPath: {
+      type: String,
     },
     appmapYmlPresent: Boolean,
     mostRecentAppMaps: Array,
@@ -201,6 +238,7 @@ export default {
           return Math.max(1000, (this.appmapStats?.numAppMaps ?? 0) * 5);
         }
       ),
+      targetAppmap: this.targetAppmapData,
     };
   },
   watch: {
@@ -264,6 +302,15 @@ export default {
     },
   },
   computed: {
+    showStatus() {
+      return !this.targetAppmap && this.appmapStats && (!this.hasAppMaps || !this.isChatting);
+    },
+    targetAppmapName() {
+      return this.targetAppmap?.metadata?.name;
+    },
+    inputPlaceholder() {
+      return this.targetAppmap ? 'What do you want to know about this AppMap?' : 'How can I help?';
+    },
     statusStep() {
       return this.searchStatus ? this.searchStatus.step : undefined;
     },
@@ -279,6 +326,11 @@ export default {
     },
   },
   methods: {
+    askAboutWorkspace() {
+      this.targetAppmap = undefined;
+      this.$refs.vchat.resetAppMaps();
+      this.$refs.vchat.clear();
+    },
     getAppMapState() {
       return this.$refs.vappmap?.getState();
     },
@@ -351,7 +403,11 @@ export default {
             if (tool) {
               const numResults = this.searchResponse.results.length;
               tool.title = 'Project analysis complete';
-              tool.status = `Found ${numResults} relevant AppMap${numResults === 1 ? '' : 's'}`;
+
+              // When asking about a single map, the "Found 1 relevant AppMap" message is redundant
+              if (!this.targetAppmap)
+                tool.status = `Found ${numResults} relevant AppMap${numResults === 1 ? '' : 's'}`;
+
               tool.complete = true;
             }
           }
@@ -361,7 +417,7 @@ export default {
         const explainRequest = {
           question: message,
         };
-        if (appmaps.length > 0) explainRequest.appmaps = this.appmaps;
+        if (appmaps.length > 0) explainRequest.appmaps = appmaps;
         if (codeSelections.length > 0) explainRequest.codeSelection = codeSelections.join('\n\n');
 
         this.ask.explain(explainRequest, this.$refs.vchat.threadId).catch(onError);
@@ -423,6 +479,10 @@ export default {
     },
   },
   async mounted() {
+    if (this.$refs.vappmap && this.targetAppmap && this.targetAppmapFsPath) {
+      this.includeAppMap(this.targetAppmapFsPath);
+      await this.$refs.vappmap.loadData(this.targetAppmap);
+    }
     this.loadAppMapStats();
   },
 };
@@ -514,9 +574,43 @@ $border-color: darken($gray4, 10%);
         margin: 0.5rem 0;
         padding: 0 1.75rem;
 
-        .search-results-list-container {
+        .single-appmap-notification {
+          font-size: 0.9rem;
+          color: lighten($gray4, 20%);
           display: flex;
           flex-direction: row;
+          align-items: center;
+
+          .divider {
+            margin: 0 0.75rem;
+          }
+        }
+
+        @media (max-width: 900px) {
+          .single-appmap-notification {
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+
+            .divider {
+              display: none;
+            }
+          }
+        }
+
+        .search-results-single-appmap {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
+          .target-appmap-name {
+            font-size: 0.9rem;
+            margin: 0;
+            font-style: italic;
+          }
+        }
+
+        .search-results-list-container {
           align-items: center;
 
           .search-results-list {

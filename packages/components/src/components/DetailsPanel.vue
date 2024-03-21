@@ -1,7 +1,16 @@
 <template>
   <div class="details-panel">
     <h3 class="details-panel__title">
-      <AppMapLogo width="70" />
+      <div
+        class="details-panel__ask-navie-button"
+        v-if="showAskNavie"
+        data-cy="details-panel-ask-navie-button"
+        @click="() => this.$emit('askNavieAboutMap')"
+      >
+        <CompassIcon class="compass-icon" />
+        <div>Ask Navie</div>
+      </div>
+      <AppMapLogo v-else width="70" />
       <ChevronDownIcon
         class="details-panel__hide-panel-icon"
         @click="() => this.$emit('hideDetailsPanel')"
@@ -41,11 +50,6 @@
       </div>
     </div>
 
-    <div class="details-panel__notification" v-if="!selectedObject">
-      <FeedbackIcon />
-      Help us improve AppMap.
-      <a href="https://appmap.io/product/feedback/general.html">Send your feedback.</a>
-    </div>
     <div
       class="details-panel__source"
       v-if="!selectedObject && !selectedLabel && sourceLocationObject"
@@ -141,6 +145,7 @@ import ScissorsIcon from '@/assets/scissors-icon.svg';
 import NavArrow from '@/assets/nav-arrow.svg';
 import ClearIcon from '@/assets/x-icon.svg';
 import ChevronDownIcon from '@/assets/fa-solid_chevron-down.svg';
+import CompassIcon from '@/assets/compass-simpler.svg';
 import { SELECT_CODE_OBJECT } from '@/store/vsCode';
 
 const MAX_DISPLAY_NAME_LENGTH = 150;
@@ -171,6 +176,7 @@ export default {
     NavArrow,
     ClearIcon,
     ChevronDownIcon,
+    CompassIcon,
   },
   props: {
     subtitle: String,
@@ -196,6 +202,10 @@ export default {
     isGiantAppMap: {
       type: Boolean,
       default: false,
+    },
+    showAskNavie: {
+      type: Boolean,
+      default: true,
     },
   },
 
@@ -300,6 +310,53 @@ export default {
   word-break: break-word;
   border-right: 1px solid $base15;
   overflow: auto;
+
+  &__ask-navie-button {
+    padding: 0.5rem 0.75rem;
+    background-color: $gray2;
+    border-radius: $border-radius;
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: fit-content;
+    color: $gray5;
+    transition: $transition;
+
+    .compass-icon {
+      width: 28px;
+      margin: -0.25rem 0.5rem -0.25rem 0;
+
+      path {
+        transition: $transition;
+        fill: $gray5;
+      }
+
+      circle {
+        transition: $transition;
+        stroke: $gray5;
+      }
+    }
+
+    &:hover {
+      cursor: pointer;
+      background-color: lighten($gray2, 10%);
+      color: $hotpink;
+      transition: $transition;
+
+      .compass-icon {
+        path {
+          transition: $transition;
+          fill: $hotpink;
+        }
+
+        circle {
+          transition: $transition;
+          stroke: $hotpink;
+        }
+      }
+    }
+  }
 
   &__title {
     margin-bottom: 1rem;

@@ -172,22 +172,23 @@ $border-color: #7289c5;
 
       &:empty:before {
         content: attr(placeholder);
-        color: white;
+        color: lighten($gray4, 10%);
       }
 
       &:focus-visible {
         outline: none !important;
       }
     }
+
     .popper {
       position: absolute;
       right: 1rem;
       bottom: 0.45rem;
-      // transform: translate(-50%, -50%);
 
       &__text {
         border: none;
       }
+
       .send {
         height: 2rem;
         width: 2rem;
@@ -196,11 +197,13 @@ $border-color: #7289c5;
         border-radius: $border-radius;
         background-color: #6c81ba;
         transition: background-color 0.5s ease-in-out;
+
         svg {
           path {
             fill: #fff;
           }
         }
+
         &:disabled {
           pointer-events: none;
           background-color: rgba($color: #7289c5, $alpha: 0.25);
@@ -211,6 +214,7 @@ $border-color: #7289c5;
             }
           }
         }
+
         &:hover {
           cursor: pointer;
           background-color: $hotpink;
