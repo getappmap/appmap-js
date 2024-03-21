@@ -13,14 +13,14 @@ context('Chat search', () => {
       // Ruby AppMap
       cy.get('.tabs .tab-btn').contains('Dependency Map').click();
 
-      cy.get('[data-cy="app"] [data-id="GET /admin"]', {
+      cy.get('[data-cy="appmap"] [data-id="GET /admin"]', {
         timeout: 10000,
       }).should('be.visible');
 
       // Java AppMap
       cy.get('[data-cy="appmap-list"]').select('Create Visit For Pet');
       cy.get('.tabs .tab-btn').contains('Dependency Map').click();
-      cy.get('[data-cy="app"] [data-id="org/springframework/samples/petclinic/owner"]').should(
+      cy.get('[data-cy="appmap"] [data-id="org/springframework/samples/petclinic/owner"]').should(
         'be.visible'
       );
     });
@@ -32,18 +32,18 @@ context('Chat search', () => {
       cy.get('.tabs .tab-btn').contains('Dependency Map').click();
 
       // Initial state
-      cy.get('[data-cy="app"] [data-id="GET /admin"].highlight');
+      cy.get('[data-cy="appmap"] [data-id="GET /admin"].highlight');
 
       // expand the details panel
       cy.get('.sidebar-menu__hamburger-menu').click();
 
       cy.get('[data-cy="select-object"]').select(0);
       cy.get(
-        '[data-cy="app"] [data-id="app/controllers/Spree::Admin::OrdersController"].highlight'
+        '[data-cy="appmap"] [data-id="app/controllers/Spree::Admin::OrdersController"].highlight'
       );
 
       cy.get('[data-cy="select-object"]').select(1);
-      cy.get('[data-cy="app"] [data-id="GET /admin"].highlight');
+      cy.get('[data-cy="appmap"] [data-id="GET /admin"].highlight');
     });
 
     it('new chat button clears the state', () => {
@@ -53,14 +53,14 @@ context('Chat search', () => {
       cy.get('.tabs .tab-btn').contains('Dependency Map').click();
 
       // Ruby AppMap should be visible
-      cy.get('[data-cy="app"] [data-id="GET /admin"]', {
+      cy.get('[data-cy="appmap"] [data-id="GET /admin"]', {
         timeout: 10000,
       }).should('be.visible');
 
       cy.get('[data-cy="new-chat-btn"]').click();
 
       // Ruby AppMap should not be visible
-      cy.get('[data-cy="app"] [data-id="GET /admin"]', {
+      cy.get('[data-cy="appmap"] [data-id="GET /admin"]', {
         timeout: 10000,
       }).should('not.exist');
     });

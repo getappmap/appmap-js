@@ -99,6 +99,12 @@ export default {
   transition: $transition;
   user-select: none;
 
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   &:disabled {
     background-color: $gray2;
     border-color: $gray2;
@@ -108,6 +114,7 @@ export default {
       border-color: $gray2;
     }
   }
+
   &--timeout {
     position: relative;
 
@@ -139,6 +146,7 @@ export default {
       background-color: rgba(255, 255, 255, 0.65);
     }
   }
+
   &--secondary {
     background-color: darken(desaturate($color: $brightblue, $amount: 75%), 25%);
     color: $white;
@@ -152,6 +160,7 @@ export default {
       background-color: rgba(255, 255, 255, 0.65);
     }
   }
+
   &--ghost {
     background-color: inherit;
     border: 1px solid $gray4;

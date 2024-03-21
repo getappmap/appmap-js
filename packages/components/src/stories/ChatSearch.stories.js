@@ -89,6 +89,16 @@ export const ChatSearchWithAppMaps = (args, { argTypes }) => ({
   },
 });
 
+export const ChatSearchWithTargetAppMap = (args, { argTypes }) => ({
+  props: Object.keys(argTypes),
+  components: { VChatSearch },
+  template: `<v-chat-search v-bind="$props" ref="chatSearch"></v-chat-search>`,
+});
+ChatSearchWithTargetAppMap.args = {
+  targetAppmapData: petclinicData,
+  targetAppmapFsPath: 'fake/path',
+};
+
 export const ChatSearchMock = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VChatSearch },
