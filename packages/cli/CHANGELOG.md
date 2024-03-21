@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.131.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.130.2...@appland/appmap-v3.131.0) (2024-03-21)
+
+
+### Features
+
+* `index` is forwards compatible with the latest frontend ([879eef5](https://github.com/getappmap/appmap-js/commit/879eef59b3875b492395ce65e733b69054b5748f))
+
 # [@appland/appmap-v3.130.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.130.1...@appland/appmap-v3.130.2) (2024-03-21)
 
 
