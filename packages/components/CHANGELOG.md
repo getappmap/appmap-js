@@ -1,3 +1,10 @@
+# [@appland/components-v4.11.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.10.0...@appland/components-v4.11.0) (2024-03-21)
+
+
+### Features
+
+* Migrate ChatSearch to v2 stats API ([81df1a7](https://github.com/getappmap/appmap-js/commit/81df1a7a15f5ca33793e608fbd48c4f28fceebf1))
+
 # [@appland/components-v4.10.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.9.0...@appland/components-v4.10.0) (2024-03-21)
 
 
