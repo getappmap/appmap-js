@@ -1,3 +1,10 @@
+# [@appland/components-v4.12.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.11.0...@appland/components-v4.12.0) (2024-03-22)
+
+
+### Features
+
+* Open Navie from an appmap ([9559a1b](https://github.com/getappmap/appmap-js/commit/9559a1b51e6409a23522592fbd4e354c7a12d87f))
+
 # [@appland/components-v4.11.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.10.0...@appland/components-v4.11.0) (2024-03-21)
 
 
