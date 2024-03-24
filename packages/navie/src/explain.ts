@@ -112,8 +112,8 @@ export interface ClientRequest {
 }
 
 export class ExplainOptions {
-  modelName = 'gpt-4-0125-preview';
-  tokenLimit = 8000;
+  modelName = process.env.APPMAP_NAVIE_MODEL ?? 'gpt-4-0125-preview';
+  tokenLimit = Number(process.env.APPMAP_NAVIE_TOKEN_LIMIT ?? 8000);
   temperature = 0.4;
   responseTokens = 1000;
 }

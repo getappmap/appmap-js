@@ -3,7 +3,6 @@ import OpenAI from 'openai';
 import { warn } from 'console';
 import { ChatOpenAI } from '@langchain/openai';
 
-import buildChatOpenAI from '../chat-openai';
 import InteractionHistory, { VectorTermsInteractionEvent } from '../interaction-history';
 
 const SYSTEM_PROMPT = `You are assisting a developer to search a code base.
@@ -33,7 +32,7 @@ export default class VectorTermsService {
   ) {}
 
   async suggestTerms(question: string): Promise<string[]> {
-    const openAI: ChatOpenAI = buildChatOpenAI({
+    const openAI: ChatOpenAI = new ChatOpenAI({
       modelName: this.modelName,
       temperature: this.temperature,
     });
@@ -52,7 +51,7 @@ export default class VectorTermsService {
     // eslint-disable-next-line no-await-in-loop
     const response = await openAI.completionWithRetry({
       messages,
-      model: 'gpt-4-0125-preview',
+      model: openAI.modelName,
       stream: true,
     });
     const tokens = Array<string>();

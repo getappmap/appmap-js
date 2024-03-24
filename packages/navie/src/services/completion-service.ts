@@ -1,4 +1,4 @@
-import buildChatOpenAI from '../chat-openai';
+import { ChatOpenAI } from '@langchain/openai';
 import InteractionHistory, { CompletionEvent } from '../interaction-history';
 
 export type Completion = AsyncIterable<string>;
@@ -17,7 +17,7 @@ export class OpenAICompletionService implements CompletionService {
   async *complete(): Completion {
     const { messages } = this.interactionHistory.buildState();
 
-    const chatAI = buildChatOpenAI({
+    const chatAI = new ChatOpenAI({
       modelName: this.modelName,
       temperature: this.temperature,
       streaming: true,

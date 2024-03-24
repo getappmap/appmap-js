@@ -1,30 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import { ChatOpenAI, OpenAIChatInput } from '@langchain/openai';
-import assert from 'assert';
+import { ChatOpenAI } from '@langchain/openai';
 
 import VectorTermsService from '../../src/services/vector-terms-service';
-import buildChatOpenAI from '../../src/chat-openai';
 import InteractionHistory from '../../src/interaction-history';
 
-jest.mock('../../src/chat-openai');
+jest.mock('@langchain/openai');
+const completionWithRetry = jest.mocked(ChatOpenAI.prototype.completionWithRetry);
 
 describe('DefaultVectorTermsService', () => {
   let interactionHistory: InteractionHistory;
   let service: VectorTermsService;
-  let completionWithRetry: jest.Mock;
 
   beforeEach(() => {
-    completionWithRetry = jest.fn();
-    const predictAI = {
-      completionWithRetry,
-    } as unknown as ChatOpenAI;
-
-    jest.mocked(buildChatOpenAI).mockImplementation((params: Partial<OpenAIChatInput>) => {
-      assert(!params.streaming);
-      return predictAI;
-    });
     interactionHistory = new InteractionHistory();
     interactionHistory.on('event', (event) => console.log(event.message));
     service = new VectorTermsService(interactionHistory, 'gpt-4', 0.5);
@@ -47,7 +36,7 @@ describe('DefaultVectorTermsService', () => {
         model: 'gpt-3.5',
         object: 'chat.completion.chunk',
       },
-    ]);
+    ] as any);
   }
 
   describe('when LLM suggested terms', () => {

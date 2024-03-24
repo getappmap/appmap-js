@@ -1,7 +1,7 @@
 import { ConversationSummaryMemory } from 'langchain/memory';
 import { AIMessage, HumanMessage } from '@langchain/core/messages';
+import { ChatOpenAI } from '@langchain/openai';
 
-import buildChatOpenAI from '../chat-openai';
 import Message from '../message';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
 
@@ -13,7 +13,7 @@ export default class MemoryService {
   ) {}
 
   async predictSummary(messages: Message[]) {
-    const predictAI = buildChatOpenAI({
+    const predictAI = new ChatOpenAI({
       modelName: this.modelName,
       temperature: this.temperature,
     });
