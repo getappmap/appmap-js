@@ -19,7 +19,7 @@
     "pre-commit": "lint-staged",
     "test": "jest --filter=./tests/testFilter.js",
     "test:binary": "jest -c tests/binary/jest.config.js",
-    "build": "tsc && yarn build:html",
+    "build": "tsc && yarn build:html && yarn build:doc",
     "watch": "tsc --watch",
     "build:html": "ts-node esbuild.html.ts",
     "build:doc": "rsync -av --delete ../../docs built/",

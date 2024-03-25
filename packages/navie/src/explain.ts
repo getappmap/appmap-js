@@ -11,6 +11,7 @@ import ProjectInfoService from './services/project-info-service';
 import { ProjectInfo, ProjectInfoProvider } from './project-info';
 import CodeSelectionService from './services/code-selection-service';
 import { AgentMode, AgentOptions } from './agent';
+import { HelpProvider } from './help';
 import AgentSelectionService from './services/agent-selection-service';
 import LookupContextService from './services/lookup-context-service';
 import ApplyContextService from './services/apply-context-service';
@@ -105,6 +106,7 @@ export default function explain(
   clientRequest: ClientRequest,
   contextProvider: ContextProvider,
   projectInfoProvider: ProjectInfoProvider,
+  helpProvider: HelpProvider,
   options: ExplainOptions,
   chatHistory?: ChatHistory
 ): IExplain {
@@ -126,6 +128,7 @@ export default function explain(
 
   const agentSelectionService = new AgentSelectionService(
     interactionHistory,
+    helpProvider,
     vectorTermsService,
     lookupContextService,
     applyContextService
