@@ -13,11 +13,17 @@ function contentSnippet(content: string, maxLength = SNIPPET_LENGTH): string {
 }
 
 export abstract class InteractionEvent {
-  constructor(public name: string) {}
+  constructor(public type: string) {}
+
+  abstract get metadata(): Record<string, string | number | boolean>;
 
   abstract get message(): string;
 
   abstract updateState(state: InteractionState): void;
+}
+
+export function isPromptEvent(event: InteractionEvent): event is PromptInteractionEvent {
+  return event.type === 'prompt';
 }
 
 export class PromptInteractionEvent extends InteractionEvent {
@@ -27,7 +33,15 @@ export class PromptInteractionEvent extends InteractionEvent {
     public content: string,
     public prefix?: string
   ) {
-    super(name);
+    super('prompt');
+  }
+
+  get metadata() {
+    return {
+      type: this.type,
+      role: this.role,
+      name: this.name,
+    };
   }
 
   get message() {
@@ -48,6 +62,13 @@ export class VectorTermsInteractionEvent extends InteractionEvent {
     super('vectorTerms');
   }
 
+  get metadata() {
+    return {
+      type: this.type,
+      termCount: this.terms.length,
+    };
+  }
+
   get message() {
     return `[vectorTerms] ${this.terms.join(' ')}`;
   }
@@ -60,6 +81,14 @@ export class VectorTermsInteractionEvent extends InteractionEvent {
 export class CompletionEvent extends InteractionEvent {
   constructor(public model: string, public temperature: number) {
     super('completion');
+  }
+
+  get metadata() {
+    return {
+      type: this.type,
+      model: this.model,
+      temperature: this.temperature,
+    };
   }
 
   get message() {
@@ -75,6 +104,17 @@ export class CompletionEvent extends InteractionEvent {
 export class ContextLookupEvent extends InteractionEvent {
   constructor(public context: ContextResponse | undefined) {
     super('contextLookup');
+  }
+
+  get contextAvailable() {
+    return !!this.context;
+  }
+
+  get metadata() {
+    return {
+      type: this.type,
+      contextAvailable: this.contextAvailable,
+    };
   }
 
   get message() {
@@ -95,6 +135,17 @@ export class ContextLookupEvent extends InteractionEvent {
 export class ContextItemEvent extends InteractionEvent {
   constructor(public contextItem: ContextItem, public file?: string) {
     super('contextItem');
+  }
+
+  get metadata() {
+    const result: Record<string, string> = {
+      type: this.type,
+      name: this.contextItem.name,
+    };
+    if (this.file) {
+      result.file = this.file;
+    }
+    return result;
   }
 
   get message() {

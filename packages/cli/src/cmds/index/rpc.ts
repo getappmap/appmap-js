@@ -19,6 +19,7 @@ import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 import { configureRpcDirectories } from '../../lib/handleWorkingDirectory';
 import { loadConfiguration } from '@appland/client';
 import { getConfigurationV1, setConfigurationV1 } from '../../rpc/configuration';
+import { Agents } from '@appland/navie';
 
 const AI_KEY_ENV_VARS = ['OPENAI_API_KEY'];
 
@@ -26,16 +27,15 @@ export const command = 'rpc';
 export const describe = 'Run AppMap JSON-RPC server';
 
 export const builder = (args: yargs.Argv) => {
-  args.showHidden();
-
   args.option('directory', {
     describe: 'program working directory',
     type: 'string',
     alias: 'd',
-    multiple: true,
+    array: true,
   });
   args.option('port', {
-    describe: 'port to listen on for JSON-RPC requests',
+    describe:
+      'port to listen on for JSON-RPC requests. Use port 0 to let the OS choose a port. The port number will be printed to stdout on startup.',
     type: 'number',
     alias: 'p',
   });
@@ -56,6 +56,11 @@ export const builder = (args: yargs.Argv) => {
     array: true,
   });
 
+  args.option('agent-mode', {
+    describe: `Agent mode which to run the Navie AI. The agent can also be controlled by starting the question with '@<agent> '.`,
+    choices: Object.values(Agents).map((agent) => agent.toLowerCase()),
+  });
+
   return args.strict();
 };
 
@@ -74,6 +79,9 @@ export const handler = async (argv) => {
   if (aiOptions) {
     aiOptions = Array.isArray(aiOptions) ? aiOptions : [aiOptions];
   }
+  let agentModeStr: string | undefined = argv.explainMode;
+  let agentMode: Agents | undefined;
+  if (agentModeStr) agentMode = agentModeStr as Agents;
 
   const useLocalNavie = () => {
     if (argv.navieProvider === 'local') {
@@ -108,6 +116,9 @@ export const handler = async (argv) => {
           navie.setOption(key, value);
         }
       }
+    }
+    if (agentMode) {
+      navie.setOption('explainMode', agentMode);
     }
   };
 

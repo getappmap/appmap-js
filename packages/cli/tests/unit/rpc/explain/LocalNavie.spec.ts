@@ -20,6 +20,10 @@ describe('LocalNavie', () => {
       navie.setOption('tokenLimit', 100);
       expect(navie.explainOptions.tokenLimit).toBe(100);
     });
+    it("should set 'explainMode'", () => {
+      navie.setOption('explainMode', 'mode');
+      expect(navie.explainOptions.agentMode).toBe('mode');
+    });
     it('should throw an error for unsupported option', () => {
       expect(() => navie.setOption('unsupported', 'value')).toThrowError(
         "LocalNavie does not support option 'unsupported'"
