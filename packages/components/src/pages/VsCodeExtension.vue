@@ -372,6 +372,7 @@ import {
   filterStringToFilterState,
   base64UrlEncode,
   AppMapFilter,
+  AppMap,
 } from '@appland/models';
 import { unparseDiagram } from '@appland/sequence-diagram';
 
@@ -504,6 +505,7 @@ export default {
       isFullscreen: false,
       showDetailsPanel: false,
       rightColumnWidth: 0,
+      filteredAppMap: this.emptyFilteredAppMap(),
     };
   },
   mixins: [EmitLinkMixin],
@@ -554,6 +556,17 @@ export default {
     },
   },
   watch: {
+    '$store.state.filters': {
+      handler(filters) {
+        this.applyFilters(filters, this.$store.state.appMap);
+      },
+      deep: true,
+    },
+    '$store.state.appMap': {
+      handler(appMap) {
+        this.applyFilters(this.filters, appMap);
+      },
+    },
     '$store.state.currentView': {
       handler(view) {
         this.$refs.tabs.activateTab(this.$refs[view]);
@@ -674,10 +687,6 @@ export default {
     },
     filters() {
       return this.$store.state.filters;
-    },
-    filteredAppMap() {
-      const { appMap } = this.$store.state;
-      return this.filters.filter(appMap, this.findings);
     },
     viewState() {
       return this.getStateObject();
@@ -884,6 +893,12 @@ export default {
     },
   },
   methods: {
+    applyFilters(filter, appMap) {
+      this.filteredAppMap = filter.filter(appMap, this.findings);
+    },
+    emptyFilteredAppMap() {
+      return new AppMapFilter().filter(new AppMap());
+    },
     detailsPanelTransitionEnd() {
       this.rightColumnWidth = this.$refs.mainColumnRight.offsetWidth;
     },
