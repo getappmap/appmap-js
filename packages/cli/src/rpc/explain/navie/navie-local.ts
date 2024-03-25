@@ -7,6 +7,7 @@ import { homedir } from 'os';
 import { Context, Explain, Message, ProjectInfo, explain } from '@appland/navie';
 
 import INavie from './inavie';
+import { AgentMode } from '@appland/navie/dist/agent';
 
 class LocalHistory {
   constructor(public readonly threadId: string) {}
@@ -59,6 +60,9 @@ const OPTION_SETTERS: Record<
   },
   modelName: (explainOptions, value) => {
     explainOptions.modelName = String(value);
+  },
+  explainMode: (explainOptions, value) => {
+    explainOptions.agentMode = value as AgentMode;
   },
 };
 

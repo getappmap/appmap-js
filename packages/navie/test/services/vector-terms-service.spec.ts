@@ -46,7 +46,7 @@ describe('DefaultVectorTermsService', () => {
         const terms = await service.suggestTerms('user management');
         expect(interactionHistory.events.map((e) => ({ ...e }))).toEqual([
           {
-            name: 'vectorTerms',
+            type: 'vectorTerms',
             terms: ['user', 'management'],
           },
         ]);
