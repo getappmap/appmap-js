@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>AppMap | {{ page.title }}</title>
+  </head>
+  <!-- Layout: default -->
+  <body>
+    <script>
+(function () {
+    // https://stackoverflow.com/a/21198129
+    var hash = window.location.hash.substring(1);
+    let newLocation = '/docs/reference/analysis-rules';
+    if (hash) {
+        newLocation += '#' + hash;
+    }
+    window.location = newLocation;
+})();
+    </script>
+    <p>
+      You're being redirected to the new home of this content:
+    </p>
+    <p>
+      <a href="https://docs.appland.com/docs/reference/analysis-rules.html">https://docs.appland.com/docs/reference/analysis-rules.html</a>
+    </p>
+  </body>
+</html>
