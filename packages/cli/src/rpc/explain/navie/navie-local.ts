@@ -12,6 +12,9 @@ class LocalHistory {
   constructor(public readonly threadId: string) {}
 
   async saveMessage(message: Message) {
+    if (!['user', 'assistant'].includes(message.role))
+      throw new Error(`Invalid message role for conversation history : ${message.role}`);
+
     await this.initHistory();
     const timestampNumber = Date.now();
     const historyFile = join(this.historyDir, `${timestampNumber}.json`);
@@ -26,6 +29,10 @@ class LocalHistory {
       const historyPath = join(this.historyDir, historyFile);
       const historyString = await readFile(historyPath, 'utf-8');
       const message = JSON.parse(historyString);
+      // Fix messages that were miscategorized.
+      if (message.role === 'system') {
+        message.role = 'assistant';
+      }
       history.push(message);
     }
     return history;
@@ -112,7 +119,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
       response.push(token);
       this.emit('token', token);
     }
-    this.history.saveMessage({ content: response.join(''), role: 'system' });
+    this.history.saveMessage({ content: response.join(''), role: 'assistant' });
     this.emit('complete');
   }
 }
