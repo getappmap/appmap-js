@@ -1,6 +1,8 @@
 import { Context, ContextProvider, ProjectInfo } from '@appland/navie';
 
 export default interface INavie {
+  setOption(key: string, value: string | number): void;
+
   ask(question: string, codeSelection: string | undefined): Promise<void>;
 
   on(event: 'ack', listener: (userMessageId: string, threadId: string) => void): this;

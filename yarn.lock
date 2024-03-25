@@ -447,6 +447,7 @@ __metadata:
     "@types/node": ^17.0.2
     "@typescript-eslint/eslint-plugin": ^5.51.0
     "@typescript-eslint/parser": ^5.7.0
+    appmap-node: ^2.19.1
     eslint: ^8.4.1
     eslint-config-airbnb-base: ^15.0.0
     eslint-config-airbnb-typescript: ^17.0.0
@@ -14159,6 +14160,23 @@ __metadata:
   bin:
     appmap-node: bin/appmap-node.js
   checksum: 4efb482fac808b06ffbc37faf835b43ad2ecae09423afb208e9f398e2389b181ca30901b062a049e76977ebc34fb2d1d38adc7603c61515109b155c56a0e25f4
+  languageName: node
+  linkType: hard
+
+"appmap-node@npm:^2.19.1":
+  version: 2.19.1
+  resolution: "appmap-node@npm:2.19.1"
+  dependencies:
+    acorn-walk: ^8.2.0
+    astring: ^1.8.6
+    chalk: <5
+    json5: ^2.2.3
+    meriyah: ^4.3.7
+    source-map-js: ^1.0.2
+    yaml: ^2.3.4
+  bin:
+    appmap-node: bin/appmap-node.js
+  checksum: 897f5ea6fb840731588003c85e2c91092ffb6c6068e6b19d2e7f2ebd5a5f1ebecf0d9cc7cb1bb13320d68db9726e5b8a8cda0c4a7ebd1c5813adaf42090b62b2
   languageName: node
   linkType: hard
 

@@ -49,6 +49,12 @@ export const builder = (args: yargs.Argv) => {
     boolean: true,
     default: false,
   });
+  args.option('ai-option', {
+    describe:
+      'Specify an extended option to the AI provider, in the form of a key=value pair. May be repeated.',
+    type: 'string',
+    array: true,
+  });
 
   return args.strict();
 };
@@ -64,6 +70,10 @@ export const handler = async (argv) => {
   }
 
   const { port, logNavie } = argv;
+  let aiOptions: string[] | undefined = argv.aiOption;
+  if (aiOptions) {
+    aiOptions = Array.isArray(aiOptions) ? aiOptions : [aiOptions];
+  }
 
   const useLocalNavie = () => {
     if (argv.navieProvider === 'local') {
@@ -90,15 +100,26 @@ export const handler = async (argv) => {
     return false;
   };
 
+  const applyAIOptions = (navie: LocalNavie | RemoteNavie) => {
+    if (aiOptions) {
+      for (const option of aiOptions) {
+        const [key, value] = option.split('=');
+        if (key && value) {
+          navie.setOption(key, value);
+        }
+      }
+    }
+  };
+
   const buildLocalNavie = (
     threadId: string | undefined,
     contextProvider: Context.ContextProvider,
     projectInfoProvider: ProjectInfo.ProjectInfoProvider
   ) => {
     const navie = new LocalNavie(threadId, contextProvider, projectInfoProvider);
+    applyAIOptions(navie);
 
     let START: number | undefined;
-
     const logEvent = (event: InteractionEvent) => {
       if (!logNavie) return;
 
@@ -113,13 +134,16 @@ export const handler = async (argv) => {
     navie.on('event', logEvent);
     return navie;
   };
+
   const buildRemoteNavie = (
     threadId: string | undefined,
     contextProvider: Context.ContextProvider,
     projectInfoProvider: ProjectInfo.ProjectInfoProvider
   ) => {
     loadConfiguration(false);
-    return new RemoteNavie(threadId, contextProvider, projectInfoProvider);
+    const navie = new RemoteNavie(threadId, contextProvider, projectInfoProvider);
+    applyAIOptions(navie);
+    return navie;
   };
 
   const navieProvider = useLocalNavie() ? buildLocalNavie : buildRemoteNavie;
