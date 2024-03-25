@@ -7,9 +7,10 @@ import { warn } from 'console';
 import { RpcError, RpcHandler } from '../rpc';
 import collectContext from './collectContext';
 import INavie, { INavieProvider } from './navie/inavie';
-import { Context, ProjectInfo } from '@appland/navie';
+import { Context, Help, ProjectInfo } from '@appland/navie';
 import configuration from '../configuration';
 import collectProjectInfos from '../../cmds/navie/projectInfo';
+import collectHelp from '../../cmds/navie/help';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
@@ -122,6 +123,10 @@ export class Explain extends EventEmitter {
   projectInfoContext(): Promise<ProjectInfo.ProjectInfoResponse> {
     return collectProjectInfos();
   }
+
+  helpContext(data: Help.HelpRequest): Promise<Help.HelpResponse> {
+    return collectHelp(data);
+  }
 }
 
 async function explain(
@@ -160,8 +165,9 @@ async function explain(
   const contextProvider: Context.ContextProvider = async (data: any) => invokeContextFunction(data);
   const projectInfoProvider: ProjectInfo.ProjectInfoProvider = async (data: any) =>
     invokeContextFunction(data);
+  const helpProvider: Help.HelpProvider = async (data: any) => invokeContextFunction(data);
 
-  const navie = navieProvider(threadId, contextProvider, projectInfoProvider);
+  const navie = navieProvider(threadId, contextProvider, projectInfoProvider, helpProvider);
   return new Promise<ExplainRpc.ExplainResponse>((resolve, reject) => {
     let isFirst = true;
 

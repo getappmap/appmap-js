@@ -4,6 +4,8 @@ import { ExplainOptions } from '../explain';
 import InteractionHistory from '../interaction-history';
 import { Agent, AgentMode } from '../agent';
 import { ProjectInfo } from '../project-info';
+import { HelpAgent } from '../agents/help-agent';
+import { HelpProvider } from '../help';
 import VectorTermsService from './vector-terms-service';
 import { GenerateAgent } from '../agents/generate-agent';
 import LookupContextService from './lookup-context-service';
@@ -15,11 +17,13 @@ type AgentModeResult = { agent: Agent; question: string };
 const MODE_PREFIXES = {
   '@explain ': AgentMode.Explain,
   '@generate ': AgentMode.Generate,
+  '@help ': AgentMode.Help,
 };
 
 export default class AgentSelectionService {
   constructor(
     private history: InteractionHistory,
+    private helpProvider: HelpProvider,
     private vectorTermsService: VectorTermsService,
     private lookupContextService: LookupContextService,
     private applyContextService: ApplyContextService
@@ -32,6 +36,8 @@ export default class AgentSelectionService {
   ): AgentModeResult {
     let modifiedQuestion = question;
     const hasAppMaps = projectInfo.some((info) => info.appmapStats.numAppMaps > 0);
+
+    const helpAgent = () => new HelpAgent(this.history, this.helpProvider, this.vectorTermsService);
 
     const generateAgent = () =>
       new GenerateAgent(
@@ -50,6 +56,7 @@ export default class AgentSelectionService {
       );
 
     const buildAgent = {
+      [AgentMode.Help]: helpAgent,
       [AgentMode.Generate]: generateAgent,
       [AgentMode.Explain]: explainAgent,
     };
@@ -75,11 +82,18 @@ export default class AgentSelectionService {
       }
     };
 
+    const noAppMapsMode = () => {
+      if (!hasAppMaps) {
+        this.history.log(`[mode-selection] Activating Help mode because no AppMaps were detected.`);
+        return { question, agent: helpAgent() };
+      }
+    };
+
     const defaultMode = () => {
       this.history.log(`[mode-selection] Using default mode: ${AgentMode.Explain}`);
       return { question, agent: explainAgent() };
     };
 
-    return optionMode() || questionPrefixMode() /* || noAppMapsMode() */ || defaultMode();
+    return optionMode() || questionPrefixMode() || noAppMapsMode() || defaultMode();
   }
 }

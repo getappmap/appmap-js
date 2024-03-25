@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { ExplainRpc } from '@appland/rpc';
-import { explain } from '@appland/navie';
+import { Help, explain } from '@appland/navie';
 import { AI } from '@appland/client';
 import { AIClient, AICallbacks, AIInputPromptOptions, AIUserInput } from '@appland/client';
 import { ContextProvider, InteractionHistory, ProjectInfo } from '@appland/navie';
@@ -44,8 +44,9 @@ describe('RPC', () => {
         navieProvider = (
           threadId: string | undefined,
           contextProvider: ContextProvider,
-          projectInfoProvider: ProjectInfo.ProjectInfoProvider
-        ) => new LocalNavie(threadId, contextProvider, projectInfoProvider);
+          projectInfoProvider: ProjectInfo.ProjectInfoProvider,
+          helpProvider: Help.HelpProvider
+        ) => new LocalNavie(threadId, contextProvider, projectInfoProvider, helpProvider);
         rpcTest = new SingleDirectoryRPCTest(DEFAULT_WORKING_DIR, navieProvider);
       });
 
@@ -69,12 +70,12 @@ describe('RPC', () => {
         const explainOptions: ExplainRpc.ExplainOptions = {
           question,
         };
-        const response = (await rpcTest.client.request(
+        const response = await rpcTest.client.request(
           ExplainRpc.ExplainFunctionName,
           explainOptions
-        ));
+        );
         expect(response.error).toBeFalsy();
-        
+
         const explainResponse: ExplainRpc.ExplainResponse = response.result;
         expect(explainResponse.userMessageId).toBeTruthy();
         expect(explainResponse.threadId).toBeTruthy();
@@ -96,8 +97,9 @@ describe('RPC', () => {
         navieProvider = (
           threadId: string | undefined,
           contextProvider: ContextProvider,
-          projectInfoProvider: ProjectInfo.ProjectInfoProvider
-        ) => new RemoteNavie(threadId, contextProvider, projectInfoProvider);
+          projectInfoProvider: ProjectInfo.ProjectInfoProvider,
+          helpProvider: Help.HelpProvider
+        ) => new RemoteNavie(threadId, contextProvider, projectInfoProvider, helpProvider);
         rpcTest = new SingleDirectoryRPCTest(DEFAULT_WORKING_DIR, navieProvider);
       });
 

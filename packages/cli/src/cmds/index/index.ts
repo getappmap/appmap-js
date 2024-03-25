@@ -21,7 +21,7 @@ import { loadConfiguration } from '@appland/client';
 import { appmapStatsV1, appmapStatsV2 } from '../../rpc/appmap/stats';
 import LocalNavie from '../../rpc/explain/navie/navie-local';
 import RemoteNavie from '../../rpc/explain/navie/navie-remote';
-import { Context, ProjectInfo } from '@appland/navie';
+import { Context, Help, ProjectInfo } from '@appland/navie';
 import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 
 const AI_KEY_ENV_VARS = ['OPENAI_API_KEY'];
@@ -111,9 +111,10 @@ export const handler = async (argv) => {
       const buildLocalNavie = (
         threadId: string | undefined,
         contextProvider: Context.ContextProvider,
-        projectInfoProvider: ProjectInfo.ProjectInfoProvider
+        projectInfoProvider: ProjectInfo.ProjectInfoProvider,
+        helpProvider: Help.HelpProvider
       ) => {
-        const navie = new LocalNavie(threadId, contextProvider, projectInfoProvider);
+        const navie = new LocalNavie(threadId, contextProvider, projectInfoProvider, helpProvider);
 
         let START: number | undefined;
 
@@ -134,8 +135,9 @@ export const handler = async (argv) => {
       const buildRemoteNavie = (
         threadId: string | undefined,
         contextProvider: Context.ContextProvider,
-        projectInfoProvider: ProjectInfo.ProjectInfoProvider
-      ) => new RemoteNavie(threadId, contextProvider, projectInfoProvider);
+        projectInfoProvider: ProjectInfo.ProjectInfoProvider,
+        helpProvider: Help.HelpProvider
+      ) => new RemoteNavie(threadId, contextProvider, projectInfoProvider, helpProvider);
 
       const navieProvider = useLocalNavie() ? buildLocalNavie : buildRemoteNavie;
 

@@ -7,6 +7,7 @@ export enum PromptType {
   SequenceDiagram = 'sequenceDiagrams',
   CodeSnippet = 'codeSnippets',
   DataRequest = 'dataRequest',
+  HelpDoc = 'helpDoc',
 }
 
 const PROMPT_NAMES: Record<PromptType, { singular: string; plural: string }> = {
@@ -18,6 +19,7 @@ const PROMPT_NAMES: Record<PromptType, { singular: string; plural: string }> = {
   [PromptType.SequenceDiagram]: { singular: 'sequence diagram', plural: 'sequence diagrams' },
   [PromptType.CodeSnippet]: { singular: 'code snippet', plural: 'code snippets' },
   [PromptType.DataRequest]: { singular: 'data request', plural: 'data requests' },
+  [PromptType.HelpDoc]: { singular: 'help document', plural: 'help documents' },
 };
 
 export type Prompt = {
@@ -117,6 +119,15 @@ Each data request was recorded by the AppMap language library which is integrate
 
 Sequence diagrams, if available, provide more context about how each data request is used in the overall program.`,
     prefix: 'Data request',
+    multiple: true,
+  },
+  [PromptType.HelpDoc]: {
+    content: `**Help documents**
+
+You're provided with help documents that are relevant to the task. Each help document provides detailed
+information about installing, configuring, and using AppMap. You should refer to these documents when
+providing guidance to the user.`,
+    prefix: 'Help document',
     multiple: true,
   },
 };

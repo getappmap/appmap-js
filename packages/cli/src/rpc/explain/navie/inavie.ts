@@ -1,4 +1,4 @@
-import { Context, ProjectInfo } from '@appland/navie';
+import { Context, Help, ProjectInfo } from '@appland/navie';
 
 export default interface INavie {
   setOption(key: string, value: string | number): void;
@@ -14,5 +14,6 @@ export default interface INavie {
 export type INavieProvider = (
   threadId: string | undefined,
   contextProvider: Context.ContextProvider,
-  projectInfoProvider: ProjectInfo.ProjectInfoProvider
+  projectInfoProvider: ProjectInfo.ProjectInfoProvider,
+  helpProvider: Help.HelpProvider
 ) => INavie;

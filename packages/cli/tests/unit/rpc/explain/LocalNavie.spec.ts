@@ -4,8 +4,11 @@ describe('LocalNavie', () => {
   let navie: LocalNavie;
   let contextProvider = jest.fn();
   let projectInfoProvider = jest.fn();
+  let helpProvider = jest.fn();
 
-  beforeEach(() => (navie = new LocalNavie('threadId', contextProvider, projectInfoProvider)));
+  beforeEach(
+    () => (navie = new LocalNavie('threadId', contextProvider, projectInfoProvider, helpProvider))
+  );
 
   describe('setOptions', () => {
     it("should set 'temperature'", () => {

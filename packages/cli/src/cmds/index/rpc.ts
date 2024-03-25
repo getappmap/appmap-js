@@ -1,4 +1,4 @@
-import yargs from 'yargs';
+import yargs, { help } from 'yargs';
 import chalk from 'chalk';
 
 import { verbose } from '../../utils';
@@ -14,7 +14,7 @@ import appmapData from '../../rpc/appmap/data';
 import { appmapStatsV1, appmapStatsV2 } from '../../rpc/appmap/stats';
 import LocalNavie from '../../rpc/explain/navie/navie-local';
 import RemoteNavie from '../../rpc/explain/navie/navie-remote';
-import { Context, ProjectInfo } from '@appland/navie';
+import { Context, Help, ProjectInfo } from '@appland/navie';
 import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 import { configureRpcDirectories } from '../../lib/handleWorkingDirectory';
 import { loadConfiguration } from '@appland/client';
@@ -125,9 +125,10 @@ export const handler = async (argv) => {
   const buildLocalNavie = (
     threadId: string | undefined,
     contextProvider: Context.ContextProvider,
-    projectInfoProvider: ProjectInfo.ProjectInfoProvider
+    projectInfoProvider: ProjectInfo.ProjectInfoProvider,
+    helpProvider: Help.HelpProvider
   ) => {
-    const navie = new LocalNavie(threadId, contextProvider, projectInfoProvider);
+    const navie = new LocalNavie(threadId, contextProvider, projectInfoProvider, helpProvider);
     applyAIOptions(navie);
 
     let START: number | undefined;
@@ -149,10 +150,11 @@ export const handler = async (argv) => {
   const buildRemoteNavie = (
     threadId: string | undefined,
     contextProvider: Context.ContextProvider,
-    projectInfoProvider: ProjectInfo.ProjectInfoProvider
+    projectInfoProvider: ProjectInfo.ProjectInfoProvider,
+    helpProvider: Help.HelpProvider
   ) => {
     loadConfiguration(false);
-    const navie = new RemoteNavie(threadId, contextProvider, projectInfoProvider);
+    const navie = new RemoteNavie(threadId, contextProvider, projectInfoProvider, helpProvider);
     applyAIOptions(navie);
     return navie;
   };
