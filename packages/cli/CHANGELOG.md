@@ -1,3 +1,16 @@
+# [@appland/appmap-v3.132.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.131.0...@appland/appmap-v3.132.0) (2024-03-25)
+
+
+### Bug Fixes
+
+* Store AI responses as 'assistant' messages ([111af69](https://github.com/getappmap/appmap-js/commit/111af690a955c02fe157420a4d6ff323d8a3b987))
+
+
+### Features
+
+* Configure extended AI options ([6a25bf0](https://github.com/getappmap/appmap-js/commit/6a25bf09eb0c48ab6e3b82533a513b00af29cc93))
+* Drop 'navie' command ([e43d6a3](https://github.com/getappmap/appmap-js/commit/e43d6a356a3f1e223f3605ddf66d82faf9ee9362))
+
 # [@appland/appmap-v3.131.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.130.2...@appland/appmap-v3.131.0) (2024-03-21)
 
 
