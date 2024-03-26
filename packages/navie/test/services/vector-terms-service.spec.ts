@@ -5,11 +5,12 @@ import { ChatOpenAI } from '@langchain/openai';
 
 import VectorTermsService from '../../src/services/vector-terms-service';
 import InteractionHistory from '../../src/interaction-history';
+import { mockAIResponse } from '../fixture';
 
 jest.mock('@langchain/openai');
 const completionWithRetry = jest.mocked(ChatOpenAI.prototype.completionWithRetry);
 
-describe('DefaultVectorTermsService', () => {
+describe('VectorTermsService', () => {
   let interactionHistory: InteractionHistory;
   let service: VectorTermsService;
 
@@ -20,30 +21,11 @@ describe('DefaultVectorTermsService', () => {
   });
   afterEach(() => jest.resetAllMocks());
 
-  function mockAIResponse(responses: string[]): void {
-    const choices = responses.map((response, index) => ({
-      delta: {
-        content: response,
-      },
-      index,
-      finish_reason: 'stop',
-    }));
-    completionWithRetry.mockResolvedValueOnce([
-      {
-        id: 'cmpl-3Z5z9J5Z5Z5Z5Z5Z5Z5Z5Z5Z5Z5',
-        choices,
-        created: 1635989729,
-        model: 'gpt-3.5',
-        object: 'chat.completion.chunk',
-      },
-    ] as any);
-  }
-
   describe('when LLM suggested terms', () => {
     describe('is a valid JSON object', () => {
       it('is recorded in the interaction history', async () => {
-        mockAIResponse([`{"terms": ["user", "management"]}`]);
-        const terms = await service.suggestTerms('user management');
+        mockAIResponse(completionWithRetry, [`{"terms": ["user", "management"]}`]);
+        await service.suggestTerms('user management');
         expect(interactionHistory.events.map((e) => ({ ...e }))).toEqual([
           {
             type: 'vectorTerms',
@@ -52,19 +34,19 @@ describe('DefaultVectorTermsService', () => {
         ]);
       });
       it('should return the terms', async () => {
-        mockAIResponse([`{"terms": ["user", "management"]}`]);
+        mockAIResponse(completionWithRetry, [`{"terms": ["user", "management"]}`]);
         const terms = await service.suggestTerms('user management');
         expect(terms).toEqual(['user', 'management']);
         expect(completionWithRetry).toHaveBeenCalledTimes(1);
       });
       it('removes very short terms', async () => {
-        mockAIResponse([`["user", "management", "a"]`]);
+        mockAIResponse(completionWithRetry, [`["user", "management", "a"]`]);
         const terms = await service.suggestTerms('user management');
         expect(terms).toEqual(['user', 'management']);
         expect(completionWithRetry).toHaveBeenCalledTimes(1);
       });
       it('converts underscore_words to distinct words', async () => {
-        mockAIResponse([`["user_management"]`]);
+        mockAIResponse(completionWithRetry, [`["user_management"]`]);
         const terms = await service.suggestTerms('user management');
         expect(terms).toEqual(['user', 'management']);
         expect(completionWithRetry).toHaveBeenCalledTimes(1);
@@ -72,14 +54,14 @@ describe('DefaultVectorTermsService', () => {
     });
     describe('are a valid JSON list', () => {
       it('should return the terms', async () => {
-        mockAIResponse(['["user", "management"]']);
+        mockAIResponse(completionWithRetry, ['["user", "management"]']);
         const terms = await service.suggestTerms('user management');
         expect(terms).toEqual(['user', 'management']);
       });
     });
     describe('are valid JSON wrapped in fences', () => {
       it('should return the terms', async () => {
-        mockAIResponse(['```json', '["user", "management"]', '```']);
+        mockAIResponse(completionWithRetry, ['```json', '["user", "management"]', '```']);
         const terms = await service.suggestTerms('user management');
         expect(terms).toEqual(['user', 'management']);
       });
@@ -87,7 +69,7 @@ describe('DefaultVectorTermsService', () => {
 
     describe('are invalid JSON', () => {
       it('is accepted and processed', async () => {
-        mockAIResponse(['-user -mgmt']);
+        mockAIResponse(completionWithRetry, ['-user -mgmt']);
         const terms = await service.suggestTerms('user management');
         expect(terms).toEqual(['user', 'mgmt']);
         expect(completionWithRetry).toHaveBeenCalledTimes(1);

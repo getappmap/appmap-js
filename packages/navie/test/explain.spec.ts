@@ -16,18 +16,18 @@ import {
   predictsSummary,
   providesProjectInfo,
 } from './fixture';
+import ClassificationService from '../src/services/classification-service';
 
 describe('CodeExplainerService', () => {
   let interactionHistory: InteractionHistory;
   let completionService: CompletionService;
+  let classificationService: ClassificationService;
   let agentSelectionService: AgentSelectionService;
   let codeSelection: string | undefined;
   let codeSelectionService: CodeSelectionService;
   let memoryService: MemoryService;
   let projectInfoService: ProjectInfoService;
-  let explainOptions: ExplainOptions;
   let agent: Agent;
-  let codeExplainerService: CodeExplainerService;
 
   let userMessage1: string;
   let assistantMessage1: string | undefined;
@@ -37,6 +37,7 @@ describe('CodeExplainerService', () => {
     return new CodeExplainerService(
       interactionHistory,
       completionService,
+      classificationService,
       agentSelectionService,
       codeSelectionService,
       projectInfoService,
@@ -108,6 +109,9 @@ describe('CodeExplainerService', () => {
     completionService = {
       complete: () => TOKEN_STREAM,
     };
+    classificationService = {
+      classifyQuestion: jest.fn().mockResolvedValue(undefined),
+    } as unknown as ClassificationService;
     codeSelection = undefined;
     codeSelectionService = new CodeSelectionService(interactionHistory);
     projectInfoService = {
@@ -120,7 +124,6 @@ describe('CodeExplainerService', () => {
       memoryService = {
         predictSummary: doesNotPredictSummary(),
       } as unknown as MemoryService;
-      explainOptions = defaultExplainOptions();
       agent = mockAgent();
       mockAgentSelectionService(agent);
     });
@@ -170,7 +173,6 @@ describe('CodeExplainerService', () => {
       memoryService = {
         predictSummary: predictsSummary(),
       } as unknown as MemoryService;
-      explainOptions = defaultExplainOptions();
       agent = mockAgent();
       mockAgentSelectionService(agent);
     });

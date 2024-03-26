@@ -91,3 +91,22 @@ export function predictsSummary(): (messages: Message[]) => void {
     return Promise.resolve();
   });
 }
+
+export function mockAIResponse(completionWithRetry: jest.Mock, responses: string[]): void {
+  const choices = responses.map((response, index) => ({
+    delta: {
+      content: response,
+    },
+    index,
+    finish_reason: 'stop',
+  }));
+  completionWithRetry.mockResolvedValueOnce([
+    {
+      id: 'cmpl-3Z5z9J5Z5Z5Z5Z5Z5Z5Z5Z5Z5Z5',
+      choices,
+      created: 1635989729,
+      model: 'gpt-3.5',
+      object: 'chat.completion.chunk',
+    },
+  ] as any);
+}
