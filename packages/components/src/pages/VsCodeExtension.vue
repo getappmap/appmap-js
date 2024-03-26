@@ -80,6 +80,7 @@
           :tabName="VIEW_COMPONENT"
           :ref="VIEW_COMPONENT"
         >
+          <v-loading-spinner v-if="isDiagramLoading" />
           <v-lazy-loader>
             <v-diagram-component
               :class-map="filteredAppMap.classMap"
@@ -95,6 +96,7 @@
           :tabName="VIEW_SEQUENCE"
           :allow-scroll="true"
         >
+          <v-loading-spinner v-if="isDiagramLoading" />
           <v-lazy-loader>
             <v-diagram-sequence
               ref="viewSequence_diagram"
@@ -109,6 +111,7 @@
 
         <v-tab name="Trace View" :is-active="isViewingFlow" :tabName="VIEW_FLOW" :ref="VIEW_FLOW">
           <div class="trace-view">
+            <v-loading-spinner v-if="isDiagramLoading" />
             <v-lazy-loader>
               <v-diagram-trace
                 ref="viewFlow_diagram"
@@ -131,6 +134,7 @@
           :tabName="VIEW_FLAMEGRAPH"
           :allow-scroll="false"
         >
+          <v-loading-spinner v-if="isDiagramLoading" />
           <v-lazy-loader>
             <v-diagram-flamegraph
               ref="viewFlamegraph_diagram"
@@ -448,6 +452,7 @@ import { SAVED_FILTERS_STORAGE_ID } from '../components/FilterMenu.vue';
 import { DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH } from '../components/DiagramSequence.vue';
 import VCompassIcon from '@/assets/compass-simpler.svg';
 import VLazyLoader from '@/components/LazyLoader.vue';
+import VLoadingSpinner from '@/components/LoadingSpinner.vue';
 
 const browserPrefixes = ['', 'webkit', 'moz'];
 
@@ -489,6 +494,7 @@ export default {
     VConfigurationRequired,
     VCompassIcon,
     VLazyLoader,
+    VLoadingSpinner,
   },
   store,
   data() {
@@ -516,6 +522,7 @@ export default {
       showDetailsPanel: false,
       rightColumnWidth: 0,
       filteredAppMap: this.emptyFilteredAppMap(),
+      isDiagramLoading: false,
     };
   },
   mixins: [EmitLinkMixin],
@@ -567,8 +574,8 @@ export default {
   },
   watch: {
     '$store.state.filters': {
-      handler(filters) {
-        this.applyFilters(filters, this.$store.state.appMap);
+      async handler(filters) {
+        await this.applyFilters(filters, this.$store.state.appMap, true);
       },
       deep: true,
     },
@@ -903,8 +910,19 @@ export default {
     },
   },
   methods: {
-    applyFilters(filter, appMap) {
-      this.filteredAppMap = filter.filter(appMap, this.findings);
+    async applyFilters(filter, appMap, isAsync = false) {
+      if (isAsync) {
+        this.isDiagramLoading = true;
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            this.filteredAppMap = filter.filter(appMap, this.findings);
+            this.isDiagramLoading = false;
+            resolve();
+          }, 0);
+        });
+      } else {
+        this.filteredAppMap = filter.filter(appMap, this.findings);
+      }
     },
     emptyFilteredAppMap() {
       return new AppMapFilter().filter(new AppMap());
