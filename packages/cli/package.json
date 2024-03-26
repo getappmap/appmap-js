@@ -22,6 +22,7 @@
     "build": "tsc && yarn build:html",
     "watch": "tsc --watch",
     "build:html": "ts-node esbuild.html.ts",
+    "build:doc": "rsync -av --delete ../../docs built/",
     "start": "ts-node src/cli.ts",
     "build-native": "yarn build && ./bin/build-native"
   },
@@ -156,7 +157,9 @@
     "assets": [
       "package.json",
       "resources",
-      "built/appmap.html"
+      "built/appmap.html",
+      "built/sequenceDiagram.html",
+      "built/docs"
     ],
     "outputPath": "dist"
   },
