@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.133.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.132.0...@appland/appmap-v3.133.0) (2024-03-26)
+
+
+### Features
+
+* Update for docs bundled within the compiled package ([6cce57b](https://github.com/getappmap/appmap-js/commit/6cce57b60116c7d5779c3fd2bbf93ba687fe49d1))
+
 # [@appland/appmap-v3.132.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.131.0...@appland/appmap-v3.132.0) (2024-03-25)
 
 
