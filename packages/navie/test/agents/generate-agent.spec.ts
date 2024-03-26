@@ -18,10 +18,9 @@ describe('@generate agent', () => {
     interactionHistory = new InteractionHistory();
     lookupContextService = {
       lookupContext: jest.fn(),
-      contextFn: jest.fn(),
+      lookupHelp: jest.fn(),
     } as unknown as LookupContextService;
     vectorTermsService = suggestsVectorTerms('How does user management work?', undefined);
-    LookupContextService.lookupAndApplyContext = jest.fn();
     applyContextService = {
       addSystemPrompts: jest.fn(),
       applyContext: jest.fn(),
@@ -56,15 +55,14 @@ describe('@generate agent', () => {
       );
     });
 
-    it('invokes the lookup context service', async () => {
+    it('looks up context but not help', async () => {
       await buildAgent().perform(initialQuestionOptions, () => tokensAvailable);
 
-      expect(LookupContextService.lookupAndApplyContext).toHaveBeenCalledWith(
-        lookupContextService,
-        applyContextService,
+      expect(lookupContextService.lookupContext).toHaveBeenCalledWith(
         ['user', 'management'],
         tokensAvailable
       );
+      expect(lookupContextService.lookupHelp).not.toHaveBeenCalled();
     });
 
     it('applies the agent and question system prompts', async () => {

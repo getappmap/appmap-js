@@ -1,4 +1,5 @@
 import { ContextProvider, ContextRequest } from '../src/context';
+import { HelpProvider } from '../src/help';
 import InteractionHistory from '../src/interaction-history';
 import Message from '../src/message';
 import { ProjectInfoProvider } from '../src/project-info';
@@ -23,6 +24,16 @@ export const SEARCH_CONTEXT = {
   codeObjects: CODE_OBJECTS,
 };
 
+export const HELP_CONTEXT = [
+  {
+    filePath: 'appmap-java.md',
+    content: 'AppMap Java reference',
+    from: 1,
+    to: 10,
+    score: 1,
+  },
+];
+
 export const TOKEN_STREAM: AsyncIterable<string> = {
   [Symbol.asyncIterator]: async function* () {
     yield 'The user management system is a system ';
@@ -42,27 +53,6 @@ export function suggestsVectorTerms(
   return {
     suggestTerms,
   } as unknown as VectorTermsService;
-}
-
-export function providesContext(
-  interactionHistory: InteractionHistory,
-  tokenCount: number
-): LookupContextService {
-  const lookupProvider: ContextProvider = jest
-    .fn()
-    .mockImplementation((request: ContextRequest) => {
-      expect(request.vectorTerms).toEqual(['user', 'management']);
-      expect(request.tokenCount).toEqual(tokenCount);
-      return Promise.resolve(SEARCH_CONTEXT);
-    });
-  return new LookupContextService(interactionHistory, lookupProvider);
-}
-
-export function providesNoContext(interactionHistory: InteractionHistory): LookupContextService {
-  const lookupProvider: ContextProvider = jest
-    .fn()
-    .mockImplementation(() => Promise.resolve(undefined));
-  return new LookupContextService(interactionHistory, lookupProvider);
 }
 
 export const APPMAP_CONFIG = {

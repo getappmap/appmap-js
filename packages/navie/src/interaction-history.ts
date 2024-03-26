@@ -3,6 +3,7 @@ import InteractionState from './interaction-state';
 import { ContextItem, ContextResponse } from './context';
 import { PromptType } from './prompt';
 import { CHARACTERS_PER_TOKEN } from './message';
+import { HelpDoc } from './help';
 
 const SNIPPET_LENGTH = 800;
 
@@ -129,6 +130,33 @@ export class ContextLookupEvent extends InteractionEvent {
 
   updateState(state: InteractionState) {
     state.contextAvailable = this.context;
+  }
+}
+
+export class HelpLookupEvent extends InteractionEvent {
+  constructor(public help: HelpDoc[] | undefined) {
+    super('helpLookup');
+  }
+
+  get helpAvailable() {
+    return !!this.help;
+  }
+
+  get metadata() {
+    return {
+      type: this.type,
+      helpAvailable: this.helpAvailable,
+    };
+  }
+
+  get message() {
+    if (!this.help) return `[helpLookup] not found`;
+
+    return `[helpLookup] ${this.help.length} items`;
+  }
+
+  updateState(state: InteractionState) {
+    state.helpAvailable = this.help;
   }
 }
 

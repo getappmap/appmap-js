@@ -123,7 +123,11 @@ export default function explain(
     options.modelName,
     options.temperature
   );
-  const lookupContextService = new LookupContextService(interactionHistory, contextProvider);
+  const lookupContextService = new LookupContextService(
+    interactionHistory,
+    contextProvider,
+    helpProvider
+  );
   const applyContextService = new ApplyContextService(interactionHistory);
 
   const agentSelectionService = new AgentSelectionService(
