@@ -80,10 +80,12 @@
           :tabName="VIEW_COMPONENT"
           :ref="VIEW_COMPONENT"
         >
-          <v-diagram-component
-            :class-map="filteredAppMap.classMap"
-            :highlighted-event-index="eventFilterMatchIndex"
-          />
+          <v-lazy-loader>
+            <v-diagram-component
+              :class-map="filteredAppMap.classMap"
+              :highlighted-event-index="eventFilterMatchIndex"
+            />
+          </v-lazy-loader>
         </v-tab>
 
         <v-tab
@@ -93,28 +95,32 @@
           :tabName="VIEW_SEQUENCE"
           :allow-scroll="true"
         >
-          <v-diagram-sequence
-            ref="viewSequence_diagram"
-            :app-map="filteredAppMap"
-            :collapse-depth="seqDiagramCollapseDepth"
-            :highlighted-event-index="eventFilterMatchIndex"
-            @setMaxSeqDiagramCollapseDepth="setMaxSeqDiagramCollapseDepth"
-            @updateCollapseDepth="handleNewCollapseDepth"
-          />
+          <v-lazy-loader>
+            <v-diagram-sequence
+              ref="viewSequence_diagram"
+              :app-map="filteredAppMap"
+              :collapse-depth="seqDiagramCollapseDepth"
+              :highlighted-event-index="eventFilterMatchIndex"
+              @setMaxSeqDiagramCollapseDepth="setMaxSeqDiagramCollapseDepth"
+              @updateCollapseDepth="handleNewCollapseDepth"
+            />
+          </v-lazy-loader>
         </v-tab>
 
         <v-tab name="Trace View" :is-active="isViewingFlow" :tabName="VIEW_FLOW" :ref="VIEW_FLOW">
           <div class="trace-view">
-            <v-diagram-trace
-              ref="viewFlow_diagram"
-              :events="filteredAppMap.rootEvents()"
-              :event-filter-matches="new Set(eventFilterMatches)"
-              :event-filter-match="eventFilterMatch"
-              :event-filter-match-index="eventFilterMatchIndex + 1"
-              :name="VIEW_FLOW"
-              :zoom-controls="true"
-              @clickEvent="onClickTraceEvent"
-            />
+            <v-lazy-loader>
+              <v-diagram-trace
+                ref="viewFlow_diagram"
+                :events="filteredAppMap.rootEvents()"
+                :event-filter-matches="new Set(eventFilterMatches)"
+                :event-filter-match="eventFilterMatch"
+                :event-filter-match-index="eventFilterMatchIndex + 1"
+                :name="VIEW_FLOW"
+                :zoom-controls="true"
+                @clickEvent="onClickTraceEvent"
+              />
+            </v-lazy-loader>
           </div>
         </v-tab>
 
@@ -125,13 +131,15 @@
           :tabName="VIEW_FLAMEGRAPH"
           :allow-scroll="false"
         >
-          <v-diagram-flamegraph
-            ref="viewFlamegraph_diagram"
-            :events="filteredAppMap.rootEvents()"
-            :title="filteredAppMap.name"
-            :highlighted-event-index="eventFilterMatchIndex"
-            @select="onFlamegraphSelect"
-          />
+          <v-lazy-loader>
+            <v-diagram-flamegraph
+              ref="viewFlamegraph_diagram"
+              :events="filteredAppMap.rootEvents()"
+              :title="filteredAppMap.name"
+              :highlighted-event-index="eventFilterMatchIndex"
+              @select="onFlamegraphSelect"
+            />
+          </v-lazy-loader>
         </v-tab>
 
         <template v-slot:notification>
@@ -439,6 +447,7 @@ import isPrecomputedSequenceDiagram from '@/lib/isPrecomputedSequenceDiagram';
 import { SAVED_FILTERS_STORAGE_ID } from '../components/FilterMenu.vue';
 import { DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH } from '../components/DiagramSequence.vue';
 import VCompassIcon from '@/assets/compass-simpler.svg';
+import VLazyLoader from '@/components/LazyLoader.vue';
 
 const browserPrefixes = ['', 'webkit', 'moz'];
 
@@ -479,6 +488,7 @@ export default {
     VUnlicensedNotice,
     VConfigurationRequired,
     VCompassIcon,
+    VLazyLoader,
   },
   store,
   data() {
@@ -1467,9 +1477,11 @@ export default {
     if (this.isGiantAppMap) {
       this.showStatsPanel = true;
       this.setView(null);
+    } else if (this.showStatsPanel && this.currentView === null) {
+      this.showStatsPanel = false;
+      this.setView(this.defaultView);
     }
   },
-
   beforeDestroy() {
     browserPrefixes.forEach((prefix) => {
       document.removeEventListener(prefix + 'fullscreenchange', this.checkFullscreen);
