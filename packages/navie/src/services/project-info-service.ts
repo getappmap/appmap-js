@@ -25,19 +25,19 @@ export default class ProjectInfoService {
         PromptType.AppMapConfig,
         'appmapConfig',
         () => projectInfo.some(({ appmapConfig }) => Boolean(appmapConfig)),
-        `The user's project does not contain an AppMap config file (appmap.yml).`,
+        `The project does not contain an AppMap config file (appmap.yml).`,
       ],
       [
         PromptType.AppMapStats,
         'appmapStats',
         () => projectInfo.some(({ appmapStats }) => appmapStats.numAppMaps > 0),
-        `The user's project does not contain any AppMaps.`,
+        `The project does not contain any AppMaps.`,
       ],
     ];
     projectInfoKeys.forEach(([promptType, projectInfoKey, isPresent, missingInfoMessage]) => {
       if (!isPresent()) {
         this.interactionHistory.addEvent(
-          new PromptInteractionEvent(promptType, 'system', missingInfoMessage)
+          new PromptInteractionEvent(promptType, 'user', missingInfoMessage)
         );
         return;
       }

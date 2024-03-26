@@ -1,4 +1,4 @@
-import yargs from 'yargs';
+import yargs, { help } from 'yargs';
 import chalk from 'chalk';
 
 import { verbose } from '../../utils';
@@ -14,11 +14,12 @@ import appmapData from '../../rpc/appmap/data';
 import { appmapStatsV1, appmapStatsV2 } from '../../rpc/appmap/stats';
 import LocalNavie from '../../rpc/explain/navie/navie-local';
 import RemoteNavie from '../../rpc/explain/navie/navie-remote';
-import { Context, ProjectInfo } from '@appland/navie';
+import { Context, Help, ProjectInfo } from '@appland/navie';
 import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 import { configureRpcDirectories } from '../../lib/handleWorkingDirectory';
 import { loadConfiguration } from '@appland/client';
 import { getConfigurationV1, setConfigurationV1 } from '../../rpc/configuration';
+import { Agents } from '@appland/navie';
 
 const AI_KEY_ENV_VARS = ['OPENAI_API_KEY'];
 
@@ -26,16 +27,15 @@ export const command = 'rpc';
 export const describe = 'Run AppMap JSON-RPC server';
 
 export const builder = (args: yargs.Argv) => {
-  args.showHidden();
-
   args.option('directory', {
     describe: 'program working directory',
     type: 'string',
     alias: 'd',
-    multiple: true,
+    array: true,
   });
   args.option('port', {
-    describe: 'port to listen on for JSON-RPC requests',
+    describe:
+      'port to listen on for JSON-RPC requests. Use port 0 to let the OS choose a port. The port number will be printed to stdout on startup.',
     type: 'number',
     alias: 'p',
   });
@@ -56,6 +56,11 @@ export const builder = (args: yargs.Argv) => {
     array: true,
   });
 
+  args.option('agent-mode', {
+    describe: `Agent mode which to run the Navie AI. The agent can also be controlled by starting the question with '@<agent> '.`,
+    choices: Object.values(Agents).map((agent) => agent.toLowerCase()),
+  });
+
   return args.strict();
 };
 
@@ -74,6 +79,9 @@ export const handler = async (argv) => {
   if (aiOptions) {
     aiOptions = Array.isArray(aiOptions) ? aiOptions : [aiOptions];
   }
+  let agentModeStr: string | undefined = argv.explainMode;
+  let agentMode: Agents | undefined;
+  if (agentModeStr) agentMode = agentModeStr as Agents;
 
   const useLocalNavie = () => {
     if (argv.navieProvider === 'local') {
@@ -109,14 +117,18 @@ export const handler = async (argv) => {
         }
       }
     }
+    if (agentMode) {
+      navie.setOption('explainMode', agentMode);
+    }
   };
 
   const buildLocalNavie = (
     threadId: string | undefined,
     contextProvider: Context.ContextProvider,
-    projectInfoProvider: ProjectInfo.ProjectInfoProvider
+    projectInfoProvider: ProjectInfo.ProjectInfoProvider,
+    helpProvider: Help.HelpProvider
   ) => {
-    const navie = new LocalNavie(threadId, contextProvider, projectInfoProvider);
+    const navie = new LocalNavie(threadId, contextProvider, projectInfoProvider, helpProvider);
     applyAIOptions(navie);
 
     let START: number | undefined;
@@ -138,10 +150,11 @@ export const handler = async (argv) => {
   const buildRemoteNavie = (
     threadId: string | undefined,
     contextProvider: Context.ContextProvider,
-    projectInfoProvider: ProjectInfo.ProjectInfoProvider
+    projectInfoProvider: ProjectInfo.ProjectInfoProvider,
+    helpProvider: Help.HelpProvider
   ) => {
     loadConfiguration(false);
-    const navie = new RemoteNavie(threadId, contextProvider, projectInfoProvider);
+    const navie = new RemoteNavie(threadId, contextProvider, projectInfoProvider, helpProvider);
     applyAIOptions(navie);
     return navie;
   };

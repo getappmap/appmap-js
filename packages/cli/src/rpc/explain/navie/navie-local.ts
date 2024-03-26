@@ -4,9 +4,10 @@ import { mkdir, readFile, readdir, writeFile } from 'fs/promises';
 import { randomUUID } from 'crypto';
 import { join } from 'path';
 import { homedir } from 'os';
-import { Context, Explain, Message, ProjectInfo, explain } from '@appland/navie';
+import { Context, Explain, Help, Message, ProjectInfo, explain } from '@appland/navie';
 
 import INavie from './inavie';
+import { AgentMode } from '@appland/navie/dist/agent';
 
 class LocalHistory {
   constructor(public readonly threadId: string) {}
@@ -60,6 +61,9 @@ const OPTION_SETTERS: Record<
   modelName: (explainOptions, value) => {
     explainOptions.modelName = String(value);
   },
+  explainMode: (explainOptions, value) => {
+    explainOptions.agentMode = value as AgentMode;
+  },
 };
 
 export default class LocalNavie extends EventEmitter implements INavie {
@@ -69,7 +73,8 @@ export default class LocalNavie extends EventEmitter implements INavie {
   constructor(
     public threadId: string | undefined,
     private readonly contextProvider: Context.ContextProvider,
-    private readonly projectInfoProvider: ProjectInfo.ProjectInfoProvider
+    private readonly projectInfoProvider: ProjectInfo.ProjectInfoProvider,
+    private readonly helpProvider: Help.HelpProvider
   ) {
     super();
 
@@ -110,6 +115,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
       clientRequest,
       this.contextProvider,
       this.projectInfoProvider,
+      this.helpProvider,
       this.explainOptions,
       history
     );

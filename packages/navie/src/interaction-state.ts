@@ -1,4 +1,5 @@
 import { ContextItem, ContextResponse } from './context';
+import { HelpResponse } from './help';
 import Message from './message';
 
 export default class InteractionState {
@@ -8,11 +9,9 @@ export default class InteractionState {
   public completionModel?: string;
   public completionTemperature?: number;
   public contextAvailable?: ContextResponse;
+  public helpAvailable?: HelpResponse;
 
   addContextItem(contextItem: ContextItem) {
-    // const items = this.contextItems.get(contextItem.type);
-    // assert(items);
-    // items.push(contextItem.content);
     this.messages.push({ content: contextItem.content, role: 'user' });
   }
 }

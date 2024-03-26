@@ -42,7 +42,7 @@ async function getAppmapStats(config: AppMapConfigWithDirectory): Promise<Stats>
   await processNamedFiles(appmapDir, 'metadata.json', async () => numAppMaps++);
 
   return {
-    name: config.name,
+    name: config.name || config.directory,
     directory: config.directory,
     packages: Array.from(packages).sort(),
     classes: Array.from(classes).sort(),
