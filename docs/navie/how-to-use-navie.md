@@ -12,6 +12,8 @@ toc: true
 When you ask a question to Navie, it will search through all your AppMaps created for your project to pull in relevant traces, sequence diagrams, and code snippets for analysis.  It will then send these code snippets and runtime code sequence diagrams to the Generative AI service along with your question.  By sending this valuable context to the AI interface, your answers will be much more personal and specific to your codebase, files, and functions. Additionally, the Generative AI will be able to understand how your code works at runtime and will be able to make architectural level recommendations across your entire application. 
 
 - [How to Open Navie](#how-to-open-navie)
+  - [In VS Code](#in-vs-code)
+  - [In JetBrains](#in-jetbrains)
 - [How to Generate the Highest Quality Answers](#how-to-generate-the-highest-quality-answers)
   - [Create AppMaps](#create-appmaps)
   - [Ask Navie](#ask-navie)
@@ -19,21 +21,33 @@ When you ask a question to Navie, it will search through all your AppMaps create
   - [Repeat](#repeat)
 - [Next Steps](#next-steps)
 
-
 ## How to Open Navie
 
 There are three ways to access Navie in your code editor:
-- [In the AppMap Plugin Instructions Section](#in-the-appmap-plugin-instructions-section)
-- [Via the VS Code Command Palette](#via-the-vs-code-command-palette)
-- [Select a code block and use the lightbulb](#select-a-code-block-and-use-the-lightbulb)
+- [How to Open Navie](#how-to-open-navie)
+  - [In VS Code](#in-vs-code)
+    - [In the AppMap Plugin Instructions Section](#in-the-appmap-plugin-instructions-section)
+    - [Via the VS Code Command Palette](#via-the-vs-code-command-palette)
+    - [Select a code block and use the lightbulb](#select-a-code-block-and-use-the-lightbulb)
+  - [In JetBrains](#in-jetbrains)
+    - [In the AppMap Sidebar Plugin](#in-the-appmap-sidebar-plugin)
+    - [Via the JetBrains Tools menu option](#via-the-jetbrains-tools-menu-option)
+- [How to Generate the Highest Quality Answers](#how-to-generate-the-highest-quality-answers)
+  - [Create AppMaps](#create-appmaps)
+  - [Ask Navie](#ask-navie)
+  - [Write Code](#write-code)
+  - [Repeat](#repeat)
+- [Next Steps](#next-steps)
 
-### In the AppMap Plugin Instructions Section
+### In VS Code
+
+#### In the AppMap Plugin Instructions Section
 
 You can Ask Navie by opening the AppMap Instructions drop down and select on the "Ask AppMap Navie AI".
 
 <img class="video-screenshot" src="/assets/img/product/navie-navigation.webp"/> 
 
-### Via the VS Code Command Palette
+#### Via the VS Code Command Palette
 
 You can open the VS Code Command Palette
    - Mac: `Cmd + Shift + P`
@@ -43,11 +57,33 @@ And search for `Navie`
 
 <img class="video-screenshot" src="/assets/img/product/command-palette-navie.webp"/> 
 
-### Select a code block and use the lightbulb
+#### Select a code block and use the lightbulb
 
 Finally you can open Navie by selecting a block of text and using the lightbulb to ask Navie about your code.
 
 <img class="video-screenshot" src="/assets/img/product/lightbulb.webp"/> 
+
+### In JetBrains
+
+#### In the AppMap Sidebar Plugin
+
+You can open the AppMap plugin in your sidebar.
+
+<img class="video-screenshot" src="/assets/img/product/appmap-sidebar.webp"/> 
+
+Then select Ask AppMap Navie AI from the Instructions section.
+
+<img class="video-screenshot" src="/assets/img/product/ask-navie-vscode.webp"/>
+
+#### Via the JetBrains Tools menu option
+
+You can open Navie by clicking on the JetBrains menu option `Tools` -> `AppMap`.  From there you can select `Explain with AppMap Navie AI`
+
+<img class="video-screenshot" src="/assets/img/product/tools-appmap-vscode.webp"/>
+
+AppMap Navie will open as a new tab in your JetBrains editor. 
+
+<img class="video-screenshot" src="/assets/img/product/ask-navie-vscode-window.webp"/>
 
 ## How to Generate the Highest Quality Answers
 
