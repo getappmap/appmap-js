@@ -4,7 +4,9 @@ import ApplyContextService from '../../src/services/apply-context-service';
 import VectorTermsService from '../../src/services/vector-terms-service';
 import LookupContextService from '../../src/services/lookup-context-service';
 import { AgentOptions } from '../../src/agent';
-import { suggestsVectorTerms } from '../fixture';
+import { SEARCH_CONTEXT, suggestsVectorTerms } from '../fixture';
+import { HelpResponse } from '../../src/help';
+import { CHARACTERS_PER_TOKEN } from '../../src/message';
 
 describe('@explain agent', () => {
   let interactionHistory: InteractionHistory;
@@ -18,10 +20,10 @@ describe('@explain agent', () => {
     interactionHistory = new InteractionHistory();
     lookupContextService = {
       lookupContext: jest.fn(),
+      lookupHelp: jest.fn(),
       contextFn: jest.fn(),
     } as unknown as LookupContextService;
     vectorTermsService = suggestsVectorTerms('How does user management work?', undefined);
-    LookupContextService.lookupAndApplyContext = jest.fn();
     applyContextService = {
       addSystemPrompts: jest.fn(),
       applyContext: jest.fn(),
@@ -45,7 +47,12 @@ describe('@explain agent', () => {
       aggregateQuestion: 'How does user management work?',
       chatHistory: [],
       hasAppMaps: true,
-      projectInfo: [],
+      projectInfo: [
+        {
+          appmapConfig: { language: 'ruby' } as unknown as any,
+          appmapStats: { numAppMaps: 1 } as unknown as any,
+        },
+      ],
     };
 
     it('invokes the vector terms service', async () => {
@@ -56,14 +63,36 @@ describe('@explain agent', () => {
       );
     });
 
-    it('invokes the lookup context service', async () => {
+    it('looks up context and help', async () => {
+      const context = SEARCH_CONTEXT;
+      const help: HelpResponse = [
+        {
+          filePath: 'ruby-diagram.md',
+          from: 1,
+          to: 2,
+          content: 'steps to make a Ruby appmap diagram',
+          score: 1,
+        },
+      ];
+      lookupContextService.lookupContext = jest.fn().mockResolvedValue(context);
+      lookupContextService.lookupHelp = jest.fn().mockResolvedValue(help);
+
       await buildAgent().perform(initialQuestionOptions, () => tokensAvailable);
 
-      expect(LookupContextService.lookupAndApplyContext).toHaveBeenCalledWith(
-        lookupContextService,
-        applyContextService,
+      expect(lookupContextService.lookupContext).toHaveBeenCalledWith(
         ['user', 'management'],
         tokensAvailable
+      );
+      expect(lookupContextService.lookupHelp).toHaveBeenCalledWith(
+        ['ruby'],
+        ['user', 'management'],
+        tokensAvailable
+      );
+
+      expect(applyContextService.applyContext).toHaveBeenCalledWith(
+        context,
+        help,
+        tokensAvailable * CHARACTERS_PER_TOKEN
       );
     });
 

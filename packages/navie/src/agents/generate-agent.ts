@@ -53,12 +53,9 @@ export class GenerateAgent implements Agent {
     );
 
     const vectorTerms = await this.vectorTermsService.suggestTerms(options.aggregateQuestion);
-    await LookupContextService.lookupAndApplyContext(
-      this.lookupContextService,
-      this.applyContextService,
-      vectorTerms,
-      tokensAvailable()
-    );
+    const tokenCount = tokensAvailable();
+    const context = await this.lookupContextService.lookupContext(vectorTerms, tokenCount);
+    LookupContextService.applyContext(context, [], this.applyContextService, tokenCount);
   }
 
   applyQuestionPrompt(question: string): void {

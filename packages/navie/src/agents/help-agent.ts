@@ -83,7 +83,7 @@ Provide best practices for making AppMaps, taking into account the following con
 const PREFIX_TIP_PROMPT = `**Tip: Using the @help prefix**
 
 Finish your response by informing the user that, in the future, they can begin any question
-with the prefix '@help' to activate help mode, and get help with using AppMap.
+with the prefix "@help" to activate help mode, and get help with using AppMap.
 `;
 
 export class HelpAgent implements Agent {

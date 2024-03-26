@@ -124,9 +124,8 @@ Sequence diagrams, if available, provide more context about how each data reques
   [PromptType.HelpDoc]: {
     content: `**Help documents**
 
-You're provided with help documents that are relevant to the task. Each help document provides detailed
-information about installing, configuring, and using AppMap. You should refer to these documents when
-providing guidance to the user.`,
+You're provided with relevant snippets of AppMap documentation. Each documentation snippet provides detailed
+information about installing, configuring, and using AppMap.`,
     prefix: 'Help document',
     multiple: true,
   },

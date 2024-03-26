@@ -41,8 +41,8 @@ will waste the user's time. The user wants direct answers to their questions.
 **Teach the user about the @help prefix**
 
 If it seems like the user might be asking about how to use AppMap, rather than about the contents of their AppMaps,
-you should teach the user about the '@help' prefix. You can inform the user that they can begin their question with
-the '@help' prefix to get help with using AppMap. 
+you should teach the user about the "@help" prefix. You can inform the user that they can begin their question with
+the "@help" prefix to get help with using AppMap. 
 `;
 
 export default class ExplainAgent implements Agent {
@@ -64,13 +64,18 @@ export default class ExplainAgent implements Agent {
       )
     );
 
+    const languages = options.projectInfo
+      .map((info) => info.appmapConfig?.language)
+      .filter(Boolean) as string[];
+    const tokenCount = tokensAvailable();
     const vectorTerms = await this.vectorTermsService.suggestTerms(options.aggregateQuestion);
-    await LookupContextService.lookupAndApplyContext(
-      this.lookupContextService,
-      this.applyContextService,
-      vectorTerms,
-      tokensAvailable()
-    );
+
+    const contextRequest = this.lookupContextService.lookupContext(vectorTerms, tokenCount);
+    const helpRequest = this.lookupContextService.lookupHelp(languages, vectorTerms, tokenCount);
+    const context = await contextRequest;
+    const help = await helpRequest;
+
+    LookupContextService.applyContext(context, help, this.applyContextService, tokenCount);
   }
 
   applyQuestionPrompt(question: string): void {
