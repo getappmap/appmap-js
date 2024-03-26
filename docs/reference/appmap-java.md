@@ -160,7 +160,8 @@ When you run your program, the agent reads configuration settings from
 ```
 # 'name' should generally be the same as the code repo name.
 name: MyProject
-appmap_dir: build/tmp/appmap
+language: java
+appmap_dir: tmp/appmap
 packages:
 - path: com.mycorp.myproject
   exclude: [ com.mycorp.myproject.MyClass#MyMethod ]
