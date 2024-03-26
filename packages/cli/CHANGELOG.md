@@ -1,3 +1,16 @@
+# [@appland/appmap-v3.134.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.133.0...@appland/appmap-v3.134.0) (2024-03-26)
+
+
+### Bug Fixes
+
+* Default the stats name to the directory ([b1351b1](https://github.com/getappmap/appmap-js/commit/b1351b139a2e06e154e134933fc3ff47c0c98729))
+
+
+### Features
+
+* Implement [@help](https://github.com/help) mode ([58f36f3](https://github.com/getappmap/appmap-js/commit/58f36f392b875bbd6a8301f68ecb18c505d2bb97))
+* Refactor navie into agent modes ([2b1a7f6](https://github.com/getappmap/appmap-js/commit/2b1a7f65e828332eb1e38cac12f85c8aff833880))
+
 # [@appland/appmap-v3.133.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.132.0...@appland/appmap-v3.133.0) (2024-03-26)
 
 
