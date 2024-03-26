@@ -15,6 +15,8 @@ import { HelpProvider } from './help';
 import AgentSelectionService from './services/agent-selection-service';
 import LookupContextService from './services/lookup-context-service';
 import ApplyContextService from './services/apply-context-service';
+import ClassificationService from './services/classification-service';
+import { warn } from 'console';
 
 export type ChatHistory = Message[];
 
@@ -35,6 +37,7 @@ export class CodeExplainerService {
   constructor(
     public readonly interactionHistory: InteractionHistory,
     private readonly completionService: CompletionService,
+    private readonly classifierService: ClassificationService,
     private readonly agentSelectionService: AgentSelectionService,
     private readonly codeSelectionService: CodeSelectionService,
     private readonly projectInfoService: ProjectInfoService,
@@ -47,6 +50,8 @@ export class CodeExplainerService {
     chatHistory?: ChatHistory
   ): AsyncIterable<string> {
     const { question: baseQuestion, codeSelection } = clientRequest;
+
+    const classificationRequest = this.classifierService.classifyQuestion(baseQuestion);
 
     const projectInfoResponse = await this.projectInfoService.lookupProjectInfo();
     const projectInfo: ProjectInfo[] = Array.isArray(projectInfoResponse)
@@ -91,6 +96,11 @@ export class CodeExplainerService {
     if (codeSelection) this.codeSelectionService.applyCodeSelection(codeSelection);
     mode.applyQuestionPrompt(question);
 
+    {
+      const classification = await classificationRequest;
+      warn(`Classification: ${classification}`);
+    }
+
     const response = this.completionService.complete();
     for await (const token of response) {
       yield token;
@@ -112,6 +122,12 @@ export default function explain(
 ): IExplain {
   const interactionHistory = new InteractionHistory();
   const completionService = new OpenAICompletionService(
+    interactionHistory,
+    options.modelName,
+    options.temperature
+  );
+
+  const classificationService = new ClassificationService(
     interactionHistory,
     options.modelName,
     options.temperature
@@ -147,6 +163,7 @@ export default function explain(
   const codeExplainerService = new CodeExplainerService(
     interactionHistory,
     completionService,
+    classificationService,
     agentSelectionService,
     codeSelectionService,
     projectInfoService,
