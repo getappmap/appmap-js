@@ -1,3 +1,10 @@
+# [@appland/components-v4.12.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.12.0...@appland/components-v4.12.1) (2024-03-27)
+
+
+### Bug Fixes
+
+* Update intellij process recording instructions ([866c8f9](https://github.com/getappmap/appmap-js/commit/866c8f93c58ca1be4b291dbad6e440b0ec3458d5))
+
 # [@appland/components-v4.12.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.11.0...@appland/components-v4.12.0) (2024-03-22)
 
 
