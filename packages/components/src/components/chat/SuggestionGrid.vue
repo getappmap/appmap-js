@@ -36,8 +36,8 @@ export default {
       type: Array,
       default: () => [
         {
-          title: 'Document the architecture of a feature.',
-          subTitle: 'Get AppMaps and a detailed text description of the code design.',
+          title: 'Explain how a feature works.',
+          subTitle: 'Get a detailed text description of the code design.',
           prompt:
             "Describe a particular feature or system within your application and I'll describe how it works.",
         },
