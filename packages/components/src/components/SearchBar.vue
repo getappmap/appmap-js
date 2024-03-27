@@ -222,7 +222,7 @@ export default {
       return this.$refs.input === window?.document?.activeElement;
     },
     onWindowClick(event) {
-      if (!getEventTarget(event.target, this.$refs.form)) {
+      if (!getEventTarget(event.target, this.$refs.form) && this.searchValue) {
         if (this.$refs.input !== window.document.activeElement) this.showSuggestions = false;
 
         if (
