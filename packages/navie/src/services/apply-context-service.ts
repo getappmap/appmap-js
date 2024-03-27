@@ -14,7 +14,11 @@ type ContextItemWithFile = ContextItem & { file?: string };
 export default class ApplyContextService {
   constructor(public readonly interactionHistory: InteractionHistory) {}
 
-  applyContext(context: ContextResponse | undefined, help: HelpResponse, characterLimit: number) {
+  applyContext(
+    context: ContextResponse | undefined,
+    help: HelpResponse | undefined,
+    characterLimit: number
+  ) {
     if (!context) {
       this.interactionHistory.addEvent(
         new PromptInteractionEvent(
@@ -35,7 +39,7 @@ export default class ApplyContextService {
       codeSnippets[key],
     ]);
     const availableDataRequests = [...codeObjects];
-    const availableHelp = [...help];
+    const availableHelp = [...(help ?? [])];
 
     const availableItemCount = () =>
       [
