@@ -78,10 +78,14 @@
         <i class="header-icon"><ProcessIcon /></i>Process recording
       </h3>
       <p>
-        AppMap can record an entire Java process from start to finish. To use process recording, run
-        your application using
-        <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap". When your
-        application exits, the AppMap will be saved and opened.
+        AppMap can record an entire Java process from start to finish. To use process recording, set
+        the Java system property <code class="inline">appmap.recording.auto=true</code>. You must
+        set this system property as a JVM argument. If you are using a graphical run configuration,
+        add the option <code class="inline">-Dappmap.recording.auto=true</code> to the "VM options"
+        field. If you are running on the command line, add the option
+        <code class="inline">-Dappmap.recording.auto=true</code> to the JVM CLI arguments. Next, run
+        your application using <component :is="runConfigIcon" class="run-config-icon" /> "Start with
+        AppMap". When your application exits, the AppMap will be saved and opened.
       </p>
       <p>
         Visit
