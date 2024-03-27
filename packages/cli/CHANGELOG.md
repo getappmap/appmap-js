@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.135.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.135.0...@appland/appmap-v3.135.1) (2024-03-27)
+
+
+### Bug Fixes
+
+* Use local Navie when Azure OpenAI is configured ([bfb94b2](https://github.com/getappmap/appmap-js/commit/bfb94b2ca89a2dc3cdfc76876c8b27211f42254d))
+
 # [@appland/appmap-v3.135.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.134.0...@appland/appmap-v3.135.0) (2024-03-26)
 
 
