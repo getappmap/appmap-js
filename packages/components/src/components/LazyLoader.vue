@@ -22,12 +22,24 @@ export default Vue.extend({
     };
   },
 
-  mounted() {
-    Vue.nextTick(() => {
-      setTimeout(() => {
+  methods: {
+    render() {
+      Vue.nextTick(() => {
         this.shouldRender = true;
-      }, 0);
-    });
+      });
+    },
+  },
+
+  activated() {
+    this.render();
+  },
+
+  mounted() {
+    this.render();
+  },
+
+  deactivated() {
+    this.shouldRender = false;
   },
 });
 </script>
