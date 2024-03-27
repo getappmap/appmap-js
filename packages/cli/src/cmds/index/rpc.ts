@@ -21,7 +21,7 @@ import { loadConfiguration } from '@appland/client';
 import { getConfigurationV1, setConfigurationV1 } from '../../rpc/configuration';
 import { Agents } from '@appland/navie';
 
-const AI_KEY_ENV_VARS = ['OPENAI_API_KEY'];
+const AI_KEY_ENV_VARS = ['OPENAI_API_KEY', 'AZURE_OPENAI_API_KEY'];
 
 export const command = 'rpc';
 export const describe = 'Run AppMap JSON-RPC server';
