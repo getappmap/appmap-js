@@ -2,6 +2,7 @@
 layout: docs
 title: Docs - AppMap Navie
 name: Demo
+description: "Documentation | AppMap Navie AI demonstrations"
 step: 5
 navie: true
 ---

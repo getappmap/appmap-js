@@ -2,6 +2,7 @@
 layout: docs
 title: Docs - AppMap Navie
 name: How to use Navie
+description: "Documentation | How to use AppMap Navie AI"
 step: 3
 navie: true
 toc: true

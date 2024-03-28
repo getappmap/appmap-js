@@ -2,6 +2,7 @@
 layout: docs
 title: Docs - AppMap Navie
 name: index
+description: "Documentation | AppMap Navie AI uses enhanced context from dynamic runtime code analysis to understand your application completely."
 step: 1
 ---
 
