@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - AppMap in your Code Editor
+description: "AppMap Runtime Analysis scans AppMaps to detect code flaws, presenting findings in your editor for preemptive fixes."
 name: AppMap Analysis
 setup-appmap-ide: true
 step: 8

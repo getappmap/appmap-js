@@ -1,8 +1,10 @@
 ---
 layout: docs
 title: Docs - Reference
+description: "Explore a range of AppMap tools and agents for various languages like Ruby, Python, Java, and more, along with CLI, API, and GitHub Action integration."
 toc: true
 step: 1
+redirect_from: [/docs/reference/browser-extension]
 ---
 
 # Reference

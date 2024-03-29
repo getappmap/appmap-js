@@ -2,6 +2,7 @@
 layout: docs
 toc: true
 title: Docs - Community
+description: "Join AppMap's vibrant community on Slack for discussions, issue reporting, and become a contributor."
 redirect_from: [/docs/troubleshooting]
 ---
 # Community

@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Diagrams
+description: "AppMap visualizes code behavior in interactive diagrams. Features include recording dynamic runtime code with AppMap, quick search in navigation, filtering, detailed stats, and sequence diagram control."
 diagrams: true
 name: How it works
 step: 1

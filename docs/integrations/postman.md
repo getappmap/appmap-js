@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Integrations
+description: "Learn how to import your AppMap generated OpenAPI definitions into Postman, adjust settings, and interact with your APIs. Detailed guide with visuals included."
 integrations: true
 name: Postman
 step: 4

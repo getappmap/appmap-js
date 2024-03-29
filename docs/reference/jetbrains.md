@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Reference
+description: "AppMap for JetBrains reference guide. Learn to use AppMap in your JetBrains code editor."
 toc: true
 reference: true
 name: AppMap for JetBrains
