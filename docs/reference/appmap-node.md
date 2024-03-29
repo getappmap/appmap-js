@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Reference
+description: "Learn about the AppMap Agent for Node.js. Explore usage, configuration, tests, remote, request, and process recording."
 toc: true
 reference: true
 name: AppMap Agent for Node.js

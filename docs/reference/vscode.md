@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Reference
+description: "Explore AppMap features in Visual Studio Code: AppMap panel, runtime analysis, code objects, Java integration, extension actions, remote recording, OpenAPI generation."
 toc: true
 reference: true
 name: AppMap for Visual Studio Code

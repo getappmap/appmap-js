@@ -2,6 +2,7 @@
 layout: docs
 setup-appmap-ide: true
 title: Docs - AppMap in your Code Editor
+description: "Integrate AppMap into your Code Editor easily with AppMap for Visual Studio Code and JetBrains IDEs."
 step: 2
 name: Add AppMap to your Code Editor
 redirect_from: [/docs/add-appmap-to-a-project/, /docs/install-appmap-agent, /docs/quickstart, /docs/quickstart/index.html]
