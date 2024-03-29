@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Reference
+description: "Learn how to use AppMap GitHub Actions to analyze code changes efficiently. Setup and configure AppMap tools, archive, and analyze AppMaps for each pull request."
 reference: true
 toc: true
 name: GitHub Action

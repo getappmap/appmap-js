@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Diagrams
+description: "Explore AppMap's Flame Graphs, a tool for visualizing code performance. Learn how to read, drill down, and switch views to identify performance issues."
 diagrams: true
 name: Flame Graph
 step: 5

@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Reference
+description: "Explore the AppMap CLI reference guide for analyzing runtime code behavior."
 toc: true
 reference: true
 step: 9

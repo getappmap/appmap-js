@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Guides
+description: "Optimize AppMaps by refining recordings to exclude noise. Start with inclusive config, analyze stats, update config, create concise AppMaps."
 guides: true
 name: Refining AppMaps
 step: 4

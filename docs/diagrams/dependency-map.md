@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - AppMap Diagrams - Dependency Map
+description: "Explore AppMap's interactive Dependency Map for a comprehensive view of your code's connections. Navigate through web services, libraries, SQL, and more."
 diagrams: true
 name: Dependency Map
 step: 2

@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Reference
+description: "Legacy AppMap Agent for JavaScript is no longer actively developed. Migrate to appmap-node for Node.js apps."
 toc: true
 reference: true
 name: AppMap Agent for JavaScript (legacy)
