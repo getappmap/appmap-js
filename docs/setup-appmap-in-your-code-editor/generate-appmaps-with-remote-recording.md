@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - AppMap in your Code Editor
+description: "Generate AppMaps through remote recording for detailed HTTP request sequences. Install AppMap agent and follow steps for remote recording in various languages."
 name: Generate AppMaps with Remote Recording
 step: 4
 setup-appmap-ide: true

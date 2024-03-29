@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Diagrams
+description: "AppMap generates interactive diagrams from code execution traces, aiding in understanding and improving your code. Accessible right in your code editor, AppMap supports multiple frameworks."
 toc: false
 ---
 
