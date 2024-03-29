@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Integrations
+description: "Learn how to record AppMaps inside a Docker container for consistent, reproducible environments across various operating systems, enhancing code quality and collaboration."
 integrations: true
 name: Docker
 step: 7

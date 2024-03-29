@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Reference
+description: "AppMap reference guide for the Gradle plugin which enables recording AppMaps in Gradle projects."
 toc: true
 reference: true
 name: AppMap for Java - Gradle Plugin

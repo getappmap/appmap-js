@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - AppMap in your Code Editor
+description: "Learn to set up and navigate AppMap in your code editor efficiently. Explore features like generating AppMaps from tests and remote recording."
 toc: true
 redirect_from: [/docs/your-first-15-minutes-with-appmap/, /docs/code-editor-extensions/,/docs/code-editor-extensions/appmap-for-vs-code, /docs/code-editor-extensions/appmap-for-jetbrains]
 ---

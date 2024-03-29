@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Reference
+description: "AppMap Agent for Java records AppMaps of your code. Learn about supported versions, tests, requests recording, remote recording, and annotations."
 toc: true
 reference: true
 name: AppMap Agent for Java

@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Reference
+description: "Integrate AppMap Maven plugin easily for test recording in Maven projects."
 toc: true
 reference: true
 name: AppMap for Java - Maven Plugin

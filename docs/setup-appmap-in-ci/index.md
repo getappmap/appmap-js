@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Set up AppMap in CI
+description: "Learn to set up AppMap in CI using GitHub Actions or CircleCI. Explore how it works, example projects, and troubleshooting tips."
 redirect_from: [/docs/analysis/integrating-with-ci/]
 ---
 
