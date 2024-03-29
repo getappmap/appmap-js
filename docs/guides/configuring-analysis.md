@@ -4,7 +4,7 @@ title: Docs - Guides
 guides: true
 name: Configuring Analysis
 step: 6
-redirect_from: [/docs/analysis/match-pattern-config, /docs/analysis/findings,/docs/reference/configuring-analysis]
+redirect_from: [docs/analysis/configuring-checks, /docs/analysis/match-pattern-config, /docs/analysis/findings,/docs/reference/configuring-analysis]
 ---
 
 # Configuring Analysis <!-- omit in toc -->
