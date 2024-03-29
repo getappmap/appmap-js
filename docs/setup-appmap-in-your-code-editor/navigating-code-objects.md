@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - AppMap in your Code Editor
+description: "Explore AppMap's Code Objects view to navigate code functions, HTTP requests, and SQL queries across all AppMaps."
 name: Navigating Code Objects
 setup-appmap-ide: true
 step: 7

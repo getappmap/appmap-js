@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Integrations
+description: "AppMap integrates with Atlassian Confluence to generate interactive software diagrams from run-time data, enhancing documentation and collaboration on software projects."
 integrations: true
 name: Atlassian Confluence
 step: 1
