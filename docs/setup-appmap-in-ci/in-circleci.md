@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Set up AppMap in CI
+description: "Get started with AppMap and CircleCI for behavioral analysis in your test cases. Follow steps to sync files, set up GitHub Action, and analyze runtime code changes."
 name: Getting Started with CircleCI
 setup-appmap-ci: true
 step: 3

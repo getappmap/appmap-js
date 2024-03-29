@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Integrations
+description: "Generate, modify, and compare PlantUML sequence diagrams with AppMap. Integrate with tools like Atlassian Confluence. Ideal for code changes and GitHub Pull Requests."
 integrations: true
 name: PlantUML
 step: 3

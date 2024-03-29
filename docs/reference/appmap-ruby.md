@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Reference
+description: "AppMap referernce guide for Ruby. Record AppMaps easily for improved code visibility and analysis."
 toc: true
 reference: true
 name: AppMap Agent for Ruby
