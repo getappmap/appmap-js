@@ -2,6 +2,7 @@
 layout: docs
 setup-appmap-ide: true
 title: Docs - AppMap in your Code Editor
+description: "Learn how AppMap works: recording agents for Java, Python, Ruby, and Node.js, configuration, recording methods, AppMap files, running in containers, and viewing AppMap diagrams."
 step: 1
 name: How AppMap Works
 redirect_from: [/docs/your-first-15-minutes-with-appmap/what-is-appmap,/docs/your-first-15-minutes-with-appmap/ideal-projects,/docs/your-first-15-minutes-with-appmap/appmap-analysis,/docs/guides/how-appmap-works]

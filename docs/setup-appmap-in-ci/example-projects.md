@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Set up AppMap in CI
+description: "Explore workflow examples for AppMap GitHub Action in various languages & frameworks like Ruby on Rails, Java Spring, Python Django, and Node.js."
 name: Example Projects
 setup-appmap-ci: true
 step: 4

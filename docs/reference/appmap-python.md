@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Reference
+description: "AppMap reference documentation for AppMap Python. Learn installation, configuration, tests, request recording, decorators, and environment variables."
 toc: true
 reference: true
 name: AppMap Agent for Python
