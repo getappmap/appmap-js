@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - How-To Guides
+description: "Learn how to leverage AppMap effectively with guides on handling large AppMaps, reading SQL, refining, generating OpenAPI, reverse engineering, and more."
 step: 1
 ---
 
