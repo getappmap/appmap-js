@@ -3,6 +3,7 @@ layout: docs
 title: Docs - Reference
 toc: true
 step: 1
+redirect_from: [/docs/reference/browser-extension]
 ---
 
 # Reference
