@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - AppMap in your Code Editor
+description: "Automatically generate AppMaps from test cases using AppMap, benefiting from named cases, source locations, and incremental testing for various frameworks."
 name: Generate AppMaps from Tests
 setup-appmap-ide: true
 step: 3

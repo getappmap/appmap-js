@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Reference
+description: "Explore technical documentation for analysis labels with AppMap."
 name: Analysis Labels
 step: 14
 reference: true

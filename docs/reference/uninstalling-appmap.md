@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Reference
+description: "Learn how to uninstall AppMap components like IDE plugins, libraries, and generated files from your project to clean up after usage effectively."
 toc: true
 reference: true
 name: Uninstalling AppMap
@@ -58,6 +59,14 @@ Use the `bundle` command to remove the AppMap library from your project:
 ```console
 $ bundle remove appmap
 ```
+
+Or you can remove the appmap gem globally if installed at the system level. 
+{: .example-code}
+
+```console
+$ gem uninstall appmap
+```
+
 Alternatively, manually remove the line containing `appmap` from the top of your Gemfile. 
 
 ### Java

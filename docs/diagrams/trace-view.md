@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - AppMap Diagrams - Trace View
+description: "Explore AppMap's interactive Trace view diagram. Navigate execution traces, view variable details, and link to source code."
 diagrams: true
 name: Trace View
 step: 3

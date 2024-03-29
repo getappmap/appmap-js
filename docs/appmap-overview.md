@@ -2,6 +2,7 @@
 layout: docs
 toc: true
 title: Docs - AppMap overview
+description: "Explore AppMap, an open-source code analysis tool capturing code execution traces as interactive diagrams, ideal for web frameworks like Rails, Django, and Flask."
 redirect_from: [/docs, /docs/faq]
 
 ---

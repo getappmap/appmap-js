@@ -2,6 +2,7 @@
 layout: docs
 guides: true
 title: Docs - Guides
+description: "Learn to reverse engineer efficiently using AppMap. Capture code execution details effortlessly. Visualize data for insights. Automate AppMap creation and storage for collaboration."
 step: 7
 render_with_liquid: false
 name: Reverse Engineering
