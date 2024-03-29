@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Integrations
+description: "Use AppMap Analysis within GitHub Actions to analyze behavioral changes per Pull Request. It offers root cause analysis, API changes tracking, security and performance findings, and more."
 integrations: true
 name: GitHub Actions
 step: 2

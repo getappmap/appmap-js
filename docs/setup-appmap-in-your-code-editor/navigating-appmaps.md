@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - AppMap in your Code Editor
+description: "Learn to navigate AppMaps effectively. Discover Dependency and Trace views to enhance code understanding and execution analysis."
 name: Navigating AppMaps
 setup-appmap-ide: true
 step: 6
