@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Integrations
+description: "Atlassian Compass is a unified platform for managing distributed software architecture. It supports visualizing OpenAPI docs via SwaggerUI, and enables file pushing through webhooks."
 integrations: true
 name: Atlassian Compass
 step: 1

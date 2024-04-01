@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Guides
+description: "Discover SQL commands in AppMaps to analyze application logic's database interactions, spot inefficiencies, and understand code impacts for improved performance and reliability."
 guides: true
 name: Reading SQL in AppMaps
 step: 3

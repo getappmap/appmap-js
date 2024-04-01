@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Set up AppMap in CI
+description: "Learn how to troubleshoot common issues when integrating AppMap into your GitHub Actions."
 name: Troubleshooting
 setup-appmap-ci: true
 step: 6

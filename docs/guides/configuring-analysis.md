@@ -1,10 +1,11 @@
 ---
 layout: docs
 title: Docs - Guides
+description: "Configure AppMap Analysis by customizing checks for flexible rule options. Understand findings and their properties for effective analysis."
 guides: true
 name: Configuring Analysis
 step: 6
-redirect_from: [/docs/analysis/match-pattern-config, /docs/analysis/findings,/docs/reference/configuring-analysis]
+redirect_from: [docs/analysis/configuring-checks, /docs/analysis/match-pattern-config, /docs/analysis/findings,/docs/reference/configuring-analysis]
 ---
 
 # Configuring Analysis <!-- omit in toc -->

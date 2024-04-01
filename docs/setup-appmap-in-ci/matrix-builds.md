@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Set up AppMap in CI
+description: "Optimize GitHub Actions for matrix builds to deploy AppMap efficiently. Modify actions, add triggers, analyze results, and streamline installation configurations."
 name: Matrix Builds with GitHub Actions
 setup-appmap-ci: true
 step: 5

@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Integrations
+description: "Optimize your AppMap API interaction with Readme's developer hub. Easily add new endpoints and sync with your GitHub Action or CI system for efficient documentation."
 integrations: true
 name: Readme
 step: 6

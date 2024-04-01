@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - AppMap Navie
+description: "Learn to use AppMap Navie to add a new feature to a complex application. AppMap Navie enhances AI code assistance with detailed, context-aware insights."
 name: Demo
 step: 5
 navie: true
