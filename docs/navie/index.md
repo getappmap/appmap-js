@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - AppMap Navie
+description: "Optimize AI code completion with AppMap Navie, leveraging runtime code execution insights for hyper-personalized AI-assisted coding."
 name: index
 description: "Documentation | AppMap Navie AI uses enhanced context from dynamic runtime code analysis to understand your application completely."
 step: 1
