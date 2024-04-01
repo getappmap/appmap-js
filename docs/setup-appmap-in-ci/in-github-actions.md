@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Set up AppMap in CI
+description: "Learn how to leverage AppMap within GitHub Actions to analyze behavioral changes in Pull Requests. Install AppMap and configure rules for enhanced performance and security."
 name: Getting Started with GitHub Actions
 setup-appmap-ci: true
 step: 2

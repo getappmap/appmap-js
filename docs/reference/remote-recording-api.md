@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Reference
+description: "Learn how to use the AppMap Remote Recording API to start, stop, and save AppMaps. AppMap agent handles requests on the same port as the app."
 toc: false
 reference: true
 name: Remote recording API

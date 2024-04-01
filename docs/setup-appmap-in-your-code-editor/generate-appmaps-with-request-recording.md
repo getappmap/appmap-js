@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - AppMap in your Code Editor
+description: "Learn to use AppMap to configure your app to record AppMaps of HTTP requests, easily sort and name them."
 name: Generate AppMaps with Request Recording
 setup-appmap-ide: true
 redirect_from: [/docs/your-first-15-minutes-with-appmap/streaming-appmaps-with-request-recording]

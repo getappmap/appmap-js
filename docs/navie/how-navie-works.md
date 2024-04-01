@@ -2,6 +2,8 @@
 layout: docs
 title: Docs - AppMap Navie
 name: How Navie Works
+description: "Documentation | How AppMap Navie AI works"
+
 step: 2
 navie: true
 ---
