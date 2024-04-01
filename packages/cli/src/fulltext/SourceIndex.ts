@@ -6,6 +6,7 @@ import {
 } from 'langchain/text_splitter';
 import lunr from 'lunr';
 import { log } from 'console';
+import { verbose } from '../utils';
 
 const COMMON_REPO_BINARY_FILE_EXTENSIONS: string[] = [
   'png',
@@ -85,6 +86,16 @@ export type SourceIndexDocument = {
   text: string;
 };
 
+function packRef(fileName: string, from: number, to: number) {
+  return `${fileName}:${from}-${to}`;
+}
+
+export function unpackRef(ref: string): { fileName: string; from: number; to: number } {
+  const [fileName, fromTo] = ref.split(':');
+  const [from, to] = fromTo.split('-').map((n) => parseInt(n, 10));
+  return { fileName, from, to };
+}
+
 export class SourceIndex {
   index: lunr.Index | undefined;
 
@@ -108,13 +119,13 @@ export class SourceIndex {
   protected async indexDocument(fileName: string, documents: Array<SourceIndexDocument>) {
     const fileNameTokens = fileName.split('.');
     if (fileNameTokens.length < 2) {
-      log(`Skipping file with no extension: ${fileName}`);
+      if (verbose()) log(`Skipping file with no extension: ${fileName}`);
       return;
     }
 
     const extension = fileNameTokens[fileNameTokens.length - 1];
     if (COMMON_REPO_BINARY_FILE_EXTENSIONS.includes(extension)) {
-      log(`Skipping binary file: ${fileName}`);
+      if (verbose()) log(`Skipping binary file: ${fileName}`);
       return;
     }
 
@@ -125,7 +136,7 @@ export class SourceIndex {
     if (language) {
       splitter = RecursiveCharacterTextSplitter.fromLanguage(language);
     } else {
-      console.log(`No language found for file: ${fileName}`);
+      if (verbose()) console.log(`No language found for file: ${fileName}`);
       splitter = new RecursiveCharacterTextSplitter();
     }
     let fileContents: string;
@@ -139,7 +150,7 @@ export class SourceIndex {
 
     for (const chunk of await splitter.createDocuments([fileContents])) {
       const { from, to } = chunk.metadata.loc.lines;
-      const id = `${fileName}:${from}-${to}`;
+      const id = packRef(fileName, from, to);
       documents.push({
         id,
         text: chunk.pageContent,

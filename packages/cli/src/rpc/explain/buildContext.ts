@@ -52,7 +52,7 @@ export default async function buildContext(searchResults: SearchRpc.SearchResult
     try {
       await buildSequenceDiagram(result);
     } catch (e) {
-      warn(`Failed to build sequence diagram for ${result.appmap}`)
+      warn(`Failed to build sequence diagram for ${result.appmap}`);
       warn(e);
     }
     for (const event of result.events) {
@@ -61,10 +61,17 @@ export default async function buildContext(searchResults: SearchRpc.SearchResult
         continue;
       }
 
-      if (examinedLocations.has(event.location)) continue;
+      warn(`Location: ${event.location}`);
+      if (examinedLocations.has(event.location)) {
+        warn(`Duplicate location: ${event.location}`);
+        continue;
+      }
       examinedLocations.add(event.location);
 
-      if (codeSnippets.has(event.location)) continue;
+      if (codeSnippets.has(event.location)) {
+        warn(`Code snippets has location: ${event.location}`);
+        continue;
+      }
 
       const snippets = await lookupSourceCode(result.directory, event.location);
       if (snippets) {

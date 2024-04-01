@@ -1,4 +1,4 @@
-import yargs, { help } from 'yargs';
+import yargs from 'yargs';
 import chalk from 'chalk';
 
 import { verbose } from '../../utils';
