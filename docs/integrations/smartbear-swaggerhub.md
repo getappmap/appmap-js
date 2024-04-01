@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Integrations
+description: "AppMap integration with SwaggerHub automates API documentation directly into SwaggerHub using GitHub Actions. Collaborate on API design, ensuring style, quality, and consistency."
 integrations: true
 name: SmartBear SwaggerHub
 render_with_liquid: false

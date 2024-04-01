@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Guides
+description: "AppMap analyzes runtime changes in your codebase for failed tests, API, security, performance issues, and anti-patterns, providing detailed reports."
 guides: true
 name: Understanding the Runtime Code Review Report
 step: 8

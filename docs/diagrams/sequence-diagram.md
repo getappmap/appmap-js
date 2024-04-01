@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Diagrams
+description: "Improve your software engineering with AppMap's interactive sequence diagrams. Generate, view, compare, and export diagrams directly in your code editor for accurate, up-to-date documentation."
 diagrams: true
 name: Sequence Diagram
 step: 4

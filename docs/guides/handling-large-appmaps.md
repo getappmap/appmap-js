@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Guides
+description: "Learn how to manage large AppMaps effectively. Discover tips to handle AppMaps over 10 MB and 200 MB in size, focusing on optimizing AppMap content for better interpretation and performance."
 guides: true
 name: Handling Large AppMaps
 step: 2

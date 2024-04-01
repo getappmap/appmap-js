@@ -1,6 +1,7 @@
 ---
 layout: docs
 title: Docs - Guides
+description: "Use AppMap to auto generate OpenAPI definitions and document HTTP APIs. AppMap captures runtime behavior, creating accurate API schemas effortlessly."
 guides: true
 name: Generating OpenAPI Definitions
 step: 5

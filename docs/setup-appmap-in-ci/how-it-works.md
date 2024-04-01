@@ -2,6 +2,7 @@
 layout: docs
 setup-appmap-ci: true
 title: Set up AppMap in CI
+description: "Optimize CI with AppMap Analysis, tracking behavioral changes in each Pull Request. Get started by installing the AppMap GitHub App from the GitHub Marketplace."
 step: 1
 name: How it works
 redirect_from: [/docs/analysis/in-ci]
