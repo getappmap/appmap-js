@@ -3,7 +3,6 @@ layout: docs
 title: Docs - AppMap Navie
 description: "Learn how to use AppMap Navie to provide personalized code analysis. Generate AppMaps, ask Navie questions, analyze code, and iterate for optimal results."
 name: How to use Navie
-description: "Documentation | How to use AppMap Navie AI"
 step: 3
 navie: true
 toc: true
