@@ -2,6 +2,9 @@ import { ChatOpenAI } from '@langchain/openai';
 
 import InteractionHistory, { CompletionEvent } from '../interaction-history';
 import type Message from '../message';
+import { mkdir, writeFile } from 'fs/promises';
+import { join } from 'path';
+import { homedir } from 'os';
 
 export type Completion = AsyncIterable<string>;
 
@@ -31,6 +34,14 @@ export class OpenAICompletionService implements CompletionService {
 
   async *complete(): Completion {
     const { messages } = this.interactionHistory.buildState();
+
+    if (process.env.APPMAP_OUTPUT_CONTEXT) {
+    const contextDir = join(homedir(), '.appmap', 'context');
+    await mkdir(contextDir, { recursive: true });
+    await writeFile(
+      join(contextDir, `${new Date().valueOf()}.json`),
+      JSON.stringify(messages, null, 2)
+    );
 
     const chatAI = new ChatOpenAI({
       modelName: this.modelName,
