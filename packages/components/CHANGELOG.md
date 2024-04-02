@@ -1,3 +1,15 @@
+# [@appland/components-v4.13.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.12.2...@appland/components-v4.13.0) (2024-04-02)
+
+
+### Bug Fixes
+
+* Only update search bar when it has text ([6f6ff51](https://github.com/getappmap/appmap-js/commit/6f6ff518befb5e88044bd0935b83a8a995c9fa70))
+
+
+### Features
+
+* Tweak navie suggestion language ([dc88fc7](https://github.com/getappmap/appmap-js/commit/dc88fc753b1b7aac04463a4068051bc7aa6ae0c1))
+
 # [@appland/components-v4.12.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.12.1...@appland/components-v4.12.2) (2024-04-01)
 
 
