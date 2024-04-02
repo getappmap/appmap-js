@@ -14,6 +14,8 @@ Some AppMaps contain too much data and can be difficult to review. Often, these 
 
 - [AppMaps Over 10 MB](#appmaps-over-10-mb)
 - [AppMaps Over 200 MB](#appmaps-over-200-mb)
+- [Handle Large AppMaps in the CLI](#handle-large-appmaps-in-the-cli)
+  - [Video Tutorial](#video-tutorial)
 
 ## AppMaps Over 10 MB
 
@@ -42,3 +44,95 @@ When an AppMap is over 200 MB, we will **not** open it in the code editor extens
 * [Configure exclusions in a Node.js project](/docs/reference/appmap-node.html#configuration)
 
 We do not recommend using the `prune` CLI command for AppMaps over 200 MB, because it loads the entire AppMap into memory, which may cause performance issues for your computer. 
+
+## Handle Large AppMaps in the CLI
+
+For some AppMaps that are extrodinarily large, you may notice issues opening them in your code editor. 
+In this scenario, you can use the AppMap CLI to analyze the statistics of the offending AppMap if you are unable to see the 
+statistics in your code editor. 
+
+You can then use the details from the `stats` command on the large AppMap to properly exclude functions that are noisy and may not provide any 
+useful insights (for example getters and setters).
+
+Here's how it works.
+
+In this exmaple, we have a specific test in our Python Django application that is generating a very large (over 1GB) AppMap.
+We'll use the AppMap CLI to get information about the noisest functions that we can exclude from a future AppMap recording.
+
+![Large AppMaps](/assets/img/docs/guides/large-appmap-list.webp)
+
+First, you'll need to ensure you have the AppMap CLI binaries installed on your machine.  
+If you have already installed the AppMap code editor plugin for JetBrains or VS Code, the binaries will already exist 
+in your `$HOME/.appmap/bin` directory. 
+
+Otherwise, you can download the latest version of AppMap binaries on [GitHub following this guide.](/docs/reference/appmap-client-cli.html#install-appmap-cli-precompiled-binary)
+
+With your binary installed.  We'll run the following command to analyze the large AppMap to identify noisy functions to exclude.
+
+For more details about how the AppMap CLI works and the stats command, refer to the [AppMap reference guide.](/docs/reference/appmap-client-cli.html#stats)
+
+In our command below, we'll run the stats command pointing to the directory where the AppMap lives, 
+and the name of the appmap (the file extenion `.appmap.json` can be optionally added or omitted).
+
+```console
+$ appmap stats <directory containing AppMap> --appmap-file <name of the AppMap file>
+```
+{: .example-code}
+
+For example:
+
+```bash
+$ appmap stats tmp/appmap/pytest --appmap-file tests_integration_catalogue_test_category_TestMovingACategory_test_fix_tree.appmap.json
+Analyzing AppMap: tmp/appmap/pytest/tests_integration_catalogue_test_category_TestMovingACategory_test_fix_tree.appmap.json
+
+1. function:oscar/apps/catalogue/abstract_models/AbstractCategory#get_ancestors_and_self
+      count: 1526529
+      estimated size: 572.2 MB
+
+2. function:oscar/apps/catalogue/abstract_models/AbstractCategory.fix_tree
+      count: 1
+      estimated size: 583.0 bytes
+
+3. function:oscar/apps/catalogue/abstract_models/AbstractCategory#set_ancestors_are_public
+      count: 1
+      estimated size: 368.0 bytes
+```
+{: .example-code}
+
+In our example the `get_ancestors_and_self` function in the `AbstractCategory` class is 
+the single largest offender and the main cause of the large appmap.  
+
+We will now add an exclusion for this function in our `appmap.yml` configuration file. 
+
+To learn how to add an exclusion to your project refer to the documentation below.
+
+* [Configure exclusions in a Ruby project](/docs/reference/appmap-ruby.html#configuration)
+* [Configure exclusions in a Java project](/docs/reference/appmap-java.html#configuration)
+* [Configure exclusions in a Python project](/docs/reference/appmap-python.html#configuration)
+* [Configure exclusions in a Node.js project](/docs/reference/appmap-node.html#configuration)
+
+
+In this example we'll exclude the `apps.catalogue.abstract_models.AbstractCategory.get_ancestors_and_self` function from 
+our main `oscar` python package. 
+
+My updated `appmap.yml` now looks like this:
+
+```
+appmap_dir: tmp/appmap
+language: python
+name: django-oscar
+packages:
+  - path: sandbox
+  - path: oscar
+    exclude: 
+    - apps.catalogue.abstract_models.AbstractCategory.get_ancestors_and_self
+```
+
+Now if I run my tests again, this noisy function will no longer be included within the AppMap and the size of the file will 
+be significantly reduced. 
+
+![Smaller AppMap](/assets/img/docs/guides/smaller-appmap.webp)
+
+### Video Tutorial
+
+ {% include vimeo.html id='931215155' %}

@@ -3,7 +3,6 @@ layout: docs
 title: Docs - AppMap Navie
 description: "Optimize AI code completion with AppMap Navie, leveraging runtime code execution insights for hyper-personalized AI-assisted coding."
 name: index
-description: "Documentation | AppMap Navie AI uses enhanced context from dynamic runtime code analysis to understand your application completely."
 step: 1
 ---
 
@@ -14,8 +13,11 @@ AppMap Navie is the missing link that improves the power of AI code completers a
 That means you're not just working with static analysis anymore, and you're not looking at just individual files or functions. With Navie, you can understand the entire codebase at an architectural level, how it behaves and executes, and provide much more detailed answers to your software questions.
 
 - [How Navie Works](/docs/navie/how-navie-works)
-- [How to use Navie](/docs/navie/how-to-use-navie)
-- [Video Demo](/docs/navie/demo)
+- [Using Navie](/docs/navie/using-navie)
+- [Bring your own key](/docs/navie/bring-your-own-key)
+- [Bring your own model](/docs/navie/bring-your-own-llm)
+- [Navie vs Copilot](/docs/navie/navie-vs-copilot)
+- [Video Demos](/docs/navie/video-demos)
 
 **Install AppMap for your preferred code editor to get started.**
 
