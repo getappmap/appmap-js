@@ -8,6 +8,9 @@ import { DEFAULT_MAX_DIAGRAMS } from '../search/search';
 import buildContext from './buildContext';
 import { log } from 'console';
 import { isAbsolute, join } from 'path';
+import { ContextValue } from '../../cmds/context-provider/context-provider';
+import applyContext from '../../cmds/context-provider/applyContext';
+import assert from 'assert';
 
 export function textSearchResultToRpcSearchResult(
   eventResult: EventSearchResult
@@ -50,6 +53,7 @@ export class EventCollector {
         score: result.score,
       });
     }
+
     const context = await buildContext(results);
 
     const contextSize =
@@ -145,15 +149,53 @@ export class ContextCollector {
       };
       contextSize: number;
     };
+    let selectedContext: {
+      sequenceDiagrams: string[];
+      codeSnippets: Map<string, string>;
+      codeObjects: Set<string>;
+    };
     let charCount = 0;
     let maxEventsPerDiagram = 5;
     log(`Requested char limit: ${this.charLimit}`);
     while (true) {
       log(`Collecting context with ${maxEventsPerDiagram} events per diagram.`);
       contextCandidate = await eventsCollector.collectEvents(maxEventsPerDiagram);
-      const estimatedSize = contextCandidate.contextSize;
+
+      let context = new Array<ContextValue>();
+      for (const value of contextCandidate.context.sequenceDiagrams) {
+        context.push({ type: 'sequenceDiagram', content: value });
+      }
+      for (const [key, value] of contextCandidate.context.codeSnippets.entries()) {
+        context.push({ type: 'codeSnippet', id: key, content: value });
+      }
+      for (const value of contextCandidate.context.codeObjects) {
+        context.push({ type: 'dataRequest', content: value });
+      }
+
+      // Re-arrange the context to provide a sampling of each type of content.
+      log(`Sampling context with ${context.length} items to obtain ${this.charLimit} characters.`);
+      context = applyContext(context, this.charLimit);
+
+      const estimatedSize = context.map((item) => item.content.length).reduce((a, b) => a + b, 0);
       log(`Collected an estimated ${estimatedSize} characters.`);
+
       if (estimatedSize === charCount || estimatedSize > this.charLimit) {
+        selectedContext = {
+          sequenceDiagrams: context
+            .filter((item) => item.type === 'sequenceDiagram')
+            .map((item) => item.content),
+          codeSnippets: context
+            .filter((item) => item.type === 'codeSnippet')
+            .reduce((map, item) => {
+              assert(item.id);
+              map.set(item.id, item.content);
+              return map;
+            }, new Map<string, string>()),
+          codeObjects: new Set(
+            context.filter((item) => item.type === 'dataRequest').map((item) => item.content)
+          ),
+        };
+
         break;
       }
       charCount = estimatedSize;
@@ -166,7 +208,7 @@ export class ContextCollector {
         results: contextCandidate.results,
         numResults: appmapSearchResponse.numResults,
       },
-      context: contextCandidate.context,
+      context: selectedContext,
     };
   }
 }

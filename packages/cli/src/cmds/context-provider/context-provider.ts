@@ -9,7 +9,7 @@ import { inspect } from 'util';
 import { log } from 'console';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 
-export type ContextType = string;
+export type ContextType = 'sequenceDiagram' | 'codeSnippet' | 'dataRequest';
 
 export type ContextValue = {
   id?: string;
@@ -78,6 +78,11 @@ export const handler = async (argv) => {
 
     let result: any;
     try {
+      log(
+        `Executing provider ${provider} with keywords ${keywords.join(
+          ' '
+        )} and charLimit ${charLimit}`
+      );
       result = await providerFunction(keywords, charLimit);
     } catch (error) {
       console.error('Error executing provider:', error);
