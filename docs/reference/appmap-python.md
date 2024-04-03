@@ -185,17 +185,24 @@ Given a source file `record_sample.py`:
 ```
 import os
 import sys
+from datetime import datetime
+from pathlib import Path
 
 import appmap
+
+output_directory = Path('tmp/appmap/codeblock')
+output_directory.mkdir(parents=True, exist_ok=True)  # Step 2: Ensure the directory exists
+
+timestamp = datetime.now().isoformat(timespec='seconds')
+output_file = output_directory / f'{timestamp}.appmap.json'
 
 r = appmap.Recording()
 with r:
     import sample
     print(sample.C().hello_world(), file=sys.stderr)
 
-with os.fdopen(sys.stdout.fileno(), "w", closefd=False) as stdout:
-    stdout.write(appmap.generation.dump(r))
-    stdout.flush()
+with open(output_file, 'w') as f:
+    f.write(appmap.generation.dump(r))
 ```
 
 and a source file `sample.py`:
@@ -222,17 +229,17 @@ appmap_dir: tmp/appmap
 you can generate a recording of the code
 
 ```
-% python record_sample.py > record_sample.appmap.json
-% jq '.events | length' record_sample.appmap.json
+% python record_sample.py
+% jq '.events | length' tmp/appmap/codeblock/*.appmap.json
 6
-% jq < record_sample.appmap.json | head -10
+% jq < tmp/appmap/codeblock/*.appmap.json | head -10
 {
-  "version": "1.4",
+  "version": "1.9",
   "metadata": {
     "language": {
       "name": "python",
       "engine": "CPython",
-      "version": "3.9.1"
+      "version": "3.10.13"
     },
     "client": {
       "name": "appmap",

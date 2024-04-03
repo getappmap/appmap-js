@@ -3,8 +3,6 @@ layout: docs
 title: Docs - AppMap Navie
 description: "Enhance Generative AI models with AppMap Navie. Navie leverages RAG to provide accurate answers by searching locally stored AppMaps for relevant code snippets and application insights."
 name: How Navie Works
-description: "Documentation | How AppMap Navie AI works"
-
 step: 2
 navie: true
 ---
