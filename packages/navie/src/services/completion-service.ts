@@ -35,7 +35,6 @@ export class OpenAICompletionService implements CompletionService {
   async *complete(): Completion {
     const { messages } = this.interactionHistory.buildState();
 
-    if (process.env.APPMAP_OUTPUT_CONTEXT) {
     const contextDir = join(homedir(), '.appmap', 'context');
     await mkdir(contextDir, { recursive: true });
     await writeFile(
