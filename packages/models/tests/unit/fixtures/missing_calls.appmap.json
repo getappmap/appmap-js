@@ -1,0 +1,872 @@
+{
+  "events": [
+    {
+      "event": "call",
+      "id": 1,
+      "thread_id": 0,
+      "method_id": "constructor",
+      "static": true,
+      "parameters": [
+        {
+          "class": "String",
+          "value": "'.'",
+          "name": "path"
+        }
+      ],
+      "defined_class": "GradleInstaller",
+      "path": "src/cmds/agentInstaller/gradleInstaller.ts",
+      "lineno": 17
+    },
+    {
+      "event": "call",
+      "id": 2,
+      "thread_id": 0,
+      "method_id": "constructor",
+      "static": true,
+      "parameters": [
+        {
+          "class": "String",
+          "value": "'Gradle'",
+          "name": "name"
+        },
+        {
+          "class": "String",
+          "value": "'.'",
+          "name": "path"
+        }
+      ],
+      "defined_class": "JavaBuildToolInstaller",
+      "path": "src/cmds/agentInstaller/javaBuildToolInstaller.ts",
+      "lineno": 35
+    },
+    {
+      "event": "call",
+      "id": 3,
+      "thread_id": 0,
+      "method_id": "constructor",
+      "static": true,
+      "parameters": [
+        {
+          "class": "String",
+          "value": "'Gradle'",
+          "name": "name"
+        },
+        {
+          "class": "String",
+          "value": "'.'",
+          "name": "path"
+        }
+      ],
+      "defined_class": "AgentInstaller",
+      "path": "src/cmds/agentInstaller/agentInstaller.ts",
+      "lineno": 16
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 4,
+      "parent_id": 3,
+      "elapsed": 0.000008048024028539658
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 5,
+      "parent_id": 2,
+      "elapsed": 0.00007687299512326717
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 6,
+      "parent_id": 1,
+      "elapsed": 0.00024133198894560337
+    },
+    {
+      "event": "call",
+      "id": 7,
+      "thread_id": 0,
+      "method_id": "installAgent",
+      "static": false,
+      "receiver": {
+        "class": "GradleInstaller",
+        "value": "GradleInstaller {\n  name: 'Gradle',\n  isNoop: false,\n  path: '/home/db/dev/applandinc/appmap-js/packages/cli',\n  identifyGradleFile: 'buildscript-plugins.gradle',\n  buildFilePath: '/home/db/dev/applandinc/appmap-js/packages/cli/tests/unit/fixtures/java/gradle/data/buildscript-plugins.gradle'\n}",
+        "object_id": 128011
+      },
+      "parameters": [
+        {
+          "class": "InstallerUI",
+          "value": "InstallerUI { interactive: true, options: {} }",
+          "object_id": 128012,
+          "name": "ui"
+        }
+      ],
+      "defined_class": "GradleInstaller",
+      "path": "src/cmds/agentInstaller/gradleInstaller.ts",
+      "lineno": 230
+    },
+    {
+      "event": "call",
+      "id": 8,
+      "thread_id": 0,
+      "method_id": "constructor",
+      "static": true,
+      "parameters": [
+        {
+          "class": "String",
+          "value": "'/home/db/dev/applandinc/appmap-js/packages/cli/tests/unit/fixtures/java/gradle/data/buildscript-plugins.gradle'",
+          "name": "path"
+        }
+      ],
+      "defined_class": "EncodedFile",
+      "path": "src/encodedFile.ts",
+      "lineno": 10
+    },
+    {
+      "event": "call",
+      "id": 9,
+      "thread_id": 0,
+      "method_id": "read",
+      "static": false,
+      "receiver": {
+        "class": "Function",
+        "value": "[class EncodedFile]"
+      },
+      "parameters": [
+        {
+          "class": "String",
+          "value": "'/home/db/dev/applandinc/appmap-js/packages/cli/tests/unit/fixtures/java/gradle/data/buildscript-plugins.gradle'",
+          "name": "path"
+        }
+      ],
+      "defined_class": "EncodedFile",
+      "path": "src/encodedFile.ts",
+      "lineno": 43
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 10,
+      "parent_id": 9,
+      "return_value": {
+        "class": "Object",
+        "value": "{\n  buf: Buffer(106) [Uint8Array] [\n     98, 117, 105, 108, 100, 115,  99, 114, 105, 112, 116,  32,\n    123,  10, 125,  10,  10, 112, 108, 117, 103, 105, 110, 115,\n     32, 123,  10,  32,  32, 105, 100,  32,  39,  99, 111, 109,\n     46,  97, 112, 112, 108,  97, 110, 100,  46,  97, 112, 112,\n    109,  97, 112,  39,  32, 118, 101, 114, 115, 105, 111, 110,\n     32,  39,  49,  46,  50,  46,  48,  39,  10, 125,  10,  10,\n    114, 101, 112, 111, 115, 105, 116, 111, 114, 105, 101, 115,\n     32, 123,  10,  32,  32, 109,  97, 118, 101, 110,  67, 101,\n    110, 116, 114,  97,\n    ... 6 more items\n  ],\n  bom0: undefined,\n  bom1: undefined,\n  encoding: undefined\n}",
+        "object_id": 128013
+      },
+      "elapsed": 0.0003327720332890749
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 11,
+      "parent_id": 8,
+      "elapsed": 0.0009990279795601964
+    },
+    {
+      "event": "call",
+      "id": 12,
+      "thread_id": 0,
+      "method_id": "toString",
+      "static": false,
+      "receiver": {
+        "class": "EncodedFile",
+        "value": "EncodedFile {\n  path: '/home/db/dev/applandinc/appmap-js/packages/cli/tests/unit/fixtures/java/gradle/data/buildscript-plugins.gradle',\n  buf: Buffer(106) [Uint8Array] [\n     98, 117, 105, 108, 100, 115,  99, 114, 105, 112, 116,  32,\n    123,  10, 125,  10,  10, 112, 108, 117, 103, 105, 110, 115,\n     32, 123,  10,  32,  32, 105, 100,  32,  39,  99, 111, 109,\n     46,  97, 112, 112, 108,  97, 110, 100,  46,  97, 112, 112,\n    109,  97, 112,  39,  32, 118, 101, 114, 115, 105, 111, 110,\n     32,  39,  49,  46,  50,  46,  48,  39,  10, 125,  10,  10,\n    114, 101, 112, 111, 115, 105, 116, 111, 114, 105, 101, 115,\n     32, 123,  10,  32,  32, 109,  97, 118, 101, 110,  67, 101,\n    110, 116, 114,  97,\n    ... 6 more items\n  ],\n  bom0: undefined,\n  bom1: undefined,\n  encoding: undefined\n}",
+        "object_id": 128014
+      },
+      "defined_class": "EncodedFile",
+      "path": "src/encodedFile.ts",
+      "lineno": 18
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 13,
+      "parent_id": 12,
+      "return_value": {
+        "class": "String",
+        "value": "'buildscript {\\n' +\n  '}\\n' +\n  '\\n' +\n  'plugins {\\n' +\n  \"  id 'com.appland.appmap' version '1.2.0'\\n\" +\n  '}\\n' +\n  '\\n' +\n  'repositories {\\n' +\n  '  mavenCentral()\\n' +\n  '}\\n'"
+      },
+      "elapsed": 0.000007134978659451008
+    },
+    {
+      "event": "call",
+      "id": 17,
+      "thread_id": 0,
+      "method_id": "constructor",
+      "static": true,
+      "parameters": [
+        {
+          "class": "String",
+          "value": "'buildscript'",
+          "name": "blockName"
+        },
+        {
+          "class": "Number",
+          "value": "12",
+          "name": "lbrace"
+        }
+      ],
+      "defined_class": "SourceOffsets",
+      "path": "src/cmds/agentInstaller/gradleParser.ts",
+      "lineno": 8
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 18,
+      "parent_id": 17,
+      "elapsed": 0.000008736969903111458
+    },
+    {
+      "event": "call",
+      "id": 19,
+      "thread_id": 0,
+      "method_id": "constructor",
+      "static": true,
+      "parameters": [
+        {
+          "class": "String",
+          "value": "'plugins'",
+          "name": "blockName"
+        },
+        {
+          "class": "Number",
+          "value": "25",
+          "name": "lbrace"
+        }
+      ],
+      "defined_class": "SourceOffsets",
+      "path": "src/cmds/agentInstaller/gradleParser.ts",
+      "lineno": 8
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 20,
+      "parent_id": 19,
+      "elapsed": 0.0000014210818335413933
+    },
+    {
+      "event": "call",
+      "id": 21,
+      "thread_id": 0,
+      "method_id": "constructor",
+      "static": true,
+      "parameters": [
+        {
+          "class": "String",
+          "value": "'repositories'",
+          "name": "blockName"
+        },
+        {
+          "class": "Number",
+          "value": "85",
+          "name": "lbrace"
+        }
+      ],
+      "defined_class": "SourceOffsets",
+      "path": "src/cmds/agentInstaller/gradleParser.ts",
+      "lineno": 8
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 22,
+      "parent_id": 21,
+      "elapsed": 0.0000010329531505703926
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 23,
+      "parent_id": 16,
+      "return_value": {
+        "class": "Object",
+        "value": "{\n  startOffset: 0,\n  mavenPresent: true,\n  buildscript: SourceOffsets {\n    blockName: 'buildscript',\n    lbrace: 12,\n    braceIdx: 0,\n    rbrace: 14\n  },\n  plugins: SourceOffsets {\n    blockName: 'plugins',\n    lbrace: 25,\n    braceIdx: 0,\n    rbrace: 69\n  },\n  repositories: SourceOffsets {\n    blockName: 'repositories',\n    lbrace: 85,\n    braceIdx: 0,\n    rbrace: 104\n  }\n}",
+        "object_id": 128016
+      },
+      "elapsed": 0.004256497020833194
+    },
+    {
+      "event": "call",
+      "id": 24,
+      "thread_id": 0,
+      "method_id": "checkSyntax",
+      "static": false,
+      "receiver": {
+        "class": "GradleParser",
+        "value": "GradleParser { debug: 0 }",
+        "object_id": 128015
+      },
+      "parameters": [
+        {
+          "class": "Object",
+          "value": "{\n  startOffset: 0,\n  mavenPresent: true,\n  buildscript: SourceOffsets {\n    blockName: 'buildscript',\n    lbrace: 12,\n    braceIdx: 0,\n    rbrace: 14\n  },\n  plugins: SourceOffsets {\n    blockName: 'plugins',\n    lbrace: 25,\n    braceIdx: 0,\n    rbrace: 69\n  },\n  repositories: SourceOffsets {\n    blockName: 'repositories',\n    lbrace: 85,\n    braceIdx: 0,\n    rbrace: 104\n  }\n}",
+          "object_id": 128016,
+          "name": "parseResult"
+        }
+      ],
+      "defined_class": "GradleParser",
+      "path": "src/cmds/agentInstaller/gradleParser.ts",
+      "lineno": 171
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 25,
+      "parent_id": 24,
+      "elapsed": 0.000004547997377812862
+    },
+    {
+      "event": "call",
+      "id": 26,
+      "thread_id": 0,
+      "method_id": "getWhitespace",
+      "static": true,
+      "parameters": [
+        {
+          "class": "String",
+          "value": "'buildscript {\\n' +\n  '}\\n' +\n  '\\n' +\n  'plugins {\\n' +\n  \"  id 'com.appland.appmap' version '1.2.0'\\n\" +\n  '}\\n' +\n  '\\n' +\n  'repositories {\\n' +\n  '  mavenCentral()\\n' +\n  '}\\n'",
+          "name": "source"
+        }
+      ],
+      "defined_class": "sourceUtil",
+      "path": "src/cmds/agentInstaller/sourceUtil.ts",
+      "lineno": 22
+    },
+    {
+      "event": "call",
+      "id": 27,
+      "thread_id": 0,
+      "method_id": "constructor",
+      "static": true,
+      "parameters": [
+        {
+          "class": "String",
+          "value": "'space'",
+          "name": "type"
+        },
+        {
+          "class": "Number",
+          "value": "2",
+          "name": "width"
+        }
+      ],
+      "defined_class": "Whitespace",
+      "path": "src/cmds/agentInstaller/sourceUtil.ts",
+      "lineno": 7
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 28,
+      "parent_id": 27,
+      "elapsed": 0.000007528928108513355
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 29,
+      "parent_id": 26,
+      "return_value": {
+        "class": "Whitespace",
+        "value": "Whitespace { type: 'space', width: 2 }",
+        "object_id": 128017
+      },
+      "elapsed": 0.0002222149632871151
+    },
+    {
+      "event": "call",
+      "id": 30,
+      "thread_id": 0,
+      "method_id": "insertPluginSpec",
+      "static": false,
+      "receiver": {
+        "class": "GradleInstaller",
+        "value": "GradleInstaller {\n  name: 'Gradle',\n  isNoop: false,\n  path: '/home/db/dev/applandinc/appmap-js/packages/cli',\n  identifyGradleFile: 'buildscript-plugins.gradle',\n  buildFilePath: '/home/db/dev/applandinc/appmap-js/packages/cli/tests/unit/fixtures/java/gradle/data/buildscript-plugins.gradle'\n}",
+        "object_id": 128011
+      },
+      "parameters": [
+        {
+          "class": "InstallerUI",
+          "value": "InstallerUI { interactive: true, options: {} }",
+          "object_id": 128012,
+          "name": "ui"
+        },
+        {
+          "class": "String",
+          "value": "'buildscript {\\n' +\n  '}\\n' +\n  '\\n' +\n  'plugins {\\n' +\n  \"  id 'com.appland.appmap' version '1.2.0'\\n\" +\n  '}\\n' +\n  '\\n' +\n  'repositories {\\n' +\n  '  mavenCentral()\\n' +\n  '}\\n'",
+          "name": "buildFileSource"
+        },
+        {
+          "class": "Object",
+          "value": "{\n  startOffset: 0,\n  mavenPresent: true,\n  buildscript: SourceOffsets {\n    blockName: 'buildscript',\n    lbrace: 12,\n    braceIdx: 0,\n    rbrace: 14\n  },\n  plugins: SourceOffsets {\n    blockName: 'plugins',\n    lbrace: 25,\n    braceIdx: 0,\n    rbrace: 69\n  },\n  repositories: SourceOffsets {\n    blockName: 'repositories',\n    lbrace: 85,\n    braceIdx: 0,\n    rbrace: 104\n  }\n}",
+          "object_id": 128016,
+          "name": "parseResult"
+        },
+        {
+          "class": "Whitespace",
+          "value": "Whitespace { type: 'space', width: 2 }",
+          "object_id": 128017,
+          "name": "whitespace"
+        }
+      ],
+      "defined_class": "GradleInstaller",
+      "path": "src/cmds/agentInstaller/gradleInstaller.ts",
+      "lineno": 112
+    },
+    {
+      "event": "call",
+      "id": 31,
+      "thread_id": 0,
+      "method_id": "selectPluginSpec",
+      "static": false,
+      "receiver": {
+        "class": "GradleInstaller",
+        "value": "GradleInstaller {\n  name: 'Gradle',\n  isNoop: false,\n  path: '/home/db/dev/applandinc/appmap-js/packages/cli',\n  identifyGradleFile: 'buildscript-plugins.gradle',\n  buildFilePath: '/home/db/dev/applandinc/appmap-js/packages/cli/tests/unit/fixtures/java/gradle/data/buildscript-plugins.gradle'\n}",
+        "object_id": 128011
+      },
+      "defined_class": "GradleInstaller",
+      "path": "src/cmds/agentInstaller/gradleInstaller.ts",
+      "lineno": 170
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 32,
+      "parent_id": 31,
+      "return_value": {
+        "class": "String",
+        "value": "\"id 'com.appland.appmap' version '1.2.0'\""
+      },
+      "elapsed": 0.0000024581095203757286
+    },
+    {
+      "event": "call",
+      "id": 33,
+      "thread_id": 0,
+      "method_id": "continueWithoutJavaPlugin",
+      "static": false,
+      "receiver": {
+        "class": "InstallerUI",
+        "value": "InstallerUI { interactive: true, options: {} }",
+        "object_id": 128012
+      },
+      "defined_class": "InstallerUI",
+      "path": "src/cmds/agentInstaller/installerUI.ts",
+      "lineno": 172
+    },
+    {
+      "event": "call",
+      "id": 34,
+      "thread_id": 0,
+      "method_id": "prompt",
+      "static": false,
+      "receiver": {
+        "class": "UserInteraction",
+        "value": "UserInteraction {\n  spinner: Ora {\n    options: [Object],\n    frameIndex: 0,\n    _spinner: [Object],\n    interval: 80,\n    color: 'cyan',\n    hideCursor: true,\n    stream: [WriteStream],\n    id: undefined,\n    _isEnabled: true,\n    _isSilent: false,\n    lineCount: 1,\n    linesToClear: 0,\n    _indent: 0,\n    discardStdin: true,\n    isDiscardingStdin: false,\n    [Symbol(text)]: '',\n    [Symbol(prefixText)]: undefined\n  }\n}",
+        "object_id": 128018
+      },
+      "parameters": [
+        {
+          "class": "Object",
+          "value": "{\n  type: 'list',\n  name: 'userWillContinue',\n  message: \"The \\x1B[31m'java'\\x1B[39m plugin was not found. This configuration is unsupported and is likely to fail. Continue?\",\n  default: 'Abort',\n  choices: [ 'Abort', 'Continue' ]\n}",
+          "object_id": 128019,
+          "name": "questions"
+        }
+      ],
+      "defined_class": "UserInteraction",
+      "path": "src/cmds/userInteraction.ts",
+      "lineno": 13
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 35,
+      "parent_id": 34,
+      "return_value": {
+        "class": "Promise<Object>",
+        "value": "Promise { { addMavenCentral: 'Yes', userWillContinue: 'Continue' } }",
+        "object_id": 128020
+      },
+      "elapsed": 0.0006721150130033493
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 36,
+      "parent_id": 33,
+      "return_value": {
+        "class": "Promise<Boolean>",
+        "value": "Promise { true }",
+        "object_id": 128021
+      },
+      "elapsed": 0.0025495279114693403
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 37,
+      "parent_id": 30,
+      "return_value": {
+        "class": "Promise<Object>",
+        "value": "Promise {\n  {\n    updatedSrc: \"buildscript {\\n}\\n\\nplugins {\\n  id 'com.appland.appmap' version '1.2.0'\\n}\",\n    offset: 70\n  }\n}",
+        "object_id": 128022
+      },
+      "elapsed": 0.0031167720444500446
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 38,
+      "parent_id": 7,
+      "return_value": {
+        "class": "Promise<undefined>",
+        "value": "Promise { undefined }",
+        "object_id": 128023
+      },
+      "elapsed": 0.011523513006977737
+    },
+    {
+      "event": "call",
+      "id": 39,
+      "thread_id": 0,
+      "method_id": "padLine",
+      "static": false,
+      "receiver": {
+        "class": "Whitespace",
+        "value": "Whitespace { type: 'space', width: 2 }",
+        "object_id": 128017
+      },
+      "parameters": [
+        {
+          "class": "String",
+          "value": "\"id 'com.appland.appmap' version '1.2.0'\"",
+          "name": "line"
+        }
+      ],
+      "defined_class": "Whitespace",
+      "path": "src/cmds/agentInstaller/sourceUtil.ts",
+      "lineno": 16
+    },
+    {
+      "event": "call",
+      "id": 40,
+      "thread_id": 0,
+      "method_id": "char",
+      "static": false,
+      "receiver": {
+        "class": "Whitespace",
+        "value": "Whitespace { type: 'space', width: 2 }",
+        "object_id": 128017
+      },
+      "defined_class": "Whitespace",
+      "path": "src/cmds/agentInstaller/sourceUtil.ts",
+      "lineno": 12
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 41,
+      "parent_id": 40,
+      "return_value": {
+        "class": "String",
+        "value": "' '"
+      },
+      "elapsed": 0.000001700012944638729
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 42,
+      "parent_id": 39,
+      "return_value": {
+        "class": "String",
+        "value": "\"  id 'com.appland.appmap' version '1.2.0'\""
+      },
+      "elapsed": 0.00009277602657675743
+    },
+    {
+      "event": "call",
+      "id": 43,
+      "thread_id": 0,
+      "method_id": "insertRepository",
+      "static": false,
+      "receiver": {
+        "class": "GradleInstaller",
+        "value": "GradleInstaller {\n  name: 'Gradle',\n  isNoop: false,\n  path: '/home/db/dev/applandinc/appmap-js/packages/cli',\n  identifyGradleFile: 'buildscript-plugins.gradle',\n  buildFilePath: '/home/db/dev/applandinc/appmap-js/packages/cli/tests/unit/fixtures/java/gradle/data/buildscript-plugins.gradle'\n}",
+        "object_id": 128011
+      },
+      "parameters": [
+        {
+          "class": "InstallerUI",
+          "value": "InstallerUI { interactive: true, options: {} }",
+          "object_id": 128012,
+          "name": "ui"
+        },
+        {
+          "class": "String",
+          "value": "'buildscript {\\n' +\n  '}\\n' +\n  '\\n' +\n  'plugins {\\n' +\n  \"  id 'com.appland.appmap' version '1.2.0'\\n\" +\n  '}\\n' +\n  '\\n' +\n  'repositories {\\n' +\n  '  mavenCentral()\\n' +\n  '}\\n'",
+          "name": "buildFileSource"
+        },
+        {
+          "class": "String",
+          "value": "\"buildscript {\\n}\\n\\nplugins {\\n  id 'com.appland.appmap' version '1.2.0'\\n}\"",
+          "name": "updatedSrc"
+        },
+        {
+          "class": "Number",
+          "value": "70",
+          "name": "offset"
+        },
+        {
+          "class": "Object",
+          "value": "{\n  startOffset: 0,\n  mavenPresent: true,\n  buildscript: SourceOffsets {\n    blockName: 'buildscript',\n    lbrace: 12,\n    braceIdx: 0,\n    rbrace: 14\n  },\n  plugins: SourceOffsets {\n    blockName: 'plugins',\n    lbrace: 25,\n    braceIdx: 0,\n    rbrace: 69\n  },\n  repositories: SourceOffsets {\n    blockName: 'repositories',\n    lbrace: 85,\n    braceIdx: 0,\n    rbrace: 104\n  }\n}",
+          "object_id": 128016,
+          "name": "parseResult"
+        },
+        {
+          "class": "Whitespace",
+          "value": "Whitespace { type: 'space', width: 2 }",
+          "object_id": 128017,
+          "name": "whitespace"
+        }
+      ],
+      "defined_class": "GradleInstaller",
+      "path": "src/cmds/agentInstaller/gradleInstaller.ts",
+      "lineno": 186
+    },
+    {
+      "event": "return",
+      "thread_id": 0,
+      "id": 44,
+      "parent_id": 43,
+      "return_value": {
+        "class": "Promise",
+        "value": "Promise {\n  {\n    updatedSrc: \"buildscript {\\n}\\n\\nplugins {\\n  id 'com.appland.appmap' version '1.2.0'\\n}\",\n    offset: 70\n  }\n}",
+        "object_id": 128024
+      },
+      "elapsed": 0.000005495967343449593
+    }
+  ],
+  "version": "1.12",
+  "metadata": {
+    "client": {
+      "name": "appmap-node",
+      "version": "2.15.0",
+      "url": "https://github.com/getappmap/appmap-node"
+    },
+    "language": {
+      "name": "javascript",
+      "engine": "Node.js",
+      "version": "v20.11.0"
+    },
+    "app": "@appland/appmap",
+    "recorder": {
+      "type": "tests",
+      "name": "jest"
+    },
+    "name": "GradleInstaller installAgent transforms buildscript-plugins.gradle as expected",
+    "test_status": "succeeded"
+  },
+  "classMap": [
+    {
+      "name": "src",
+      "type": "package",
+      "children": [
+        {
+          "name": "cmds",
+          "type": "package",
+          "children": [
+            {
+              "name": "agentInstaller",
+              "type": "package",
+              "children": [
+                {
+                  "type": "class",
+                  "name": "AgentInstaller",
+                  "children": [
+                    {
+                      "type": "function",
+                      "name": "constructor",
+                      "static": false,
+                      "location": "src/cmds/agentInstaller/agentInstaller.ts:16"
+                    }
+                  ]
+                },
+                {
+                  "type": "class",
+                  "name": "GradleInstaller",
+                  "children": [
+                    {
+                      "type": "function",
+                      "name": "insertPluginSpec",
+                      "static": false,
+                      "location": "src/cmds/agentInstaller/gradleInstaller.ts:112"
+                    },
+                    {
+                      "type": "function",
+                      "name": "constructor",
+                      "static": false,
+                      "location": "src/cmds/agentInstaller/gradleInstaller.ts:17"
+                    },
+                    {
+                      "type": "function",
+                      "name": "selectPluginSpec",
+                      "static": false,
+                      "location": "src/cmds/agentInstaller/gradleInstaller.ts:170"
+                    },
+                    {
+                      "type": "function",
+                      "name": "insertRepository",
+                      "static": false,
+                      "location": "src/cmds/agentInstaller/gradleInstaller.ts:186"
+                    },
+                    {
+                      "type": "function",
+                      "name": "installAgent",
+                      "static": false,
+                      "location": "src/cmds/agentInstaller/gradleInstaller.ts:230"
+                    }
+                  ]
+                },
+                {
+                  "type": "class",
+                  "name": "GradleParser",
+                  "children": [
+                    {
+                      "type": "function",
+                      "name": "checkSyntax",
+                      "static": false,
+                      "location": "src/cmds/agentInstaller/gradleParser.ts:171"
+                    },
+                    {
+                      "type": "function",
+                      "name": "constructor",
+                      "static": false,
+                      "location": "src/cmds/agentInstaller/gradleParser.ts:47"
+                    },
+                    {
+                      "type": "function",
+                      "name": "parse",
+                      "static": false,
+                      "location": "src/cmds/agentInstaller/gradleParser.ts:55"
+                    }
+                  ]
+                },
+                {
+                  "type": "class",
+                  "name": "SourceOffsets",
+                  "children": [
+                    {
+                      "type": "function",
+                      "name": "constructor",
+                      "static": false,
+                      "location": "src/cmds/agentInstaller/gradleParser.ts:8"
+                    }
+                  ]
+                },
+                {
+                  "type": "class",
+                  "name": "InstallerUI",
+                  "children": [
+                    {
+                      "type": "function",
+                      "name": "continueWithoutJavaPlugin",
+                      "static": false,
+                      "location": "src/cmds/agentInstaller/installerUI.ts:172"
+                    }
+                  ]
+                },
+                {
+                  "type": "class",
+                  "name": "JavaBuildToolInstaller",
+                  "children": [
+                    {
+                      "type": "function",
+                      "name": "constructor",
+                      "static": false,
+                      "location": "src/cmds/agentInstaller/javaBuildToolInstaller.ts:35"
+                    }
+                  ]
+                },
+                {
+                  "type": "class",
+                  "name": "Whitespace",
+                  "children": [
+                    {
+                      "type": "function",
+                      "name": "char",
+                      "static": false,
+                      "location": "src/cmds/agentInstaller/sourceUtil.ts:12"
+                    },
+                    {
+                      "type": "function",
+                      "name": "padLine",
+                      "static": false,
+                      "location": "src/cmds/agentInstaller/sourceUtil.ts:16"
+                    },
+                    {
+                      "type": "function",
+                      "name": "constructor",
+                      "static": false,
+                      "location": "src/cmds/agentInstaller/sourceUtil.ts:7"
+                    }
+                  ]
+                },
+                {
+                  "type": "class",
+                  "name": "sourceUtil",
+                  "children": [
+                    {
+                      "type": "function",
+                      "name": "getWhitespace",
+                      "static": true,
+                      "location": "src/cmds/agentInstaller/sourceUtil.ts:22"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "class",
+              "name": "UserInteraction",
+              "children": [
+                {
+                  "type": "function",
+                  "name": "prompt",
+                  "static": false,
+                  "location": "src/cmds/userInteraction.ts:13"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "class",
+          "name": "EncodedFile",
+          "children": [
+            {
+              "type": "function",
+              "name": "constructor",
+              "static": false,
+              "location": "src/encodedFile.ts:10"
+            },
+            {
+              "type": "function",
+              "name": "toString",
+              "static": false,
+              "location": "src/encodedFile.ts:18"
+            },
+            {
+              "type": "function",
+              "name": "read",
+              "static": true,
+              "location": "src/encodedFile.ts:43"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

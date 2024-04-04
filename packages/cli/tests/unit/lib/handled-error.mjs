@@ -1,15 +1,9 @@
-import { buildAppMap } from '@appland/models';
 import { warn } from 'console';
-import { readFile } from 'fs/promises';
 import { parentPort } from 'worker_threads';
 
-parentPort.on('message', async (task) => {
-  const { appmapFile } = task;
+parentPort.on('message', async () => {
   try {
-    const appmap = buildAppMap()
-      .source(await readFile(appmapFile, 'utf-8'))
-      .build();
-    parentPort.postMessage({ events: appmap.events.length ?? 0 });
+    throw new Error('Handle this error');
   } catch (err) {
     let errorMessage;
     try {
