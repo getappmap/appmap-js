@@ -1,22 +1,45 @@
 ---
 layout: docs
 title: Docs - AppMap Navie
-description: "Learn to use AppMap Navie to add a new feature to a complex application. AppMap Navie enhances AI code assistance with detailed, context-aware insights."
-name: Demo
-description: "Documentation | AppMap Navie AI demonstrations"
-step: 5
+description: "Learn to use AppMap Navie to navigate and improve complex applications. AppMap Navie enhances AI code assistance with detailed, context-aware insights."
+name: Video Demos
+step: 6
 navie: true
+redirect_from: [/docs/navie/demo]
 ---
 
-# Video Demo
+# Video Demos
 
-**In this video**
+- [Navie and FastAPI](#navie-and-fastapi)
+- [Using Navie to Fix Slow Code](#using-navie-to-fix-slow-code)
+- [Visualizing and Understanding MongoDB Queries](#visualizing-and-understanding-mongodb-queries)
+- [Reverse Engineering a Complex Python Application](#reverse-engineering-a-complex-python-application)
 
-We use Navie to learn how to add a custom offline captcha to a Django powered web store.  We will generate AppMaps of our user registration process, and then ask Navie for where and how to add this feature. By using Retrieval-Augmented Generation, our answers from the Generative AI are highly specific to our codebase and how it operates allowing me to quicking find exactly where to add a new feature even while having little previous knowledge of this code base. 
+## Navie and FastAPI
 
-{% include vimeo.html id='915670906' %}
+AppMap now supports FastAPI so you can map and analyze your FastAPI applications. Use the power of AppMap Navie as your personal AI powered software architect to help you write better code, faster.
 
-## Follow Along
+{% include vimeo.html id='925530952' %}
+
+## Using Navie to Fix Slow Code
+
+Discover how to visualize API interactions, identify slow endpoints with flame graphs, and leverage AI to pinpoint and resolve inefficiencies without deep diving into the codebase.
+
+{% include vimeo.html id='926266854' %}
+
+## Visualizing and Understanding MongoDB Queries 
+
+Use AppMap Navie to visualize MongoDB interactions. Ask Navie to explain how your application and database work together and learn to improve your application.
+
+{% include vimeo.html id='925177100' %}
+
+## Reverse Engineering a Complex Python Application
+
+We use Navie to learn how to add a custom offline captcha to a Django powered web store.  We will generate AppMaps of our user registration process, and then ask Navie for where and how to add this feature. By using Retrieval-Augmented Generation, our answers from the Generative AI are highly specific to our codebase and how it operates allowing me to quickly find exactly where to add a new feature even while having little previous knowledge of this code base. 
+
+{% include vimeo.html id='924683343' %}
+
+### Follow Along
 
 I'm here today to show you how to use the new AppMap Navie. AppMap Navie isn't just another AI code assistant, it's the missing link that improves the power of AI code completers and code assistants. Leveraging the unique ability that AppMap has to understand your code's execution at runtime, Navie transforms this data into a powerhouse of hyper-personalized context-aware insights for AI-assisted coding. That means you're not just working with static analysis anymore, and you're not looking at just individual files or functions. You're stepping into a realm where Navie can understand the entire codebase at an architectural level, how it behaves and executes, and provide much more detailed answers to your software questions.
 
@@ -28,7 +51,7 @@ So now I can use this data to ask AppMap Navie what areas of my codebase are inv
 
 <img class="video-screenshot" src="/assets/img/docs/navie-demo-2.webp"/> 
 
-If I was using an AI-powered code autocompleter, I would need to already know what files or functions that this request hits. I would actually need to be in the function to make this code change. AppMap sees how my code executes and Navie provides the AI with the context. I get very clear and direct insight into exactly where I need to make this code change.
+If I was using an AI-powered code auto-completer, I would need to already know what files or functions that this request hits. I would actually need to be in the function to make this code change. AppMap sees how my code executes and Navie provides the AI with the context. I get very clear and direct insight into exactly where I need to make this code change.
 
 <img class="video-screenshot" src="/assets/img/docs/navie-demo-3.webp"/> 
 
@@ -48,4 +71,4 @@ Using this registration template, we can copy the code over from Navie and paste
 
 Now we'll do that one more time, but we'll register our account with an invalid Captcha. You'll see that registration has failed and the user was notified that the Captcha was incorrect.
 
-Now you can see how AppMap improves the AI coding experience across your entire application.  If you asked asked similar questions to a standard AI assistant you would only get generic answers based on existing public knowledge. Without knowledge of your code, these generic reponses will leave you continuing to hunt and search thru a complex code base.  With AppMap able to see all of your codes runtime behavior, it can now provide context-aware insights to power these hyper-personalized responses to your software questions in your code editor.  
+Now you can see how AppMap improves the AI coding experience across your entire application.  If you asked asked similar questions to a standard AI assistant you would only get generic answers based on existing public knowledge. Without knowledge of your code, these generic responses will leave you continuing to hunt and search thru a complex code base.  With AppMap able to see all of your codes runtime behavior, it can now provide context-aware insights to power these hyper-personalized responses to your software questions in your code editor.  
