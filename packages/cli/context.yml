@@ -1,0 +1,29 @@
+- type: sequenceDiagram
+  content: "@startuml\n!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml\n\
+    participant logout as \"logout\"\nparticipant authentication as \"authentication\"\
+    \n  [->logout: doFilter (12.9 ms)\n  activate logout\n    logout->logout: requiresLogout\
+    \ (0.7 ms)\n    activate logout\n    logout<--logout: java.lang.Boolean\n    deactivate\
+    \ logout\n    logout->authentication: doFilter (11.9 ms)\n    activate authentication\n\
+    \      authentication->authentication: requiresAuthentication (0.1 ms)\n     \
+    \ activate authentication\n      authentication<--authentication: java.lang.Boolean\n\
+    \      deactivate authentication\n      authentication->authentication: doFilter\
+    \ (11.7 ms)\n      activate authentication\n        authentication->authentication:\
+    \ requiresAuthentication\n        activate authentication\n        authentication<--authentication:\
+    \ java.lang.Boolean\n        deactivate authentication\n        authentication->authentication:\
+    \ doFilter (11.6 ms)\n        activate authentication\n          authentication->authentication:\
+    \ createAuthentication (0.2 ms)\n          activate authentication\n         \
+    \   authentication->authentication: buildDetails (0.1 ms)\n            activate\
+    \ authentication\n            authentication<--authentication: org.springframework.security.web.authentication.We\n\
+    \            deactivate authentication\n          authentication<--authentication:\
+    \ org.springframework.security.authentication.Anonym\n          deactivate authentication\n\
+    \          authentication->authentication: commence (1.5 ms)\n          activate\
+    \ authentication\n            authentication->authentication: buildRedirectUrlToLoginPage\
+    \ (0.7 ms)\n            activate authentication\n              authentication->authentication:\
+    \ determineUrlToUseForThisRequest (0.1 ms)\n              activate authentication\n\
+    \              authentication<--authentication: string\n              deactivate\
+    \ authentication\n            authentication<--authentication: string\n      \
+    \      deactivate authentication\n          authentication<--authentication: void\n\
+    \          deactivate authentication\n        authentication<--authentication:\
+    \ void\n        deactivate authentication\n      authentication<--authentication:\
+    \ void\n      deactivate authentication\n    logout<--authentication: void\n \
+    \   deactivate authentication\n  [<--logout: void\n  deactivate logout\n@enduml"

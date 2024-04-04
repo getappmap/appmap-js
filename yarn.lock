@@ -165,6 +165,7 @@ __metadata:
     "@types/node": ^16
     "@types/semver": ^7.3.10
     "@types/sinon": ^10.0.2
+    "@types/sqlite3": ^3.1.11
     "@types/tmp": ^0.2.3
     "@types/validator": ^13.7.10
     "@types/w3c-xmlserializer": ^2.0.2
@@ -228,6 +229,7 @@ __metadata:
     semver: ^7.3.5
     sinon: ^11.1.2
     sql-formatter: ^4.0.2
+    sqlite3: ^5.1.7
     stream-http: ^3.2.0
     strip-ansi: ^6.0.0
     tmp: ^0.2.1
@@ -11632,6 +11634,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/sqlite3@npm:^3.1.11":
+  version: 3.1.11
+  resolution: "@types/sqlite3@npm:3.1.11"
+  dependencies:
+    "@types/node": "*"
+  checksum: bcda2df582bdc1e1c0f0fa2e4ca0c5188207155eac52518244a3e7517d3c58a1f441871a7ec9088f2281af1bfdc5175c082a2c13da920c51cb7f3aa2f17e8d7b
+  languageName: node
+  linkType: hard
+
 "@types/stack-utils@npm:^1.0.1":
   version: 1.0.1
   resolution: "@types/stack-utils@npm:1.0.1"
@@ -18864,6 +18875,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"decompress-response@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "decompress-response@npm:6.0.0"
+  dependencies:
+    mimic-response: ^3.1.0
+  checksum: d377cf47e02d805e283866c3f50d3d21578b779731e8c5072d6ce8c13cc31493db1c2f6784da9d1d5250822120cefa44f1deab112d5981015f2e17444b763812
+  languageName: node
+  linkType: hard
+
 "dedent@npm:^0.7.0":
   version: 0.7.0
   resolution: "dedent@npm:0.7.0"
@@ -19206,6 +19226,13 @@ __metadata:
   bin:
     detect-libc: ./bin/detect-libc.js
   checksum: daaaed925ffa7889bd91d56e9624e6c8033911bb60f3a50a74a87500680652969dbaab9526d1e200a4c94acf80fc862a22131841145a0a8482d60a99c24f4a3e
+  languageName: node
+  linkType: hard
+
+"detect-libc@npm:^2.0.0":
+  version: 2.0.3
+  resolution: "detect-libc@npm:2.0.3"
+  checksum: 2ba6a939ae55f189aea996ac67afceb650413c7a34726ee92c40fb0deb2400d57ef94631a8a3f052055eea7efb0f99a9b5e6ce923415daa3e68221f963cfc27d
   languageName: node
   linkType: hard
 
@@ -30056,6 +30083,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mimic-response@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "mimic-response@npm:3.1.0"
+  checksum: 25739fee32c17f433626bf19f016df9036b75b3d84a3046c7d156e72ec963dd29d7fc8a302f55a3d6c5a4ff24259676b15d915aad6480815a969ff2ec0836867
+  languageName: node
+  linkType: hard
+
 "min-document@npm:^2.19.0":
   version: 2.19.0
   resolution: "min-document@npm:2.19.0"
@@ -30750,6 +30784,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-abi@npm:^3.3.0":
+  version: 3.57.0
+  resolution: "node-abi@npm:3.57.0"
+  dependencies:
+    semver: ^7.3.5
+  checksum: 4ec876ca87ea5c02bdc088cae32fb275368d85113a51a677390bd5e6f9f4fbd85d1a47b00764c05b4a3a16ae83ea42b2b32788bbf6c7d98dfa9f41921e5a2569
+  languageName: node
+  linkType: hard
+
 "node-abort-controller@npm:^3.0.1":
   version: 3.1.1
   resolution: "node-abort-controller@npm:3.1.1"
@@ -30763,6 +30806,15 @@ __metadata:
   dependencies:
     node-gyp: latest
   checksum: 938922b3d7cb34ee137c5ec39df6289a3965e8cab9061c6848863324c21a778a81ae3bc955554c56b6b86962f6ccab2043dd5fa3f33deab633636bd28039333f
+  languageName: node
+  linkType: hard
+
+"node-addon-api@npm:^7.0.0":
+  version: 7.1.0
+  resolution: "node-addon-api@npm:7.1.0"
+  dependencies:
+    node-gyp: latest
+  checksum: 26640c8d2ed7e2059e2ed65ee79e2a195306b3f1fc27ad11448943ba91d37767bd717a9a0453cc97e83a1109194dced8336a55f8650000458ef625c0b8b5e3df
   languageName: node
   linkType: hard
 
@@ -30853,7 +30905,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-gyp@npm:^8.3.0, node-gyp@npm:^8.4.0, node-gyp@npm:latest":
+"node-gyp@npm:8.x, node-gyp@npm:^8.3.0, node-gyp@npm:^8.4.0, node-gyp@npm:latest":
   version: 8.4.1
   resolution: "node-gyp@npm:8.4.1"
   dependencies:
@@ -33611,6 +33663,28 @@ __metadata:
   bin:
     prebuild-install: bin.js
   checksum: de4313eda821305912af922700a2db04bb8e77fe8aa9c2788550f1000c026cbefc82da468ec0c0a37764c5417bd8169dbd540928535fb38d00bb9bbd673dd217
+  languageName: node
+  linkType: hard
+
+"prebuild-install@npm:^7.1.1":
+  version: 7.1.2
+  resolution: "prebuild-install@npm:7.1.2"
+  dependencies:
+    detect-libc: ^2.0.0
+    expand-template: ^2.0.3
+    github-from-package: 0.0.0
+    minimist: ^1.2.3
+    mkdirp-classic: ^0.5.3
+    napi-build-utils: ^1.0.1
+    node-abi: ^3.3.0
+    pump: ^3.0.0
+    rc: ^1.2.7
+    simple-get: ^4.0.0
+    tar-fs: ^2.0.0
+    tunnel-agent: ^0.6.0
+  bin:
+    prebuild-install: bin.js
+  checksum: 543dadf8c60e004ae9529e6013ca0cbeac8ef38b5f5ba5518cb0b622fe7f8758b34e4b5cb1a791db3cdc9d2281766302df6088bd1a225f206925d6fee17d6c5c
   languageName: node
   linkType: hard
 
@@ -36522,6 +36596,17 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
+"simple-get@npm:^4.0.0":
+  version: 4.0.1
+  resolution: "simple-get@npm:4.0.1"
+  dependencies:
+    decompress-response: ^6.0.0
+    once: ^1.3.1
+    simple-concat: ^1.0.0
+  checksum: e4132fd27cf7af230d853fa45c1b8ce900cb430dd0a3c6d3829649fe4f2b26574c803698076c4006450efb0fad2ba8c5455fbb5755d4b0a5ec42d4f12b31d27e
+  languageName: node
+  linkType: hard
+
 "simple-swizzle@npm:^0.2.2":
   version: 0.2.2
   resolution: "simple-swizzle@npm:0.2.2"
@@ -37034,6 +37119,27 @@ resolve@1.1.7:
   bin:
     sql-formatter: bin/sqlfmt.js
   checksum: ce2bd1c507bc3435cfc17184d6404e39d033541ebf0f092087623972a4cf0f72822aec0752060b9f8ed387b63e3a1c46e3d621037dd069fe15f258a83e235940
+  languageName: node
+  linkType: hard
+
+"sqlite3@npm:^5.1.7":
+  version: 5.1.7
+  resolution: "sqlite3@npm:5.1.7"
+  dependencies:
+    bindings: ^1.5.0
+    node-addon-api: ^7.0.0
+    node-gyp: 8.x
+    prebuild-install: ^7.1.1
+    tar: ^6.1.11
+  peerDependencies:
+    node-gyp: 8.x
+  dependenciesMeta:
+    node-gyp:
+      optional: true
+  peerDependenciesMeta:
+    node-gyp:
+      optional: true
+  checksum: 37e387b74e34aea3d0fc5cea76e14de3139e4bdbf6574ff6ca876c3b5e36e859b278e99922c179c14337cb0d487d8da8dbbaaf7d63fbab5928dc134a9d5db262
   languageName: node
   linkType: hard
 

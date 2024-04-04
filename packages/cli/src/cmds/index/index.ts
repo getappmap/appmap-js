@@ -23,7 +23,7 @@ import LocalNavie from '../../rpc/explain/navie/navie-local';
 import RemoteNavie from '../../rpc/explain/navie/navie-remote';
 import { Context, Help, ProjectInfo } from '@appland/navie';
 import { InteractionEvent } from '@appland/navie/dist/interaction-history';
-import indexSource from '../../fulltext/SourceIndex';
+import indexSource from '../../fulltext/SourceIndexSQLite';
 import { dirname } from 'path';
 import { mkdir } from 'fs/promises';
 
