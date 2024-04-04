@@ -77,7 +77,7 @@ describe('processAppMapDir', () => {
     );
 
     describe('unhandled error', () => {
-      beforeEach(() => ((jobFile = join(__dirname, 'build-appmap.mjs')), buildWorkerPool()));
+      beforeEach(() => ((jobFile = join(__dirname, 'unhandled-error.mjs')), buildWorkerPool()));
 
       it('reports the error', async () => {
         const result = await processAppMapDir(
@@ -92,14 +92,12 @@ describe('processAppMapDir', () => {
         expect(result.unhandledErrors).toHaveLength(1);
         expect(result.numProcessed).toEqual(1);
         const errorMessage = result.errors[0].toString();
-        expect(errorMessage).toContain(`Error: return #48 is missing call #49`);
+        expect(errorMessage).toContain(`Error: Here comes an unhandled error`);
       });
     });
 
     describe('caught exception', () => {
-      beforeEach(
-        () => ((jobFile = join(__dirname, 'build-appmap-handle-error.mjs')), buildWorkerPool())
-      );
+      beforeEach(() => ((jobFile = join(__dirname, 'handled-error.mjs')), buildWorkerPool()));
 
       it('reports the error', async () => {
         const result = await processAppMapDir(
@@ -114,7 +112,7 @@ describe('processAppMapDir', () => {
         expect(result.unhandledErrors).toHaveLength(0);
         expect(result.numProcessed).toEqual(1);
         const errorMessage = result.errors[0].toString();
-        expect(errorMessage).toContain(`Error: return #48 is missing call #49`);
+        expect(errorMessage).toContain(`Error: Handle this error`);
       });
     });
   });

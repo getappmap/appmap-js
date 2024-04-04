@@ -7,12 +7,6 @@ export default class EventStack {
   }
 
   add(event) {
-    // Don't begin a stack with a return, we likely started recording in the
-    // middle of thread execution.
-    if (event.isReturn() && this.events.length === 0) {
-      return;
-    }
-
     if (event.isCall()) {
       this.stack.push(event);
       this.eventMap[event.id] = event;
@@ -46,7 +40,10 @@ export default class EventStack {
           call.parent = parent;
         }
       } else {
-        throw new Error(`return #${event.id} is missing call #${event.parent_id}`);
+        // This can happen in async contexts where the recording began in the middle
+        // of another async task. It's possible that the parent call was executed
+        // before the recording began. If this is the case, discard the return event.
+        return;
       }
     }
 
