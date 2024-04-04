@@ -23,9 +23,6 @@ import LocalNavie from '../../rpc/explain/navie/navie-local';
 import RemoteNavie from '../../rpc/explain/navie/navie-remote';
 import { Context, Help, ProjectInfo } from '@appland/navie';
 import { InteractionEvent } from '@appland/navie/dist/interaction-history';
-import indexSource from '../../fulltext/SourceIndex';
-import { dirname } from 'path';
-import { mkdir } from 'fs/promises';
 
 const AI_KEY_ENV_VARS = ['OPENAI_API_KEY', 'AZURE_OPENAI_API_KEY'];
 
@@ -48,10 +45,6 @@ export const builder = (args: yargs.Argv) => {
     describe: 'watch the directory for changes to appmaps',
     boolean: true,
     alias: 'w',
-  });
-  args.option('bm25', {
-    describe:
-      'generate and save a BM25 index of the source code and save it to the named file (requires git to list the repository files)',
   });
   args.option('port', {
     describe: 'port to listen on for JSON-RPC requests',
@@ -178,12 +171,5 @@ export const handler = async (argv) => {
   } else {
     const cmd = new FingerprintDirectoryCommand(appmapDir);
     await cmd.execute();
-
-    // TODO: Activate this option by default from getappmap/archive-action.
-    if (bm25) {
-      const dir = dirname(bm25);
-      await mkdir(dir, { recursive: true });
-      await indexSource(bm25);
-    }
   }
 };

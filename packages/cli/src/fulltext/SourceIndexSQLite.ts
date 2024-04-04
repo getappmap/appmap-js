@@ -1,12 +1,16 @@
-import { readFile, writeFile } from 'fs/promises';
-import { executeCommand } from '../lib/executeCommand';
 import {
   RecursiveCharacterTextSplitter,
   SupportedTextSplitterLanguage,
 } from 'langchain/text_splitter';
-import lunr from 'lunr';
 import { log } from 'console';
+import sqlite3 from 'better-sqlite3';
+import assert from 'assert';
+import { readFile } from 'fs/promises';
+import { existsSync } from 'fs';
+
+import { executeCommand } from '../lib/executeCommand';
 import { verbose } from '../utils';
+import queryKeywords from './queryKeywords';
 
 const COMMON_REPO_BINARY_FILE_EXTENSIONS: string[] = [
   'png',
@@ -82,7 +86,7 @@ const TEXT_SPLITTER_LANGUAGE_EXTENSIONS: Record<SupportedTextSplitterLanguage, s
 };
 
 export type SourceIndexDocument = {
-  id: string;
+  ref: string;
   text: string;
 };
 
@@ -96,27 +100,32 @@ export function unpackRef(ref: string): { fileName: string; from: number; to: nu
   return { fileName, from, to };
 }
 
-export class SourceIndex {
-  index: lunr.Index | undefined;
+export class SourceIndexSQLite {
+  constructor(public database: sqlite3.Database) {}
 
-  async execute(): Promise<lunr.Index> {
-    const documents = new Array<SourceIndexDocument>();
-    const projectFiles = await SourceIndex.listGitProjectFiles();
-    for (const fileName of projectFiles) {
-      await this.indexDocument(fileName, documents);
-    }
+  async search(keywords: string[]): Promise<SourceIndexDocument[]> {
+    const query = `SELECT ref, text, terms FROM code_snippets WHERE code_snippets MATCH ? ORDER BY bm25(code_snippets, 1.0, 0.5)`;
 
-    this.index = lunr(function () {
-      this.ref('id');
-      this.field('text');
-
-      for (const doc of documents) this.add(doc);
+    const searchExpr = queryKeywords(keywords).join(' OR ');
+    const rows = this.database.prepare(query).all(searchExpr);
+    rows.forEach((row: any) => {
+      if (verbose()) console.log(`Found row ${row.ref} with terms ${row.terms}`);
     });
-
-    return this.index;
+    return rows.map((row: any) => ({ ref: row.ref, text: row.text }));
   }
 
-  protected async indexDocument(fileName: string, documents: Array<SourceIndexDocument>) {
+  async buildIndex() {
+    this.database.exec(
+      `CREATE VIRTUAL TABLE code_snippets USING fts5(ref UNINDEXED, text UNINDEXED, terms, tokenize = 'porter unicode61')`
+    );
+
+    const projectFiles = await SourceIndexSQLite.listGitProjectFiles();
+    for (const fileName of projectFiles) {
+      await this.indexDocument(fileName);
+    }
+  }
+
+  protected async indexDocument(fileName: string) {
     const fileNameTokens = fileName.split('.');
     if (fileNameTokens.length < 2) {
       if (verbose()) log(`Skipping file with no extension: ${fileName}`);
@@ -150,11 +159,19 @@ export class SourceIndex {
 
     for (const chunk of await splitter.createDocuments([fileContents])) {
       const { from, to } = chunk.metadata.loc.lines;
-      const id = packRef(fileName, from, to);
-      documents.push({
-        id,
-        text: chunk.pageContent,
-      });
+      const ref = packRef(fileName, from, to);
+
+      try {
+        if (verbose()) console.log(`Indexing document ${ref}`);
+
+        const terms = queryKeywords([chunk.pageContent]).join(' ');
+        this.database
+          .prepare('INSERT INTO code_snippets (ref, text, terms ) VALUES (?, ?, ?)')
+          .run(ref, chunk.pageContent, terms);
+      } catch (error) {
+        console.warn(`Error indexing document ${ref}`);
+        console.warn(error);
+      }
     }
   }
 
@@ -165,9 +182,17 @@ export class SourceIndex {
   }
 }
 
-export default async function indexSource(outputFile: string) {
-  const sourceIndex = new SourceIndex();
-  const index = await sourceIndex.execute();
-  await writeFile(outputFile, JSON.stringify(index));
-  console.log(`Wrote source index to ${outputFile}`);
+export function restoreSourceIndex(textIndexFile: string): SourceIndexSQLite {
+  assert(existsSync(textIndexFile), `Index file ${textIndexFile} does not exist`);
+  const database = new sqlite3(textIndexFile);
+  return new SourceIndexSQLite(database);
+}
+
+export async function buildSourceIndex(textIndexFile: string): Promise<SourceIndexSQLite> {
+  assert(!existsSync(textIndexFile), `Index file ${textIndexFile} already exists`);
+  const database = new sqlite3(textIndexFile);
+  const sourceIndex = new SourceIndexSQLite(database);
+  await sourceIndex.buildIndex();
+  console.log(`Wrote source index to ${textIndexFile}`);
+  return sourceIndex;
 }

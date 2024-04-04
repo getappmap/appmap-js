@@ -1,15 +1,16 @@
 import { AppMap, AppMapFilter, Event, buildAppMap } from '@appland/models';
 import { log, warn } from 'console';
 import { readFile } from 'fs/promises';
-import { verbose } from '../utils';
 import lunr from 'lunr';
-import { splitCamelized } from '../utils';
-import { collectParameters } from './collectParameters';
 import assert from 'assert';
+
+import { verbose } from '../utils';
+import { collectParameters } from './collectParameters';
+import queryKeywords from './queryKeywords';
 
 type IndexItem = {
   fqid: string;
-  name: string;
+  name: string[];
   location?: string;
   parameters: string[];
   eventIds: number[];
@@ -78,11 +79,10 @@ export default class FindEvents {
       const co = event.codeObject;
       const parameters = collectParameters(event);
       if (!this.indexItemsByFqid.has(co.fqid)) {
-        const name = splitCamelized(co.id);
         const item: IndexItem = {
           fqid: co.fqid,
-          name,
-          parameters,
+          name: queryKeywords([co.id]),
+          parameters: queryKeywords(parameters),
           location: co.location,
           eventIds: [event.id],
         };
@@ -106,7 +106,8 @@ export default class FindEvents {
     this.idx = lunr(function () {
       this.ref('fqid');
       this.field('name');
-      this.tokenizer.separator = /[\s/\-_:#.]+/;
+      this.field('parameters');
+      this.tokenizer.separator = /[\s/\-[\]_:#.\$]+/;
 
       self.indexItemsByFqid.forEach((item) => {
         let boost = 1;
@@ -119,8 +120,13 @@ export default class FindEvents {
 
   search(search: string, options: SearchOptions = {}): SearchResponse {
     assert(this.idx);
-    let matches = this.idx.search(search);
+    let matches = this.idx.search(queryKeywords([search]).join(' '));
     const numResults = matches.length;
+    if (numResults === 0) {
+      if (verbose())
+        log(`[FindEvents] No event matches for search "${search}" within AppMap "${this.appmapId}`);
+      return { type: 'event', results: [], numResults: 0 };
+    }
     if (verbose())
       log(
         `[FindEvents] Got ${numResults} event matches for search "${search}" within AppMap "${this.appmapId}`
