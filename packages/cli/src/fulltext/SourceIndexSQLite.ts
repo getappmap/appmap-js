@@ -10,6 +10,7 @@ import { existsSync } from 'fs';
 
 import { executeCommand } from '../lib/executeCommand';
 import { verbose } from '../utils';
+import queryKeywords from './queryKeywords';
 
 const COMMON_REPO_BINARY_FILE_EXTENSIONS: string[] = [
   'png',
@@ -103,15 +104,19 @@ export class SourceIndexSQLite {
   constructor(public database: sqlite3.Database) {}
 
   async search(keywords: string[]): Promise<SourceIndexDocument[]> {
-    const query = `SELECT ref, text FROM code_snippets WHERE code_snippets MATCH ? ORDER BY bm25(code_snippets, 1.0, 0.5)`;
-    const queryKeywords = keywords.join(' ');
-    const rows = this.database.prepare(query).all(queryKeywords);
+    const query = `SELECT ref, text, terms FROM code_snippets WHERE code_snippets MATCH ? ORDER BY bm25(code_snippets, 1.0, 0.5)`;
+
+    const searchExpr = queryKeywords(keywords).join(' OR ');
+    const rows = this.database.prepare(query).all(searchExpr);
+    rows.forEach((row: any) => {
+      if (verbose()) console.log(`Found row ${row.ref} with terms ${row.terms}`);
+    });
     return rows.map((row: any) => ({ ref: row.ref, text: row.text }));
   }
 
   async buildIndex() {
     this.database.exec(
-      `CREATE VIRTUAL TABLE code_snippets USING fts5(ref UNINDEXED, text, tokenize = 'porter unicode61')`
+      `CREATE VIRTUAL TABLE code_snippets USING fts5(ref UNINDEXED, text UNINDEXED, terms, tokenize = 'porter unicode61')`
     );
 
     const projectFiles = await SourceIndexSQLite.listGitProjectFiles();
@@ -159,9 +164,10 @@ export class SourceIndexSQLite {
       try {
         if (verbose()) console.log(`Indexing document ${ref}`);
 
+        const terms = queryKeywords([chunk.pageContent]).join(' ');
         this.database
-          .prepare('INSERT INTO code_snippets (ref, text) VALUES (?, ?)')
-          .run(ref, chunk.pageContent);
+          .prepare('INSERT INTO code_snippets (ref, text, terms ) VALUES (?, ?, ?)')
+          .run(ref, chunk.pageContent, terms);
       } catch (error) {
         console.warn(`Error indexing document ${ref}`);
         console.warn(error);

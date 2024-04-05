@@ -3,14 +3,16 @@ import { Metadata } from '@appland/models';
 import { mkdtemp, readFile, rm } from 'fs/promises';
 import sqlite3 from 'better-sqlite3';
 import { log, warn } from 'console';
+import decamelize from 'decamelize';
 
-import { exists, processNamedFiles, splitCamelized, verbose } from '../utils';
+import { exists, processNamedFiles, verbose } from '../utils';
 import UpToDate from '../lib/UpToDate';
 import loadAppMapConfig from '../lib/loadAppMapConfig';
 import { packRef, refToAppMapDir, unpackRef } from './ref';
 import { existsSync } from 'fs';
 import assert from 'assert';
 import { tmpdir } from 'os';
+import queryKeywords from './queryKeywords';
 
 type SerializedCodeObject = {
   name: string;
@@ -71,7 +73,7 @@ async function buildDocument(directory: string, metadataFile: string): Promise<I
     if (co.type === 'query') queries.push(co.name);
     else if (co.type === 'route') routes.push(co.name);
     else if (co.type === 'external-route') externalRoutes.push(co.name);
-    else codeObjects.push(splitCamelized(co.name));
+    else codeObjects.push(decamelize(co.name, { separator: ' ' }));
 
     co.children?.forEach((child) => {
       collectFunction(child);
@@ -85,7 +87,7 @@ async function buildDocument(directory: string, metadataFile: string): Promise<I
       await readFile(join(indexDir, 'canonical.parameters.json'), 'utf-8')
     ) as string[];
     canonicalParameters.forEach((cp) => {
-      parameters.push(splitCamelized(cp));
+      parameters.push(decamelize(cp, { separator: ' ' }));
     });
   }
 
@@ -96,7 +98,7 @@ async function buildDocument(directory: string, metadataFile: string): Promise<I
   return {
     id,
     name: metadata.name,
-    source_location: metadata.source_location,
+    source_location: metadata.source_location, 
     code_objects: codeObjects.join(' '),
     queries: queries.join(' '),
     routes: routes.join(' '),
@@ -254,11 +256,9 @@ export default class AppMapIndex {
 
   async search(keywords: string[], options: SearchOptions = {}): Promise<SearchResponse> {
     const query = `SELECT ref, bm25(appmaps, 1.0, 0.5) score FROM appmaps WHERE appmaps MATCH ? ORDER BY bm25(appmaps, 1.0, 0.5)`;
-    const queryKeywords = keywords.join(' ');
-    const rows = this.database.prepare(query).all(queryKeywords);
-    // const rows = (await promisify(this.database.prepare.bind(this.database, query))(
-    //   queryKeywords
-    // )) as any;
+
+    const searchExpr = queryKeywords(keywords).join(' OR ');
+    const rows = this.database.prepare(query).all(searchExpr);
     const dbRefs = rows.map((row: any) => ({ ref: row.ref, score: row.score })) as DbMatch[];
 
     let refs = await removeNonExistentMatches(dbRefs);
@@ -337,8 +337,10 @@ export async function buildAppMapIndex(
           if (verbose()) console.log(`Indexing document ${document.id}`);
           const values = Object.values(document).filter(Boolean);
           values.splice(values.indexOf(document.id), 1);
-          const text = values.flat().join(' ');
-          database.prepare('INSERT INTO appmaps (ref, text) VALUES (?, ?)').run(document.id, text);
+          const keywords = queryKeywords(values.flat());
+          database
+            .prepare('INSERT INTO appmaps (ref, text) VALUES (?, ?)')
+            .run(document.id, keywords.join(' '));
           documentCount += 1;
         } catch (error) {
           console.warn(`Error indexing document ${document.id}`);
