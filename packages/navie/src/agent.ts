@@ -18,7 +18,7 @@ export class AgentOptions {
   ) {}
 
   get hasAppMaps() {
-    return this.projectInfo.some((info) => info.appmapStats.numAppMaps > 0);
+    return this.projectInfo.some((info) => info.appmapStats && info.appmapStats?.numAppMaps > 0);
   }
 }
 

@@ -45,6 +45,7 @@ describe('HelpAgent', () => {
       [],
       [
         {
+          directory: 'twitter',
           appmapConfig: { language: 'ruby' } as unknown as AppMapConfig,
           appmapStats: { numAppMaps: 0 } as unknown as AppMapStats,
         },
@@ -107,6 +108,7 @@ describe('HelpAgent', () => {
       [],
       [
         {
+          directory: 'shopify',
           appmapConfig: { language: 'ruby' } as unknown as AppMapConfig,
           appmapStats: { numAppMaps: 10 } as unknown as AppMapStats,
         },
