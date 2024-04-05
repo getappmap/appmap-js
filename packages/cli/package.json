@@ -163,7 +163,9 @@
       "resources",
       "built/appmap.html",
       "built/sequenceDiagram.html",
-      "built/docs"
+      "built/docs",
+      "../../node_modules/better-sqlite3/build/Release/*",
+      "node_modules/better-sqlite3/build/Release/*"
     ],
     "outputPath": "dist"
   },
