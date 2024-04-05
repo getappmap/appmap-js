@@ -43,6 +43,7 @@
   "dependencies": {
     "@langchain/core": "^0.1.32",
     "@langchain/openai": "^0.0.15",
+    "js-yaml": "^4.1.0",
     "langchain": "^0.1.25",
     "openai": "^4.28.0"
   }

@@ -8,6 +8,7 @@ export enum PromptType {
   CodeSnippet = 'codeSnippets',
   DataRequest = 'dataRequest',
   HelpDoc = 'helpDoc',
+  CodeEditor = 'codeEditor',
 }
 
 const PROMPT_NAMES: Record<PromptType, { singular: string; plural: string }> = {
@@ -20,11 +21,12 @@ const PROMPT_NAMES: Record<PromptType, { singular: string; plural: string }> = {
   [PromptType.CodeSnippet]: { singular: 'code snippet', plural: 'code snippets' },
   [PromptType.DataRequest]: { singular: 'data request', plural: 'data requests' },
   [PromptType.HelpDoc]: { singular: 'help document', plural: 'help documents' },
+  [PromptType.CodeEditor]: { singular: 'code editor', plural: 'code editors' },
 };
 
 export type Prompt = {
   content: string;
-  prefix: string;
+  tagName: string;
   multiple?: boolean;
 };
 
@@ -33,7 +35,7 @@ export const PROMPTS: Record<PromptType, Prompt> = {
     content: `**The user's code selection**
 
 The user is asking about specific lines of code that they have selected in their code editor.`,
-    prefix: 'Code selection',
+    tagName: 'code-selection',
   },
   [PromptType.Question]: {
     content: `**The user's question**
@@ -47,7 +49,7 @@ well as you can from the context you have.
 Avoid recommending other diagram tools such as Lucidchart, Draw.io, PlantUML, or Mermaid,
 except as supplemental resources to AppMap.
 `,
-    prefix: 'Question',
+    tagName: 'question',
   },
   [PromptType.IssueDescription]: {
     content: `**The code generation task**
@@ -55,7 +57,7 @@ except as supplemental resources to AppMap.
 This is a description of a code enhancement that the user wants you to help them with. Your response should be
 focused primarily on solving this issue via code generation.
 `,
-    prefix: 'Question',
+    tagName: 'issue-description',
   },
   [PromptType.AppMapConfig]: {
     content: `**AppMap configuration**
@@ -72,7 +74,7 @@ of each element contain the configuration of the AppMap agent, including:
 
 Because the workspace already contains an \`appmap.yml\` file, you don't need to describe how to install the AppMap language
 library / agent. You may, however, advise the user on how to optimize this configuration for their specific needs.`,
-    prefix: 'AppMap configurations',
+    tagName: 'appmap-config',
   },
   [PromptType.AppMapStats]: {
     content: `**AppMap statistics**
@@ -86,7 +88,7 @@ each project:
 - **routes** - A list of HTTP routes.
 - **tables** - A list of database tables.
 - **numAppMaps** - The number of AppMaps that are available in the project.`,
-    prefix: 'AppMap statistics',
+    tagName: 'appmap-stats',
   },
   [PromptType.SequenceDiagram]: {
     content: `**Sequence diagrams**
@@ -95,7 +97,7 @@ You're provided with sequence diagrams that are relevant to the task.
 Each sequence diagram represents the actual flow of code that was recorded by the AppMap language library
 which is integrated into the project.
 `,
-    prefix: 'Sequence diagram',
+    tagName: 'sequence-diagram',
     multiple: true,
   },
   [PromptType.CodeSnippet]: {
@@ -108,7 +110,7 @@ Sequence diagrams, if available, provide more context about how each code snippe
 Each code snippet begins with the file name and line number where the code is located,
 followed by the code itself.
 `,
-    prefix: 'Code snippet',
+    tagName: 'code-snippet',
     multiple: true,
   },
   [PromptType.DataRequest]: {
@@ -119,7 +121,7 @@ is an outbound request to a database, API, or other data source that was made by
 Each data request was recorded by the AppMap language library which is integrated into the project.
 
 Sequence diagrams, if available, provide more context about how each data request is used in the overall program.`,
-    prefix: 'Data request',
+    tagName: 'data-request',
     multiple: true,
   },
   [PromptType.HelpDoc]: {
@@ -127,8 +129,14 @@ Sequence diagrams, if available, provide more context about how each data reques
 
 You're provided with relevant snippets of AppMap documentation. Each documentation snippet provides detailed
 information about installing, configuring, and using AppMap.`,
-    prefix: 'Help document',
+    tagName: 'help-doc',
     multiple: true,
+  },
+  [PromptType.CodeEditor]: {
+    content: `**Code editor**
+
+You're provided with information about the user's code editor. This information includes the code editor's name.`,
+    tagName: 'code-editor',
   },
 };
 
@@ -137,11 +145,11 @@ export function buildPromptDescriptor(promptType: PromptType): string {
   const content = [prompt.content];
   if (prompt.multiple) {
     content.push(
-      `Multiple ${PROMPT_NAMES[promptType].plural} of this type will be provided. Each one will be prefixed with "[${prompt.prefix}]"`
+      `Multiple ${PROMPT_NAMES[promptType].plural} of this type will be provided. Each one will be prefixed with "[${prompt.tagName}]"`
     );
   } else {
     content.push(
-      `The ${PROMPT_NAMES[promptType].singular} will be prefixed with "[${prompt.prefix}]"`
+      `The ${PROMPT_NAMES[promptType].singular} will be prefixed with "[${prompt.tagName}]"`
     );
   }
 
@@ -150,5 +158,5 @@ export function buildPromptDescriptor(promptType: PromptType): string {
 
 export function buildPromptValue(promptType: PromptType, value: string): string {
   const prompt = PROMPTS[promptType];
-  return `[${prompt.prefix}] ${value}`;
+  return [`<${prompt.tagName}>`, value, `</${prompt.tagName}>`].join('\n');
 }

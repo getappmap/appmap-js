@@ -38,7 +38,8 @@ export class Explain extends EventEmitter {
     public question: string,
     public codeSelection: string | undefined,
     public appmaps: string[] | undefined,
-    public status: ExplainRpc.ExplainStatusResponse
+    public status: ExplainRpc.ExplainStatusResponse,
+    public codeEditor: string | undefined
   ) {
     super();
   }
@@ -126,8 +127,8 @@ export class Explain extends EventEmitter {
     return searchResult.context;
   }
 
-  projectInfoContext(): Promise<ProjectInfo.ProjectInfoResponse> {
-    return collectProjectInfos();
+  async projectInfoContext(): Promise<ProjectInfo.ProjectInfoResponse> {
+    return await collectProjectInfos(this.codeEditor);
   }
 
   helpContext(data: Help.HelpRequest): Promise<Help.HelpResponse> {
@@ -140,7 +141,8 @@ async function explain(
   question: string,
   codeSelection: string | undefined,
   appmaps: string[] | undefined,
-  threadId: string | undefined
+  threadId: string | undefined,
+  codeEditor: string | undefined
 ): Promise<ExplainRpc.ExplainResponse> {
   const status: ExplainRpc.ExplainStatusResponse = {
     step: ExplainRpc.Step.NEW,
@@ -154,7 +156,8 @@ async function explain(
     question,
     codeSelection,
     appmaps,
-    status
+    status,
+    codeEditor
   );
 
   const invokeContextFunction = async (data: any) => {
@@ -223,9 +226,11 @@ async function explain(
 }
 
 const explainHandler: (
-  navieProvider: INavieProvider
+  navieProvider: INavieProvider,
+  codeEditor: string | undefined
 ) => RpcHandler<ExplainRpc.ExplainOptions, ExplainRpc.ExplainResponse> = (
-  navieProvider: INavieProvider
+  navieProvider: INavieProvider,
+  codeEditor: string | undefined
 ) => {
   return {
     name: ExplainRpc.ExplainFunctionName,
@@ -235,7 +240,8 @@ const explainHandler: (
         options.question,
         options.codeSelection,
         options.appmaps,
-        options.threadId
+        options.threadId,
+        codeEditor
       ),
   };
 };

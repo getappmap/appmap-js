@@ -170,7 +170,7 @@ export class ContextItemEvent extends InteractionEvent {
   }
 
   get promptPrefix() {
-    return PROMPTS[this.promptType].prefix;
+    return PROMPTS[this.promptType].tagName;
   }
 
   get metadata() {

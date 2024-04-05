@@ -65,6 +65,12 @@ export const builder = (args: yargs.Argv) => {
     choices: Object.values(Agents).map((agent) => agent.toLowerCase()),
   });
 
+  args.option('code-editor', {
+    describe: 'Which code editor spawned the process',
+    type: 'string',
+    choices: ['vscode', 'jetbrains'],
+  });
+
   return args.strict();
 };
 
@@ -175,7 +181,7 @@ export const handler = async (argv) => {
     appmapData(),
     metadata(),
     sequenceDiagram(),
-    explainHandler(navieProvider),
+    explainHandler(navieProvider, argv.codeEditor),
     explainStatusHandler(),
     setConfigurationV1(),
     getConfigurationV1(),

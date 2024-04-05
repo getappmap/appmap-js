@@ -1,3 +1,4 @@
+import { dump } from 'js-yaml';
 import { ProjectInfo, ProjectInfoProvider } from '../project-info';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
@@ -20,7 +21,12 @@ export default class ProjectInfoService {
     const projectInfo = Array.isArray(response) ? response : [response];
     this.interactionHistory.log('Project info obtained');
 
-    const projectInfoKeys: [PromptType, keyof ProjectInfo, Test, string][] = [
+    const projectInfoKeys: [
+      PromptType,
+      'appmapConfig' | 'appmapStats' | 'codeEditor',
+      Test,
+      string
+    ][] = [
       [
         PromptType.AppMapConfig,
         'appmapConfig',
@@ -30,8 +36,17 @@ export default class ProjectInfoService {
       [
         PromptType.AppMapStats,
         'appmapStats',
-        () => projectInfo.some(({ appmapStats }) => appmapStats.numAppMaps > 0),
+        () =>
+          projectInfo.some(
+            ({ appmapStats }) => appmapStats?.numAppMaps && appmapStats.numAppMaps > 0
+          ),
         `The project does not contain any AppMaps.`,
+      ],
+      [
+        PromptType.CodeEditor,
+        'codeEditor',
+        () => projectInfo.some(({ codeEditor }) => Boolean(codeEditor)),
+        `The code editor is not specified.`,
       ],
     ];
     projectInfoKeys.forEach(([promptType, projectInfoKey, isPresent, missingInfoMessage]) => {
@@ -42,14 +57,8 @@ export default class ProjectInfoService {
         return;
       }
 
-      const promptValue = projectInfo.map((info) => {
-        let value: Record<string, unknown> | undefined = info[projectInfoKey];
-        const hasName = 'name' in info;
-        if (!hasName && info.appmapConfig?.name) {
-          value = { ...value, name: info.appmapConfig.name };
-        }
-        return value;
-      });
+      const promptValue = projectInfo.map((info) => info[projectInfoKey]).filter(Boolean);
+
       this.interactionHistory.addEvent(
         new PromptInteractionEvent(promptType, 'system', buildPromptDescriptor(promptType))
       );
@@ -57,7 +66,7 @@ export default class ProjectInfoService {
         new PromptInteractionEvent(
           promptType,
           'user',
-          buildPromptValue(promptType, JSON.stringify(promptValue))
+          buildPromptValue(promptType, dump(promptValue))
         )
       );
     });

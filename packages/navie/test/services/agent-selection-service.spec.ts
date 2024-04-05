@@ -62,6 +62,7 @@ describe('AgentSelectionService', () => {
         new ExplainOptions(),
         [
           {
+            directory: 'appland',
             appmapConfig: { language: 'ruby' } as unknown as AppMapConfig,
             appmapStats: { numAppMaps: 0 } as unknown as AppMapStats,
           },
@@ -78,6 +79,7 @@ describe('AgentSelectionService', () => {
         new ExplainOptions(),
         [
           {
+            directory: 'stripe',
             appmapConfig: { language: 'ruby' } as unknown as AppMapConfig,
             appmapStats: { numAppMaps: 10 } as unknown as AppMapStats,
           },

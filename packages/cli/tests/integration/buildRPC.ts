@@ -29,7 +29,10 @@ export type RPC = {
 // mocked as needed.
 //
 // Returns an RPC client that can be used to make requests to the server.
-export async function buildRPC(navieProvider: INavieProvider): Promise<RPC> {
+export async function buildRPC(
+  navieProvider: INavieProvider,
+  codeEditor?: string | undefined
+): Promise<RPC> {
   const fingerprintWatchCommand = {
     numProcessed: 0,
   } as FingerprintWatchCommand;
@@ -42,7 +45,7 @@ export async function buildRPC(navieProvider: INavieProvider): Promise<RPC> {
     appmapData(),
     metadata(),
     sequenceDiagram(),
-    explainHandler(navieProvider),
+    explainHandler(navieProvider, codeEditor),
     explainStatusHandler(),
     setConfigurationV1(),
     getConfigurationV1(),

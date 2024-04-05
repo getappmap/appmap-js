@@ -152,7 +152,7 @@ export const handler = async (argv) => {
         appmapData(),
         metadata(),
         sequenceDiagram(),
-        explainHandler(navieProvider),
+        explainHandler(navieProvider, argv.codeEditor),
         explainStatusHandler(),
       ];
       const rpcServer = new RPCServer(port, rpcMethods);
