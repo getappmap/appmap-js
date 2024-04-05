@@ -2,20 +2,21 @@
 layout: docs
 title: Docs - AppMap Navie
 description: "Learn how to use AppMap Navie to provide personalized code analysis. Generate AppMaps, ask Navie questions, analyze code, and iterate for optimal results."
-name: How to use Navie
-description: "Documentation | How to use AppMap Navie AI"
+name: Using Navie
 step: 3
 navie: true
 toc: true
+redirect_from: [/docs/navie/how-to-use-navie]
 ---
 
-# How to Use Navie
+# Using Navie
 
 When you ask a question to Navie, it will search through all your AppMaps created for your project to pull in relevant traces, sequence diagrams, and code snippets for analysis.  It will then send these code snippets and runtime code sequence diagrams to the Generative AI service along with your question.  By sending this valuable context to the AI interface, your answers will be much more personal and specific to your codebase, files, and functions. Additionally, the Generative AI will be able to understand how your code works at runtime and will be able to make architectural level recommendations across your entire application. 
 
 - [How to Open Navie](#how-to-open-navie)
   - [In VS Code](#in-vs-code)
   - [In JetBrains](#in-jetbrains)
+  - [Ask Navie in any open AppMap](#how-to-ask-navie-about-an-appmap)
 - [How to Generate the Highest Quality Answers](#how-to-generate-the-highest-quality-answers)
   - [Create AppMaps](#create-appmaps)
   - [Ask Navie](#ask-navie)
@@ -24,22 +25,6 @@ When you ask a question to Navie, it will search through all your AppMaps create
 - [Next Steps](#next-steps)
 
 ## How to Open Navie
-
-There are three ways to access Navie in your code editor:
-- [How to Open Navie](#how-to-open-navie)
-  - [In VS Code](#in-vs-code)
-    - [In the AppMap Plugin Instructions Section](#in-the-appmap-plugin-instructions-section)
-    - [Via the VS Code Command Palette](#via-the-vs-code-command-palette)
-    - [Select a code block and use the lightbulb](#select-a-code-block-and-use-the-lightbulb)
-  - [In JetBrains](#in-jetbrains)
-    - [In the AppMap Sidebar Plugin](#in-the-appmap-sidebar-plugin)
-    - [Via the JetBrains Tools menu option](#via-the-jetbrains-tools-menu-option)
-- [How to Generate the Highest Quality Answers](#how-to-generate-the-highest-quality-answers)
-  - [Create AppMaps](#create-appmaps)
-  - [Ask Navie](#ask-navie)
-  - [Write Code](#write-code)
-  - [Repeat](#repeat)
-- [Next Steps](#next-steps)
 
 ### In VS Code
 
@@ -86,6 +71,20 @@ You can open Navie by clicking on the JetBrains menu option `Tools` -> `AppMap`.
 AppMap Navie will open as a new tab in your JetBrains editor. 
 
 <img class="video-screenshot" src="/assets/img/product/ask-navie-vscode-window.webp"/>
+
+## How to Ask Navie about an AppMap
+
+Normally when asking Navie about your application, AppMap will search through all the available AppMaps to find the ones that are most relevant to your question. You can target your question more specifically to an AppMap, representing a test case, API call, or other interaction by clicking the "Ask Navie" box on any AppMap you open.
+
+<img class="video-screenshot" src="/assets/img/product/ask-navie-about-a-map.webp"/>
+
+**NOTE**: When you "Ask Navie from within an AppMap your questions' context will only include the single AppMap.  You can opt to search the entire workspace by selecting the option to "Include the whole workspace".
+
+<img class="video-screenshot" src="/assets/img/product/ask-single-map.webp"/>
+
+### Video Demo
+
+{% include vimeo.html id='929980707' %}
 
 ## How to Generate the Highest Quality Answers
 
@@ -151,4 +150,4 @@ Continue to ask follow-up question to Navie as you are making code changes or wh
 
 ## Next Steps
 
-Watch: [Demo of using AppMap Navie to add a new feature to a complex application.](/docs/navie/demo)
+[Watch video demonstrations of AppMap Navie helping you better understand your codebase and giving you personalized answers from your Generative AI tools.](/docs/navie/video-demos)
