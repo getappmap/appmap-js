@@ -1,14 +1,16 @@
-import { readFile, writeFile } from 'fs/promises';
 import {
   RecursiveCharacterTextSplitter,
   SupportedTextSplitterLanguage,
 } from 'langchain/text_splitter';
 import { log } from 'console';
 import sqlite3 from 'sqlite3';
+import { promisify } from 'util';
+import assert from 'assert';
+import { readFile } from 'fs/promises';
+import { existsSync } from 'fs';
 
 import { executeCommand } from '../lib/executeCommand';
 import { verbose } from '../utils';
-import { inspect, promisify } from 'util';
 
 const COMMON_REPO_BINARY_FILE_EXTENSIONS: string[] = [
   'png',
@@ -158,7 +160,7 @@ export class SourceIndexSQLite {
       const ref = packRef(fileName, from, to);
 
       try {
-        console.log(`Indexing document ${ref}`);
+        if (verbose()) console.log(`Indexing document ${ref}`);
         // const documentExists = await promisify(
         //   this.database.all.bind(this.database, 'SELECT 1 FROM code_snippets WHERE id = ?', id)
         // )();
@@ -182,10 +184,18 @@ export class SourceIndexSQLite {
   }
 }
 
-export default async function indexSource(outputFile: string) {
-  const database = new sqlite3.Database(outputFile);
+export function restoreSourceIndex(textIndexFile: string): SourceIndexSQLite {
+  assert(existsSync(textIndexFile), `Index file ${textIndexFile} does not exist`);
+  const database = new sqlite3.Database(textIndexFile);
+  return new SourceIndexSQLite(database);
+}
+
+export async function buildSourceIndex(textIndexFile: string): Promise<SourceIndexSQLite> {
+  assert(!existsSync(textIndexFile), `Index file ${textIndexFile} already exists`);
+  const database = new sqlite3.Database(textIndexFile);
   const sourceIndex = new SourceIndexSQLite(database);
   await sourceIndex.buildIndex();
   database.close();
-  console.log(`Wrote source index to ${outputFile}`);
+  console.log(`Wrote source index to ${textIndexFile}`);
+  return sourceIndex;
 }

@@ -1,5 +1,5 @@
 import { SearchRpc } from '@appland/rpc';
-import AppMapIndex, { SearchResponse } from '../../fulltext/AppMapIndex';
+import AppMapIndex, { SearchResponse } from '../../fulltext/AppMapIndexSQLite';
 import FindEvents, {
   SearchResponse as EventSearchResponse,
   SearchResult as EventSearchResult,
@@ -88,6 +88,7 @@ export class ContextCollector {
   query: string;
 
   constructor(
+    private appmapIndex: AppMapIndex,
     private directories: string[],
     private vectorTerms: string[],
     private charLimit: number
@@ -103,7 +104,7 @@ export class ContextCollector {
       codeObjects: Set<string>;
     };
   }> {
-    const query = this.vectorTerms.join(' ');
+    const keywords = this.vectorTerms;
 
     let appmapSearchResponse: SearchResponse;
     if (this.appmaps) {
@@ -135,7 +136,7 @@ export class ContextCollector {
       const searchOptions = {
         maxResults: DEFAULT_MAX_DIAGRAMS,
       };
-      appmapSearchResponse = await AppMapIndex.search(this.directories, query, searchOptions);
+      appmapSearchResponse = await this.appmapIndex.search(keywords, searchOptions);
     }
 
     const eventsCollector = new EventCollector(this.query, appmapSearchResponse);
@@ -214,6 +215,7 @@ export class ContextCollector {
 }
 
 export default async function collectContext(
+  appmapIndex: AppMapIndex,
   directories: string[],
   appmaps: string[] | undefined,
   vectorTerms: string[],
@@ -226,7 +228,7 @@ export default async function collectContext(
     codeObjects: Set<string>;
   };
 }> {
-  const contextCollector = new ContextCollector(directories, vectorTerms, charLimit);
+  const contextCollector = new ContextCollector(appmapIndex, directories, vectorTerms, charLimit);
   if (appmaps) contextCollector.appmaps = appmaps;
   return contextCollector.collectContext();
 }

@@ -1,11 +1,13 @@
+import AppMapIndex from '../../fulltext/AppMapIndexSQLite';
 import collectContext from '../../rpc/explain/collectContext';
 import { ContextResult, ContextValue } from './context-provider';
 
 export default async function appmapProvider(
+  appmapIndex: AppMapIndex,
   keywords: string[],
   charLimit: number
 ): Promise<ContextResult> {
-  const { context } = await collectContext(['.'], undefined, keywords, charLimit);
+  const { context } = await collectContext(appmapIndex, ['.'], undefined, keywords, charLimit);
 
   const result = new Array<ContextValue>();
   for (const value of context.sequenceDiagrams) {

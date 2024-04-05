@@ -1,14 +1,15 @@
 import yargs from 'yargs';
 import express from 'express';
+import { cwd } from 'process';
+import bodyParser from 'body-parser';
 
-import { verbose } from '../../utils';
 import appmapProvider from './appmap-provider';
 import bm25Provider from './bm25-provider';
-import bodyParser from 'body-parser';
-import { inspect } from 'util';
+import { verbose } from '../../utils';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
-import indexSource from '../../fulltext/SourceIndexSQLite';
-import { existsSync, rmSync } from 'fs';
+import { buildSourceIndex, restoreSourceIndex } from '../../fulltext/SourceIndexSQLite';
+import findOrCreateResourceFromFile from '../../lib/findOrCreateResourceFromFile';
+import { buildAppMapIndex, restoreAppMapIndex } from '../../fulltext/AppMapIndexSQLite';
 
 export type ContextType = 'sequenceDiagram' | 'codeSnippet' | 'dataRequest';
 
@@ -42,6 +43,13 @@ export const builder = (args: yargs.Argv) => {
     describe: 'path to the text index file',
     type: 'string',
     alias: 't',
+    default: 'source-index.sqlite',
+  });
+  args.option('appmap-index-file', {
+    describe: 'path to the appmap index file',
+    type: 'string',
+    alias: 'a',
+    default: 'appmap-index.sqlite',
   });
   args.option('clobber', {
     describe: 'overwrite existing files if they already exist',
@@ -63,24 +71,21 @@ export const handler = async (argv) => {
   verbose(argv.verbose);
   handleWorkingDirectory(argv.directory);
 
-  const { port: portStr, textIndexFile, listen, clobber } = argv;
+  const { port: portStr, textIndexFile, appmapIndexFile, listen, clobber } = argv;
 
-  if (textIndexFile) {
-    if (existsSync(textIndexFile)) {
-      if (clobber) {
-        console.warn(
-          `File ${textIndexFile} already exists and --clobber option is set, so it will be rebuilt.`
-        );
+  const sourceIndex = await findOrCreateResourceFromFile(
+    textIndexFile,
+    clobber,
+    restoreSourceIndex.bind(null, textIndexFile),
+    buildSourceIndex.bind(null, textIndexFile)
+  );
 
-        rmSync(textIndexFile, { recursive: true, force: true });
-      }
-    }
-
-    if (!existsSync(textIndexFile)) {
-      console.log(`Building text index in file: ${textIndexFile}`);
-      await indexSource(textIndexFile);
-    }
-  }
+  const appmapIndex = await findOrCreateResourceFromFile(
+    appmapIndexFile,
+    clobber,
+    restoreAppMapIndex.bind(null, appmapIndexFile, [cwd()]),
+    buildAppMapIndex.bind(null, appmapIndexFile, [cwd()])
+  );
 
   if (!listen) {
     return;
@@ -92,8 +97,8 @@ export const handler = async (argv) => {
   app.use(bodyParser.json());
 
   const contextProviders: Record<string, ProviderFunction> = {
-    appmap: appmapProvider,
-    bm25: bm25Provider.bind(null, textIndexFile),
+    appmap: appmapProvider.bind(null, appmapIndex),
+    bm25: bm25Provider.bind(null, sourceIndex),
   };
 
   // Define the route for /context-provider?provider

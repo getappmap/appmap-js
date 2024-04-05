@@ -2,10 +2,9 @@ import assert from 'assert';
 
 import { SearchRpc } from '@appland/rpc';
 import { RpcHandler } from '../rpc';
-import AppMapIndex, { SearchResponse } from '../../fulltext/AppMapIndex';
+import { SearchResponse, withAppMapIndex } from '../../fulltext/AppMapIndexSQLite';
 import searchSingleAppMap from '../../cmds/search/searchSingleAppMap';
 import configuration from '../configuration';
-import { dir } from 'console';
 import { isAbsolute, join } from 'path';
 
 export const DEFAULT_MAX_DIAGRAMS = 10;
@@ -57,7 +56,11 @@ export async function handler(
     const searchOptions = {
       maxResults: options.maxDiagrams || options.maxResults || DEFAULT_MAX_DIAGRAMS,
     };
-    appmapSearchResponse = await AppMapIndex.search(directories, query, searchOptions);
+    const keywords = query.split(' ');
+    appmapSearchResponse = await withAppMapIndex(
+      directories,
+      async (appmapIndex) => await appmapIndex.search(keywords, searchOptions)
+    );
   }
 
   // For each AppMap, search for events within the map that match the query.
