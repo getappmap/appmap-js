@@ -61,11 +61,8 @@ export default async function buildContext(searchResults: SearchRpc.SearchResult
         continue;
       }
 
-      warn(`Location: ${event.location}`);
-      if (examinedLocations.has(event.location)) {
-        warn(`Duplicate location: ${event.location}`);
-        continue;
-      }
+      if (examinedLocations.has(event.location)) continue;
+
       examinedLocations.add(event.location);
 
       if (codeSnippets.has(event.location)) {

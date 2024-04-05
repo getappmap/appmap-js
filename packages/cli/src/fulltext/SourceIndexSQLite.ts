@@ -3,7 +3,7 @@ import {
   SupportedTextSplitterLanguage,
 } from 'langchain/text_splitter';
 import { log } from 'console';
-import sqlite3 from 'sqlite3';
+import sqlite3 from 'better-sqlite3';
 import { promisify } from 'util';
 import assert from 'assert';
 import { readFile } from 'fs/promises';
@@ -106,14 +106,12 @@ export class SourceIndexSQLite {
   async search(keywords: string[]): Promise<SourceIndexDocument[]> {
     const query = `SELECT ref, text FROM code_snippets WHERE code_snippets MATCH ? ORDER BY bm25(code_snippets, 1.0, 0.5)`;
     const queryKeywords = keywords.join(' ');
-    const rows = (await promisify(
-      this.database.all.bind(this.database, query, queryKeywords)
-    )()) as any[];
-    return rows.map((row) => ({ ref: row.ref, text: row.text }));
+    const rows = this.database.prepare(query).all(queryKeywords);
+    return rows.map((row: any) => ({ ref: row.ref, text: row.text }));
   }
 
   async buildIndex() {
-    this.database.run(
+    this.database.exec(
       `CREATE VIRTUAL TABLE code_snippets USING fts5(ref UNINDEXED, text, tokenize = 'porter unicode61')`
     );
 
@@ -161,15 +159,10 @@ export class SourceIndexSQLite {
 
       try {
         if (verbose()) console.log(`Indexing document ${ref}`);
-        // const documentExists = await promisify(
-        //   this.database.all.bind(this.database, 'SELECT 1 FROM code_snippets WHERE id = ?', id)
-        // )();
-        // if (!documentExists)
-        this.database.run(
-          'INSERT INTO code_snippets (ref, text) VALUES (?, ?)',
-          ref,
-          chunk.pageContent
-        );
+
+        this.database
+          .prepare('INSERT INTO code_snippets (ref, text) VALUES (?, ?)')
+          .run(ref, chunk.pageContent);
       } catch (error) {
         console.warn(`Error indexing document ${ref}`);
         console.warn(error);
@@ -186,13 +179,15 @@ export class SourceIndexSQLite {
 
 export function restoreSourceIndex(textIndexFile: string): SourceIndexSQLite {
   assert(existsSync(textIndexFile), `Index file ${textIndexFile} does not exist`);
-  const database = new sqlite3.Database(textIndexFile);
+  const database = new sqlite3(textIndexFile);
+  database.pragma('journal_mode = WAL');
   return new SourceIndexSQLite(database);
 }
 
 export async function buildSourceIndex(textIndexFile: string): Promise<SourceIndexSQLite> {
   assert(!existsSync(textIndexFile), `Index file ${textIndexFile} already exists`);
-  const database = new sqlite3.Database(textIndexFile);
+  const database = new sqlite3(textIndexFile);
+  database.pragma('journal_mode = WAL');
   const sourceIndex = new SourceIndexSQLite(database);
   await sourceIndex.buildIndex();
   database.close();

@@ -1,7 +1,7 @@
 import { dirname, join } from 'path';
 import { Metadata } from '@appland/models';
 import { mkdtemp, readFile, rm } from 'fs/promises';
-import sqlite3 from 'sqlite3';
+import sqlite3 from 'better-sqlite3';
 import { log, warn } from 'console';
 import { promisify } from 'util';
 
@@ -256,9 +256,10 @@ export default class AppMapIndex {
   async search(keywords: string[], options: SearchOptions = {}): Promise<SearchResponse> {
     const query = `SELECT ref, bm25(appmaps, 1.0, 0.5) score FROM appmaps WHERE appmaps MATCH ? ORDER BY bm25(appmaps, 1.0, 0.5)`;
     const queryKeywords = keywords.join(' ');
-    const rows = (await promisify(
-      this.database.all.bind(this.database, query, queryKeywords)
-    )()) as any;
+    const rows = this.database.prepare(query).all(queryKeywords);
+    // const rows = (await promisify(this.database.prepare.bind(this.database, query))(
+    //   queryKeywords
+    // )) as any;
     const dbRefs = rows.map((row: any) => ({ ref: row.ref, score: row.score })) as DbMatch[];
 
     let refs = await removeNonExistentMatches(dbRefs);
@@ -282,7 +283,8 @@ export default class AppMapIndex {
 
 export function restoreAppMapIndex(indexFile: string, directories: string[]): AppMapIndex {
   assert(existsSync(indexFile), `Index file ${indexFile} does not exist`);
-  const database = new sqlite3.Database(indexFile);
+  const database = new sqlite3(indexFile);
+  database.pragma('journal_mode = WAL');
   return new AppMapIndex(directories, database);
 }
 
@@ -305,8 +307,9 @@ export async function buildAppMapIndex(
   directories: string[]
 ): Promise<AppMapIndex> {
   assert(!existsSync(indexFile), `Index file ${indexFile} already exists`);
-  const database = new sqlite3.Database(indexFile);
-  database.run(
+  const database = new sqlite3(indexFile);
+  database.pragma('journal_mode = WAL');
+  database.exec(
     `CREATE VIRTUAL TABLE appmaps USING fts5(ref UNINDEXED, text, tokenize = 'porter unicode61')`
   );
 
@@ -337,11 +340,9 @@ export async function buildAppMapIndex(
           if (verbose()) console.log(`Indexing document ${document.id}`);
           const values = Object.values(document).filter(Boolean);
           values.splice(values.indexOf(document.id), 1);
-          database.run(
-            'INSERT INTO appmaps (ref, text) VALUES (?, ?)',
-            document.id,
-            values.join(' ')
-          );
+          database
+            .prepare('INSERT INTO appmaps (ref, text) VALUES (?, ?)')
+            .run(document.id, values.join(' '));
         } catch (error) {
           console.warn(`Error indexing document ${document.id}`);
           console.warn(error);
