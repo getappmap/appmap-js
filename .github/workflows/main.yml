@@ -83,4 +83,5 @@ jobs:
       - name: Publish release/ build artifacts
         uses: actions/upload-artifact@v4
         with:
+          name: AppMap packaged binaries
           path: packages/cli/release
