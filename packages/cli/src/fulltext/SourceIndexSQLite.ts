@@ -4,7 +4,6 @@ import {
 } from 'langchain/text_splitter';
 import { log } from 'console';
 import sqlite3 from 'better-sqlite3';
-import { promisify } from 'util';
 import assert from 'assert';
 import { readFile } from 'fs/promises';
 import { existsSync } from 'fs';
@@ -180,17 +179,14 @@ export class SourceIndexSQLite {
 export function restoreSourceIndex(textIndexFile: string): SourceIndexSQLite {
   assert(existsSync(textIndexFile), `Index file ${textIndexFile} does not exist`);
   const database = new sqlite3(textIndexFile);
-  database.pragma('journal_mode = WAL');
   return new SourceIndexSQLite(database);
 }
 
 export async function buildSourceIndex(textIndexFile: string): Promise<SourceIndexSQLite> {
   assert(!existsSync(textIndexFile), `Index file ${textIndexFile} already exists`);
   const database = new sqlite3(textIndexFile);
-  database.pragma('journal_mode = WAL');
   const sourceIndex = new SourceIndexSQLite(database);
   await sourceIndex.buildIndex();
-  database.close();
   console.log(`Wrote source index to ${textIndexFile}`);
   return sourceIndex;
 }

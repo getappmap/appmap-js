@@ -3,7 +3,6 @@ import { Metadata } from '@appland/models';
 import { mkdtemp, readFile, rm } from 'fs/promises';
 import sqlite3 from 'better-sqlite3';
 import { log, warn } from 'console';
-import { promisify } from 'util';
 
 import { exists, processNamedFiles, splitCamelized, verbose } from '../utils';
 import UpToDate from '../lib/UpToDate';
@@ -284,7 +283,6 @@ export default class AppMapIndex {
 export function restoreAppMapIndex(indexFile: string, directories: string[]): AppMapIndex {
   assert(existsSync(indexFile), `Index file ${indexFile} does not exist`);
   const database = new sqlite3(indexFile);
-  database.pragma('journal_mode = WAL');
   return new AppMapIndex(directories, database);
 }
 
@@ -308,14 +306,13 @@ export async function buildAppMapIndex(
 ): Promise<AppMapIndex> {
   assert(!existsSync(indexFile), `Index file ${indexFile} already exists`);
   const database = new sqlite3(indexFile);
-  database.pragma('journal_mode = WAL');
   database.exec(
     `CREATE VIRTUAL TABLE appmaps USING fts5(ref UNINDEXED, text, tokenize = 'porter unicode61')`
   );
 
-  const documents = new Array<any>();
   if (verbose()) log(`[AppMapIndex] Adding AppMaps to full-text index`);
   const startTime = Date.now();
+  let documentCount = 0;
 
   for (const directory of directories) {
     const appmapConfig = await loadAppMapConfig(join(directory, 'appmap.yml'));
@@ -340,15 +337,13 @@ export async function buildAppMapIndex(
           if (verbose()) console.log(`Indexing document ${document.id}`);
           const values = Object.values(document).filter(Boolean);
           values.splice(values.indexOf(document.id), 1);
-          database
-            .prepare('INSERT INTO appmaps (ref, text) VALUES (?, ?)')
-            .run(document.id, values.join(' '));
+          const text = values.flat().join(' ');
+          database.prepare('INSERT INTO appmaps (ref, text) VALUES (?, ?)').run(document.id, text);
+          documentCount += 1;
         } catch (error) {
           console.warn(`Error indexing document ${document.id}`);
           console.warn(error);
         }
-
-        documents.push(await buildDocument(directory, metadataFile));
       }
     );
   }
@@ -356,9 +351,7 @@ export async function buildAppMapIndex(
   const endTime = Date.now();
   if (verbose())
     log(
-      `[AppMapIndex] Added ${documents.length} AppMaps to full-text index in ${
-        endTime - startTime
-      }ms`
+      `[AppMapIndex] Added ${documentCount} AppMaps to full-text index in ${endTime - startTime}ms`
     );
   return new AppMapIndex(directories, database);
 }
