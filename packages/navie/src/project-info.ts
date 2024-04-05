@@ -14,9 +14,14 @@ export type AppMapStats = {
   numAppMaps: number;
 };
 
+export type CodeEditorInfo = {
+  name: string;
+};
+
 export type ProjectInfo = {
   appmapConfig?: AppMapConfig;
   appmapStats: AppMapStats;
+  codeEditor?: CodeEditorInfo;
 };
 
 export type ProjectInfoResponse = ProjectInfo | Array<ProjectInfo>;

@@ -8,6 +8,7 @@ export enum PromptType {
   CodeSnippet = 'codeSnippets',
   DataRequest = 'dataRequest',
   HelpDoc = 'helpDoc',
+  CodeEditor = 'codeEditor',
 }
 
 const PROMPT_NAMES: Record<PromptType, { singular: string; plural: string }> = {
@@ -20,6 +21,7 @@ const PROMPT_NAMES: Record<PromptType, { singular: string; plural: string }> = {
   [PromptType.CodeSnippet]: { singular: 'code snippet', plural: 'code snippets' },
   [PromptType.DataRequest]: { singular: 'data request', plural: 'data requests' },
   [PromptType.HelpDoc]: { singular: 'help document', plural: 'help documents' },
+  [PromptType.CodeEditor]: { singular: 'code editor', plural: 'code editors' },
 };
 
 export type Prompt = {
@@ -128,6 +130,12 @@ You're provided with relevant snippets of AppMap documentation. Each documentati
 information about installing, configuring, and using AppMap.`,
     prefix: 'Help document',
     multiple: true,
+  },
+  [PromptType.CodeEditor]: {
+    content: `**Code editor**
+
+You're provided with information about the user's code editor. This information includes the code editor's name.`,
+    prefix: 'Code editor',
   },
 };
 

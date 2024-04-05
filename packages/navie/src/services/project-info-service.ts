@@ -33,6 +33,12 @@ export default class ProjectInfoService {
         () => projectInfo.some(({ appmapStats }) => appmapStats.numAppMaps > 0),
         `The project does not contain any AppMaps.`,
       ],
+      [
+        PromptType.CodeEditor,
+        PromptType.CodeEditor,
+        () => projectInfo.some(({ codeEditor }) => Boolean(codeEditor)),
+        `The project does not contain any code editor information.`,
+      ],
     ];
     projectInfoKeys.forEach(([promptType, projectInfoKey, isPresent, missingInfoMessage]) => {
       if (!isPresent()) {
@@ -45,7 +51,7 @@ export default class ProjectInfoService {
       const promptValue = projectInfo.map((info) => {
         let value: Record<string, unknown> | undefined = info[projectInfoKey];
         const hasName = 'name' in info;
-        if (!hasName && info.appmapConfig?.name) {
+        if (!hasName && info.appmapConfig?.name && promptType !== PromptType.CodeEditor) {
           value = { ...value, name: info.appmapConfig.name };
         }
         return value;
