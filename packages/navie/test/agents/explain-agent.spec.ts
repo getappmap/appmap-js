@@ -49,6 +49,7 @@ describe('@explain agent', () => {
       hasAppMaps: true,
       projectInfo: [
         {
+          directory: 'twitter',
           appmapConfig: { language: 'ruby' } as unknown as any,
           appmapStats: { numAppMaps: 1 } as unknown as any,
         },
