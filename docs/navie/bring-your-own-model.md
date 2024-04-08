@@ -5,7 +5,8 @@ name: Bring Your Own Model
 step: 4
 navie: true
 toc: true
-description: Use AppMap Navie AI with your own OpenAI account or OpenAI-comaptible LLM running either locally or remotely.
+description: Use AppMap Navie AI with your own OpenAI account or OpenAI-compatible LLM running either locally or remotely.
+redirect_from: [/docs/navie/bring-your-own-llm]
 ---
 <p class="alert alert-info">
 <b>This feature is in early access.</b> We will post various comparisons of AppMap with models, we currently recommend GPT4 from OpenAI via Open AI or Microsoft Azure, and Mixtral-8x7B-Instruct-v0.1.  We will update this section with additional models and more benchmarking details, please check back often for updates.

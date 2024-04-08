@@ -21,6 +21,7 @@ redirect_from: [docs/reference/appmap-swagger-ruby]
   - [`sequence-diagram`](#sequence-diagram)
   - [`sequence-diagram-diff`](#sequence-diagram-diff)
   - [`openapi`](#openapi)
+  - [`stats`](#stats)
   - [`prune`](#prune)
   - [`archive`](#archive)
   - [`restore`](#restore)
@@ -300,6 +301,105 @@ you specify its file with the optional `--openapi-template` parameter.
 
 The `--openapi-title` and `--openapi-version` parameters override the values of the
 `info/title` and `info/version` properties in the generated document. 
+
+## `stats`
+
+Use this command to show statistics about events from a single AppMap or all AppMaps in a directory.
+
+### Usage
+
+The `stats` command takes a directory of AppMaps and will identify the largest AppMaps, and will also 
+calculate which functions have the highest AppMap overhead.  You can use this data alongside the `prune` command 
+to reduce the size of your AppMaps or remove noisy functions.  To target a specific AppMap use the `--appmap-file` 
+option with the name of the map. 
+
+For example:
+
+
+To get statistics for all the AppMaps in a directory, this will look recursively in all directories below `tmp/appmap`:
+```
+$ appmap stats tmp/appmap
+✔ Computing AppMap stats...
+
+Largest AppMaps (which are bigger than 1024kb)
+1.5MB minitest/Microposts_interface_micropost_interface.appmap.json
+1.5MB minitest/Valid_login_redirect_after_login.appmap.json
+1.1MB minitest/Invalid_password_login_with_valid_email_invalid_password.appmap.json
+
+✔ Computing functions with highest AppMap overhead...
+
+Total instrumentation time
+1947ms
+
+Functions with highest AppMap overhead
+     Time |     % |   Count | Function name
+    546ms | 28.1% |    2082 | sprockets/Sprockets::EncodingUtils.unmarshaled_deflated
+    268ms | 13.8% |    2082 | ruby/Marshal.load
+    180ms |  9.2% |    3211 | ruby/Array#pack
+    154ms |  7.9% |     375 | actionview/ActionView::Resolver#find_all
+     85ms |  4.4% |    2054 | logger/Logger::LogDevice#write
+     64ms |  3.3% |       7 | app/mailers/UserMailer#account_activation
+     61ms |  3.1% |     120 | ruby/Marshal.dump
+     59ms |    3% |       9 | app/mailers/UserMailer#password_reset
+     58ms |    3% |     517 | openssl/OpenSSL::Random.random_bytes
+     52ms |  2.7% |    1042 | activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after
+```
+{: .example-code}
+
+To get stats for an individual AppMap, pass the full directory where the AppMap lives, and use the `--appmap-file` option 
+to list the name of the AppMap.
+
+Example: 
+
+```
+$ appmap stats tmp/appmap/pytest --appmap-file tests_integration_catalogue_test_category_TestCategoryFactory_test_can_use_alternative_separator.appmap.json
+Analyzing AppMap: /tmp/appmap/pytest/tests_integration_catalogue_test_category_TestCategoryFactory_test_can_use_alternative_separator.appmap.json
+
+1. function:oscar/apps/catalogue/abstract_models/AbstractCategory#get_ancestors_and_self
+      count: 131033
+      estimated size: 48.8 MB
+
+2. function:oscar/apps/catalogue/categories.create_from_sequence
+      count: 3
+      estimated size: 1.2 KB
+
+3. function:oscar/apps/catalogue/abstract_models/AbstractCategory#save
+      count: 3
+      estimated size: 1.7 KB
+
+4. function:oscar/apps/catalogue/abstract_models/AbstractCategory#generate_slug
+      count: 3
+      estimated size: 1.1 KB
+
+5. function:oscar/core/utils.slugify
+      count: 3
+      estimated size: 794.0 bytes
+```
+{: .example-code}
+
+### Arguments
+
+```console
+$ appmap stats --help
+```
+{: .example-code}
+
+```
+appmap stats [directory]
+
+Show statistics about events from an AppMap or from all AppMaps in a directory
+
+Options:
+      --version      Show version number                               [boolean]
+  -v, --verbose      Run with verbose logging                          [boolean]
+      --help         Show help                                         [boolean]
+  -d, --directory    program working directory                          [string]
+      --appmap-dir   directory to recursively inspect for AppMaps
+  -f, --format       How to format the output
+                                     [choices: "json", "text"] [default: "text"]
+  -l, --limit        Number of methods to display         [number] [default: 10]
+  -a, --appmap-file  AppMap to analyze                                  [string]
+```
 
 ## `prune`
 
