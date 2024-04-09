@@ -1,3 +1,5 @@
+import { warn } from 'console';
+
 import Message from './message';
 import MemoryService from './services/memory-service';
 import VectorTermsService from './services/vector-terms-service';
@@ -16,7 +18,6 @@ import AgentSelectionService from './services/agent-selection-service';
 import LookupContextService from './services/lookup-context-service';
 import ApplyContextService from './services/apply-context-service';
 import ClassificationService from './services/classification-service';
-import { warn } from 'console';
 
 export type ChatHistory = Message[];
 

@@ -11,12 +11,17 @@ import searchSingleAppMap, { SearchOptions as SingleSearchOptions } from './sear
 import AppMapIndex, {
   SearchResponse as DiagramsSearchResponse,
   SearchOptions,
-} from '../../fulltext/AppMapIndex';
+  SearchResponse,
+  buildAppMapIndex,
+  restoreAppMapIndex,
+  withAppMapIndex,
+} from '../../fulltext/AppMapIndexSQLite';
 import {
   SearchResult as EventSearchResult,
   SearchResponse as EventSearchResponse,
 } from '../../fulltext/FindEvents';
 import { openInBrowser } from '../open/openers';
+import findOrCreateResourceFromFile from '../../lib/findOrCreateResourceFromFile';
 
 export const command = 'search <query>';
 export const describe =
@@ -168,7 +173,14 @@ export const handler = async (argv: any) => {
     const options: SearchOptions = {
       maxResults,
     };
-    const response = await AppMapIndex.search([process.cwd()], query, options);
+
+    // Preserve the existing semantics of the search function by building the index from scratch
+    // on each invocation.
+    // TODO: Maintain a persistent index, and sync the file contents with the index.
+    const response = await withAppMapIndex(
+      [process.cwd()],
+      async (appmapIndex) => await appmapIndex.search(query, options)
+    );
     if (findEvents) {
       const eventOptions: SingleSearchOptions = { maxResults };
       const { maxSize, filter: filterStr } = argv;

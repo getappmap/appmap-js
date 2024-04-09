@@ -34,6 +34,7 @@ const CompareReportCommand = require('./cmds/compare-report/compareReport');
 const InventoryCommand = require('./cmds/inventory/inventory');
 const InventoryReportCommand = require('./cmds/inventory-report/inventoryReport');
 const SearchCommand = require('./cmds/search/search');
+const ContextProvider = require('./cmds/context-provider/context-provider');
 import * as RpcCommand from './cmds/index/rpc';
 import UploadCommand from './cmds/upload';
 import { default as sqlErrorLog } from './lib/sqlErrorLog';
@@ -140,6 +141,7 @@ yargs(process.argv.slice(2))
   .command(InventoryReportCommand)
   .command(SearchCommand)
   .command(RpcCommand)
+  .command(ContextProvider)
   .option('verbose', {
     alias: 'v',
     type: 'boolean',

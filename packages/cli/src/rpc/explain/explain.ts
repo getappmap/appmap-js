@@ -11,6 +11,7 @@ import { Context, Help, ProjectInfo } from '@appland/navie';
 import configuration from '../configuration';
 import collectProjectInfos from '../../cmds/navie/projectInfo';
 import collectHelp from '../../cmds/navie/help';
+import AppMapIndex, { withAppMapIndex } from '../../fulltext/AppMapIndexSQLite';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
@@ -88,11 +89,12 @@ export class Explain extends EventEmitter {
     // pruned by the client AI anyway.
     // The meaning of tokenCount is "try and get at least this many tokens"
     const charLimit = tokenCount * 3;
-    const searchResult = await collectContext(
+
+    // TODO: Maintain a persistent index, and sync the file contents with the index.
+    const searchResult = await withAppMapIndex(
       this.directories,
-      this.appmaps,
-      vectorTerms,
-      charLimit
+      async (appmapIndex: AppMapIndex) =>
+        await collectContext(appmapIndex, this.directories, this.appmaps, vectorTerms, charLimit)
     );
 
     this.status.searchResponse = searchResult.searchResponse;
