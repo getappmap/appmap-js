@@ -33,6 +33,59 @@ export function isCamelized(str: string): boolean {
   return /[a-z][A-Z]/.test(testStr);
 }
 
+// MIT License via https://github.com/sindresorhus/decamelize/blob/main/index.js
+export function decamelize(
+  text: string,
+  { separator = '_', preserveConsecutiveUppercase = false } = {}
+): string {
+  const handlePreserveConsecutiveUppercase = (decamelized: string, separator: string) => {
+    // Lowercase all single uppercase characters. As we
+    // want to preserve uppercase sequences, we cannot
+    // simply lowercase the separated string at the end.
+    // `data_For_USACounties` → `data_for_USACounties`
+    decamelized = decamelized.replace(
+      /((?<![\p{Uppercase_Letter}\d])[\p{Uppercase_Letter}\d](?![\p{Uppercase_Letter}\d]))/gu,
+      (item) => item.toLowerCase()
+    );
+
+    // Remaining uppercase sequences will be separated from lowercase sequences.
+    // `data_For_USACounties` → `data_for_USA_counties`
+    return decamelized.replace(
+      /(\p{Uppercase_Letter}+)(\p{Uppercase_Letter}\p{Lowercase_Letter}+)/gu,
+      (_, $1, $2) => $1 + separator + $2.toLowerCase()
+    );
+  };
+
+  if (!(typeof text === 'string' && typeof separator === 'string')) {
+    throw new TypeError('The `text` and `separator` arguments should be of type `string`');
+  }
+
+  // Checking the second character is done later on. Therefore process shorter strings here.
+  if (text.length < 2) {
+    return preserveConsecutiveUppercase ? text : text.toLowerCase();
+  }
+
+  const replacement = `$1${separator}$2`;
+
+  // Split lowercase sequences followed by uppercase character.
+  // `dataForUSACounties` → `data_For_USACounties`
+  // `myURLstring → `my_URLstring`
+  const decamelized = text.replace(
+    /([\p{Lowercase_Letter}\d])(\p{Uppercase_Letter})/gu,
+    replacement
+  );
+
+  if (preserveConsecutiveUppercase) {
+    return handlePreserveConsecutiveUppercase(decamelized, separator);
+  }
+
+  // Split multiple uppercase characters followed by one or more lowercase characters.
+  // `my_URLstring` → `my_ur_lstring`
+  return decamelized
+    .replace(/(\p{Uppercase_Letter})(\p{Uppercase_Letter}\p{Lowercase_Letter}+)/gu, replacement)
+    .toLowerCase();
+}
+
 async function statFile(filePath: PathLike): Promise<Stats | null> {
   try {
     return await fsp.stat(filePath);

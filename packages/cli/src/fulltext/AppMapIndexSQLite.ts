@@ -3,9 +3,8 @@ import { Metadata } from '@appland/models';
 import { mkdtemp, readFile, rm } from 'fs/promises';
 import sqlite3 from 'better-sqlite3';
 import { log, warn } from 'console';
-import decamelize from 'decamelize';
 
-import { exists, processNamedFiles, verbose } from '../utils';
+import { decamelize, exists, processNamedFiles, verbose } from '../utils';
 import UpToDate from '../lib/UpToDate';
 import loadAppMapConfig from '../lib/loadAppMapConfig';
 import { packRef, refToAppMapDir, unpackRef } from './ref';
@@ -98,7 +97,7 @@ async function buildDocument(directory: string, metadataFile: string): Promise<I
   return {
     id,
     name: metadata.name,
-    source_location: metadata.source_location, 
+    source_location: metadata.source_location,
     code_objects: codeObjects.join(' '),
     queries: queries.join(' '),
     routes: routes.join(' '),
