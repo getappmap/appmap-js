@@ -254,7 +254,7 @@ export default class AppMapIndex {
   constructor(public directories: string[], private database: sqlite3.Database) {}
 
   async search(keywords: string[], options: SearchOptions = {}): Promise<SearchResponse> {
-    const query = `SELECT ref, bm25(appmaps, 1.0, 0.5) score FROM appmaps WHERE appmaps MATCH ? ORDER BY bm25(appmaps, 1.0, 0.5)`;
+    const query = `SELECT ref, (rank * -1) score FROM appmaps WHERE appmaps MATCH ? ORDER BY bm25(appmaps, 1.0, 0.5)`;
 
     const searchExpr = queryKeywords(keywords).join(' OR ');
     const rows = this.database.prepare(query).all(searchExpr);
@@ -285,6 +285,9 @@ export function restoreAppMapIndex(indexFile: string, directories: string[]): Ap
   return new AppMapIndex(directories, database);
 }
 
+// This function is used for a "one-shot" search in which the index us built, used, and discarded.
+// Replace this with a persistent index file that can be used across multiple searches, and is
+// synced with the file system as needed.
 export async function withAppMapIndex<T>(
   directories: string[],
   callback: (index: AppMapIndex) => T | Promise<T>
@@ -292,7 +295,7 @@ export async function withAppMapIndex<T>(
   const tmpDir = await mkdtemp(join(tmpdir(), 'appmap-search-' + new Date().getTime()));
   const indexFile = join(tmpDir, 'appmap.index.sqlite');
   try {
-    const index = restoreAppMapIndex(indexFile, directories);
+    const index = await buildAppMapIndex(indexFile, directories);
     return await callback(index);
   } finally {
     await rm(tmpDir, { recursive: true });

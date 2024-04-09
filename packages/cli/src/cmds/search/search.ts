@@ -11,8 +11,10 @@ import searchSingleAppMap, { SearchOptions as SingleSearchOptions } from './sear
 import AppMapIndex, {
   SearchResponse as DiagramsSearchResponse,
   SearchOptions,
+  SearchResponse,
   buildAppMapIndex,
   restoreAppMapIndex,
+  withAppMapIndex,
 } from '../../fulltext/AppMapIndexSQLite';
 import {
   SearchResult as EventSearchResult,
@@ -83,38 +85,13 @@ export const builder = (args: yargs.Argv) => {
     alias: 'f',
   });
 
-  args.option('appmap-index-file', {
-    describe: 'path to the AppMap index file',
-    type: 'string',
-    alias: 'i',
-    default: 'appmap-index.sqlite',
-  });
-
-  args.option('clobber', {
-    describe: 'overwrite existing files if they already exist',
-    type: 'boolean',
-    alias: 'c',
-    default: false,
-  });
-
   return args.strict();
 };
 
 export const handler = async (argv: any) => {
   verbose(argv.verbose);
 
-  const {
-    directory,
-    query,
-    appmap,
-    contextDepth,
-    show,
-    maxResults,
-    findEvents,
-    format,
-    appmapIndexFile,
-    clobber,
-  } = argv;
+  const { directory, query, appmap, contextDepth, show, maxResults, findEvents, format } = argv;
 
   handleWorkingDirectory(directory);
 
@@ -197,14 +174,13 @@ export const handler = async (argv: any) => {
       maxResults,
     };
 
-    const appmapIndex = (await findOrCreateResourceFromFile(
-      appmapIndexFile,
-      clobber,
-      restoreAppMapIndex.bind(null, appmapIndexFile, [process.cwd()]),
-      buildAppMapIndex.bind(null, appmapIndexFile, [process.cwd()])
-    )) as AppMapIndex;
-
-    const response = await appmapIndex.search(query, options);
+    // Preserve the existing semantics of the search function by building the index from scratch
+    // on each invocation.
+    // TODO: Maintain a persistent index, and sync the file contents with the index.
+    const response = await withAppMapIndex(
+      [process.cwd()],
+      async (appmapIndex) => await appmapIndex.search(query, options)
+    );
     if (findEvents) {
       const eventOptions: SingleSearchOptions = { maxResults };
       const { maxSize, filter: filterStr } = argv;

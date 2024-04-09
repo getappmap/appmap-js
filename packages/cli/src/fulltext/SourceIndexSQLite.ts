@@ -88,6 +88,7 @@ const TEXT_SPLITTER_LANGUAGE_EXTENSIONS: Record<SupportedTextSplitterLanguage, s
 export type SourceIndexDocument = {
   ref: string;
   text: string;
+  score: number;
 };
 
 function packRef(fileName: string, from: number, to: number) {
@@ -104,14 +105,14 @@ export class SourceIndexSQLite {
   constructor(public database: sqlite3.Database) {}
 
   async search(keywords: string[]): Promise<SourceIndexDocument[]> {
-    const query = `SELECT ref, text, terms FROM code_snippets WHERE code_snippets MATCH ? ORDER BY bm25(code_snippets, 1.0, 0.5)`;
+    const query = `SELECT ref, terms, text, (rank * -1) score FROM code_snippets WHERE code_snippets MATCH ? ORDER BY bm25(code_snippets, 1.0, 0.5)`;
 
     const searchExpr = queryKeywords(keywords).join(' OR ');
     const rows = this.database.prepare(query).all(searchExpr);
     rows.forEach((row: any) => {
       if (verbose()) console.log(`Found row ${row.ref} with terms ${row.terms}`);
     });
-    return rows.map((row: any) => ({ ref: row.ref, text: row.text }));
+    return rows.map((row: any) => ({ ref: row.ref, text: row.text, score: row.score }));
   }
 
   async buildIndex() {

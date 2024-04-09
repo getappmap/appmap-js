@@ -10,7 +10,13 @@
           "eventIds": [58],
           "fqid": "function:app/controllers/OrganizationsController#new",
           "location": "app/controllers/organizations_controller.rb:11",
-          "score": 6.74
+          "score": 5.022
+        },
+        {
+          "elapsed": 0.082122,
+          "eventIds": [33],
+          "fqid": "route:GET /organizations/new",
+          "score": 0.899
         }
       ],
       "score": 1

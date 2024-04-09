@@ -89,6 +89,8 @@ export class Explain extends EventEmitter {
     // pruned by the client AI anyway.
     // The meaning of tokenCount is "try and get at least this many tokens"
     const charLimit = tokenCount * 3;
+
+    // TODO: Maintain a persistent index, and sync the file contents with the index.
     const searchResult = await withAppMapIndex(
       this.directories,
       async (appmapIndex: AppMapIndex) =>
