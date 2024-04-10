@@ -8,6 +8,7 @@ import { Context, Explain, Help, Message, ProjectInfo, explain } from '@appland/
 
 import INavie from './inavie';
 import { AgentMode } from '@appland/navie/dist/agent';
+import Telemetry from '../../../telemetry';
 
 class LocalHistory {
   constructor(public readonly threadId: string) {}
@@ -99,6 +100,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
   }
 
   async ask(question: string, codeSelection: string | undefined): Promise<void> {
+    this.#reportConfigTelemetry();
     const messageId = randomUUID();
     log(`[local-navie] Processing question ${messageId} in thread ${this.threadId}`);
     this.emit('ack', messageId, this.threadId);
@@ -127,5 +129,19 @@ export default class LocalNavie extends EventEmitter implements INavie {
     }
     this.history.saveMessage({ content: response.join(''), role: 'assistant' });
     this.emit('complete');
+  }
+
+  #skipTelemetry: boolean = !Telemetry.enabled;
+
+  #reportConfigTelemetry() {
+    if (this.#skipTelemetry) return;
+    Telemetry.sendEvent({
+      name: 'navie-local',
+      properties: {
+        modelName: this.explainOptions.modelName,
+        azureVersion: process.env.AZURE_OPENAI_API_VERSION,
+      },
+    });
+    this.#skipTelemetry = true;
   }
 }
