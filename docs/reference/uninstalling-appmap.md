@@ -61,6 +61,7 @@ $ bundle remove appmap
 ```
 
 Or you can remove the appmap gem globally if installed at the system level. 
+
 {: .example-code}
 
 ```console
