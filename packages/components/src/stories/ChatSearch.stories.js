@@ -283,6 +283,11 @@ function buildMockRpc(searchResponse, explanation, appmapStats = AppmapStats) {
       if (method === 'appmap.metadata') {
         callback(null, null, data.metadata);
       }
+    } else if (method === 'v2.configuration.get') {
+      callback(null, null, {
+        baseUrl: 'http://localhost:3000',
+        model: 'Mixtral-8x7B-Instruct-v0.1',
+      });
     }
   };
 }

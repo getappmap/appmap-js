@@ -417,6 +417,10 @@ $border-color: darken($gray4, 10%);
 
   .explainer {
     color: #e3e5e8;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
   .button-panel {

@@ -1,4 +1,4 @@
-import { AppMapRpc } from '@appland/rpc';
+import { AppMapRpc, ConfigurationRpc } from '@appland/rpc';
 import { browserClient, reportError } from './RPC';
 
 import { EventEmitter } from 'events';
@@ -153,6 +153,20 @@ export default class AppMapRPC {
           if (err || error) return reportError(reject, err, error);
 
           resolve(result as string);
+        }
+      );
+    });
+  }
+
+  configuration(): Promise<ConfigurationRpc.V2.Get.Response> {
+    return new Promise((resolve, reject) => {
+      this.client.request(
+        ConfigurationRpc.V2.Get.Method,
+        undefined,
+        (err: any, error: any, result: any) => {
+          if (err || error) return reportError(reject, err, error);
+
+          resolve(result);
         }
       );
     });

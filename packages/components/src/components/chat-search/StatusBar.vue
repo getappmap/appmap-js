@@ -63,9 +63,7 @@ $fg: #ececec;
   padding: 0.75rem;
   transition: background-color 0.2s;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
   border-radius: $border-radius;
-  margin: 0.5rem;
 
   &__header {
     display: flex;
