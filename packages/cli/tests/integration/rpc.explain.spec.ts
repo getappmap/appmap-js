@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { ExplainRpc } from '@appland/rpc';
-import { Help, explain } from '@appland/navie';
+import { Help, explain, Explain } from '@appland/navie';
 import { AI } from '@appland/client';
 import { AIClient, AICallbacks, AIInputPromptOptions, AIUserInput } from '@appland/client';
 import { ContextProvider, InteractionHistory, ProjectInfo } from '@appland/navie';
@@ -11,6 +11,8 @@ import { SearchContextOptions } from '../../src/rpc/explain/explain';
 import RemoteNavie from '../../src/rpc/explain/navie/navie-remote';
 import LocalNavie from '../../src/rpc/explain/navie/navie-local';
 import { INavieProvider } from '../../src/rpc/explain/navie/inavie';
+
+import Telemetry from '../../src/telemetry';
 
 jest.mock('@appland/navie');
 
@@ -56,6 +58,7 @@ describe('RPC', () => {
       afterAll(async () => await rpcTest.teardownAll());
 
       it('answers the question', async () => {
+        jest.spyOn(Telemetry, 'enabled', 'get').mockReturnValue(true);
         const explainImpl = {
           on(_event: 'event', _listener: (event: InteractionHistory.InteractionEvent) => void) {},
           execute(): AsyncIterable<string> {
@@ -89,6 +92,10 @@ describe('RPC', () => {
         await waitFor(async () => (await queryStatus()).step === ExplainRpc.Step.COMPLETE);
         const statusResult = await queryStatus();
         expect(statusResult.explanation).toEqual([answer]);
+        expect(Telemetry.sendEvent).toBeCalledWith({
+          name: 'navie-local',
+          properties: { modelName: 'test-model' },
+        });
       });
     });
 
@@ -337,4 +344,14 @@ describe('RPC', () => {
       });
     });
   });
+});
+
+jest.mock('../../src/telemetry');
+Object.defineProperty(Telemetry, 'enabled', { get: jest.fn(), configurable: true });
+jest.mocked(Explain.ExplainOptions).mockReturnValue({
+  modelName: 'test-model',
+  responseTokens: 42,
+  temperature: 0.69,
+  tokenLimit: 31337,
+  agentMode: undefined,
 });
