@@ -17,6 +17,12 @@
         :input-placeholder="inputPlaceholder"
       >
         <v-context-status v-if="showStatus" :appmap-stats="appmapStats" />
+        <v-llm-configuration
+          data-cy="llm-config"
+          v-if="configLoaded && !isChatting"
+          :base-url="baseUrl"
+          :model="model"
+        />
       </v-chat>
     </div>
     <div
@@ -39,6 +45,7 @@
 import VChat from '@/components/chat/Chat.vue';
 import VContextStatus from '@/components/chat-search/ContextStatus.vue';
 import VContext from '@/components/chat-search/Context.vue';
+import VLlmConfiguration from '@/components/chat-search/LlmConfiguration.vue';
 import AppMapRPC from '@/lib/AppMapRPC';
 import authenticatedClient from '@/components/mixins/authenticatedClient';
 import type { ITool, CodeSelection } from '@/components/chat/Chat.vue';
@@ -51,6 +58,7 @@ export default {
     VChat,
     VContext,
     VContextStatus,
+    VLlmConfiguration,
   },
   mixins: [authenticatedClient],
   props: {
@@ -118,6 +126,9 @@ export default {
         }
       ),
       targetAppmap: this.targetAppmapData,
+      configLoaded: false,
+      baseUrl: undefined,
+      model: undefined,
     };
   },
   watch: {
@@ -390,6 +401,12 @@ export default {
     setIsChatting(isChatting: boolean) {
       this.isChatting = isChatting;
     },
+    async loadNavieConfig() {
+      const { baseUrl, model } = await this.rpcClient().configuration();
+      this.baseUrl = baseUrl;
+      this.model = model;
+      this.configLoaded = true;
+    },
   },
   async mounted() {
     if (this.$refs.vappmap && this.targetAppmap && this.targetAppmapFsPath) {
@@ -397,6 +414,7 @@ export default {
       await this.$refs.vappmap.loadData(this.targetAppmap);
     }
     this.loadAppMapStats();
+    this.loadNavieConfig();
   },
 };
 </script>

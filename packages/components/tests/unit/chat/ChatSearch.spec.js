@@ -1,6 +1,7 @@
 import VChatSearch from '@/pages/ChatSearch.vue';
 import { mount, createWrapper } from '@vue/test-utils';
 import navieContext from '../../../src/stories/data/navie_context.json';
+import { config } from 'yargs';
 
 describe('pages/ChatSearch.vue', () => {
   const chatSearchWrapper = (messagesCalled) => {
@@ -57,9 +58,12 @@ describe('pages/ChatSearch.vue', () => {
     ],
   ];
 
+  const noConfig = () => [[null, null, {}]];
+
   it('can be resized', async () => {
     const wrapper = chatSearchWrapper({
       'v2.appmap.stats': appmapStatsHasAppMaps(),
+      'v2.configuration.get': noConfig(),
     });
 
     const lhsPanel = wrapper.find('[data-cy="resize-left"]');
@@ -84,6 +88,7 @@ describe('pages/ChatSearch.vue', () => {
     it('shows a warning that no AppMaps are available', async () => {
       const wrapper = chatSearchWrapper({
         'v2.appmap.stats': appmapStatsNoAppMaps(),
+        'v2.configuration.get': noConfig(),
       });
       await wrapper.vm.$nextTick();
       wrapper.find('[data-cy="status-bar-header"]').trigger('click');
@@ -93,6 +98,7 @@ describe('pages/ChatSearch.vue', () => {
     it('emits an event when the user clicks the "Create some" button', async () => {
       const wrapper = chatSearchWrapper({
         'v2.appmap.stats': appmapStatsNoAppMaps(),
+        'v2.configuration.get': noConfig(),
       });
       await wrapper.vm.$nextTick();
 
@@ -107,6 +113,7 @@ describe('pages/ChatSearch.vue', () => {
     it("shows Navie's context", async () => {
       const wrapper = chatSearchWrapper({
         'v2.appmap.stats': appmapStatsNoAppMaps(),
+        'v2.configuration.get': noConfig(),
       });
       await wrapper.vm.$nextTick();
 
@@ -119,6 +126,7 @@ describe('pages/ChatSearch.vue', () => {
     it('shows instructions', async () => {
       const wrapper = chatSearchWrapper({
         'v2.appmap.stats': appmapStatsHasAppMaps(),
+        'v2.configuration.get': noConfig(),
       });
       await wrapper.vm.$nextTick();
       expect(wrapper.find('.instructions [data-cy="no-appmaps"]').exists()).toBe(false);
@@ -127,6 +135,7 @@ describe('pages/ChatSearch.vue', () => {
     it("shows Navie's context", async () => {
       const wrapper = chatSearchWrapper({
         'v2.appmap.stats': appmapStatsHasAppMaps(),
+        'v2.configuration.get': noConfig(),
       });
       await wrapper.vm.$nextTick();
 
@@ -147,6 +156,7 @@ describe('pages/ChatSearch.vue', () => {
         };
         const messagesCalled = {
           'v2.appmap.stats': appmapStatsHasAppMaps(),
+          'v2.configuration.get': noConfig(),
           explain: [[null, null, { userMessageId, threadId }]],
           'explain.status': [
             [null, null, { step: 'build-vector-terms' }],
@@ -226,6 +236,7 @@ describe('pages/ChatSearch.vue', () => {
 
         const messagesCalled = {
           'v2.appmap.stats': appmapStatsHasAppMaps(),
+          'v2.configuration.get': noConfig(),
           explain: [[null, null, { userMessageId, threadId }]],
           'explain.status': [
             [null, null, { step: 'build-vector-terms' }],
@@ -299,6 +310,7 @@ describe('pages/ChatSearch.vue', () => {
       const wrapper = chatSearchWrapper({
         'appmap.metadata': [[null, null, {}]],
         'v2.appmap.stats': appmapStatsHasAppMaps(),
+        'v2.configuration.get': noConfig(),
         explain: [[null, null, { userMessageId, threadId }]],
         'explain.status': [
           [null, null, { step: 'complete', searchResponse: { results: [{ events: [] }] } }],
@@ -338,9 +350,10 @@ describe('pages/ChatSearch.vue', () => {
       const wrapper = mount(VChatSearch, {
         propsData: {
           appmapRpcFn: (method, __, callback) => {
-            expect(method).toBe('v2.appmap.stats');
-            const [args] = appmapStatsHasAppMaps();
-            setTimeout(() => callback(...args), delay);
+            if (method === 'v2.appmap.stats') {
+              const [args] = appmapStatsHasAppMaps();
+              setTimeout(() => callback(...args), delay);
+            }
           },
         },
       });
@@ -360,6 +373,7 @@ describe('pages/ChatSearch.vue', () => {
       const [second] = appmapStatsHasAppMaps();
       const wrapper = chatSearchWrapper({
         'v2.appmap.stats': [first, second],
+        'v2.configuration.get': noConfig(),
         propsData: {
           appmapYmlPresent: true,
         },
@@ -392,10 +406,102 @@ describe('pages/ChatSearch.vue', () => {
     });
   });
 
+  describe('llm configuration', () => {
+    it('does not render until the configuration is available', async () => {
+      const wrapper = chatSearchWrapper({
+        'v2.appmap.stats': appmapStatsHasAppMaps(),
+        'v2.configuration.get': noConfig(),
+      });
+
+      expect(wrapper.find('[data-cy="llm-config"]').exists()).toBe(false);
+
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('[data-cy="llm-config"]').exists()).toBe(true);
+    });
+
+    it('renders a local configuration', async () => {
+      const wrapper = chatSearchWrapper({
+        'v2.appmap.stats': appmapStatsHasAppMaps(),
+        'v2.configuration.get': [
+          [null, null, { baseUrl: 'http://localhost:11434', model: 'mistral' }],
+        ],
+      });
+
+      await wrapper.vm.$nextTick();
+
+      const llmConfig = wrapper.find('[data-cy="llm-config"]');
+      expect(llmConfig.exists()).toBe(true);
+      expect(llmConfig.find('[data-cy="llm-model"]').text()).toBe('mistral');
+      expect(llmConfig.find('[data-cy="llm-provider"]').text()).toBe('(via localhost)');
+    });
+
+    it('renders the default configuration', async () => {
+      const wrapper = chatSearchWrapper({
+        'v2.appmap.stats': appmapStatsHasAppMaps(),
+        'v2.configuration.get': [[null, null, {}]],
+      });
+
+      await wrapper.vm.$nextTick();
+
+      const llmConfig = wrapper.find('[data-cy="llm-config"]');
+      expect(llmConfig.exists()).toBe(true);
+      expect(llmConfig.find('[data-cy="llm-model"]').text()).toBe('GPT-4 Turbo');
+      expect(llmConfig.find('[data-cy="llm-provider"]').text()).toBe('(default)');
+    });
+
+    it('renders an azure configuration', async () => {
+      const wrapper = chatSearchWrapper({
+        'v2.appmap.stats': appmapStatsHasAppMaps(),
+        'v2.configuration.get': [
+          [
+            null,
+            null,
+            {
+              baseUrl: 'https://my-instance.openai.azure.com',
+              model: 'my-deployment',
+            },
+          ],
+        ],
+      });
+
+      await wrapper.vm.$nextTick();
+
+      const llmConfig = wrapper.find('[data-cy="llm-config"]');
+      expect(llmConfig.exists()).toBe(true);
+      expect(llmConfig.find('[data-cy="llm-model"]').text()).toBe('my-deployment');
+      expect(llmConfig.find('[data-cy="llm-provider"]').text()).toBe('(via Azure OpenAI)');
+    });
+
+    it('renders an OpenAI configuration', async () => {
+      const wrapper = chatSearchWrapper({
+        'v2.appmap.stats': appmapStatsHasAppMaps(),
+        'v2.configuration.get': [
+          [
+            null,
+            null,
+            {
+              baseUrl: 'https://api.openai.com',
+              model: 'gpt-4-turbo',
+            },
+          ],
+        ],
+      });
+
+      await wrapper.vm.$nextTick();
+
+      const llmConfig = wrapper.find('[data-cy="llm-config"]');
+      expect(llmConfig.exists()).toBe(true);
+      expect(llmConfig.find('[data-cy="llm-model"]').text()).toBe('gpt-4-turbo');
+      expect(llmConfig.find('[data-cy="llm-provider"]').text()).toBe('(via OpenAI)');
+    });
+  });
+
   describe('error handling', () => {
     async function simulateError(err, error) {
       const wrapper = chatSearchWrapper({
         'v2.appmap.stats': appmapStatsHasAppMaps(),
+        'v2.configuration.get': noConfig(),
         explain: [[err, error]],
       });
 
