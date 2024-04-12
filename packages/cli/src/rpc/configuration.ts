@@ -1,7 +1,8 @@
 import { ConfigurationRpc } from '@appland/rpc';
 import { RpcHandler } from './rpc';
-import { dirname, join } from 'path';
+import { dirname } from 'path';
 import loadAppMapConfig, { AppMapConfig } from '../lib/loadAppMapConfig';
+import { getLLMConfiguration } from './llmConfiguration';
 
 export type AppMapDirectory = {
   directory: string;
@@ -57,7 +58,7 @@ export function getConfigurationV1(): RpcHandler<
 > {
   return {
     name: ConfigurationRpc.V1.Get.Method,
-    handler: async () => {
+    handler: () => {
       return {
         appmapConfigFiles: config.appmapConfigFilePaths,
       };
@@ -84,11 +85,10 @@ export function getConfigurationV2(): RpcHandler<
 > {
   return {
     name: ConfigurationRpc.V2.Get.Method,
-    handler: async () => {
-      return {
-        appmapConfigFiles: config.appmapConfigFilePaths,
-        projectDirectories: config.projectDirectories,
-      };
-    },
+    handler: () => ({
+      appmapConfigFiles: config.appmapConfigFilePaths,
+      projectDirectories: config.projectDirectories,
+      ...getLLMConfiguration(),
+    }),
   };
 }
