@@ -15,6 +15,7 @@
         :question="question"
         @isChatting="setIsChatting"
         :input-placeholder="inputPlaceholder"
+        :suggestions="promptSuggestions"
       >
         <v-context-status v-if="showStatus" :appmap-stats="appmapStats" />
       </v-chat>
@@ -153,7 +154,6 @@ import VButton from '@/components/Button.vue';
 import AppMapRPC from '@/lib/AppMapRPC';
 import authenticatedClient from '@/components/mixins/authenticatedClient';
 import type { ITool, CodeSelection } from '@/components/chat/Chat.vue';
-
 import debounce from '@/lib/debounce';
 
 export default {
@@ -239,6 +239,7 @@ export default {
         }
       ),
       targetAppmap: this.targetAppmapData,
+      promptSuggestions: undefined,
     };
   },
   watch: {
@@ -477,6 +478,18 @@ export default {
     setIsChatting(isChatting: boolean) {
       this.isChatting = isChatting;
     },
+    async loadPromptSuggestions(): Promise<void> {
+      try {
+        const suggestions = await this.rpcClient().promptSuggestions();
+        this.promptSuggestions = suggestions.map(({ name, description, prompt }) => ({
+          title: name,
+          subTitle: description,
+          prompt,
+        }));
+      } catch (e) {
+        console.error('Error loading prompt suggestions', e);
+      }
+    },
   },
   async mounted() {
     if (this.$refs.vappmap && this.targetAppmap && this.targetAppmapFsPath) {
@@ -484,6 +497,7 @@ export default {
       await this.$refs.vappmap.loadData(this.targetAppmap);
     }
     this.loadAppMapStats();
+    this.loadPromptSuggestions();
   },
 };
 </script>

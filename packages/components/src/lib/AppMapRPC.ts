@@ -1,4 +1,4 @@
-import { AppMapRpc } from '@appland/rpc';
+import { AppMapRpc, PromptRpc } from '@appland/rpc';
 import { browserClient, reportError } from './RPC';
 
 import { EventEmitter } from 'events';
@@ -153,6 +153,20 @@ export default class AppMapRPC {
           if (err || error) return reportError(reject, err, error);
 
           resolve(result as string);
+        }
+      );
+    });
+  }
+
+  promptSuggestions(): Promise<PromptRpc.V1.Suggestions.Response> {
+    return new Promise((resolve, reject) => {
+      this.client.request(
+        PromptRpc.V1.Suggestions.Method,
+        {},
+        function (err: any, error: any, result: PromptRpc.V1.Suggestions.Response) {
+          if (err || error) return reportError(reject, err, error);
+
+          resolve(result);
         }
       );
     });

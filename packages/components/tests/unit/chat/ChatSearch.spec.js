@@ -57,9 +57,29 @@ describe('pages/ChatSearch.vue', () => {
     ],
   ];
 
+  const noAppMapPromptSuggestions = () => [
+    [
+      null,
+      null,
+      [
+        {
+          name: 'What is an AppMap recording?',
+          description: 'Learn about the key concepts powering Navie',
+          prompt: '@help What is an AppMap recording?',
+        },
+        {
+          name: 'How do I record my application?',
+          description: 'Learn about how build deeper understanding of your application',
+          prompt: '@help How do I record my application?',
+        },
+      ],
+    ],
+  ];
+
   it('can be resized', async () => {
     const wrapper = chatSearchWrapper({
       'v2.appmap.stats': appmapStatsHasAppMaps(),
+      'v1.prompt.suggestions': noAppMapPromptSuggestions(),
     });
 
     const lhsPanel = wrapper.find('[data-cy="resize-left"]');
@@ -84,8 +104,10 @@ describe('pages/ChatSearch.vue', () => {
     let wrapper;
 
     beforeEach(() => {
+      const [stats] = appmapStatsHasAppMaps();
       wrapper = chatSearchWrapper({
-        'v2.appmap.stats': appmapStatsNoAppMaps(),
+        'v2.appmap.stats': [stats, stats],
+        'v1.prompt.suggestions': noAppMapPromptSuggestions(),
         propsData: {
           targetAppmapData: appmapData,
           targetAppmapFsPath: 'test',
@@ -131,6 +153,7 @@ describe('pages/ChatSearch.vue', () => {
     it('shows a warning that no AppMaps are available', async () => {
       const wrapper = chatSearchWrapper({
         'v2.appmap.stats': appmapStatsNoAppMaps(),
+        'v1.prompt.suggestions': noAppMapPromptSuggestions(),
       });
       await wrapper.vm.$nextTick();
       wrapper.find('[data-cy="status-bar-header"]').trigger('click');
@@ -140,6 +163,7 @@ describe('pages/ChatSearch.vue', () => {
     it('emits an event when the user clicks the "Create some" button', async () => {
       const wrapper = chatSearchWrapper({
         'v2.appmap.stats': appmapStatsNoAppMaps(),
+        'v1.prompt.suggestions': noAppMapPromptSuggestions(),
       });
       await wrapper.vm.$nextTick();
 
@@ -154,6 +178,7 @@ describe('pages/ChatSearch.vue', () => {
     it("shows Navie's context", async () => {
       const wrapper = chatSearchWrapper({
         'v2.appmap.stats': appmapStatsNoAppMaps(),
+        'v1.prompt.suggestions': noAppMapPromptSuggestions(),
       });
       await wrapper.vm.$nextTick();
 
@@ -166,6 +191,7 @@ describe('pages/ChatSearch.vue', () => {
     it('shows instructions', async () => {
       const wrapper = chatSearchWrapper({
         'v2.appmap.stats': appmapStatsHasAppMaps(),
+        'v1.prompt.suggestions': noAppMapPromptSuggestions(),
       });
       await wrapper.vm.$nextTick();
       expect(wrapper.find('.instructions [data-cy="no-appmaps"]').exists()).toBe(false);
@@ -174,6 +200,7 @@ describe('pages/ChatSearch.vue', () => {
     it("shows Navie's context", async () => {
       const wrapper = chatSearchWrapper({
         'v2.appmap.stats': appmapStatsHasAppMaps(),
+        'v1.prompt.suggestions': noAppMapPromptSuggestions(),
       });
       await wrapper.vm.$nextTick();
 
@@ -194,6 +221,7 @@ describe('pages/ChatSearch.vue', () => {
         };
         const messagesCalled = {
           'v2.appmap.stats': appmapStatsHasAppMaps(),
+          'v1.prompt.suggestions': noAppMapPromptSuggestions(),
           explain: [[null, null, { userMessageId, threadId }]],
           'explain.status': [
             [null, null, { step: 'build-vector-terms' }],
@@ -286,6 +314,7 @@ describe('pages/ChatSearch.vue', () => {
 
         const messagesCalled = {
           'v2.appmap.stats': appmapStatsHasAppMaps(),
+          'v1.prompt.suggestions': noAppMapPromptSuggestions(),
           explain: [[null, null, { userMessageId, threadId }]],
           'explain.status': [
             [null, null, { step: 'build-vector-terms' }],
@@ -359,6 +388,7 @@ describe('pages/ChatSearch.vue', () => {
         'appmap.data': [[null, null, '{}']],
         'appmap.metadata': [[null, null, {}]],
         'v2.appmap.stats': appmapStatsHasAppMaps(),
+        'v1.prompt.suggestions': noAppMapPromptSuggestions(),
         explain: [[null, null, { userMessageId, threadId }]],
         'explain.status': [
           [null, null, { step: 'complete', searchResponse: { results: [{ events: [] }] } }],
@@ -398,9 +428,10 @@ describe('pages/ChatSearch.vue', () => {
       const wrapper = mount(VChatSearch, {
         propsData: {
           appmapRpcFn: (method, __, callback) => {
-            expect(method).toBe('v2.appmap.stats');
-            const [args] = appmapStatsHasAppMaps();
-            setTimeout(() => callback(...args), delay);
+            if (method === 'v2.appmap.stats') {
+              const [args] = appmapStatsHasAppMaps();
+              setTimeout(() => callback(...args), delay);
+            }
           },
         },
       });
@@ -420,6 +451,7 @@ describe('pages/ChatSearch.vue', () => {
       const [second] = appmapStatsHasAppMaps();
       const wrapper = chatSearchWrapper({
         'v2.appmap.stats': [first, second],
+        'v1.prompt.suggestions': noAppMapPromptSuggestions(),
         propsData: {
           appmapYmlPresent: true,
         },
@@ -452,10 +484,56 @@ describe('pages/ChatSearch.vue', () => {
     });
   });
 
+  describe('dynamic prompts', () => {
+    afterEach(() => {
+      jest.resetAllMocks();
+    });
+
+    it('does not show prompts until they are available', async () => {
+      // `v1.prompt.suggestions` will throw an error, so we'll mock it
+      // out to prevent the error from being logged to the console.
+      jest.spyOn(console, 'error').mockImplementation(() => {});
+
+      const wrapper = chatSearchWrapper({
+        'v2.appmap.stats': appmapStatsHasAppMaps(),
+        'v1.prompt.suggestions': [[new Error('something happened'), null, undefined]],
+        propsData: {
+          appmapYmlPresent: true,
+        },
+      });
+
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.findAll('[data-cy="prompt-suggestion"]').length).toBe(0);
+    });
+
+    it('renders the expected prompts', async () => {
+      const wrapper = chatSearchWrapper({
+        'v2.appmap.stats': appmapStatsHasAppMaps(),
+        'v1.prompt.suggestions': [
+          [
+            null,
+            null,
+            Array.from({ length: 2 }).map((_, i) => ({
+              name: `Example prompt name #${i + 1}`,
+              description: `Example prompt description #${i + 1}`,
+              prompt: `Example prompt #${i + 1}`,
+            })),
+          ],
+        ],
+      });
+
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.findAll('[data-cy="prompt-suggestion"]').length).toBe(2);
+    });
+  });
+
   describe('error handling', () => {
     async function simulateError(err, error) {
       const wrapper = chatSearchWrapper({
         'v2.appmap.stats': appmapStatsHasAppMaps(),
+        'v1.prompt.suggestions': noAppMapPromptSuggestions(),
         explain: [[err, error]],
       });
 

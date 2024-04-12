@@ -167,13 +167,9 @@ export default {
       type: Array,
       required: false,
     },
-    disableSuggestions: {
-      type: Boolean,
-      default: false,
-    },
     suggestionSpeaker: {
       type: String,
-      default: 'system',
+      default: 'user',
       validator: (v: string) => ['system', 'user'].includes(v),
     },
     inputPlaceholder: {
@@ -195,7 +191,7 @@ export default {
   },
   computed: {
     suggestionsEnabled() {
-      return this.disableSuggestions !== true && !this.isChatting;
+      return this.suggestions && !this.isChatting;
     },
     isChatting(): boolean {
       return this.messages.length > 0;
