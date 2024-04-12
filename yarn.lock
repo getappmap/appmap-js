@@ -251,7 +251,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/client@workspace:packages/client"
   dependencies:
-    "@appland/appmap-agent-js": ^13.9.0
     "@appland/models": "workspace:^2.10.0"
     "@types/form-data": ^2.5.0
     "@types/jest": ^29.4.1
@@ -417,7 +416,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/models@workspace:packages/models"
   dependencies:
-    "@appland/appmap-agent-js": ^13.9.0
     "@appland/sql-parser": ^1.5.0
     "@types/crypto-js": ^4.1.1
     "@typescript-eslint/eslint-plugin": ^5.43.0
@@ -472,7 +470,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/openapi@workspace:packages/openapi"
   dependencies:
-    "@appland/appmap-agent-js": ^13.9.0
     "@appland/models": "workspace:^2.10.0"
     "@types/jest": ^29.4.1
     "@types/js-yaml": ^4.0.5
@@ -606,7 +603,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/telemetry@workspace:packages/telemetry"
   dependencies:
-    "@appland/appmap-agent-js": ^13.9.0
     "@types/jest": ^29.4.1
     "@typescript-eslint/eslint-plugin": ^5.7.0
     "@typescript-eslint/parser": ^5.7.0

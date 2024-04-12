@@ -10,7 +10,7 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "lint": "eslint",
-    "test": "appmap-agent-js"
+    "test": "jest"
   },
   "publishConfig": {
     "access": "public"
@@ -26,7 +26,6 @@
     "socket.io-client": "^4.7.2"
   },
   "devDependencies": {
-    "@appland/appmap-agent-js": "^13.9.0",
     "@types/jest": "^29.4.1",
     "@types/js-yaml": "^4.0.5",
     "@types/nock": "^11.1.0",

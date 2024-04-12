@@ -9,13 +9,12 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "appmap-agent-js",
+    "test": "jest",
     "build": "tsc -p tsconfig.build.json",
     "watch": "tsc -p tsconfig.build.json --watch",
     "lint": "eslint src"
   },
   "devDependencies": {
-    "@appland/appmap-agent-js": "^13.9.0",
     "@types/jest": "^29.4.1",
     "@types/js-yaml": "^4.0.5",
     "@typescript-eslint/eslint-plugin": "^5.7.0",

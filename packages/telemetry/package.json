@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "test": "appmap-agent-js",
+    "test": "jest",
     "lint": "eslint telemetry.ts",
     "pre-commit": "lint-staged"
   },
@@ -17,7 +17,6 @@
     "read-pkg-up": "^7.0.1"
   },
   "devDependencies": {
-    "@appland/appmap-agent-js": "^13.9.0",
     "@types/jest": "^29.4.1",
     "@typescript-eslint/eslint-plugin": "^5.7.0",
     "@typescript-eslint/parser": "^5.7.0",
