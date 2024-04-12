@@ -1,9 +1,6 @@
-import { ContextProvider, ContextRequest } from '../src/context';
-import { HelpProvider } from '../src/help';
-import InteractionHistory from '../src/interaction-history';
+import { ContextV2 } from '../src/context';
 import Message from '../src/message';
 import { ProjectInfoProvider } from '../src/project-info';
-import LookupContextService from '../src/services/lookup-context-service';
 import VectorTermsService from '../src/services/vector-terms-service';
 
 export const SEQUENCE_DIAGRAMS = [`diagram-1`, `diagram-2`];
@@ -13,16 +10,26 @@ export const CODE_SNIPPETS = {
   'app/post.rb': `class Post < ApplicationRecord; end`,
 };
 
-export const CODE_OBJECTS = [
+export const DATA_REQUESTS = [
   `SELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1`,
   `SELECT "posts".* FROM "posts" WHERE "posts"."user_id" = $1`,
 ];
 
-export const SEARCH_CONTEXT = {
-  sequenceDiagrams: SEQUENCE_DIAGRAMS,
-  codeSnippets: CODE_SNIPPETS,
-  codeObjects: CODE_OBJECTS,
-};
+export const SEARCH_CONTEXT: ContextV2.ContextResponse = [
+  ...SEQUENCE_DIAGRAMS.map((content) => ({
+    type: ContextV2.ContextItemType.SequenceDiagram,
+    content,
+  })),
+  ...Object.entries(CODE_SNIPPETS).map(([location, content]) => ({
+    type: ContextV2.ContextItemType.CodeSnippet,
+    location,
+    content,
+  })),
+  ...DATA_REQUESTS.map((content) => ({
+    type: ContextV2.ContextItemType.DataRequest,
+    content,
+  })),
+];
 
 export const HELP_CONTEXT = [
   {

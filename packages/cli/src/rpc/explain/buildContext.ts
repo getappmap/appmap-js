@@ -5,6 +5,7 @@ import assert from 'assert';
 import { handler as sequenceDiagramHandler } from '../appmap/sequenceDiagram';
 import lookupSourceCode from './lookupSourceCode';
 import { warn } from 'console';
+import { ContextV2 } from '@appland/navie';
 
 /**
  * Processes search results to build sequence diagrams, code snippets, and code object sets. This is the format
@@ -22,14 +23,22 @@ import { warn } from 'console';
  *   These code objects are most commonly SQL queries and HTTP requests (client and server), since code snipptes are stored separately.
  *   The term "data requests" is being phased in to replace "codeObjects".
  */
-export default async function buildContext(searchResults: SearchRpc.SearchResult[]): Promise<{
-  sequenceDiagrams: string[];
-  codeSnippets: Map<string, string>;
-  codeObjects: Set<string>;
-}> {
-  const sequenceDiagrams = new Array<string>();
-  const codeSnippets = new Map<string, string>();
-  const codeObjects = new Set<string>();
+export default async function buildContext(
+  searchResults: SearchRpc.SearchResult[]
+): Promise<ContextV2.ContextResponse> {
+  const sequenceDiagrams = new Array<ContextV2.ContextItem>();
+  const codeSnippets = new Array<ContextV2.ContextItem>();
+  const dataRequests = new Array<ContextV2.ContextItem>();
+
+  const codeSnippetLocations = new Set<string>();
+  const dataRequestContent = new Set<string>();
+
+  const appmapLocation = (appmap: string, event?: SearchRpc.EventMatch) => {
+    const appmapFile = [appmap, 'appmap.json'].join('.');
+    const tokens = [appmapFile];
+    if (event && event.eventIds.length) tokens.push(String(event.eventIds[0]));
+    return tokens.join(':');
+  };
 
   const buildSequenceDiagram = async (result: SearchRpc.SearchResult) => {
     const codeObjects = result.events.map((event) => event.fqid);
@@ -44,7 +53,12 @@ export default async function buildContext(searchResults: SearchRpc.SearchResult
       formatOptions: { disableMarkup: true },
     });
     assert(typeof plantUML === 'string');
-    sequenceDiagrams.push(plantUML);
+    sequenceDiagrams.push({
+      location: appmapLocation(result.appmap),
+      type: ContextV2.ContextItemType.SequenceDiagram,
+      content: plantUML,
+      score: result.score,
+    });
   };
 
   const examinedLocations = new Set<string>();
@@ -52,26 +66,42 @@ export default async function buildContext(searchResults: SearchRpc.SearchResult
     try {
       await buildSequenceDiagram(result);
     } catch (e) {
-      warn(`Failed to build sequence diagram for ${result.appmap}`)
+      warn(`Failed to build sequence diagram for ${result.appmap}`);
       warn(e);
     }
     for (const event of result.events) {
       if (!event.location) {
-        codeObjects.add(event.fqid);
+        if (!dataRequestContent.has(event.fqid)) {
+          dataRequestContent.add(event.fqid);
+          dataRequests.push({
+            location: appmapLocation(result.appmap, event),
+            type: ContextV2.ContextItemType.DataRequest,
+            content: event.fqid,
+            score: event.score,
+          });
+        }
         continue;
       }
 
       if (examinedLocations.has(event.location)) continue;
+
       examinedLocations.add(event.location);
 
-      if (codeSnippets.has(event.location)) continue;
+      if (codeSnippetLocations.has(event.location)) continue;
+
+      codeSnippetLocations.add(event.location);
 
       const snippets = await lookupSourceCode(result.directory, event.location);
       if (snippets) {
-        codeSnippets.set(event.location, snippets.join('\n'));
+        codeSnippets.push({
+          type: ContextV2.ContextItemType.CodeSnippet,
+          location: event.location,
+          content: snippets.join('\n'),
+          score: event.score,
+        });
       }
     }
   }
 
-  return { sequenceDiagrams, codeSnippets, codeObjects };
+  return [...sequenceDiagrams, ...codeSnippets, ...dataRequests];
 }

@@ -4,7 +4,7 @@ import { mkdir, readFile, readdir, writeFile } from 'fs/promises';
 import { randomUUID } from 'crypto';
 import { join } from 'path';
 import { homedir } from 'os';
-import { Context, Explain, Help, Message, ProjectInfo, explain } from '@appland/navie';
+import { ContextV2, Explain, Help, Message, ProjectInfo, explain } from '@appland/navie';
 
 import INavie from './inavie';
 import { AgentMode } from '@appland/navie/dist/agent';
@@ -73,7 +73,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
 
   constructor(
     public threadId: string | undefined,
-    private readonly contextProvider: Context.ContextProvider,
+    private readonly contextProvider: ContextV2.ContextProvider,
     private readonly projectInfoProvider: ProjectInfo.ProjectInfoProvider,
     private readonly helpProvider: Help.HelpProvider
   ) {

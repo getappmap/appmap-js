@@ -1,11 +1,12 @@
 import { SearchRpc } from '@appland/rpc';
 import { ContextCollector, EventCollector } from '../../../../src/rpc/explain/collectContext';
-import AppMapIndex, { SearchResponse } from '../../../../src/fulltext/AppMapIndex';
+import AppMapIndex from '../../../../src/fulltext/AppMapIndex';
+import * as navie from '@appland/navie';
 
 jest.mock('../../../../src/fulltext/AppMapIndex');
+jest.mock('@appland/navie');
 
 describe('ContextCollector', () => {
-  const appmapDir = 'test/appmaps';
   const vectorTerms = ['login', 'user'];
   const charLimit = 5000;
   let contextCollector: ContextCollector;
@@ -13,17 +14,23 @@ describe('ContextCollector', () => {
   beforeEach(() => {
     contextCollector = new ContextCollector(['a', 'b'], vectorTerms, charLimit);
   });
+  afterEach(() => jest.restoreAllMocks());
 
   describe('collectContext', () => {
     it('returns context for specified appmaps', async () => {
       const mockAppmaps = ['appmap1', 'appmap2'];
       contextCollector.appmaps = mockAppmaps;
 
-      const mockContext = {
-        sequenceDiagrams: ['diagram1', 'diagram2'],
-        codeSnippets: new Map(),
-        codeObjects: new Set(),
-      };
+      const mockContext: navie.ContextV2.ContextResponse = [
+        {
+          type: navie.ContextV2.ContextItemType.SequenceDiagram,
+          content: 'diagram1',
+        },
+        {
+          type: navie.ContextV2.ContextItemType.SequenceDiagram,
+          content: 'diagram2',
+        },
+      ];
 
       AppMapIndex.search = jest.fn().mockRejectedValue(new Error('Unexpected call to search'));
 
@@ -60,17 +67,18 @@ describe('ContextCollector', () => {
             directory: 'b',
             score: 1,
             events: [{ fqid: 'function:3', score: 1, eventIds: [5, 6] }],
-          }
+          },
         ],
       };
 
       AppMapIndex.search = jest.fn().mockResolvedValue(mockSearchResponse);
 
-      const mockContext = {
-        sequenceDiagrams: [],
-        codeSnippets: new Map(),
-        codeObjects: new Set(),
-      };
+      const mockContext: navie.ContextV2.ContextResponse = [
+        {
+          type: navie.ContextV2.ContextItemType.SequenceDiagram,
+          content: 'diagram1',
+        },
+      ];
 
       EventCollector.prototype.collectEvents = jest.fn().mockResolvedValue({
         results: [],
