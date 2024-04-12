@@ -5,7 +5,7 @@ import { readFile } from 'fs/promises';
 import configuration, { AppMapConfigWithDirectory } from '../configuration';
 import { join } from 'path';
 
-type Stats = {
+export type Stats = {
   name: string;
   directory: string;
   packages: string[];

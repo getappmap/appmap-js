@@ -20,6 +20,7 @@ import { configureRpcDirectories } from '../../lib/handleWorkingDirectory';
 import { loadConfiguration } from '@appland/client';
 import { getConfigurationV1, setConfigurationV1 } from '../../rpc/configuration';
 import { Agents } from '@appland/navie';
+import promptSuggestionsV1 from '../../rpc/prompt';
 
 const AI_KEY_ENV_VARS = ['OPENAI_API_KEY', 'AZURE_OPENAI_API_KEY'];
 
@@ -175,6 +176,7 @@ export const handler = async (argv) => {
     explainStatusHandler(),
     setConfigurationV1(),
     getConfigurationV1(),
+    promptSuggestionsV1(),
   ];
   const rpcServer = new RPCServer(port, rpcMethods);
   rpcServer.start();
