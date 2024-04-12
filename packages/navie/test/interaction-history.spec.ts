@@ -1,7 +1,9 @@
+import { ContextV2 } from '../src/context';
 import InteractionHistory, {
   ContextItemEvent,
   ContextLookupEvent,
 } from '../src/interaction-history';
+import { PromptType } from '../src/prompt';
 
 describe('InteractionHistory', () => {
   describe('#buildState', () => {
@@ -19,13 +21,21 @@ describe('InteractionHistory', () => {
       describe('when non-empty', () => {
         it('sets state.contextAvailable', () => {
           const interactionHistory = new InteractionHistory();
-          const context = {
-            sequenceDiagrams: ['diagram-1'],
-            codeSnippets: {
-              'file.py': 'code snippet content',
+          const context: ContextV2.ContextResponse = [
+            {
+              type: ContextV2.ContextItemType.SequenceDiagram,
+              content: 'diagram-1',
             },
-            codeObjects: ['code-object-1'],
-          };
+            {
+              type: ContextV2.ContextItemType.CodeSnippet,
+              location: 'file.py',
+              content: 'code snippet content',
+            },
+            {
+              type: ContextV2.ContextItemType.DataRequest,
+              content: 'data request',
+            },
+          ];
           const lookupContextEvent = new ContextLookupEvent(context);
           interactionHistory.addEvent(lookupContextEvent);
           const state = interactionHistory.buildState();
@@ -40,7 +50,7 @@ describe('InteractionHistory', () => {
         it('adds a message to the state', () => {
           const interactionHistory = new InteractionHistory();
           interactionHistory.addEvent(
-            new ContextItemEvent({ name: 'Sequence diagram', content: 'diagram-1' })
+            new ContextItemEvent(PromptType.SequenceDiagram, 'diagram-1')
           );
           const state = interactionHistory.buildState();
           expect(state.messages).toEqual([
@@ -52,10 +62,7 @@ describe('InteractionHistory', () => {
         it('adds a message to the state', () => {
           const interactionHistory = new InteractionHistory();
           interactionHistory.addEvent(
-            new ContextItemEvent(
-              { name: 'Code snippet', content: 'code snippet content' },
-              'file.py'
-            )
+            new ContextItemEvent(PromptType.CodeSnippet, 'code snippet content', 'file.py')
           );
           const state = interactionHistory.buildState();
           expect(state.messages).toEqual([
@@ -66,9 +73,7 @@ describe('InteractionHistory', () => {
       describe('data request', () => {
         it('adds a message to the state', () => {
           const interactionHistory = new InteractionHistory();
-          interactionHistory.addEvent(
-            new ContextItemEvent({ name: 'Data request', content: 'data request' })
-          );
+          interactionHistory.addEvent(new ContextItemEvent(PromptType.DataRequest, 'data request'));
           const state = interactionHistory.buildState();
           expect(state.messages).toEqual([
             { content: '[Data request] data request', role: 'user' },

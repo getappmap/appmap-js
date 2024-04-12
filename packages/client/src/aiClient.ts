@@ -17,7 +17,7 @@ export type Callbacks = {
   onComplete(): void;
   onRequestContext?: (
     data: Record<string, unknown>
-  ) => Record<string, unknown> | Promise<Record<string, unknown>>;
+  ) => Record<string, unknown> | unknown[] | Promise<Record<string, unknown> | unknown[]>;
   onAck?: (userMessageId: string, threadId: string) => void;
   onError?: (error: Error) => void;
 };

@@ -1,7 +1,7 @@
 import EventEmitter from 'events';
 import InteractionState from './interaction-state';
-import { ContextItem, ContextResponse } from './context';
-import { PromptType } from './prompt';
+import { ContextV2 } from './context';
+import { PROMPTS, PromptType } from './prompt';
 import { CHARACTERS_PER_TOKEN } from './message';
 import { HelpDoc } from './help';
 
@@ -103,7 +103,7 @@ export class CompletionEvent extends InteractionEvent {
 }
 
 export class ContextLookupEvent extends InteractionEvent {
-  constructor(public context: ContextResponse | undefined) {
+  constructor(public context: ContextV2.ContextResponse | undefined) {
     super('contextLookup');
   }
 
@@ -121,11 +121,15 @@ export class ContextLookupEvent extends InteractionEvent {
   get message() {
     if (!this.context) return `[contextLookup] not found`;
 
-    const diagramCount = this.context.sequenceDiagrams.length;
-    const snippetCount = Object.keys(this.context.codeSnippets).length;
-    const dataRequestCount = this.context.codeObjects.length;
+    const countByItemType = this.context.reduce((acc, item) => {
+      acc.set(item.type, (acc.get(item.type) ?? 0) + 1);
+      return acc;
+    }, new Map<ContextV2.ContextItemType, number>());
+    const countByItemTypeStr = Array.from(countByItemType.entries())
+      .map((entry) => `${entry[1]} ${entry[0]}`)
+      .join(', ');
 
-    return `[contextLookup] ${diagramCount} diagrams, ${snippetCount} snippets, ${dataRequestCount} data requests`;
+    return `[contextLookup] ${countByItemTypeStr}`;
   }
 
   updateState(state: InteractionState) {
@@ -161,26 +165,29 @@ export class HelpLookupEvent extends InteractionEvent {
 }
 
 export class ContextItemEvent extends InteractionEvent {
-  constructor(public contextItem: ContextItem, public file?: string) {
+  constructor(public promptType: PromptType, public content: string, public location?: string) {
     super('contextItem');
+  }
+
+  get promptPrefix() {
+    return PROMPTS[this.promptType].prefix;
   }
 
   get metadata() {
     const result: Record<string, string> = {
       type: this.type,
-      name: this.contextItem.name,
+      promptType: this.promptType,
     };
-    if (this.file) {
-      result.file = this.file;
-    }
+    if (this.location) result.location = this.location;
+
     return result;
   }
 
   get message() {
     return [
-      `[${this.contextItem.name}]`,
-      this.file ? `${this.file}: ` : undefined,
-      contentSnippet(this.contextItem.content),
+      `[${this.promptPrefix}]`,
+      this.location ? `${this.location}: ` : undefined,
+      contentSnippet(this.content),
     ]
       .filter(Boolean)
       .join(' ');
@@ -188,8 +195,8 @@ export class ContextItemEvent extends InteractionEvent {
 
   updateState(state: InteractionState) {
     const content = [
-      `[${this.contextItem.name}]`,
-      [this.file, this.contextItem.content].filter(Boolean).join(': '),
+      `[${this.promptPrefix}]`,
+      [this.location, this.content].filter(Boolean).join(': '),
     ]
       .filter(Boolean)
       .join(' ');
