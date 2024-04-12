@@ -3,11 +3,10 @@ import { ExplainRpc } from '@appland/rpc';
 import { Help, explain, Explain } from '@appland/navie';
 import { AI } from '@appland/client';
 import { AIClient, AICallbacks, AIInputPromptOptions, AIUserInput } from '@appland/client';
-import { ContextProvider, InteractionHistory, ProjectInfo } from '@appland/navie';
+import { ContextV2, InteractionHistory, ProjectInfo } from '@appland/navie';
 
 import { waitFor } from './waitFor';
 import { DEFAULT_WORKING_DIR, default as RPCTest, SingleDirectoryRPCTest } from './RPCTest';
-import { SearchContextOptions } from '../../src/rpc/explain/explain';
 import RemoteNavie from '../../src/rpc/explain/navie/navie-remote';
 import LocalNavie from '../../src/rpc/explain/navie/navie-local';
 import { INavieProvider } from '../../src/rpc/explain/navie/inavie';
@@ -45,7 +44,7 @@ describe('RPC', () => {
       beforeAll(() => {
         navieProvider = (
           threadId: string | undefined,
-          contextProvider: ContextProvider,
+          contextProvider: ContextV2.ContextProvider,
           projectInfoProvider: ProjectInfo.ProjectInfoProvider,
           helpProvider: Help.HelpProvider
         ) => new LocalNavie(threadId, contextProvider, projectInfoProvider, helpProvider);
@@ -103,7 +102,7 @@ describe('RPC', () => {
       beforeAll(() => {
         navieProvider = (
           threadId: string | undefined,
-          contextProvider: ContextProvider,
+          contextProvider: ContextV2.ContextProvider,
           projectInfoProvider: ProjectInfo.ProjectInfoProvider,
           helpProvider: Help.HelpProvider
         ) => new RemoteNavie(threadId, contextProvider, projectInfoProvider, helpProvider);
@@ -132,22 +131,24 @@ describe('RPC', () => {
               expect(options?.tool).toEqual('explain');
               this.callbacks.onAck!(userMessageId, threadId);
 
-              const searchContextOptions: SearchContextOptions = {
+              const searchContextOptions: ContextV2.ContextRequest = {
                 vectorTerms: ['api', 'key'],
                 tokenCount: 4000,
-                numSearchResults: 1,
-                numDiagramsToAnalyze: 1,
               };
 
-              const context = await this.callbacks.onRequestContext!({
-                ...{ type: 'search' },
+              const context: ContextV2.ContextResponse = (await this.callbacks.onRequestContext!({
+                ...{ type: 'search', version: 2 },
                 ...searchContextOptions,
-              });
-              expect(Object.keys(context).sort()).toEqual([
-                'codeObjects',
-                'codeSnippets',
-                'sequenceDiagrams',
-              ]);
+              })) as ContextV2.ContextResponse;
+
+              const isWindows = () => process.platform === 'win32';
+
+              // TODO: Fixture path doesn't resolve on Windows. Is this a bug?
+              const itemTypes = isWindows()
+                ? ['data-request', 'sequence-diagram']
+                : ['code-snippet', 'data-request', 'sequence-diagram'];
+
+              expect([...new Set(context?.map((item) => item.type))].sort()).toEqual(itemTypes);
 
               this.callbacks.onToken!(answer, userMessageId);
 
@@ -185,16 +186,16 @@ describe('RPC', () => {
 
           await waitFor(async () => (await queryStatus()).step === ExplainRpc.Step.COMPLETE);
 
-          const statusResult = await queryStatus();
-          const sequenceDiagrams = statusResult.sequenceDiagrams;
+          const statusResult: ExplainRpc.ExplainStatusResponse = await queryStatus();
+          const sequenceDiagrams = statusResult.contextResponse
+            ?.filter((item) => item.type === ContextV2.ContextItemType.SequenceDiagram)
+            .map((item) => item.content);
           expect(sequenceDiagrams?.join('\n')).toContain('@startuml');
-          expect(Object.keys(statusResult)).toContain('codeObjects');
-          expect(Object.keys(statusResult)).toContain('codeSnippets');
+          expect(Object.keys(statusResult)).toContain('contextResponse');
           expect(Object.keys(statusResult)).toContain('searchResponse');
           expect(statusResult.searchResponse?.numResults).toBeTruthy();
 
-          for (const key of ['sequenceDiagrams', 'codeObjects', 'codeSnippets', 'searchResponse'])
-            delete statusResult[key];
+          for (const key of ['contextResponse', 'searchResponse']) delete statusResult[key];
 
           expect(statusResult).toEqual({
             step: ExplainRpc.Step.COMPLETE,

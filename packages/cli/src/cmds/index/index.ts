@@ -1,6 +1,8 @@
 import readline from 'readline';
 import yargs from 'yargs';
 import chalk from 'chalk';
+import { loadConfiguration } from '@appland/client';
+import { ContextV2, Help, ProjectInfo } from '@appland/navie';
 
 import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
 import FingerprintWatchCommand from '../../fingerprint/fingerprintWatchCommand';
@@ -17,11 +19,9 @@ import sequenceDiagram from '../../rpc/appmap/sequenceDiagram';
 import { explainHandler, explainStatusHandler } from '../../rpc/explain/explain';
 import RPCServer from './rpcServer';
 import appmapData from '../../rpc/appmap/data';
-import { loadConfiguration } from '@appland/client';
 import { appmapStatsV1, appmapStatsV2 } from '../../rpc/appmap/stats';
 import LocalNavie from '../../rpc/explain/navie/navie-local';
 import RemoteNavie from '../../rpc/explain/navie/navie-remote';
-import { Context, Help, ProjectInfo } from '@appland/navie';
 import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 
 const AI_KEY_ENV_VARS = ['OPENAI_API_KEY', 'AZURE_OPENAI_API_KEY'];
@@ -110,7 +110,7 @@ export const handler = async (argv) => {
 
       const buildLocalNavie = (
         threadId: string | undefined,
-        contextProvider: Context.ContextProvider,
+        contextProvider: ContextV2.ContextProvider,
         projectInfoProvider: ProjectInfo.ProjectInfoProvider,
         helpProvider: Help.HelpProvider
       ) => {
@@ -134,7 +134,7 @@ export const handler = async (argv) => {
       };
       const buildRemoteNavie = (
         threadId: string | undefined,
-        contextProvider: Context.ContextProvider,
+        contextProvider: ContextV2.ContextProvider,
         projectInfoProvider: ProjectInfo.ProjectInfoProvider,
         helpProvider: Help.HelpProvider
       ) => new RemoteNavie(threadId, contextProvider, projectInfoProvider, helpProvider);

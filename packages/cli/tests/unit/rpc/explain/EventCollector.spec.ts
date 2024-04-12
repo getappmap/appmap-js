@@ -64,11 +64,7 @@ describe('EventCollector', () => {
     jest
       .mocked(FindEvents)
       .prototype.search.mockImplementation(() => mockFindEventsResponsesCopy.shift()!);
-    jest.mocked(buildContext).mockResolvedValue({
-      sequenceDiagrams: [],
-      codeSnippets: new Map(),
-      codeObjects: new Set(),
-    });
+    jest.mocked(buildContext).mockResolvedValue([]);
   });
   afterEach(() => jest.resetAllMocks());
 

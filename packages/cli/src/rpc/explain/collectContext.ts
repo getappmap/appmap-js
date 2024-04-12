@@ -8,6 +8,7 @@ import { DEFAULT_MAX_DIAGRAMS } from '../search/search';
 import buildContext from './buildContext';
 import { log } from 'console';
 import { isAbsolute, join } from 'path';
+import { ContextV2 } from '@appland/navie';
 
 export function textSearchResultToRpcSearchResult(
   eventResult: EventSearchResult
@@ -29,11 +30,7 @@ export class EventCollector {
 
   async collectEvents(maxEvents: number): Promise<{
     results: SearchRpc.SearchResult[];
-    context: {
-      sequenceDiagrams: string[];
-      codeSnippets: Map<string, string>;
-      codeObjects: Set<string>;
-    };
+    context: ContextV2.ContextResponse;
     contextSize: number;
   }> {
     const results = new Array<SearchRpc.SearchResult>();
@@ -52,10 +49,7 @@ export class EventCollector {
     }
     const context = await buildContext(results);
 
-    const contextSize =
-      context.sequenceDiagrams.join('').length +
-      Array.from(context.codeSnippets.values()).join('').length +
-      [...context.codeObjects].join('').length;
+    const contextSize = context.reduce((acc, item) => acc + item.content.length, 0);
 
     return { results, context, contextSize };
   }
@@ -93,11 +87,7 @@ export class ContextCollector {
 
   async collectContext(): Promise<{
     searchResponse: SearchRpc.SearchResponse;
-    context: {
-      sequenceDiagrams: string[];
-      codeSnippets: Map<string, string>;
-      codeObjects: Set<string>;
-    };
+    context: ContextV2.ContextResponse;
   }> {
     const query = this.vectorTerms.join(' ');
 
@@ -138,11 +128,7 @@ export class ContextCollector {
 
     let contextCandidate: {
       results: SearchRpc.SearchResult[];
-      context: {
-        sequenceDiagrams: string[];
-        codeSnippets: Map<string, string>;
-        codeObjects: Set<string>;
-      };
+      context: ContextV2.ContextResponse;
       contextSize: number;
     };
     let charCount = 0;
@@ -178,11 +164,7 @@ export default async function collectContext(
   charLimit: number
 ): Promise<{
   searchResponse: SearchRpc.SearchResponse;
-  context: {
-    sequenceDiagrams: string[];
-    codeSnippets: Map<string, string>;
-    codeObjects: Set<string>;
-  };
+  context: ContextV2.ContextResponse;
 }> {
   const contextCollector = new ContextCollector(directories, vectorTerms, charLimit);
   if (appmaps) contextCollector.appmaps = appmaps;

@@ -6,7 +6,7 @@ import InteractionHistory, {
   InteractionEvent,
   InteractionHistoryEvents,
 } from './interaction-history';
-import { ContextProvider } from './context';
+import { ContextV2 } from './context';
 import ProjectInfoService from './services/project-info-service';
 import { ProjectInfo, ProjectInfoProvider } from './project-info';
 import CodeSelectionService from './services/code-selection-service';
@@ -114,7 +114,7 @@ export interface IExplain extends InteractionHistoryEvents {
 
 export default function explain(
   clientRequest: ClientRequest,
-  contextProvider: ContextProvider,
+  contextProvider: ContextV2.ContextProvider,
   projectInfoProvider: ProjectInfoProvider,
   helpProvider: HelpProvider,
   options: ExplainOptions,
@@ -139,9 +139,15 @@ export default function explain(
     options.modelName,
     options.temperature
   );
+
+  const contextProviderV2 = async (
+    request: ContextV2.ContextRequest
+  ): Promise<ContextV2.ContextResponse> =>
+    contextProvider({ ...request, version: 2, type: 'search' });
+
   const lookupContextService = new LookupContextService(
     interactionHistory,
-    contextProvider,
+    contextProviderV2,
     helpProvider
   );
   const applyContextService = new ApplyContextService(interactionHistory);

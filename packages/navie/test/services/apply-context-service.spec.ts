@@ -1,6 +1,6 @@
-import { ContextProvider, ContextRequest, ContextResponse } from '../../src/context';
+import { ContextV2 } from '../../src/context';
 import { HelpProvider, HelpRequest, HelpResponse } from '../../src/help';
-import InteractionHistory from '../../src/interaction-history';
+import InteractionHistory, { ContextItemEvent } from '../../src/interaction-history';
 import ApplyContextService from '../../src/services/apply-context-service';
 import LookupContextService from '../../src/services/lookup-context-service';
 import { HELP_CONTEXT, SEARCH_CONTEXT } from '../fixture';
@@ -9,7 +9,7 @@ describe('ApplyContextService', () => {
   describe('applyContext', () => {
     let interactionHistory: InteractionHistory;
     let applyContextService: ApplyContextService;
-    let context: ContextResponse;
+    let context: ContextV2.ContextResponse;
     let help: HelpResponse;
 
     beforeEach(() => {
@@ -26,63 +26,47 @@ describe('ApplyContextService', () => {
     it('collects samples of context into the output', () => {
       collect(1000 * 1000);
       expect(
-        interactionHistory.events.filter((e) => e.type === 'contextItem').map((e) => ({ ...e }))
+        interactionHistory.events
+          .filter((e) => e.type === 'contextItem')
+          .map((e) => ({ ...e.metadata, ...{ content: (e as ContextItemEvent).content } }))
       ).toEqual([
         {
+          content: `diagram-1`,
+          promptType: 'sequenceDiagrams',
           type: 'contextItem',
-          contextItem: {
-            content: `diagram-1`,
-            name: 'Sequence diagram',
-          },
-          file: undefined,
         },
         {
+          content: `class User < ApplicationRecord; end`,
+          promptType: 'codeSnippets',
+          location: 'app/user.rb',
           type: 'contextItem',
-          contextItem: {
-            content: `class User < ApplicationRecord; end`,
-            name: 'Code snippet',
-          },
-          file: 'app/user.rb',
         },
         {
+          content: `class Post < ApplicationRecord; end`,
+          promptType: 'codeSnippets',
+          location: 'app/post.rb',
           type: 'contextItem',
-          contextItem: {
-            content: `class Post < ApplicationRecord; end`,
-            name: 'Code snippet',
-          },
-          file: 'app/post.rb',
         },
         {
+          content: `SELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1`,
+          promptType: 'dataRequest',
           type: 'contextItem',
-          contextItem: {
-            content: `SELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1`,
-            name: 'Data request',
-          },
-          file: undefined,
         },
         {
+          content: `SELECT "posts".* FROM "posts" WHERE "posts"."user_id" = $1`,
+          promptType: 'dataRequest',
           type: 'contextItem',
-          contextItem: {
-            content: `SELECT "posts".* FROM "posts" WHERE "posts"."user_id" = $1`,
-            name: 'Data request',
-          },
-          file: undefined,
         },
         {
+          content: `AppMap Java reference`,
+          promptType: 'helpDoc',
+          location: 'appmap-java.md',
           type: 'contextItem',
-          contextItem: {
-            content: `AppMap Java reference`,
-            name: 'Help document',
-          },
-          file: 'appmap-java.md',
         },
         {
+          content: `diagram-2`,
+          promptType: 'sequenceDiagrams',
           type: 'contextItem',
-          contextItem: {
-            content: `diagram-2`,
-            name: 'Sequence diagram',
-          },
-          file: undefined,
         },
       ]);
     });
@@ -90,23 +74,21 @@ describe('ApplyContextService', () => {
     it('limits the output to the character limit', () => {
       collect(75);
       expect(
-        interactionHistory.events.filter((e) => e.type === 'contextItem').map((e) => ({ ...e }))
+        interactionHistory.events.map((e) => ({
+          ...e.metadata,
+          ...{ content: (e as ContextItemEvent).content },
+        }))
       ).toEqual([
         {
+          content: `diagram-1`,
+          promptType: 'sequenceDiagrams',
           type: 'contextItem',
-          contextItem: {
-            content: `diagram-1`,
-            name: 'Sequence diagram',
-          },
-          file: undefined,
         },
         {
+          content: `class User < ApplicationRecord; end`,
+          promptType: 'codeSnippets',
+          location: 'app/user.rb',
           type: 'contextItem',
-          contextItem: {
-            content: `class User < ApplicationRecord; end`,
-            name: 'Code snippet',
-          },
-          file: 'app/user.rb',
         },
       ]);
     });
@@ -128,7 +110,7 @@ describe('ApplyContextService', () => {
       interactionHistory: InteractionHistory,
       tokenCount: number
     ): LookupContextService {
-      const contextFn: ContextProvider = jest.fn().mockImplementation((request: ContextRequest) => {
+      const contextFn = jest.fn().mockImplementation((request: ContextV2.ContextRequest) => {
         expect(request.vectorTerms).toEqual(['user', 'management']);
         expect(request.tokenCount).toEqual(tokenCount);
         return Promise.resolve(SEARCH_CONTEXT);
@@ -142,10 +124,8 @@ describe('ApplyContextService', () => {
     }
 
     function providesNoContext(interactionHistory: InteractionHistory): LookupContextService {
-      const contextFn: ContextProvider = jest
-        .fn()
-        .mockResolvedValue({ sequenceDiagrams: [], codeSnippets: {}, codeObjects: [] });
-      const helpFn: HelpProvider = jest.fn().mockResolvedValue([]);
+      const contextFn = jest.fn().mockResolvedValue([]);
+      const helpFn = jest.fn().mockResolvedValue([]);
       return new LookupContextService(interactionHistory, contextFn, helpFn);
     }
 
@@ -219,34 +199,34 @@ describe('ApplyContextService', () => {
           },
           {
             type: 'contextItem',
-            name: 'Sequence diagram',
+            promptType: 'sequenceDiagrams',
           },
           {
             type: 'contextItem',
-            name: 'Code snippet',
-            file: 'app/user.rb',
+            promptType: 'codeSnippets',
+            location: 'app/user.rb',
           },
           {
             type: 'contextItem',
-            name: 'Code snippet',
-            file: 'app/post.rb',
+            promptType: 'codeSnippets',
+            location: 'app/post.rb',
           },
           {
             type: 'contextItem',
-            name: 'Data request',
+            promptType: 'dataRequest',
           },
           {
             type: 'contextItem',
-            name: 'Data request',
+            promptType: 'dataRequest',
           },
           {
             type: 'contextItem',
-            name: 'Help document',
-            file: 'appmap-java.md',
+            promptType: 'helpDoc',
+            location: 'appmap-java.md',
           },
           {
             type: 'contextItem',
-            name: 'Sequence diagram',
+            promptType: 'sequenceDiagrams',
           },
         ]);
       });

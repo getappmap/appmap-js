@@ -1,6 +1,6 @@
 import { log } from 'console';
 import InteractionHistory, { ContextLookupEvent, HelpLookupEvent } from '../interaction-history';
-import { ContextRequest, ContextResponse } from '../context';
+import { ContextV2 } from '../context';
 import { CHARACTERS_PER_TOKEN } from '../message';
 import ApplyContextService from './apply-context-service';
 import { HelpRequest, HelpResponse } from '../help';
@@ -8,18 +8,23 @@ import { HelpRequest, HelpResponse } from '../help';
 export default class LookupContextService {
   constructor(
     public readonly interactionHistory: InteractionHistory,
-    public readonly contextFn: (data: ContextRequest) => Promise<ContextResponse>,
+    public readonly contextFn: (
+      data: ContextV2.ContextRequest
+    ) => Promise<ContextV2.ContextResponse>,
     public readonly helpFn: (data: HelpRequest) => Promise<HelpResponse>
   ) {}
 
-  async lookupContext(vectorTerms: string[], tokenCount: number): Promise<ContextResponse> {
-    const context = await this.contextFn({
+  async lookupContext(keywords: string[], tokenCount: number): Promise<ContextV2.ContextResponse> {
+    const contextRequestPayload: ContextV2.ContextRequest & { version: 2; type: 'search' } = {
+      version: 2,
       type: 'search',
-      vectorTerms,
+      vectorTerms: keywords,
       tokenCount,
-    });
+    };
 
-    const contextFound = context?.sequenceDiagrams?.length > 0;
+    const context = await this.contextFn(contextRequestPayload);
+
+    const contextFound = context?.length > 0;
     if (contextFound) {
       this.interactionHistory.addEvent(new ContextLookupEvent(context));
     } else {
@@ -54,7 +59,7 @@ export default class LookupContextService {
   }
 
   static applyContext(
-    context: ContextResponse,
+    context: ContextV2.ContextResponse,
     help: HelpResponse,
     applyContextService: ApplyContextService,
     tokenCount: number

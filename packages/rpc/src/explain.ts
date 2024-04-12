@@ -37,15 +37,20 @@ export namespace ExplainRpc {
     data?: object;
   };
 
+  export type ContextItem = {
+    type: string;
+    content: string;
+    location?: string;
+    score?: number;
+  };
+
   export type ExplainStatusResponse = {
     step: Step;
     threadId?: string;
     err?: Error | RpcError;
     vectorTerms?: string[];
     searchResponse?: SearchRpc.SearchResponse;
-    sequenceDiagrams?: string[];
-    codeSnippets?: Record<string, string>;
-    codeObjects?: string[];
+    contextResponse?: ContextItem[];
     explanation?: string[];
   };
 }

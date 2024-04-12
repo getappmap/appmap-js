@@ -1,20 +1,23 @@
-import { log } from 'console';
-import assert from 'assert';
+import { error, log } from 'console';
 
-import { ContextItem, ContextResponse } from '../context';
+import { ContextV2 } from '../context';
 import InteractionHistory, {
   ContextItemEvent,
   PromptInteractionEvent,
 } from '../interaction-history';
-import { PROMPTS, PromptType, buildPromptDescriptor } from '../prompt';
-import { HelpResponse } from '../help';
+import { PromptType, buildPromptDescriptor } from '../prompt';
+import { HelpDoc, HelpResponse } from '../help';
 
-type ContextItemWithFile = ContextItem & { file?: string };
+type ContextItemWithFile = { type: PromptType; content: string; file?: string };
 
 export default class ApplyContextService {
   constructor(public readonly interactionHistory: InteractionHistory) {}
 
-  applyContext(context: ContextResponse | undefined, help: HelpResponse, characterLimit: number) {
+  applyContext(
+    context: ContextV2.ContextResponse | undefined,
+    help: HelpResponse,
+    characterLimit: number
+  ) {
     if (!context) {
       this.interactionHistory.addEvent(
         new PromptInteractionEvent(
@@ -26,15 +29,20 @@ export default class ApplyContextService {
       return;
     }
 
-    const { sequenceDiagrams, codeSnippets, codeObjects } = context;
+    const sequenceDiagrams = context.filter(
+      (item) => item.type === ContextV2.ContextItemType.SequenceDiagram
+    );
+    const codeSnippets = context.filter(
+      (item) => item.type === ContextV2.ContextItemType.CodeSnippet
+    );
+    const dataRequests = context.filter(
+      (item) => item.type === ContextV2.ContextItemType.DataRequest
+    );
 
     const availableContent = new Array<ContextItemWithFile | undefined>();
     const availableDiagrams = [...sequenceDiagrams];
-    const availableCodeSnippets: [string, string][] = Object.keys(codeSnippets).map((key) => [
-      key,
-      codeSnippets[key],
-    ]);
-    const availableDataRequests = [...codeObjects];
+    const availableCodeSnippets = [...codeSnippets];
+    const availableDataRequests = [...dataRequests];
     const availableHelp = [...help];
 
     const availableItemCount = () =>
@@ -58,72 +66,66 @@ export default class ApplyContextService {
       const itemType = index % roundSize;
       index += 1;
 
-      let item: [string, string] | undefined;
-      let name: string | undefined;
-      let content: string | undefined;
-      let file: string | undefined;
+      let item: ContextV2.ContextItem | undefined;
+      let helpItem: HelpDoc | undefined;
 
-      const selectDiagram = (): boolean => {
-        if (availableDiagrams.length === 0) return false;
-
-        name = PROMPTS[PromptType.SequenceDiagram].prefix;
-        content = availableDiagrams.shift();
-        return true;
+      const selectDiagram = () => {
+        item = availableDiagrams.shift();
       };
 
-      const selectCodeSnippet = (): boolean => {
-        if (availableCodeSnippets.length === 0) return false;
-
-        name = PROMPTS[PromptType.CodeSnippet].prefix;
+      const selectCodeSnippet = () => {
         item = availableCodeSnippets.shift();
-        assert(item);
-        [file, content] = item;
-        return true;
       };
 
-      const selectDataRequest = (): boolean => {
-        if (availableDataRequests.length === 0) return false;
-
-        name = PROMPTS[PromptType.DataRequest].prefix;
-        content = availableDataRequests.shift();
-        return true;
+      const selectDataRequest = () => {
+        item = availableDataRequests.shift();
       };
 
-      const selectHelp = (): boolean => {
-        if (availableHelp.length === 0) return false;
-
-        const helpItem = availableHelp.shift();
-        if (!helpItem) return false;
-
-        name = PROMPTS[PromptType.HelpDoc].prefix;
-        [file, content] = [helpItem.filePath, helpItem.content];
-        return true;
+      const selectHelp = () => {
+        helpItem = availableHelp.shift();
       };
 
-      let selectionMade: boolean;
       if (itemType === 0) {
-        selectionMade = selectDiagram();
+        selectDiagram();
       } else if (itemType >= numDiagrams && itemType < numDiagrams + numSnippets) {
-        selectionMade = selectCodeSnippet();
+        selectCodeSnippet();
       } else if (
         itemType >= numDiagrams + numSnippets &&
         itemType < numDiagrams + numSnippets + numDataRequests
       ) {
-        selectionMade = selectDataRequest();
+        selectDataRequest();
       } else {
-        selectionMade = selectHelp();
+        selectHelp();
       }
 
-      if (selectionMade) {
-        assert(name && content);
-        availableContent.push({ name, content, file });
+      if (item) {
+        let promptType: PromptType | undefined;
+        // eslint-disable-next-line default-case
+        switch (item.type) {
+          case ContextV2.ContextItemType.SequenceDiagram:
+            promptType = PromptType.SequenceDiagram;
+            break;
+          case ContextV2.ContextItemType.CodeSnippet:
+            promptType = PromptType.CodeSnippet;
+            break;
+          case ContextV2.ContextItemType.DataRequest:
+            promptType = PromptType.DataRequest;
+            break;
+        }
+        if (promptType)
+          availableContent.push({ type: promptType, content: item.content, file: item.location });
+      } else if (helpItem) {
+        availableContent.push({
+          type: PromptType.HelpDoc,
+          content: helpItem.content,
+          file: helpItem.filePath,
+        });
       }
     }
 
     let charsRemaining = characterLimit;
     log(`Remaining characters before context: ${charsRemaining}`);
 
-    const messages = new Array<ContextItem>();
     const addContextItem = (contextItem: ContextItemWithFile | undefined): boolean => {
       if (!contextItem) return false;
 
@@ -133,12 +135,8 @@ export default class ApplyContextService {
 
       charsRemaining -= contextItem.content.length;
       this.interactionHistory.addEvent(
-        new ContextItemEvent(
-          { name: contextItem.name, content: contextItem.content },
-          contextItem.file
-        )
+        new ContextItemEvent(contextItem.type, contextItem.content, contextItem.file)
       );
-      messages.push(contextItem);
       return true;
     };
 
@@ -151,10 +149,18 @@ export default class ApplyContextService {
     this.interactionHistory.log(`Remaining characters after context: ${charsRemaining}`);
   }
 
-  addSystemPrompts(context: ContextResponse, help: HelpResponse) {
-    const { sequenceDiagrams, codeSnippets, codeObjects } = context;
+  addSystemPrompts(context: ContextV2.ContextResponse, help: HelpResponse) {
+    const hasSequenceDiagram = context.some(
+      (item) => item.type === ContextV2.ContextItemType.SequenceDiagram
+    );
+    const hasCodeSnippet = context.some(
+      (item) => item.type === ContextV2.ContextItemType.CodeSnippet
+    );
+    const hasDataRequest = context.some(
+      (item) => item.type === ContextV2.ContextItemType.DataRequest
+    );
 
-    if (sequenceDiagrams.length > 0)
+    if (hasSequenceDiagram)
       this.interactionHistory.addEvent(
         new PromptInteractionEvent(
           PromptType.SequenceDiagram,
@@ -163,7 +169,7 @@ export default class ApplyContextService {
         )
       );
 
-    if (Object.keys(codeSnippets).length > 0)
+    if (hasCodeSnippet)
       this.interactionHistory.addEvent(
         new PromptInteractionEvent(
           PromptType.CodeSnippet,
@@ -172,7 +178,7 @@ export default class ApplyContextService {
         )
       );
 
-    if (codeObjects.length > 0)
+    if (hasDataRequest)
       this.interactionHistory.addEvent(
         new PromptInteractionEvent(
           PromptType.DataRequest,

@@ -1,13 +1,12 @@
 import chalk from 'chalk';
-import assert from 'assert';
 import EventEmitter from 'events';
-import { ExplainRpc } from '@appland/rpc';
 import { warn } from 'console';
+import { ExplainRpc } from '@appland/rpc';
+import { ContextV2, Help, ProjectInfo } from '@appland/navie';
 
 import { RpcError, RpcHandler } from '../rpc';
 import collectContext from './collectContext';
 import INavie, { INavieProvider } from './navie/inavie';
-import { Context, Help, ProjectInfo } from '@appland/navie';
 import configuration from '../configuration';
 import collectProjectInfos from '../../cmds/navie/projectInfo';
 import collectHelp from '../../cmds/navie/help';
@@ -72,15 +71,20 @@ export class Explain extends EventEmitter {
     await navie.ask(this.question, this.codeSelection);
   }
 
-  async searchContext(data: SearchContextOptions): Promise<SearchContextResponse> {
-    const { vectorTerms } = data;
+  async searchContext(data: ContextV2.ContextRequest): Promise<ContextV2.ContextResponse> {
+    let { vectorTerms: keywords } = data;
     let { tokenCount } = data;
+
     if (!tokenCount) {
-      warn(chalk.bold(`Warning: tokenCount not set, defaulting to ${DEFAULT_TOKEN_LIMIT}`));
+      warn(chalk.bold(`Warning: Token limit not set, defaulting to ${DEFAULT_TOKEN_LIMIT}`));
       tokenCount = DEFAULT_TOKEN_LIMIT;
     }
+    if (!keywords || keywords.length === 0) {
+      warn(chalk.bold(`Warning: No keywords provided, context result may be unpredictable`));
+      keywords = [];
+    }
 
-    this.status.vectorTerms = vectorTerms;
+    this.status.vectorTerms = keywords;
 
     this.status.step = ExplainRpc.Step.SEARCH_APPMAPS;
 
@@ -88,36 +92,14 @@ export class Explain extends EventEmitter {
     // pruned by the client AI anyway.
     // The meaning of tokenCount is "try and get at least this many tokens"
     const charLimit = tokenCount * 3;
-    const searchResult = await collectContext(
-      this.directories,
-      this.appmaps,
-      vectorTerms,
-      charLimit
-    );
+    const searchResult = await collectContext(this.directories, this.appmaps, keywords, charLimit);
 
     this.status.searchResponse = searchResult.searchResponse;
-
-    this.status.step = ExplainRpc.Step.COLLECT_CONTEXT;
-
-    this.status.sequenceDiagrams = searchResult.context.sequenceDiagrams;
-    this.status.codeSnippets = Array.from<string>(searchResult.context.codeSnippets.keys()).reduce(
-      (acc, key) => {
-        const snippet = searchResult.context.codeSnippets.get(key);
-        assert(snippet !== undefined);
-        if (snippet) acc[key] = snippet;
-        return acc;
-      },
-      {} as Record<string, string>
-    );
-    this.status.codeObjects = Array.from(searchResult.context.codeObjects);
+    this.status.contextResponse = searchResult.context;
 
     this.status.step = ExplainRpc.Step.EXPLAIN;
 
-    return {
-      sequenceDiagrams: this.status.sequenceDiagrams,
-      codeSnippets: this.status.codeSnippets,
-      codeObjects: this.status.codeObjects,
-    };
+    return searchResult.context;
   }
 
   projectInfoContext(): Promise<ProjectInfo.ProjectInfoResponse> {
@@ -162,7 +144,8 @@ async function explain(
     }
   };
 
-  const contextProvider: Context.ContextProvider = async (data: any) => invokeContextFunction(data);
+  const contextProvider: ContextV2.ContextProvider = async (data: any) =>
+    invokeContextFunction(data);
   const projectInfoProvider: ProjectInfo.ProjectInfoProvider = async (data: any) =>
     invokeContextFunction(data);
   const helpProvider: Help.HelpProvider = async (data: any) => invokeContextFunction(data);
