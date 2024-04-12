@@ -8,7 +8,7 @@ import { DEFAULT_MAX_DIAGRAMS } from '../search/search';
 import buildContext from './buildContext';
 import { log } from 'console';
 import { isAbsolute, join } from 'path';
-import { ContextV2 } from '@appland/navie';
+import { ContextV2, applyContext } from '@appland/navie';
 
 export function textSearchResultToRpcSearchResult(
   eventResult: EventSearchResult
@@ -137,12 +137,17 @@ export class ContextCollector {
     while (true) {
       log(`Collecting context with ${maxEventsPerDiagram} events per diagram.`);
       contextCandidate = await eventsCollector.collectEvents(maxEventsPerDiagram);
-      const estimatedSize = contextCandidate.contextSize;
-      log(`Collected an estimated ${estimatedSize} characters.`);
-      if (estimatedSize === charCount || estimatedSize > this.charLimit) {
+
+      const appliedContext = applyContext(contextCandidate.context, this.charLimit);
+      const appliedContextSize = appliedContext.reduce((acc, item) => acc + item.content.length, 0);
+      contextCandidate.context = appliedContext;
+      contextCandidate.contextSize = appliedContextSize;
+      log(`Collected an estimated ${appliedContextSize} characters.`);
+
+      if (appliedContextSize === charCount || appliedContextSize > this.charLimit) {
         break;
       }
-      charCount = estimatedSize;
+      charCount = appliedContextSize;
       maxEventsPerDiagram = Math.ceil(maxEventsPerDiagram * 1.5);
       log(`Increasing max events per diagram to ${maxEventsPerDiagram}.`);
     }
@@ -168,5 +173,5 @@ export default async function collectContext(
 }> {
   const contextCollector = new ContextCollector(directories, vectorTerms, charLimit);
   if (appmaps) contextCollector.appmaps = appmaps;
-  return contextCollector.collectContext();
+  return await contextCollector.collectContext();
 }
