@@ -98,43 +98,6 @@
           v-if="appmapStats"
         />
       </template>
-      <v-accordion
-        v-if="enableDiagnostics"
-        class="diagnostics"
-        :open="showDiagnostics"
-        @toggle="toggleDiagonstics"
-      >
-        <template #header>
-          <a href="" @click.prevent>Diagnostics &raquo;</a>
-        </template>
-
-        <ul v-if="searchStatus">
-          <li>Step: {{ searchStatus.step }}</li>
-          <li v-if="searchStatus.vectorTerms">
-            Vector terms: {{ searchStatus.vectorTerms.join(' ') }}
-          </li>
-          <li v-if="searchStatus.sequenceDiagrams">
-            Sequence diagrams: {{ searchStatus.sequenceDiagrams.length }}
-          </li>
-          <li v-if="searchStatus.codeSnippets">
-            Code snippets: {{ Object.keys(searchStatus.codeSnippets).length }}
-          </li>
-          <li v-if="searchStatus.codeObjects">
-            Code objects: {{ searchStatus.codeObjects.length }}
-          </li>
-          <li v-if="searchStatus.prompt">
-            Prompt:
-            <ul class="prompt">
-              <li v-for="msg in searchStatus.prompt" :key="[msg.role, msg.content].join('->')">
-                <code class="role">{{ msg.role }}</code>
-                <div class="content">
-                  {{ msg.content }}
-                </div>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </v-accordion>
     </div>
     <v-instructions v-else class="instructions" :appmaps="mostRecentAppMaps" />
   </div>
@@ -143,7 +106,6 @@
 <script lang="ts">
 //@ts-nocheck
 import VChat from '@/components/chat/Chat.vue';
-import VAccordion from '@/components/Accordion.vue';
 import VInstructions from '@/components/chat-search/Instructions.vue';
 import VMatchInstructions from '@/components/chat-search/MatchInstructions.vue';
 import VNoMatchInstructions from '@/components/chat-search/NoMatchInstructions.vue';
@@ -161,7 +123,6 @@ export default {
   components: {
     VChat,
     VAppMap,
-    VAccordion,
     VInstructions,
     VMatchInstructions,
     VNoMatchInstructions,
@@ -184,10 +145,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    enableDiagnostics: {
-      type: Boolean,
-      default: false,
-    },
     appmaps: {
       type: Array,
       default: () => [],
@@ -208,7 +165,6 @@ export default {
       searchStatus: undefined,
       searchId: 0,
       selectedSearchResultId: undefined,
-      showDiagnostics: false,
       isPanelResizing: false,
       initialPanelWidth: 0,
       initialClientX: 0,
@@ -438,9 +394,6 @@ export default {
       this.searching = false;
       this.loadAppMapStats();
     },
-    toggleDiagonstics() {
-      this.showDiagnostics = !this.showDiagnostics;
-    },
     rpcClient(): AppMapRPC {
       return new AppMapRPC(
         this.appmapRpcFn ? { request: this.appmapRpcFn } : this.appmapRpcPort || 30101
@@ -646,25 +599,6 @@ $border-color: darken($gray4, 10%);
       background-color: $black;
       margin-top: 0rem;
     }
-  }
-}
-
-.diagnostics {
-  background-color: $black;
-  padding: 0.5rem;
-  margin-left: -1rem; // Hack around v-accordion padding
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-
-  a {
-    color: $brightblue;
-    text-decoration: none;
-  }
-
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    color: $gray6;
   }
 }
 </style>

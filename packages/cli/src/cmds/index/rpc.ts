@@ -1,5 +1,7 @@
-import yargs, { help } from 'yargs';
+import yargs from 'yargs';
 import chalk from 'chalk';
+import { ContextV2, Help, ProjectInfo, Agents } from '@appland/navie';
+import { loadConfiguration } from '@appland/client';
 
 import { verbose } from '../../utils';
 import { log } from 'console';
@@ -14,12 +16,9 @@ import appmapData from '../../rpc/appmap/data';
 import { appmapStatsV1, appmapStatsV2 } from '../../rpc/appmap/stats';
 import LocalNavie from '../../rpc/explain/navie/navie-local';
 import RemoteNavie from '../../rpc/explain/navie/navie-remote';
-import { Context, Help, ProjectInfo } from '@appland/navie';
 import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 import { configureRpcDirectories } from '../../lib/handleWorkingDirectory';
-import { loadConfiguration } from '@appland/client';
 import { getConfigurationV1, setConfigurationV1 } from '../../rpc/configuration';
-import { Agents } from '@appland/navie';
 
 const AI_KEY_ENV_VARS = ['OPENAI_API_KEY', 'AZURE_OPENAI_API_KEY'];
 
@@ -124,7 +123,7 @@ export const handler = async (argv) => {
 
   const buildLocalNavie = (
     threadId: string | undefined,
-    contextProvider: Context.ContextProvider,
+    contextProvider: ContextV2.ContextProvider,
     projectInfoProvider: ProjectInfo.ProjectInfoProvider,
     helpProvider: Help.HelpProvider
   ) => {
@@ -149,7 +148,7 @@ export const handler = async (argv) => {
 
   const buildRemoteNavie = (
     threadId: string | undefined,
-    contextProvider: Context.ContextProvider,
+    contextProvider: ContextV2.ContextProvider,
     projectInfoProvider: ProjectInfo.ProjectInfoProvider,
     helpProvider: Help.HelpProvider
   ) => {
