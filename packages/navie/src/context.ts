@@ -39,6 +39,8 @@ export namespace ContextV2 {
     // A data request that was made by the application. This could be a database query,
     // an HTTP client request, or any other type of data request.
     DataRequest = 'data-request',
+    // A help document that is relevant to the user's situation.
+    HelpDoc = 'help-doc',
   }
 
   // A specific context item that is returned in the response.
