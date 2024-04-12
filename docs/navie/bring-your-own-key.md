@@ -3,8 +3,6 @@ layout: docs
 title: Docs - AppMap Navie
 description: "Update your OpenAI key in Navie to use your own account. Follow steps to add, delete, or check key status."
 name: Bring Your Own Key
-description: "Documentation | Use your own LLM key with AppMap Navie AI"
-
 step: 4
 navie: true
 toc: true
