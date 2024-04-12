@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { ExplainRpc } from '@appland/rpc';
-import { Help, explain, Explain } from '@appland/navie';
+import { Help, explain, applyContext, Explain } from '@appland/navie';
 import { AI } from '@appland/client';
 import { AIClient, AICallbacks, AIInputPromptOptions, AIUserInput } from '@appland/client';
 import { ContextV2, InteractionHistory, ProjectInfo } from '@appland/navie';
@@ -68,6 +68,9 @@ describe('RPC', () => {
         };
 
         jest.mocked(explain).mockReturnValue(explainImpl);
+        jest
+          .mocked(applyContext)
+          .mockImplementation((context: ContextV2.ContextResponse) => context);
 
         const explainOptions: ExplainRpc.ExplainOptions = {
           question,
