@@ -12,6 +12,10 @@ export namespace ConfigurationRpc {
       export const Method = 'v1.configuration.get';
       export type Params = undefined;
       export type Response = {
+        navieConfig: {
+          baseUrl?: string;
+          model?: string;
+        };
         appmapConfigFiles: string[];
       };
     }
