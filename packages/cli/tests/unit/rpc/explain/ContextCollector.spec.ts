@@ -12,6 +12,7 @@ describe('ContextCollector', () => {
   let contextCollector: ContextCollector;
 
   beforeEach(() => {
+    jest.mocked(navie.applyContext).mockImplementation((context) => context);
     contextCollector = new ContextCollector(['a', 'b'], vectorTerms, charLimit);
   });
   afterEach(() => jest.restoreAllMocks());
