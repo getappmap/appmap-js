@@ -20,8 +20,8 @@ describe('ApplyContextService', () => {
     });
     afterEach(() => jest.resetAllMocks());
 
-    const collect = (characterLimit: number) =>
-      applyContextService.applyContext(context, help, characterLimit);
+    const collect = (characterLimit: number, maxContentLength = characterLimit / 5) =>
+      applyContextService.applyContext(context, help, characterLimit, maxContentLength);
 
     it('collects samples of context into the output', () => {
       collect(1000 * 1000);
@@ -72,7 +72,7 @@ describe('ApplyContextService', () => {
     });
 
     it('limits the output to the character limit', () => {
-      collect(75);
+      collect(10, 50);
       expect(
         interactionHistory.events.map((e) => ({
           ...e.metadata,

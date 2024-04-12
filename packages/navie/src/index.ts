@@ -1,4 +1,5 @@
 /* eslint-disable import/prefer-default-export */
+export { default as applyContext } from './lib/apply-context';
 export { default as Message } from './message';
 export { default as InteractionState } from './interaction-state';
 export { default as explain } from './explain';
