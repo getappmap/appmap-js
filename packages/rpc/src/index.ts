@@ -10,3 +10,4 @@ export * from './search';
 export * from './appmap';
 export * from './explain';
 export * from './configuration';
+export * from './prompt';
