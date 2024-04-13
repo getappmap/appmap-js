@@ -12,7 +12,12 @@ import { explainHandler, explainStatusHandler } from '../../src/rpc/explain/expl
 import { waitFor } from './waitFor';
 import FingerprintWatchCommand from '../../src/fingerprint/fingerprintWatchCommand';
 import { INavieProvider } from '../../src/rpc/explain/navie/inavie';
-import { getConfigurationV1, setConfigurationV1 } from '../../src/rpc/configuration';
+import {
+  getConfigurationV1,
+  getConfigurationV2,
+  setConfigurationV1,
+  setConfigurationV2,
+} from '../../src/rpc/configuration';
 
 export type RPC = {
   server: RPCServer;
@@ -39,8 +44,10 @@ export async function buildRPC(navieProvider: INavieProvider): Promise<RPC> {
     sequenceDiagram(),
     explainHandler(navieProvider),
     explainStatusHandler(),
-    getConfigurationV1(),
     setConfigurationV1(),
+    getConfigurationV1(),
+    setConfigurationV2(),
+    getConfigurationV2(),
   ];
 
   const rpcServer = new RPCServer(0, handlers);

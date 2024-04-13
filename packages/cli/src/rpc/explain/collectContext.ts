@@ -1,14 +1,17 @@
 import { SearchRpc } from '@appland/rpc';
-import AppMapIndex, { SearchResponse } from '../../fulltext/AppMapIndex';
+import AppMapIndex, { SearchResponse as AppMapSearchResponse } from '../../fulltext/AppMapIndex';
 import FindEvents, {
   SearchResponse as EventSearchResponse,
   SearchResult as EventSearchResult,
 } from '../../fulltext/FindEvents';
-import { DEFAULT_MAX_DIAGRAMS } from '../search/search';
+import { DEFAULT_MAX_DIAGRAMS, DEFAULT_MAX_FILES } from '../search/search';
 import buildContext from './buildContext';
 import { log } from 'console';
 import { isAbsolute, join } from 'path';
 import { ContextV2, applyContext } from '@appland/navie';
+import { FileIndexMatch, buildFileIndex } from '../../fulltext/FileIndex';
+import withIndex from '../../fulltext/withIndex';
+import { SourceIndexMatch, buildSourceIndex } from '../../fulltext/SourceIndex';
 
 export function textSearchResultToRpcSearchResult(
   eventResult: EventSearchResult
@@ -26,7 +29,7 @@ export function textSearchResultToRpcSearchResult(
 export class EventCollector {
   appmapIndexes = new Map<string, FindEvents>();
 
-  constructor(private query: string, private appmapSearchResponse: SearchResponse) {}
+  constructor(private query: string, private appmapSearchResponse: AppMapSearchResponse) {}
 
   async collectEvents(maxEvents: number): Promise<{
     results: SearchRpc.SearchResult[];
@@ -72,13 +75,39 @@ export class EventCollector {
   }
 }
 
+const CHARS_PER_SNIPPET = 50;
+
+export class SourceCollector {
+  constructor(private keywords: string[], private fileSearchResponse: FileIndexMatch[]) {}
+
+  async collectContext(charLimit: number): Promise<ContextV2.ContextItem[]> {
+    const sourceIndexDocuments = await withIndex(
+      'source',
+      (indexFileName: string) => buildSourceIndex(indexFileName, this.fileSearchResponse),
+      (index) => index.search(this.keywords, Math.round(charLimit / CHARS_PER_SNIPPET))
+    );
+
+    const buildLocation = (doc: SourceIndexMatch) => {
+      const filePath = join(doc.directory, doc.fileName);
+      return `${filePath}:${doc.from}-${doc.to}`;
+    };
+
+    return sourceIndexDocuments.map((doc: SourceIndexMatch) => ({
+      type: ContextV2.ContextItemType.CodeSnippet,
+      content: doc.content,
+      location: buildLocation(doc),
+    }));
+  }
+}
+
 export class ContextCollector {
   public appmaps: string[] | undefined;
 
   query: string;
 
   constructor(
-    private directories: string[],
+    private appmapDirectories: string[],
+    private sourceDirectories: string[],
     private vectorTerms: string[],
     private charLimit: number
   ) {
@@ -91,11 +120,11 @@ export class ContextCollector {
   }> {
     const query = this.vectorTerms.join(' ');
 
-    let appmapSearchResponse: SearchResponse;
+    let appmapSearchResponse: AppMapSearchResponse;
     if (this.appmaps) {
       const results = this.appmaps
         .map((appmap) => {
-          const directory = this.directories.find((dir) => appmap.startsWith(dir));
+          const directory = this.appmapDirectories.find((dir) => appmap.startsWith(dir));
           if (!directory) return undefined;
 
           return {
@@ -121,10 +150,17 @@ export class ContextCollector {
       const searchOptions = {
         maxResults: DEFAULT_MAX_DIAGRAMS,
       };
-      appmapSearchResponse = await AppMapIndex.search(this.directories, query, searchOptions);
+      appmapSearchResponse = await AppMapIndex.search(this.appmapDirectories, query, searchOptions);
     }
 
+    const fileSearchResponse = await withIndex(
+      'files',
+      (indexFileName: string) => buildFileIndex(this.sourceDirectories, indexFileName),
+      (index) => index.search(this.vectorTerms, DEFAULT_MAX_FILES)
+    );
+
     const eventsCollector = new EventCollector(this.query, appmapSearchResponse);
+    const sourceCollector = new SourceCollector(this.vectorTerms, fileSearchResponse);
 
     let contextCandidate: {
       results: SearchRpc.SearchResult[];
@@ -136,7 +172,19 @@ export class ContextCollector {
     log(`Requested char limit: ${this.charLimit}`);
     while (true) {
       log(`Collecting context with ${maxEventsPerDiagram} events per diagram.`);
+
       contextCandidate = await eventsCollector.collectEvents(maxEventsPerDiagram);
+
+      const codeSnippetCount = contextCandidate.context.filter(
+        (item) => item.type === ContextV2.ContextItemType.CodeSnippet
+      ).length;
+      let sourceContext: ContextV2.ContextResponse = [];
+      if (codeSnippetCount === 0) {
+        sourceContext = await sourceCollector.collectContext(this.charLimit);
+      } else {
+        sourceContext = await sourceCollector.collectContext(this.charLimit / 4);
+      }
+      contextCandidate.context = contextCandidate.context.concat(sourceContext);
 
       const appliedContext = applyContext(contextCandidate.context, this.charLimit);
       const appliedContextSize = appliedContext.reduce((acc, item) => acc + item.content.length, 0);
@@ -163,7 +211,8 @@ export class ContextCollector {
 }
 
 export default async function collectContext(
-  directories: string[],
+  appmapDirectories: string[],
+  sourceDirectories: string[],
   appmaps: string[] | undefined,
   vectorTerms: string[],
   charLimit: number
@@ -171,7 +220,12 @@ export default async function collectContext(
   searchResponse: SearchRpc.SearchResponse;
   context: ContextV2.ContextResponse;
 }> {
-  const contextCollector = new ContextCollector(directories, vectorTerms, charLimit);
+  const contextCollector = new ContextCollector(
+    appmapDirectories,
+    sourceDirectories,
+    vectorTerms,
+    charLimit
+  );
   if (appmaps) contextCollector.appmaps = appmaps;
   return await contextCollector.collectContext();
 }
