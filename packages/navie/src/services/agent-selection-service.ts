@@ -35,7 +35,6 @@ export default class AgentSelectionService {
     projectInfo: ProjectInfo[]
   ): AgentModeResult {
     let modifiedQuestion = question;
-    const hasAppMaps = projectInfo.some((info) => info.appmapStats.numAppMaps > 0);
 
     const helpAgent = () => new HelpAgent(this.history, this.helpProvider, this.vectorTermsService);
 
@@ -82,18 +81,11 @@ export default class AgentSelectionService {
       }
     };
 
-    const noAppMapsMode = () => {
-      if (!hasAppMaps) {
-        this.history.log(`[mode-selection] Activating Help mode because no AppMaps were detected.`);
-        return { question, agent: helpAgent() };
-      }
-    };
-
     const defaultMode = () => {
       this.history.log(`[mode-selection] Using default mode: ${AgentMode.Explain}`);
       return { question, agent: explainAgent() };
     };
 
-    return optionMode() || questionPrefixMode() || noAppMapsMode() || defaultMode();
+    return optionMode() || questionPrefixMode() || defaultMode();
   }
 }
