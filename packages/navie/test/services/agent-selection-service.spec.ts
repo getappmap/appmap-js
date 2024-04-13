@@ -56,7 +56,7 @@ describe('AgentSelectionService', () => {
   });
 
   describe('when there are no AppMaps', () => {
-    it('creates a Help agent', () => {
+    it('creates an Explain agent', () => {
       const { agent, question } = buildAgentSelectionService().selectAgent(
         genericQuestion,
         new ExplainOptions(),
@@ -67,7 +67,7 @@ describe('AgentSelectionService', () => {
           },
         ]
       );
-      expect(agent).toBeInstanceOf(HelpAgent);
+      expect(agent).toBeInstanceOf(ExplainAgent);
       expect(question).toEqual(question);
     });
   });
