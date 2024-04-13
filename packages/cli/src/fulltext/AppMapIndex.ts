@@ -2,13 +2,14 @@ import { dirname, join } from 'path';
 import { Metadata } from '@appland/models';
 import { readFile, rename, rm, stat, writeFile } from 'fs/promises';
 
-import { exists, processNamedFiles, splitCamelized, verbose } from '../utils';
+import { exists, processNamedFiles, verbose } from '../utils';
+import { splitCamelized } from '../lib/splitCamelized';
 import { log, warn } from 'console';
 import lunr from 'lunr';
 import UpToDate from '../lib/UpToDate';
 import loadAppMapConfig from '../lib/loadAppMapConfig';
 import { packRef, refToAppMapDir, unpackRef } from './ref';
-import assert from 'assert';
+import queryKeywords from './queryKeywords';
 
 type SerializedCodeObject = {
   name: string;
@@ -58,7 +59,7 @@ async function buildDocument(directory: string, metadataFile: string): Promise<a
     if (co.type === 'query') queries.push(co.name);
     else if (co.type === 'route') routes.push(co.name);
     else if (co.type === 'external-route') externalRoutes.push(co.name);
-    else codeObjects.push(splitCamelized(co.name));
+    else codeObjects.push(co.name);
 
     co.children?.forEach((child) => {
       collectFunction(child);
@@ -82,13 +83,13 @@ async function buildDocument(directory: string, metadataFile: string): Promise<a
   const id = packRef(directory, appmapId);
   return {
     id,
-    name: metadata.name,
-    source_location: metadata.source_location,
-    code_objects: codeObjects.join(' '),
-    queries: queries.join(' '),
-    routes: routes.join(' '),
-    external_routes: externalRoutes.join(' '),
-    parameters: parameters,
+    name: queryKeywords(metadata.name),
+    source_location: queryKeywords(metadata.source_location),
+    code_objects: queryKeywords(codeObjects),
+    queries: queryKeywords(queries),
+    routes: queryKeywords(routes),
+    external_routes: queryKeywords(externalRoutes),
+    parameters: queryKeywords(parameters),
   };
 }
 
@@ -287,7 +288,7 @@ export default class AppMapIndex {
   constructor(public directories: string[], private idx: lunr.Index) {}
 
   async search(search: string, options: SearchOptions = {}): Promise<SearchResponse> {
-    let matches = this.idx.search(search);
+    let matches = this.idx.search(queryKeywords(search).join(' '));
     matches = await removeNonExistentMatches(matches);
     const numResults = matches.length;
 
@@ -310,11 +311,11 @@ export default class AppMapIndex {
   }
 
   static async search(
-    directories: string[],
+    appmapDirectories: string[],
     search: string,
     options: SearchOptions = {}
   ): Promise<SearchResponse> {
-    const index = await buildIndex(directories);
+    const index = await buildIndex(appmapDirectories);
     return await index.search(search, options);
   }
 }

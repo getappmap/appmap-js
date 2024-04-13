@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { exec } from 'child_process';
+import { ExecOptions, exec } from 'child_process';
 import { verbose } from '../utils';
 
 function commandStyle(message: string): string {
@@ -11,10 +11,13 @@ export function executeCommand(
   printCommand = verbose(),
   printStdout = verbose(),
   printStderr = verbose(),
-  okCodes = [0]
+  okCodes = [0],
+  cwd?: string
 ): Promise<string> {
   if (printCommand) console.warn(commandStyle(cmd));
-  const command = exec(cmd);
+  const commandOptions: ExecOptions = {};
+  if (cwd) commandOptions.cwd = cwd;
+  const command = exec(cmd, commandOptions);
   const result: string[] = [];
   const stderr: string[] = [];
   if (command.stdout) {

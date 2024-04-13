@@ -13,87 +13,92 @@ describe('ContextCollector', () => {
 
   beforeEach(() => {
     jest.mocked(navie.applyContext).mockImplementation((context) => context);
-    contextCollector = new ContextCollector(['a', 'b'], vectorTerms, charLimit);
   });
   afterEach(() => jest.restoreAllMocks());
 
   describe('collectContext', () => {
-    it('returns context for specified appmaps', async () => {
-      const mockAppmaps = ['appmap1', 'appmap2'];
-      contextCollector.appmaps = mockAppmaps;
-
-      const mockContext: navie.ContextV2.ContextResponse = [
-        {
-          type: navie.ContextV2.ContextItemType.SequenceDiagram,
-          content: 'diagram1',
-        },
-        {
-          type: navie.ContextV2.ContextItemType.SequenceDiagram,
-          content: 'diagram2',
-        },
-      ];
-
-      AppMapIndex.search = jest.fn().mockRejectedValue(new Error('Unexpected call to search'));
-
-      EventCollector.prototype.collectEvents = jest.fn().mockResolvedValue({
-        results: [],
-        context: mockContext,
-        contextSize: 4545,
+    describe('appmaps', () => {
+      beforeEach(() => {
+        contextCollector = new ContextCollector(['a', 'b'], [], vectorTerms, charLimit);
       });
 
-      const collectedContext = await contextCollector.collectContext();
+      it('returns context for specified appmaps', async () => {
+        const mockAppmaps = ['appmap1', 'appmap2'];
+        contextCollector.appmaps = mockAppmaps;
 
-      expect(collectedContext.searchResponse.numResults).toBe(mockAppmaps.length);
-      expect(collectedContext.context).toEqual(mockContext);
-    });
-
-    it('handles search across all appmaps', async () => {
-      const mockSearchResponse: SearchRpc.SearchResponse = {
-        numResults: 10,
-        results: [
+        const mockContext: navie.ContextV2.ContextResponse = [
           {
-            appmap: 'appmap1',
-            directory: 'a',
-            score: 1,
-            events: [{ fqid: 'function:1', score: 1, eventIds: [1, 2] }],
+            type: navie.ContextV2.ContextItemType.SequenceDiagram,
+            content: 'diagram1',
           },
           {
-            appmap: 'appmap2',
-            directory: 'a',
-            score: 1,
-            events: [{ fqid: 'function:2', score: 1, eventIds: [3, 4] }],
+            type: navie.ContextV2.ContextItemType.SequenceDiagram,
+            content: 'diagram2',
           },
-          {
-            appmap: 'appmap3',
-            directory: 'b',
-            score: 1,
-            events: [{ fqid: 'function:3', score: 1, eventIds: [5, 6] }],
-          },
-        ],
-      };
+        ];
 
-      AppMapIndex.search = jest.fn().mockResolvedValue(mockSearchResponse);
+        AppMapIndex.search = jest.fn().mockRejectedValue(new Error('Unexpected call to search'));
 
-      const mockContext: navie.ContextV2.ContextResponse = [
-        {
-          type: navie.ContextV2.ContextItemType.SequenceDiagram,
-          content: 'diagram1',
-        },
-      ];
+        EventCollector.prototype.collectEvents = jest.fn().mockResolvedValue({
+          results: [],
+          context: mockContext,
+          contextSize: 4545,
+        });
 
-      EventCollector.prototype.collectEvents = jest.fn().mockResolvedValue({
-        results: [],
-        context: mockContext,
-        contextSize: 3000,
+        const collectedContext = await contextCollector.collectContext();
+
+        expect(collectedContext.searchResponse.numResults).toBe(mockAppmaps.length);
+        expect(collectedContext.context).toEqual(mockContext);
       });
 
-      const collectedContext = await contextCollector.collectContext();
+      it('handles search across all appmaps', async () => {
+        const mockSearchResponse: SearchRpc.SearchResponse = {
+          numResults: 10,
+          results: [
+            {
+              appmap: 'appmap1',
+              directory: 'a',
+              score: 1,
+              events: [{ fqid: 'function:1', score: 1, eventIds: [1, 2] }],
+            },
+            {
+              appmap: 'appmap2',
+              directory: 'a',
+              score: 1,
+              events: [{ fqid: 'function:2', score: 1, eventIds: [3, 4] }],
+            },
+            {
+              appmap: 'appmap3',
+              directory: 'b',
+              score: 1,
+              events: [{ fqid: 'function:3', score: 1, eventIds: [5, 6] }],
+            },
+          ],
+        };
 
-      expect(AppMapIndex.search).toHaveBeenCalledWith(['a', 'b'], vectorTerms.join(' '), {
-        maxResults: expect.any(Number),
+        AppMapIndex.search = jest.fn().mockResolvedValue(mockSearchResponse);
+
+        const mockContext: navie.ContextV2.ContextResponse = [
+          {
+            type: navie.ContextV2.ContextItemType.SequenceDiagram,
+            content: 'diagram1',
+          },
+        ];
+
+        EventCollector.prototype.collectEvents = jest.fn().mockResolvedValue({
+          results: [],
+          context: mockContext,
+          contextSize: 3000,
+        });
+
+        const collectedContext = await contextCollector.collectContext();
+
+        expect(AppMapIndex.search).toHaveBeenCalledWith(['a', 'b'], vectorTerms.join(' '), {
+          maxResults: expect.any(Number),
+        });
+        expect(collectedContext.searchResponse.numResults).toBe(10);
+        expect(collectedContext.context).toEqual(mockContext);
       });
-      expect(collectedContext.searchResponse.numResults).toBe(10);
-      expect(collectedContext.context).toEqual(mockContext);
     });
   });
 });

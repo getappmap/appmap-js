@@ -7,7 +7,7 @@ import { ContextV2, Help, ProjectInfo } from '@appland/navie';
 import { RpcError, RpcHandler } from '../rpc';
 import collectContext from './collectContext';
 import INavie, { INavieProvider } from './navie/inavie';
-import configuration from '../configuration';
+import configuration, { AppMapDirectory } from '../configuration';
 import collectProjectInfos from '../../cmds/navie/projectInfo';
 import collectHelp from '../../cmds/navie/help';
 
@@ -32,7 +32,8 @@ export const DEFAULT_TOKEN_LIMIT = 8000;
 
 export class Explain extends EventEmitter {
   constructor(
-    public directories: string[],
+    public appmapDirectories: AppMapDirectory[],
+    public projectDirectories: string[],
     public question: string,
     public codeSelection: string | undefined,
     public appmaps: string[] | undefined,
@@ -92,7 +93,13 @@ export class Explain extends EventEmitter {
     // pruned by the client AI anyway.
     // The meaning of tokenCount is "try and get at least this many tokens"
     const charLimit = tokenCount * 3;
-    const searchResult = await collectContext(this.directories, this.appmaps, keywords, charLimit);
+    const searchResult = await collectContext(
+      this.appmapDirectories.map((dir) => dir.directory),
+      this.projectDirectories,
+      this.appmaps,
+      keywords,
+      charLimit
+    );
 
     this.status.searchResponse = searchResult.searchResponse;
     this.status.contextResponse = searchResult.context;
@@ -122,8 +129,16 @@ async function explain(
     step: ExplainRpc.Step.NEW,
     threadId,
   };
-  const { directories } = configuration();
-  const explain = new Explain(directories, question, codeSelection, appmaps, status);
+  const appmapDirectories = await configuration().appmapDirectories();
+  const { projectDirectories } = configuration();
+  const explain = new Explain(
+    appmapDirectories,
+    projectDirectories,
+    question,
+    codeSelection,
+    appmaps,
+    status
+  );
 
   const invokeContextFunction = async (data: any) => {
     const type = data['type'];

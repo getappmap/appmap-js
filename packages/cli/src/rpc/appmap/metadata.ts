@@ -14,8 +14,8 @@ export default function metadata(): RpcHandler<
     let appmapId = appmapArg;
     if (appmapId.endsWith('.appmap.json')) appmapId = appmapId.slice(0, '.appmap.json'.length * -1);
     if (!isAbsolute(appmapId)) {
-      const { directories } = configuration();
-      if (directories.length === 1) appmapId = join(directories[0], appmapId);
+      const directories = await configuration().appmapDirectories();
+      if (directories.length === 1) appmapId = join(directories[0].directory, appmapId);
     }
 
     let metadataStr: string | undefined;
