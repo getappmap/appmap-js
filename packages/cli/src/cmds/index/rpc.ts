@@ -18,7 +18,12 @@ import LocalNavie from '../../rpc/explain/navie/navie-local';
 import RemoteNavie from '../../rpc/explain/navie/navie-remote';
 import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 import { configureRpcDirectories } from '../../lib/handleWorkingDirectory';
-import { getConfigurationV1, setConfigurationV1 } from '../../rpc/configuration';
+import {
+  getConfigurationV1,
+  getConfigurationV2,
+  setConfigurationV1,
+  setConfigurationV2,
+} from '../../rpc/configuration';
 
 const AI_KEY_ENV_VARS = ['OPENAI_API_KEY', 'AZURE_OPENAI_API_KEY'];
 
@@ -174,6 +179,8 @@ export const handler = async (argv) => {
     explainStatusHandler(),
     setConfigurationV1(),
     getConfigurationV1(),
+    setConfigurationV2(),
+    getConfigurationV2(),
   ];
   const rpcServer = new RPCServer(port, rpcMethods);
   rpcServer.start();

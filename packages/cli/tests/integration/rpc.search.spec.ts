@@ -1,6 +1,6 @@
 import { SearchRpc } from '@appland/rpc';
 import { join } from 'path';
-import { readFile } from 'fs/promises';
+import { readFile, writeFile } from 'fs/promises';
 
 import { SingleDirectoryRPCTest as RPCTest } from './RPCTest';
 import { verbose } from '../../src/utils';

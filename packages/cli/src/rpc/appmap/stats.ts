@@ -2,7 +2,7 @@ import { AppMapRpc } from '@appland/rpc';
 import { RpcHandler } from '../rpc';
 import { processNamedFiles } from '../../utils';
 import { readFile } from 'fs/promises';
-import configuration, { AppMapConfigWithDirectory } from '../configuration';
+import configuration, { AppMapDirectory } from '../configuration';
 import { join } from 'path';
 
 type Stats = {
@@ -15,14 +15,17 @@ type Stats = {
   numAppMaps: number;
 };
 
-async function getAppmapStats(config: AppMapConfigWithDirectory): Promise<Stats> {
+async function getAppmapStats(appmapDirectory: AppMapDirectory): Promise<Stats> {
   const packages = new Set<string>();
   const classes = new Set<string>();
   const routes = new Set<string>();
   const tables = new Set<string>();
   let numAppMaps = 0;
 
-  const appmapDir = join(config.directory, config.appmap_dir ?? 'tmp/appmap');
+  const appmapDir = join(
+    appmapDirectory.directory,
+    appmapDirectory.appmapConfig.appmap_dir ?? 'tmp/appmap'
+  );
   const collectStrings = (values: Set<string>): ((file: string) => Promise<void>) => {
     return async (file: string): Promise<void> => {
       for (const value of JSON.parse(await readFile(file, 'utf-8'))) values.add(value);
@@ -42,8 +45,8 @@ async function getAppmapStats(config: AppMapConfigWithDirectory): Promise<Stats>
   await processNamedFiles(appmapDir, 'metadata.json', async () => numAppMaps++);
 
   return {
-    name: config.name || config.directory,
-    directory: config.directory,
+    name: appmapDirectory.appmapConfig.name || appmapDirectory.directory,
+    directory: appmapDirectory.directory,
     packages: Array.from(packages).sort(),
     classes: Array.from(classes).sort(),
     routes: Array.from(routes).sort(),
@@ -52,9 +55,12 @@ async function getAppmapStats(config: AppMapConfigWithDirectory): Promise<Stats>
   };
 }
 
-export async function collectStats(cachedConfigs?: AppMapConfigWithDirectory[]): Promise<Stats[]> {
-  const configs = cachedConfigs ?? (await configuration().configs());
-  const stats = await Promise.all(configs.map((config) => getAppmapStats(config)));
+export async function collectStats(
+  preloadedAppMapDirectories?: AppMapDirectory[]
+): Promise<Stats[]> {
+  const appmapDirectories =
+    preloadedAppMapDirectories ?? (await configuration().appmapDirectories());
+  const stats = await Promise.all(appmapDirectories.map((appmapDir) => getAppmapStats(appmapDir)));
   return stats.sort((a, b) => a.name.localeCompare(b.name));
 }
 

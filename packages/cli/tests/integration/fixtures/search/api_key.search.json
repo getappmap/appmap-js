@@ -6,26 +6,27 @@
       "events": [
         {
           "fqid": "function:app/models/ApiKey.authenticate",
-          "score": 2.526492529179534,
+          "score": 0.626496608131281,
           "elapsed": 0.155711,
           "eventIds": [8, 40],
           "location": "app/models/api_key.rb:51"
         },
         {
           "fqid": "function:app/models/ApiKey.decode",
-          "score": 2.526492529179534,
+          "score": 0.626496608131281,
           "elapsed": 0.000045,
           "eventIds": [9, 30, 41],
           "location": "app/models/api_key.rb:24"
         },
         {
-          "fqid": "route:DELETE /api/api_keys",
-          "score": 1.9961624432896234,
-          "elapsed": 0.16964100000000001,
-          "eventIds": [7, 39]
+          "fqid": "function:app/models/ApiKey.encode",
+          "score": 0.45537676708413655,
+          "elapsed": 0.000024,
+          "eventIds": [4],
+          "location": "app/models/api_key.rb:20"
         }
       ],
-      "score": 2.1969807691466032
+      "score": 3.5885669145217287
     }
   ],
   "numResults": 1

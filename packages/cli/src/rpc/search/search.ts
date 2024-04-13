@@ -4,12 +4,12 @@ import { SearchRpc } from '@appland/rpc';
 import { RpcHandler } from '../rpc';
 import AppMapIndex, { SearchResponse } from '../../fulltext/AppMapIndex';
 import searchSingleAppMap from '../../cmds/search/searchSingleAppMap';
-import configuration from '../configuration';
-import { dir } from 'console';
+import configuration, { AppMapDirectory } from '../configuration';
 import { isAbsolute, join } from 'path';
 
 export const DEFAULT_MAX_DIAGRAMS = 10;
 export const DEFAULT_MAX_EVENTS_PER_DIAGRAM = 100;
+export const DEFAULT_MAX_FILES = 10;
 
 export type HandlerOptions = {
   maxResults?: number;
@@ -23,20 +23,20 @@ export async function handler(
   options: HandlerOptions
 ): Promise<SearchRpc.SearchResponse> {
   const config = configuration();
-  const { directories } = config;
+  const appmapDirectories = await config.appmapDirectories();
   let appmapSearchResponse: SearchResponse;
   if (appmaps) {
     const results = appmaps
       .map((appmap) => {
-        let directory: string | undefined;
-        if (directories.length === 1) directory = directories[0];
-        else directory = directories.find((dir) => appmap.startsWith(dir));
-        if (!directory) return undefined;
+        let appmapDirectory: AppMapDirectory | undefined;
+        if (appmapDirectories.length === 1) appmapDirectory = appmapDirectories[0];
+        else appmapDirectory = appmapDirectories.find((dir) => appmap.startsWith(dir.directory));
+        if (!appmapDirectory) return undefined;
 
-        const appmapId = isAbsolute(appmap) ? appmap : join(directory, appmap);
+        const appmapId = isAbsolute(appmap) ? appmap : join(appmapDirectory.directory, appmap);
         return {
           appmap: appmapId,
-          directory,
+          directory: appmapDirectory.directory,
           score: 1,
         };
       })
@@ -57,7 +57,11 @@ export async function handler(
     const searchOptions = {
       maxResults: options.maxDiagrams || options.maxResults || DEFAULT_MAX_DIAGRAMS,
     };
-    appmapSearchResponse = await AppMapIndex.search(directories, query, searchOptions);
+    appmapSearchResponse = await AppMapIndex.search(
+      appmapDirectories.map((d) => d.directory),
+      query,
+      searchOptions
+    );
   }
 
   // For each AppMap, search for events within the map that match the query.

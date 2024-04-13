@@ -4,8 +4,8 @@ import configuration from '../../rpc/configuration';
 
 export default async function collectProjectInfos(): Promise<ProjectInfo.ProjectInfo[]> {
   const projectInfoByPath: { [key: string]: ProjectInfo.ProjectInfo } = {};
-  const appmapConfigs = await configuration().configs();
-  const appmapStats = await collectStats(appmapConfigs);
+  const appmapDirectories = await configuration().appmapDirectories();
+  const appmapStats = await collectStats(appmapDirectories);
   appmapStats.forEach((stats) => {
     const { directory } = stats;
 
@@ -16,12 +16,12 @@ export default async function collectProjectInfos(): Promise<ProjectInfo.Project
     projectInfoByPath[directory] = { appmapConfig: undefined, appmapStats: stats };
   });
 
-  appmapConfigs.forEach((config) => {
-    projectInfoByPath[config.directory].appmapConfig = {
-      name: config.name,
-      language: config.language ?? 'unknown',
-      appmap_dir: config.appmap_dir ?? 'tmp/appmap',
-      packages: config.packages,
+  appmapDirectories.forEach((dir) => {
+    projectInfoByPath[dir.directory].appmapConfig = {
+      name: dir.appmapConfig.name,
+      language: dir.appmapConfig.language ?? 'unknown',
+      appmap_dir: dir.appmapConfig.appmap_dir ?? 'tmp/appmap',
+      packages: dir.appmapConfig.packages,
     };
   });
 

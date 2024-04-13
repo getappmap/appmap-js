@@ -1,4 +1,3 @@
-import sinon, { SinonSandbox } from 'sinon';
 import * as utils from '../../../src/utils';
 import AppMapIndex from '../../../src/fulltext/AppMapIndex';
 import UpToDate from '../../../src/lib/UpToDate';

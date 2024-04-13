@@ -21,8 +21,8 @@ export async function appmapFilterHandler(
 
   let filePath = appmapFile(appmapId);
   if (!isAbsolute(filePath)) {
-    const { directories } = configuration();
-    if (directories.length === 1) filePath = join(directories[0], filePath);
+    const directories = await configuration().appmapDirectories();
+    if (directories.length === 1) filePath = join(directories[0].directory, filePath);
   }
 
   const appmapStr = await readFile(filePath, 'utf8');
