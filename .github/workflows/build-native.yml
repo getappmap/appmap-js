@@ -1,0 +1,27 @@
+name: Build Native
+
+on:
+  pull_request:
+
+jobs:
+  build_native:
+    runs-on: ubuntu-latest
+
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'build native') }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: ./.github/actions/setup-node
+
+      - name: Build
+        run: |
+          yarn build && yarn build-native
+
+      - name: Publish release/ build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: AppMap packaged binaries
+          path: packages/cli/release
