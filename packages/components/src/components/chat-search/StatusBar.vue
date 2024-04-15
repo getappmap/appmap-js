@@ -4,6 +4,7 @@
       <span class="status-bar__header__title">
         <v-warning-icon class="warning-icon" v-if="level === 'warning' || level === 'error'" />
         <v-success-icon class="success-icon" v-if="level === 'success'" />
+        <v-info-icon class="info-icon" v-if="level === 'info'" />
         <slot name="header" />
       </span>
       <v-chevron-down-icon :class="['toggle-icon', showBody ? 'up' : 'down']" />
@@ -19,6 +20,7 @@ import Vue, { PropType } from 'vue';
 import VChevronDownIcon from '@/assets/fa-solid_chevron-down.svg';
 import VWarningIcon from '@/assets/exclamation-circle.svg';
 import VSuccessIcon from '@/assets/success-checkmark.svg';
+import VInfoIcon from '@/assets/info-circle.svg';
 
 export default Vue.extend({
   name: 'v-status-bar',
@@ -27,6 +29,7 @@ export default Vue.extend({
     VChevronDownIcon,
     VWarningIcon,
     VSuccessIcon,
+    VInfoIcon,
   },
 
   data() {
@@ -37,9 +40,9 @@ export default Vue.extend({
 
   props: {
     level: {
-      type: String as PropType<'success' | 'warning' | 'error'>,
+      type: String as PropType<'info' | 'success' | 'warning' | 'error'>,
       default: 'success',
-      validator: (value: string) => ['success', 'warning', 'error'].includes(value),
+      validator: (value: string) => ['info', 'success', 'warning', 'error'].includes(value),
     },
   },
 
@@ -77,7 +80,8 @@ $fg: #ececec;
       gap: 0.5rem;
 
       .warning-icon,
-      .success-icon {
+      .success-icon,
+      .info-icon {
         fill: $fg;
         width: 20px;
 
@@ -124,7 +128,8 @@ $fg: #ececec;
     }
   }
 
-  &--success {
+  &--success,
+  &--info {
     background-color: rgba(128, 128, 255, 0.1);
   }
 

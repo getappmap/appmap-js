@@ -303,7 +303,7 @@ export default {
   },
   computed: {
     showStatus() {
-      return !this.targetAppmap && this.appmapStats && (!this.hasAppMaps || !this.isChatting);
+      return !this.targetAppmap && this.appmapStats && !this.isChatting;
     },
     targetAppmapName() {
       return this.targetAppmap?.metadata?.name;
