@@ -2,7 +2,7 @@
   <v-status-bar v-if="numAppMaps" level="success">
     <template v-slot:header>
       <div class="context__header">
-        {{ numAppMaps }} AppMap{{ numAppMaps === 1 ? '' : 's' }} available
+        {{ numAppMaps }} AppMap recording{{ numAppMaps === 1 ? '' : 's' }} available
       </div>
     </template>
     <template v-slot:body>
@@ -23,9 +23,9 @@
     </template>
   </v-status-bar>
 
-  <v-status-bar v-else level="error">
+  <v-status-bar v-else level="info">
     <template v-slot:header>
-      <div class="context__header">No AppMaps available</div>
+      <div class="context__header">No AppMap data available</div>
     </template>
     <template v-slot:body>
       <div class="context__sub-header">

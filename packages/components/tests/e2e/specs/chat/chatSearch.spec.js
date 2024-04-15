@@ -98,11 +98,10 @@ context('Chat search', () => {
       cy.viewport(1280, 720);
     });
 
-    it('shows the context status when AppMaps are not available and the user is chatting', () => {
+    it('does not show the context status when AppMaps are not available and the user is chatting', () => {
       cy.get('[data-cy="status-bar"]').should('be.visible');
       cy.get('[data-cy="chat-input"]', { timeout: 25000 }).type('Hello world{enter}');
-      cy.get('.button-panel').should('be.visible');
-      cy.get('[data-cy="status-bar"]').should('be.visible');
+      cy.get('[data-cy="status-bar"]').should('not.exist');
     });
   });
 });
