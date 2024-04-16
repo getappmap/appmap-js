@@ -1,3 +1,10 @@
+# [@appland/components-v4.14.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.13.0...@appland/components-v4.14.0) (2024-04-16)
+
+
+### Features
+
+* De-emphasize no appmap status in Navie ([55e8724](https://github.com/getappmap/appmap-js/commit/55e87246fc642fd1d45bacfba5ad51467bf1b031))
+
 # [@appland/components-v4.13.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.12.2...@appland/components-v4.13.0) (2024-04-02)
 
 
