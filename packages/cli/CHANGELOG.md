@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.136.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.135.1...@appland/appmap-v3.136.0) (2024-04-16)
+
+
+### Features
+
+* Emit navie-local telemetry events ([66e4757](https://github.com/getappmap/appmap-js/commit/66e4757530448c054c000479511cea346517c43d)), closes [#1712](https://github.com/getappmap/appmap-js/issues/1712)
+
 # [@appland/appmap-v3.135.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.135.0...@appland/appmap-v3.135.1) (2024-03-27)
 
 
