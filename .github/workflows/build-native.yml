@@ -4,7 +4,7 @@ on:
   pull_request:
 
 jobs:
-  build_native:
+  linux:
     runs-on: ubuntu-latest
 
     if: ${{ contains(github.event.pull_request.labels.*.name, 'build native') }}
@@ -18,10 +18,90 @@ jobs:
 
       - name: Build
         run: |
-          yarn build && yarn build-native
+          yarn build
+          cd packages/cli
+          yarn build-native linux
 
-      - name: Publish release/ build artifacts
+      - name: Publish appmap-linux-x64
         uses: actions/upload-artifact@v4
         with:
-          name: AppMap packaged binaries
-          path: packages/cli/release
+          name: appmap-linux-x64
+          path: packages/cli/release/appmap-linux-x64
+
+  macos-x64:
+    runs-on: macos-12
+
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'build native') }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install deps
+        run: python3 -m pip install --break-system-packages setuptools
+
+      - name: Setup Node
+        uses: ./.github/actions/setup-node
+
+      - name: Build
+        run: |
+          yarn build
+          cd packages/cli
+          yarn build-native macos x64
+
+      - name: Publish appmap-macos-x64
+        uses: actions/upload-artifact@v4
+        with:
+          name: appmap-macos-x64
+          path: packages/cli/release/appmap-macos-x64
+
+  macos-arm:
+    runs-on: macos-14
+
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'build native') }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install deps
+        run: python3 -m pip install --break-system-packages setuptools
+
+      - name: Setup Node
+        uses: ./.github/actions/setup-node
+
+      - name: Build
+        run: |
+          yarn build
+          cd packages/cli
+          yarn build-native macos arm64
+
+      - name: Publish appmap-macos-arm64
+        uses: actions/upload-artifact@v4
+        with:
+          name: appmap-macos-arm64
+          path: packages/cli/release/appmap-macos-arm64
+
+  windows:
+    runs-on: windows-latest
+
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'build native') }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: ./.github/actions/setup-node
+
+      - name: Build
+        run: |
+          yarn build
+          cd packages/cli
+          yarn build-native windows x64
+
+      - name: Publish appmap-windows-x64
+        uses: actions/upload-artifact@v4
+        with:
+          name: appmap-windows-x64
+          path: packages/cli/release/appmap-windows-x64.exe
