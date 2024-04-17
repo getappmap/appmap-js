@@ -1,23 +1,21 @@
 #!/bin/bash
 set -ex
 
-# Optionally pass a desired OS as the first argument. E.g. ./build-native.sh macos
-# Otherwise every OS will be built.
+# Optionally pass a desired OS as the first argument, followed by an optional architecture.
+# e.g. ./build-native macos arm64
+#
+# Otherwise every target will be built.
 # Note that if a desired OS is provided, the output will simply be named 'appmap' or 'appmap.exe'.
 # OS and ARCH are only used to name the output when multiple targets are being built at once.
-DESIRED_TARGET="${1}"
+OS="${1}"
+ARGS="--config package.json --compress GZip"
 
-# Assert that node version is 18.x.x
-NODE_VERSION=$(node --version)
-if [[ ! $NODE_VERSION =~ ^v18\.[0-9]+\.[0-9]+$ ]]; then
-  echo "Node version must be 18.x.x"
-  exit 1
+if [ -n "${OS}" ]; then
+  ARCH="${2:-x64}"
+  echo "Building native binaries for ${OS} ${ARCH}..."
+  ARGS="${ARGS} -o release/appmap-${OS}-${ARCH} -t node18-${OS}-${ARCH}"
+else
+  echo "Building native binaries for each target..."
 fi
 
-echo "Building native binaries..."
-yarn pkg \
-  --config package.json \
-  --compress GZip \
-  -o release/appmap \
-  $([ -n "${DESIRED_TARGET}" ] && echo "-t node18-${DESIRED_TARGET}-x64") \
-  built/cli.js
+yarn pkg ${ARGS} built/cli.js
