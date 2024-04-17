@@ -1,22 +1,43 @@
 ---
 layout: docs
-title: Docs - AppMap Navie
-description: "Update your OpenAI key in Navie to use your own account. Follow steps to add, delete, or check key status."
-name: Bring Your Own Key
-step: 4
+title: Docs - Navie
+name: Configuring environment in VS Code
+step: 5
 navie: true
 toc: true
+description: Configure AppMap services environment in VSCode
 ---
 
-# Bring Your Own Key (BYOK)
 
-By default, when asking a question to Navie, your code editor will interact with the AppMap hosted proxy for OpenAI.  If you have a requirement to bring your own key or otherwise use your own OpenAI account you can follow these steps to update the OpenAI key.  Refer to the Navie Docs for more details about [Navie technical architecture](/docs/navie/how-navie-works).
+# Configuring environment in VS Code
 
+Configure Navie to [use a specific LLM](/docs/navie/bring-your-own-model) by adjusting the environment variables used by the AppMap extension.
+
+- [Editing AppMap services environment](#editing-appmap-services-environment)
 - [Add a new OpenAI Key](#add-a-new-openai-key)
 - [Delete a configured OpenAI Key](#delete-a-configured-openai-key)
 - [Check the status of your OpenAI key](#check-the-status-of-your-openai-key)
-- [FAQs](#faqs)
-  - [How is my API key saved securely?](#how-is-my-api-key-saved-securely)
+- [How is my API key saved securely?](#how-is-my-api-key-saved-securely)
+
+## Editing AppMap services environment
+
+**Note**: To store the API key securely, follow [the instructions below](#add-a-new-openai-key).
+
+In VS Code, go to settings.
+
+<img class="video-screenshot" src="/assets/img/docs/goto-vscode-settings.webp" alt="a screenshot of the Visual Studio Code menu"/>
+
+ Search for “appmap environment” to reveal “AppMap: Command Line Environment” setting.
+
+<img class="video-screenshot" alt="a screenshot of the AppMap: Command Line Environment settings section" src="/assets/img/docs/search-for-appmap-environment.webp"/>
+
+Use *Add Item* to define the relevant environment variables according to the [BYOM documentation](/docs/navie/bring-your-own-model#configuration).
+
+<img class="video-screenshot" alt="a screenshot showing an example of the bring your own model key value entry" src="/assets/img/docs/byom-key-value-example.webp"/>
+
+Reload your VS Code for the changes to take effect.  
+
+**NOTE:** Please follow the instructions below to set `OPENAI_API_KEY` or `AZURE_OPENAI_API_KEY` securely.
 
 ## Add a new OpenAI Key
 
@@ -87,13 +108,8 @@ The code editor will respond a notifiction in the bottom corner with your latest
 <img class="video-screenshot" src="/assets/img/product/byok-check-status-resp.webp"/> 
 
 
-# FAQs
-
 ## How is my API key saved securely?
 
 For secure storage of API key secrets within AppMap, we use the default VS Code secret storage which leverages  Electron's safeStorage API to ensure the confidentiality of sensitive information. Upon encryption, secrets are stored within the user data directory in a SQLite database, alongside other VS Code state information. This encryption process involves generating a unique encryption key, which, on macOS, is securely stored within `Keychain Access` under "Code Safe Storage" or "Code - Insiders Safe Storage," depending on the version. This method provides a robust layer of protection, preventing unauthorized access by other applications or users with full disk access. The safeStorage API, accessible in the main process, supports operations such as checking encryption availability, encrypting and decrypting strings, and selecting storage backends on Linux. This approach ensures that your secrets are securely encrypted and stored, safeguarding them from potential threats while maintaining application integrity.
-
-
-
 
 
