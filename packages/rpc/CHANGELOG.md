@@ -1,3 +1,10 @@
+# [@appland/rpc-v1.7.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.6.0...@appland/rpc-v1.7.0) (2024-04-18)
+
+
+### Features
+
+* Define v2.configuration.get+set ([1f38aa4](https://github.com/getappmap/appmap-js/commit/1f38aa48348ba5eae35a59fb9a8c3c2ab853d404))
+
 # [@appland/rpc-v1.6.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.5.0...@appland/rpc-v1.6.0) (2024-03-18)
 
 
