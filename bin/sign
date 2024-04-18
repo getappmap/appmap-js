@@ -11,11 +11,13 @@ APPLE_IDENTITY_CERTIFICATE_PATH="${TMP_DIR}/certificate.pem"
 echo "${APPLE_IDENTITY_PRIVATE_KEY}" > "${APPLE_IDENTITY_PRIVATE_KEY_PATH}"
 echo "${APPLE_IDENTITY_CERTIFICATE}" > "${APPLE_IDENTITY_CERTIFICATE_PATH}"
 
+ENTITLEMENTS_PATH="$(dirname "${BASH_SOURCE[0]}")/../ci/osx-entitlements.plist"
+
 for BINARY_PATH in "$@"; do
   rcodesign sign \
     --pem-source "${APPLE_IDENTITY_PRIVATE_KEY_PATH}" \
     --pem-source "${APPLE_IDENTITY_CERTIFICATE_PATH}" \
     --code-signature-flags runtime \
-    --entitlements-xml-path "${PROJECT_CWD}/ci/osx-entitlements.plist" \
+    --entitlements-xml-path "${ENTITLEMENTS_PATH}" \
     "${BINARY_PATH}"
 done
