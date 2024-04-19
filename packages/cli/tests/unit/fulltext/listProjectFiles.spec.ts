@@ -1,6 +1,7 @@
 import listProjectFiles, { isBinaryFile } from '../../../src/fulltext/listProjectFiles';
 import * as fs from 'fs';
 import * as fsp from 'fs/promises';
+import { join } from 'path';
 
 jest.mock('fs/promises', () => ({
   readdir: jest.fn(),
@@ -20,17 +21,18 @@ describe('listProjectFiles', () => {
       { name: 'helper.js', isFile: () => true, isDirectory: () => false } as unknown as fs.Dirent,
     ];
 
+    const baseDir = join('fake', 'directory');
     jest.mocked(fsp.readdir).mockImplementation((dir: fs.PathLike) => {
-      if (dir.toString() === '/fake/directory/utils') return Promise.resolve([mockFiles[3]]);
-      else if (dir.toString() === '/fake/directory') return Promise.resolve(mockFiles.slice(0, 3));
+      if (dir.toString() === join(baseDir, 'utils')) return Promise.resolve([mockFiles[3]]);
+      else if (dir.toString() === baseDir) return Promise.resolve(mockFiles.slice(0, 3));
       else return Promise.resolve([]);
     });
 
-    const files = await listProjectFiles('/fake/directory');
-    expect(files).toContain('/fake/directory/index.js');
-    expect(files).toContain('/fake/directory/utils/helper.js');
-    expect(files).not.toContain('/fake/directory/logo.png');
-    expect(fsp.readdir).toHaveBeenCalledTimes(2); // Initial dir + utils
+    const files = await listProjectFiles(baseDir);
+    expect(files).toContain(join(baseDir, 'index.js'));
+    expect(files).toContain(join(baseDir, 'utils', 'helper.js'));
+    expect(files).not.toContain(join(baseDir, 'logo.png'));
+    expect(fsp.readdir).toHaveBeenCalledTimes(2); // baseDir + utils
   });
 
   it('ignores directories specified in IGNORE_DIRECTORIES', async () => {
@@ -44,16 +46,17 @@ describe('listProjectFiles', () => {
     ];
 
     const directoriesRead = new Array<string>();
+    const baseDir = join('fake', 'directory');
     jest.mocked(fsp.readdir).mockImplementation((dir: fs.PathLike) => {
       directoriesRead.push(dir.toString());
 
-      if (dir.toString() === '/fake/directory') return Promise.resolve(mockDirectories);
+      if (dir.toString() === baseDir) return Promise.resolve(mockDirectories);
       else return Promise.resolve([]);
     });
 
-    const files = await listProjectFiles('/fake/directory');
+    const files = await listProjectFiles(baseDir);
     expect(files).toEqual([]);
-    expect(directoriesRead).toEqual(['/fake/directory', '/fake/directory/src']);
+    expect(directoriesRead).toEqual([baseDir, join(baseDir, 'src')]);
   });
 
   it('identifies binary files correctly', () => {
