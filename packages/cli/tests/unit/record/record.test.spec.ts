@@ -178,7 +178,6 @@ describe('record test', () => {
       });
       expect(recordContext.properties()).toEqual({
         exitCodes: '0',
-        // eslint-disable-next-line prettier/prettier
         log: `
 ===
 
@@ -208,7 +207,6 @@ describe('record test', () => {
       });
       expect(recordContext.properties()).toEqual({
         exitCodes: '1',
-        // eslint-disable-next-line prettier/prettier
         log: `
 ===
 

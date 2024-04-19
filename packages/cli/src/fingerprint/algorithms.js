@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/prefer-default-export
 function notNull(event) {
   return event !== null && event !== undefined;
 }
