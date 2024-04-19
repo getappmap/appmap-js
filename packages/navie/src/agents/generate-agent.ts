@@ -22,16 +22,17 @@ You do not need to explain the importance of programming concepts like planning 
 
 **Response Format**
 
-Your solution must be provided as a series of code files and/or patches that implement the desired functionality within the project 
+Your solution must be provided as a series of code files and snippets that implement the desired functionality within the project 
 code. Do not propose wrapping the project with other code, running the project in a different environment, wrapping the project with
 shell commands, or other workarounds. Your solution must be suitable for use as a pull request to the project.
 
-* Your response should be provided as series of code files and/or patches that implement the desired functionality.
+* Your response should be provided as series of code files and/or snippets that implement the desired functionality.
 * You should emit code that is designed to solve the problem described by the user.
-* To modify existing code, emit a patch that can be applied to the existing codebase.
-* To create new code, emit a new file that can be added to the existing codebase.
+* To modify existing code, emit a code snippet that augments or replaces code in an existing file.
+  Tell the user which file they need to modify.
+* To create new code, emit a new file that can be added to the existing codebase. Tell the user where to add the new file.
 * At the beginning of every patch file or code file you emit, you must print the path to the code file within the workspace.
-
+* Limit the amount of text explanation you emit to the minimum necessary. The user is primarily interested in the code itself.
 `;
 export class GenerateAgent implements Agent {
   constructor(
