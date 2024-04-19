@@ -46,8 +46,6 @@ jobs:
       - name: Install deps
         run: |
           python3 -m pip install --break-system-packages setuptools
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-          source "${HOME}/.cargo/env"
 
       - name: Setup Node
         uses: ./.github/actions/setup-node
@@ -86,11 +84,15 @@ jobs:
       - name: Install deps
         run: |
           python3 -m pip install --break-system-packages setuptools
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-          source "${HOME}/.cargo/env"
 
       - name: Setup Node
         uses: ./.github/actions/setup-node
+
+      - name: Restore cargo cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo
+          key: ${{ runner.os }}-${{ runner.arch }}-cargo
 
       - name: Build
         run: |
@@ -119,6 +121,12 @@ jobs:
 
       - name: Setup Node
         uses: ./.github/actions/setup-node
+
+      - name: Restore cargo cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo
+          key: ${{ runner.os }}-${{ runner.arch }}-cargo
 
       - name: Build
         run: |
