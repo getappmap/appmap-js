@@ -171,7 +171,7 @@ __metadata:
     JSONStream: ^1.3.5
     ajv: ^8.6.3
     applicationinsights: ^2.1.4
-    appmap-node: ^2.19.3
+    appmap-node: ^2.20.0
     async: ^3.2.4
     axios: ^0.27.2
     better-sqlite3: ^9.5.0
@@ -14174,9 +14174,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"appmap-node@npm:^2.19.3":
-  version: 2.19.3
-  resolution: "appmap-node@npm:2.19.3"
+"appmap-node@npm:^2.19.3, appmap-node@npm:^2.20.0":
+  version: 2.20.0
+  resolution: "appmap-node@npm:2.20.0"
   dependencies:
     acorn-walk: ^8.2.0
     astring: ^1.8.6
@@ -14187,7 +14187,7 @@ __metadata:
     yaml: ^2.3.4
   bin:
     appmap-node: bin/appmap-node.js
-  checksum: ffb964654004f859ab082d826ffb831725bf8b1e32c7f18f62692a3077e1b938b9568e63cea29db3940f5c1b953db14b822742dc7db17f0c9893c463fa3a26b2
+  checksum: 1c23dd519c684eeaeacd5d45c413d065c89fd01c15c7068ad4b113dcf97e6cb7aeb574bdfd0aa288a34b1aec00c7776bcb990c684840aab9441fb2eb96576082
   languageName: node
   linkType: hard
 
