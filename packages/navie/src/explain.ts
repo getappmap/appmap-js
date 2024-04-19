@@ -52,7 +52,7 @@ export class CodeExplainerService {
   ): AsyncIterable<string> {
     const { question: baseQuestion, codeSelection } = clientRequest;
 
-    const classificationRequest = this.classifierService.classifyQuestion(baseQuestion);
+    const contextLabelsFn = this.classifierService.classifyQuestion(baseQuestion);
 
     const projectInfoResponse = await this.projectInfoService.lookupProjectInfo();
     const projectInfo: ProjectInfo[] = Array.isArray(projectInfoResponse)
@@ -78,12 +78,20 @@ export class CodeExplainerService {
       .filter(Boolean)
       .join('\n\n');
 
+    const contextLabels = await contextLabelsFn;
+    warn(
+      `Classification: ${contextLabels
+        .map((label) => [label.name, label.weight].join('='))
+        .join(', ')}`
+    );
+
     const agentOptions = new AgentOptions(
       question,
       aggregateQuestion,
       chatHistory?.map((message) => message.content) || [],
       projectInfo,
-      codeSelection
+      codeSelection,
+      contextLabels
     );
     await mode.perform(agentOptions, tokensAvailable);
 
@@ -96,11 +104,6 @@ export class CodeExplainerService {
 
     if (codeSelection) this.codeSelectionService.applyCodeSelection(codeSelection);
     mode.applyQuestionPrompt(question);
-
-    {
-      const classification = await classificationRequest;
-      warn(`Classification: ${classification}`);
-    }
 
     const response = this.completionService.complete();
     for await (const token of response) {

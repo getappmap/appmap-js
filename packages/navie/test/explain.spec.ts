@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { Agent, AgentMode, AgentOptions } from '../src/agent';
+import { Agent, AgentMode } from '../src/agent';
 import { ChatHistory, ClientRequest, CodeExplainerService, ExplainOptions } from '../src/explain';
 import InteractionHistory from '../src/interaction-history';
 import Message from '../src/message';
@@ -110,7 +110,7 @@ describe('CodeExplainerService', () => {
       complete: () => TOKEN_STREAM,
     };
     classificationService = {
-      classifyQuestion: jest.fn().mockResolvedValue(undefined),
+      classifyQuestion: jest.fn().mockResolvedValue([]),
     } as unknown as ClassificationService;
     codeSelection = undefined;
     codeSelectionService = new CodeSelectionService(interactionHistory);
@@ -140,6 +140,7 @@ describe('CodeExplainerService', () => {
           aggregateQuestion: userMessage1,
           chatHistory: [],
           codeSelection: undefined,
+          contextLabels: [],
           projectInfo: [
             {
               appmapConfig: APPMAP_CONFIG,
@@ -189,6 +190,7 @@ describe('CodeExplainerService', () => {
           aggregateQuestion: [userMessage1, userMessage2].join('\n\n'),
           chatHistory: [userMessage1, assistantMessage1],
           codeSelection: undefined,
+          contextLabels: [],
           projectInfo: [
             {
               appmapConfig: APPMAP_CONFIG,

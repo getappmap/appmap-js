@@ -52,6 +52,7 @@ describe('VectorTermsService', () => {
         expect(completionWithRetry).toHaveBeenCalledTimes(1);
       });
     });
+
     describe('are a valid JSON list', () => {
       it('should return the terms', async () => {
         mockAIResponse(completionWithRetry, ['["user", "management"]']);
@@ -59,6 +60,7 @@ describe('VectorTermsService', () => {
         expect(terms).toEqual(['user', 'management']);
       });
     });
+
     describe('are valid JSON wrapped in fences', () => {
       it('should return the terms', async () => {
         mockAIResponse(completionWithRetry, ['```json', '["user", "management"]', '```']);
@@ -67,7 +69,24 @@ describe('VectorTermsService', () => {
       });
     });
 
-    describe('are invalid JSON', () => {
+    describe('is YAML', () => {
+      it('parses the terms', async () => {
+        mockAIResponse(completionWithRetry, ['response_key:', '  - user', '  - management']);
+        const terms = await service.suggestTerms('user management');
+        expect(terms).toEqual(['response', 'key', 'user', 'management']);
+      });
+    });
+
+    describe('is prefixed by "Terms:"', () => {
+      it('is accepted and processed', async () => {
+        mockAIResponse(completionWithRetry, ['Terms: ["user", "management"]']);
+        const terms = await service.suggestTerms('user management');
+        expect(terms).toEqual(['user', 'management']);
+        expect(completionWithRetry).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('is list-ish ', () => {
       it('is accepted and processed', async () => {
         mockAIResponse(completionWithRetry, ['-user -mgmt']);
         const terms = await service.suggestTerms('user management');

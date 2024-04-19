@@ -14,13 +14,18 @@ export default class LookupContextService {
     public readonly helpFn: (data: HelpRequest) => Promise<HelpResponse>
   ) {}
 
-  async lookupContext(keywords: string[], tokenCount: number): Promise<ContextV2.ContextResponse> {
+  async lookupContext(
+    keywords: string[],
+    tokenCount: number,
+    contextLabels?: ContextV2.ContextLabel[]
+  ): Promise<ContextV2.ContextResponse> {
     const contextRequestPayload: ContextV2.ContextRequest & { version: 2; type: 'search' } = {
       version: 2,
       type: 'search',
       vectorTerms: keywords,
       tokenCount,
     };
+    if (contextLabels) contextRequestPayload.labels = contextLabels;
 
     const context = await this.contextFn(contextRequestPayload);
 
@@ -28,7 +33,7 @@ export default class LookupContextService {
     if (contextFound) {
       this.interactionHistory.addEvent(new ContextLookupEvent(context));
     } else {
-      log('No sequence diagrams found');
+      log('No context found');
       this.interactionHistory.addEvent(new ContextLookupEvent(undefined));
     }
 
