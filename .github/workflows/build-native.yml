@@ -122,6 +122,7 @@ jobs:
 
       - name: Build
         run: |
+          choco install rsync
           yarn build
           cd packages/cli
           yarn build-native windows x64
