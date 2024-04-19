@@ -24,94 +24,21 @@
       data-cy="resize-handle"
       @mousedown="startResizing"
     ></div>
-    <div class="search-container" v-if="targetAppmap || searchResponse">
-      <template v-if="targetAppmap || searchResponse.results.length">
-        <div class="search-results-container">
-          <template v-if="targetAppmap">
-            <div class="search-results-header">
-              <div class="single-appmap-notification">
-                <p>You're asking Navie about a single AppMap</p>
-                <div class="divider">|</div>
-                <v-button
-                  data-cy="full-workspace-context-button"
-                  class="create-more-appmaps"
-                  size="small"
-                  kind="ghost"
-                  @click.native="askAboutWorkspace"
-                >
-                  Include the whole workspace
-                </v-button>
-              </div>
-              <div class="search-results-single-appmap">
-                <h2>AppMap Viewer:</h2>
-                <p class="target-appmap-name">
-                  {{ targetAppmapName }}
-                </p>
-              </div>
-            </div>
-          </template>
-          <template v-else>
-            <div class="search-results-header">
-              <v-match-instructions
-                v-if="searchResponse"
-                :appmap-stats="appmapStats"
-                :search-response="searchResponse"
-              />
-              <div class="search-results-list-container">
-                <h2>AppMap Viewer:</h2>
-                <select
-                  class="search-results-list"
-                  v-model="selectedSearchResultId"
-                  v-if="selectedSearchResultId"
-                  data-cy="appmap-list"
-                >
-                  <option
-                    v-for="result in searchResponse.results"
-                    :value="result.id"
-                    :key="result.id"
-                  >
-                    {{ result.metadata.name || result.appmap }}
-                  </option>
-                </select>
-              </div>
-            </div>
-          </template>
-        </div>
-        <v-app-map
-          v-if="selectedSearchResult || targetAppmap"
-          :allow-fullscreen="true"
-          default-view="viewSequence"
-          :show-ask-navie="false"
-          :saved-filters="savedFilters"
-          :auto-expand-details-panel="false"
-          data-cy="appmap"
-          ref="vappmap"
-          class="appmap"
-        >
-        </v-app-map>
-        <div v-else class="appmap-empty"></div>
-      </template>
-      <template v-else>
-        <v-no-match-instructions
-          class="no-match-instructions"
-          :appmap-stats="appmapStats"
-          v-if="appmapStats"
-        />
-      </template>
+    <div class="search-container">
+      <v-context
+        class="no-match-instructions"
+        :appmap-stats="appmapStats"
+        :context-response="contextResponse"
+      />
     </div>
-    <v-instructions v-else class="instructions" :appmaps="mostRecentAppMaps" />
   </div>
 </template>
 
 <script lang="ts">
 //@ts-nocheck
 import VChat from '@/components/chat/Chat.vue';
-import VInstructions from '@/components/chat-search/Instructions.vue';
-import VMatchInstructions from '@/components/chat-search/MatchInstructions.vue';
-import VNoMatchInstructions from '@/components/chat-search/NoMatchInstructions.vue';
 import VContextStatus from '@/components/chat-search/ContextStatus.vue';
-import VAppMap from './VsCodeExtension.vue';
-import VButton from '@/components/Button.vue';
+import VContext from '@/components/chat-search/Context.vue';
 import AppMapRPC from '@/lib/AppMapRPC';
 import authenticatedClient from '@/components/mixins/authenticatedClient';
 import type { ITool, CodeSelection } from '@/components/chat/Chat.vue';
@@ -122,12 +49,8 @@ export default {
   name: 'v-chat-search',
   components: {
     VChat,
-    VAppMap,
-    VInstructions,
-    VMatchInstructions,
-    VNoMatchInstructions,
+    VContext,
     VContextStatus,
-    VButton,
   },
   mixins: [authenticatedClient],
   props: {
@@ -270,6 +193,9 @@ export default {
     statusStep() {
       return this.searchStatus ? this.searchStatus.step : undefined;
     },
+    contextResponse() {
+      return this.searchStatus?.contextResponse;
+    },
     selectedSearchResult() {
       if (!this.searchResponse || !this.selectedSearchResultId) return;
 
@@ -386,7 +312,6 @@ export default {
       this.searching = false;
       this.searchStatus = undefined;
       this.searchResponse = undefined;
-      this.searchStatus = undefined;
       this.selectedSearchResultId = undefined;
       this.searchId = 0;
       this.searchStatusLabel = undefined;
@@ -455,7 +380,7 @@ $border-color: darken($gray4, 10%);
   .chat-container {
     overflow: hidden;
     min-width: 375px;
-    width: 40vw;
+    width: 60vw;
 
     display: flex;
     flex-direction: column;
@@ -499,11 +424,9 @@ $border-color: darken($gray4, 10%);
   .context-container {
     font-size: 1rem;
     color: $white;
-    grid-template-rows: auto 1fr;
-    display: grid;
     flex-direction: column;
     overflow-y: auto;
-    background-color: $black;
+    background-color: darken(#292c39, 10%);
   }
 
   .instructions {
@@ -512,81 +435,12 @@ $border-color: darken($gray4, 10%);
 
   .search-container {
     max-height: 100vh;
-
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
     h2 {
       font-size: 1.2rem;
       margin-right: 1rem;
-    }
-
-    .search-results-container {
-      background-color: darken($gray2, 8%);
-
-      .search-results-header {
-        display: flex;
-        flex-direction: column;
-        margin: 0.5rem 0;
-        padding: 0 1.75rem;
-
-        .single-appmap-notification {
-          font-size: 0.9rem;
-          color: lighten($gray4, 20%);
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-
-          .divider {
-            margin: 0 0.75rem;
-          }
-        }
-
-        @media (max-width: 900px) {
-          .single-appmap-notification {
-            flex-direction: column;
-            align-items: flex-start;
-            margin-bottom: 1.5rem;
-
-            .divider {
-              display: none;
-            }
-          }
-        }
-
-        .search-results-single-appmap {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-
-          .target-appmap-name {
-            font-size: 0.9rem;
-            margin: 0;
-            font-style: italic;
-          }
-        }
-
-        .search-results-list-container {
-          align-items: center;
-
-          .search-results-list {
-            margin: 0.5rem 0;
-            width: 30em;
-            height: 1.7rem;
-            color: white;
-            background-color: lighten($gray3, 5%);
-            border-radius: 10px;
-            padding: 0.3rem;
-            border: none;
-
-            &:hover {
-              background-color: lighten($gray3, 10%);
-              transition: all 0.2s ease-in-out;
-            }
-
-            &:focus-visible {
-              outline: none;
-            }
-          }
-        }
-      }
     }
 
     .appmap {

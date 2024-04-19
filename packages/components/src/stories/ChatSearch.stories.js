@@ -4,6 +4,7 @@ import orderData from './data/scenario.json';
 import petclinicData from './data/java_scenario.json';
 import longPackageData from './data/long-package.appmap.json';
 import savedFilters from './data/saved_filters.js';
+import navieContext from './data/navie_context.json';
 
 const code = `class UsersController < ApplicationController
   before_action :correct_user,   only: [:edit, :update]
@@ -259,6 +260,7 @@ function buildMockRpc(searchResponse, explanation, appmapStats = AppmapStats) {
             step: 'explain',
             searchResponse,
             explanation: explanation.slice(0, responseIndex - 2).map((line) => `${line}\n`),
+            contextResponse: navieContext,
           });
         }, 500);
       else
@@ -266,6 +268,7 @@ function buildMockRpc(searchResponse, explanation, appmapStats = AppmapStats) {
           step: 'complete',
           searchResponse,
           explanation,
+          contextResponse: navieContext,
         });
     } else if (method.split('.')[0] === 'appmap') {
       const appmapId = params.appmap;
