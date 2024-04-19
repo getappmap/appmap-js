@@ -28,11 +28,31 @@ jobs:
           yarn build-native linux x64
           ${GITHUB_WORKSPACE}/bin/hash release/appmap-linux-x64
 
-      - name: Publish appmap-linux-x64
+      - name: Publish appmap-linux-x64 artifact
         uses: actions/upload-artifact@v4
         with:
           name: appmap-linux-x64
           path: packages/cli/release/appmap-linux-x64
+
+      - name: 'Release: appmap-linux-x64'
+        uses: svenstaro/upload-release-action@v2
+        if: github.ref_type == 'tag'
+        with:
+          repo_token: ${{ secrets.GH_TOKEN }}
+          file: packages/cli/release/appmap-linux-x64
+          asset_name: appmap-linux-x64
+          tag: ${{ github.ref }}
+          overwrite: true
+
+      - name: 'Release: appmap-linux-x64.sha256'
+        uses: svenstaro/upload-release-action@v2
+        if: github.ref_type == 'tag'
+        with:
+          repo_token: ${{ secrets.GH_TOKEN }}
+          file: packages/cli/release/appmap-linux-x64.sha256
+          asset_name: appmap-linux-x64.sha256
+          tag: ${{ github.ref }}
+          overwrite: true
 
   macos-x64:
     runs-on: macos-12
@@ -73,6 +93,26 @@ jobs:
         with:
           name: appmap-macos-x64
           path: packages/cli/release/appmap-macos-x64
+
+      - name: 'Release: appmap-macos-x64'
+        uses: svenstaro/upload-release-action@v2
+        if: github.ref_type == 'tag'
+        with:
+          repo_token: ${{ secrets.GH_TOKEN }}
+          file: packages/cli/release/appmap-macos-x64
+          asset_name: appmap-macos-x64
+          tag: ${{ github.ref }}
+          overwrite: true
+
+      - name: 'Release: appmap-macos-x64.sha256'
+        uses: svenstaro/upload-release-action@v2
+        if: github.ref_type == 'tag'
+        with:
+          repo_token: ${{ secrets.GH_TOKEN }}
+          file: packages/cli/release/appmap-macos-x64.sha256
+          asset_name: appmap-macos-x64.sha256
+          tag: ${{ github.ref }}
+          overwrite: true
 
   macos-arm:
     runs-on: macos-14
@@ -120,6 +160,26 @@ jobs:
           name: appmap-macos-arm64
           path: packages/cli/release/appmap-macos-arm64
 
+      - name: 'Release: appmap-macos-arm64'
+        uses: svenstaro/upload-release-action@v2
+        if: github.ref_type == 'tag'
+        with:
+          repo_token: ${{ secrets.GH_TOKEN }}
+          file: packages/cli/release/appmap-macos-arm64
+          asset_name: appmap-macos-arm64
+          tag: ${{ github.ref }}
+          overwrite: true
+
+      - name: 'Release: appmap-macos-arm64.sha256'
+        uses: svenstaro/upload-release-action@v2
+        if: github.ref_type == 'tag'
+        with:
+          repo_token: ${{ secrets.GH_TOKEN }}
+          file: packages/cli/release/appmap-macos-arm64.sha256
+          asset_name: appmap-macos-arm64.sha256
+          tag: ${{ github.ref }}
+          overwrite: true
+
   windows:
     runs-on: windows-latest
 
@@ -154,6 +214,26 @@ jobs:
         with:
           name: appmap-windows-x64
           path: packages/cli/release/appmap-windows-x64.exe
+
+      - name: 'Release: appmap-windows-x64.exe'
+        uses: svenstaro/upload-release-action@v2
+        if: github.ref_type == 'tag'
+        with:
+          repo_token: ${{ secrets.GH_TOKEN }}
+          file: packages/cli/release/appmap-windows-x64.exe
+          asset_name: appmap-windows-x64.exe
+          tag: ${{ github.ref }}
+          overwrite: true
+
+      - name: 'Release: appmap-windows-x64.exe.sha256'
+        uses: svenstaro/upload-release-action@v2
+        if: github.ref_type == 'tag'
+        with:
+          repo_token: ${{ secrets.GH_TOKEN }}
+          file: packages/cli/release/appmap-windows-x64.exe.sha256
+          asset_name: appmap-windows-x64.exe.sha256
+          tag: ${{ github.ref }}
+          overwrite: true
 
   finalize-release:
     name: finalize release
