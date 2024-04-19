@@ -51,17 +51,13 @@ module.exports = {
       },
     ],
     '@semantic-release/git',
-    [
-      '@semantic-release/github',
-      {
-        assets: 'release/*',
-      },
-    ],
+    '@semantic-release/github',
+
     [
       '@semantic-release/exec',
       {
         verifyConditionsCmd: 'test -n "$YARN_NPM_AUTH_TOKEN"',
-        publishCmd: 'yarn npm publish',
+        publishCmd: 'yarn npm publish --tag next',
       },
     ],
   ],
