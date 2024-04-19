@@ -20,9 +20,23 @@ describe('ClassificationService', () => {
 
   describe('when LLM responds', () => {
     it('returns the response', async () => {
-      mockAIResponse(completionWithRetry, [`Classification: user management`]);
+      const classification = `
+architecture: high
+- troubleshooting: low
+`;
+
+      mockAIResponse(completionWithRetry, [classification]);
       const response = await service.classifyQuestion('user management');
-      expect(response).toEqual(`Classification: user management`);
+      expect(response).toEqual([
+        {
+          name: 'architecture',
+          weight: 'high',
+        },
+        {
+          name: 'troubleshooting',
+          weight: 'low',
+        },
+      ]);
       expect(completionWithRetry).toHaveBeenCalledTimes(1);
     });
   });

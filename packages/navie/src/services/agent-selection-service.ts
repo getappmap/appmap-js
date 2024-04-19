@@ -32,7 +32,7 @@ export default class AgentSelectionService {
   selectAgent(
     question: string,
     options: ExplainOptions,
-    projectInfo: ProjectInfo[]
+    _projectInfo: ProjectInfo[]
   ): AgentModeResult {
     let modifiedQuestion = question;
 

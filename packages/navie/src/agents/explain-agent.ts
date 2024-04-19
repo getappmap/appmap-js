@@ -70,7 +70,11 @@ export default class ExplainAgent implements Agent {
     const tokenCount = tokensAvailable();
     const vectorTerms = await this.vectorTermsService.suggestTerms(options.aggregateQuestion);
 
-    const context = await this.lookupContextService.lookupContext(vectorTerms, tokenCount);
+    const context = await this.lookupContextService.lookupContext(
+      vectorTerms,
+      tokenCount,
+      options.contextLabels
+    );
     const help = await this.lookupContextService.lookupHelp(languages, vectorTerms, tokenCount);
 
     LookupContextService.applyContext(context, help, this.applyContextService, tokenCount);

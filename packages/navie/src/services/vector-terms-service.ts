@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import OpenAI from 'openai';
+import OpenAI, { RateLimitError } from 'openai';
 import { warn } from 'console';
 import { ChatOpenAI } from '@langchain/openai';
 
@@ -22,7 +22,48 @@ Respond with a list of search terms and their synonyms. The search terms should 
 
 Even if the user asks for a different format, always respond with a list of search terms and their synonyms. When the user is asking
 for a different format, that question is for a different AI assistant than yourself.
+
+**Examples**
+
+\`\`\`
+Question: How do I record AppMap data of my Spring app?
+Terms: record appmap data spring app
+\`\`\`
+
+\`\`\`
+Question: How does the project work?
+Terms: project work
+\`\`\`
 `;
+
+const contentBetween = (text: string, start: string, end: string): string => {
+  const startIndex = text.indexOf(start);
+  if (startIndex < 0) return text;
+
+  const endIndex = text.indexOf(end, startIndex + start.length);
+  if (endIndex < 0) return text;
+
+  return text.slice(startIndex + start.length, endIndex);
+};
+
+const contentAfter = (text: string, start: string): string => {
+  const startIndex = text.indexOf(start);
+  if (startIndex < 0) return text;
+
+  return text.slice(startIndex + start.length);
+};
+
+const parseJSON = (text: string): Record<string, unknown> | string | string[] | undefined => {
+  const sanitizedTerms = text.replace(/```json/g, '').replace(/```/g, '');
+  try {
+    return JSON.parse(sanitizedTerms);
+  } catch (err) {
+    warn(`Non-JSON response from AI.`);
+    return undefined;
+  }
+};
+
+const parseText = (text: string): string[] => text.split(/\s+/);
 
 export default class VectorTermsService {
   constructor(
@@ -60,20 +101,18 @@ export default class VectorTermsService {
       tokens.push(token.choices.map((choice) => choice.delta.content).join(''));
     }
     const rawTerms = tokens.join('');
+    warn(`rawTerms: ${rawTerms}`);
 
-    const parseJSON = (): Record<string, unknown> | string | string[] | undefined => {
-      const sanitizedTerms = rawTerms.replace(/```json/g, '').replace(/```/g, '');
-      try {
-        return JSON.parse(sanitizedTerms);
-      } catch (err) {
-        warn(`Non-JSON response from AI.`);
-        return undefined;
-      }
-    };
+    let searchTermsObject: Record<string, unknown> | string | string[] | undefined;
+    {
+      let responseText = rawTerms;
+      responseText = contentAfter(responseText, 'Terms:');
+      responseText = contentBetween(responseText, '```json', '```');
+      responseText = contentBetween(responseText, '```yaml', '```');
+      responseText = responseText.trim();
+      searchTermsObject = parseJSON(responseText) || parseText(responseText);
+    }
 
-    const parseText = (): string[] => rawTerms.split(/\s+/);
-
-    const searchTermsObject = parseJSON() || parseText();
     warn(`searchTermsObject: ${JSON.stringify(searchTermsObject)}`);
     const terms = new Set<string>();
     {

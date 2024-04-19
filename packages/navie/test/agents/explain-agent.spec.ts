@@ -81,7 +81,8 @@ describe('@explain agent', () => {
 
       expect(lookupContextService.lookupContext).toHaveBeenCalledWith(
         ['user', 'management'],
-        tokensAvailable
+        tokensAvailable,
+        undefined
       );
       expect(lookupContextService.lookupHelp).toHaveBeenCalledWith(
         ['ruby'],

@@ -44,11 +44,17 @@ export namespace ExplainRpc {
     score?: number;
   };
 
+  export type ContextLabel = {
+    name: string;
+    weight: string;
+  };
+
   export type ExplainStatusResponse = {
     step: Step;
     threadId?: string;
     err?: Error | RpcError;
     vectorTerms?: string[];
+    labels?: ContextLabel[];
     searchResponse?: SearchRpc.SearchResponse;
     contextResponse?: ContextItem[];
     explanation?: string[];

@@ -10,6 +10,7 @@ import INavie, { INavieProvider } from './navie/inavie';
 import configuration, { AppMapDirectory } from '../configuration';
 import collectProjectInfos from '../../cmds/navie/projectInfo';
 import collectHelp from '../../cmds/navie/help';
+import { basename } from 'path';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
@@ -73,19 +74,37 @@ export class Explain extends EventEmitter {
   }
 
   async searchContext(data: ContextV2.ContextRequest): Promise<ContextV2.ContextResponse> {
-    let { vectorTerms: keywords } = data;
+    let { vectorTerms } = data;
     let { tokenCount } = data;
+
+    this.status.vectorTerms = vectorTerms;
+
+    if (data.labels) this.status.labels = data.labels;
+    const labels = data.labels || [];
 
     if (!tokenCount) {
       warn(chalk.bold(`Warning: Token limit not set, defaulting to ${DEFAULT_TOKEN_LIMIT}`));
       tokenCount = DEFAULT_TOKEN_LIMIT;
     }
-    if (!keywords || keywords.length === 0) {
+    if (!vectorTerms || vectorTerms.length === 0) {
       warn(chalk.bold(`Warning: No keywords provided, context result may be unpredictable`));
-      keywords = [];
     }
 
-    this.status.vectorTerms = keywords;
+    const keywords = [...vectorTerms];
+    if (
+      labels.find((label) => label.name === 'architecture') ||
+      labels.find((label) => label.name === 'overview')
+    ) {
+      keywords.push('architecture');
+      keywords.push('design');
+      keywords.push('readme');
+      keywords.push('about');
+      keywords.push('overview');
+      for (const dir of this.projectDirectories) {
+        keywords.push(basename(dir));
+      }
+    }
+    // TODO: For 'troubleshoot', include log information
 
     this.status.step = ExplainRpc.Step.SEARCH_APPMAPS;
 
