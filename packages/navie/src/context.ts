@@ -57,6 +57,29 @@ export namespace ContextV2 {
     score?: number;
   };
 
+  export enum ContextLabelName {
+    HelpWithAppMap = 'help-with-appmap',
+    Architecture = 'architecture',
+    Feature = 'feature',
+    Overview = 'overview',
+    Troubleshoot = 'troubleshoot',
+    Explain = 'explain',
+    Generate = 'generate',
+  }
+
+  export enum ContextLabelWeight {
+    // The label is very relevant to the request.
+    High = 'high',
+    // The label is somewhat relevant to the request.
+    Medium = 'medium',
+  }
+
+  // A label that describes the nature of the user's request.
+  export type ContextLabel = {
+    name: ContextLabelName | string;
+    weight: ContextLabelWeight | string;
+  };
+
   // Request a set of context items from the context provider.
   export type ContextRequest = ContextV1.ContextRequest & {
     // Boost recent context items. For example, if the user is asking about an event that has recently occurred, such
@@ -69,11 +92,8 @@ export namespace ContextV2 {
     locations?: string[];
     // When specified, only return context items of these types.
     itemTypes?: ContextItemType[];
-    // Weight the importance of the context items. The sum of the weights should be 1.
-    // Item types not specified will be omitted from the response, along with item types whose weight is 0 or less.
-    // If the user's question is directed most specifically to a certain type of context item, the weights should be
-    // set to emphasize that type of context item. If the user's question is more general, the weights can be omitted.
-    weights?: Record<ContextItemType, number>;
+    // Emphasize context items that are relevant to the classification of the user's request.
+    labels?: ContextLabel[];
   };
 
   export type ContextResponse = ContextItem[];

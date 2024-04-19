@@ -1,3 +1,4 @@
+import { ContextV2 } from './context';
 import { ProjectInfo } from './project-info';
 
 export enum AgentMode {
@@ -12,7 +13,8 @@ export class AgentOptions {
     public aggregateQuestion: string,
     public chatHistory: string[],
     public projectInfo: ProjectInfo[],
-    public codeSelection?: string
+    public codeSelection?: string,
+    public contextLabels?: ContextV2.ContextLabel[]
   ) {}
 
   get hasAppMaps() {
