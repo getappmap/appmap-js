@@ -20,7 +20,8 @@ jobs:
         run: |
           yarn build
           cd packages/cli
-          yarn build-native linux
+          yarn build-native linux x64
+          ${GITHUB_WORKSPACE}/bin/hash release/appmap-linux-x64
 
       - name: Publish appmap-linux-x64
         uses: actions/upload-artifact@v4
@@ -129,11 +130,13 @@ jobs:
           key: ${{ runner.os }}-${{ runner.arch }}-cargo
 
       - name: Build
+        shell: bash
         run: |
           choco install rsync
           yarn build
           cd packages/cli
           yarn build-native windows x64
+          ${GITHUB_WORKSPACE}/bin/hash release/appmap-win32-x64.exe
 
       - name: Publish appmap-windows-x64
         uses: actions/upload-artifact@v4
