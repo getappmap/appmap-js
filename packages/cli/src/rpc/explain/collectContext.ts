@@ -7,9 +7,9 @@ import FindEvents, {
 import { DEFAULT_MAX_DIAGRAMS, DEFAULT_MAX_FILES } from '../search/search';
 import buildContext from './buildContext';
 import { log } from 'console';
-import path, { isAbsolute, join } from 'path';
+import { isAbsolute, join } from 'path';
 import { ContextV2, applyContext } from '@appland/navie';
-import { FileIndex, FileIndexMatch, buildFileIndex } from '../../fulltext/FileIndex';
+import { FileIndexMatch, buildFileIndex } from '../../fulltext/FileIndex';
 import withIndex from '../../fulltext/withIndex';
 import { SourceIndexMatch, buildSourceIndex } from '../../fulltext/SourceIndex';
 

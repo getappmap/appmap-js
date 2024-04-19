@@ -3,64 +3,12 @@ import sqlite3 from 'better-sqlite3';
 import assert from 'assert';
 import { existsSync } from 'fs';
 
-import { executeCommand } from '../lib/executeCommand';
-import { isFile, verbose } from '../utils';
+import { verbose } from '../utils';
 import queryKeywords from './queryKeywords';
-import path, { join } from 'path';
-
-const COMMON_REPO_BINARY_FILE_EXTENSIONS: string[] = [
-  'png',
-  'jpg',
-  'jpeg',
-  'gif',
-  'bmp',
-  'ico',
-  'tiff',
-  'webp',
-  'svg',
-  'mp3',
-  'wav',
-  'ogg',
-  'flac',
-  'aac',
-  'mp4',
-  'webm',
-  'mkv',
-  'avi',
-  'mov',
-  'wmv',
-  'mpg',
-  'flv',
-  'zip',
-  'tar',
-  'gz',
-  'bz2',
-  'xz',
-  '7z',
-  'rar',
-  'pdf',
-  'doc',
-  'docx',
-  'xls',
-  'xlsx',
-  'ppt',
-  'pptx',
-  'odt',
-  'ods',
-  'odp',
-  'rtf',
-  'woff',
-  'woff2',
-  'eot',
-  'ttf',
-  'otf',
-  'ico',
-  'flv',
-  'avi',
-  'mov',
-  'wmv',
-  'mpg',
-];
+import path from 'path';
+import { Git, GitState } from '../telemetry';
+import listProjectFiles, { COMMON_REPO_BINARY_FILE_EXTENSIONS } from './listProjectFiles';
+import listGitProjectFiles from './listGitProjectFIles';
 
 export type FileIndexMatch = {
   directory: string;
@@ -98,7 +46,14 @@ export class FileIndex {
 
   async indexDirectories(directories: string[]) {
     for (const directory of directories) {
-      const fileNames = await FileIndex.listGitProjectFiles(directory);
+      const gitState = await Git.state(directory);
+
+      let fileNames: string[];
+      if (gitState === GitState.Ok) {
+        fileNames = await listGitProjectFiles(directory);
+      } else {
+        fileNames = await listProjectFiles(directory);
+      }
       for (const fileName of fileNames) {
         this.indexFile(directory, fileName);
       }
@@ -127,48 +82,6 @@ export class FileIndex {
       console.warn(`Error indexing document ${filePath}`);
       console.warn(error);
     }
-  }
-
-  // Run git ls-files and git status to get a list of all git-managed files. By doing it this way,
-  // we automatically apply any .gitignore rules.
-  static async listGitProjectFiles(directory: string) {
-    const lsFiles = async (): Promise<string[]> => {
-      const gitFiles = (
-        await executeCommand('git ls-files', verbose(), verbose(), verbose(), [0], directory)
-      ).split('\n');
-      return gitFiles.filter(Boolean);
-    };
-    const statusFiles = async (): Promise<string[]> => {
-      return (
-        await executeCommand(
-          'git status --porcelain',
-          verbose(),
-          verbose(),
-          verbose(),
-          [0],
-          directory
-        )
-      )
-        .split('\n')
-        .map((line) => {
-          const [, fileName] = line.split(' ');
-          return fileName;
-        });
-    };
-
-    const result = new Set<string>();
-    // TODO: Boost new and modified files.
-    for (const file of [...(await lsFiles()), ...(await statusFiles())]) {
-      if (!file) {
-        continue;
-      }
-      const filePath = join(directory, file);
-      if (await isFile(filePath)) {
-        result.add(file);
-      }
-    }
-
-    return [...result].sort();
   }
 }
 
