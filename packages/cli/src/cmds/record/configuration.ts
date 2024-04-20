@@ -14,7 +14,7 @@ export type RemoteRecordingConfig = {
 export class TestCommand {
   constructor(public command: string, public env: Record<string, string> = {}) {}
 
-  static toString(cmd: TestCommand): string {
+  static toString(this: void, cmd: TestCommand): string {
     return `${TestCaseRecording.envString(cmd.env)}${cmd.command}`;
   }
 }

@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/unbound-method
 const { dirname } = require('path');
 const { verbose, processNamedFiles } = require('./utils');
 const { default: UpToDate } = require('./lib/UpToDate');
