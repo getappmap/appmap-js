@@ -186,7 +186,7 @@ export default class FindCodeObjects {
       }
 
       let appmapName = indexDir;
-      if (indexDir.indexOf(process.cwd()) === 0) {
+      if (indexDir.startsWith(process.cwd())) {
         appmapName = indexDir.substring(process.cwd().length + 1);
       }
 
