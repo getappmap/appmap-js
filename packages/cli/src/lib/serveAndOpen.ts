@@ -66,7 +66,7 @@ export default async function serveAndOpen(
       const pathname = requestUrl.pathname;
       if (pathname === '/') {
         return serveStaticFile(baseDir, file, 'text/html');
-      } else if (pathname && pathname.startsWith('/resource')) {
+      } else if (pathname?.startsWith('/resource')) {
         const pathname = requestUrl.query;
         if (pathname) serveStaticFile(process.cwd(), decodeURIComponent(pathname));
         else send404();

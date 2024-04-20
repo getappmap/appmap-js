@@ -46,7 +46,7 @@ const filter = (rl, context, home) => {
         filter(rl, context, home);
       }
 
-      if (!filterField || !filterField.filterName) {
+      if (!filterField?.filterName) {
         return retry();
       }
 

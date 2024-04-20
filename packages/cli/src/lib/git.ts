@@ -41,7 +41,7 @@ class SanitizedUri {
 }
 
 function hasUrl(remote: unknown): remote is { url: string } {
-  return remote && remote['url'];
+  return remote?.['url'];
 }
 
 async function findAndSanitizeRepository(dir: string): Promise<SanitizedUri | void> {

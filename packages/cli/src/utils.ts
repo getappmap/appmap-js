@@ -56,7 +56,7 @@ export async function mtime(filePath: PathLike): Promise<number | undefined> {
   // as temp files).
 
   const fileStat = await statFile(filePath);
-  if (!fileStat || !fileStat.isFile()) {
+  if (!fileStat?.isFile()) {
     return;
   }
   return fileStat.mtimeMs;
@@ -64,7 +64,7 @@ export async function mtime(filePath: PathLike): Promise<number | undefined> {
 
 export async function isFile(filePath: PathLike): Promise<boolean> {
   const fileStat = await statFile(filePath);
-  return !!(fileStat && fileStat.isFile());
+  return !!fileStat?.isFile();
 }
 
 /**
@@ -147,7 +147,7 @@ export async function processNamedFiles(
     // If the directory contains the target fileName, add it to the process queue and return.
     const targetFileName = join(dir, fileName);
     const target = await stats(targetFileName);
-    if (target && target.isFile()) {
+    if (target?.isFile()) {
       matchCount += 1;
       q.push(targetFileName);
       return;
@@ -162,7 +162,7 @@ export async function processNamedFiles(
     }
     for (const childName of children) {
       const child = await stats(join(dir, childName));
-      if (child && child.isDirectory()) {
+      if (child?.isDirectory()) {
         await processDir(join(dir, childName));
       }
     }
@@ -256,8 +256,8 @@ export function prefixLines(str: string, prefix: string): string {
   return str.replace(/^/gm, prefix);
 }
 
-export function formatValue(value: ReturnValueObject) {
-  if (value === null || value === undefined || value.value === null || value.value === undefined) {
+export function formatValue(value?: ReturnValueObject) {
+  if (value?.value === null || value?.value === undefined) {
     return 'Null';
   }
 

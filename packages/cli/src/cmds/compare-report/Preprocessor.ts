@@ -110,7 +110,7 @@ export function filterFindings(findings: FindingChange[], section: Section | Exp
   return findings.filter(
     (finding) =>
       (!includeDomains || includeDomains.includes(finding.finding.impactDomain || 'Stability')) &&
-      (!excludeDomains || !excludeDomains.includes(finding.finding.impactDomain || 'Stability'))
+      (!excludeDomains?.includes(finding.finding.impactDomain || 'Stability'))
   );
 }
 
