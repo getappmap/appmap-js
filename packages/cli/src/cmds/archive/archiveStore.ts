@@ -88,7 +88,7 @@ export class GitHubArchiveStore implements ArchiveStore {
       full: new Map<ArchiveId, ArchiveEntry>(),
       incremental: new Map<ArchiveId, ArchiveEntry>(),
     };
-    for (let page = 1; true; page++) {
+    for (let page = 1; ; page++) {
       const response = (
         await this.octokit.rest.actions.listArtifactsForRepo({
           owner,

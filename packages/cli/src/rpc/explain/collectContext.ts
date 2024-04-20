@@ -170,7 +170,7 @@ export class ContextCollector {
     let charCount = 0;
     let maxEventsPerDiagram = 5;
     log(`Requested char limit: ${this.charLimit}`);
-    while (true) {
+    for (;;) {
       log(`Collecting context with ${maxEventsPerDiagram} events per diagram.`);
 
       contextCandidate = await eventsCollector.collectEvents(maxEventsPerDiagram);

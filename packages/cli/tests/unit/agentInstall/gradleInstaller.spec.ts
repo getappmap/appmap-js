@@ -34,6 +34,7 @@ describe('GradleInstaller', () => {
         // By default, we'll run all test. This is here to make it easy to skip
         // them by name: change true to false, and check for the test name of
         // interest.
+        // eslint-disable-next-line no-constant-condition
         const testFn = true || test === 'extra-repo-block' ? it : xit;
 
         const actualFile = `${test}${testExt}`;
