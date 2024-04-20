@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable class-methods-use-this */
 const { CodeObject } = require('@appland/models');
 const Unique = require('./unique');
