@@ -38,8 +38,9 @@ export class FileArchiveStore implements ArchiveStore {
       // Example archive path: .appmap/archive/full/2c51afaae3cc355e4bac499e9b68ea1d3dc1b36a.tar
       // Extract archive type and revision from the path
       const archiveTokens = path.split('/');
-      const revision = archiveTokens.pop()?.split('.')[0]!;
-      const type = archiveTokens.pop()!;
+      const revision = archiveTokens.pop()?.split('.')[0];
+      const type = archiveTokens.pop();
+      assert(type && revision);
       return { id: path, type, revision };
     };
 
