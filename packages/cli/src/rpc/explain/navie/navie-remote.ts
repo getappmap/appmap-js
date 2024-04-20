@@ -83,7 +83,7 @@ export default class RemoteNavie extends EventEmitter implements INavie {
               return {};
             }
           } catch (e) {
-            warn(`Explain context function ${data} threw an error: ${e}`);
+            warn(`Explain context function ${JSON.stringify(data)} threw an error: ${e}`);
             // TODO: Report an error object instead?
             return {};
           }

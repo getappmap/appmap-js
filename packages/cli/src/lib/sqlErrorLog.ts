@@ -9,7 +9,7 @@ async function writeErrorToFile(error: ParseError) {
   const flags = SqlParseErrorFileOpened ? 'a' : 'w';
   SqlParseErrorFileOpened = true;
   open(SqlParseErrorFileName, flags).then((handle) => {
-    handle.write([error.toString(), ''].join('\n')).finally(handle.close.bind(handle));
+    handle.write([String(error), ''].join('\n')).finally(handle.close.bind(handle));
   });
 }
 
