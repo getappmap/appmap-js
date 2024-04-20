@@ -62,13 +62,14 @@ For case (3), you should contact AppMap support for help with troubleshooting.
     case NextStepChoices.RELAUNCH.value:
       await UI.continue('Press enter when the server has been restarted');
       break;
-    case NextStepChoices.SUPPORT.value:
+    case NextStepChoices.SUPPORT.value: {
       const details = recordContext.remoteError?.toString() || '';
 
       await openTicket(details, DEFAULT_HELP_MSG, false);
 
       return abort; // We're done
       break;
+    }
   }
 
   return initial;
