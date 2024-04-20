@@ -89,12 +89,12 @@ export class HelpIndex {
       const splitter = new MarkdownTextSplitter();
       // TODO: Utilize the front matter
       const chunks = await splitter.createDocuments([text]);
-      for (let i = 0; i < chunks.length; i++) {
-        const { from, to } = chunks[i].metadata.loc.lines;
+      for (const chunk of chunks) {
+        const { from, to } = chunk.metadata.loc.lines;
         const id = packRef(filePath, from, to);
-        contentByRef.set(id, chunks[i].pageContent);
+        contentByRef.set(id, chunk.pageContent);
         const pageName = frontMatter?.name || frontMatter?.title;
-        documents.push({ id, pageName, content: chunks[i].pageContent });
+        documents.push({ id, pageName, content: chunk.pageContent });
       }
     };
 

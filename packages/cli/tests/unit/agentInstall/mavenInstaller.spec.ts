@@ -33,8 +33,7 @@ describe('MavenInstaller', () => {
       const tests = files.map((file) => path.basename(file, expectedExt));
       const efWrite = sinon.stub(EncodedFile.prototype, 'write');
 
-      for (let i = 0; i < tests.length; ++i) {
-        const test = tests[i];
+      for (const test of tests) {
         sinon.stub(maven, 'buildFilePath').value(path.join(dataDir, `${test}.actual.xml`));
 
         const expected = (await fs.readFile(path.join(dataDir, `${test}${expectedExt}`)))

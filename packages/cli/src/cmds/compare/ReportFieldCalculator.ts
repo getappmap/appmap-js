@@ -58,6 +58,18 @@ export default class ReportFieldCalculator {
 
           // Build a text snippet for each top level context.
           const allActions = [...diagramDiff.rootActions];
+          /* FIXME: this loop probably doesn't do what's intended —
+           * it's equivalent to:
+           *
+           *   diagramDiff.rootActions = [diagramDiff.rootActions[0]];
+           *   const snippet = format(FormatType.Text, diagramDiff, 'diff');
+           *   sequenceDiagramDiff.set(snippet.diagram, [appmap]);
+           *   diagramDiff.rootActions = allActions;
+           *
+           * but it's not clear what the intended behavior is since it's verified
+           * by tests to be this. — divide
+           */
+          // eslint-disable-next-line @typescript-eslint/prefer-for-of
           for (let actionIndex = 0; actionIndex < diagramDiff.rootActions.length; actionIndex++) {
             const action = diagramDiff.rootActions[actionIndex];
             diagramDiff.rootActions = [action];
