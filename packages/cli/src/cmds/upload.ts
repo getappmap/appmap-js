@@ -123,7 +123,7 @@ export async function handler(argv: Arguments): Promise<void> {
   UI.success(`Created mapset ${url} with ${total} AppMaps`);
 }
 
-const command: CommandModule<{}, Arguments> = {
+const command: CommandModule<never, Arguments> = {
   command: 'upload',
   builder: {
     directory: {

@@ -91,7 +91,7 @@ export default class SummaryReporter implements Reporter {
     return template.generateMarkdown(report);
   }
 
-  static helpers(): Record<string, Function> {
+  static helpers() {
     const rule_url = (rule: string) => {
       return new SafeString(`[${rule}](https://appmap.io/docs/reference/rules/${rule})`);
     };

@@ -48,7 +48,7 @@ export default class WelcomeReporter implements Reporter {
     return template.generateMarkdown(data);
   }
 
-  static helpers(): { [name: string]: Function } | undefined {
+  static helpers() {
     const agent_reference_name = (language: string) => {
       if (language === 'javascript') return 'agent-js';
       else return language;

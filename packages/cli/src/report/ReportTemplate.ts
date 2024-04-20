@@ -1,6 +1,7 @@
 export class ReportTemplate {
   constructor(
     public template: HandlebarsTemplateDelegate,
+    // eslint-disable-next-line @typescript-eslint/ban-types
     public helpers: Record<string, Function>
   ) {}
 
