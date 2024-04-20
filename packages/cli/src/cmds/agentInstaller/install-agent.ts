@@ -89,7 +89,7 @@ class InstallerError extends Error {
   }
 }
 
-const _handler = async (
+const handler = async (
   args: InstallCommandOptions
 ): Promise<{ exitCode: number; err: Error | null }> => {
   const {
@@ -227,7 +227,7 @@ export default {
   },
 
   async handler(args: InstallCommandOptions): Promise<void> {
-    const { exitCode, err } = await _handler(args);
+    const { exitCode, err } = await handler(args);
 
     Telemetry.flush(() => {
       Yargs.exit(exitCode, err as any);

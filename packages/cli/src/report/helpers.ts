@@ -6,7 +6,7 @@ const inspect = (value: any) => {
 };
 
 const length = (...list: any[]): number => {
-  const _fn = list.pop();
+  /* const _fn = */ list.pop();
   let result = 0;
   for (const item of list) {
     if (item === undefined || item === null) {
@@ -23,7 +23,7 @@ const length = (...list: any[]): number => {
 };
 
 const coalesce = (...list: any[]): number => {
-  const _fn = list.pop();
+  /* const _fn = */ list.pop();
   return list.find((item) => item !== undefined && item !== null && item !== '');
 };
 
@@ -33,13 +33,13 @@ const extractArrayValue = (args: any[]): any[] => (Array.isArray(args[0]) ? args
 
 const every = (...args: any[]): boolean => {
   args = [...args];
-  const _fn = args.pop();
+  /* const _fn = */ args.pop();
   return args.every((value) => !!value);
 };
 
 const eq = (...args: any[]): boolean => {
   args = [...args];
-  const _fn = args.pop();
+  /* const _fn = */ args.pop();
   if (args.length === 0) return false;
   const first = args[0];
   return args.every((value) => value === first);
@@ -61,21 +61,21 @@ const format_as_yaml = (value: any): SafeString => new Handlebars.SafeString(dum
 
 const sum = (...args: any[]) => {
   args = [...args];
-  const _fn = args.pop();
+  /* const _fn = */ args.pop();
   const values = extractArrayValue(args);
   return values.reduce((a, b) => a + (b || 0), 0);
 };
 
 const subtract = (...args: any[]) => {
   args = [...args];
-  const _fn = args.pop();
+  /* const _fn = */ args.pop();
   const initial = args.shift() || 0;
   return args.reduce((a, b) => a - (b || 0), initial);
 };
 
 const divide = (...args: any[]) => {
   args = [...args];
-  const _fn = args.pop();
+  /* const _fn = */ args.pop();
   const values = extractArrayValue(args);
   const initial = values.shift() || 0;
   return values.reduce((a, b) => a / (b || 1), initial);
