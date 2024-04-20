@@ -86,8 +86,8 @@ export class TestFailure {
           .split('\n')
           .map(
             (line, index) =>
-              `${(index + testSnippet!.startLine).toString() === lineno ? '> ' : '  '} ${
-                index + testSnippet!.startLine
+              `${(index + testSnippet.startLine).toString() === lineno ? '> ' : '  '} ${
+                index + testSnippet.startLine
               }: ${line}`
           )
           .join('\n');

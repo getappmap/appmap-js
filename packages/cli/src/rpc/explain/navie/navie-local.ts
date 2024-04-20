@@ -54,10 +54,10 @@ const OPTION_SETTERS: Record<
   (explainOptions: Explain.ExplainOptions, value: string | number) => void
 > = {
   tokenLimit: (explainOptions, value) => {
-    explainOptions.tokenLimit = typeof value === 'string' ? parseInt(value as string, 10) : value;
+    explainOptions.tokenLimit = typeof value === 'string' ? parseInt(value, 10) : value;
   },
   temperature: (explainOptions, value) => {
-    explainOptions.temperature = typeof value === 'string' ? parseFloat(value as string) : value;
+    explainOptions.temperature = typeof value === 'string' ? parseFloat(value) : value;
   },
   modelName: (explainOptions, value) => {
     explainOptions.modelName = String(value);

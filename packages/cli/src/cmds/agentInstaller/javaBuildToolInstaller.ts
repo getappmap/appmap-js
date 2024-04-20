@@ -67,7 +67,7 @@ export default abstract class JavaBuildToolInstaller extends AgentInstaller {
         .split('=')[1];
     }
 
-    return this._agentJar!.trim();
+    return this._agentJar.trim();
   }
 
   async environment(): Promise<Record<string, string>> {

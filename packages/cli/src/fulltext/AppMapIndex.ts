@@ -277,7 +277,7 @@ export function reportMatches(
     type: 'appmap',
     results: searchResults,
     stats: [...scoreStats.keys()].reduce((acc, key) => {
-      acc[key] = scoreStats.get(key as ScoreStats)!;
+      acc[key] = scoreStats.get(key)!;
       return acc;
     }, {}) as SearchStats,
     numResults,
