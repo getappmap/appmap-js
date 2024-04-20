@@ -1,10 +1,10 @@
 import moo from 'moo';
 
 class SourceOffsets {
-  braceIdx: number = 1;
+  braceIdx = 1;
   // A syntactically correct build file will always have an rbrace to match the
   // lbrace.
-  rbrace: number = -1;
+  rbrace = -1;
   constructor(readonly blockName: string, readonly lbrace: number) {}
 }
 
@@ -45,7 +45,7 @@ export type GradleParseResult = {
 } & { [k in keyof Keywords]?: SourceOffsets };
 
 export class GradleParser {
-  public debug: number = 0;
+  public debug = 0;
 
   /**
    * Parse the given gradle source, returning a GradleParseResult describing what we found.

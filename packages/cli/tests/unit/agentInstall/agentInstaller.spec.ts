@@ -3,8 +3,8 @@ import AgentInstaller from '../../../src/cmds/agentInstaller/agentInstaller';
 import commandStruct from '../../../src/cmds/agentInstaller/commandStruct';
 
 class FakeInstaller extends AgentInstaller {
-  public buildFile: string = 'bf';
-  public documentation: string = 'http://www.example.com';
+  public buildFile = 'bf';
+  public documentation = 'http://www.example.com';
   constructor(path: string) {
     super('Fake', path);
   }

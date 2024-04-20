@@ -18,7 +18,7 @@ export async function statsForDirectory(
   appMapDir: string,
   format: string,
   limit: number,
-  handlerCaller: string = 'from_stats'
+  handlerCaller = 'from_stats'
 ): Promise<[SortedAppMapSize[], SlowestExecutionTime[]]> {
   async function calculateAppMapSizes(appMapDir: string): Promise<AppMapSizeTable> {
     const appMapSizes: AppMapSizeTable = {};

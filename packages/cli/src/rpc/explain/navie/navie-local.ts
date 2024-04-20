@@ -131,7 +131,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
     this.emit('complete');
   }
 
-  #skipTelemetry: boolean = !Telemetry.enabled;
+  #skipTelemetry = !Telemetry.enabled;
 
   #reportConfigTelemetry() {
     if (this.#skipTelemetry) return;
