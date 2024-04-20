@@ -32,8 +32,7 @@ export default function buildReporter(
       report = new WelcomeReporter(appmapURL, sourceURL);
       break;
     case TemplateName.Summary:
-      const summaryReport = new SummaryReporter(appmapURL, sourceURL);
-      report = summaryReport;
+      report = new SummaryReporter(appmapURL, sourceURL);
       break;
   }
   return report;
