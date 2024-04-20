@@ -86,6 +86,15 @@ describe('VectorTermsService', () => {
       });
     });
 
+    describe('includes terms with "+" prefix', () => {
+      it('is accepted and processed', async () => {
+        mockAIResponse(completionWithRetry, ['Terms: +user management']);
+        const terms = await service.suggestTerms('user management');
+        expect(terms).toEqual(['+user', 'management']);
+        expect(completionWithRetry).toHaveBeenCalledTimes(1);
+      });
+    });
+
     describe('is list-ish ', () => {
       it('is accepted and processed', async () => {
         mockAIResponse(completionWithRetry, ['-user -mgmt']);
