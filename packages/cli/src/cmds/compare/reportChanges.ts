@@ -50,7 +50,7 @@ export default async function reportChanges(
   for (const revisionName of [RevisionName.Base, RevisionName.Head]) {
     const metadataByPath = appMapMetadata[revisionName];
     for (const appmap of metadataByPath.keys()) {
-      if (!(await sequenceDiagramExists(revisionName as RevisionName, appmap))) {
+      if (!(await sequenceDiagramExists(revisionName, appmap))) {
         warn(`No sequence diagram found for ${revisionName} AppMap ${appmap}`);
         metadataByPath.delete(appmap);
       }

@@ -108,7 +108,7 @@ export default {
       }
 
       if (typeof state === 'string') {
-        await showAppMap(state as FileName);
+        await showAppMap(state);
       }
 
       await StatsCommand.handler(argv, 'from_record');

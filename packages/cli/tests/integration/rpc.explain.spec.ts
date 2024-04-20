@@ -149,10 +149,10 @@ describe('RPC', () => {
               const foundType = contextItemTypes.find((itemType) => itemTypes.includes(itemType));
               assert(foundType, `Expected one of ${itemTypes.join(', ')}, got none`);
 
-              this.callbacks.onToken!(answer, userMessageId);
+              this.callbacks.onToken(answer, userMessageId);
 
               setTimeout(() => {
-                this.callbacks.onComplete!();
+                this.callbacks.onComplete();
               }, 0);
             }
           }
@@ -230,7 +230,7 @@ describe('RPC', () => {
             constructor(public callbacks: AICallbacks) {}
 
             async inputPrompt(): Promise<void> {
-              this.callbacks.onComplete!();
+              this.callbacks.onComplete();
             }
           }
 

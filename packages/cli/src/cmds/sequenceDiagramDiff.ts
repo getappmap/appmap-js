@@ -110,10 +110,10 @@ export const handler = async (argv: any) => {
   const compareFiles = async (): Promise<void> => {
     if (argv.validate) {
       const baseValidation = await validateDiagram(
-        JSON.parse(await readFile(baseDiagramFile, 'utf-8')) as any
+        JSON.parse(await readFile(baseDiagramFile, 'utf-8'))
       );
       const headValidation = await validateDiagram(
-        JSON.parse(await readFile(headDiagramFile, 'utf-8')) as any
+        JSON.parse(await readFile(headDiagramFile, 'utf-8'))
       );
 
       if (baseValidation !== ValidationResult.Valid || headValidation !== ValidationResult.Valid) {

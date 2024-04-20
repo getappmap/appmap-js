@@ -80,7 +80,7 @@ export default async function serveAndOpen(
     }
   })
     .listen(0, '127.0.0.1', () => {
-      const port = (server!.address() as AddressInfo).port;
+      const port = (server.address() as AddressInfo).port;
 
       const params = new URLSearchParams();
       for (const [key, value] of Object.entries(resources)) {

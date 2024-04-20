@@ -123,7 +123,7 @@ export default class RecordContext {
   get failures(): number {
     if (!this.results) throw new Error('Internal Error, no results yet');
 
-    return this.exitCodes!.reduce((acc, c) => acc + (c !== 0 ? 1 : 0), 0);
+    return this.exitCodes.reduce((acc, c) => acc + (c !== 0 ? 1 : 0), 0);
   }
 
   get output(): string[] {

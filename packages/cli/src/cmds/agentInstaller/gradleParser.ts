@@ -100,7 +100,7 @@ export class GradleParser {
       }
 
       const ignored = ['comment', 'multicomment', 'other', 'space'];
-      if (ignored.includes(t.type!)) {
+      if (ignored.includes(t.type)) {
         continue;
       }
       if (this.debug === 1) {
