@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import { assert } from 'console';
 import { default as defaultfs } from 'fs';
 import { Stats } from 'fs-extra';

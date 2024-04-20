@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import { join as joinPath, basename, resolve } from 'path';
 import gracefulFs from 'graceful-fs';
 import { promisify } from 'util';
