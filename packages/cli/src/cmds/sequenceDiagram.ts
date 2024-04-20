@@ -150,8 +150,7 @@ export const handler = async (argv: any) => {
     }
   };
 
-  for (let i = 0; i < argv.appmap.length; i++) {
-    const appmapFile = argv.appmap[i];
+  for (const appmapFile of argv.appmap) {
     await generateDiagram(appmapFile);
   }
 

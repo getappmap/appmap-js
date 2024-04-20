@@ -113,8 +113,7 @@ const _handler = async (
     const projects = await getProjects(ui, installers, directory, true, projectType);
 
     const noopsInvoked = new Set<string>();
-    for (let i = 0; i < projects.length; i++) {
-      const project = projects[i];
+    for (const project of projects) {
       if (project.selectedInstaller?.isNoop) {
         // make sure we're not duplicating messages
         if (noopsInvoked.has(project.selectedInstaller.name)) continue;
