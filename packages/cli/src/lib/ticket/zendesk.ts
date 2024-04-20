@@ -62,7 +62,7 @@ ${errors.map((e) => `===\n${stripAnsi(e)}\n===`).join('\n')}`,
     // for ZENDESK_AUTHZ is {email_address}msg, {ken:{api_token}.
     const zendeskAuthz = process.env.ZENDESK_AUTHZ;
     if (zendeskAuthz) {
-      body: headers['Authorization'] = `Basic ${Buffer.from(zendeskAuthz).toString('base64')}`;
+      headers['Authorization'] = `Basic ${Buffer.from(zendeskAuthz).toString('base64')}`;
     }
 
     const { data: res } = await axios
