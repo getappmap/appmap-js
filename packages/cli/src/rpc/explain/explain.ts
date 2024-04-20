@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import EventEmitter from 'events';
-import { warn } from 'console';
-import { ExplainRpc } from '@appland/rpc';
+import { log, warn } from 'console';
+import { ExplainRpc, SearchRpc } from '@appland/rpc';
 import { ContextV2, Help, ProjectInfo } from '@appland/navie';
 
 import { RpcError, RpcHandler } from '../rpc';
@@ -10,7 +10,9 @@ import INavie, { INavieProvider } from './navie/inavie';
 import configuration, { AppMapDirectory } from '../configuration';
 import collectProjectInfos from '../../cmds/navie/projectInfo';
 import collectHelp from '../../cmds/navie/help';
-import { basename } from 'path';
+import { basename, join } from 'path';
+import { link, mkdir, writeFile } from 'fs/promises';
+import { dump } from 'js-yaml';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
@@ -32,6 +34,8 @@ export type SearchContextResponse = {
 export const DEFAULT_TOKEN_LIMIT = 8000;
 
 export class Explain extends EventEmitter {
+  private userMessageId: string | undefined;
+
   constructor(
     public appmapDirectories: AppMapDirectory[],
     public projectDirectories: string[],
@@ -46,6 +50,7 @@ export class Explain extends EventEmitter {
   async explain(navie: INavie): Promise<void> {
     navie.on('ack', (userMessageId, threadId) => {
       this.status.threadId = threadId;
+      this.userMessageId = userMessageId;
       this.emit('ack', userMessageId, threadId);
     });
     navie.on('token', (token, _messageId) => {
@@ -71,14 +76,16 @@ export class Explain extends EventEmitter {
     await navie.ask(this.question, this.codeSelection);
   }
 
-  async searchContext(data: ContextV2.ContextRequest): Promise<ContextV2.ContextResponse> {
-    let { vectorTerms } = data;
-    let { tokenCount } = data;
+  async searchContext(
+    contextRequest: ContextV2.ContextRequest
+  ): Promise<ContextV2.ContextResponse> {
+    let { vectorTerms } = contextRequest;
+    let { tokenCount } = contextRequest;
 
     this.status.vectorTerms = vectorTerms;
 
-    if (data.labels) this.status.labels = data.labels;
-    const labels = data.labels || [];
+    if (contextRequest.labels) this.status.labels = contextRequest.labels;
+    const labels = contextRequest.labels || [];
 
     if (!tokenCount) {
       warn(chalk.bold(`Warning: Token limit not set, defaulting to ${DEFAULT_TOKEN_LIMIT}`));
@@ -118,6 +125,8 @@ export class Explain extends EventEmitter {
       charLimit
     );
 
+    await this.logContext(contextRequest, keywords, searchResult);
+
     this.status.searchResponse = searchResult.searchResponse;
     this.status.contextResponse = searchResult.context;
 
@@ -132,6 +141,46 @@ export class Explain extends EventEmitter {
 
   helpContext(data: Help.HelpRequest): Promise<Help.HelpResponse> {
     return collectHelp(data);
+  }
+
+  async logContext(
+    request: ContextV2.ContextRequest,
+    keywords: string[],
+    searchResult: {
+      searchResponse: SearchRpc.SearchResponse;
+      context: ContextV2.ContextResponse;
+    }
+  ) {
+    const contextDir = join(
+      ...([process.env.HOME, '.appmap', 'navie', 'context'].filter(Boolean) as string[])
+    );
+    await mkdir(contextDir, { recursive: true });
+
+    const contextTimestampFile = join(contextDir, [Date.now().toString(), 'yml'].join('.'));
+    const message = dump({
+      threadId: this.status.threadId,
+      messageId: this.userMessageId,
+      question: this.question,
+      codeSelection: this.codeSelection,
+      request: request,
+      keywords: keywords,
+      searchResponse: searchResult.searchResponse,
+      context: searchResult.context,
+    });
+    await writeFile(contextTimestampFile, message, 'utf8');
+    log(`Wrote context to ${contextTimestampFile}`);
+
+    if (this.userMessageId) {
+      const messageIdDir = join(contextDir, 'messageId');
+      await mkdir(messageIdDir, { recursive: true });
+      const contextMessageIdFile = join(messageIdDir, [this.userMessageId, 'yml'].join('.'));
+      try {
+        await link(contextTimestampFile, contextMessageIdFile);
+        log(`Linked context file ${contextTimestampFile} to ${contextMessageIdFile}`);
+      } catch (err) {
+        console.error(`Failed to link context file ${contextTimestampFile}: ${err}`);
+      }
+    }
   }
 }
 
