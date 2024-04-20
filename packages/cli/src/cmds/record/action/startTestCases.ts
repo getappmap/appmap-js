@@ -4,7 +4,7 @@ import RecordContext from '../recordContext';
 
 export default async function startTestCases(context: RecordContext) {
   const { configuration } = context;
-  if (Boolean(process.stdout.isTTY)) {
+  if (process.stdout.isTTY) {
     const defaultMaxTime = configuration.setting('test_recording.max_time', 30);
     let maxTime: number | undefined;
     do {
