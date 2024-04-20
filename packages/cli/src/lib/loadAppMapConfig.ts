@@ -14,10 +14,10 @@ export type HideOption =
 // fields that are likely to be used for creating a canonical sequence diagram.
 export type CompareFilter = {
   hide_external?: boolean;
-  dependency_folders?: Array<string>;
-  hide_name?: Array<string>;
-  hide?: Array<HideOption>;
-  reveal?: Array<HideOption>;
+  dependency_folders?: string[];
+  hide_name?: string[];
+  hide?: HideOption[];
+  reveal?: HideOption[];
 };
 
 export interface CompareConfig {

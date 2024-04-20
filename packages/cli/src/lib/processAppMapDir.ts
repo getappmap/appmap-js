@@ -20,8 +20,8 @@ export type TaskResultHandler<V> = (appmapFile: string, result: V) => void | Pro
 
 export type ProcessResult = {
   oversized: Set<string>;
-  errors: Array<Error>;
-  unhandledErrors: Array<Error>;
+  errors: Error[];
+  unhandledErrors: Error[];
   numProcessed: number;
 };
 

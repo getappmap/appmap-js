@@ -47,7 +47,7 @@ function parseSize(size: string) {
 }
 
 function generateConsoleMessage(filters: any): string {
-  let exclusions = [] as Array<any>;
+  let exclusions = [] as any[];
 
   if ('hideUnlabeled' in filters) exclusions.push('All unlabeled functions');
   if ('hideMediaRequests' in filters) exclusions.push('All media requests');

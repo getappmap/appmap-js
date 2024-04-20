@@ -15,7 +15,7 @@ describe('WorkerPool', () => {
 
   const initializeWorkerPool = () => (workerPool = new WorkerPool(jobFile, numThreads));
 
-  const runTasks = async <T>(tasks: Array<T>): Promise<TaskResult> => {
+  const runTasks = async <T>(tasks: T[]): Promise<TaskResult> => {
     const processTasks = async (cb: (err: Error | null, result: any) => void) => {
       await Promise.all(
         tasks.map((task) => {

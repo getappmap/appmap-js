@@ -86,7 +86,7 @@ export interface EventMatch {
 }
 
 export interface CodeObjectMatchSpec {
-  tokens: Array<(codeObject: CodeObject) => boolean>;
+  tokens: ((codeObject: CodeObject) => boolean)[];
 }
 
 export interface Filter {

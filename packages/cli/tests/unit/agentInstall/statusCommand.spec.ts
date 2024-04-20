@@ -64,7 +64,7 @@ describe('status sub-command', () => {
   });
 
   it('chooses an installer when there are multiple options', async () => {
-    const installers: Array<AgentInstaller> = [];
+    const installers: AgentInstaller[] = [];
     installers[0] = stubInterface<AgentInstaller>();
     installers[1] = stubInterface<AgentInstaller>();
 
