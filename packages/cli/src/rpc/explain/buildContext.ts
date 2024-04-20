@@ -36,7 +36,7 @@ export default async function buildContext(
   const appmapLocation = (appmap: string, event?: SearchRpc.EventMatch) => {
     const appmapFile = [appmap, 'appmap.json'].join('.');
     const tokens = [appmapFile];
-    if (event && event.eventIds.length) tokens.push(String(event.eventIds[0]));
+    if (event?.eventIds.length) tokens.push(String(event.eventIds[0]));
     return tokens.join(':');
   };
 
