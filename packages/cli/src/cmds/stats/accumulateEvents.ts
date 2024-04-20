@@ -30,7 +30,7 @@ async function parseClassMap(mapPath: string): Promise<ClassMap> {
   });
 }
 
-export async function accumulateEvents(mapPath: string): Promise<Array<EventInfo>> {
+export async function accumulateEvents(mapPath: string): Promise<EventInfo[]> {
   const classMap = await parseClassMap(mapPath);
   const events = {};
 

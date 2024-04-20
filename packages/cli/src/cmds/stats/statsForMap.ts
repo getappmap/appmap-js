@@ -29,7 +29,7 @@ export async function statsForMap(
   format: string,
   limit: number,
   mapPath: string
-): Promise<Array<EventInfo>> {
+): Promise<EventInfo[]> {
   const eventsStats = (await accumulateEvents(mapPath)).slice(0, limit);
 
   if (format === 'json') {
