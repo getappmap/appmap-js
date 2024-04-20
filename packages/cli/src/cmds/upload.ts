@@ -27,7 +27,7 @@ type Metadata = {
 
 export const MAX_APPMAP_SIZE = 2 * 1024 * 1024;
 
-function applyOrCheck(data: { [x: string]: string | undefined }, key: string, input?: string) {
+function applyOrCheck(data: Record<string, string | undefined>, key: string, input?: string) {
   if (!input) return;
 
   const existing = data[key];
