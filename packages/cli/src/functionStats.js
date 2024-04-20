@@ -1,4 +1,3 @@
-// @ts-nocheck
 const { analyzeSQL, normalizeSQL } = require('@appland/models');
 const { formatValue, formatHttpServerRequest } = require('./utils');
 
