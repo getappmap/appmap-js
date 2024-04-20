@@ -20,12 +20,16 @@ export class RpcError extends Error implements jayson.JSONRPCError {
         warn(`Data: ${err.data}`);
         try {
           data.data = JSON.parse(JSON.stringify(err.data));
-        } catch {}
+        } catch {
+          // fallthrough
+        }
       }
       if (err.cause) {
         try {
           data.cause = JSON.parse(JSON.stringify(err.cause));
-        } catch {}
+        } catch {
+          // fallthrough
+        }
       }
       if (err.stack) data.stack = err.stack;
 

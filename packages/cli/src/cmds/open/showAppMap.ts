@@ -9,7 +9,9 @@ export default async function showAppMap(appMapFile: string) {
       try {
         spawn('code', [abspath(appMapFile)]);
         return;
-      } catch {} // fallthrough
+      } catch {
+        // fallthrough
+      }
     return openInBrowser(appMapFile, false);
   }
 
