@@ -1,4 +1,10 @@
 import { SearchRpc } from '@appland/rpc';
+import { stat } from 'fs/promises';
+import { log, warn } from 'console';
+import { Token, stemmer } from 'lunr';
+import { isAbsolute, join } from 'path';
+import { ContextV2, applyContext } from '@appland/navie';
+
 import AppMapIndex, { SearchResponse as AppMapSearchResponse } from '../../fulltext/AppMapIndex';
 import FindEvents, {
   SearchResponse as EventSearchResponse,
@@ -6,12 +12,13 @@ import FindEvents, {
 } from '../../fulltext/FindEvents';
 import { DEFAULT_MAX_DIAGRAMS, DEFAULT_MAX_FILES } from '../search/search';
 import buildContext from './buildContext';
-import { log } from 'console';
-import { isAbsolute, join } from 'path';
-import { ContextV2, applyContext } from '@appland/navie';
 import { FileIndexMatch, buildFileIndex } from '../../fulltext/FileIndex';
 import withIndex from '../../fulltext/withIndex';
 import { SourceIndexMatch, buildSourceIndex } from '../../fulltext/SourceIndex';
+import { executeCommand } from '../../lib/executeCommand';
+import { verbose } from '../../utils';
+import { Git, GitState } from '../../telemetry';
+import { isBinaryFile } from '../../fulltext/listProjectFiles';
 
 export function textSearchResultToRpcSearchResult(
   eventResult: EventSearchResult
@@ -77,13 +84,62 @@ export class EventCollector {
 
 const CHARS_PER_SNIPPET = 50;
 
+const MAX_GIT_GREP_FILE_SIZE = 20 * 1024;
+
 export class SourceCollector {
   constructor(private keywords: string[], private fileSearchResponse: FileIndexMatch[]) {}
 
-  async collectContext(charLimit: number): Promise<ContextV2.ContextItem[]> {
+  async collectContext(directories: string[], charLimit: number): Promise<ContextV2.ContextItem[]> {
+    const grepFiles = async (directory: string, keyword: string): Promise<string[]> => {
+      const grepCommand = `git grep -i -I -F -l ${keyword}`;
+      const result = await executeCommand(
+        grepCommand,
+        verbose(),
+        verbose(),
+        verbose(),
+        [0],
+        directory
+      );
+      return result.split('\n').filter(Boolean);
+    };
+
+    const files = [...this.fileSearchResponse];
+
+    const isSmallEnough = async (filePath: string) => {
+      try {
+        const fileSize = (await stat(filePath)).size;
+        if (fileSize <= MAX_GIT_GREP_FILE_SIZE) return true;
+
+        log(`File ${filePath} is too large for git-grep (${fileSize} bytes).`);
+      } catch (e) {
+        warn(`File ${filePath} not found.`);
+      }
+    };
+
+    // TODO: Include results of `git status` in the search?
+    const requiredKeywords = this.keywords.filter((keyword) => keyword.startsWith('+'));
+    if (requiredKeywords.length === 1) {
+      for (const directory of directories) {
+        if ((await Git.state(directory)) !== GitState.Ok) continue;
+
+        const trimmedKeyword = requiredKeywords[0].slice(1);
+        const stemmedKeyword = stemmer(new Token(trimmedKeyword, {})).toString();
+        const keyword = trimmedKeyword.startsWith(stemmedKeyword) ? stemmedKeyword : trimmedKeyword;
+        const gitFiles = await grepFiles(directory, keyword);
+        log(
+          `Matched ${gitFiles.length} files via git-grep in ${directory} using keyword ${keyword}.`
+        );
+        for (const file of gitFiles) {
+          const includeFile = !isBinaryFile(file) && isSmallEnough(join(directory, file));
+
+          if (includeFile) files.push({ directory, fileName: file, score: 0.0 });
+        }
+      }
+    }
+
     const sourceIndexDocuments = await withIndex(
       'source',
-      (indexFileName: string) => buildSourceIndex(indexFileName, this.fileSearchResponse),
+      (indexFileName: string) => buildSourceIndex(indexFileName, files),
       (index) => index.search(this.keywords, Math.round(charLimit / CHARS_PER_SNIPPET))
     );
 
@@ -180,11 +236,17 @@ export class ContextCollector {
       ).length;
       let sourceContext: ContextV2.ContextResponse = [];
       if (codeSnippetCount === 0) {
-        sourceContext = await sourceCollector.collectContext(this.charLimit);
+        sourceContext = await sourceCollector.collectContext(
+          this.sourceDirectories,
+          this.charLimit
+        );
       } else {
-        sourceContext = await sourceCollector.collectContext(this.charLimit / 4);
+        sourceContext = await sourceCollector.collectContext(
+          this.sourceDirectories,
+          this.charLimit / 4
+        );
       }
-      contextCandidate.context = contextCandidate.context.concat(sourceContext);
+      contextCandidate.context.push(...sourceContext);
 
       const appliedContext = applyContext(contextCandidate.context, this.charLimit);
       const appliedContextSize = appliedContext.reduce((acc, item) => acc + item.content.length, 0);
