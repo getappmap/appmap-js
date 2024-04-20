@@ -58,7 +58,7 @@ describe('newAppMaps', () => {
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual(`<h2 id=\"new-appmaps\">⭐ New AppMaps</h2>
+        expect(report).toEqual(`<h2 id="new-appmaps">⭐ New AppMaps</h2>
 
 
 [[rspec] Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json) from [\`spec/controllers/users_controller_test.rb:10\`](spec/controllers/users_controller_test.rb#L10)
@@ -102,7 +102,7 @@ describe('newAppMaps', () => {
           } as unknown as ChangeReport,
           { ...reportOptions, ...{ maxElements: 2 } }
         );
-        expect(report).toEqual(`<h2 id=\"new-appmaps\">⭐ New AppMaps</h2>
+        expect(report).toEqual(`<h2 id="new-appmaps">⭐ New AppMaps</h2>
 
 
 [[rspec] Users controller test](https://getappmap.com/?path=head%2Fminitest%2Fusers_controller_test.appmap.json) from [\`spec/controllers/users_controller_test.rb:10\`](spec/controllers/users_controller_test.rb#L10)

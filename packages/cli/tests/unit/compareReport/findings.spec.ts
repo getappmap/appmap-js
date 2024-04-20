@@ -78,7 +78,7 @@ describe('findings', () => {
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual(`<h2 id=\"performance-problems\">Performance problems</h2>
+        expect(report).toEqual(`<h2 id="performance-problems">Performance problems</h2>
 
 ### :tada: Problems resolved (1)
 

@@ -61,7 +61,7 @@ describe('removedAppMaps', () => {
           } as unknown as ChangeReport,
           reportOptions
         );
-        expect(report).toEqual(`<h2 id=\"removed-appmaps\">✖️ Removed AppMaps</h2>
+        expect(report).toEqual(`<h2 id="removed-appmaps">✖️ Removed AppMaps</h2>
 
 [[rspec] Users controller test](https://getappmap.com/?path=base%2Fminitest%2Fusers_controller_test.appmap.json)
 `);
@@ -104,7 +104,7 @@ describe('removedAppMaps', () => {
           } as unknown as ChangeReport,
           { ...reportOptions, ...{ maxElements: 2 } }
         );
-        expect(report).toEqual(`<h2 id=\"removed-appmaps\">✖️ Removed AppMaps</h2>
+        expect(report).toEqual(`<h2 id="removed-appmaps">✖️ Removed AppMaps</h2>
 
 [[rspec] Users controller test](https://getappmap.com/?path=base%2Fminitest%2Fusers_controller_test.appmap.json)
 
