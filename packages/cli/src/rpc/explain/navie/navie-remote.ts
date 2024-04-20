@@ -21,18 +21,17 @@ export default class RemoteNavie extends EventEmitter implements INavie {
   }
 
   async ask(question: string, codeSelection: string | undefined) {
-    const self = this;
     (
       await AI.connect({
-        onAck(userMessageId, threadId) {
+        onAck: (userMessageId, threadId) => {
           if (verbose())
             warn(`Explain received ack (userMessageId=${userMessageId}, threadId=${threadId})`);
-          self.emit('ack', userMessageId, threadId);
+          this.emit('ack', userMessageId, threadId);
         },
-        onToken(token, _messageId) {
-          self.emit('token', token);
+        onToken: (token, _messageId) => {
+          this.emit('token', token);
         },
-        async onRequestContext(data) {
+        onRequestContext: async (data) => {
           try {
             if (data.type === 'search') {
               const { version } = data;
@@ -42,7 +41,7 @@ export default class RemoteNavie extends EventEmitter implements INavie {
               // version is V1 or V2, we can treat it as V2.
               const contextRequestV2: ContextV2.ContextRequest = data as ContextV2.ContextRequest;
 
-              const responseV2: ContextV2.ContextResponse = await self.contextProvider({
+              const responseV2: ContextV2.ContextResponse = await this.contextProvider({
                 ...contextRequestV2,
                 type: 'search',
                 version: 2,
@@ -71,13 +70,13 @@ export default class RemoteNavie extends EventEmitter implements INavie {
             }
             if (data.type === 'projectInfo') {
               return (
-                (await self.projectInfoProvider(
+                (await this.projectInfoProvider(
                   data as unknown as ProjectInfo.ProjectInfoRequest
                 )) || {}
               );
             }
             if (data.type === 'help') {
-              return (await self.helpProvider(data as unknown as Help.HelpRequest)) || {};
+              return (await this.helpProvider(data as unknown as Help.HelpRequest)) || {};
             } else {
               warn(`Unhandled context request type: ${data.type}`);
               // A response is required from this function.
@@ -89,18 +88,18 @@ export default class RemoteNavie extends EventEmitter implements INavie {
             return {};
           }
         },
-        onComplete() {
+        onComplete: () => {
           if (verbose()) warn(`Explain is complete`);
-          self.emit('complete');
+          this.emit('complete');
         },
-        onError(err: Error) {
+        onError: (err: Error) => {
           if (verbose()) warn(`Error handled by Explain: ${err}`);
-          self.emit('error', err);
+          this.emit('error', err);
         },
       })
     ).inputPrompt(
       { question: question, codeSelection: codeSelection },
-      { threadId: self.threadId, tool: 'explain' }
+      { threadId: this.threadId, tool: 'explain' }
     );
   }
 }

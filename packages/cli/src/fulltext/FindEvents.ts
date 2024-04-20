@@ -103,6 +103,7 @@ export default class FindEvents {
     filteredAppMap.rootEvents().forEach((event) => indexEvent(event));
 
     this.filteredAppMap = filteredAppMap;
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
     this.idx = lunr(function () {
       this.ref('fqid');
