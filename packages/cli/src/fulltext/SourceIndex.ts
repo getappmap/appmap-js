@@ -10,7 +10,6 @@ import { verbose } from '../utils';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import queryKeywords from './queryKeywords';
-import { Closeable } from './withIndex';
 
 const TEXT_SPLITTER_LANGUAGE_EXTENSIONS: Record<SupportedTextSplitterLanguage, string[]> = {
   cpp: ['cpp', 'h', 'hpp', 'c', 'cc', 'cxx', 'hxx'],

@@ -54,6 +54,15 @@ export const COMMON_REPO_BINARY_FILE_EXTENSIONS: string[] = [
   'mov',
   'wmv',
   'mpg',
+  'jar',
+  'war',
+  'ear',
+  'class',
+  'so',
+  'dll',
+  'exe',
+  'min.js',
+  'min.css',
 ];
 
 const IGNORE_DIRECTORIES = ['node_modules', 'vendor', 'tmp', 'build', 'dist', 'target'];
