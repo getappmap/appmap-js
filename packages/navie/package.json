@@ -10,7 +10,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
-    "test": "jest",
+    "test": "appmap-node jest",
     "lint": "eslint"
   },
   "publishConfig": {
