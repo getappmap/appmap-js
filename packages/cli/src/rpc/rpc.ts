@@ -12,7 +12,7 @@ export class RpcError extends Error implements jayson.JSONRPCError {
     let rpcError: jayson.JSONRPCError;
     warn(`Handling exception: ${inspect(err)}`);
     if (err.stack) warn(`Stack trace: ${err.stack}`);
-    if (err.cause) warn(`Cause: ${err.cause}`);
+    if (err.cause) warn(`Cause: ${String(err.cause)}`);
     if (isRpcError(err)) {
       rpcError = { code: err.code, message: err.message };
       const data: Record<string, any> = {};

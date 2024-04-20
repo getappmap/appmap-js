@@ -130,7 +130,7 @@ describe('record remote', () => {
 
           const appMapName = 'myAppMap';
           sinon.stub(nameAppMap, 'default').resolves(appMapName);
-          sinon.stub(saveAppMap, 'default').resolves(`${nameAppMap}.appmap.json`);
+          sinon.stub(saveAppMap, 'default').resolves(`${appMapName}.appmap.json`);
         });
 
         const EXAMPLES = [
