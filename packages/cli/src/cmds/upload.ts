@@ -96,7 +96,7 @@ export async function handler(argv: Arguments): Promise<void> {
   if (paths.length === 0) throw new Error(`No AppMaps found in directory '${appmapDir}'`);
 
   let total = paths.length;
-  const { baseURL } = await loadConfiguration();
+  const { baseURL } = loadConfiguration();
   UI.progress(`Uploading ${total} AppMaps for ${app} to ${baseURL}...`);
 
   const uuids: string[] = [];
