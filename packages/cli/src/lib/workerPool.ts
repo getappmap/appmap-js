@@ -40,7 +40,7 @@ export default class WorkerPool extends EventEmitter {
   workers: Worker[] = [];
   freeWorkers: Worker[] = [];
   tasks: Task[] = [];
-  workerInfoByThreadId: Map<number, WorkerInfo> = new Map();
+  workerInfoByThreadId = new Map<number, WorkerInfo>();
 
   addWorkerInterval?: NodeJS.Timeout | undefined;
 

@@ -167,7 +167,7 @@ export const handler = async (argv: any) => {
   };
 
   const compareDirectories = async (): Promise<void> => {
-    const diagramData: Map<string, { diagrams: Map<string, Diagram> }> = new Map();
+    const diagramData = new Map<string, { diagrams: Map<string, Diagram> }>();
     diagramData.set(baseDiagramFile, {
       diagrams: new Map<string, Diagram>(),
     });
