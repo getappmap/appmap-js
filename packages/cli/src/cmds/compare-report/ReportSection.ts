@@ -136,7 +136,7 @@ export default class ReportSection {
     return context;
   }
 
-  static helpers(): { [name: string]: Function } | undefined {
+  static helpers() {
     type RecorderGroup = {
       recorderName: string;
       count: number;
