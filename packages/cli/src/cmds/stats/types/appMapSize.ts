@@ -3,9 +3,7 @@ export type AppMapSize = {
   size: number;
 };
 
-export type AppMapSizeTable = {
-  [key: string]: AppMapSize;
-};
+export type AppMapSizeTable = Record<string, AppMapSize>;
 
 export type SortedAppMapSize = {
   path: string;

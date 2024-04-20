@@ -25,7 +25,7 @@ export type SearchContextOptions = {
 
 export type SearchContextResponse = {
   sequenceDiagrams: string[];
-  codeSnippets: { [key: string]: string };
+  codeSnippets: Record<string, string>;
   codeObjects: string[];
 };
 

@@ -3,7 +3,7 @@ import { collectStats } from '../../rpc/appmap/stats';
 import configuration from '../../rpc/configuration';
 
 export default async function collectProjectInfos(): Promise<ProjectInfo.ProjectInfo[]> {
-  const projectInfoByPath: { [key: string]: ProjectInfo.ProjectInfo } = {};
+  const projectInfoByPath: Record<string, ProjectInfo.ProjectInfo> = {};
   const appmapDirectories = await configuration().appmapDirectories();
   const appmapStats = await collectStats(appmapDirectories);
   appmapStats.forEach((stats) => {

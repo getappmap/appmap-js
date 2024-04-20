@@ -36,9 +36,7 @@ interface Setting {
 
 export type AppMapSettings = {
   max_time?: number;
-} & {
-  [key: string]: Setting;
-};
+} & Record<string, Setting>;
 
 export default class Configuration {
   constructor(appMapFile?: string, settingsFile?: string) {
