@@ -53,7 +53,7 @@ export default {
       const [project] = await getProjects(ui, installers, directory, false, projectType);
 
       const statusProcedure = new AgentStatusProcedure(
-        project.selectedInstaller as AgentInstaller,
+        project.selectedInstaller!,
         directory
       );
 

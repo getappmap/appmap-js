@@ -53,7 +53,7 @@ describe('emitUsage', () => {
       const resultPath = await emitUsage(process.cwd(), numEvents, numAppMaps, metadata as any);
       expect(resultPath).toBeDefined();
 
-      const dto = JSON.parse(await readFile(resultPath as string, 'utf-8')) as UsageUpdateDto;
+      const dto = JSON.parse(await readFile(resultPath!, 'utf-8')) as UsageUpdateDto;
       expect(dto).toMatchObject({
         events: numEvents,
         appmaps: numAppMaps,

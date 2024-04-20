@@ -125,7 +125,7 @@ const _handler = async (
       }
 
       const installProcedure = new AgentInstallerProcedure(
-        project.selectedInstaller as AgentInstaller,
+        project.selectedInstaller!,
         project.path
       );
 
