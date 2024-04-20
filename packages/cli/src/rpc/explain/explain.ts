@@ -44,8 +44,6 @@ export class Explain extends EventEmitter {
   }
 
   async explain(navie: INavie): Promise<void> {
-    const self = this;
-
     navie.on('ack', (userMessageId, threadId) => {
       this.status.threadId = threadId;
       this.emit('ack', userMessageId, threadId);
