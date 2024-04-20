@@ -13,5 +13,5 @@ describe(quotePath, () => {
     [['/tmp/app\\map.json', true], '"/tmp/app\\\\map.json"'],
     [['/tmp/ap"p\nmap\0/ma\\p1.json'], '"/tmp/ap\\"p\\nmap\\0/ma\\\\p1.json"'],
     [['/tmp/ap"p\nmap\0/ma\\p1.json', true], '"/tmp/ap\\"p\\nmap\\0/ma\\\\p1.json"'],
-  ])('with %o', (args, expected) => expect(quotePath.apply(undefined, args)).toEqual(expected));
+  ])('with %o', (args, expected) => expect(quotePath(...args)).toEqual(expected));
 });
