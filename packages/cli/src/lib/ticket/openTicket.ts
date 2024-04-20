@@ -9,7 +9,7 @@ import { isValidEmail, isValidName } from './validation';
 export default async function openTicket(
   errors: string | string[],
   helpMsg: string = DEFAULT_HELP_MSG,
-  prompt: boolean = true
+  prompt = true
 ): Promise<void> {
   errors = !Array.isArray(errors) ? [errors] : errors;
 

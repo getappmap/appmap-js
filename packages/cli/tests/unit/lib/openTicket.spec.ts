@@ -18,7 +18,7 @@ const getNthCallArgs = (stub, nth) => (stub as sinon.SinonStub).getCall(nth).arg
 
 class TestErrorResponse implements HttpErrorResponse {
   headers: Record<string, string> = {};
-  body: string = '';
+  body = '';
   toString(): string {
     return `${JSON.stringify(this)}`;
   }

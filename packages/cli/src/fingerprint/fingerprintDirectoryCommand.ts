@@ -4,8 +4,8 @@ import FingerprintQueue from './fingerprintQueue';
 import emitUsage from '../lib/emitUsage';
 
 class FingerprintDirectoryCommand {
-  private appmaps: number = 0;
-  private events: number = 0;
+  private appmaps = 0;
+  private events = 0;
   private metadata?: Metadata;
 
   constructor(private readonly directory: string) {}

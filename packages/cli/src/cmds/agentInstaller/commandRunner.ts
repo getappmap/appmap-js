@@ -6,7 +6,7 @@ import { verbose } from '../../utils';
 import { ChildProcessError } from '../errors';
 
 export class ProcessLog {
-  public static buffer: string = '';
+  public static buffer = '';
 
   public static log(command: string, childProcess: ChildProcess) {
     this.buffer = this.buffer.concat(`\n\nRunning command: \`${command}\`\n\n`);

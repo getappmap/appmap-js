@@ -75,7 +75,7 @@ export const builder = (args: yargs.Argv) => {
 
 export async function handler(
   argv: any,
-  handlerCaller: string = 'from_stats'
+  handlerCaller = 'from_stats'
 ): Promise<Array<EventInfo> | Promise<[SortedAppMapSize[], SlowestExecutionTime[]]> | undefined> {
   verbose(argv.verbose);
   handleWorkingDirectory(argv.directory);

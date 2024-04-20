@@ -36,6 +36,7 @@ const invokeCommand = (
     if (err) throw err;
   }
 ) => {
+  // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   const debugSwitch: string = ''; // to debug, set debugSwitch to -v
 
   if (debugSwitch !== '-v') {

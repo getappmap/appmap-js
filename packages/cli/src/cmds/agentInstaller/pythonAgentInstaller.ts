@@ -152,7 +152,7 @@ export class PipenvInstaller extends PythonInstaller {
 
 export class PipInstaller extends PythonInstaller {
   static identifier = 'pip';
-  private _buildFile: string = 'requirements.txt';
+  private _buildFile = 'requirements.txt';
 
   constructor(path: string) {
     super(PipInstaller.identifier, path);
