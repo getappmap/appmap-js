@@ -18,7 +18,7 @@ export default async function analyzeAppMaps(
   const includedCodeObjectIds = new Set<CodeObjectId>();
 
   const interpretCodeObjectPattern = (pattern: string) => {
-    if (pattern.charAt(0) === '+') {
+    if (pattern.startsWith('+')) {
       pattern = pattern.slice(1);
       requiredPatterns.add(pattern);
     }

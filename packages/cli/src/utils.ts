@@ -261,7 +261,7 @@ export function formatValue(value: ReturnValueObject) {
     return 'Null';
   }
 
-  const valueStr = value.value.indexOf('#<') === 0 ? null : value.value;
+  const valueStr = value.value.startsWith('#<') ? null : value.value;
 
   return [value.class, valueStr].filter((e) => e).join(' ');
 }

@@ -91,8 +91,8 @@ export async function statsForDirectory(
           if (
             event.definedClass &&
             event.path &&
-            (event.path[0] == '/' ||
-              event.path[0] == '<' ||
+            (event.path.startsWith('/') ||
+              event.path.startsWith('<') ||
               event.path.includes('::') ||
               event.path.startsWith('Kernel'))
           ) {
