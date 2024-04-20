@@ -3,7 +3,7 @@ import { exists } from '../utils';
 
 export async function locateAppMapConfigFile(appmapDir: string): Promise<string | undefined> {
   let dir: string = appmapDir;
-  while (true) {
+  for (;;) {
     const appmapFile = join(dir, 'appmap.yml');
     if (await exists(appmapFile)) return appmapFile;
 
