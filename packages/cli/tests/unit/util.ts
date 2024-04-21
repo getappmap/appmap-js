@@ -44,7 +44,7 @@ async function executeWorkspaceOSCommand(cmd: string, workingDirectory: string):
 }
 
 export async function cleanProject(workingDirectory: string) {
-  const commands = [`git checkout HEAD .`, `git clean -f -d .`];
+  const commands = [`git checkout HEAD .`, `git clean -fdx .`];
   for (const command of commands) {
     try {
       await executeWorkspaceOSCommand(command, workingDirectory);
