@@ -187,7 +187,7 @@ describe('RPC', () => {
 
           const statusResult: ExplainRpc.ExplainStatusResponse = await queryStatus();
           const sequenceDiagrams = statusResult.contextResponse
-            ?.filter((item) => item.type === ContextV2.ContextItemType.SequenceDiagram)
+            ?.filter((item) => item.type === 'sequence-diagram')
             .map((item) => item.content);
           expect(sequenceDiagrams?.join('\n')).toContain('@startuml');
           expect(Object.keys(statusResult)).toContain('contextResponse');

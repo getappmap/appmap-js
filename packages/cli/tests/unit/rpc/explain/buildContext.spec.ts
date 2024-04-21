@@ -1,5 +1,7 @@
-import buildContext from '../../../../src/rpc/explain/buildContext';
+import { ContextV2 } from '@appland/navie';
+
 import { handler as sequenceDiagramHandler } from '../../../../src/rpc/appmap/sequenceDiagram';
+import buildContext from '../../../../src/rpc/explain/buildContext';
 import lookupSourceCode from '../../../../src/rpc/explain/lookupSourceCode';
 
 jest.mock('../../../../src/rpc/appmap/sequenceDiagram');
@@ -45,7 +47,9 @@ describe('buildContext', () => {
           ],
         },
       ]);
-      expect(context.filter((item) => item.type !== 'sequence-diagram')).toEqual([
+      expect(
+        context.filter((item) => item.type !== ContextV2.ContextItemType.SequenceDiagram)
+      ).toEqual([
         {
           location: 'app/models/user.rb',
           type: 'code-snippet',
@@ -66,7 +70,9 @@ describe('buildContext', () => {
           events: [{ fqid: 'query:SELECT * FROM users', score: 1, eventIds: [1, 2] }],
         },
       ]);
-      expect(context.filter((item) => item.type !== 'sequence-diagram')).toEqual([
+      expect(
+        context.filter((item) => item.type !== ContextV2.ContextItemType.SequenceDiagram)
+      ).toEqual([
         {
           location: 'appmap1.appmap.json:1',
           type: 'data-request',
