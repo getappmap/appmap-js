@@ -42,17 +42,8 @@ module.exports = {
         publishCmd: 'yarn build',
       },
     ],
-    [
-      '@semantic-release/exec',
-      {
-        verifyConditionsCmd: '$PROJECT_CWD/bin/presign',
-        publishCmd: '$PROJECT_CWD/bin/build-native',
-        shell: '/bin/bash',
-      },
-    ],
     '@semantic-release/git',
     '@semantic-release/github',
-
     [
       '@semantic-release/exec',
       {
