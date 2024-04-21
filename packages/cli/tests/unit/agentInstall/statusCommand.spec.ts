@@ -15,7 +15,7 @@ const invokeCommand = (
   projectDir: string,
   evalResults: (err: Error | undefined, argv: any, output: string) => void
 ) => {
-  return yargs
+  return yargs([])
     .command(require('../../../src/cmds/agentInstaller/status').default)
     .parse(`status ${projectDir}`, {}, (err, argv, output) => {
       evalResults(err, argv, output);
