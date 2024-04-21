@@ -226,7 +226,12 @@ jobs:
 
   release:
     if: github.ref == 'refs/heads/main'
-    needs: [test_cli, test_components, test_chromatic, test_scanner, test_native, appmap-analysis]
+    needs:
+      - test_cli
+      - test_components
+      - test_scanner
+      - test_native
+      - test_the_rest
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
