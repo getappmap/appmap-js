@@ -241,6 +241,8 @@ jobs:
         uses: ./.github/actions/setup-node
 
       - name: Release
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           yarn
           yarn semantic-release
