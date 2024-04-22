@@ -1,3 +1,10 @@
+# [@appland/client-v1.17.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.16.0...@appland/client-v1.17.0) (2024-04-22)
+
+
+### Features
+
+* Define ContextV2 types for Navie ([c03de02](https://github.com/getappmap/appmap-js/commit/c03de0260a65bece067ac90a1cba7345a86a406c))
+
 # [@appland/client-v1.16.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.15.1...@appland/client-v1.16.0) (2024-03-06)
 
 
