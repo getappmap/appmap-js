@@ -154,6 +154,10 @@ export default {
       }
     },
   },
+
+  mounted() {
+    this.bindCopyButtons();
+  },
 };
 </script>
 <style lang="scss">
