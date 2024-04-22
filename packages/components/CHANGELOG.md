@@ -1,3 +1,10 @@
+# [@appland/components-v4.15.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.14.0...@appland/components-v4.15.0) (2024-04-22)
+
+
+### Features
+
+* Define ContextV2 types for Navie ([c03de02](https://github.com/getappmap/appmap-js/commit/c03de0260a65bece067ac90a1cba7345a86a406c))
+
 # [@appland/components-v4.14.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.13.0...@appland/components-v4.14.0) (2024-04-16)
 
 
