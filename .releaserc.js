@@ -1,6 +1,12 @@
+let commitMessage = 'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}';
 let plublishArgs = '';
 if (process.env.npm_package_name === '@appland/appmap') {
+  // Don't publish @appland/appmap as latest. This is done in a follow-up step.
   plublishArgs = '--tag next';
+
+  // Similarly, don't include the [skip ci] in the commit message. Otherwise the following step will
+  // not execute.
+  commitMessage = commitMessage.replace(/\s\[skip ci\]/, '');
 }
 
 module.exports = {
@@ -47,7 +53,12 @@ module.exports = {
         publishCmd: 'yarn build',
       },
     ],
-    '@semantic-release/git',
+    [
+      '@semantic-release/git',
+      {
+        message: commitMessage,
+      },
+    ],
     '@semantic-release/github',
     [
       '@semantic-release/exec',
