@@ -1,3 +1,19 @@
+# [@appland/appmap-v3.137.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.136.0...@appland/appmap-v3.137.0) (2024-04-22)
+
+
+### Bug Fixes
+
+* Add more binary and binary-ish file types ([3440e1d](https://github.com/getappmap/appmap-js/commit/3440e1dff889be66f38796ed6ec090211a4416c1))
+* Remove appmap-agent-js docs from Navie ([2c434a3](https://github.com/getappmap/appmap-js/commit/2c434a3592280337807977c19eee6f5a89f3d096))
+
+
+### Features
+
+* Consider labels when providing the context ([9268446](https://github.com/getappmap/appmap-js/commit/92684465bef2c2de2714d771294a1c8496a4254e))
+* Define ContextV2 types for Navie ([c03de02](https://github.com/getappmap/appmap-js/commit/c03de0260a65bece067ac90a1cba7345a86a406c))
+* Merge full-text search results with AppMap results ([2b53751](https://github.com/getappmap/appmap-js/commit/2b5375139a76dcf5f256a5360bb2d808d99b326a))
+* Run applyContext within collectContext ([d1b67aa](https://github.com/getappmap/appmap-js/commit/d1b67aabff8417c46f332bfe56e9fb3925f935e4))
+
 # [@appland/appmap-v3.136.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.135.1...@appland/appmap-v3.136.0) (2024-04-16)
 
 
