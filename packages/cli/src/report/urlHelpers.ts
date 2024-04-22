@@ -21,7 +21,12 @@ export default function urlHelpers(options: URLOptions): Record<string, (...args
   let { baseDir } = options;
   if (!baseDir) baseDir = process.cwd();
 
-  const source_url = (location: string, fileLinenoSeparator = '#L') => {
+  const source_url = (location: string | undefined, fileLinenoSeparator = '#L') => {
+    // source_location is optional in AppMap spec. Since this helper
+    // is called directly from Handlebars templates, declaring location
+    // as "location: string" does not guarantee its presence.
+    if (!location) return;
+
     if (typeof fileLinenoSeparator === 'object') {
       fileLinenoSeparator = '#L';
     }

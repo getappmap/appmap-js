@@ -29,4 +29,41 @@ describe('ChangeReporter', () => {
 \`\`\`
 (apiDiff) Validation errors in "head": Swagger schema validation failed.`);
   });
+
+  it('tolerates absence of source_location, which is optional in spec', async () => {
+    const appmapURL = 'https://appmap.example.com';
+    const changeReportData: ChangeReport = {
+      testFailures: [
+        {
+          appmap: "tmp/appmap/jest/test/the_test_that_failed",
+          name: "the test that failed"
+        },
+      ],
+      newAppMaps: [],
+      removedAppMaps: [],
+      changedAppMaps: [],
+      appMapMetadata: {
+        base: {},
+        head: {
+          "tmp/appmap/jest/test/the_test_that_failed": {
+            client: {
+              "name": "appmap-node",
+              "url": "https://github.com/getappmap/appmap-node"
+            },
+            recorder: {
+              name: "jest"
+            },
+            name: "the test that failed",
+            test_status: "failed",
+            // no source_location here
+          }
+        },
+      },
+      sequenceDiagramDiff: {},
+    };
+    const changeReporter = new ChangeReporter(appmapURL);
+    const report = await changeReporter.generateReport(changeReportData);
+    expect(report).toContain("the test that failed");
+
+  })
 });
