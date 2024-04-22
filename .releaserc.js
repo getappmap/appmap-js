@@ -1,3 +1,8 @@
+let plublishArgs = '';
+if (process.env.npm_package_name === '@appland/appmap') {
+  plublishArgs = '--tag next';
+}
+
 module.exports = {
   branches: ['main'],
   plugins: [
@@ -48,7 +53,7 @@ module.exports = {
       '@semantic-release/exec',
       {
         verifyConditionsCmd: 'test -n "$YARN_NPM_AUTH_TOKEN"',
-        publishCmd: 'yarn npm publish --tag next',
+        publishCmd: `yarn npm publish ${plublishArgs}`,
       },
     ],
   ],
