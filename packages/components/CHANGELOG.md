@@ -1,3 +1,15 @@
+# [@appland/components-v4.16.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.15.0...@appland/components-v4.16.0) (2024-04-22)
+
+
+### Bug Fixes
+
+* Support code ranges in context location ([21f29d6](https://github.com/getappmap/appmap-js/commit/21f29d692a9d61083eb9aeada2397192684e6bfb))
+
+
+### Features
+
+* Show Navie Context ([#1732](https://github.com/getappmap/appmap-js/issues/1732)) ([c78e279](https://github.com/getappmap/appmap-js/commit/c78e27908604efa296fe554486b4e3636f947342))
+
 # [@appland/components-v4.15.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.14.0...@appland/components-v4.15.0) (2024-04-22)
 
 
