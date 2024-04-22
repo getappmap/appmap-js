@@ -1,6 +1,6 @@
 import VChatSearch from '@/pages/ChatSearch.vue';
 import { mount, createWrapper } from '@vue/test-utils';
-import appmapData from '../fixtures/user_page_scenario.appmap.json';
+import navieContext from '../../../src/stories/data/navie_context.json';
 
 describe('pages/ChatSearch.vue', () => {
   const chatSearchWrapper = (messagesCalled) => {
@@ -78,53 +78,6 @@ describe('pages/ChatSearch.vue', () => {
     const newWidth = Number.parseInt(lhsPanel.element.style.width.replace('px', ''), 10);
 
     expect(newWidth).toBe(initialWidth + resizeBy);
-  });
-
-  describe('when opened with a target Appmap', () => {
-    let wrapper;
-
-    beforeEach(() => {
-      wrapper = chatSearchWrapper({
-        'v2.appmap.stats': appmapStatsNoAppMaps(),
-        propsData: {
-          targetAppmapData: appmapData,
-          targetAppmapFsPath: 'test',
-        },
-      });
-    });
-
-    it('shows the target Appmap without ask navie buttons', async () => {
-      expect(wrapper.find('[data-cy="appmap"]').exists()).toBe(true);
-
-      expect(wrapper.find('[data-cy="ask-navie-control-button"]').exists()).toBe(false);
-      expect(wrapper.find('[data-cy="collapsed-sidebar-ask-navie"]').exists()).toBe(false);
-
-      // Open the details panel
-      wrapper.find('[data-cy="sidebar-hamburger-menu-icon');
-      await wrapper.vm.$nextTick();
-
-      expect(wrapper.find('[data-cy="details-panel-ask-navie-button"]').exists()).toBe(false);
-    });
-
-    it('changes the placeholder text', () => {
-      const placeholder = wrapper.find('[data-cy="chat-input"]').attributes('placeholder');
-      expect(placeholder).toBe('What do you want to know about this AppMap?');
-    });
-
-    it('does not show the status bar', () => {
-      expect(wrapper.find('[data-cy="status-bar"]').exists()).toBe(false);
-    });
-
-    it('has a button to switch the context to the full workspace', async () => {
-      const fullWorkspaceContextButton = wrapper.find('[data-cy="full-workspace-context-button"]');
-      expect(fullWorkspaceContextButton.exists()).toBe(true);
-      fullWorkspaceContextButton.trigger('click');
-      await wrapper.vm.$nextTick();
-      expect(wrapper.find('[data-cy="appmap"]').exists()).toBe(false);
-      expect(wrapper.find('[data-cy="status-bar"]').exists()).toBe(true);
-      const placeholder = wrapper.find('[data-cy="chat-input"]').attributes('placeholder');
-      expect(placeholder).toBe('How can I help?');
-    });
   });
 
   describe('when no AppMaps are available', () => {
@@ -212,11 +165,11 @@ describe('pages/ChatSearch.vue', () => {
                 step: 'complete',
                 searchResponse,
                 explanation: ['Contact IT'],
+                contextResponse: navieContext,
               },
             ],
           ],
           'appmap.metadata': [[null, null, {}]],
-          'appmap.data': [[null, null, '{}']],
         };
         const wrapper = chatSearchWrapper(messagesCalled);
         return { messagesCalled, wrapper };
@@ -246,13 +199,6 @@ describe('pages/ChatSearch.vue', () => {
         expect(wrapper.vm.$refs.vchat.threadId).toBe('the-thread-id');
       });
 
-      it('shows the "match" instructions', async () => {
-        const { wrapper } = await performSearch();
-
-        expect(wrapper.find('[data-cy="match-instructions"]').exists()).toBe(true);
-        expect(wrapper.find('[data-cy="no-match-instructions"]').exists()).toBe(false);
-      });
-
       it('only renders the search status once', async () => {
         const { wrapper } = await performSearch();
 
@@ -264,17 +210,11 @@ describe('pages/ChatSearch.vue', () => {
         expect(wrapper.findAll('[data-cy="tool-status"]').length).toBe(1);
       });
 
-      it('emits an event when the user clicks the "Create more" button', async () => {
+      it('renders the context in the RHS', async () => {
         const { wrapper } = await performSearch();
 
-        await wrapper.vm.$nextTick();
-
-        const createMoreButton = wrapper.find('[data-cy="create-more-appmaps-btn"]');
-        expect(createMoreButton.exists()).toBe(true);
-
-        await createMoreButton.trigger('click');
-        const rootWrapper = createWrapper(wrapper.vm.$root);
-        expect(rootWrapper.emitted()['open-record-instructions']).toEqual([[]]);
+        expect(wrapper.findAll('[data-cy="context-notice"]').length).toBe(0);
+        expect(wrapper.findAll('[data-cy="context-item"]').length).toBe(navieContext.length);
       });
     });
 
@@ -329,6 +269,14 @@ describe('pages/ChatSearch.vue', () => {
         );
       });
 
+      it('shows the context notice', async () => {
+        const { wrapper } = await performSearch();
+
+        expect(wrapper.find('[data-cy="context-notice"]').text()).toContain(
+          'When you ask Navie a question, this area will reflect the information'
+        );
+      });
+
       it('makes expected RPC calls', async () => {
         const { messagesCalled } = await performSearch();
 
@@ -343,20 +291,12 @@ describe('pages/ChatSearch.vue', () => {
 
         expect(wrapper.vm.$refs.vchat.threadId).toEqual(threadId);
       });
-
-      it('shows the "no match" instructions', async () => {
-        const { wrapper } = await performSearch();
-
-        expect(wrapper.find('[data-cy="match-instructions"]').exists()).toBe(false);
-        expect(wrapper.find('[data-cy="no-match-instructions"]').exists()).toBe(true);
-      });
     });
 
     it('renders the search status', async () => {
       const title = '[data-cy="tool-status"] [data-cy="title"]';
       const status = '[data-cy="tool-status"] [data-cy="status"]';
       const wrapper = chatSearchWrapper({
-        'appmap.data': [[null, null, '{}']],
         'appmap.metadata': [[null, null, {}]],
         'v2.appmap.stats': appmapStatsHasAppMaps(),
         explain: [[null, null, { userMessageId, threadId }]],

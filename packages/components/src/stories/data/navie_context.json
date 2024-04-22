@@ -1,0 +1,182 @@
+[
+    {
+        "type": "code-snippet",
+        "location": "app/controllers/microposts_controller.rb:5",
+        "content": "def create\n    @micropost = current_user.microposts.build(micropost_params)\n    @micropost.image.attach(params[:micropost][:image])\n    if @micropost.save\n      flash[:success] = \"Micropost created!\"\n      redirect_to root_url\n    else\n      @feed_items = current_user.feed.paginate(page: params[:page])\n      render 'static_pages/home', status: :unprocessable_entity\n    end\n  end",
+        "score": 8.751767372528656
+    },
+    {
+        "type": "code-snippet",
+        "location": "app/views/shared/_micropost_form.html.erb",
+        "content": "<%= form_with(model: @micropost) do |f| %>\n  <%= render 'shared/error_messages', object: f.object %>\n  <div class=\"field\">\n    <%= f.text_area :content, placeholder: \"Compose new micropost...\" %>\n  </div>\n  <%= f.submit \"Post\", class: \"btn btn-primary\" %>\n  <span class=\"image\">\n    <%= f.file_field :image, accept: \"image/jpeg,image/gif,image/png\" %>\n  </span>\n<% end %>\n",
+        "score": 3.9383898087561473
+    },
+    {
+        "type": "code-snippet",
+        "location": "app/models/user.rb:30",
+        "content": "# Returns the hash digest of the given string.\n  def User.digest(string)\n    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :\n                                                  BCrypt::Engine.cost\n    BCrypt::Password.create(string, cost: cost)\n  end\n\n  # Returns a random token.\n  def User.new_token\n    SecureRandom.urlsafe_base64\n  end",
+        "score": 3.739958460426303
+    },
+    {
+        "type": "code-snippet",
+        "location": "app/controllers/sessions_controller.rb:6",
+        "content": "def create\n    user = User.find_by(email: params[:session][:email].downcase)\n    if user && user.authenticate(params[:session][:password])\n      if user.activated?\n        forwarding_url = session[:forwarding_url]\n        reset_session\n        params[:session][:remember_me] == '1' ? remember(user) : forget(user)\n        log_in user\n        redirect_to forwarding_url || user\n      else\n        message  = \"Account not activated. \"\n        message += \"Check your email for the activation link.\"",
+        "score": 2.493809592914881
+    },
+    {
+        "type": "code-snippet",
+        "location": "app/controllers/password_resets_controller.rb:6",
+        "content": "class PasswordResetsController < ApplicationController\n  before_action :get_user,         only: [:edit, :update]\n  before_action :valid_user,       only: [:edit, :update]\n  before_action :check_expiration, only: [:edit, :update]    # Case 1\n\n  def new\n  end",
+        "score": 3.320039930913052
+    },
+    {
+        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Microposts_interface_micropost_interface.appmap.json:2941",
+        "type": "data-request",
+        "content": "query:SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC LIMIT ? OFFSET ?",
+        "score": 5.501650869122312
+    },
+    {
+        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Microposts_interface_micropost_interface.appmap.json:1057",
+        "type": "data-request",
+        "content": "route:POST /microposts",
+        "score": 4.1545854873174255
+    },
+    {
+        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Microposts_controller_should_redirect_create_when_not_logged_in.appmap.json",
+        "type": "sequence-diagram",
+        "content": "@startuml\n!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml\nparticipant HTTP_server_requests as \"HTTP server requests\"\nparticipant activesupport as \"activesupport\"\nparticipant ruby as \"ruby\"\nparticipant logger as \"logger\"\nparticipant actionpack as \"actionpack\"\nparticipant json as \"json\"\n  [->HTTP_server_requests: POST /microposts (27.1 ms)\n  activate HTTP_server_requests\n    HTTP_server_requests->activesupport: invoke_before (0.65 ms)\n    activate activesupport\n    HTTP_server_requests<--activesupport: array\n    deactivate activesupport\n    HTTP_server_requests->activesupport: invoke_after (0.0178 ms)\n    activate activesupport\n    HTTP_server_requests<--activesupport: array\n    deactivate activesupport\n    HTTP_server_requests->ruby: unpack (0.038 ms)\n    activate ruby\n    HTTP_server_requests<--ruby: array\n    deactivate ruby\n    Loop 3 times (1.3 ms)\n      HTTP_server_requests->logger: write (1.3 ms)\n      activate logger\n      HTTP_server_requests<--logger: integer\n      deactivate logger\n    End\n    Loop 2 times (5.92 ms)\n      HTTP_server_requests->activesupport: invoke_before (5.92 ms)\n      activate activesupport\n      HTTP_server_requests<--activesupport: array\n      deactivate activesupport\n    End\n    Loop 2 times (0.00837 ms)\n      HTTP_server_requests->activesupport: invoke_after (0.00837 ms)\n      activate activesupport\n      HTTP_server_requests<--activesupport: array\n      deactivate activesupport\n    End\n    HTTP_server_requests->logger: write (0.0328 ms)\n    activate logger\n    HTTP_server_requests<--logger: integer\n    deactivate logger\n    HTTP_server_requests->actionpack: []= (0.299 ms)\n    activate actionpack\n    HTTP_server_requests<--actionpack: object\n    deactivate actionpack\n    HTTP_server_requests->actionpack: [] (0.0174 ms)\n    activate actionpack\n    HTTP_server_requests<--actionpack: object\n    deactivate actionpack\n    HTTP_server_requests->json: generate (0.135 ms)\n    activate json\n    HTTP_server_requests<--json: string\n    deactivate json\n    HTTP_server_requests->activesupport: encrypt_and_sign (5.69 ms)\n    activate activesupport\n    HTTP_server_requests<--activesupport: string\n    deactivate activesupport\n    HTTP_server_requests->actionpack: []= (0.0626 ms)\n    activate actionpack\n    HTTP_server_requests<--actionpack: string\n    deactivate actionpack\n  [<--HTTP_server_requests: 303\n  deactivate HTTP_server_requests\n@enduml",
+        "score": 3.1947084374008217
+    },
+    {
+        "type": "code-snippet",
+        "location": "app/views/password_resets/new.html.erb",
+        "content": "<% provide(:title, \"Forgot password\") %>\n<h1>Forgot password</h1>\n\n<div class=\"row\">\n  <div class=\"col-md-6 col-md-offset-3\">\n    <%= form_with(url: password_resets_path, scope: :password_reset,\n                  local: true) do |f| %>\n      <%= f.label :email %>\n      <%= f.email_field :email, class: 'form-control' %>\n\n      <%= f.submit \"Submit\", class: \"btn btn-primary\" %>\n    <% end %>\n  </div>\n</div>\n",
+        "score": 3.22328102582269
+    },
+    {
+        "type": "code-snippet",
+        "location": "app/controllers/password_resets_controller.rb:9",
+        "content": "def create\n    @user = User.find_by(email: params[:password_reset][:email].downcase)\n    if @user\n      @user.create_reset_digest\n      @user.send_password_reset_email\n      flash[:info] = \"Email sent with password reset instructions\"\n      redirect_to root_url\n    else\n      flash.now[:danger] = \"Email address not found\"\n      render 'new', status: :unprocessable_entity\n    end\n  end\n\n  def edit\n  end",
+        "score": 3.9595558192446645
+    },
+    {
+        "type": "code-snippet",
+        "location": "app/controllers/sessions_controller.rb:3",
+        "content": "class SessionsController < ApplicationController\n\n  def new\n  end",
+        "score": 3.3863343751023756
+    },
+    {
+        "type": "code-snippet",
+        "location": "app/views/sessions/new.html.erb",
+        "content": "<% provide(:title, \"Log in\") %>\n<h1>Log in</h1>\n\n<div class=\"row\">\n  <div class=\"col-md-6 col-md-offset-3\">\n    <%= form_with(url: login_path, scope: :session) do |f| %>\n\n      <%= f.label :email %>\n      <%= f.email_field :email, class: 'form-control' %>\n\n      <%= f.label :password %>\n      <%= link_to \"(forgot password)\", new_password_reset_path %>\n      <%= f.password_field :password, class: 'form-control' %>\n\n      <%= f.label :remember_me, class: \"checkbox inline\" do %>\n        <%= f.check_box :remember_me %>\n        <span>Remember me on this computer</span>\n      <% end %>\n\n      <%= f.submit \"Log in\", class: \"btn btn-primary\" %>\n    <% end %>\n\n    <p>New user? <%= link_to \"Sign up now!\", signup_path %></p>\n  </div>\n</div>\n",
+        "score": 2.625487478545651
+    },
+    {
+        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Microposts_interface_micropost_interface.appmap.json:427",
+        "type": "data-request",
+        "content": "query:SELECT \"microposts\".* FROM \"microposts\" WHERE (user_id IN (SELECT followed_id FROM relationships\n                     WHERE  follower_id = 762146111)\n                     OR user_id = 762146111) ORDER BY \"microposts\".\"created_at\" DESC LIMIT ? OFFSET ?",
+        "score": 4.143624517600158
+    },
+    {
+        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Microposts_interface_micropost_interface.appmap.json:375",
+        "type": "data-request",
+        "content": "query:SELECT COUNT(*) FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ?",
+        "score": 3.967871037650867
+    },
+    {
+        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Microposts_interface_micropost_interface.appmap.json:1054",
+        "type": "data-request",
+        "content": "query:SELECT COUNT(*) FROM \"microposts\"",
+        "score": 3.872623990452542
+    },
+    {
+        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Microposts_controller_should_redirect_create_when_not_logged_in.appmap.json:23",
+        "type": "data-request",
+        "content": "query:SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"id\" = ? LIMIT ?",
+        "score": 2.727108505358743
+    },
+    {
+        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Microposts_controller_should_redirect_destroy_when_not_logged_in.appmap.json",
+        "type": "sequence-diagram",
+        "content": "@startuml\n!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml\nparticipant HTTP_server_requests as \"HTTP server requests\"\nparticipant activesupport as \"activesupport\"\nparticipant ruby as \"ruby\"\nparticipant logger as \"logger\"\nparticipant actionpack as \"actionpack\"\nparticipant json as \"json\"\n  [->HTTP_server_requests: DELETE /microposts/{id} (45.3 ms)\n  activate HTTP_server_requests\n    HTTP_server_requests->activesupport: invoke_before (0.435 ms)\n    activate activesupport\n    HTTP_server_requests<--activesupport: array\n    deactivate activesupport\n    HTTP_server_requests->activesupport: invoke_after (0.00748 ms)\n    activate activesupport\n    HTTP_server_requests<--activesupport: array\n    deactivate activesupport\n    HTTP_server_requests->ruby: unpack (0.00951 ms)\n    activate ruby\n    HTTP_server_requests<--ruby: array\n    deactivate ruby\n    Loop 3 times (0.385 ms)\n      HTTP_server_requests->logger: write (0.385 ms)\n      activate logger\n      HTTP_server_requests<--logger: integer\n      deactivate logger\n    End\n    Loop 2 times (5.3 ms)\n      HTTP_server_requests->activesupport: invoke_before (5.3 ms)\n      activate activesupport\n      HTTP_server_requests<--activesupport: array\n      deactivate activesupport\n    End\n    Loop 2 times (0.00873 ms)\n      HTTP_server_requests->activesupport: invoke_after (0.00873 ms)\n      activate activesupport\n      HTTP_server_requests<--activesupport: array\n      deactivate activesupport\n    End\n    HTTP_server_requests->logger: write (0.0322 ms)\n    activate logger\n    HTTP_server_requests<--logger: integer\n    deactivate logger\n    HTTP_server_requests->actionpack: []= (0.253 ms)\n    activate actionpack\n    HTTP_server_requests<--actionpack: object\n    deactivate actionpack\n    HTTP_server_requests->actionpack: [] (0.00468 ms)\n    activate actionpack\n    HTTP_server_requests<--actionpack: object\n    deactivate actionpack\n    HTTP_server_requests->json: generate (0.0982 ms)\n    activate json\n    HTTP_server_requests<--json: string\n    deactivate json\n    HTTP_server_requests->activesupport: encrypt_and_sign (2.94 ms)\n    activate activesupport\n    HTTP_server_requests<--activesupport: string\n    deactivate activesupport\n    HTTP_server_requests->actionpack: []= (0.0883 ms)\n    activate actionpack\n    HTTP_server_requests<--actionpack: string\n    deactivate actionpack\n  [<--HTTP_server_requests: 303\n  deactivate HTTP_server_requests\n@enduml",
+        "score": 2.509168413040464
+    },
+    {
+        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost.appmap.json:277",
+        "type": "data-request",
+        "content": "query:SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? AND \"microposts\".\"id\" = ? ORDER BY \"microposts\".\"created_at\" DESC LIMIT ?",
+        "score": 3.1499559180588994
+    },
+    {
+        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost.appmap.json:201",
+        "type": "data-request",
+        "content": "route:DELETE /microposts/{id}",
+        "score": 2.346403448441283
+    },
+    {
+        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Forgot_password_form_password_reset_path.appmap.json:18",
+        "type": "data-request",
+        "content": "query:SELECT sql FROM\n  (SELECT * FROM sqlite_master UNION ALL\n   SELECT * FROM sqlite_temp_master)\nWHERE type = 'table' AND name = 'microposts'\n",
+        "score": 6.845692535143122
+    },
+    {
+        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Forgot_password_form_password_reset_path.appmap.json:259",
+        "type": "data-request",
+        "content": "route:GET /password_resets/new",
+        "score": 1.698194377230458
+    },
+    {
+        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Micropost_order_should_be_most_recent_first.appmap.json",
+        "type": "sequence-diagram",
+        "content": "@startuml\n!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml\nparticipant Database as \"Database\"\n  [->Database: SELECT \"microposts\".* FROM \"microposts\" WHERE \"mic (3.1 ms)\n  Note right\nSELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"id\" = ? LIMIT ?\n  End note\n  [->Database: SELECT \"microposts\".* FROM \"microposts\" ORDER BY \" (0.872 ms)\n  Note right\nSELECT \"microposts\".* FROM \"microposts\" ORDER BY \"microposts\".\"created_at\" DESC\nLIMIT ?\n  End note\n@enduml",
+        "score": 2.172232031805074
+    },
+    {
+        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Micropost_order_should_be_most_recent_first.appmap.json:25",
+        "type": "data-request",
+        "content": "query:SELECT \"microposts\".* FROM \"microposts\" ORDER BY \"microposts\".\"created_at\" DESC LIMIT ?",
+        "score": 2.3018083760382835
+    },
+    {
+        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/User_associated_microposts_should_be_destroyed.appmap.json:102",
+        "type": "data-request",
+        "content": "query:SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC",
+        "score": 2.51521771754786
+    },
+    {
+        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/User_associated_microposts_should_be_destroyed.appmap.json",
+        "type": "sequence-diagram",
+        "content": "@startuml\n!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml\nparticipant activesupport as \"activesupport\"\nparticipant app_models as \"app/models\"\nparticipant ruby as \"ruby\"\nparticipant Database as \"Database\"\n  [->activesupport: invoke_before (3.15 ms)\n  activate activesupport\n    activesupport->app_models: new_token (0.232 ms)\n    activate app_models\n      app_models->ruby: pack (0.00616 ms)\n      activate ruby\n      app_models<--ruby: string\n      deactivate ruby\n    activesupport<--app_models: string\n    deactivate app_models\n  [<--activesupport: array\n  deactivate activesupport\n  [->Database: INSERT INTO \"users\" (\"name\", \"email\", \"created_at\" (5.51 ms)\n  Note right\nINSERT INTO \"users\" (\"name\", \"email\", \"created_at\", \"updated_at\",\n\"password_digest\", \"remember_digest\", \"admin\", \"activation_digest\", \"activated\",\n\"activated_at\", \"reset_digest\", \"reset_sent_at\") VALUES (?, ?, ?, ?, ?, ?, ?, ?,\n?, ?, ?, ?)\n  End note\n  [->Database: INSERT INTO \"microposts\" (\"content\", \"user_id\", \"c (1.12 ms)\n  Note right\nINSERT INTO \"microposts\" (\"content\", \"user_id\", \"created_at\", \"updated_at\")\nVALUES (?, ?, ?, ?)\n  End note\n  [->ruby: eval (1.97 ms)\n  activate ruby\n    ruby->Database: SELECT COUNT(*) FROM \"microposts\" (0.475 ms)\n  [<--ruby: integer\n  deactivate ruby\n  [->activesupport: invoke_before (27.4 ms)\n  activate activesupport\n    activesupport->Database: SELECT \"microposts\".* FROM \"microposts\" WHERE \"mic (0.729 ms)\n    Note right\nSELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER\nBY \"microposts\".\"created_at\" DESC\n    End note\n    activesupport->Database: DELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = (0.632 ms)\n    Note right\nDELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = ?\n    End note\n  [<--activesupport: array\n  deactivate activesupport\n  [->ruby: eval (33.8 ms)\n  activate ruby\n    ruby->Database: SELECT COUNT(*) FROM \"microposts\" (4.87 ms)\n  [<--ruby: integer\n  deactivate ruby\n@enduml",
+        "score": 1.8918641930646078
+    },
+    {
+        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/User_associated_microposts_should_be_destroyed.appmap.json:108",
+        "type": "data-request",
+        "content": "query:DELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = ?",
+        "score": 1.8836576122002642
+    },
+    {
+        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/User_associated_microposts_should_be_destroyed.appmap.json:75",
+        "type": "data-request",
+        "content": "query:INSERT INTO \"microposts\" (\"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (?, ?, ?, ?)",
+        "score": 1.6350344033077715
+    },
+    {
+        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Invalid_password_login_path.appmap.json",
+        "type": "sequence-diagram",
+        "content": "@startuml\n!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml\nparticipant HTTP_server_requests as \"HTTP server requests\"\nparticipant controllers as \"controllers\"\nparticipant actionpack as \"actionpack\"\nparticipant views as \"views\"\nparticipant actionview as \"actionview\"\nparticipant logger as \"logger\"\nparticipant helpers as \"helpers\"\n  [->HTTP_server_requests: GET /login (125 ms)\n  activate HTTP_server_requests\n    HTTP_server_requests->controllers: new (0.00552 ms)\n    activate controllers\n    HTTP_server_requests<--controllers: void\n    deactivate controllers\n    HTTP_server_requests->actionpack: render_to_body (108 ms)\n    activate actionpack\n      actionpack->views: render (103 ms)\n      activate views\n        Loop 5 times (0.584 ms)\n          views->actionview: find_all (0.584 ms)\n          activate actionview\n          views<--actionview: array\n          deactivate actionview\n        End\n        Loop 3 times (8.11 ms)\n          views->logger: write (8.11 ms)\n          activate logger\n          views<--logger: integer\n          deactivate logger\n        End\n        views->helpers: full_title (0.0433 ms)\n        activate helpers\n        views<--helpers: string\n        deactivate helpers\n        views->views: render (6.66 ms)\n        activate views\n        views<--views: void\n        deactivate views\n        views->views: render (17.6 ms)\n        activate views\n        views<--views: void\n        deactivate views\n        views->actionpack: [] (0.0264 ms)\n        activate actionpack\n        views<--actionpack: void\n        deactivate actionpack\n        views->views: render (3.55 ms)\n        activate views\n        views<--views: void\n        deactivate views\n        views->logger: write (0.0471 ms)\n        activate logger\n        views<--logger: integer\n        deactivate logger\n      actionpack<--views: void\n      deactivate views\n    HTTP_server_requests<--actionpack: ActionView::OutputBuffer\n    deactivate actionpack\n  [<--HTTP_server_requests: 200\n  deactivate HTTP_server_requests\n@enduml",
+        "score": 1.5853334034202393
+    },
+    {
+        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/User_associated_microposts_should_be_destroyed.appmap.json:49",
+        "type": "data-request",
+        "content": "query:INSERT INTO \"users\" (\"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"remember_digest\", \"admin\", \"activation_digest\", \"activated\", \"activated_at\", \"reset_digest\", \"reset_sent_at\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        "score": 0.31884191485227703
+    },
+    {
+        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Users_index_index_as_admin_including_pagination_and_delete_links.appmap.json",
+        "type": "sequence-diagram",
+        "content": "@startuml\n!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml\nparticipant HTTP_server_requests as \"HTTP server requests\"\nparticipant controllers as \"controllers\"\nparticipant logger as \"logger\"\nparticipant actionpack as \"actionpack\"\nparticipant helpers as \"helpers\"\nparticipant models as \"models\"\nparticipant ruby as \"ruby\"\nparticipant activesupport as \"activesupport\"\nparticipant Database as \"Database\"\n  [->HTTP_server_requests: POST /login (59.8 ms)\n  activate HTTP_server_requests\n    HTTP_server_requests->controllers: create (48.9 ms)\n    activate controllers\n      controllers->logger: write (0.168 ms)\n      activate logger\n      controllers<--logger: integer\n      deactivate logger\n      controllers->Database: SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email (2.55 ms)\n      Note right\nSELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?\n      End note\n      controllers->actionpack: [] (1.8 ms)\n      activate actionpack\n      controllers<--actionpack: void\n      deactivate actionpack\n      controllers->actionpack: destroy (0.548 ms)\n      activate actionpack\n      controllers<--actionpack: boolean\n      deactivate actionpack\n      controllers->helpers: remember (25.6 ms)\n      activate helpers\n        helpers->models: remember (20.3 ms)\n        activate models\n          models->models: new_token (0.212 ms)\n          activate models\n            models->ruby: pack (0.00644 ms)\n            activate ruby\n            models<--ruby: string\n            deactivate ruby\n          models<--models: string\n          deactivate models\n        helpers<--models: string\n        deactivate models\n      controllers<--helpers: string\n      deactivate helpers\n      controllers->helpers: log_in (0.622 ms)\n      activate helpers\n      controllers<--helpers: string\n      deactivate helpers\n      controllers->actionpack: redirect_to (0.962 ms)\n      activate actionpack\n      controllers<--actionpack: string\n      deactivate actionpack\n    HTTP_server_requests<--controllers: string\n    deactivate controllers\n  [<--HTTP_server_requests: 302\n  deactivate HTTP_server_requests\n  [->HTTP_server_requests: DELETE /users/{id} (82.4 ms)\n  activate HTTP_server_requests\n    HTTP_server_requests->activesupport: invoke_before (33 ms)\n    activate activesupport\n      activesupport->Database: SELECT \"microposts\".* FROM \"microposts\" WHERE \"mic (0.43 ms)\n      Note right\nSELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER\nBY \"microposts\".\"created_at\" DESC\n      End note\n      Loop 2 times (2.94 ms)\n        activesupport->Database: DELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = (2.94 ms)\n        Note right\nDELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = ?\n        End note\n      End\n    HTTP_server_requests<--activesupport: array\n    deactivate activesupport\n  [<--HTTP_server_requests: 303\n  deactivate HTTP_server_requests\n@enduml",
+        "score": 1.371787155501902
+    }
+]
