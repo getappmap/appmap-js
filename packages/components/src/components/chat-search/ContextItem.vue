@@ -78,7 +78,10 @@ export default {
       switch (this.contextItem.type) {
         case 'code-snippet':
           // Return the file extension, without line numbers
-          return this.contextItem.location.replace(/:\d+$/, '').split('.').pop();
+          return this.contextItem.location
+            .replace(/:\d+(-\d+)?$/, '')
+            .split('.')
+            .pop();
 
         case 'sequence-diagram':
           return 'plantuml';
