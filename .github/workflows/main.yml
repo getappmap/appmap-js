@@ -253,5 +253,6 @@ jobs:
           GIT_COMMITTER_EMAIL: release@app.land
         run: |
           yarn
+          yarn build
           yarn semantic-release
           yarn chromatic --auto-accept-changes
