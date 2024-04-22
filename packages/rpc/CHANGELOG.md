@@ -1,3 +1,11 @@
+# [@appland/rpc-v1.8.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.7.0...@appland/rpc-v1.8.0) (2024-04-22)
+
+
+### Features
+
+* Consider labels when providing the context ([9268446](https://github.com/getappmap/appmap-js/commit/92684465bef2c2de2714d771294a1c8496a4254e))
+* Define ContextV2 types for Navie ([c03de02](https://github.com/getappmap/appmap-js/commit/c03de0260a65bece067ac90a1cba7345a86a406c))
+
 # [@appland/rpc-v1.7.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.6.0...@appland/rpc-v1.7.0) (2024-04-18)
 
 
