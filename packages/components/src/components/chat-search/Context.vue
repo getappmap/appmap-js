@@ -2,7 +2,7 @@
   <div class="context" data-cy="context">
     <template v-if="!contextResponse">
       <div class="context__notice-container">
-        <div class="context__notice">
+        <div class="context__notice" data-cy="context-notice">
           <h2>Navie's context</h2>
           <p>
             When you ask Navie a question, this area will reflect the information that Navie is
@@ -28,6 +28,7 @@
                   :key="getContextItemKey(contextItem)"
                   :contextItem="contextItem"
                   :index="index"
+                  data-cy="context-item"
                 />
               </div>
             </div>

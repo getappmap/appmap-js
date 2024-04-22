@@ -118,9 +118,14 @@ export default {
       this.showContent = !this.showContent;
     },
     getContext() {
-      const markdown = `\`\`\`${this.language}\n${this.contextItem.content}\n\`\`\`\n\n`;
-      console.log('markdown: ', markdown);
+      const markdown = `\`\`\`${this.language}\n${this.stripPrefix(
+        this.contextItem.content
+      )}\n\`\`\`\n\n`;
       return this.renderMarkdown(markdown);
+    },
+    stripPrefix(text) {
+      // i.e. strip 'query: ' from 'query: SELECT * FROM table'
+      return text.replace(/^[a-z]+:/, '');
     },
     renderMarkdown(text) {
       const markdown = marked.parse(text);

@@ -1,5 +1,6 @@
 import VChatSearch from '@/pages/ChatSearch.vue';
 import { mount, createWrapper } from '@vue/test-utils';
+import navieContext from '../../../src/stories/data/navie_context.json';
 
 describe('pages/ChatSearch.vue', () => {
   const chatSearchWrapper = (messagesCalled) => {
@@ -164,6 +165,7 @@ describe('pages/ChatSearch.vue', () => {
                 step: 'complete',
                 searchResponse,
                 explanation: ['Contact IT'],
+                contextResponse: navieContext,
               },
             ],
           ],
@@ -206,6 +208,13 @@ describe('pages/ChatSearch.vue', () => {
         await wrapper.vm.$nextTick();
 
         expect(wrapper.findAll('[data-cy="tool-status"]').length).toBe(1);
+      });
+
+      it('renders the context in the RHS', async () => {
+        const { wrapper } = await performSearch();
+
+        expect(wrapper.findAll('[data-cy="context-notice"]').length).toBe(0);
+        expect(wrapper.findAll('[data-cy="context-item"]').length).toBe(navieContext.length);
       });
     });
 
@@ -257,6 +266,14 @@ describe('pages/ChatSearch.vue', () => {
 
         expect(wrapper.find('[data-cy="tool-status"]').text()).toContain(
           'Found 0 relevant AppMaps'
+        );
+      });
+
+      it('shows the context notice', async () => {
+        const { wrapper } = await performSearch();
+
+        expect(wrapper.find('[data-cy="context-notice"]').text()).toContain(
+          'When you ask Navie a question, this area will reflect the information'
         );
       });
 
