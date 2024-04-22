@@ -4,13 +4,17 @@
   {{#each testFailures}}
 <details>
 <summary>
-{{ testLocation }}
+{{#if testLocation}}
+    {{ testLocation }}
+{{else}}
+    {{ appmap.metadata.name }}
+{{/if}}
 </summary>
 
 <p/>
 
 <!-- testLocation -->
-{{ source_link testLocation }} failed with error:
+{{#if testLocation}}{{ source_link testLocation }}{{/if}} failed with error:
 
     {{#if failureMessage}}
 <!-- failureMessage -->
