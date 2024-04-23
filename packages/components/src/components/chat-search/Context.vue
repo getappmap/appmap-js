@@ -79,7 +79,7 @@ export default {
 
   methods: {
     getContextItemKey(contextItem) {
-      return `${contextItem.type}-${contextItem.location}`;
+      return `${contextItem.type}-${contextItem.location || contextItem.content}`;
     },
     hasContext(type: string) {
       return this.contextResponse.some((context) => context.type === type);
