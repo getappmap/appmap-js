@@ -44,6 +44,14 @@ export type SourceIndexMatch = {
   score: number;
 };
 
+export type Chunk = {
+  directory: string;
+  fileName: string;
+  from: number;
+  to: number;
+  content: string;
+};
+
 export class SourceIndex {
   constructor(public database: sqlite3.Database) {}
 
@@ -108,32 +116,47 @@ export class SourceIndex {
     for (const chunk of await splitter.createDocuments([fileContents])) {
       const { from, to } = chunk.metadata.loc.lines;
 
-      try {
-        if (verbose()) console.log(`Indexing document ${filePath} from ${from} to ${to}`);
+      this.indexChunk({
+        directory,
+        fileName,
+        from,
+        to,
+        content: chunk.pageContent,
+      });
+    }
+  }
 
-        const terms = queryKeywords([chunk.pageContent]).join(' ');
-        this.database
-          .prepare(
-            'INSERT INTO code_snippets (directory, file_name, from_line, to_line, snippet, terms) VALUES (?, ?, ?, ?, ?, ?)'
-          )
-          .run(directory, fileName, from, to, chunk.pageContent, terms);
-      } catch (error) {
-        console.warn(`Error indexing document ${filePath} from ${from} to ${to}`);
-        console.warn(error);
-      }
+  indexChunk(chunk: Chunk) {
+    const { directory, fileName, from, to, content } = chunk;
+
+    const filePath = join(directory, fileName);
+    try {
+      if (verbose()) console.log(`Indexing chunk ${filePath} from ${from} to ${to}`);
+
+      const terms = queryKeywords([content]).join(' ');
+      this.database
+        .prepare(
+          'INSERT INTO code_snippets (directory, file_name, from_line, to_line, snippet, terms) VALUES (?, ?, ?, ?, ?, ?)'
+        )
+        .run(directory, fileName, from, to, content, terms);
+    } catch (error) {
+      console.warn(`Error indexing document ${filePath} from ${from} to ${to}`);
+      console.warn(error);
     }
   }
 }
 
 export async function buildSourceIndex(
   indexFileName: string,
-  files: FileIndexMatch[]
+  files: FileIndexMatch[],
+  chunks: Chunk[]
 ): Promise<SourceIndex> {
   assert(!existsSync(indexFileName), `Index file ${indexFileName} already exists`);
   const database = new sqlite3(indexFileName);
   const sourceIndex = new SourceIndex(database);
   sourceIndex.initializeIndex();
   await sourceIndex.indexFiles(files);
+  for (const chunk of chunks) sourceIndex.indexChunk(chunk);
   console.log(`Wrote file index to ${indexFileName}`);
   return sourceIndex;
 }

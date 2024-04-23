@@ -1,6 +1,5 @@
 import { SearchRpc } from '@appland/rpc';
-import { stat } from 'fs/promises';
-import { log, warn } from 'console';
+import { log } from 'console';
 import { Token, stemmer } from 'lunr';
 import { isAbsolute, join } from 'path';
 import { ContextV2, applyContext } from '@appland/navie';
@@ -14,11 +13,10 @@ import { DEFAULT_MAX_DIAGRAMS, DEFAULT_MAX_FILES } from '../search/search';
 import buildContext from './buildContext';
 import { FileIndexMatch, buildFileIndex } from '../../fulltext/FileIndex';
 import withIndex from '../../fulltext/withIndex';
-import { SourceIndexMatch, buildSourceIndex } from '../../fulltext/SourceIndex';
+import { Chunk, SourceIndexMatch, buildSourceIndex } from '../../fulltext/SourceIndex';
 import { executeCommand } from '../../lib/executeCommand';
 import { verbose } from '../../utils';
 import { Git, GitState } from '../../telemetry';
-import { isBinaryFile } from '../../fulltext/listProjectFiles';
 
 export function textSearchResultToRpcSearchResult(
   eventResult: EventSearchResult
@@ -84,40 +82,61 @@ export class EventCollector {
 
 const CHARS_PER_SNIPPET = 50;
 
-const MAX_GIT_GREP_FILE_SIZE = 20 * 1024;
-
 export class SourceCollector {
   constructor(private keywords: string[], private fileSearchResponse: FileIndexMatch[]) {}
 
   async collectContext(directories: string[], charLimit: number): Promise<ContextV2.ContextItem[]> {
+    const isntAllImports = (chunk: string) =>
+      !chunk
+        .split('\n')
+        .every(
+          (line) =>
+            line.startsWith('import ') ||
+            line.startsWith('from ') ||
+            line.startsWith('require(') ||
+            line.startsWith('const ') ||
+            line.startsWith('let ') ||
+            line.startsWith('var ')
+        );
+
     const grepFiles = async (directory: string, keyword: string): Promise<string[]> => {
-      const grepCommand = `git grep -i -I -F -l ${keyword}`;
-      const result = await executeCommand(
-        grepCommand,
-        verbose(),
-        verbose(),
-        verbose(),
-        [0],
-        directory
-      );
-      return result.split('\n').filter(Boolean);
+      // const grepCommand = `git grep -i -I -F -l ${keyword}`;
+      const grepCommand = `git --no-pager grep -WiFn --no-color ${keyword}`;
+      return (await executeCommand(grepCommand, verbose(), verbose(), verbose(), [0], directory))
+        .split('--')
+        .map((line) => line.trim())
+        .filter(isntAllImports);
     };
 
     const files = [...this.fileSearchResponse];
 
-    const isSmallEnough = async (filePath: string) => {
-      try {
-        const fileSize = (await stat(filePath)).size;
-        if (fileSize <= MAX_GIT_GREP_FILE_SIZE) return true;
+    const matchToChunk = (directory: string, text: string): Chunk => {
+      const lines = text.split('\n');
+      const firstLine = lines[0];
+      const lastLine = lines[lines.length - 1];
 
-        log(`File ${filePath} is too large for git-grep (${fileSize} bytes).`);
-      } catch (e) {
-        warn(`File ${filePath} not found.`);
+      // First line format: docs/blog/_posts/2021-06-30-flow-diagrams.md:21:matching text
+      // Subsequent line format: docs/blog/_posts/2021-06-30-flow-diagrams.md-28-## Conclusion
+      const [fileName, fromLine, line] = firstLine.split(':');
+      const content = [line];
+      let toLine = fromLine;
+      for (const line of lines.slice(1, -1)) {
+        const [lineNo, ...rest] = lastLine.slice(fileName.length).split('-');
+        content.push(rest.join('-'));
+        toLine = lineNo;
       }
+      return {
+        directory,
+        fileName,
+        from: parseInt(fromLine),
+        to: parseInt(toLine),
+        content: content.join('\n'),
+      };
     };
 
     // TODO: Include results of `git status` in the search?
     const requiredKeywords = this.keywords.filter((keyword) => keyword.startsWith('+'));
+    const chunks = new Array<Chunk>();
     if (requiredKeywords.length === 1) {
       for (const directory of directories) {
         if ((await Git.state(directory)) !== GitState.Ok) continue;
@@ -125,21 +144,17 @@ export class SourceCollector {
         const trimmedKeyword = requiredKeywords[0].slice(1);
         const stemmedKeyword = stemmer(new Token(trimmedKeyword, {})).toString();
         const keyword = trimmedKeyword.startsWith(stemmedKeyword) ? stemmedKeyword : trimmedKeyword;
-        const gitFiles = await grepFiles(directory, keyword);
+        const rawChunks = await grepFiles(directory, keyword);
         log(
-          `Matched ${gitFiles.length} files via git-grep in ${directory} using keyword ${keyword}.`
+          `Matched ${rawChunks.length} files via git-grep in ${directory} using keyword ${keyword}.`
         );
-        for (const file of gitFiles) {
-          const includeFile = !isBinaryFile(file) && isSmallEnough(join(directory, file));
-
-          if (includeFile) files.push({ directory, fileName: file, score: 0.0 });
-        }
+        chunks.concat(...rawChunks.map((text) => matchToChunk(directory, text)));
       }
     }
 
     const sourceIndexDocuments = await withIndex(
       'source',
-      (indexFileName: string) => buildSourceIndex(indexFileName, files),
+      (indexFileName: string) => buildSourceIndex(indexFileName, files, chunks),
       (index) => index.search(this.keywords, Math.round(charLimit / CHARS_PER_SNIPPET))
     );
 
