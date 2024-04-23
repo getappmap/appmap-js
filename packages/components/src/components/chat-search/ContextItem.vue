@@ -108,7 +108,7 @@ export default {
         }
       } else {
         // TODO: This should be CSS
-        return this.contextItem.content.slice(0, 25) + '...';
+        return this.stripPrefix(this.contextItem.content).slice(0, 25) + '...';
       }
     },
     isCodeSnippet() {

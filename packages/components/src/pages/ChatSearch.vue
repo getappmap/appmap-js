@@ -194,7 +194,7 @@ export default {
       return this.searchStatus ? this.searchStatus.step : undefined;
     },
     contextResponse() {
-      return this.searchStatus?.contextResponse;
+      return this.searchStatus?.contextResponse || this.createContextResponse();
     },
     selectedSearchResult() {
       if (!this.searchResponse || !this.selectedSearchResultId) return;
@@ -208,6 +208,41 @@ export default {
     },
   },
   methods: {
+    // This converts the old search context into the new context format
+    createContextResponse() {
+      if (!this.searchStatus) return;
+
+      const { codeObjects, sequenceDiagrams, codeSnippets } = this.searchStatus;
+      const result = [];
+
+      codeObjects?.forEach((codeObject) => {
+        result.push({
+          type: 'data-request',
+          content: codeObject,
+        });
+      });
+
+      sequenceDiagrams?.forEach((sequenceDiagram) => {
+        result.push({
+          type: 'sequence-diagram',
+          content: sequenceDiagram,
+        });
+      });
+
+      if (codeSnippets) {
+        Object.keys(codeSnippets).forEach((location) => {
+          result.push({
+            location,
+            type: 'code-snippet',
+            content: this.searchStatus.codeSnippets[location],
+          });
+        });
+      }
+
+      if (result.length === 0) return;
+
+      return result;
+    },
     askAboutWorkspace() {
       this.targetAppmap = undefined;
       this.$refs.vchat.resetAppMaps();
