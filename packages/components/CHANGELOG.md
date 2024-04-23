@@ -1,3 +1,10 @@
+# [@appland/components-v4.16.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.16.0...@appland/components-v4.16.1) (2024-04-23)
+
+
+### Bug Fixes
+
+* New Navie UI works with the old RPC ([2ba3ad0](https://github.com/getappmap/appmap-js/commit/2ba3ad0aeaa86d27a5e4bce1ef76708b61607d4d))
+
 # [@appland/components-v4.16.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.15.0...@appland/components-v4.16.0) (2024-04-22)
 
 
