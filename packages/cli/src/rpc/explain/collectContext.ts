@@ -14,9 +14,8 @@ import buildContext from './buildContext';
 import { FileIndexMatch, buildFileIndex } from '../../fulltext/FileIndex';
 import withIndex from '../../fulltext/withIndex';
 import { Chunk, SourceIndexMatch, buildSourceIndex } from '../../fulltext/SourceIndex';
-import { executeCommand } from '../../lib/executeCommand';
-import { verbose } from '../../utils';
 import { Git, GitState } from '../../telemetry';
+import gitGrep from '../../fulltext/gitGrep';
 
 export function textSearchResultToRpcSearchResult(
   eventResult: EventSearchResult
@@ -86,63 +85,21 @@ export class SourceCollector {
   constructor(private keywords: string[], private fileSearchResponse: FileIndexMatch[]) {}
 
   async collectContext(directories: string[], charLimit: number): Promise<ContextV2.ContextItem[]> {
-    const isImport = (line: string) =>
-      line.startsWith('import ') ||
-      line.startsWith('from ') ||
-      line.startsWith('require(') ||
-      line.startsWith('const ') ||
-      line.startsWith('let ') ||
-      line.startsWith('var ');
-
-    const grepFiles = async (directory: string, keyword: string): Promise<string[]> => {
-      const grepCommand = `git --no-pager grep -WiFn --no-color ${keyword}`;
-      return (await executeCommand(grepCommand, verbose(), verbose(), verbose(), [0], directory))
-        .split(/^--$/m)
-        .map((line) => line.trim());
-    };
-
     const files = [...this.fileSearchResponse];
-
-    const matchToChunk = (directory: string, text: string): Chunk | undefined => {
-      let fileName: string | undefined, from: number | undefined, to: number | undefined;
-      const content: string[] = [];
-      for (const line of text.trim().split(/\r?\n/)) {
-        const match = /(.+?)(?<sep>[-:=])(\d+)\k<sep>(.*)/.exec(line);
-        if (!match) continue;
-
-        const [, name, , lineno, txt] = match;
-        fileName ||= name;
-        from ||= Number(lineno);
-        to = Number(lineno);
-        content.push(txt);
-      }
-      if (fileName && from && to && !content.every(isImport))
-        return {
-          directory,
-          fileName,
-          from,
-          to,
-          content: content.join('\n'),
-        };
-    };
 
     // TODO: Include results of `git status` in the search?
     const requiredKeywords = this.keywords.filter((keyword) => keyword.startsWith('+'));
+    const trimmedKeyword = requiredKeywords[0].slice(1);
+    const stemmedKeyword = stemmer(new Token(trimmedKeyword, {})).toString();
+    const keyword = trimmedKeyword.startsWith(stemmedKeyword) ? stemmedKeyword : trimmedKeyword;
+
     const chunks = new Array<Chunk>();
     if (requiredKeywords.length === 1) {
       for (const directory of directories) {
         if ((await Git.state(directory)) !== GitState.Ok) continue;
 
-        const trimmedKeyword = requiredKeywords[0].slice(1);
-        const stemmedKeyword = stemmer(new Token(trimmedKeyword, {})).toString();
-        const keyword = trimmedKeyword.startsWith(stemmedKeyword) ? stemmedKeyword : trimmedKeyword;
-        const rawChunks = await grepFiles(directory, keyword);
-        log(
-          `Matched ${rawChunks.length} files via git-grep in ${directory} using keyword ${keyword}.`
-        );
-        chunks.concat(
-          ...(rawChunks.map((text) => matchToChunk(directory, text)).filter(Boolean) as Chunk[])
-        );
+        const dirChunks = await gitGrep(directory, keyword);
+        chunks.concat(...dirChunks);
       }
     }
 
