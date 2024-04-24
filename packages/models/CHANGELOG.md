@@ -1,3 +1,10 @@
+# [@appland/models-v2.10.2](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.10.1...@appland/models-v2.10.2) (2024-04-24)
+
+
+### Bug Fixes
+
+* Unexpected return calls no longer raise an exception ([bccece5](https://github.com/getappmap/appmap-js/commit/bccece5a373e315d36ed2328dfbb1d22e20c7787))
+
 # [@appland/models-v2.10.1](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.10.0...@appland/models-v2.10.1) (2024-03-04)
 
 
