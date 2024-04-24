@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.137.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.137.0...@appland/appmap-v3.137.1) (2024-04-24)
+
+
+### Bug Fixes
+
+* Unexpected return calls no longer raise an exception ([bccece5](https://github.com/getappmap/appmap-js/commit/bccece5a373e315d36ed2328dfbb1d22e20c7787))
+
 # [@appland/appmap-v3.137.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.136.0...@appland/appmap-v3.137.0) (2024-04-22)
 
 
