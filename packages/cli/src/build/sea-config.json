@@ -1,0 +1,9 @@
+{
+  "main": "dist/cli.js",
+  "output": "dist/appmap.blob",
+  "disableExperimentalSEAWarning": true,
+  "assets": {
+    "./docs": "./dist/docs",
+    "./build/better_sqlite3.node": "./dist/build/better_sqlite3.node"
+  }
+}
