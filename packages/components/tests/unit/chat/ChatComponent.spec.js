@@ -147,14 +147,58 @@ describe('components/Chat.vue', () => {
     });
   });
 
-  describe('clicking a suggestion', () => {
-    it('adds a fake message to the chat', async () => {
-      const wrapper = mount(VChat);
+  describe('clicking a mode instruction', () => {
+    let wrapper;
 
-      wrapper.find('[data-cy="prompt-suggestion"]').trigger('click');
-      await wrapper.vm.$nextTick();
+    beforeEach(() => {
+      // mock the document.createRange function
+      global.document.createRange = () => {
+        return {
+          selectNodeContents: () => {},
+          collapse: () => {},
+        };
+      };
 
-      expect(wrapper.find('[data-actor="system"] [data-cy="message-text"]').exists()).toBe(true);
+      // mock the window.getSelection function
+      global.window.getSelection = () => {
+        return {
+          removeAllRanges: () => {},
+          addRange: () => {},
+        };
+      };
+
+      wrapper = mount(VChat);
+    });
+
+    it('adds the mode prefix to the chat', async () => {
+      const chatInput = wrapper.find('[data-cy="chat-input"]');
+      const modeInstructions = wrapper.findAll('[data-cy="mode-instruction"]');
+
+      await modeInstructions.at(0).trigger('click');
+      expect(chatInput.element.innerText).toBe('@explain ');
+
+      await modeInstructions.at(1).trigger('click');
+      expect(chatInput.element.innerText).toBe('@help ');
+
+      await modeInstructions.at(2).trigger('click');
+      expect(chatInput.element.innerText).toBe('@generate ');
+    });
+
+    it('adds the prefix to the current message', async () => {
+      const question = 'Can I ask you a question?';
+      const chatInput = wrapper.find('[data-cy="chat-input"]');
+      chatInput.element.innerText = question;
+      await chatInput.trigger('input');
+
+      // sanity check
+      expect(chatInput.element.innerText).toBe(question);
+
+      const modeInstructions = wrapper.findAll('[data-cy="mode-instruction"]');
+      await modeInstructions.at(0).trigger('click');
+      expect(chatInput.element.innerText).toBe(`@explain ${question}`);
+
+      await modeInstructions.at(1).trigger('click');
+      expect(chatInput.element.innerText).toBe(`@help ${question}`);
     });
   });
 
@@ -187,81 +231,6 @@ describe('components/Chat.vue', () => {
       wrapper.find('[data-cy="feedback-good"]').trigger('click');
 
       expect(api).toBeCalledWith(messageId, 1);
-    });
-  });
-
-  describe('suggested prompts', () => {
-    it('can emit the prompt as the user', async () => {
-      const sendMessage = jest.fn();
-      const prompt = 'the-prompt';
-      const wrapper = mount(VChat, {
-        propsData: {
-          suggestionSpeaker: 'user',
-          sendMessage,
-          suggestions: [{ title: 'title', subtitle: 'subtitle', prompt }],
-        },
-      });
-      wrapper.find('[data-cy="prompt-suggestion"]').trigger('click');
-
-      await wrapper.vm.$nextTick();
-
-      expect(wrapper.find('[data-actor="user"] [data-cy="message-text"]').exists()).toBe(true);
-      expect(sendMessage).toBeCalledWith(prompt, [], []);
-    });
-
-    it('emits the prompt along with a code selection', async () => {
-      const sendMessage = jest.fn();
-      const prompt = 'the-prompt';
-      const wrapper = mount(VChat, {
-        propsData: {
-          suggestionSpeaker: 'user',
-          sendMessage,
-          suggestions: [{ title: 'title', subtitle: 'subtitle', prompt }],
-        },
-      });
-      const code = `class User < ApplicationRecord`;
-      wrapper.vm.includeCodeSelection({
-        path: 'app/models/user.rb',
-        lineStart: 10,
-        lineEnd: 15,
-        code,
-        language: 'ruby',
-      });
-      wrapper.find('[data-cy="prompt-suggestion"]').trigger('click');
-
-      await wrapper.vm.$nextTick();
-
-      expect(wrapper.find('[data-actor="user"] [data-cy="message-text"]').exists()).toBe(true);
-      expect(sendMessage).toBeCalledWith(prompt, [code], []);
-    });
-
-    it('emits the prompt along with an appmap', async () => {
-      const sendMessage = jest.fn();
-      const prompt = 'the-prompt';
-      const wrapper = mount(VChat, {
-        propsData: {
-          suggestionSpeaker: 'user',
-          sendMessage,
-          suggestions: [{ title: 'title', subtitle: 'subtitle', prompt }],
-        },
-      });
-      const code = `class User < ApplicationRecord`;
-      wrapper.vm.includeAppMap('the/appmap');
-      wrapper.find('[data-cy="prompt-suggestion"]').trigger('click');
-
-      await wrapper.vm.$nextTick();
-
-      expect(wrapper.find('[data-actor="user"] [data-cy="message-text"]').exists()).toBe(true);
-      expect(sendMessage).toBeCalledWith(prompt, [], ['the/appmap']);
-    });
-
-    it('can emit the prompt as the system', async () => {
-      const wrapper = mount(VChat); // default is system
-      wrapper.find('[data-cy="prompt-suggestion"]').trigger('click');
-
-      await wrapper.vm.$nextTick();
-
-      expect(wrapper.find('[data-actor="system"] [data-cy="message-text"]').exists()).toBe(true);
     });
   });
 

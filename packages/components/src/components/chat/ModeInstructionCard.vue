@@ -1,6 +1,9 @@
 <template>
-  <div class="suggestion-card" data-cy="prompt-suggestion" @click="onClick">
-    <div class="title">{{ title }}</div>
+  <div class="mode-instruction-card" data-cy="mode-instruction" @click="onClick">
+    <div class="title">
+      {{ title }}
+      <span class="default" v-if="isDefault">(default)</span>
+    </div>
     <div class="sub-title">{{ subTitle }}</div>
   </div>
 </template>
@@ -8,31 +11,36 @@
 <script lang="ts">
 //@ts-nocheck
 export default {
-  name: 'v-suggestion-card',
+  name: 'v-mode-instruction-card',
 
   props: {
+    id: {
+      required: true,
+    },
     title: {
       required: true,
     },
     subTitle: {
       required: true,
     },
-    prompt: {
-      required: true,
+    isDefault: {
+      type: Boolean,
+      default: false,
     },
   },
 
   methods: {
     onClick() {
-      this.$emit('suggest', this.prompt);
+      this.$emit('useMode', this.id);
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.suggestion-card {
+.mode-instruction-card {
   background-color: #2d3546;
+  margin: 0.5rem 0;
   padding: 1rem 2rem;
   color: #e3e5e8;
   width: 100%;
@@ -52,6 +60,10 @@ export default {
   .title {
     font-weight: bold;
     margin-bottom: 0.5rem;
+
+    .default {
+      color: $gray4;
+    }
   }
 
   .sub-title {
