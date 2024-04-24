@@ -37,11 +37,18 @@
         :code-selections="message.codeSelections"
         @change-sentiment="onSentimentChange"
       />
-      <v-suggestion-grid
-        :suggestions="suggestions"
-        @suggest="onSuggestion"
-        v-if="suggestionsEnabled"
-      />
+      <div class="mode-instructions" v-if="!isChatting">
+        <p>You can start your question with one of these commands:</p>
+        <v-mode-instruction-card
+          v-for="instruction in modeInstructions"
+          :key="instruction.id"
+          :title="instruction.title"
+          :subTitle="instruction.subTitle"
+          :id="instruction.id"
+          :isDefault="instruction.default"
+          @useMode="onUseMode"
+        />
+      </div>
     </div>
     <div v-if="!authorized" class="status-unauthorized status-container">
       <div class="status-label">
@@ -73,7 +80,7 @@
 import Vue from 'vue';
 import VUserMessage from '@/components/chat/UserMessage.vue';
 import VChatInput from '@/components/chat/ChatInput.vue';
-import VSuggestionGrid from '@/components/chat/SuggestionGrid.vue';
+import VModeInstructionCard from '@/components/chat/ModeInstructionCard.vue';
 import VAppMapNavieLogo from '@/assets/appmap-full-logo.svg';
 import VButton from '@/components/Button.vue';
 import { AI } from '@appland/client';
@@ -151,7 +158,7 @@ export default {
   components: {
     VUserMessage,
     VChatInput,
-    VSuggestionGrid,
+    VModeInstructionCard,
     VAppMapNavieLogo,
     VButton,
   },
@@ -162,19 +169,6 @@ export default {
     },
     sendMessage: {
       type: Function, // (message: string, codeSelections?: string[]) => void
-    },
-    suggestions: {
-      type: Array,
-      required: false,
-    },
-    disableSuggestions: {
-      type: Boolean,
-      default: false,
-    },
-    suggestionSpeaker: {
-      type: String,
-      default: 'system',
-      validator: (v: string) => ['system', 'user'].includes(v),
     },
     inputPlaceholder: {
       type: String,
@@ -191,12 +185,29 @@ export default {
       codeSelections: [] as CodeSelection[],
       appmaps: [] as string[],
       scrollLog: (message: string) => (this.enableScrollLog ? console.log(message) : undefined),
+      modeInstructions: [
+        {
+          id: 'explain',
+          title: '@explain',
+          subTitle:
+            'Navie will help you understand your project. This mode is used when there is no prefix.',
+          default: true,
+        },
+        {
+          id: 'help',
+          title: '@help',
+          subTitle:
+            'Navie will help you setup AppMap, including generating AppMap recordings and diagrams.',
+        },
+        {
+          id: 'generate',
+          title: '@generate',
+          subTitle: 'Navie will help you generate new code.',
+        },
+      ],
     };
   },
   computed: {
-    suggestionsEnabled() {
-      return this.disableSuggestions !== true && !this.isChatting;
-    },
     isChatting(): boolean {
       return this.messages.length > 0;
     },
@@ -214,6 +225,9 @@ export default {
       return this.messages.find((m) => {
         return Object.keys(query).every((key) => m[key] === query[key]);
       });
+    },
+    onUseMode(mode: string) {
+      this.$refs.input.prefixNewMode(`@${mode}`);
     },
     // Creates-or-appends a message.
     addToken(token: string, threadId: string, messageId: string) {
@@ -255,9 +269,6 @@ export default {
       this.messages.push(new ErrorMessage(error));
       this.scrollToBottom();
     },
-    ask(message: string) {
-      this.onSend(message);
-    },
     onError(error, assistantMessage?: AssistantMessage) {
       const messageIndex = this.messages.findIndex((m) => m === assistantMessage);
       if (messageIndex !== -1) {
@@ -285,17 +296,6 @@ export default {
     onAck(_messageId: string, threadId: string) {
       this.setAuthorized(true);
       this.threadId = threadId;
-    },
-    onSuggestion(prompt: string) {
-      if (this.suggestionSpeaker === 'system') {
-        // Make it look like the AI is typing
-        const assistantMessage = new AssistantMessage();
-        assistantMessage.complete = true;
-        assistantMessage.append(prompt);
-        this.messages.push(assistantMessage);
-      } else {
-        this.ask(prompt);
-      }
     },
     clear() {
       this.threadId = undefined;
@@ -445,6 +445,14 @@ $border-color: darken($gray4, 10%);
     justify-content: flex-end;
     height: 100%;
     overflow: auto;
+
+    .mode-instructions {
+      display: flex;
+      flex-direction: column;
+      padding: 2rem;
+      color: $gray4;
+      font-size: 0.9rem;
+    }
   }
 
   .chatting {

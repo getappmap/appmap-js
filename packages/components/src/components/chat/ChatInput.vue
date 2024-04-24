@@ -104,6 +104,24 @@ export default {
     focus() {
       (this.$refs.input as HTMLSpanElement).focus();
     },
+    prefixNewMode(mode: string) {
+      const currentInput = (this.$refs.input as HTMLSpanElement).innerText || '';
+      this.setInput(`${mode} ${currentInput.replace(/^\s*@(.+?)?(\s+?|$)/g, '')}`);
+    },
+    setInput(input: string) {
+      this.input = input;
+      (this.$refs.input as HTMLSpanElement).innerText = input;
+
+      // Move the cursor to the end of the input
+      const range = document.createRange();
+      const selection = window.getSelection();
+      range.selectNodeContents(this.$refs.input);
+      range.collapse(false);
+      selection.removeAllRanges();
+      selection.addRange(range);
+
+      this.focus();
+    },
   },
   updated() {
     this.focus();
