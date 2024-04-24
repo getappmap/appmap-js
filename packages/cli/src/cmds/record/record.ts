@@ -9,7 +9,7 @@ import { chdir } from 'process';
 import initial, { createState as createInitialState } from './state/initial';
 import RecordContext from './recordContext';
 import Configuration from './configuration';
-const StatsCommand = require('../stats/stats');
+import * as StatsCommand from '../stats/stats';
 import openTicket from '../../lib/ticket/openTicket';
 import UI from '../userInteraction';
 import { RemoteRecordingError } from './makeRequest';

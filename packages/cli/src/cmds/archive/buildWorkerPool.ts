@@ -4,7 +4,7 @@ import { join } from 'path';
 import { existsSync } from 'fs';
 
 // This import is used to ensure that the packaging follows the dependency.
-require('./analyzeWorkerWrapper');
+import './analyzeWorkerWrapper';
 
 const TEST_ENV_WORKER_FILE = join(__dirname, '../../../built/cmds/archive/analyzeWorkerWrapper.js');
 const WORKER_FILE = existsSync(TEST_ENV_WORKER_FILE)

@@ -6,15 +6,16 @@
 /* eslint-disable func-names */
 /* eslint-disable max-classes-per-file */
 
-const yargs = require('yargs');
-const { promises: fsp, readFileSync } = require('fs');
-const { queue } = require('async');
-const { join } = require('path');
+import yargs from 'yargs';
+import { readFileSync } from 'fs';
+import * as fsp from 'fs/promises';
+import { queue } from 'async';
+import { join } from 'path';
 import { setSQLErrorHandler } from '@appland/models';
 
-const { verbose } = require('./utils');
-const IndexCommand = require('./cmds/index/index');
-const Depends = require('./depends');
+import { verbose } from './utils';
+import * as IndexCommand from './cmds/index/index';
+import Depends from './depends';
 import InstallCommand from './cmds/agentInstaller/install-agent';
 import StatusCommand from './cmds/agentInstaller/status';
 import { default as OpenAPICommand } from './cmds/openapi/openapi';
@@ -22,18 +23,18 @@ import PruneCommand from './cmds/prune/prune';
 import RecordCommand from './cmds/record/record';
 import { handleWorkingDirectory } from './lib/handleWorkingDirectory';
 import { locateAppMapDir } from './lib/locateAppMapDir';
-const OpenCommand = require('./cmds/open/open');
-const InspectCommand = require('./cmds/inspect/inspect');
-const SequenceDiagramCommand = require('./cmds/sequenceDiagram');
-const SequenceDiagramDiffCommand = require('./cmds/sequenceDiagramDiff');
-const StatsCommand = require('./cmds/stats/stats');
-const ArchiveCommand = require('./cmds/archive/archive');
-const RestoreCommand = require('./cmds/archive/restore');
-const CompareCommand = require('./cmds/compare/compare');
-const CompareReportCommand = require('./cmds/compare-report/compareReport');
-const InventoryCommand = require('./cmds/inventory/inventory');
-const InventoryReportCommand = require('./cmds/inventory-report/inventoryReport');
-const SearchCommand = require('./cmds/search/search');
+import * as OpenCommand from './cmds/open/open';
+import * as InspectCommand from './cmds/inspect/inspect';
+import * as SequenceDiagramDiffCommand from './cmds/sequenceDiagramDiff';
+import * as SequenceDiagramCommand from './cmds/sequenceDiagram';
+import * as StatsCommand from './cmds/stats/stats';
+import * as ArchiveCommand from './cmds/archive/archive';
+import * as RestoreCommand from './cmds/archive/restore';
+import * as CompareCommand from './cmds/compare/compare';
+import * as CompareReportCommand from './cmds/compare-report/compareReport';
+import * as InventoryCommand from './cmds/inventory/inventory';
+import * as InventoryReportCommand from './cmds/inventory-report/inventoryReport';
+import * as SearchCommand from './cmds/search/search';
 import * as RpcCommand from './cmds/index/rpc';
 import UploadCommand from './cmds/upload';
 import { default as sqlErrorLog } from './lib/sqlErrorLog';

@@ -1,7 +1,6 @@
 import { verbose } from '../utils';
 import { CodeObject, CodeObjectMatcher, CodeObjectMatchSpec } from './types';
-
-const { MATCH_ABORT, MATCH_CONTINUE, MATCH_COMPLETE } = require('./constants');
+import { MATCH_ABORT, MATCH_CONTINUE, MATCH_COMPLETE } from './constants';
 
 class Matcher {
   depth = 0;
