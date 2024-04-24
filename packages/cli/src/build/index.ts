@@ -7,6 +7,7 @@ import terser from '@rollup/plugin-terser';
 import replace from '@rollup/plugin-replace';
 import { cp, mkdir } from 'fs/promises';
 import { dirname, join } from 'path';
+import { exec } from 'child_process';
 
 // see below for details on these options
 const inputOptions: InputOptions = {
@@ -109,6 +110,17 @@ async function generateOutputs(bundle: RollupBuild) {
   }
 
   await cp('package.json', 'dist/package.json');
+
+  if (process.platform !== 'win32') {
+    await exec('node --experimental-sea-config src/build/sea-config.json');
+    await exec('cp $(command -v node) dist/appmap');
+    await exec(
+      [
+        'npx postject dist/appmap NODE_SEA_BLOB dist/appmap.blob',
+        '--sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2',
+      ].join(' ')
+    );
+  }
 }
 
 async function build() {
