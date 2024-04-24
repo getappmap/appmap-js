@@ -150,8 +150,8 @@ export default {
     $fg: rgb(255, 255, 255, 0.75);
 
     margin: 0 auto;
-    max-width: 40%;
-    min-width: 0;
+    width: 40%;
+    min-width: 180px;
     background-color: rgb(0, 0, 0, 0.25);
     border: 1px solid rgb(255, 255, 255, 0.1);
     border-radius: 0.5rem;
