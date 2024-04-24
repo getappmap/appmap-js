@@ -86,52 +86,44 @@ export class SourceCollector {
   constructor(private keywords: string[], private fileSearchResponse: FileIndexMatch[]) {}
 
   async collectContext(directories: string[], charLimit: number): Promise<ContextV2.ContextItem[]> {
-    const isntAllImports = (chunk: string) =>
-      !chunk
-        .split('\n')
-        .every(
-          (line) =>
-            line.startsWith('import ') ||
-            line.startsWith('from ') ||
-            line.startsWith('require(') ||
-            line.startsWith('const ') ||
-            line.startsWith('let ') ||
-            line.startsWith('var ')
-        );
+    const isImport = (line: string) =>
+      line.startsWith('import ') ||
+      line.startsWith('from ') ||
+      line.startsWith('require(') ||
+      line.startsWith('const ') ||
+      line.startsWith('let ') ||
+      line.startsWith('var ');
 
     const grepFiles = async (directory: string, keyword: string): Promise<string[]> => {
-      // const grepCommand = `git grep -i -I -F -l ${keyword}`;
       const grepCommand = `git --no-pager grep -WiFn --no-color ${keyword}`;
       return (await executeCommand(grepCommand, verbose(), verbose(), verbose(), [0], directory))
-        .split('--')
-        .map((line) => line.trim())
-        .filter(isntAllImports);
+        .split(/^--$/m)
+        .map((line) => line.trim());
     };
 
     const files = [...this.fileSearchResponse];
 
-    const matchToChunk = (directory: string, text: string): Chunk => {
-      const lines = text.split('\n');
-      const firstLine = lines[0];
-      const lastLine = lines[lines.length - 1];
+    const matchToChunk = (directory: string, text: string): Chunk | undefined => {
+      let fileName: string | undefined, from: number | undefined, to: number | undefined;
+      const content: string[] = [];
+      for (const line of text.trim().split(/\r?\n/)) {
+        const match = /(.+?)(?<sep>[-:=])(\d+)\k<sep>(.*)/.exec(line);
+        if (!match) continue;
 
-      // First line format: docs/blog/_posts/2021-06-30-flow-diagrams.md:21:matching text
-      // Subsequent line format: docs/blog/_posts/2021-06-30-flow-diagrams.md-28-## Conclusion
-      const [fileName, fromLine, line] = firstLine.split(':');
-      const content = [line];
-      let toLine = fromLine;
-      for (const line of lines.slice(1, -1)) {
-        const [lineNo, ...rest] = lastLine.slice(fileName.length).split('-');
-        content.push(rest.join('-'));
-        toLine = lineNo;
+        const [, name, , lineno, txt] = match;
+        fileName ||= name;
+        from ||= Number(lineno);
+        to = Number(lineno);
+        content.push(txt);
       }
-      return {
-        directory,
-        fileName,
-        from: parseInt(fromLine),
-        to: parseInt(toLine),
-        content: content.join('\n'),
-      };
+      if (fileName && from && to && !content.every(isImport))
+        return {
+          directory,
+          fileName,
+          from,
+          to,
+          content: content.join('\n'),
+        };
     };
 
     // TODO: Include results of `git status` in the search?
@@ -148,7 +140,9 @@ export class SourceCollector {
         log(
           `Matched ${rawChunks.length} files via git-grep in ${directory} using keyword ${keyword}.`
         );
-        chunks.concat(...rawChunks.map((text) => matchToChunk(directory, text)));
+        chunks.concat(
+          ...(rawChunks.map((text) => matchToChunk(directory, text)).filter(Boolean) as Chunk[])
+        );
       }
     }
 
