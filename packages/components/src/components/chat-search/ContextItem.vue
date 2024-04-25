@@ -5,7 +5,11 @@
       <v-white-appmap-logo v-else class="row-icon" />
       <div>{{ header }}</div>
     </div>
-    <div class="context__body__table-row__content">
+    <div
+      class="context__body__table-row__content"
+      v-if="!isSequenceDiagram"
+      data-cy="context-item-content"
+    >
       <span v-html="highlightedContent" />
     </div>
   </div>
@@ -64,15 +68,11 @@ export default {
       type: Object,
       required: true,
     },
-    index: {
-      type: Number,
-      required: true,
-    },
   },
 
   computed: {
     highlightedContent() {
-      return this.getContext();
+      return this.isSequenceDiagram ? '' : this.getContext();
     },
     language() {
       switch (this.contextItem.type) {
@@ -113,6 +113,9 @@ export default {
     },
     isCodeSnippet() {
       return this.contextItem.type === 'code-snippet';
+    },
+    isSequenceDiagram() {
+      return this.contextItem.type === 'sequence-diagram';
     },
   },
 

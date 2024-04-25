@@ -25,9 +25,8 @@
               <div class="context__body__table">
                 <v-context-item
                   v-for="(contextItem, index) in contextItems(t)"
-                  :key="getContextItemKey(contextItem)"
+                  :key="index"
                   :contextItem="contextItem"
-                  :index="index"
                   data-cy="context-item"
                 />
               </div>
@@ -78,9 +77,6 @@ export default {
   },
 
   methods: {
-    getContextItemKey(contextItem) {
-      return `${contextItem.type}-${contextItem.location || contextItem.content}`;
-    },
     hasContext(type: string) {
       return this.contextResponse.some((context) => context.type === type);
     },
