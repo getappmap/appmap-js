@@ -242,7 +242,7 @@ const EmptyAppmapStats = {
   numAppMaps: 0,
 };
 
-function buildMockRpc(searchResponse, explanation, appmapStats = AppmapStats) {
+function buildMockRpc(searchResponse, explanation, appmapStats, navieContext) {
   return (method, params, callback) => {
     if (method === 'explain') {
       statusIndex = 0;
@@ -292,9 +292,21 @@ function buildMockRpc(searchResponse, explanation, appmapStats = AppmapStats) {
   };
 }
 
-const nonEmptyMockRpc = buildMockRpc(NonEmptySearchResponse, MOCK_EXPLANATION);
+const nonEmptyMockRpc = buildMockRpc(
+  NonEmptySearchResponse,
+  MOCK_EXPLANATION,
+  AppmapStats,
+  navieContext
+);
 
-const emptyMockRpc = buildMockRpc(EmptySearchResponse, [], EmptyAppmapStats);
+const noAppMapsContext = navieContext.filter((context) => context.type === 'code-snippet');
+
+const emptyMockRpc = buildMockRpc(
+  EmptySearchResponse,
+  MOCK_EXPLANATION,
+  EmptyAppmapStats,
+  noAppMapsContext
+);
 
 ChatSearchMock.args = {
   appmapRpcFn: nonEmptyMockRpc,

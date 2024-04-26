@@ -60,6 +60,43 @@ describe('pages/ChatSearch.vue', () => {
 
   const noConfig = () => [[null, null, {}]];
 
+  const emptySearchResponse = {
+    results: [],
+  };
+
+  const buildComponent = (appmapStatsFnc, searchResponse, contextResponse, hasMetadata) => {
+    const messagesCalled = {
+      'v2.appmap.stats': appmapStatsFnc(),
+      'v2.configuration.get': noConfig(),
+      explain: [[null, null, { userMessageId, threadId }]],
+      'explain.status': [
+        [null, null, { step: 'build-vector-terms' }],
+        [
+          null,
+          null,
+          {
+            step: 'explain',
+            searchResponse,
+          },
+        ],
+        [
+          null,
+          null,
+          {
+            step: 'complete',
+            searchResponse,
+            explanation: ['Contact IT'],
+            contextResponse,
+          },
+        ],
+      ],
+    };
+
+    if (hasMetadata) messagesCalled['appmap.metadata'] = [[null, null, {}]];
+    const wrapper = chatSearchWrapper(messagesCalled);
+    return { messagesCalled, wrapper };
+  };
+
   it('can be resized', async () => {
     const wrapper = chatSearchWrapper({
       'v2.appmap.stats': appmapStatsHasAppMaps(),
@@ -85,6 +122,35 @@ describe('pages/ChatSearch.vue', () => {
   });
 
   describe('when no AppMaps are available', () => {
+    const navieContextwithoutAppMaps = navieContext.filter((item) => item.type === 'code-snippet');
+
+    const performSearch = async () => {
+      const { messagesCalled, wrapper } = buildComponent(
+        appmapStatsNoAppMaps,
+        emptySearchResponse,
+        navieContextwithoutAppMaps
+      );
+
+      await wrapper.vm.sendMessage('How do I reset my password?');
+      await wrapper.vm.$nextTick();
+
+      return { messagesCalled, wrapper };
+    };
+
+    it('renders a message to help users create AppMap data', async () => {
+      const { wrapper } = await performSearch();
+
+      expect(wrapper.find('[data-cy="create-appmap-data"]').text()).toContain(
+        "You don't have any AppMap data"
+      );
+      const createDataBtn = wrapper.find('[data-cy="create-appmap-data-btn"]');
+      expect(createDataBtn.exists());
+
+      await createDataBtn.trigger('click');
+      const rootWrapper = createWrapper(wrapper.vm.$root);
+      expect(rootWrapper.emitted()['open-install-instructions']).toEqual([[]]);
+    });
+
     it('shows a warning that no AppMaps are available', async () => {
       const wrapper = chatSearchWrapper({
         'v2.appmap.stats': appmapStatsNoAppMaps(),
@@ -144,49 +210,23 @@ describe('pages/ChatSearch.vue', () => {
     });
 
     describe('and there are matching AppMaps', () => {
-      const buildComponent = () => {
-        const searchResponse = {
-          results: [
-            {
-              appmap: 'example.appmap.json',
-              events: [],
-              score: 1.0,
-            },
-          ],
-        };
-        const messagesCalled = {
-          'v2.appmap.stats': appmapStatsHasAppMaps(),
-          'v2.configuration.get': noConfig(),
-          explain: [[null, null, { userMessageId, threadId }]],
-          'explain.status': [
-            [null, null, { step: 'build-vector-terms' }],
-            [
-              null,
-              null,
-              {
-                step: 'explain',
-                searchResponse,
-              },
-            ],
-            [
-              null,
-              null,
-              {
-                step: 'complete',
-                searchResponse,
-                explanation: ['Contact IT'],
-                contextResponse: navieContext,
-              },
-            ],
-          ],
-          'appmap.metadata': [[null, null, {}]],
-        };
-        const wrapper = chatSearchWrapper(messagesCalled);
-        return { messagesCalled, wrapper };
+      const searchResponse = {
+        results: [
+          {
+            appmap: 'example.appmap.json',
+            events: [],
+            score: 1.0,
+          },
+        ],
       };
 
       const performSearch = async () => {
-        const { messagesCalled, wrapper } = buildComponent();
+        const { messagesCalled, wrapper } = buildComponent(
+          appmapStatsHasAppMaps,
+          searchResponse,
+          navieContext,
+          true
+        );
 
         await wrapper.vm.sendMessage('How do I reset my password?');
         await wrapper.vm.$nextTick();
@@ -229,42 +269,11 @@ describe('pages/ChatSearch.vue', () => {
     });
 
     describe('but no AppMaps match the question', () => {
-      const buildComponent = () => {
-        const emptySearchResponse = {
-          results: [],
-        };
-
-        const messagesCalled = {
-          'v2.appmap.stats': appmapStatsHasAppMaps(),
-          'v2.configuration.get': noConfig(),
-          explain: [[null, null, { userMessageId, threadId }]],
-          'explain.status': [
-            [null, null, { step: 'build-vector-terms' }],
-            [
-              null,
-              null,
-              {
-                step: 'explain',
-                searchResponse: emptySearchResponse,
-              },
-            ],
-            [
-              null,
-              null,
-              {
-                step: 'complete',
-                searchResponse: emptySearchResponse,
-                explanation: ['Contact IT'],
-              },
-            ],
-          ],
-        };
-        const wrapper = chatSearchWrapper(messagesCalled);
-        return { messagesCalled, wrapper };
-      };
-
       const performSearch = async () => {
-        const { messagesCalled, wrapper } = buildComponent();
+        const { messagesCalled, wrapper } = buildComponent(
+          appmapStatsHasAppMaps,
+          emptySearchResponse
+        );
 
         await wrapper.vm.sendMessage('How do I reset my password?');
         await wrapper.vm.$nextTick();
