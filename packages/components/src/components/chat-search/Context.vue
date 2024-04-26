@@ -16,6 +16,25 @@
       <div>
         <h2>Context</h2>
         <div class="context__body">
+          <div
+            v-if="numAppMaps === 0"
+            class="context__body__no-appmaps"
+            data-cy="create-appmap-data"
+          >
+            <p>
+              You don't have any AppMap data. Adding AppMap data to Navie's context improves Navie's
+              code suggestions and answers.
+            </p>
+            <v-button
+              data-cy="create-appmap-data-btn"
+              class="create-appmap-data"
+              size="small"
+              kind="ghost"
+              @click.native="openInstallInstructions"
+            >
+              Open Instructions
+            </v-button>
+          </div>
           <div v-for="t in Object.keys(contextTypes)" :key="t">
             <div v-if="hasContext(t)">
               <h3>
@@ -41,12 +60,14 @@
 <script lang="ts">
 //@ts-nocheck
 import VContextItem from '@/components/chat-search/ContextItem.vue';
+import VButton from '@/components/Button.vue';
 
 export default {
   name: 'v-context',
 
   components: {
     VContextItem,
+    VButton,
   },
 
   props: {
@@ -66,9 +87,9 @@ export default {
     },
     contextTypes() {
       return {
-        'code-snippet': 'Code Snippets',
         'sequence-diagram': 'Sequence Diagrams',
         'data-request': 'Data Requests',
+        'code-snippet': 'Code Snippets',
       };
     },
     contextTypeKeys() {
@@ -85,6 +106,9 @@ export default {
     },
     contextItemCount(type: string) {
       return this.contextItems(type).length;
+    },
+    openInstallInstructions() {
+      this.$root.$emit('open-install-instructions');
     },
   },
 };
@@ -122,6 +146,11 @@ export default {
   }
 
   &__body {
+    &__no-appmaps {
+      padding: 0 1rem;
+      margin-bottom: 2.5rem;
+    }
+
     &__table {
       display: flex;
       flex-direction: column;
