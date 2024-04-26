@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.138.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.137.2...@appland/appmap-v3.138.0) (2024-04-26)
+
+
+### Features
+
+* Add Navie configuration to `v2.configuration.get` implementation ([0b19c77](https://github.com/getappmap/appmap-js/commit/0b19c77475a9e628f52c0b5a7a437616ce0f994d))
+
 # [@appland/appmap-v3.137.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.137.1...@appland/appmap-v3.137.2) (2024-04-26)
 
 
