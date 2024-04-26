@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import yargs from 'yargs';
 import chalk from 'chalk';
 import { ContextV2, Help, ProjectInfo, Agents } from '@appland/navie';
@@ -24,6 +27,7 @@ import {
   setConfigurationV1,
   setConfigurationV2,
 } from '../../rpc/configuration';
+import detectCodeEditor from '../../lib/detectCodeEditor';
 
 const AI_KEY_ENV_VARS = ['OPENAI_API_KEY', 'AZURE_OPENAI_API_KEY'];
 
@@ -66,9 +70,11 @@ export const builder = (args: yargs.Argv) => {
   });
 
   args.option('code-editor', {
-    describe: 'Which code editor spawned the process',
+    describe:
+      'Active code editor. This information is used to tune the @help responses. If unspecified, the code editor may be picked up from environment variables APPMAP_CODE_EDITOR, TERM_PROGRAM and TERMINAL_EMULATOR.',
     type: 'string',
-    choices: ['vscode', 'jetbrains'],
+    // Allow this to be any string. The code editor brand name may be a clue to the language
+    // in use, or the user's intent.
   });
 
   return args.strict();
@@ -77,7 +83,7 @@ export const builder = (args: yargs.Argv) => {
 export const handler = async (argv) => {
   verbose(argv.verbose);
 
-  let directories: string[] = [];
+  const directories: string[] = [];
   if (argv.directory) {
     Array.isArray(argv.directory)
       ? directories.push(...argv.directory)
@@ -89,9 +95,15 @@ export const handler = async (argv) => {
   if (aiOptions) {
     aiOptions = Array.isArray(aiOptions) ? aiOptions : [aiOptions];
   }
-  let agentModeStr: string | undefined = argv.explainMode;
+  const agentModeStr: string | undefined = argv.explainMode;
   let agentMode: Agents | undefined;
   if (agentModeStr) agentMode = agentModeStr as Agents;
+
+  let codeEditor: string | undefined = argv.codeEditor;
+  if (!codeEditor) {
+    codeEditor = detectCodeEditor();
+    if (codeEditor) log(`Detected code editor: ${codeEditor}`);
+  }
 
   const useLocalNavie = () => {
     if (argv.navieProvider === 'local') {
@@ -173,6 +185,7 @@ export const handler = async (argv) => {
 
   configureRpcDirectories(directories);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const rpcMethods: RpcHandler<any, any>[] = [
     search(),
     appmapStatsV1(),
@@ -181,7 +194,7 @@ export const handler = async (argv) => {
     appmapData(),
     metadata(),
     sequenceDiagram(),
-    explainHandler(navieProvider, argv.codeEditor),
+    explainHandler(navieProvider, codeEditor),
     explainStatusHandler(),
     setConfigurationV1(),
     getConfigurationV1(),
