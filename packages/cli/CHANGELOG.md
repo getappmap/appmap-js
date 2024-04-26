@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.137.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.137.1...@appland/appmap-v3.137.2) (2024-04-26)
+
+
+### Bug Fixes
+
+* Tolerate absence of source_location in compare-report ([a99f7aa](https://github.com/getappmap/appmap-js/commit/a99f7aaf96b97abd4ac2a4c8e72a456e24af2883))
+* Tone down architecture pressure ([edff9ec](https://github.com/getappmap/appmap-js/commit/edff9ec5198c98e0ce14aa5c90515533187b05ed))
+
 # [@appland/appmap-v3.137.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.137.0...@appland/appmap-v3.137.1) (2024-04-24)
 
 
