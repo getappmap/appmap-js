@@ -3,7 +3,7 @@
     <div class="context__body__table-row__header" @click="openLocation">
       <v-code-icon v-if="isCodeSnippet" class="row-icon" />
       <v-white-appmap-logo v-else class="row-icon" />
-      <div>{{ header }}</div>
+      <div class="row-text">{{ header }}</div>
     </div>
     <div
       class="context__body__table-row__content"
@@ -187,6 +187,12 @@ export default {
     .row-icon {
       margin-right: 0.75rem;
       width: 18px;
+    }
+
+    .row-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     &:hover {
