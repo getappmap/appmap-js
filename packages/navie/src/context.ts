@@ -45,8 +45,12 @@ export namespace ContextV2 {
 
   // A specific context item that is returned in the response.
   export type ContextItem = {
-    // Identifies the location in the code base from which the context was obtained.
+    // The directory in which the context item is located.
+    directory?: string;
+    // Identifies the location in the project directory from which the context was obtained.
     // For example, a file path with an optional line number or range in the format "path/to/file.rb:1-2".
+    // In some cases, the AppMap agent may not be able to determine the location of the context item,
+    // so this field may be a best guess. In the code editor, perform a search for the file name to locate the file.
     location?: string;
     // The type of context item.
     type: ContextItemType;
