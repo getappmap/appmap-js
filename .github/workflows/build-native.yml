@@ -212,32 +212,32 @@ jobs:
           choco install rsync
           yarn build
           cd packages/cli
-          yarn build-native windows x64
-          node ${GITHUB_WORKSPACE}/bin/hash.js release/appmap-windows-x64.exe
+          yarn build-native win x64
+          node ${GITHUB_WORKSPACE}/bin/hash.js release/appmap-win-x64.exe
 
-      - name: Publish appmap-windows-x64
+      - name: Publish appmap-win-x64
         uses: actions/upload-artifact@v4
         with:
-          name: appmap-windows-x64
-          path: packages/cli/release/appmap-windows-x64.exe
+          name: appmap-win-x64
+          path: packages/cli/release/appmap-win-x64.exe
 
-      - name: 'Release: appmap-windows-x64.exe'
+      - name: 'Release: appmap-win-x64.exe'
         uses: svenstaro/upload-release-action@v2
         if: github.ref_type == 'tag'
         with:
           repo_token: ${{ secrets.GH_TOKEN }}
-          file: packages/cli/release/appmap-windows-x64.exe
-          asset_name: appmap-windows-x64.exe
+          file: packages/cli/release/appmap-win-x64.exe
+          asset_name: appmap-win-x64.exe
           tag: ${{ github.ref }}
           overwrite: true
 
-      - name: 'Release: appmap-windows-x64.exe.sha256'
+      - name: 'Release: appmap-win-x64.exe.sha256'
         uses: svenstaro/upload-release-action@v2
         if: github.ref_type == 'tag'
         with:
           repo_token: ${{ secrets.GH_TOKEN }}
-          file: packages/cli/release/appmap-windows-x64.exe.sha256
-          asset_name: appmap-windows-x64.exe.sha256
+          file: packages/cli/release/appmap-win-x64.exe.sha256
+          asset_name: appmap-win-x64.exe.sha256
           tag: ${{ github.ref }}
           overwrite: true
 
