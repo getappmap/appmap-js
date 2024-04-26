@@ -1,3 +1,11 @@
+# [@appland/rpc-v1.9.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.8.0...@appland/rpc-v1.9.0) (2024-04-26)
+
+
+### Features
+
+* Add Navie configuration to `v2.configuration.get` implementation ([0b19c77](https://github.com/getappmap/appmap-js/commit/0b19c77475a9e628f52c0b5a7a437616ce0f994d))
+* Expand `v2.configuration.get` to include Navie config ([d8edc0c](https://github.com/getappmap/appmap-js/commit/d8edc0c7a0fe64fa5c82179ffd6396f1c999f544))
+
 # [@appland/rpc-v1.8.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.7.0...@appland/rpc-v1.8.0) (2024-04-22)
 
 
