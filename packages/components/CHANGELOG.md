@@ -1,3 +1,10 @@
+# [@appland/components-v4.16.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.16.1...@appland/components-v4.16.2) (2024-04-26)
+
+
+### Bug Fixes
+
+* Don't render sequence diagram context content ([9fe67d0](https://github.com/getappmap/appmap-js/commit/9fe67d0d9e79fd5def075ccb37fdb5744cfbc0e7))
+
 # [@appland/components-v4.16.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.16.0...@appland/components-v4.16.1) (2024-04-23)
 
 
