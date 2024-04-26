@@ -213,7 +213,7 @@ jobs:
           yarn build
           cd packages/cli
           yarn build-native windows x64
-          ${GITHUB_WORKSPACE}/bin/hash release/appmap-win32-x64.exe
+          node ${GITHUB_WORKSPACE}/bin/hash.js release/appmap-windows-x64.exe
 
       - name: Publish appmap-windows-x64
         uses: actions/upload-artifact@v4
