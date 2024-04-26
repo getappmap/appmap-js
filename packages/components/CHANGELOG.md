@@ -1,3 +1,10 @@
+# [@appland/components-v4.18.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.17.0...@appland/components-v4.18.0) (2024-04-26)
+
+
+### Features
+
+* Add LLM configuration UI ([59ba982](https://github.com/getappmap/appmap-js/commit/59ba982d2f3a72a1727e0ca22545914da237bf24))
+
 # [@appland/components-v4.17.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.16.2...@appland/components-v4.17.0) (2024-04-26)
 
 
