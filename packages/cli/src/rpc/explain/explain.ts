@@ -90,8 +90,8 @@ export class Explain extends EventEmitter {
 
     const keywords = [...vectorTerms];
     if (
-      labels.find((label) => label.name === 'architecture') ||
-      labels.find((label) => label.name === 'overview')
+      labels.find((label) => label.name === 'architecture' && label.weight === 'high') ||
+      labels.find((label) => label.name === 'overview' && label.weight === 'high')
     ) {
       keywords.push('architecture');
       keywords.push('design');
