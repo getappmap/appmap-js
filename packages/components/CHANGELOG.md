@@ -1,3 +1,15 @@
+# [@appland/components-v4.17.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.16.2...@appland/components-v4.17.0) (2024-04-26)
+
+
+### Bug Fixes
+
+* Set min-width on context notice ([ba77a05](https://github.com/getappmap/appmap-js/commit/ba77a054cd53ff6d31bbddfbe7c469a542ead5d9))
+
+
+### Features
+
+* Replace Navie suggestions with mode instructions ([dca72ce](https://github.com/getappmap/appmap-js/commit/dca72ced6272b0406875cf6975db6217540e5b2b))
+
 # [@appland/components-v4.16.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.16.1...@appland/components-v4.16.2) (2024-04-26)
 
 
