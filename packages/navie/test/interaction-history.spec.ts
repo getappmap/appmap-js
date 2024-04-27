@@ -28,9 +28,9 @@ describe('InteractionHistory', () => {
             },
             {
               type: ContextV2.ContextItemType.CodeSnippet,
-              location: 'file.py',
               content: 'code snippet content',
-            },
+              location: 'file.py',
+            } as ContextV2.FileContextItem,
             {
               type: ContextV2.ContextItemType.DataRequest,
               content: 'data request',

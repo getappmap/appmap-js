@@ -60,7 +60,6 @@ describe('ApplyContextService', () => {
         {
           content: `AppMap Java reference`,
           promptType: 'helpDoc',
-          location: 'appmap-java.md',
           type: 'contextItem',
         },
         {
@@ -222,7 +221,6 @@ describe('ApplyContextService', () => {
           {
             type: 'contextItem',
             promptType: 'helpDoc',
-            location: 'appmap-java.md',
           },
           {
             type: 'contextItem',

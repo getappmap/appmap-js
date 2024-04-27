@@ -45,9 +45,6 @@ export namespace ContextV2 {
 
   // A specific context item that is returned in the response.
   export type ContextItem = {
-    // Identifies the location in the code base from which the context was obtained.
-    // For example, a file path with an optional line number or range in the format "path/to/file.rb:1-2".
-    location?: string;
     // The type of context item.
     type: ContextItemType;
     // The content of the context item. The content is specific to the type of context item.
@@ -56,6 +53,29 @@ export namespace ContextV2 {
     // only when the context item was obtained by searching for keywords (terms).
     score?: number;
   };
+
+  export type FileContextItem = ContextItem & {
+    type:
+      | ContextItemType.CodeSnippet
+      | ContextItemType.SequenceDiagram
+      | ContextItemType.DataRequest;
+    // The directory in which the context item is located.
+    directory: string;
+    // Identifies the location in the project directory from which the context was obtained.
+    // For example, a file path with an optional line number or range in the format "path/to/file.rb:1-2".
+    // In some cases, the AppMap agent may not be able to determine the location of the context item,
+    // so this field may be a best guess. In the code editor, perform a search for the file name to locate the file.
+    // This will always be a relative path from the indicated directory.
+    location: string;
+  };
+
+  export function isFileContextItem(contextItem: ContextItem): contextItem is FileContextItem {
+    return (
+      contextItem.type === ContextItemType.CodeSnippet ||
+      contextItem.type === ContextItemType.SequenceDiagram ||
+      contextItem.type === ContextItemType.DataRequest
+    );
+  }
 
   export enum ContextLabelName {
     HelpWithAppMap = 'help-with-appmap',
