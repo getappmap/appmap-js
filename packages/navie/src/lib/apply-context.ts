@@ -66,7 +66,9 @@ export default function applyContext(
   const appliedContext = new Array<ContextV2.ContextItem>();
 
   const itemDescription = (contextItem: ContextV2.ContextItem): string =>
-    [contextItem.type, contextItem.location].filter(Boolean).join(' ');
+    [contextItem.type, ContextV2.isFileContextItem(contextItem) ? contextItem.location : undefined]
+       .filter(Boolean)
+      .join(' ');
 
   const addContextItem = (contextItem: ContextV2.ContextItem): ContextItemStatus => {
     // Don't consume too much of the character limit on a single item.

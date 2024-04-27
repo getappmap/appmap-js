@@ -60,11 +60,17 @@ export default class ApplyContextService {
           break;
         default:
       }
-      if (promptType)
+      if (promptType) {
         this.interactionHistory.addEvent(
-          new ContextItemEvent(promptType, item.content, item.location)
+          new ContextItemEvent(
+            promptType,
+            item.content,
+            ContextV2.isFileContextItem(item) ? item.location : undefined
+          )
         );
-      else warn(`Unknown context item type: ${item.type} for content: ${item.content}`);
+      } else {
+        warn(`Unknown context item type: ${item.type} for content: ${item.content}`);
+      }
     }
 
     this.interactionHistory.log(`Remaining characters after context: ${charsRemaining}`);
