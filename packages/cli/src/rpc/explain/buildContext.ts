@@ -26,9 +26,9 @@ import { ContextV2 } from '@appland/navie';
 export default async function buildContext(
   searchResults: SearchRpc.SearchResult[]
 ): Promise<ContextV2.ContextResponse> {
-  const sequenceDiagrams = new Array<ContextV2.ContextItem>();
-  const codeSnippets = new Array<ContextV2.ContextItem>();
-  const dataRequests = new Array<ContextV2.ContextItem>();
+  const sequenceDiagrams = new Array<ContextV2.FileContextItem>();
+  const codeSnippets = new Array<ContextV2.FileContextItem>();
+  const dataRequests = new Array<ContextV2.FileContextItem>();
 
   const codeSnippetLocations = new Set<string>();
   const dataRequestContent = new Set<string>();
@@ -54,6 +54,7 @@ export default async function buildContext(
     });
     assert(typeof plantUML === 'string');
     sequenceDiagrams.push({
+      directory: result.directory,
       location: appmapLocation(result.appmap),
       type: ContextV2.ContextItemType.SequenceDiagram,
       content: plantUML,
@@ -74,6 +75,7 @@ export default async function buildContext(
         if (!dataRequestContent.has(event.fqid)) {
           dataRequestContent.add(event.fqid);
           dataRequests.push({
+            directory: result.directory,
             location: appmapLocation(result.appmap, event),
             type: ContextV2.ContextItemType.DataRequest,
             content: event.fqid,
@@ -94,6 +96,7 @@ export default async function buildContext(
       const snippets = await lookupSourceCode(result.directory, event.location);
       if (snippets) {
         codeSnippets.push({
+          directory: result.directory,
           type: ContextV2.ContextItemType.CodeSnippet,
           location: event.location,
           content: snippets.join('\n'),

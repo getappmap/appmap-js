@@ -165,7 +165,11 @@ export class HelpLookupEvent extends InteractionEvent {
 }
 
 export class ContextItemEvent extends InteractionEvent {
-  constructor(public promptType: PromptType, public content: string, public location?: string) {
+  constructor(
+    public promptType: PromptType,
+    public content: string,
+    public location?: string | undefined
+  ) {
     super('contextItem');
   }
 

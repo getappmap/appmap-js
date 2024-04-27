@@ -5,6 +5,7 @@ import { ContextV1, ContextV2, Help, ProjectInfo } from '@appland/navie';
 
 import { verbose } from '../../../utils';
 import { default as INavie } from './inavie';
+import assert from 'assert';
 
 export default class RemoteNavie extends EventEmitter implements INavie {
   constructor(
@@ -56,7 +57,10 @@ export default class RemoteNavie extends EventEmitter implements INavie {
                   codeSnippets: responseV2
                     .filter((item) => item.type === ContextV2.ContextItemType.CodeSnippet)
                     .reduce((acc, item) => {
-                      acc[item.location || ''] = item.content;
+                      assert(item.type === ContextV2.ContextItemType.CodeSnippet);
+                      if (ContextV2.isFileContextItem(item)) {
+                        acc[item.location] = item.content;
+                      }
                       return acc;
                     }, {} as Record<string, string>),
                   codeObjects: responseV2

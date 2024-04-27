@@ -88,11 +88,11 @@ export class SourceCollector {
     );
 
     const buildLocation = (doc: SourceIndexMatch) => {
-      const filePath = join(doc.directory, doc.fileName);
-      return `${filePath}:${doc.from}-${doc.to}`;
+      return `${doc.fileName}:${doc.from}-${doc.to}`;
     };
 
     return sourceIndexDocuments.map((doc: SourceIndexMatch) => ({
+      directory: doc.directory,
       type: ContextV2.ContextItemType.CodeSnippet,
       content: doc.content,
       location: buildLocation(doc),

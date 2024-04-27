@@ -23,6 +23,7 @@ describe('buildContext', () => {
       ]);
       expect(context).toEqual([
         {
+          directory: 'a',
           location: 'appmap1.appmap.json',
           type: 'sequence-diagram',
           content: 'the diagram',
@@ -51,6 +52,7 @@ describe('buildContext', () => {
         context.filter((item) => item.type !== ContextV2.ContextItemType.SequenceDiagram)
       ).toEqual([
         {
+          directory: 'a',
           location: 'app/models/user.rb',
           type: 'code-snippet',
           score: 1,
@@ -74,6 +76,7 @@ describe('buildContext', () => {
         context.filter((item) => item.type !== ContextV2.ContextItemType.SequenceDiagram)
       ).toEqual([
         {
+          directory: 'a',
           location: 'appmap1.appmap.json:1',
           type: 'data-request',
           score: 1,
