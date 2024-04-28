@@ -10,7 +10,7 @@
           data-option="default"
         >
           <h1>Use the Navie backend</h1>
-          <p>Instantly get access to Navie without any additionalconfiguration.</p>
+          <p>Instantly get access to Navie without any additional configuration.</p>
         </div>
         <a
           href="https://appmap.io/docs/navie/bring-your-own-model.html"
