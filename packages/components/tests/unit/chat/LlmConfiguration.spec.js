@@ -33,4 +33,22 @@ describe('components/LlmConfiguration.vue', () => {
     expect(wrapper.findAll('[data-cy="llm-modal-option"]').length).toBe(3);
     expect(wrapper.find('[data-cy="llm-modal-option"][data-option="default"]').exists()).toBe(true);
   });
+
+  it('closes the modal when the escape key is pressed', async () => {
+    const wrapper = mount(LlmConfiguration, {
+      propsData: {},
+    });
+
+    wrapper.find('[data-cy="llm-config-button"]').trigger('click');
+
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find('[data-cy="llm-config-modal"]').exists()).toBe(true);
+
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find('[data-cy="llm-config-modal"]').exists()).toBe(false);
+  });
 });

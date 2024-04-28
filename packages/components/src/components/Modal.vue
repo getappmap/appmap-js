@@ -12,6 +12,19 @@ import Vue from 'vue';
 
 export default Vue.extend({
   name: 'v-modal',
+  methods: {
+    handleKeydown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        this.$emit('close');
+      }
+    },
+  },
+  mounted() {
+    window.addEventListener('keydown', this.handleKeydown);
+  },
+  destroyed() {
+    window.removeEventListener('keydown', this.handleKeydown);
+  },
 });
 </script>
 

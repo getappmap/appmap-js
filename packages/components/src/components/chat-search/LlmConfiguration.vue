@@ -1,6 +1,6 @@
 <template>
   <div class="llm-configuration">
-    <v-modal v-show="modalVisible" @close="hideModal" data-cy="llm-config-modal">
+    <v-modal v-if="modalVisible" @close="hideModal" data-cy="llm-config-modal">
       <div class="config-options">
         <div
           class="option"
