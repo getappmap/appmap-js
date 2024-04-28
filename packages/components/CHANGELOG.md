@@ -1,3 +1,15 @@
+# [@appland/components-v4.19.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.18.0...@appland/components-v4.19.0) (2024-04-28)
+
+
+### Bug Fixes
+
+* Long appmap names or paths are clipped with ellipsis ([83bcc98](https://github.com/getappmap/appmap-js/commit/83bcc989566866e7603f647a6e3ab67a9234728b))
+
+
+### Features
+
+* Warn users in Navie when they have no appmap data ([9c4d8e4](https://github.com/getappmap/appmap-js/commit/9c4d8e4880dbf409eea6e50e15b03458248b1663))
+
 # [@appland/components-v4.18.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.17.0...@appland/components-v4.18.0) (2024-04-26)
 
 
