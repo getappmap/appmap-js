@@ -559,7 +559,7 @@ __metadata:
     openapi-diff: ^0.23.6
     openapi-types: ^9.3.0
     ora: ~5
-    pkg: ^5.5.2
+    pkg: ^5.8.0
     prettier: ^2.7.1
     pretty-format: ^27.4.6
     read-pkg-up: ^7.0.1
@@ -1803,7 +1803,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-validator-identifier@npm:^7.14.9, @babel/helper-validator-identifier@npm:^7.15.7, @babel/helper-validator-identifier@npm:^7.16.7":
+"@babel/helper-validator-identifier@npm:^7.14.9, @babel/helper-validator-identifier@npm:^7.16.7":
   version: 7.16.7
   resolution: "@babel/helper-validator-identifier@npm:7.16.7"
   checksum: dbb3db9d184343152520a209b5684f5e0ed416109cde82b428ca9c759c29b10c7450657785a8b5c5256aa74acc6da491c1f0cf6b784939f7931ef82982051b69
@@ -2011,15 +2011,6 @@ __metadata:
   bin:
     babel-node: ./bin/babel-node.js
   checksum: 1135f5b8a0775540978289f22aea631d6616301bcb1039df7fcfbd9903ce6e5815533a37f32756f4a23293e5ab5f2fab7515f967d93944333866d69460345ecc
-  languageName: node
-  linkType: hard
-
-"@babel/parser@npm:7.16.2":
-  version: 7.16.2
-  resolution: "@babel/parser@npm:7.16.2"
-  bin:
-    parser: ./bin/babel-parser.js
-  checksum: e8ceef8214adf55beaae80fff1647ae6535e17af592749a6f3fd3ed1081bbb1474fd88bf4d3470ec8bc0082843a6d23445e9e08b03e91831458acc6fd37d7bc9
   languageName: node
   linkType: hard
 
@@ -5128,16 +5119,6 @@ __metadata:
     debug: ^4.3.1
     globals: ^11.1.0
   checksum: 48f2eac0e86b6cb60dab13a5ea6a26ba45c450262fccdffc334c01089e75935f7546be195e260e97f6e43cea419862eda095018531a2718fef8189153d479f88
-  languageName: node
-  linkType: hard
-
-"@babel/types@npm:7.16.0":
-  version: 7.16.0
-  resolution: "@babel/types@npm:7.16.0"
-  dependencies:
-    "@babel/helper-validator-identifier": ^7.15.7
-    to-fast-properties: ^2.0.0
-  checksum: 5b483da5c6e6f2394fba7ee1da8787a0c9cddd33491271c4da702e49e6faf95ce41d7c8bf9a4ee47f2ef06bdb35096f4d0f6ae4b5bea35ebefe16309d22344b7
   languageName: node
   linkType: hard
 
@@ -33353,24 +33334,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pkg-fetch@npm:3.3.0":
-  version: 3.3.0
-  resolution: "pkg-fetch@npm:3.3.0"
-  dependencies:
-    chalk: ^4.1.2
-    fs-extra: ^9.1.0
-    https-proxy-agent: ^5.0.0
-    node-fetch: ^2.6.6
-    progress: ^2.0.3
-    semver: ^7.3.5
-    tar-fs: ^2.1.1
-    yargs: ^16.2.0
-  bin:
-    pkg-fetch: lib-es5/bin.js
-  checksum: d242f0fe2f8d95773f1110b6b1444d22c165e241f004da8d7c323b4d64639e9087158c033e89e5c3fc7523a3f9f1608f029e8c5092c361aa4921b01fb86895e6
-  languageName: node
-  linkType: hard
-
 "pkg-fetch@npm:3.4.2":
   version: 3.4.2
   resolution: "pkg-fetch@npm:3.4.2"
@@ -33404,36 +33367,6 @@ __metadata:
   dependencies:
     find-up: ^3.0.0
   checksum: 5bac346b7c7c903613c057ae3ab722f320716199d753f4a7d053d38f2b5955460f3e6ab73b4762c62fd3e947f58e04f1343e92089e7bb6091c90877406fcd8c8
-  languageName: node
-  linkType: hard
-
-"pkg@npm:^5.5.2":
-  version: 5.6.0
-  resolution: "pkg@npm:5.6.0"
-  dependencies:
-    "@babel/parser": 7.16.2
-    "@babel/types": 7.16.0
-    chalk: ^4.1.2
-    escodegen: ^2.0.0
-    fs-extra: ^9.1.0
-    globby: ^11.0.4
-    into-stream: ^6.0.0
-    minimist: ^1.2.5
-    multistream: ^4.1.0
-    pkg-fetch: 3.3.0
-    prebuild-install: 6.1.4
-    progress: ^2.0.3
-    resolve: ^1.20.0
-    stream-meter: ^1.0.4
-    tslib: 2.3.1
-  peerDependencies:
-    node-notifier: ">=9.0.1"
-  peerDependenciesMeta:
-    node-notifier:
-      optional: true
-  bin:
-    pkg: lib-es5/bin.js
-  checksum: 4591e48656f6e71e4ef4b0037bda747df8742b3c08bc3b34263dbaa32d7e999773cd2858367f91938890e395b9f10d3af01a74d427966495657bfa5a8d7fdb54
   languageName: node
   linkType: hard
 
@@ -39517,17 +39450,17 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.3.1, tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.2.0":
-  version: 2.3.1
-  resolution: "tslib@npm:2.3.1"
-  checksum: de17a98d4614481f7fcb5cd53ffc1aaf8654313be0291e1bfaee4b4bb31a20494b7d218ff2e15017883e8ea9626599b3b0e0229c18383ba9dce89da2adf15cb9
-  languageName: node
-  linkType: hard
-
 "tslib@npm:^1.10.0, tslib@npm:^1.13.0, tslib@npm:^1.8.1":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: dbe628ef87f66691d5d2959b3e41b9ca0045c3ee3c7c7b906cc1e328b39f199bb1ad9e671c39025bd56122ac57dfbf7385a94843b1cc07c60a4db74795829acd
+  languageName: node
+  linkType: hard
+
+"tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.2.0":
+  version: 2.3.1
+  resolution: "tslib@npm:2.3.1"
+  checksum: de17a98d4614481f7fcb5cd53ffc1aaf8654313be0291e1bfaee4b4bb31a20494b7d218ff2e15017883e8ea9626599b3b0e0229c18383ba9dce89da2adf15cb9
   languageName: node
   linkType: hard
 

@@ -1,9 +1,21 @@
 #!/bin/bash
-set -e
+set -ex
 
-echo "Building native binaries..."
-yarn pkg \
-  --config package.json \
-  --compress GZip \
-  -o release/scanner \
-  built/cli.js
+# Optionally pass a desired OS as the first argument, followed by an optional architecture.
+# e.g. ./build-native macos arm64
+#
+# Otherwise every target will be built.
+# Note that if a desired OS is provided, the output will simply be named 'appmap' or 'appmap.exe'.
+# OS and ARCH are only used to name the output when multiple targets are being built at once.
+OS="${1}"
+ARGS="--config package.json --compress GZip"
+
+if [ -n "${OS}" ]; then
+  ARCH="${2:-x64}"
+  echo "Building native binaries for ${OS} ${ARCH}..."
+  ARGS="${ARGS} -o release/scanner-${OS}-${ARCH} -t node18-${OS}-${ARCH}"
+else
+  echo "Building native binaries for each target..."
+fi
+
+yarn pkg ${ARGS} built/cli.js
