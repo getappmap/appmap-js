@@ -116,7 +116,7 @@ export namespace ContextV2 {
     labels?: ContextLabel[];
   };
 
-  export type ContextResponse = ContextItem[];
+  export type ContextResponse = Array<ContextItem | FileContextItem>;
 
   export type ContextProvider = (
     request: ContextRequest & { version: 2; type: 'search' }
