@@ -1,3 +1,15 @@
+# [@appland/components-v4.20.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.19.1...@appland/components-v4.20.0) (2024-04-29)
+
+
+### Bug Fixes
+
+* Remove a typo in the model configuration modal ([17725e6](https://github.com/getappmap/appmap-js/commit/17725e683d359051ebaf5a55ea75f0236afa6da2))
+
+
+### Features
+
+* Pressing `esc` will now close a modal ([c1e48ca](https://github.com/getappmap/appmap-js/commit/c1e48cab94ad220a6fdadb9e29d8d380b5853d8e))
+
 # [@appland/components-v4.19.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.19.0...@appland/components-v4.19.1) (2024-04-29)
 
 
