@@ -1,3 +1,15 @@
+# [@appland/components-v4.21.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.20.0...@appland/components-v4.21.0) (2024-04-29)
+
+
+### Bug Fixes
+
+* Update @appland/models to v2.10.2 ([1d4360a](https://github.com/getappmap/appmap-js/commit/1d4360ab0e9a8ae3f321d10f81670ab5d1c77e39))
+
+
+### Features
+
+* `open-location` now emits the directory ([36b407c](https://github.com/getappmap/appmap-js/commit/36b407c5c176508012f69691eeaa1d6f104edaae))
+
 # [@appland/components-v4.20.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.19.1...@appland/components-v4.20.0) (2024-04-29)
 
 
