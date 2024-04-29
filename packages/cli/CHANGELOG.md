@@ -1,3 +1,12 @@
+# [@appland/appmap-v3.139.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.138.0...@appland/appmap-v3.139.0) (2024-04-29)
+
+
+### Features
+
+* Clarify context item fields ([78351af](https://github.com/getappmap/appmap-js/commit/78351af83dbd8897479e28ffc7cb49ad410664d7))
+* Detect code editor from env vars ([c6fce87](https://github.com/getappmap/appmap-js/commit/c6fce87f476fdb52121ee2bb4bd1d7b8f0454250))
+* Include code editor in ProjectInfo struct. ([4701810](https://github.com/getappmap/appmap-js/commit/4701810948f12b9981a2fc7dce718cc1bf5fd6b0))
+
 # [@appland/appmap-v3.138.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.137.2...@appland/appmap-v3.138.0) (2024-04-26)
 
 
