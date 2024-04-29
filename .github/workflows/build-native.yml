@@ -269,4 +269,4 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - run: yarn npm tag add ${{ github.ref_name }} latest
+      - run: yarn npm tag add `echo ${{ github.ref_name }} | sed -e s/-v/@/` latest
