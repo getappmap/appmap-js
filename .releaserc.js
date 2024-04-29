@@ -1,8 +1,9 @@
 let commitMessage = 'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}';
-let plublishArgs = '';
-if (process.env.npm_package_name === '@appland/appmap') {
-  // Don't publish @appland/appmap as latest. This is done in a follow-up step.
-  plublishArgs = '--tag next';
+let publishArgs = '';
+const packageName = process.env.npm_package_name;
+if (packageName === '@appland/appmap' || packageName === '@appland/scanner') {
+  // Don't publish @appland/{appmap,scanner} as latest. This is done in a follow-up step.
+  publishArgs = '--tag next';
 
   // Similarly, don't include the [skip ci] in the commit message. Otherwise the following step will
   // not execute.
@@ -64,7 +65,7 @@ module.exports = {
       '@semantic-release/exec',
       {
         verifyConditionsCmd: 'test -n "$YARN_NPM_AUTH_TOKEN"',
-        publishCmd: `yarn npm publish ${plublishArgs}`,
+        publishCmd: `yarn npm publish ${publishArgs}`,
       },
     ],
   ],
