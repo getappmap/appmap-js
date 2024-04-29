@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { createWrapper, mount } from '@vue/test-utils';
 import VContextItem from '@/components/chat-search/ContextItem.vue';
 
 describe('ContextItem', () => {
@@ -28,5 +28,27 @@ describe('ContextItem', () => {
       },
     });
     expect(wrapper.find('[data-cy="context-item-content"]').text()).toContain(content);
+  });
+  it('emits an event when the user clicks to open the location', () => {
+    const location = 'app/models/user.rb:10';
+    const directory = '/home/user/land-of-apps/sample_app_6th_ed';
+    const contextItem = {
+      location,
+      directory,
+      type: 'code-snippet',
+      content: '# frozen_string_literal: true\n',
+    };
+    const wrapper = mount(VContextItem, {
+      propsData: {
+        contextItem,
+      },
+    });
+
+    wrapper.find('[data-cy="context-item-header"]').trigger('click');
+
+    const rootWrapper = createWrapper(wrapper.vm.$root);
+    const events = rootWrapper.emitted('open-location');
+    expect(events).toHaveLength(1);
+    expect(events[0]).toStrictEqual([location, directory]);
   });
 });

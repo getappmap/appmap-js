@@ -1,182 +1,180 @@
 [
     {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
         "type": "code-snippet",
-        "location": "app/controllers/microposts_controller.rb:5",
-        "content": "def create\n    @micropost = current_user.microposts.build(micropost_params)\n    @micropost.image.attach(params[:micropost][:image])\n    if @micropost.save\n      flash[:success] = \"Micropost created!\"\n      redirect_to root_url\n    else\n      @feed_items = current_user.feed.paginate(page: params[:page])\n      render 'static_pages/home', status: :unprocessable_entity\n    end\n  end",
-        "score": 8.751767372528656
+        "location": "app/helpers/sessions_helper.rb:54",
+        "content": "# Logs out the current user.\n  def log_out\n    forget(current_user)\n    reset_session\n    @current_user = nil\n  end\n\n  # Stores the URL trying to be accessed.\n  def store_location\n    session[:forwarding_url] = request.original_url if request.get? || request.head?\n  end\nend",
+        "score": 5.563924544180424
     },
     {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
         "type": "code-snippet",
-        "location": "app/views/shared/_micropost_form.html.erb",
-        "content": "<%= form_with(model: @micropost) do |f| %>\n  <%= render 'shared/error_messages', object: f.object %>\n  <div class=\"field\">\n    <%= f.text_area :content, placeholder: \"Compose new micropost...\" %>\n  </div>\n  <%= f.submit \"Post\", class: \"btn btn-primary\" %>\n  <span class=\"image\">\n    <%= f.file_field :image, accept: \"image/jpeg,image/gif,image/png\" %>\n  </span>\n<% end %>\n",
-        "score": 3.9383898087561473
+        "location": "app/helpers/sessions_helper.rb:35",
+        "content": "# Returns true if the given user is the current user.\n  def current_user?(user)\n    user == current_user\n  end\n\n  # Returns true if the user is logged in, false otherwise.\n  # @label security.authentication\n  def logged_in?\n    !current_user.nil?\n  end\n\n  # Forgets a persistent session.\n  def forget(user)\n    user.forget if user\n    cookies.delete(:user_id)\n    cookies.delete(:remember_token)\n  end",
+        "score": 2.3636720020623283
     },
     {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
         "type": "code-snippet",
-        "location": "app/models/user.rb:30",
-        "content": "# Returns the hash digest of the given string.\n  def User.digest(string)\n    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :\n                                                  BCrypt::Engine.cost\n    BCrypt::Password.create(string, cost: cost)\n  end\n\n  # Returns a random token.\n  def User.new_token\n    SecureRandom.urlsafe_base64\n  end",
-        "score": 3.739958460426303
+        "location": "app/helpers/logged_in_helper.rb:10",
+        "content": "module LoggedInHelper\n  # @label security.require_login\n  def logged_in_api_user\n    raise LoginError unless logged_in?\n    true\n  end\n\n  # Confirms a logged-in user.\n  # @label security.require_login\n  def logged_in_user\n    unless logged_in?\n      store_location\n      flash[:danger] = \"Please log in.\"\n      redirect_to login_url\n    end\n  end\nend",
+        "score": 2.1875801699594923
     },
     {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
         "type": "code-snippet",
-        "location": "app/controllers/sessions_controller.rb:6",
-        "content": "def create\n    user = User.find_by(email: params[:session][:email].downcase)\n    if user && user.authenticate(params[:session][:password])\n      if user.activated?\n        forwarding_url = session[:forwarding_url]\n        reset_session\n        params[:session][:remember_me] == '1' ? remember(user) : forget(user)\n        log_in user\n        redirect_to forwarding_url || user\n      else\n        message  = \"Account not activated. \"\n        message += \"Check your email for the activation link.\"",
-        "score": 2.493809592914881
+        "location": "app/helpers/sessions_helper.rb:16",
+        "content": "# Returns the user corresponding to the remember token cookie.\n  def current_user\n    if (user_id = session[:user_id])\n      @current_user ||= User.find_by(id: user_id)\n    elsif (user_id = cookies.encrypted[:user_id])\n      user = User.find_by(id: user_id)\n      if user && user.authenticated?(:remember, cookies[:remember_token])\n        log_in user\n        @current_user = user\n      end\n    end\n  end",
+        "score": 2.1933536726513885
     },
     {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
         "type": "code-snippet",
-        "location": "app/controllers/password_resets_controller.rb:6",
-        "content": "class PasswordResetsController < ApplicationController\n  before_action :get_user,         only: [:edit, :update]\n  before_action :valid_user,       only: [:edit, :update]\n  before_action :check_expiration, only: [:edit, :update]    # Case 1\n\n  def new\n  end",
-        "score": 3.320039930913052
+        "location": "app/controllers/microposts_controller.rb:28",
+        "content": "def destroy\n    @micropost.destroy\n    flash[:success] = \"Micropost deleted\"\n    if request.referrer.nil? || request.referrer == microposts_url\n      redirect_to root_url\n    else\n      redirect_to request.referrer\n    end\n  end\n\n  def micropost_params\n    params.require(:micropost).permit(:content, :image)\n  end",
+        "score": 7.559678597665379
     },
     {
-        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Microposts_interface_micropost_interface.appmap.json:2941",
-        "type": "data-request",
-        "content": "query:SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC LIMIT ? OFFSET ?",
-        "score": 5.501650869122312
-    },
-    {
-        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Microposts_interface_micropost_interface.appmap.json:1057",
-        "type": "data-request",
-        "content": "route:POST /microposts",
-        "score": 4.1545854873174255
-    },
-    {
-        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Microposts_controller_should_redirect_create_when_not_logged_in.appmap.json",
-        "type": "sequence-diagram",
-        "content": "@startuml\n!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml\nparticipant HTTP_server_requests as \"HTTP server requests\"\nparticipant activesupport as \"activesupport\"\nparticipant ruby as \"ruby\"\nparticipant logger as \"logger\"\nparticipant actionpack as \"actionpack\"\nparticipant json as \"json\"\n  [->HTTP_server_requests: POST /microposts (27.1 ms)\n  activate HTTP_server_requests\n    HTTP_server_requests->activesupport: invoke_before (0.65 ms)\n    activate activesupport\n    HTTP_server_requests<--activesupport: array\n    deactivate activesupport\n    HTTP_server_requests->activesupport: invoke_after (0.0178 ms)\n    activate activesupport\n    HTTP_server_requests<--activesupport: array\n    deactivate activesupport\n    HTTP_server_requests->ruby: unpack (0.038 ms)\n    activate ruby\n    HTTP_server_requests<--ruby: array\n    deactivate ruby\n    Loop 3 times (1.3 ms)\n      HTTP_server_requests->logger: write (1.3 ms)\n      activate logger\n      HTTP_server_requests<--logger: integer\n      deactivate logger\n    End\n    Loop 2 times (5.92 ms)\n      HTTP_server_requests->activesupport: invoke_before (5.92 ms)\n      activate activesupport\n      HTTP_server_requests<--activesupport: array\n      deactivate activesupport\n    End\n    Loop 2 times (0.00837 ms)\n      HTTP_server_requests->activesupport: invoke_after (0.00837 ms)\n      activate activesupport\n      HTTP_server_requests<--activesupport: array\n      deactivate activesupport\n    End\n    HTTP_server_requests->logger: write (0.0328 ms)\n    activate logger\n    HTTP_server_requests<--logger: integer\n    deactivate logger\n    HTTP_server_requests->actionpack: []= (0.299 ms)\n    activate actionpack\n    HTTP_server_requests<--actionpack: object\n    deactivate actionpack\n    HTTP_server_requests->actionpack: [] (0.0174 ms)\n    activate actionpack\n    HTTP_server_requests<--actionpack: object\n    deactivate actionpack\n    HTTP_server_requests->json: generate (0.135 ms)\n    activate json\n    HTTP_server_requests<--json: string\n    deactivate json\n    HTTP_server_requests->activesupport: encrypt_and_sign (5.69 ms)\n    activate activesupport\n    HTTP_server_requests<--activesupport: string\n    deactivate activesupport\n    HTTP_server_requests->actionpack: []= (0.0626 ms)\n    activate actionpack\n    HTTP_server_requests<--actionpack: string\n    deactivate actionpack\n  [<--HTTP_server_requests: 303\n  deactivate HTTP_server_requests\n@enduml",
-        "score": 3.1947084374008217
-    },
-    {
-        "type": "code-snippet",
-        "location": "app/views/password_resets/new.html.erb",
-        "content": "<% provide(:title, \"Forgot password\") %>\n<h1>Forgot password</h1>\n\n<div class=\"row\">\n  <div class=\"col-md-6 col-md-offset-3\">\n    <%= form_with(url: password_resets_path, scope: :password_reset,\n                  local: true) do |f| %>\n      <%= f.label :email %>\n      <%= f.email_field :email, class: 'form-control' %>\n\n      <%= f.submit \"Submit\", class: \"btn btn-primary\" %>\n    <% end %>\n  </div>\n</div>\n",
-        "score": 3.22328102582269
-    },
-    {
-        "type": "code-snippet",
-        "location": "app/controllers/password_resets_controller.rb:9",
-        "content": "def create\n    @user = User.find_by(email: params[:password_reset][:email].downcase)\n    if @user\n      @user.create_reset_digest\n      @user.send_password_reset_email\n      flash[:info] = \"Email sent with password reset instructions\"\n      redirect_to root_url\n    else\n      flash.now[:danger] = \"Email address not found\"\n      render 'new', status: :unprocessable_entity\n    end\n  end\n\n  def edit\n  end",
-        "score": 3.9595558192446645
-    },
-    {
-        "type": "code-snippet",
-        "location": "app/controllers/sessions_controller.rb:3",
-        "content": "class SessionsController < ApplicationController\n\n  def new\n  end",
-        "score": 3.3863343751023756
-    },
-    {
-        "type": "code-snippet",
-        "location": "app/views/sessions/new.html.erb",
-        "content": "<% provide(:title, \"Log in\") %>\n<h1>Log in</h1>\n\n<div class=\"row\">\n  <div class=\"col-md-6 col-md-offset-3\">\n    <%= form_with(url: login_path, scope: :session) do |f| %>\n\n      <%= f.label :email %>\n      <%= f.email_field :email, class: 'form-control' %>\n\n      <%= f.label :password %>\n      <%= link_to \"(forgot password)\", new_password_reset_path %>\n      <%= f.password_field :password, class: 'form-control' %>\n\n      <%= f.label :remember_me, class: \"checkbox inline\" do %>\n        <%= f.check_box :remember_me %>\n        <span>Remember me on this computer</span>\n      <% end %>\n\n      <%= f.submit \"Log in\", class: \"btn btn-primary\" %>\n    <% end %>\n\n    <p>New user? <%= link_to \"Sign up now!\", signup_path %></p>\n  </div>\n</div>\n",
-        "score": 2.625487478545651
-    },
-    {
-        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Microposts_interface_micropost_interface.appmap.json:427",
-        "type": "data-request",
-        "content": "query:SELECT \"microposts\".* FROM \"microposts\" WHERE (user_id IN (SELECT followed_id FROM relationships\n                     WHERE  follower_id = 762146111)\n                     OR user_id = 762146111) ORDER BY \"microposts\".\"created_at\" DESC LIMIT ? OFFSET ?",
-        "score": 4.143624517600158
-    },
-    {
-        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Microposts_interface_micropost_interface.appmap.json:375",
-        "type": "data-request",
-        "content": "query:SELECT COUNT(*) FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ?",
-        "score": 3.967871037650867
-    },
-    {
-        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Microposts_interface_micropost_interface.appmap.json:1054",
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "location": "/home/user/land-of-apps/sample_app_6th_ed/tmp/appmap/minitest/Microposts_controller_should_redirect_create_when_not_logged_in.appmap.json:28",
         "type": "data-request",
         "content": "query:SELECT COUNT(*) FROM \"microposts\"",
-        "score": 3.872623990452542
+        "score": 2.8163146131069947
     },
     {
-        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Microposts_controller_should_redirect_create_when_not_logged_in.appmap.json:23",
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "location": "/home/user/land-of-apps/sample_app_6th_ed/tmp/appmap/minitest/Microposts_controller_should_redirect_create_when_not_logged_in.appmap.json:31",
+        "type": "data-request",
+        "content": "route:POST /microposts",
+        "score": 2.3076690259509345
+    },
+    {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "location": "/home/user/land-of-apps/sample_app_6th_ed/tmp/appmap/minitest/Microposts_controller_should_redirect_destroy_when_not_logged_in.appmap.json",
+        "type": "sequence-diagram",
+        "content": "@startuml\n!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml\nparticipant HTTP_server_requests as \"HTTP server requests\"\nparticipant activesupport as \"activesupport\"\nparticipant app_helpers as \"app/helpers\"\nparticipant actionpack as \"actionpack\"\n  [->HTTP_server_requests: DELETE /microposts/{id} (7.67 ms)\n  activate HTTP_server_requests\n    HTTP_server_requests->activesupport: invoke_before (0.727 ms)\n    activate activesupport\n      activesupport->app_helpers: logged_in_user (0.346 ms)\n      activate app_helpers\n        app_helpers->app_helpers: logged_in? (0.071 ms)\n        activate app_helpers\n          app_helpers->app_helpers: current_user (0.051 ms)\n          activate app_helpers\n            app_helpers->actionpack: [] (0.003 ms)\n            activate actionpack\n            app_helpers<--actionpack: void\n            deactivate actionpack\n            app_helpers->actionpack: [] (0.001 ms)\n            activate actionpack\n            app_helpers<--actionpack: void\n            deactivate actionpack\n          app_helpers<--app_helpers: void\n          deactivate app_helpers\n        app_helpers<--app_helpers: void\n        deactivate app_helpers\n        app_helpers->app_helpers: store_location (0.001 ms)\n        activate app_helpers\n        app_helpers<--app_helpers: void\n        deactivate app_helpers\n        app_helpers->actionpack: [] (0.002 ms)\n        activate actionpack\n        app_helpers<--actionpack: void\n        deactivate actionpack\n        app_helpers->actionpack: redirect_to (0.097 ms)\n        activate actionpack\n        app_helpers<--actionpack: string\n        deactivate actionpack\n      activesupport<--app_helpers: string\n      deactivate app_helpers\n    HTTP_server_requests<--activesupport: array\n    deactivate activesupport\n  [<--HTTP_server_requests: 302\n  deactivate HTTP_server_requests\n@enduml",
+        "score": 2.1595
+    },
+    {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "type": "code-snippet",
+        "location": "app/views/microposts/_micropost.html.erb",
+        "content": "<li id=\"micropost-<%= micropost.id %>\">\n  <%= link_to gravatar_for(micropost.user, size: 50), micropost.user %>\n  <span class=\"user\"><%= link_to micropost.user.name, micropost.user %></span>\n  <span class=\"content\">\n    <%= micropost.content %>\n    <%= image_tag micropost.display_image if micropost.image.attached? %>\n  </span>\n  <span class=\"timestamp\">\n    Posted <%= time_ago_in_words(micropost.created_at) %> ago.\n    <% if current_user?(micropost.user) %>\n      <%= link_to \"delete\", micropost, method: :delete,\n                                       data: { confirm: \"You sure?\" } %>\n    <% end %>\n  </span>\n</li>\n",
+        "score": 7.483311065297232
+    },
+    {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "type": "code-snippet",
+        "location": "app/controllers/microposts_controller.rb:6",
+        "content": "def create\n    @micropost = current_user.microposts.build(micropost_params)\n    @micropost.image.attach(params[:micropost][:image])\n    if @micropost.save\n      flash[:success] = \"Micropost created!\"\n      redirect_to root_url\n    else\n      @feed_items = current_user.feed.paginate(page: params[:page])\n      render 'static_pages/home'\n    end\n  end",
+        "score": 6.658824558433717
+    },
+    {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "type": "code-snippet",
+        "location": "app/views/shared/_micropost_form.html.erb",
+        "content": "<%= form_with(model: @micropost, local: true) do |f| %>\n  <%= render 'shared/error_messages', object: f.object %>\n  <div class=\"field\">\n    <%= f.text_area :content, placeholder: \"Compose new micropost...\" %>\n  </div>\n  <%= f.submit \"Post\", class: \"btn btn-primary\" %>\n  <span class=\"image\">\n    <%= f.file_field :image, accept: \"image/jpeg,image/gif,image/png\" %>\n  </span>\n<% end %>\n\n<script type=\"text/javascript\">\n  $(\"#micropost_image\").bind(\"change\", function() {\n    const size_in_megabytes = this.files[0].size/1024/1024;\n    if (size_in_megabytes > 5) {\n      alert(\"Maximum file size is 5MB. Please choose a smaller file.\");\n      $(\"#micropost_image\").val(\"\");\n    }\n  });\n</script>\n",
+        "score": 5.86969339062953
+    },
+    {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "type": "code-snippet",
+        "location": "app/models/micropost.rb:13",
+        "content": "# Returns a resized image for display.\n  def display_image\n    image.variant(resize_to_limit: [500, 500])\n  end\nend",
+        "score": 4.4392163722891445
+    },
+    {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "type": "code-snippet",
+        "location": "app/controllers/microposts_controller.rb:32",
+        "content": "def correct_user\n    @micropost = current_user.microposts.find_by(id: params[:id])\n    # status: https://stackoverflow.com/questions/10472600/a-redirect-to-from-destroy-action-always-gets-delete-verb-whatever-method-i-dec/20978913\n    status = request.delete? ? 303 : 302\n    redirect_to root_url, status: status if @micropost.nil?\n  end\nend",
+        "score": 5.262995772371473
+    },
+    {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "location": "/home/user/land-of-apps/sample_app_6th_ed/tmp/appmap/minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost.appmap.json:23",
         "type": "data-request",
         "content": "query:SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"id\" = ? LIMIT ?",
-        "score": 2.727108505358743
+        "score": 4.937019546244475
     },
     {
-        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Microposts_controller_should_redirect_destroy_when_not_logged_in.appmap.json",
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "type": "code-snippet",
+        "location": "app/models/user.rb:45",
+        "content": "# @label secret\n  def User.new_reset_token\n    Base64.urlsafe_encode64 YAML.dump('operation' => 'reset', 'secret' => SecureRandom.bytes(200))\n  end\n\n  # Remembers a user in the database for use in persistent sessions.\n  def remember\n    self.remember_token = User.new_remember_token\n    update_attribute(:remember_digest, User.digest(remember_token))\n  end",
+        "score": 2.5745757903002193
+    },
+    {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "type": "code-snippet",
+        "content": "# SQLite. Versions 3.8.0 and up are supported.\n#   gem install sqlite3\n#\n#   Ensure the SQLite 3 gem is defined in your Gemfile\n#   gem 'sqlite3'\n#\ndefault: &default\n  adapter: sqlite3\n  pool: <%= ENV.fetch(\"RAILS_MAX_THREADS\") { 5 } %>\n  timeout: 5000\n\ndevelopment:\n  <<: *default\n  database: db/development.sqlite3\n\n# Warning: The database defined as \"test\" will be erased and\n# re-generated from your development database when you run \"rake\".\n# Do not set this db to the same as development or production.\ntest:\n  <<: *default\n  database: db/test.sqlite3\n\nproduction:\n  adapter: postgresql\n  encoding: unicode\n  # For details on connection pooling, see Rails configuration guide\n  # https://guides.rubyonrails.org/configuring.html#database-pooling\n  pool: <%= ENV.fetch(\"RAILS_MAX_THREADS\") { 5 } %>\n  database: sample_app_production\n  username: sample_app\n  password: <%= ENV['SAMPLE_APP_DATABASE_PASSWORD'] %>",
+        "location": "config/database.yml:1-31"
+    },
+    {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "type": "code-snippet",
+        "content": "<% provide(:title, \"About\") %>\n<h1>About</h1>\n<p>\n  The <a href=\"https://www.railstutorial.org/\"><em>Ruby on Rails\n  Tutorial</em></a>, part of the\n  <a href=\"https://www.learnenough.com/\">Learn Enough</a> family of\n  tutorials, is a\n  <a href=\"https://www.railstutorial.org/book\">book</a> and\n  <a href=\"http://screencasts.railstutorial.org/\">screencast series</a>\n  to teach web development with\n  <a href=\"https://rubyonrails.org//\">Ruby on Rails</a>.\n  This is the sample app for the tutorial.\n</p>",
+        "location": "app/views/static_pages/about.html.erb:1-13"
+    },
+    {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "type": "code-snippet",
+        "content": "# Ruby on Rails Tutorial sample application\n\nThis is the sample application for\n[*Ruby on Rails Tutorial:\nLearn Web Development with Rails*](https://www.railstutorial.org/)\n(6th Edition)\nby [Michael Hartl](http://www.michaelhartl.com/).\n\n## License\n\nAll source code in the [Ruby on Rails Tutorial](https://www.railstutorial.org/)\nis available jointly under the MIT License and the Beerware License. See\n[LICENSE.md](LICENSE.md) for details.\n\n## Getting started\n\nTo get started with the app, clone the repo and then install the needed gems:\n\n```\n$ bundle install --without production\n```\n\nNext, migrate the database:\n\n```\n$ rails db:migrate\n```\n\nFinally, run the test suite to verify that everything is working correctly:\n\n```\n$ rails test\n```\n\nIf the test suite passes, you'll be ready to run the app in a local server:\n\n```\n$ rails server\n```\n\nFor more information, see the\n[*Ruby on Rails Tutorial* book](https://www.railstutorial.org/book).",
+        "location": "README.md:1-42"
+    },
+    {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "type": "code-snippet",
+        "content": "# Architecture\n\n## Login and session management\n\n### [Login a user (test/integration/users_login_test.rb)](tmp/appmap/minitest/Users_login_login_with_remembering.appmap.json)\n\nLogin is performed by SessionsController, without or without a remembering cookie.\n\n### [Require a logged-in user (test/integration/following_test.rb)](tmp/appmap/minitest/Following_followers_page.appmap.json)\n\nLogged-in user is enforced by a `before_action`. It's labeled `security.require_login`.\n\n## Submit a post\n\n### [Micropost integration test (test/integration/microposts_interface_test.rb)](tmp/appmap/minitest/Microposts_interface_micropost_interface.appmap.json).\n\nThis is a rather complex example, but it's comprehensive.",
+        "location": "ARCHITECTURE.md:1-17"
+    },
+    {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "type": "code-snippet",
+        "content": "class MicropostsController < ApplicationController\n  before_action :logged_in_api_user, only: [:index]\n  before_action :logged_in_user, only: [:create, :destroy]\n  before_action :correct_user,   only: :destroy\n\n  def create\n    @micropost = current_user.microposts.build(micropost_params)\n    @micropost.image.attach(params[:micropost][:image])\n    if @micropost.save\n      flash[:success] = \"Micropost created!\"\n      redirect_to root_url\n    else\n      @feed_items = current_user.feed.paginate(page: params[:page])\n      render 'static_pages/home'\n    end\n  end\n\n  def destroy\n    @micropost.destroy\n    flash[:success] = \"Micropost deleted\"\n    if request.referrer.nil? || request.referrer == microposts_url\n      redirect_to root_url\n    else\n      redirect_to request.referrer\n    end\n  end\n\n  def micropost_params\n    params.require(:micropost).permit(:content, :image)\n  end",
+        "location": "app/controllers/microposts_controller.rb:1-30"
+    },
+    {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "type": "code-snippet",
+        "content": "<li id=\"micropost-<%= micropost.id %>\">\n  <%= link_to gravatar_for(micropost.user, size: 50), micropost.user %>\n  <span class=\"user\"><%= link_to micropost.user.name, micropost.user %></span>\n  <span class=\"content\">\n    <%= micropost.content %>\n    <%= image_tag micropost.display_image if micropost.image.attached? %>\n  </span>\n  <span class=\"timestamp\">\n    Posted <%= time_ago_in_words(micropost.created_at) %> ago.\n    <% if current_user?(micropost.user) %>\n      <%= link_to \"delete\", micropost, method: :delete,\n                                       data: { confirm: \"You sure?\" } %>\n    <% end %>\n  </span>\n</li>",
+        "location": "app/views/microposts/_micropost.html.erb:1-15"
+    },
+    {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "type": "code-snippet",
+        "content": "def micropost_params\n    params.require(:micropost).permit(:content, :image)\n  end\n\n  def correct_user\n    @micropost = current_user.microposts.find_by(id: params[:id])\n    # status: https://stackoverflow.com/questions/10472600/a-redirect-to-from-destroy-action-always-gets-delete-verb-whatever-method-i-dec/20978913\n    status = request.delete? ? 303 : 302\n    redirect_to root_url, status: status if @micropost.nil?\n  end\nend",
+        "location": "app/controllers/microposts_controller.rb:28-38"
+    },
+    {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "type": "code-snippet",
+        "content": "module MicropostsHelper\nend",
+        "location": "app/helpers/microposts_helper.rb:1-2"
+    },
+    {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "type": "code-snippet",
+        "content": "// Place all the styles related to the Microposts controller here.\n// They will automatically be included in application.css.\n// You can use Sass (SCSS) here: http://sass-lang.com/",
+        "location": "app/assets/stylesheets/microposts.scss:1-3"
+    },
+    {
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "location": "/home/user/land-of-apps/sample_app_6th_ed/tmp/appmap/minitest/Users_controller_should_redirect_edit_when_not_logged_in.appmap.json",
         "type": "sequence-diagram",
-        "content": "@startuml\n!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml\nparticipant HTTP_server_requests as \"HTTP server requests\"\nparticipant activesupport as \"activesupport\"\nparticipant ruby as \"ruby\"\nparticipant logger as \"logger\"\nparticipant actionpack as \"actionpack\"\nparticipant json as \"json\"\n  [->HTTP_server_requests: DELETE /microposts/{id} (45.3 ms)\n  activate HTTP_server_requests\n    HTTP_server_requests->activesupport: invoke_before (0.435 ms)\n    activate activesupport\n    HTTP_server_requests<--activesupport: array\n    deactivate activesupport\n    HTTP_server_requests->activesupport: invoke_after (0.00748 ms)\n    activate activesupport\n    HTTP_server_requests<--activesupport: array\n    deactivate activesupport\n    HTTP_server_requests->ruby: unpack (0.00951 ms)\n    activate ruby\n    HTTP_server_requests<--ruby: array\n    deactivate ruby\n    Loop 3 times (0.385 ms)\n      HTTP_server_requests->logger: write (0.385 ms)\n      activate logger\n      HTTP_server_requests<--logger: integer\n      deactivate logger\n    End\n    Loop 2 times (5.3 ms)\n      HTTP_server_requests->activesupport: invoke_before (5.3 ms)\n      activate activesupport\n      HTTP_server_requests<--activesupport: array\n      deactivate activesupport\n    End\n    Loop 2 times (0.00873 ms)\n      HTTP_server_requests->activesupport: invoke_after (0.00873 ms)\n      activate activesupport\n      HTTP_server_requests<--activesupport: array\n      deactivate activesupport\n    End\n    HTTP_server_requests->logger: write (0.0322 ms)\n    activate logger\n    HTTP_server_requests<--logger: integer\n    deactivate logger\n    HTTP_server_requests->actionpack: []= (0.253 ms)\n    activate actionpack\n    HTTP_server_requests<--actionpack: object\n    deactivate actionpack\n    HTTP_server_requests->actionpack: [] (0.00468 ms)\n    activate actionpack\n    HTTP_server_requests<--actionpack: object\n    deactivate actionpack\n    HTTP_server_requests->json: generate (0.0982 ms)\n    activate json\n    HTTP_server_requests<--json: string\n    deactivate json\n    HTTP_server_requests->activesupport: encrypt_and_sign (2.94 ms)\n    activate activesupport\n    HTTP_server_requests<--activesupport: string\n    deactivate activesupport\n    HTTP_server_requests->actionpack: []= (0.0883 ms)\n    activate actionpack\n    HTTP_server_requests<--actionpack: string\n    deactivate actionpack\n  [<--HTTP_server_requests: 303\n  deactivate HTTP_server_requests\n@enduml",
-        "score": 2.509168413040464
+        "content": "@startuml\n!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml\nparticipant HTTP_server_requests as \"HTTP server requests\"\nparticipant activesupport as \"activesupport\"\nparticipant app_helpers as \"app/helpers\"\nparticipant actionpack as \"actionpack\"\n  [->HTTP_server_requests: GET /users/{id}/edit (8.06 ms)\n  activate HTTP_server_requests\n    HTTP_server_requests->activesupport: invoke_before (0.94 ms)\n    activate activesupport\n      activesupport->app_helpers: logged_in_user (0.454 ms)\n      activate app_helpers\n        app_helpers->app_helpers: logged_in? (0.074 ms)\n        activate app_helpers\n          app_helpers->app_helpers: current_user (0.054 ms)\n          activate app_helpers\n            app_helpers->actionpack: [] (0.003 ms)\n            activate actionpack\n            app_helpers<--actionpack: void\n            deactivate actionpack\n            app_helpers->actionpack: [] (0.001 ms)\n            activate actionpack\n            app_helpers<--actionpack: void\n            deactivate actionpack\n          app_helpers<--app_helpers: void\n          deactivate app_helpers\n        app_helpers<--app_helpers: void\n        deactivate app_helpers\n        app_helpers->app_helpers: store_location (0.105 ms)\n        activate app_helpers\n          app_helpers->actionpack: []= (0.057 ms)\n          activate actionpack\n          app_helpers<--actionpack: string\n          deactivate actionpack\n        app_helpers<--app_helpers: string\n        deactivate app_helpers\n        app_helpers->actionpack: [] (0.001 ms)\n        activate actionpack\n        app_helpers<--actionpack: void\n        deactivate actionpack\n        app_helpers->actionpack: redirect_to (0.1 ms)\n        activate actionpack\n        app_helpers<--actionpack: string\n        deactivate actionpack\n      activesupport<--app_helpers: string\n      deactivate app_helpers\n    HTTP_server_requests<--activesupport: array\n    deactivate activesupport\n  [<--HTTP_server_requests: 302\n  deactivate HTTP_server_requests\n@enduml",
+        "score": 1.0305
     },
     {
-        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost.appmap.json:277",
-        "type": "data-request",
-        "content": "query:SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? AND \"microposts\".\"id\" = ? ORDER BY \"microposts\".\"created_at\" DESC LIMIT ?",
-        "score": 3.1499559180588994
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "type": "code-snippet",
+        "content": "class Micropost < ApplicationRecord\n  belongs_to       :user\n  has_one_attached :image\n  default_scope -> { order(created_at: :desc) }\n  validates :user_id, presence: true\n  validates :content, presence: true, length: { maximum: 140 }\n  validates :image,   content_type: { in: %w[image/jpeg image/gif image/png],\n                                      message: \"must be a valid image format\" },\n                      size: { less_than: 5.megabytes,\n                              message:   \"should be less than 5MB\" }\n\n  # Returns a resized image for display.\n  def display_image\n    image.variant(resize_to_limit: [500, 500])\n  end\nend",
+        "location": "app/models/micropost.rb:1-16"
     },
     {
-        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost.appmap.json:201",
-        "type": "data-request",
-        "content": "route:DELETE /microposts/{id}",
-        "score": 2.346403448441283
-    },
-    {
-        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Forgot_password_form_password_reset_path.appmap.json:18",
-        "type": "data-request",
-        "content": "query:SELECT sql FROM\n  (SELECT * FROM sqlite_master UNION ALL\n   SELECT * FROM sqlite_temp_master)\nWHERE type = 'table' AND name = 'microposts'\n",
-        "score": 6.845692535143122
-    },
-    {
-        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Forgot_password_form_password_reset_path.appmap.json:259",
-        "type": "data-request",
-        "content": "route:GET /password_resets/new",
-        "score": 1.698194377230458
-    },
-    {
-        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Micropost_order_should_be_most_recent_first.appmap.json",
-        "type": "sequence-diagram",
-        "content": "@startuml\n!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml\nparticipant Database as \"Database\"\n  [->Database: SELECT \"microposts\".* FROM \"microposts\" WHERE \"mic (3.1 ms)\n  Note right\nSELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"id\" = ? LIMIT ?\n  End note\n  [->Database: SELECT \"microposts\".* FROM \"microposts\" ORDER BY \" (0.872 ms)\n  Note right\nSELECT \"microposts\".* FROM \"microposts\" ORDER BY \"microposts\".\"created_at\" DESC\nLIMIT ?\n  End note\n@enduml",
-        "score": 2.172232031805074
-    },
-    {
-        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Micropost_order_should_be_most_recent_first.appmap.json:25",
-        "type": "data-request",
-        "content": "query:SELECT \"microposts\".* FROM \"microposts\" ORDER BY \"microposts\".\"created_at\" DESC LIMIT ?",
-        "score": 2.3018083760382835
-    },
-    {
-        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/User_associated_microposts_should_be_destroyed.appmap.json:102",
-        "type": "data-request",
-        "content": "query:SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC",
-        "score": 2.51521771754786
-    },
-    {
-        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/User_associated_microposts_should_be_destroyed.appmap.json",
-        "type": "sequence-diagram",
-        "content": "@startuml\n!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml\nparticipant activesupport as \"activesupport\"\nparticipant app_models as \"app/models\"\nparticipant ruby as \"ruby\"\nparticipant Database as \"Database\"\n  [->activesupport: invoke_before (3.15 ms)\n  activate activesupport\n    activesupport->app_models: new_token (0.232 ms)\n    activate app_models\n      app_models->ruby: pack (0.00616 ms)\n      activate ruby\n      app_models<--ruby: string\n      deactivate ruby\n    activesupport<--app_models: string\n    deactivate app_models\n  [<--activesupport: array\n  deactivate activesupport\n  [->Database: INSERT INTO \"users\" (\"name\", \"email\", \"created_at\" (5.51 ms)\n  Note right\nINSERT INTO \"users\" (\"name\", \"email\", \"created_at\", \"updated_at\",\n\"password_digest\", \"remember_digest\", \"admin\", \"activation_digest\", \"activated\",\n\"activated_at\", \"reset_digest\", \"reset_sent_at\") VALUES (?, ?, ?, ?, ?, ?, ?, ?,\n?, ?, ?, ?)\n  End note\n  [->Database: INSERT INTO \"microposts\" (\"content\", \"user_id\", \"c (1.12 ms)\n  Note right\nINSERT INTO \"microposts\" (\"content\", \"user_id\", \"created_at\", \"updated_at\")\nVALUES (?, ?, ?, ?)\n  End note\n  [->ruby: eval (1.97 ms)\n  activate ruby\n    ruby->Database: SELECT COUNT(*) FROM \"microposts\" (0.475 ms)\n  [<--ruby: integer\n  deactivate ruby\n  [->activesupport: invoke_before (27.4 ms)\n  activate activesupport\n    activesupport->Database: SELECT \"microposts\".* FROM \"microposts\" WHERE \"mic (0.729 ms)\n    Note right\nSELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER\nBY \"microposts\".\"created_at\" DESC\n    End note\n    activesupport->Database: DELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = (0.632 ms)\n    Note right\nDELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = ?\n    End note\n  [<--activesupport: array\n  deactivate activesupport\n  [->ruby: eval (33.8 ms)\n  activate ruby\n    ruby->Database: SELECT COUNT(*) FROM \"microposts\" (4.87 ms)\n  [<--ruby: integer\n  deactivate ruby\n@enduml",
-        "score": 1.8918641930646078
-    },
-    {
-        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/User_associated_microposts_should_be_destroyed.appmap.json:108",
-        "type": "data-request",
-        "content": "query:DELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = ?",
-        "score": 1.8836576122002642
-    },
-    {
-        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/User_associated_microposts_should_be_destroyed.appmap.json:75",
-        "type": "data-request",
-        "content": "query:INSERT INTO \"microposts\" (\"content\", \"user_id\", \"created_at\", \"updated_at\") VALUES (?, ?, ?, ?)",
-        "score": 1.6350344033077715
-    },
-    {
-        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Invalid_password_login_path.appmap.json",
-        "type": "sequence-diagram",
-        "content": "@startuml\n!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml\nparticipant HTTP_server_requests as \"HTTP server requests\"\nparticipant controllers as \"controllers\"\nparticipant actionpack as \"actionpack\"\nparticipant views as \"views\"\nparticipant actionview as \"actionview\"\nparticipant logger as \"logger\"\nparticipant helpers as \"helpers\"\n  [->HTTP_server_requests: GET /login (125 ms)\n  activate HTTP_server_requests\n    HTTP_server_requests->controllers: new (0.00552 ms)\n    activate controllers\n    HTTP_server_requests<--controllers: void\n    deactivate controllers\n    HTTP_server_requests->actionpack: render_to_body (108 ms)\n    activate actionpack\n      actionpack->views: render (103 ms)\n      activate views\n        Loop 5 times (0.584 ms)\n          views->actionview: find_all (0.584 ms)\n          activate actionview\n          views<--actionview: array\n          deactivate actionview\n        End\n        Loop 3 times (8.11 ms)\n          views->logger: write (8.11 ms)\n          activate logger\n          views<--logger: integer\n          deactivate logger\n        End\n        views->helpers: full_title (0.0433 ms)\n        activate helpers\n        views<--helpers: string\n        deactivate helpers\n        views->views: render (6.66 ms)\n        activate views\n        views<--views: void\n        deactivate views\n        views->views: render (17.6 ms)\n        activate views\n        views<--views: void\n        deactivate views\n        views->actionpack: [] (0.0264 ms)\n        activate actionpack\n        views<--actionpack: void\n        deactivate actionpack\n        views->views: render (3.55 ms)\n        activate views\n        views<--views: void\n        deactivate views\n        views->logger: write (0.0471 ms)\n        activate logger\n        views<--logger: integer\n        deactivate logger\n      actionpack<--views: void\n      deactivate views\n    HTTP_server_requests<--actionpack: ActionView::OutputBuffer\n    deactivate actionpack\n  [<--HTTP_server_requests: 200\n  deactivate HTTP_server_requests\n@enduml",
-        "score": 1.5853334034202393
-    },
-    {
-        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/User_associated_microposts_should_be_destroyed.appmap.json:49",
-        "type": "data-request",
-        "content": "query:INSERT INTO \"users\" (\"name\", \"email\", \"created_at\", \"updated_at\", \"password_digest\", \"remember_digest\", \"admin\", \"activation_digest\", \"activated\", \"activated_at\", \"reset_digest\", \"reset_sent_at\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        "score": 0.31884191485227703
-    },
-    {
-        "location": "/home/ahtrotta/projects/rails_tutorial_sample_app_7th_ed/tmp/appmap/minitest/Users_index_index_as_admin_including_pagination_and_delete_links.appmap.json",
-        "type": "sequence-diagram",
-        "content": "@startuml\n!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml\nparticipant HTTP_server_requests as \"HTTP server requests\"\nparticipant controllers as \"controllers\"\nparticipant logger as \"logger\"\nparticipant actionpack as \"actionpack\"\nparticipant helpers as \"helpers\"\nparticipant models as \"models\"\nparticipant ruby as \"ruby\"\nparticipant activesupport as \"activesupport\"\nparticipant Database as \"Database\"\n  [->HTTP_server_requests: POST /login (59.8 ms)\n  activate HTTP_server_requests\n    HTTP_server_requests->controllers: create (48.9 ms)\n    activate controllers\n      controllers->logger: write (0.168 ms)\n      activate logger\n      controllers<--logger: integer\n      deactivate logger\n      controllers->Database: SELECT \"users\".* FROM \"users\" WHERE \"users\".\"email (2.55 ms)\n      Note right\nSELECT \"users\".* FROM \"users\" WHERE \"users\".\"email\" = ? LIMIT ?\n      End note\n      controllers->actionpack: [] (1.8 ms)\n      activate actionpack\n      controllers<--actionpack: void\n      deactivate actionpack\n      controllers->actionpack: destroy (0.548 ms)\n      activate actionpack\n      controllers<--actionpack: boolean\n      deactivate actionpack\n      controllers->helpers: remember (25.6 ms)\n      activate helpers\n        helpers->models: remember (20.3 ms)\n        activate models\n          models->models: new_token (0.212 ms)\n          activate models\n            models->ruby: pack (0.00644 ms)\n            activate ruby\n            models<--ruby: string\n            deactivate ruby\n          models<--models: string\n          deactivate models\n        helpers<--models: string\n        deactivate models\n      controllers<--helpers: string\n      deactivate helpers\n      controllers->helpers: log_in (0.622 ms)\n      activate helpers\n      controllers<--helpers: string\n      deactivate helpers\n      controllers->actionpack: redirect_to (0.962 ms)\n      activate actionpack\n      controllers<--actionpack: string\n      deactivate actionpack\n    HTTP_server_requests<--controllers: string\n    deactivate controllers\n  [<--HTTP_server_requests: 302\n  deactivate HTTP_server_requests\n  [->HTTP_server_requests: DELETE /users/{id} (82.4 ms)\n  activate HTTP_server_requests\n    HTTP_server_requests->activesupport: invoke_before (33 ms)\n    activate activesupport\n      activesupport->Database: SELECT \"microposts\".* FROM \"microposts\" WHERE \"mic (0.43 ms)\n      Note right\nSELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER\nBY \"microposts\".\"created_at\" DESC\n      End note\n      Loop 2 times (2.94 ms)\n        activesupport->Database: DELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = (2.94 ms)\n        Note right\nDELETE FROM \"microposts\" WHERE \"microposts\".\"id\" = ?\n        End note\n      End\n    HTTP_server_requests<--activesupport: array\n    deactivate activesupport\n  [<--HTTP_server_requests: 303\n  deactivate HTTP_server_requests\n@enduml",
-        "score": 1.371787155501902
+        "directory": "/home/user/land-of-apps/sample_app_6th_ed",
+        "type": "code-snippet",
+        "content": "orange:\n  content: \"I just ate an orange!\"\n  created_at: <%= 10.minutes.ago %>\n  user: michael\n\ntau_manifesto:\n  content: \"Check out the @tauday site by @mhartl: http://tauday.com\"\n  created_at: <%= 3.years.ago %>\n  user: michael\n\ncat_video:\n  content: \"Sad cats are sad: http://youtu.be/PKffm2uI4dk\"\n  created_at: <%= 2.hours.ago %>\n  user: michael\n\nmost_recent:\n  content: \"Writing a short test\"\n  created_at: <%= Time.zone.now %>\n  user: michael\n\n<% 30.times do |n| %>\nmicropost_<%= n %>:\n  content: <%= Faker::Lorem.sentence(word_count: 5) %>\n  created_at: <%= 42.days.ago %>\n  user: michael\n<% end %>\n\nants:\n  content: \"Oh, is that what you want? Because that's how you get ants!\"\n  created_at: <%= 2.years.ago %>\n  user: archer\n\nzone:\n  content: \"Danger zone!\"\n  created_at: <%= 3.days.ago %>\n  user: archer\n\ntone:\n  content: \"I'm sorry. Your words made sense, but your sarcastic tone did not.\"\n  created_at: <%= 10.minutes.ago %>\n  user: lana",
+        "location": "test/fixtures/microposts.yml:1-41"
     }
 ]

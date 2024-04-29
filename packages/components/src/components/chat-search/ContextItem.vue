@@ -1,6 +1,10 @@
 <template>
   <div class="context__body__table-row">
-    <div class="context__body__table-row__header" @click="openLocation">
+    <div
+      class="context__body__table-row__header"
+      data-cy="context-item-header"
+      @click="openLocation"
+    >
       <v-code-icon v-if="isCodeSnippet" class="row-icon" />
       <v-white-appmap-logo v-else class="row-icon" />
       <div class="row-text">{{ header }}</div>
@@ -161,7 +165,7 @@ export default {
     },
     openLocation() {
       if (this.contextItem.location) {
-        this.$root.$emit('open-location', this.contextItem.location);
+        this.$root.$emit('open-location', this.contextItem.location, this.contextItem.directory);
       }
     },
   },
