@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.139.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.139.0...@appland/appmap-v3.139.1) (2024-04-29)
+
+
+### Bug Fixes
+
+* Update dependencies ([1760d12](https://github.com/getappmap/appmap-js/commit/1760d1278ac8327d049da2549a013a86e5c1ad58))
+
 # [@appland/appmap-v3.139.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.138.0...@appland/appmap-v3.139.0) (2024-04-29)
 
 
