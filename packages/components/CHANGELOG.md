@@ -1,3 +1,10 @@
+# [@appland/components-v4.19.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.19.0...@appland/components-v4.19.1) (2024-04-29)
+
+
+### Bug Fixes
+
+* Upgrade @appland/rpc to v1.9.0 ([4c567d6](https://github.com/getappmap/appmap-js/commit/4c567d69fc2d90650f0e34138ef9b80cbeba273d))
+
 # [@appland/components-v4.19.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.18.0...@appland/components-v4.19.0) (2024-04-28)
 
 
