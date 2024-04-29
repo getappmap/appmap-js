@@ -300,7 +300,7 @@ __metadata:
   dependencies:
     "@appland/client": "workspace:^1.12.0"
     "@appland/diagrams": "workspace:^1.7.0"
-    "@appland/models": "workspace:^2.10.0"
+    "@appland/models": "workspace:^2.10.2"
     "@appland/rpc": "workspace:^1.9.0"
     "@appland/sequence-diagram": "workspace:^1.11.0"
     "@babel/core": ^7.22.5
