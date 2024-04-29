@@ -19,6 +19,8 @@ import LookupContextService from './services/lookup-context-service';
 import ApplyContextService from './services/apply-context-service';
 import ClassificationService from './services/classification-service';
 
+export const DEFAULT_TOKEN_LIMIT = 12000;
+
 export type ChatHistory = Message[];
 
 export interface ClientRequest {
@@ -29,7 +31,7 @@ export interface ClientRequest {
 export class ExplainOptions {
   agentMode: AgentMode | undefined;
   modelName = process.env.APPMAP_NAVIE_MODEL ?? 'gpt-4-0125-preview';
-  tokenLimit = Number(process.env.APPMAP_NAVIE_TOKEN_LIMIT ?? 8000);
+  tokenLimit = Number(process.env.APPMAP_NAVIE_TOKEN_LIMIT ?? DEFAULT_TOKEN_LIMIT);
   temperature = 0.4;
   responseTokens = 1000;
 }

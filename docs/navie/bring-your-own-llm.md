@@ -47,7 +47,7 @@ You can use the following variables to direct Navie to use any LLM with an OpenA
 
 * `OPENAI_BASE_URL` — base URL for OpenAI API.
 * `APPMAP_NAVIE_MODEL` — name of the model to use instead of GPT-4.
-* `APPMAP_NAVIE_TOKEN_LIMIT` — maximum context size in tokens (default 8000).
+* `APPMAP_NAVIE_TOKEN_LIMIT` — maximum context size in tokens (default 12000).
 
 For Azure OpenAI, you need to [create a deployment](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource) and use these variables instead:
 
