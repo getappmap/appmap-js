@@ -1,3 +1,10 @@
+# [@appland/navie-v1.9.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.8.0...@appland/navie-v1.9.0) (2024-04-30)
+
+
+### Features
+
+* Switch to gpt-4-turbo-2024-04-09 as default ([b3b9604](https://github.com/getappmap/appmap-js/commit/b3b960470f0665e9dfba40266236b20c2935db7b))
+
 # [@appland/navie-v1.8.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.7.0...@appland/navie-v1.8.0) (2024-04-30)
 
 
