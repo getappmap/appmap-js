@@ -39,4 +39,5 @@ release
 
 # AppMap
 packages/*/tmp/
+tmp/appmap
 *.appmap.json
