@@ -29,7 +29,7 @@ export type SearchContextResponse = {
   codeObjects: string[];
 };
 
-export const DEFAULT_TOKEN_LIMIT = 8000;
+export const DEFAULT_TOKEN_LIMIT = 12000;
 
 export class Explain extends EventEmitter {
   constructor(
