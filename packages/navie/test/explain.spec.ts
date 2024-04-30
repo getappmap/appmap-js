@@ -116,6 +116,7 @@ describe('CodeExplainerService', () => {
     codeSelectionService = new CodeSelectionService(interactionHistory);
     projectInfoService = {
       lookupProjectInfo: providesProjectInfo(),
+      promptProjectInfo: jest.fn(),
     } as unknown as ProjectInfoService;
   });
 
