@@ -195,12 +195,6 @@ export default {
         }
       }
     },
-    searchStatus: function (newSearchStatus) {
-      // only update the context response if we don't have one already
-      if (!this.contextResponse && newSearchStatus) {
-        this.contextResponse = newSearchStatus.contextResponse || this.createContextResponse();
-      }
-    },
   },
   computed: {
     showStatus() {
@@ -214,6 +208,15 @@ export default {
     },
     statusStep() {
       return this.searchStatus ? this.searchStatus.step : undefined;
+    },
+    numCodeSnippets() {
+      return this.getContextItems('code-snippet').length;
+    },
+    numSequenceDiagrams() {
+      return this.getContextItems('sequence-diagram').length;
+    },
+    numDataRequests() {
+      return this.getContextItems('data-request').length;
     },
     selectedSearchResult() {
       if (!this.searchResponse || !this.selectedSearchResultId) return;
@@ -261,6 +264,38 @@ export default {
       if (result.length === 0) return;
 
       return result;
+    },
+    getContextItems(type) {
+      return this.contextResponse?.filter((contextItem) => contextItem.type === type) || [];
+    },
+    getToolStatusMessage() {
+      const codeSnippets =
+        this.numCodeSnippets > 0
+          ? `${this.numCodeSnippets} code snippet${this.numCodeSnippets === 1 ? '' : 's'}`
+          : '';
+
+      const sequenceDiagrams =
+        this.numSequenceDiagrams > 0
+          ? `${this.numSequenceDiagrams} sequence diagram${
+              this.numSequenceDiagrams === 1 ? '' : 's'
+            }`
+          : '';
+
+      const dataRequests =
+        this.numDataRequests > 0
+          ? `${this.numDataRequests} data request${this.numDataRequests === 1 ? '' : 's'}`
+          : '';
+
+      const messageSegments = [sequenceDiagrams, dataRequests, codeSnippets].filter(Boolean);
+      if (messageSegments.length === 0) {
+        return;
+      } else if (messageSegments.length === 1) {
+        return `Found ${messageSegments[0]}`;
+      } else if (messageSegments.length === 2) {
+        return `Found ${messageSegments.join(' and ')}`;
+      } else {
+        return `Found ${messageSegments.slice(0, -1).join(', ')}, and ${messageSegments.slice(-1)}`;
+      }
     },
     askAboutWorkspace() {
       this.targetAppmap = undefined;
@@ -332,21 +367,21 @@ export default {
         this.ask.on('status', (status) => {
           this.searchStatus = status;
 
+          // only update the context response if we don't have one already
+          if (!this.contextResponse)
+            this.contextResponse = status.contextResponse || this.createContextResponse();
+
           if (!this.searchResponse && status.searchResponse) {
             this.searchResponse = status.searchResponse;
 
             // Update the tool status to reflect the fact that we've found some AppMaps
             if (tool) {
-              const numResults = this.searchResponse.results.length;
               tool.title = 'Project analysis complete';
-
-              // When asking about a single map, the "Found 1 relevant AppMap" message is redundant
-              if (!this.targetAppmap)
-                tool.status = `Found ${numResults} relevant AppMap${numResults === 1 ? '' : 's'}`;
-
               tool.complete = true;
             }
           }
+
+          if (tool && !tool.status) tool.status = this.getToolStatusMessage();
         });
         this.ask.on('complete', onComplete);
 

@@ -1,7 +1,6 @@
 import VChatSearch from '@/pages/ChatSearch.vue';
 import { mount, createWrapper } from '@vue/test-utils';
 import navieContext from '../../../src/stories/data/navie_context.json';
-import { config } from 'yargs';
 
 describe('pages/ChatSearch.vue', () => {
   const chatSearchWrapper = (messagesCalled) => {
@@ -266,9 +265,44 @@ describe('pages/ChatSearch.vue', () => {
         expect(wrapper.findAll('[data-cy="context-notice"]').length).toBe(0);
         expect(wrapper.findAll('[data-cy="context-item"]').length).toBe(navieContext.length);
       });
+
+      it('renders the search status', async () => {
+        const title = '[data-cy="tool-status"] [data-cy="title"]';
+        const status = '[data-cy="tool-status"] [data-cy="status"]';
+        const wrapper = chatSearchWrapper({
+          'appmap.metadata': [[null, null, {}]],
+          'v2.appmap.stats': appmapStatsHasAppMaps(),
+          'v2.configuration.get': noConfig(),
+          explain: [[null, null, { userMessageId, threadId }]],
+          'explain.status': [
+            [
+              null,
+              null,
+              {
+                step: 'complete',
+                searchResponse: { results: [{ events: [] }] },
+                contextResponse: navieContext,
+              },
+              ,
+            ],
+          ],
+        });
+
+        const messageSent = wrapper.vm.sendMessage('How do I reset my password?');
+
+        await wrapper.vm.$nextTick();
+        expect(wrapper.find(title).text()).toBe('Analyzing your project');
+        expect(wrapper.find(status).text()).toBe('');
+
+        await messageSent;
+        expect(wrapper.find(title).text()).toBe('Project analysis complete');
+        expect(wrapper.find(status).text()).toBe(
+          'Found 2 sequence diagrams, 3 data requests, and 22 code snippets'
+        );
+      });
     });
 
-    describe('but no AppMaps match the question', () => {
+    describe('but no context is found', () => {
       const performSearch = async () => {
         const { messagesCalled, wrapper } = buildComponent(
           appmapStatsHasAppMaps,
@@ -281,12 +315,10 @@ describe('pages/ChatSearch.vue', () => {
         return { messagesCalled, wrapper };
       };
 
-      it('states that no matches were found', async () => {
+      it('does not mention context', async () => {
         const { wrapper } = await performSearch();
 
-        expect(wrapper.find('[data-cy="tool-status"]').text()).toContain(
-          'Found 0 relevant AppMaps'
-        );
+        expect(wrapper.find('[data-cy="tool-status"]').text()).toBe('Project analysis complete');
       });
 
       it('shows the context notice', async () => {
@@ -311,30 +343,6 @@ describe('pages/ChatSearch.vue', () => {
 
         expect(wrapper.vm.$refs.vchat.threadId).toEqual(threadId);
       });
-    });
-
-    it('renders the search status', async () => {
-      const title = '[data-cy="tool-status"] [data-cy="title"]';
-      const status = '[data-cy="tool-status"] [data-cy="status"]';
-      const wrapper = chatSearchWrapper({
-        'appmap.metadata': [[null, null, {}]],
-        'v2.appmap.stats': appmapStatsHasAppMaps(),
-        'v2.configuration.get': noConfig(),
-        explain: [[null, null, { userMessageId, threadId }]],
-        'explain.status': [
-          [null, null, { step: 'complete', searchResponse: { results: [{ events: [] }] } }],
-        ],
-      });
-
-      const messageSent = wrapper.vm.sendMessage('How do I reset my password?');
-
-      await wrapper.vm.$nextTick();
-      expect(wrapper.find(title).text()).toBe('Analyzing your project');
-      expect(wrapper.find(status).text()).toBe('');
-
-      await messageSent;
-      expect(wrapper.find(title).text()).toBe('Project analysis complete');
-      expect(wrapper.find(status).text()).toBe('Found 1 relevant AppMap');
     });
   });
 
