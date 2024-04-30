@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.87.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.86.0...@appland/scanner-v1.87.0) (2024-04-30)
+
+
+### Features
+
+* Build scanner binary packages with Node 18 ([37c939b](https://github.com/getappmap/appmap-js/commit/37c939b7b3e19a098bfe81d2e5a66bacb413f6e3))
+
 # [@appland/scanner-v1.86.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.85.0...@appland/scanner-v1.86.0) (2023-12-28)
 
 
