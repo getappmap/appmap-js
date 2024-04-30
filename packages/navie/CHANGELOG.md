@@ -1,3 +1,10 @@
+# [@appland/navie-v1.8.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.7.0...@appland/navie-v1.8.0) (2024-04-30)
+
+
+### Features
+
+* Update Navie token limit to 12,000 ([7d6e0db](https://github.com/getappmap/appmap-js/commit/7d6e0db32927cd2963317db5ce9a00f4182b7d30))
+
 # [@appland/navie-v1.7.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.6.0...@appland/navie-v1.7.0) (2024-04-29)
 
 
