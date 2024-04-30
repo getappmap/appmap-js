@@ -95,6 +95,12 @@ export class CodeExplainerService {
       codeSelection,
       contextLabels
     );
+
+    const isArchitecture = contextLabels
+      .filter((label) => label.weight === 'high')
+      .some((label) => label.name === 'architecture' || label.name === 'overview');
+
+    this.projectInfoService.promptProjectInfo(isArchitecture, projectInfo);
     await mode.perform(agentOptions, tokensAvailable);
 
     if (codeSelection) this.codeSelectionService.addSystemPrompt();
