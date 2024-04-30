@@ -11,6 +11,7 @@ import { GenerateAgent } from '../agents/generate-agent';
 import LookupContextService from './lookup-context-service';
 import ApplyContextService from './apply-context-service';
 import ExplainAgent from '../agents/explain-agent';
+import { IssueAgent } from '../agents/issue-agent';
 
 type AgentModeResult = { agent: Agent; question: string };
 
@@ -18,6 +19,7 @@ const MODE_PREFIXES = {
   '@explain ': AgentMode.Explain,
   '@generate ': AgentMode.Generate,
   '@help ': AgentMode.Help,
+  '@issue ': AgentMode.Issue,
 };
 
 export default class AgentSelectionService {
@@ -37,6 +39,14 @@ export default class AgentSelectionService {
     let modifiedQuestion = question;
 
     const helpAgent = () => new HelpAgent(this.history, this.helpProvider, this.vectorTermsService);
+
+    const issueAgent = () =>
+      new IssueAgent(
+        this.history,
+        this.vectorTermsService,
+        this.lookupContextService,
+        this.applyContextService
+      );
 
     const generateAgent = () =>
       new GenerateAgent(
@@ -58,6 +68,7 @@ export default class AgentSelectionService {
       [AgentMode.Help]: helpAgent,
       [AgentMode.Generate]: generateAgent,
       [AgentMode.Explain]: explainAgent,
+      [AgentMode.Issue]: issueAgent,
     };
 
     const optionMode = () => {

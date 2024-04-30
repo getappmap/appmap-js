@@ -47,9 +47,9 @@ export class GenerateAgent implements Agent {
 
     this.history.addEvent(
       new PromptInteractionEvent(
-        PromptType.IssueDescription,
+        PromptType.Specification,
         'system',
-        buildPromptDescriptor(PromptType.IssueDescription)
+        buildPromptDescriptor(PromptType.Specification)
       )
     );
 
@@ -62,9 +62,9 @@ export class GenerateAgent implements Agent {
   applyQuestionPrompt(question: string): void {
     this.history.addEvent(
       new PromptInteractionEvent(
-        PromptType.IssueDescription,
+        PromptType.Specification,
         'user',
-        buildPromptValue(PromptType.IssueDescription, question)
+        buildPromptValue(PromptType.Specification, question)
       )
     );
   }

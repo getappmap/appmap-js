@@ -1,6 +1,7 @@
 export enum PromptType {
   Question = 'question',
-  IssueDescription = 'issueDescription',
+  Specification = 'specification',
+  ProblemStatement = 'problemStatement',
   CodeSelection = 'codeSelection',
   AppMapConfig = 'appmapConfig',
   AppMapStats = 'appmapStats',
@@ -13,7 +14,8 @@ export enum PromptType {
 
 const PROMPT_NAMES: Record<PromptType, { singular: string; plural: string }> = {
   [PromptType.Question]: { singular: 'question', plural: 'questions' },
-  [PromptType.IssueDescription]: { singular: 'issue description', plural: 'issue descriptions' },
+  [PromptType.Specification]: { singular: 'specification', plural: 'specifications' },
+  [PromptType.ProblemStatement]: { singular: 'problem statement', plural: 'problem statements' },
   [PromptType.CodeSelection]: { singular: 'code selection', plural: 'code selections' },
   [PromptType.AppMapConfig]: { singular: 'AppMap configuration', plural: 'AppMap configurations' },
   [PromptType.AppMapStats]: { singular: 'AppMap statistics', plural: 'AppMap statistics' },
@@ -51,13 +53,21 @@ except as supplemental resources to AppMap.
 `,
     tagName: 'question',
   },
-  [PromptType.IssueDescription]: {
+  [PromptType.Specification]: {
     content: `**The code generation task**
 
 This is a description of a code enhancement that the user wants you to help them with. Your response should be
 focused primarily on solving this issue via code generation.
 `,
     tagName: 'issue-description',
+  },
+  [PromptType.ProblemStatement]: {
+    content: `**The problem statement**
+
+This is a description of the problem that the user wants you to help them with. Your response should be
+focused ond describing the problem fully as a software Issue, aka Ticket.
+`,
+    tagName: 'problem-statement',
   },
   [PromptType.AppMapConfig]: {
     content: `**AppMap configuration**
