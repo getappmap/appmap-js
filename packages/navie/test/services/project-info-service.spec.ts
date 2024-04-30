@@ -39,6 +39,7 @@ describe('ProjectInfoService', () => {
       projectInfoProviderFn.mockResolvedValueOnce(projectInfo);
       const result = await service.lookupProjectInfo();
       expect(result).toEqual(projectInfo);
+      service.promptProjectInfo(false, result);
       expect(interactionHistory.events.map((event) => event.metadata)).toEqual([
         {
           name: 'appmapConfig',
@@ -86,7 +87,7 @@ describe('ProjectInfoService', () => {
         },
       ];
       projectInfoProviderFn.mockResolvedValueOnce(projectInfo);
-      await service.lookupProjectInfo();
+      service.promptProjectInfo(false, await service.lookupProjectInfo());
       const messages = interactionHistory.buildState().messages;
       expect(messages).toHaveLength(4);
       const instructionPrompt = messages[0];
@@ -96,27 +97,84 @@ describe('ProjectInfoService', () => {
       expect(valuePrompt.content).toContain('name: appmap');
     });
 
-    test('appmapStats present', async () => {
-      const projectInfo = [
-        {
-          directory: '/some/path',
-          appmapStats: {
-            packages: ['appmap'],
-            routes: ['GET /'],
-            tables: ['users'],
-            numAppMaps: 1,
-          },
-        },
-      ];
-      projectInfoProviderFn.mockResolvedValueOnce(projectInfo);
-      await service.lookupProjectInfo();
-      const messages = interactionHistory.buildState().messages;
-      expect(messages).toHaveLength(4);
-      const instructionPrompt = messages[1];
-      const valuePrompt = messages[2];
-      expect(instructionPrompt.content).toContain('**AppMap statistics**');
-      expect(valuePrompt.content).toContain('<appmap-stats>');
-      expect(valuePrompt.content).toContain('numAppMaps: 1');
+    describe('when appmapStats are present', () => {
+      const smallStats = {
+        packages: ['appmap'],
+        routes: ['GET /'],
+        tables: ['users'],
+        numAppMaps: 1,
+      };
+      const largeStats = {
+        packages: Array(21).fill('appmap'),
+        routes: Array(21).fill('GET /'),
+        tables: Array(21).fill('users'),
+        numAppMaps: 1,
+      };
+
+      const verifySmallStats = () => {
+        const messages = interactionHistory.buildState().messages;
+        expect(messages).toHaveLength(4);
+        const instructionPrompt = messages[1];
+        const valuePrompt = messages[2];
+        expect(instructionPrompt.content).toContain('**AppMap statistics**');
+        expect(valuePrompt.content).toContain('<appmap-stats>');
+        expect(valuePrompt.content).toContain('numAppMaps: 1');
+      };
+
+      const verifyLargeStats = () => {
+        const messages = interactionHistory.buildState().messages;
+        expect(messages).toHaveLength(4);
+        const instructionPrompt = messages[1];
+        const valuePrompt = messages[2];
+        expect(instructionPrompt.content).toContain('**AppMap statistics**');
+        expect(valuePrompt.content).toContain('<appmap-stats>');
+        expect(valuePrompt.content).toContain('numAppMaps: 1');
+        expect(valuePrompt.content).toContain(`- packages:
+    - appmap
+    - appmap`);
+      };
+
+      describe('and the question is about architecture', () => {
+        test('the prompt includes the stats', async () => {
+          const projectInfo = [
+            {
+              directory: '/some/path',
+              appmapStats: largeStats,
+            },
+          ];
+          projectInfoProviderFn.mockResolvedValueOnce(projectInfo);
+          service.promptProjectInfo(true, await service.lookupProjectInfo());
+          verifyLargeStats();
+        });
+      });
+
+      describe('and the question is not about architecture', () => {
+        test('the prompt includes small stats', async () => {
+          const projectInfo = [
+            {
+              directory: '/some/path',
+              appmapStats: smallStats,
+            },
+          ];
+          projectInfoProviderFn.mockResolvedValueOnce(projectInfo);
+          service.promptProjectInfo(false, await service.lookupProjectInfo());
+          verifySmallStats();
+        });
+
+        test('the prompt excludes routes, tables and packages from large stats', async () => {
+          const projectInfo = [
+            {
+              directory: '/some/path',
+              appmapStats: largeStats,
+            },
+          ];
+          projectInfoProviderFn.mockResolvedValueOnce(projectInfo);
+          service.promptProjectInfo(false, await service.lookupProjectInfo());
+          const messages = interactionHistory.buildState().messages;
+
+          expect(messages.map((msg) => msg.content).join('\n')).not.toContain(`packages:`);
+        });
+      });
     });
 
     test('codeEditor present', async () => {
@@ -129,7 +187,7 @@ describe('ProjectInfoService', () => {
         },
       ];
       projectInfoProviderFn.mockResolvedValueOnce(projectInfo);
-      await service.lookupProjectInfo();
+      service.promptProjectInfo(false, await service.lookupProjectInfo());
       const messages = interactionHistory.buildState().messages;
       expect(messages).toHaveLength(4);
       const instructionPrompt = messages[2];
