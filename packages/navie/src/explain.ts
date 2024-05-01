@@ -10,14 +10,15 @@ import InteractionHistory, {
 } from './interaction-history';
 import { ContextV2 } from './context';
 import ProjectInfoService from './services/project-info-service';
-import { ProjectInfo, ProjectInfoProvider } from './project-info';
+import { ProjectInfoProvider } from './project-info';
 import CodeSelectionService from './services/code-selection-service';
 import { AgentMode, AgentOptions } from './agent';
 import { HelpProvider } from './help';
-import AgentSelectionService from './services/agent-selection-service';
 import LookupContextService from './services/lookup-context-service';
 import ApplyContextService from './services/apply-context-service';
 import ClassificationService from './services/classification-service';
+import AgentSelectionService from './services/agent-selection-service';
+import { applyCommandOptions, parseOptions } from './command-option';
 
 export const DEFAULT_TOKEN_LIMIT = 12000;
 
@@ -34,6 +35,8 @@ export class ExplainOptions {
   tokenLimit = Number(process.env.APPMAP_NAVIE_TOKEN_LIMIT ?? DEFAULT_TOKEN_LIMIT);
   temperature = 0.4;
   responseTokens = 1000;
+  fetchProjectInfo = true;
+  fetchContext = true;
 }
 
 export class CodeExplainerService {
@@ -49,26 +52,34 @@ export class CodeExplainerService {
 
   async *execute(
     clientRequest: ClientRequest,
-    options: ExplainOptions,
+    requestOptions: ExplainOptions,
     chatHistory?: ChatHistory
   ): AsyncIterable<string> {
-    const { question: baseQuestion, codeSelection } = clientRequest;
+    const { codeSelection } = clientRequest;
 
-    const contextLabelsFn = this.classifierService.classifyQuestion(baseQuestion);
+    let question: string;
+    let agentMode: AgentMode | undefined;
+
+    {
+      const parsedOptions = parseOptions(clientRequest.question);
+      agentMode = parsedOptions.agentMode;
+      question = parsedOptions.question;
+      applyCommandOptions(parsedOptions.options, requestOptions);
+    }
+
+    const contextLabelsFn = this.classifierService.classifyQuestion(question);
 
     const projectInfoResponse = await this.projectInfoService.lookupProjectInfo();
-    const projectInfo: ProjectInfo[] = Array.isArray(projectInfoResponse)
+    const projectInfo = Array.isArray(projectInfoResponse)
       ? projectInfoResponse
       : [projectInfoResponse];
 
-    const { question, agent: mode } = this.agentSelectionService.selectAgent(
-      baseQuestion,
-      options,
-      projectInfo
-    );
+    const mode = this.agentSelectionService.buildAgent(agentMode);
 
     const tokensAvailable = (): number =>
-      options.tokenLimit - options.responseTokens - this.interactionHistory.computeTokenSize();
+      requestOptions.tokenLimit -
+      requestOptions.responseTokens -
+      this.interactionHistory.computeTokenSize();
 
     const aggregateQuestion = [
       ...(chatHistory || [])
@@ -100,7 +111,8 @@ export class CodeExplainerService {
       .filter((label) => label.weight === 'high')
       .some((label) => label.name === 'architecture' || label.name === 'overview');
 
-    this.projectInfoService.promptProjectInfo(isArchitecture, projectInfo);
+    if (projectInfo) this.projectInfoService.promptProjectInfo(isArchitecture, projectInfo);
+
     await mode.perform(agentOptions, tokensAvailable);
 
     if (codeSelection) this.codeSelectionService.addSystemPrompt();

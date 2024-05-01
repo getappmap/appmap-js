@@ -85,11 +85,12 @@ export default class ExplainAgent implements Agent {
       )
     );
 
-    const languages = options.projectInfo
-      .map((info) => info.appmapConfig?.language)
-      .filter(Boolean) as string[];
     const tokenCount = tokensAvailable();
     const vectorTerms = await this.vectorTermsService.suggestTerms(options.aggregateQuestion);
+
+    const languages = options.projectInfo
+      ? (options.projectInfo.map((info) => info.appmapConfig?.language).filter(Boolean) as string[])
+      : [];
 
     const context = await this.lookupContextService.lookupContext(
       vectorTerms,
