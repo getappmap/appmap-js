@@ -19,7 +19,7 @@
         <v-context-status v-if="showStatus" :appmap-stats="appmapStats" />
         <v-llm-configuration
           data-cy="llm-config"
-          v-if="configLoaded && !isChatting"
+          v-if="!disableLlmConfig && configLoaded && !isChatting"
           :base-url="baseUrl"
           :model="model"
         />
@@ -88,6 +88,10 @@ export default {
     },
     appmapYmlPresent: Boolean,
     mostRecentAppMaps: Array,
+    disableLlmConfig: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
