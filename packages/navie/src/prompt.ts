@@ -54,12 +54,12 @@ except as supplemental resources to AppMap.
     tagName: 'question',
   },
   [PromptType.Specification]: {
-    content: `**The code generation task**
+    content: `**The code specification**
 
 This is a description of a code enhancement that the user wants you to help them with. Your response should be
 focused primarily on solving this issue via code generation.
 `,
-    tagName: 'issue-description',
+    tagName: 'code-specification',
   },
   [PromptType.ProblemStatement]: {
     content: `**The problem statement**

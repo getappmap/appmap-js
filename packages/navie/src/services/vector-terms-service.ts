@@ -4,6 +4,9 @@ import { warn } from 'console';
 import { ChatOpenAI } from '@langchain/openai';
 
 import InteractionHistory, { VectorTermsInteractionEvent } from '../interaction-history';
+import { contentBetween } from './contentBetween';
+import { contentAfter } from './contentAfter';
+import { parseJSON } from './parseJSON';
 
 const SYSTEM_PROMPT = `You are assisting a developer to search a code base.
 
@@ -72,33 +75,6 @@ Instructions: Create test cases, following established patterns for mocking with
 Terms: test cases +log_context jest
 \`\`\`
 `;
-
-const contentBetween = (text: string, start: string, end: string): string => {
-  const startIndex = text.indexOf(start);
-  if (startIndex < 0) return text;
-
-  const endIndex = text.indexOf(end, startIndex + start.length);
-  if (endIndex < 0) return text;
-
-  return text.slice(startIndex + start.length, endIndex);
-};
-
-const contentAfter = (text: string, start: string): string => {
-  const startIndex = text.indexOf(start);
-  if (startIndex < 0) return text;
-
-  return text.slice(startIndex + start.length);
-};
-
-const parseJSON = (text: string): Record<string, unknown> | string | string[] | undefined => {
-  const sanitizedTerms = text.replace(/```json/g, '').replace(/```/g, '');
-  try {
-    return JSON.parse(sanitizedTerms);
-  } catch (err) {
-    warn(`Non-JSON response from AI.`);
-    return undefined;
-  }
-};
 
 const parseText = (text: string): string[] => text.split(/\s+/);
 

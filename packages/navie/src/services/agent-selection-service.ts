@@ -10,6 +10,9 @@ import LookupContextService from './lookup-context-service';
 import ApplyContextService from './apply-context-service';
 import ExplainAgent from '../agents/explain-agent';
 import { IssueAgent } from '../agents/issue-agent';
+import { EditAgent } from '../agents/edit-agent';
+import FileUpdateService from './file-update-service';
+import FileChangeExtractorService from './file-change-extractor-service';
 
 export default class AgentSelectionService {
   constructor(
@@ -17,7 +20,9 @@ export default class AgentSelectionService {
     private helpProvider: HelpProvider,
     private vectorTermsService: VectorTermsService,
     private lookupContextService: LookupContextService,
-    private applyContextService: ApplyContextService
+    private applyContextService: ApplyContextService,
+    private fileChangeExtractor: FileChangeExtractorService,
+    private fileUpdateService: FileUpdateService
   ) {}
 
   buildAgent(agentMode?: AgentMode): Agent {
@@ -47,11 +52,15 @@ export default class AgentSelectionService {
         this.applyContextService
       );
 
+    const editAgent = () =>
+      new EditAgent(this.history, this.fileChangeExtractor, this.fileUpdateService);
+
     const buildAgent = {
       [AgentMode.Help]: helpAgent,
       [AgentMode.Generate]: generateAgent,
       [AgentMode.Explain]: explainAgent,
       [AgentMode.Issue]: issueAgent,
+      [AgentMode.Edit]: editAgent,
     };
 
     return buildAgent[agentMode || AgentMode.Explain]();

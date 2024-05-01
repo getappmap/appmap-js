@@ -18,7 +18,9 @@ import LookupContextService from './services/lookup-context-service';
 import ApplyContextService from './services/apply-context-service';
 import ClassificationService from './services/classification-service';
 import AgentSelectionService from './services/agent-selection-service';
-import { applyCommandOptions, parseOptions } from './command-option';
+import { CommandOptions, applyCommandOptions, parseOptions } from './command-option';
+import FileChangeExtractorService from './services/file-change-extractor-service';
+import FileUpdateService from './services/file-update-service';
 
 export const DEFAULT_TOKEN_LIMIT = 12000;
 
@@ -57,13 +59,14 @@ export class CodeExplainerService {
   ): AsyncIterable<string> {
     const { codeSelection } = clientRequest;
 
+    let commandOptions: CommandOptions;
     let question: string;
     let agentMode: AgentMode | undefined;
-
     {
       const parsedOptions = parseOptions(clientRequest.question);
       agentMode = parsedOptions.agentMode;
       question = parsedOptions.question;
+      commandOptions = parsedOptions.options;
       applyCommandOptions(parsedOptions.options, requestOptions);
     }
 
@@ -104,7 +107,8 @@ export class CodeExplainerService {
       chatHistory?.map((message) => message.content) || [],
       projectInfo,
       codeSelection,
-      contextLabels
+      contextLabels,
+      commandOptions
     );
 
     const isArchitecture = contextLabels
@@ -113,7 +117,10 @@ export class CodeExplainerService {
 
     if (projectInfo) this.projectInfoService.promptProjectInfo(isArchitecture, projectInfo);
 
-    await mode.perform(agentOptions, tokensAvailable);
+    const message = await mode.perform(agentOptions, tokensAvailable);
+    if (message) {
+      yield message;
+    }
 
     if (codeSelection) this.codeSelectionService.addSystemPrompt();
 
@@ -163,6 +170,16 @@ export default function explain(
     options.modelName,
     options.temperature
   );
+  const fileChangeExtractorService = new FileChangeExtractorService(
+    interactionHistory,
+    options.modelName,
+    options.temperature
+  );
+  const fileUpdateService = new FileUpdateService(
+    interactionHistory,
+    options.modelName,
+    options.temperature
+  );
 
   const contextProviderV2 = async (
     request: ContextV2.ContextRequest
@@ -181,7 +198,9 @@ export default function explain(
     helpProvider,
     vectorTermsService,
     lookupContextService,
-    applyContextService
+    applyContextService,
+    fileChangeExtractorService,
+    fileUpdateService
   );
   const projectInfoService = new ProjectInfoService(interactionHistory, projectInfoProvider);
   const memoryService = new MemoryService(

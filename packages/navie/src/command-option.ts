@@ -1,7 +1,6 @@
 import assert from 'assert';
 import { AgentMode } from './agent';
 import { ExplainOptions } from './explain';
-import { warn } from 'console';
 
 const BOOLEAN_STRINGS: Record<string, boolean> = {
   true: true,
@@ -19,6 +18,7 @@ export enum CommandOptionName {
   ResponseTokens = 'response-tokens',
   ProjectInfo = 'project-info',
   Context = 'context',
+  FileName = 'file',
 }
 
 export function commandOptionName(value: string): CommandOptionName | undefined {
