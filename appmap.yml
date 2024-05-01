@@ -11,11 +11,15 @@ packages:
     exclude:
       - node_modules
       - .yarn
-  - path: packages/scanner
+  - path: packages/client
     exclude:
       - node_modules
       - .yarn
-  - path: packages/sequence-diagram
+  - path: packages/openapi
+    exclude:
+      - node_modules
+      - .yarn
+  - path: packages/scanner
     exclude:
       - node_modules
       - .yarn
