@@ -133,6 +133,7 @@ export default {
       configLoaded: false,
       baseUrl: undefined,
       model: undefined,
+      contextResponse: undefined,
     };
   },
   watch: {
@@ -194,6 +195,12 @@ export default {
         }
       }
     },
+    searchStatus: function (newSearchStatus) {
+      // only update the context response if we don't have one already
+      if (!this.contextResponse && newSearchStatus) {
+        this.contextResponse = newSearchStatus.contextResponse || this.createContextResponse();
+      }
+    },
   },
   computed: {
     showStatus() {
@@ -207,9 +214,6 @@ export default {
     },
     statusStep() {
       return this.searchStatus ? this.searchStatus.step : undefined;
-    },
-    contextResponse() {
-      return this.searchStatus?.contextResponse || this.createContextResponse();
     },
     selectedSearchResult() {
       if (!this.searchResponse || !this.selectedSearchResultId) return;
@@ -365,6 +369,7 @@ export default {
       this.selectedSearchResultId = undefined;
       this.searchId = 0;
       this.searchStatusLabel = undefined;
+      this.contextResponse = undefined;
       this.ask?.removeAllListeners();
       this.searching = false;
       this.loadAppMapStats();
