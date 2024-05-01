@@ -74,6 +74,11 @@ export default class ExplainAgent implements Agent {
     private applyContextService: ApplyContextService
   ) {}
 
+  // eslint-disable-next-line class-methods-use-this
+  get standalone(): boolean {
+    return false;
+  }
+
   async perform(options: AgentOptions, tokensAvailable: () => number) {
     this.history.addEvent(new PromptInteractionEvent('agent', 'system', EXPLAIN_AGENT_PROMPT));
 

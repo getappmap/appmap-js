@@ -12,13 +12,13 @@ import { ContextV2 } from './context';
 import ProjectInfoService from './services/project-info-service';
 import { ProjectInfoProvider } from './project-info';
 import CodeSelectionService from './services/code-selection-service';
-import { AgentMode, AgentOptions } from './agent';
+import { Agent, AgentMode, AgentOptions } from './agent';
 import { HelpProvider } from './help';
 import LookupContextService from './services/lookup-context-service';
 import ApplyContextService from './services/apply-context-service';
 import ClassificationService from './services/classification-service';
 import AgentSelectionService from './services/agent-selection-service';
-import { CommandOptions, applyCommandOptions, parseOptions } from './command-option';
+import { applyCommandOptions, parseOptions } from './command-option';
 import FileChangeExtractorService from './services/file-change-extractor-service';
 import FileUpdateService from './services/file-update-service';
 
@@ -37,16 +37,14 @@ export class ExplainOptions {
   tokenLimit = Number(process.env.APPMAP_NAVIE_TOKEN_LIMIT ?? DEFAULT_TOKEN_LIMIT);
   temperature = 0.4;
   responseTokens = 1000;
-  fetchProjectInfo = true;
-  fetchContext = true;
 }
 
 export class CodeExplainerService {
   constructor(
+    public readonly agent: Agent,
     public readonly interactionHistory: InteractionHistory,
     private readonly completionService: CompletionService,
     private readonly classifierService: ClassificationService,
-    private readonly agentSelectionService: AgentSelectionService,
     private readonly codeSelectionService: CodeSelectionService,
     private readonly projectInfoService: ProjectInfoService,
     private readonly memoryService: MemoryService
@@ -57,18 +55,7 @@ export class CodeExplainerService {
     requestOptions: ExplainOptions,
     chatHistory?: ChatHistory
   ): AsyncIterable<string> {
-    const { codeSelection } = clientRequest;
-
-    let commandOptions: CommandOptions;
-    let question: string;
-    let agentMode: AgentMode | undefined;
-    {
-      const parsedOptions = parseOptions(clientRequest.question);
-      agentMode = parsedOptions.agentMode;
-      question = parsedOptions.question;
-      commandOptions = parsedOptions.options;
-      applyCommandOptions(parsedOptions.options, requestOptions);
-    }
+    const { codeSelection, question } = clientRequest;
 
     const contextLabelsFn = this.classifierService.classifyQuestion(question);
 
@@ -76,8 +63,6 @@ export class CodeExplainerService {
     const projectInfo = Array.isArray(projectInfoResponse)
       ? projectInfoResponse
       : [projectInfoResponse];
-
-    const mode = this.agentSelectionService.buildAgent(agentMode);
 
     const tokensAvailable = (): number =>
       requestOptions.tokenLimit -
@@ -107,8 +92,7 @@ export class CodeExplainerService {
       chatHistory?.map((message) => message.content) || [],
       projectInfo,
       codeSelection,
-      contextLabels,
-      commandOptions
+      contextLabels
     );
 
     const isArchitecture = contextLabels
@@ -117,10 +101,7 @@ export class CodeExplainerService {
 
     if (projectInfo) this.projectInfoService.promptProjectInfo(isArchitecture, projectInfo);
 
-    const message = await mode.perform(agentOptions, tokensAvailable);
-    if (message) {
-      yield message;
-    }
+    await this.agent.perform(agentOptions, tokensAvailable);
 
     if (codeSelection) this.codeSelectionService.addSystemPrompt();
 
@@ -130,7 +111,7 @@ export class CodeExplainerService {
     }
 
     if (codeSelection) this.codeSelectionService.applyCodeSelection(codeSelection);
-    mode.applyQuestionPrompt(question);
+    this.agent.applyQuestionPrompt(question);
 
     const response = this.completionService.complete();
     for await (const token of response) {
@@ -209,22 +190,59 @@ export default function explain(
     options.temperature
   );
 
-  const codeExplainerService = new CodeExplainerService(
-    interactionHistory,
-    completionService,
-    classificationService,
-    agentSelectionService,
-    codeSelectionService,
-    projectInfoService,
-    memoryService
-  );
+  let question: string;
+  let agentMode: AgentMode | undefined;
+  {
+    const parsedOptions = parseOptions(clientRequest.question);
+    agentMode = parsedOptions.agentMode;
+    question = parsedOptions.question;
+    applyCommandOptions(parsedOptions.options, options);
+  }
 
-  return {
-    on: (event: 'event', listener: (event: InteractionEvent) => void) => {
-      interactionHistory.on(event, listener);
-    },
-    execute() {
-      return codeExplainerService.execute(clientRequest, options, chatHistory);
-    },
-  };
+  const agent = agentSelectionService.buildAgent(agentMode);
+
+  let explainer: IExplain;
+  if (agent.standalone) {
+    agent.applyQuestionPrompt(question);
+
+    explainer = {
+      on: (event: 'event', listener: (event: InteractionEvent) => void) => {
+        interactionHistory.on(event, listener);
+      },
+      async *execute(): AsyncIterable<string> {
+        const agentOptions = new AgentOptions(
+          question,
+          [question, clientRequest.codeSelection].join('\n\n'),
+          (chatHistory || []).map((message) => message.content),
+          []
+        );
+
+        const messages = await agent.perform(agentOptions, () => options.tokenLimit);
+        if (Array.isArray(messages))
+          for (const message of messages) {
+            yield message;
+          }
+      },
+    };
+  } else {
+    const codeExplainerService = new CodeExplainerService(
+      agent,
+      interactionHistory,
+      completionService,
+      classificationService,
+      codeSelectionService,
+      projectInfoService,
+      memoryService
+    );
+
+    explainer = {
+      on: (event: 'event', listener: (event: InteractionEvent) => void) => {
+        interactionHistory.on(event, listener);
+      },
+      execute() {
+        return codeExplainerService.execute(clientRequest, options, chatHistory);
+      },
+    };
+  }
+  return explainer;
 }

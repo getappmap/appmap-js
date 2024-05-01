@@ -90,12 +90,6 @@ export function applyCommandOptions(options: CommandOptions, explainOptions: Exp
       case CommandOptionName.ResponseTokens:
         explainOptions.responseTokens = option.value as number;
         break;
-      case CommandOptionName.ProjectInfo:
-        explainOptions.fetchProjectInfo = option.value as boolean;
-        break;
-      case CommandOptionName.Context:
-        explainOptions.fetchContext = option.value as boolean;
-        break;
       default:
     }
   }

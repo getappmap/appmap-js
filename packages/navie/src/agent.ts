@@ -21,25 +21,18 @@ export class AgentOptions {
     public chatHistory: string[],
     public projectInfo: ProjectInfo[],
     public codeSelection?: string,
-    public contextLabels?: ContextV2.ContextLabel[],
-    public commandOptions?: CommandOptions
+    public contextLabels?: ContextV2.ContextLabel[]
   ) {}
 
   get hasAppMaps() {
     return this.projectInfo.some((info) => info.appmapStats && info.appmapStats?.numAppMaps > 0);
   }
-
-  get wantsProjectInfo() {
-    return this.commandOptions?.some((option) => option.name === CommandOptionName.ProjectInfo);
-  }
-
-  get wantsContext() {
-    return this.commandOptions?.some((option) => option.name === CommandOptionName.Context);
-  }
 }
 
 export interface Agent {
-  perform(options: AgentOptions, tokensAvailable: () => number): Promise<string | void>;
+  get standalone(): boolean;
+
+  perform(options: AgentOptions, tokensAvailable: () => number): Promise<string[] | void>;
 
   applyQuestionPrompt(question: string): void;
 }

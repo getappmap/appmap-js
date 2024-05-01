@@ -98,6 +98,11 @@ export class HelpAgent implements Agent {
     private vectorTermsService: VectorTermsService
   ) {}
 
+  // eslint-disable-next-line class-methods-use-this
+  get standalone(): boolean {
+    return false;
+  }
+
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {
     this.history.addEvent(new PromptInteractionEvent('agent', 'system', HELP_AGENT_PROMPT));
 

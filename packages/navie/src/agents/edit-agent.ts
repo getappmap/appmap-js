@@ -1,11 +1,9 @@
 import { inspect } from 'util';
 import { Agent, AgentOptions } from '../agent';
-import { CommandOptionName } from '../command-option';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 import FileChangeExtractorService from '../services/file-change-extractor-service';
 import FileUpdateService from '../services/file-update-service';
-import LookupContextService from '../services/lookup-context-service';
 
 export const EDIT_AGENT_PROMPT = `**Task: Edit Code Files**
 
@@ -33,7 +31,12 @@ export class EditAgent implements Agent {
     public fileUpdateService: FileUpdateService
   ) {}
 
-  async perform(options: AgentOptions): Promise<string> {
+  // eslint-disable-next-line class-methods-use-this
+  get standalone(): boolean {
+    return true;
+  }
+
+  async perform(options: AgentOptions): Promise<string[]> {
     this.history.addEvent(new PromptInteractionEvent('agent', 'system', EDIT_AGENT_PROMPT));
 
     this.history.addEvent(
@@ -44,16 +47,11 @@ export class EditAgent implements Agent {
       )
     );
 
-    const fileName =
-      options.commandOptions?.find((option) => option.name === CommandOptionName.FileName)?.value ||
-      'Last file name referenced in the assistance response';
-    const fileNameStr = fileName.toString();
-
     const messages = new Array<string>();
     try {
       const fileModification = await this.fileChangeExtractor.extract(
         options.chatHistory,
-        fileNameStr
+        options.question
       );
       await this.fileUpdateService.apply(fileModification);
       messages.push(`File change applied successfully to ${fileModification.file}`);
@@ -61,7 +59,7 @@ export class EditAgent implements Agent {
       messages.push(`An error occurred: ${inspect(err)}`);
     }
 
-    return messages.join('\n');
+    return messages;
   }
 
   applyQuestionPrompt(question: string): void {

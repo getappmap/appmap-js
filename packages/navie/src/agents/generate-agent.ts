@@ -42,6 +42,11 @@ export class GenerateAgent implements Agent {
     private applyContextService: ApplyContextService
   ) {}
 
+  // eslint-disable-next-line class-methods-use-this
+  get standalone(): boolean {
+    return false;
+  }
+
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {
     this.history.addEvent(new PromptInteractionEvent('agent', 'system', GENERATE_AGENT_PROMPT));
 
