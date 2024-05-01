@@ -1,4 +1,3 @@
-import { CommandOptionName, CommandOptions } from './command-option';
 import { ContextV2 } from './context';
 import { ProjectInfo } from './project-info';
 
@@ -7,7 +6,7 @@ export enum AgentMode {
   Generate = 'generate',
   Help = 'help',
   Issue = 'issue',
-  Edit = 'edit',
+  Apply = 'apply',
 }
 
 export function agentMode(value: string): AgentMode | undefined {

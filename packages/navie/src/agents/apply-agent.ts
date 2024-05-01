@@ -5,7 +5,7 @@ import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 import FileChangeExtractorService from '../services/file-change-extractor-service';
 import FileUpdateService from '../services/file-update-service';
 
-export const EDIT_AGENT_PROMPT = `**Task: Edit Code Files**
+export const EDIT_AGENT_PROMPT = `**Task: Apply Suggested Changes to Code Files**
 
 **About you**
 
@@ -24,7 +24,7 @@ Your response should be the edited file with the code change provided by the use
 Do not wrap the response in a code block, Markdown, or code fences. The response should be the raw text of the edited file.
 `;
 
-export class EditAgent implements Agent {
+export default class ApplyAgent implements Agent {
   constructor(
     public history: InteractionHistory,
     public fileChangeExtractor: FileChangeExtractorService,
