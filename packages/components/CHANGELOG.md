@@ -1,3 +1,10 @@
+# [@appland/components-v4.22.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.22.0...@appland/components-v4.22.1) (2024-05-01)
+
+
+### Bug Fixes
+
+* Context does not disappear on followup questions ([e7884a2](https://github.com/getappmap/appmap-js/commit/e7884a2aae508b3e99bf7524786d35ef3a38e156))
+
 # [@appland/components-v4.22.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.21.0...@appland/components-v4.22.0) (2024-05-01)
 
 
