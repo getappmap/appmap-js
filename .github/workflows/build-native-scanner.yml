@@ -271,3 +271,5 @@ jobs:
         uses: actions/checkout@v3
 
       - run: yarn npm tag add `echo ${{ github.ref_name }} | sed -e s/-v/@/` latest
+        env:
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.YARN_NPM_AUTH_TOKEN }}
