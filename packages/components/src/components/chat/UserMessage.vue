@@ -167,9 +167,17 @@ export default {
 
   data() {
     return {
+      timestamp: Date.now(),
       sentimentTimeout: undefined,
       copiedMessageTimeout: undefined,
     };
+  },
+
+  watch: {
+    renderedMarkdown() {
+      const delay = (this.timestamp - Date.now()) % 530; /* ms */
+      this.$el.style.setProperty('--cursor-animation-delay', `${delay}ms`);
+    },
   },
 
   computed: {
@@ -511,9 +519,13 @@ export default {
       &:after {
         content: '▊';
         animation-name: cursor-blink;
+
+        // Note that this is also reflected in the `renderedMarkdown` watcher
         animation-duration: 530ms;
+
         animation-iteration-count: infinite;
         animation-direction: alternate;
+        animation-delay: var(--cursor-animation-delay);
       }
     }
 
