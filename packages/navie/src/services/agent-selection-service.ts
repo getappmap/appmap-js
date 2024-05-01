@@ -2,15 +2,15 @@
 /* eslint-disable consistent-return */
 import InteractionHistory from '../interaction-history';
 import { Agent, AgentMode } from '../agent';
-import { HelpAgent } from '../agents/help-agent';
 import { HelpProvider } from '../help';
 import VectorTermsService from './vector-terms-service';
-import { GenerateAgent } from '../agents/generate-agent';
 import LookupContextService from './lookup-context-service';
 import ApplyContextService from './apply-context-service';
+import HelpAgent from '../agents/help-agent';
+import GenerateAgent from '../agents/generate-agent';
 import ExplainAgent from '../agents/explain-agent';
-import { IssueAgent } from '../agents/issue-agent';
-import { EditAgent } from '../agents/edit-agent';
+import IssueAgent from '../agents/issue-agent';
+import ApplyAgent from '../agents/apply-agent';
 import FileUpdateService from './file-update-service';
 import FileChangeExtractorService from './file-change-extractor-service';
 
@@ -52,15 +52,15 @@ export default class AgentSelectionService {
         this.applyContextService
       );
 
-    const editAgent = () =>
-      new EditAgent(this.history, this.fileChangeExtractor, this.fileUpdateService);
+    const applyAgent = () =>
+      new ApplyAgent(this.history, this.fileChangeExtractor, this.fileUpdateService);
 
     const buildAgent = {
       [AgentMode.Help]: helpAgent,
       [AgentMode.Generate]: generateAgent,
       [AgentMode.Explain]: explainAgent,
       [AgentMode.Issue]: issueAgent,
-      [AgentMode.Edit]: editAgent,
+      [AgentMode.Apply]: applyAgent,
     };
 
     return buildAgent[agentMode || AgentMode.Explain]();

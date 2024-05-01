@@ -94,7 +94,7 @@ Context (SQL Query):
 SELECT * FROM workspace_tagging WHERE tag = 'important'
 \`\`\`
 `;
-export class IssueAgent implements Agent {
+export default class IssueAgent implements Agent {
   constructor(
     public history: InteractionHistory,
     private vectorTermsService: VectorTermsService,
