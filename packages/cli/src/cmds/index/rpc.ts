@@ -88,6 +88,11 @@ export const handler = async (argv) => {
     Array.isArray(argv.directory)
       ? directories.push(...argv.directory)
       : directories.push(argv.directory);
+
+    if (directories.length === 1) {
+      log(`Changing to working directory: ${directories[0]}`);
+      process.chdir(directories[0]);
+    }
   }
 
   const { port, logNavie } = argv;
