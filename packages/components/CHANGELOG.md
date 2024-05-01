@@ -1,3 +1,10 @@
+# [@appland/components-v4.22.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.21.0...@appland/components-v4.22.0) (2024-05-01)
+
+
+### Features
+
+* Add flag to disable LLM config ([6c7ee34](https://github.com/getappmap/appmap-js/commit/6c7ee34a6da4c45a0aae708ada6d13d827c07fba))
+
 # [@appland/components-v4.21.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.20.0...@appland/components-v4.21.0) (2024-04-29)
 
 
