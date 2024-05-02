@@ -5,6 +5,7 @@ import sqlite3 from 'better-sqlite3';
 import tmp from 'tmp';
 
 import { FileIndex, filterFiles } from '../../../src/fulltext/FileIndex';
+import * as querySymbols from '../../../src/fulltext/querySymbols';
 
 describe('FileIndex', () => {
   let fileIndex: FileIndex;
@@ -41,9 +42,7 @@ describe('FileIndex', () => {
   describe('when matches are found', () => {
     beforeEach(() => {
       fileIndex = new FileIndex(database);
-      for (const file of files) {
-        fileIndex.indexFile(file.directory, file.fileName);
-      }
+      files.forEach(({ directory, fileName }) => fileIndex.indexFile(directory, fileName));
     });
     afterEach(() => fileIndex.close());
 
@@ -65,6 +64,15 @@ describe('FileIndex', () => {
     it('does not match directory nanmes', () => {
       const results = fileIndex.search(['dir1'], 10);
       expect(results.map((r) => ({ directory: r.directory, fileName: r.fileName }))).toEqual([]);
+    });
+  });
+
+  describe('indexFile', () => {
+    it('does not query symbols if allowSymbols is false', () => {
+      const querySymbolsFn = jest.spyOn(querySymbols, 'default');
+      const fileIndex = new FileIndex(database);
+      fileIndex.indexFile('dir1', 'file1', { allowSymbols: false });
+      expect(querySymbolsFn).not.toHaveBeenCalled();
     });
   });
 });

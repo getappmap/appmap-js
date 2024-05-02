@@ -10,11 +10,17 @@ import listProjectFiles from './listProjectFiles';
 import queryKeywords from './queryKeywords';
 import { Git, GitState } from '../telemetry';
 import listGitProjectFiles from './listGitProjectFIles';
+import querySymbols from './querySymbols';
 
 export type FileIndexMatch = {
   directory: string;
   fileName: string;
   score: number;
+};
+
+type IndexFileOptions = {
+  allowGenericParsing?: boolean;
+  allowSymbols?: boolean;
 };
 
 export class FileIndex {
@@ -49,32 +55,57 @@ export class FileIndex {
   }
 
   async indexDirectories(directories: string[]) {
-    for (const directory of directories) {
-      const gitState = await Git.state(directory);
-
-      let fileNames: string[];
-      if (gitState === GitState.Ok) {
-        fileNames = await listGitProjectFiles(directory);
-      } else {
-        fileNames = await listProjectFiles(directory);
-      }
-      this.#indexDirectory(directory, await filterFiles(directory, fileNames));
-    }
+    return Promise.all(
+      directories.map((directory) =>
+        Git.state(directory)
+          .then((gitState) =>
+            gitState === GitState.Ok ? listGitProjectFiles(directory) : listProjectFiles(directory)
+          )
+          .then((fileNames) => filterFiles(directory, fileNames))
+          .then((fileNames) => this.#indexDirectory(directory, fileNames))
+      )
+    );
   }
 
   #indexDirectory = this.database.transaction((directory: string, fileNames: string[]) => {
-    for (const fileName of fileNames) {
-      this.indexFile(directory, fileName);
+    const startTime = new Date().getTime();
+    const options = {
+      allowGenericParsing: fileNames.length < 15_000,
+      allowSymbols: fileNames.length < 15_000,
+    };
+
+    if (verbose()) {
+      if (options.allowSymbols) {
+        console.log('Symbol parsing is enabled.');
+        console.log(
+          `Generic symbol parsing is ${options.allowGenericParsing ? 'enabled.' : 'disabled.'}`
+        );
+      } else {
+        console.log('Symbol parsing is disabled.');
+      }
     }
+
+    for (const fileName of fileNames) {
+      this.indexFile(directory, fileName, options);
+    }
+
+    const endTime = new Date().getTime();
+    console.log(`Indexed ${fileNames.length} files in ${directory} in ${endTime - startTime}ms`);
   });
 
   #insert: sqlite3.Statement<unknown[]>;
 
-  indexFile(directory: string, filePath: string) {
+  indexFile(directory: string, filePath: string, options: IndexFileOptions = {}) {
+    const { allowGenericParsing = true, allowSymbols = true } = options;
     const fileNameTokens = filePath.split(path.sep);
 
     try {
-      const terms = queryKeywords(fileNameTokens).join(' ');
+      let terms = queryKeywords(fileNameTokens).join(' ');
+
+      if (allowSymbols) {
+        const symbols = querySymbols(path.join(directory, filePath), allowGenericParsing);
+        terms += ` ${queryKeywords(symbols).sort().join(' ')}`;
+      }
 
       if (verbose()) console.log(`Indexing file path ${filePath} with terms ${terms}`);
 
@@ -162,6 +193,8 @@ const BINARY_FILE_EXTENSIONS: string[] = [
   'class',
   'so',
   'dll',
+  'dylib',
+  'o',
   'exe',
   'min.js',
   'min.css',
@@ -170,10 +203,11 @@ const BINARY_FILE_EXTENSIONS: string[] = [
 export async function filterFiles(directory: string, fileNames: string[]): Promise<string[]> {
   const result: string[] = [];
   for (const fileName of fileNames) {
-    if (BINARY_FILE_EXTENSIONS.some((ext) => fileName.toLowerCase().endsWith(ext))) continue;
+    const fileExtension = path.extname(fileName).toLowerCase();
+    if (BINARY_FILE_EXTENSIONS.some((ext) => ext === fileExtension)) continue;
     try {
       const stats = await stat(join(directory, fileName));
-      if (stats.isFile() && stats.size < 50000) result.push(fileName);
+      if (stats.isFile() && stats.size < 50_000) result.push(fileName);
     } catch (error) {
       console.warn(`Error checking file ${fileName}`);
       console.warn(error);
