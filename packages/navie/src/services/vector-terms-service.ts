@@ -122,7 +122,7 @@ export default class VectorTermsService {
       responseText = contentAfter(responseText, 'Terms:');
       responseText = trimFences(responseText);
       searchTermsObject =
-        parseJSON<Record<string, unknown> | string | string[]>(responseText) ||
+        parseJSON<Record<string, unknown> | string | string[]>(responseText, undefined) ||
         parseText(responseText);
     }
 
