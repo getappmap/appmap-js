@@ -1,28 +1,9 @@
 import { inspect } from 'util';
 import { Agent, AgentOptions } from '../agent';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
-import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
+import { PromptType, buildPromptValue } from '../prompt';
 import FileChangeExtractorService from '../services/file-change-extractor-service';
 import FileUpdateService from '../services/file-update-service';
-
-export const EDIT_AGENT_PROMPT = `**Task: Apply Suggested Changes to Code Files**
-
-**About you**
-
-Your name is Navie. You are code generation AI created and maintained by AppMap Inc, and are available to AppMap users as a service.
-
-Your job is to edit a file with a code change provided by the user, and respond with the edited file.
-
-**About the user**
-
-The user is an experienced software developer.
-
-**About your response**
-
-Your response should be the edited file with the code change provided by the user.
-
-Do not wrap the response in a code block, Markdown, or code fences. The response should be the raw text of the edited file.
-`;
 
 export default class ApplyAgent implements Agent {
   constructor(
@@ -37,29 +18,25 @@ export default class ApplyAgent implements Agent {
   }
 
   async perform(options: AgentOptions): Promise<string[]> {
-    this.history.addEvent(new PromptInteractionEvent('agent', 'system', EDIT_AGENT_PROMPT));
-
-    this.history.addEvent(
-      new PromptInteractionEvent(
-        PromptType.Specification,
-        'system',
-        buildPromptDescriptor(PromptType.Specification)
-      )
-    );
-
     const messages = new Array<string>();
     try {
-      const fileModification = await this.fileChangeExtractor.extract(
+      const fileUpdate = await this.fileChangeExtractor.extract(
         options.chatHistory,
         options.question
       );
-      await this.fileUpdateService.apply(fileModification);
-      messages.push(`File change applied successfully to ${fileModification.file}`);
+      if (!fileUpdate) {
+        messages.push('Unable to parse file change. Please try again.');
+        return messages;
+      }
+      messages.push(`File change parsed successfully for ${fileUpdate.file}`);
+
+      const updateMessages = await this.fileUpdateService.apply(fileUpdate);
+      if (updateMessages) messages.push(...updateMessages);
     } catch (err: any) {
       messages.push(`An error occurred: ${inspect(err)}`);
     }
 
-    return messages;
+    return messages.map((msg) => [msg, '\n'].join(''));
   }
 
   applyQuestionPrompt(question: string): void {

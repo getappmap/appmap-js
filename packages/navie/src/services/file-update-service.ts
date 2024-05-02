@@ -3,6 +3,7 @@ import { warn } from 'console';
 import { readFile, writeFile } from 'fs/promises';
 import OpenAI from 'openai';
 import InteractionHistory from '../interaction-history';
+import trimFences from '../lib/trim-fences';
 
 export type FileUpdate = {
   file: string;
@@ -24,7 +25,7 @@ export default class FileUpdateService {
     public temperature: number
   ) {}
 
-  async apply(fileUpdate: FileUpdate): Promise<void> {
+  async apply(fileUpdate: FileUpdate): Promise<string[] | void> {
     const fileContents = await readFile(fileUpdate.file, 'utf8');
 
     const openAI: ChatOpenAI = new ChatOpenAI({
@@ -54,13 +55,16 @@ export default class FileUpdateService {
       stream: true,
     });
     const tokens = Array<string>();
+    warn(`File change response:\n`);
     // eslint-disable-next-line no-await-in-loop
     for await (const token of response) {
+      process.stderr.write(token.choices.map((choice) => choice.delta.content).join(''));
       tokens.push(token.choices.map((choice) => choice.delta.content).join(''));
     }
     const rawResponse = tokens.join('');
-    warn(`File change response:\n${rawResponse}`);
+    const codeResponse = trimFences(rawResponse);
+    await writeFile(fileUpdate.file, codeResponse, 'utf8');
 
-    await writeFile(fileUpdate.file, rawResponse, 'utf8');
+    return [`File change applied to ${fileUpdate.file}.`];
   }
 }
