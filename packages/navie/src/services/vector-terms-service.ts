@@ -4,9 +4,9 @@ import { warn } from 'console';
 import { ChatOpenAI } from '@langchain/openai';
 
 import InteractionHistory, { VectorTermsInteractionEvent } from '../interaction-history';
-import { contentBetween } from './contentBetween';
-import { contentAfter } from './contentAfter';
-import { parseJSON } from './parseJSON';
+import contentAfter from '../lib/content-after';
+import parseJSON from '../lib/parse-json';
+import trimFences from '../lib/trim-fences';
 
 const SYSTEM_PROMPT = `You are assisting a developer to search a code base.
 
@@ -120,10 +120,10 @@ export default class VectorTermsService {
     {
       let responseText = rawResponse;
       responseText = contentAfter(responseText, 'Terms:');
-      responseText = contentBetween(responseText, '```json', '```');
-      responseText = contentBetween(responseText, '```yaml', '```');
-      responseText = responseText.trim();
-      searchTermsObject = parseJSON(responseText) || parseText(responseText);
+      responseText = trimFences(responseText);
+      searchTermsObject =
+        parseJSON<Record<string, unknown> | string | string[]>(responseText) ||
+        parseText(responseText);
     }
 
     const terms = new Set<string>();

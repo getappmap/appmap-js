@@ -4,7 +4,7 @@ import { ChatOpenAI } from '@langchain/openai';
 
 import InteractionHistory from '../interaction-history';
 import { FileUpdate } from './file-update-service';
-import { contentBetween } from './contentBetween';
+import parseJSON from '../lib/parse-json';
 
 const SYSTEM_PROMPT = `**File Change Extractor**
 
@@ -50,7 +50,7 @@ export default class FileChangeExtractorService {
     public temperature: number
   ) {}
 
-  async extract(chatHistory: string[], fileName: string): Promise<FileUpdate> {
+  async extract(chatHistory: string[], fileName: string): Promise<FileUpdate | undefined> {
     const openAI: ChatOpenAI = new ChatOpenAI({
       modelName: this.modelName,
       temperature: this.temperature,
@@ -85,13 +85,6 @@ export default class FileChangeExtractorService {
     const rawResponse = tokens.join('');
     warn(`File change response:\n${rawResponse}`);
 
-    let fileUpdate: FileUpdate;
-    {
-      let responseText = rawResponse;
-      responseText = contentBetween(responseText, '```json', '```');
-      responseText = responseText.trim();
-      fileUpdate = JSON.parse(responseText) as FileUpdate;
-    }
-    return fileUpdate;
+    return parseJSON<FileUpdate>(rawResponse);
   }
 }
