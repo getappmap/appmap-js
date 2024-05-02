@@ -1,3 +1,10 @@
+# [@appland/components-v4.23.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.22.1...@appland/components-v4.23.0) (2024-05-02)
+
+
+### Features
+
+* Update Navie tool status message ([3b8dc65](https://github.com/getappmap/appmap-js/commit/3b8dc659bed79bdf29101c35dc1c19138369ab05))
+
 # [@appland/components-v4.22.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.22.0...@appland/components-v4.22.1) (2024-05-01)
 
 
