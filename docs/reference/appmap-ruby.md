@@ -1,43 +1,42 @@
 ---
 layout: docs
 title: Docs - Reference
-description: "AppMap referernce guide for Ruby. Record AppMaps easily for improved code visibility and analysis."
+description: "AppMap reference guide for Ruby. Record AppMap Data easily for improved code visibility and analysis."
 toc: true
 reference: true
 name: AppMap Agent for Ruby
 step: 3
 ---
 
-# AppMap Agent for Ruby
+# AppMap Agent for Ruby <!-- omit in toc -->
 
-- [AppMap Agent for Ruby](#appmap-agent-for-ruby)
-  - [About](#about)
-    - [Supported versions](#supported-versions)
-  - [Installation](#installation)
-  - [Configuration](#configuration)
-    - [Events that are always recorded](#events-that-are-always-recorded)
-  - [Labels](#labels)
-  - [Tests recording](#tests-recording)
-    - [RSpec](#rspec)
-    - [Minitest](#minitest)
-    - [Cucumber](#cucumber)
-  - [Requests recording](#requests-recording)
-    - [Requests recording in Rails](#requests-recording-in-rails)
-    - [Requests recording in non-Rails apps](#requests-recording-in-non-rails-apps)
-  - [Remote recording](#remote-recording)
-    - [Remote recording in Rails](#remote-recording-in-rails)
-    - [Remote recording in non-Rails apps](#remote-recording-in-non-rails-apps)
-  - [Code Block recording](#code-block-recording)
-  - [Enable and disabling AppMaps](#enable-and-disabling-appmaps)
-    - [Disabling AppMaps using environment variables](#disabling-appmaps-using-environment-variables)
-    - [Disabling AppMaps of specific RSpec tests](#disabling-appmaps-of-specific-rspec-tests)
-  - [Enabling and disabling instrumentation](#enabling-and-disabling-instrumentation)
-  - [Advanced runtime options](#advanced-runtime-options)
-  - [GitHub repository](#github-repository)
+- [About](#about)
+  - [Supported versions](#supported-versions)
+- [Installation](#installation)
+- [Configuration](#configuration)
+  - [Events that are always recorded](#events-that-are-always-recorded)
+- [Labels](#labels)
+- [Tests recording](#tests-recording)
+  - [RSpec](#rspec)
+  - [Minitest](#minitest)
+  - [Cucumber](#cucumber)
+- [Requests recording](#requests-recording)
+  - [Requests recording in Rails](#requests-recording-in-rails)
+  - [Requests recording in non-Rails apps](#requests-recording-in-non-rails-apps)
+- [Remote recording](#remote-recording)
+  - [Remote recording in Rails](#remote-recording-in-rails)
+  - [Remote recording in non-Rails apps](#remote-recording-in-non-rails-apps)
+- [Code Block Recording](#code-block-recording)
+- [Enable and disable AppMap Data creation](#enable-and-disable-appmap-data-creation)
+  - [Disabling AppMap Data creation using environment variables](#disabling-appmap-data-creation-using-environment-variables)
+  - [Disabling AppMap Data creation for specific RSpec tests](#disabling-appmap-data-creation-for-specific-rspec-tests)
+- [Enabling and disabling instrumentation](#enabling-and-disabling-instrumentation)
+- [Advanced runtime options](#advanced-runtime-options)
+- [GitHub repository](#github-repository)
 
 ## About
 
-`appmap` is a Gem for recording [AppMaps](https://github.com/getappmap/appmap) of your code.
+`appmap` is a Gem for recording [AppMap Data](https://github.com/getappmap/appmap) of your code.
 
 {% include docs/what_is_appmap_snippet.md %}
 
@@ -133,7 +132,7 @@ Optional list of fully qualified class and method names. Separate class and meth
 Optional list of fully qualified `Class#instance_method` or `Class.class_method` method names. The primary use of `functions` is to apply specific labels to functions whose source code is not accessible (e.g., it's in a Gem).
 
 - The `gem` or `path` name needs to match the actual location of the method(s)
-- You can specify an individual `method` or multiple `methods` and a single `label` or mutiple `labels`.
+- You can specify an individual `method` or multiple `methods` and a single `label` or multiple `labels`.
 
 For functions which are part of the application code, use `@label` or `@labels` in code comments to apply labels.
 
@@ -146,11 +145,11 @@ Certain events are always recorded whenever AppMap recording is enabled. These e
 * SQL queries that sent to the `ActiveSupport::Notifications` handler `sql.active_record`.
 * Specific functions that are identified and labeled by [lib/appmap/builtin_hooks](https://github.com/getappmap/appmap-ruby/tree/master/lib/appmap/builtin_hooks) and [lib/appmap/gem_hooks](https://github.com/getappmap/appmap-ruby/tree/master/lib/appmap/gem_hooks).
 
-So, even if your _appmap.yml_ is empty except for a `name` and `packages: []`, your AppMaps will still contain the events listed above.
+So, even if your _appmap.yml_ is empty except for a `name` and `packages: []`, your AppMap Data will still contain the events listed above.
 
 ## Labels
 
-The AppMap data specification provides for class and function `labels`, which can be used to enhance the AppMap visualizations, and for code analysis.
+The AppMap Data specification provides for class and function `labels`, which can be used to enhance the AppMap Diagrams, and for code analysis.
 
 You can apply function labels using source code comments in your Ruby code. To apply a labels to a function, add a `@label` or `@labels` line to the comment which immediately precedes a function.
 
@@ -179,7 +178,7 @@ Then the AppMap metadata section for this function will include:
 
 ### RSpec
 
-When you run your RSpec tests, AppMaps will be recorded automatically (as long as the `appmap` gem is loaded).
+When you run your RSpec tests, AppMap Data will be recorded automatically (as long as the `appmap` gem is loaded).
 
 If you **don't see this working automatically** for some reason, you can try requiring `appmap/rspec` in your `spec_helper.rb`:
 
@@ -219,11 +218,11 @@ $ find tmp/appmap/rspec
 Hello_says_hello_when_prompted.appmap.json
 ```
 
-You can disable AppMap recording for specific tests and examples groups using the tag `appmap: false`. See the section on [enable and disabling AppMaps](#enable-and-disabling-appmaps).
+You can disable AppMap recording for specific tests and examples groups using the tag `appmap: false`. See the section on [enable and disable AppMap Data creation](#enable-and-disable-appmap-data-creation).
 
 ### Minitest
 
-When you run your Minitest tests, AppMaps will be recorded automatically (as long as the `appmap` gem is loaded).
+When you run your Minitest tests, AppMap Data will be recorded automatically (as long as the `appmap` gem is loaded).
 
 If you **don't see this working automatically** for some reason, you can try requiring `appmap/minitest` in your `test_helper.rb`:
 
@@ -318,7 +317,7 @@ Hello_Says_hello_when_prompted.appmap.json
 To do this, the AppMap agent hooks into the Rack middleware. It starts a recording when each new request is received,
 records the execution thread into an AppMap, and saves in when the request is completed.
 
-Requests recording is enabled by default when `RAILS_ENV=development`. You can enable it in any environment by setting `APPMAP_RECORD_REQUESTS=true`, and disable it for every enivronment by setting `APPMAP_RECORD_REQUESTS=false`.
+Requests recording is enabled by default when `RAILS_ENV=development`. You can enable it in any environment by setting `APPMAP_RECORD_REQUESTS=true`, and disable it for every environment by setting `APPMAP_RECORD_REQUESTS=false`.
 
 ### Requests recording in Rails
 
@@ -338,11 +337,11 @@ $ rails server
 ```
 {: .example-code}
 
-If you don't see a message indicating that "requests" recording is enbled, start the server with `APPMAP_RECORD_REQUESTS=true`, or ensure that `RAILS_ENV=development`.
+If you don't see a message indicating that "requests" recording is enabled, start the server with `APPMAP_RECORD_REQUESTS=true`, or ensure that `RAILS_ENV=development`.
 
 ### Requests recording in non-Rails apps
 
-For non-Rails apps, add the AppMap middleware using the method provided by the framemwork you're using. Run your application server in the usual way. If you don't see a message indicating that "requests" recording is enbled, start the server with `APPMAP_RECORD_REQUESTS=true`, or ensure that `APP_ENV=development`.
+For non-Rails apps, add the AppMap middleware using the method provided by the framework you're using. Run your application server in the usual way. If you don't see a message indicating that "requests" recording is enabled, start the server with `APPMAP_RECORD_REQUESTS=true`, or ensure that `APP_ENV=development`.
 
 ## Remote recording
 
@@ -371,12 +370,12 @@ $ rails server
 ```
 {: .example-code}
 
-If you don't see a message indicating that "remote" recording is enbled, start the server with `APPMAP_RECORD_REMOTE=true`, or ensure that `RAILS_ENV=development`.
+If you don't see a message indicating that "remote" recording is enabled, start the server with `APPMAP_RECORD_REMOTE=true`, or ensure that `RAILS_ENV=development`.
 
 ### Remote recording in non-Rails apps
 
-For non-Rails apps, add the AppMap middleware using the method provided by the framemwork you're using. Run your application server in the usual way.
-If you don't see a message indicating that "remote" recording is enbled, start the server with `APPMAP_RECORD_REMOTE=true`, or ensure that `APP_ENV=development`.
+For non-Rails apps, add the AppMap middleware using the method provided by the framework you're using. Run your application server in the usual way.
+If you don't see a message indicating that "remote" recording is enabled, start the server with `APPMAP_RECORD_REMOTE=true`, or ensure that `APP_ENV=development`.
 
 ## Code Block Recording
 
@@ -399,9 +398,9 @@ File.write('tmp/appmap/block/demo.appmap.json', JSON.generate(appmap))
 ```
 {: .example-code}
 
-## Enable and disabling AppMaps
+## Enable and disable AppMap Data creation
 
-### Disabling AppMaps using environment variables
+### Disabling AppMap Data creation using environment variables
 
 To disable all AppMap recording, set the environment variable `APPMAP=false`.
 
@@ -409,7 +408,7 @@ To disable requests recording, set the environment variable `APPMAP_RECORD_REQUE
 
 To disable remote recording, set the environment variable `APPMAP_RECORD_REMOTE=false`.
 
-### Disabling AppMaps of specific RSpec tests
+### Disabling AppMap Data creation for specific RSpec tests
 
 To disable recording of an RSpec test or example group, use the tag `appmap: false`.
 
@@ -417,7 +416,7 @@ For example:
 
 ```ruby
 describe 'Module 1', appmap: false do
-  # AppMaps are disabled for all tests in this scope.
+  # AppMap Data is disabled for all tests in this scope.
   it 'does something'
   it 'does something else'
 end
@@ -453,7 +452,7 @@ For example, in Rails `application.rb`:
 require 'appmap'
 ```
 
-Of course, if instrumentation is disabled in this way, then no AppMaps will be recorded.
+Of course, if instrumentation is disabled in this way, then no AppMap Data will be recorded.
 
 ## Advanced runtime options
 

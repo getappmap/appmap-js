@@ -4,7 +4,7 @@ title: Docs - Guides
 description: "Configure AppMap Analysis by customizing checks for flexible rule options. Understand findings and their properties for effective analysis."
 guides: true
 name: Configuring Analysis
-step: 6
+step: 7
 redirect_from: [docs/analysis/configuring-checks, /docs/analysis/match-pattern-config, /docs/analysis/findings,/docs/reference/configuring-analysis]
 ---
 
@@ -154,5 +154,5 @@ When a scanner check matches an AppMap, it issues a _finding_.  A finding includ
 
 A `hash` of the finding is computed from the finding properties that are most important and characteristic. The hash is used implement a critical feature of AppMap Analysis - de-duplication. De-duplication serves two purposes:
 
-1) A finding may occur many times within a set of AppMaps. As a user, you're only interested in unique findings, therefore the hash can be used to de-duplicate the findings and present a minimal data set.
+1) A finding may occur many times within a set of AppMap Diagrams. As a user, you're only interested in unique findings, therefore the hash can be used to de-duplicate the findings and present a minimal data set.
 2) Findings can be managed and triaged in the [AppMap Server](https://app.land) UI. For example, a finding can be deferred to prevent that finding from holding up a build or pull request. If the finding occurs again in the future, the hash is used to recognize that the finding has already been found, triaged - therefore the finding is not reported as new, and does not block the build or need to be re-triaged.

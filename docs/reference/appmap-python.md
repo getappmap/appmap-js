@@ -13,7 +13,9 @@ step: 4
   - [Supported versions](#supported-versions)
 - [Installation](#installation)
 - [Configuration](#configuration)
-- [Tests recording](#tests-recording)
+- [Enabling and disabling recording](#enabling-and-disabling-recording)
+  - [`appmap-python` script](#appmap-python-script)
+- [Test recording](#test-recording)
   - [pytest](#pytest)
   - [unittest](#unittest)
 - [Request recording](#request-recording)
@@ -29,15 +31,13 @@ step: 4
   - [@appmap.labels](#appmaplabels)
   - [@appmap.noappmap](#appmapnoappmap)
 - [Environment variables](#environment-variables)
-  - [General configuration](#general-configuration)
   - [Controlling recording](#controlling-recording)
-    - [Disabling recording methods](#disabling-recording-methods)
-    - [Enabling recording methods](#enabling-recording-methods)
+  - [Other configuration](#other-configuration)
 - [GitHub repository](#github-repository)
 
 ## About
 
-`appmap` is a Python package for recording [AppMaps](https://github.com/getappmap/appmap) of your code.
+`appmap` is a Python package for recording [AppMap Diagrams](https://github.com/getappmap/appmap) of your code.
 
 {% include docs/what_is_appmap_snippet.md %}
 
@@ -86,7 +86,7 @@ Add your modules as `path` entries in `appmap.yml`, and external packages
     - MyOtherClass.my_instance_method
     - MyOtherClass.my_class_method
   # You can record dependency packages, such as Django.
-  # We don't recommend recording Django by default though, your AppMaps will be quite large
+  # We don't recommend recording Django by default though, your AppMap Diagram will be quite large
   # and mostly about Django itself, not your own code.
   #- dist: Django
   #  exclude:
@@ -103,12 +103,59 @@ This is generally the same package name as you'd give to `pip install` or put
 in `pyproject.toml`. You can additionally use `path` and `exclude` on `dist`
 entries to limit the capture to specific patterns.
 
-By default, shallow capture is enabled on `dist` packages, supressing tracking
+By default, shallow capture is enabled on `dist` packages, suppressing tracking
 of most internal execution flow. This allows you to capture the interaction without
 getting bogged down with detail. To see these details, set `shallow: false`.
 You can also use `shallow: true` on `path` entries.
 
-## Tests recording
+## Enabling and disabling recording
+
+In the simplest case, AppMap recording can be either "enabled" or "disabled". When it's enabled, AppMap
+data files will be created whenever a supported test case is run, and whenever a web request is
+served. The remote recording endpoint will also be available. Recording of test cases, requests, and
+remote recording can be further controlled with [additional environment
+variables](#controlling-recording). When it's disabled, no application code will be instrumented, and
+no AppMap files will be created.
+
+Currently, AppMap is enabled by default. So if your python environment (either global, or in a
+virtualenv) has the `appmap` package installed, AppMap will (a) instrument your python code whenever
+you run a python program, and (b) the enabled behavior described above will be applied.
+
+In the upcoming version 2 of the `appmap` package, the default behavior will change: AppMap will be
+disabled by default. To enable AppMap, you can either (a) launch your python program with the new
+`appmap-python` launch script, or (b) set the `APPMAP` environment variable (e.g. `export APPMAP=true`
+in Bash, `$Env:APPMAP="true"` in PowerShell, etc).
+
+### `appmap-python` script
+```
+% appmap-python --help
+usage: appmap-python [-h] [--record unittest,requests,remote,pytest,process] [--no-record unittest,requests,remote,pytest,process] [--enable-log | --no-enable-log] [command ...]
+
+Enable recording of the provided command, optionally specifying the
+type(s) of recording to enable and disable. If a recording type is
+specified as both enabled and disabled, it will be enabled.
+
+This command sets the environment variables described here:
+https://appmap.io/docs/reference/appmap-python.html#controlling-recording.
+For any recording type that is not explicitly specified, the
+corresponding environment variable will not be set.
+
+If no command is provided, the computed set of environment variables
+will be displayed.
+
+positional arguments:
+  command               the command to run (default: display the environment variables)
+
+options:
+  -h, --help            show this help message and exit
+  --record unittest,requests,remote,pytest,process
+                        recording types to enable
+  --no-record unittest,requests,remote,pytest,process
+                        recording types to disable
+  --enable-log, --no-enable-log
+                        create a log file (default: False)
+```
+## Test recording
 
 `appmap` supports recording [pytest](https://pytest.org) and
 [unittest](https://docs.python.org/3/library/unittest.html) test cases.
@@ -116,7 +163,7 @@ You can also use `shallow: true` on `path` entries.
 ### pytest
 
 `appmap` is a `pytest` plugin. When it's installed in a project that uses
-`pytest`, it will be available to generate AppMaps.
+`pytest`, it will be available to generate AppMap Diagrams by default.
 
 ```
 root@e9987eaa93c8:/src/appmap/test/data/pytest# pip show appmap
@@ -185,17 +232,35 @@ Given a source file `record_sample.py`:
 ```
 import os
 import sys
+from datetime import datetime
+from pathlib import Path
 
 import appmap
+
+output_directory = Path('tmp/appmap/codeblock')
+output_directory.mkdir(parents=True, exist_ok=True)  # Step 2: Ensure the directory exists
+
+timestamp = datetime.now().isoformat(timespec='seconds')
+output_file = output_directory / f'{timestamp}.appmap.json'
 
 r = appmap.Recording()
 with r:
     import sample
     print(sample.C().hello_world(), file=sys.stderr)
 
-with os.fdopen(sys.stdout.fileno(), "w", closefd=False) as stdout:
-    stdout.write(appmap.generation.dump(r))
-    stdout.flush()
+with open(output_file, "w") as f:
+    f.write(
+        appmap.generation.dump(
+            r,
+            {
+                "name": str(timestamp),
+                "recorder": {
+                    "type": "process",
+                    "name": "process",
+                },
+            },
+        )
+    )
 ```
 
 and a source file `sample.py`:
@@ -222,17 +287,17 @@ appmap_dir: tmp/appmap
 you can generate a recording of the code
 
 ```
-% python record_sample.py > record_sample.appmap.json
-% jq '.events | length' record_sample.appmap.json
+% python record_sample.py
+% jq '.events | length' tmp/appmap/codeblock/*.appmap.json
 6
-% jq < record_sample.appmap.json | head -10
+% jq < tmp/appmap/codeblock/*.appmap.json | head -10
 {
-  "version": "1.4",
+  "version": "1.9",
   "metadata": {
     "language": {
       "name": "python",
       "engine": "CPython",
-      "version": "3.9.1"
+      "version": "3.10.13"
     },
     "client": {
       "name": "appmap",
@@ -293,9 +358,9 @@ Remote recordings will be enabled when `remote_enabled` is `True`.
 
 ### @appmap.labels
 
-The [AppMap data format](https://github.com/getappmap/appmap) provides for class and
-function `labels`, which can be used to enhance the AppMap visualizations, and to
-programatically analyze the data.
+The [AppMap Data Format](https://github.com/getappmap/appmap) provides for class and
+function `labels`, which can be used to enhance the AppMap Diagrams, and to
+programmatically analyze the data.
 
 You can apply function labels using the `appmap.labels` decorator in your Python code. To
 apply a label to a function, decorate the function with `@appmap.labels`.
@@ -321,7 +386,7 @@ Then the AppMap metadata section for this function will include:
 ```
 
 ### @appmap.noappmap
-The `@appmap.noappmap` decorator can be used to disable recording of `pytest` and `unittest` tests. If applied to a specific function, that function will not generate an AppMap. Alternatively, it can be applied to a test class to disable generation of AppMaps for all tests in the class.
+The `@appmap.noappmap` decorator can be used to disable recording of `pytest` and `unittest` tests. If applied to a specific function, that function will not generate an AppMap. Alternatively, it can be applied to a test class to disable generation of AppMap Data for all tests in the class.
 
 For example:
 ```
@@ -352,11 +417,46 @@ class TestNoAppMaps(unittest.TestCase):
         ...
 ```
 
-When functions within `TestNoAppMaps` are executed, no AppMaps will be generated.
+When functions within `TestNoAppMaps` are executed, no AppMap Data will be generated.
 
 ## Environment variables
 
-### General configuration
+### Controlling recording
+These variables control the types of recordings generated by the agent. The values of the variables are not case-sensitive.
+
+* `APPMAP` controls all instrumentation and recording. When unset, or explicitly set to `true`, all application code will be instrumented, and the generation of recordings will be controlled by the variables below. When set to `false`, application code will run as if the AppMap agent was not installed.
+
+Note that, as described above, the default behavior will change in version 2: by default (or if `APPMAP` is set to `false`), no code will be instrumented, and no recordings generated.
+
+* `APPMAP_RECORD_<PYTEST|UNITTEST>` controls recording generation when test cases are run by `pytest` or `unittest`. When unset or set to `true`, each test case will generate a recording. When set to `false`, no recordings for individual test cases will be created. For example, to disable recording when using `pytest`, use `APPMAP_RECORD_PYTEST=false`:
+
+```
+$ env APPMAP_RECORD_PYTEST=false pytest
+```
+or
+```
+$ appmap-python --no-record pytest pytest
+```
+
+In version 2, these two variables will be combined into a single variable named `APPMAP_RECORD_TESTS`, controlling recording for these (and any future) test frameworks.
+
+* `APPMAP_RECORD_REMOTE` controls the installation of the AppMap remote recording API. When unset, and run in a development environment (described [above](#web-framework-support)), remote recording will be enabled. When set to `true`, remote recording will always be enabled, regardless of environment. When set to `false`, remote recording will always be disabled.
+
+Note that enabling remote recording other than in a development environment is a security risk, and `appmap` will issue a warning if you do so. However, sometimes the behavior of interest only occurs in some other environment. Setting `APPMAP_RECORD_REMOTE=true` allows this. For example, to enable remote recording for a Flask app started without debug, run:
+
+```
+$ env APPMAP_RECORD_REMOTE=true flask --app main.app
+```
+or
+```
+$ appmap-python --record remote flask --app main.app
+```
+
+* `APPMAP_RECORD_REQUESTS` controls creation of request recordings created when a web framework processes HTTP requests. When unset or `true`, request recordings will be created, otherwise they will not.
+
+* `APPMAP_RECORD_PROCESS` controls recording of the entire python process that loads the agent. When `true`, recording starts when the agent is loaded. When the process exits, an AppMap will be created.
+
+### Other configuration
 These environment variables can be used to control various aspects of the AppMap agent.
 
 * `APPMAP_CONFIG` specifies the configuration file to use. Defaults to `appmap.yml` in the
@@ -372,24 +472,6 @@ These environment variables can be used to control various aspects of the AppMap
 * `APPMAP_DISABLE_LOG_FILE` controls the automatic creation of a log file by the
   AppMap agent. If not `true` (the default), a log file will be created.
 
-### Controlling recording
-These variables control the types of recordings generated by the agent.
-
-#### Disabling recording methods
-Some recording types are enabled by default. These variables allow you to disable them.
-
-* `APPMAP_RECORD_<PYTEST|UNITTEST>` disables recording for individual test frameworks when set to `false`. For example, to disable recording when using `pytest`, use the variable `APPMAP_RECORD_PYTEST`.
-
-* `APPMAP_RECORD_REQUESTS` disables recording of HTTP requests when set to `false`.
-
-* `APPMAP_RECORD_REMOTE` disables remote recording when set to `false`.
-
-* `APPMAP` controls all instrumentation and recording. When set to `false`, application code will run as if the AppMap agent was not installed.
-
-#### Enabling recording methods
-Some recording types are not enabled by default. These variables allow you to enable them
-
-* `APPMAP_RECORD_PROCESS` controls recording of the entire python process that loads the agent. When `true`, recording starts when the agent is loaded. When the process exits, an AppMap will be created.
 
 ## GitHub repository
 

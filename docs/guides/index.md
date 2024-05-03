@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Docs - How-To Guides
-description: "Learn how to leverage AppMap effectively with guides on handling large AppMaps, reading SQL, refining, generating OpenAPI, reverse engineering, and more."
+description: "Learn how to leverage AppMap effectively with guides on handling large AppMap Diagrams, reading SQL, refining, generating OpenAPI, reverse engineering, and more."
 step: 1
 ---
 
@@ -9,9 +9,11 @@ step: 1
 
 These guide contain in-depth information on how to use AppMap for different use cases and scenarios.
 
-- [Handling Large AppMaps](/docs/guides/handling-large-appmaps)
-- [Reading SQL in AppMaps](/docs/guides/reading-sql-in-appmaps)
-- [Refining AppMaps](/docs/guides/refine-appmaps)
+- [Using AppMap Diagrams](/docs/guides/using-appmap-diagrams)
+- [Exporting AppMap Diagrams](/docs/guides/exporting-appmap-diagrams)
+- [Handling Large AppMap Diagrams](/docs/guides/handling-large-appmap-diagrams)
+- [Reading SQL in AppMap Diagrams](/docs/guides/reading-sql-in-appmap-diagrams)
+- [Refining AppMap Data](/docs/guides/refine-appmap-data)
 - [Generating OpenAPI Definitions](/docs/guides/openapi)
 - [Configuring Analysis](/docs/guides/configuring-analysis)
 - [Reverse Engineering with AppMap](/docs/guides/reverse-engineering)

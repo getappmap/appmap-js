@@ -12,7 +12,7 @@ step: 1
 
 - [AppMap panel](#appmap-panel)
   - [Instructions](#instructions)
-  - [AppMaps tree view](#appmaps-tree-view)
+  - [AppMap Diagram tree view](#appmap-diagram-tree-view)
   - [Runtime Analysis](#runtime-analysis)
   - [Code Objects](#code-objects)
 - ["Run with AppMap" for Java](#run-with-appmap-for-java)
@@ -29,11 +29,11 @@ Step-by-step instructions for configuring a project to use AppMap and using the 
 
 Once you've configured AppMap for a project, commit the file changes to Git so that your colleagues don't have to do the setup themselves.
 
-### AppMaps tree view
+### AppMap Diagram tree view
 
-The AppMap view shows all AppMaps in your open projects. You can open it from the top level menu (View -> Open view... -> AppMap), with an AppMap action or by clicking on its icon in the side bar.
+The AppMap view shows all AppMap Diagrams in your open projects. You can open it from the top level menu (View -> Open view... -> AppMap), with an AppMap action or by clicking on its icon in the side bar.
 
-AppMaps are organized by how they were created (request recording, remote recording, test case recording).
+AppMap Diagrams are organized by how they were created (request recording, remote recording, test case recording).
 
 Within the AppMap tree view you can
 
@@ -48,7 +48,7 @@ AppMap can find automatically find software design flaws that impact security, p
 
 ### Code Objects
 
-All the HTTP server requests, SQL queries, packages, classes, and functions that are present in an AppMap are listed here in a tree view. You can navigate through these code objects to see what's present in your project. Click on any code object to open the AppMaps that contain it.
+All the HTTP server requests, SQL queries, packages, classes, and functions that are present in an AppMap are listed here in a tree view. You can navigate through these code objects to see what's present in your project. Click on any code object to open the AppMap Diagram that contains it.
 
 ## "Run with AppMap" for Java
 
@@ -60,13 +60,9 @@ To run your tests with AppMap enabled, navigate to the `Testing` section of VS C
 
 <img class="video-screenshot" src="/assets/img/vscode-run-with-tests.webp"/> 
 
-To run your applicaiton with AppMap enabled, navigate to the `Run and Debug` section of VS Code in the left hand menu icons. You will see a new launch configuration in the in the drop down which says `Run with AppMap` alongside any other launch configurations for your project.  With the `Run with AppMap` launch configuration select click on the "Play" icon, highlighted in the screenshot below. This will start your applicaiton with the AppMap libraries installed and enabled.  You can now interact with your application to generate [request recordings](/docs/reference/appmap-java.html#requests-recording) or use [remote recording](#remote-recording).
+To run your application with AppMap enabled, navigate to the `Run and Debug` section of VS Code in the left hand menu icons. You will see a new launch configuration in the in the drop down which says `Run with AppMap` alongside any other launch configurations for your project.  With the `Run with AppMap` launch configuration select click on the "Play" icon, highlighted in the screenshot below. This will start your application with the AppMap libraries installed and enabled.  You can now interact with your application to generate [request recordings](/docs/reference/appmap-java.html#requests-recording) or use [remote recording](#remote-recording).
 
 <img class="video-screenshot" src="/assets/img/vscode-run-with-appmap.webp"/> 
-
-### Video Demo
-
-{% include vimeo.html id='916087851' %}
 
 After installing the VS Code AppMap extension for your Java project, you will notice a new launch configuration in the `.vscode` directory in your project. 
 
@@ -78,7 +74,7 @@ Next, click on the "Run and Debug" menu option in the left hand column of VS Cod
 
 Clicking on the "Play" button next to the "Run with AppMap" launch configuration will start your Java application with the necessary AppMap configuration flags enabled by default. 
 
-When your application is running you can proceed to record AppMaps using either [Requests Recording](/docs/reference/appmap-java#requests-recording) or [Remote Recording](https://appmap.io/docs/reference/vscode.html#remote-recording)
+When your application is running you can proceed to record AppMap Data using either [Requests Recording](/docs/reference/appmap-java#requests-recording) or [Remote Recording](https://appmap.io/docs/reference/vscode.html#remote-recording)
 
 
 ## Extension actions
@@ -89,9 +85,9 @@ Most of the command names should be self-explanatory. Here are a few commands wh
 
 - **AppMap: Filter/Find AppMap by name** Opens the AppMap side bar view and the filter/find text field
 - **AppMap: Login**, **AppMap: Logout** Some extension functionality requires you to login to the AppMap Server. You'll be prompted to do this when you setup AppMap for the first time. You can also login and logout using the built-in `Accounts` feature of VSCode.
-- **AppMap: Touch Out-of-Date Test Files** If you have AppMaps that are generated from test cases, this command will determine which tests need to be re-run in order to bring the AppMaps up-to-date. It will then "touch" (update the modified date) of each out-of-date test case. You can use a file watching trigger program like `Guard` (Ruby), `grunt` or `gulp` (JS) to re-run the test cases as they are touched.
+- **AppMap: Touch Out-of-Date Test Files** If you have AppMap Diagrams generated from test cases, this command will determine which tests need to be re-run in order to bring the AppMap Data up-to-date. It will then "touch" (update the modified date) of each out-of-date test case. You can use a file watching trigger program like `Guard` (Ruby), `grunt` or `gulp` (JS) to re-run the test cases as they are touched.
 - **AppMap: Copy Out-of-Date Tests to Clipboard** Similar to the "Touch Out-of-Date Test Files" command, but places the file names on the clipboard
-- **AppMap: Open Code Object in AppMap** Using this command you can find and open AppMaps for any code object (package, class, function, route, etc) in your project.
+- **AppMap: Open Code Object in AppMap** Using this command you can find and open AppMap Diagrams for any code object (package, class, function, route, etc) in your project.
 
 ## Remote recording
 
@@ -116,7 +112,7 @@ For more details about remote recording, see:
 
 ## Generate OpenAPI Definitions
 
-After [recording AppMaps](/docs/recording-methods.html) for your project, open the command pallette using `CTRL+SHIFT+P` or `COMMAND+SHIFT+P` on macOS, type `AppMap: Generate OpenAPI`, then hit `Enter`. This will open a new file with your OpenAPI definition document. Save this file locally, share with your team, or ingest as a [new collection into API tools like Postman.](https://blog.postman.com/new-postman-integration-with-appmap-create-and-manage-always-accurate-collections/)
+After [recording AppMap Data](/docs/recording-methods.html) for your project, open the command pallette using `CTRL+SHIFT+P` or `COMMAND+SHIFT+P` on macOS, type `AppMap: Generate OpenAPI`, then hit `Enter`. This will open a new file with your OpenAPI definition document. Save this file locally, share with your team, or ingest as a [new collection into API tools like Postman.](https://blog.postman.com/new-postman-integration-with-appmap-create-and-manage-always-accurate-collections/)
 
 ![alt_text](/assets/img/openapi/openapi-1.webp "OpenAPI export to file")
 

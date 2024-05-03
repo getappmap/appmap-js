@@ -1,18 +1,18 @@
 ---
 layout: docs
 title: Docs - Guides
-description: "Optimize AppMaps by refining recordings to exclude noise. Start with inclusive config, analyze stats, update config, create concise AppMaps."
+description: "Optimize AppMap Diagrams by refining recordings to exclude noise. Start with inclusive config, analyze stats, update config, create concise AppMap Diagrams."
 guides: true
-name: Refining AppMaps
-step: 4
-redirect_from: [/docs/reference/refine-appmaps]
+name: Refining AppMap Data
+step: 5
+redirect_from: [/docs/reference/refine-appmaps, /docs/guides/refine-appmaps]
 ---
 
-# Refining AppMaps <!-- omit in toc -->
+# Refining AppMap Data <!-- omit in toc -->
 
 When you initially create a client configuration, it can be hard to know what classes to
 include. Most often, you will simply select everything just to see what a recording looks
-like. The resulting AppMaps can be quite large and noisy. The presence of calls to many
+like. The resulting AppMap Diagrams can be quite large and noisy. The presence of calls to many
 utility methods makes it hard to understand the bigger picture.
 
 To refine your recordings, it's best to start with the smallest use-case that's
@@ -23,7 +23,7 @@ single functional or integration test is a better choice.
 
 Once you've made a recording of a use-case, you can use the `stats` subcommand
 of the [AppMap CLI](/docs/reference/appmap-client-cli.html).
-tools to generate some simple statistics about your AppMaps. Based on these statistics,
+tools to generate some simple statistics about your AppMap Data. Based on these statistics,
 you will be able to update your configuration so that less-interesting methods are
 excluded. When new recordings are created with the improved configuration, they will be
 more concise and easier to understand.
@@ -36,7 +36,7 @@ example, we'll use the tests in
 
 - [Step 1: Make a recording with an inclusive configuration](#step-1-make-a-recording-with-an-inclusive-configuration)
 - [Step 2: Eliminate the noise](#step-2-eliminate-the-noise)
-- [Step 3: Update the configuration and create new AppMaps](#step-3-update-the-configuration-and-create-new-appmaps)
+- [Step 3: Update the configuration and create new AppMap Diagrams](#step-3-update-the-configuration-and-create-new-appmap-diagrams)
 
 ## Step 1: Make a recording with an inclusive configuration
 
@@ -55,8 +55,7 @@ packages:
 These are the three top-level packages used by Jenkins. We include them to make sure all
 calls to methods that might be interesting get recorded.
 
-Running the tests in `DirectlyModifiableViewTest.java` produces five very large
-AppMaps:
+Running the tests in `DirectlyModifiableViewTest.java` produces five very large AppMap Diagrams:
 
 ```
 % mvn test -Dtest=DirectlyModifiableViewTest
@@ -73,7 +72,7 @@ total 310312
 The statistics for these show that there's substantial noise in them:
 
 ```
-% appland stats tmp/appmap
+% appmap stats tmp/appmap
 232356 calls, top 20 methods
   hudson.util.AdaptedIterator#hasNext:50: 30433 (1 distinct)
   hudson.util.Iterators$5#hasNext:295: 30433 (1 distinct)
@@ -98,7 +97,7 @@ The statistics for these show that there's substantial noise in them:
 ```
 
 The top 20 methods in these files are called more than 1500 times! Removing them from the
-recordings will make the AppMaps easier to understand, without eliminating any
+recordings will make the AppMap Diagrams easier to understand, without eliminating any
 interesting information.
 
 ## Step 2: Eliminate the noise
@@ -106,7 +105,7 @@ interesting information.
 We'll start by generating more detailed statistics:
 
 ```sh
-% appland stats --limit 0 --files --json tmp/appmap > jenkins-unfiltered-stats.json
+% appmap stats --limit 0 --files --json tmp/appmap > jenkins-unfiltered-stats.json
 ```
 {: .example-code}
 
@@ -138,7 +137,7 @@ necessary to list them separately in the configuration. They can be removed.
 Note that there's nothing special about the 75-call threshold used to select calls for
 exclusion. Depending on your application, a different value may produce better results.
 
-## Step 3: Update the configuration and create new AppMaps
+## Step 3: Update the configuration and create new AppMap Diagrams
 
 The new configuration in `appmap.yml` gets updated to look like this:
 

@@ -53,7 +53,7 @@ For the license key to successfully validate with AppMap systems ensure your mac
 
 <img class="video-screenshot" src="/assets/img/license-key-jetbrains-3.webp"/> 
 
-### JetBrains Install Video Demo
+### Video: How to Install an AppMap license key in JetBrains
 
 <div class="video-container" onclick="JetBrainsplayVideo()">
   <img id="JetBrainsvideoPlaceholder" src="/assets/img/appmap-license-jetbrains-placeholder.webp" style="display:block; width: 100%;">

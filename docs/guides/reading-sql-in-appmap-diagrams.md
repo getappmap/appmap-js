@@ -1,13 +1,14 @@
 ---
 layout: docs
 title: Docs - Guides
-description: "Discover SQL commands in AppMaps to analyze application logic's database interactions, spot inefficiencies, and understand code impacts for improved performance and reliability."
+description: "Discover SQL commands in AppMap Diagrams to analyze application logic's database interactions, spot inefficiencies, and understand code impacts for improved performance and reliability."
 guides: true
-name: Reading SQL in AppMaps
-step: 3
+name: Reading SQL in AppMap Diagrams
+step: 4
+redirect_from: [/docs/guides/reading-sql-in-appmaps]
 ---
 
-## Reading SQL in AppMaps
+## Reading SQL in AppMap Diagrams
 The AppMap extension for your editor displays SQL commands in AppMap Diagrams so you can understand how your application logic interacts with the database. You can quickly discover SQL inefficiencies and anti-patterns that pose hidden scalability and reliability risks even if your application seems to be working well.
 
 With the AppMap extension, not only are trips to database logs no longer required to see the SQL commands, but the SQL commands are also directly linked to the code that initiates their execution, helping developers understand the direct impacts of their code updates on database operations and performance.   

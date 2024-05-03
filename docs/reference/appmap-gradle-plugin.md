@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Docs - Reference
-description: "AppMap reference guide for the Gradle plugin which enables recording AppMaps in Gradle projects."
+description: "AppMap reference guide for the Gradle plugin which enables recording AppMap Data in Gradle projects."
 toc: true
 reference: true
 name: AppMap for Java - Gradle Plugin
@@ -22,7 +22,7 @@ step: 7
 ## About
 
 The [AppMap Gradle Plugin](https://plugins.gradle.org/plugin/com.appland.appmap)
-provides simple method for recording AppMaps in running
+provides simple method for recording AppMap Data in running
 tests in Gradle projects, and a seamless integration into CI/CD pipelines. The
 client agent requires `appmap.yml` configuration file, see
 [appmap-java](./appmap-java/) for details.

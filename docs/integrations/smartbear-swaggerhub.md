@@ -70,10 +70,6 @@ After it's published, you'll see the latest revision now available in your Swagg
 
 <img class="video-screenshot" src="/assets/img/swaggerhub-portal.webp"/>
 
-### Demo
-
-<div style="position: relative; padding-bottom: 56.25%; height: 0;"><iframe src="https://www.loom.com/embed/b36735e6254a4a13a824c827a3390efb" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
-
 ## Disable Deployment when Runtime OpenAPI Diverges from SwaggerHub API
 
 Because we are going to be using the SwaggerHub CLI inside of our CI/GitHub action
@@ -121,6 +117,3 @@ Refer to [this project on GitHub](https://github.com/land-of-apps/rails_tutorial
 With this configuratino enabled, when a user makes a commit which changes the routes that are NOT currently in the published API spec on SwaggerHub this build will fail and the user will be unable to deploy unless they update the API spec on SwaggerHub or remove the offending changes. 
 
 <img class="video-screenshot" src="/assets/img/swaggerhub-github-build-failure.webp"/>
-
-### Demo
-<div style="position: relative; padding-bottom: 56.25%; height: 0;"><iframe src="https://www.loom.com/embed/f51d590a46e8493ebb27be33c63328e6" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>

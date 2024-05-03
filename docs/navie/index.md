@@ -13,8 +13,10 @@ AppMap Navie is the missing link that improves the power of AI code completers a
 That means you're not just working with static analysis anymore, and you're not looking at just individual files or functions. With Navie, you can understand the entire codebase at an architectural level, how it behaves and executes, and provide much more detailed answers to your software questions.
 
 - [How Navie Works](/docs/navie/how-navie-works)
-- [How to use Navie](/docs/navie/how-to-use-navie)
-- [Video Demo](/docs/navie/demo)
+- [How to Open Navie](/docs/navie/how-to-open-navie)
+- [Using Navie](/docs/navie/using-navie)
+- [Bring Your Own Key](/docs/navie/bring-your-own-key)
+- [Bring Your Own Model](/docs/navie/bring-your-own-llm)
 
 **Install AppMap for your preferred code editor to get started.**
 

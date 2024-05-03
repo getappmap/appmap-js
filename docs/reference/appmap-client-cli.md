@@ -21,6 +21,7 @@ redirect_from: [docs/reference/appmap-swagger-ruby]
   - [`sequence-diagram`](#sequence-diagram)
   - [`sequence-diagram-diff`](#sequence-diagram-diff)
   - [`openapi`](#openapi)
+  - [`stats`](#stats)
   - [`prune`](#prune)
   - [`archive`](#archive)
   - [`restore`](#restore)
@@ -30,7 +31,7 @@ redirect_from: [docs/reference/appmap-swagger-ruby]
 
 ## Overview
 
-The AppMap CLI provides utility commands to install AppMap client libraries and work with AppMaps.
+The AppMap CLI provides utility commands to install AppMap client libraries and work with AppMap Data.
 
 ## Prerequisites
 
@@ -86,7 +87,7 @@ Installing AppMap agent for ....
    │                                                                     │
    │              Success! AppMap has finished installing.               │
    │                                                                     │
-   │                      NEXT STEP: Record AppMaps                      │
+   │                      NEXT STEP: Record AppMap Data                  │
    │                                                                     │
    │   You can consult the AppMap documentation, or continue with the    │
    │     instructions provided in the AppMap code editor extension.      │
@@ -100,7 +101,7 @@ and when developing locally. It will not be added to your production system.
 
 ## `inspect` 
 
-Search AppMaps for references to a code object (package, function, class, query, route, etc) and print available event info.
+Search AppMap Data for references to a code object (package, function, class, query, route, etc) and print available event info.
 
 ```console
 $ appmap inspect --help
@@ -118,14 +119,14 @@ $ appmap inspect --help
         --version      Show version number                               [boolean]
     -v, --verbose      Run with verbose logging                          [boolean]
         --help         Show help                                         [boolean]
-        --appmap-dir   directory to recursively inspect for AppMaps
+        --appmap-dir   directory to recursively inspect for AppMap Data
                                                           [default: "tmp/appmap"]
     -i, --interactive  interact with the output via CLI                  [boolean]
 ```
 
-You can use this command to search and display events and associated data from across all the AppMaps in a directory (recursively explored). 
+You can use this command to search and display events and associated data from across all the AppMap Data in a directory (recursively explored). 
 
-The `code-object` argument is a required argument, composed of a type and identifier. The inspect command will find all events that match this code object across all the AppMaps. Whether an event matches the `code-object` argument is defined as follows:
+The `code-object` argument is a required argument, composed of a type and identifier. The inspect command will find all events that match this code object across the AppMap Data. Whether an event matches the `code-object` argument is defined as follows:
 
 | code-object type | match criteria |
 | -----------------|----------------|
@@ -157,7 +158,7 @@ $ appmap inspect --interactive
 ```
 {: .example-code}
 
-Without the `--interactive` option, all matching results are printed as JSON. This mode is suitable for searching AppMaps and printing results that can be piped into other scripts (e.g. using [jq](https://stedolan.github.io/jq/)) for further processing.
+Without the `--interactive` option, all matching results are printed as JSON. This mode is suitable for searching AppMap Data and printing results that can be piped into other scripts (e.g. using [jq](https://stedolan.github.io/jq/)) for further processing.
 
 **Interactive mode arguments** 
 
@@ -169,7 +170,7 @@ The home screen presents the following data:
 
 | Field index | Field name | Description |
 |-------------|------------|-------------|
-| 1 | Events | A list of AppMaps and event indices that match the initial search term and filters. |
+| 1 | Events | A list of AppMap Diagrams and event indices that match the initial search term and filters. |
 | 2 | Return values | Enumeration of all the different values returned by the matching object (most applicable when searching for a function). |
 | 3 | HTTP server requests | Distinct routes in which the code object is found. Each listed result is a unique request method, normalized path, and status code. |
 | 4 | SQL queries | Unique normalized SQL which is a descendant (or self) of the matching code object. |
@@ -177,9 +178,9 @@ The home screen presents the following data:
 | 6 | Callers | Unique functions which are the parent of each matching code object. |
 | 7 | Ancestors | Unique HTTP server requests and labeled functions which appear as an ancestor of a matching code object. |
 | 8 | Descendants | Unique labeled functions which appear as a descendant of a matching code object. |
-| 9 | Package trigrams | Unique combinations of caller → code-object → calee, converted to package names. |
-| 10 | Class trigrams | Unique combinations of caller → code-object → calee, converted to class names. |
-| 11 | Function trigrams | Unique combinations of caller → code-object → calee, as functions, SQL, or HTTP client requests. |
+| 9 | Package trigrams | Unique combinations of caller → code-object → callee, converted to package names. |
+| 10 | Class trigrams | Unique combinations of caller → code-object → callee, converted to class names. |
+| 11 | Function trigrams | Unique combinations of caller → code-object → callee, as functions, SQL, or HTTP client requests. |
 
 On the home screen, a field is displayed if there are only a small number of distinct values. Otherwise, the number of distinct values is shown, and you can use the `(p)rint` command to see the full details.
 
@@ -277,13 +278,13 @@ $ appmap openapi --help
 ```
   appmap openapi
 
-  Generate OpenAPI from AppMaps in a directory
+  Generate OpenAPI from AppMap Data in a directory
 
   Options:
         --version           Show version number                          [boolean]
     -v, --verbose           Run with verbose logging                     [boolean]
         --help              Show help                                    [boolean]
-        --appmap-dir        directory to recursively inspect for AppMaps
+        --appmap-dir        directory to recursively inspect for AppMap Data
                                                           [default: "tmp/appmap"]
     -o, --output-file       output file name
         --openapi-template  template YAML; generated content will be placed in the
@@ -292,7 +293,7 @@ $ appmap openapi --help
         --openapi-version   info/version field of the OpenAPI document
 ```
 
-Use this command to generate OpenAPI documentation from all AppMaps in a directory
+Use this command to generate OpenAPI documentation from all AppMap Data in a directory
 (recursively explored).
 
 `openapi` ships with a default `yml` template but you can use a custom template if
@@ -300,6 +301,105 @@ you specify its file with the optional `--openapi-template` parameter.
 
 The `--openapi-title` and `--openapi-version` parameters override the values of the
 `info/title` and `info/version` properties in the generated document. 
+
+## `stats`
+
+Use this command to show statistics about events from a single AppMap Diagram or all diagrams in a directory.
+
+### Usage
+
+The `stats` command takes a directory of AppMap Data and will identify the largest diagrams, and will also 
+calculate which functions have the highest AppMap overhead.  You can use this data alongside the `prune` command 
+to reduce the size of your AppMap Diagram or remove noisy functions.  To target a specific AppMap use the `--appmap-file` 
+option with the name of the map. 
+
+For example:
+
+
+To get statistics for all the AppMap Data in a directory, this will look recursively in all directories below `tmp/appmap`:
+```
+$ appmap stats tmp/appmap
+✔ Computing AppMap stats...
+
+Largest AppMaps (which are bigger than 1024kb)
+1.5MB minitest/Microposts_interface_micropost_interface.appmap.json
+1.5MB minitest/Valid_login_redirect_after_login.appmap.json
+1.1MB minitest/Invalid_password_login_with_valid_email_invalid_password.appmap.json
+
+✔ Computing functions with highest AppMap overhead...
+
+Total instrumentation time
+1947ms
+
+Functions with highest AppMap overhead
+     Time |     % |   Count | Function name
+    546ms | 28.1% |    2082 | sprockets/Sprockets::EncodingUtils.unmarshaled_deflated
+    268ms | 13.8% |    2082 | ruby/Marshal.load
+    180ms |  9.2% |    3211 | ruby/Array#pack
+    154ms |  7.9% |     375 | actionview/ActionView::Resolver#find_all
+     85ms |  4.4% |    2054 | logger/Logger::LogDevice#write
+     64ms |  3.3% |       7 | app/mailers/UserMailer#account_activation
+     61ms |  3.1% |     120 | ruby/Marshal.dump
+     59ms |    3% |       9 | app/mailers/UserMailer#password_reset
+     58ms |    3% |     517 | openssl/OpenSSL::Random.random_bytes
+     52ms |  2.7% |    1042 | activesupport/ActiveSupport::Callbacks::CallbackSequence#invoke_after
+```
+{: .example-code}
+
+To get stats for an individual AppMap, pass the full directory where the AppMap lives, and use the `--appmap-file` option 
+to list the name of the AppMap.
+
+Example: 
+
+```
+$ appmap stats tmp/appmap/pytest --appmap-file tests_integration_catalogue_test_category_TestCategoryFactory_test_can_use_alternative_separator.appmap.json
+Analyzing AppMap: /tmp/appmap/pytest/tests_integration_catalogue_test_category_TestCategoryFactory_test_can_use_alternative_separator.appmap.json
+
+1. function:oscar/apps/catalogue/abstract_models/AbstractCategory#get_ancestors_and_self
+      count: 131033
+      estimated size: 48.8 MB
+
+2. function:oscar/apps/catalogue/categories.create_from_sequence
+      count: 3
+      estimated size: 1.2 KB
+
+3. function:oscar/apps/catalogue/abstract_models/AbstractCategory#save
+      count: 3
+      estimated size: 1.7 KB
+
+4. function:oscar/apps/catalogue/abstract_models/AbstractCategory#generate_slug
+      count: 3
+      estimated size: 1.1 KB
+
+5. function:oscar/core/utils.slugify
+      count: 3
+      estimated size: 794.0 bytes
+```
+{: .example-code}
+
+### Arguments
+
+```console
+$ appmap stats --help
+```
+{: .example-code}
+
+```
+appmap stats [directory]
+
+Show statistics about events from an AppMap or from all diagrams in a directory
+
+Options:
+      --version      Show version number                               [boolean]
+  -v, --verbose      Run with verbose logging                          [boolean]
+      --help         Show help                                         [boolean]
+  -d, --directory    program working directory                          [string]
+      --appmap-dir   directory to recursively inspect for AppMap Data
+  -f, --format       How to format the output
+                                     [choices: "json", "text"] [default: "text"]
+  -l, --limit        Number of methods to display         [number] [default: 10]
+  -a, --appmap-file  AppMap to analyze                                  [string]
+```
 
 ## `prune`
 
@@ -338,7 +438,7 @@ Options:
   -s, --size         Prune input file to this size    [string] [default: "15mb"]
   -d, --directory    Working directory for the command                  [string]
       --filter       Filter to use to prune the map                     [string]
-      --output-data  Whether to output all AppMap data or just output what was
+      --output-data  Whether to output all AppMap Data or just output what was
                      removed                                           [boolean]
 ```
 
@@ -365,17 +465,17 @@ $ appmap prune <APPMAP_FILE> --filter eyJjdXJyZW50VmlldyI6InZpZXdTZXF1ZW5jZSIsIm
 
 ## `archive`
 
-Use this command locally, or [in CI](/docs/analysis/in-ci.html), to build a compressed archive of AppMaps from a directory containing AppMaps. Running this command without additional options will result in a "full" archive created at `.appmap/archive/full/{git revision}.tar`. Example: `.appmap/archive/full/028e610386f2fc132c93e613f57011825a8ae6e0.tar`
+Use this command locally, or in the [GitHub Action](/docs/integrations/github-actions) or [CircleCI](/docs/integrations/circle-ci), to build a compressed archive of AppMap Data from a directory containing AppMap Data. Running this command without additional options will result in a "full" archive created at `.appmap/archive/full/{git revision}.tar`. Example: `.appmap/archive/full/028e610386f2fc132c93e613f57011825a8ae6e0.tar`
 
 ### Usage
 
-The `archive` command does not require any arguments to run, but must be run in a git project with a valid appmap.yml file with AppMaps located in the directory defined by `appmap_dir:` in the configuration. 
+The `archive` command does not require any arguments to run, but must be run in a git project with a valid appmap.yml file with AppMap Data located in the directory defined by `appmap_dir:` in the configuration. 
 
 ### Arguments
 ```
 appmap archive
 
-Build an AppMap archive from a directory containing AppMaps
+Build an AppMap archive from a directory containing AppMap Data
 
 Options:
       --version           Show version number                          [boolean]
@@ -398,18 +498,18 @@ Options:
                           default, it's .appmap/archive/<type>.         [string]
   -f, --output-file       output file name. Default output name is
                           <revision>.tar                                [string]
-      --analyze, --index  whether to analyze the AppMaps
+      --analyze, --index  whether to analyze the AppMap Data
                                                        [boolean] [default: true]
       --max-size          maximum AppMap size that will be processed, in
                           filesystem-reported MB                   [default: 50]
-      --filter            filter to apply to AppMaps when normalizing them into
-                          sequence diagrams                             [string]
-      --thread-count      Number of worker threads to use when analyzing AppMaps
+      --filter            filter to apply to AppMap Data when normalizing them
+                          into sequence diagrams                        [string]
+      --thread-count      Number of worker threads to use when analyzing AppMap Data
                                                                         [number]
 ```
 
 ## `restore`
-Use this command locally, or [in CI](/docs/analysis/in-ci.html), to download the most current available AppMap data from the available archives. The archived AppMap data can be stored locally or within a GitHub artifact store (if you are using the [GitHub Integration](/docs/analysis/in-github-actions.html)).  The archive filename must match the git revision requested to be restored. 
+Use this command locally, or in the [GitHub Action](/docs/integrations/github-actions) or [CircleCI](/docs/integrations/circle-ci), to download the most current available AppMap Data from the available archives. The archived AppMap Data can be stored locally or within a GitHub artifact store (if you are using the [GitHub Integration](/docs/integrations/github-actions)).  The archive filename must match the git revision requested to be restored. 
 
 ### Usage
 
@@ -419,7 +519,7 @@ The `restore` command does not require any arguments to run. By default, it will
 ```
 appmap restore
 
-Restore the most current available AppMap data from available archives
+Restore the most current available AppMap Data from available archives
 
 Options:
       --version      Show version number                               [boolean]
@@ -440,7 +540,7 @@ Options:
 
 ## `compare`
 
-Use this command locally, or [in CI](/docs/analysis/in-ci.html), to compare code behavior by analyzing two sets of AppMaps from different git revisions. 
+Use this command locally, or in the [GitHub Action](/docs/integrations/github-actions) or [CircleCI](/docs/integrations/circle-ci), to compare code behavior by analyzing two sets of AppMap Diagrams from different git revisions. 
 ### Usage
 
 The `compare` command requires `--base-revision` to be passed to the command with a valid git SHA (i.e. `028e610386f2fc132c93e613f57011825a8ae6e0`). The head revision will be inferred based on the current git HEAD SHA for the git project in the current working directory.  
@@ -457,9 +557,9 @@ For the base revision (i.e. `c01273ab4929e7d555aa8539f83c188aba42972d`):
 Example:
 `--output-dir .appmap/change-report/028e610386f2fc132c93e613f57011825a8ae6e0-c01273ab4929e7d555aa8539f83c188aba42972d/base`
 
-Both `base` and `head` directories will require restored appmaps before `compare` will run.  
+Both `base` and `head` directories will require restored AppMap Data before `compare` will run.  
 
-After successfully running, `compare` will output a `diff` directory of AppMaps and a `change-report.json` within the `.appmap/change-report/$base_revision-$head_revision/` directory.
+After successfully running, `compare` will output a `diff` directory of AppMap Diagrams and a `change-report.json` within the `.appmap/change-report/$base_revision-$head_revision/` directory.
  
 ### Arguments
 ```
@@ -484,8 +584,8 @@ Options:
                                             exists    [boolean] [default: false]
       --source-dir                          root directory of the application
                                             source code  [string] [default: "."]
-      --delete-unreferenced,                whether to delete AppMaps from base
-      --delete-unchanged                    and head that are unreferenced by
+      --delete-unreferenced,                whether to delete AppMap Data from 
+      --delete-unchanged                    base and head that are unreferenced by
                                             the change report    [default: true]
       --report-removed                      whether to report removed findings,
                                             such as removed API routes, resolved
@@ -494,7 +594,7 @@ Options:
 
 ## `compare-report`
 
-Use this command locally, or [in CI](/docs/analysis/in-ci.html), to generate a report document from comparison data generated by the [compare](#compare) command. 
+Use this command locally, or in the [GitHub Action](/docs/integrations/github-actions) or [CircleCI](/docs/integrations/circle-ci), to generate a report document from comparison data generated by the [compare](#compare) command. 
 
 ### Usage
 
@@ -518,7 +618,7 @@ Options:
       --help        Show help                                          [boolean]
       --source-url  Base URL to link to a source file. The relative path to the
                     source file will be added to the URL path.          [string]
-      --appmap-url  Base URL to link to AppMaps. A 'path' parameter will be
+      --appmap-url  Base URL to link to AppMap Data. A 'path' parameter will be
                     added with the relative path from the report directory to
                     the AppMap JSON file.                               [string]
   -d, --directory   program working directory                           [string]

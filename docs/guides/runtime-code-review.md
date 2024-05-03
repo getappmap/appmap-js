@@ -4,7 +4,7 @@ title: Docs - Guides
 description: "AppMap analyzes runtime changes in your codebase for failed tests, API, security, performance issues, and anti-patterns, providing detailed reports."
 guides: true
 name: Understanding the Runtime Code Review Report
-step: 8
+step: 9
 ---
 
 # Understanding the Runtime Code Review Report <!-- omit in toc -->
@@ -27,7 +27,7 @@ AppMap Analysis works with your Continuous Integration (CI) system to collect, s
   - [Security Flaws](#security-flaws)
   - [Performance Problems](#performance-problems)
   - [Code Anti-Patterns](#code-anti-patterns)
-  - [New AppMaps](#new-appmaps)
+  - [New AppMap Diagrams](#new-appmap-diagrams)
 
 ## The AppMap Change Report
 
@@ -51,12 +51,14 @@ This report shows the runtime analysis done by AppMap, which records code execut
 
 The summary gives you an overview of the following code-related flaws, problems, and anti-patterns. 
 
-- [Failed Tests](#failed-tests)
-- [API Changes](#api-changes)
-- [Security Flaws](#security-flaws)
-- [Performance Problems](#performance-problems)
-- [Code Anti-Patterns](#code-anti-patterns)
-- [New AppMaps](#new-appmaps)
+- [The AppMap Change Report](#the-appmap-change-report)
+- [Summary and Status](#summary-and-status)
+  - [Failed Tests](#failed-tests)
+  - [API Changes](#api-changes)
+  - [Security Flaws](#security-flaws)
+  - [Performance Problems](#performance-problems)
+  - [Code Anti-Patterns](#code-anti-patterns)
+  - [New AppMap Diagrams](#new-appmap-diagrams)
 
 
 ### Failed Tests
@@ -104,6 +106,6 @@ AppMap can identify any major or potential structural flaws in the architecture,
 
 For a full list of all the flaws and issues which AppMap can detect, refer to the [Analysis Rules](/docs/reference/analysis-rules) reference section.
 
-### New AppMaps
+### New AppMap Diagrams
 
-New test cases added to a pull request will lead to new AppMaps being created, with one AppMap created for each new test. AppMap will list all of the new AppMaps (and therefore, each new test) created in each pull request. 
+New test cases added to a pull request will lead to new AppMap Diagrams being created, with one AppMap created for each new test. AppMap will list all of the new diagrams (and therefore, each new test) created in each pull request. 

@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Docs - Integrations
-description: "Learn how to record AppMaps inside a Docker container for consistent, reproducible environments across various operating systems, enhancing code quality and collaboration."
+description: "Learn how to record AppMap Data inside a Docker container for consistent, reproducible environments across various operating systems, enhancing code quality and collaboration."
 integrations: true
 name: Docker
 step: 7
@@ -11,17 +11,17 @@ step: 7
 
 AppMap supports capturing AppMap recordings from inside a Docker container, when using [Docker Compose](https://docs.docker.com/compose/), or when running [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 
-- [Why record AppMaps within Docker?](#why-record-appmaps-within-docker)
+- [Why record AppMap Data within Docker?](#why-record-appmap-data-within-docker)
 - [Sample Project](#sample-project)
 - [How to run AppMap inside of Docker Engine](#how-to-run-appmap-inside-of-docker-engine)
 - [How to run AppMap inside of Docker Compose](#how-to-run-appmap-inside-of-docker-compose)
 - [Troubleshooting AppMap and Docker](#troubleshooting-appmap-and-docker)
 
-## Why record AppMaps within Docker?
+## Why record AppMap Data within Docker?
 
-Recording AppMaps inside a Docker container offers several advantages for developers. Docker's containerization ensures a consistent, reproducible environment across various operating systems, which is crucial for diagnosing and resolving issues that may be environment-specific. This uniformity simplifies the setup process, reduces the time spent on environment configuration, and increases the reliability of recorded AppMaps by mirroring the conditions under which software runs in production or other developers' environments. 
+Recording AppMap Data inside a Docker container offers several advantages for developers. Docker's containerization ensures a consistent, reproducible environment across various operating systems, which is crucial for diagnosing and resolving issues that may be environment-specific. This uniformity simplifies the setup process, reduces the time spent on environment configuration, and increases the reliability of recorded AppMap Diagrams by mirroring the conditions under which software runs in production or other developers' environments. 
 
-Overall, using Docker for recording AppMaps streamlines the development workflow, enhances code quality, and fosters collaboration among team members by ensuring that everyone works within an identical development setup.
+Overall, using Docker for recording AppMap Data streamlines the development workflow, enhances code quality, and fosters collaboration among team members by ensuring that everyone works within an identical development setup.
 
 ## Sample Project
 
@@ -50,7 +50,7 @@ Let's breakdown what that command is doing:
 - `sample_rails_docker`: The name of the Docker image to use for the container.  
 - `bundle exec rails server -b 0.0.0.0`: The command executed within the container to start the application.  
 
-After recording your AppMaps, you'll now see them in the VS Code or JetBrains extension.  The maps will also be visible in your local directory in the `tmp/appmap` folder.  
+After recording your AppMap Data, you'll now see them in the VS Code or JetBrains extension.  The maps will also be visible in your local directory in the `tmp/appmap` folder.  
 
 <img class="video-screenshot" src="/assets/img/docs/guides/docker-appmaps.webp"/> 
 
@@ -88,9 +88,9 @@ You can now run `docker compose up web` to launch this container using Docker Co
 
 ## Troubleshooting AppMap and Docker
 
-### AppMaps are not visible in plugin with directory correctly mounted
+### AppMap Diagrams are not visible in plugin with directory correctly mounted <!-- omit in toc -->
 
-You may experience an issue on Linux where you have correctly bind mounted the `tmp/appmap` directory into your Docker container, but are still unable to see the AppMaps in your project.  
+You may experience an issue on Linux where you have correctly bind mounted the `tmp/appmap` directory into your Docker container, but are still unable to see the AppMap Diagrams in your project.  
 
 <img class="video-screenshot" src="/assets/img/docs/guides/docker-no-appmaps.webp"/>
 
