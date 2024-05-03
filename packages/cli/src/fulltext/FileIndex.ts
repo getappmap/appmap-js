@@ -17,7 +17,16 @@ export type FileIndexMatch = {
 };
 
 export class FileIndex {
-  constructor(public database: sqlite3.Database) {}
+  constructor(public database: sqlite3.Database) {
+    this.database.exec(
+      `CREATE VIRTUAL TABLE files USING fts5(directory UNINDEXED, file_name UNINDEXED, terms, tokenize = 'porter unicode61')`
+    );
+    this.database.pragma('journal_mode = OFF');
+    this.database.pragma('synchronous = OFF');
+    this.#insert = this.database.prepare(
+      'INSERT INTO files (directory, file_name, terms) VALUES (?, ?, ?)'
+    );
+  }
 
   close() {
     this.database.close();
@@ -38,12 +47,6 @@ export class FileIndex {
     }));
   }
 
-  initializeIndex() {
-    this.database.exec(
-      `CREATE VIRTUAL TABLE files USING fts5(directory UNINDEXED, file_name UNINDEXED, terms, tokenize = 'porter unicode61')`
-    );
-  }
-
   async indexDirectories(directories: string[]) {
     for (const directory of directories) {
       const gitState = await Git.state(directory);
@@ -54,11 +57,17 @@ export class FileIndex {
       } else {
         fileNames = await listProjectFiles(directory);
       }
-      for (const fileName of fileNames) {
-        this.indexFile(directory, fileName);
-      }
+      this.#indexDirectory(directory, fileNames);
     }
   }
+
+  #indexDirectory = this.database.transaction((directory: string, fileNames: string[]) => {
+    for (const fileName of fileNames) {
+      this.indexFile(directory, fileName);
+    }
+  });
+
+  #insert: sqlite3.Statement<unknown[]>;
 
   indexFile(directory: string, filePath: string) {
     const fileNameTokens = filePath.split(path.sep);
@@ -75,9 +84,7 @@ export class FileIndex {
 
       if (verbose()) console.log(`Indexing file path ${filePath} with terms ${terms}`);
 
-      this.database
-        .prepare('INSERT INTO files (directory, file_name, terms) VALUES (?, ?, ?)')
-        .run(directory, filePath, terms);
+      this.#insert.run(directory, filePath, terms);
     } catch (error) {
       console.warn(`Error indexing document ${filePath}`);
       console.warn(error);
@@ -98,7 +105,6 @@ export async function buildFileIndex(
   assert(!existsSync(indexFileName), `Index file ${indexFileName} already exists`);
   const database = new sqlite3(indexFileName);
   const fileIndex = new FileIndex(database);
-  fileIndex.initializeIndex();
   await fileIndex.indexDirectories(directories);
   console.log(`Wrote file index to ${indexFileName}`);
   return fileIndex;

@@ -36,7 +36,6 @@ describe('FileIndex', () => {
   describe('when matches are found', () => {
     beforeEach(() => {
       fileIndex = new FileIndex(database);
-      fileIndex.initializeIndex();
       for (const file of files) {
         fileIndex.indexFile(file.directory, file.fileName);
       }

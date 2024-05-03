@@ -22,7 +22,6 @@ describe('SourceIndex', () => {
 
     beforeEach(async () => {
       sourceIndex = new SourceIndex(database);
-      sourceIndex.initializeIndex();
       await sourceIndex.indexFiles(files);
     });
     afterEach(() => sourceIndex.close());
