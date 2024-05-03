@@ -1,3 +1,10 @@
+# [@appland/components-v4.24.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.23.0...@appland/components-v4.24.0) (2024-05-03)
+
+
+### Features
+
+* Buffer and interpolate chunked completions ([729e212](https://github.com/getappmap/appmap-js/commit/729e2122198d47a30ab6e17799546e639c9d2312))
+
 # [@appland/components-v4.23.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.22.1...@appland/components-v4.23.0) (2024-05-02)
 
 
