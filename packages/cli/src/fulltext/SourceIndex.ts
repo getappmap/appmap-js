@@ -2,6 +2,7 @@ import {
   RecursiveCharacterTextSplitter,
   SupportedTextSplitterLanguage,
 } from 'langchain/text_splitter';
+import type { Document } from 'langchain/document';
 import assert from 'assert';
 import sqlite3 from 'better-sqlite3';
 import { existsSync } from 'fs';
@@ -45,7 +46,16 @@ export type SourceIndexMatch = {
 };
 
 export class SourceIndex {
-  constructor(public database: sqlite3.Database) {}
+  constructor(public database: sqlite3.Database) {
+    this.database.exec(
+      `CREATE VIRTUAL TABLE code_snippets USING fts5(directory UNINDEXED, file_name UNINDEXED, from_line UNINDEXED, to_line UNINDEXED, snippet UNINDEXED, terms, tokenize = 'porter unicode61')`
+    );
+    this.database.pragma('journal_mode = OFF');
+    this.database.pragma('synchronous = OFF');
+    this.#insert = this.database.prepare(
+      'INSERT INTO code_snippets (directory, file_name, from_line, to_line, snippet, terms) VALUES (?, ?, ?, ?, ?, ?)'
+    );
+  }
 
   close() {
     this.database.close();
@@ -69,17 +79,13 @@ export class SourceIndex {
     }));
   }
 
-  initializeIndex() {
-    this.database.exec(
-      `CREATE VIRTUAL TABLE code_snippets USING fts5(directory UNINDEXED, file_name UNINDEXED, from_line UNINDEXED, to_line UNINDEXED, snippet UNINDEXED, terms, tokenize = 'porter unicode61')`
-    );
-  }
-
   async indexFiles(files: SourceIndexDocument[]): Promise<void> {
     for (const file of files) {
       await this.indexFile(file);
     }
   }
+
+  #insert: sqlite3.Statement<unknown[]>;
 
   async indexFile(file: SourceIndexDocument) {
     const { directory, fileName } = file;
@@ -105,24 +111,27 @@ export class SourceIndex {
       return;
     }
 
-    for (const chunk of await splitter.createDocuments([fileContents])) {
-      const { from, to } = chunk.metadata.loc.lines;
+    const chunks = await splitter.createDocuments([fileContents]);
+    this.#indexChunks(chunks, directory, fileName);
+  }
 
-      try {
-        if (verbose()) console.log(`Indexing document ${filePath} from ${from} to ${to}`);
+  #indexChunks = this.database.transaction(
+    (chunks: Document[], directory: string, fileName: string) => {
+      for (const chunk of chunks) {
+        const { from, to } = chunk.metadata.loc.lines;
 
-        const terms = queryKeywords([chunk.pageContent]).join(' ');
-        this.database
-          .prepare(
-            'INSERT INTO code_snippets (directory, file_name, from_line, to_line, snippet, terms) VALUES (?, ?, ?, ?, ?, ?)'
-          )
-          .run(directory, fileName, from, to, chunk.pageContent, terms);
-      } catch (error) {
-        console.warn(`Error indexing document ${filePath} from ${from} to ${to}`);
-        console.warn(error);
+        try {
+          if (verbose()) console.log(`Indexing document ${fileName} from ${from} to ${to}`);
+
+          const terms = queryKeywords([chunk.pageContent]).join(' ');
+          this.#insert.run(directory, fileName, from, to, chunk.pageContent, terms);
+        } catch (error) {
+          console.warn(`Error indexing document ${fileName} from ${from} to ${to}`);
+          console.warn(error);
+        }
       }
     }
-  }
+  );
 }
 
 export async function buildSourceIndex(
@@ -132,7 +141,6 @@ export async function buildSourceIndex(
   assert(!existsSync(indexFileName), `Index file ${indexFileName} already exists`);
   const database = new sqlite3(indexFileName);
   const sourceIndex = new SourceIndex(database);
-  sourceIndex.initializeIndex();
   await sourceIndex.indexFiles(files);
   console.log(`Wrote file index to ${indexFileName}`);
   return sourceIndex;
