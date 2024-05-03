@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Docs - Reference
-description: "Learn how to use the AppMap Remote Recording API to start, stop, and save AppMaps. AppMap agent handles requests on the same port as the app."
+description: "Learn how to use the AppMap Remote Recording API to start, stop, and save AppMap Data. AppMap agent handles requests on the same port as the app."
 toc: false
 reference: true
 name: Remote recording API
@@ -9,13 +9,12 @@ step: 10
 redirect_from: [/docs/reference/remote-recording]
 ---
 
-# Remote recording API
+# Remote recording API <!-- omit in toc -->
 
-- [Remote recording API](#remote-recording-api)
-  - [Start a remote recording](#start-a-remote-recording)
-  - [Retrieve the current recording status](#retrieve-the-current-recording-status)
-  - [Stop a remote recording](#stop-a-remote-recording)
-  - [Save recorded AppMaps to disk](#save-recorded-appmaps-to-disk)
+- [Start a remote recording](#start-a-remote-recording)
+- [Retrieve the current recording status](#retrieve-the-current-recording-status)
+- [Stop a remote recording](#stop-a-remote-recording)
+- [Save recorded AppMap Data to disk](#save-recorded-appmap-data-to-disk)
 
 When an application is set up for AppMap recording, the AppMap agent injects itself into the web stack and handles the remote recording HTTP requests, accepting requests on the same port as the web interface of the application.
 
@@ -92,7 +91,7 @@ Content-type: application/json
 curl -H 'Accept: application/json' -sXDELETE http://localhost:8080/_appmap/record -o MyFirstAppMap.appmap.json
 ```
 
-## Save recorded AppMaps to disk
+## Save recorded AppMap Data to disk
 
 Save the returned payload to disk as an `.appmap.json` file. We recommend that the AppMap file be named after the recorded test and that additional metadata is added to the recorded AppMap prior to saving, such as the AppMap’s name or labels indicating the test outcome and framework. See the [AppMap specification](https://github.com/getappmap/appmap#appmap-data-specification) for details about AppMap metadata.
 

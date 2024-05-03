@@ -12,7 +12,7 @@ redirect_from: [/docs/reference/appmap-agent-js]
 # AppMap Agent for Node.js
 
 **Note**: this agent is currently in early access. It replaces [appmap-agent-js](/docs/reference/appmap-agent-js) which is no longer in active development. [Let us know](https://github.com/getappmap/appmap-node/issues)
-if your project is unable to create AppMaps with `appmap-node`.
+if your project is unable to create AppMap Data with `appmap-node`.
 
 - [About](#about)
   - [Supported versions](#supported-versions)
@@ -23,13 +23,13 @@ if your project is unable to create AppMaps with `appmap-node`.
 - [Remote recording](#remote-recording)
 - [Process recording](#process-recording)
 - [Request recording](#request-recording)
-- [Viewing AppMaps](#viewing-appmaps)
+- [Viewing AppMap Diagrams](#viewing-appmap-diagrams)
 - [GitHub repository](#github-repository)
-- [Troubleshooing](#troubleshooting)
+- [Troubleshooting](#troubleshooting)
 
 ## About
 
-`appmap-node` records [AppMaps](https://appmap.io) of your Node.js applications. 
+`appmap-node` records [AppMap Data](https://github.com/getappmap/appmap) of your Node.js applications. 
 
 {% include docs/what_is_appmap_snippet.md %}
 
@@ -61,7 +61,7 @@ The `appmap-node` command works by passing a modified version of the environment
 to the launch command. This allows it to work with any Node.js command, including ones based on `npm`,
 `npx`, `node`, or even shell scripts that launch Node.js applications.
 
-AppMaps are saved to the directory `tmp/appmap` by default, and each AppMap file ends in `.appmap.json`.
+AppMap Data is saved to the directory `tmp/appmap` by default, and each AppMap file ends in `.appmap.json`.
 
 ## Configuration
 
@@ -81,7 +81,7 @@ packages:
 {: .example-code}
 
 - **name** Provides the project name (autodetected from *package.json*).
-- **appmap_dir** Directory to place the appmaps in. Defaults to `tmp/appmap`.
+- **appmap_dir** Directory to place the AppMap Data in. Defaults to `tmp/appmap`.
 - **packages** A list of paths which should be instrumented.
 
 **packages**
@@ -117,7 +117,7 @@ $ npx appmap-node yarn test
 ```
 {: .example-code}
     
-When the tests are complete, the AppMaps will be stored in the default output directory `tmp/appmap/<test-framework>`,
+When the tests are complete, the AppMap files will be stored in the default output directory `tmp/appmap/<test-framework>`,
 where `<test-framework>` will be one of `mocha`, `jest`, or `vitest`.
 
 {% include vimeo.html id='921256248' %}
@@ -166,10 +166,9 @@ npx appmap-node <add your Node.js application launch command here>
 ```
 {: .example-code}
 
-Then interact with your app using its UI or API, and AppMaps will be generated automatically. 
+Then interact with your app using its UI or API, and AppMap Diagrams will be generated automatically. 
 
-
-## Viewing AppMaps
+## Viewing AppMap Diagrams
 
 Recorded AppMap are saved as `.appmap.json` files `tmp/appmap`. 
 

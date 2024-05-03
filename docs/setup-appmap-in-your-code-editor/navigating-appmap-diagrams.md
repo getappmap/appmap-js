@@ -1,21 +1,21 @@
 ---
 layout: docs
 title: Docs - AppMap in your Code Editor
-description: "Learn to navigate AppMaps effectively. Discover Dependency and Trace views to enhance code understanding and execution analysis."
-name: Navigating AppMaps
+description: "Learn to navigate AppMap Diagrams effectively. Discover Dependency and Trace views to enhance code understanding and execution analysis."
+name: Navigating AppMap Diagrams
 setup-appmap-ide: true
 step: 6
-redirect_from: [/docs/your-first-15-minutes-with-appmap/navigating-appmaps]
+redirect_from: [/docs/your-first-15-minutes-with-appmap/navigating-appmaps, /docs/setup-appmap-in-your-code-editor/navigating-appmaps]
 ---
 
-# Navigating AppMaps
+# Navigating AppMap Diagrams
 
 {% include vimeo.html id='916048549' %}
 
 ---
 
 **In this video**  
-We walk through how to navigate within your AppMaps. We'll dive into the various sections of the AppMap view, such as the dependency view and the trace view. And we'll show you how to better understand your code execution by traversing your AppMap and how to link back to your code
+We walk through how to navigate your AppMap Diagrams. We'll dive into the various sections of the AppMap view, such as the dependency view and the trace view. And we'll show you how to better understand your code execution by traversing your AppMap and how to link back to your code
 
 **Links mentioned**  
 [Rails Sample Application](https://github.com/land-of-apps/sample_app_6th_ed/tree/codespaces-devcontainer)  
@@ -25,11 +25,11 @@ We walk through how to navigate within your AppMaps. We'll dive into the various
 
 ## Follow along
 
-Welcome to AppMap. If you’ve been following along this tutorial, you should have AppMaps generated from either your [test cases](/docs/your-first-15-minutes-with-appmap/generate-appmaps-with-tests.html) or from a [remote recording](/docs/your-first-15-minutes-with-appmap/generate-appmaps-with-remote-recording.html). This tutorial assumes you have at least one AppMap created, but ideally more than one. As always you can clone this [sample project repository from Github](https://github.com/land-of-apps/sample_app_6th_ed/tree/codespaces-devcontainer) and follow along. 
+Welcome to AppMap. If you’ve been following along this tutorial, you should have AppMap Diagrams generated from either your [test cases](/docs/setup-appmap-in-your-code-editor/generate-appmap-data-from-tests.html) or from a [remote recording](/docs/setup-appmap-in-your-code-editor/generate-appmap-data-with-remote-recording.html). This tutorial assumes you have at least one AppMap created, but ideally more than one. As always you can clone this [sample project repository from Github](https://github.com/land-of-apps/sample_app_6th_ed/tree/codespaces-devcontainer) and follow along. 
 
-In this tutorial, we are going to dive into our AppMaps, show you how to navigate them and how to connect an AppMap back to your code. 
+In this tutorial, we are going to dive into our AppMap Diagrams, show you how to navigate them and how to connect an AppMap back to your code. 
 
-We’ll start by opening the AppMap extension installed in our VS Code editor. You’ll see a listing of all your AppMaps in your left hand column. From here, we can select on an AppMap to open it. 
+We’ll start by opening the AppMap extension installed in our VS Code editor. You’ll see a listing of all your AppMap Diagrams in your left hand column. From here, we can select on an AppMap to open it. 
 
 <img class="video-screenshot" src="/assets/img/docs/first-fifteen-minutes/appmap-view.webp"/>
 

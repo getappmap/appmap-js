@@ -8,7 +8,7 @@ redirect_from: [/docs/troubleshooting]
 # Community
 
 ## Forum
-[AppMap Slack](https://appmap.io/slack) is the best place for discussing AppMap with team members and community users.  Ask questions about installation and setup of AppMap agents, get expert advice about the recording strategies for your applications, and share your AppMaps with people who code in your language.  
+[AppMap Slack](https://appmap.io/slack) is the best place for discussing AppMap with team members and community users.  Ask questions about installation and setup of AppMap agents, get expert advice about the recording strategies for your applications, and share your AppMap Diagrams with people who code in your language.  
 
 ## Reporting problems
 [Join us on Slack](https://appmap.io/slack) and share your findings with us, or visit the [GitHub repositories](https://github.com/getappmap) and submit tickets there.

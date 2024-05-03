@@ -4,7 +4,7 @@ title: Docs - Guides
 description: "Use AppMap to auto generate OpenAPI definitions and document HTTP APIs. AppMap captures runtime behavior, creating accurate API schemas effortlessly."
 guides: true
 name: Generating OpenAPI Definitions
-step: 5
+step: 6
 redirect_from: [/docs/openapi,/docs/openapi/features,/docs/openapi/code-editor-extensions,/docs/openapi/integrations,/docs/openapi/customization,/docs/reference/openapi]
 ---
 
@@ -28,15 +28,15 @@ Because AppMap records your code's runtime behavior, it can see and record all o
 
 ## Requirements
 
-1. AppMaps for your application that includes calls to your API endpoints. (Refer to the AppMap documentation on [how to record your application](/docs/recording-methods))
+1. AppMap Data generated from your application that includes calls to your API endpoints. (Refer to the AppMap documentation on [how to record your application](/docs/recording-methods))
 2. The latest version of the [AppMap binaries downloaded.](https://github.com/getappmap/appmap-js/releases?q=@appland/appmap*&expanded=true) (For the CLI usage)
 3. The latest version of the AppMap code editor extension (for code editor usage)  
 
 ## Schema
 
-The generated OpenAPI schema only includes information (paths, methods, status codes, parameters, responses, headers, security) that have actually been observed in the AppMap data. So, if a particular code behavior has not been observed by AppMap, it won't be present in the OpenAPI. 
+The generated OpenAPI schema only includes information (paths, methods, status codes, parameters, responses, headers, security) that have actually been observed in the AppMap Data. So, if a particular code behavior has not been observed by AppMap, it won't be present in the OpenAPI. 
 
-When AppMap data is collected by running test cases, the generated OpenAPI will reflect the code coverage of the application with regard to its APIs. If an expected path, method, status or parameter is not observed in the generated OpenAPI, you'll know it's missing because it's not tested.
+When AppMap Data is collected by running test cases, the generated OpenAPI will reflect the code coverage of the application with regard to its APIs. If an expected path, method, status or parameter is not observed in the generated OpenAPI, you'll know it's missing because it's not tested.
 
 Object schema is inferred from runtime data. When there are many examples of a request, the inferred schema of all the examples is merged into one unified schema. 
 

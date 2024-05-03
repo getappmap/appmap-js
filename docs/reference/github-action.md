@@ -1,42 +1,48 @@
 ---
 layout: docs
 title: Docs - Reference
-description: "Learn how to use AppMap GitHub Actions to analyze code changes efficiently. Setup and configure AppMap tools, archive, and analyze AppMaps for each pull request."
+description: "Learn how to use AppMap GitHub Actions to analyze code changes efficiently. Setup and configure AppMap tools, archive, and analyze AppMap Data for each pull request."
 reference: true
 toc: true
 name: GitHub Action
 step: 15
 ---
 
-# GitHub Action Reference
+# GitHub Action Reference <!-- omit in toc -->
+
+- [Actions Reference](#actions-reference)
+  - [Install AppMap Tools](#install-appmap-tools)
+  - [Archive AppMap Data](#archive-appmap-data)
+  - [Analyze AppMap Data](#analyze-appmap-data)
+- [Reusable Workflows](#reusable-workflows)
+- [Permissions](#permissions)
+
 
 <p class="alert alert-info">
-To get started with the AppMap GitHub Action,  <a href="/docs/setup-appmap-in-ci/in-github-actions">refer to the setup documentation</a>
+To get started with the AppMap GitHub Action,  <a href="/docs/integrations/github-actions">refer to the setup documentation</a>
 </p>
 
 ## Actions Reference
 
 AppMap uses 3 separate GitHub Actions to analyze your code on each pull request. Find the reference documentation below for each of these actions. 
 
-### Install AppMap tools
+### Install AppMap Tools
 [getappmap/install-action](https://github.com/getappmap/install-action)
-Prepares a repository to record AppMaps and to run AppMap CLI commands. 
+Prepares a repository to record AppMap Data and to run AppMap CLI commands. 
 
 This Action will run on commits to the main branch and whenever pull requests are created. The Action will install the AppMap binary into the GitHub Action environment in the `/usr/local/bin/` directory.
 
 [Configuration Options](https://github.com/getappmap/install-action/blob/main/action.yml)
 
-### Archive AppMaps
+### Archive AppMap Data
 [getappmap/archive-action](https://github.com/getappmap/archive-action)
-Archives AppMaps which have been built in the current project. 
+Archives AppMap Data built in the current project. 
 
-This Action runs when a new branch or Pull Request is merged to the main branch. It will generate a `.tar.gz` archive of the AppMaps created by your test cases and store it as a GitHub artifact. The stored file includes the archive JSON and the AppMaps archive.
-
-
+This Action runs when a new branch or Pull Request is merged to the main branch. It will generate a `.tar.gz` archive of the AppMap Data created by your test cases and store it as a GitHub artifact. The stored file includes the archive JSON and the AppMap Data archive.
 
 [Configuration Options](https://github.com/getappmap/archive-action/blob/main/action.yml)
 
-### Analyze AppMaps
+### Analyze AppMap Data
 [getappmap/analyze-action](https://github.com/getappmap/analyze-action)
 
 This Action runs when a Pull Request (or draft) is opened, reopened, or a new commit is added. This Action generates the AppMap analysis report for the head revision, compared to the base branch. A report in Markdown format is generated and is stored as a GitHub artifact within the GitHub Action. This report can optionally be pushed to the active Pull Request as a comment.

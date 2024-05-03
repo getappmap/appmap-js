@@ -61,6 +61,7 @@ $ bundle remove appmap
 ```
 
 Or you can remove the appmap gem globally if installed at the system level. 
+
 {: .example-code}
 
 ```console
@@ -99,7 +100,7 @@ Your Node project dependencies were not modified to use AppMap. Simply changing 
 to no longer prepend `npx appmap-node` is enough to stop using AppMap.
 
 ## Removing AppMap-generated files from your project
-If you had generated AppMaps, you will have a number of files in your project folder that can safely be removed after completing the uninstall steps above. This is an optional step.
+If you had generated AppMap Data, you will have a number of files in your project folder that can safely be removed after completing the uninstall steps above. This is an optional step.
 
 Start by removing the AppMap configuration file:
 

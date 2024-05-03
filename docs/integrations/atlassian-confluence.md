@@ -15,12 +15,12 @@ Confluence facilitates robust documentation and knowledge sharing. AppMap automa
 
 ## Requirements
 
-1. A project containing AppMaps.
-  - How to make AppMaps [in your code editor](/docs/setup-appmap-in-your-code-editor/)
-  - How to make AppMaps [using a GitHub action in CI](/docs/setup-appmap-in-ci/) 
+1. A project containing AppMap Data.
+  - How to make AppMap Diagrams [in your code editor](/docs/setup-appmap-in-your-code-editor/)
+  - How to make AppMap Diagrams [using a GitHub action](/docs/integrations/github-actions) or in [CircleCI](/docs/integrations/circle-ci)
 2. [The AppMap app for Confluence](https://marketplace.atlassian.com/apps/1233075/appmap-for-confluence). 
 
-## Add AppMaps to a Document or Blog Post
+## Add AppMap Diagrams to a Document or Blog Post
 
 1. **Enter Edit Mode:** Click the pencil icon to switch to Edit Mode in Confluence.
   <img class="video-screenshot" src="/assets/img/enter-edit-mode.png"/> 
@@ -37,7 +37,7 @@ Confluence facilitates robust documentation and knowledge sharing. AppMap automa
   <img class="video-screenshot" src="/assets/img/edit-menu-confluence.png"/>
    Select the AppMap you want to display from the dropdown menu and it will render.
   <img class="video-screenshot" src="/assets/img/select-an-appmap-confluence.webp"/>
-    <p class="alert alert-info">  If your AppMap does not render, make sure that you are working on a published document. AppMaps will not render until the document has been published at least once</p>
+    <p class="alert alert-info">  If your AppMap does not render, make sure that you are working on a published document. AppMap Diagrams will not render until the document has been published at least once</p>
 
 5. **Adjust Width (Optional)** The width adjustment controls at the bottom of the AppMap window can be used to view more of the AppMap inline.
   <img class="video-screenshot" src="/assets/img/width-adjustments-confluence.png"/>

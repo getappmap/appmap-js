@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Docs - Reference
-description: "AppMap Agent for Java records AppMaps of your code. Learn about supported versions, tests, requests recording, remote recording, and annotations."
+description: "AppMap Agent for Java records AppMap Data of your code. Learn about supported versions, tests, requests recording, remote recording, and annotations."
 toc: true
 reference: true
 name: AppMap Agent for Java
@@ -34,7 +34,7 @@ step: 5
 
 ## About
 
-`appmap-agent` is a Java agent JAR for recording [AppMaps](https://github.com/getappmap/appmap) of your code. 
+`appmap-agent` is a Java agent JAR for recording [AppMap Data](https://github.com/getappmap/appmap) of your code. 
 
 {% include docs/what_is_appmap_snippet.md %}
 
@@ -46,7 +46,7 @@ step: 5
 
 ### Using IntelliJ IDEA Run Configurations
 
-If you're using JetBrains IntelliJ IDEA, we recommend using [run configurations to create AppMaps](/docs/reference/jetbrains#create-appmaps-with-tests).
+If you're using JetBrains IntelliJ IDEA, we recommend using [run configurations to create AppMap Data](/docs/reference/jetbrains#create-appmap-data-from-junit-test-runs).
 
 ### Recording tests with Maven
 
@@ -127,7 +127,7 @@ Other related options such as `appmap.recording.file` and `appmap.recording.name
 
 You can use the Java function `com.appland.appmap.record.Recording#record` to record a specific span of code. With this method, you can control exactly what code is recorded, and where the recording is saved.
 
-This code snippet illustrates how to use the `record()` function to record a block of code, and then write the AppMap data to a file:
+This code snippet illustrates how to use the `record()` function to record a block of code, and then write the AppMap Data to a file:
 
 ```java
 final Recorder recorder = Recorder.getInstance();
@@ -141,7 +141,7 @@ Recording recording = recorder.record(() -> {
 StringWriter sw = new StringWriter();
 recording.readFully(true, sw);
 
-// Now write the recorded AppMap data to a file. The file name should end in ".appmap.json".
+// Now write the recorded AppMap Data to a file. The file name should end in ".appmap.json".
 try (PrintWriter out = new PrintWriter("runnable-recording.appmap.json")) {
   out.println(sw.toString());
 }
@@ -178,7 +178,7 @@ packages:
 ```
 
 - **name** Provides the project name (required)
-- **appmap_dir** The directory where AppMaps will be saved by request recording. If unset, a default based on the project's build configuration file will be used.
+- **appmap_dir** The directory where AppMap Data will be saved by request recording. If unset, a default based on the project's build configuration file will be used.
 - **packages** A list describing how packages should be instrumented. For backwards compatibility, classes and methods can also be specified here. New projects should use the `methods` property to specify which methods to instrument.
 
 **packages**
@@ -238,7 +238,7 @@ public class ExampleClass {
 When `labeledFunction` appears in an AppMap, it will have the labels `label1` and `label2`.
 
 ### @NoAppMap
-The `NoAppMap` annotation can be used to disable recording of JUnit test methods. If applied to a specific method, that method will not generate an AppMap. Alternatively, it can be applied to a test class to disable generation of AppMaps for all test methods in the class.
+The `NoAppMap` annotation can be used to disable recording of JUnit test methods. If applied to a specific method, that method will not generate an AppMap. Alternatively, it can be applied to a test class to disable generation of AppMap Data for all test methods in the class.
 
 #### Usage
 Example of annotating a test method:
@@ -280,7 +280,7 @@ public class UnrecordedTestClass {
   }
 }
 ```
-No AppMaps will be generated for the tests in `UnrecordedTestClass`.
+No AppMap Data will be generated for the tests in `UnrecordedTestClass`.
 
 ## System Properties
 

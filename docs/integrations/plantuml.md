@@ -20,7 +20,7 @@ You can copy the file contents directly into other tools, or you can customize i
 
 ### Generating sequence diagrams from the CLI
 
-AppMaps can be generated on the command line from your terminal, or within a CI build.
+AppMap Data can be generated on the command line from your terminal, or within a CI build.
 
 #### CLI command: `sequence-diagram`
 
@@ -34,9 +34,9 @@ $ appmap sequence-diagram --format plantuml tmp/appmap/minitest/Following_follow
 
 ### Comparing sequence diagrams
 
-When two AppMaps are similar, it can be useful to represent them as sequence diagrams and then compare them. This is most useful:
+When two AppMap Diagrams are similar, it can be useful to represent them as sequence diagrams and then compare them. This is most useful:
 
-1. To compare AppMaps of two different test cases, requests, or remote recordings.
+1. To compare AppMap Diagrams of two different test cases, requests, or remote recordings.
 1. To compare two different versions of the same AppMap - before and after a code change.
 
 Sequence diagram comparisons can be attached to GitHub Pull Requests to make it easier for reviewers to better understand changes in code.

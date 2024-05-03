@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Docs - AppMap in your Code Editor
-description: "AppMap Runtime Analysis scans AppMaps to detect code flaws, presenting findings in your editor for preemptive fixes."
+description: "AppMap Runtime Analysis scans AppMap Data to detect code flaws, presenting findings in your editor for preemptive fixes."
 name: AppMap Analysis
 setup-appmap-ide: true
 step: 8
@@ -10,7 +10,7 @@ redirect_from: [/docs/your-first-15-minutes-with-appmap/appmap-analysis,/docs/an
 
 # AppMap Analysis
 
-When there are AppMaps available in your project, AppMap Runtime Analysis will immediately scan them to detect flaws in the code. These flaws are surfaced as **findings** and are displayed in your code editor as you work so that they can be addressed **before** they are propagated to test or production environments.
+When there is AppMap Data available in your project, AppMap Runtime Analysis will immediately scan them to detect flaws in the code. These flaws are surfaced as **findings** and are displayed in your code editor as you work so that they can be addressed **before** they are propagated to test or production environments.
 
 ## Navigate findings
 
@@ -42,7 +42,7 @@ Clicking the ‘Overview’ link in the Runtime Analysis sidebar will open the �
 ---
 
 **In this video**  
-AppMap Analysis scans your AppMaps to find software design flaws that impact performance, stability, security and maintainability. This runtime code analysis can find the problems that static code analyzers miss - and that cause 90% of today’s most serious production issues.
+AppMap Analysis scans your AppMap Data to find software design flaws that impact performance, stability, security and maintainability. This runtime code analysis can find the problems that static code analyzers miss - and that cause 90% of today’s most serious production issues.
 
 **Links mentioned**  
 [AppMap Community Slack](/slack)  
@@ -57,7 +57,7 @@ AppMap Analysis is available for both JetBrains IDEs and Visual Studio Code.
 
 ## Investigate findings
 
-Let's look at a sample Ruby on rails application, where AppMap has already been installed and AppMaps have been generated. From the test cases, you'll see a new option for findings in the left-hand column or an option here for investigate findings.
+Let's look at a sample Ruby on rails application, where AppMap has already been installed and AppMap Data has been generated. From the test cases, you'll see a new option for findings in the left-hand column or an option here for investigate findings.
 
 <img class="video-screenshot" src="/assets/img/appmap-analysis-1.webp"/>
 

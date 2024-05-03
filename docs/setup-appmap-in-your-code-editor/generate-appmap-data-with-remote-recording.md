@@ -1,14 +1,14 @@
 ---
 layout: docs
 title: Docs - AppMap in your Code Editor
-description: "Generate AppMaps through remote recording for detailed HTTP request sequences. Install AppMap agent and follow steps for remote recording in various languages."
-name: Generate AppMaps with Remote Recording
+description: "Generate AppMap Data through remote recording for detailed HTTP request sequences. Install AppMap agent and follow steps for remote recording in various languages."
+name: Generate AppMap Data with Remote Recording
 step: 4
 setup-appmap-ide: true
-redirect_from: [/docs/your-first-15-minutes-with-appmap/generate-appmaps-with-remote-recording]
+redirect_from: [/docs/your-first-15-minutes-with-appmap/generate-appmaps-with-remote-recording, /docs/setup-appmap-in-your-code-editor/generate-appmaps-with-remote-recording]
 ---
 
-# Generate AppMaps with Remote Recording
+# Generate AppMap Data with Remote Recording
 
 Remote recording enables you to create an AppMap while interacting directly with your app through the UI or API.
 
@@ -35,7 +35,7 @@ The steps for creating a remote recording are:
 ---
 
 **In this video**  
-We generate AppMaps with a remote recording of our application. You can remote record your application if your app doesn’t have complete test cases, or when you want to dive into a specific user interaction such as an API call or specific product functionality in your app.
+We generate AppMap Data with a remote recording of our application. You can remote record your application if your app doesn’t have complete test cases, or when you want to dive into a specific user interaction such as an API call or specific product functionality in your app.
 
 **Links mentioned**  
 [Rails Sample Application](https://github.com/land-of-apps/sample_app_6th_ed/tree/codespaces-devcontainer)  
@@ -47,13 +47,13 @@ We generate AppMaps with a remote recording of our application. You can remote r
 
 ## Follow along
 
-In this tutorial we are going to generate AppMaps with a remote recording of our application. You can remote record your application if your app doesn’t have complete test cases, or when you want to dive into a specific user interaction such as an API call or specific product functionality in your app.
+In this tutorial we are going to generate AppMap Data with a remote recording of our application. You can remote record your application if your app doesn’t have complete test cases, or when you want to dive into a specific user interaction such as an API call or specific product functionality in your app.
 
-We are going to be using [a sample ruby on rails application](https://github.com/land-of-apps/sample_app_6th_ed/tree/codespaces-devcontainer), which is a basic Twitter clone. If you have followed the previous tutorials, you’ll have [AppMap installed, and have already generated AppMaps for your test cases](/docs/your-first-15-minutes-with-appmap/generate-appmaps-with-tests.html).
+We are going to be using [a sample ruby on rails application](https://github.com/land-of-apps/sample_app_6th_ed/tree/codespaces-devcontainer), which is a basic Twitter clone. If you have followed the previous tutorials, you’ll have [AppMap installed, and have already generated AppMap Data for your test cases](/docs/setup-appmap-in-your-code-editor/generate-appmap-data-from-tests).
 
 ## Install AppMap agent
 
-**NOTE:** If you're using JetBrains IntelliJ IDEA with Java, [follow these instructions](/docs/reference/jetbrains#remote-recording) to create AppMaps using remote recording.
+**NOTE:** If you're using JetBrains IntelliJ IDEA with Java, [follow these instructions](/docs/reference/jetbrains#remote-recording) to create AppMap Data using remote recording.
 
 We’re going to open the AppMap for Visual Studio Code extension and install the AppMap agent. Our installer will confirm that the project meets all the requirements necessary to create maps.
 
@@ -67,13 +67,13 @@ You’ll see that the only changes thus far to our repository are the addition o
 
 <img class="video-screenshot" src="/assets/img/docs/first-fifteen-minutes/project-config-diff.webp"/>
 
-## Recording AppMaps
+## Recording AppMap Diagrams
 
-Next, follow the on-screen instructions for recording AppMaps. You'll receive one of the two following options.
+Next, follow the on-screen instructions for recording AppMap Data. You'll receive one of the two following options.
 
 First, you may be instructed to run your application as you normally would. In this scenario, AppMap will automatically be enabled and each web request will generate a new AppMap.
 
-If you see this screen, follow along with [streaming AppMaps](/docs/your-first-15-minutes-with-appmap/streaming-appmaps-with-request-recording.html).
+If you see this screen, follow along with [request recording AppMap Data](/docs/setup-appmap-in-your-code-editor/generate-appmap-data-with-request-recording).
 
 <img class="video-screenshot" src="/assets/img/appmap-record.webp"/>
 
@@ -95,18 +95,18 @@ We’ll now return to our console and run the `record` command. If I omit passin
 
 ## Interact with Application
 
-Now that the agent is connected, we can hit enter to begin recording. Now, I can interact with my application, kick off a specific functional or integration test, or make any specific API calls to your application. I’m going to login and reset my password. It’s important to keep remote recordings focused on a specific function, and not include too many interactions in one single recording as AppMaps can grow large as recordings progress.
+Now that the agent is connected, we can hit enter to begin recording. Now, I can interact with my application, kick off a specific functional or integration test, or make any specific API calls to your application. I’m going to login and reset my password. It’s important to keep remote recordings focused on a specific function, and not include too many interactions in one single AppMap Data recording as they can grow large as recordings progress.
 
 When I am done interacting, I return back to the terminal and hit enter again to stop the recording. We’ll give this recording a name and then this AppMap will be opened within VS Code.
 
 <img class="video-screenshot" src="/assets/img/docs/first-fifteen-minutes/stop-remote-recording.webp"/>
 
-## Open AppMaps
+## Open AppMap Diagrams
 
 We’ll also receive a runtime analysis scan of this code path as well, which has identified a performance issue with an N+1 SQL query generating the main list of tweets. For early access to our AppMap runtime analysis [reach out to us](/appmap-analysis).
 
 <img class="video-screenshot" src="/assets/img/docs/first-fifteen-minutes/remote-recorded-appmap.webp"/>
 
-Finally, you'll see AppMaps actually exist inside your temp directory in the AppMap folder. We don't recommend committing these to your project. They can grow your git repositories unnecessarily. But you can commit changes to your Gemfile and the appmap configuration file which will make the project available to other developers.
+Finally, you'll see AppMap Data actually exists inside your temp directory in the AppMap folder. We don't recommend committing these to your project. They can grow your git repositories unnecessarily. But you can commit changes to your Gemfile and the appmap configuration file which will make the project available to other developers.
 
 <img class="video-screenshot" src="/assets/img/docs/first-fifteen-minutes/dont-commit-appmaps.webp"/>

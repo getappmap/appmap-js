@@ -23,7 +23,7 @@ step: 6
 
 ## About
 
-The AppMap Maven Plugin provides simple method for recording AppMaps in running
+The AppMap Maven Plugin provides a simple method for recording AppMap Data in running
 tests in Maven projects and a seamless integration into CI/CD pipelines. The
 client agent requires `appmap.yml` configuration file, see
 [appmap-java](./appmap-java) for details.

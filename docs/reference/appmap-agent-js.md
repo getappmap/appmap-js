@@ -26,12 +26,12 @@ if in your project `appmap-node` doesn't work while `appmap-agent-js` does.
   - [`appmap-agent-js` parameters](#appmap-agent-js-parameters)
     - [Example](#example)
   - [System Properties](#system-properties)
-  - [Viewing AppMaps](#viewing-appmaps)
+  - [Viewing AppMap Diagrams](#viewing-appmap-diagrams)
   - [GitHub repository](#github-repository)
 
 ## About
 
-`appmap-agent-js` is a JavaScript package for recording [AppMaps](https://github.com/getappmap/appmap) of your code. 
+`appmap-agent-js` is a JavaScript package for recording [AppMap Diagrams](https://github.com/getappmap/appmap) of your code. 
 
 {% include docs/what_is_appmap_snippet.md %}
 
@@ -123,7 +123,7 @@ AppMap file will be created for each unique test case.
     ```
     {: .example-code}
     
-1. `appmap-agent-js` will run the tests. When the tests are complete, the AppMaps will be stored
+1. `appmap-agent-js` will run the tests. When the tests are complete, the AppMap Data will be stored
    in the default output directory `tmp/appmap/mocha`.
 
 ### Recording jest test cases:
@@ -134,7 +134,7 @@ AppMap file will be created for each unique test case.
     npx appmap-agent-js -- jest 'test/**/*.ts'
     ```
     {: .example-code}
-1. `appmap-agent-js` will run the tests. When the tests are complete, the AppMaps will be stored
+1. `appmap-agent-js` will run the tests. When the tests are complete, the AppMap Data will be stored
    in the default output directory `tmp/appmap/jest`.
 
 ## Remote recording
@@ -143,7 +143,7 @@ AppMap file will be created for each unique test case.
 This functionality is provided by the AppMap agent. It will hook an existing HTTP engine, 
 serving HTTP requests to toggle recording on and off.
 
-**Note** Your application must be using Express.js (directly or indirectly) for remote recording to work. Express.js is requried because AppMap injects its [control routes](/docs/reference/remote-recording-api) into the Express.js middleware stack. Express-based frameworks such as Nest.js will work, as long as they are using Express under the hood.
+**Note** Your application must be using Express.js (directly or indirectly) for remote recording to work. Express.js is required because AppMap injects its [control routes](/docs/reference/remote-recording-api) into the Express.js middleware stack. Express-based frameworks such as Nest.js will work, as long as they are using Express under the hood.
 
 1. Run `appmap-agent-js` with the `--recorder=remote` argument, the application-starting command, and its parameters following the `--` delimiter. For example:
     ```sh
@@ -169,7 +169,7 @@ npx appmap-agent-js --command="put the command to start your app here" --recorde
 ```
 {: .example-code}
 
-Then interact with your app using its UI or API, and AppMaps will be generated automatically. You will see them appear in the 'AppMaps' tab in the left sidebar and on the 'Explore AppMaps' page of the instructions.
+Then interact with your app using its UI or API, and AppMap Data will be generated automatically. You will see them appear in the 'AppMaps' tab in the left sidebar and on the 'Explore AppMaps' page of the instructions.
 
 --- 
 ## `appmap-agent-js` parameters
@@ -180,7 +180,7 @@ The most frequently used `appmap-agent-js` parameters are:
     - `mocha` if the the command contains `mocha`
     - `jest` if the the command contains `jest`
     - `process` in all other cases
-  - `mocha` and `jest` recorders record AppMaps from test cases automatically
+  - `mocha` and `jest` recorders record AppMap Data from test cases automatically
   - `remote` recorder has to be started and stopped manually with http requests
   - `process` recorder records entire processes automatically, from start to finish 
 - `--command="_start command_"` : alternate method of specifying the app- or tests-starting command, wrapped in quotes
@@ -202,7 +202,7 @@ npx appmap-agent-js --log-level=error --recorder=remote -- node built/app.js
   _appmap.yml_
 - `APPMAP_REPOSITORY_DIRECTORY` Path to the project's local git folder. Default: .
 
-## Viewing AppMaps
+## Viewing AppMap Diagrams
 
 Recorded AppMap are saved as `.appmap.json` files in the project folders (default location: `tmp/appmap`.) 
 
