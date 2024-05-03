@@ -1,4 +1,4 @@
-import listProjectFiles, { isBinaryFile } from '../../../src/fulltext/listProjectFiles';
+import listProjectFiles from '../../../src/fulltext/listProjectFiles';
 import * as fs from 'fs';
 import * as fsp from 'fs/promises';
 import { join } from 'path';
@@ -12,7 +12,7 @@ describe('listProjectFiles', () => {
     jest.resetAllMocks();
   });
 
-  it('lists all non-binary, non-ignored files in a directory', async () => {
+  it('lists all files in a directory', async () => {
     const mockFiles = [
       { name: 'index.js', isFile: () => true, isDirectory: () => false } as unknown as fs.Dirent,
       { name: 'logo.png', isFile: () => true, isDirectory: () => false } as unknown as fs.Dirent,
@@ -31,7 +31,6 @@ describe('listProjectFiles', () => {
     const files = await listProjectFiles(baseDir);
     expect(files).toContain(join(baseDir, 'index.js'));
     expect(files).toContain(join(baseDir, 'utils', 'helper.js'));
-    expect(files).not.toContain(join(baseDir, 'logo.png'));
     expect(fsp.readdir).toHaveBeenCalledTimes(2); // baseDir + utils
   });
 
@@ -57,11 +56,5 @@ describe('listProjectFiles', () => {
     const files = await listProjectFiles(baseDir);
     expect(files).toEqual([]);
     expect(directoriesRead).toEqual([baseDir, join(baseDir, 'src')]);
-  });
-
-  it('identifies binary files correctly', () => {
-    expect(isBinaryFile('image.png')).toBe(true);
-    expect(isBinaryFile('document.pdf')).toBe(true);
-    expect(isBinaryFile('script.js')).toBe(false);
   });
 });

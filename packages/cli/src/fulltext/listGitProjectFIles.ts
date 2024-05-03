@@ -1,7 +1,6 @@
 import { basename, join } from 'path';
 import { executeCommand } from '../lib/executeCommand';
 import { verbose, isFile } from '../utils';
-import { isBinaryFile } from './listProjectFiles';
 
 // Run git ls-files and git status to get a list of all git-managed files. By doing it this way,
 // we automatically apply any .gitignore rules.
@@ -36,11 +35,8 @@ export default async function listGitProjectFiles(directory: string): Promise<st
     if (!file) {
       continue;
     }
-    const filePath = join(directory, file);
-    if ((await isFile(filePath)) && !isBinaryFile(basename(filePath))) {
-      result.add(file);
-    }
+    result.add(file);
   }
 
-  return [...result].sort();
+  return [...result];
 }

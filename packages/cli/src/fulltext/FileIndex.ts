@@ -1,13 +1,14 @@
-import { log } from 'console';
+import { stat } from 'node:fs/promises';
+import path, { join } from 'node:path';
+
 import sqlite3 from 'better-sqlite3';
 import assert from 'assert';
 import { existsSync } from 'fs';
 
 import { verbose } from '../utils';
+import listProjectFiles from './listProjectFiles';
 import queryKeywords from './queryKeywords';
-import path from 'path';
 import { Git, GitState } from '../telemetry';
-import listProjectFiles, { COMMON_REPO_BINARY_FILE_EXTENSIONS } from './listProjectFiles';
 import listGitProjectFiles from './listGitProjectFIles';
 
 export type FileIndexMatch = {
@@ -57,7 +58,7 @@ export class FileIndex {
       } else {
         fileNames = await listProjectFiles(directory);
       }
-      this.#indexDirectory(directory, fileNames);
+      this.#indexDirectory(directory, await filterFiles(directory, fileNames));
     }
   }
 
@@ -71,13 +72,6 @@ export class FileIndex {
 
   indexFile(directory: string, filePath: string) {
     const fileNameTokens = filePath.split(path.sep);
-    const fileName = fileNameTokens[fileNameTokens.length - 1];
-
-    const extension = fileName.split('.').pop();
-    if (extension && COMMON_REPO_BINARY_FILE_EXTENSIONS.includes(extension)) {
-      if (verbose()) log(`Skipping binary file: ${filePath}`);
-      return;
-    }
 
     try {
       const terms = queryKeywords(fileNameTokens).join(' ');
@@ -108,4 +102,82 @@ export async function buildFileIndex(
   await fileIndex.indexDirectories(directories);
   console.log(`Wrote file index to ${indexFileName}`);
   return fileIndex;
+}
+
+const BINARY_FILE_EXTENSIONS: string[] = [
+  'png',
+  'jpg',
+  'jpeg',
+  'gif',
+  'bmp',
+  'ico',
+  'tiff',
+  'webp',
+  'svg',
+  'mp3',
+  'wav',
+  'ogg',
+  'flac',
+  'aac',
+  'mp4',
+  'webm',
+  'mkv',
+  'avi',
+  'mov',
+  'wmv',
+  'mpg',
+  'flv',
+  'zip',
+  'tar',
+  'gz',
+  'bz2',
+  'xz',
+  '7z',
+  'rar',
+  'pdf',
+  'doc',
+  'docx',
+  'xls',
+  'xlsx',
+  'ppt',
+  'pptx',
+  'odt',
+  'ods',
+  'odp',
+  'rtf',
+  'woff',
+  'woff2',
+  'eot',
+  'ttf',
+  'otf',
+  'ico',
+  'flv',
+  'avi',
+  'mov',
+  'wmv',
+  'mpg',
+  'jar',
+  'war',
+  'ear',
+  'class',
+  'so',
+  'dll',
+  'exe',
+  'min.js',
+  'min.css',
+].map((ext) => '.' + ext);
+
+export async function filterFiles(directory: string, fileNames: string[]): Promise<string[]> {
+  const result: string[] = [];
+  for (const fileName of fileNames) {
+    if (BINARY_FILE_EXTENSIONS.some((ext) => fileName.toLowerCase().endsWith(ext))) continue;
+    try {
+      const stats = await stat(join(directory, fileName));
+      if (stats.isFile() && stats.size < 50000) result.push(fileName);
+    } catch (error) {
+      console.warn(`Error checking file ${fileName}`);
+      console.warn(error);
+    }
+  }
+  return result;
 }
