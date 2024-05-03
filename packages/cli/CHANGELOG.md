@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.140.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.140.0...@appland/appmap-v3.140.1) (2024-05-03)
+
+
+### Bug Fixes
+
+* Improve context gathering performance ([0e9e8c7](https://github.com/getappmap/appmap-js/commit/0e9e8c7d5cc217e0f6922cc17dd2d9ac917f7d47))
+* Skip files over 50 kB when indexing ([813aa3d](https://github.com/getappmap/appmap-js/commit/813aa3d5ad16443e864b8ff2b69cfc2c823dfc9f))
+
 # [@appland/appmap-v3.140.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.139.1...@appland/appmap-v3.140.0) (2024-04-30)
 
 
