@@ -394,6 +394,7 @@ class GitProperties {
 }
 
 const gitCache = new Map<string | symbol, unknown>();
+const noCacheList: Array<keyof typeof GitProperties> = ['clearCache'];
 
 // GitProperties is available externally as Git.
 // This export provides a simple caching layer around GitProperties to avoid
@@ -401,7 +402,10 @@ const gitCache = new Map<string | symbol, unknown>();
 export const Git = new Proxy(GitProperties, {
   get(target, prop) {
     type TargetProp = keyof typeof target;
-    if (typeof target[prop as TargetProp] === 'function') {
+    if (
+      !noCacheList.includes(prop.toString() as TargetProp) &&
+      typeof target[prop as TargetProp] === 'function'
+    ) {
       return new Proxy(target[prop as TargetProp], {
         apply(target, thisArg, argArray) {
           const cacheKey = `${prop.toString()}(${JSON.stringify(argArray)})`;
@@ -410,12 +414,7 @@ export const Git = new Proxy(GitProperties, {
           }
           /* eslint-disable-next-line @typescript-eslint/ban-types */
           const result: unknown = Reflect.apply(target as Function, thisArg, argArray);
-          if (result instanceof Promise) {
-            return result.then((r) => {
-              gitCache.set(cacheKey, r);
-              return r as unknown;
-            });
-          }
+          gitCache.set(cacheKey, result);
           return result;
         },
       }) as unknown;
