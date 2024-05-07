@@ -4,7 +4,7 @@ title: Docs - Guides
 description: "Learn how to export your AppMap Diagrams into raw JSON format, SVG formats, and into 3rd party documentation tools like Confluence"
 guides: true
 name: Exporting AppMap Diagrams
-step: 2`
+step: 4
 ---
 
 # Exporting AppMap Diagrams <!-- omit in toc -->
