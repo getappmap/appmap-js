@@ -3,13 +3,19 @@ layout: docs
 title: Docs - Guides
 description: "Configure AppMap Analysis by customizing checks for flexible rule options. Understand findings and their properties for effective analysis."
 guides: true
-name: Configuring Analysis
-step: 7
-redirect_from: [docs/analysis/configuring-checks, /docs/analysis/match-pattern-config, /docs/analysis/findings,/docs/reference/configuring-analysis]
+name: Using AppMap Analysis
+step: 8
+redirect_from: [docs/analysis/configuring-checks, /docs/analysis/match-pattern-config, /docs/analysis/findings,/docs/reference/configuring-analysis,/docs/guides/configuring-analysis]
 ---
 
-# Configuring Analysis <!-- omit in toc -->
+# AppMap Analysis
 
+When there is AppMap Data available in your project, AppMap Runtime Analysis will immediately scan them to detect flaws in the code. These flaws are surfaced as **findings** and are displayed in your code editor as you work so that they can be addressed **before** they are propagated to test or production environments.
+
+- [Navigate Findings](#navigate-findings)
+- [Investigate findings](#investigate-findings)
+- [Use labels to visually explore your code](#use-labels-to-visually-explore-your-code)
+- [Configuring Analysis](#configuring-analysis)
 - [Configuring checks](#configuring-checks)
   - [Example appmap-scanner.yml](#example-appmap-scanneryml)
 - [Match pattern config](#match-pattern-config)
@@ -18,8 +24,50 @@ redirect_from: [docs/analysis/configuring-checks, /docs/analysis/match-pattern-c
   - [Properties](#properties)
   - [Finding hash](#finding-hash)
 
+## Navigate Findings
 
-## Configuring checks
+Findings are displayed In the Runtime Analysis sidebar pane sorted by impact category and type.
+
+<image class="video-screenshot" src="/assets/img/docs/runtime-analysis-sidebar-findings.webp"/> 
+
+Clicking the ‘Overview’ link in the Runtime Analysis sidebar will open the ‘Runtime Analysis Summary’ window which contains a summary of findings for a particular project.
+
+<image class="video-screenshot" src="/assets/img/docs/runtime-analysis-overview-dashboard.webp"/> 
+
+{% include vimeo.html id='916087872' %}
+
+---
+
+**In this video**  
+AppMap Analysis scans your AppMap Data to find software design flaws that impact performance, stability, security and maintainability. This runtime code analysis can find the problems that static code analyzers miss - and that cause 90% of today’s most serious production issues.
+
+**Links mentioned**  
+[AppMap Community Slack](/slack)  
+[Get AppMap for VSCode](https://marketplace.visualstudio.com/items?itemName=appland.appmap)  
+[Get AppMap for JetBrains](https://plugins.jetbrains.com/plugin/16701-appmap)
+
+---
+
+## Investigate findings
+
+Let's look at a sample Ruby on rails application, where AppMap has already been installed and AppMap Data has been generated. From the test cases, you'll see a new option for findings in the left-hand column or an option here for investigate findings.
+
+<img class="video-screenshot" src="/assets/img/appmap-analysis-1.webp"/>
+
+You can see one of the issues we've found is that a log event contained secret data by clicking on the finding will be taken directly to the line of code where this event occurs by hovering over the pin.
+<img class="video-screenshot" src="/assets/img/appmap-analysis-2.webp"/>
+
+## Use labels to visually explore your code
+
+You can open the AppMap and see exactly where the function wrote this secret to a log file. How does AppMap know that this was a secret? Unlike static analyzers and other tools that do pattern matching AppMap knows this function generates secrets because we have built in knowledge of common software libraries with pre-populated labels.
+
+We know exactly where to look to avoid false positives. Developers can extend their labels, whether it's a common library or not with simple code comments on their functions.
+<img class="video-screenshot" src="/assets/img/appmap-analysis-3.webp"/>
+
+If you search for the secret label, you'll see the location in the code where this event occurs by clicking on the function, you'll be taken to the exact location of the AppMap, where the secret was generated. Additionally, you can open the code, combining a visual model alongside the code.
+<img class="video-screenshot" src="/assets/img/appmap-analysis-4.webp"/>
+
+## Configuring Analysis Checks
 
 AppMap Analysis is configured in a YAML document. It's primary job is to specify which scanner rules will check the code.
 Each check specifies a rule id, and may include additional properties that customized and tune the behavior of the rule.

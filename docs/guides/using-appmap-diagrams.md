@@ -5,8 +5,8 @@ description: "Configure AppMap Analysis by customizing checks for flexible rule 
 guides: true
 toc: true
 name: Using AppMap Diagrams
-step: 1
-redirect_from: [/docs/how-to-use-appmap-diagrams.html, /docs/how-to-use-appmap-diagrams, /docs/diagrams/how-to-use-appmaps, /docs/diagrams/sequence-diagrams, /docs/diagrams, /docs/diagrams/how-it-works, /docs/diagrams/dependency-map, /docs/diagrams/trace-view, /docs/diagrams/sequence-diagram, /docs/diagrams/flamegraph]
+step: 2
+redirect_from: [/docs/how-to-use-appmap-diagrams.html, /docs/how-to-use-appmap-diagrams, /docs/diagrams/how-to-use-appmaps, /docs/diagrams/sequence-diagrams, /docs/diagrams, /docs/diagrams/how-it-works, /docs/diagrams/dependency-map, /docs/diagrams/trace-view, /docs/diagrams/sequence-diagram, /docs/diagrams/flamegraph, /docs/setup-appmap-in-your-code-editor/navigating-appmap-diagrams]
 ---
 
 # Using AppMap Diagrams <!-- omit in toc -->

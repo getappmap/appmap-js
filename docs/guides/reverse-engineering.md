@@ -3,7 +3,7 @@ layout: docs
 guides: true
 title: Docs - Guides
 description: "Learn to reverse engineer efficiently using AppMap. Capture code execution details effortlessly. Visualize data for insights. Automate AppMap creation and storage for collaboration."
-step: 8
+step: 9
 render_with_liquid: false
 name: Reverse Engineering
 ---
@@ -47,7 +47,7 @@ AppMap is a powerful tool for reverse-engineering legacy code. Unlike telemetry-
 The data can be further combined, compared, and analyzed to obtain key insights about how the code works and how it can be improved. The purpose of this guide is to provide a step-by-step procedure for characterizing a large codebase with AppMap and obtaining these insights.
 
 ## Pre-requisites
-You should first review our guide on [how AppMap works](/docs/setup-appmap-in-your-code-editor/how-appmap-works).
+You should first review our guide on [how to make AppMap Data](/docs/get-started-with-appmap/making-appmap-data).
 
 # Reverse Engineering an Application - A Step by Step Process
 This section provides a procedure for characterizing your code using AppMap. Consider this procedure as a recommendation on how to get started. For your specific needs, you’ll likely find useful ways to extend and customize these recommendations. 
