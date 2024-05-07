@@ -22,6 +22,6 @@ This powerful technique provides the AI with many valuable pieces of information
 
 Navie integrates seamlessly into your existing AppMap enabled project.  Once you have the AppMap software libraries installed into your project, interact with your application or run tests to automatically generate AppMap Data. All of your code and AppMap Data will stay locally in your environment until you ask Navie a question.  After asking a question to Navie, the relevant AppMap Diagrams and code snippets are located locally by the AppMap search and explain API, then this data is sent to OpenAI (available option to bring your own LLM), and the response is returned to the user. 
 
-<img class="video-screenshot" src="/assets/img/product/navie-architecture.webp"/> 
+![Navie Architecture](/assets/img/product/navie-architecture-slide.svg)
 
 For more details about the privacy and security of your AppMap Data, refer to the [AppMap Security FAQ](https://appmap.io/security)

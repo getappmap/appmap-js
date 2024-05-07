@@ -4,7 +4,7 @@ title: Docs - Guides
 description: "Discover SQL commands in AppMap Diagrams to analyze application logic's database interactions, spot inefficiencies, and understand code impacts for improved performance and reliability."
 guides: true
 name: Reading SQL in AppMap Diagrams
-step: 4
+step: 5
 redirect_from: [/docs/guides/reading-sql-in-appmaps]
 ---
 

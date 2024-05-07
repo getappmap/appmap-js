@@ -4,7 +4,7 @@ title: Docs - Guides
 description: "Use AppMap to auto generate OpenAPI definitions and document HTTP APIs. AppMap captures runtime behavior, creating accurate API schemas effortlessly."
 guides: true
 name: Generating OpenAPI Definitions
-step: 6
+step: 7
 redirect_from: [/docs/openapi,/docs/openapi/features,/docs/openapi/code-editor-extensions,/docs/openapi/integrations,/docs/openapi/customization,/docs/reference/openapi]
 ---
 
