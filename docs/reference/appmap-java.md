@@ -218,7 +218,7 @@ attribute is ignored.
 The `appmap-java` annotations are provided in the package `com.appland:appmap-annotation`, available on [Maven Central](https://search.maven.org/artifact/com.appland/appmap-annotation). To use them, add that package as a dependency in your build configuration file (`pom.xml`, `build.gradle`).
 
 ### @Labels
-`appmap-java` suports the addition of [code labels](https://appmap.io/docs/appmap-overview.html#features) through the `com.appland.appmap.annotation.Labels` annotation.
+`appmap-java` suports the addition of [code labels](/docs/reference/appmap-java.html#annotations) through the `com.appland.appmap.annotation.Labels` annotation.
 
 #### Usage
 Once the `Labels` annotation is available, you can apply it to methods in your application. For example:

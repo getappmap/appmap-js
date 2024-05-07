@@ -4,7 +4,7 @@ title: Docs - Guides
 description: "Optimize AppMap Diagrams by refining recordings to exclude noise. Start with inclusive config, analyze stats, update config, create concise AppMap Diagrams."
 guides: true
 name: Refining AppMap Data
-step: 5
+step: 6
 redirect_from: [/docs/reference/refine-appmaps, /docs/guides/refine-appmaps]
 ---
 
