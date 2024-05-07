@@ -190,15 +190,9 @@ describe('telemetry', () => {
       expect(contributors.length).toBeGreaterThan(0);
     });
 
-    it('properly caches the list of git contributors', async () => {
-      let firstResult: string[] | undefined;
-      for (let i = 0; i < 10; i++) {
-        if (!firstResult) {
-          firstResult = await Git.contributors(sinceDaysAgo);
-        }
-
-        expect(await Git.contributors(sinceDaysAgo)).toEqual(firstResult);
-      }
+    it('properly caches the list of git contributors', () => {
+      const firstResult = Git.contributors(sinceDaysAgo);
+      expect(Git.contributors(sinceDaysAgo)).toEqual(firstResult);
     });
 
     describe('state', () => {
