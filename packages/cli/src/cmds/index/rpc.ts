@@ -183,7 +183,8 @@ export const handler = async (argv) => {
 
   const navieProvider = useLocalNavie() ? buildLocalNavie : buildRemoteNavie;
 
-  configureRpcDirectories(directories);
+  loadConfiguration(false);
+  await configureRpcDirectories(directories);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const rpcMethods: RpcHandler<any, any>[] = [

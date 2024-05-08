@@ -3,6 +3,7 @@ import { RpcHandler } from './rpc';
 import { dirname } from 'path';
 import loadAppMapConfig, { AppMapConfig } from '../lib/loadAppMapConfig';
 import { getLLMConfiguration } from './llmConfiguration';
+import { warn } from 'console';
 
 export type AppMapDirectory = {
   directory: string;
@@ -73,6 +74,7 @@ export function setConfigurationV2(): RpcHandler<
   return {
     name: ConfigurationRpc.V2.Set.Method,
     handler: async (params) => {
+      warn(`Setting RPC configuration: ${JSON.stringify(params)}`);
       config = await Configuration.buildFromRpcParams(params);
       return undefined;
     },

@@ -55,7 +55,7 @@ export default abstract class RPCTest {
   }
 
   async setupEach() {
-    configureRpcDirectories(this.directories);
+    await configureRpcDirectories(this.directories);
 
     this.appmaps = new Array<string>();
     for (const dir of this.directories) {
@@ -80,7 +80,7 @@ export default abstract class RPCTest {
     }
 
     // Reset the RPC configuration.
-    configureRpcDirectories([]);
+    await configureRpcDirectories([]);
 
     // RPC services should not rely on setting cwd. Warn if the cwd has been changed.
     const cwd = process.cwd();
