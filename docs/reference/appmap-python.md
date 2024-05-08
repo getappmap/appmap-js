@@ -37,9 +37,14 @@ step: 4
 
 ## About
 
-`appmap` is a Python package for recording [AppMap Diagrams](https://github.com/getappmap/appmap) of your code.
+`appmap` is a Python package for creating [AppMap Diagrams](https://github.com/getappmap/appmap) of
+your code.
 
 {% include docs/what_is_appmap_snippet.md %}
+
+`appmap` works by modifying the way python imports the modules of an application. After a module is
+imported, `appmap` examines it for function definitions. Each function is instrumented, so that when
+it is called, a trace event will be added to the current recording.
 
 ### Supported versions
 
@@ -48,21 +53,29 @@ step: 4
 Support for new versions is added frequently, please check back regularly for updates.
 
 ## Installation
+`appmap` works best when installed in a virtual environment, usually one associated with a project.
+This helps ensure that the project's code will be instrumented, while reducing the chance of
+interference with other python utilities.
 
-If your project uses `pip` for dependency management, add the `appmap` package to the requirements
-file or install it directly with
+If your project uses `pip` for dependency management, add the `appmap` package to the project's
+requirements file or install it directly. Specifying the `--require-virtualenv` switch ensures that
+it will only be installed in a virtual environment.
+
 ```shell
-pip install appmap
+pip install --require-virtualenv appmap
 ```
 {: .example-code}
 
-For projects that use `poetry` , add the `appmap` package to `pyproject.toml`.
+For projects that use `poetry` , add the `appmap` package to `pyproject.toml`. Note that, by
+default, `poetry` manages dependencies using a virtual environment.
+
 ```
 poetry add --group=dev appmap
 ```
 {: .example-code}
 
-`pipenv` is also supported:
+`pipenv` is also supported. Like `poetry`, `pipenv` installs dependencies in a virtual environment.
+
 ```
 pipenv install --dev appmap
 ```
@@ -72,8 +85,14 @@ pipenv install --dev appmap
 
 ## Configuration
 
-Add your modules as `path` entries in `appmap.yml`, and external packages
-(distributions) as `dist`:
+`appmap` is configured using a YAML file. By default, `appmap` looks in the current working
+directory for a file named `appmap.yml`.
+
+`appmap.yml` contains information used to create AppMap Data files. It allows you to specify the
+application's name, as well as the modules that should be instrumented.
+
+For each module, add the fully-qualified module name as the value of a `path` property. These names
+should be in the format used in an `import` statement:
 
 ```
   name: my_python_app
@@ -92,21 +111,28 @@ Add your modules as `path` entries in `appmap.yml`, and external packages
   #  exclude:
   #  - django.db
 ```
+Notes about this example:
+* The application has two modules that will be recorded: `app.mod1` and
+  `app.mod2`. When the python interpreter imports one of those modules (e.g. by evaluating `import
+  app.mod1`, `from app import mod1`, `from app import *`, etc), `appmap` will instrument the
+  functions in the imported module.
 
-Note that an `exclude` is resolved relative to the associated path. So, for example, this
-configuration excludes `app.mod2.MyClass`.
+  If the value of a `path` property cannot be parsed as a module name, `appmap` will issue an error
+  and exit.
 
-For external [distribution packages](https://packaging.python.org/glossary/#term-Distribution-Package)
-use the `dist` specifier; the names are looked up in the
-[database of installed Python distributions](https://www.python.org/dev/peps/pep-0376/).
-This is generally the same package name as you'd give to `pip install` or put
-in `pyproject.toml`. You can additionally use `path` and `exclude` on `dist`
-entries to limit the capture to specific patterns.
+* An `exclude` is resolved relative to the associated path. So, for example, this configuration
+  excludes `app.mod2.MyClass`.
 
-By default, shallow capture is enabled on `dist` packages, suppressing tracking
-of most internal execution flow. This allows you to capture the interaction without
-getting bogged down with detail. To see these details, set `shallow: false`.
-You can also use `shallow: true` on `path` entries.
+* An external [distribution
+  package](https://packaging.python.org/glossary/#term-Distribution-Package) can be specified using
+  the `dist` specifier. The names are looked up in the [database of installed Python
+  distributions](https://www.python.org/dev/peps/pep-0376/). This is generally the same package name
+  as you'd give to `pip install` or put in `pyproject.toml`. You can additionally use `path` and
+  `exclude` on `dist` entries to limit the capture to specific patterns.
+
+By default, shallow capture is enabled on `dist` packages, suppressing tracking of most internal
+execution flow. This allows you to capture the interaction without getting bogged down with detail.
+To see these details, set `shallow: false`. You can also use `shallow: true` on `path` entries.
 
 ## Enabling and disabling recording
 
