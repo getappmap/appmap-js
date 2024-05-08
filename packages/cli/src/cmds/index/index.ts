@@ -141,7 +141,7 @@ export const handler = async (argv) => {
 
       const navieProvider = useLocalNavie() ? buildLocalNavie : buildRemoteNavie;
 
-      configureRpcDirectories([process.cwd()]);
+      await configureRpcDirectories([process.cwd()]);
 
       const rpcMethods: RpcHandler<any, any>[] = [
         numProcessed(cmd),
