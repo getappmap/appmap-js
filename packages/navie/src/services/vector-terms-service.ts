@@ -4,6 +4,7 @@ import { warn } from 'console';
 import { ChatOpenAI } from '@langchain/openai';
 
 import InteractionHistory, { VectorTermsInteractionEvent } from '../interaction-history';
+import trimFences from '../lib/trim-fences';
 
 const SYSTEM_PROMPT = `You are assisting a developer to search a code base.
 
@@ -73,16 +74,6 @@ Terms: test cases +log_context jest
 \`\`\`
 `;
 
-const contentBetween = (text: string, start: string, end: string): string => {
-  const startIndex = text.indexOf(start);
-  if (startIndex < 0) return text;
-
-  const endIndex = text.indexOf(end, startIndex + start.length);
-  if (endIndex < 0) return text;
-
-  return text.slice(startIndex + start.length, endIndex);
-};
-
 const contentAfter = (text: string, start: string): string => {
   const startIndex = text.indexOf(start);
   if (startIndex < 0) return text;
@@ -144,9 +135,7 @@ export default class VectorTermsService {
     {
       let responseText = rawResponse;
       responseText = contentAfter(responseText, 'Terms:');
-      responseText = contentBetween(responseText, '```json', '```');
-      responseText = contentBetween(responseText, '```yaml', '```');
-      responseText = responseText.trim();
+      responseText = trimFences(responseText);
       searchTermsObject = parseJSON(responseText) || parseText(responseText);
     }
 
