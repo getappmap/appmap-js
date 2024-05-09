@@ -37,7 +37,7 @@ export default function queryKeywords(words: undefined | string | string[]): str
     .map((word) => sanitizeKeyword(word || ''))
     .flat()
     .filter(Boolean)
-    .map((word) => splitCamelized(word).split(/[\s]+/g))
+    .map((word) => splitCamelized(word).split(/[\s_]+/g))
     .flat()
     .map((str) => str.trim())
     .filter(Boolean)
