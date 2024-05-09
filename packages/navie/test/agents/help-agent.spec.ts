@@ -1,5 +1,5 @@
 import { AgentOptions } from '../../src/agent';
-import { HelpAgent } from '../../src/agents/help-agent';
+import HelpAgent from '../../src/agents/help-agent';
 import { HelpProvider, HelpRequest, HelpResponse } from '../../src/help';
 import InteractionHistory from '../../src/interaction-history';
 import { AppMapConfig, AppMapStats } from '../../src/project-info';

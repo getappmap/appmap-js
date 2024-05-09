@@ -1,5 +1,5 @@
 import ExplainAgent from '../../src/agents/explain-agent';
-import { HelpAgent } from '../../src/agents/help-agent';
+import HelpAgent from '../../src/agents/help-agent';
 import { ExplainOptions } from '../../src/explain';
 import { HelpProvider } from '../../src/help';
 import InteractionHistory from '../../src/interaction-history';

@@ -4,13 +4,13 @@ import { ExplainOptions } from '../explain';
 import InteractionHistory from '../interaction-history';
 import { Agent, AgentMode } from '../agent';
 import { ProjectInfo } from '../project-info';
-import { HelpAgent } from '../agents/help-agent';
 import { HelpProvider } from '../help';
+import HelpAgent from '../agents/help-agent';
+import GenerateAgent from '../agents/generate-agent';
+import ExplainAgent from '../agents/explain-agent';
 import VectorTermsService from './vector-terms-service';
-import { GenerateAgent } from '../agents/generate-agent';
 import LookupContextService from './lookup-context-service';
 import ApplyContextService from './apply-context-service';
-import ExplainAgent from '../agents/explain-agent';
 
 type AgentModeResult = { agent: Agent; question: string };
 

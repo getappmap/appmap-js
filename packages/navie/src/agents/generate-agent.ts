@@ -34,7 +34,7 @@ shell commands, or other workarounds. Your solution must be suitable for use as 
 * At the beginning of every patch file or code file you emit, you must print the path to the code file within the workspace.
 * Limit the amount of text explanation you emit to the minimum necessary. The user is primarily interested in the code itself.
 `;
-export class GenerateAgent implements Agent {
+export default class GenerateAgent implements Agent {
   constructor(
     public history: InteractionHistory,
     private vectorTermsService: VectorTermsService,
