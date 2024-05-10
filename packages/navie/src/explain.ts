@@ -19,7 +19,7 @@ import LookupContextService from './services/lookup-context-service';
 import ApplyContextService from './services/apply-context-service';
 import ClassificationService from './services/classification-service';
 
-export const DEFAULT_TOKEN_LIMIT = 12000;
+export const DEFAULT_TOKEN_LIMIT = 8000;
 
 export type ChatHistory = Message[];
 
@@ -95,6 +95,12 @@ export class CodeExplainerService {
       codeSelection,
       contextLabels
     );
+
+    const isArchitecture = contextLabels
+      .filter((label) => label.weight === 'high')
+      .some((label) => label.name === 'architecture' || label.name === 'overview');
+
+    this.projectInfoService.promptProjectInfo(isArchitecture, projectInfo);
     await mode.perform(agentOptions, tokensAvailable);
 
     if (codeSelection) this.codeSelectionService.addSystemPrompt();
