@@ -1,3 +1,19 @@
+# [@appland/appmap-v3.141.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.140.1...@appland/appmap-v3.141.0) (2024-05-10)
+
+
+### Bug Fixes
+
+* Don't yield absolute paths from listProjectFiles ([7f76bf9](https://github.com/getappmap/appmap-js/commit/7f76bf982db474c8672976df659c381c3b633dc2))
+* Handle multiple -d options to rpc command ([81c88c2](https://github.com/getappmap/appmap-js/commit/81c88c27050330870dd09bb7a2959cc47a498ed6))
+* Prevent SIGPIPE in large projects ([a13b628](https://github.com/getappmap/appmap-js/commit/a13b628e4b4669999d61212c474f08c268e4d2c9))
+* Query keywords now additionally split on underscore ([b7fceb3](https://github.com/getappmap/appmap-js/commit/b7fceb327029b7c9232f044c34ecac9486d00009))
+
+
+### Features
+
+* Include static symbol names in file terms ([320bba5](https://github.com/getappmap/appmap-js/commit/320bba5e0221ebf703a029671c60b262249563ef))
+* Index directory files in batches ([dd662fd](https://github.com/getappmap/appmap-js/commit/dd662fd6f098499c346696747640862420427073))
+
 # [@appland/appmap-v3.140.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.140.0...@appland/appmap-v3.140.1) (2024-05-03)
 
 
