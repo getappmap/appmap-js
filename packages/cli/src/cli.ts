@@ -35,6 +35,7 @@ const InventoryCommand = require('./cmds/inventory/inventory');
 const InventoryReportCommand = require('./cmds/inventory-report/inventoryReport');
 const SearchCommand = require('./cmds/search/search');
 import * as RpcCommand from './cmds/index/rpc';
+import * as NavieCommand from './cmds/navie';
 import UploadCommand from './cmds/upload';
 import { default as sqlErrorLog } from './lib/sqlErrorLog';
 
@@ -140,6 +141,7 @@ yargs(process.argv.slice(2))
   .command(InventoryReportCommand)
   .command(SearchCommand)
   .command(RpcCommand)
+  .command(NavieCommand)
   .option('verbose', {
     alias: 'v',
     type: 'boolean',
