@@ -4,7 +4,7 @@ title: Docs - Guides
 description: "Learn how to manage large AppMap Diagrams effectively. Discover tips to handle AppMap Data over 10 MB and 200 MB in size, focusing on optimizing AppMap Data for better interpretation and performance."
 guides: true
 name: Handling Large AppMap Diagrams
-step: 3
+step: 4
 redirect_from: [/docs/reference/handling-large-appmaps, /docs/guides/handling-large-appmaps]
 ---
 
