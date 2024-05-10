@@ -74,6 +74,11 @@ export default class ExplainAgent implements Agent {
     private applyContextService: ApplyContextService
   ) {}
 
+  // eslint-disable-next-line class-methods-use-this
+  get standalone(): boolean {
+    return false;
+  }
+
   async perform(options: AgentOptions, tokensAvailable: () => number) {
     this.history.addEvent(new PromptInteractionEvent('agent', 'system', EXPLAIN_AGENT_PROMPT));
 
@@ -85,11 +90,12 @@ export default class ExplainAgent implements Agent {
       )
     );
 
-    const languages = options.projectInfo
-      .map((info) => info.appmapConfig?.language)
-      .filter(Boolean) as string[];
     const tokenCount = tokensAvailable();
     const vectorTerms = await this.vectorTermsService.suggestTerms(options.aggregateQuestion);
+
+    const languages = options.projectInfo
+      ? (options.projectInfo.map((info) => info.appmapConfig?.language).filter(Boolean) as string[])
+      : [];
 
     const context = await this.lookupContextService.lookupContext(
       vectorTerms,

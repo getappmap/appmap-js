@@ -77,6 +77,11 @@ export const builder = (args: yargs.Argv) => {
     // in use, or the user's intent.
   });
 
+  args.option('thread', {
+    describe: 'Resume a conversation identified by thread id',
+    type: 'string',
+  });
+
   return args.strict();
 };
 
@@ -88,9 +93,15 @@ export const handler = async (argv) => {
     Array.isArray(argv.directory)
       ? directories.push(...argv.directory)
       : directories.push(argv.directory);
+
+    if (directories.length === 1) {
+      log(`Changing to working directory: ${directories[0]}`);
+      process.chdir(directories[0]);
+    }
   }
 
   const { port, logNavie } = argv;
+  let { thread: initialThreadId } = argv;
   let aiOptions: string[] | undefined = argv.aiOption;
   if (aiOptions) {
     aiOptions = Array.isArray(aiOptions) ? aiOptions : [aiOptions];
@@ -150,6 +161,13 @@ export const handler = async (argv) => {
     projectInfoProvider: ProjectInfo.ProjectInfoProvider,
     helpProvider: Help.HelpProvider
   ) => {
+    if (!threadId && initialThreadId) {
+      log(`Resuming thread ${initialThreadId}`);
+      // eslint-disable-next-line no-param-reassign
+      threadId = initialThreadId;
+      initialThreadId = undefined;
+    }
+
     const navie = new LocalNavie(threadId, contextProvider, projectInfoProvider, helpProvider);
     applyAIOptions(navie);
 

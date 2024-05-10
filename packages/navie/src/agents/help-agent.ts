@@ -91,12 +91,17 @@ Finish your response by informing the user that, in the future, they can begin a
 with the prefix "@help" to activate help mode, and get help with using AppMap.
 `;
 
-export class HelpAgent implements Agent {
+export default class HelpAgent implements Agent {
   constructor(
     public history: InteractionHistory,
     private helpProvider: HelpProvider,
     private vectorTermsService: VectorTermsService
   ) {}
+
+  // eslint-disable-next-line class-methods-use-this
+  get standalone(): boolean {
+    return false;
+  }
 
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {
     this.history.addEvent(new PromptInteractionEvent('agent', 'system', HELP_AGENT_PROMPT));

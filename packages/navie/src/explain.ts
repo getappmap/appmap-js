@@ -10,14 +10,17 @@ import InteractionHistory, {
 } from './interaction-history';
 import { ContextV2 } from './context';
 import ProjectInfoService from './services/project-info-service';
-import { ProjectInfo, ProjectInfoProvider } from './project-info';
+import { ProjectInfoProvider } from './project-info';
 import CodeSelectionService from './services/code-selection-service';
-import { AgentMode, AgentOptions } from './agent';
+import { Agent, AgentMode, AgentOptions } from './agent';
 import { HelpProvider } from './help';
-import AgentSelectionService from './services/agent-selection-service';
 import LookupContextService from './services/lookup-context-service';
 import ApplyContextService from './services/apply-context-service';
 import ClassificationService from './services/classification-service';
+import AgentSelectionService from './services/agent-selection-service';
+import { applyCommandOptions, parseOptions } from './command-option';
+import FileChangeExtractorService from './services/file-change-extractor-service';
+import FileUpdateService from './services/file-update-service';
 
 export const DEFAULT_TOKEN_LIMIT = 12000;
 
@@ -38,10 +41,10 @@ export class ExplainOptions {
 
 export class CodeExplainerService {
   constructor(
+    public readonly agent: Agent,
     public readonly interactionHistory: InteractionHistory,
     private readonly completionService: CompletionService,
     private readonly classifierService: ClassificationService,
-    private readonly agentSelectionService: AgentSelectionService,
     private readonly codeSelectionService: CodeSelectionService,
     private readonly projectInfoService: ProjectInfoService,
     private readonly memoryService: MemoryService
@@ -49,26 +52,22 @@ export class CodeExplainerService {
 
   async *execute(
     clientRequest: ClientRequest,
-    options: ExplainOptions,
+    requestOptions: ExplainOptions,
     chatHistory?: ChatHistory
   ): AsyncIterable<string> {
-    const { question: baseQuestion, codeSelection } = clientRequest;
+    const { codeSelection, question } = clientRequest;
 
-    const contextLabelsFn = this.classifierService.classifyQuestion(baseQuestion);
+    const contextLabelsFn = this.classifierService.classifyQuestion(question);
 
     const projectInfoResponse = await this.projectInfoService.lookupProjectInfo();
-    const projectInfo: ProjectInfo[] = Array.isArray(projectInfoResponse)
+    const projectInfo = Array.isArray(projectInfoResponse)
       ? projectInfoResponse
       : [projectInfoResponse];
 
-    const { question, agent: mode } = this.agentSelectionService.selectAgent(
-      baseQuestion,
-      options,
-      projectInfo
-    );
-
     const tokensAvailable = (): number =>
-      options.tokenLimit - options.responseTokens - this.interactionHistory.computeTokenSize();
+      requestOptions.tokenLimit -
+      requestOptions.responseTokens -
+      this.interactionHistory.computeTokenSize();
 
     const aggregateQuestion = [
       ...(chatHistory || [])
@@ -95,7 +94,14 @@ export class CodeExplainerService {
       codeSelection,
       contextLabels
     );
-    await mode.perform(agentOptions, tokensAvailable);
+
+    const isArchitecture = contextLabels
+      .filter((label) => label.weight === 'high')
+      .some((label) => label.name === 'architecture' || label.name === 'overview');
+
+    if (projectInfo) this.projectInfoService.promptProjectInfo(isArchitecture, projectInfo);
+
+    await this.agent.perform(agentOptions, tokensAvailable);
 
     if (codeSelection) this.codeSelectionService.addSystemPrompt();
 
@@ -105,7 +111,7 @@ export class CodeExplainerService {
     }
 
     if (codeSelection) this.codeSelectionService.applyCodeSelection(codeSelection);
-    mode.applyQuestionPrompt(question);
+    this.agent.applyQuestionPrompt(question);
 
     const response = this.completionService.complete();
     for await (const token of response) {
@@ -145,6 +151,16 @@ export default function explain(
     options.modelName,
     options.temperature
   );
+  const fileChangeExtractorService = new FileChangeExtractorService(
+    interactionHistory,
+    options.modelName,
+    options.temperature
+  );
+  const fileUpdateService = new FileUpdateService(
+    interactionHistory,
+    options.modelName,
+    options.temperature
+  );
 
   const contextProviderV2 = async (
     request: ContextV2.ContextRequest
@@ -163,7 +179,9 @@ export default function explain(
     helpProvider,
     vectorTermsService,
     lookupContextService,
-    applyContextService
+    applyContextService,
+    fileChangeExtractorService,
+    fileUpdateService
   );
   const projectInfoService = new ProjectInfoService(interactionHistory, projectInfoProvider);
   const memoryService = new MemoryService(
@@ -172,22 +190,59 @@ export default function explain(
     options.temperature
   );
 
-  const codeExplainerService = new CodeExplainerService(
-    interactionHistory,
-    completionService,
-    classificationService,
-    agentSelectionService,
-    codeSelectionService,
-    projectInfoService,
-    memoryService
-  );
+  let question: string;
+  let agentMode: AgentMode | undefined;
+  {
+    const parsedOptions = parseOptions(clientRequest.question);
+    agentMode = parsedOptions.agentMode;
+    question = parsedOptions.question;
+    applyCommandOptions(parsedOptions.options, options);
+  }
 
-  return {
-    on: (event: 'event', listener: (event: InteractionEvent) => void) => {
-      interactionHistory.on(event, listener);
-    },
-    execute() {
-      return codeExplainerService.execute(clientRequest, options, chatHistory);
-    },
-  };
+  const agent = agentSelectionService.buildAgent(agentMode);
+
+  let explainer: IExplain;
+  if (agent.standalone) {
+    agent.applyQuestionPrompt(question);
+
+    explainer = {
+      on: (event: 'event', listener: (event: InteractionEvent) => void) => {
+        interactionHistory.on(event, listener);
+      },
+      async *execute(): AsyncIterable<string> {
+        const agentOptions = new AgentOptions(
+          question,
+          [question, clientRequest.codeSelection].join('\n\n'),
+          (chatHistory || []).map((message) => message.content),
+          []
+        );
+
+        const messages = await agent.perform(agentOptions, () => options.tokenLimit);
+        if (Array.isArray(messages))
+          for (const message of messages) {
+            yield message;
+          }
+      },
+    };
+  } else {
+    const codeExplainerService = new CodeExplainerService(
+      agent,
+      interactionHistory,
+      completionService,
+      classificationService,
+      codeSelectionService,
+      projectInfoService,
+      memoryService
+    );
+
+    explainer = {
+      on: (event: 'event', listener: (event: InteractionEvent) => void) => {
+        interactionHistory.on(event, listener);
+      },
+      execute() {
+        return codeExplainerService.execute(clientRequest, options, chatHistory);
+      },
+    };
+  }
+  return explainer;
 }

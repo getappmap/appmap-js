@@ -20,6 +20,18 @@ export default class ProjectInfoService {
 
     const projectInfo = Array.isArray(response) ? response : [response];
     this.interactionHistory.log('Project info obtained');
+    return projectInfo;
+  }
+
+  promptProjectInfo(isArchitecture: boolean, projectInfo: ProjectInfo[]) {
+    const emitProjectInfo: ProjectInfo[] = projectInfo.map((info) => ({ ...info }));
+
+    if (!isArchitecture) {
+      for (const info of emitProjectInfo) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        delete (info as any).appmapStats;
+      }
+    }
 
     const projectInfoKeys: [
       PromptType,
@@ -70,7 +82,5 @@ export default class ProjectInfoService {
         )
       );
     });
-
-    return projectInfo;
   }
 }

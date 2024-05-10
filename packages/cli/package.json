@@ -54,7 +54,6 @@
     "@types/validator": "^13.7.10",
     "@types/w3c-xmlserializer": "^2.0.2",
     "@types/yargs": "^17.0.2",
-    "appmap-node": "^2.20.0",
     "esbuild": "0.19.8",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^8.3.0",

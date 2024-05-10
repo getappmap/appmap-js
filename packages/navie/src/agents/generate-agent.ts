@@ -34,7 +34,7 @@ shell commands, or other workarounds. Your solution must be suitable for use as 
 * At the beginning of every patch file or code file you emit, you must print the path to the code file within the workspace.
 * Limit the amount of text explanation you emit to the minimum necessary. The user is primarily interested in the code itself.
 `;
-export class GenerateAgent implements Agent {
+export default class GenerateAgent implements Agent {
   constructor(
     public history: InteractionHistory,
     private vectorTermsService: VectorTermsService,
@@ -42,14 +42,19 @@ export class GenerateAgent implements Agent {
     private applyContextService: ApplyContextService
   ) {}
 
+  // eslint-disable-next-line class-methods-use-this
+  get standalone(): boolean {
+    return false;
+  }
+
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {
     this.history.addEvent(new PromptInteractionEvent('agent', 'system', GENERATE_AGENT_PROMPT));
 
     this.history.addEvent(
       new PromptInteractionEvent(
-        PromptType.IssueDescription,
+        PromptType.Specification,
         'system',
-        buildPromptDescriptor(PromptType.IssueDescription)
+        buildPromptDescriptor(PromptType.Specification)
       )
     );
 
@@ -62,9 +67,9 @@ export class GenerateAgent implements Agent {
   applyQuestionPrompt(question: string): void {
     this.history.addEvent(
       new PromptInteractionEvent(
-        PromptType.IssueDescription,
+        PromptType.Specification,
         'user',
-        buildPromptValue(PromptType.IssueDescription, question)
+        buildPromptValue(PromptType.Specification, question)
       )
     );
   }

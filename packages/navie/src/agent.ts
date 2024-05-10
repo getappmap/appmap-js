@@ -5,6 +5,12 @@ export enum AgentMode {
   Explain = 'explain',
   Generate = 'generate',
   Help = 'help',
+  Issue = 'issue',
+  Apply = 'apply',
+}
+
+export function agentMode(value: string): AgentMode | undefined {
+  return Object.values(AgentMode).find((mode) => mode === value);
 }
 
 export class AgentOptions {
@@ -23,7 +29,9 @@ export class AgentOptions {
 }
 
 export interface Agent {
-  perform(options: AgentOptions, tokensAvailable: () => number): Promise<void>;
+  get standalone(): boolean;
+
+  perform(options: AgentOptions, tokensAvailable: () => number): Promise<string[] | void>;
 
   applyQuestionPrompt(question: string): void;
 }
