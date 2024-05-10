@@ -29,8 +29,8 @@ describe('listProjectFiles', () => {
     });
 
     const files = await listProjectFiles(baseDir);
-    expect(files).toContain(join(baseDir, 'index.js'));
-    expect(files).toContain(join(baseDir, 'utils', 'helper.js'));
+    expect(files).toContain('index.js');
+    expect(files).toContain(join('utils', 'helper.js'));
     expect(fsp.readdir).toHaveBeenCalledTimes(2); // baseDir + utils
   });
 
