@@ -15,7 +15,14 @@
     <section>
       <h3>Add the <code class="inline">appmap</code> package to your project</h3>
       <div>
-        <v-code-snippet clipboard-text="pip install appmap" :kind="ctaButtonType" />
+        <v-code-snippet
+          clipboard-text="pip install --require-virtualenv appmap"
+          :kind="ctaButtonType"
+        />
+        <p>
+          Note that this requires that you create and activate a
+          <a href="https://docs.python.org/3/library/venv.html">virtual environment</a>.
+        </p>
       </div>
       <div>
         <div class="center-block">or</div>
