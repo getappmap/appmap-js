@@ -1,3 +1,10 @@
+# [@appland/components-v4.24.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.24.0...@appland/components-v4.24.1) (2024-05-10)
+
+
+### Bug Fixes
+
+* update pip install command ([c046b57](https://github.com/getappmap/appmap-js/commit/c046b578d414188c296336f8938ffd9e86e25729))
+
 # [@appland/components-v4.24.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.23.0...@appland/components-v4.24.0) (2024-05-03)
 
 
