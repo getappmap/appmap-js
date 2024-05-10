@@ -6,7 +6,6 @@ name: Using Navie
 step: 3
 toc: true
 navie: true
-toc: true
 redirect_from: [/docs/navie/how-to-use-navie]
 ---
 

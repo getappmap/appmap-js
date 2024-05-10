@@ -133,14 +133,7 @@ jobs:
         run: |
           cd packages/cli
           yarn run lint
-          npx appmap-node yarn run test
-
-      - name: Save AppMaps
-        uses: actions/cache/save@v3
-        if: always()
-        with:
-          path: ./packages/cli/tmp/appmap
-          key: appmaps-${{ github.sha }}-${{ github.run_attempt }}
+          yarn run test
 
   test_scanner:
     runs-on: ubuntu-latest
@@ -163,8 +156,6 @@ jobs:
           cd packages/scanner
           yarn run lint
           yarn run test
-          # TODO: Run only the appmap-node version of these tests
-          # npx appmap-node yarn run test
 
   test_native:
     runs-on: ubuntu-latest
@@ -211,18 +202,6 @@ jobs:
         run: |
           yarn workspaces foreach -v -t --exclude root --exclude @appland/appmap --exclude @appland/components --exclude @appland/scanner run lint
           yarn workspaces foreach -v -t --exclude root --exclude @appland/appmap --exclude @appland/components --exclude @appland/scanner run test
-
-  appmap-analysis:
-    if: always()
-    needs: [test_cli]
-    uses: getappmap/analyze-action/.github/workflows/appmap-analysis.yml@v1
-    with:
-      directory: ./packages/cli
-    permissions:
-      actions: read
-      contents: read
-      checks: write
-      pull-requests: write
 
   release:
     if: github.ref == 'refs/heads/main'

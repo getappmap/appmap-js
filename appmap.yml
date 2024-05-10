@@ -1,0 +1,25 @@
+name: appmap-js
+appmap_dir: tmp/appmap
+packages:
+  - path: packages/cli
+    exclude:
+      - node_modules
+      - .yarn
+      - splitCamelized
+      - isCamelized
+  - path: packages/navie
+    exclude:
+      - node_modules
+      - .yarn
+  - path: packages/client
+    exclude:
+      - node_modules
+      - .yarn
+  - path: packages/openapi
+    exclude:
+      - node_modules
+      - .yarn
+  - path: packages/scanner
+    exclude:
+      - node_modules
+      - .yarn
