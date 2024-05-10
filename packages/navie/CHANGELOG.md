@@ -1,3 +1,10 @@
+# [@appland/navie-v1.9.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.9.0...@appland/navie-v1.9.1) (2024-05-10)
+
+
+### Bug Fixes
+
+* Don't prompt with appmapStats for non-arch questions ([8b74c8e](https://github.com/getappmap/appmap-js/commit/8b74c8ef16632567ff8bcca37b9c43afd10578d2))
+
 # [@appland/navie-v1.9.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.8.0...@appland/navie-v1.9.0) (2024-04-30)
 
 
