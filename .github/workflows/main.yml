@@ -142,6 +142,13 @@ jobs:
           path: ./packages/cli/tmp/appmap
           key: appmaps-${{ github.sha }}-${{ github.run_attempt }}
 
+      - name: Save AppMaps
+        uses: actions/cache/save@v3
+        if: always()
+        with:
+          path: ./packages/cli/tmp/appmap
+          key: appmaps-${{ github.sha }}-${{ github.run_attempt }}
+
   test_scanner:
     runs-on: ubuntu-latest
 
