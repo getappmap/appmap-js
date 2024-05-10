@@ -18,7 +18,7 @@ export type FileIndexMatch = {
   score: number;
 };
 
-type IndexFileOptions = {
+type ParsingOptions = {
   allowGenericParsing?: boolean;
   allowSymbols?: boolean;
 };
@@ -54,48 +54,71 @@ export class FileIndex {
     }));
   }
 
-  async indexDirectories(directories: string[]) {
-    return Promise.all(
-      directories.map((directory) =>
-        Git.state(directory)
-          .then((gitState) =>
-            gitState === GitState.Ok ? listGitProjectFiles(directory) : listProjectFiles(directory)
-          )
-          .then((fileNames) => filterFiles(directory, fileNames))
-          .then((fileNames) => this.#indexDirectory(directory, fileNames))
-      )
-    );
-  }
+  async indexDirectories(directories: string[], batchSize = 100) {
+    for (const directory of directories) {
+      try {
+        const startTime = new Date().getTime();
+        const gitState = await Git.state(directory);
+        const fileNames =
+          gitState === GitState.Ok
+            ? await listGitProjectFiles(directory)
+            : await listProjectFiles(directory);
 
-  #indexDirectory = this.database.transaction((directory: string, fileNames: string[]) => {
-    const startTime = new Date().getTime();
-    const options = {
-      allowGenericParsing: fileNames.length < 15_000,
-      allowSymbols: fileNames.length < 15_000,
-    };
+        const filteredFileNames = await filterFiles(directory, fileNames);
 
-    if (verbose()) {
-      if (options.allowSymbols) {
-        console.log('Symbol parsing is enabled.');
+        const options = {
+          allowGenericParsing: fileNames.length < 15_000,
+          allowSymbols: fileNames.length < 15_000,
+        };
+
+        if (verbose()) {
+          if (options.allowSymbols) {
+            console.log('Symbol parsing is enabled.');
+            console.log(
+              `Generic symbol parsing is ${options.allowGenericParsing ? 'enabled.' : 'disabled.'}`
+            );
+          } else {
+            console.log('Symbol parsing is disabled.');
+          }
+        }
+
+        for (let i = 0; i < filteredFileNames.length; i += batchSize) {
+          this.indexDirectory(directory, filteredFileNames, options, i, batchSize);
+
+          // yield to the event loop after each chunk
+          await new Promise((resolve) => setTimeout(resolve, 0));
+        }
+
+        const endTime = new Date().getTime();
         console.log(
-          `Generic symbol parsing is ${options.allowGenericParsing ? 'enabled.' : 'disabled.'}`
+          `Indexed ${fileNames.length} files in ${directory} in ${endTime - startTime}ms`
         );
-      } else {
-        console.log('Symbol parsing is disabled.');
+      } catch (error) {
+        console.error(`Error processing directory ${directory}:`, error);
       }
     }
+  }
 
-    for (const fileName of fileNames) {
-      this.indexFile(directory, fileName, options);
+  private indexDirectory = this.database.transaction(
+    (
+      directory: string,
+      fileNames: string[],
+      options?: ParsingOptions,
+      offset?: number,
+      limit?: number
+    ) => {
+      const startIndex = offset ?? 0;
+      const endIndex = limit ? Math.min(startIndex + limit, fileNames.length) : fileNames.length;
+      for (let i = startIndex; i < endIndex; i++) {
+        const fileName = fileNames[i];
+        this.indexFile(directory, fileName, options);
+      }
     }
-
-    const endTime = new Date().getTime();
-    console.log(`Indexed ${fileNames.length} files in ${directory} in ${endTime - startTime}ms`);
-  });
+  );
 
   #insert: sqlite3.Statement<unknown[]>;
 
-  indexFile(directory: string, filePath: string, options: IndexFileOptions = {}) {
+  indexFile(directory: string, filePath: string, options: ParsingOptions = {}) {
     const { allowGenericParsing = true, allowSymbols = true } = options;
     const fileNameTokens = filePath.split(path.sep);
 
