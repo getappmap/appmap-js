@@ -310,6 +310,40 @@ function buildMockRpc(
         baseUrl,
         model: 'gpt-4-turbo',
       });
+    } else if (method === 'v1.navie.metadata') {
+      callback(null, null, {
+        welcomeMessage:
+          "### Hi, I'm Navie!\n\nI can help you answer questions about your codebase, plan solutions, and generate code. Enter `@` to see a list of commands.",
+        inputPlaceholder: "Ask a question or enter '@' for commands",
+        commands: [
+          {
+            name: '@explain',
+            description:
+              'Ask questions about the codebase, and Navie will respond with explanations, diagrams, code snippets, and more. This is the default mode.',
+          },
+          {
+            name: '@diagram',
+            description: 'Navie can generate Mermaid diagrams based on your request.',
+          },
+          {
+            name: '@plan',
+            description: 'Create a plan to implement a solution to a code issue or feature.',
+          },
+          {
+            name: '@generate',
+            description:
+              'Generate code based on the given instructions. This is particularly useful after a plan is created.',
+          },
+          {
+            name: '@help',
+            description: 'Get help with AppMap and Navie AI.',
+          },
+          {
+            name: '@test',
+            description: 'Write tests for your code.',
+          },
+        ],
+      });
     }
   };
 }

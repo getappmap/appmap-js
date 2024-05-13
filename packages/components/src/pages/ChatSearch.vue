@@ -13,8 +13,9 @@
         :send-message="sendMessage"
         :status-label="searchStatusLabel"
         :question="question"
-        @isChatting="setIsChatting"
         :input-placeholder="inputPlaceholder"
+        :metadata="metadata"
+        @isChatting="setIsChatting"
         @stop="onStop"
       >
         <v-llm-configuration
@@ -137,6 +138,7 @@ export default {
       contextResponse: undefined,
       pinnedItems: [] as PinItem[],
       projectDirectories: [] as string[],
+      metadata: undefined as NavieRpc.V1.Metadata.Response | undefined,
     };
   },
   provide() {
@@ -483,6 +485,10 @@ export default {
 
       this.configLoaded = true;
     },
+    async loadMetadata() {
+      const metadata = await this.rpcClient.metadata();
+      this.metadata = metadata;
+    },
   },
   async mounted() {
     if (this.$refs.vappmap && this.targetAppmap && this.targetAppmapFsPath) {
@@ -490,6 +496,7 @@ export default {
       await this.$refs.vappmap.loadData(this.targetAppmap);
     }
     this.loadNavieConfig();
+    this.loadMetadata();
     this.$root.$on('pin', (pin: PinEvent) => {
       const pinIndex = this.pinnedItems.findIndex((p) => p.handle === pin.handle);
       if (pin.pinned && pinIndex === -1) {
