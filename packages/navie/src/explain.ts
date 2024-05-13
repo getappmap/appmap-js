@@ -30,7 +30,7 @@ export interface ClientRequest {
 
 export class ExplainOptions {
   agentMode: AgentMode | undefined;
-  modelName = process.env.APPMAP_NAVIE_MODEL ?? 'gpt-4-turbo-2024-04-09';
+  modelName = process.env.APPMAP_NAVIE_MODEL ?? 'gpt-4o';
   tokenLimit = Number(process.env.APPMAP_NAVIE_TOKEN_LIMIT ?? DEFAULT_TOKEN_LIMIT);
   temperature = 0.4;
   responseTokens = 1000;

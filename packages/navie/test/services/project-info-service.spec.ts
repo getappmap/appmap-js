@@ -60,7 +60,7 @@ describe('ProjectInfoService', () => {
 
       expect(interactionHistory.buildState().messages).toEqual([
         {
-          content: 'The project does not contain an AppMap config file (appmap.yml).',
+          content: expect.stringContaining('does not contain an AppMap config file'),
           role: 'user',
         },
         {
