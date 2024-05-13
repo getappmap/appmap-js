@@ -18,3 +18,11 @@ You'll find the AppMap team there, along with other AppMap users.
 ### Step 2: [Ask Navie AI a Question](/docs/get-started-with-appmap/navie-ai-quickstart)
 
 ### Step 3: [Make AppMap Data and Improve Navie's Responses](/docs/get-started-with-appmap/making-appmap-data)
+
+### Video: Getting Started in VS Code
+
+{% include vimeo.html id='943787985' %}
+
+### Video: Getting Started in JetBrains
+
+{% include vimeo.html id='943788515' %}
