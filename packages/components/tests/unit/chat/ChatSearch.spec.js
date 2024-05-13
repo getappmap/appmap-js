@@ -30,12 +30,26 @@ describe('pages/ChatSearch.vue', () => {
   const userMessageId = 'the-user-message-id';
 
   const noConfig = () => [[null, null, { projectDirectories: [] }]];
+
+  const navieMetadata = {
+    welcomeMessage: 'Welcome to Navie!',
+    inputPlaceholder: 'Type something',
+    commands: [
+      {
+        name: '@example',
+        description: 'An example command',
+      },
+    ],
+  };
+  const rpcNavieMetadata = () => [[null, null, navieMetadata]];
+
   const emptySearchResponse = {
     results: [],
   };
 
   const buildComponent = (searchResponse, contextResponse, hasMetadata) => {
     const messagesCalled = {
+      'v1.navie.metadata': rpcNavieMetadata(),
       'v2.configuration.get': noConfig(),
       explain: [[null, null, { userMessageId, threadId }]],
       'explain.status': [
@@ -95,6 +109,7 @@ describe('pages/ChatSearch.vue', () => {
 
   it('can be resized', async () => {
     const wrapper = chatSearchWrapper({
+      'v1.navie.metadata': rpcNavieMetadata(),
       'v2.configuration.get': noConfig(),
     });
 
@@ -175,7 +190,7 @@ describe('pages/ChatSearch.vue', () => {
         const status = '[data-cy="tool-status"] [data-cy="status"]';
         const wrapper = chatSearchWrapper({
           'appmap.metadata': [[null, null, {}]],
-
+          'v1.navie.metadata': rpcNavieMetadata(),
           'v2.configuration.get': noConfig(),
           explain: [[null, null, { userMessageId, threadId }]],
           'explain.status': [
@@ -264,6 +279,7 @@ describe('pages/ChatSearch.vue', () => {
     it('does not render until the configuration is available', async () => {
       const wrapper = chatSearchWrapper({
         'v2.configuration.get': noConfig(),
+        'v1.navie.metadata': rpcNavieMetadata(),
       });
 
       expect(wrapper.find('[data-cy="llm-config"]').exists()).toBe(false);
@@ -275,6 +291,7 @@ describe('pages/ChatSearch.vue', () => {
 
     it('renders a local configuration', async () => {
       const wrapper = chatSearchWrapper({
+        'v1.navie.metadata': rpcNavieMetadata(),
         'v2.configuration.get': [
           [
             null,
@@ -294,6 +311,7 @@ describe('pages/ChatSearch.vue', () => {
 
     it('renders the default configuration', async () => {
       const wrapper = chatSearchWrapper({
+        'v1.navie.metadata': rpcNavieMetadata(),
         'v2.configuration.get': [[null, null, { projectDirectories: [] }]],
       });
 
@@ -307,6 +325,7 @@ describe('pages/ChatSearch.vue', () => {
 
     it('renders an azure configuration', async () => {
       const wrapper = chatSearchWrapper({
+        'v1.navie.metadata': rpcNavieMetadata(),
         'v2.configuration.get': [
           [
             null,
@@ -330,6 +349,7 @@ describe('pages/ChatSearch.vue', () => {
 
     it('renders an OpenAI configuration', async () => {
       const wrapper = chatSearchWrapper({
+        'v1.navie.metadata': rpcNavieMetadata(),
         'v2.configuration.get': [
           [
             null,
@@ -355,6 +375,7 @@ describe('pages/ChatSearch.vue', () => {
   describe('error handling', () => {
     async function simulateError(err, error) {
       const wrapper = chatSearchWrapper({
+        'v1.navie.metadata': rpcNavieMetadata(),
         'v2.configuration.get': noConfig(),
         explain: [[err, error]],
       });

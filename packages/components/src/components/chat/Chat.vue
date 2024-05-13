@@ -61,6 +61,7 @@
       :question="question"
       :code-selections="codeSelections"
       :is-stop-active="isResponseStreaming"
+      :metadata="metadata"
       ref="input"
     />
   </div>
@@ -68,12 +69,13 @@
 
 <script lang="ts">
 //@ts-nocheck
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
 import VUserMessage from '@/components/chat/UserMessage.vue';
 import VChatInput from '@/components/chat/ChatInput.vue';
 import VAppMapNavieLogo from '@/assets/appmap-full-logo.svg';
 import VButton from '@/components/Button.vue';
 import { AI } from '@appland/client';
+import { NavieRpc } from '@appland/rpc';
 
 export type CodeSelection = {
   path: string;
@@ -166,6 +168,9 @@ export default {
       type: String,
       default: 'What are you working on today?',
     },
+    metadata: {
+      type: Object as PropType<NavieRpc.V1.Metadata.Response | undefined>,
+    },
   },
   data() {
     return {
@@ -177,26 +182,6 @@ export default {
       codeSelections: [] as CodeSelection[],
       appmaps: [] as string[],
       scrollLog: (message: string) => (this.enableScrollLog ? console.log(message) : undefined),
-      modeInstructions: [
-        {
-          id: 'explain',
-          title: '@explain',
-          subTitle:
-            'Navie will help you understand your project. This mode is used when there is no prefix.',
-          default: true,
-        },
-        {
-          id: 'help',
-          title: '@help',
-          subTitle:
-            'Navie will help you setup AppMap, including generating AppMap recordings and diagrams.',
-        },
-        {
-          id: 'generate',
-          title: '@generate',
-          subTitle: 'Navie will help you generate new code.',
-        },
-      ],
     };
   },
   computed: {

@@ -1,26 +1,33 @@
 <template>
   <div class="popper" @mouseover="hover = true" @mouseleave="hover = false">
     <transition name="fade">
-      <span
-        :class="`popper__text popper__text--${placement} popper__text--${flashStyle} popper__text--align-${textAlign}`"
-        v-if="isVisible"
-        v-html="textValue"
-      ></span>
+      <span :class="classes" v-if="isVisible">
+        <div v-if="textValue" v-html="textValue" />
+        <slot else name="content" />
+      </span>
     </transition>
 
     <slot />
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue';
+
+export default Vue.extend({
   name: 'v-popper',
 
   props: {
     placement: {
       type: String,
       required: true,
-      validator: (value) => ['left', 'right', 'top', 'bottom'].indexOf(value) !== -1,
+      validator: (value: string) =>
+        ['left', 'right', 'top', 'bottom', 'none'].indexOf(value) !== -1,
+    },
+    align: {
+      type: String,
+      default: 'center',
+      validator: (value: string) => ['left', 'right', 'center'].indexOf(value) !== -1,
     },
     text: {
       type: String,
@@ -29,13 +36,11 @@ export default {
       type: Number,
       default: 1500,
     },
-    textAlign: {
-      type: String,
-      default: 'center',
-      validator: (value) => ['left', 'right', 'center'].indexOf(value) !== -1,
-    },
     disabled: {
       default: false,
+    },
+    arrow: {
+      default: true,
     },
   },
 
@@ -44,8 +49,9 @@ export default {
       displayFlash: false,
       hover: false,
       flashText: '',
-      flashTimer: null,
+      flashTimer: undefined as number | undefined,
       flashStyle: 'default',
+      visibleOverride: false,
     };
   },
 
@@ -58,33 +64,50 @@ export default {
   },
 
   computed: {
-    isVisible() {
-      return (
-        !this.disabled && ((this.displayFlash && this.flashText) || (this.hover && this.textValue))
-      );
+    isVisible(): boolean {
+      const explicitlyVisible = this.visibleOverride;
+      const isHovered = !this.disabled && this.hover && Boolean(this.textValue);
+      const isFlashed = !this.disabled && this.displayFlash && Boolean(this.flashText);
+      return explicitlyVisible || isHovered || isFlashed;
     },
-    textValue() {
+    textValue(): string {
       return this.flashText || this.text;
+    },
+    classes(): Record<string, boolean> {
+      return {
+        popper__text: true,
+        'popper__text--no-arrow': !this.arrow,
+        [`popper__text--align-${this.align}`]: true,
+        [`popper__text--${this.placement}`]: true,
+        [`popper__text--${this.flashStyle}`]: true,
+      };
     },
   },
 
   methods: {
-    flash(text, style = 'default') {
+    flash(text: string, style = 'default') {
       this.displayFlash = true;
       this.flashText = text;
       this.flashStyle = style;
 
       if (this.flashTimer) {
         clearTimeout(this.flashTimer);
+        this.flashTimer = undefined;
       }
 
       this.flashTimer = setTimeout(() => {
         this.displayFlash = false;
-        this.flashTimer = null;
-      }, this.flashTime);
+        this.flashTimer = undefined;
+      }, this.flashTime) as unknown as number;
+    },
+    show() {
+      this.visibleOverride = true;
+    },
+    hide() {
+      this.visibleOverride = false;
     },
   },
-};
+});
 </script>
 
 <style scoped lang="scss">
@@ -113,18 +136,6 @@ $border-color: $gray1;
     word-wrap: break-word;
     word-break: normal;
     width: max-content;
-
-    &--align-left {
-      text-align: left;
-    }
-
-    &--align-right {
-      text-align: right;
-    }
-
-    &--align-center {
-      text-align: center;
-    }
 
     &--left {
       right: 100%;
@@ -181,7 +192,6 @@ $border-color: $gray1;
         content: '';
         position: absolute;
         bottom: -1px;
-        left: 50%;
         width: 1em;
         height: 1em;
         transform: translate(-50%, 0.5em) rotateZ(45deg);
@@ -198,12 +208,39 @@ $border-color: $gray1;
       transform: translateY(0);
     }
 
+    &--none {
+      &::before {
+        display: none;
+      }
+    }
+
     &--success {
       border-color: $brightblue;
 
       &::before {
         border-color: inherit;
       }
+    }
+
+    &--no-arrow {
+      margin-top: 0;
+      &::before {
+        display: none;
+      }
+    }
+
+    &--align-left {
+      left: 0;
+      transform: translateY(-100%);
+    }
+
+    &--align-right {
+      right: 0;
+    }
+
+    &--align-center {
+      left: 50%;
+      transform: translateX(-50%);
     }
   }
 }

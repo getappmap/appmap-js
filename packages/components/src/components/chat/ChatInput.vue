@@ -17,9 +17,15 @@
       />
     </div>
     <div class="input-container">
+      <v-auto-complete
+        :input="input"
+        :commands="commands"
+        @submit="onAutoComplete"
+        ref="autocomplete"
+      />
       <div
         contenteditable="plaintext-only"
-        :placeholder="placeholder"
+        :placeholder="placeholderOverride"
         role="textbox"
         @input="onInput"
         @keydown="onKeyDown"
@@ -55,10 +61,13 @@
 <script lang="ts">
 //@ts-nocheck
 
+import type { PropType } from 'vue';
 import VSendIcon from '@/assets/compass-icon.svg';
 import VStopIcon from '@/assets/stop-icon.svg';
 import VPopper from '@/components/Popper.vue';
 import VCodeSelection from '@/components/chat/CodeSelection.vue';
+import VAutoComplete from '@/components/chat/AutoComplete.vue';
+import { NavieRpc } from '@appland/rpc';
 
 export default {
   name: 'v-chat-input',
@@ -67,6 +76,7 @@ export default {
     VStopIcon,
     VPopper,
     VCodeSelection,
+    VAutoComplete,
   },
   props: {
     question: {
@@ -83,6 +93,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    metadata: {
+      type: Object as PropType<NavieRpc.V1.Metadata.Response | undefined>,
+      default: undefined,
+    },
   },
   data() {
     return {
@@ -90,8 +104,17 @@ export default {
     };
   },
   computed: {
+    commands(): NavieRpc.V1.Metadata.Command[] {
+      return this.metadata?.commands ?? [];
+    },
+    placeholderOverride(): string | undefined {
+      return this.metadata?.inputPlaceholder ?? this.placeholder;
+    },
     hasInput() {
       return this.input !== '';
+    },
+    isSelectingCommand() {
+      return this.$refs.autocomplete.isVisible;
     },
   },
   methods: {
@@ -109,16 +132,18 @@ export default {
       this.input = input.innerText;
     },
     onKeyDown(e: Event) {
-      if (!(e instanceof KeyboardEvent)) return;
+      if (!(e instanceof KeyboardEvent));
 
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         this.send();
       }
     },
+    onAutoComplete(command: string) {
+      this.prefixNewMode(command);
+    },
     send() {
-      if (!this.hasInput) return;
-      if (this.isStopActive) return;
+      if (!this.hasInput || this.isSelectingCommand || this.isStopActive) return;
 
       this.$emit('send', this.input);
       this.input = '';
@@ -132,20 +157,19 @@ export default {
     },
     prefixNewMode(mode: string) {
       const currentInput = (this.$refs.input as HTMLSpanElement).innerText || '';
-      this.setInput(`${mode} ${currentInput.replace(/^\s*@(.+?)?(\s+?|$)/g, '')}`);
+      this.setInput(`${mode} ${currentInput.replace(/^\s*@[^\s]*\s*/g, '')}`);
     },
     setInput(input: string) {
       this.input = input;
-      (this.$refs.input as HTMLSpanElement).innerText = input;
+      const inputEl: HTMLInputElement = this.$refs.input;
+      inputEl.innerText = input;
+
+      const match = input.match(/\s+|$/);
+      const index = match ? match.index + match[0].length : input.length;
 
       // Move the cursor to the end of the input
-      const range = document.createRange();
       const selection = window.getSelection();
-      range.selectNodeContents(this.$refs.input);
-      range.collapse(false);
-      selection.removeAllRanges();
-      selection.addRange(range);
-
+      selection?.setPosition(this.$refs.input.lastChild, index);
       this.focus();
     },
   },
