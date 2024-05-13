@@ -1,4 +1,4 @@
-import { AppMapRpc, ConfigurationRpc } from '@appland/rpc';
+import { AppMapRpc, ConfigurationRpc, NavieRpc } from '@appland/rpc';
 import { browserClient, reportError } from './RPC';
 
 import { EventEmitter } from 'events';
@@ -212,6 +212,20 @@ export default class AppMapRPC {
           succeeded
             ? resolve()
             : reject(new Error(`Failed to update ${filePath}. Please try again.`));
+        }
+      );
+    });
+  }
+
+  metadata(): Promise<NavieRpc.V1.Metadata.Response> {
+    return new Promise((resolve, reject) => {
+      this.client.request(
+        NavieRpc.V1.Metadata.Method,
+        undefined,
+        (err: any, error: any, result: NavieRpc.V1.Metadata.Response) => {
+          if (err || error) return reportError(reject, err, error);
+
+          resolve(result);
         }
       );
     });
