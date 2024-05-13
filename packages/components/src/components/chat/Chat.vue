@@ -37,18 +37,6 @@
         :code-selections="message.codeSelections"
         @change-sentiment="onSentimentChange"
       />
-      <div class="mode-instructions" v-if="!isChatting">
-        <p>You can start your question with one of these commands:</p>
-        <v-mode-instruction-card
-          v-for="instruction in modeInstructions"
-          :key="instruction.id"
-          :title="instruction.title"
-          :subTitle="instruction.subTitle"
-          :id="instruction.id"
-          :isDefault="instruction.default"
-          @useMode="onUseMode"
-        />
-      </div>
     </div>
     <div v-if="!authorized" class="status-unauthorized status-container">
       <div class="status-label">
@@ -158,7 +146,6 @@ export default {
   components: {
     VUserMessage,
     VChatInput,
-    VModeInstructionCard,
     VAppMapNavieLogo,
     VButton,
   },
@@ -185,26 +172,6 @@ export default {
       codeSelections: [] as CodeSelection[],
       appmaps: [] as string[],
       scrollLog: (message: string) => (this.enableScrollLog ? console.log(message) : undefined),
-      modeInstructions: [
-        {
-          id: 'explain',
-          title: '@explain',
-          subTitle:
-            'Navie will help you understand your project. This mode is used when there is no prefix.',
-          default: true,
-        },
-        {
-          id: 'help',
-          title: '@help',
-          subTitle:
-            'Navie will help you setup AppMap, including generating AppMap recordings and diagrams.',
-        },
-        {
-          id: 'generate',
-          title: '@generate',
-          subTitle: 'Navie will help you generate new code.',
-        },
-      ],
     };
   },
   computed: {
@@ -225,9 +192,6 @@ export default {
       return this.messages.find((m) => {
         return Object.keys(query).every((key) => m[key] === query[key]);
       });
-    },
-    onUseMode(mode: string) {
-      this.$refs.input.prefixNewMode(`@${mode}`);
     },
     // Creates-or-appends a message.
     addToken(token: string, threadId: string, messageId: string) {
