@@ -159,7 +159,7 @@ export default {
     },
     inputPlaceholder: {
       type: String,
-      default: 'How can I help?',
+      default: 'What are you working on today?',
     },
   },
   data() {
