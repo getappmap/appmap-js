@@ -15,10 +15,28 @@ import ExplainAgent from '../agents/explain-agent';
 type AgentModeResult = { agent: Agent; question: string };
 
 const MODE_PREFIXES = {
-  '@explain ': AgentMode.Explain,
-  '@generate ': AgentMode.Generate,
-  '@help ': AgentMode.Help,
+  '@explain ': {
+    mode: AgentMode.Explain,
+    endUserDescription:
+      'This is the default mode. Navie will explain something about your project.',
+  },
+  '@generate ': {
+    mode: AgentMode.Generate,
+    endUserDescription:
+      'Provides help with AppMap related behavior, such as recording agents, best practices, installation, and more.',
+  },
+  '@help ': {
+    mode: AgentMode.Help,
+    endUserDescription: 'This mode is optimized for code generation.',
+  },
 };
+
+type ModeDescriptor = {
+  mode: string;
+  endUserDescription: string;
+};
+
+export const AvailableModes: ReadonlyArray<ModeDescriptor> = Object.values(MODE_PREFIXES);
 
 export default class AgentSelectionService {
   constructor(
@@ -71,7 +89,7 @@ export default class AgentSelectionService {
     };
 
     const questionPrefixMode = () => {
-      for (const [prefix, mode] of Object.entries(MODE_PREFIXES)) {
+      for (const [prefix, { mode }] of Object.entries(MODE_PREFIXES)) {
         if (question.startsWith(prefix)) {
           modifiedQuestion = question.slice(prefix.length);
           this.history.log(`[mode-selection] Activating agent due to question prefix: ${mode}`);

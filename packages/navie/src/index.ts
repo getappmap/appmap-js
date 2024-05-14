@@ -9,3 +9,4 @@ export * as ProjectInfo from './project-info';
 export * as Help from './help';
 export * as Explain from './explain';
 export * as InteractionHistory from './interaction-history';
+export { AvailableModes } from './services/agent-selection-service';
