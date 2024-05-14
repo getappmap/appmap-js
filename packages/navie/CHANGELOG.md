@@ -1,3 +1,10 @@
+# [@appland/navie-v1.9.2](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.9.1...@appland/navie-v1.9.2) (2024-05-14)
+
+
+### Bug Fixes
+
+* De-emphasize manual creation of appmap.yml ([79e44cb](https://github.com/getappmap/appmap-js/commit/79e44cb5926975fdf0a670d6cf5c393f6c366fd5))
+
 # [@appland/navie-v1.9.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.9.0...@appland/navie-v1.9.1) (2024-05-10)
 
 
