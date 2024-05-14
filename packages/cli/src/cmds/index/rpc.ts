@@ -29,6 +29,7 @@ import {
 } from '../../rpc/configuration';
 import detectCodeEditor from '../../lib/detectCodeEditor';
 import detectAIEnvVar, { AI_KEY_ENV_VARS } from './aiEnvVar';
+import { navieCommandsV1 } from '../../rpc/navie/commands';
 
 export const command = 'rpc';
 export const describe = 'Run AppMap JSON-RPC server';
@@ -200,6 +201,7 @@ export const handler = async (argv) => {
     getConfigurationV1(),
     setConfigurationV2(),
     getConfigurationV2(),
+    navieCommandsV1(),
   ];
   const rpcServer = new RPCServer(port, rpcMethods);
   rpcServer.start();
