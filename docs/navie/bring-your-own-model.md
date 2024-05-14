@@ -25,6 +25,7 @@ By default, when asking a question to Navie, your code editor will interact with
   - [Azure OpenAI](#azure-openai)
   - [AnyScale Endpoints](#anyscale-endpoints)
   - [Ollama](#ollama)
+  - [LM Studio](#lm-studio)
 
 ## Navie AI Recommended Models
 
@@ -115,9 +116,13 @@ Use the editor to define the relevant environment variables according to the [BY
 
 **Reload your IDE for the changes to take effect.**
 
+After reloading you can confirm the model is configured correctly in the Navie Chat window.
+
+<img class="video-screenshot" src="/assets/img/product/navie-confirm-ui-jetbrains.webp"/>
+
 ### Configuring in VS Code
 
-#### Editing AppMap services environment
+#### Editing AppMap services environment <!-- omit in toc -->
 
 **Note**: To store the API key securely with VS Code secret storage, follow [the instructions below](#add-a-new-openai-key).
 
@@ -137,7 +142,11 @@ Reload your VS Code for the changes to take effect.
 
 **NOTE:** Please follow the instructions below to set `OPENAI_API_KEY` or `AZURE_OPENAI_API_KEY` securely.
 
-#### Add a new OpenAI Key
+After reloading you can confirm the model is configured correctly in the Navie Chat window.
+
+<img class="video-screenshot" src="/assets/img/product/navie-confirm-ui-vscode.webp"/>
+
+#### Add a new OpenAI Key <!-- omit in toc -->
 
 In VS Code, open the Command Palette.
 
@@ -161,7 +170,7 @@ You'll get a notification in VS Code that your key is set.
 
 <img class="video-screenshot" src="/assets/img/product/byok-key-set.webp"/> 
 
-#### Delete a configured OpenAI Key
+#### Delete a configured OpenAI Key <!-- omit in toc -->
 
 To delete your key, simply open the Command Palette
 
@@ -183,7 +192,7 @@ And simply hit enter with the field blank.  VS Code will notify you that the key
 
 <img class="video-screenshot" src="/assets/img/product/byok-key-erased.webp"/> 
 
-#### How is my API key saved securely?
+#### How is my API key saved securely? <!-- omit in toc -->
 
 For secure storage of API key secrets within AppMap, we use the default VS Code secret storage which leverages  Electron's safeStorage API to ensure the confidentiality of sensitive information. Upon encryption, secrets are stored within the user data directory in a SQLite database, alongside other VS Code state information. This encryption process involves generating a unique encryption key, which, on macOS, is securely stored within `Keychain Access` under "Code Safe Storage" or "Code - Insiders Safe Storage," depending on the version. This method provides a robust layer of protection, preventing unauthorized access by other applications or users with full disk access. The safeStorage API, accessible in the main process, supports operations such as checking encryption availability, encrypting and decrypting strings, and selecting storage backends on Linux. This approach ensures that your secrets are securely encrypted and stored, safeguarding them from potential threats while maintaining application integrity.
 
@@ -228,5 +237,39 @@ Navie to use it:
 | `OPENAI_API_KEY` | `dummy` |
 | `OPENAI_BASE_URL` | `http://127.0.0.1:11434/v1` |
 | `APPMAP_NAVIE_MODEL` | `mixtral` |
+
+**Note:** Even though it's running locally a dummy placeholder API key is still required.
+
+### LM Studio
+
+You can use [LM Studio](https://lmstudio.ai/) to run Navie with local models. 
+
+After downloading a model to run, select the option to run a local server.
+
+<img class="video-screenshot" src="/assets/img/product/lmstudio-run-local-server.webp"/> 
+
+In the next window, select which model you want to load into the local inference server.
+
+<img class="video-screenshot" src="/assets/img/product/lmstudio-load-model.webp"/> 
+
+After loading your model, you can confirm it's successfully running in the logs.  
+
+*NOTE*: Save the URL it's running under to use for `OPENAI_BASE_URL` environment variable.
+
+For example: `http://localhost:1234/v1`
+
+<img class="video-screenshot" src="/assets/img/product/lmstudio-confirm-running.webp"/>
+
+In the `Model Inspector` copy the name of the model and use this for the `APPMAP_NAVIE_MODEL` environment variable.
+
+For example: `Meta-Llama-3-8B-Instruct-imatrix`
+
+<img class="video-screenshot" src="/assets/img/product/lmstudio-model-inspector.webp"/>
+
+Continue to configure your local environment with the following environment variables based on your LM Studio configuration.  Refer to the [documentation above](#bring-your-own-model-byom) for steps specific to your code editor.
+
+| `OPENAI_API_KEY` | `dummy` |
+| `OPENAI_BASE_URL` | `http://localhost:1234/v1` |
+| `APPMAP_NAVIE_MODEL` | `Meta-Llama-3-8B-Instruct-imatrix` |
 
 **Note:** Even though it's running locally a dummy placeholder API key is still required.
