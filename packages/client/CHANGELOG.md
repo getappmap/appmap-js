@@ -1,3 +1,10 @@
+# [@appland/client-v1.18.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.17.0...@appland/client-v1.18.0) (2024-05-14)
+
+
+### Features
+
+* Conversation reporting API functions ([6a2783d](https://github.com/getappmap/appmap-js/commit/6a2783d6792c7a8d5dd65c95d6c20d48375f40bd))
+
 # [@appland/client-v1.17.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.16.0...@appland/client-v1.17.0) (2024-04-22)
 
 
