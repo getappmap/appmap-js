@@ -106,7 +106,7 @@ export default Vue.extend({
       const tokens = activeText.split(/\s+/);
       return tokens[tokens.length - 1];
     },
-    autoCompletions(): Command[] {
+    autoCompletions(): NavieRpc.V1.Commands.Response {
       if (!this.activeToken) return [];
       return this.commands.filter(
         ({ command }) => command !== this.activeToken && command.startsWith(this.activeToken!)
