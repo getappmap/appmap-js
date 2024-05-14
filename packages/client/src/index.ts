@@ -15,7 +15,21 @@ export { default as AppMapListItem } from './appMapListItem';
 export { default as FindingStatusListItem } from './findingStatusListItem';
 export { default as Usage, UsageReport, UsageUpdateDto } from './usage';
 export { AckCallback, UserMessageHandler } from './userMessageHandler';
-export { default as AI } from './ai';
+export {
+  default as AI,
+  ProjectDirectory,
+  ProjectParameters,
+  ModelParameters,
+  CreateConversationThread,
+  ConversationThread,
+  ConversationCount,
+  Permissions as ConversationPermissions,
+  Usage as ConversationUsage,
+  Classification,
+  CreateUserMessage,
+  CreateAgentMessage,
+  UpdateAgentMessage,
+} from './ai';
 export {
   default as AIClient,
   Callbacks as AICallbacks,

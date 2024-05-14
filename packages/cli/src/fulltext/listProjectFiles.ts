@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { readdir } from 'fs/promises';
-import { basename, join } from 'path';
+import { join, relative } from 'path';
 
 const IGNORE_DIRECTORIES = ['node_modules', 'vendor', 'tmp', 'build', 'dist', 'target'];
 
@@ -20,17 +20,17 @@ export default async function listProjectFiles(
   // Perform a breadth-first traversal of a directory, collecting all non-binary files and
   // applying the directory ignore list.
   const processDir = async (dir: string) => {
-    const queue = ['.'];
+    const queue = [dir];
     while (queue.length > 0 && files.length < fileLimit) {
       const currentDir = queue.shift();
       assert(currentDir, 'queue should not be empty');
 
-      const entries = await readdir(join(dir, currentDir), { withFileTypes: true });
+      const entries = await readdir(currentDir, { withFileTypes: true });
       for (const entry of entries) {
-        const path = currentDir === '.' ? entry.name : join(currentDir, entry.name);
+        const path = join(currentDir, entry.name);
         if (entry.isDirectory()) {
           if (!ignoreDirectory(entry.name)) queue.push(path);
-        } else files.push(path);
+        } else files.push(relative(dir, path));
       }
     }
   };

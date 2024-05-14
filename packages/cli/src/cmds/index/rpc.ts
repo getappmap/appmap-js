@@ -28,8 +28,7 @@ import {
   setConfigurationV2,
 } from '../../rpc/configuration';
 import detectCodeEditor from '../../lib/detectCodeEditor';
-
-const AI_KEY_ENV_VARS = ['OPENAI_API_KEY', 'AZURE_OPENAI_API_KEY'];
+import detectAIEnvVar, { AI_KEY_ENV_VARS } from './aiEnvVar';
 
 export const command = 'rpc';
 export const describe = 'Run AppMap JSON-RPC server';
@@ -116,7 +115,7 @@ export const handler = async (argv) => {
       return false;
     }
 
-    const aiEnvVar = Object.keys(process.env).find((key) => AI_KEY_ENV_VARS.includes(key));
+    const aiEnvVar = detectAIEnvVar();
     if (aiEnvVar) {
       log(`Using local Navie provider due to presence of environment variable ${aiEnvVar}`);
       return true;
