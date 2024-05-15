@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.142.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.141.0...@appland/appmap-v3.142.0) (2024-05-15)
+
+
+### Features
+
+* Add 'navie' CLI command for one-shot Navie interactions ([f3f31e8](https://github.com/getappmap/appmap-js/commit/f3f31e832f86d1e3b33dc4f3ce76cbdf7ea50b4a))
+
 # [@appland/appmap-v3.141.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.140.1...@appland/appmap-v3.141.0) (2024-05-10)
 
 
