@@ -1,3 +1,10 @@
+# [@appland/components-v4.24.3](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.24.2...@appland/components-v4.24.3) (2024-05-15)
+
+
+### Bug Fixes
+
+* Update context UI ([de435d8](https://github.com/getappmap/appmap-js/commit/de435d84a0d02999839b0ea420993f8ab661f9cc))
+
 # [@appland/components-v4.24.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.24.1...@appland/components-v4.24.2) (2024-05-15)
 
 
