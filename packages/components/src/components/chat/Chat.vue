@@ -37,18 +37,6 @@
         :code-selections="message.codeSelections"
         @change-sentiment="onSentimentChange"
       />
-      <div class="mode-instructions" v-if="!isChatting">
-        <p>You can start your question with one of these commands:</p>
-        <v-mode-instruction-card
-          v-for="instruction in modeInstructions"
-          :key="instruction.id"
-          :title="instruction.title"
-          :subTitle="instruction.subTitle"
-          :id="instruction.id"
-          :isDefault="instruction.default"
-          @useMode="onUseMode"
-        />
-      </div>
     </div>
     <div v-if="!authorized" class="status-unauthorized status-container">
       <div class="status-label">
@@ -158,7 +146,6 @@ export default {
   components: {
     VUserMessage,
     VChatInput,
-    VModeInstructionCard,
     VAppMapNavieLogo,
     VButton,
   },
@@ -172,7 +159,7 @@ export default {
     },
     inputPlaceholder: {
       type: String,
-      default: 'How can I help?',
+      default: 'What are you working on today?',
     },
   },
   data() {
@@ -225,9 +212,6 @@ export default {
       return this.messages.find((m) => {
         return Object.keys(query).every((key) => m[key] === query[key]);
       });
-    },
-    onUseMode(mode: string) {
-      this.$refs.input.prefixNewMode(`@${mode}`);
     },
     // Creates-or-appends a message.
     addToken(token: string, threadId: string, messageId: string) {
