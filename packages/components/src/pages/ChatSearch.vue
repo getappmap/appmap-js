@@ -205,7 +205,9 @@ export default {
       return this.targetAppmap?.metadata?.name;
     },
     inputPlaceholder() {
-      return this.targetAppmap ? 'What do you want to know about this AppMap?' : 'How can I help?';
+      return this.targetAppmap
+        ? 'What do you want to know about this AppMap?'
+        : 'What are you working on today?';
     },
     statusStep() {
       return this.searchStatus ? this.searchStatus.step : undefined;

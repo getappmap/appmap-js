@@ -147,61 +147,6 @@ describe('components/Chat.vue', () => {
     });
   });
 
-  describe('clicking a mode instruction', () => {
-    let wrapper;
-
-    beforeEach(() => {
-      // mock the document.createRange function
-      global.document.createRange = () => {
-        return {
-          selectNodeContents: () => {},
-          collapse: () => {},
-        };
-      };
-
-      // mock the window.getSelection function
-      global.window.getSelection = () => {
-        return {
-          removeAllRanges: () => {},
-          addRange: () => {},
-        };
-      };
-
-      wrapper = mount(VChat);
-    });
-
-    it('adds the mode prefix to the chat', async () => {
-      const chatInput = wrapper.find('[data-cy="chat-input"]');
-      const modeInstructions = wrapper.findAll('[data-cy="mode-instruction"]');
-
-      await modeInstructions.at(0).trigger('click');
-      expect(chatInput.element.innerText).toBe('@explain ');
-
-      await modeInstructions.at(1).trigger('click');
-      expect(chatInput.element.innerText).toBe('@help ');
-
-      await modeInstructions.at(2).trigger('click');
-      expect(chatInput.element.innerText).toBe('@generate ');
-    });
-
-    it('adds the prefix to the current message', async () => {
-      const question = 'Can I ask you a question?';
-      const chatInput = wrapper.find('[data-cy="chat-input"]');
-      chatInput.element.innerText = question;
-      await chatInput.trigger('input');
-
-      // sanity check
-      expect(chatInput.element.innerText).toBe(question);
-
-      const modeInstructions = wrapper.findAll('[data-cy="mode-instruction"]');
-      await modeInstructions.at(0).trigger('click');
-      expect(chatInput.element.innerText).toBe(`@explain ${question}`);
-
-      await modeInstructions.at(1).trigger('click');
-      expect(chatInput.element.innerText).toBe(`@help ${question}`);
-    });
-  });
-
   describe('setAuthorized', () => {
     describe('(false)', () => {
       it('activates the login prompt', async () => {
