@@ -1,3 +1,10 @@
+# [@appland/components-v4.24.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.24.1...@appland/components-v4.24.2) (2024-05-15)
+
+
+### Bug Fixes
+
+* Drop mode suggestion buttons ([bbda6f9](https://github.com/getappmap/appmap-js/commit/bbda6f9efaf06d23fd526f8fb994dad733a885e7))
+
 # [@appland/components-v4.24.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.24.0...@appland/components-v4.24.1) (2024-05-10)
 
 
