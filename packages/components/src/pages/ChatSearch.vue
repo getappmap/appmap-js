@@ -319,7 +319,6 @@ export default {
       this.searching = true;
       this.lastStatusLabel = undefined;
 
-      let myThreadId: string | undefined;
       return new Promise((resolve, reject) => {
         // If we can't find a system message, this is a new chat.
         // We could potentially use the status to determine whether or not
@@ -363,7 +362,6 @@ export default {
         });
 
         this.ask.on('ack', (messageId: string, threadId: string) => {
-          myThreadId = threadId;
           this.$refs.vchat.onAck(messageId, threadId);
           interp.onToken((t) => this.$refs.vchat.addToken(t, threadId, messageId));
         });
@@ -378,8 +376,8 @@ export default {
         this.ask.on('status', (status) => {
           this.searchStatus = status;
 
-          // only update the context response if we don't have one already
-          if (!this.contextResponse)
+          // Only update the context response if one is present.
+          if (status.contextResponse)
             this.contextResponse = status.contextResponse || this.createContextResponse();
 
           if (!this.searchResponse && status.searchResponse) {
