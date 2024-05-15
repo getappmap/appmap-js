@@ -96,6 +96,33 @@ describe('pages/ChatSearch.vue', () => {
     return { messagesCalled, wrapper };
   };
 
+  it('can change context', async () => {
+    const wrapper = mount(VChatSearch, { propsData: { appmapRpcFn: jest.fn() } });
+    expect(wrapper.find('[data-cy="context-notice"]').exists()).toBe(true);
+
+    wrapper.vm.sendMessage('Hello world');
+    const ask = wrapper.vm.ask;
+
+    ask.emit('status', { contextResponse: [] });
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('[data-cy="context-notice"]').exists()).toBe(false);
+
+    ask.emit('status', {
+      contextResponse: [
+        {
+          directory: '/home/user/land-of-apps/sample_app_6th_ed',
+          type: 'code-snippet',
+          location: 'app/helpers/sessions_helper.rb:54',
+          content:
+            '# Logs out the current user.\n  def log_out\n    forget(current_user)\n    reset_session\n    @current_user = nil\n  end\n\n  # Stores the URL trying to be accessed.\n  def store_location\n    session[:forwarding_url] = request.original_url if request.get? || request.head?\n  end\nend',
+          score: 5.563924544180424,
+        },
+      ],
+    });
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('[data-cy="context-item"]').exists()).toBe(true);
+  });
+
   it('can be resized', async () => {
     const wrapper = chatSearchWrapper({
       'v2.appmap.stats': appmapStatsHasAppMaps(),
