@@ -16,7 +16,6 @@ redirect_from: [/docs/reference/browser-extension]
 - [AppMap Agent for Java](/docs/reference/appmap-java)
     - [AppMap for Java – Maven Plugin](/docs/reference/appmap-maven-plugin)
     - [AppMap for Java – Gradle Plugin](/docs/reference/appmap-gradle-plugin)
-- [AppMap Agent for JavaScript (legacy)](/docs/reference/appmap-agent-js)
 - [AppMap Command line interface (CLI)](/docs/reference/appmap-client-cli.html)
 - [Remote recording API](/docs/reference/remote-recording-api)
 - [Analysis Rules](/docs/reference/analysis-rules)
