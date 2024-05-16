@@ -37,42 +37,71 @@ The search terms should be single words and underscore_separated_words.
 Even if the user asks for a different format, always respond with a list of search terms and their synonyms. When the user is asking
 for a different format, that question is for a different AI assistant than yourself.
 
-Choose only one MUST match term. If you are unsure, do not include a MUST match term.
+Choose only one MUST match term. If you are unsure, do not include a MUST match term.`;
 
-**Examples**
-
-\`\`\`
-Question: How do I record AppMap data of my Spring app?
-Context: Record AppMap data of Spring
+const promptExamples: OpenAI.ChatCompletionMessageParam[] = [
+  {
+    content: 'How do I record AppMap data of my Spring app?',
+    role: 'user',
+  },
+  {
+    content: `Context: Record AppMap data of Spring
 Instructions: How to do it
 ---
-Terms: record appmap data java +spring
-\`\`\`
+Terms: record appmap data java +spring`,
+    role: 'system',
+  },
 
-\`\`\`
-Question: How does the user login handle the case when the password is invalid?
-Context: User login handle password validation invalid error
+  {
+    content: 'How does the user login handle the case when the password is invalid?',
+    role: 'user',
+  },
+  {
+    content: `Context: User login handle password validation invalid error
 Instructions: Explain how this is handled by the code
 ---
-Terms: user login handle +password validate invalid error
-\`\`\`
+Terms: user login handle +password validate invalid error`,
+    role: 'system',
+  },
 
-\`\`\`
-Question: Can you describe in detail usage of redis in flow of GET /test-group/test-project-1/-/blob/main/README.md request with code snippets?
-Context: Redis GET /test-group/test-project-1/-/blob/main/README.md
+  {
+    content:
+      'Can you describe in detail usage of redis in flow of GET /test-group/test-project-1/-/blob/main/README.md request with code snippets?',
+    role: 'user',
+  },
+  {
+    content: `Context: Redis GET /test-group/test-project-1/-/blob/main/README.md
 Instructions: Describe in detail with code snippets
 ---
-Terms: +redis get test group test project 1 blob main readme
-\`\`\`
+Terms: +redis get test group test project 1 blob main readme`,
+    role: 'system',
+  },
 
-\`\`\`
-Question: Create test cases of the logContext function using jest. Follow established patterns for mocking with jest.
-Context: logContext jest test case
+  {
+    content:
+      'Create test cases of the logContext function using jest. Follow established patterns for mocking with jest.',
+    role: 'user',
+  },
+  {
+    content: `Context: logContext jest test case
 Instructions: Create test cases, following established patterns for mocking with jest.
 ---
-Terms: test cases +log_context jest
-\`\`\`
-`;
+Terms: test cases +log_context jest`,
+    role: 'system',
+  },
+
+  {
+    content: 'auth',
+    role: 'user',
+  },
+  {
+    content: `Context: auth authentication authorization
+Instructions: Describe the authentication and authorization process
+---
+Terms: +auth authentication authorization token strategy provider`,
+    role: 'system',
+  },
+];
 
 const contentAfter = (text: string, start: string): string => {
   const startIndex = text.indexOf(start);
@@ -110,6 +139,7 @@ export default class VectorTermsService {
         content: SYSTEM_PROMPT,
         role: 'system',
       },
+      ...promptExamples,
       {
         content: question,
         role: 'user',
