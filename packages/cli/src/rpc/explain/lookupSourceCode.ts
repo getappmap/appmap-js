@@ -40,7 +40,7 @@ export default async function lookupSourceCode(
       ignore: [
         '**/node_modules/**',
         '**/vendor/**',
-        '**/tmp/**',
+        'tmp/**',
         '**/build/**',
         '**/dist/**',
         '**/target/**',
