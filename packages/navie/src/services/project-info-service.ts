@@ -123,7 +123,10 @@ export default class ProjectInfoService {
         new PromptInteractionEvent(
           PromptType.CodeEditor,
           'user',
-          buildPromptValue(PromptType.CodeEditor, dump(codeEditors))
+          buildPromptValue(
+            PromptType.CodeEditor,
+            dump(codeEditors.map(({ name }) => ({ name, installed: true, activated: true })))
+          )
         )
       );
     } else {
