@@ -5,7 +5,7 @@ description: "AppMap Agent for Java records AppMap Data of your code. Learn abou
 toc: true
 reference: true
 name: AppMap Agent for Java
-step: 5
+step: 6
 ---
 
 # AppMap Agent for Java

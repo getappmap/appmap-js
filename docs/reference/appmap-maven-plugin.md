@@ -5,7 +5,7 @@ description: "Integrate AppMap Maven plugin easily for test recording in Maven p
 toc: true
 reference: true
 name: AppMap for Java - Maven Plugin
-step: 6
+step: 7
 ---
 
 # AppMap Maven plugin

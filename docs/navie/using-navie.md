@@ -1,16 +1,51 @@
 ---
 layout: docs
-title: Docs - Guides
+title: Docs - AppMap Navie
 description: "Learn how to use AppMap Navie to provide personalized code analysis. Generate AppMap Data, ask Navie questions, analyze code, and iterate for optimal results."
-guides: true
-name: Navie Best Practices
-step: 1
-redirect_from: [/docs/navie/using-navie]
+name: Using Navie
+step: 3
+navie: true
+toc: true
+redirect_from: [/docs/guides/navie-best-practices]
 ---
+# Using Navie
 
-# Navie Best Practices
+- [User Interface](#user-interface)
+- [Basic Layout](#basic-layout)
+- [Navie Best Practices](#navie-best-practices)
+  - [Create AppMap Data](#create-appmap-data)
+  - [Ask Navie](#ask-navie)
+  - [Implement Generated Code](#implement-generated-code)
+  - [Repeat](#repeat)
 
-When you ask a question to Navie, it will search through all your AppMap Diagrams created for your project to pull in relevant traces, sequence diagrams, and code snippets for analysis.  It will then send these code snippets and runtime code sequence diagrams to the Generative AI service along with your question.  By sending this valuable context to the AI interface, your answers will be much more personal and specific to your codebase, files, and functions. Additionally, the Generative AI will be able to understand how your code works at runtime and will be able to make architectural level recommendations across your entire application. 
+When you ask a question to Navie, it will search through all your AppMap Diagrams (if they exist) and your static source code for your project to pull in relevant traces, sequence diagrams, and code snippets for analysis.  It will then send these code snippets and runtime code sequence diagrams to the Generative AI service along with your question.  By sending this valuable context to the AI interface, your answers will be much more personal and specific to your codebase, files, and functions. 
+
+## User Interface
+AppMap Navie AI is an AI assistant that enables you to ask architectural level questions about your code base. Navie is also able to help you generate new code that can span across your entire project. The primary user interface for Navie is within your VS Code or JetBrains code editor.  Refer to the Navie docs to [learn how to open Navie](/docs/navie/how-to-open-navie) for your code editor. 
+
+![Navie User Interface](/assets/img/docs/appmap-navie-user-interface.webp)
+
+## Basic Layout
+
+The Navie user interface consists of 5 key areas. 
+
+<ol type="A">
+  <b><li>AppMap Data Status Panel</li></b>
+  This panel will list the current status of the AppMap Data that has been created for your project.  AppMap Data are your application runtime traces which include things like HTTP and SQL requests, data flows, class and function level instrumentation, and more. Without AppMap Data created for your project, Navie can search through your static source code in your workspace for relevant code snippets. 
+  <b><li>Navie Context Window</li></b>
+  Upon asking a question to Navie it will search through your AppMap Data (if exists) and the source code in your open workspace to locate all the relevant context for your question. This area will reflect the information that Navie is aware of when answering. You can use this information to better understand how Navie is responding.
+  <b><li>LLM Model Config Button</li></b>
+  You can configure Navie to use your own OpenAI API key or bring your own LLM model running locally or within another provider. Clicking the gear icon will open the configuration modal for the bring your own model settings.  <a href="/docs/navie/bring-your-own-model">Refer to the AppMap docs for more details</a>
+ about how to configure Navie to use your own LLM models. 
+  <b><li>Active LLM Model</li></b>
+  This panel will display the currently configured LLM model in use with Navie.  The LLM details are displayed in the following format: <code>Model: &lt;Model Name&gt; (&lt;location&gt;)</code>.  When using the default Navie backend, the location will be listed as <code>default</code>. When using your own OpenAI API key the location will be listed as <code>via OpenAI</code>.  When using <a href="/docs/navie/bring-your-own-model.html#configuration">Navie Bring Your Own Model</a>
+, the location will be the value of the <code>OPENAI_BASE_URL</code> environment variable, for example <code>via localhost</code> when using <a href="/docs/navie/bring-your-own-model.html#ollama">Ollama</a> or <a href="/docs/navie/bring-your-own-model.html#lm-studio">LM Studio</a>. 
+  <b><li>Navie Chat Window</li></b>
+  This is your primary location for interacting with Navie.  Here you can ask Navie questions about how your application works, ask Navie to generate code or test cases, and you can even have Navie create a pull request based on your changes. For more advanced usage of Navie refer to the <a href="#advanced-navie-commands">Advanced Navie Commands</a>
+ section.  
+</ol>
+
+## Navie Best Practices
 
 To generate the highest quality responses from Navie, we recommend the following approach. 
 
@@ -19,7 +54,7 @@ To generate the highest quality responses from Navie, we recommend the following
 - [Write Code](#write-code)
 - [Repeat](#repeat)
 
-## Create AppMap Data
+### Create AppMap Data
 
 We recommend creating maps that are most relevant to the question or area of the application you are going to be working with. For example, if i wanted to understand how my new user registration flow worked I could [create a remote recording](/docs/get-started-with-appmap/making-appmap-data.html#with-remote-application-recording) of a new user registration flow. Alternatively, I could [run all the test cases](/docs/get-started-with-appmap/making-appmap-data.html#with-test-case-recording) related to new user creation, registration, and adjacent areas. 
 
@@ -37,17 +72,13 @@ Depending on your language and framework there [are up to 5 different ways](/doc
 
 Each of these methods generates AppMap Data in JSON format, which are then visualized through interactive diagrams in your code editor. This visualization supports a deep understanding of your application's architecture, dependencies, and runtime behavior, facilitating enhanced code quality and performance optimization.
 
-## Ask Navie
+### Ask Navie
 
 Navie, can address a wide range of questions about your application, extending beyond what static analysis AI assistants can provide, to understand dynamic interactions, dependencies, and performance bottlenecks to help your developers design and deliver solutions faster for a host of complex issues.
 
 If you are not able to use the AppMap OpenAI proxy, you can bring your own OpenAI API key, or use an entirely different AI Model, [hosted in your environment](/docs/navie/bring-your-own-model.html#azure-openai) or [hosted locally](/docs/navie/bring-your-own-model.html#ollama). 
 
-You can ask free formed questions, or start your question with one of these commands:
-
-- `@explain`: (Default) Navie will help you understand your project. This mode is used when there is no prefix.
-- `@help`: Navie will help you setup AppMap, including generating AppMap recordings and diagrams.
-- `@generate`: Navie will help you generate new code.
+You can ask free formed questions, or refer to the [Navie Reference docs](/docs/reference/navie) to learn more about the advanced Navie chat commands you can use with your question. 
 
 **Examples of good questions to ask Navie.**
 
@@ -60,7 +91,7 @@ You can ask free formed questions, or start your question with one of these comm
 * Explain what functions or files are involved when a user logs into my service. 
 * Loading the "products" view page is slow in production, provide suggested guidance with relevant code changes I can make to improve the speed.
 
-## Implement Generated Code
+### Implement Generated Code
 
 Navie can do more than just provide code implementation details, you can talk to Navie about a variety of other topics as you are updating your application based on it's recommendations. 
 
@@ -74,6 +105,6 @@ Navie can do more than just provide code implementation details, you can talk to
 
 5. **Custom Queries**: Tailor your questions to fit unique development needs—whether you're troubleshooting a specific error, seeking optimization opportunities, or curious about the interactions between various components of your application.
 
-## Repeat
+### Repeat
 
 Continue to ask follow-up question to Navie as you are making code changes or when you need additional details or more specific advice.  Additionally, as you make changes to your application, continue creating AppMap recordings of the updated code interactions and start new conversations with Navie to dive deeper into your feature implementation.

@@ -2,7 +2,7 @@
 layout: docs
 title: Docs - Navie
 name: Bring Your Own LLM Model
-step: 3
+step: 4
 navie: true
 toc: true
 description: Use AppMap Navie with your own OpenAI account or OpenAI-compatible LLM running either locally or remotely.
@@ -15,26 +15,63 @@ By default, when asking a question to Navie, your code editor will interact with
 - [Navie AI Recommended Models](#navie-ai-recommended-models)
 - [Bring Your Own OpenAI API Key (BYOK)](#bring-your-own-openai-api-key-byok)
   - [Configuring Your OpenAI Key](#configuring-your-openai-key)
+    - [Modify which OpenAI Model to use](#modify-which-openai-model-to-use)
   - [Reset Navie AI to use Default Navie Backend](#reset-navie-ai-to-use-default-navie-backend)
 - [Bring Your Own Model (BYOM)](#bring-your-own-model-byom)
   - [Configuration](#configuration)
   - [Configuring in JetBrains](#configuring-in-jetbrains)
   - [Configuring in VS Code](#configuring-in-vs-code)
 - [Examples](#examples)
-  - [OpenAI](#openai)
-  - [Azure OpenAI](#azure-openai)
-  - [AnyScale Endpoints](#anyscale-endpoints)
-  - [Ollama](#ollama)
-  - [LM Studio](#lm-studio)
 
 ## Navie AI Recommended Models
 
 <p class="alert alert-danger">
 AppMap Navie AI recommends avoiding models that do not support chat mode.
 </p>
-<!-- This doc is located at https://docs.google.com/presentation/d/145gzoYVsgJ3J4jGh_2Or8ClZ0drqoC-GTjI1UqkyF_o/edit#slide=id.g1ff63dc2dd6_0_0 -->
 
-![Navie Recommended Models](/assets/img/product/navie-model-recommendations.svg)
+<table class="table table-striped table-bordered black-white-table">
+  <tr>
+    <tr>
+      <th class="large-header">Navie AI Backend LLM</th>
+      <th class="large-header">Ease of Setup</th>
+      <th class="large-header">Quality of Responses</th>
+  </tr>
+  <tr>
+    <tr>
+      <td>AppMap OpenAI Proxy (default)</td>
+      <td>⭐⭐⭐⭐⭐</td>
+      <td>⭐⭐⭐⭐⭐</td>
+  </tr>
+  <tr>
+    <tr>
+      <td>Self Managed OpenAI API Key</td>
+      <td>⭐⭐⭐⭐</td>
+      <td>⭐⭐⭐⭐⭐</td>
+  </tr>
+      <tr>
+      <td>Azure Hosted OpenAI</td>
+      <td>⭐⭐⭐</td>
+      <td>⭐⭐⭐⭐⭐</td>
+  </tr>
+  </tr>
+      <tr>
+      <td>Anyscale Hosted Mixtral-8x7B</td>
+      <td>⭐⭐⭐</td>
+      <td>⭐⭐⭐</td>
+  </tr>
+  </tr>
+      <tr>
+      <td>Locally Hosted Mixtral-8x7B-Instruct-v0.1</td>
+      <td>⭐⭐</td>
+      <td>⭐⭐⭐</td>
+  </tr>
+  </tr>
+      <tr>
+      <td>Codellama/Codeqwen</td>
+      <td>❌ Not Supported</td>
+      <td>❌ Not Supported</td>
+  </tr>
+</table>
 
 ## Bring Your Own OpenAI API Key (BYOK)
 
@@ -44,19 +81,33 @@ Navie AI uses the AppMap hosted proxy with an AppMap managed OpenAI API key. If 
 
 In your code editor, open the Navie Chat window. If the model displays `(default)`, this means that Navie is configured to use the AppMap hosted OpenAI proxy.  Click on the gear icon in the top of the Navie Chat window to change the model. 
 
-![Navie Recommended Models](/assets/img/product/navie-default-model.webp)
+![Navie configuration gear](/assets/img/product/navie-default-model.webp)
 
 In the modal, select the option to `Use your own OpenAI API key`
 
-![Navie Recommended Models](/assets/img/product/navie-byok-openai-1.webp)
+![Use your own key modal](/assets/img/product/navie-byok-openai-1.webp)
 
 After you enter your OpenAI API Key in the menu option, hit `enter` and your code editor will be prompted to reload.
 
-![Navie Recommended Models](/assets/img/product/navie-byok-openai-2.webp)
+**In VS Code:**
+![VS Code popup to store API Key](/assets/img/product/navie-byok-openai-2.webp)
+
+**In JetBrains:**
+![JetBrains popup to store API Key](/assets/img/product/navie-byok-jetbrains.webp)
+
+**NOTE:** You can also use the environment variable in the [configuration](#configuration) section to store your API key as an environment variable instead of using the `gear` icon in the Navie chat window. 
 
 After your code editor reloads, you can confirm your requests are being routed to OpenAI directly in the Navie Chat window. It will list the model `OpenAI` and the location, in this case `via OpenAI`.
 
-![Navie Recommended Models](/assets/img/product/navie-byok-openai-3.webp)
+![OpenAI location](/assets/img/product/navie-byok-openai-3.webp)
+
+#### Modify which OpenAI Model to use
+
+AppMap generally uses the latest OpenAI models as the default, but if you want to use an alternative model like `gpt-3.5` or a preview model like `gpt-4-vision-preview` you can modify the `APPMAP_NAVIE_MODEL` environment variable after configuring your own OpenAI API key to use other OpenAI models.  
+
+After setting your `APPMAP_NAVIE_MODEL` with your chosen model reload/restart your code editor and then confirm it's configuration by opening a new Navie chat window. In this example i've configured my model to be `gpt-4o` with my personal OpenAI API Key. 
+
+![JetBrains OpenAI key modal](/assets/img/product/custom-model.webp)
 
 ### Reset Navie AI to use Default Navie Backend
 
@@ -124,8 +175,6 @@ After reloading you can confirm the model is configured correctly in the Navie C
 
 #### Editing AppMap services environment <!-- omit in toc -->
 
-**Note**: To store the API key securely with VS Code secret storage, follow [the instructions below](#add-a-new-openai-key).
-
 In VS Code, go to settings.
 
 <img class="video-screenshot" src="/assets/img/docs/goto-vscode-settings.webp" alt="a screenshot of the Visual Studio Code menu"/>
@@ -140,136 +189,10 @@ Use *Add Item* to define the relevant environment variables according to the [BY
 
 Reload your VS Code for the changes to take effect.  
 
-**NOTE:** Please follow the instructions below to set `OPENAI_API_KEY` or `AZURE_OPENAI_API_KEY` securely.
-
 After reloading you can confirm the model is configured correctly in the Navie Chat window.
 
 <img class="video-screenshot" src="/assets/img/product/navie-confirm-ui-vscode.webp"/>
 
-#### Add a new OpenAI Key <!-- omit in toc -->
-
-In VS Code, open the Command Palette.
-
-You can use a hotkey to open the VS Code Command Palette
-   - Mac: `Cmd + Shift + P`
-   - Windows/Linux: `Ctrl + Shift + P`
-
-Or you can select `View` -> `Command Palette`
-
-<img class="video-screenshot" src="/assets/img/product/byok-command-palette.webp"/> 
-
-Search for `AppMap Set OpenAPI Key`
-
-<img class="video-screenshot" src="/assets/img/product/byok-search.webp"/> 
-
-Paste your key into the new field and hit enter.
-
-You'll get a notification in VS Code that your key is set. 
-
-**NOTE:** You will need to reload your window for the setting to take effect. Use the Command Palette `Developer: Reload Window`
-
-<img class="video-screenshot" src="/assets/img/product/byok-key-set.webp"/> 
-
-#### Delete a configured OpenAI Key <!-- omit in toc -->
-
-To delete your key, simply open the Command Palette
-
-You can use a hotkey to open
-   - Mac: `Cmd + Shift + P`
-   - Windows/Linux: `Ctrl + Shift + P`
-
-Or you can select `View` -> `Command Palette`
-
-<img class="video-screenshot" src="/assets/img/product/byok-command-palette.webp"/> 
-
-Search for `AppMap Set OpenAPI Key`
-
-<img class="video-screenshot" src="/assets/img/product/byok-search.webp"/> 
-
-And simply hit enter with the field blank.  VS Code will notify you that the key has been unset.
-
-**NOTE:** You will need to reload your window for the setting to take effect. Use the Command Palette `Developer: Reload Window`
-
-<img class="video-screenshot" src="/assets/img/product/byok-key-erased.webp"/> 
-
-#### How is my API key saved securely? <!-- omit in toc -->
-
-For secure storage of API key secrets within AppMap, we use the default VS Code secret storage which leverages  Electron's safeStorage API to ensure the confidentiality of sensitive information. Upon encryption, secrets are stored within the user data directory in a SQLite database, alongside other VS Code state information. This encryption process involves generating a unique encryption key, which, on macOS, is securely stored within `Keychain Access` under "Code Safe Storage" or "Code - Insiders Safe Storage," depending on the version. This method provides a robust layer of protection, preventing unauthorized access by other applications or users with full disk access. The safeStorage API, accessible in the main process, supports operations such as checking encryption availability, encrypting and decrypting strings, and selecting storage backends on Linux. This approach ensures that your secrets are securely encrypted and stored, safeguarding them from potential threats while maintaining application integrity.
-
 ## Examples
 
-### OpenAI
-
-**Note:** We recommend configuring your OpenAI key using the code editor extension. Follow the [Bring Your Own Key](/docs/navie/bring-your-own-model.html#configuring-your-openai-key) docs for instructions.  
-
-Only `OPENAI_API_KEY` needs to be set, other settings can stay default:
-
-| `OPENAI_API_KEY`| `sk-9spQsnE3X7myFHnjgNKKgIcGAdaIG78I3HZB4DFDWQGM` |
-
-### Azure OpenAI
-
-Assuming you [created](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource) a `navie` GPT-4 deployment on `contoso.openai.azure.com` OpenAI instance:
-
-| `AZURE_OPENAI_API_KEY` | `e50edc22e83f01802893d654c4268c4f` |
-| `AZURE_OPENAI_API_VERSION` | `2024-02-01` |
-| `AZURE_OPENAI_API_INSTANCE_NAME` | `contoso` |
-| `AZURE_OPENAI_API_DEPLOYMENT_NAME` | `navie` |
-
-### AnyScale Endpoints
-
-[AnyScale Endpoints](https://www.anyscale.com/endpoints) allows querying a
-selection of open-source LLMs. After you create an account you can use it by
-setting:
-
-| `OPENAI_API_KEY` | `esecret_myxfwgl1iinbz9q5hkexemk8f4xhcou8` |
-| `OPENAI_BASE_URL` | `https://api.endpoints.anyscale.com/v1` |
-| `APPMAP_NAVIE_MODEL` | `mistralai/Mixtral-8x7B-Instruct-v0.1` |
-
-Consult [AnyScale documentation](https://docs.endpoints.anyscale.com/) for model
-names. Note we recommend using Mixtral models with Navie.
-
-### Ollama
-
-You can use [Ollama](https://ollama.com/) to run Navie with local models; after
-you've successfully ran a model with `ollama run` command, you can configure
-Navie to use it:
-
-| `OPENAI_API_KEY` | `dummy` |
-| `OPENAI_BASE_URL` | `http://127.0.0.1:11434/v1` |
-| `APPMAP_NAVIE_MODEL` | `mixtral` |
-
-**Note:** Even though it's running locally a dummy placeholder API key is still required.
-
-### LM Studio
-
-You can use [LM Studio](https://lmstudio.ai/) to run Navie with local models. 
-
-After downloading a model to run, select the option to run a local server.
-
-<img class="video-screenshot" src="/assets/img/product/lmstudio-run-local-server.webp"/> 
-
-In the next window, select which model you want to load into the local inference server.
-
-<img class="video-screenshot" src="/assets/img/product/lmstudio-load-model.webp"/> 
-
-After loading your model, you can confirm it's successfully running in the logs.  
-
-*NOTE*: Save the URL it's running under to use for `OPENAI_BASE_URL` environment variable.
-
-For example: `http://localhost:1234/v1`
-
-<img class="video-screenshot" src="/assets/img/product/lmstudio-confirm-running.webp"/>
-
-In the `Model Inspector` copy the name of the model and use this for the `APPMAP_NAVIE_MODEL` environment variable.
-
-For example: `Meta-Llama-3-8B-Instruct-imatrix`
-
-<img class="video-screenshot" src="/assets/img/product/lmstudio-model-inspector.webp"/>
-
-Continue to configure your local environment with the following environment variables based on your LM Studio configuration.  Refer to the [documentation above](#bring-your-own-model-byom) for steps specific to your code editor.
-
-| `OPENAI_API_KEY` | `dummy` |
-| `OPENAI_BASE_URL` | `http://localhost:1234/v1` |
-| `APPMAP_NAVIE_MODEL` | `Meta-Llama-3-8B-Instruct-imatrix` |
-
-**Note:** Even though it's running locally a dummy placeholder API key is still required.
+Refer to the [Navie Reference Guide](/docs/reference/navie) for detailed examples of using Navie with your own LLM backend.

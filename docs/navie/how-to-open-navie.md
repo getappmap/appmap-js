@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Docs - AppMap Navie
-description: "Learn how to use AppMap Navie to provide personalized code analysis. Generate AppMap Data, ask Navie questions, analyze code, and iterate for optimal results."
+description: "Learn how to open AppMap Navie in your code editor. Open Navie in your VS Code or JetBrains code editor to start working with Navie AI"
 name: How to Open Navie
 step: 2
 navie: true
