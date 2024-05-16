@@ -20,6 +20,7 @@ import ApplyContextService from './services/apply-context-service';
 import ClassificationService from './services/classification-service';
 
 export const DEFAULT_TOKEN_LIMIT = 8000;
+export const DEFAULT_TEMPERATURE = 0.2;
 
 export type ChatHistory = Message[];
 
@@ -32,7 +33,7 @@ export class ExplainOptions {
   agentMode: AgentMode | undefined;
   modelName = process.env.APPMAP_NAVIE_MODEL ?? 'gpt-4o';
   tokenLimit = Number(process.env.APPMAP_NAVIE_TOKEN_LIMIT ?? DEFAULT_TOKEN_LIMIT);
-  temperature = 0.4;
+  temperature = Number(process.env.APPMAP_NAVIE_TEMPERATURE ?? DEFAULT_TEMPERATURE);
   responseTokens = 1000;
 }
 
