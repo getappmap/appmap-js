@@ -1,6 +1,6 @@
 import { warn } from 'node:console';
 import { createWriteStream } from 'node:fs';
-import { readFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import type { Writable } from 'node:stream';
 import { text } from 'node:stream/consumers';
 
@@ -12,7 +12,7 @@ import { Agents, ContextV2, Help, ProjectInfo } from '@appland/navie';
 import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 
 import { configureRpcDirectories } from '../lib/handleWorkingDirectory';
-import { explainHandler } from '../rpc/explain/explain';
+import { explainHandler, explainStatusHandler } from '../rpc/explain/explain';
 import INavie, { INavieProvider } from '../rpc/explain/navie/inavie';
 import LocalNavie from '../rpc/explain/navie/navie-local';
 import RemoteNavie from '../rpc/explain/navie/navie-remote';
@@ -178,6 +178,10 @@ export function builder<T>(args: yargs.Argv<T>) {
       describe: 'Input path',
       type: 'string',
       alias: 'i',
+    })
+    .option('context-output', {
+      describe: 'Output path for context',
+      type: 'string',
     });
 }
 
@@ -196,13 +200,23 @@ export async function handler(argv: HandlerArguments) {
         warn(err);
         process.exitCode = 1;
       })
-      .on('token', (token) => output.write(token));
+      .on('token', (token) => output.write(token))
+      .on('complete', () => void complete());
   }
 
   const question = await getQuestion(argv.input, argv.question);
   const capturingProvider = (...args: Parameters<INavieProvider>) =>
     attachNavie(buildNavieProvider(argv)(...args));
-  await explainHandler(capturingProvider, argv.codeEditor).handler({ question });
+  const explain = await explainHandler(capturingProvider, argv.codeEditor).handler({ question });
+
+  async function complete() {
+    if (argv.contextOutput) {
+      const { contextResponse } = await explainStatusHandler().handler(explain);
+      if (contextResponse) {
+        await writeFile(argv.contextOutput, JSON.stringify(contextResponse));
+      }
+    }
+  }
 }
 
 function openOutput(outputPath: string | undefined): Writable {
