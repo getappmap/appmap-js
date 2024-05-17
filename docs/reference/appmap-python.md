@@ -480,7 +480,23 @@ $ appmap-python --record remote flask --app main.app
 
 * `APPMAP_RECORD_REQUESTS` controls creation of request recordings created when a web framework processes HTTP requests. When unset or `true`, request recordings will be created, otherwise they will not.
 
-* `APPMAP_RECORD_PROCESS` controls recording of the entire python process that loads the agent. When `true`, recording starts when the agent is loaded. When the process exits, an AppMap will be created.
+* `APPMAP_RECORD_PROCESS` controls recording of the entire python process that loads the agent. When
+  `true`, recording starts when the agent is loaded. When the process exits, an AppMap will be
+  created.
+
+  **Important note:** process recording is not compatible with other recording methods. If you start
+  a python process when `APPMAP_RECORD_PROCESS` is `true`, other attempts to create a recording will
+  raise a `RuntimeError` with the message "Recording already in progress".
+
+  For example, when `APPMAP_RECORD_PROCESS` is `true`, trying to start a request recording will
+  raise this error. To avoid this, you should disable request recording. For example:
+
+  ```
+  $ appmap-python --record process --no-record requests flask --app main.app
+  ```
+
+  In addition, using code block recording, running tests, or starting a remote recording, will
+  all raise this error and should not be attempted.
 
 ### Other configuration
 These environment variables can be used to control various aspects of the AppMap agent.
