@@ -1,8 +1,16 @@
 import chalk from 'chalk';
 import EventEmitter from 'events';
 import { warn } from 'console';
-import { ExplainRpc } from '@appland/rpc';
+import { basename } from 'path';
+import {
+  AI,
+  ConversationThread,
+  ModelParameters,
+  ProjectDirectory,
+  ProjectParameters,
+} from '@appland/client';
 import { ContextV2, Help, ProjectInfo } from '@appland/navie';
+import { ExplainRpc } from '@appland/rpc';
 
 import { RpcError, RpcHandler } from '../rpc';
 import collectContext from './collectContext';
@@ -10,7 +18,9 @@ import INavie, { INavieProvider } from './navie/inavie';
 import configuration, { AppMapDirectory } from '../configuration';
 import collectProjectInfos from '../../cmds/navie/projectInfo';
 import collectHelp from '../../cmds/navie/help';
-import { basename } from 'path';
+import { getLLMConfiguration } from '../llmConfiguration';
+import detectAIEnvVar from '../../cmds/index/aiEnvVar';
+import reportFetchError from './navie/report-fetch-error';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
@@ -32,6 +42,8 @@ export type SearchContextResponse = {
 export const DEFAULT_TOKEN_LIMIT = 12000;
 
 export class Explain extends EventEmitter {
+  conversationThread: ConversationThread | undefined;
+
   constructor(
     public appmapDirectories: AppMapDirectory[],
     public projectDirectories: string[],
@@ -46,7 +58,11 @@ export class Explain extends EventEmitter {
 
   async explain(navie: INavie): Promise<void> {
     navie.on('ack', (userMessageId, threadId) => {
-      this.status.threadId = threadId;
+      // threadId is now pre-allocated by the enrollConversationThread call
+      // It may be falsey because errors in enrollConversationThread are logged but do not
+      // block the rest of the procedure.
+      if (!this.status.threadId) this.status.threadId = threadId;
+
       this.emit('ack', userMessageId, threadId);
     });
     navie.on('token', (token, _messageId) => {
@@ -69,11 +85,27 @@ export class Explain extends EventEmitter {
         };
       this.emit('error', rpcError);
     });
-    await navie.ask(this.question, this.codeSelection);
+
+    if (!this.status.threadId) {
+      const thread = await reportFetchError('enrollConversationThread', () =>
+        this.enrollConversationThread(navie)
+      );
+      if (thread) {
+        this.conversationThread = thread;
+        this.status.threadId = thread.id;
+        if (!thread.permissions.useNavieAIProxy) {
+          warn(
+            `Use of Navie AI proxy is forbidden by your organization policy.\nYou can ignore this message if you're using your own AI API key or connecting to your own model.`
+          );
+        }
+      }
+    }
+
+    await navie.ask(this.status.threadId, this.question, this.codeSelection);
   }
 
   async searchContext(data: ContextV2.ContextRequest): Promise<ContextV2.ContextResponse> {
-    let { vectorTerms } = data;
+    const { vectorTerms } = data;
     let { tokenCount } = data;
 
     this.status.vectorTerms = vectorTerms;
@@ -134,6 +166,40 @@ export class Explain extends EventEmitter {
   helpContext(data: Help.HelpRequest): Promise<Help.HelpResponse> {
     return collectHelp(data);
   }
+
+  async enrollConversationThread(navie: INavie): Promise<ConversationThread | undefined> {
+    const modelParameters = {
+      ...getLLMConfiguration(),
+      provider: navie.providerName,
+    } as ModelParameters;
+    const aiKeyName = detectAIEnvVar();
+    if (aiKeyName) modelParameters.aiKeyName = aiKeyName;
+
+    const configurationDirectories = await configuration().appmapDirectories();
+    const directories = configurationDirectories.map((dir) => {
+      const result: ProjectDirectory = {
+        hasAppMapConfig: dir.appmapConfig !== undefined,
+      };
+      if (dir.appmapConfig?.language) {
+        result.language = dir.appmapConfig.language;
+      }
+      return result;
+    });
+
+    const projectParameters: ProjectParameters = {
+      directoryCount: configurationDirectories.length,
+      directories,
+    };
+    if (this.codeEditor) projectParameters.codeEditor = this.codeEditor;
+
+    try {
+      return await AI.createConversationThread({ modelParameters, projectParameters });
+    } catch (err) {
+      warn(`Failed to create conversation thread`);
+      warn(err);
+      return undefined;
+    }
+  }
 }
 
 async function explain(
@@ -185,7 +251,7 @@ async function explain(
     invokeContextFunction(data);
   const helpProvider: Help.HelpProvider = async (data: any) => invokeContextFunction(data);
 
-  const navie = navieProvider(threadId, contextProvider, projectInfoProvider, helpProvider);
+  const navie = navieProvider(contextProvider, projectInfoProvider, helpProvider);
   return new Promise<ExplainRpc.ExplainResponse>((resolve, reject) => {
     let isFirst = true;
 

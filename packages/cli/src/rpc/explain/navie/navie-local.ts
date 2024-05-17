@@ -8,6 +8,15 @@ import { ContextV2, Navie, Help, Message, ProjectInfo, navie } from '@appland/na
 
 import INavie from './inavie';
 import Telemetry from '../../../telemetry';
+import {
+  AI,
+  CreateAgentMessage,
+  CreateUserMessage,
+  UpdateAgentMessage,
+  UpdateUserMessage,
+} from '@appland/client';
+import reportFetchError from './report-fetch-error';
+import assert from 'assert';
 
 class LocalHistory {
   constructor(public readonly threadId: string) {}
@@ -67,26 +76,18 @@ const OPTION_SETTERS: Record<
 };
 
 export default class LocalNavie extends EventEmitter implements INavie {
-  public history: LocalHistory;
   public navieOptions = new Navie.NavieOptions();
 
   constructor(
-    public threadId: string | undefined,
     private readonly contextProvider: ContextV2.ContextProvider,
     private readonly projectInfoProvider: ProjectInfo.ProjectInfoProvider,
     private readonly helpProvider: Help.HelpProvider
   ) {
     super();
+  }
 
-    if (threadId) {
-      log(`[local-navie] Continuing thread ${threadId}`);
-      this.threadId = threadId;
-    } else {
-      this.threadId = randomUUID();
-      log(`[local-navie] Starting new thread ${this.threadId}`);
-    }
-    this.threadId = threadId || randomUUID();
-    this.history = new LocalHistory(this.threadId);
+  get providerName() {
+    return 'local';
   }
 
   setOption(key: keyof typeof OPTION_SETTERS, value: string | number) {
@@ -98,19 +99,61 @@ export default class LocalNavie extends EventEmitter implements INavie {
     }
   }
 
-  async ask(question: string, codeSelection: string | undefined): Promise<void> {
+  async ask(
+    threadId: string | undefined,
+    question: string,
+    codeSelection: string | undefined
+  ): Promise<void> {
+    if (!threadId) {
+      warn(`[local-navie] No threadId provided for question. Allocating a new threadId.`);
+      // eslint-disable-next-line no-param-reassign
+      threadId = randomUUID();
+    }
+
+    let userMessageId: string;
+    {
+      const userMessage: CreateUserMessage = {
+        questionLength: question.length,
+      };
+      if (codeSelection) userMessage.codeSelectionLength = codeSelection.length;
+
+      userMessageId =
+        (
+          await reportFetchError(
+            'createUserMessage',
+            () => (assert(threadId), AI.createUserMessage(threadId, userMessage))
+          )
+        )?.id ?? randomUUID();
+    }
+
+    let agentMessageId: string;
+    {
+      const agentMessage: CreateAgentMessage = {};
+
+      agentMessageId =
+        (
+          await reportFetchError(
+            'createAgentMessage',
+            () => (assert(threadId), AI.createAgentMessage(threadId, agentMessage))
+          )
+        )?.id ?? randomUUID();
+    }
+
+    const history = new LocalHistory(threadId);
+
     this.#reportConfigTelemetry();
-    const messageId = randomUUID();
-    log(`[local-navie] Processing question ${messageId} in thread ${this.threadId}`);
-    this.emit('ack', messageId, this.threadId);
+    log(`[local-navie] Processing question ${userMessageId} in thread ${threadId}`);
+    this.emit('ack', userMessageId, threadId);
 
     const clientRequest: Navie.ClientRequest = {
       question,
       codeSelection,
     };
 
-    const history = await this.history.restoreMessages();
-    this.history.saveMessage({ content: question, role: 'user' });
+    const messages = await history.restoreMessages();
+    await history.saveMessage({ content: question, role: 'user' });
+
+    const startTime = Date.now();
 
     const navieFn = navie(
       clientRequest,
@@ -118,15 +161,47 @@ export default class LocalNavie extends EventEmitter implements INavie {
       this.projectInfoProvider,
       this.helpProvider,
       this.navieOptions,
-      history
+      messages
     );
+
+    let agentName: string | undefined;
+    let classification: ContextV2.ContextLabel[] | undefined;
+
     navieFn.on('event', (event) => this.emit('event', event));
+    navieFn.on('agent', (agent) => (agentName = agent));
+    navieFn.on('classification', (labels) => (classification = labels));
+
     const response = new Array<string>();
     for await (const token of navieFn.execute()) {
       response.push(token);
-      this.emit('token', token);
+      this.emit('token', token, agentMessageId);
     }
-    this.history.saveMessage({ content: response.join(''), role: 'assistant' });
+    const endTime = Date.now();
+    const duration = endTime - startTime;
+
+    warn(`[local-navie] Completed question ${userMessageId} in ${duration}ms`);
+
+    await history.saveMessage({ content: response.join(''), role: 'assistant' });
+
+    {
+      const userMessage: UpdateUserMessage = {
+        agentName,
+        classification,
+      };
+      await reportFetchError('updateUserMessage', () =>
+        AI.updateUserMessage(userMessageId, userMessage)
+      );
+    }
+    {
+      const agentMessage: UpdateAgentMessage = {
+        responseLength: response.join('').length,
+        responseTime: duration,
+      };
+      await reportFetchError('updateAgentMessage', () =>
+        AI.updateAgentMessage(agentMessageId, agentMessage)
+      );
+    }
+
     this.emit('complete');
   }
 

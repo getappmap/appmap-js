@@ -109,12 +109,11 @@ export const handler = async (argv) => {
       };
 
       const buildLocalNavie = (
-        threadId: string | undefined,
         contextProvider: ContextV2.ContextProvider,
         projectInfoProvider: ProjectInfo.ProjectInfoProvider,
         helpProvider: Help.HelpProvider
       ) => {
-        const navie = new LocalNavie(threadId, contextProvider, projectInfoProvider, helpProvider);
+        const navie = new LocalNavie(contextProvider, projectInfoProvider, helpProvider);
 
         let START: number | undefined;
 
@@ -133,11 +132,10 @@ export const handler = async (argv) => {
         return navie;
       };
       const buildRemoteNavie = (
-        threadId: string | undefined,
         contextProvider: ContextV2.ContextProvider,
         projectInfoProvider: ProjectInfo.ProjectInfoProvider,
         helpProvider: Help.HelpProvider
-      ) => new RemoteNavie(threadId, contextProvider, projectInfoProvider, helpProvider);
+      ) => new RemoteNavie(contextProvider, projectInfoProvider, helpProvider);
 
       const navieProvider = useLocalNavie() ? buildLocalNavie : buildRemoteNavie;
 

@@ -9,7 +9,6 @@ import assert from 'assert';
 
 export default class RemoteNavie extends EventEmitter implements INavie {
   constructor(
-    public threadId: string | undefined,
     private contextProvider: ContextV2.ContextProvider,
     private projectInfoProvider: ProjectInfo.ProjectInfoProvider,
     private helpProvider: Help.HelpProvider
@@ -17,11 +16,15 @@ export default class RemoteNavie extends EventEmitter implements INavie {
     super();
   }
 
+  get providerName() {
+    return 'remote';
+  }
+
   setOption(key: string, _value: string | number) {
     throw new Error(`RemoteNavie does not support option '${key}'`);
   }
 
-  async ask(question: string, codeSelection: string | undefined) {
+  async ask(threadId: string, question: string, codeSelection: string | undefined) {
     (
       await AI.connect({
         onAck: (userMessageId, threadId) => {
@@ -103,7 +106,7 @@ export default class RemoteNavie extends EventEmitter implements INavie {
       })
     ).inputPrompt(
       { question: question, codeSelection: codeSelection },
-      { threadId: this.threadId, tool: 'explain' }
+      { threadId, tool: 'explain' }
     );
   }
 }
