@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.143.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.142.1...@appland/appmap-v3.143.0) (2024-05-17)
+
+
+### Features
+
+* Emit agent and classification events ([a73bcaa](https://github.com/getappmap/appmap-js/commit/a73bcaa276835b8def2d56c270aab358ca35443f))
+
 # [@appland/appmap-v3.142.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.142.0...@appland/appmap-v3.142.1) (2024-05-17)
 
 
