@@ -1,6 +1,6 @@
 import { ChatOpenAI } from '@langchain/openai';
 import OpenAI from 'openai';
-import InteractionHistory from '../interaction-history';
+import InteractionHistory, { ClassificationEvent } from '../interaction-history';
 import { ContextV2 } from '../context';
 
 const SYSTEM_PROMPT = `**Question classifier**
@@ -138,6 +138,8 @@ export default class ClassificationService {
       })
       .filter((item) => item);
 
-    return classification as ContextV2.ContextLabel[];
+    const labels = classification as ContextV2.ContextLabel[];
+    this.interactionHistory.addEvent(new ClassificationEvent(labels));
+    return labels;
   }
 }

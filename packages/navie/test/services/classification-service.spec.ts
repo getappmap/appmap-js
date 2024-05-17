@@ -19,13 +19,14 @@ describe('ClassificationService', () => {
   afterEach(() => jest.resetAllMocks());
 
   describe('when LLM responds', () => {
-    it('returns the response', async () => {
-      const classification = `
+    const classification = `
 architecture: high
 - troubleshooting: low
 `;
 
-      mockAIResponse(completionWithRetry, [classification]);
+    beforeEach(() => mockAIResponse(completionWithRetry, [classification]));
+
+    it('returns the response', async () => {
       const response = await service.classifyQuestion('user management');
       expect(response).toEqual([
         {
@@ -38,6 +39,17 @@ architecture: high
         },
       ]);
       expect(completionWithRetry).toHaveBeenCalledTimes(1);
+    });
+
+    it('emits classification event', async () => {
+      await service.classifyQuestion('user management');
+      expect(
+        interactionHistory.events.find((event) => event.metadata.type === 'classification')
+          ?.metadata
+      ).toEqual({
+        type: 'classification',
+        classification: ['architecture=high', 'troubleshooting=low'],
+      });
     });
   });
 });

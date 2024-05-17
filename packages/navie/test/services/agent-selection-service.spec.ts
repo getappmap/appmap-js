@@ -2,7 +2,7 @@ import ExplainAgent from '../../src/agents/explain-agent';
 import HelpAgent from '../../src/agents/help-agent';
 import { ExplainOptions } from '../../src/explain';
 import { HelpProvider } from '../../src/help';
-import InteractionHistory from '../../src/interaction-history';
+import InteractionHistory, { AgentSelectionEvent } from '../../src/interaction-history';
 import { AppMapConfig, AppMapStats } from '../../src/project-info';
 import AgentSelectionService from '../../src/services/agent-selection-service';
 import ApplyContextService from '../../src/services/apply-context-service';
@@ -36,21 +36,26 @@ describe('AgentSelectionService', () => {
     applyContextService = {} as ApplyContextService;
   });
 
+  const agentSelectionEvent = (): AgentSelectionEvent | undefined =>
+    interactionHistory.events.find((event) => event instanceof AgentSelectionEvent) as any;
+
   describe('when the question specifies an agent', () => {
+    const invokeAgent = () =>
+      buildAgentSelectionService().selectAgent(helpAgentQueston, new ExplainOptions(), []);
+
     it('creates the specified agent', () => {
-      const { agent } = buildAgentSelectionService().selectAgent(
-        helpAgentQueston,
-        new ExplainOptions(),
-        []
-      );
+      const { agent } = invokeAgent();
       expect(agent).toBeInstanceOf(HelpAgent);
     });
+    it('emits the agent selection event', () => {
+      const { agent } = invokeAgent();
+      expect(agentSelectionEvent()?.metadata).toEqual({
+        agent: 'help',
+        type: 'agentSelection',
+      });
+    });
     it('removes the prefix', () => {
-      const { question } = buildAgentSelectionService().selectAgent(
-        helpAgentQueston,
-        new ExplainOptions(),
-        []
-      );
+      const { question } = invokeAgent();
       expect(question).toEqual('How to make a diagram?');
     });
   });
