@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.142.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.142.0...@appland/appmap-v3.142.1) (2024-05-17)
+
+
+### Bug Fixes
+
+* install subcommand checks that target exists ([99799f3](https://github.com/getappmap/appmap-js/commit/99799f31e48b5d9c87aae112ffed538578f81021))
+
 # [@appland/appmap-v3.142.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.141.0...@appland/appmap-v3.142.0) (2024-05-15)
 
 
