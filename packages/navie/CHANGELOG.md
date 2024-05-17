@@ -1,3 +1,17 @@
+# [@appland/navie-v1.10.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.9.2...@appland/navie-v1.10.0) (2024-05-17)
+
+
+### Bug Fixes
+
+* Don't instruct code editor users to install the plugin ([5b0eaa6](https://github.com/getappmap/appmap-js/commit/5b0eaa6f7075b9ddf94bb725b51d50d49c9fa930))
+* Improve handling of code fences ([e3e4b41](https://github.com/getappmap/appmap-js/commit/e3e4b41b0ccebd98e8bb0a49ca9e2b0e6043d088))
+
+
+### Features
+
+* Change default temperature and make it customizable ([5a2bc41](https://github.com/getappmap/appmap-js/commit/5a2bc416ef96dccdd290bec0acd5914eeb439c85))
+* Emit agent and classification events ([a73bcaa](https://github.com/getappmap/appmap-js/commit/a73bcaa276835b8def2d56c270aab358ca35443f))
+
 # [@appland/navie-v1.9.2](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.9.1...@appland/navie-v1.9.2) (2024-05-14)
 
 
