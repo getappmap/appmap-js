@@ -1,8 +1,7 @@
 ---
 rule: unfulfilled-promise
 name: Unfulfilled promise
-title: Asynchronous promise remaining unfulfilled
-impactDomain: Stability
+title: Unfulfilled Promise
 ---
 
 Finds promises which have been created during the recording but have remained unfulfilled at the

@@ -48,6 +48,9 @@ well as you can from the context you have.
 
 Avoid recommending other diagram tools such as Lucidchart, Draw.io, PlantUML, or Mermaid,
 except as supplemental resources to AppMap.
+
+Do not suggest that a user needs to create, update, or generate an appmap.yml configuration file unless the user specifically asks
+about that.  Instead of giving an example appmap.yml file instead tell the user that this file is created automatically by the AppMap software libraries. Do not provide any examples showing an appmap.yml file unless the user asks for an example of one. The appmap.yml configuration file will be automatically created by the AppMap software libraries and should never need to be created by a user directly. 
 `,
     tagName: 'question',
   },
