@@ -1,7 +1,7 @@
 import { isNativeError } from 'node:util/types';
 
 import Yargs from 'yargs';
-import { promises as fs } from 'fs';
+import { promises as fs, statSync } from 'fs';
 import {
   AbortError,
   ChildProcessError,
@@ -110,6 +110,16 @@ const handler = async (
   const ui = new InstallerUI(interactive, { overwriteAppMapConfig, installerName, buildFile });
 
   try {
+    const stats = statSync(directory, { throwIfNoEntry: false });
+    if (!stats?.isDirectory()) {
+      const msg = `${directory} does not exist or is not a directory.`;
+      console.error(`ERROR: ${msg}`);
+      return {
+        exitCode: 1,
+        err: new InvalidPathError(msg),
+      };
+    }
+
     const projects = await getProjects(ui, installers, directory, true, projectType);
 
     const noopsInvoked = new Set<string>();

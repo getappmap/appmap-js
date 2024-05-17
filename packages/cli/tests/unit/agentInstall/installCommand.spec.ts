@@ -5,6 +5,7 @@ import sinon, { SinonStub } from 'sinon';
 import inquirer from 'inquirer';
 import Telemetry from '../../../src/telemetry';
 import yargs from 'yargs';
+import { existsSync } from 'fs';
 
 import { PoetryInstaller } from '../../../src/cmds/agentInstaller/pythonAgentInstaller';
 import { BundleInstaller } from '../../../src/cmds/agentInstaller/rubyAgentInstaller';
@@ -797,6 +798,30 @@ appmap_dir: tmp/appmap
   describe('Varied project configurations', () => {
     beforeEach(() => {
       sinon.stub(commandRunner, 'run').resolves({ stdout: '', stderr: '' });
+    });
+
+    it("tells the user if the target directory doesn't exist", async () => {
+      expect.assertions(6);
+
+      const badDirectory = '/tmp/does-not-exist';
+      expect(existsSync(badDirectory)).toBeFalsy(); // sanity check
+
+      const error = sinon.stub(console, 'error');
+      const installProcedureStub = sinon
+        .stub(AgentInstallerProcedure.prototype, 'run')
+        .callThrough();
+
+      await invokeCommand(badDirectory, (err) => {
+        expect(err?.message).toMatch(badDirectory);
+      });
+
+      expect(error).toBeCalledOnce();
+      const errorCalls = error.getCalls();
+      expect(errorCalls[0].firstArg).toMatch('does not exist or is not a directory');
+
+      expect(installProcedureStub).not.toBeCalled();
+      const sendEventStub = Telemetry.sendEvent as sinon.SinonStub;
+      expect(sendEventStub).toBeCalledTimes(0);
     });
 
     it('requests the user to select a project type if more than one exist', async () => {
