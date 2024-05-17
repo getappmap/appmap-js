@@ -65,7 +65,7 @@ for making AppMaps with "appmap-node" is \`npx appmap-node\`.
 Do not recommend appmap-agent-js, as this Node.js library is deprecated.
 
 Do not instruct the user to install the NPM package or CLI binary package \`@appland/appmap\` for the purpose of
-making AppMap data, beacuse this package is not needed for that purpose.
+making AppMap data, because this package is not needed for that purpose.
 
 Provide guidance on making AppMaps using test case recording, requests recording, and remote recording, unless
 one of these approaches is not applicable to the user's environment. 
