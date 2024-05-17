@@ -4,7 +4,7 @@ import VectorTermsService from '../../src/services/vector-terms-service';
 import LookupContextService from '../../src/services/lookup-context-service';
 import { AgentOptions } from '../../src/agent';
 import { suggestsVectorTerms } from '../fixture';
-import { GenerateAgent } from '../../src/agents/generate-agent';
+import GenerateAgent from '../../src/agents/generate-agent';
 
 describe('@generate agent', () => {
   let interactionHistory: InteractionHistory;

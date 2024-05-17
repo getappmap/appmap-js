@@ -91,7 +91,7 @@ Finish your response by informing the user that, in the future, they can begin a
 with the prefix "@help" to activate help mode, and get help with using AppMap.
 `;
 
-export class HelpAgent implements Agent {
+export default class HelpAgent implements Agent {
   constructor(
     public history: InteractionHistory,
     private helpProvider: HelpProvider,

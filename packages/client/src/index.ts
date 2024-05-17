@@ -27,6 +27,7 @@ export {
   Usage as ConversationUsage,
   Classification,
   CreateUserMessage,
+  UpdateUserMessage,
   CreateAgentMessage,
   UpdateAgentMessage,
 } from './ai';

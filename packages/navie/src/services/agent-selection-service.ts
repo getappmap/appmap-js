@@ -1,18 +1,18 @@
 /* eslint-disable default-case */
 /* eslint-disable consistent-return */
 import { ExplainOptions } from '../explain';
-import InteractionHistory from '../interaction-history';
+import InteractionHistory, { AgentSelectionEvent } from '../interaction-history';
 import { Agent, AgentMode } from '../agent';
 import { ProjectInfo } from '../project-info';
-import { HelpAgent } from '../agents/help-agent';
 import { HelpProvider } from '../help';
+import HelpAgent from '../agents/help-agent';
+import GenerateAgent from '../agents/generate-agent';
+import ExplainAgent from '../agents/explain-agent';
 import VectorTermsService from './vector-terms-service';
-import { GenerateAgent } from '../agents/generate-agent';
 import LookupContextService from './lookup-context-service';
 import ApplyContextService from './apply-context-service';
-import ExplainAgent from '../agents/explain-agent';
 
-type AgentModeResult = { agent: Agent; question: string };
+type AgentModeResult = { agentMode: AgentMode; agent: Agent; question: string };
 
 const MODE_PREFIXES = {
   '@explain ': AgentMode.Explain,
@@ -66,7 +66,7 @@ export default class AgentSelectionService {
           `[mode-selection] Activating agent due to explicit option: ${options.agentMode}`
         );
         const agent = buildAgent[options.agentMode]();
-        return { question, agent };
+        return { agentMode: options.agentMode, question, agent };
       }
     };
 
@@ -76,16 +76,18 @@ export default class AgentSelectionService {
           modifiedQuestion = question.slice(prefix.length);
           this.history.log(`[mode-selection] Activating agent due to question prefix: ${mode}`);
           const agent = buildAgent[mode]();
-          return { question: modifiedQuestion, agent };
+          return { agentMode: mode, question: modifiedQuestion, agent };
         }
       }
     };
 
     const defaultMode = () => {
       this.history.log(`[mode-selection] Using default mode: ${AgentMode.Explain}`);
-      return { question, agent: explainAgent() };
+      return { agentMode: AgentMode.Explain, question, agent: explainAgent() };
     };
 
-    return optionMode() || questionPrefixMode() || defaultMode();
+    const result = optionMode() || questionPrefixMode() || defaultMode();
+    this.history.addEvent(new AgentSelectionEvent(result.agentMode));
+    return result;
   }
 }

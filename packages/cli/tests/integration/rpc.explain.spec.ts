@@ -3,7 +3,7 @@ import { ExplainRpc } from '@appland/rpc';
 import { Help, explain, applyContext, Explain } from '@appland/navie';
 import { AI } from '@appland/client';
 import { AIClient, AICallbacks, AIInputPromptOptions, AIUserInput } from '@appland/client';
-import { ContextV2, InteractionHistory, ProjectInfo } from '@appland/navie';
+import { ContextV2, ProjectInfo } from '@appland/navie';
 
 import { waitFor } from './waitFor';
 import { DEFAULT_WORKING_DIR, default as RPCTest, SingleDirectoryRPCTest } from './RPCTest';
@@ -59,7 +59,7 @@ describe('RPC', () => {
       it('answers the question', async () => {
         jest.spyOn(Telemetry, 'enabled', 'get').mockReturnValue(true);
         const explainImpl = {
-          on(_event: 'event', _listener: (event: InteractionHistory.InteractionEvent) => void) {},
+          on(_event: any, _listener: any) {},
           execute(): AsyncIterable<string> {
             return (async function* () {
               yield answer;

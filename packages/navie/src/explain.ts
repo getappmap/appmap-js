@@ -1,10 +1,13 @@
 import { warn } from 'console';
+import EventEmitter from 'events';
 
 import Message from './message';
 import MemoryService from './services/memory-service';
 import VectorTermsService from './services/vector-terms-service';
 import CompletionService, { OpenAICompletionService } from './services/completion-service';
 import InteractionHistory, {
+  AgentSelectionEvent,
+  ClassificationEvent,
   InteractionEvent,
   InteractionHistoryEvents,
 } from './interaction-history';
@@ -122,6 +125,12 @@ export class CodeExplainerService {
 }
 
 export interface IExplain extends InteractionHistoryEvents {
+  on(event: 'event', listener: (event: InteractionEvent) => void): void;
+
+  on(event: 'agent', listener: (agent: string) => void): void;
+
+  on(event: 'classification', listener: (labels: ContextV2.ContextLabel[]) => void): void;
+
   execute(): AsyncIterable<string>;
 }
 
@@ -189,12 +198,28 @@ export default function explain(
     memoryService
   );
 
-  return {
-    on: (event: 'event', listener: (event: InteractionEvent) => void) => {
-      interactionHistory.on(event, listener);
-    },
-    execute() {
-      return codeExplainerService.execute(clientRequest, options, chatHistory);
-    },
-  };
+  class ExplainImplementation extends EventEmitter implements IExplain {
+    constructor() {
+      super();
+
+      interactionHistory.on('event', (event: InteractionEvent) => {
+        this.emit('event', event);
+
+        if (event instanceof AgentSelectionEvent) {
+          this.emit('agent', event.agent);
+        }
+
+        if (event instanceof ClassificationEvent) {
+          this.emit('classification', event.classification);
+        }
+      });
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    async *execute(): AsyncIterable<string> {
+      yield* codeExplainerService.execute(clientRequest, options, chatHistory);
+    }
+  }
+
+  return new ExplainImplementation();
 }

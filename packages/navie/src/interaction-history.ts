@@ -4,6 +4,7 @@ import { ContextV2 } from './context';
 import { PROMPTS, PromptType } from './prompt';
 import { CHARACTERS_PER_TOKEN } from './message';
 import { HelpDoc } from './help';
+import { AgentMode } from './agent';
 
 const SNIPPET_LENGTH = 800;
 
@@ -16,7 +17,10 @@ function contentSnippet(content: string, maxLength = SNIPPET_LENGTH): string {
 export abstract class InteractionEvent {
   constructor(public type: string) {}
 
-  abstract get metadata(): Record<string, string | number | boolean>;
+  abstract get metadata(): Record<
+    string,
+    string | number | boolean | string[] | Record<string, string>
+  >;
 
   abstract get message(): string;
 
@@ -25,6 +29,48 @@ export abstract class InteractionEvent {
 
 export function isPromptEvent(event: InteractionEvent): event is PromptInteractionEvent {
   return event.type === 'prompt';
+}
+
+export class AgentSelectionEvent extends InteractionEvent {
+  constructor(public agent: AgentMode) {
+    super('agentSelection');
+  }
+
+  get metadata() {
+    return {
+      type: this.type,
+      agent: this.agent,
+    };
+  }
+
+  get message() {
+    return `[agentSelection] ${this.agent}`;
+  }
+
+  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
+  updateState(_state: InteractionState) {}
+}
+
+export class ClassificationEvent extends InteractionEvent {
+  constructor(public classification: ContextV2.ContextLabel[]) {
+    super('classification');
+  }
+
+  get metadata() {
+    return {
+      type: this.type,
+      classification: this.classification.map((label) => `${label.name}=${label.weight}`),
+    };
+  }
+
+  get message() {
+    return `[classification] ${this.classification
+      .map((label) => `${label.name}=${label.weight}`)
+      .join(', ')}`;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  updateState(_state: InteractionState) {}
 }
 
 export class PromptInteractionEvent extends InteractionEvent {

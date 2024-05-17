@@ -140,7 +140,7 @@ export default class AI {
     await this.apiRequest('POST', 'send feedback', `v1/ai/feedback`, { messageId, sentiment });
   }
 
-  protected static async createMessage<T, Q>(
+  protected static async createMessage<T>(
     threadId: string,
     role: string,
     endpoint: string,
@@ -166,7 +166,7 @@ export default class AI {
     );
   }
 
-  protected static async apiRequest<T, Q>(
+  protected static async apiRequest<T>(
     method: string,
     description: string,
     urlPath: string,

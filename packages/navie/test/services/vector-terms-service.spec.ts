@@ -63,7 +63,7 @@ describe('VectorTermsService', () => {
 
     describe('are valid JSON wrapped in fences', () => {
       it('should return the terms', async () => {
-        mockAIResponse(completionWithRetry, ['```json', '["user", "management"]', '```']);
+        mockAIResponse(completionWithRetry, ['```json\n', '["user", "management"]\n', '```\n']);
         const terms = await service.suggestTerms('user management');
         expect(terms).toEqual(['user', 'management']);
       });
@@ -71,7 +71,7 @@ describe('VectorTermsService', () => {
 
     describe('is YAML', () => {
       it('parses the terms', async () => {
-        mockAIResponse(completionWithRetry, ['response_key:', '  - user', '  - management']);
+        mockAIResponse(completionWithRetry, ['response_key:\n', '  - user\n', '  - management\n']);
         const terms = await service.suggestTerms('user management');
         expect(terms).toEqual(['response', 'key', 'user', 'management']);
       });
