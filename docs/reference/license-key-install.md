@@ -4,7 +4,7 @@ title: Docs - Reference
 description: "Install your AppMap license key for VS Code and JetBrains by following these steps."
 toc: true
 reference: true
-step: 17
+step: 18
 name: License Key Installation
 ---
 
