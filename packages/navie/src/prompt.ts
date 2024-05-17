@@ -135,7 +135,8 @@ information about installing, configuring, and using AppMap.`,
   [PromptType.CodeEditor]: {
     content: `**Code editor**
 
-You're provided with information about the user's code editor. This information includes the code editor's name.`,
+You're provided with information about the user's code editor, in which you run as an AI assistant via a plugin.
+Do not mention installation or activation of the AppMap extension, because the user has already accomplished these steps.`,
     tagName: 'code-editor',
   },
 };
