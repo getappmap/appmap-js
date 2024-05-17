@@ -5,7 +5,7 @@ description: "AppMap reference guide for Ruby. Record AppMap Data easily for imp
 toc: true
 reference: true
 name: AppMap Agent for Ruby
-step: 3
+step: 4
 ---
 
 # AppMap Agent for Ruby <!-- omit in toc -->

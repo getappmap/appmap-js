@@ -5,7 +5,7 @@ description: "AppMap reference guide for the Gradle plugin which enables recordi
 toc: true
 reference: true
 name: AppMap for Java - Gradle Plugin
-step: 7
+step: 8
 ---
 
 # AppMap Gradle plugin

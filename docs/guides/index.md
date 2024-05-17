@@ -9,7 +9,6 @@ step: 1
 
 These guide contain in-depth information on how to use AppMap for different use cases and scenarios.
 
-- [Navie Best Practices](/docs/guides/navie-best-practices)
 - [Using AppMap Diagrams](/docs/guides/using-appmap-diagrams)
 - [Navigating Code Objects](/docs/guides/navigating-code-objects)
 - [Exporting AppMap Diagrams](/docs/guides/exporting-appmap-diagrams)

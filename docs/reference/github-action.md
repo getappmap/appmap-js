@@ -5,7 +5,7 @@ description: "Learn how to use AppMap GitHub Actions to analyze code changes eff
 reference: true
 toc: true
 name: GitHub Action
-step: 15
+step: 16
 ---
 
 # GitHub Action Reference <!-- omit in toc -->
