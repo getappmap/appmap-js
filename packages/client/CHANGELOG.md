@@ -1,3 +1,10 @@
+# [@appland/client-v1.18.1](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.18.0...@appland/client-v1.18.1) (2024-05-17)
+
+
+### Bug Fixes
+
+* Export missing UpdateUserMessage ([6282fe3](https://github.com/getappmap/appmap-js/commit/6282fe3dd24d54f1f088b9b660587dc4b7855acd))
+
 # [@appland/client-v1.18.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.17.0...@appland/client-v1.18.0) (2024-05-14)
 
 
