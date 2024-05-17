@@ -5,7 +5,7 @@ description: "Learn how to use the AppMap Remote Recording API to start, stop, a
 toc: false
 reference: true
 name: Remote recording API
-step: 10
+step: 11
 redirect_from: [/docs/reference/remote-recording]
 ---
 

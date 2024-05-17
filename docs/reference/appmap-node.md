@@ -5,7 +5,7 @@ description: "Learn about the AppMap Agent for Node.js. Explore usage, configura
 toc: true
 reference: true
 name: AppMap Agent for Node.js
-step: 5
+step: 6
 redirect_from: [/docs/reference/appmap-agent-js]
 ---
 

@@ -14,6 +14,7 @@ That means you're not just working with static analysis anymore, and you're not 
 
 - [How Navie Works](/docs/navie/how-navie-works)
 - [How to Open Navie](/docs/navie/how-to-open-navie)
+- [Using Navie](/docs/navie/using-navie)
 - [Bring Your Own LLM Model](/docs/navie/bring-your-own-model)
 
 **Install AppMap for your preferred code editor to get started.**

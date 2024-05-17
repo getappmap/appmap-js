@@ -31,11 +31,7 @@ By default, Navie will utilize an OpenAI service hosted by AppMap. If, for data 
 
 When you ask a question to Navie, it will search through all your AppMap Diagrams (if they exist) for your project to pull in relevant traces, sequence diagrams, and code snippets for analysis. It will then send these code snippets and runtime code sequence diagrams to the Generative AI service along with your question. 
 
-You can ask free-form questions, or start your question with one of these commands:
-
-- `@explain`: (Default) Help you understand your project. This mode is used when there is no prefix.
-- `@help`: Get assistance with configuring and using AppMap.
-- `@generate`: Optimizes the answer to focus on new code generation.
+Refer to the [Using Navie docs](/docs/navie/using-navie) to learn more about the advanced Navie chat commands you can use with your question. 
 
 After asking Navie a question, Navie will search through your application source code, finding any relevant code snippets. It will include relevant AppMap Data like sequence diagrams and data flows if they exist for your project. You will see on the right hand side of the Navie window the relevant context from your code included with the question. 
 
