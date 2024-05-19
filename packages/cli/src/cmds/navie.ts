@@ -57,8 +57,7 @@ export function commonNavieArgsBuilder<T>(args: yargs.Argv<T>): yargs.Argv<T & N
       array: true,
     })
     .option('agent-mode', {
-      describe: `Agent mode which to run the Navie AI. The agent can also be controlled by starting the question with '@<agent> '.`,
-      choices: Object.values(Agents).map((agent) => agent.toLowerCase()),
+      describe: `This option is deprecated. Instead, start your question with @<command | agent>.`,
     })
     .option('code-editor', {
       describe:

@@ -1,4 +1,6 @@
 import { dump } from 'js-yaml';
+import assert from 'assert';
+
 import {
   AppMapConfig,
   AppMapStats,
@@ -8,7 +10,6 @@ import {
 } from '../project-info';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
-import assert from 'assert';
 
 type Test = () => boolean;
 

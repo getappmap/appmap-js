@@ -1,9 +1,7 @@
 import assert from 'assert';
 import { ExplainRpc } from '@appland/rpc';
-import { Help, explain, applyContext, Explain } from '@appland/navie';
-import { AI } from '@appland/client';
-import { AIClient, AICallbacks, AIInputPromptOptions, AIUserInput } from '@appland/client';
-import { ContextV2, ProjectInfo } from '@appland/navie';
+import { ContextV2, ProjectInfo, Help, navie, applyContext, Navie } from '@appland/navie';
+import { AI, AIClient, AICallbacks, AIInputPromptOptions, AIUserInput } from '@appland/client';
 
 import { waitFor } from './waitFor';
 import { DEFAULT_WORKING_DIR, default as RPCTest, SingleDirectoryRPCTest } from './RPCTest';
@@ -58,7 +56,7 @@ describe('RPC', () => {
 
       it('answers the question', async () => {
         jest.spyOn(Telemetry, 'enabled', 'get').mockReturnValue(true);
-        const explainImpl = {
+        const navieImpl = {
           on(_event: any, _listener: any) {},
           execute(): AsyncIterable<string> {
             return (async function* () {
@@ -67,7 +65,7 @@ describe('RPC', () => {
           },
         };
 
-        jest.mocked(explain).mockReturnValue(explainImpl);
+        jest.mocked(navie).mockReturnValue(navieImpl);
         jest
           .mocked(applyContext)
           .mockImplementation((context: ContextV2.ContextResponse) => context);
@@ -349,10 +347,9 @@ describe('RPC', () => {
 jest.mock('../../src/telemetry');
 Object.defineProperty(Telemetry, 'enabled', { get: jest.fn(), configurable: true });
 jest.mocked(Git.state).mockResolvedValue(0);
-jest.mocked(Explain.ExplainOptions).mockReturnValue({
+jest.mocked(Navie.NavieOptions).mockReturnValue({
   modelName: 'test-model',
   responseTokens: 42,
   temperature: 0.69,
   tokenLimit: 31337,
-  agentMode: undefined,
 });

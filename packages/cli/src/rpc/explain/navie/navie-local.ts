@@ -1,13 +1,12 @@
-import { log } from 'console';
+import { log, warn } from 'console';
 import EventEmitter from 'events';
 import { mkdir, readFile, readdir, writeFile } from 'fs/promises';
 import { randomUUID } from 'crypto';
 import { join } from 'path';
 import { homedir } from 'os';
-import { ContextV2, Explain, Help, Message, ProjectInfo, explain } from '@appland/navie';
+import { ContextV2, Navie, Help, Message, ProjectInfo, navie } from '@appland/navie';
 
 import INavie from './inavie';
-import { AgentMode } from '@appland/navie/dist/agent';
 import Telemetry from '../../../telemetry';
 
 class LocalHistory {
@@ -51,25 +50,25 @@ class LocalHistory {
 
 const OPTION_SETTERS: Record<
   string,
-  (explainOptions: Explain.ExplainOptions, value: string | number) => void
+  (navieOptions: Navie.NavieOptions, value: string | number) => void
 > = {
-  tokenLimit: (explainOptions, value) => {
-    explainOptions.tokenLimit = typeof value === 'string' ? parseInt(value, 10) : value;
+  tokenLimit: (navieOptions, value) => {
+    navieOptions.tokenLimit = typeof value === 'string' ? parseInt(value, 10) : value;
   },
-  temperature: (explainOptions, value) => {
-    explainOptions.temperature = typeof value === 'string' ? parseFloat(value) : value;
+  temperature: (navieOptions, value) => {
+    navieOptions.temperature = typeof value === 'string' ? parseFloat(value) : value;
   },
-  modelName: (explainOptions, value) => {
-    explainOptions.modelName = String(value);
+  modelName: (navieOptions, value) => {
+    navieOptions.modelName = String(value);
   },
-  explainMode: (explainOptions, value) => {
-    explainOptions.agentMode = value as AgentMode;
+  explainMode: () => {
+    warn(`Option 'explainMode' is deprecated and will be ignored`);
   },
 };
 
 export default class LocalNavie extends EventEmitter implements INavie {
   public history: LocalHistory;
-  public explainOptions = new Explain.ExplainOptions();
+  public navieOptions = new Navie.NavieOptions();
 
   constructor(
     public threadId: string | undefined,
@@ -93,7 +92,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
   setOption(key: keyof typeof OPTION_SETTERS, value: string | number) {
     const setter = OPTION_SETTERS[key];
     if (setter) {
-      setter(this.explainOptions, value);
+      setter(this.navieOptions, value);
     } else {
       throw new Error(`LocalNavie does not support option '${key}'`);
     }
@@ -105,7 +104,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
     log(`[local-navie] Processing question ${messageId} in thread ${this.threadId}`);
     this.emit('ack', messageId, this.threadId);
 
-    const clientRequest: Explain.ClientRequest = {
+    const clientRequest: Navie.ClientRequest = {
       question,
       codeSelection,
     };
@@ -113,17 +112,17 @@ export default class LocalNavie extends EventEmitter implements INavie {
     const history = await this.history.restoreMessages();
     this.history.saveMessage({ content: question, role: 'user' });
 
-    const explainFn = explain(
+    const navieFn = navie(
       clientRequest,
       this.contextProvider,
       this.projectInfoProvider,
       this.helpProvider,
-      this.explainOptions,
+      this.navieOptions,
       history
     );
-    explainFn.on('event', (event) => this.emit('event', event));
+    navieFn.on('event', (event) => this.emit('event', event));
     const response = new Array<string>();
-    for await (const token of explainFn.execute()) {
+    for await (const token of navieFn.execute()) {
       response.push(token);
       this.emit('token', token);
     }
@@ -138,7 +137,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
     Telemetry.sendEvent({
       name: 'navie-local',
       properties: {
-        modelName: this.explainOptions.modelName,
+        modelName: this.navieOptions.modelName,
         azureVersion: process.env.AZURE_OPENAI_API_VERSION,
       },
     });
