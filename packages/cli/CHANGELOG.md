@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.144.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.143.0...@appland/appmap-v3.144.0) (2024-05-19)
+
+
+### Features
+
+* Sync only high level docs ([5186e4e](https://github.com/getappmap/appmap-js/commit/5186e4e0c896324b808e5341878b02da6df41e3a))
+
 # [@appland/appmap-v3.143.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.142.1...@appland/appmap-v3.143.0) (2024-05-17)
 
 
