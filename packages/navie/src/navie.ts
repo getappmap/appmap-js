@@ -23,6 +23,7 @@ import Command, { CommandMode } from './command';
 import ExplainCommand from './commands/explain-command';
 import ClassifyCommand from './commands/classify-command';
 import Message from './message';
+import VectorTermsCommand from './commands/vector-terms-command';
 
 export type ChatHistory = Message[];
 
@@ -72,13 +73,14 @@ export default function navie(
     options.temperature
   );
 
+  const vectorTermsService = new VectorTermsService(
+    interactionHistory,
+    options.modelName,
+    options.temperature
+  );
+
   const buildExplainCommand = () => {
     const codeSelectionService = new CodeSelectionService(interactionHistory);
-    const vectorTermsService = new VectorTermsService(
-      interactionHistory,
-      options.modelName,
-      options.temperature
-    );
 
     const contextProviderV2 = async (
       request: ContextV2.ContextRequest
@@ -120,9 +122,12 @@ export default function navie(
 
   const buildClassifyCommand = () => new ClassifyCommand(classificationService);
 
+  const buildVectorTermsCommand = () => new VectorTermsCommand(vectorTermsService);
+
   const commandBuilders: Record<CommandMode, () => Command> = {
     [CommandMode.Explain]: buildExplainCommand,
     [CommandMode.Classify]: buildClassifyCommand,
+    [CommandMode.VectorTerms]: buildVectorTermsCommand,
   };
 
   let { question } = clientRequest;
