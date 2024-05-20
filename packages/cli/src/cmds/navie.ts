@@ -17,6 +17,7 @@ import INavie, { INavieProvider } from '../rpc/explain/navie/inavie';
 import LocalNavie from '../rpc/explain/navie/navie-local';
 import RemoteNavie from '../rpc/explain/navie/navie-remote';
 import detectAIEnvVar, { AI_KEY_ENV_VARS } from './index/aiEnvVar';
+import detectCodeEditor from '../lib/detectCodeEditor';
 
 interface ExplainArgs {
   aiOption?: string[];
@@ -198,10 +199,16 @@ export async function handler(argv: HandlerArguments) {
       .on('token', (token) => output.write(token));
   }
 
+  let codeEditor: string | undefined = argv.codeEditor;
+  if (!codeEditor) {
+    codeEditor = detectCodeEditor();
+    if (codeEditor) warn(`Detected code editor: ${codeEditor}`);
+  }
+
   const question = await getQuestion(argv.input, argv.question);
   const capturingProvider = (...args: Parameters<INavieProvider>) =>
     attachNavie(buildNavieProvider(argv)(...args));
-  await explainHandler(capturingProvider, argv.codeEditor).handler({ question });
+  await explainHandler(capturingProvider, codeEditor).handler({ question });
 }
 
 function openOutput(outputPath: string | undefined): Writable {
