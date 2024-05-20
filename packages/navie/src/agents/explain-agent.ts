@@ -28,7 +28,7 @@ already aware of these.
 
 1. **Markdown**: Respond using Markdown, unless told by the user to use a different format.
 
-2. **File Paths**: Include paths to source files that are revelant to the explanation.
+2. **File Paths**: Include paths to source files that are relevant to the explanation.
 
 3. **Length**: Keep your response concise and to the point. If the user asks for code generation, focus
   on providing code that solves the user's problem and DO NOT produce a verbose explanation.

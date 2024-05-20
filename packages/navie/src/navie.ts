@@ -23,7 +23,6 @@ import Command, { CommandMode } from './command';
 import ExplainCommand from './commands/explain-command';
 import ClassifyCommand from './commands/classify-command';
 import Message from './message';
-import { AgentMode } from './agent';
 
 export type ChatHistory = Message[];
 
