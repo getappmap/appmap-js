@@ -103,5 +103,20 @@ describe('VectorTermsService', () => {
         expect(completionWithRetry).toHaveBeenCalledTimes(1);
       });
     });
+
+    describe('terms are empty', () => {
+      it('falls back to the user input', async () => {
+        const examples = ['', 'Terms: ', '{}', '```json\n[]\n```'];
+        const expected = ['user', 'management'];
+
+        for (let i = 0; i < examples.length; i++) {
+          const example = examples[i];
+          mockAIResponse(completionWithRetry, [example]);
+          const terms = await service.suggestTerms('user management');
+          expect(terms).toEqual(expected);
+          expect(completionWithRetry).toHaveBeenCalledTimes(i + 1);
+        }
+      });
+    });
   });
 });

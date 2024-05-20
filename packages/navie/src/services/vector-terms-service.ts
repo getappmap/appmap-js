@@ -5,6 +5,7 @@ import { ChatOpenAI } from '@langchain/openai';
 
 import InteractionHistory, { VectorTermsInteractionEvent } from '../interaction-history';
 import trimFences from '../lib/trim-fences';
+import isEmpty from '../lib/is-empty';
 
 const SYSTEM_PROMPT = `You are assisting a developer to search a code base.
 
@@ -136,6 +137,10 @@ export default class VectorTermsService {
       responseText = contentAfter(responseText, 'Terms:');
       responseText = trimFences(responseText);
       searchTermsObject = parseJSON(responseText) || parseText(responseText);
+      if (isEmpty(searchTermsObject)) {
+        warn('No search terms were returned. Falling back to raw input.');
+        searchTermsObject = question.split(/\s+/).filter(Boolean);
+      }
     }
 
     const terms = new Set<string>();
