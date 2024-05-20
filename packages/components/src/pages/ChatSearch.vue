@@ -49,7 +49,6 @@ import VLlmConfiguration from '@/components/chat-search/LlmConfiguration.vue';
 import AppMapRPC from '@/lib/AppMapRPC';
 import authenticatedClient from '@/components/mixins/authenticatedClient';
 import type { ITool, CodeSelection } from '@/components/chat/Chat.vue';
-import CompletionInterpolation from '@/lib/completionInterpolation';
 
 import debounce from '@/lib/debounce';
 
@@ -319,6 +318,7 @@ export default {
       this.searching = true;
       this.lastStatusLabel = undefined;
 
+      let myThreadId: string | undefined;
       return new Promise((resolve, reject) => {
         // If we can't find a system message, this is a new chat.
         // We could potentially use the status to determine whether or not
@@ -343,34 +343,27 @@ export default {
         };
 
         const onComplete = () => {
-          interp.dispose();
           this.searching = false;
           onProjectContextComplete();
+          systemMessage.complete = true;
           resolve();
         };
 
         const onError = (error) => {
-          interp.dispose();
           onComplete();
           this.$refs.vchat.onError(error, systemMessage);
           reject();
         };
 
-        const interp = new CompletionInterpolation();
-        interp.onEnd(() => {
-          systemMessage.complete = true;
-        });
-
-        this.ask.on('ack', (messageId: string, threadId: string) => {
-          this.$refs.vchat.onAck(messageId, threadId);
-          interp.onToken((t) => this.$refs.vchat.addToken(t, threadId, messageId));
+        this.ask.on('ack', (_messageId: string, threadId: string) => {
+          myThreadId = threadId;
+          this.$refs.vchat.onAck(_messageId, threadId);
         });
         this.ask.on('token', (token, messageId) => {
           if (!systemMessage.messageId) systemMessage.messageId = messageId;
 
           onProjectContextComplete();
-
-          interp.write(token);
+          this.$refs.vchat.addToken(token, myThreadId, messageId);
         });
         this.ask.on('error', onError);
         this.ask.on('status', (status) => {
