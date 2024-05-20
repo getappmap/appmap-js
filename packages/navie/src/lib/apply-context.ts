@@ -15,7 +15,7 @@ export const DEFAULT_SELECTION_FREQUENCY: Map<ContextV2.ContextItemType, number>
   [ContextV2.ContextItemType.SequenceDiagram]: 1,
   [ContextV2.ContextItemType.CodeSnippet]: 5,
   [ContextV2.ContextItemType.DataRequest]: 2,
-  [ContextV2.ContextItemType.HelpDoc]: 1,
+  [ContextV2.ContextItemType.HelpDoc]: 2,
 }).reduce((map, [key, value]) => {
   map.set(key as ContextV2.ContextItemType, value);
   return map;
@@ -67,7 +67,7 @@ export default function applyContext(
 
   const itemDescription = (contextItem: ContextV2.ContextItem): string =>
     [contextItem.type, ContextV2.isFileContextItem(contextItem) ? contextItem.location : undefined]
-       .filter(Boolean)
+      .filter(Boolean)
       .join(' ');
 
   const addContextItem = (contextItem: ContextV2.ContextItem): ContextItemStatus => {

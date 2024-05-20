@@ -86,7 +86,6 @@ const parseJSON = (text: string): Record<string, unknown> | string | string[] | 
   try {
     return JSON.parse(sanitizedTerms);
   } catch (err) {
-    warn(`Non-JSON response from AI.`);
     return undefined;
   }
 };

@@ -1,6 +1,5 @@
 import ExplainAgent from '../../src/agents/explain-agent';
 import HelpAgent from '../../src/agents/help-agent';
-import { ExplainOptions } from '../../src/explain';
 import { HelpProvider } from '../../src/help';
 import InteractionHistory, { AgentSelectionEvent } from '../../src/interaction-history';
 import { AppMapConfig, AppMapStats } from '../../src/project-info';
@@ -40,8 +39,7 @@ describe('AgentSelectionService', () => {
     interactionHistory.events.find((event) => event instanceof AgentSelectionEvent) as any;
 
   describe('when the question specifies an agent', () => {
-    const invokeAgent = () =>
-      buildAgentSelectionService().selectAgent(helpAgentQueston, new ExplainOptions(), []);
+    const invokeAgent = () => buildAgentSelectionService().selectAgent(helpAgentQueston, []);
 
     it('creates the specified agent', () => {
       const { agent } = invokeAgent();
@@ -62,34 +60,26 @@ describe('AgentSelectionService', () => {
 
   describe('when there are no AppMaps', () => {
     it('creates an Explain agent', () => {
-      const { agent, question } = buildAgentSelectionService().selectAgent(
-        genericQuestion,
-        new ExplainOptions(),
-        [
-          {
-            directory: 'appland',
-            appmapConfig: { language: 'ruby' } as unknown as AppMapConfig,
-            appmapStats: { numAppMaps: 0 } as unknown as AppMapStats,
-          },
-        ]
-      );
+      const { agent, question } = buildAgentSelectionService().selectAgent(genericQuestion, [
+        {
+          directory: 'appland',
+          appmapConfig: { language: 'ruby' } as unknown as AppMapConfig,
+          appmapStats: { numAppMaps: 0 } as unknown as AppMapStats,
+        },
+      ]);
       expect(agent).toBeInstanceOf(ExplainAgent);
       expect(question).toEqual(question);
     });
   });
   describe('when there are AppMaps', () => {
     it('creates an Explain agent', () => {
-      const { agent, question } = buildAgentSelectionService().selectAgent(
-        genericQuestion,
-        new ExplainOptions(),
-        [
-          {
-            directory: 'stripe',
-            appmapConfig: { language: 'ruby' } as unknown as AppMapConfig,
-            appmapStats: { numAppMaps: 10 } as unknown as AppMapStats,
-          },
-        ]
-      );
+      const { agent, question } = buildAgentSelectionService().selectAgent(genericQuestion, [
+        {
+          directory: 'stripe',
+          appmapConfig: { language: 'ruby' } as unknown as AppMapConfig,
+          appmapStats: { numAppMaps: 10 } as unknown as AppMapStats,
+        },
+      ]);
       expect(agent).toBeInstanceOf(ExplainAgent);
       expect(question).toEqual(question);
     });

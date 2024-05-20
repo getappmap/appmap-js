@@ -1,6 +1,7 @@
 import assert from 'assert';
 import { Agent, AgentMode } from '../src/agent';
-import { ChatHistory, ClientRequest, CodeExplainerService, ExplainOptions } from '../src/explain';
+import { ChatHistory, ClientRequest } from '../src/navie';
+import ExplainCommand, { ExplainOptions } from '../src/commands/explain-command';
 import InteractionHistory from '../src/interaction-history';
 import Message from '../src/message';
 import AgentSelectionService from '../src/services/agent-selection-service';
@@ -18,7 +19,7 @@ import {
 } from './fixture';
 import ClassificationService from '../src/services/classification-service';
 
-describe('CodeExplainerService', () => {
+describe('ExplainCommand', () => {
   let interactionHistory: InteractionHistory;
   let completionService: CompletionService;
   let classificationService: ClassificationService;
@@ -33,8 +34,9 @@ describe('CodeExplainerService', () => {
   let assistantMessage1: string | undefined;
   let userMessage2: string | undefined;
 
-  function buildCodeExplainerService() {
-    return new CodeExplainerService(
+  function buildExplainCommand(options: ExplainOptions) {
+    return new ExplainCommand(
+      options,
       interactionHistory,
       completionService,
       classificationService,
@@ -90,12 +92,12 @@ describe('CodeExplainerService', () => {
   }
 
   async function explain(
-    codeExplainerService: CodeExplainerService = buildCodeExplainerService(),
+    explainCommand: ExplainCommand = buildExplainCommand(defaultExplainOptions()),
     clientRequest: ClientRequest = buildClientRequest(),
     options: ExplainOptions = defaultExplainOptions(),
     history: ChatHistory = chatHistory()
   ): Promise<string[]> {
-    const result = codeExplainerService.execute(clientRequest, options, history);
+    const result = explainCommand.execute(clientRequest, history);
     const resultArray = new Array<string>();
     for await (const item of result) {
       resultArray.push(item);

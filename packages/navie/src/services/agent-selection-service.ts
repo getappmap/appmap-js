@@ -1,6 +1,5 @@
 /* eslint-disable default-case */
 /* eslint-disable consistent-return */
-import { ExplainOptions } from '../explain';
 import InteractionHistory, { AgentSelectionEvent } from '../interaction-history';
 import { Agent, AgentMode } from '../agent';
 import { ProjectInfo } from '../project-info';
@@ -29,11 +28,7 @@ export default class AgentSelectionService {
     private applyContextService: ApplyContextService
   ) {}
 
-  selectAgent(
-    question: string,
-    options: ExplainOptions,
-    _projectInfo: ProjectInfo[]
-  ): AgentModeResult {
+  selectAgent(question: string, _projectInfo: ProjectInfo[]): AgentModeResult {
     let modifiedQuestion = question;
 
     const helpAgent = () => new HelpAgent(this.history, this.helpProvider, this.vectorTermsService);
@@ -60,16 +55,6 @@ export default class AgentSelectionService {
       [AgentMode.Explain]: explainAgent,
     };
 
-    const optionMode = () => {
-      if (options.agentMode) {
-        this.history.log(
-          `[mode-selection] Activating agent due to explicit option: ${options.agentMode}`
-        );
-        const agent = buildAgent[options.agentMode]();
-        return { agentMode: options.agentMode, question, agent };
-      }
-    };
-
     const questionPrefixMode = () => {
       for (const [prefix, mode] of Object.entries(MODE_PREFIXES)) {
         if (question.startsWith(prefix)) {
@@ -86,7 +71,7 @@ export default class AgentSelectionService {
       return { agentMode: AgentMode.Explain, question, agent: explainAgent() };
     };
 
-    const result = optionMode() || questionPrefixMode() || defaultMode();
+    const result = questionPrefixMode() || defaultMode();
     this.history.addEvent(new AgentSelectionEvent(result.agentMode));
     return result;
   }

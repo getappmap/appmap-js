@@ -41,12 +41,18 @@ export class HelpIndex {
       this.idx
         .search(keywords.join(' '))
         .map((result) => {
-          const content = this.contentByRef.get(result.ref);
+          let content = this.contentByRef.get(result.ref);
           const [filePath, from, to] = unpackRef(result.ref);
           if (!content) {
             warn(`Could not find content for ${result.ref}`);
             return;
           }
+
+          const filePathWithoutMdSuffix = filePath.replace(/\.md$/, '');
+          content = [
+            `<!-- Permalink: https://appmap.io/docs/${filePathWithoutMdSuffix} -->`,
+            content,
+          ].join('\n');
           return {
             filePath,
             from,
