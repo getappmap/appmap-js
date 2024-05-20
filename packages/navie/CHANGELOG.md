@@ -1,3 +1,10 @@
+# [@appland/navie-v1.11.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.11.0...@appland/navie-v1.11.1) (2024-05-20)
+
+
+### Bug Fixes
+
+* Provide vector term examples as chat primitives ([b6ff24d](https://github.com/getappmap/appmap-js/commit/b6ff24d93e6fe4567124f18a5171abf1ed5e273c))
+
 # [@appland/navie-v1.11.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.10.0...@appland/navie-v1.11.0) (2024-05-20)
 
 
