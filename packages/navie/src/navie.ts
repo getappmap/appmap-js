@@ -137,7 +137,10 @@ export default function navie(
       break;
     }
   }
+
   if (!command) command = buildExplainCommand();
+
+  clientRequest.question = question;
 
   class Navie extends EventEmitter implements INavie {
     constructor() {
