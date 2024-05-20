@@ -1,3 +1,17 @@
+# [@appland/appmap-v3.145.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.144.0...@appland/appmap-v3.145.0) (2024-05-20)
+
+
+### Bug Fixes
+
+* Detect code editor in the 'navie' command ([61a94ee](https://github.com/getappmap/appmap-js/commit/61a94ee3784486d483714564d140e805d29e21bc))
+* Fix typos ([03990fd](https://github.com/getappmap/appmap-js/commit/03990fd11d5041784e739900f3bc8447711939af))
+
+
+### Features
+
+* Add a URL to the beginning of each doc search result ([fde8d16](https://github.com/getappmap/appmap-js/commit/fde8d168af60e3dee6b08368eabc3f15ec398d18))
+* Introduce Navie commands, including [@classify](https://github.com/classify) ([e76a3fc](https://github.com/getappmap/appmap-js/commit/e76a3fcaa825a1fe0bd8e0db5042e2ee38989a84))
+
 # [@appland/appmap-v3.144.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.143.0...@appland/appmap-v3.144.0) (2024-05-19)
 
 
