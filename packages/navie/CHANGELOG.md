@@ -1,3 +1,19 @@
+# [@appland/navie-v1.11.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.10.0...@appland/navie-v1.11.0) (2024-05-20)
+
+
+### Bug Fixes
+
+* Add [@vector-terms](https://github.com/vector-terms) command ([6267119](https://github.com/getappmap/appmap-js/commit/6267119bdaac5682956b78dbce1890adefa409f9))
+* Fix typos ([03990fd](https://github.com/getappmap/appmap-js/commit/03990fd11d5041784e739900f3bc8447711939af))
+* Remove JSON parse warning ([c1477a0](https://github.com/getappmap/appmap-js/commit/c1477a0a5672a32d99b5104bacdaa51a0949f18a))
+* Update the question after command selection ([e81cd1b](https://github.com/getappmap/appmap-js/commit/e81cd1b90bae48c953e141da7792a0a9ebb85180))
+
+
+### Features
+
+* Introduce Navie commands, including [@classify](https://github.com/classify) ([e76a3fc](https://github.com/getappmap/appmap-js/commit/e76a3fcaa825a1fe0bd8e0db5042e2ee38989a84))
+* Update prompts and context ([b195de2](https://github.com/getappmap/appmap-js/commit/b195de2b85c564d1bf7f2eee10e4d10087601b57))
+
 # [@appland/navie-v1.10.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.9.2...@appland/navie-v1.10.0) (2024-05-17)
 
 
