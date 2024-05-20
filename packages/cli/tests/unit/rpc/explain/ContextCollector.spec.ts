@@ -1,6 +1,7 @@
 import { SearchRpc } from '@appland/rpc';
 import { ContextCollector, EventCollector } from '../../../../src/rpc/explain/collectContext';
 import AppMapIndex from '../../../../src/fulltext/AppMapIndex';
+import * as withIndex from '../../../../src/fulltext/withIndex';
 import * as navie from '@appland/navie';
 
 jest.mock('../../../../src/fulltext/AppMapIndex');
@@ -98,6 +99,32 @@ describe('ContextCollector', () => {
         });
         expect(collectedContext.searchResponse.numResults).toBe(10);
         expect(collectedContext.context).toEqual(mockContext);
+      });
+    });
+
+    describe('with empty vector terms', () => {
+      it('returns an empty context', async () => {
+        const indexSearch = jest.spyOn(withIndex, 'default');
+        const emptyVectorTerms = [[], [''], [' ']];
+
+        for (const vectorTerms of emptyVectorTerms) {
+          const contextCollector = new ContextCollector(
+            ['example'],
+            ['src'],
+            vectorTerms,
+            charLimit
+          );
+          const result = await contextCollector.collectContext();
+          expect(result).toStrictEqual({
+            searchResponse: {
+              results: [],
+              numResults: 0,
+            },
+            context: [],
+          });
+        }
+
+        expect(indexSearch).not.toHaveBeenCalled();
       });
     });
   });

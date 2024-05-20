@@ -137,10 +137,13 @@ export function buildHelpIndex(directory: string): Promise<HelpIndex> {
 export default async function collectHelp(
   helpRequest: Help.HelpRequest
 ): Promise<Help.HelpResponse> {
+  const { vectorTerms } = helpRequest;
+  if (vectorTerms.length === 0 || vectorTerms.every((v) => v.trim() === '')) return [];
+
   if (!helpIndex) {
     assert(DOCS_DIR, 'Could not find AppMap docs directory');
     helpIndex = await buildHelpIndex(DOCS_DIR);
   }
 
-  return await helpIndex.search(helpRequest.vectorTerms);
+  return await helpIndex.search(vectorTerms);
 }
