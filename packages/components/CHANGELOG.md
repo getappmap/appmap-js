@@ -1,3 +1,10 @@
+# [@appland/components-v4.24.4](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.24.3...@appland/components-v4.24.4) (2024-05-20)
+
+
+### Reverts
+
+* Revert "feat: Buffer and interpolate chunked completions" ([7ebda84](https://github.com/getappmap/appmap-js/commit/7ebda8489866e07c0ec9f0c53ab8616d11235670))
+
 # [@appland/components-v4.24.3](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.24.2...@appland/components-v4.24.3) (2024-05-15)
 
 
