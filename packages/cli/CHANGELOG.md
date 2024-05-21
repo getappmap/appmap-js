@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.146.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.145.0...@appland/appmap-v3.146.0) (2024-05-21)
+
+
+### Features
+
+* Report conversation and message metadata ([ad7acd4](https://github.com/getappmap/appmap-js/commit/ad7acd463b117da8da2d71438d8f81589ec13d38))
+
 # [@appland/appmap-v3.145.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.144.0...@appland/appmap-v3.145.0) (2024-05-20)
 
 
