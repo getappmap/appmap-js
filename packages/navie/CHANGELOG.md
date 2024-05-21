@@ -1,3 +1,10 @@
+# [@appland/navie-v1.12.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.11.1...@appland/navie-v1.12.0) (2024-05-21)
+
+
+### Features
+
+* Emit agent and classification events ([dde41f1](https://github.com/getappmap/appmap-js/commit/dde41f1c237f726df0374f4d6841788e708b07d1))
+
 # [@appland/navie-v1.11.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.11.0...@appland/navie-v1.11.1) (2024-05-20)
 
 
