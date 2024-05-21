@@ -13,10 +13,11 @@ describe('RemoteNavie', () => {
   let aiClient: AIClient;
   let inputPrompt = jest.fn();
   const question = 'What is the meaning of life?';
+  const threadId = 'the-thread-id';
   let codeSelection: string | undefined;
 
   beforeEach(() => {
-    navie = new RemoteNavie('threadId', contextProvider, projectInfoProvider, helpProvider);
+    navie = new RemoteNavie(contextProvider, projectInfoProvider, helpProvider);
 
     aiClient = {
       inputPrompt,
@@ -68,7 +69,7 @@ describe('RemoteNavie', () => {
     });
 
     it('provides ContextV2', async () => {
-      await navie.ask(question, codeSelection);
+      await navie.ask(threadId, question, codeSelection);
 
       callbacks.onAck!('userMessageId', 'threadId');
       expect(ackFn).toHaveBeenCalledWith('userMessageId', 'threadId');
@@ -106,7 +107,7 @@ describe('RemoteNavie', () => {
     });
 
     it('adapts ContextV1 to ContextV2', async () => {
-      await navie.ask(question, codeSelection);
+      await navie.ask(threadId, question, codeSelection);
 
       callbacks.onAck!('userMessageId', 'threadId');
       expect(ackFn).toHaveBeenCalledWith('userMessageId', 'threadId');

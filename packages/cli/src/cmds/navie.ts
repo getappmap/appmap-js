@@ -119,13 +119,12 @@ export function buildNavieProvider(argv: ExplainArgs) {
   };
 
   const buildLocalNavie = (
-    threadId: string | undefined,
     contextProvider: ContextV2.ContextProvider,
     projectInfoProvider: ProjectInfo.ProjectInfoProvider,
     helpProvider: Help.HelpProvider
   ) => {
     loadConfiguration(false);
-    const navie = new LocalNavie(threadId, contextProvider, projectInfoProvider, helpProvider);
+    const navie = new LocalNavie(contextProvider, projectInfoProvider, helpProvider);
     applyAIOptions(navie);
 
     let START: number | undefined;
@@ -145,13 +144,12 @@ export function buildNavieProvider(argv: ExplainArgs) {
   };
 
   const buildRemoteNavie = (
-    threadId: string | undefined,
     contextProvider: ContextV2.ContextProvider,
     projectInfoProvider: ProjectInfo.ProjectInfoProvider,
     helpProvider: Help.HelpProvider
   ) => {
     loadConfiguration(true);
-    const navie = new RemoteNavie(threadId, contextProvider, projectInfoProvider, helpProvider);
+    const navie = new RemoteNavie(contextProvider, projectInfoProvider, helpProvider);
     applyAIOptions(navie);
     return navie;
   };

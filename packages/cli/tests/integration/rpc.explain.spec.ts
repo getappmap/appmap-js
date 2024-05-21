@@ -41,11 +41,10 @@ describe('RPC', () => {
     describe('via local AI service', () => {
       beforeAll(() => {
         navieProvider = (
-          threadId: string | undefined,
           contextProvider: ContextV2.ContextProvider,
           projectInfoProvider: ProjectInfo.ProjectInfoProvider,
           helpProvider: Help.HelpProvider
-        ) => new LocalNavie(threadId, contextProvider, projectInfoProvider, helpProvider);
+        ) => new LocalNavie(contextProvider, projectInfoProvider, helpProvider);
         rpcTest = new SingleDirectoryRPCTest(DEFAULT_WORKING_DIR, navieProvider);
       });
 
@@ -102,11 +101,10 @@ describe('RPC', () => {
     describe('via remote AI service', () => {
       beforeAll(() => {
         navieProvider = (
-          threadId: string | undefined,
           contextProvider: ContextV2.ContextProvider,
           projectInfoProvider: ProjectInfo.ProjectInfoProvider,
           helpProvider: Help.HelpProvider
-        ) => new RemoteNavie(threadId, contextProvider, projectInfoProvider, helpProvider);
+        ) => new RemoteNavie(contextProvider, projectInfoProvider, helpProvider);
         rpcTest = new SingleDirectoryRPCTest(DEFAULT_WORKING_DIR, navieProvider);
       });
 
@@ -129,7 +127,6 @@ describe('RPC', () => {
               options?: AIInputPromptOptions
             ): Promise<void> {
               expect(input).toEqual({ question, codeSelection: undefined });
-              expect(options?.tool).toEqual('explain');
               this.callbacks.onAck!(userMessageId, threadId);
 
               const searchContextOptions: ContextV2.ContextRequest = {
@@ -162,6 +159,13 @@ describe('RPC', () => {
           jest
             .spyOn(AI, 'connect')
             .mockImplementation((callbacks: AICallbacks) => Promise.resolve(aiClient(callbacks)));
+          jest.spyOn(AI, 'createConversationThread').mockImplementation(() =>
+            Promise.resolve({
+              id: threadId,
+              permissions: { useNavieAIProxy: true },
+              usage: { conversationCounts: [] },
+            })
+          );
 
           const explainOptions: ExplainRpc.ExplainOptions = {
             question,

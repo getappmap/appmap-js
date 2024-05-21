@@ -1,5 +1,5 @@
-import EventEmitter from 'events';
 import assert from 'assert';
+import EventEmitter from 'events';
 
 import MemoryService from './services/memory-service';
 import VectorTermsService from './services/vector-terms-service';
