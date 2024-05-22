@@ -254,6 +254,27 @@ export class ContextItemEvent extends InteractionEvent {
   }
 }
 
+export class TechStackEvent extends InteractionEvent {
+  constructor(public terms: string[]) {
+    super('techStack');
+  }
+
+  get metadata() {
+    return {
+      type: this.type,
+      terms: this.terms,
+    };
+  }
+
+  get message() {
+    return `[techStack] ${this.terms.join(' ')}`;
+  }
+
+  updateState(state: InteractionState) {
+    state.techStackTerms = this.terms;
+  }
+}
+
 export interface InteractionHistoryEvents {
   on(event: 'event', listener: (event: InteractionEvent) => void): void;
 }

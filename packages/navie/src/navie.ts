@@ -24,6 +24,8 @@ import ExplainCommand from './commands/explain-command';
 import ClassifyCommand from './commands/classify-command';
 import Message from './message';
 import VectorTermsCommand from './commands/vector-terms-command';
+import TechStackService from './services/tech-stack-service';
+import TechStackCommand from './commands/tech-stack-command';
 
 export type ChatHistory = Message[];
 
@@ -79,6 +81,12 @@ export default function navie(
     options.temperature
   );
 
+  const techStackService = new TechStackService(
+    interactionHistory,
+    options.modelName,
+    options.temperature
+  );
+
   const buildExplainCommand = () => {
     const codeSelectionService = new CodeSelectionService(interactionHistory);
 
@@ -96,10 +104,10 @@ export default function navie(
 
     const agentSelectionService = new AgentSelectionService(
       interactionHistory,
-      helpProvider,
       vectorTermsService,
       lookupContextService,
-      applyContextService
+      applyContextService,
+      techStackService
     );
     const projectInfoService = new ProjectInfoService(interactionHistory, projectInfoProvider);
     const memoryService = new MemoryService(
@@ -124,10 +132,13 @@ export default function navie(
 
   const buildVectorTermsCommand = () => new VectorTermsCommand(vectorTermsService);
 
+  const buildTechStackCommand = () => new TechStackCommand(techStackService);
+
   const commandBuilders: Record<CommandMode, () => Command> = {
     [CommandMode.Explain]: buildExplainCommand,
     [CommandMode.Classify]: buildClassifyCommand,
     [CommandMode.VectorTerms]: buildVectorTermsCommand,
+    [CommandMode.TechStack]: buildTechStackCommand,
   };
 
   let { question } = clientRequest;

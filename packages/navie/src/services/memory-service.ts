@@ -30,7 +30,6 @@ export default class MemoryService {
         : new AIMessage({ content: message.content });
     });
 
-    // TODO: We never have an existing summary, so the second argument is always empty.
     const summary = await memory.predictNewSummary(lcMessages, '');
     this.interactionHistory.addEvent(new PromptInteractionEvent('summary', 'system', summary));
   }

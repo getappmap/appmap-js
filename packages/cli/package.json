@@ -22,7 +22,7 @@
     "build": "tsc && yarn build:html && yarn build:doc",
     "watch": "tsc --watch",
     "build:html": "ts-node esbuild.html.ts",
-    "build:doc": "cd ../../docs && rsync -av --include='appmap-overview.md' --include='navie/***' --include='diagrams/***' --include='get-started-with-appmap/***' --exclude='*' --delete . ../packages/cli/built/docs",
+    "build:doc": "rsync -av --delete ../../docs built/ && rm -f built/docs/reference/appmap-agent-js.md",
     "start": "ts-node src/cli.ts",
     "build-native": "yarn build && ./bin/build-native"
   },

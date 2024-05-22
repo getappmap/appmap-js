@@ -64,19 +64,10 @@ describe('@explain agent', () => {
       );
     });
 
-    it('looks up context and help', async () => {
+    it('looks up code context (only)', async () => {
       const context = SEARCH_CONTEXT;
-      const help: HelpResponse = [
-        {
-          filePath: 'ruby-diagram.md',
-          from: 1,
-          to: 2,
-          content: 'steps to make a Ruby appmap diagram',
-          score: 1,
-        },
-      ];
       lookupContextService.lookupContext = jest.fn().mockResolvedValue(context);
-      lookupContextService.lookupHelp = jest.fn().mockResolvedValue(help);
+      lookupContextService.lookupHelp = jest.fn();
 
       await buildAgent().perform(initialQuestionOptions, () => tokensAvailable);
 
@@ -85,15 +76,11 @@ describe('@explain agent', () => {
         tokensAvailable,
         undefined
       );
-      expect(lookupContextService.lookupHelp).toHaveBeenCalledWith(
-        ['ruby'],
-        ['user', 'management'],
-        tokensAvailable
-      );
+      expect(lookupContextService.lookupHelp).not.toHaveBeenCalled();
 
       expect(applyContextService.applyContext).toHaveBeenCalledWith(
         context,
-        help,
+        [],
         tokensAvailable * CHARACTERS_PER_TOKEN
       );
     });

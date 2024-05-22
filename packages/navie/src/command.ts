@@ -4,6 +4,7 @@ export enum CommandMode {
   Explain = 'explain',
   Classify = 'classify',
   VectorTerms = 'vector-terms',
+  TechStack = 'tech-stack',
 }
 
 export default interface Command {
