@@ -21,6 +21,7 @@ import collectHelp from '../../cmds/navie/help';
 import { getLLMConfiguration } from '../llmConfiguration';
 import detectAIEnvVar from '../../cmds/index/aiEnvVar';
 import reportFetchError from './navie/report-fetch-error';
+import { LRUCache } from 'lru-cache';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
@@ -202,6 +203,11 @@ export class Explain extends EventEmitter {
   }
 }
 
+const codeSelections = new LRUCache<string, string>({
+  maxSize: 1024 ** 2 * 10 /* 10 MB */,
+  sizeCalculation: (value) => value.length,
+});
+
 async function explain(
   navieProvider: INavieProvider,
   question: string,
@@ -216,11 +222,18 @@ async function explain(
   };
   const appmapDirectories = await configuration().appmapDirectories();
   const { projectDirectories } = configuration();
+
+  // Cached by thread ID or supplied via argument
+  let cachedCodeSelection = codeSelection;
+  if (!cachedCodeSelection && threadId) {
+    cachedCodeSelection = codeSelections.get(threadId);
+  }
+
   const explain = new Explain(
     appmapDirectories,
     projectDirectories,
     question,
-    codeSelection,
+    cachedCodeSelection,
     appmaps,
     status,
     codeEditor
@@ -270,6 +283,7 @@ async function explain(
       status.threadId = threadId;
       const cleanupFn = () => searchStatusByUserMessageId.delete(userMessageId);
       setTimeout(cleanupFn, 1000 * 60 * 5).unref();
+      if (codeSelection) codeSelections.set(threadId, codeSelection);
       searchStatusByUserMessageId.set(userMessageId, status);
       first() && resolve({ userMessageId, threadId });
     });
