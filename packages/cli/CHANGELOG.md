@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.147.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.146.0...@appland/appmap-v3.147.0) (2024-05-22)
+
+
+### Features
+
+* Move help-related content to the Help agent exclusively ([2274b8c](https://github.com/getappmap/appmap-js/commit/2274b8c14a348e0271e1159d9baa7e1c909d7c0b))
+
 # [@appland/appmap-v3.146.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.145.0...@appland/appmap-v3.146.0) (2024-05-21)
 
 
