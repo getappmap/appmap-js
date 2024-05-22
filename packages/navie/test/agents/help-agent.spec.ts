@@ -1,32 +1,50 @@
 import { AgentOptions } from '../../src/agent';
 import HelpAgent from '../../src/agents/help-agent';
-import { HelpProvider, HelpRequest, HelpResponse } from '../../src/help';
+import { HelpRequest, HelpResponse } from '../../src/help';
 import InteractionHistory from '../../src/interaction-history';
 import { AppMapConfig, AppMapStats } from '../../src/project-info';
 import VectorTermsService from '../../src/services/vector-terms-service';
 import { suggestsVectorTerms } from '../fixture';
+import LookupContextService from '../../src/services/lookup-context-service';
+import TechStackService from '../../src/services/tech-stack-service';
 
 describe('HelpAgent', () => {
   const question = 'How to make a diagram?';
   let history: InteractionHistory;
-  let helpProvider: HelpProvider;
+  let lookupService: LookupContextService;
   let vectorTermsService: VectorTermsService;
+  let techStackService: TechStackService;
 
   function receivesHelpDocs(): void {
-    helpProvider = jest.fn().mockImplementation((request: HelpRequest): Promise<HelpResponse> => {
-      expect(request.type).toEqual('help');
-      expect(request.vectorTerms).toEqual(['ruby', 'diagram']);
-      expect(request.tokenCount).toEqual(1000);
-      return Promise.resolve([
-        {
-          filePath: 'ruby-diagram.md',
-          from: 1,
-          to: 2,
-          content: 'steps to make a Ruby appmap diagram',
-          score: 1,
-        },
-      ]);
-    });
+    lookupService = {
+      lookupHelp: jest
+        .fn()
+        .mockImplementation(
+          (
+            languages: string[],
+            vectorTerms: string[],
+            tokenCount: number
+          ): Promise<HelpResponse> => {
+            expect(languages).toEqual(['ruby']);
+            expect(vectorTerms).toEqual(['diagram']);
+            expect(tokenCount).toEqual(1000);
+            return Promise.resolve([
+              {
+                filePath: 'ruby-diagram.md',
+                from: 1,
+                to: 2,
+                content: 'steps to make a Ruby appmap diagram',
+                score: 1,
+              },
+            ]);
+          }
+        ),
+      lookupContext: jest.fn().mockRejectedValue('lookupContext not implemented'),
+    } as unknown as LookupContextService;
+
+    techStackService = {
+      detectTerms: jest.fn().mockResolvedValue(['ruby']),
+    } as unknown as TechStackService;
   }
 
   beforeEach(() => {
@@ -35,7 +53,7 @@ describe('HelpAgent', () => {
   });
 
   function buildAgent(): HelpAgent {
-    return new HelpAgent(history, helpProvider, vectorTermsService);
+    return new HelpAgent(history, lookupService, vectorTermsService, techStackService);
   }
 
   describe('when there are no AppMaps', () => {
@@ -57,7 +75,7 @@ describe('HelpAgent', () => {
     it('searches for help docs', async () => {
       await buildAgent().perform(options, () => 1000);
 
-      expect(helpProvider).toHaveBeenCalled();
+      expect(lookupService.lookupHelp).toHaveBeenCalled();
     });
     it('prompts the user to create AppMaps', async () => {
       await buildAgent().perform(options, () => 1000);
@@ -74,12 +92,12 @@ describe('HelpAgent', () => {
           type: 'prompt',
         },
         {
-          name: 'makeAppMaps',
+          name: 'techStack',
           role: 'system',
           type: 'prompt',
         },
         {
-          name: 'prefixTip',
+          name: 'makeAppMaps',
           role: 'system',
           type: 'prompt',
         },
@@ -121,7 +139,7 @@ describe('HelpAgent', () => {
       it('searches for help docs', async () => {
         await buildAgent().perform(options, () => 1000);
 
-        expect(helpProvider).toHaveBeenCalled();
+        expect(lookupService.lookupHelp).toHaveBeenCalled();
       });
 
       it('prompts based on the help docs', async () => {
@@ -135,6 +153,11 @@ describe('HelpAgent', () => {
           },
           {
             name: 'question',
+            role: 'system',
+            type: 'prompt',
+          },
+          {
+            name: 'techStack',
             role: 'system',
             type: 'prompt',
           },
@@ -154,7 +177,7 @@ describe('HelpAgent', () => {
 
     describe('and it does not find matching help', () => {
       beforeEach(() => {
-        helpProvider = jest.fn().mockImplementation(() => Promise.resolve([]));
+        lookupService.lookupHelp = jest.fn().mockImplementation(() => Promise.resolve([]));
       });
 
       it('prompts that no help docs were found', async () => {
@@ -168,6 +191,11 @@ describe('HelpAgent', () => {
           },
           {
             name: 'question',
+            role: 'system',
+            type: 'prompt',
+          },
+          {
+            name: 'techStack',
             role: 'system',
             type: 'prompt',
           },

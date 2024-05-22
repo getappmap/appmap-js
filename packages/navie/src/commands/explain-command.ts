@@ -32,16 +32,23 @@ export default class ExplainCommand implements Command {
   async *execute(clientRequest: ClientRequest, chatHistory?: ChatHistory): AsyncIterable<string> {
     const { question: baseQuestion, codeSelection } = clientRequest;
 
-    const contextLabelsFn = this.classifierService.classifyQuestion(baseQuestion);
+    const contextLabelsFn = this.classifierService.classifyQuestion(baseQuestion, chatHistory);
 
     const projectInfoResponse = await this.projectInfoService.lookupProjectInfo();
     const projectInfo: ProjectInfo[] = Array.isArray(projectInfoResponse)
       ? projectInfoResponse
       : [projectInfoResponse];
 
+    const contextLabels = await contextLabelsFn;
+    warn(
+      `Classification: ${contextLabels
+        .map((label) => [label.name, label.weight].join('='))
+        .join(', ')}`
+    );
+
     const { question, agent: mode } = this.agentSelectionService.selectAgent(
       baseQuestion,
-      projectInfo
+      contextLabels
     );
 
     const tokensAvailable = (): number =>
@@ -59,13 +66,6 @@ export default class ExplainCommand implements Command {
       .filter(Boolean)
       .join('\n\n');
 
-    const contextLabels = await contextLabelsFn;
-    warn(
-      `Classification: ${contextLabels
-        .map((label) => [label.name, label.weight].join('='))
-        .join(', ')}`
-    );
-
     const agentOptions = new AgentOptions(
       question,
       aggregateQuestion,
@@ -80,7 +80,11 @@ export default class ExplainCommand implements Command {
       .some((label) => label.name === 'architecture' || label.name === 'overview');
 
     this.projectInfoService.promptProjectInfo(isArchitecture, projectInfo);
-    await mode.perform(agentOptions, tokensAvailable);
+    const agentResponse = await mode.perform(agentOptions, tokensAvailable);
+    if (agentResponse) {
+      yield agentResponse.response;
+      if (agentResponse.abort) return;
+    }
 
     if (codeSelection) this.codeSelectionService.addSystemPrompt();
 
@@ -92,7 +96,7 @@ export default class ExplainCommand implements Command {
     if (codeSelection) this.codeSelectionService.applyCodeSelection(codeSelection);
     mode.applyQuestionPrompt(question);
 
-    const response = this.completionService.complete();
+    const response = this.completionService.complete({ temperature: mode.temperature });
     for await (const token of response) {
       yield token;
     }

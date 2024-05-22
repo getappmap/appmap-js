@@ -3,13 +3,14 @@
 import InteractionHistory, { AgentSelectionEvent } from '../interaction-history';
 import { Agent, AgentMode } from '../agent';
 import { ProjectInfo } from '../project-info';
-import { HelpProvider } from '../help';
 import HelpAgent from '../agents/help-agent';
 import GenerateAgent from '../agents/generate-agent';
 import ExplainAgent from '../agents/explain-agent';
 import VectorTermsService from './vector-terms-service';
 import LookupContextService from './lookup-context-service';
 import ApplyContextService from './apply-context-service';
+import { ContextV2 } from '../context';
+import TechStackService from './tech-stack-service';
 
 type AgentModeResult = { agentMode: AgentMode; agent: Agent; question: string };
 
@@ -22,16 +23,22 @@ const MODE_PREFIXES = {
 export default class AgentSelectionService {
   constructor(
     private history: InteractionHistory,
-    private helpProvider: HelpProvider,
     private vectorTermsService: VectorTermsService,
     private lookupContextService: LookupContextService,
-    private applyContextService: ApplyContextService
+    private applyContextService: ApplyContextService,
+    private techStackService: TechStackService
   ) {}
 
-  selectAgent(question: string, _projectInfo: ProjectInfo[]): AgentModeResult {
+  selectAgent(question: string, classification: ContextV2.ContextLabel[]): AgentModeResult {
     let modifiedQuestion = question;
 
-    const helpAgent = () => new HelpAgent(this.history, this.helpProvider, this.vectorTermsService);
+    const helpAgent = () =>
+      new HelpAgent(
+        this.history,
+        this.lookupContextService,
+        this.vectorTermsService,
+        this.techStackService
+      );
 
     const generateAgent = () =>
       new GenerateAgent(
@@ -66,12 +73,24 @@ export default class AgentSelectionService {
       }
     };
 
+    const classifierMode = () => {
+      const isHelp = classification.some(
+        (label) =>
+          label.name === ContextV2.ContextLabelName.HelpWithAppMap &&
+          label.weight === ContextV2.ContextLabelWeight.High
+      );
+      if (isHelp) {
+        this.history.log(`[mode-selection] Activating agent due to classifier: ${AgentMode.Help}`);
+        return { agentMode: AgentMode.Help, question, agent: helpAgent() };
+      }
+    };
+
     const defaultMode = () => {
       this.history.log(`[mode-selection] Using default mode: ${AgentMode.Explain}`);
       return { agentMode: AgentMode.Explain, question, agent: explainAgent() };
     };
 
-    const result = questionPrefixMode() || defaultMode();
+    const result = questionPrefixMode() || classifierMode() || defaultMode();
     this.history.addEvent(new AgentSelectionEvent(result.agentMode));
     return result;
   }

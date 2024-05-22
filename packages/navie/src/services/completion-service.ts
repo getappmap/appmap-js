@@ -6,7 +6,7 @@ import type Message from '../message';
 export type Completion = AsyncIterable<string>;
 
 export default interface CompletionService {
-  complete: () => Completion;
+  complete: (options: { temperature: number | undefined }) => Completion;
 }
 
 // Some LLMs only accept a single system message.
@@ -29,16 +29,18 @@ export class OpenAICompletionService implements CompletionService {
     public readonly temperature: number
   ) {}
 
-  async *complete(): Completion {
+  async *complete(options: { temperature: number | undefined }): Completion {
     const { messages } = this.interactionHistory.buildState();
 
     const chatAI = new ChatOpenAI({
       modelName: this.modelName,
-      temperature: this.temperature,
+      temperature: options.temperature || this.temperature,
       streaming: true,
     });
 
-    this.interactionHistory.addEvent(new CompletionEvent(this.modelName, this.temperature));
+    this.interactionHistory.addEvent(
+      new CompletionEvent(this.modelName, options.temperature || this.temperature)
+    );
 
     const response = await chatAI.completionWithRetry({
       messages: mergeSystemMessages(messages),

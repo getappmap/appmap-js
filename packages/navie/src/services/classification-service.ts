@@ -2,6 +2,7 @@ import { ChatOpenAI } from '@langchain/openai';
 import OpenAI from 'openai';
 import InteractionHistory, { ClassificationEvent } from '../interaction-history';
 import { ContextV2 } from '../context';
+import { ChatHistory } from '../navie';
 
 const SYSTEM_PROMPT = `**Question classifier**
 
@@ -136,7 +137,19 @@ export default class ClassificationService {
     public temperature: number
   ) {}
 
-  async classifyQuestion(question: string): Promise<ContextV2.ContextLabel[]> {
+  async classifyQuestion(
+    question: string,
+    chatHistory?: ChatHistory
+  ): Promise<ContextV2.ContextLabel[]> {
+    const allQuestions = [
+      ...(chatHistory || [])
+        .filter((message) => message.role === 'user')
+        .map((message) => message.content),
+      question,
+    ]
+      .filter(Boolean)
+      .join('\n\n');
+
     const openAI: ChatOpenAI = new ChatOpenAI({
       modelName: this.modelName,
       temperature: this.temperature,
@@ -148,7 +161,7 @@ export default class ClassificationService {
         role: 'system',
       },
       {
-        content: question,
+        content: allQuestions,
         role: 'user',
       },
     ];

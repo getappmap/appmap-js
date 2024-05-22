@@ -10,6 +10,7 @@ export default class InteractionState {
   public completionTemperature?: number;
   public contextAvailable?: ContextV2.ContextResponse;
   public helpAvailable?: HelpResponse;
+  public techStackTerms?: string[];
 
   addContextItem(contextItem: ContextV2.ContextItem) {
     this.messages.push({ content: contextItem.content, role: 'user' });

@@ -35,6 +35,8 @@ shell commands, or other workarounds. Your solution must be suitable for use as 
 * Limit the amount of text explanation you emit to the minimum necessary. The user is primarily interested in the code itself.
 `;
 export default class GenerateAgent implements Agent {
+  public temperature = undefined;
+
   constructor(
     public history: InteractionHistory,
     private vectorTermsService: VectorTermsService,
