@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.147.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.147.0...@appland/appmap-v3.147.1) (2024-05-22)
+
+
+### Bug Fixes
+
+* codeSelection is cached per-thread ([38dcb76](https://github.com/getappmap/appmap-js/commit/38dcb76b0a5e781c2227767146c93070666ab64b))
+
 # [@appland/appmap-v3.147.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.146.0...@appland/appmap-v3.147.0) (2024-05-22)
 
 
