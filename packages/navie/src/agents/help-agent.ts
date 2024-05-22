@@ -92,6 +92,8 @@ with the prefix "@help" to activate help mode, and get help with using AppMap.
 `;
 
 export default class HelpAgent implements Agent {
+  public temperature = 0;
+
   constructor(
     public history: InteractionHistory,
     private helpProvider: HelpProvider,

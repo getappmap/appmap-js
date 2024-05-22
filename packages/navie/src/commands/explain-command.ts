@@ -80,7 +80,11 @@ export default class ExplainCommand implements Command {
       .some((label) => label.name === 'architecture' || label.name === 'overview');
 
     this.projectInfoService.promptProjectInfo(isArchitecture, projectInfo);
-    await mode.perform(agentOptions, tokensAvailable);
+    const agentResponse = await mode.perform(agentOptions, tokensAvailable);
+    if (agentResponse) {
+      yield agentResponse.response;
+      if (agentResponse.abort) return;
+    }
 
     if (codeSelection) this.codeSelectionService.addSystemPrompt();
 
@@ -92,7 +96,7 @@ export default class ExplainCommand implements Command {
     if (codeSelection) this.codeSelectionService.applyCodeSelection(codeSelection);
     mode.applyQuestionPrompt(question);
 
-    const response = this.completionService.complete();
+    const response = this.completionService.complete({ temperature: mode.temperature });
     for await (const token of response) {
       yield token;
     }

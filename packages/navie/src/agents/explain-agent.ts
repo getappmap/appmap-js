@@ -115,6 +115,8 @@ All of these commands either do not exist, or are deprecated. Do not suggest any
 `;
 
 export default class ExplainAgent implements Agent {
+  public temperature = undefined;
+
   constructor(
     public history: InteractionHistory,
     private vectorTermsService: VectorTermsService,

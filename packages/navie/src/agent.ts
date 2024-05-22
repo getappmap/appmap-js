@@ -22,8 +22,15 @@ export class AgentOptions {
   }
 }
 
+export type AgentResponse = {
+  response: string;
+  abort: boolean;
+};
+
 export interface Agent {
-  perform(options: AgentOptions, tokensAvailable: () => number): Promise<void>;
+  perform(options: AgentOptions, tokensAvailable: () => number): Promise<AgentResponse | void>;
+
+  temperature: number | undefined;
 
   applyQuestionPrompt(question: string): void;
 }
