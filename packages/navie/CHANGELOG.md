@@ -1,3 +1,11 @@
+# [@appland/navie-v1.13.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.12.0...@appland/navie-v1.13.0) (2024-05-22)
+
+
+### Features
+
+* Agent can specify response text and temperature ([20c0434](https://github.com/getappmap/appmap-js/commit/20c043432c32460b6dd6a4f990c84fb73b828571))
+* Move help-related content to the Help agent exclusively ([2274b8c](https://github.com/getappmap/appmap-js/commit/2274b8c14a348e0271e1159d9baa7e1c909d7c0b))
+
 # [@appland/navie-v1.12.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.11.1...@appland/navie-v1.12.0) (2024-05-21)
 
 
