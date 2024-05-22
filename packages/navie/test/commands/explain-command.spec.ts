@@ -1,14 +1,16 @@
 import assert from 'assert';
-import { Agent, AgentMode } from '../src/agent';
-import { ChatHistory, ClientRequest } from '../src/navie';
-import ExplainCommand, { ExplainOptions } from '../src/commands/explain-command';
-import InteractionHistory from '../src/interaction-history';
-import Message from '../src/message';
-import AgentSelectionService from '../src/services/agent-selection-service';
-import CodeSelectionService from '../src/services/code-selection-service';
-import CompletionService from '../src/services/completion-service';
-import MemoryService from '../src/services/memory-service';
-import ProjectInfoService from '../src/services/project-info-service';
+import { Agent, AgentMode } from '../../src/agent';
+import { ChatHistory, ClientRequest } from '../../src/navie';
+import ExplainCommand, { ExplainOptions } from '../../src/commands/explain-command';
+import InteractionHistory from '../../src/interaction-history';
+import Message from '../../src/message';
+import AgentSelectionService from '../../src/services/agent-selection-service';
+import CodeSelectionService from '../../src/services/code-selection-service';
+import CompletionService from '../../src/services/completion-service';
+import MemoryService from '../../src/services/memory-service';
+import ProjectInfoService from '../../src/services/project-info-service';
+import ClassificationService from '../../src/services/classification-service';
+
 import {
   APPMAP_CONFIG,
   APPMAP_STATS,
@@ -16,8 +18,7 @@ import {
   doesNotPredictSummary,
   predictsSummary,
   providesProjectInfo,
-} from './fixture';
-import ClassificationService from '../src/services/classification-service';
+} from '../fixture';
 
 describe('ExplainCommand', () => {
   let interactionHistory: InteractionHistory;
@@ -94,6 +95,7 @@ describe('ExplainCommand', () => {
   async function explain(
     explainCommand: ExplainCommand = buildExplainCommand(defaultExplainOptions()),
     clientRequest: ClientRequest = buildClientRequest(),
+    options: ExplainOptions = defaultExplainOptions(),
     history: ChatHistory = chatHistory()
   ): Promise<string[]> {
     const result = explainCommand.execute(clientRequest, history);
