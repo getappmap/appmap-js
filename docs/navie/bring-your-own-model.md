@@ -12,7 +12,6 @@ redirect_from: [/docs/navie/bring-your-own-llm, /docs/navie/bring-your-own-key]
 # Bring Your Own LLM Model
 
 By default, when asking a question to Navie, your code editor will interact with the AppMap hosted proxy for OpenAI.  If you have a requirement to bring your own key or otherwise use your own OpenAI account you can specify your own OpenAI key; this will cause Navie to connect to OpenAI directly, without AppMap proxy acting as an intermediate.
-- [Navie AI Recommended Models](#navie-ai-recommended-models)
 - [Bring Your Own OpenAI API Key (BYOK)](#bring-your-own-openai-api-key-byok)
   - [Configuring Your OpenAI Key](#configuring-your-openai-key)
     - [Modify which OpenAI Model to use](#modify-which-openai-model-to-use)
@@ -22,56 +21,6 @@ By default, when asking a question to Navie, your code editor will interact with
   - [Configuring in JetBrains](#configuring-in-jetbrains)
   - [Configuring in VS Code](#configuring-in-vs-code)
 - [Examples](#examples)
-
-## Navie AI Recommended Models
-
-<p class="alert alert-danger">
-AppMap Navie AI recommends avoiding models that do not support chat mode.
-</p>
-
-<table class="table table-striped table-bordered black-white-table">
-  <tr>
-    <tr>
-      <th class="large-header">Navie AI Backend LLM</th>
-      <th class="large-header">Ease of Setup</th>
-      <th class="large-header">Quality of Responses</th>
-  </tr>
-  <tr>
-    <tr>
-      <td>AppMap OpenAI Proxy (default)</td>
-      <td>⭐⭐⭐⭐⭐</td>
-      <td>⭐⭐⭐⭐⭐</td>
-  </tr>
-  <tr>
-    <tr>
-      <td>Self Managed OpenAI API Key</td>
-      <td>⭐⭐⭐⭐</td>
-      <td>⭐⭐⭐⭐⭐</td>
-  </tr>
-      <tr>
-      <td>Azure Hosted OpenAI</td>
-      <td>⭐⭐⭐</td>
-      <td>⭐⭐⭐⭐⭐</td>
-  </tr>
-  </tr>
-      <tr>
-      <td>Anyscale Hosted Mixtral-8x7B</td>
-      <td>⭐⭐⭐</td>
-      <td>⭐⭐⭐</td>
-  </tr>
-  </tr>
-      <tr>
-      <td>Locally Hosted Mixtral-8x7B-Instruct-v0.1</td>
-      <td>⭐⭐</td>
-      <td>⭐⭐⭐</td>
-  </tr>
-  </tr>
-      <tr>
-      <td>Codellama/Codeqwen</td>
-      <td>❌ Not Supported</td>
-      <td>❌ Not Supported</td>
-  </tr>
-</table>
 
 ## Bring Your Own OpenAI API Key (BYOK)
 
@@ -118,7 +67,8 @@ At any time, you can unset your OpenAI API Key and revert usage back to using th
 ## Bring Your Own Model (BYOM)
 
 <p class="alert alert-info">
-<b>This feature is in early access.</b> We currently recommend GPT4-Turbo from OpenAI via OpenAI or Microsoft Azure, and Mixtral-8x7B-Instruct-v0.1.  Refer to the <a href="/docs/navie/bring-your-own-model.html#navie-ai-recommended-models">AppMap Recommended Models documentation</a> for more info
+  <b>This feature is in early access.</b>
+  We recommend choosing a model that is trained on a large corpus of both human-written natural language and code.
 </p>
 
 Another option is to use a different LLM entirely; you can use any OpenAI-compatible model 
