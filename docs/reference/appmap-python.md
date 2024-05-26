@@ -20,7 +20,8 @@ step: 5
   - [unittest](#unittest)
 - [Request recording](#request-recording)
 - [Remote recording](#remote-recording)
-- [Code Block Recording](#code-block-recording)
+- [Process recording](#process-recording)
+- [Code block recording](#code-block-recording)
 - [Web framework support](#web-framework-support)
   - [Django](#django)
   - [Flask](#flask)
@@ -248,7 +249,21 @@ To enable debugging support, ensure:
 
 **Note** Your application must be running in a supported web framework for remote recording to work.
 
-## Code Block Recording
+## Process recording
+
+AppMap can record your entire Python application from start to finish.
+
+To create a process
+recording, run your application with `appmap-python` and pass the flag `--record process` :
+
+```shell
+$ appmap-python --record process <your application command line>
+```
+
+Alternatively, you can set `APPMAP_RECORD_PROCESS=true`, as described
+[below](#process-recording-var).
+
+## Code block recording
 
 You can use `appmap.record` as a context manager to record a specific span of code. With this method, you can control exactly
 what code is recorded, and where the recording is saved.
@@ -480,7 +495,7 @@ $ appmap-python --record remote flask --app main.app
 
 * `APPMAP_RECORD_REQUESTS` controls creation of request recordings created when a web framework processes HTTP requests. When unset or `true`, request recordings will be created, otherwise they will not.
 
-* `APPMAP_RECORD_PROCESS` controls recording of the entire python process that loads the agent. When
+* <div id="process-recording-var"></div>`APPMAP_RECORD_PROCESS` controls recording of the entire python process that loads the agent. When
   `true`, recording starts when the agent is loaded. When the process exits, an AppMap will be
   created.
 
