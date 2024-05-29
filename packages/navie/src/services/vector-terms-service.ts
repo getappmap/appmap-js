@@ -4,7 +4,8 @@ import { warn } from 'console';
 import { ChatOpenAI } from '@langchain/openai';
 
 import InteractionHistory, { VectorTermsInteractionEvent } from '../interaction-history';
-import trimFences from '../lib/trim-fences';
+import contentAfter from '../lib/content-after';
+import parseJSON from '../lib/parse-json';
 
 const SYSTEM_PROMPT = `You are assisting a developer to search a code base.
 
@@ -103,22 +104,6 @@ Terms: +auth authentication authorization token strategy provider`,
   },
 ];
 
-const contentAfter = (text: string, start: string): string => {
-  const startIndex = text.indexOf(start);
-  if (startIndex < 0) return text;
-
-  return text.slice(startIndex + start.length);
-};
-
-const parseJSON = (text: string): Record<string, unknown> | string | string[] | undefined => {
-  const sanitizedTerms = text.replace(/```json/g, '').replace(/```/g, '');
-  try {
-    return JSON.parse(sanitizedTerms);
-  } catch (err) {
-    return undefined;
-  }
-};
-
 const parseText = (text: string): string[] => text.split(/\s+/);
 
 export default class VectorTermsService {
@@ -164,8 +149,9 @@ export default class VectorTermsService {
     {
       let responseText = rawResponse;
       responseText = contentAfter(responseText, 'Terms:');
-      responseText = trimFences(responseText);
-      searchTermsObject = parseJSON(responseText) || parseText(responseText);
+      searchTermsObject =
+        parseJSON<Record<string, unknown> | string | string[]>(responseText, undefined) ||
+        parseText(responseText);
     }
 
     const terms = new Set<string>();
