@@ -19,6 +19,8 @@ import {
   predictsSummary,
   providesProjectInfo,
 } from '../fixture';
+import { CommandRequest } from '../../src/command';
+import { UserOptions } from '../../src/lib/parse-options';
 
 describe('ExplainCommand', () => {
   let interactionHistory: InteractionHistory;
@@ -70,8 +72,11 @@ describe('ExplainCommand', () => {
     return history;
   }
 
-  function buildClientRequest(): ClientRequest {
-    const request: ClientRequest = { question: userMessage2 || userMessage1 };
+  function buildCommandRequest(): CommandRequest {
+    const request: CommandRequest = {
+      question: userMessage2 || userMessage1,
+      userOptions: new UserOptions(new Map()),
+    };
     if (codeSelection) request.codeSelection = codeSelection;
     return request;
   }
@@ -94,10 +99,10 @@ describe('ExplainCommand', () => {
 
   async function explain(
     explainCommand: ExplainCommand = buildExplainCommand(defaultExplainOptions()),
-    clientRequest: ClientRequest = buildClientRequest(),
+    request: CommandRequest = buildCommandRequest(),
     history: ChatHistory = chatHistory()
   ): Promise<string[]> {
-    const result = explainCommand.execute(clientRequest, history);
+    const result = explainCommand.execute(request, history);
     const resultArray = new Array<string>();
     for await (const item of result) {
       resultArray.push(item);
@@ -143,6 +148,7 @@ describe('ExplainCommand', () => {
           aggregateQuestion: userMessage1,
           chatHistory: [],
           codeSelection: undefined,
+          userOptions: new UserOptions(new Map()),
           contextLabels: [],
           projectInfo: [
             {
@@ -205,6 +211,7 @@ describe('ExplainCommand', () => {
           aggregateQuestion: [userMessage1, userMessage2].join('\n\n'),
           chatHistory: [userMessage1, assistantMessage1],
           codeSelection: undefined,
+          userOptions: new UserOptions(new Map()),
           contextLabels: [],
           projectInfo: [
             {
