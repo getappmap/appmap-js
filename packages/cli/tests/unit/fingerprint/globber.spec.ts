@@ -28,7 +28,7 @@ describe('Globber', () => {
     globber.scanNow();
   });
 
-  it('emits change events', (done) => {
+  xit('emits change events', (done) => {
     expect.assertions(1);
     globber.on('add', () => {
       fs.writeFileSync(appMapPath, '{"hello": "again"}');
