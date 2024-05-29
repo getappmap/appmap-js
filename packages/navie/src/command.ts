@@ -7,6 +7,7 @@ export enum CommandMode {
   Context = 'context',
   VectorTerms = 'vector-terms',
   TechStack = 'tech-stack',
+  Apply = 'apply',
 }
 
 export interface CommandRequest extends ClientRequest {

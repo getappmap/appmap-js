@@ -57,6 +57,9 @@ export const handler = async (argv: HandlerArguments) => {
   loadConfiguration(false);
   await configureRpcDirectories(argv.directory);
 
+  // WIP: Help the @apply command to resolve paths
+  if (argv.directory.length === 1) process.chdir(argv.directory[0]);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const rpcMethods: RpcHandler<any, any>[] = [
     search(),
