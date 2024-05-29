@@ -89,19 +89,20 @@ export default function navie(
     options.temperature
   );
 
+  const contextProviderV2 = async (
+    request: ContextV2.ContextRequest
+  ): Promise<ContextV2.ContextResponse> =>
+    contextProvider({ ...request, version: 2, type: 'search' });
+
+  const lookupContextService = new LookupContextService(
+    interactionHistory,
+    contextProviderV2,
+    helpProvider
+  );
+
   const buildExplainCommand = () => {
     const codeSelectionService = new CodeSelectionService(interactionHistory);
 
-    const contextProviderV2 = async (
-      request: ContextV2.ContextRequest
-    ): Promise<ContextV2.ContextResponse> =>
-      contextProvider({ ...request, version: 2, type: 'search' });
-
-    const lookupContextService = new LookupContextService(
-      interactionHistory,
-      contextProviderV2,
-      helpProvider
-    );
     const applyContextService = new ApplyContextService(interactionHistory);
 
     const agentSelectionService = new AgentSelectionService(
@@ -145,7 +146,6 @@ export default function navie(
     [CommandMode.VectorTerms]: buildVectorTermsCommand,
     [CommandMode.TechStack]: buildTechStackCommand,
     [CommandMode.Context]: buildContextCommand,
-    [CommandMode.Apply]: buildApplyCommand,
   };
 
   let { question } = clientRequest;
