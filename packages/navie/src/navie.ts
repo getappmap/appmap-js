@@ -26,6 +26,7 @@ import Message from './message';
 import VectorTermsCommand from './commands/vector-terms-command';
 import TechStackService from './services/tech-stack-service';
 import TechStackCommand from './commands/tech-stack-command';
+import ContextCommand from './commands/context-command';
 import parseOptions from './lib/parse-options';
 
 export type ChatHistory = Message[];
@@ -135,11 +136,16 @@ export default function navie(
 
   const buildTechStackCommand = () => new TechStackCommand(techStackService);
 
+  const buildContextCommand = () =>
+    new ContextCommand(options, vectorTermsService, lookupContextService);
+
   const commandBuilders: Record<CommandMode, () => Command> = {
     [CommandMode.Explain]: buildExplainCommand,
     [CommandMode.Classify]: buildClassifyCommand,
     [CommandMode.VectorTerms]: buildVectorTermsCommand,
     [CommandMode.TechStack]: buildTechStackCommand,
+    [CommandMode.Context]: buildContextCommand,
+    [CommandMode.Apply]: buildApplyCommand,
   };
 
   let { question } = clientRequest;
