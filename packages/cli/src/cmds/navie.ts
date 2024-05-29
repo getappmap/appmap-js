@@ -214,6 +214,10 @@ export async function handler(argv: HandlerArguments) {
   const question = await getQuestion(argv.input, argv.question);
   const capturingProvider = (...args: Parameters<INavieProvider>) =>
     attachNavie(buildNavieProvider(argv)(...args));
+
+  // WIP: Help the @apply command to resolve paths
+  if (argv.directory.length === 1) process.chdir(argv.directory[0]);
+
   await explainHandler(capturingProvider, codeEditor).handler({ question, codeSelection });
 }
 
