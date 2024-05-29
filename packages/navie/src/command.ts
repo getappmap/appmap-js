@@ -4,6 +4,7 @@ import { ChatHistory, ClientRequest } from './navie';
 export enum CommandMode {
   Explain = 'explain',
   Classify = 'classify',
+  Context = 'context',
   VectorTerms = 'vector-terms',
   TechStack = 'tech-stack',
 }

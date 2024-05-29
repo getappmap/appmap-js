@@ -26,6 +26,7 @@ import Message from './message';
 import VectorTermsCommand from './commands/vector-terms-command';
 import TechStackService from './services/tech-stack-service';
 import TechStackCommand from './commands/tech-stack-command';
+import ContextCommand from './commands/context-command';
 import parseOptions from './lib/parse-options';
 
 export type ChatHistory = Message[];
@@ -88,19 +89,20 @@ export default function navie(
     options.temperature
   );
 
+  const contextProviderV2 = async (
+    request: ContextV2.ContextRequest
+  ): Promise<ContextV2.ContextResponse> =>
+    contextProvider({ ...request, version: 2, type: 'search' });
+
+  const lookupContextService = new LookupContextService(
+    interactionHistory,
+    contextProviderV2,
+    helpProvider
+  );
+
   const buildExplainCommand = () => {
     const codeSelectionService = new CodeSelectionService(interactionHistory);
 
-    const contextProviderV2 = async (
-      request: ContextV2.ContextRequest
-    ): Promise<ContextV2.ContextResponse> =>
-      contextProvider({ ...request, version: 2, type: 'search' });
-
-    const lookupContextService = new LookupContextService(
-      interactionHistory,
-      contextProviderV2,
-      helpProvider
-    );
     const applyContextService = new ApplyContextService(interactionHistory);
 
     const agentSelectionService = new AgentSelectionService(
@@ -135,11 +137,15 @@ export default function navie(
 
   const buildTechStackCommand = () => new TechStackCommand(techStackService);
 
+  const buildContextCommand = () =>
+    new ContextCommand(options, vectorTermsService, lookupContextService);
+
   const commandBuilders: Record<CommandMode, () => Command> = {
     [CommandMode.Explain]: buildExplainCommand,
     [CommandMode.Classify]: buildClassifyCommand,
     [CommandMode.VectorTerms]: buildVectorTermsCommand,
     [CommandMode.TechStack]: buildTechStackCommand,
+    [CommandMode.Context]: buildContextCommand,
   };
 
   let { question } = clientRequest;
