@@ -10,7 +10,6 @@ import LookupContextService from './lookup-context-service';
 import ApplyContextService from './apply-context-service';
 import { ContextV2 } from '../context';
 import TechStackService from './tech-stack-service';
-import TestAgent from '../agents/test-agent';
 
 type AgentModeResult = { agentMode: AgentMode; agent: Agent; question: string };
 
@@ -18,7 +17,6 @@ const MODE_PREFIXES = {
   '@explain ': AgentMode.Explain,
   '@generate ': AgentMode.Generate,
   '@help ': AgentMode.Help,
-  '@test ': AgentMode.Test,
 };
 
 export default class AgentSelectionService {
@@ -41,14 +39,6 @@ export default class AgentSelectionService {
         this.techStackService
       );
 
-    const testAgent = () =>
-      new TestAgent(
-        this.history,
-        this.vectorTermsService,
-        this.lookupContextService,
-        this.applyContextService
-      );
-
     const generateAgent = () =>
       new GenerateAgent(
         this.history,
@@ -69,7 +59,6 @@ export default class AgentSelectionService {
       [AgentMode.Help]: helpAgent,
       [AgentMode.Generate]: generateAgent,
       [AgentMode.Explain]: explainAgent,
-      [AgentMode.Test]: testAgent,
     };
 
     const questionPrefixMode = () => {
