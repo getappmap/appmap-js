@@ -26,6 +26,7 @@ import Message from './message';
 import VectorTermsCommand from './commands/vector-terms-command';
 import TechStackService from './services/tech-stack-service';
 import TechStackCommand from './commands/tech-stack-command';
+import parseOptions from './lib/parse-options';
 
 export type ChatHistory = Message[];
 
@@ -156,7 +157,9 @@ export default function navie(
 
   if (!command) command = buildExplainCommand();
 
-  clientRequest.question = question;
+  const { options: userOptions, question: questionText } = parseOptions(question);
+
+  clientRequest.question = questionText;
 
   class Navie extends EventEmitter implements INavie {
     constructor() {
@@ -179,7 +182,7 @@ export default function navie(
     async *execute(): AsyncIterable<string> {
       assert(command, 'Command not specified');
 
-      yield* command.execute(clientRequest, chatHistory);
+      yield* command.execute({ ...clientRequest, userOptions }, chatHistory);
     }
   }
 

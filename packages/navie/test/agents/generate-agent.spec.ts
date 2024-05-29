@@ -5,6 +5,7 @@ import LookupContextService from '../../src/services/lookup-context-service';
 import { AgentOptions } from '../../src/agent';
 import { suggestsVectorTerms } from '../fixture';
 import GenerateAgent from '../../src/agents/generate-agent';
+import { UserOptions } from '../../src/lib/parse-options';
 
 describe('@generate agent', () => {
   let interactionHistory: InteractionHistory;
@@ -42,6 +43,7 @@ describe('@generate agent', () => {
     const initialQuestionOptions: AgentOptions = {
       question: 'How does user management work?',
       aggregateQuestion: 'How does user management work?',
+      userOptions: new UserOptions(new Map()),
       chatHistory: [],
       hasAppMaps: true,
       projectInfo: [],
