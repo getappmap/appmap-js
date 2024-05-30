@@ -27,9 +27,25 @@
         ref="input"
         data-cy="chat-input"
       />
-      <v-popper text="Send message" placement="top" text-align="left" :disabled="!hasInput">
-        <button class="send" data-cy="send-message" :disabled="!hasInput" @click="send">
+      <v-popper
+        v-if="!isStopActive"
+        text="Send message"
+        placement="top"
+        text-align="left"
+        :disabled="!hasInput"
+      >
+        <button class="control-button" data-cy="send-message" :disabled="!hasInput" @click="send">
           <v-send-icon />
+        </button>
+      </v-popper>
+      <v-popper v-if="isStopActive" text="Stop" placement="top" text-align="left">
+        <button
+          class="control-button"
+          data-cy="stop-response"
+          :disabled="!isStopActive"
+          @click="stop"
+        >
+          <v-stop-icon />
         </button>
       </v-popper>
     </div>
@@ -40,6 +56,7 @@
 //@ts-nocheck
 
 import VSendIcon from '@/assets/compass-icon.svg';
+import VStopIcon from '@/assets/stop-icon.svg';
 import VPopper from '@/components/Popper.vue';
 import VCodeSelection from '@/components/chat/CodeSelection.vue';
 
@@ -47,6 +64,7 @@ export default {
   name: 'v-chat-input',
   components: {
     VSendIcon,
+    VStopIcon,
     VPopper,
     VCodeSelection,
   },
@@ -60,6 +78,10 @@ export default {
     codeSelections: {
       type: Array,
       default: () => [],
+    },
+    isStopActive: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -96,10 +118,14 @@ export default {
     },
     send() {
       if (!this.hasInput) return;
+      if (this.isStopActive) return;
 
       this.$emit('send', this.input);
       this.input = '';
       (this.$refs.input as HTMLSpanElement).innerText = '';
+    },
+    stop() {
+      this.$emit('stop');
     },
     focus() {
       (this.$refs.input as HTMLSpanElement).focus();
@@ -207,7 +233,7 @@ $border-color: #7289c5;
         border: none;
       }
 
-      .send {
+      .control-button {
         height: 2rem;
         width: 2rem;
         padding: 0.25rem;

@@ -239,4 +239,43 @@ describe('components/Chat.vue', () => {
       ).toBe(true);
     });
   });
+
+  describe('Stop button', () => {
+    it('visible while system message in progress', async () => {
+      const wrapper = mount(VChat, {
+        propsData: {
+          question: 'Initial question?',
+        },
+      });
+
+      wrapper.vm.addSystemMessage();
+
+      await wrapper.vm.$nextTick();
+
+      const stopButton = wrapper.find('button[data-cy="stop-response"]');
+      expect(stopButton.isVisible()).toBe(true);
+    });
+
+    const stopButtonHidingEvents = [
+      { name: 'an error', action: (wrapper) => wrapper.vm.onError(new Error('Test Error')) },
+      { name: 'onStop called', action: (wrapper) => wrapper.vm.onStop() },
+      { name: 'clear (New Chat) called', action: (wrapper) => wrapper.vm.clear() },
+    ];
+    stopButtonHidingEvents.forEach((event) => {
+      it('hidden after ' + event.name, async () => {
+        const wrapper = mount(VChat, {
+          propsData: {
+            question: 'Initial question?',
+          },
+        });
+        wrapper.vm.onAck('the-assistant-message-id', 'the-thread-id');
+        event.action(wrapper);
+
+        await wrapper.vm.$nextTick();
+
+        const stopButton = wrapper.find('button[data-cy="stop-response"]');
+        expect(stopButton.exists()).toBe(false);
+      });
+    });
+  });
 });

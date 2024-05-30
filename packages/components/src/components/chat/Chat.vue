@@ -54,10 +54,12 @@
     </div>
     <v-chat-input
       @send="onSend"
+      @stop="onStop"
       :placeholder="inputPlaceholder"
       :class="inputClasses"
       :question="question"
       :code-selections="codeSelections"
+      :is-stop-active="isResponseStreaming"
       ref="input"
     />
   </div>
@@ -206,6 +208,9 @@ export default {
     userMessageCount() {
       return this.messages.filter((m) => m.isUser).length;
     },
+    isResponseStreaming(): boolean {
+      return this.getMessage({ complete: false, isUser: false }) !== undefined;
+    },
   },
   methods: {
     getMessage(query: Partial<IMessage>): IMessage | undefined {
@@ -276,6 +281,9 @@ export default {
       );
 
       this.codeSelections = [];
+    },
+    onStop() {
+      this.$emit('stop');
     },
     onAck(_messageId: string, threadId: string) {
       this.setAuthorized(true);

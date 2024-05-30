@@ -1,4 +1,5 @@
 import VChatSearch from '@/pages/ChatSearch.vue';
+import VChatInput from '@/components/chat/ChatInput.vue';
 import { mount, createWrapper } from '@vue/test-utils';
 import navieContext from '../../../src/stories/data/navie_context.json';
 
@@ -619,6 +620,60 @@ describe('pages/ChatSearch.vue', () => {
         expect(wrapper.find(`.messages [data-cy="message-text"]`).text()).toContain(message);
         expect(wrapper.find('.messages [data-error="true"]').exists()).toBe(true);
       });
+    });
+  });
+
+  describe('stop behavior', () => {
+    it('should not be applicable after error event', async () => {
+      const wrapper = mount(VChatSearch, { propsData: { appmapRpcFn: jest.fn() } });
+
+      wrapper.vm.sendMessage('Hello');
+
+      wrapper.vm.ask.emit('ack', 'the-message-id', 'the-thread-id');
+      wrapper.vm.ask.emit('status', { contextResponse: [] });
+
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('button[data-cy="stop-response"]').exists()).toBe(true);
+
+      wrapper.vm.ask.emit('error', new Error('Test Error'));
+
+      await wrapper.vm.$nextTick();
+      expect(wrapper.find('button[data-cy="stop-response"]').exists()).toBe(false);
+    });
+
+    it('should call this.ask.stop when ChatInput emits stop event', async () => {
+      const wrapper = mount(VChatSearch, { propsData: { appmapRpcFn: jest.fn() } });
+
+      wrapper.setData({
+        ask: {
+          stop: jest.fn(),
+        },
+      });
+
+      wrapper.findComponent({ name: 'v-chat-input' }).vm.$emit('stop');
+
+      expect(wrapper.vm.ask.stop).toHaveBeenCalled();
+    });
+
+    it('should not allow another input while the stop button is active', async () => {
+      const wrapper = mount(VChatSearch, { propsData: { appmapRpcFn: jest.fn() } });
+      const chatInput = wrapper.findComponent(VChatInput);
+      chatInput.setData({ input: 'Hello world' });
+      chatInput.vm.send();
+
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('[data-cy="stop-response"]').exists()).toBe(true);
+      expect(chatInput.vm.input).toBe('');
+
+      chatInput.setData({ input: 'Hello world again' });
+      chatInput.vm.send();
+
+      await wrapper.vm.$nextTick();
+
+      expect(chatInput.find('[data-cy="stop-response"]').exists()).toBe(true);
+      expect(chatInput.vm.input).toBe('Hello world again');
     });
   });
 });
