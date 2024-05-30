@@ -15,6 +15,7 @@
         :question="question"
         @isChatting="setIsChatting"
         :input-placeholder="inputPlaceholder"
+        @stop="onStop"
       >
         <v-context-status v-if="showStatus" :appmap-stats="appmapStats" />
         <v-llm-configuration
@@ -313,6 +314,11 @@ export default {
     updateFilters(updatedFilters) {
       this.$store.commit(SET_SAVED_FILTERS, updatedFilters);
     },
+    onStop() {
+      // This will stop token emission from this.ask immediately
+      // and emit a stop event.
+      this.ask?.stop();
+    },
     async sendMessage(message: string, codeSelections: string[] = [], appmaps: string[] = []) {
       this.ask = this.rpcClient().explain();
       this.searching = true;
@@ -347,6 +353,10 @@ export default {
           onProjectContextComplete();
           systemMessage.complete = true;
           resolve();
+        };
+
+        const onStop = () => {
+          onComplete();
         };
 
         const onError = (error) => {
@@ -386,6 +396,7 @@ export default {
           if (tool && !tool.status) tool.status = this.getToolStatusMessage();
         });
         this.ask.on('complete', onComplete);
+        this.ask.on('stop', onStop);
 
         const explainRequest = {
           question: message,

@@ -3,6 +3,10 @@ import { browserClient, reportError } from './RPC';
 
 import { EventEmitter } from 'events';
 
+// From jayson Server.errors
+// This is defined here to avoid pulling in node dependencies
+const METHOD_NOT_FOUND = -32601;
+
 type ExplainOptions = {
   question: string;
   codeSelection?: string;
@@ -18,6 +22,7 @@ type UserInput = {
 
 export class ExplainRequest extends EventEmitter {
   client: any;
+  private statusInterval?: number;
 
   constructor(client: any) {
     super();
@@ -59,17 +64,26 @@ export class ExplainRequest extends EventEmitter {
     });
   }
 
+  stop() {
+    this.stopPolling();
+    this.client.request('v1.explain.stop', null, (err: any, error: any) => {
+      if (error?.error?.code === METHOD_NOT_FOUND) return;
+      reportError(this.onError.bind(this), err, error);
+    });
+    this.emit('stop');
+  }
+
   protected pollForStatus(userMessageId: string, pollInterval = 500) {
     let numTokens = 0;
 
-    const statusInterval = setInterval(() => {
+    this.statusInterval = window.setInterval(() => {
       this.client.request(
         'explain.status',
         { userMessageId },
         (err: any, error: any, statusResponse: any) => {
           // Stop polling if the user message is no longer available from the server,
           // for example if the RPC service has been restarted.
-          if (error && error.code === 404) clearInterval(statusInterval);
+          if (error && error.code === 404) this.stopPolling();
 
           if (err || error) return reportError(this.onError.bind(this), err, error);
 
@@ -84,7 +98,7 @@ export class ExplainRequest extends EventEmitter {
           numTokens = explanation.length;
 
           if (['complete', 'error'].includes(statusResponse.step)) {
-            clearInterval(statusInterval);
+            this.stopPolling();
             this.onComplete();
           }
         }
@@ -106,6 +120,13 @@ export class ExplainRequest extends EventEmitter {
 
   protected onComplete() {
     this.emit('complete');
+  }
+
+  protected stopPolling() {
+    if (this.statusInterval) {
+      clearInterval(this.statusInterval);
+      this.statusInterval = undefined;
+    }
   }
 }
 
