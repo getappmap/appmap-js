@@ -16,6 +16,20 @@ export default class ApplyCommand implements Command {
     chatHistory?: ChatHistory | undefined
   ): AsyncIterable<string> {
     try {
+      let history = chatHistory;
+      if (!history && request.codeSelection) {
+        history = [
+          {
+            content: request.codeSelection,
+            role: 'user',
+          },
+        ];
+      }
+      if (!history) {
+        yield 'Please begin a conversation, or provide a code selection, before using @apply.\n';
+        return;
+      }
+
       const fileUpdate = await this.fileChangeExtractor.extract(
         chatHistory || [],
         request.question
@@ -26,9 +40,9 @@ export default class ApplyCommand implements Command {
       }
       yield `File change parsed successfully for ${fileUpdate.file}\n`;
 
-      const updateMessages = await this.fileUpdateService.apply(fileUpdate);
-      if (updateMessages)
-        for (const message of updateMessages) {
+      const messages = await this.fileUpdateService.apply(fileUpdate);
+      if (messages)
+        for await (const message of messages) {
           yield message;
         }
     } catch (err: any) {
