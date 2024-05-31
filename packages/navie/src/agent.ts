@@ -7,6 +7,7 @@ export enum AgentMode {
   Generate = 'generate',
   Help = 'help',
   Test = 'test',
+  Plan = 'plan',
 }
 
 export class AgentOptions {
