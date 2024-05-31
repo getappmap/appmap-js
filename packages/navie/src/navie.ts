@@ -31,6 +31,7 @@ import ApplyCommand from './commands/apply-command';
 import FileChangeExtractorService from './services/file-change-extractor-service';
 import FileUpdateService from './services/file-update-service';
 import parseOptions from './lib/parse-options';
+import ListFilesCommand from './commands/list-files-command';
 
 export type ChatHistory = Message[];
 
@@ -152,6 +153,8 @@ export default function navie(
 
   const buildTechStackCommand = () => new TechStackCommand(techStackService);
 
+  const buildListFileCommand = () => new ListFilesCommand(fileChangeExtractor);
+
   const buildContextCommand = () =>
     new ContextCommand(options, vectorTermsService, lookupContextService);
 
@@ -160,6 +163,7 @@ export default function navie(
   const commandBuilders: Record<CommandMode, () => Command> = {
     [CommandMode.Explain]: buildExplainCommand,
     [CommandMode.Classify]: buildClassifyCommand,
+    [CommandMode.ListFiles]: buildListFileCommand,
     [CommandMode.VectorTerms]: buildVectorTermsCommand,
     [CommandMode.TechStack]: buildTechStackCommand,
     [CommandMode.Context]: buildContextCommand,
@@ -172,7 +176,7 @@ export default function navie(
   let command: Command | undefined;
   for (const commandMode of Object.values(CommandMode)) {
     const prefix = `@${commandMode} `;
-    if (question.startsWith(prefix)) {
+    if (question.startsWith(prefix) || question.trim() === `@${commandMode}`) {
       command = commandBuilders[commandMode]();
       question = question.slice(prefix.length);
       break;
