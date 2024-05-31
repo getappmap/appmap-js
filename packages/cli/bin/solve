@@ -1,0 +1,165 @@
+#!/usr/bin/env bash
+
+# Read path to the issue.md file from ARGV
+pwd=$1
+# Read $2 and transform to an absolute path
+issue_file="$(pwd)/$2"
+work_dir=$(dirname $issue_file)
+
+cd "$pwd"
+
+# Optionally use APPMAP_COMMAND as the CLI command to run, otherwise use 'appmap'
+command=${APPMAP_COMMAND:-appmap}
+
+# Check if issue_file is provided and exists
+if [[ -z "$issue_file" ]]; then
+  echo "Error: Path to issue.md file is required."
+  exit 1
+elif [[ ! -f "$issue_file" ]]; then
+  echo "Error: File '$issue_file' not found."
+  exit 1
+fi
+
+plan_file="${work_dir}/plan.md"
+
+# If NOPLAN is absent, transform the issue into a plan
+if [[ -z "$NOPLAN" ]]; then
+  echo "Transforming issue $issue_file into a plan"
+  set -x
+  $command navie --log-navie -c $issue_file -o $plan_file "@plan" > "${work_dir}/plan.log" 2>&1
+  set +x
+
+  if [[ $? -ne 0 ]]; then
+    echo "Error: Failed to transform issue into a plan. See ${work_dir}/plan.log for details."
+    exit 1
+  fi
+
+  echo "Plan stored in $plan_file"
+fi
+
+# If NOLIST is absent, detect files to be modified
+if [[ -z "$NOLIST" ]]; then
+  echo "Detecting files to be modified"
+  set -x
+  $command navie --log-navie -c $plan_file -o "${work_dir}/files.json" "@list-files /format=json /nofence" > "${work_dir}/list-files.log" 2>&1
+  set +x
+
+  if [[ $? -ne 0 ]]; then
+    echo "Error: Failed to detect files to be modified. See ${work_dir}/list-files.log for details."
+    exit 1
+  fi
+
+  echo "Files to be modified stored in ${work_dir}/files.json"
+fi
+
+context_file="${work_dir}/context.txt"
+rm -f $context_file
+touch $context_file
+
+# Use jq to iterate over the array entries in files.json 
+jq -r '.[]' "${work_dir}/files.json" | while read -r file; do
+  echo "Collecting source file $file"
+  echo "<file>" >> $context_file
+  echo "<path>$file</path>" >> $context_file
+  echo "<content>" >> $context_file
+  cat $file >> $context_file
+  echo "</content>" >> $context_file
+  echo "</file>" >> $context_file
+done
+
+# Generate the code using @generate. Skip if NOGENERATE is present
+if [[ -z "$NOGENERATE" ]]; then
+  plan_prompt="${work_dir}/plan.txt"
+  cat <<PLAN_PROMPT > $plan_prompt
+@generate /nocontext
+
+Generate the code solution for the following problem according to the plan provided.
+
+## Input format
+
+The plan is delineated by the XML <plan> tag.
+
+The source files are delineated by XML <file> tags. Each file has a <path> tag with the file path and a <content> tag with the file content.
+
+Do not treat the XML tags as part of the source code. They are only there to help you parse the context.
+
+## Instructions
+
+Emit only the code changes that are necessary to solve the problem. 
+
+Do not re-generate the entire source file.
+
+You do not need to include code that does not need to change.
+
+You do not have to emit a code change for every file in the context.
+
+Emit a separate code block for each change that you want to make.
+
+If a file requires multiple changes, emit multiple code blocks.
+
+## Output format
+
+For each change you want to make, generate a pair of tags called <original> and <modified>.
+Wrap these tags with a <change> tag that also includes a <file> tag with the file path.
+
+The <original> tag should contain the original code that you want to change.
+
+The <modified> tag should contain the modified code that you want to replace the original code with.
+
+## Example output
+
+<change>
+<file>sympy/physics/vector/point.py</file>
+<original>
+                raise ValueError('Velocity of point ' + self.name + ' has not been'
+                                 ' defined in ReferenceFrame ' + frame.name)
+</original>
+<modified>
+                # Attempt to calculate the velocity based on position's time derivative
+                return self.pos_from(self).dt(frame)
+            except Exception:
+                raise ValueError('Velocity of point ' + self.name + ' has not been'
+                                 ' defined in ReferenceFrame ' + frame.name)
+</modified>
+</change>
+
+PLAN_PROMPT
+  echo "<plan>" >> $plan_prompt
+  cat $plan_file >> $plan_prompt
+  echo "</plan>" >> $plan_prompt
+  cat $context_file >> $plan_prompt
+
+  echo "Solving plan $plan_prompt into code"
+  set -x
+  $command navie --log-navie -i $plan_prompt -o "${work_dir}/solution.md" > "${work_dir}/generate.log" 2>&1
+  set +x
+
+  if [[ $? -ne 0 ]]; then
+    echo "Error: Failed to generate code. See ${work_dir}/generate.log for details."
+    exit 1
+  fi
+
+  echo "Code generated in ${work_dir}/solution.md"
+fi
+
+# Apply the generated code changes
+if [[ -z "$NOAPPLY" ]]; then
+  apply_prompt="${work_dir}/apply.txt"
+  cat <<APPLY_PROMPT > $apply_prompt
+@apply /all
+
+APPLY_PROMPT
+  cat "${work_dir}/solution.md" >> $apply_prompt
+
+  echo "Applying changes to source files"
+  set -x
+  $command navie --log-navie -i "$apply_prompt" > "${work_dir}/apply.log" 2>&1
+  set +x
+
+  if [[ $? -ne 0 ]]; then
+    echo "Error: Failed to apply changes to source files. See ${work_dir}/apply.log for details."
+    exit 1
+  fi
+
+  echo "Changes applied"
+fi

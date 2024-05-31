@@ -13,7 +13,7 @@ export default class Oracle {
     private temperature: number
   ) {}
 
-  async ask<T>(messages: Message[], question?: string): Promise<T | undefined> {
+  async ask(messages: Message[], question?: string): Promise<string | undefined> {
     const openAI: ChatOpenAI = new ChatOpenAI({
       modelName: this.modelName,
       temperature: this.temperature,
@@ -48,6 +48,6 @@ export default class Oracle {
     const rawResponse = tokens.join('');
     warn(`${this.name} response:\n${rawResponse}`);
 
-    return parseJSON<T>(rawResponse);
+    return rawResponse;
   }
 }
