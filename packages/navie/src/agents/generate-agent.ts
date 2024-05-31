@@ -55,10 +55,13 @@ export default class GenerateAgent implements Agent {
       )
     );
 
-    const vectorTerms = await this.vectorTermsService.suggestTerms(options.aggregateQuestion);
-    const tokenCount = tokensAvailable();
-    const context = await this.lookupContextService.lookupContext(vectorTerms, tokenCount);
-    LookupContextService.applyContext(context, [], this.applyContextService, tokenCount);
+    const lookupContext = options.userOptions.isEnabled('context', true);
+    if (lookupContext) {
+      const vectorTerms = await this.vectorTermsService.suggestTerms(options.aggregateQuestion);
+      const tokenCount = tokensAvailable();
+      const context = await this.lookupContextService.lookupContext(vectorTerms, tokenCount);
+      LookupContextService.applyContext(context, [], this.applyContextService, tokenCount);
+    }
   }
 
   applyQuestionPrompt(question: string): void {
