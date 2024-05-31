@@ -11,6 +11,7 @@ import ApplyContextService from './apply-context-service';
 import { ContextV2 } from '../context';
 import TechStackService from './tech-stack-service';
 import TestAgent from '../agents/test-agent';
+import { PlanAgent } from '../agents/plan-agent';
 
 type AgentModeResult = { agentMode: AgentMode; agent: Agent; question: string };
 
@@ -19,6 +20,7 @@ const MODE_PREFIXES = {
   '@generate ': AgentMode.Generate,
   '@help ': AgentMode.Help,
   '@test ': AgentMode.Test,
+  '@plan ': AgentMode.Plan,
 };
 
 export default class AgentSelectionService {
@@ -49,6 +51,14 @@ export default class AgentSelectionService {
         this.applyContextService
       );
 
+    const planAgent = () =>
+      new PlanAgent(
+        this.history,
+        this.vectorTermsService,
+        this.lookupContextService,
+        this.applyContextService
+      );
+
     const generateAgent = () =>
       new GenerateAgent(
         this.history,
@@ -70,6 +80,7 @@ export default class AgentSelectionService {
       [AgentMode.Generate]: generateAgent,
       [AgentMode.Explain]: explainAgent,
       [AgentMode.Test]: testAgent,
+      [AgentMode.Plan]: planAgent,
     };
 
     const questionPrefixMode = () => {
