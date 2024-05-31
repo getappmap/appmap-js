@@ -1,3 +1,4 @@
+/* eslint-disable no-cond-assign */
 import { ChatOpenAI } from '@langchain/openai';
 import { warn } from 'console';
 import { readFile, writeFile } from 'fs/promises';
@@ -93,6 +94,13 @@ export default class FileUpdateService {
       postSegment = sourceLines.slice(maxLocation - 1).join('\n');
     }
 
+    warn(
+      `Merging content into match segment which spans from ${minLocation - 1} to ${
+        maxLocation - 1
+      }:\n`
+    );
+    warn(matchSegment);
+
     const newSegment = await this.mergeCode(matchSegment, fileUpdate.content);
 
     // Use this to apply directly as a patch.
@@ -138,7 +146,7 @@ export default class FileUpdateService {
     ];
 
     // eslint-disable-next-line no-await-in-loop
-    const response = await openAI.completionWithRetry({
+    const aiResponse = await openAI.completionWithRetry({
       messages,
       model: openAI.modelName,
       stream: true,
@@ -146,11 +154,20 @@ export default class FileUpdateService {
     const tokens = Array<string>();
     warn(`File change response:\n`);
     // eslint-disable-next-line no-await-in-loop
-    for await (const token of response) {
+    for await (const token of aiResponse) {
       process.stderr.write(token.choices.map((choice) => choice.delta.content).join(''));
       tokens.push(token.choices.map((choice) => choice.delta.content).join(''));
     }
-    const rawResponse = tokens.join('');
-    return trimFences(rawResponse);
+    let response = tokens.join('');
+
+    const fenceRegex = /```(?:\w+)?\n([\s\S]*?)```/g;
+    let match: RegExpExecArray | null;
+    const codeBlocks = new Array<string>();
+    while ((match = fenceRegex.exec(response)) !== null) {
+      codeBlocks.push(match[1]);
+    }
+    if (codeBlocks.length) response = codeBlocks.join('\n');
+
+    return response;
   }
 }

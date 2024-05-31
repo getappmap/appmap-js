@@ -1,3 +1,4 @@
+/* eslint-disable no-cond-assign */
 /* eslint-disable no-await-in-loop */
 import { warn } from 'console';
 
@@ -6,6 +7,7 @@ import { FileUpdate } from './file-update-service';
 import { ChatHistory, ClientRequest } from '../navie';
 import Oracle from '../lib/oracle';
 import Message from '../message';
+import parseJSON from '../lib/parse-json';
 
 const EXTRACT_PROMPT = `**File Change Extractor**
 
@@ -15,10 +17,7 @@ suggested code changes. You'll be provided with a file name.
 You should find the code block that contains the suggested change for best matching file name,
 return the code block, and the line number where the change should be made.
 
-Your response should be JSON.
-
-* **file**: The name of the file to be changed.
-* **content**: The suggested code that will be placed into the file.
+Your response should be the raw text of the code block.
 
 **Example input**
 
@@ -37,11 +36,8 @@ File name: add_one.py
 
 **Example output**
 
-\`\`\`json
-{
-  "file": "add_one.py",
-  "content": "def add_one(x):\n  return x + 1"
-}
+def add_one(x):
+  return x + 1
 `;
 
 const LIST_PROMPT = `**File Name List Extractor**
@@ -93,7 +89,12 @@ export default class FileChangeExtractorService {
     }
 
     const oracle = new Oracle('List files', LIST_PROMPT, this.modelName, this.temperature);
-    return oracle.ask<string[]>(messages);
+    const fileList = await oracle.ask(messages);
+    if (!fileList) {
+      warn('Failed to list files');
+      return undefined;
+    }
+    return parseJSON(fileList) as string[];
   }
 
   async extractFile(
@@ -107,15 +108,37 @@ export default class FileChangeExtractorService {
       return undefined;
     }
 
-    const tryExtract = () => {
+    const tryExtract = async (): Promise<FileUpdate | undefined> => {
       const oracle = new Oracle('Extract file', EXTRACT_PROMPT, this.modelName, this.temperature);
-      return oracle.ask<FileUpdate>(messages, `File name: ${fileName}`);
+      const content = await oracle.ask(messages, `File name: ${fileName}`);
+      if (!content) return undefined;
+
+      return {
+        file: fileName,
+        content,
+      };
+    };
+
+    const sanitizeContent = (fileUpdate: FileUpdate) => {
+      const { content } = fileUpdate;
+
+      const fenceRegex = /```(?:\w+)?\n([\s\S]*?)```/g;
+      let match: RegExpExecArray | null;
+      const codeBlocks = new Array<string>();
+      while ((match = fenceRegex.exec(content)) !== null) {
+        codeBlocks.push(match[1]);
+      }
+      if (codeBlocks.length) fileUpdate.content = codeBlocks.join('\n');
     };
 
     // Try tryExtract up to 3 times
     for (let i = 0; i < 3; i += 1) {
       const result = await tryExtract();
-      if (result) return result;
+      if (result) {
+        sanitizeContent(result);
+        warn(`Extracted file ${result.file}:\n${result.content}`);
+        return result;
+      }
     }
 
     warn(`Failed to extract file ${fileName}`);

@@ -176,7 +176,7 @@ export default function navie(
   let command: Command | undefined;
   for (const commandMode of Object.values(CommandMode)) {
     const prefix = `@${commandMode} `;
-    if (question.startsWith(prefix) || question.trim() === `@${commandMode}`) {
+    if (question.startsWith(prefix) || question.split('\n')[0].trim() === `@${commandMode}`) {
       command = commandBuilders[commandMode]();
       question = question.slice(prefix.length);
       break;
