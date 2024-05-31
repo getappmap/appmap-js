@@ -1,15 +1,14 @@
-import OpenAI from 'openai';
-import { warn } from 'console';
-import { ChatOpenAI } from '@langchain/openai';
-
+/* eslint-disable no-await-in-loop */
 import InteractionHistory from '../interaction-history';
 import { FileUpdate } from './file-update-service';
-import parseJSON from '../lib/parse-json';
 import { ChatHistory } from '../navie';
+import Oracle from '../lib/oracle';
+import { inspect } from 'util';
+import { log, warn } from 'console';
 
-const SYSTEM_PROMPT = `**File Change Extractor**
+const EXTRACT_PROMPT = `**File Change Extractor**
 
-Your job is to examine a Markdown file that contains a mixture of text and
+Your job is to examine a Markdown document that contains a mixture of text and
 suggested code changes. You'll be provided with a file name.
 
 You should find the code block that contains the suggested change for best matching file name,
@@ -44,6 +43,37 @@ File name: add_one.py
 }
 `;
 
+const LIST_PROMPT = `**File Name List Extractor**
+
+Your job is to examine a Markdown document that contains a mixture of text and
+suggested code changes.
+
+You should list the names of all the files that have suggested changes in the file.
+
+Your response should be a JSON list of file names.
+
+**Example input**
+
+Content:
+\`\`\`python
+# add_one.py
+def add_one(x):
+  return x + 1
+\`\`\`
+
+\`\`\`\`python
+# subtract_one.py
+def subtract_one(x):
+  return x - 1
+\`\`\`
+
+Example output:
+[
+  "add_one.py",
+  "subtract_one.py"
+]
+`;
+
 export default class FileChangeExtractorService {
   constructor(
     public history: InteractionHistory,
@@ -51,40 +81,24 @@ export default class FileChangeExtractorService {
     public temperature: number
   ) {}
 
-  async extract(chatHistory: ChatHistory, fileName: string): Promise<FileUpdate | undefined> {
-    const openAI: ChatOpenAI = new ChatOpenAI({
-      modelName: this.modelName,
-      temperature: this.temperature,
-    });
+  async listFiles(chatHistory: ChatHistory): Promise<string[] | undefined> {
+    const oracle = new Oracle('List files', LIST_PROMPT, this.modelName, this.temperature);
+    return oracle.ask<string[]>(chatHistory);
+  }
 
-    const messages: OpenAI.ChatCompletionMessageParam[] = [
-      {
-        content: SYSTEM_PROMPT,
-        role: 'system',
-      },
-    ];
+  async extractFile(chatHistory: ChatHistory, fileName: string): Promise<FileUpdate | undefined> {
+    const tryExtract = () => {
+      const oracle = new Oracle('Extract file', EXTRACT_PROMPT, this.modelName, this.temperature);
+      return oracle.ask<FileUpdate>(chatHistory, `File name: ${fileName}`);
+    };
 
-    for (const message of chatHistory) messages.push(message);
-
-    messages.push({
-      content: `File name: ${fileName}`,
-      role: 'user',
-    });
-
-    // eslint-disable-next-line no-await-in-loop
-    const response = await openAI.completionWithRetry({
-      messages,
-      model: openAI.modelName,
-      stream: true,
-    });
-    const tokens = Array<string>();
-    // eslint-disable-next-line no-await-in-loop
-    for await (const token of response) {
-      tokens.push(token.choices.map((choice) => choice.delta.content).join(''));
+    // Try tryExtract up to 3 times
+    for (let i = 0; i < 3; i += 1) {
+      const result = await tryExtract();
+      if (result) return result;
     }
-    const rawResponse = tokens.join('');
-    warn(`File change response:\n${rawResponse}`);
 
-    return parseJSON<FileUpdate>(rawResponse);
+    warn(`Failed to extract file ${fileName}`);
+    return undefined;
   }
 }

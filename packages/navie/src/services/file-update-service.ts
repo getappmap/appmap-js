@@ -63,6 +63,11 @@ export default class FileUpdateService {
         }
       }
 
+      if (locations.length === 0) {
+        warn(`No matching context locations found for ${fileUpdate.file}`);
+        return;
+      }
+
       // Compute the median location. Discard outliers use the median to determine the center
       // of the code chunk. Add some padding before and after it, since the LLM will be tolerant
       // of that (in a way that diff/patch isn't).
