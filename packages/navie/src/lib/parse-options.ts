@@ -1,3 +1,4 @@
+/* eslint-disable no-continue */
 export class UserOptions {
   constructor(private options: Map<string, string | boolean>) {}
 
@@ -44,15 +45,23 @@ export default function parseOptions(question: string): {
   options: UserOptions;
   question: string;
 } {
+  if (!question) return { options: new UserOptions(new Map()), question: '' };
+
   const options = new Map<string, string | boolean>();
   const optionPattern = /^\/(?:[a-zA-Z0-9-]+)(?:=[^ ]+)?/;
-  const words = question.split(' ');
+  const words = question.split('\n')[0].split(' ');
+  const restLines = question.split('\n').slice(1);
+  const skippedWords = new Array<string>();
 
   let i = 0;
   for (; i < words.length; i += 1) {
     const word = words[i];
-    // eslint-disable-next-line no-continue
-    if (!word.trim()) continue;
+
+    // Disregard command directives and empty words
+    if (word.startsWith('@') || !word.trim()) {
+      skippedWords.push(word);
+      continue;
+    }
 
     if (!optionPattern.test(word)) break;
 
@@ -79,6 +88,8 @@ export default function parseOptions(question: string): {
     options.set(key.toLowerCase(), value);
   }
 
-  const remainingQuestion = words.slice(i).join(' ');
+  const remainingQuestion = [[...skippedWords, ...words.slice(i)].join(' '), ...restLines].join(
+    '\n'
+  );
   return { options: new UserOptions(options), question: remainingQuestion };
 }
