@@ -1,10 +1,10 @@
 /* eslint-disable no-await-in-loop */
+import { warn } from 'console';
+
 import InteractionHistory from '../interaction-history';
 import { FileUpdate } from './file-update-service';
-import { ChatHistory } from '../navie';
+import { ChatHistory, ClientRequest } from '../navie';
 import Oracle from '../lib/oracle';
-import { inspect } from 'util';
-import { log, warn } from 'console';
 import Message from '../message';
 
 const EXTRACT_PROMPT = `**File Change Extractor**
@@ -83,10 +83,10 @@ export default class FileChangeExtractorService {
   ) {}
 
   async listFiles(
-    chatHistory: ChatHistory | undefined,
-    codeSelection?: string
+    clientRequest: ClientRequest,
+    chatHistory: ChatHistory | undefined
   ): Promise<string[] | undefined> {
-    const messages = FileChangeExtractorService.buildMessages(chatHistory, codeSelection);
+    const messages = FileChangeExtractorService.buildMessages(clientRequest, chatHistory);
     if (!messages) {
       warn('No messages found for listFiles');
       return [];
@@ -97,11 +97,11 @@ export default class FileChangeExtractorService {
   }
 
   async extractFile(
+    clientRequest: ClientRequest,
     chatHistory: ChatHistory | undefined,
-    codeSelection: string | undefined,
     fileName: string
   ): Promise<FileUpdate | undefined> {
-    const messages = FileChangeExtractorService.buildMessages(chatHistory, codeSelection);
+    const messages = FileChangeExtractorService.buildMessages(clientRequest, chatHistory);
     if (!messages) {
       warn('No messages found for extractFile');
       return undefined;
@@ -123,13 +123,19 @@ export default class FileChangeExtractorService {
   }
 
   static buildMessages(
-    chatHistory: ChatHistory | undefined,
-    codeSelection?: string
+    clientRequest: ClientRequest,
+    chatHistory: ChatHistory | undefined
   ): Message[] | undefined {
     const history: Message[] = [...(chatHistory || [])];
-    if (codeSelection) {
+    if (clientRequest.question) {
       history.push({
-        content: codeSelection,
+        content: clientRequest.question,
+        role: 'user',
+      });
+    }
+    if (clientRequest.codeSelection) {
+      history.push({
+        content: clientRequest.codeSelection,
         role: 'user',
       });
     }

@@ -7,8 +7,7 @@ export default class ListFilesCommand implements Command {
   constructor(private readonly fileChangeExtractorService: FileChangeExtractorService) {}
 
   async *execute(request: CommandRequest, chatHistory?: ChatHistory): AsyncIterable<string> {
-    const files =
-      (await this.fileChangeExtractorService.listFiles(chatHistory, request.codeSelection)) || [];
+    const files = (await this.fileChangeExtractorService.listFiles(request, chatHistory)) || [];
 
     const fence = request.userOptions.isEnabled('fence', true);
     const format = request.userOptions.stringValue('format') || 'yaml';

@@ -17,7 +17,7 @@ export default class ApplyCommand implements Command {
   ): AsyncIterable<string> {
     let fileNames: string[] | undefined;
     if (request.userOptions.booleanValue('all', false) || request.question.trim() === 'all') {
-      fileNames = await this.fileChangeExtractor.listFiles(chatHistory, request.codeSelection);
+      fileNames = await this.fileChangeExtractor.listFiles(request, chatHistory);
     } else if (request.question.trim()) {
       fileNames = [request.question.trim()];
     }
@@ -28,11 +28,7 @@ export default class ApplyCommand implements Command {
     }
 
     for (const fileName of fileNames) {
-      const fileUpdate = await this.fileChangeExtractor.extractFile(
-        chatHistory,
-        request.codeSelection,
-        fileName
-      );
+      const fileUpdate = await this.fileChangeExtractor.extractFile(request, chatHistory, fileName);
       if (!fileUpdate) {
         yield `Unable to parse file change ${fileName}. Please try again.\n`;
         return;
