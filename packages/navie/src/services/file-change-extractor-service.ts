@@ -5,6 +5,7 @@ import { ChatHistory } from '../navie';
 import Oracle from '../lib/oracle';
 import { inspect } from 'util';
 import { log, warn } from 'console';
+import Message from '../message';
 
 const EXTRACT_PROMPT = `**File Change Extractor**
 
@@ -81,15 +82,34 @@ export default class FileChangeExtractorService {
     public temperature: number
   ) {}
 
-  async listFiles(chatHistory: ChatHistory): Promise<string[] | undefined> {
+  async listFiles(
+    chatHistory: ChatHistory | undefined,
+    codeSelection?: string
+  ): Promise<string[] | undefined> {
+    const messages = FileChangeExtractorService.buildMessages(chatHistory, codeSelection);
+    if (!messages) {
+      warn('No messages found for listFiles');
+      return [];
+    }
+
     const oracle = new Oracle('List files', LIST_PROMPT, this.modelName, this.temperature);
-    return oracle.ask<string[]>(chatHistory);
+    return oracle.ask<string[]>(messages);
   }
 
-  async extractFile(chatHistory: ChatHistory, fileName: string): Promise<FileUpdate | undefined> {
+  async extractFile(
+    chatHistory: ChatHistory | undefined,
+    codeSelection: string | undefined,
+    fileName: string
+  ): Promise<FileUpdate | undefined> {
+    const messages = FileChangeExtractorService.buildMessages(chatHistory, codeSelection);
+    if (!messages) {
+      warn('No messages found for extractFile');
+      return undefined;
+    }
+
     const tryExtract = () => {
       const oracle = new Oracle('Extract file', EXTRACT_PROMPT, this.modelName, this.temperature);
-      return oracle.ask<FileUpdate>(chatHistory, `File name: ${fileName}`);
+      return oracle.ask<FileUpdate>(messages, `File name: ${fileName}`);
     };
 
     // Try tryExtract up to 3 times
@@ -100,5 +120,19 @@ export default class FileChangeExtractorService {
 
     warn(`Failed to extract file ${fileName}`);
     return undefined;
+  }
+
+  static buildMessages(
+    chatHistory: ChatHistory | undefined,
+    codeSelection?: string
+  ): Message[] | undefined {
+    const history: Message[] = [...(chatHistory || [])];
+    if (codeSelection) {
+      history.push({
+        content: codeSelection,
+        role: 'user',
+      });
+    }
+    return history.length > 0 ? history : undefined;
   }
 }

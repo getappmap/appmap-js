@@ -4,7 +4,6 @@ import { ChatHistory } from '../navie';
 import Command, { CommandRequest } from '../command';
 import FileChangeExtractorService from '../services/file-change-extractor-service';
 import FileUpdateService from '../services/file-update-service';
-import Message from '../message';
 
 export default class ApplyCommand implements Command {
   constructor(
@@ -16,21 +15,9 @@ export default class ApplyCommand implements Command {
     request: CommandRequest,
     chatHistory?: ChatHistory | undefined
   ): AsyncIterable<string> {
-    const history: Message[] = [...(chatHistory || [])];
-    if (request.codeSelection) {
-      history.push({
-        content: request.codeSelection,
-        role: 'user',
-      });
-    }
-    if (!history) {
-      yield 'Please begin a conversation, or provide a code selection, before using @apply.\n';
-      return;
-    }
-
     let fileNames: string[] | undefined;
     if (request.userOptions.booleanValue('all', false) || request.question.trim() === 'all') {
-      fileNames = await this.fileChangeExtractor.listFiles(history);
+      fileNames = await this.fileChangeExtractor.listFiles(chatHistory, request.codeSelection);
     } else if (request.question.trim()) {
       fileNames = [request.question.trim()];
     }
@@ -41,7 +28,11 @@ export default class ApplyCommand implements Command {
     }
 
     for (const fileName of fileNames) {
-      const fileUpdate = await this.fileChangeExtractor.extractFile(history, fileName);
+      const fileUpdate = await this.fileChangeExtractor.extractFile(
+        chatHistory,
+        request.codeSelection,
+        fileName
+      );
       if (!fileUpdate) {
         yield `Unable to parse file change ${fileName}. Please try again.\n`;
         return;
