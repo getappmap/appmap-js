@@ -41,7 +41,7 @@ export default class ApplyCommand implements Command {
     }
 
     for (const fileName of fileNames) {
-      const fileUpdate = await this.fileChangeExtractor.extractFile(chatHistory || [], fileName);
+      const fileUpdate = await this.fileChangeExtractor.extractFile(history, fileName);
       if (!fileUpdate) {
         yield `Unable to parse file change ${fileName}. Please try again.\n`;
         return;
