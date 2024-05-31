@@ -17,6 +17,7 @@ export default class ContextCommand implements Command {
     const { question, codeSelection } = request;
 
     const fence = request.userOptions.isEnabled('fence', true);
+    const format = request.userOptions.stringValue('format') || 'yaml';
     const tokenLimit = request.userOptions.numberValue('tokenlimit') || this.options.tokenLimit;
 
     const aggregateQuestion = [
@@ -33,9 +34,15 @@ export default class ContextCommand implements Command {
 
     const context = await this.lookupContextService.lookupContext(vectorTerms, tokenLimit, []);
 
-    const yamlContext = dump(context);
-    if (fence) yield '```yaml\n';
-    yield yamlContext;
+    let contextStr: string;
+    if (format === 'yaml') {
+      contextStr = dump(context);
+    } else {
+      contextStr = JSON.stringify(context, null, 2);
+    }
+
+    if (fence) yield `\`\`\`${format}\n`;
+    yield contextStr;
     if (fence) yield '```\n';
   }
 }
