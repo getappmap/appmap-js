@@ -4,17 +4,25 @@ import { warn } from 'console';
 import { readFile, writeFile } from 'fs/promises';
 import OpenAI from 'openai';
 import InteractionHistory from '../interaction-history';
-import trimFences from '../lib/trim-fences';
 
 export type FileUpdate = {
   file: string;
-  content: string;
+  original: string;
+  modified: string;
 };
 
 const SYSTEM_PROMPT = `**File Change Applier**
 
-Your job is to apply a suggested code change. You'll be provided with the existing code
-and the suggested change. You should apply the change to the existing code and return the updated code.
+Your job is to apply a suggested code change. You'll be provided with the existing code,
+a block of original code that should occurr in the existing code, and a block of modified code.
+
+The inputs are indicated with the following XML-style tags:
+
+- <existing-code>: The existing code in the file.
+- <original-code>: The original code block to find in the existing-code.
+- <suggested-change>: The modified code block to apply to the original-code.
+
+You should find the original code in the exsting code, and replace it with the modified code.
 
 Your response should be the raw text of the updated code.
 `;
@@ -28,7 +36,7 @@ export default class FileUpdateService {
 
   async apply(fileUpdate: FileUpdate): Promise<string[] | void> {
     const fileContents = await readFile(fileUpdate.file, 'utf8');
-    const updateLines = fileUpdate.content.split('\n');
+    const searchLines = fileUpdate.original.split('\n');
     const sourceLines = fileContents.split('\n');
 
     // Find the likely chunk where the update should be applied
@@ -37,7 +45,7 @@ export default class FileUpdateService {
     {
       // Discard lines that match more than one place in the fil.
       const matchCount = new Map<string, number>();
-      for (const line of updateLines) {
+      for (const line of searchLines) {
         for (let sourceLineIndex = 0; sourceLineIndex < sourceLines.length; sourceLineIndex += 1) {
           if (sourceLines[sourceLineIndex] === line) {
             if (!matchCount.has(line)) matchCount.set(line, 0);
@@ -53,7 +61,7 @@ export default class FileUpdateService {
 
       // Now that we've done that, figure out where the remaining lines are located in the file.
       const locations = new Array<number>();
-      for (const line of updateLines) {
+      for (const line of searchLines) {
         // eslint-disable-next-line no-continue
         if (commonLines.has(line)) continue;
 
@@ -76,7 +84,7 @@ export default class FileUpdateService {
       warn(`Median code location: ${median}`);
 
       const filteredLocations = locations.filter(
-        (location) => Math.abs(location - median) < (updateLines.length * 2) / 3
+        (location) => Math.abs(location - median) < (searchLines.length * 2) / 3
       );
       warn(`Filtered locations: ${filteredLocations.join(', ')}`);
 
@@ -101,7 +109,7 @@ export default class FileUpdateService {
     );
     warn(matchSegment);
 
-    const newSegment = await this.mergeCode(matchSegment, fileUpdate.content);
+    const newSegment = await this.mergeCode(matchSegment, fileUpdate.original, fileUpdate.modified);
 
     // Use this to apply directly as a patch.
     // It's not forgiving of boundaries though.
@@ -125,7 +133,7 @@ export default class FileUpdateService {
     return [`File change applied to ${fileUpdate.file}.\n`];
   }
 
-  async mergeCode(fileContents: string, fileUpdate: string): Promise<string> {
+  async mergeCode(fileContents: string, original: string, modified: string): Promise<string> {
     const openAI: ChatOpenAI = new ChatOpenAI({
       modelName: this.modelName,
       temperature: this.temperature,
@@ -140,7 +148,11 @@ export default class FileUpdateService {
         role: 'user',
       },
       {
-        content: `<suggested-change>${fileUpdate}</suggested-change>`,
+        content: `<original-code>${original}</original-code>`,
+        role: 'user',
+      },
+      {
+        content: `<suggested-change>${modified}</suggested-change>`,
         role: 'user',
       },
     ];

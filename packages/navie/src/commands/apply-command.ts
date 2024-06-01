@@ -28,18 +28,25 @@ export default class ApplyCommand implements Command {
     }
 
     for (const fileName of fileNames) {
-      const fileUpdate = await this.fileChangeExtractor.extractFile(request, chatHistory, fileName);
-      if (!fileUpdate) {
+      const fileUpdates = await this.fileChangeExtractor.extractFile(
+        request,
+        chatHistory,
+        fileName
+      );
+      if (!fileUpdates) {
         yield `Unable to parse file change ${fileName}. Please try again.\n`;
         return;
       }
 
-      yield `File change parsed successfully for ${fileUpdate.file}\n`;
+      yield `File change parsed successfully for ${fileName}\n`;
 
-      const messages = await this.fileUpdateService.apply(fileUpdate);
-      if (messages) {
-        for await (const message of messages) {
-          yield message;
+      for (const fileUpdate of fileUpdates) {
+        yield `Applying file update for ${fileUpdate.file}\n`;
+        const messages = await this.fileUpdateService.apply(fileUpdate);
+        if (messages) {
+          for await (const message of messages) {
+            yield message;
+          }
         }
       }
     }
