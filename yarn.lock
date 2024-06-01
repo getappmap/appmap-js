@@ -451,10 +451,12 @@ __metadata:
   dependencies:
     "@langchain/core": ^0.1.32
     "@langchain/openai": ^0.0.15
+    "@types/diff-match-patch": ^1.0.36
     "@types/jest": ^29.4.1
     "@types/node": ^17.0.2
     "@typescript-eslint/eslint-plugin": ^5.51.0
     "@typescript-eslint/parser": ^5.7.0
+    diff-match-patch: ^1.0.5
     eslint: ^8.4.1
     eslint-config-airbnb-base: ^15.0.0
     eslint-config-airbnb-typescript: ^17.0.0
@@ -10974,6 +10976,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/diff-match-patch@npm:^1.0.36":
+  version: 1.0.36
+  resolution: "@types/diff-match-patch@npm:1.0.36"
+  checksum: 7d7ce03422fcc3e79d0cda26e4748aeb176b75ca4b4e5f38459b112bf24660d628424bdb08d330faefa69039d19a5316e7a102a8ab68b8e294c8346790e55113
+  languageName: node
+  linkType: hard
+
 "@types/diff@npm:^5.0.2":
   version: 5.0.2
   resolution: "@types/diff@npm:5.0.2"
@@ -19581,6 +19590,13 @@ __metadata:
   dependencies:
     semver: ^5.3.0
   checksum: 4298b83d556d45fd411279ca6fb8b05bf73552a8a46ae8d72b2624e3ce3131ce40aedddd8f37633485944776299e4b7dec4e9e267246ff0f97654a36f4272656
+  languageName: node
+  linkType: hard
+
+"diff-match-patch@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "diff-match-patch@npm:1.0.5"
+  checksum: 841522d01b09cccbc4e4402cf61514a81b906349a7d97b67222390f2d35cf5df277cb23959eeed212d5e46afb5629cebab41b87918672c5a05c11c73688630e3
   languageName: node
   linkType: hard
 
