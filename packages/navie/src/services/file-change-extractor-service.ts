@@ -1,65 +1,9 @@
-/* eslint-disable no-cond-assign */
-/* eslint-disable no-await-in-loop */
-import { warn } from 'console';
-
 import InteractionHistory from '../interaction-history';
 import { FileUpdate } from './file-update-service';
 import { ChatHistory, ClientRequest } from '../navie';
-import Oracle from '../lib/oracle';
 import Message from '../message';
+import Oracle from '../lib/oracle';
 import parseJSON from '../lib/parse-json';
-
-const EXTRACT_PROMPT = `**File Change Extractor**
-
-Your job is to examine a Markdown document that contains a mixture of text and
-suggested code changes. You'll be provided with a file name.
-
-You should find the code block that contains the suggested change for best matching file name,
-return the code block, and the line number where the change should be made.
-
-Your response should be an XML <change> object containing the following fields:
-- <file>: (optional) The name of the file
-- <original>: The original code block
-- <modified>: The modified code block
-
-If there are multiple changes for the same file, you should return multiple <change> objects.
-
-Do not enclose the code blocks in triple backticks.
-
-**Example**
-
-<change>
-<file>src/sqlfluff/core/file_helpers.py</file>
-<original>
-def get_encoding(fname: str, config: FluffConfig) -> str:
-    """Get the encoding of the file (autodetect)."""
-    encoding_config = config.get("encoding", default="autodetect")
-
-    if encoding_config == "autodetect":
-        with open(fname, "rb") as f:
-            data = f.read()
-        return chardet.detect(data)["encoding"]
-
-    return encoding_config
-</original>
-<modified>
-def get_encoding(fname: str, config: FluffConfig) -> str:
-    """Get the encoding of the file (autodetect)."""
-    try:
-        encoding_config = config.get("encoding", default="utf-8")  # Change default to utf-8
-
-        if encoding_config == "autodetect":
-            with open(fname, "rb") as f:
-                data = f.read()
-            return chardet.detect(data)["encoding"]
-
-        return encoding_config
-    except UnicodeEncodeError as e:
-        click.echo(f"Error detecting encoding for file {fname}: {str(e)}", err=True)
-        return "utf-8"
-</modified>
-</change>
-`;
 
 const LIST_PROMPT = `**File Name List Extractor**
 
@@ -105,72 +49,78 @@ export default class FileChangeExtractorService {
   ): Promise<string[] | undefined> {
     const messages = FileChangeExtractorService.buildMessages(clientRequest, chatHistory);
     if (!messages) {
-      warn('No messages found for listFiles');
+      this.history.log('[file-change-extractor] No messages found for listFiles');
       return [];
     }
 
     const oracle = new Oracle('List files', LIST_PROMPT, this.modelName, this.temperature);
     const fileList = await oracle.ask(messages);
     if (!fileList) {
-      warn('Failed to list files');
+      this.history.log('[file-change-extractor] Failed to list files');
       return undefined;
     }
     return parseJSON(fileList) as string[];
   }
 
-  async extractFile(
+  extractFile(
     clientRequest: ClientRequest,
     chatHistory: ChatHistory | undefined,
     fileName: string
-  ): Promise<FileUpdate[] | undefined> {
+  ): FileUpdate[] | undefined {
     const messages = FileChangeExtractorService.buildMessages(clientRequest, chatHistory);
     if (!messages) {
-      warn('No messages found for extractFile');
+      this.history.log('[file-change-extractor] No messages found for use by extractFile');
       return undefined;
     }
 
-    const tryExtract = async (): Promise<FileUpdate[] | undefined> => {
-      const oracle = new Oracle('Extract file', EXTRACT_PROMPT, this.modelName, this.temperature);
-      const content = await oracle.ask(messages, `File name: ${fileName}`);
-      if (!content) return undefined;
+    // Extract <change> tags from the messages. Sort into reverse order, so that the most
+    // recently emitted tags are primary.
+    const content = FileChangeExtractorService.collectContent(messages);
+    const changes = FileChangeExtractorService.extractChanges(content).reverse();
 
-      // Search for <change> tags
-      const changeRegex = /<change>([\s\S]*?)<\/change>/g;
-      let match: RegExpExecArray | null;
-      const changes = new Array<FileUpdate>();
-      while ((match = changeRegex.exec(content)) !== null) {
-        const change = match[1];
-        const fileRegex = /<file>([\s\S]*?)<\/file>/;
-        const originalRegex = /<original>([\s\S]*?)<\/original>/;
-        const modifiedRegex = /<modified>([\s\S]*?)<\/modified>/;
-        const fileMatch = fileRegex.exec(change);
-        const originalMatch = originalRegex.exec(change);
-        const modifiedMatch = modifiedRegex.exec(change);
-        if (fileMatch && originalMatch && modifiedMatch) {
-          changes.push({
-            file: fileMatch[1].trim(),
-            original: originalMatch[1].trim(),
-            modified: modifiedMatch[1].trim(),
-          });
-        }
-      }
-      return changes;
-    };
-
-    // Try tryExtract up to 3 times
-    for (let i = 0; i < 3; i += 1) {
-      const result = await tryExtract();
-      if (result) {
-        warn(`Extracted ${result.length} changes for file ${fileName}:\n`);
-        result.forEach((change) => {
-          warn(`Original:\n${change.original}\nModified:\n${change.modified}\n`);
-        });
-        return result;
-      }
+    // Return all changes that apply to the requested file name.
+    const fileChanges = changes.filter((change) => change.file === fileName);
+    if (fileChanges.length === 0) {
+      this.history.log(`No suggested changes found for ${fileName}`);
+      return undefined;
     }
 
-    warn(`Failed to extract file ${fileName}`);
-    return undefined;
+    this.history.log(
+      `[file-change-extractor] ${fileChanges.length} suggested changes found for ${fileName}`
+    );
+    return fileChanges;
+  }
+
+  static extractChanges(content: string): FileUpdate[] {
+    // Search for <change> tags
+    const changeRegex = /<change>([\s\S]*?)<\/change>/g;
+    let match: RegExpExecArray | null;
+    const changes = new Array<FileUpdate>();
+    // eslint-disable-next-line no-cond-assign
+    while ((match = changeRegex.exec(content)) !== null) {
+      const change = match[1];
+      const fileRegex = /<file>([\s\S]*?)<\/file>/;
+      const originalRegex = /<original>([\s\S]*?)<\/original>/;
+      const modifiedRegex = /<modified>([\s\S]*?)<\/modified>/;
+      const fileMatch = fileRegex.exec(change);
+      const originalMatch = originalRegex.exec(change);
+      const modifiedMatch = modifiedRegex.exec(change);
+      if (fileMatch && originalMatch && modifiedMatch) {
+        changes.push({
+          file: fileMatch[1].trim(),
+          original: originalMatch[1].trim(),
+          modified: modifiedMatch[1].trim(),
+        });
+      }
+    }
+    return changes;
+  }
+
+  static collectContent(messages: Message[]): string {
+    return messages
+      .filter((m) => m.role === 'assistant' || m.role === 'user')
+      .map((m) => m.content)
+      .join('\n\n');
   }
 
   static buildMessages(

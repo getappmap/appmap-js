@@ -1,8 +1,11 @@
 /* eslint-disable no-cond-assign */
 import { ChatOpenAI } from '@langchain/openai';
 import { warn } from 'console';
+import { diff_match_patch as DMP } from 'diff-match-patch';
 import { readFile, writeFile } from 'fs/promises';
 import OpenAI from 'openai';
+import { inspect } from 'util';
+
 import InteractionHistory from '../interaction-history';
 
 export type FileUpdate = {
@@ -11,30 +14,10 @@ export type FileUpdate = {
   modified: string;
 };
 
-const SYSTEM_PROMPT = `**File Change Applier**
-
-Your job is to apply a suggested code change. You'll be provided with the existing code,
-a block of original code that should occurr in the existing code, and a block of modified code.
-
-The inputs are indicated with the following XML-style tags:
-
-- <existing-code>: The existing code in the file.
-- <original-code>: The original code block to find in the existing-code.
-- <suggested-change>: The modified code block to apply to the original-code.
-
-You should find the original code in the exsting code, and replace it with the modified code.
-
-Your response should be the raw text of the updated code.
-`;
-
 export default class FileUpdateService {
-  constructor(
-    public history: InteractionHistory,
-    public modelName: string,
-    public temperature: number
-  ) {}
+  constructor(public history: InteractionHistory) {}
 
-  async apply(fileUpdate: FileUpdate): Promise<string[] | void> {
+  async apply(fileUpdate: FileUpdate): Promise<string[] | undefined> {
     const fileContents = await readFile(fileUpdate.file, 'utf8');
     const searchLines = fileUpdate.original.split('\n');
     const sourceLines = fileContents.split('\n');
@@ -74,7 +57,7 @@ export default class FileUpdateService {
 
       if (locations.length === 0) {
         warn(`No matching context locations found for ${fileUpdate.file}`);
-        return;
+        return undefined;
       }
 
       // Compute the median location. Discard outliers use the median to determine the center
@@ -92,94 +75,30 @@ export default class FileUpdateService {
       maxLocation = Math.min(Math.max(...filteredLocations) + 10, sourceLines.length);
     }
 
-    let preSegment = '';
-    let postSegment = '';
-    if (minLocation > 0) {
-      preSegment = sourceLines.slice(0, minLocation - 1).join('\n');
-    }
-    const matchSegment = sourceLines.slice(minLocation - 1, maxLocation - 1).join('\n');
-    if (maxLocation < sourceLines.length - 1) {
-      postSegment = sourceLines.slice(maxLocation - 1).join('\n');
-    }
+    const preSegment = sourceLines.slice(0, minLocation).join('\n');
+    const matchSegment = sourceLines.slice(minLocation, maxLocation).join('\n');
+    const postSegment = sourceLines.slice(maxLocation).join('\n');
 
-    warn(
-      `Merging content into match segment which spans from ${minLocation - 1} to ${
-        maxLocation - 1
-      }:\n`
-    );
+    warn(`Merging content into match segment which spans from ${minLocation} to ${maxLocation}:\n`);
     warn(matchSegment);
 
-    const newSegment = await this.mergeCode(matchSegment, fileUpdate.original, fileUpdate.modified);
+    // const newSegment = await this.mergeCode(matchSegment, fileUpdate.original, fileUpdate.modified);
 
-    // Use this to apply directly as a patch.
-    // It's not forgiving of boundaries though.
+    const dmp = new DMP();
+    const patchDiff = dmp.diff_main(fileUpdate.original, fileUpdate.modified);
+    dmp.diff_cleanupEfficiency(patchDiff);
+    this.history.log(`[file-update] Computed patch diff for ${fileUpdate.file}:\n`);
+    this.history.log(inspect(patchDiff));
 
-    // const dmp = new DMP();
-    // const diffs = dmp.diff_main(matchSegment, fileUpdate.content);
-    // dmp.diff_cleanupEfficiency(diffs);
-    // warn(diffs);
-
-    // const patches = dmp.patch_make(diffs);
-    // const [newSegment, patchApplied] = dmp.patch_apply(patches, matchSegment);
-
-    // const patchFailedCount = patchApplied.filter((result) => !result).length;
-    // if (patchFailedCount > 0) {
-    //   warn(`Failed to apply ${patchFailedCount} patches to ${fileUpdate.file}`);
-    // }
+    const [newSegment, patchApplied] = dmp.patch_apply(dmp.patch_make(patchDiff), matchSegment);
+    const patchFailedCount = patchApplied.filter((result) => !result).length;
+    if (patchFailedCount > 0) {
+      warn(`Failed to apply ${patchFailedCount} patches to ${fileUpdate.file}`);
+    }
 
     const newContent = [preSegment, newSegment, postSegment].join('\n');
     await writeFile(fileUpdate.file, newContent, 'utf8');
 
     return [`File change applied to ${fileUpdate.file}.\n`];
-  }
-
-  async mergeCode(fileContents: string, original: string, modified: string): Promise<string> {
-    const openAI: ChatOpenAI = new ChatOpenAI({
-      modelName: this.modelName,
-      temperature: this.temperature,
-    });
-    const messages: OpenAI.ChatCompletionMessageParam[] = [
-      {
-        content: SYSTEM_PROMPT,
-        role: 'system',
-      },
-      {
-        content: `<existing-code>${fileContents}</existing-code>`,
-        role: 'user',
-      },
-      {
-        content: `<original-code>${original}</original-code>`,
-        role: 'user',
-      },
-      {
-        content: `<suggested-change>${modified}</suggested-change>`,
-        role: 'user',
-      },
-    ];
-
-    // eslint-disable-next-line no-await-in-loop
-    const aiResponse = await openAI.completionWithRetry({
-      messages,
-      model: openAI.modelName,
-      stream: true,
-    });
-    const tokens = Array<string>();
-    warn(`File change response:\n`);
-    // eslint-disable-next-line no-await-in-loop
-    for await (const token of aiResponse) {
-      process.stderr.write(token.choices.map((choice) => choice.delta.content).join(''));
-      tokens.push(token.choices.map((choice) => choice.delta.content).join(''));
-    }
-    let response = tokens.join('');
-
-    const fenceRegex = /```(?:\w+)?\n([\s\S]*?)```/g;
-    let match: RegExpExecArray | null;
-    const codeBlocks = new Array<string>();
-    while ((match = fenceRegex.exec(response)) !== null) {
-      codeBlocks.push(match[1]);
-    }
-    if (codeBlocks.length) response = codeBlocks.join('\n');
-
-    return response;
   }
 }

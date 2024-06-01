@@ -141,11 +141,7 @@ export default function navie(
     options.temperature
   );
 
-  const fileUpdateService = new FileUpdateService(
-    interactionHistory,
-    options.modelName,
-    options.temperature
-  );
+  const fileUpdateService = new FileUpdateService(interactionHistory);
 
   const buildClassifyCommand = () => new ClassifyCommand(classificationService);
 

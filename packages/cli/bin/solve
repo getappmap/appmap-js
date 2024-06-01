@@ -71,9 +71,7 @@ done
 if [[ -z "$NOGENERATE" ]]; then
   plan_prompt="${work_dir}/plan.txt"
   cat <<PLAN_PROMPT > $plan_prompt
-@generate /nocontext
-
-Generate the code solution for the following problem according to the plan provided.
+@generate /nocontext /noformat
 
 ## Input format
 
@@ -83,34 +81,26 @@ The source files are delineated by XML <file> tags. Each file has a <path> tag w
 
 Do not treat the XML tags as part of the source code. They are only there to help you parse the context.
 
-## Instructions
-
-Emit only the code changes that are necessary to solve the problem. 
-
-Do not re-generate the entire source file.
-
-You do not need to include code that does not need to change.
-
-You do not have to emit a code change for every file in the context.
-
-Emit a separate code block for each change that you want to make.
-
-If a file requires multiple changes, emit multiple code blocks.
-
 ## Output format
 
 For each change you want to make, generate a pair of tags called <original> and <modified>.
 Wrap these tags with a <change> tag that also includes a <file> tag with the file path.
 
-The <original> tag should contain the original code that you want to change.
+The <original> tag should contain the original code that you want to change. Do not abbreviate
+existing code using ellipses or similar. You must place the exact original code in the <original> tag.
+
+The <original> code should be at least 5 lines long.
 
 The <modified> tag should contain the modified code that you want to replace the original code with.
+Do not abbreviate the modified code using ellipses or similar. You must place the exact modified code 
+in the <modified> tag.
 
 ## Example output
 
 <change>
 <file>sympy/physics/vector/point.py</file>
 <original>
+            except Exception:
                 raise ValueError('Velocity of point ' + self.name + ' has not been'
                                  ' defined in ReferenceFrame ' + frame.name)
 </original>
