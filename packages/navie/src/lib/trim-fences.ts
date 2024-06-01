@@ -15,3 +15,16 @@ export default function trimFences(text: string): string {
 
   return text;
 }
+
+// TODO: Alternatively:
+// const sanitizeContent = (fileUpdate: FileUpdate) => {
+//   const { content } = fileUpdate;
+
+//   const fenceRegex = /```(?:\w+)?\n([\s\S]*?)```/g;
+//   let match: RegExpExecArray | null;
+//   const codeBlocks = new Array<string>();
+//   while ((match = fenceRegex.exec(content)) !== null) {
+//     codeBlocks.push(match[1]);
+//   }
+//   if (codeBlocks.length) fileUpdate.content = codeBlocks.join('\n');
+// };

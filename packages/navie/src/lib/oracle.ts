@@ -3,7 +3,6 @@ import { warn } from 'console';
 import OpenAI from 'openai';
 
 import Message from '../message';
-import parseJSON from './parse-json';
 
 export default class Oracle {
   constructor(

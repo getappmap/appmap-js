@@ -17,27 +17,48 @@ suggested code changes. You'll be provided with a file name.
 You should find the code block that contains the suggested change for best matching file name,
 return the code block, and the line number where the change should be made.
 
-Your response should be the raw text of the code block.
+Your response should be an XML <change> object containing the following fields:
+- <file>: (optional) The name of the file
+- <original>: The original code block
+- <modified>: The modified code block
 
-**Example input**
+If there are multiple changes for the same file, you should return multiple <change> objects.
 
-Content: Generate a function that adds one to any number
-Role: user
+Do not enclose the code blocks in triple backticks.
 
-Content:
-  \`\`\`python
-  # add_one.py
-  def add_one(x):
-    return x + 1
-  \`\`\`
-Role: assistant
+**Example**
 
-File name: add_one.py
+<change>
+<file>src/sqlfluff/core/file_helpers.py</file>
+<original>
+def get_encoding(fname: str, config: FluffConfig) -> str:
+    """Get the encoding of the file (autodetect)."""
+    encoding_config = config.get("encoding", default="autodetect")
 
-**Example output**
+    if encoding_config == "autodetect":
+        with open(fname, "rb") as f:
+            data = f.read()
+        return chardet.detect(data)["encoding"]
 
-def add_one(x):
-  return x + 1
+    return encoding_config
+</original>
+<modified>
+def get_encoding(fname: str, config: FluffConfig) -> str:
+    """Get the encoding of the file (autodetect)."""
+    try:
+        encoding_config = config.get("encoding", default="utf-8")  # Change default to utf-8
+
+        if encoding_config == "autodetect":
+            with open(fname, "rb") as f:
+                data = f.read()
+            return chardet.detect(data)["encoding"]
+
+        return encoding_config
+    except UnicodeEncodeError as e:
+        click.echo(f"Error detecting encoding for file {fname}: {str(e)}", err=True)
+        return "utf-8"
+</modified>
+</change>
 `;
 
 const LIST_PROMPT = `**File Name List Extractor**
@@ -101,42 +122,49 @@ export default class FileChangeExtractorService {
     clientRequest: ClientRequest,
     chatHistory: ChatHistory | undefined,
     fileName: string
-  ): Promise<FileUpdate | undefined> {
+  ): Promise<FileUpdate[] | undefined> {
     const messages = FileChangeExtractorService.buildMessages(clientRequest, chatHistory);
     if (!messages) {
       warn('No messages found for extractFile');
       return undefined;
     }
 
-    const tryExtract = async (): Promise<FileUpdate | undefined> => {
+    const tryExtract = async (): Promise<FileUpdate[] | undefined> => {
       const oracle = new Oracle('Extract file', EXTRACT_PROMPT, this.modelName, this.temperature);
       const content = await oracle.ask(messages, `File name: ${fileName}`);
       if (!content) return undefined;
 
-      return {
-        file: fileName,
-        content,
-      };
-    };
-
-    const sanitizeContent = (fileUpdate: FileUpdate) => {
-      const { content } = fileUpdate;
-
-      const fenceRegex = /```(?:\w+)?\n([\s\S]*?)```/g;
+      // Search for <change> tags
+      const changeRegex = /<change>([\s\S]*?)<\/change>/g;
       let match: RegExpExecArray | null;
-      const codeBlocks = new Array<string>();
-      while ((match = fenceRegex.exec(content)) !== null) {
-        codeBlocks.push(match[1]);
+      const changes = new Array<FileUpdate>();
+      while ((match = changeRegex.exec(content)) !== null) {
+        const change = match[1];
+        const fileRegex = /<file>([\s\S]*?)<\/file>/;
+        const originalRegex = /<original>([\s\S]*?)<\/original>/;
+        const modifiedRegex = /<modified>([\s\S]*?)<\/modified>/;
+        const fileMatch = fileRegex.exec(change);
+        const originalMatch = originalRegex.exec(change);
+        const modifiedMatch = modifiedRegex.exec(change);
+        if (fileMatch && originalMatch && modifiedMatch) {
+          changes.push({
+            file: fileMatch[1].trim(),
+            original: originalMatch[1].trim(),
+            modified: modifiedMatch[1].trim(),
+          });
+        }
       }
-      if (codeBlocks.length) fileUpdate.content = codeBlocks.join('\n');
+      return changes;
     };
 
     // Try tryExtract up to 3 times
     for (let i = 0; i < 3; i += 1) {
       const result = await tryExtract();
       if (result) {
-        sanitizeContent(result);
-        warn(`Extracted file ${result.file}:\n${result.content}`);
+        warn(`Extracted ${result.length} changes for file ${fileName}:\n`);
+        result.forEach((change) => {
+          warn(`Original:\n${change.original}\nModified:\n${change.modified}\n`);
+        });
         return result;
       }
     }
