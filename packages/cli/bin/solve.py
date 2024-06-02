@@ -110,12 +110,28 @@ def main():
     if not args.noplan:
         print(f"Transforming issue {args.issue_file} into a plan")
 
+        plan_prompt = os.path.join(work_dir, "plan.txt")
+        with open(plan_prompt, "w") as plan_f:
+            plan_f.write(
+                """@plan /nocontext /noformat
+
+## Guidelines
+
+* Try to solve the problem with a minimal set of code changes.
+
+* Avoid refactorings that will affect multiple parts of the codebase.
+
+* Do not output code blocks or fenced code. Output only a text description of the suggested
+    changes, along with the file names.
+"""
+            )
+
         run_navie_command(
             command=appmap_command,
             context_path=issue_file,
+            input_path=plan_prompt,
             output_path=plan_file,
             log_path=os.path.join(work_dir, "plan.log"),
-            additional_args="@plan",
         )
 
         print(f"Plan stored in {plan_file}")
@@ -168,6 +184,12 @@ The plan is delineated by the XML <plan> tag.
 The source files are delineated by XML <file> tags. Each file has a <path> tag with the file path and a <content> tag with the file content.
 
 Do not treat the XML tags as part of the source code. They are only there to help you parse the context.
+
+## Guidelines
+
+Try to solve the problem with a minimal set of code changes.
+
+Avoid refactorings that will affect multiple parts of the codebase.
 
 ## Output format
 
