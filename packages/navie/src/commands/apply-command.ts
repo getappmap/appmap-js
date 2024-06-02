@@ -30,8 +30,9 @@ export default class ApplyCommand implements Command {
     for (const fileName of fileNames) {
       const fileUpdates = this.fileChangeExtractor.extractFile(request, chatHistory, fileName);
       if (!fileUpdates) {
-        yield `Unable to parse file change ${fileName}. Please try again.\n`;
-        return;
+        yield `No file updates found for ${fileName}.\n`;
+        // eslint-disable-next-line no-continue
+        continue;
       }
 
       yield `File change parsed successfully for ${fileName}\n`;
