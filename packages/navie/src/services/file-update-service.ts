@@ -1,5 +1,6 @@
 import { readFile, writeFile } from 'fs/promises';
 import assert from 'assert';
+import { existsSync } from 'fs';
 
 import InteractionHistory from '../interaction-history';
 
@@ -16,6 +17,14 @@ export default class FileUpdateService {
     this.history.log(`[file-update] Applying file change to ${fileUpdate.file}  `);
     this.history.log(`[file-update] Original content:\n${fileUpdate.original}`);
     this.history.log(`[file-update] Modified content:\n${fileUpdate.modified}`);
+
+    if (!existsSync(fileUpdate.file)) {
+      this.history.log(`[file-update] File does not exist: ${fileUpdate.file}`);
+
+      await writeFile(fileUpdate.file, fileUpdate.modified, 'utf8');
+
+      return undefined;
+    }
 
     const fileContents = await readFile(fileUpdate.file, 'utf8');
     const fileLines = fileContents.split('\n');
@@ -46,9 +55,10 @@ export default class FileUpdateService {
 
     if (matchLine === undefined || matchLine === -1) {
       this.history.log(`[file-update] Failed to find match for ${fileUpdate.file}`);
-      return undefined;
+      return [`Created new file ${fileUpdate.file}.\n`];
     }
 
+    assert(matchIndentOffset !== undefined);
     this.history.log(
       `[file-update] Found match at line ${matchLine} with indent offset ${matchIndentOffset}`
     );

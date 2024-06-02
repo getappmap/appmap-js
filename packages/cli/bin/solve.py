@@ -11,12 +11,9 @@ import json
 def run_command(command):
     result = subprocess.run(command, shell=True, capture_output=True)
     if result.returncode != 0:
-        print(
-            f"Error: Command '{command}' failed with message: {result.stderr.decode()}"
-        )
-        sys.exit(1)
-    return result.stdout.decode()
+        raise RuntimeError(f"Failed to execute command {command}")
 
+    return result.stdout.decode()
 
 def run_navie_command(
     command,
@@ -39,6 +36,7 @@ def run_navie_command(
     """
     # Build the command
     cmd = f"{command} navie --log-navie"
+    # TODO: Add token limit option, e.g. --ai-option tokenLimit=4000
     if input_path:
         cmd += f" -i {input_path}"
     if context_path:
@@ -65,6 +63,11 @@ def main():
     )
     parser.add_argument(
         "issue_file", type=str, help="File containing the issue description"
+    )
+
+    # Option to auto-format files before generating the plan.
+    parser.add_argument(
+        "--format-command", type=str, help="format command to use", default=None
     )
 
     # Options to enable lint-based repair.
@@ -160,8 +163,27 @@ def main():
                 context_f.write("<file>\n")
                 context_f.write(f"<path>{file}</path>\n")
                 context_f.write("<content>\n")
-                with open(file, "r") as file_content:
-                    context_f.write(file_content.read())
+                if os.path.isfile(file):
+                    if args.format_command:
+                        print(f"Auto-formatting file {file}")
+                        format_command = args.format_command.split() + [file]
+                        run_command(" ".join(format_command))
+
+                    with open(file, "r") as content_f:
+                        file_content = content_f.read()
+                        file_lines = file_content.split("\n")
+                        any_line_starts_with_tabs = any(
+                            line.startswith("\t") for line in file_lines
+                        )
+                        if any_line_starts_with_tabs:
+                            print(
+                                f"Warning: File '{file}' starts with tabs. Code generation is not likely to be reliable. Please replace identation with spaces, or specify the --format-command option to have it done automatically.",
+                                file=sys.stderr,
+                            )
+
+                        context_f.write(file_content)
+                else:
+                    print(f"Notice: File '{file}' does not exist. It will probably be created in the code generation step.", file=sys.stderr)
                 context_f.write("</content>\n")
                 context_f.write("</file>\n")
 
