@@ -94,13 +94,19 @@ For each change you want to make, generate a pair of tags called <original> and 
 Wrap these tags with a <change> tag that also includes a <file> tag with the file path.
 
 The <original> tag should contain the original code that you want to change. Do not abbreviate
-existing code using ellipses or similar. You must place the exact original code in the <original> tag.
+existing code using ellipses or similar. 
 
 The <original> code should be at least 5 lines long.
+
+Do not output the entire original code if you only want to change a part of it. Output
+only the part that you want to change.
 
 The <modified> tag should contain the modified code that you want to replace the original code with.
 Do not abbreviate the modified code using ellipses or similar. You must place the exact modified code 
 in the <modified> tag.
+
+You do not need to output the entire modified code if you only want to change a part of it. Output
+only the part that you want to change.
 
 Both the original code and the output code must contain the proper indentation and formatting.
 For example, if the original code has a 4 spaces of indentation, the output code must also have a 4 
@@ -114,20 +120,16 @@ The <original> and <modified> content should be wrapped in a CDATA section to av
 <change>
   <file>sympy/physics/vector/point.py</file>
   <original>
-<![CDATA[
             except Exception:
                 raise ValueError('Velocity of point ' + self.name + ' has not been'
                                  ' defined in ReferenceFrame ' + frame.name)
-]]>
   </original>
   <modified>
-<![CDATA[
                 # Attempt to calculate the velocity based on position's time derivative
                 return self.pos_from(self).dt(frame)
             except Exception:
                 raise ValueError('Velocity of point ' + self.name + ' has not been'
                                  ' defined in ReferenceFrame ' + frame.name)
-]]>
   </modified>
 </change>
 
@@ -231,20 +233,16 @@ The <original> and <modified> content should be wrapped in a CDATA section to av
 <change>
   <file>sympy/physics/vector/point.py</file>
   <original>
-<![CDATA[
             except Exception:
                 raise ValueError('Velocity of point ' + self.name + ' has not been'
                                  ' defined in ReferenceFrame ' + frame.name)
-]]>
   </original>
   <modified>
-<![CDATA[
                 # Attempt to calculate the velocity based on position's time derivative
                 return self.pos_from(self).dt(frame)
             except Exception:
                 raise ValueError('Velocity of point ' + self.name + ' has not been'
                                  ' defined in ReferenceFrame ' + frame.name)
-]]>
   </modified>
 </change>
 
@@ -255,9 +253,7 @@ PLAN_PROMPT
           echo "<file>" >> $repair_prompt
           echo "<path>$file</path>" >> $repair_prompt
           echo "<content>" >> $repair_prompt
-          echo "<![CDATA[" >> $repair_prompt
           cat $file >> $repair_prompt
-          echo "]]>" >> $repair_prompt
           echo "</content>" >> $repair_prompt
           echo "</file>" >> $repair_prompt
 
