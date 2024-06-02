@@ -69,11 +69,15 @@ export default class FileUpdateService {
     );
 
     const newContent = [];
-    if (matchLine > 0) newContent.push(fileLines.slice(0, matchLine).join('\n'));
+    if (matchLine > 0) {
+      const contentPrefix = fileLines.slice(0, matchLine).join('\n');
+      newContent.push(contentPrefix);
+    }
     newContent.push(modifiedContent);
-    if (matchLine + originalLineCount < fileLines.length)
-      newContent.push(fileLines.slice(matchLine + originalLineCount).join('\n'));
-
+    if (matchLine + originalLineCount < fileLines.length) {
+      const contentPostfix = fileLines.slice(matchLine + originalLineCount).join('\n');
+      newContent.push(contentPostfix);
+    }
     await writeFile(fileUpdate.file, newContent.join('\n'), 'utf8');
 
     return [`File change applied to ${fileUpdate.file}.\n`];
