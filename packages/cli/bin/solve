@@ -11,6 +11,13 @@ cd "$pwd"
 # Optionally use APPMAP_COMMAND as the CLI command to run, otherwise use 'appmap'
 command=${APPMAP_COMMAND:-appmap}
 
+# Example: LINT_COMMAND="./venv/bin/python -m pylint --errors-only"
+# Example: LINT_COMMAND="./venv/bin/python -m flake8"
+lint_command=${LINT_COMMAND}
+
+# Example: LINT_ERROR_PATTERN=": E"
+lint_error_pattern=${LINT_ERROR_PATTERN}
+
 # Check if issue_file is provided and exists
 if [[ -z "$issue_file" ]]; then
   echo "Error: Path to issue.md file is required."
@@ -164,3 +171,32 @@ APPLY_PROMPT
 
   echo "Changes applied"
 fi
+
+if [[ -n "$lint_command" ]]; then
+  echo "Linting source files"
+
+  # Use jq to iterate over the array entries in files.json and load them into a variable.
+  # They must all be on the same line. Don't have any single quotes in the variable.
+  files=$(jq -r '.[]' "${work_dir}/files.json" | tr '\n' ' ')
+
+  set -x
+  # Run the linter and tee the output to a variable and to stdout
+  lint_output=$($lint_command $files 2>&1 | tee /dev/tty)
+  set +x
+
+  if [[ $? -ne 0 ]]; then
+    echo "Error: Failed to lint source files."
+    exit 1
+  fi
+
+  if [[ -n "$lint_error_pattern" ]]; then
+    # Check the output for presence of errors
+    if [[ $lint_output == *"$lint_error_pattern"* ]]; then
+      echo "Error: Source files contain linting errors."
+      echo "$lint_output"
+      exit 1
+    fi
+  fi
+
+  echo "Source files linted."
+fi  
