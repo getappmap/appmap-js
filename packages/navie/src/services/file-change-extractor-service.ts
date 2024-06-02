@@ -98,6 +98,18 @@ export default class FileChangeExtractorService {
     const changeRegex = /<change>([\s\S]*?)<\/change>/g;
     let match: RegExpExecArray | null;
     const changes = new Array<FileUpdate>();
+
+    // Remove initial '\n' on the first line.
+    // Trim the last line if it's "\n   ".
+    const trimChange = (change: string): string => {
+      const changeLines = change.split('\n');
+      const firstLine = changeLines[0];
+      const lastLine = changeLines[changeLines.length - 1];
+      if (firstLine.startsWith('\n')) changeLines[0] = firstLine.substring(1);
+      if (lastLine.match('/\ns*/')) changeLines.pop();
+      return changeLines.join('\n');
+    };
+
     // eslint-disable-next-line no-cond-assign
     while ((match = changeRegex.exec(content)) !== null) {
       const change = match[1];
@@ -108,8 +120,8 @@ export default class FileChangeExtractorService {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (jObj && jObj.file && jObj.original && jObj.modified) {
         const update = jObj as FileUpdate;
-        if (update.original.startsWith('\n')) update.original = update.original.substring(1);
-        if (update.modified.startsWith('\n')) update.modified = update.modified.substring(1);
+        update.original = trimChange(update.original);
+        update.modified = trimChange(update.modified);
         changes.push(jObj as FileUpdate);
       }
     }
