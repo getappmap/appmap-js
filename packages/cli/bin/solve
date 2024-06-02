@@ -175,28 +175,130 @@ fi
 if [[ -n "$lint_command" ]]; then
   echo "Linting source files"
 
-  # Use jq to iterate over the array entries in files.json and load them into a variable.
-  # They must all be on the same line. Don't have any single quotes in the variable.
-  files=$(jq -r '.[]' "${work_dir}/files.json" | tr '\n' ' ')
+  jq -r '.[]' "${work_dir}/files.json" | while read -r file; do
+    echo "Linting $file"
 
-  set -x
-  # Run the linter and tee the output to a variable and to stdout
-  lint_output=$($lint_command $files 2>&1 | tee /dev/tty)
-  set +x
+    set -x
+    # Run the linter and tee the output to a variable and to stdout
+    lint_output=$($lint_command $file 2>&1 | tee /dev/tty)
+    set +x
 
-  if [[ $? -ne 0 ]]; then
-    echo "Error: Failed to lint source files."
-    exit 1
-  fi
-
-  if [[ -n "$lint_error_pattern" ]]; then
-    # Check the output for presence of errors
-    if [[ $lint_output == *"$lint_error_pattern"* ]]; then
-      echo "Error: Source files contain linting errors."
+    if [[ $? -ne 0 ]]; then
+      echo "Error: Failed to lint source files."
+    else
       echo "$lint_output"
-      exit 1
+
+      if [[ -n "$lint_error_pattern" ]]; then
+        # Check the output for presence of errors
+        if [[ $lint_output == *"$lint_error_pattern"* ]]; then
+          echo "The source file contains linting errors."
+          echo "$lint_output"
+
+          # Normalize the file path to replace separator characters with underscores
+          norm_file=$(echo $file | tr / _)
+          repair_prompt="${work_dir}/repair_${norm_file}.txt"
+          repair_plan="${work_dir}/repair_${norm_file}.md"
+          repair_log="${work_dir}/repair_${norm_file}.log"
+          
+          cat <<PLAN_PROMPT > $repair_prompt
+@generate /nocontext /noformat
+
+Fix the linter errors indicated by the <lint-error> tag.
+
+## Output format
+
+For each change you want to make, generate a pair of tags called <original> and <modified>.
+Wrap these tags with a <change> tag that also includes a <file> tag with the file path.
+
+The <original> tag should contain the original code that you want to change. Do not abbreviate
+existing code using ellipses or similar. You must place the exact original code in the <original> tag.
+
+The <original> code should be at least 5 lines long.
+
+The <modified> tag should contain the modified code that you want to replace the original code with.
+Do not abbreviate the modified code using ellipses or similar. You must place the exact modified code 
+in the <modified> tag.
+
+Both the original code and the output code must contain the proper indentation and formatting.
+For example, if the original code has a 4 spaces of indentation, the output code must also have a 4 
+spaces of indentation. If the original code has 8 spaces of indentation, the output code must also have
+8 spaces of indentation.
+
+The <original> and <modified> content should be wrapped in a CDATA section to avoid XML parsing issues.
+
+## Example output
+
+<change>
+  <file>sympy/physics/vector/point.py</file>
+  <original>
+<![CDATA[
+            except Exception:
+                raise ValueError('Velocity of point ' + self.name + ' has not been'
+                                 ' defined in ReferenceFrame ' + frame.name)
+]]>
+  </original>
+  <modified>
+<![CDATA[
+                # Attempt to calculate the velocity based on position's time derivative
+                return self.pos_from(self).dt(frame)
+            except Exception:
+                raise ValueError('Velocity of point ' + self.name + ' has not been'
+                                 ' defined in ReferenceFrame ' + frame.name)
+]]>
+  </modified>
+</change>
+
+PLAN_PROMPT
+          echo "<lint-error>" >> $repair_prompt
+          echo $lint_output >> $repair_prompt
+          echo "</lint-error>" >> $repair_prompt
+          echo "<file>" >> $repair_prompt
+          echo "<path>$file</path>" >> $repair_prompt
+          echo "<content>" >> $repair_prompt
+          echo "<![CDATA[" >> $repair_prompt
+          cat $file >> $repair_prompt
+          echo "]]>" >> $repair_prompt
+          echo "</content>" >> $repair_prompt
+          echo "</file>" >> $repair_prompt
+
+          # Plan the repair
+          echo "Generating code to repair $file"
+          set -x
+          $command navie --log-navie -i "$repair_prompt" -o "$repair_plan" > $repair_log 2>&1
+          set +x
+
+          if [[ $? -ne 0 ]]; then
+            echo "Error: Failed to generate code to repair source file. See $repair_log for details."
+            exit 1
+          fi
+
+          echo "Code generated to repair source file in $repair_plan"
+
+          repair_apply_prompt="${work_dir}/repair_apply_${norm_file}.txt"
+          repair_apply_log="${work_dir}/repair_apply_${norm_file}.log"
+
+          cat <<APPLY_PROMPT > $repair_apply_prompt
+@apply /all
+
+APPLY_PROMPT
+          cat $repair_plan >> $repair_apply_prompt
+
+          echo "Applying changes to source files"
+          set -x
+          $command navie --log-navie -i "$repair_apply_prompt" > "$repair_apply_log" 2>&1
+          set +x
+
+          if [[ $? -ne 0 ]]; then
+            echo "Error: Failed to apply changes to source files. See ${repair_apply_log} for details."
+            exit 1
+          fi
+
+          echo "Changes applied"
+        fi
+      fi
     fi
-  fi
+  done
+
 
   echo "Source files linted."
 fi  
