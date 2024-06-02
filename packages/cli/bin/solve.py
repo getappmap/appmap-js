@@ -106,6 +106,7 @@ def main():
     appmap_command = args.appmap_command
 
     plan_file = os.path.join(work_dir, "plan.md")
+    solution_file = os.path.join(work_dir, "solution.md")
 
     if not args.noplan:
         print(f"Transforming issue {args.issue_file} into a plan")
@@ -113,13 +114,11 @@ def main():
         plan_prompt = os.path.join(work_dir, "plan.txt")
         with open(plan_prompt, "w") as plan_f:
             plan_f.write(
-                """@plan /nocontext /noformat
+                """@plan
 
 ## Guidelines
 
 * Try to solve the problem with a minimal set of code changes.
-
-* Avoid refactorings that will affect multiple parts of the codebase.
 
 * Do not output code blocks or fenced code. Output only a text description of the suggested
     changes, along with the file names.
@@ -149,19 +148,13 @@ def main():
 
         print(f"Files to be modified stored in {os.path.join(work_dir, 'files.json')}")
 
-    solution_file = os.path.join(work_dir, "solution.md")
-
     if not args.nogenerate:
         context_file = os.path.join(work_dir, "context.txt")
-        if os.path.exists(context_file):
-            os.remove(context_file)
-        with open(context_file, "w") as _:
-            pass
 
         with open(os.path.join(work_dir, "files.json")) as f:
             files = json.load(f)
 
-        with open(context_file, "a") as context_f:
+        with open(context_file, "w") as context_f:
             for file in files:
                 print("Collecting source file", file)
                 context_f.write("<file>\n")
@@ -172,9 +165,9 @@ def main():
                 context_f.write("</content>\n")
                 context_f.write("</file>\n")
 
-        plan_prompt = os.path.join(work_dir, "plan.txt")
-        with open(plan_prompt, "w") as plan_f:
-            plan_f.write(
+        generate_prompt = os.path.join(work_dir, "generate.txt")
+        with open(generate_prompt, "w") as generate_f:
+            generate_f.write(
                 """@generate /nocontext /noformat
 
 ## Input format
@@ -238,23 +231,23 @@ The <original> and <modified> content should be wrapped in a CDATA section to av
 """
             )
 
-            plan_f.write("<plan>\n")
+            generate_f.write("<plan>\n")
             with open(plan_file, "r") as plan_content:
-                plan_f.write(plan_content.read())
-            plan_f.write("</plan>\n")
+                generate_f.write(plan_content.read())
+            generate_f.write("</plan>\n")
             with open(context_file, "r") as context_content:
-                plan_f.write(context_content.read())
+                generate_f.write(context_content.read())
 
-        print("Solving plan", plan_prompt, "into code")
+        print("Solving plan", generate_prompt, "into code")
 
         run_navie_command(
             command=appmap_command,
-            input_path=plan_prompt,
+            input_path=generate_prompt,
             output_path=solution_file,
             log_path=os.path.join(work_dir, "generate.log"),
         )
 
-        print(f"Code generated in {os.path.join(work_dir, 'solution.md')}")
+        print(f"Code generated in {solution_file}")
 
     # Apply the generated code changes
     if not args.noapply:
@@ -302,8 +295,12 @@ The <original> and <modified> content should be wrapped in a CDATA section to av
 
                 lint_error_match = None
                 if lint_error_pattern:
-                    if lint_error_pattern.startswith("/") and lint_error_pattern.endswith("/"):
-                        lint_error_match = re.search(lint_error_pattern[1:-1], lint_output)
+                    if lint_error_pattern.startswith(
+                        "/"
+                    ) and lint_error_pattern.endswith("/"):
+                        lint_error_match = re.search(
+                            lint_error_pattern[1:-1], lint_output
+                        )
                     else:
                         lint_error_match = lint_error_pattern in lint_output
 
