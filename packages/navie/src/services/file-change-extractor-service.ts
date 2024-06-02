@@ -1,3 +1,5 @@
+import XML from 'fast-xml-parser';
+
 import InteractionHistory from '../interaction-history';
 import { FileUpdate } from './file-update-service';
 import { ChatHistory, ClientRequest } from '../navie';
@@ -99,18 +101,16 @@ export default class FileChangeExtractorService {
     // eslint-disable-next-line no-cond-assign
     while ((match = changeRegex.exec(content)) !== null) {
       const change = match[1];
-      const fileRegex = /<file>([\s\S]*?)<\/file>/;
-      const originalRegex = /<original>([\s\S]*?)<\/original>/;
-      const modifiedRegex = /<modified>([\s\S]*?)<\/modified>/;
-      const fileMatch = fileRegex.exec(change);
-      const originalMatch = originalRegex.exec(change);
-      const modifiedMatch = modifiedRegex.exec(change);
-      if (fileMatch && originalMatch && modifiedMatch) {
-        changes.push({
-          file: fileMatch[1].trim(),
-          original: originalMatch[1].trim(),
-          modified: modifiedMatch[1].trim(),
-        });
+
+      const parser = new XML.XMLParser();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const jObj = parser.parse(change);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      if (jObj && jObj.file && jObj.original && jObj.modified) {
+        const update = jObj as FileUpdate;
+        if (update.original.startsWith('\n')) update.original = update.original.substring(1);
+        if (update.modified.startsWith('\n')) update.modified = update.modified.substring(1);
+        changes.push(jObj as FileUpdate);
       }
     }
     return changes;
