@@ -328,8 +328,10 @@ Avoid refactorings that will affect multiple parts of the codebase.
     # Store the original content of the files
     base_file_content = {}
     for file in files:
-        with open(file, "r") as f:
-            base_file_content[file] = f.read()
+        # Non-existent files will be ignored here.
+        if os.path.isfile(file):
+            with open(file, "r") as f:
+                base_file_content[file] = f.read()
 
     # Apply the generated code changes
     if not args.noapply:
@@ -355,142 +357,139 @@ Avoid refactorings that will affect multiple parts of the codebase.
 
         print("Linting source files")
 
-        with open(os.path.join(work_dir, "files.json")) as f:
-            files = json.load(f)
+        for file in base_file_content.keys():
+            print(f"Linting {file}")
+            norm_file = file.replace("/", "_")
 
-            for file in files:
-                print(f"Linting {file}")
-                norm_file = file.replace("/", "_")
+            lint_args = lint_command.split() + [file]
 
-                lint_args = lint_command.split() + [file]
+            lint_result = subprocess.run(
+                lint_args,
+                capture_output=True,
+                text=True,
+            )
 
-                lint_result = subprocess.run(
-                    lint_args,
-                    capture_output=True,
-                    text=True,
+            lint_output = lint_result.stdout + lint_result.stderr
+
+            print(lint_output)
+
+            # If lint_error_pattern starts and ends with '/', treat it as a regular expression.
+            # Otherwise, treat it as a string literal.
+            #
+            # Find all lint errors reported in the output. Then select just those errors that
+            # are reported on lines that we have modified.
+            lint_errors = []
+            if lint_error_pattern:
+                if lint_error_pattern.startswith(
+                    "/"
+                ) and lint_error_pattern.endswith("/"):
+                    lint_errors = re.findall(lint_error_pattern[1:-1], lint_output)
+                else:
+                    lint_errors = lint_output.split("\n").filter(
+                        lambda line: lint_error_pattern in line
+                    )
+            else:
+                lint_errors = lint_output.split("\n")
+
+            temp_dir = os.path.join(work_dir, "diff", norm_file)
+            os.makedirs(temp_dir, exist_ok=True)
+            # Write the base file content
+            with open(os.path.join(temp_dir, "base"), "w") as f:
+                f.write(base_file_content[file])
+            with open(file, "r") as f:
+                with open(os.path.join(temp_dir, "updated"), "w") as f2:
+                    f2.write(f.read())
+            # Run the diff command
+            diff_command = f"diff -u {os.path.join(temp_dir, 'base')} {os.path.join(temp_dir, 'updated')}"
+            file_diff = run_command(diff_command, fail_on_error=False)
+
+            print(file_diff)
+
+            # Lint errors are formatted like this:
+            # bin/solve.py:257:80: E501 line too long (231 > 79 characters)
+            # Collect the line numbers of the lint errors.
+            lint_errors_by_line_number = {}
+            for error in lint_errors:
+                if error:
+                    line_number = error.split(":")[1]
+                    print(f"Error reported on line {line_number}: ${error}")
+                    lint_errors_by_line_number[int(line_number)] = error
+
+            # The file diff contains chunks like:
+            # @@ -147,15 +147,21 @@
+            # Find the '+' number, which indicates the start line. Also find the number after the
+            # comma, which indicates the number of lines. Report these two numbers for each chunk.
+            diff_ranges = [
+                [int(ch) for ch in chunk.split(" ")[2].split(",")]
+                for chunk in file_diff.split("\n")
+                if chunk.startswith("@@")
+            ]
+
+            for diff_range in diff_ranges:
+                print(
+                    f"The file has changes between lines {diff_range[0]} and {diff_range[0] + diff_range[1]}"
                 )
 
-                lint_output = lint_result.stdout + lint_result.stderr
+            lint_error_line_numbers_within_diff_sections = [
+                line_number
+                for line_number in lint_errors_by_line_number.keys()
+                for diff_range in diff_ranges
+                if diff_range[0] <= line_number <= diff_range[0] + diff_range[1]
+            ]
 
-                print(lint_output)
+            if lint_error_line_numbers_within_diff_sections:
+                print(
+                    f"Lint errors within diff sections: {lint_error_line_numbers_within_diff_sections}"
+                )
+            else:
+                print("There are no lint errors within diff sections")
 
-                # If lint_error_pattern starts and ends with '/', treat it as a regular expression.
-                # Otherwise, treat it as a string literal.
-                #
-                # Find all lint errors reported in the output. Then select just those errors that
-                # are reported on lines that we have modified.
-                lint_errors = []
-                if lint_error_pattern:
-                    if lint_error_pattern.startswith(
-                        "/"
-                    ) and lint_error_pattern.endswith("/"):
-                        lint_errors = re.findall(lint_error_pattern[1:-1], lint_output)
-                    else:
-                        lint_errors = lint_output.split("\n").filter(
-                            lambda line: lint_error_pattern in line
-                        )
-                else:
-                    lint_errors = lint_output.split("\n")
+            for line_number in lint_error_line_numbers_within_diff_sections:
+                lint_error = lint_errors_by_line_number[line_number]
+                print(f"Error reported on line {line_number}: {lint_error}")
 
-                temp_dir = os.path.join(work_dir, "diff", norm_file)
-                os.makedirs(temp_dir, exist_ok=True)
-                # Write the base file content
-                with open(os.path.join(temp_dir, "base"), "w") as f:
-                    f.write(base_file_content[file])
+                # Extract the chunk of code that contains the error
+                content_chunk_lines = []
                 with open(file, "r") as f:
-                    with open(os.path.join(temp_dir, "updated"), "w") as f2:
-                        f2.write(f.read())
-                # Run the diff command
-                diff_command = f"diff -u {os.path.join(temp_dir, 'base')} {os.path.join(temp_dir, 'updated')}"
-                file_diff = run_command(diff_command, fail_on_error=False)
+                    lines = f.readlines()
 
-                print(file_diff)
+                    # # Mark the line with the error
+                    # error_line = lines[line_number - 1]
 
-                # Lint errors are formatted like this:
-                # bin/solve.py:257:80: E501 line too long (231 > 79 characters)
-                # Collect the line numbers of the lint errors.
-                lint_errors_by_line_number = {}
-                for error in lint_errors:
-                    if error:
-                        line_number = error.split(":")[1]
-                        print(f"Error reported on line {line_number}: ${error}")
-                        lint_errors_by_line_number[int(line_number)] = error
+                    # # Detect line ending as \n or \r\n
+                    # line_ending_regexp = re.compile(r"\r?\n")
+                    # line_ending = line_ending_regexp.search(error_line).group(0)
+                    # line = lines[line_number - 1].rstrip()
 
-                # The file diff contains chunks like:
-                # @@ -147,15 +147,21 @@
-                # Find the '+' number, which indicates the start line. Also find the number after the
-                # comma, which indicates the number of lines. Report these two numbers for each chunk.
-                diff_ranges = [
-                    [int(ch) for ch in chunk.split(" ")[2].split(",")]
-                    for chunk in file_diff.split("\n")
-                    if chunk.startswith("@@")
+                    # lines[line_number - 1] = f"{line} <- {lint_error}{line_ending}"
+
+                    range_min = max(0, line_number - 3)
+                    range_max = min(len(lines), line_number + 3)
+                    for line_number in range(range_min, range_max):
+                        content_chunk_lines.append(f"{line_number + 1}: {lines[line_number]}")
+
+                    # for i in range(
+                    #     max(0, line_number - 3), min(len(lines), line_number + 3)
+                    # ):
+                    #     content_chunk_lines.append(lines[i])
+
+                repair_dir = os.path.join(
+                    work_dir, "repair", norm_file, str(line_number)
+                )
+                os.makedirs(repair_dir, exist_ok=True)
+
+                repair_prompt, repair_output, repair_log = [
+                    os.path.join(repair_dir, f"generate.{ext}")
+                    for ext in ["txt", "md", "log"]
+                ]
+                repair_apply_prompt, repair_apply_output, repair_apply_log = [
+                    os.path.join(repair_dir, f"apply.{ext}")
+                    for ext in ["txt", "md", "log"]
                 ]
 
-                for diff_range in diff_ranges:
-                    print(
-                        f"The file has changes between lines {diff_range[0]} and {diff_range[0] + diff_range[1]}"
-                    )
-
-                lint_error_line_numbers_within_diff_sections = [
-                    line_number
-                    for line_number in lint_errors_by_line_number.keys()
-                    for diff_range in diff_ranges
-                    if diff_range[0] <= line_number <= diff_range[0] + diff_range[1]
-                ]
-
-                if lint_error_line_numbers_within_diff_sections:
-                    print(
-                        f"Lint errors within diff sections: {lint_error_line_numbers_within_diff_sections}"
-                    )
-                else:
-                    print("There are no lint errors within diff sections")
-
-                for line_number in lint_error_line_numbers_within_diff_sections:
-                    lint_error = lint_errors_by_line_number[line_number]
-                    print(f"Error reported on line {line_number}: {lint_error}")
-
-                    # Extract the chunk of code that contains the error
-                    content_chunk_lines = []
-                    with open(file, "r") as f:
-                        lines = f.readlines()
-
-                        # # Mark the line with the error
-                        # error_line = lines[line_number - 1]
-
-                        # # Detect line ending as \n or \r\n
-                        # line_ending_regexp = re.compile(r"\r?\n")
-                        # line_ending = line_ending_regexp.search(error_line).group(0)
-                        # line = lines[line_number - 1].rstrip()
-
-                        # lines[line_number - 1] = f"{line} <- {lint_error}{line_ending}"
-
-                        range_min = max(0, line_number - 3)
-                        range_max = min(len(lines), line_number + 3)
-                        for line_number in range(range_min, range_max):
-                            content_chunk_lines.append(f"{line_number + 1}: {lines[line_number]}")
-
-                        # for i in range(
-                        #     max(0, line_number - 3), min(len(lines), line_number + 3)
-                        # ):
-                        #     content_chunk_lines.append(lines[i])
-
-                    repair_dir = os.path.join(
-                        work_dir, "repair", norm_file, str(line_number)
-                    )
-                    os.makedirs(repair_dir, exist_ok=True)
-
-                    repair_prompt, repair_output, repair_log = [
-                        os.path.join(repair_dir, f"generate.{ext}")
-                        for ext in ["txt", "md", "log"]
-                    ]
-                    repair_apply_prompt, repair_apply_output, repair_apply_log = [
-                        os.path.join(repair_dir, f"apply.{ext}")
-                        for ext in ["txt", "md", "log"]
-                    ]
-
-                    with open(repair_prompt, "w") as f:
-                        f.write(
-                            f"""
+                with open(repair_prompt, "w") as f:
+                    f.write(
+                        f"""
 @generate /nocontext /noformat
 
 Fix the linter errors indicated by the <lint-error> tag.
@@ -506,54 +505,54 @@ only present in the file/content to help you identify which line has the lint er
 
 <lint-error>
 """
-                        )
-                        f.write(lint_error)
-                        f.write(
-                            """
+                    )
+                    f.write(lint_error)
+                    f.write(
+                        """
 </lint-error>
 <file>
-    <path>"""
-                        )
-                        f.write(file)
-                        f.write(
-                            """
-    </path>
-    <content>
+<path>"""
+                    )
+                    f.write(file)
+                    f.write(
+                        """
+</path>
+<content>
 """
-                        )
-                        f.write("".join(content_chunk_lines))
-                        f.write(
-                            """
-    </content>
+                    )
+                    f.write("".join(content_chunk_lines))
+                    f.write(
+                        """
+</content>
 </file>
 """
-                        )
-
-                    # Plan the repair
-                    print(f"Generating code to repair {file}")
-                    run_navie_command(
-                        command=appmap_command,
-                        input_path=repair_prompt,
-                        output_path=repair_output,
-                        log_path=repair_log,
                     )
 
-                    print(f"Code generated to repair source file in {repair_output}")
+                # Plan the repair
+                print(f"Generating code to repair {file}")
+                run_navie_command(
+                    command=appmap_command,
+                    input_path=repair_prompt,
+                    output_path=repair_output,
+                    log_path=repair_log,
+                )
 
-                    with open(repair_apply_prompt, "w") as f:
-                        f.write("@apply /all\n\n")
-                        with open(repair_output, "r") as plan_fp:
-                            f.write(plan_fp.read())
+                print(f"Code generated to repair source file in {repair_output}")
 
-                    print("Applying changes to source files")
-                    run_navie_command(
-                        command=appmap_command,
-                        input_path=repair_apply_prompt,
-                        output_path=repair_apply_output,
-                        log_path=repair_apply_log,
-                    )
+                with open(repair_apply_prompt, "w") as f:
+                    f.write("@apply /all\n\n")
+                    with open(repair_output, "r") as plan_fp:
+                        f.write(plan_fp.read())
 
-                    print("Changes applied")
+                print("Applying changes to source files")
+                run_navie_command(
+                    command=appmap_command,
+                    input_path=repair_apply_prompt,
+                    output_path=repair_apply_output,
+                    log_path=repair_apply_log,
+                )
+
+                print("Changes applied")
 
 
 if __name__ == "__main__":
