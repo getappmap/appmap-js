@@ -453,25 +453,10 @@ Avoid refactorings that will affect multiple parts of the codebase.
                 with open(file, "r") as f:
                     lines = f.readlines()
 
-                    # # Mark the line with the error
-                    # error_line = lines[line_number - 1]
-
-                    # # Detect line ending as \n or \r\n
-                    # line_ending_regexp = re.compile(r"\r?\n")
-                    # line_ending = line_ending_regexp.search(error_line).group(0)
-                    # line = lines[line_number - 1].rstrip()
-
-                    # lines[line_number - 1] = f"{line} <- {lint_error}{line_ending}"
-
-                    range_min = max(0, line_number - 3)
-                    range_max = min(len(lines), line_number + 3)
+                    range_min = max(0, line_number - 7)
+                    range_max = min(len(lines), line_number + 7)
                     for line_number in range(range_min, range_max):
                         content_chunk_lines.append(f"{line_number + 1}: {lines[line_number]}")
-
-                    # for i in range(
-                    #     max(0, line_number - 3), min(len(lines), line_number + 3)
-                    # ):
-                    #     content_chunk_lines.append(lines[i])
 
                 repair_dir = os.path.join(
                     work_dir, "repair", norm_file, str(line_number)
