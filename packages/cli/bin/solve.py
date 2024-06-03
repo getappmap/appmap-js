@@ -7,6 +7,79 @@ import subprocess
 import sys
 import json
 
+format_instructions = """For each change you want to make, generate a pair of tags called <original> and <modified>.
+Wrap these tags with a <change> tag that also includes a <file> tag with the file path.
+
+The <original> tag should contain the original code that you want to change. Do not abbreviate
+existing code using ellipses or similar.
+
+Always include an attribute "no-ellipsis" with the value "true" in the <original> tag.
+This should be a true statement about the tag.
+
+The <original> code should contain an attribute that indicates about how many lines of context
+it contains. You should plan for this context to contain the code that should be modified, plus
+three lines before and after it.
+
+Do not output the entire original code, or long functions, if you only want to change a part of it.
+Plan to output only the part that you want to change.
+
+If you need to make multiple changes to the same file, output multiple <change> tags.
+In the change, indicate the number of the change that this is, starting from 1.
+
+The <modified> tag should contain the modified code that you want to replace the original code with.
+Do not abbreviate the modified code using ellipses or similar. You must place the exact modified code
+in the <modified> tag.
+
+You do not need to output the entire modified code if you only want to change a part of it. Output
+only the part that you want to change.
+
+Always include an attribute "no-ellipsis" with the value "true" in the <modified> tag.
+This should be a true statement about the tag.
+
+Both the original code and the output code must contain the proper indentation and formatting.
+For example, if the original code has 4 spaces of indentation, the output code must also have 4
+spaces of indentation. If the original code has 8 spaces of indentation, the output code must also have
+8 spaces of indentation.
+
+The <original> and <modified> content should be wrapped in a CDATA section to avoid XML parsing issues.
+
+## Example output
+
+<change>
+    <file change-number-for-this-file="1">src/main/java/org/springframework/samples/petclinic/vet/Vet.java</file>
+    <original line-count="13" no-ellipsis="true"><![CDATA[
+    @JoinTable(
+        name = "vet_specialties",
+        joinColumns = @JoinColumn(name = "vet_id"),
+        inverseJoinColumns = @JoinColumn(name = "specialty_id")
+    )
+    private Set<Specialty> specialties;
+
+    protected Set<Specialty> getSpecialtiesInternal() {
+        if (this.specialties == null) {
+            this.specialties = new HashSet<>();
+        }
+        return this.specialties;
+    }]]></original>
+    <modified no-ellipsis="true"><![CDATA[
+    @JoinTable(
+        name = "vet_specialties",
+        joinColumns = @JoinColumn(name = "vet_id"),
+        inverseJoinColumns = @JoinColumn(name = "specialty_id")
+    )
+    private Set<Specialty> specialties;
+
+    private String address;
+
+    protected Set<Specialty> getSpecialtiesInternal() {
+        if (this.specialties == null) {
+            this.specialties = new HashSet<>();
+        }
+        return this.specialties;
+    }]]></modified>
+</change>
+"""
+
 
 def run_command(command):
     result = subprocess.run(command, shell=True, capture_output=True)
@@ -14,6 +87,7 @@ def run_command(command):
         raise RuntimeError(f"Failed to execute command {command}")
 
     return result.stdout.decode()
+
 
 def run_navie_command(
     command,
@@ -45,6 +119,8 @@ def run_navie_command(
     if additional_args:
         cmd += f" {additional_args}"
     cmd += f" > {log_path} 2>&1"
+
+    print(f"Executing command: {cmd}")
 
     result = os.system(cmd)
 
@@ -110,6 +186,7 @@ def main():
 
     plan_file = os.path.join(work_dir, "plan.md")
     solution_file = os.path.join(work_dir, "solution.md")
+    apply_file = os.path.join(work_dir, "apply.md")
 
     if not args.noplan:
         print(f"Transforming issue {args.issue_file} into a plan")
@@ -183,14 +260,17 @@ def main():
 
                         context_f.write(file_content)
                 else:
-                    print(f"Notice: File '{file}' does not exist. It will probably be created in the code generation step.", file=sys.stderr)
+                    print(
+                        f"Notice: File '{file}' does not exist. It will probably be created in the code generation step.",
+                        file=sys.stderr,
+                    )
                 context_f.write("</content>\n")
                 context_f.write("</file>\n")
 
         generate_prompt = os.path.join(work_dir, "generate.txt")
         with open(generate_prompt, "w") as generate_f:
             generate_f.write(
-                """@generate /nocontext /noformat
+                f"""@generate /nocontext /noformat
 
 ## Input format
 
@@ -208,77 +288,8 @@ Avoid refactorings that will affect multiple parts of the codebase.
 
 ## Output format
 
-For each change you want to make, generate a pair of tags called <original> and <modified>.
-Wrap these tags with a <change> tag that also includes a <file> tag with the file path.
+{format_instructions}
 
-The <original> tag should contain the original code that you want to change. Do not abbreviate
-existing code using ellipses or similar. 
-
-Always include an attribute "no-ellipsis" with the value "true" in the <original> tag.
-This should be a true statement about the tag.
-
-The <original> code should contain an attribute that indicates about how many lines of context
-it contains. You should plan for this context to contain the code that should be modified, plus 
-three lines before and after it.
-
-Do not output the entire original code, or long functions, if you only want to change a part of it.
-Plan to output only the part that you want to change.
-
-If you need to make multiple changes to the same file, output multiple <change> tags.
-In the change, indicate the number of the change that this is, starting from 1.
-
-The <modified> tag should contain the modified code that you want to replace the original code with.
-Do not abbreviate the modified code using ellipses or similar. You must place the exact modified code
-in the <modified> tag.
-
-You do not need to output the entire modified code if you only want to change a part of it. Output
-only the part that you want to change.
-
-Always include an attribute "no-ellipsis" with the value "true" in the <modified> tag.
-This should be a true statement about the tag.
-
-Both the original code and the output code must contain the proper indentation and formatting.
-For example, if the original code has 4 spaces of indentation, the output code must also have 4
-spaces of indentation. If the original code has 8 spaces of indentation, the output code must also have
-8 spaces of indentation.
-
-The <original> and <modified> content should be wrapped in a CDATA section to avoid XML parsing issues.
-
-## Example output
-
-<change>
-    <file change-number-for-this-file="1">src/main/java/org/springframework/samples/petclinic/vet/Vet.java</file>
-    <original line-count="13" no-ellipsis="true"><![CDATA[
-    @JoinTable(
-        name = "vet_specialties",
-        joinColumns = @JoinColumn(name = "vet_id"),
-        inverseJoinColumns = @JoinColumn(name = "specialty_id")
-    )
-    private Set<Specialty> specialties;
-
-    protected Set<Specialty> getSpecialtiesInternal() {
-        if (this.specialties == null) {
-            this.specialties = new HashSet<>();
-        }
-        return this.specialties;
-    }]]></original>
-    <modified no-ellipsis="true"><![CDATA[
-    @JoinTable(
-        name = "vet_specialties",
-        joinColumns = @JoinColumn(name = "vet_id"),
-        inverseJoinColumns = @JoinColumn(name = "specialty_id")
-    )
-    private Set<Specialty> specialties;
-
-    private String address;
-
-    protected Set<Specialty> getSpecialtiesInternal() {
-        if (this.specialties == null) {
-            this.specialties = new HashSet<>();
-        }
-        return this.specialties;
-    }]]></modified>
-</change>
 """
             )
 
@@ -312,7 +323,7 @@ The <original> and <modified> content should be wrapped in a CDATA section to av
         run_navie_command(
             command=appmap_command,
             input_path=apply_prompt,
-            output_path=os.path.join(work_dir, "apply.log"),
+            output_path=apply_file,
             log_path=os.path.join(work_dir, "apply.log"),
         )
 
@@ -368,52 +379,14 @@ The <original> and <modified> content should be wrapped in a CDATA section to av
 
                     with open(repair_prompt, "w") as f:
                         f.write(
-                            """
+                            f"""
 @generate /nocontext /noformat
 
 Fix the linter errors indicated by the <lint-error> tag.
 
 ## Output format
 
-For each change you want to make, generate a pair of tags called <original> and <modified>. 
-Wrap these tags with a <change> tag that also includes a <file> tag with the file path.
-
-The <original> tag should contain the original code that you want to change. Do not abbreviate
-existing code using ellipses or similar. 
-
-The <original> code should be at least 5 lines long.
-
-Do not output the entire original code if you only want to change a part of it. Output
-only the part that you want to change.
-
-The <modified> tag should contain the modified code that you want to replace the original code with.
-Do not abbreviate the modified code using ellipses or similar. You must place the exact modified code
-in the <modified> tag.
-
-You do not need to output the entire modified code if you only want to change a part of it. Output
-only the part that you want to change.
-
-Both the original code and the output code must contain the proper indentation and formatting. For example, 
-if the original code has 4 spaces of indentation, the output code must also have 4 spaces of indentation.
-If the original code has 8 spaces of indentation, the output code must also have 8 spaces of indentation.
-
-The <original> and <modified> content should be wrapped in a CDATA section to avoid XML parsing issues.
-
-## Example output
-
-<change>
-<file>sympy/physics/vector/point.py</file>
-<original><![CDATA[
-except Exception:
-raise ValueError('Velocity of point ' + self.name + ' has not been defined in ReferenceFrame ' + frame.name)
-]]></original>
-<modified><![CDATA[
-# Attempt to calculate the velocity based on position's time derivative
-return self.pos_from(self).dt(frame)
-except Exception:
-raise ValueError('Velocity of point ' + self.name + ' has not been defined in ReferenceFrame ' + frame.name)
-]]></modified>
-</change>
+{format_instructions}
 
 <lint-error>
 """

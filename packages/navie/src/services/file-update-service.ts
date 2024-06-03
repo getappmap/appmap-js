@@ -55,7 +55,7 @@ export default class FileUpdateService {
 
     if (matchLine === undefined || matchLine === -1) {
       this.history.log(`[file-update] Failed to find match for ${fileUpdate.file}`);
-      return [`Created new file ${fileUpdate.file}.\n`];
+      return [`Couldn't find original content lines for update to file ${fileUpdate.file}.\n`];
     }
 
     assert(matchIndentOffset !== undefined);
