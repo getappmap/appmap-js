@@ -106,7 +106,7 @@ export default class FileChangeExtractorService {
       const firstLine = changeLines[0];
       const lastLine = changeLines[changeLines.length - 1];
       if (firstLine.startsWith('\n')) changeLines[0] = firstLine.substring(1);
-      if (lastLine.match('/\ns*/')) changeLines.pop();
+      if (lastLine.trim() === '') changeLines.pop();
       return changeLines.join('\n');
     };
 
