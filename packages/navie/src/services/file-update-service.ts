@@ -10,6 +10,42 @@ export type FileUpdate = {
   modified: string;
 };
 
+function findLineMatch(haystack: readonly string[], needle: readonly string[]): number | undefined {
+  assert(needle.length && haystack.length);
+  const trimmed = needle.map((s) => s.trim());
+
+  /* eslint-disable no-labels */
+  /* eslint-disable no-continue */
+  next: for (let i = 0; i <= haystack.length - needle.length; i += 1) {
+    for (let j = 0; j < needle.length; j += 1)
+      if (haystack[i + j].trim() !== trimmed[j]) continue next;
+    return i;
+  }
+  /* eslint-enable no-continue */
+  /* eslint-enable no-labels */
+
+  return undefined;
+}
+
+function makeWhitespaceAdjuster(to: string, from: string) {
+  const fromWhitespace = from.match(/^\s*/)?.[0];
+  const toWhitespace = to.match(/^\s*/)?.[0];
+
+  assert(fromWhitespace !== undefined);
+  assert(toWhitespace !== undefined);
+
+  if (fromWhitespace === toWhitespace) {
+    const adjuster = (s: string) => s;
+    adjuster.desc = 'none';
+    return adjuster;
+  }
+
+  const fromRe = new RegExp(`^${fromWhitespace}`);
+  const adjuster = (s: string) => s.replace(fromRe, toWhitespace);
+  adjuster.desc = `${fromWhitespace.length} -> ${toWhitespace.length}`;
+  return adjuster;
+}
+
 export default class FileUpdateService {
   constructor(public history: InteractionHistory) {}
 
@@ -30,65 +66,28 @@ export default class FileUpdateService {
     const fileLines = fileContents.split('\n');
 
     const originalLines = fileUpdate.original.split('\n');
-    const originalLineCount = originalLines.length;
 
-    const adjustLine = (offset: number, line: string): string => {
-      if (offset >= 0) return ' '.repeat(offset) + line;
+    const index = findLineMatch(fileLines, originalLines);
+    if (!index) return [`[file-update] Failed to find match for ${fileUpdate.file}.\n`];
 
-      return line.substring(-offset);
-    };
-
-    let matchLine: number | undefined;
-    let matchIndentOffset: number | undefined;
-    // Ajust for LLM errors in indenting.
-    const indentOffsetOptions = [0, -2, 2, -4, 4, -6, 6, -8, 8, -10, 10, -12, 12];
-    for (const offset of indentOffsetOptions) {
-      const adjust = (line: string) => adjustLine(offset, line);
-      const originalContentWithIndent = originalLines.map(adjust).join('\n');
-      const matchChar = fileContents.indexOf(originalContentWithIndent);
-      if (matchChar !== -1) {
-        matchLine = fileContents.substring(0, matchChar).split('\n').length - 1;
-        matchIndentOffset = offset;
-        break;
-      }
-    }
-
-    if (matchLine === undefined || matchLine === -1) {
-      this.history.log(`[file-update] Failed to find match for ${fileUpdate.file}`);
-      return [`Couldn't find original content lines for update to file ${fileUpdate.file}.\n`];
-    }
-
-    assert(matchIndentOffset !== undefined);
-    this.history.log(
-      `[file-update] Found match at line ${matchLine} with indent offset ${matchIndentOffset}`
+    const nonEmptyIndex = originalLines.findIndex((s) => s.trim());
+    const adjustWhitespace = makeWhitespaceAdjuster(
+      fileLines[index + nonEmptyIndex],
+      originalLines[nonEmptyIndex]
     );
 
-    // Assume that the LLM-generated replacement code has the same offset as the original code.
-    const modifiedContent = fileUpdate.modified
-      .split('\n')
-      .map((line) => {
-        assert(matchIndentOffset !== undefined);
-        return adjustLine(matchIndentOffset, line);
-      })
-      .join('\n');
-
     this.history.log(
-      `[file-update] Merging content into match segment which spans from ${matchLine} to ${
-        matchLine + originalLineCount
-      }:\n`
+      `[file-update] Found match at line ${index + 1}, whitespace adjustment: ${
+        adjustWhitespace.desc
+      }\n`
+    );
+    fileLines.splice(
+      index,
+      originalLines.length,
+      ...fileUpdate.modified.split('\n').map(adjustWhitespace)
     );
 
-    const newContent = [];
-    if (matchLine > 0) {
-      const contentPrefix = fileLines.slice(0, matchLine).join('\n');
-      newContent.push(contentPrefix);
-    }
-    newContent.push(modifiedContent);
-    if (matchLine + originalLineCount < fileLines.length) {
-      const contentPostfix = fileLines.slice(matchLine + originalLineCount).join('\n');
-      newContent.push(contentPostfix);
-    }
-    await writeFile(fileUpdate.file, newContent.join('\n'), 'utf8');
+    await writeFile(fileUpdate.file, fileLines.join('\n'), 'utf8');
 
     return [`File change applied to ${fileUpdate.file}.\n`];
   }
