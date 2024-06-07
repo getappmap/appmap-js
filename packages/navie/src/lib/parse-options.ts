@@ -45,6 +45,8 @@ export default function parseOptions(question: string): {
   options: UserOptions;
   question: string;
 } {
+  // eslint-disable-next-line no-param-reassign
+  question = question.trimStart();
   if (!question) return { options: new UserOptions(new Map()), question: '' };
 
   const options = new Map<string, string | boolean>();
