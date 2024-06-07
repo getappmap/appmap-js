@@ -99,16 +99,9 @@ export default class FileChangeExtractorService {
     let match: RegExpExecArray | null;
     const changes = new Array<FileUpdate>();
 
-    // Remove initial '\n' on the first line.
-    // Trim the last line if it's "\n   ".
-    const trimChange = (change: string): string => {
-      const changeLines = change.split('\n');
-      const firstLine = changeLines[0];
-      const lastLine = changeLines[changeLines.length - 1];
-      if (firstLine.startsWith('\n')) changeLines[0] = firstLine.substring(1);
-      if (lastLine.match('/\ns*/')) changeLines.pop();
-      return changeLines.join('\n');
-    };
+    // Trim at most one leading and trailing blank lines
+    const trimChange = (change: string): string =>
+      change.replace(/^\s*\n/, '').replace(/\n\s*$/, '');
 
     // eslint-disable-next-line no-cond-assign
     while ((match = changeRegex.exec(content)) !== null) {

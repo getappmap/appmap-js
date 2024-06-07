@@ -8,20 +8,21 @@ import FileChangeExtractorService from '../../src/services/file-change-extractor
 import FileUpdateService from '../../src/services/file-update-service';
 
 describe(FileUpdateService, () => {
-  it('correctly applies an update even with broken whitespace', async () => {
+  const example = (name: string) => async () => {
     expect.assertions(2);
 
-    const fixtureDir = join(__dirname, 'file-update-service', 'whitespace-mismatch');
+    const fixtureDir = join(__dirname, 'file-update-service', name);
     await cp(fixtureDir, process.cwd(), { recursive: true });
     const apply = await readFile('apply.txt', 'utf8');
     const changes = FileChangeExtractorService.extractChanges(apply);
 
     const result = await service.apply(changes[0]);
-    expect(result && result[0]).toEqual('File change applied to fields.py.\n');
-    expect(await readFile('fields.py', 'utf8')).toEqual(
-      await readFile('fields-expected.py', 'utf8')
-    );
-  });
+    expect(result && result[0]).toEqual('File change applied to original.txt.\n');
+    expect(await readFile('original.txt', 'utf8')).toEqual(await readFile('expected.txt', 'utf8'));
+  };
+
+  it('correctly applies an update even with broken whitespace', example('whitespace-mismatch'));
+  it('correctly applies an update even with trailing newlines', example('trailing-newlines'));
 
   let service: FileUpdateService;
 
