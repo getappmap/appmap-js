@@ -95,7 +95,7 @@ export default class FileChangeExtractorService {
 
   static extractChanges(content: string): FileUpdate[] {
     // Search for <change> tags
-    const changeRegex = /<change>([\s\S]*?)<\/change>/g;
+    const changeRegex = /<change>([\s\S]*?)<\/change>/gi;
     let match: RegExpExecArray | null;
     const changes = new Array<FileUpdate>();
 
