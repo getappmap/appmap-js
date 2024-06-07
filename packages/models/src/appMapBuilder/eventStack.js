@@ -35,6 +35,12 @@ export default class EventStack {
         this.stack.pop();
 
         const parent = this.stack[this.stack.length - 1];
+        if (call === parent) {
+          // FIXME: This shouldn't ever happen, but there's an unknown issue in some AppMaps that
+          // causes it. Without this check, node will crash, so preempt that by throwing an Error.
+          throw new Error(`failed trying to compute event stack, call.id: ${call.id}`);
+        }
+
         if (parent) {
           parent.children.push(call);
           call.parent = parent;
