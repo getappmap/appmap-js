@@ -1,3 +1,10 @@
+# [@appland/models-v2.10.3](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.10.2...@appland/models-v2.10.3) (2024-06-08)
+
+
+### Bug Fixes
+
+* don't crash on bad AppMaps ([558c60a](https://github.com/getappmap/appmap-js/commit/558c60aa9fc6733a52de39f9ad64feeff9a74493))
+
 # [@appland/models-v2.10.2](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.10.1...@appland/models-v2.10.2) (2024-04-24)
 
 
