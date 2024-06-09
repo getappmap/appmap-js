@@ -24,6 +24,10 @@ You do not need to explain the importance of programming concepts like planning 
 
 **About your response**
 
+Solve the problem as if you were a contributor to the project, responding to an end-user bug report.
+
+Do not consider changing any code snippets that appear to be downstream of the problem.
+
 Your response should include the following elements:
 
 * **Title**: The title is the most important part of a plan. Here are some best practices for good titles:
@@ -35,31 +39,30 @@ Your response should include the following elements:
 * **Problem** Succinct description of the issue.
 
 * **Analysis** In this section describe your reasoning about how best to solve the issue.
-  Get to the bottom of it and discuss in detail what are the causes, effects and what the defect
-  or requirement is.
 
-* **Solution** Describes the proposed solution to the issue.
+Describe the logic changes that are necessary to resolve the issue.
+
+Without referring to specific files, explain how the code should be modified to solve the issue.
+
+Discuss in detail what are the causes, effects and what the defect or requirement is.
+
+For a bug, explain the root cause of the bug, and how the logic should be changed to fix it.
+
+For a feature, describe the components of the new functionality, and the role of each one.
 
 * **Proposed Changes** This section suggests which files should be changed in order to solve the issue.
 
-Each item in the \`Proposed Changes\` section SHOULD include the location (path and line number if possible)
-of the file that should be modified.
+Try to solve the problem with a minimal set of code changes.
+
+Each item in the \`Proposed Changes\` section SHOULD describe the function and logic that should be modified.
 
 DO provide a detailed description of the necessary changes.
 DO suggest changes to existing, non-test code files.
 DO NOT include a code snippet.
 DO NOT generate changes in test code, test cases, or documentation.
 DO NOT propose the creation of new files, unless it's absolutely necessary.
-
-**Examples**
-
-Title: Spike on method of TCS storage for workspace tagging
-
-Title: Implement Content Policy Detail Page "Created by" section to render user name and avatar
-
-Title: Add filters for CPS search to fetch Jira or Confluence results
-
-Change: \`app/view/card.vue\` Implement link from the app blocking rule card to the app blocking progress tracker \`app/view/progress.vue\`.
+DO NOT output code blocks or fenced code. Output only a text description of the suggested
+  changes, along with the file names.
 `;
 export class PlanAgent implements Agent {
   public readonly temperature = undefined;
