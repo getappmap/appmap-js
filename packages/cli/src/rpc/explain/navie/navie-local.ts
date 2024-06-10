@@ -145,64 +145,69 @@ export default class LocalNavie extends EventEmitter implements INavie {
     log(`[local-navie] Processing question ${userMessageId} in thread ${threadId}`);
     this.emit('ack', userMessageId, threadId);
 
-    const clientRequest: Navie.ClientRequest = {
-      question,
-      codeSelection,
-    };
-
-    const messages = await history.restoreMessages();
-    await history.saveMessage({ content: question, role: 'user' });
-
-    const startTime = Date.now();
-
-    const navieFn = navie(
-      clientRequest,
-      this.contextProvider,
-      this.projectInfoProvider,
-      this.helpProvider,
-      this.navieOptions,
-      messages
-    );
-
-    let agentName: string | undefined;
-    let classification: ContextV2.ContextLabel[] | undefined;
-
-    navieFn.on('event', (event) => this.emit('event', event));
-    navieFn.on('agent', (agent) => (agentName = agent));
-    navieFn.on('classification', (labels) => (classification = labels));
-
-    const response = new Array<string>();
-    for await (const token of navieFn.execute()) {
-      response.push(token);
-      this.emit('token', token, agentMessageId);
-    }
-    const endTime = Date.now();
-    const duration = endTime - startTime;
-
-    warn(`[local-navie] Completed question ${userMessageId} in ${duration}ms`);
-
-    await history.saveMessage({ content: response.join(''), role: 'assistant' });
-
-    {
-      const userMessage: UpdateUserMessage = {
-        agentName,
-        classification,
+    try {
+      const clientRequest: Navie.ClientRequest = {
+        question,
+        codeSelection,
       };
-      await reportFetchError('updateUserMessage', () =>
-        AI.updateUserMessage(userMessageId, userMessage)
-      );
-    }
-    {
-      const agentMessage: UpdateAgentMessage = {
-        responseLength: response.join('').length,
-        responseTime: duration,
-      };
-      await reportFetchError('updateAgentMessage', () =>
-        AI.updateAgentMessage(agentMessageId, agentMessage)
-      );
-    }
 
-    this.emit('complete');
+      const messages = await history.restoreMessages();
+      await history.saveMessage({ content: question, role: 'user' });
+
+      const startTime = Date.now();
+
+      const navieFn = navie(
+        clientRequest,
+        this.contextProvider,
+        this.projectInfoProvider,
+        this.helpProvider,
+        this.navieOptions,
+        messages
+      );
+
+      let agentName: string | undefined;
+      let classification: ContextV2.ContextLabel[] | undefined;
+
+      navieFn.on('event', (event) => this.emit('event', event));
+      navieFn.on('agent', (agent) => (agentName = agent));
+      navieFn.on('classification', (labels) => (classification = labels));
+
+      const response = new Array<string>();
+      for await (const token of navieFn.execute()) {
+        response.push(token);
+        this.emit('token', token, agentMessageId);
+      }
+      const endTime = Date.now();
+      const duration = endTime - startTime;
+
+      warn(`[local-navie] Completed question ${userMessageId} in ${duration}ms`);
+
+      await history.saveMessage({ content: response.join(''), role: 'assistant' });
+
+      {
+        const userMessage: UpdateUserMessage = {
+          agentName,
+          classification,
+        };
+        await reportFetchError('updateUserMessage', () =>
+          AI.updateUserMessage(userMessageId, userMessage)
+        );
+      }
+      {
+        const agentMessage: UpdateAgentMessage = {
+          responseLength: response.join('').length,
+          responseTime: duration,
+        };
+        await reportFetchError('updateAgentMessage', () =>
+          AI.updateAgentMessage(agentMessageId, agentMessage)
+        );
+      }
+
+      this.emit('complete');
+    } catch (e) {
+      this.emit('error', e);
+      throw e;
+    }
   }
 
   #skipTelemetry = !Telemetry.enabled;
