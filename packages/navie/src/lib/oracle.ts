@@ -3,6 +3,7 @@ import { warn } from 'console';
 import OpenAI from 'openai';
 
 import Message from '../message';
+import completion from './completion';
 
 export default class Oracle {
   constructor(
@@ -35,18 +36,13 @@ export default class Oracle {
       return result;
     };
 
-    const response = await openAI.completionWithRetry({
-      messages: collectMessages(),
-      model: openAI.modelName,
-      stream: true,
-    });
-    const tokens = Array<string>();
-    for await (const token of response) {
-      tokens.push(token.choices.map((choice) => choice.delta.content).join(''));
+    let response = '';
+    for await (const token of completion(openAI, collectMessages())) {
+      response += token;
     }
-    const rawResponse = tokens.join('');
-    warn(`${this.name} response:\n${rawResponse}`);
 
-    return rawResponse;
+    warn(`${this.name} response:\n${response}`);
+
+    return response;
   }
 }

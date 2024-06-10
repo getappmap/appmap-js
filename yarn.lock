@@ -28250,11 +28250,11 @@ __metadata:
   linkType: hard
 
 "js-tiktoken@npm:^1.0.7, js-tiktoken@npm:^1.0.8":
-  version: 1.0.8
-  resolution: "js-tiktoken@npm:1.0.8"
+  version: 1.0.12
+  resolution: "js-tiktoken@npm:1.0.12"
   dependencies:
     base64-js: ^1.5.1
-  checksum: ac6e666f14661b4e744bd60987e35275668863a686413bb35baca2d9a503bc95fcfa907f3c02b8e8abe4a4a70abe622c06cbb72ce3574b3b929d22f9146c3f85
+  checksum: 07a0e9cd5cb05f304696ac74e76d48f960d62b0443b65f0d09adf79dc903d2fba82d2cff2907491259bbf8b59842c20f89fd1879d2c0249706e7c84507c687fd
   languageName: node
   linkType: hard
 
