@@ -1,3 +1,32 @@
+# [@appland/appmap-v3.148.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.147.1...@appland/appmap-v3.148.0) (2024-06-11)
+
+
+### Bug Fixes
+
+* Direct output from the apply step to apply.md ([57df591](https://github.com/getappmap/appmap-js/commit/57df591191fa0b4d7186a25552bacad0eb9725e7))
+* Increase the context size for lint fixes ([a75e8a3](https://github.com/getappmap/appmap-js/commit/a75e8a3c6bfde63946704eb44fbf4f0f3bb591e9))
+* Push the file input after command line arguments in navie command ([a0116c3](https://github.com/getappmap/appmap-js/commit/a0116c305bfe131b3ee83af962234f53b471c42f))
+* Report errors instead of silently swallowing them ([aac761b](https://github.com/getappmap/appmap-js/commit/aac761befbd0a1409311623b6889cadd065001cf))
+* Skip loading of base file content for non-existent files ([4ab50ca](https://github.com/getappmap/appmap-js/commit/4ab50cacc0f8f760add7f6561770b2b68ba4bf72))
+* solve.py workflow and variable names ([43bab34](https://github.com/getappmap/appmap-js/commit/43bab34b6fd6c608bafbd343b557b9b4e13a9f3a))
+* Update lookupSourceCode ([d6ca646](https://github.com/getappmap/appmap-js/commit/d6ca6468ecebb5de2e111165053e3035d3980438))
+
+
+### Features
+
+* --code-selection/-c option to navie cmd ([600865f](https://github.com/getappmap/appmap-js/commit/600865f666154eef0175fc5d1be4c5e883689b8a))
+* [@apply](https://github.com/apply) and [@test](https://github.com/test) commands ([c4fcaea](https://github.com/getappmap/appmap-js/commit/c4fcaeacea6c9b1748ad20050af607024722d20c))
+* Add bin/solve script ([ef9d52c](https://github.com/getappmap/appmap-js/commit/ef9d52c31fc1ce0279c24c7cfa5db28676d4b02a))
+* Add lint functionality to bin/solve ([78cb9da](https://github.com/getappmap/appmap-js/commit/78cb9da09b1c2645164c1aed8aba714af30740b2))
+* Auto-fix lint errors ([5a1ce18](https://github.com/getappmap/appmap-js/commit/5a1ce18bb2cedc50ce8f2f1ec783390bf1fb3ba3))
+* Discourage complex changes ([af3cd02](https://github.com/getappmap/appmap-js/commit/af3cd02b09ac02815cdacea8fc8e1324e84c5c55))
+* Fix lint errors ([b607946](https://github.com/getappmap/appmap-js/commit/b607946409cde4fd203ba27e0d9c9448d66a9757))
+* Handle missing and unformatted files ([e1dc846](https://github.com/getappmap/appmap-js/commit/e1dc84646f6b4399d529888b62d68e6ed90e14dd))
+* Make the LLM make assertions about the output ([1495aff](https://github.com/getappmap/appmap-js/commit/1495aff32e72208736339790b64935f7060d1dd3))
+* Python version of solve ([c515ea5](https://github.com/getappmap/appmap-js/commit/c515ea5a9f9a1becc6c38f870e0becbf15f97ee0))
+* Use more straight file manipulation to apply changes ([2b0d624](https://github.com/getappmap/appmap-js/commit/2b0d62458f3f67f76e0d1e1f9862a279d670416a))
+* Use XML format for file change proposals ([ccbce23](https://github.com/getappmap/appmap-js/commit/ccbce231b7ac2802d860259214862a884e91d819))
+
 # [@appland/appmap-v3.147.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.147.0...@appland/appmap-v3.147.1) (2024-05-22)
 
 
