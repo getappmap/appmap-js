@@ -18,18 +18,16 @@ function findLineMatch(
   assert(trimmed.length && haystack.length);
 
   let needlePos = 0;
-  let start = -1;
-  for (let i = 0; i <= haystack.length; i += 1) {
+  let start = 0;
+  for (let i = 0; i < haystack.length; i += 1) {
     const hay = haystack[i].trim();
     // skip blank lines
     if (hay) {
+      if (trimmed[needlePos] !== hay) needlePos = 0;
       if (trimmed[needlePos] === hay) {
-        if (start < 0) start = i;
+        if (!needlePos) start = i;
         needlePos += 1;
         if (needlePos === trimmed.length) return [start, i - start + 1];
-      } else {
-        needlePos = 0;
-        start = -1;
       }
     }
   }

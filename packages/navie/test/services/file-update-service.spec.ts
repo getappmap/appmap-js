@@ -24,6 +24,10 @@ describe(FileUpdateService, () => {
   it('correctly applies an update even with broken whitespace', example('whitespace-mismatch'));
   it('correctly applies an update even with trailing newlines', example('trailing-newlines'));
   it('correctly applies an update even when blank lines mismatch', example('mismatch-blank-count'));
+  it(
+    'correctly applies an update even when there are repeated similar but mismatching lines',
+    example('mismatched-similar')
+  );
 
   let service: FileUpdateService;
 
