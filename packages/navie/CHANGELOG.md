@@ -1,3 +1,40 @@
+# [@appland/navie-v1.14.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.13.0...@appland/navie-v1.14.0) (2024-06-11)
+
+
+### Bug Fixes
+
+* Apply changes in a more robust way ([00bcb78](https://github.com/getappmap/appmap-js/commit/00bcb78ac5675ec13c91698e6082c8fb68ebd3de))
+* Direct output from the apply step to apply.md ([57df591](https://github.com/getappmap/appmap-js/commit/57df591191fa0b4d7186a25552bacad0eb9725e7))
+* Fixes to parseOptions ([7787ac8](https://github.com/getappmap/appmap-js/commit/7787ac8c09b4a605e63542d0f5a797ec1dac1fc7))
+* Ignore leading spaces when parsing options ([be4ff55](https://github.com/getappmap/appmap-js/commit/be4ff5507918e3a8590a08ba69dfef1a76f5fdff))
+* Let changeextractor accept different tag capitalization ([b4458c7](https://github.com/getappmap/appmap-js/commit/b4458c7d20bf606cb218e3abdae84e72cd640b10))
+* Trim leading and trailing whitespace in the modifications correctly ([c4e43fe](https://github.com/getappmap/appmap-js/commit/c4e43fe2824fabcd285e1f97eed7edfef9403978))
+* Tune the change parsing ([45f704b](https://github.com/getappmap/appmap-js/commit/45f704b9d4add57c6d9a8ba785aab4ee033d96ea))
+
+
+### Features
+
+* [@apply](https://github.com/apply) all described code changes ([499da29](https://github.com/getappmap/appmap-js/commit/499da296789a8a680014c73530bfd1ff0f1eee60))
+* [@apply](https://github.com/apply) and [@test](https://github.com/test) commands ([c4fcaea](https://github.com/getappmap/appmap-js/commit/c4fcaeacea6c9b1748ad20050af607024722d20c))
+* [@context](https://github.com/context) can dump as yaml or json ([c43c774](https://github.com/getappmap/appmap-js/commit/c43c774ea0827b50ef896a8bf8a5b8a644c11db9))
+* [@context](https://github.com/context) command ([1509709](https://github.com/getappmap/appmap-js/commit/1509709fda99c18f2a143997531e4d65f2c2dc54))
+* /nocontent option ([303a4c5](https://github.com/getappmap/appmap-js/commit/303a4c5f0619d8adc4d9c7792c99eb519f73be0d))
+* Add [@list-files](https://github.com/list-files) command ([ccebba2](https://github.com/getappmap/appmap-js/commit/ccebba2ebc4b830ff60c6951d807980975dd3ebd))
+* Add [@plan](https://github.com/plan) agent ([2d3985e](https://github.com/getappmap/appmap-js/commit/2d3985e06e80dc3a4e9356282b9ae270277f29a8))
+* Add bin/solve script ([ef9d52c](https://github.com/getappmap/appmap-js/commit/ef9d52c31fc1ce0279c24c7cfa5db28676d4b02a))
+* Detect [@command](https://github.com/command) on the first line by itself ([83a4fed](https://github.com/getappmap/appmap-js/commit/83a4fed2578131cc27bd1f88db7892c7417f4ba5))
+* Handle missing and unformatted files ([e1dc846](https://github.com/getappmap/appmap-js/commit/e1dc84646f6b4399d529888b62d68e6ed90e14dd))
+* Improve [@list-files](https://github.com/list-files) accuracy ([a337cc4](https://github.com/getappmap/appmap-js/commit/a337cc49042fc253cce48a07025e77738da49b28))
+* Improve [@plan](https://github.com/plan) prompt ([cf889f1](https://github.com/getappmap/appmap-js/commit/cf889f131335e55a7d1f2e579132c5a51bea1c30))
+* Make [@apply](https://github.com/apply) more effective ([22fdd3e](https://github.com/getappmap/appmap-js/commit/22fdd3eb1304def6d063ea03f9e560d83b3f470b))
+* Offer /nocontext ([a3b7090](https://github.com/getappmap/appmap-js/commit/a3b7090c30e5fda1c559a510d518b80e100ce45f))
+* Parse /slash options ([fcbae55](https://github.com/getappmap/appmap-js/commit/fcbae550914218b683f866ecd7089b800317ec9e))
+* Parse out the changes using <original> and <modified> syntax ([8b0bc46](https://github.com/getappmap/appmap-js/commit/8b0bc46ef38f79db50bcd66604d2e3c41b059f50))
+* Show cost estimates when calling the LLM ([d4a4c26](https://github.com/getappmap/appmap-js/commit/d4a4c262486981499cc1884f9fbec332dd747d9f))
+* Tighten up the expectations for [@plan](https://github.com/plan) ([2a4dd6c](https://github.com/getappmap/appmap-js/commit/2a4dd6c86a5db7566d6cd9b6fe62803d92d05040))
+* Use more straight file manipulation to apply changes ([2b0d624](https://github.com/getappmap/appmap-js/commit/2b0d62458f3f67f76e0d1e1f9862a279d670416a))
+* Use XML format for file change proposals ([ccbce23](https://github.com/getappmap/appmap-js/commit/ccbce231b7ac2802d860259214862a884e91d819))
+
 # [@appland/navie-v1.13.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.12.0...@appland/navie-v1.13.0) (2024-05-22)
 
 
