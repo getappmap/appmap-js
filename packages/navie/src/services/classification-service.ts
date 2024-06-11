@@ -2,6 +2,7 @@ import { ChatOpenAI } from '@langchain/openai';
 import OpenAI from 'openai';
 import InteractionHistory, { ClassificationEvent } from '../interaction-history';
 import { ContextV2 } from '../context';
+import completion from '../lib/completion';
 import { ChatHistory } from '../navie';
 
 const SYSTEM_PROMPT = `**Question classifier**
@@ -166,16 +167,10 @@ export default class ClassificationService {
       },
     ];
 
-    // eslint-disable-next-line no-await-in-loop
-    const response = await openAI.completionWithRetry({
-      messages,
-      model: openAI.modelName,
-      stream: true,
-    });
+    const response = completion(openAI, messages);
     const tokens = Array<string>();
-    // eslint-disable-next-line no-await-in-loop
     for await (const token of response) {
-      tokens.push(token.choices.map((choice) => choice.delta.content).join(''));
+      tokens.push(token);
     }
     const rawTerms = tokens.join('');
 

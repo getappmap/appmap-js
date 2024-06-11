@@ -242,10 +242,10 @@ async function getQuestion(path?: string, literal?: string[]): Promise<string> {
 
   if (targetPath === '-') {
     warn('Reading question from stdin');
-    question.unshift(await text(process.stdin));
+    question.push(await text(process.stdin));
   } else if (targetPath) {
     warn(`Reading question from ${targetPath}`);
-    question.unshift(await readFile(targetPath, 'utf-8'));
+    question.push(await readFile(targetPath, 'utf-8'));
   }
 
   return question.join(' ');

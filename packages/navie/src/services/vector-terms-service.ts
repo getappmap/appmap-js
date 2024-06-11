@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import OpenAI from 'openai';
 import { warn } from 'console';
 import { ChatOpenAI } from '@langchain/openai';
@@ -6,6 +5,7 @@ import { ChatOpenAI } from '@langchain/openai';
 import InteractionHistory, { VectorTermsInteractionEvent } from '../interaction-history';
 import contentAfter from '../lib/content-after';
 import parseJSON from '../lib/parse-json';
+import completion from '../lib/completion';
 
 const SYSTEM_PROMPT = `You are assisting a developer to search a code base.
 
@@ -131,16 +131,10 @@ export default class VectorTermsService {
       },
     ];
 
-    // eslint-disable-next-line no-await-in-loop
-    const response = await openAI.completionWithRetry({
-      messages,
-      model: openAI.modelName,
-      stream: true,
-    });
+    const response = completion(openAI, messages);
     const tokens = Array<string>();
-    // eslint-disable-next-line no-await-in-loop
     for await (const token of response) {
-      tokens.push(token.choices.map((choice) => choice.delta.content).join(''));
+      tokens.push(token);
     }
     const rawResponse = tokens.join('');
     warn(`Vector terms response:\n${rawResponse}`);
