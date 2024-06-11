@@ -7,6 +7,7 @@ import VectorTermsService from '../../src/services/vector-terms-service';
 import { suggestsVectorTerms } from '../fixture';
 import LookupContextService from '../../src/services/lookup-context-service';
 import TechStackService from '../../src/services/tech-stack-service';
+import { UserOptions } from '../../src/lib/parse-options';
 
 describe('HelpAgent', () => {
   const question = 'How to make a diagram?';
@@ -60,6 +61,7 @@ describe('HelpAgent', () => {
     const options = new AgentOptions(
       question,
       question,
+      new UserOptions(new Map()),
       [],
       [
         {
@@ -123,6 +125,7 @@ describe('HelpAgent', () => {
     const options = new AgentOptions(
       question,
       question,
+      new UserOptions(new Map()),
       [],
       [
         {

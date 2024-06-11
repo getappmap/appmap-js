@@ -9,8 +9,8 @@ import MemoryService from '../services/memory-service';
 import ProjectInfoService from '../services/project-info-service';
 import InteractionHistory from '../interaction-history';
 import { ProjectInfo } from '../project-info';
-import Command from '../command';
-import { ChatHistory, ClientRequest } from '../navie';
+import Command, { CommandRequest } from '../command';
+import { ChatHistory } from '../navie';
 
 export type ExplainOptions = {
   tokenLimit: number;
@@ -29,8 +29,8 @@ export default class ExplainCommand implements Command {
     private readonly memoryService: MemoryService
   ) {}
 
-  async *execute(clientRequest: ClientRequest, chatHistory?: ChatHistory): AsyncIterable<string> {
-    const { question: baseQuestion, codeSelection } = clientRequest;
+  async *execute(request: CommandRequest, chatHistory?: ChatHistory): AsyncIterable<string> {
+    const { question: baseQuestion, codeSelection } = request;
 
     const contextLabelsFn = this.classifierService.classifyQuestion(baseQuestion, chatHistory);
 
@@ -69,6 +69,7 @@ export default class ExplainCommand implements Command {
     const agentOptions = new AgentOptions(
       question,
       aggregateQuestion,
+      request.userOptions,
       chatHistory?.map((message) => message.content) || [],
       projectInfo,
       codeSelection,

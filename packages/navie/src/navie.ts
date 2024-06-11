@@ -26,6 +26,12 @@ import Message from './message';
 import VectorTermsCommand from './commands/vector-terms-command';
 import TechStackService from './services/tech-stack-service';
 import TechStackCommand from './commands/tech-stack-command';
+import ContextCommand from './commands/context-command';
+import ApplyCommand from './commands/apply-command';
+import FileChangeExtractorService from './services/file-change-extractor-service';
+import FileUpdateService from './services/file-update-service';
+import parseOptions from './lib/parse-options';
+import ListFilesCommand from './commands/list-files-command';
 
 export type ChatHistory = Message[];
 
@@ -87,19 +93,20 @@ export default function navie(
     options.temperature
   );
 
+  const contextProviderV2 = async (
+    request: ContextV2.ContextRequest
+  ): Promise<ContextV2.ContextResponse> =>
+    contextProvider({ ...request, version: 2, type: 'search' });
+
+  const lookupContextService = new LookupContextService(
+    interactionHistory,
+    contextProviderV2,
+    helpProvider
+  );
+
   const buildExplainCommand = () => {
     const codeSelectionService = new CodeSelectionService(interactionHistory);
 
-    const contextProviderV2 = async (
-      request: ContextV2.ContextRequest
-    ): Promise<ContextV2.ContextResponse> =>
-      contextProvider({ ...request, version: 2, type: 'search' });
-
-    const lookupContextService = new LookupContextService(
-      interactionHistory,
-      contextProviderV2,
-      helpProvider
-    );
     const applyContextService = new ApplyContextService(interactionHistory);
 
     const agentSelectionService = new AgentSelectionService(
@@ -128,17 +135,35 @@ export default function navie(
     );
   };
 
+  const fileChangeExtractor = new FileChangeExtractorService(
+    interactionHistory,
+    options.modelName,
+    options.temperature
+  );
+
+  const fileUpdateService = new FileUpdateService(interactionHistory);
+
   const buildClassifyCommand = () => new ClassifyCommand(classificationService);
 
   const buildVectorTermsCommand = () => new VectorTermsCommand(vectorTermsService);
 
   const buildTechStackCommand = () => new TechStackCommand(techStackService);
 
+  const buildListFileCommand = () => new ListFilesCommand(fileChangeExtractor);
+
+  const buildContextCommand = () =>
+    new ContextCommand(options, vectorTermsService, lookupContextService);
+
+  const buildApplyCommand = () => new ApplyCommand(fileChangeExtractor, fileUpdateService);
+
   const commandBuilders: Record<CommandMode, () => Command> = {
     [CommandMode.Explain]: buildExplainCommand,
     [CommandMode.Classify]: buildClassifyCommand,
+    [CommandMode.ListFiles]: buildListFileCommand,
     [CommandMode.VectorTerms]: buildVectorTermsCommand,
     [CommandMode.TechStack]: buildTechStackCommand,
+    [CommandMode.Context]: buildContextCommand,
+    [CommandMode.Apply]: buildApplyCommand,
   };
 
   let { question } = clientRequest;
@@ -147,7 +172,7 @@ export default function navie(
   let command: Command | undefined;
   for (const commandMode of Object.values(CommandMode)) {
     const prefix = `@${commandMode} `;
-    if (question.startsWith(prefix)) {
+    if (question.startsWith(prefix) || question.split('\n')[0].trim() === `@${commandMode}`) {
       command = commandBuilders[commandMode]();
       question = question.slice(prefix.length);
       break;
@@ -156,7 +181,9 @@ export default function navie(
 
   if (!command) command = buildExplainCommand();
 
-  clientRequest.question = question;
+  const { options: userOptions, question: questionText } = parseOptions(question);
+
+  clientRequest.question = questionText;
 
   class Navie extends EventEmitter implements INavie {
     constructor() {
@@ -179,7 +206,7 @@ export default function navie(
     async *execute(): AsyncIterable<string> {
       assert(command, 'Command not specified');
 
-      yield* command.execute(clientRequest, chatHistory);
+      yield* command.execute({ ...clientRequest, userOptions }, chatHistory);
     }
   }
 

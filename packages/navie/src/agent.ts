@@ -1,16 +1,20 @@
 import { ContextV2 } from './context';
+import { UserOptions } from './lib/parse-options';
 import { ProjectInfo } from './project-info';
 
 export enum AgentMode {
   Explain = 'explain',
   Generate = 'generate',
   Help = 'help',
+  Test = 'test',
+  Plan = 'plan',
 }
 
 export class AgentOptions {
   constructor(
     public question: string,
     public aggregateQuestion: string,
+    public userOptions: UserOptions,
     public chatHistory: string[],
     public projectInfo: ProjectInfo[],
     public codeSelection?: string,

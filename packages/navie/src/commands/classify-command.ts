@@ -1,12 +1,12 @@
-import Command from '../command';
-import { ChatHistory, ClientRequest } from '../navie';
+import Command, { CommandRequest } from '../command';
+import { ChatHistory } from '../navie';
 import ClassificationService from '../services/classification-service';
 
 export default class ClassifyCommand implements Command {
   constructor(private readonly classificationService: ClassificationService) {}
 
-  async *execute(clientRequest: ClientRequest, chatHistory?: ChatHistory): AsyncIterable<string> {
-    const { question: baseQuestion } = clientRequest;
+  async *execute(request: CommandRequest, chatHistory?: ChatHistory): AsyncIterable<string> {
+    const { question: baseQuestion } = request;
 
     const contextLabels = await this.classificationService.classifyQuestion(
       baseQuestion,

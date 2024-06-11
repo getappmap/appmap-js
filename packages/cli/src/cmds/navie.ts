@@ -176,6 +176,11 @@ export function builder<T>(args: yargs.Argv<T>) {
       describe: 'Input path',
       type: 'string',
       alias: 'i',
+    })
+    .option('code-selection', {
+      describe: 'Code selection path',
+      type: 'string',
+      alias: 'c',
     });
 }
 
@@ -203,10 +208,17 @@ export async function handler(argv: HandlerArguments) {
     if (codeEditor) warn(`Detected code editor: ${codeEditor}`);
   }
 
+  let codeSelection: string | undefined;
+  if (argv.codeSelection) codeSelection = await readFile(argv.codeSelection, 'utf-8');
+
   const question = await getQuestion(argv.input, argv.question);
   const capturingProvider = (...args: Parameters<INavieProvider>) =>
     attachNavie(buildNavieProvider(argv)(...args));
-  await explainHandler(capturingProvider, codeEditor).handler({ question });
+
+  // WIP: Help the @apply command to resolve paths
+  if (argv.directory.length === 1) process.chdir(argv.directory[0]);
+
+  await explainHandler(capturingProvider, codeEditor).handler({ question, codeSelection });
 }
 
 function openOutput(outputPath: string | undefined): Writable {
@@ -230,10 +242,10 @@ async function getQuestion(path?: string, literal?: string[]): Promise<string> {
 
   if (targetPath === '-') {
     warn('Reading question from stdin');
-    question.unshift(await text(process.stdin));
+    question.push(await text(process.stdin));
   } else if (targetPath) {
     warn(`Reading question from ${targetPath}`);
-    question.unshift(await readFile(targetPath, 'utf-8'));
+    question.push(await readFile(targetPath, 'utf-8'));
   }
 
   return question.join(' ');

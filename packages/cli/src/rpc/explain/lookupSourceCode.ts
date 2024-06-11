@@ -19,7 +19,7 @@ export const LANGUAGE_BY_FILE_EXTENSION: Record<string, 'js' | 'java' | 'ruby' |
 
 // TODO: Look up different types of files
 const scannedExtensions = new Set<string>();
-let FILE_NAMES = new Set<string>();
+const FILE_NAMES = new Set<string>();
 
 // TODO: Return source code up to the next location in the class map.
 // TODO: Reverse-strip comment that follow the function.
@@ -40,7 +40,7 @@ export default async function lookupSourceCode(
       ignore: [
         '**/node_modules/**',
         '**/vendor/**',
-        '**/tmp/**',
+        'tmp/**',
         '**/build/**',
         '**/dist/**',
         '**/target/**',

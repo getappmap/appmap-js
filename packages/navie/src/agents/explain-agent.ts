@@ -62,16 +62,21 @@ export default class ExplainAgent implements Agent {
       )
     );
 
-    const tokenCount = tokensAvailable();
-    const vectorTerms = await this.vectorTermsService.suggestTerms(options.aggregateQuestion);
+    const { aggregateQuestion } = options;
 
-    const context = await this.lookupContextService.lookupContext(
-      vectorTerms,
-      tokenCount,
-      options.contextLabels
-    );
+    const lookupContext = options.userOptions.isEnabled('context', true);
+    if (lookupContext) {
+      const tokenCount = tokensAvailable();
+      const vectorTerms = await this.vectorTermsService.suggestTerms(aggregateQuestion);
 
-    LookupContextService.applyContext(context, [], this.applyContextService, tokenCount);
+      const context = await this.lookupContextService.lookupContext(
+        vectorTerms,
+        tokenCount,
+        options.contextLabels
+      );
+
+      LookupContextService.applyContext(context, [], this.applyContextService, tokenCount);
+    }
   }
 
   applyQuestionPrompt(question: string): void {

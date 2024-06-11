@@ -1,6 +1,7 @@
 import { ChatOpenAI } from '@langchain/openai';
 import OpenAI from 'openai';
 import InteractionHistory, { TechStackEvent } from '../interaction-history';
+import completion from '../lib/completion';
 
 const SYSTEM_PROMPT = `**Programming language and framework detector**
 
@@ -71,16 +72,10 @@ export default class TechStackService {
       },
     ];
 
-    // eslint-disable-next-line no-await-in-loop
-    const response = await openAI.completionWithRetry({
-      messages,
-      model: openAI.modelName,
-      stream: true,
-    });
+    const response = completion(openAI, messages);
     const tokens = Array<string>();
-    // eslint-disable-next-line no-await-in-loop
     for await (const token of response) {
-      tokens.push(token.choices.map((choice) => choice.delta.content).join(''));
+      tokens.push(token);
     }
     const rawTerms = tokens.join('');
 

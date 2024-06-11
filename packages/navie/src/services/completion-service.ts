@@ -2,6 +2,7 @@ import { ChatOpenAI } from '@langchain/openai';
 
 import InteractionHistory, { CompletionEvent } from '../interaction-history';
 import type Message from '../message';
+import completion from '../lib/completion';
 
 export type Completion = AsyncIterable<string>;
 
@@ -42,15 +43,6 @@ export class OpenAICompletionService implements CompletionService {
       new CompletionEvent(this.modelName, options.temperature || this.temperature)
     );
 
-    const response = await chatAI.completionWithRetry({
-      messages: mergeSystemMessages(messages),
-      model: this.modelName,
-      stream: true,
-    });
-
-    for await (const token of response) {
-      const content = token.choices.map((choice) => choice.delta.content).join('');
-      yield content;
-    }
+    yield* completion(chatAI, mergeSystemMessages(messages));
   }
 }

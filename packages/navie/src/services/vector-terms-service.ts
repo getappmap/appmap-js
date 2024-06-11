@@ -1,10 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import OpenAI from 'openai';
 import { warn } from 'console';
 import { ChatOpenAI } from '@langchain/openai';
 
 import InteractionHistory, { VectorTermsInteractionEvent } from '../interaction-history';
-import trimFences from '../lib/trim-fences';
+import contentAfter from '../lib/content-after';
+import parseJSON from '../lib/parse-json';
+import completion from '../lib/completion';
 
 const SYSTEM_PROMPT = `You are assisting a developer to search a code base.
 
@@ -103,22 +104,6 @@ Terms: +auth authentication authorization token strategy provider`,
   },
 ];
 
-const contentAfter = (text: string, start: string): string => {
-  const startIndex = text.indexOf(start);
-  if (startIndex < 0) return text;
-
-  return text.slice(startIndex + start.length);
-};
-
-const parseJSON = (text: string): Record<string, unknown> | string | string[] | undefined => {
-  const sanitizedTerms = text.replace(/```json/g, '').replace(/```/g, '');
-  try {
-    return JSON.parse(sanitizedTerms);
-  } catch (err) {
-    return undefined;
-  }
-};
-
 const parseText = (text: string): string[] => text.split(/\s+/);
 
 export default class VectorTermsService {
@@ -146,16 +131,10 @@ export default class VectorTermsService {
       },
     ];
 
-    // eslint-disable-next-line no-await-in-loop
-    const response = await openAI.completionWithRetry({
-      messages,
-      model: openAI.modelName,
-      stream: true,
-    });
+    const response = completion(openAI, messages);
     const tokens = Array<string>();
-    // eslint-disable-next-line no-await-in-loop
     for await (const token of response) {
-      tokens.push(token.choices.map((choice) => choice.delta.content).join(''));
+      tokens.push(token);
     }
     const rawResponse = tokens.join('');
     warn(`Vector terms response:\n${rawResponse}`);
@@ -164,8 +143,9 @@ export default class VectorTermsService {
     {
       let responseText = rawResponse;
       responseText = contentAfter(responseText, 'Terms:');
-      responseText = trimFences(responseText);
-      searchTermsObject = parseJSON(responseText) || parseText(responseText);
+      searchTermsObject =
+        parseJSON<Record<string, unknown> | string | string[]>(responseText, undefined) ||
+        parseText(responseText);
     }
 
     const terms = new Set<string>();
