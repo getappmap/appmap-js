@@ -50,19 +50,19 @@ describe('explainHandler', () => {
       const codeSelection = 'int main() { return 0; }';
       const questions = ['how do i??', 'but i cant??'];
       await explain({ question: questions[0], codeSelection, threadId });
-      expect(navie.ask).toHaveBeenCalledWith(threadId, questions[0], codeSelection);
+      expect(navie.ask).toHaveBeenCalledWith(threadId, questions[0], codeSelection, undefined);
 
       // The same threadId should be used for the next call
       // Note that codeSelection is not given
       await explain({ question: questions[1], threadId });
-      expect(navie.ask).toHaveBeenCalledWith(threadId, questions[1], codeSelection);
+      expect(navie.ask).toHaveBeenCalledWith(threadId, questions[1], codeSelection, undefined);
     });
 
     it('does not cache the code selection by threadId if codeSelection is not given', async () => {
       const threadId = 'the-other-thread-id';
       for (const question of ['???', 'now what?']) {
         await explain({ question: question, threadId });
-        expect(navie.ask).toHaveBeenCalledWith(threadId, question, undefined);
+        expect(navie.ask).toHaveBeenCalledWith(threadId, question, undefined, undefined);
       }
     });
   });

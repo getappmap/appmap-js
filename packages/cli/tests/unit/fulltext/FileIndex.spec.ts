@@ -107,7 +107,7 @@ describe('FileIndex', () => {
       } as any);
       jest.spyOn(listGitProjectFiles, 'default').mockResolvedValue(fileNames);
 
-      await fileIndex.indexDirectories(['dir1'], batchSize);
+      await fileIndex.indexDirectories(['dir1'], undefined, batchSize);
 
       expect(indexDirectory).toHaveBeenCalledTimes(numFiles / batchSize);
       expect(indexFile).toHaveBeenCalledTimes(numFiles);

@@ -52,8 +52,8 @@ export class Explain extends EventEmitter {
     public codeSelection: string | undefined,
     public appmaps: string[] | undefined,
     public status: ExplainRpc.ExplainStatusResponse,
-    public codeEditor: string | undefined,
-    public prompt: string | undefined
+    public codeEditor?: string,
+    public prompt?: string
   ) {
     super();
   }
@@ -150,7 +150,8 @@ export class Explain extends EventEmitter {
       this.projectDirectories,
       this.appmaps,
       keywords,
-      charLimit
+      charLimit,
+      data.exclude
     );
 
     this.status.searchResponse = searchResult.searchResponse;

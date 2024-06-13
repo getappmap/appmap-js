@@ -27,8 +27,8 @@ export default class RemoteNavie extends EventEmitter implements INavie {
   async ask(
     threadId: string,
     question: string,
-    codeSelection: string | undefined,
-    prompt: string | undefined
+    codeSelection?: string,
+    prompt?: string
   ) {
     if (prompt) {
       warn(`RemoteNavie does not support a custom prompt option.`);

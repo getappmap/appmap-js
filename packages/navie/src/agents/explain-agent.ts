@@ -65,6 +65,7 @@ export default class ExplainAgent implements Agent {
 
     const lookupContext = options.userOptions.isEnabled('context', true);
     const transformTerms = options.userOptions.isEnabled('terms', true);
+    const exclude = options.userOptions.stringValue('exclude');
     if (lookupContext) {
       const tokenCount = tokensAvailable();
       const searchTerms = await transformSearchTerms(
@@ -76,7 +77,8 @@ export default class ExplainAgent implements Agent {
       const context = await this.lookupContextService.lookupContext(
         searchTerms,
         tokenCount,
-        options.contextLabels
+        options.contextLabels,
+        exclude ? [exclude] : undefined
       );
 
       LookupContextService.applyContext(context, [], this.applyContextService, tokenCount);

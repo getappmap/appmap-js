@@ -20,7 +20,8 @@ export default class ContextCommand implements Command {
     const fence = request.userOptions.isEnabled('fence', true);
     const format = request.userOptions.stringValue('format') || 'yaml';
     const tokenLimit = request.userOptions.numberValue('tokenlimit') || this.options.tokenLimit;
-    const transformTerms = request.userOptions.booleanValue('terms', true);
+    const transformTerms = request.userOptions.isEnabled('terms', true);
+    const exclude = request.userOptions.stringValue('exclude');
 
     const aggregateQuestion = [
       ...(chatHistory || [])
@@ -37,7 +38,12 @@ export default class ContextCommand implements Command {
       aggregateQuestion,
       this.vectorTermsService
     );
-    const context = await this.lookupContextService.lookupContext(searchTerms, tokenLimit, []);
+    const context = await this.lookupContextService.lookupContext(
+      searchTerms,
+      tokenLimit,
+      [],
+      exclude ? [exclude] : undefined
+    );
 
     let contextStr: string;
     if (format === 'yaml') {

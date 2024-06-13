@@ -102,8 +102,8 @@ export default class LocalNavie extends EventEmitter implements INavie {
   async ask(
     threadId: string | undefined,
     question: string,
-    codeSelection: string | undefined,
-    prompt: string | undefined
+    codeSelection?: string,
+    prompt?: string
   ): Promise<void> {
     if (!threadId) {
       warn(`[local-navie] No threadId provided for question. Allocating a new threadId.`);

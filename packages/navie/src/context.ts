@@ -114,6 +114,8 @@ export namespace ContextV2 {
     itemTypes?: ContextItemType[];
     // Emphasize context items that are relevant to the classification of the user's request.
     labels?: ContextLabel[];
+    // Optional list of file patterns to exclude.
+    exclude?: string[];
   };
 
   export type ContextResponse = Array<ContextItem | FileContextItem>;
