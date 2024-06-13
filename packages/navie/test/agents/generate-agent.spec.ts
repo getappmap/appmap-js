@@ -62,7 +62,9 @@ describe('@generate agent', () => {
 
       expect(lookupContextService.lookupContext).toHaveBeenCalledWith(
         ['user', 'management'],
-        tokensAvailable
+        tokensAvailable,
+        undefined,
+        undefined
       );
       expect(lookupContextService.lookupHelp).not.toHaveBeenCalled();
     });

@@ -6,6 +6,7 @@ import VectorTermsService from '../services/vector-terms-service';
 import LookupContextService from '../services/lookup-context-service';
 import TechStackService from '../services/tech-stack-service';
 import { CHARACTERS_PER_TOKEN } from '../message';
+import transformSearchTerms from '../lib/transform-search-terms';
 
 export const HELP_AGENT_PROMPT = `**Task: Providing Help with AppMap**
 
@@ -210,7 +211,12 @@ export default class HelpAgent implements Agent {
       );
     }
 
-    const vectorTerms = await this.vectorTermsService.suggestTerms(options.aggregateQuestion);
+    const transformTerms = options.userOptions.isEnabled('terms', true);
+    const searchTerms = await transformSearchTerms(
+      transformTerms,
+      options.aggregateQuestion,
+      this.vectorTermsService
+    );
     const tokenCount = tokensAvailable();
 
     const collectLanguages = () => {
@@ -222,7 +228,7 @@ export default class HelpAgent implements Agent {
 
     let helpContext = await this.lookupContextService.lookupHelp(
       [...new Set([...collectLanguages(), ...techStackTerms])].sort(),
-      vectorTerms,
+      searchTerms,
       tokenCount
     );
 

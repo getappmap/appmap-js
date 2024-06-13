@@ -1,5 +1,6 @@
 import { Agent, AgentOptions } from '../agent';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
+import transformSearchTerms from '../lib/transform-search-terms';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 import ApplyContextService from '../services/apply-context-service';
 import LookupContextService from '../services/lookup-context-service';
@@ -64,10 +65,15 @@ export default class GenerateAgent implements Agent {
     );
 
     const lookupContext = options.userOptions.isEnabled('context', true);
+    const transformTerms = options.userOptions.isEnabled('terms', true);
     if (lookupContext) {
-      const vectorTerms = await this.vectorTermsService.suggestTerms(options.aggregateQuestion);
+      const searchTerms = await transformSearchTerms(
+        transformTerms,
+        options.aggregateQuestion,
+        this.vectorTermsService
+      );
       const tokenCount = tokensAvailable();
-      const context = await this.lookupContextService.lookupContext(vectorTerms, tokenCount);
+      const context = await this.lookupContextService.lookupContext(searchTerms, tokenCount);
       LookupContextService.applyContext(context, [], this.applyContextService, tokenCount);
     }
   }

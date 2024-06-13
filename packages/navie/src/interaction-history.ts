@@ -76,7 +76,7 @@ export class ClassificationEvent extends InteractionEvent {
 export class PromptInteractionEvent extends InteractionEvent {
   constructor(
     public name: PromptType | string,
-    public role: 'user' | 'system',
+    public role: 'user' | 'assistant' | 'system',
     public content: string,
     public prefix?: string
   ) {

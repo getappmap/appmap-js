@@ -76,6 +76,7 @@ describe('@explain agent', () => {
       expect(lookupContextService.lookupContext).toHaveBeenCalledWith(
         ['user', 'management'],
         tokensAvailable,
+        undefined,
         undefined
       );
       expect(lookupContextService.lookupHelp).not.toHaveBeenCalled();

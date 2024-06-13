@@ -102,7 +102,8 @@ export default class LocalNavie extends EventEmitter implements INavie {
   async ask(
     threadId: string | undefined,
     question: string,
-    codeSelection: string | undefined
+    codeSelection: string | undefined,
+    prompt: string | undefined
   ): Promise<void> {
     if (!threadId) {
       warn(`[local-navie] No threadId provided for question. Allocating a new threadId.`);
@@ -149,6 +150,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
       const clientRequest: Navie.ClientRequest = {
         question,
         codeSelection,
+        prompt,
       };
 
       const messages = await history.restoreMessages();

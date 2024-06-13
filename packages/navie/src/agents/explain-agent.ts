@@ -4,6 +4,7 @@ import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 import VectorTermsService from '../services/vector-terms-service';
 import LookupContextService from '../services/lookup-context-service';
 import ApplyContextService from '../services/apply-context-service';
+import transformSearchTerms from '../lib/transform-search-terms';
 
 const EXPLAIN_AGENT_PROMPT = `**Task: Explaining Code, Analyzing Code, Generating Code**
 
@@ -62,15 +63,18 @@ export default class ExplainAgent implements Agent {
       )
     );
 
-    const { aggregateQuestion } = options;
-
     const lookupContext = options.userOptions.isEnabled('context', true);
+    const transformTerms = options.userOptions.isEnabled('terms', true);
     if (lookupContext) {
       const tokenCount = tokensAvailable();
-      const vectorTerms = await this.vectorTermsService.suggestTerms(aggregateQuestion);
+      const searchTerms = await transformSearchTerms(
+        transformTerms,
+        options.aggregateQuestion,
+        this.vectorTermsService
+      );
 
       const context = await this.lookupContextService.lookupContext(
-        vectorTerms,
+        searchTerms,
         tokenCount,
         options.contextLabels
       );
