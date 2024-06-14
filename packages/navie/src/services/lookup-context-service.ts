@@ -1,4 +1,4 @@
-import { log } from 'console';
+import { warn } from 'console';
 import InteractionHistory, { ContextLookupEvent, HelpLookupEvent } from '../interaction-history';
 import { ContextV2 } from '../context';
 import { CHARACTERS_PER_TOKEN } from '../message';
@@ -17,8 +17,14 @@ export default class LookupContextService {
   async lookupContext(
     keywords: string[],
     tokenCount: number,
-    contextLabels?: ContextV2.ContextLabel[]
+    contextLabels?: ContextV2.ContextLabel[],
+    exclude?: string[]
   ): Promise<ContextV2.ContextResponse> {
+    if (keywords.length === 0) {
+      warn('WARNING: No keywords provided');
+      return [];
+    }
+
     const contextRequestPayload: ContextV2.ContextRequest & { version: 2; type: 'search' } = {
       version: 2,
       type: 'search',
@@ -26,6 +32,7 @@ export default class LookupContextService {
       tokenCount,
     };
     if (contextLabels) contextRequestPayload.labels = contextLabels;
+    if (exclude) contextRequestPayload.exclude = exclude;
 
     const context = await this.contextFn(contextRequestPayload);
 
@@ -33,7 +40,7 @@ export default class LookupContextService {
     if (contextFound) {
       this.interactionHistory.addEvent(new ContextLookupEvent(context));
     } else {
-      log('No context found');
+      warn('No context found');
       this.interactionHistory.addEvent(new ContextLookupEvent(undefined));
     }
 
@@ -56,7 +63,7 @@ export default class LookupContextService {
     if (helpFound) {
       this.interactionHistory.addEvent(new HelpLookupEvent(help));
     } else {
-      log('No help found');
+      warn('No help found');
       this.interactionHistory.addEvent(new HelpLookupEvent(undefined));
     }
 

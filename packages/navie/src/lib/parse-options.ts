@@ -6,7 +6,7 @@ export class UserOptions {
     return this.options.has(key);
   }
 
-  isEnabled(key: string, defaultValue?: boolean): boolean | undefined {
+  isEnabled(key: string, defaultValue: boolean): boolean {
     return this.booleanValue(key, defaultValue);
   }
 
@@ -22,7 +22,7 @@ export class UserOptions {
     return defaultValue;
   }
 
-  booleanValue(key: string, defaultValue?: boolean): boolean | undefined {
+  booleanValue(key: string, defaultValue: boolean): boolean {
     if (!this.options.has(key)) return defaultValue;
 
     const value = this.options.get(key);

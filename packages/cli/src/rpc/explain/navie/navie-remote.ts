@@ -24,7 +24,15 @@ export default class RemoteNavie extends EventEmitter implements INavie {
     throw new Error(`RemoteNavie does not support option '${key}'`);
   }
 
-  async ask(threadId: string, question: string, codeSelection: string | undefined) {
+  async ask(
+    threadId: string,
+    question: string,
+    codeSelection?: string,
+    prompt?: string
+  ) {
+    if (prompt) {
+      warn(`RemoteNavie does not support a custom prompt option.`);
+    }
     (
       await AI.connect({
         onAck: (userMessageId, threadId) => {

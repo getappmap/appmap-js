@@ -79,12 +79,18 @@ export default class TestAgent implements Agent {
     );
 
     const lookupContext = options.userOptions.isEnabled('context', true);
+    const exclude = options.userOptions.stringValue('exclude');
     if (lookupContext) {
       const vectorTerms = await this.vectorTermsService.suggestTerms(options.aggregateQuestion);
       vectorTerms.push('test');
       vectorTerms.push('spec');
       const tokenCount = tokensAvailable();
-      const context = await this.lookupContextService.lookupContext(vectorTerms, tokenCount);
+      const context = await this.lookupContextService.lookupContext(
+        vectorTerms,
+        tokenCount,
+        undefined,
+        exclude ? [exclude] : undefined
+      );
       LookupContextService.applyContext(context, [], this.applyContextService, tokenCount);
     }
   }

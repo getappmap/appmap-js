@@ -167,7 +167,7 @@ describe('Explain', () => {
 
         expect(explain.conversationThread).toBeUndefined();
         expect(status).toEqual({ step: ExplainRpc.Step.NEW });
-        expect(navie.ask).toHaveBeenCalledWith(undefined, question, undefined);
+        expect(navie.ask).toHaveBeenCalledWith(undefined, question, undefined, undefined);
       });
 
       describe('and navie acks the message', () => {
