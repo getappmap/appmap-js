@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.149.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.148.0...@appland/appmap-v3.149.0) (2024-06-18)
+
+
+### Features
+
+* --prompt and /noterms options ([9802fdc](https://github.com/getappmap/appmap-js/commit/9802fdc9baded47ccc565ed6f4fb79850f1d3ad6))
+* Exclude context by file pattern ([0ad604a](https://github.com/getappmap/appmap-js/commit/0ad604a99ac745326facefaf0ad4c2990a9ae813))
+
 # [@appland/appmap-v3.148.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.147.1...@appland/appmap-v3.148.0) (2024-06-11)
 
 
