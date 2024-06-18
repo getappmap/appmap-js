@@ -1,3 +1,19 @@
+# [@appland/navie-v1.15.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.14.0...@appland/navie-v1.15.0) (2024-06-18)
+
+
+### Bug Fixes
+
+* Tolerate mismatch in number of blank lines when applying update ([230d14f](https://github.com/getappmap/appmap-js/commit/230d14fcc83cffb620e3a2f543f5885204df68e6)), closes [#1841](https://github.com/getappmap/appmap-js/issues/1841)
+* Tolerate mismatch in number of blank lines when applying update ([ee6a4c8](https://github.com/getappmap/appmap-js/commit/ee6a4c8f2bd3ac7e24a27b251f4c34c6de1c522f)), closes [#1841](https://github.com/getappmap/appmap-js/issues/1841)
+* When applying updates, make sure to retry the same line on mismatch ([b12fb0a](https://github.com/getappmap/appmap-js/commit/b12fb0a32851901f1217093b4986490f958be936))
+* When applying updates, make sure to retry the same line on mismatch ([ad56df3](https://github.com/getappmap/appmap-js/commit/ad56df39e06b40b7a3a48884c5e4f5e37f2122cc))
+
+
+### Features
+
+* --prompt and /noterms options ([9802fdc](https://github.com/getappmap/appmap-js/commit/9802fdc9baded47ccc565ed6f4fb79850f1d3ad6))
+* Exclude context by file pattern ([0ad604a](https://github.com/getappmap/appmap-js/commit/0ad604a99ac745326facefaf0ad4c2990a9ae813))
+
 # [@appland/navie-v1.14.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.13.0...@appland/navie-v1.14.0) (2024-06-11)
 
 
