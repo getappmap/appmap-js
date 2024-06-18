@@ -1,3 +1,10 @@
+# [@appland/rpc-v1.10.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.9.0...@appland/rpc-v1.10.0) (2024-06-18)
+
+
+### Features
+
+* --prompt and /noterms options ([9802fdc](https://github.com/getappmap/appmap-js/commit/9802fdc9baded47ccc565ed6f4fb79850f1d3ad6))
+
 # [@appland/rpc-v1.9.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.8.0...@appland/rpc-v1.9.0) (2024-04-26)
 
 
