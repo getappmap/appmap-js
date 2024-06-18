@@ -102,6 +102,7 @@ export class SourceCollector {
 
 export class ContextCollector {
   public appmaps: string[] | undefined;
+  public excludePatterns: RegExp[] | undefined;
 
   query: string;
 
@@ -155,7 +156,8 @@ export class ContextCollector {
 
     const fileSearchResponse = await withIndex(
       'files',
-      (indexFileName: string) => buildFileIndex(this.sourceDirectories, indexFileName),
+      (indexFileName: string) =>
+        buildFileIndex(this.sourceDirectories, indexFileName, this.excludePatterns),
       (index) => index.search(this.vectorTerms, DEFAULT_MAX_FILES)
     );
 
@@ -215,7 +217,8 @@ export default async function collectContext(
   sourceDirectories: string[],
   appmaps: string[] | undefined,
   vectorTerms: string[],
-  charLimit: number
+  charLimit: number,
+  exclude?: string[]
 ): Promise<{
   searchResponse: SearchRpc.SearchResponse;
   context: ContextV2.ContextResponse;
@@ -227,5 +230,6 @@ export default async function collectContext(
     charLimit
   );
   if (appmaps) contextCollector.appmaps = appmaps;
+  if (exclude) contextCollector.excludePatterns = exclude.map((pattern) => new RegExp(pattern));
   return await contextCollector.collectContext();
 }

@@ -32,12 +32,14 @@ import FileChangeExtractorService from './services/file-change-extractor-service
 import FileUpdateService from './services/file-update-service';
 import parseOptions from './lib/parse-options';
 import ListFilesCommand from './commands/list-files-command';
+import { warn } from 'console';
 
 export type ChatHistory = Message[];
 
 export interface ClientRequest {
   question: string;
   codeSelection?: string;
+  prompt?: string;
 }
 
 export interface INavie extends InteractionHistoryEvents {
@@ -50,14 +52,16 @@ export interface INavie extends InteractionHistoryEvents {
   execute(): AsyncIterable<string>;
 }
 
+export const DEFAULT_MODEL_NAME = 'gpt-4o';
 export const DEFAULT_TOKEN_LIMIT = 8000;
 export const DEFAULT_TEMPERATURE = 0.2;
+export const DEFAULT_RESPONSE_TOKENS = 1000;
 
 export class NavieOptions {
-  modelName = process.env.APPMAP_NAVIE_MODEL ?? 'gpt-4o';
+  modelName = process.env.APPMAP_NAVIE_MODEL ?? DEFAULT_MODEL_NAME;
   tokenLimit = Number(process.env.APPMAP_NAVIE_TOKEN_LIMIT ?? DEFAULT_TOKEN_LIMIT);
   temperature = Number(process.env.APPMAP_NAVIE_TEMPERATURE ?? DEFAULT_TEMPERATURE);
-  responseTokens = 1000;
+  responseTokens = Number(process.env.APPMAP_NAVIE_RESPONSE_TOKENS ?? DEFAULT_RESPONSE_TOKENS);
 }
 
 export default function navie(
@@ -68,6 +72,12 @@ export default function navie(
   options: NavieOptions,
   chatHistory?: ChatHistory
 ): INavie {
+  if (options.modelName !== DEFAULT_MODEL_NAME) warn(`Using model ${options.modelName}`);
+  if (options.tokenLimit !== DEFAULT_TOKEN_LIMIT) warn(`Using token limit ${options.tokenLimit}`);
+  if (options.temperature !== DEFAULT_TEMPERATURE) warn(`Using temperature ${options.temperature}`);
+  if (options.responseTokens !== DEFAULT_RESPONSE_TOKENS)
+    warn(`Using response tokens ${options.responseTokens}`);
+
   const interactionHistory = new InteractionHistory();
   const completionService = new OpenAICompletionService(
     interactionHistory,

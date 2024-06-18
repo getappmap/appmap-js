@@ -72,7 +72,7 @@ describe('LocalNavie', () => {
 
         await new Promise<void>((resolve) => {
           awaitResponse(resolve);
-          navie.ask('the-thread-id', 'What is the meaning of life?', undefined);
+          navie.ask('the-thread-id', 'What is the meaning of life?');
         });
       });
 
@@ -84,7 +84,7 @@ describe('LocalNavie', () => {
 
           await new Promise<void>((resolve) => {
             awaitResponse(resolve);
-            navie.ask(undefined, 'What is the meaning of life?', undefined);
+            navie.ask(undefined, 'What is the meaning of life?');
           });
         });
       });

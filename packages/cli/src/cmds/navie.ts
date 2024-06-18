@@ -24,6 +24,7 @@ interface ExplainArgs {
   agentMode?: Agents;
   navieProvider?: string;
   logNavie?: boolean;
+  prompt?: string;
 }
 
 interface NavieCommonCmdArgs extends ExplainArgs {
@@ -59,6 +60,11 @@ export function commonNavieArgsBuilder<T>(args: yargs.Argv<T>): yargs.Argv<T & N
     })
     .option('agent-mode', {
       describe: `This option is deprecated. Instead, start your question with @<command | agent>.`,
+    })
+    .option('prompt', {
+      describe: 'A file containing custom system prompts to send to the LLM',
+      alias: 'p',
+      type: 'string',
     })
     .option('code-editor', {
       describe:
@@ -211,6 +217,9 @@ export async function handler(argv: HandlerArguments) {
   let codeSelection: string | undefined;
   if (argv.codeSelection) codeSelection = await readFile(argv.codeSelection, 'utf-8');
 
+  let prompt: string | undefined;
+  if (argv.prompt) prompt = await readFile(argv.prompt, 'utf-8');
+
   const question = await getQuestion(argv.input, argv.question);
   const capturingProvider = (...args: Parameters<INavieProvider>) =>
     attachNavie(buildNavieProvider(argv)(...args));
@@ -218,7 +227,7 @@ export async function handler(argv: HandlerArguments) {
   // WIP: Help the @apply command to resolve paths
   if (argv.directory.length === 1) process.chdir(argv.directory[0]);
 
-  await explainHandler(capturingProvider, codeEditor).handler({ question, codeSelection });
+  await explainHandler(capturingProvider, codeEditor).handler({ question, codeSelection, prompt });
 }
 
 function openOutput(outputPath: string | undefined): Writable {

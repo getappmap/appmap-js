@@ -82,7 +82,7 @@ describe('v2.configuration.get', () => {
       OPENAI_API_KEY: 'test',
     });
 
-    it('returns the expected config', async () => {
+    it('returns the expected config', () => {
       const result = getConfigurationV2().handler(undefined);
       expect(result).toStrictEqual({
         baseUrl: 'https://test.api.openai.com',
@@ -94,9 +94,10 @@ describe('v2.configuration.get', () => {
   });
 
   describe('with default settings', () => {
-    it('returns the expected config', async () => {
+    it('returns the expected config', () => {
       const result = getConfigurationV2().handler(undefined);
       expect(result).toStrictEqual({
+        // KEG: I am not sure why this isn't coming through as the default value of https://api.openai.com
         baseUrl: undefined,
         model: undefined,
         projectDirectories: [],

@@ -7,7 +7,7 @@ import CodeSelectionService from '../services/code-selection-service';
 import CompletionService from '../services/completion-service';
 import MemoryService from '../services/memory-service';
 import ProjectInfoService from '../services/project-info-service';
-import InteractionHistory from '../interaction-history';
+import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
 import { ProjectInfo } from '../project-info';
 import Command, { CommandRequest } from '../command';
 import { ChatHistory } from '../navie';
@@ -92,6 +92,12 @@ export default class ExplainCommand implements Command {
     const hasChatHistory = chatHistory && chatHistory.length > 0;
     if (hasChatHistory) {
       await this.memoryService.predictSummary(chatHistory);
+    }
+
+    if (request.prompt) {
+      this.interactionHistory.addEvent(
+        new PromptInteractionEvent('customPrompt', 'system', request.prompt)
+      );
     }
 
     if (codeSelection) this.codeSelectionService.applyCodeSelection(codeSelection);

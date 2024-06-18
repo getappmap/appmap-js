@@ -10,19 +10,27 @@ export type FileUpdate = {
   modified: string;
 };
 
-function findLineMatch(haystack: readonly string[], needle: readonly string[]): number | undefined {
-  assert(needle.length && haystack.length);
-  const trimmed = needle.map((s) => s.trim());
+function findLineMatch(
+  haystack: readonly string[],
+  needle: readonly string[]
+): [number, number] | undefined {
+  const trimmed = needle.map((s) => s.trim()).filter((s) => s); // skip blank lines
+  assert(trimmed.length && haystack.length);
 
-  /* eslint-disable no-labels */
-  /* eslint-disable no-continue */
-  next: for (let i = 0; i <= haystack.length - needle.length; i += 1) {
-    for (let j = 0; j < needle.length; j += 1)
-      if (haystack[i + j].trim() !== trimmed[j]) continue next;
-    return i;
+  let needlePos = 0;
+  let start = 0;
+  for (let i = 0; i < haystack.length; i += 1) {
+    const hay = haystack[i].trim();
+    // skip blank lines
+    if (hay) {
+      if (trimmed[needlePos] !== hay) needlePos = 0;
+      if (trimmed[needlePos] === hay) {
+        if (!needlePos) start = i;
+        needlePos += 1;
+        if (needlePos === trimmed.length) return [start, i - start + 1];
+      }
+    }
   }
-  /* eslint-enable no-continue */
-  /* eslint-enable no-labels */
 
   return undefined;
 }
@@ -67,8 +75,10 @@ export default class FileUpdateService {
 
     const originalLines = fileUpdate.original.split('\n');
 
-    const index = findLineMatch(fileLines, originalLines);
-    if (!index) return [`[file-update] Failed to find match for ${fileUpdate.file}.\n`];
+    const match = findLineMatch(fileLines, originalLines);
+    if (!match) return [`[file-update] Failed to find match for ${fileUpdate.file}.\n`];
+
+    const [index, length] = match;
 
     const nonEmptyIndex = originalLines.findIndex((s) => s.trim());
     const adjustWhitespace = makeWhitespaceAdjuster(
@@ -81,11 +91,7 @@ export default class FileUpdateService {
         adjustWhitespace.desc
       }\n`
     );
-    fileLines.splice(
-      index,
-      originalLines.length,
-      ...fileUpdate.modified.split('\n').map(adjustWhitespace)
-    );
+    fileLines.splice(index, length, ...fileUpdate.modified.split('\n').map(adjustWhitespace));
 
     await writeFile(fileUpdate.file, fileLines.join('\n'), 'utf8');
 
