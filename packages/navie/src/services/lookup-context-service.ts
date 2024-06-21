@@ -17,8 +17,7 @@ export default class LookupContextService {
   async lookupContext(
     keywords: string[],
     tokenCount: number,
-    contextLabels?: ContextV2.ContextLabel[],
-    exclude?: string[]
+    filters: ContextV2.ContextFilters = {}
   ): Promise<ContextV2.ContextResponse> {
     if (keywords.length === 0) {
       warn('WARNING: No keywords provided');
@@ -30,9 +29,8 @@ export default class LookupContextService {
       type: 'search',
       vectorTerms: keywords,
       tokenCount,
+      ...filters,
     };
-    if (contextLabels) contextRequestPayload.labels = contextLabels;
-    if (exclude) contextRequestPayload.exclude = exclude;
 
     const context = await this.contextFn(contextRequestPayload);
 

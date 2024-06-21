@@ -1,3 +1,6 @@
+import { warn } from 'console';
+import { ContextV2 } from '../context';
+
 /* eslint-disable no-continue */
 export class UserOptions {
   constructor(private options: Map<string, string | boolean>) {}
@@ -38,6 +41,18 @@ export class UserOptions {
     if (typeof value === 'string') return value;
 
     return defaultValue;
+  }
+
+  populateContextFilters(filters: ContextV2.ContextFilters) {
+    const exclude = this.stringValue('exclude');
+    if (exclude) filters.exclude = [exclude];
+
+    const include = this.stringValue('include');
+    if (include) filters.include = [include];
+
+    const types = this.stringValue('itemtype');
+    if (types)
+      filters.itemTypes = types.split(',').map((type) => type as ContextV2.ContextItemType);
   }
 }
 
@@ -87,6 +102,7 @@ export default function parseOptions(question: string): {
       }
     }
 
+    warn(`User option ${key}=${value.toString()}`);
     options.set(key.toLowerCase(), value);
   }
 

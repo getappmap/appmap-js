@@ -287,7 +287,7 @@ export function reportMatches(
 export default class AppMapIndex {
   constructor(public directories: string[], private idx: lunr.Index) {}
 
-  async search(search: string, options: SearchOptions = {}): Promise<SearchResponse> {
+  async search(search: string, options: SearchOptions): Promise<SearchResponse> {
     let matches = this.idx.search(queryKeywords(search).join(' '));
     matches = await removeNonExistentMatches(matches);
     const numResults = matches.length;
@@ -313,7 +313,7 @@ export default class AppMapIndex {
   static async search(
     appmapDirectories: string[],
     search: string,
-    options: SearchOptions = {}
+    options: SearchOptions
   ): Promise<SearchResponse> {
     const index = await buildIndex(appmapDirectories);
     return await index.search(search, options);

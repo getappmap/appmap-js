@@ -86,19 +86,21 @@ describe('FileIndex', () => {
   });
 
   describe('indexDirectories', () => {
-    afterEach(() => {
-      jest.resetAllMocks();
-    });
+    const numFiles = 100;
+    const batchSize = 50;
+    const fileNames = Array.from({ length: numFiles }, (_, i) => `file${i}`);
 
-    it('indexes all files in batches', async () => {
-      /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument */
-      // `any` is used to avoid type errors and provide access to private methods
-      const fileIndex = new FileIndex(database);
-      const numFiles = 100;
-      const batchSize = 50;
-      const fileNames = Array.from({ length: numFiles }, (_, i) => `file${i}`);
-      const indexFile = jest.spyOn(fileIndex, 'indexFile');
-      const indexDirectory = jest.spyOn(fileIndex as any, 'indexDirectory');
+    let fileIndex: FileIndex;
+    let indexFile: jest.SpyInstance;
+    let indexDirectory: jest.SpyInstance;
+
+    /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument */
+    // `any` is used to avoid type errors and provide access to private methods
+
+    beforeEach(() => {
+      fileIndex = new FileIndex(database);
+      indexFile = jest.spyOn(fileIndex, 'indexFile');
+      indexDirectory = jest.spyOn(fileIndex as any, 'indexDirectory');
 
       jest.spyOn(Git, 'state').mockResolvedValue(GitState.Ok);
       jest.mocked(fs.stat).mockResolvedValue({
@@ -106,14 +108,41 @@ describe('FileIndex', () => {
         size: BigInt(100),
       } as any);
       jest.spyOn(listGitProjectFiles, 'default').mockResolvedValue(fileNames);
+    });
 
-      await fileIndex.indexDirectories(['dir1'], undefined, batchSize);
+    afterEach(() => {
+      jest.resetAllMocks();
+    });
+
+    it('indexes all files in batches', async () => {
+      await fileIndex.indexDirectories(['dir1'], undefined, undefined, batchSize);
 
       expect(indexDirectory).toHaveBeenCalledTimes(numFiles / batchSize);
       expect(indexFile).toHaveBeenCalledTimes(numFiles);
       expect(indexFile.mock.calls.map(([, fileName]) => fileName)).toEqual(fileNames);
-      /* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument */
     });
+
+    describe('when some are filtered out', () => {
+      describe('by excludePattern', () => {
+        it('removes them', async () => {
+          await fileIndex.indexDirectories(['dir1'], [/file1/], undefined);
+
+          expect(fileIndex.search(['file1'], 10)).toHaveLength(0);
+          expect(fileIndex.search(['file2'], 10)).toHaveLength(1);
+        });
+      });
+
+      describe('by includePattern', () => {
+        it('removes them', async () => {
+          await fileIndex.indexDirectories(['dir1'], undefined, [/file1/]);
+
+          expect(fileIndex.search(['file1'], 10)).toHaveLength(1);
+          expect(fileIndex.search(['file2'], 10)).toHaveLength(0);
+        });
+      });
+    });
+
+    /* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument */
   });
 });
 

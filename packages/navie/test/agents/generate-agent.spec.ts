@@ -6,12 +6,14 @@ import { AgentOptions } from '../../src/agent';
 import { suggestsVectorTerms } from '../fixture';
 import GenerateAgent from '../../src/agents/generate-agent';
 import { UserOptions } from '../../src/lib/parse-options';
+import ContextService from '../../src/services/context-service';
 
 describe('@generate agent', () => {
   let interactionHistory: InteractionHistory;
   let vectorTermsService: VectorTermsService;
   let lookupContextService: LookupContextService;
   let applyContextService: ApplyContextService;
+  let contextService: ContextService;
   let tokensAvailable: number;
 
   beforeEach(async () => {
@@ -26,28 +28,33 @@ describe('@generate agent', () => {
       addSystemPrompts: jest.fn(),
       applyContext: jest.fn(),
     } as unknown as ApplyContextService;
+    contextService = new ContextService(
+      vectorTermsService,
+      lookupContextService,
+      applyContextService
+    );
   });
 
   afterEach(() => jest.restoreAllMocks());
 
   function buildAgent(): GenerateAgent {
-    return new GenerateAgent(
-      interactionHistory,
-      vectorTermsService,
-      lookupContextService,
-      applyContextService
-    );
+    return new GenerateAgent(interactionHistory, contextService);
   }
 
   describe('#perform', () => {
-    const initialQuestionOptions: AgentOptions = {
-      question: 'How does user management work?',
-      aggregateQuestion: 'How does user management work?',
-      userOptions: new UserOptions(new Map()),
-      chatHistory: [],
-      hasAppMaps: true,
-      projectInfo: [],
-    };
+    const initialQuestionOptions = new AgentOptions(
+      'How does user management work?',
+      'How does user management work?',
+      new UserOptions(new Map()),
+      [],
+      [
+        {
+          directory: 'twitter',
+          appmapConfig: { language: 'ruby' } as unknown as any,
+          appmapStats: { numAppMaps: 1 } as unknown as any,
+        },
+      ]
+    );
 
     it('invokes the vector terms service', async () => {
       await buildAgent().perform(initialQuestionOptions, () => tokensAvailable);
@@ -63,8 +70,7 @@ describe('@generate agent', () => {
       expect(lookupContextService.lookupContext).toHaveBeenCalledWith(
         ['user', 'management'],
         tokensAvailable,
-        undefined,
-        undefined
+        {}
       );
       expect(lookupContextService.lookupHelp).not.toHaveBeenCalled();
     });
