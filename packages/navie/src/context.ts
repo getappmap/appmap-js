@@ -100,8 +100,7 @@ export namespace ContextV2 {
     weight: ContextLabelWeight | string;
   };
 
-  // Request a set of context items from the context provider.
-  export type ContextRequest = ContextV1.ContextRequest & {
+  export type ContextFilters = {
     // Boost recent context items. For example, if the user is asking about an event that has recently occurred, such
     // as an error or exception, or if the user is asking about code that they have recently run.
     recent?: boolean;
@@ -116,7 +115,12 @@ export namespace ContextV2 {
     labels?: ContextLabel[];
     // Optional list of file patterns to exclude.
     exclude?: string[];
+    // Optional list of file patterns to include.
+    include?: string[];
   };
+
+  // Request a set of context items from the context provider.
+  export type ContextRequest = ContextV1.ContextRequest & ContextFilters;
 
   export type ContextResponse = Array<ContextItem | FileContextItem>;
 

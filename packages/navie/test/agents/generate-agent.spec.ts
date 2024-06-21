@@ -40,14 +40,19 @@ describe('@generate agent', () => {
   }
 
   describe('#perform', () => {
-    const initialQuestionOptions: AgentOptions = {
-      question: 'How does user management work?',
-      aggregateQuestion: 'How does user management work?',
-      userOptions: new UserOptions(new Map()),
-      chatHistory: [],
-      hasAppMaps: true,
-      projectInfo: [],
-    };
+    const initialQuestionOptions = new AgentOptions(
+      'How does user management work?',
+      'How does user management work?',
+      new UserOptions(new Map()),
+      [],
+      [
+        {
+          directory: 'twitter',
+          appmapConfig: { language: 'ruby' } as unknown as any,
+          appmapStats: { numAppMaps: 1 } as unknown as any,
+        },
+      ]
+    );
 
     it('invokes the vector terms service', async () => {
       await buildAgent().perform(initialQuestionOptions, () => tokensAvailable);
@@ -63,8 +68,7 @@ describe('@generate agent', () => {
       expect(lookupContextService.lookupContext).toHaveBeenCalledWith(
         ['user', 'management'],
         tokensAvailable,
-        undefined,
-        undefined
+        {}
       );
       expect(lookupContextService.lookupHelp).not.toHaveBeenCalled();
     });

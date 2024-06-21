@@ -77,8 +77,7 @@ export default class ExplainAgent implements Agent {
       const context = await this.lookupContextService.lookupContext(
         searchTerms,
         tokenCount,
-        options.contextLabels,
-        exclude ? [exclude] : undefined
+        options.buildContextFilters()
       );
 
       LookupContextService.applyContext(context, [], this.applyContextService, tokenCount);

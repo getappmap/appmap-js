@@ -66,7 +66,6 @@ export default class GenerateAgent implements Agent {
 
     const lookupContext = options.userOptions.isEnabled('context', true);
     const transformTerms = options.userOptions.isEnabled('terms', true);
-    const exclude = options.userOptions.stringValue('exclude');
     if (lookupContext) {
       const searchTerms = await transformSearchTerms(
         transformTerms,
@@ -77,8 +76,7 @@ export default class GenerateAgent implements Agent {
       const context = await this.lookupContextService.lookupContext(
         searchTerms,
         tokenCount,
-        undefined,
-        exclude ? [exclude] : undefined
+        options.buildContextFilters()
       );
       LookupContextService.applyContext(context, [], this.applyContextService, tokenCount);
     }

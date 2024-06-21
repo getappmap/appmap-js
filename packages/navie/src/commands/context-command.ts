@@ -6,6 +6,7 @@ import VectorTermsService from '../services/vector-terms-service';
 import { ChatHistory } from '../navie';
 import { ExplainOptions } from './explain-command';
 import transformSearchTerms from '../lib/transform-search-terms';
+import { ContextV2 } from '../context';
 
 export default class ContextCommand implements Command {
   constructor(
@@ -21,7 +22,6 @@ export default class ContextCommand implements Command {
     const format = request.userOptions.stringValue('format') || 'yaml';
     const tokenLimit = request.userOptions.numberValue('tokenlimit') || this.options.tokenLimit;
     const transformTerms = request.userOptions.isEnabled('terms', true);
-    const exclude = request.userOptions.stringValue('exclude');
 
     const aggregateQuestion = [
       ...(chatHistory || [])
@@ -38,12 +38,11 @@ export default class ContextCommand implements Command {
       aggregateQuestion,
       this.vectorTermsService
     );
-    const context = await this.lookupContextService.lookupContext(
-      searchTerms,
-      tokenLimit,
-      [],
-      exclude ? [exclude] : undefined
-    );
+
+    const filters: ContextV2.ContextFilters = {};
+    request.userOptions.populateContextFilters(filters);
+
+    const context = await this.lookupContextService.lookupContext(searchTerms, tokenLimit, filters);
 
     let contextStr: string;
     if (format === 'yaml') {

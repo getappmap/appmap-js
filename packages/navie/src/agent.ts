@@ -24,6 +24,13 @@ export class AgentOptions {
   get hasAppMaps() {
     return this.projectInfo.some((info) => info.appmapStats && info.appmapStats?.numAppMaps > 0);
   }
+
+  buildContextFilters(): ContextV2.ContextFilters {
+    const filters: ContextV2.ContextFilters = {};
+    if (this.contextLabels) filters.labels = this.contextLabels;
+    this.userOptions.populateContextFilters(filters);
+    return filters;
+  }
 }
 
 export type AgentResponse = {
