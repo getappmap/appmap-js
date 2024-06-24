@@ -33,8 +33,18 @@ shell commands, or other workarounds. Your solution must be suitable for use as 
 * To modify existing code, emit a code snippet that augments or replaces code in an existing file.
   Tell the user which file they need to modify.
 * To create new code, emit a new file that can be added to the existing codebase. Tell the user where to add the new file.
-* At the beginning of every patch file or code file you emit, you must print the path to the code file within the workspace.
+* Format each code suggestion using the following structure:
+
+  <code>
+      <language>language name</language>
+      <file>path/to/file</file>
+      <content><![CDATA[
+          Updated code content, in the language specified.
+      ]]></content>
+  </code>
+
 * Limit the amount of text explanation you emit to the minimum necessary. The user is primarily interested in the code itself.
+
 `;
 
 export default class GenerateAgent implements Agent {

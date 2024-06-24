@@ -28,6 +28,16 @@ Your solution must be provided as test code that implements the desired function
 To generate the test case, you should analyze the existing test case code in the project. You will be provided
 with code snippets of other, related test cases.
 
+Format each code suggestion using the following structure:
+
+  <code>
+      <language>language name</language>
+      <file>path/to/file</file>
+      <content><![CDATA[
+          Updated code content, in the language specified.
+      ]]></content>
+  </code>
+
 DOs and DO NOTs:
 
 * DO begin the code snippet with a comment containing the path to the test case file.
@@ -47,15 +57,17 @@ shell commands, or other workarounds.
 Input: Describe a test case that verifies that the function add_one(x) returns x + 1.
 
 Output:
-\`\`\`python
-# test_math.py
 
+<code>
+    <language>python</language>
+    <file>test_math.py</file>
+    <content><![CDATA[
 def test_add_one():
-  assert add_one(1) == 2
-  assert add_one(2) == 3
-  assert add_one(3) == 4
-\`\`\`
-
+      assert add_one(1) == 2
+      assert add_one(2) == 3
+      assert add_one(3) == 4
+    ]]></content>
+</code>
 `;
 export default class TestAgent implements Agent {
   public temperature = undefined;
