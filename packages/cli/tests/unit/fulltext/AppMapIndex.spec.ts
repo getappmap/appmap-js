@@ -47,7 +47,7 @@ describe('AppMapIndex', () => {
       });
 
       it('downscores the out of date matches', async () => {
-        const searchResults = await appMapIndex.search('login');
+        const searchResults = await appMapIndex.search('login', {});
         expect(searchResults.numResults).toEqual(5);
         expect(searchResults.results.map((r) => r.appmap)).toEqual([
           'appmap5',
@@ -74,7 +74,7 @@ describe('AppMapIndex', () => {
         const index = new AppMapIndex(['project-dir'], {
           search: jest.fn().mockReturnValue([]),
         } as any);
-        const searchResults = await index.search('');
+        const searchResults = await index.search('', {});
         expect(searchResults).toStrictEqual({
           type: 'appmap',
           results: [],
@@ -87,7 +87,7 @@ describe('AppMapIndex', () => {
     it(`reports statistics`, async () => {
       mockUpToDate();
 
-      const searchResults = await appMapIndex.search('login');
+      const searchResults = await appMapIndex.search('login', {});
       expect(searchResults.numResults).toEqual(5);
       expect(searchResults.results.map((r) => r.score)).toEqual([5, 4, 3, 2, 1]);
 
@@ -121,7 +121,7 @@ describe('AppMapIndex', () => {
       } as unknown as lunr.Index;
       appMapIndex = new AppMapIndex(['project-dir'], mockLunr);
 
-      const searchResults = await appMapIndex.search('login');
+      const searchResults = await appMapIndex.search('login', {});
       expect(searchResults.numResults).toEqual(1);
       expect(searchResults.results).toEqual([
         { appmap: 'appmap1', directory: 'the-dir', score: 1 },

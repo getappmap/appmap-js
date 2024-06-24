@@ -113,7 +113,7 @@ export class Explain extends EventEmitter {
     this.status.vectorTerms = vectorTerms;
 
     if (data.labels) this.status.labels = data.labels;
-    const labels = data.labels || [];
+    const labels = data.labels ?? [];
 
     if (!tokenCount) {
       warn(chalk.bold(`Warning: Token limit not set, defaulting to ${DEFAULT_TOKEN_LIMIT}`));
@@ -151,7 +151,7 @@ export class Explain extends EventEmitter {
       this.appmaps,
       keywords,
       charLimit,
-      data.exclude
+      data
     );
 
     this.status.searchResponse = searchResult.searchResponse;

@@ -77,6 +77,8 @@ export default class ApplyContextService {
   }
 
   addSystemPrompts(context: ContextV2.ContextResponse, help: HelpResponse) {
+    if (!context || context.length === 0) return;
+
     const hasSequenceDiagram = context.some(
       (item) => item.type === ContextV2.ContextItemType.SequenceDiagram
     );

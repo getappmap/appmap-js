@@ -1,3 +1,4 @@
+import { warn } from 'console';
 import { ContextV2 } from '../context';
 
 /* eslint-disable no-continue */
@@ -48,6 +49,10 @@ export class UserOptions {
 
     const include = this.stringValue('include');
     if (include) filters.include = [include];
+
+    const types = this.stringValue('itemtype');
+    if (types)
+      filters.itemTypes = types.split(',').map((type) => type as ContextV2.ContextItemType);
   }
 }
 
@@ -97,6 +102,7 @@ export default function parseOptions(question: string): {
       }
     }
 
+    warn(`User option ${key}=${value.toString()}`);
     options.set(key.toLowerCase(), value);
   }
 
