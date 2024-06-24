@@ -3,12 +3,7 @@ import assert from 'assert';
 import { existsSync } from 'fs';
 
 import InteractionHistory from '../interaction-history';
-
-export type FileUpdate = {
-  file: string;
-  original: string;
-  modified: string;
-};
+import { SearchReplace } from '../lib/file-update';
 
 function findLineMatch(
   haystack: readonly string[],
@@ -57,7 +52,7 @@ function makeWhitespaceAdjuster(to: string, from: string) {
 export default class FileUpdateService {
   constructor(public history: InteractionHistory) {}
 
-  async apply(fileUpdate: FileUpdate): Promise<string[] | undefined> {
+  async apply(fileUpdate: SearchReplace): Promise<string[] | undefined> {
     this.history.log(`[file-update] Applying file change to ${fileUpdate.file}  `);
     this.history.log(`[file-update] Original content:\n${fileUpdate.original}`);
     this.history.log(`[file-update] Modified content:\n${fileUpdate.modified}`);
