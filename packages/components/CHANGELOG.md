@@ -1,3 +1,10 @@
+# [@appland/components-v4.25.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.24.4...@appland/components-v4.25.0) (2024-06-24)
+
+
+### Features
+
+* Stop Navie answer ([9730be4](https://github.com/getappmap/appmap-js/commit/9730be4fb45651baaa5d3569a344127d92ed587c))
+
 # [@appland/components-v4.24.4](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.24.3...@appland/components-v4.24.4) (2024-05-20)
 
 
