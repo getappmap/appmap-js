@@ -57,6 +57,7 @@ export class FileIndex {
   async indexDirectories(
     directories: string[],
     excludePatterns: RegExp[] | undefined,
+    includePatterns: RegExp[] | undefined,
     batchSize = 100
   ) {
     for (const directory of directories) {
@@ -68,7 +69,12 @@ export class FileIndex {
             ? await listGitProjectFiles(directory)
             : await listProjectFiles(directory);
 
-        const filteredFileNames = await filterFiles(directory, fileNames, excludePatterns);
+        const filteredFileNames = await filterFiles(
+          directory,
+          fileNames,
+          excludePatterns,
+          includePatterns
+        );
 
         const options = {
           allowGenericParsing: fileNames.length < 15_000,
@@ -153,12 +159,13 @@ export function restoreFileIndex(indexFileName: string): FileIndex {
 export async function buildFileIndex(
   directories: string[],
   indexFileName: string,
-  excludePatterns?: RegExp[]
+  excludePatterns?: RegExp[],
+  includePatterns?: RegExp[]
 ): Promise<FileIndex> {
   assert(!existsSync(indexFileName), `Index file ${indexFileName} already exists`);
   const database = new sqlite3(indexFileName);
   const fileIndex = new FileIndex(database);
-  await fileIndex.indexDirectories(directories, excludePatterns);
+  await fileIndex.indexDirectories(directories, excludePatterns, includePatterns);
   console.log(`Wrote file index to ${indexFileName}`);
   return fileIndex;
 }
@@ -231,12 +238,15 @@ const BINARY_FILE_EXTENSIONS: string[] = [
 export async function filterFiles(
   directory: string,
   fileNames: string[],
-  excludePatterns?: RegExp[]
+  excludePatterns?: RegExp[],
+  includePatterns?: RegExp[]
 ): Promise<string[]> {
   const result: string[] = [];
   for (const fileName of fileNames) {
     const fileExtension = path.extname(fileName).toLowerCase();
     if (BINARY_FILE_EXTENSIONS.some((ext) => ext === fileExtension)) continue;
+
+    if (includePatterns && !includePatterns.some((pattern) => pattern.test(fileName))) continue;
 
     if (excludePatterns?.some((pattern) => pattern.test(fileName))) continue;
 

@@ -1,8 +1,12 @@
 import { SearchRpc } from '@appland/rpc';
-import AppMapIndex, { SearchResponse as AppMapSearchResponse } from '../../fulltext/AppMapIndex';
+import AppMapIndex, {
+  SearchResponse as AppMapSearchResponse,
+  SearchOptions as AppMapSearchOptions,
+} from '../../fulltext/AppMapIndex';
 import FindEvents, {
   SearchResponse as EventSearchResponse,
   SearchResult as EventSearchResult,
+  SearchOptions as EventsSearchOptions,
 } from '../../fulltext/FindEvents';
 import { DEFAULT_MAX_DIAGRAMS, DEFAULT_MAX_FILES } from '../search/search';
 import buildContext from './buildContext';
@@ -31,7 +35,12 @@ export class EventCollector {
 
   constructor(private query: string, private appmapSearchResponse: AppMapSearchResponse) {}
 
-  async collectEvents(maxEvents: number): Promise<{
+  async collectEvents(
+    maxEvents: number,
+    excludePatterns?: RegExp[],
+    includePatterns?: RegExp[],
+    includeTypes?: ContextV2.ContextItemType[]
+  ): Promise<{
     results: SearchRpc.SearchResult[];
     context: ContextV2.ContextResponse;
     contextSize: number;
@@ -42,7 +51,13 @@ export class EventCollector {
       let { appmap } = result;
       if (!isAbsolute(appmap)) appmap = join(result.directory, appmap);
 
-      const eventsSearchResponse = await this.findEvents(appmap, maxEvents);
+      const options: EventsSearchOptions = {
+        maxResults: maxEvents,
+      };
+      if (includePatterns) options.includePatterns = includePatterns;
+      if (excludePatterns) options.excludePatterns = excludePatterns;
+
+      const eventsSearchResponse = await this.findEvents(appmap, options);
       results.push({
         appmap: appmap,
         directory: result.directory,
@@ -50,7 +65,14 @@ export class EventCollector {
         score: result.score,
       });
     }
-    const context = await buildContext(results);
+
+    const isIncludedType = (item: ContextV2.ContextItem) => {
+      if (includeTypes && !includeTypes.some((type) => type === item.type)) return false;
+
+      return true;
+    };
+
+    const context = (await buildContext(results)).filter(isIncludedType);
 
     const contextSize = context.reduce((acc, item) => acc + item.content.length, 0);
 
@@ -67,11 +89,11 @@ export class EventCollector {
     return index;
   }
 
-  async findEvents(appmap: string, maxResults: number): Promise<EventSearchResponse> {
+  async findEvents(appmap: string, options: AppMapSearchOptions): Promise<EventSearchResponse> {
     if (appmap.endsWith('.appmap.json')) appmap = appmap.slice(0, -'.appmap.json'.length);
 
     const index = await this.appmapIndex(appmap);
-    return index.search(this.query, { maxResults });
+    return index.search(this.query, options);
   }
 }
 
@@ -103,6 +125,8 @@ export class SourceCollector {
 export class ContextCollector {
   public appmaps: string[] | undefined;
   public excludePatterns: RegExp[] | undefined;
+  public includePatterns: RegExp[] | undefined;
+  public includeTypes: ContextV2.ContextItemType[] | undefined;
 
   query: string;
 
@@ -148,7 +172,7 @@ export class ContextCollector {
       };
     } else {
       // Search across all AppMaps, creating a map from AppMap id to AppMapSearchResult
-      const searchOptions = {
+      const searchOptions: AppMapSearchOptions = {
         maxResults: DEFAULT_MAX_DIAGRAMS,
       };
       appmapSearchResponse = await AppMapIndex.search(this.appmapDirectories, query, searchOptions);
@@ -157,7 +181,12 @@ export class ContextCollector {
     const fileSearchResponse = await withIndex(
       'files',
       (indexFileName: string) =>
-        buildFileIndex(this.sourceDirectories, indexFileName, this.excludePatterns),
+        buildFileIndex(
+          this.sourceDirectories,
+          indexFileName,
+          this.excludePatterns,
+          this.includePatterns
+        ),
       (index) => index.search(this.vectorTerms, DEFAULT_MAX_FILES)
     );
 
@@ -175,7 +204,12 @@ export class ContextCollector {
     for (;;) {
       log(`Collecting context with ${maxEventsPerDiagram} events per diagram.`);
 
-      contextCandidate = await eventsCollector.collectEvents(maxEventsPerDiagram);
+      contextCandidate = await eventsCollector.collectEvents(
+        maxEventsPerDiagram,
+        this.excludePatterns,
+        this.includePatterns,
+        this.includeTypes
+      );
 
       const codeSnippetCount = contextCandidate.context.filter(
         (item) => item.type === ContextV2.ContextItemType.CodeSnippet
@@ -218,7 +252,7 @@ export default async function collectContext(
   appmaps: string[] | undefined,
   vectorTerms: string[],
   charLimit: number,
-  exclude?: string[]
+  filters: ContextV2.ContextFilters
 ): Promise<{
   searchResponse: SearchRpc.SearchResponse;
   context: ContextV2.ContextResponse;
@@ -230,6 +264,12 @@ export default async function collectContext(
     charLimit
   );
   if (appmaps) contextCollector.appmaps = appmaps;
-  if (exclude) contextCollector.excludePatterns = exclude.map((pattern) => new RegExp(pattern));
+
+  if (filters?.exclude)
+    contextCollector.excludePatterns = filters.exclude.map((pattern) => new RegExp(pattern));
+  if (filters?.include)
+    contextCollector.includePatterns = filters.include.map((pattern) => new RegExp(pattern));
+  if (filters?.itemTypes) contextCollector.includeTypes = filters.itemTypes.map((type) => type);
+
   return await contextCollector.collectContext();
 }
