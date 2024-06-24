@@ -1,7 +1,7 @@
 import XML from 'fast-xml-parser';
 
 import InteractionHistory from '../interaction-history';
-import { FileUpdate } from './file-update-service';
+import { SearchReplace } from '../lib/file-update';
 import { ChatHistory, ClientRequest } from '../navie';
 import Message from '../message';
 import Oracle from '../lib/oracle';
@@ -68,7 +68,7 @@ export default class FileChangeExtractorService {
     clientRequest: ClientRequest,
     chatHistory: ChatHistory | undefined,
     fileName: string
-  ): FileUpdate[] | undefined {
+  ): SearchReplace[] | undefined {
     const messages = FileChangeExtractorService.buildMessages(clientRequest, chatHistory);
     if (!messages) {
       this.history.log('[file-change-extractor] No messages found for use by extractFile');
@@ -93,11 +93,11 @@ export default class FileChangeExtractorService {
     return fileChanges;
   }
 
-  static extractChanges(content: string): FileUpdate[] {
+  static extractChanges(content: string): SearchReplace[] {
     // Search for <change> tags
     const changeRegex = /<change>([\s\S]*?)<\/change>/gi;
     let match: RegExpExecArray | null;
-    const changes = new Array<FileUpdate>();
+    const changes = new Array<SearchReplace>();
 
     // Trim at most one leading and trailing blank lines
     const trimChange = (change: string): string =>
@@ -112,10 +112,10 @@ export default class FileChangeExtractorService {
       const jObj = parser.parse(change);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (jObj && jObj.file && jObj.original && jObj.modified) {
-        const update = jObj as FileUpdate;
+        const update = jObj as SearchReplace;
         update.original = trimChange(update.original);
         update.modified = trimChange(update.modified);
-        changes.push(jObj as FileUpdate);
+        changes.push(jObj as SearchReplace);
       }
     }
     return changes;
