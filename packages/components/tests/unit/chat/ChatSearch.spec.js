@@ -58,7 +58,7 @@ describe('pages/ChatSearch.vue', () => {
     ],
   ];
 
-  const noConfig = () => [[null, null, {}]];
+  const noConfig = () => [[null, null, { projectDirectories: [] }]];
 
   const emptySearchResponse = {
     results: [],
@@ -469,7 +469,11 @@ describe('pages/ChatSearch.vue', () => {
       const wrapper = chatSearchWrapper({
         'v2.appmap.stats': appmapStatsHasAppMaps(),
         'v2.configuration.get': [
-          [null, null, { baseUrl: 'http://localhost:11434', model: 'mistral' }],
+          [
+            null,
+            null,
+            { baseUrl: 'http://localhost:11434', model: 'mistral', projectDirectories: [] },
+          ],
         ],
       });
 
@@ -484,7 +488,7 @@ describe('pages/ChatSearch.vue', () => {
     it('renders the default configuration', async () => {
       const wrapper = chatSearchWrapper({
         'v2.appmap.stats': appmapStatsHasAppMaps(),
-        'v2.configuration.get': [[null, null, {}]],
+        'v2.configuration.get': [[null, null, { projectDirectories: [] }]],
       });
 
       await wrapper.vm.$nextTick();
@@ -505,6 +509,7 @@ describe('pages/ChatSearch.vue', () => {
             {
               baseUrl: 'https://my-instance.openai.azure.com',
               model: 'my-deployment',
+              projectDirectories: [],
             },
           ],
         ],
@@ -528,6 +533,7 @@ describe('pages/ChatSearch.vue', () => {
             {
               baseUrl: 'https://api.openai.com',
               model: 'gpt-4-turbo',
+              projectDirectories: [],
             },
           ],
         ],
