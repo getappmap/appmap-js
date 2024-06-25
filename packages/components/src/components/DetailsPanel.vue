@@ -1,14 +1,15 @@
 <template>
   <div class="details-panel">
     <h3 class="details-panel__title">
-      <div
-        class="details-panel__ask-navie-button"
-        v-if="showAskNavie"
-        data-cy="details-panel-ask-navie-button"
-        @click="() => this.$emit('askNavieAboutMap')"
-      >
-        <CompassIcon class="compass-icon" />
-        <div>Ask Navie</div>
+      <div class="details-panel__ask-navie-wrapper" v-if="showAskNavie">
+        <div
+          class="details-panel__ask-navie-button"
+          data-cy="details-panel-ask-navie-button"
+          @click="() => this.$emit('askNavieAboutMap')"
+        >
+          <CompassIcon class="compass-icon" />
+          <div>Ask Navie</div>
+        </div>
       </div>
       <AppMapLogo v-else width="70" />
       <ChevronDownIcon
@@ -299,6 +300,26 @@ export default {
 </script>
 
 <style scoped lang="scss">
+$glow-size: 0.2rem;
+$glow-blur: 0.5rem;
+$glow-alpha: 0.5;
+@keyframes pan {
+  0%,
+  100% {
+    background-position: 0% 0%;
+    box-shadow: 0 0 $glow-blur $glow-size rgba(255, 7, 170, $glow-alpha);
+  }
+  25%,
+  75% {
+    background-position: 100% 100%;
+    box-shadow: 0 0 $glow-blur $glow-size rgba(156, 47, 186, $glow-alpha);
+  }
+  50% {
+    background-position: 100% 100%;
+    box-shadow: 0 0 $glow-blur $glow-size rgba(67, 98, 177, $glow-alpha);
+  }
+}
+
 .details-panel {
   display: block;
   font-family: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -311,10 +332,21 @@ export default {
   border-right: 1px solid $base15;
   overflow: auto;
 
+  &__ask-navie-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $navie-gradient;
+    border-radius: $border-radius;
+    padding: 4px;
+    animation: pan 5s linear infinite;
+    background-size: 300% 300%;
+  }
+
   &__ask-navie-button {
     padding: 0.5rem 0.75rem;
-    background-color: $gray2;
-    border-radius: $border-radius;
+    background: rgba(26, 40, 78, 0.75);
+    border-radius: calc(#{$border-radius} - 2px);
     font-size: 0.9rem;
     display: flex;
     flex-direction: row;
@@ -340,19 +372,19 @@ export default {
 
     &:hover {
       cursor: pointer;
-      background-color: lighten($gray2, 10%);
-      color: $hotpink;
+      color: #fff;
       transition: $transition;
+      background: rgba(255, 255, 255, 0.2);
 
       .compass-icon {
         path {
           transition: $transition;
-          fill: $hotpink;
+          fill: #fff;
         }
 
         circle {
           transition: $transition;
-          stroke: $hotpink;
+          stroke: #fff;
         }
       }
     }

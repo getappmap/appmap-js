@@ -1841,24 +1841,46 @@ code {
         cursor: pointer;
       }
 
+      $glow-alpha: 1;
+      $glow-size: 4px;
+      @keyframes glow {
+        0%,
+        100% {
+          stroke: $gray4;
+          filter: drop-shadow(0 0 0 transparent);
+        }
+
+        33% {
+          stroke: rgba(255, 7, 170, 1);
+          filter: drop-shadow(0 0 $glow-size rgba(255, 7, 170, $glow-alpha));
+        }
+
+        66% {
+          stroke: rgba(156, 47, 186, 1);
+          filter: drop-shadow(0 0 $glow-size rgba(156, 47, 186, $glow-alpha));
+        }
+      }
       .ask-navie {
         background-color: inherit;
         border: none;
+        padding: 0;
+        animation: glow 5s infinite ease-in-out;
 
         &:hover {
           cursor: pointer;
+          filter: drop-shadow(0 0 $glow-size $white) !important;
 
           svg path {
-            fill: $hotpink;
+            fill: $white;
           }
 
           svg circle {
-            stroke: $hotpink;
+            stroke: $white;
           }
         }
 
         svg {
-          width: 20px;
+          width: 22px;
 
           path {
             fill: $gray4;
