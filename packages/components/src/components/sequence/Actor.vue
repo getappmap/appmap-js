@@ -9,7 +9,7 @@
               <template v-if="interactive && !isPrecomputedSequenceDiagram">
                 <div class="control-wrap">
                   <span class="hide-container" @click.stop="hideCodeObject">
-                    <XIcon />
+                    <XIcon class="close-icon" />
                   </span>
                   <v-popper
                     class="hover-text-popper"
@@ -393,5 +393,10 @@ $min-height: 3rem;
   top: 0;
   left: 100%;
   float: left;
+}
+
+.close-icon {
+  width: 12px;
+  height: 12px;
 }
 </style>
