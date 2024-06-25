@@ -34,7 +34,7 @@
           :status="tool.status"
         />
       </div>
-      <span v-html="renderedMarkdown" />
+      <component :is="renderedMarkdown" />
     </div>
     <div class="buttons">
       <span
@@ -86,42 +86,82 @@ import VCheckIcon from '@/assets/success-checkmark.svg';
 import VButton from '@/components/Button.vue';
 import VToolStatus from '@/components/chat/ToolStatus.vue';
 import VCodeSelection from '@/components/chat/CodeSelection.vue';
+import VMarkdownCodeSnippet from '@/components/chat/MarkdownCodeSnippet.vue';
 
 import { Marked, Renderer } from 'marked';
 import { markedHighlight } from 'marked-highlight';
 import DOMPurify from 'dompurify';
 import hljs from 'highlight.js';
+import Vue from 'vue';
 
 // Add a custom renderer to wrap code blocks in a container.
 // We can add a copy button and other things here.
 // TODO: Can we do this in a more elegant way? E.g. with a Vue component?
 const customRenderer = new Renderer();
 const originalRenderer = customRenderer.code.bind(customRenderer);
-customRenderer.code = (code: string, language: string, escaped: boolean) => {
-  const content = originalRenderer(code, language, escaped);
-  return `<div class="md-code-snippet" data-cy="code-snippet">
-    <div class="md-code-snippet__header">
-      <span class="md-code-snippet__language">${language}</span>
-      <span class="md-code-snippet__copy" data-cy="copy">
-        <svg viewBox="0 0 17 20" xmlns="http://www.w3.org/2000/svg">
-          <path d="M5.46626 18.6334H1.36657V6.33434H12.2991V9.06747H13.6657V5.65106L12.9824 4.96778H10.9325V3.60121H9.56596C9.56291 2.87751 9.27295 2.18456 8.75969 1.67435C8.2476 1.1653 7.55488 0.879578 6.83283 0.879578C6.11077 0.879578 5.41806 1.1653 4.90597 1.67435C4.39271 2.18456 4.10275 2.87751 4.0997 3.60121H2.65114V4.96778H0.683283L0 5.65106V19.3167L0.683283 20H5.46626V18.6334ZM5.46626 3.3279C5.51679 3.05659 5.64828 2.80694 5.84342 2.6118C6.03856 2.41666 6.28821 2.28517 6.55952 2.23464C6.826 2.18263 7.10193 2.21118 7.35212 2.31664C7.60356 2.4122 7.81866 2.58427 7.96708 2.8086C8.14611 3.07172 8.2277 3.38908 8.19776 3.70592C8.16782 4.02276 8.02824 4.31921 7.80309 4.54414C7.57816 4.76929 7.28171 4.90887 6.96487 4.93881C6.64803 4.96875 6.33067 4.88716 6.06755 4.70813C5.84322 4.55971 5.67115 4.34461 5.57559 4.09317C5.46625 3.85392 5.42829 3.58819 5.46626 3.3279ZM15.1415 16.2556L13.6656 17.7451V10.434H12.299V17.7315L10.8231 16.2556L9.85289 17.2259L12.504 19.8633H13.4743L16.1118 17.2259L15.1415 16.2556ZM7.05145 10.5707H8.02171L10.6592 13.2081L9.68892 14.1784L8.21303 12.7025V20H6.84646V12.6888L5.37057 14.1784L4.40031 13.2081L7.05145 10.5707Z"/>
-        </svg>
-        Copy
-      </span>
-    </div>
-    ${content}
-  </div>`;
+customRenderer.code = (code: string, language: string, escaped: boolean, sourcePath: string) => {
+  const content = originalRenderer(code, language, escaped, sourcePath);
+  return [
+    '<v-markdown-code-snippet ',
+    language && `language="${language}"`,
+    sourcePath && `source-path="${sourcePath}"`,
+    '>',
+    content,
+    '</v-markdown-code-snippet>',
+  ].join('');
 };
 
 const marked = new Marked(
   markedHighlight({
     langPrefix: 'hljs language-',
     highlight(code: string, lang: string) {
+      // TODO: This should move into VMarkdownCodeSnippet
       const language = hljs.getLanguage(lang) ? lang : 'plaintext';
       return hljs.highlight(code, { language }).value;
     },
   }),
-  { renderer: customRenderer }
+  {
+    renderer: customRenderer,
+    extensions: [
+      {
+        // Matches an HTML comment that contains a file path
+        // Example: <!-- file: /path/to/file.py -->
+        name: 'file-annotation',
+        level: 'block',
+        start(src: string) {
+          console.log('start', src);
+          console.log('index', src.search(/^\s+?<!--\s+?file:/gm));
+          const index = src.search(/^\s+?<!--\s+?file:/);
+          return index > -1 ? index : false;
+        },
+        tokenizer(src: string) {
+          const fileCommentMatch = /^\s+?<!--\s+?file:\s+?(.+)\s+?-->/.exec(src);
+          if (!fileCommentMatch) return false;
+
+          const codeMatch = /\s*?```(.*)\n([\s\S]+?)```/.exec(
+            src.slice(fileCommentMatch.index + fileCommentMatch[0].length)
+          );
+          if (!codeMatch) return false;
+
+          const [, sourcePath] = fileCommentMatch;
+          const [, language, content] = codeMatch;
+
+          return {
+            type: 'file-annotation',
+            raw: fileCommentMatch[0] + codeMatch[0],
+            text: src,
+            sourcePath,
+            language: language.trim(),
+            content,
+          };
+        },
+        renderer({ sourcePath, language, content }) {
+          const highlightedContent = hljs.highlight(content, { language }).value;
+          return this.parser.renderer.code(highlightedContent, language, true, sourcePath);
+        },
+      },
+    ],
+  }
 );
 
 export default {
@@ -184,6 +224,8 @@ export default {
       const dom = DOMPurify.sanitize(markdown, {
         USE_PROFILES: { html: true },
         RETURN_DOM: true,
+        ADD_TAGS: ['v-markdown-code-snippet'],
+        ADD_ATTR: ['language', 'source-path'],
       });
 
       if (!this.complete) {
@@ -212,7 +254,10 @@ export default {
         }
       }
 
-      return dom.outerHTML;
+      return Vue.component('dynamic-markdown', {
+        components: { VMarkdownCodeSnippet },
+        template: `<div>${dom.ownerDocument.body.innerHTML}</div>`,
+      });
     },
     hasClipboardAPI() {
       return (
@@ -450,63 +495,6 @@ export default {
       }
     }
 
-    .md-code-snippet {
-      margin: 1rem 0;
-      border-radius: $border-radius;
-      background-color: rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      overflow: hidden;
-
-      pre {
-        margin: 0;
-        border: 0;
-        border-radius: 0;
-        overflow: auto;
-      }
-
-      &__header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: rgba(0, 0, 0, 0.4);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      &__language {
-        display: inline-block;
-        padding: 0.25rem 1rem;
-        border-right: 1px solid rgba(255, 255, 255, 0.1);
-        color: #e2e4e5;
-      }
-
-      &__copy {
-        display: inline-block;
-        padding: 0.25rem 1rem;
-        border-left: 1px solid rgba(255, 255, 255, 0.1);
-        color: #e2e4e5;
-        cursor: pointer;
-        transition: background-color 0.5s ease-in-out;
-
-        svg {
-          height: 16px;
-          width: 16px;
-
-          path {
-            fill: #e2e4e5;
-          }
-        }
-
-        &:hover {
-          background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        &:active {
-          background-color: $blue;
-          transition: background-color 0s;
-        }
-      }
-    }
-
     .cursor {
       &:after {
         content: '▊';
@@ -532,26 +520,6 @@ export default {
       }
     }
 
-    code {
-      border-radius: 6px;
-      background-color: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 0.25em 0.25rem 0 0.25rem;
-      color: #e2e4e5;
-    }
-
-    pre {
-      padding: 1rem;
-      border-radius: $border-radius;
-      background-color: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      code {
-        border: 0;
-        background-color: transparent;
-        padding: 0;
-      }
-    }
-
     ul {
       margin: 1rem 0;
       margin-block-start: 1em;
@@ -565,6 +533,20 @@ export default {
     & > :last-child {
       margin-bottom: 0;
     }
+  }
+
+  code {
+    border-radius: 6px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.25em 0.25rem 0 0.25rem;
+    color: #e2e4e5;
+  }
+
+  pre code {
+    border: 0;
+    background-color: transparent;
+    padding: 0;
   }
 }
 </style>
