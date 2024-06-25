@@ -149,20 +149,20 @@
             text="Ask Navie about this AppMap"
             placement="left"
             text-align="left"
+            v-if="!sequenceDiagramDiffMode && showAskNavie"
           >
-            <div v-if="!sequenceDiagramDiffMode && showAskNavie" class="ask-navie">
-              <button class="ask-navie" @click="askNavie" data-cy="ask-navie-control-button">
-                <v-compass-icon />
-              </button>
-            </div>
+            <button class="ask-navie" @click="askNavie" data-cy="ask-navie-control-button">
+              <v-compass-icon />
+            </button>
           </v-popper>
           <v-popper
             class="hover-text-popper"
             text="Collapse actions below this depth"
             placement="left"
             text-align="left"
+            v-if="isViewingSequence && !sequenceDiagramDiffMode"
           >
-            <div v-if="isViewingSequence && !sequenceDiagramDiffMode" class="depth-control">
+            <div class="depth-control">
               <button
                 class="depth-button depth-button__decrease"
                 @click="decreaseSeqDiagramCollapseDepth"
