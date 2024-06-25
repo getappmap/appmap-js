@@ -13,8 +13,26 @@
       data-cy="context-header"
       @click="onClickHeader"
     >
-      <span class="context-container__title">{{ title }}</span>
+      <span class="context-container__title" data-cy="context-title">{{ title }}</span>
       <span class="context-container__button-group">
+        <span
+          :class="{
+            'context-container__button': 1,
+            'context-container__button--pending': !!pendingState,
+            'context-container__button--failure': pendingState === 'failure',
+            'context-container__button--success': pendingState === 'success',
+          }"
+          data-cy="apply"
+          @click.stop="onApply"
+          v-if="isFile && isPinnable"
+        >
+          <transition name="fade" mode="out-in">
+            <v-loader v-if="pendingState === 'pending'" />
+            <v-check-icon v-else-if="pendingState === 'success'" />
+            <v-close-icon v-else-if="pendingState === 'failure'" />
+            <v-apply-icon v-else />
+          </transition>
+        </span>
         <span
           class="context-container__button"
           data-cy="jump-to"
@@ -50,7 +68,7 @@
           @click.stop="onPin"
           data-cy="pin"
           :data-pinned="pinned"
-          v-if="!isFile"
+          v-if="isPinnable"
         >
           <v-pin-icon />
         </span>
@@ -106,6 +124,10 @@ import VHamburgerMenuIcon from '@/assets/hamburger.svg';
 import VExpandIcon from '@/assets/fullscreen.svg';
 import VPopperMenu from '@/components/PopperMenu.vue';
 import VJumpToIcon from '@/assets/open.svg';
+import VApplyIcon from '@/assets/apply.svg';
+import VCheckIcon from '@/assets/success-checkmark.svg';
+import VCloseIcon from '@/assets/x-icon.svg';
+import VLoader from '@/components/chat/Loader.vue';
 import type ContextContainerMenuItem from './ContextContainerMenuItem';
 import type { PinEvent } from './PinEvent';
 
@@ -119,6 +141,10 @@ export default Vue.extend({
     VExpandIcon,
     VPopperMenu,
     VJumpToIcon,
+    VApplyIcon,
+    VLoader,
+    VCheckIcon,
+    VCloseIcon,
   },
   props: {
     title: String,
@@ -143,6 +169,10 @@ export default Vue.extend({
       type: String,
       required: false,
     },
+    isPinnable: {
+      type: Boolean,
+      default: true,
+    },
   },
   inject: {
     pinnedItems: {
@@ -151,11 +181,11 @@ export default Vue.extend({
   },
   data() {
     const isReference = typeof this.handle === 'number';
-    const isFile = !!this.location || !!this.directory;
     return {
       isReference,
-      collapsed: isReference || isFile,
+      collapsed: isReference || !this.isPinnable,
       valueHandle: this.handle ?? GlobalId++,
+      pendingState: undefined as undefined | 'pending' | 'success' | 'failure',
     };
   },
   computed: {
@@ -167,7 +197,7 @@ export default Vue.extend({
       return !!this.location || !!this.directory;
     },
     isCollapsable(): boolean {
-      return this.isReference || this.isFile;
+      return this.isReference || !this.isPinnable;
     },
   },
   methods: {
@@ -197,6 +227,16 @@ export default Vue.extend({
     onOpen() {
       if (!this.isFile) return;
       this.$root.$emit('open-location', this.location, this.directory);
+    },
+    onApply() {
+      if (!this.isFile || !this.isPinnable || this.pendingState) return;
+      this.pendingState = 'pending';
+      this.$emit('apply', (result: 'success' | 'failure') => {
+        this.pendingState = result;
+        setTimeout(() => {
+          this.pendingState = undefined;
+        }, 2000);
+      });
     },
   },
 });
@@ -243,11 +283,16 @@ export default Vue.extend({
     display: inline-block;
     padding: 0.5rem 1rem;
     color: #e2e4e5;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 
   &__button-group {
     display: flex;
     justify-content: end;
+    background-color: rgba(black, 0.1);
+
     & > *:nth-child(1) {
       border-left: 1px solid rgba(black, 0.1);
     }
@@ -256,12 +301,40 @@ export default Vue.extend({
   &__button {
     display: inline-block;
     padding: 0.5rem 1rem;
-    background-color: rgba(black, 0.1);
+    // background-color: rgba(black, 0.1);
     color: #e2e4e5;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
     user-select: none;
     height: 100%;
+
+    &--pending {
+      $bg: black;
+      width: 16px;
+      height: auto;
+      cursor: initial;
+
+      &:hover {
+        background-color: transparent !important;
+      }
+
+      &::v-deep > .loader .dot {
+        filter: drop-shadow(0 0 0.25rem rgba(white, 1));
+        background-color: #e2e4e5 !important;
+      }
+    }
+
+    &--failure {
+      svg path {
+        fill: $red2 !important;
+      }
+    }
+
+    &--success {
+      svg path {
+        fill: $success-indicator !important;
+      }
+    }
 
     svg {
       height: 16px;
@@ -280,6 +353,7 @@ export default Vue.extend({
         filter: drop-shadow(2px 2px 2px rgba(black, 0.75));
         path {
           fill: white;
+          stroke: white;
         }
       }
       &:hover {
@@ -328,6 +402,15 @@ export default Vue.extend({
         background-color: transparent;
       }
     }
+  }
+
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 200ms;
+  }
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
   }
 }
 </style>

@@ -20,6 +20,10 @@ type UserInput = {
   appmaps?: string[];
 };
 
+type UpdateResult = {
+  succeeded: boolean;
+};
+
 export class ExplainRequest extends EventEmitter {
   client: any;
   private statusInterval?: number;
@@ -195,5 +199,21 @@ export default class AppMapRPC {
 
   explain(): ExplainRequest {
     return new ExplainRequest(this.client);
+  }
+
+  update(filePath: string, modifiedContent: string): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.client.request(
+        'file.update',
+        { file: filePath, modified: modifiedContent },
+        (err: any, error: any, { succeeded }: UpdateResult) => {
+          if (err || error) return reportError(reject, err, error);
+
+          succeeded
+            ? resolve()
+            : reject(new Error(`Failed to update ${filePath}. Please try again.`));
+        }
+      );
+    });
   }
 }

@@ -35,7 +35,6 @@
         />
       </div>
       <v-streaming-message-content :content="renderedMarkdown" :active="!complete" />
-      <!-- <component :is="renderedMarkdown" /> -->
     </div>
     <div class="buttons">
       <span
@@ -96,21 +95,60 @@ import DOMPurify from 'dompurify';
 // We can add a copy button and other things here.
 // TODO: Can we do this in a more elegant way? E.g. with a Vue component?
 const customRenderer = new Renderer();
-customRenderer.code = (code: string, language: string) => {
+customRenderer.code = (code: string, language: string, escaped: boolean, sourcePath: string) => {
   if (language === 'mermaid') {
     return `<v-mermaid-diagram>${code}</v-mermaid-diagram>`;
   }
 
   return [
-    '<v-markdown-code-snippet ',
-    language && `language="${language}"`,
+    '<v-markdown-code-snippet',
+    language && ` language="${language}"`,
+    sourcePath && ` location="${sourcePath}"`,
     '>',
     new Option(code).innerHTML,
     '</v-markdown-code-snippet>',
   ].join('');
 };
 
-const marked = new Marked({ renderer: customRenderer });
+const marked = new Marked({
+  renderer: customRenderer,
+  extensions: [
+    {
+      // Matches an HTML comment that contains a file path
+      // Example: <!-- file: /path/to/file.py -->
+      name: 'file-annotation',
+      level: 'block',
+      start(src: string) {
+        const index = src.search(/^\s*?<!--\s+?file:/);
+        return index > -1 ? index : false;
+      },
+      tokenizer(src: string) {
+        const fileCommentMatch = /^\s*?<!--\s+?file:\s+?(.+)\s+?-->/.exec(src);
+        if (!fileCommentMatch) return false;
+
+        const codeMatch = /\s*?```(.*)\n([\s\S]+?)```/.exec(
+          src.slice(fileCommentMatch.index + fileCommentMatch[0].length)
+        );
+        if (!codeMatch) return false;
+
+        const [, sourcePath] = fileCommentMatch;
+        const [, language, content] = codeMatch;
+
+        return {
+          type: 'file-annotation',
+          raw: fileCommentMatch[0] + codeMatch[0],
+          text: src,
+          sourcePath,
+          language: language.trim(),
+          content,
+        };
+      },
+      renderer({ sourcePath, language, content }) {
+        return this.parser.renderer.code(content, language, true, sourcePath);
+      },
+    },
+  ],
+});
 
 export default {
   name: 'v-user-message',
@@ -173,7 +211,7 @@ export default {
       return DOMPurify.sanitize(markdown, {
         USE_PROFILES: { html: true },
         ADD_TAGS: ['v-markdown-code-snippet', 'v-mermaid-diagram'],
-        ADD_ATTR: ['language'],
+        ADD_ATTR: ['language', 'location'],
       });
     },
     hasClipboardAPI() {

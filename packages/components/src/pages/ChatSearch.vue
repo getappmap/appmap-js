@@ -120,9 +120,8 @@ export default {
       isChatting: false,
       loadAppMapStats: debounce(
         async () => {
-          const rpc = this.rpcClient();
           try {
-            this.appmapStats = await rpc.appmapStats();
+            this.appmapStats = await this.rpcClient.appmapStats();
           } catch (e) {
             console.error('Error loading appmap stats', e);
           }
@@ -138,11 +137,14 @@ export default {
       model: undefined,
       contextResponse: undefined,
       pinnedItems: [] as PinItem[],
+      projectDirectories: [] as string[],
     };
   },
   provide() {
     return {
       pinnedItems: this.pinnedItems,
+      rpcClient: this.rpcClient,
+      projectDirectories: this.projectDirectories,
     };
   },
   watch: {
@@ -156,11 +158,10 @@ export default {
       }
 
       const searchResponse = newVal;
-      const rpc = this.rpcClient();
 
       let resultId = 0;
       for (const result of searchResponse.results) {
-        const metadata = await rpc.appmapMetadata(result.appmap);
+        const metadata = await this.rpcClient.appmapMetadata(result.appmap);
         (result as any).id = ['search-result', this.searchId, resultId].join('_');
         (result as any).metadata = metadata;
         resultId += 1;
@@ -178,9 +179,8 @@ export default {
           return;
         }
 
-        const index = this.rpcClient();
         const searchResult = this.selectedSearchResult;
-        const appmapData = await index.appmapData(searchResult.appmap);
+        const appmapData = await this.rpcClient.appmapData(searchResult.appmap);
         await this.$refs.vappmap.loadData(appmapData);
         this.$refs.vappmap.setState(
           JSON.stringify({ selectedObjects: searchResult.events.map((e) => e.fqid) })
@@ -238,6 +238,11 @@ export default {
     },
     hasAppMaps() {
       return this.appmapStats?.some(({ numAppMaps }) => numAppMaps > 0) ?? false;
+    },
+    rpcClient(): AppMapRPC {
+      return new AppMapRPC(
+        this.appmapRpcFn ? { request: this.appmapRpcFn } : this.appmapRpcPort || 30101
+      );
     },
   },
   methods: {
@@ -328,7 +333,7 @@ export default {
       this.ask?.stop();
     },
     async sendMessage(message: string, codeSelections: string[] = [], appmaps: string[] = []) {
-      this.ask = this.rpcClient().explain();
+      this.ask = this.rpcClient.explain();
       this.searching = true;
       this.lastStatusLabel = undefined;
 
@@ -452,11 +457,6 @@ export default {
       this.pinnedItems = [];
       this.loadAppMapStats();
     },
-    rpcClient(): AppMapRPC {
-      return new AppMapRPC(
-        this.appmapRpcFn ? { request: this.appmapRpcFn } : this.appmapRpcPort || 30101
-      );
-    },
     startResizing(event) {
       document.body.style.userSelect = 'none';
       this.isPanelResizing = true;
@@ -489,9 +489,15 @@ export default {
       this.isChatting = isChatting;
     },
     async loadNavieConfig() {
-      const { baseUrl, model } = await this.rpcClient().configuration();
+      const { baseUrl, model, projectDirectories } = await this.rpcClient.configuration();
       this.baseUrl = baseUrl;
       this.model = model;
+
+      // projectDirectories is reactive and injected into child components so
+      // don't outright reassign it to a new array. It'll lose the bound observers.
+      this.projectDirectories.splice(0, this.projectDirectories.length);
+      this.projectDirectories.push(...(projectDirectories ?? []));
+
       this.configLoaded = true;
     },
   },

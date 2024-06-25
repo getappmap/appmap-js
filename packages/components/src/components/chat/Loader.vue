@@ -1,8 +1,8 @@
 <template>
   <div class="loader">
     <div class="dot" />
-    <div class="dot" :style="{ 'animation-delay': '0.15s' }" />
-    <div class="dot" :style="{ 'animation-delay': '0.3s' }" />
+    <div class="dot" :style="{ 'animation-delay': '-0.15s' }" />
+    <div class="dot" :style="{ 'animation-delay': '-0.3s' }" />
   </div>
 </template>
 
