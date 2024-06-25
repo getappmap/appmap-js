@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.149.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.149.0...@appland/appmap-v3.149.1) (2024-06-25)
+
+
+### Bug Fixes
+
+* Skip searching for context on empty input ([75a234e](https://github.com/getappmap/appmap-js/commit/75a234e438f2c5a37ac9c962f1f5bb28bb13cc42))
+
 # [@appland/appmap-v3.149.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.148.0...@appland/appmap-v3.149.0) (2024-06-18)
 
 
