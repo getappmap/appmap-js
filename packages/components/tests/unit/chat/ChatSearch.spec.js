@@ -491,7 +491,7 @@ describe('pages/ChatSearch.vue', () => {
 
       const llmConfig = wrapper.find('[data-cy="llm-config"]');
       expect(llmConfig.exists()).toBe(true);
-      expect(llmConfig.find('[data-cy="llm-model"]').text()).toBe('GPT-4 Turbo');
+      expect(llmConfig.find('[data-cy="llm-model"]').text()).toBe('GPT-4o');
       expect(llmConfig.find('[data-cy="llm-provider"]').text()).toBe('(default)');
     });
 
