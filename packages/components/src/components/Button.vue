@@ -108,6 +108,7 @@ export default {
   &:disabled {
     background-color: $gray2;
     border-color: $gray2;
+    cursor: initial;
 
     &:hover {
       background-color: $gray2;
