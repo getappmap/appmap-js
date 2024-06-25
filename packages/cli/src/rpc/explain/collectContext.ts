@@ -6,7 +6,7 @@ import FindEvents, {
 } from '../../fulltext/FindEvents';
 import { DEFAULT_MAX_DIAGRAMS, DEFAULT_MAX_FILES } from '../search/search';
 import buildContext from './buildContext';
-import { log } from 'console';
+import { log, warn } from 'console';
 import { isAbsolute, join } from 'path';
 import { ContextV2, applyContext } from '@appland/navie';
 import { FileIndexMatch, buildFileIndex } from '../../fulltext/FileIndex';
@@ -119,6 +119,11 @@ export class ContextCollector {
     searchResponse: SearchRpc.SearchResponse;
     context: ContextV2.ContextResponse;
   }> {
+    if (this.vectorTerms.length === 0 || this.vectorTerms.every((term) => term.trim() === '')) {
+      warn('No vector terms received. Context search will be skipped.');
+      return { searchResponse: { results: [], numResults: 0 }, context: [] };
+    }
+
     const query = this.vectorTerms.join(' ');
 
     let appmapSearchResponse: AppMapSearchResponse;
