@@ -9,3 +9,4 @@ export * as ProjectInfo from './project-info';
 export * as Help from './help';
 export * as Navie from './navie';
 export * as InteractionHistory from './interaction-history';
+export { default as XMLMarkdownTransformer } from './lib/xml-markdown-transformer';

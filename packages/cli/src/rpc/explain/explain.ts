@@ -9,7 +9,7 @@ import {
   ProjectDirectory,
   ProjectParameters,
 } from '@appland/client';
-import { ContextV2, Help, ProjectInfo } from '@appland/navie';
+import { ContextV2, Help, ProjectInfo, XMLMarkdownTransformer } from '@appland/navie';
 import { ExplainRpc } from '@appland/rpc';
 
 import { RpcError, RpcHandler } from '../rpc';
@@ -59,6 +59,7 @@ export class Explain extends EventEmitter {
   }
 
   async explain(navie: INavie): Promise<void> {
+    const clientTransformer = new XMLMarkdownTransformer();
     navie.on('ack', (userMessageId, threadId) => {
       // threadId is now pre-allocated by the enrollConversationThread call
       // It may be falsey because errors in enrollConversationThread are logged but do not
@@ -67,9 +68,11 @@ export class Explain extends EventEmitter {
 
       this.emit('ack', userMessageId, threadId);
     });
-    navie.on('token', (token, _messageId) => {
-      this.status.explanation ||= [];
-      this.status.explanation.push(token);
+    navie.on('token', (token) => {
+      clientTransformer.transform(token, (xformedToken: string) => {
+        this.status.explanation ||= [];
+        this.status.explanation.push(xformedToken);
+      });
     });
     navie.on('complete', () => {
       this.status.step = ExplainRpc.Step.COMPLETE;
