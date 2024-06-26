@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.150.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.149.1...@appland/appmap-v3.150.0) (2024-06-26)
+
+
+### Features
+
+* Filter by file path and context item type ([282ed20](https://github.com/getappmap/appmap-js/commit/282ed2087358900fc41b2ac61d379c03464fa728))
+
 # [@appland/appmap-v3.149.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.149.0...@appland/appmap-v3.149.1) (2024-06-25)
 
 
