@@ -1,3 +1,10 @@
+# [@appland/navie-v1.16.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.15.0...@appland/navie-v1.16.0) (2024-06-26)
+
+
+### Features
+
+* Filter by file path and context item type ([282ed20](https://github.com/getappmap/appmap-js/commit/282ed2087358900fc41b2ac61d379c03464fa728))
+
 # [@appland/navie-v1.15.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.14.0...@appland/navie-v1.15.0) (2024-06-18)
 
 
