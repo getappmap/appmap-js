@@ -1,6 +1,6 @@
 import lunr from 'lunr';
 import { Help } from '@appland/navie';
-import { processFiles, processNamedFiles, verbose } from '../../utils';
+import { processFiles, verbose } from '../../utils';
 import { log, warn } from 'console';
 import { readFile } from 'fs/promises';
 import { MarkdownTextSplitter } from 'langchain/text_splitter';

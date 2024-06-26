@@ -1,9 +1,7 @@
 import { Agent, AgentOptions } from '../agent';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
-import ApplyContextService from '../services/apply-context-service';
-import LookupContextService from '../services/lookup-context-service';
-import VectorTermsService from '../services/vector-terms-service';
+import ContextService from '../services/context-service';
 
 export const TEST_AGENT_PROMPT = `**Task: Generation a Test Case**
 
@@ -60,12 +58,7 @@ def test_add_one():
 export default class TestAgent implements Agent {
   public temperature = undefined;
 
-  constructor(
-    public history: InteractionHistory,
-    private vectorTermsService: VectorTermsService,
-    private lookupContextService: LookupContextService,
-    private applyContextService: ApplyContextService
-  ) {}
+  constructor(public history: InteractionHistory, private contextService: ContextService) {}
 
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {
     this.history.addEvent(new PromptInteractionEvent('agent', 'system', TEST_AGENT_PROMPT));
@@ -78,21 +71,7 @@ export default class TestAgent implements Agent {
       )
     );
 
-    const lookupContext = options.userOptions.isEnabled('context', true);
-    const exclude = options.userOptions.stringValue('exclude');
-    if (lookupContext) {
-      const vectorTerms = await this.vectorTermsService.suggestTerms(options.aggregateQuestion);
-      vectorTerms.push('test');
-      vectorTerms.push('spec');
-      const tokenCount = tokensAvailable();
-      const context = await this.lookupContextService.lookupContext(
-        vectorTerms,
-        tokenCount,
-        undefined,
-        exclude ? [exclude] : undefined
-      );
-      LookupContextService.applyContext(context, [], this.applyContextService, tokenCount);
-    }
+    await this.contextService.perform(options, tokensAvailable, ['test', 'spec']);
   }
 
   applyQuestionPrompt(question: string): void {

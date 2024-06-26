@@ -1,10 +1,7 @@
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
 import { Agent, AgentOptions } from '../agent';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
-import VectorTermsService from '../services/vector-terms-service';
-import LookupContextService from '../services/lookup-context-service';
-import ApplyContextService from '../services/apply-context-service';
-import transformSearchTerms from '../lib/transform-search-terms';
+import ContextService from '../services/context-service';
 
 const EXPLAIN_AGENT_PROMPT = `**Task: Explaining Code, Analyzing Code, Generating Code**
 
@@ -45,12 +42,7 @@ HTTP server and client requests, exceptions, log messages, and database queries.
 export default class ExplainAgent implements Agent {
   public temperature = undefined;
 
-  constructor(
-    public history: InteractionHistory,
-    private vectorTermsService: VectorTermsService,
-    private lookupContextService: LookupContextService,
-    private applyContextService: ApplyContextService
-  ) {}
+  constructor(public history: InteractionHistory, private contextService: ContextService) {}
 
   async perform(options: AgentOptions, tokensAvailable: () => number) {
     this.history.addEvent(new PromptInteractionEvent('agent', 'system', EXPLAIN_AGENT_PROMPT));
@@ -63,26 +55,7 @@ export default class ExplainAgent implements Agent {
       )
     );
 
-    const lookupContext = options.userOptions.isEnabled('context', true);
-    const transformTerms = options.userOptions.isEnabled('terms', true);
-    const exclude = options.userOptions.stringValue('exclude');
-    if (lookupContext) {
-      const tokenCount = tokensAvailable();
-      const searchTerms = await transformSearchTerms(
-        transformTerms,
-        options.aggregateQuestion,
-        this.vectorTermsService
-      );
-
-      const context = await this.lookupContextService.lookupContext(
-        searchTerms,
-        tokenCount,
-        options.contextLabels,
-        exclude ? [exclude] : undefined
-      );
-
-      LookupContextService.applyContext(context, [], this.applyContextService, tokenCount);
-    }
+    await this.contextService.perform(options, tokensAvailable);
   }
 
   applyQuestionPrompt(question: string): void {

@@ -6,6 +6,7 @@ import lunr from 'lunr';
 import { collectParameters } from './collectParameters';
 import assert from 'assert';
 import queryKeywords from './queryKeywords';
+import { fileNameMatchesFilterPatterns } from './fileNameMatchesFilterPatterns';
 
 type IndexItem = {
   fqid: string;
@@ -18,6 +19,8 @@ type IndexItem = {
 
 export type SearchOptions = {
   maxResults?: number;
+  includePatterns?: RegExp[];
+  excludePatterns?: RegExp[];
 };
 
 export type SearchResult = {
@@ -135,19 +138,35 @@ export default class FindEvents {
         );
       matches = matches.slice(0, options.maxResults);
     }
-    const searchResults = matches.map((match) => {
-      const indexItem = this.indexItemsByFqid.get(match.ref);
-      assert(indexItem);
-      const result: SearchResult = {
-        appmap: this.appmapId,
-        fqid: match.ref,
-        score: match.score,
-        elapsed: indexItem?.elapsed,
-        eventIds: indexItem?.eventIds ?? [],
-      };
-      if (indexItem?.location) result.location = indexItem.location;
-      return result;
-    });
+    const searchResults = matches
+      .map((match) => {
+        const indexItem = this.indexItemsByFqid.get(match.ref);
+        assert(indexItem);
+        const result: SearchResult = {
+          appmap: this.appmapId,
+          fqid: match.ref,
+          score: match.score,
+          elapsed: indexItem?.elapsed,
+          eventIds: indexItem?.eventIds ?? [],
+        };
+        if (indexItem?.location) {
+          const path = indexItem.location.split(':');
+          const fileName = path.pop();
+
+          if (!fileName) return;
+
+          const includeFile = fileNameMatchesFilterPatterns(
+            fileName,
+            options.includePatterns,
+            options.excludePatterns
+          );
+          if (!includeFile) return;
+
+          result.location = indexItem.location;
+        }
+        return result;
+      })
+      .filter(Boolean) as SearchResult[];
     return { type: 'event', results: searchResults, numResults };
   }
 }

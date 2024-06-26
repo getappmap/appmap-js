@@ -1,10 +1,7 @@
 import { Agent, AgentOptions } from '../agent';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
-import transformSearchTerms from '../lib/transform-search-terms';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
-import ApplyContextService from '../services/apply-context-service';
-import LookupContextService from '../services/lookup-context-service';
-import VectorTermsService from '../services/vector-terms-service';
+import ContextService from '../services/context-service';
 
 export const GENERATE_AGENT_PROMPT = `**Task: Generation of Code and Test Cases**
 
@@ -40,12 +37,7 @@ shell commands, or other workarounds. Your solution must be suitable for use as 
 export default class GenerateAgent implements Agent {
   public temperature = undefined;
 
-  constructor(
-    public history: InteractionHistory,
-    private vectorTermsService: VectorTermsService,
-    private lookupContextService: LookupContextService,
-    private applyContextService: ApplyContextService
-  ) {}
+  constructor(public history: InteractionHistory, private contextService: ContextService) {}
 
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {
     const agentPrompt = [GENERATE_AGENT_PROMPT];
@@ -64,24 +56,7 @@ export default class GenerateAgent implements Agent {
       )
     );
 
-    const lookupContext = options.userOptions.isEnabled('context', true);
-    const transformTerms = options.userOptions.isEnabled('terms', true);
-    const exclude = options.userOptions.stringValue('exclude');
-    if (lookupContext) {
-      const searchTerms = await transformSearchTerms(
-        transformTerms,
-        options.aggregateQuestion,
-        this.vectorTermsService
-      );
-      const tokenCount = tokensAvailable();
-      const context = await this.lookupContextService.lookupContext(
-        searchTerms,
-        tokenCount,
-        undefined,
-        exclude ? [exclude] : undefined
-      );
-      LookupContextService.applyContext(context, [], this.applyContextService, tokenCount);
-    }
+    await this.contextService.perform(options, tokensAvailable);
   }
 
   applyQuestionPrompt(question: string): void {

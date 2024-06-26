@@ -1,10 +1,7 @@
 import { Agent, AgentOptions } from '../agent';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
-import transformSearchTerms from '../lib/transform-search-terms';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
-import ApplyContextService from '../services/apply-context-service';
-import LookupContextService from '../services/lookup-context-service';
-import VectorTermsService from '../services/vector-terms-service';
+import ContextService from '../services/context-service';
 
 // Elements of this prompt are based on https://community.atlassian.com/t5/Jira-Software-articles/How-to-write-a-useful-Jira-ticket/ba-p/2147004
 export const GENERATE_AGENT_PROMPT = `**Task: Specification of Software Issues**
@@ -68,12 +65,7 @@ DO NOT output code blocks or fenced code. Output only a text description of the 
 export class PlanAgent implements Agent {
   public readonly temperature = undefined;
 
-  constructor(
-    public history: InteractionHistory,
-    private vectorTermsService: VectorTermsService,
-    private lookupContextService: LookupContextService,
-    private applyContextService: ApplyContextService
-  ) {}
+  constructor(public history: InteractionHistory, private contextService: ContextService) {}
 
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {
     this.history.addEvent(new PromptInteractionEvent('agent', 'system', GENERATE_AGENT_PROMPT));
@@ -86,19 +78,7 @@ export class PlanAgent implements Agent {
       )
     );
 
-    const lookupContext = options.userOptions.isEnabled('context', true);
-    const transformTerms = options.userOptions.isEnabled('terms', true);
-    const exclude = options.userOptions.stringValue('exclude');
-    if (lookupContext) {
-      const searchTerms = await transformSearchTerms(
-        transformTerms,
-        options.aggregateQuestion,
-        this.vectorTermsService
-      );
-      const tokenCount = tokensAvailable();
-      const context = await this.lookupContextService.lookupContext(searchTerms, tokenCount, undefined, exclude ? [exclude] : undefined);
-      LookupContextService.applyContext(context, [], this.applyContextService, tokenCount);
-    }
+    await this.contextService.perform(options, tokensAvailable);
   }
 
   applyQuestionPrompt(question: string): void {

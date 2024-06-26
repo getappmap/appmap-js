@@ -12,6 +12,7 @@ import { ContextV2 } from '../context';
 import TechStackService from './tech-stack-service';
 import TestAgent from '../agents/test-agent';
 import { PlanAgent } from '../agents/plan-agent';
+import ContextService from './context-service';
 
 type AgentModeResult = { agentMode: AgentMode; agent: Agent; question: string };
 
@@ -35,6 +36,12 @@ export default class AgentSelectionService {
   selectAgent(question: string, classification: ContextV2.ContextLabel[]): AgentModeResult {
     let modifiedQuestion = question;
 
+    const contextService = new ContextService(
+      this.vectorTermsService,
+      this.lookupContextService,
+      this.applyContextService
+    );
+
     const helpAgent = () =>
       new HelpAgent(
         this.history,
@@ -43,37 +50,13 @@ export default class AgentSelectionService {
         this.techStackService
       );
 
-    const testAgent = () =>
-      new TestAgent(
-        this.history,
-        this.vectorTermsService,
-        this.lookupContextService,
-        this.applyContextService
-      );
+    const testAgent = () => new TestAgent(this.history, contextService);
 
-    const planAgent = () =>
-      new PlanAgent(
-        this.history,
-        this.vectorTermsService,
-        this.lookupContextService,
-        this.applyContextService
-      );
+    const planAgent = () => new PlanAgent(this.history, contextService);
 
-    const generateAgent = () =>
-      new GenerateAgent(
-        this.history,
-        this.vectorTermsService,
-        this.lookupContextService,
-        this.applyContextService
-      );
+    const generateAgent = () => new GenerateAgent(this.history, contextService);
 
-    const explainAgent = () =>
-      new ExplainAgent(
-        this.history,
-        this.vectorTermsService,
-        this.lookupContextService,
-        this.applyContextService
-      );
+    const explainAgent = () => new ExplainAgent(this.history, contextService);
 
     const buildAgent = {
       [AgentMode.Help]: helpAgent,
