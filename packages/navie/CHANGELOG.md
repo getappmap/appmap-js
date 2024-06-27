@@ -1,3 +1,11 @@
+# [@appland/navie-v1.16.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.16.0...@appland/navie-v1.16.1) (2024-06-27)
+
+
+### Bug Fixes
+
+* Merge all system messages ([2abd671](https://github.com/getappmap/appmap-js/commit/2abd671a1eaa8fa2443e147a37eee67dd8fa89b2)), closes [#1860](https://github.com/getappmap/appmap-js/issues/1860)
+* Use correct 'assistant' role in vector terms examples ([fab4393](https://github.com/getappmap/appmap-js/commit/fab43938b4e6b32a7f0aaa58c6ff567e009dfd71))
+
 # [@appland/navie-v1.16.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.15.0...@appland/navie-v1.16.0) (2024-06-26)
 
 
