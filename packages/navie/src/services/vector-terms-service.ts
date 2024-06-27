@@ -50,7 +50,7 @@ const promptExamples: OpenAI.ChatCompletionMessageParam[] = [
 Instructions: How to do it
 ---
 Terms: record appmap data java +spring`,
-    role: 'system',
+    role: 'assistant',
   },
 
   {
@@ -62,7 +62,7 @@ Terms: record appmap data java +spring`,
 Instructions: Explain how this is handled by the code
 ---
 Terms: user login handle +password validate invalid error`,
-    role: 'system',
+    role: 'assistant',
   },
 
   {
@@ -75,7 +75,7 @@ Terms: user login handle +password validate invalid error`,
 Instructions: Describe in detail with code snippets
 ---
 Terms: +redis get test group test project 1 blob main readme`,
-    role: 'system',
+    role: 'assistant',
   },
 
   {
@@ -88,7 +88,7 @@ Terms: +redis get test group test project 1 blob main readme`,
 Instructions: Create test cases, following established patterns for mocking with jest.
 ---
 Terms: test cases +log_context jest`,
-    role: 'system',
+    role: 'assistant',
   },
 
   {
@@ -100,7 +100,7 @@ Terms: test cases +log_context jest`,
 Instructions: Describe the authentication and authorization process
 ---
 Terms: +auth authentication authorization token strategy provider`,
-    role: 'system',
+    role: 'assistant',
   },
 ];
 
