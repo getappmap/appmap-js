@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.150.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.150.0...@appland/appmap-v3.150.1) (2024-06-27)
+
+
+### Bug Fixes
+
+* Bump navie version to merge system messages for AnyScale support ([b5606e8](https://github.com/getappmap/appmap-js/commit/b5606e8fbe3d20ef87b445eb49d4d9948c9f3068))
+
 # [@appland/appmap-v3.150.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.149.1...@appland/appmap-v3.150.0) (2024-06-26)
 
 
