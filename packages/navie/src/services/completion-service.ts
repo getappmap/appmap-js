@@ -1,26 +1,12 @@
 import { ChatOpenAI } from '@langchain/openai';
 
 import InteractionHistory, { CompletionEvent } from '../interaction-history';
-import type Message from '../message';
 import completion from '../lib/completion';
 
 export type Completion = AsyncIterable<string>;
 
 export default interface CompletionService {
   complete: (options: { temperature: number | undefined }) => Completion;
-}
-
-// Some LLMs only accept a single system message.
-// This functions merges all system messages into a single message
-// at the start of the list.
-function mergeSystemMessages(messages: Message[]): Message[] {
-  const systemMessages = messages.filter((message) => message.role === 'system');
-  const nonSystemMessages = messages.filter((message) => message.role !== 'system');
-  const mergedSystemMessage = {
-    role: 'system',
-    content: systemMessages.map((message) => message.content).join('\n'),
-  } as const;
-  return [mergedSystemMessage, ...nonSystemMessages];
 }
 
 export class OpenAICompletionService implements CompletionService {
@@ -43,6 +29,6 @@ export class OpenAICompletionService implements CompletionService {
       new CompletionEvent(this.modelName, options.temperature || this.temperature)
     );
 
-    yield* completion(chatAI, mergeSystemMessages(messages));
+    yield* completion(chatAI, messages);
   }
 }

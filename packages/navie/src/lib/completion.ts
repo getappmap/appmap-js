@@ -4,6 +4,7 @@ import type { TokenUsage } from '@langchain/core/language_models/base';
 import { AIMessage, HumanMessage, SystemMessage, type BaseMessage } from '@langchain/core/messages';
 import type { ChatOpenAI } from '@langchain/openai';
 import type { ChatCompletionMessageParam } from 'openai/resources';
+import Message from '../message';
 
 const MESSAGE_CONSTRUCTORS = {
   assistant: AIMessage,
@@ -131,7 +132,9 @@ function tokenUsage(promptTokens: number, completionTokens: number, modelName: s
 }
 
 function estimateTokens(messages: ChatCompletionMessageParam[]): number {
-  return messages.map((x) => x.content?.toString().length ?? 0).reduce((x, y) => x + y);
+  const nonEmpty = messages.map((x) => x.content?.toString().length ?? 0);
+  if (nonEmpty.length) return nonEmpty.reduce((x, y) => x + y);
+  return 0;
 }
 
 async function countTokens(openAI: ChatOpenAI, messages: ChatCompletionMessageParam[]) {
@@ -143,13 +146,26 @@ async function countTokens(openAI: ChatOpenAI, messages: ChatCompletionMessagePa
   }
 }
 
+// Some LLMs only accept a single system message.
+// This functions merges all system messages into a single message
+// at the start of the list.
+function mergeSystemMessages(messages: ChatCompletionMessageParam[]): ChatCompletionMessageParam[] {
+  const systemMessages = messages.filter((message) => message.role === 'system');
+  const nonSystemMessages = messages.filter((message) => message.role !== 'system');
+  const mergedSystemMessage = {
+    role: 'system',
+    content: systemMessages.map((message) => message.content).join('\n'),
+  } as const;
+  return [mergedSystemMessage, ...nonSystemMessages];
+}
+
 export default async function* completion(
   openAI: ChatOpenAI,
   messages: ChatCompletionMessageParam[]
 ): AsyncGenerator<string, Usage, unknown> {
   const promptTokensPromise = countTokens(openAI, messages);
   const response = await openAI.completionWithRetry({
-    messages,
+    messages: mergeSystemMessages(messages),
     model: openAI.modelName,
     stream: true,
   });
