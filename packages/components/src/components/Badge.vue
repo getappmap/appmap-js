@@ -5,8 +5,6 @@
 </template>
 
 <script lang="ts">
-//@ts-nocheck
-
 export default {
   name: 'v-badge',
 };
@@ -22,5 +20,6 @@ export default {
   font-weight: 600;
   vertical-align: bottom;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 </style>
