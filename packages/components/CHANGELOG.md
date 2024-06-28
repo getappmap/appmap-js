@@ -1,3 +1,17 @@
+# [@appland/components-v4.26.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.25.0...@appland/components-v4.26.0) (2024-06-28)
+
+
+### Bug Fixes
+
+* Address uneven padding in the AppMap viewer icon controls ([fe2b6b0](https://github.com/getappmap/appmap-js/commit/fe2b6b03dc217c330dfd6eada14062c0886e374e))
+
+
+### Features
+
+* Add Navie help to recording record-instructions ([1a3a6bb](https://github.com/getappmap/appmap-js/commit/1a3a6bb5116de22ca7678633b678f8fa0d368ab9))
+* Improve the readability of LLM configuration ([0cd024d](https://github.com/getappmap/appmap-js/commit/0cd024d34cc28d425724941ddeafdb4769bd3804))
+* The presence of Navie buttons is now more prominent in AppMaps ([9372711](https://github.com/getappmap/appmap-js/commit/93727116a8e6aad547a01a39f6287af0a173e780))
+
 # [@appland/components-v4.25.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.24.4...@appland/components-v4.25.0) (2024-06-24)
 
 
