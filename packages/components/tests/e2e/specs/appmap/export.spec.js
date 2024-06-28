@@ -16,7 +16,7 @@ context('Export', () => {
     });
 
     it('shows JSON and SVG options', () => {
-      cy.get('[data-cy="export-button"] .popper__button').click();
+      cy.get('[data-cy="export-button"] [data-cy="popper-button"]').click();
       cy.get('.popper__content').contains('JSON').should('exist');
       cy.get('.popper__content').contains('SVG').should('exist');
     });

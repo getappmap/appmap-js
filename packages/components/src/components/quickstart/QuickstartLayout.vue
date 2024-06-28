@@ -142,8 +142,11 @@ body {
 
     &.inline {
       display: inline-block;
-      padding: 0 5px;
+      padding: 0 5px 0 5px;
       margin: 0;
+      line-height: 1;
+      padding: 0.25rem;
+      padding-bottom: 0;
       border: none;
       color: $base07;
       background-color: rgba(0, 0, 0, 0.25);
@@ -223,9 +226,6 @@ article {
   }
   h3 {
     display: flex;
-  }
-  p {
-    margin-left: 2.5rem;
   }
   &:last-child {
     margin-bottom: 2rem;
