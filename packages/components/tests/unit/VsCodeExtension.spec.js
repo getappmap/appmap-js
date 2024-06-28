@@ -286,7 +286,7 @@ describe('VsCodeExtension.vue', () => {
     const state = { currentView: 'viewSequence' };
     await wrapper.vm.setState(JSON.stringify(state));
 
-    await wrapper.find('[data-cy="export-button"] .popper__button').trigger('click');
+    await wrapper.find('[data-cy="export-button"] [data-cy="popper-button"]').trigger('click');
     expect(wrapper.find('[data-cy="exportSVG"]').exists()).toBe(true);
   });
 

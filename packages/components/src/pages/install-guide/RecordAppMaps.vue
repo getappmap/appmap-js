@@ -32,11 +32,13 @@
               :theme="theme"
               :web-framework="webFrameworkSupported ? webFramework : undefined"
               :test-framework="testFrameworkSupported ? testFramework : undefined"
+              :editor="editor"
             />
             <VRecordInstructions_Java
               v-else
               :web-framework="webFrameworkSupported ? webFramework : undefined"
               :test-framework="testFrameworkSupported ? testFramework : undefined"
+              :editor="editor"
             />
           </template>
           <template v-else-if="isRuby">
@@ -44,6 +46,7 @@
               :theme="theme"
               :web-framework="webFrameworkSupported ? webFramework : undefined"
               :test-framework="testFrameworkSupported ? testFramework : undefined"
+              :editor="editor"
               :complete="complete"
             />
           </template>
@@ -52,6 +55,7 @@
               :theme="theme"
               :web-framework="webFrameworkSupported ? webFramework : undefined"
               :test-framework="testFrameworkSupported ? testFramework : undefined"
+              :editor="editor"
               :complete="complete"
             />
           </template>
@@ -60,6 +64,7 @@
               :theme="theme"
               :web-framework="webFrameworkSupported ? webFramework : undefined"
               :test-framework="testFrameworkSupported ? testFramework : undefined"
+              :editor="editor"
               :complete="complete"
             />
           </template>

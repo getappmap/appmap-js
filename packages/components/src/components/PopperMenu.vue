@@ -1,9 +1,9 @@
 <template>
-  <div :class="classes">
-    <div class="popper__button" @click="open = !open">
+  <div :class="classes" :data-full-screen-allowed="allowFullscreen">
+    <div @click="open = !open" data-cy="popper-button">
       <slot name="icon" />
     </div>
-    <div class="popper__body filter" v-if="open">
+    <div class="popper__body filter" v-if="open" ref="popperBody">
       <div class="popper__content">
         <slot name="body" />
       </div>
@@ -30,6 +30,11 @@ export default {
       default: false,
       required: false,
     },
+    allowFullscreen: {
+      type: Boolean,
+      default: true,
+      required: false,
+    },
   },
   data() {
     return {
@@ -37,6 +42,23 @@ export default {
       hAlign: this.position.split(/\s+?/)[1],
       open: false,
     };
+  },
+  watch: {
+    async open(isOpen) {
+      if (!isOpen) {
+        return;
+      }
+
+      // Let the DOM update before referencing the popper body.
+      // It won't exist until the next tick.
+      await this.$nextTick();
+
+      const { top } = this.$refs.popperBody.getBoundingClientRect();
+      if (top < 0) {
+        const padding = 16;
+        window.scrollBy({ top: top - padding, behavior: 'smooth' });
+      }
+    },
   },
   computed: {
     classes() {
@@ -51,6 +73,11 @@ export default {
       }
 
       return classNames;
+    },
+  },
+  methods: {
+    close() {
+      this.open = false;
     },
   },
   mounted() {
@@ -69,30 +96,30 @@ export default {
   position: relative;
   color: $gray4;
 
-  &__button {
-    position: relative;
-    padding: 0.2rem;
-    color: inherit;
-    cursor: pointer;
-    line-height: 0;
-    transition: $transition;
-
-    .popper--highlight & {
-      color: $light-purple;
-    }
-
-    svg {
-      width: 1rem;
-      height: 1rem;
-    }
-  }
-
   &.popper--opened,
   &:hover {
     color: $gray5;
   }
 
   $border-radius: 1rem;
+
+  &[data-full-screen-allowed='true'] .filter {
+    @media (max-width: 900px) {
+      position: fixed;
+      left: 0 !important;
+      top: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      max-width: inherit !important;
+      max-height: inherit !important;
+      width: inherit !important;
+      height: inherit !important;
+      margin: 0 !important;
+      border-radius: 0 !important;
+      z-index: 1000;
+      transform: none !important;
+    }
+  }
 
   &__body {
     border-radius: 0.5rem;
@@ -111,21 +138,6 @@ export default {
 
     &.filter {
       background-color: $gray2;
-      @media (max-width: 900px) {
-        position: fixed;
-        left: 0 !important;
-        top: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        max-width: inherit !important;
-        max-height: inherit !important;
-        width: inherit !important;
-        height: inherit !important;
-        margin: 0 !important;
-        border-radius: 0 !important;
-        z-index: 1000;
-        transform: none !important;
-      }
     }
 
     .popper--v-top & {
