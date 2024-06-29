@@ -186,12 +186,11 @@ export default {
       if (response.status === 201) {
         this.error = '';
         this.submitted = true;
-      } else if (response.status < 500 && response.status >= 400) {
-        this.email = '';
-        this.error = this.generateInvalidFieldMsg('email address');
       } else {
         this.email = '';
-        this.error = GENERIC_ERROR_MSG;
+        const body = await response.json();
+        if ('error' in body) this.error = body.error;
+        this.error ??= GENERIC_ERROR_MSG;
       }
     },
     async completeActivation() {
@@ -355,6 +354,8 @@ export default {
       color: $hotpink;
       font-size: 0.9rem;
       margin: 0;
+      max-height: 4rem;
+      overflow-y: scroll;
     }
 
     .accept-tos {
