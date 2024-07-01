@@ -22,7 +22,7 @@ step: 6
   - [Requests recording in Spark Framework](#requests-recording-in-spark-framework)
 - [Remote recording](#remote-recording)
 - [Process recording](#process-recording)
-- [Code Block Recording](#code-block-recording)
+- [Code block recording](#code-block-recording)
 - [Configuration](#configuration)
 - [Annotations](#annotations)
   - [@Labels](#labels)
@@ -34,7 +34,7 @@ step: 6
 
 ## About
 
-`appmap-agent` is a Java agent JAR for recording [AppMap Data](https://github.com/getappmap/appmap) of your code. 
+`appmap-agent` is a Java agent JAR for recording [AppMap Data](https://github.com/getappmap/appmap) of your code.
 
 {% include docs/what_is_appmap_snippet.md %}
 
@@ -79,7 +79,7 @@ $ java -javaagent:$HOME/.appmap/lib/java/appmap.jar myapp.jar
 ### Requests recording in Spring Boot and Spring Web Framework
 For Spring Boot and Spring Web Framework applications, `appmap-java` installs a ServletListener during initialization that will create recordings. The listener starts the recording before the servlet's `service` method is called, and ends the recording once `service` returns.
 
-For Spring Boot, `appmap-java` adds the listener when the Spring Application is initialized. 
+For Spring Boot, `appmap-java` adds the listener when the Spring Application is initialized.
 
 For Spring Web Framework, `appmap-java` adds the listener when Spring's servlet container is initialized.
 
@@ -123,7 +123,7 @@ $ java -javaagent:$HOME/.appmap/lib/java/appmap.jar -jar target/*.jar
 
 Other related options such as `appmap.recording.file` and `appmap.recording.name` are also available. Consult the [Configuration](#configuration) section for details.
 
-## Code Block Recording
+## Code block recording
 
 You can use the Java function `com.appland.appmap.record.Recording#record` to record a specific span of code. With this method, you can control exactly what code is recorded, and where the recording is saved.
 
@@ -168,7 +168,7 @@ packages:
   exclude: [ com.mycorp.myproject.MyClass#MyMethod ]
 - path: org.springframework.web
   shallow: true
-  exclude: 
+  exclude:
   - org.springframework.web.util
 - path: java.util.logging
   methods:
@@ -196,7 +196,7 @@ Each entry in the `packages` list is a YAML object which has the following keys:
   Default: `false`.
 
 * **methods** A list of YAML objects describing how specific methods should be handled.
-  * **class** a regular expressiom matching names of classes in the package 
+  * **class** a regular expression matching names of classes in the package
   * **name** a regular expression matching names of methods in **class** that should be instrumented
   * **labels** (optional) a list of labels that should be applied to all matching methods.
 

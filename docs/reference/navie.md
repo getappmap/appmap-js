@@ -152,6 +152,8 @@ Continue to configure your local environment with the following environment vari
 
 **Note:** Even though it's running locally a dummy placeholder API key is still required.
 
+{% include vimeo.html id='969002308' %}
+
 ## OpenAI Key Management in VS Code
 
 ### Add a new OpenAI Key in VS Code 
