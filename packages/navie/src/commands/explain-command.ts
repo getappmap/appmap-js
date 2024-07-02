@@ -14,6 +14,7 @@ import InteractionHistory, {
 import { ProjectInfo } from '../project-info';
 import Command, { CommandRequest } from '../command';
 import { ChatHistory } from '../navie';
+import getMostRecentMessages from '../lib/get-most-recent-messages';
 
 export type ExplainOptions = {
   tokenLimit: number;
@@ -96,6 +97,10 @@ export default class ExplainCommand implements Command {
     if (hasChatHistory) {
       for (const e of await this.memoryService.predictSummary(chatHistory))
         this.interactionHistory.addEvent(e);
+
+      for (const e of getMostRecentMessages(chatHistory)) {
+        this.interactionHistory.addEvent(e);
+      }
     }
 
     if (request.prompt) {
