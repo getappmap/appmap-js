@@ -7,7 +7,10 @@ import CodeSelectionService from '../services/code-selection-service';
 import CompletionService from '../services/completion-service';
 import MemoryService from '../services/memory-service';
 import ProjectInfoService from '../services/project-info-service';
-import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
+import InteractionHistory, {
+  CompletionEvent,
+  PromptInteractionEvent,
+} from '../interaction-history';
 import { ProjectInfo } from '../project-info';
 import Command, { CommandRequest } from '../command';
 import { ChatHistory } from '../navie';
@@ -91,7 +94,8 @@ export default class ExplainCommand implements Command {
 
     const hasChatHistory = chatHistory && chatHistory.length > 0;
     if (hasChatHistory) {
-      await this.memoryService.predictSummary(chatHistory);
+      for (const e of await this.memoryService.predictSummary(chatHistory))
+        this.interactionHistory.addEvent(e);
     }
 
     if (request.prompt) {
@@ -103,7 +107,15 @@ export default class ExplainCommand implements Command {
     if (codeSelection) this.codeSelectionService.applyCodeSelection(codeSelection);
     mode.applyQuestionPrompt(question);
 
-    const response = this.completionService.complete({ temperature: mode.temperature });
+    const { messages } = this.interactionHistory.buildState();
+
+    this.interactionHistory.addEvent(
+      new CompletionEvent(
+        this.completionService.modelName,
+        mode.temperature ?? this.completionService.temperature ?? -1
+      )
+    );
+    const response = this.completionService.complete(messages, { temperature: mode.temperature });
     for await (const token of response) {
       yield token;
     }

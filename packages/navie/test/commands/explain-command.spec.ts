@@ -22,6 +22,7 @@ import {
 import { CommandRequest } from '../../src/command';
 import { UserOptions } from '../../src/lib/parse-options';
 
+const CompletionEvent = { type: 'completion', model: 'mock', temperature: 0.5 };
 describe('ExplainCommand', () => {
   let interactionHistory: InteractionHistory;
   let completionService: CompletionService;
@@ -115,6 +116,8 @@ describe('ExplainCommand', () => {
     interactionHistory = new InteractionHistory();
     completionService = {
       complete: jest.fn().mockReturnValue(TOKEN_STREAM),
+      modelName: 'mock',
+      temperature: 0.5,
     };
     classificationService = {
       classifyQuestion: jest.fn().mockResolvedValue([]),
@@ -164,12 +167,12 @@ describe('ExplainCommand', () => {
 
     it('applies the expected prompts', async () => {
       await explain();
-      expect(interactionHistory.events.map((event) => event.metadata)).toEqual([]);
+      expect(interactionHistory.events.map((event) => event.metadata)).toEqual([CompletionEvent]);
     });
 
     it('applies the default temperature', async () => {
       await explain();
-      expect(completionService.complete).toHaveBeenCalledWith({ temperature: undefined });
+      expect(completionService.complete).toHaveBeenCalledWith([], { temperature: undefined });
     });
 
     it('returns a response', async () => {
@@ -227,7 +230,7 @@ describe('ExplainCommand', () => {
 
     it('applies the expected prompts', async () => {
       await explain();
-      expect(interactionHistory.events.map((event) => event.metadata)).toEqual([]);
+      expect(interactionHistory.events.map((event) => event.metadata)).toEqual([CompletionEvent]);
     });
 
     it('returns a response', async () => {

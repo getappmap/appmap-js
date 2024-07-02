@@ -6,6 +6,7 @@ import { ChatOpenAI } from '@langchain/openai';
 import VectorTermsService from '../../src/services/vector-terms-service';
 import InteractionHistory from '../../src/interaction-history';
 import { mockAIResponse } from '../fixture';
+import { OpenAICompletionService } from '../../src/services/completion-service';
 
 jest.mock('@langchain/openai');
 const completionWithRetry = jest.mocked(ChatOpenAI.prototype.completionWithRetry);
@@ -17,7 +18,7 @@ describe('VectorTermsService', () => {
   beforeEach(() => {
     interactionHistory = new InteractionHistory();
     interactionHistory.on('event', (event) => console.log(event.message));
-    service = new VectorTermsService(interactionHistory, 'gpt-4', 0.5);
+    service = new VectorTermsService(interactionHistory, new OpenAICompletionService('gpt-4', 0.5));
   });
   afterEach(() => jest.resetAllMocks());
 

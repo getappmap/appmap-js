@@ -2,15 +2,15 @@ import { ConversationSummaryMemory } from 'langchain/memory';
 import { AIMessage, HumanMessage } from '@langchain/core/messages';
 import { ChatOpenAI } from '@langchain/openai';
 
+import { InteractionEvent, PromptInteractionEvent } from '../interaction-history';
 import Message from '../message';
-import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
 
-export default class MemoryService {
-  constructor(
-    public readonly interactionHistory: InteractionHistory,
-    public readonly modelName: string,
-    public readonly temperature: number
-  ) {}
+export default interface MemoryService {
+  predictSummary(messages: Message[]): Promise<InteractionEvent[]>;
+}
+
+export class OpenAIMemoryService implements MemoryService {
+  constructor(public readonly modelName: string, public readonly temperature: number) {}
 
   async predictSummary(messages: Message[]) {
     const predictAI = new ChatOpenAI({
@@ -31,6 +31,6 @@ export default class MemoryService {
     });
 
     const summary = await memory.predictNewSummary(lcMessages, '');
-    this.interactionHistory.addEvent(new PromptInteractionEvent('summary', 'system', summary));
+    return [new PromptInteractionEvent('summary', 'system', summary)];
   }
 }

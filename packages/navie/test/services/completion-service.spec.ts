@@ -3,9 +3,7 @@ import * as OpenAI from '@langchain/openai';
 import InteractionHistory from '../../src/interaction-history';
 import { OpenAICompletionService } from '../../src/services/completion-service';
 
-jest.mock('@langchain/openai', () => ({
-  ChatOpenAI: jest.fn(),
-}));
+jest.mock('@langchain/openai');
 
 describe('CompletionService', () => {
   let interactionHistory: InteractionHistory;
@@ -15,7 +13,7 @@ describe('CompletionService', () => {
 
   beforeEach(() => {
     interactionHistory = new InteractionHistory();
-    service = new OpenAICompletionService(interactionHistory, modelName, temperature);
+    service = new OpenAICompletionService(modelName, temperature);
   });
 
   describe('when the completion service is created', () => {
@@ -28,41 +26,42 @@ describe('CompletionService', () => {
   });
 
   describe('when the completion service is used', () => {
-    let openAI: jest.Mock;
-    let completionWithRetry: jest.Mock;
+    const openAI = jest.mocked(OpenAI.ChatOpenAI);
+    const completionWithRetry = jest.mocked<
+      (
+        request: OpenAI.OpenAIClient.Chat.ChatCompletionCreateParamsStreaming,
+        options?: OpenAI.OpenAICoreRequestOptions
+      ) => Promise<AsyncIterable<OpenAI.OpenAIClient.Chat.Completions.ChatCompletionChunk>>
+    >(OpenAI.ChatOpenAI.prototype.completionWithRetry);
 
     beforeEach(() => {
-      completionWithRetry = jest.fn().mockImplementation(async function* () {
-        yield {
-          choices: [
-            {
-              delta: {
-                content: 'User management works by managing users.',
-                role: 'assistant',
+      const generator =
+        async function* (): AsyncIterable<OpenAI.OpenAIClient.Chat.Completions.ChatCompletionChunk> {
+          yield {
+            choices: [
+              {
+                delta: {
+                  content: 'User management works by managing users.',
+                  role: 'assistant',
+                },
+                finish_reason: 'stop',
+                index: 0,
+                logprobs: null,
               },
-              finish_reason: 'stop',
-              index: 0,
-              logprobs: null,
-            },
-          ],
-          id: 'the-id',
-          model: 'the-model',
-          created: 1234567890,
-          object: 'chat.completion.chunk',
+            ],
+            id: 'the-id',
+            model: 'the-model',
+            created: 1234567890,
+            object: 'chat.completion.chunk',
+          };
         };
-      });
 
-      openAI = OpenAI.ChatOpenAI as unknown as jest.Mock;
-      openAI.mockImplementation(
-        () =>
-          ({
-            completionWithRetry,
-          } as unknown as OpenAI.ChatOpenAI)
-      );
+      completionWithRetry.mockImplementation(async () => generator());
     });
 
     const complete = async (options: { temperature: number | undefined }) => {
-      const tokens = service.complete(options);
+      const { messages } = interactionHistory.buildState();
+      const tokens = service.complete(messages, options);
       const result = new Array<string>();
       for await (const token of tokens) {
         result.push(token);
@@ -86,7 +85,9 @@ describe('CompletionService', () => {
     describe('with a custom temperature', () => {
       it('completes the question', async () => {
         await complete({ temperature: 0.5 });
-        expect(openAI).toHaveBeenCalledWith(expect.objectContaining({ temperature: 0.5 }));
+        expect(completionWithRetry).toHaveBeenCalledWith(
+          expect.objectContaining({ temperature: 0.5 })
+        );
       });
     });
   });

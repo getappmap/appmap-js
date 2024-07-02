@@ -1,9 +1,8 @@
-import { ChatOpenAI } from '@langchain/openai';
-import OpenAI from 'openai';
 import InteractionHistory, { ClassificationEvent } from '../interaction-history';
+import Message from '../message';
 import { ContextV2 } from '../context';
-import completion from '../lib/completion';
 import { ChatHistory } from '../navie';
+import CompletionService from './completion-service';
 
 const SYSTEM_PROMPT = `**Question classifier**
 
@@ -134,8 +133,7 @@ Some examples of questions and their classifications are:
 export default class ClassificationService {
   constructor(
     public readonly interactionHistory: InteractionHistory,
-    public modelName: string,
-    public temperature: number
+    public readonly completion: CompletionService
   ) {}
 
   async classifyQuestion(
@@ -151,12 +149,7 @@ export default class ClassificationService {
       .filter(Boolean)
       .join('\n\n');
 
-    const openAI: ChatOpenAI = new ChatOpenAI({
-      modelName: this.modelName,
-      temperature: this.temperature,
-    });
-
-    const messages: OpenAI.ChatCompletionMessageParam[] = [
+    const messages: Message[] = [
       {
         content: SYSTEM_PROMPT,
         role: 'system',
@@ -167,7 +160,7 @@ export default class ClassificationService {
       },
     ];
 
-    const response = completion(openAI, messages);
+    const response = this.completion.complete(messages);
     const tokens = Array<string>();
     for await (const token of response) {
       tokens.push(token);

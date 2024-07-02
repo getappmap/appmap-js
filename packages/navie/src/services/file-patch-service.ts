@@ -1,10 +1,9 @@
-import { ChatOpenAI } from '@langchain/openai';
 import { warn } from 'console';
 import { readFile } from 'fs/promises';
-import OpenAI from 'openai';
 
 import InteractionHistory from '../interaction-history';
-import completion from '../lib/completion';
+import Message from '../message';
+import CompletionService from './completion-service';
 
 export type FileUpdate = {
   file: string;
@@ -99,26 +98,17 @@ Output:
 `;
 
 export default class FilePatchService {
-  constructor(
-    public history: InteractionHistory,
-    public modelName: string,
-    public temperature: number
-  ) {}
+  constructor(public history: InteractionHistory, public completionService: CompletionService) {}
 
   async generatePatch(fileUpdate: FileUpdate): Promise<string | undefined> {
     const fileContents = await readFile(fileUpdate.file, 'utf8');
-
-    const openAI: ChatOpenAI = new ChatOpenAI({
-      modelName: this.modelName,
-      temperature: this.temperature,
-    });
 
     const fileWithNumberedLines = fileContents
       .split('\n')
       .map((line, index) => `${index + 1}${line}`)
       .join('\n');
 
-    const messages: OpenAI.ChatCompletionMessageParam[] = [
+    const messages: Message[] = [
       {
         content: SYSTEM_PROMPT,
         role: 'system',
@@ -133,7 +123,7 @@ export default class FilePatchService {
       },
     ];
 
-    const response = completion(openAI, messages);
+    const response = this.completionService.complete(messages);
     const tokens = Array<string>();
     for await (const token of response) {
       tokens.push(token);

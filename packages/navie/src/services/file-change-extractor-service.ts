@@ -1,6 +1,7 @@
 import XML from 'fast-xml-parser';
 
 import InteractionHistory from '../interaction-history';
+import CompletionService from './completion-service';
 import { FileUpdate } from './file-update-service';
 import { ChatHistory, ClientRequest } from '../navie';
 import Message from '../message';
@@ -39,11 +40,7 @@ Example output:
 `;
 
 export default class FileChangeExtractorService {
-  constructor(
-    public history: InteractionHistory,
-    public modelName: string,
-    public temperature: number
-  ) {}
+  constructor(public history: InteractionHistory, public completionService: CompletionService) {}
 
   async listFiles(
     clientRequest: ClientRequest,
@@ -55,7 +52,7 @@ export default class FileChangeExtractorService {
       return [];
     }
 
-    const oracle = new Oracle('List files', LIST_PROMPT, this.modelName, this.temperature);
+    const oracle = new Oracle('List files', LIST_PROMPT, this.completionService);
     const fileList = await oracle.ask(messages);
     if (!fileList) {
       this.history.log('[file-change-extractor] Failed to list files');
