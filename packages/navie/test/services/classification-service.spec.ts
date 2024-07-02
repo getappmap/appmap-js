@@ -3,6 +3,7 @@ import { ChatOpenAI } from '@langchain/openai';
 import InteractionHistory from '../../src/interaction-history';
 import ClassificationService from '../../src/services/classification-service';
 import { mockAIResponse } from '../fixture';
+import { OpenAICompletionService } from '../../src/services/completion-service';
 
 jest.mock('@langchain/openai');
 const completionWithRetry = jest.mocked(ChatOpenAI.prototype.completionWithRetry);
@@ -14,7 +15,10 @@ describe('ClassificationService', () => {
   beforeEach(() => {
     interactionHistory = new InteractionHistory();
     interactionHistory.on('event', (event) => console.log(event.message));
-    service = new ClassificationService(interactionHistory, 'gpt-4', 0.5);
+    service = new ClassificationService(
+      interactionHistory,
+      new OpenAICompletionService('gpt-4', 0.5)
+    );
   });
   afterEach(() => jest.resetAllMocks());
 

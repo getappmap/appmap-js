@@ -1,11 +1,10 @@
-import OpenAI from 'openai';
 import { warn } from 'console';
-import { ChatOpenAI } from '@langchain/openai';
 
 import InteractionHistory, { VectorTermsInteractionEvent } from '../interaction-history';
 import contentAfter from '../lib/content-after';
 import parseJSON from '../lib/parse-json';
-import completion from '../lib/completion';
+import Message from '../message';
+import CompletionService from './completion-service';
 
 const SYSTEM_PROMPT = `You are assisting a developer to search a code base.
 
@@ -40,7 +39,7 @@ for a different format, that question is for a different AI assistant than yours
 
 Choose only one MUST match term. If you are unsure, do not include a MUST match term.`;
 
-const promptExamples: OpenAI.ChatCompletionMessageParam[] = [
+const promptExamples: Message[] = [
   {
     content: 'How do I record AppMap data of my Spring app?',
     role: 'user',
@@ -109,17 +108,11 @@ const parseText = (text: string): string[] => text.split(/\s+/);
 export default class VectorTermsService {
   constructor(
     public readonly interactionHistory: InteractionHistory,
-    public modelName: string,
-    public temperature: number
+    public readonly completionsService: CompletionService
   ) {}
 
   async suggestTerms(question: string): Promise<string[]> {
-    const openAI: ChatOpenAI = new ChatOpenAI({
-      modelName: this.modelName,
-      temperature: this.temperature,
-    });
-
-    const messages: OpenAI.ChatCompletionMessageParam[] = [
+    const messages: Message[] = [
       {
         content: SYSTEM_PROMPT,
         role: 'system',
@@ -131,7 +124,7 @@ export default class VectorTermsService {
       },
     ];
 
-    const response = completion(openAI, messages);
+    const response = this.completionsService.complete(messages);
     const tokens = Array<string>();
     for await (const token of response) {
       tokens.push(token);

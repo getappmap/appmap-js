@@ -1,7 +1,8 @@
 import assert from 'assert';
 import EventEmitter from 'events';
+import { warn } from 'node:console';
 
-import MemoryService from './services/memory-service';
+import { OpenAIMemoryService } from './services/memory-service';
 import VectorTermsService from './services/vector-terms-service';
 import { OpenAICompletionService } from './services/completion-service';
 import InteractionHistory, {
@@ -32,7 +33,6 @@ import FileChangeExtractorService from './services/file-change-extractor-service
 import FileUpdateService from './services/file-update-service';
 import parseOptions from './lib/parse-options';
 import ListFilesCommand from './commands/list-files-command';
-import { warn } from 'console';
 
 export type ChatHistory = Message[];
 
@@ -79,29 +79,13 @@ export default function navie(
     warn(`Using response tokens ${options.responseTokens}`);
 
   const interactionHistory = new InteractionHistory();
-  const completionService = new OpenAICompletionService(
-    interactionHistory,
-    options.modelName,
-    options.temperature
-  );
+  const completionService = new OpenAICompletionService(options.modelName, options.temperature);
 
-  const classificationService = new ClassificationService(
-    interactionHistory,
-    options.modelName,
-    options.temperature
-  );
+  const classificationService = new ClassificationService(interactionHistory, completionService);
 
-  const vectorTermsService = new VectorTermsService(
-    interactionHistory,
-    options.modelName,
-    options.temperature
-  );
+  const vectorTermsService = new VectorTermsService(interactionHistory, completionService);
 
-  const techStackService = new TechStackService(
-    interactionHistory,
-    options.modelName,
-    options.temperature
-  );
+  const techStackService = new TechStackService(interactionHistory, completionService);
 
   const contextProviderV2 = async (
     request: ContextV2.ContextRequest
@@ -127,11 +111,7 @@ export default function navie(
       techStackService
     );
     const projectInfoService = new ProjectInfoService(interactionHistory, projectInfoProvider);
-    const memoryService = new MemoryService(
-      interactionHistory,
-      options.modelName,
-      options.temperature
-    );
+    const memoryService = new OpenAIMemoryService(options.modelName, options.temperature);
 
     return new ExplainCommand(
       options,
@@ -145,11 +125,7 @@ export default function navie(
     );
   };
 
-  const fileChangeExtractor = new FileChangeExtractorService(
-    interactionHistory,
-    options.modelName,
-    options.temperature
-  );
+  const fileChangeExtractor = new FileChangeExtractorService(interactionHistory, completionService);
 
   const fileUpdateService = new FileUpdateService(interactionHistory);
 

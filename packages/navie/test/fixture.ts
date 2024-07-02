@@ -95,7 +95,7 @@ export function doesNotRequestContext() {
 
 export function predictsSummary(): (messages: Message[]) => void {
   return jest.fn().mockImplementation((_messages: Message[]) => {
-    return Promise.resolve();
+    return Promise.resolve([]);
   });
 }
 

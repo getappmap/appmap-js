@@ -1,7 +1,6 @@
-import { ChatOpenAI } from '@langchain/openai';
-import OpenAI from 'openai';
 import InteractionHistory, { TechStackEvent } from '../interaction-history';
-import completion from '../lib/completion';
+import Message from '../message';
+import CompletionService from './completion-service';
 
 const SYSTEM_PROMPT = `**Programming language and framework detector**
 
@@ -51,17 +50,11 @@ If no languages or frameworks are mentioned, respond with the word "unknown".
 export default class TechStackService {
   constructor(
     public readonly interactionHistory: InteractionHistory,
-    public modelName: string,
-    public temperature: number
+    public readonly completionService: CompletionService
   ) {}
 
   async detectTerms(question: string): Promise<string[]> {
-    const openAI: ChatOpenAI = new ChatOpenAI({
-      modelName: this.modelName,
-      temperature: this.temperature,
-    });
-
-    const messages: OpenAI.ChatCompletionMessageParam[] = [
+    const messages: Message[] = [
       {
         content: SYSTEM_PROMPT,
         role: 'system',
@@ -72,7 +65,7 @@ export default class TechStackService {
       },
     ];
 
-    const response = completion(openAI, messages);
+    const response = this.completionService.complete(messages);
     const tokens = Array<string>();
     for await (const token of response) {
       tokens.push(token);
