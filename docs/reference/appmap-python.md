@@ -249,6 +249,8 @@ To enable debugging support, ensure:
 
 **Note** Your application must be running in a supported web framework for remote recording to work.
 
+{% include vimeo.html id='973082886' %}
+
 ## Process recording
 
 AppMap can record your entire Python application from start to finish.
