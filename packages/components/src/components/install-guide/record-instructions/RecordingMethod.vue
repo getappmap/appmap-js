@@ -183,9 +183,11 @@ export default Vue.extend({
   }
 
   &__badge {
-    background-color: rgba($blue, 0.2);
-    padding: 0.125rem 0.5rem;
-    padding-top: 0.25rem;
+    // DB: Marked important because these styles are getting overwritten in VS Code.
+    // It's not clear why.
+    background-color: rgba($blue, 0.2) !important;
+    padding: 0.125rem 0.5rem !important;
+    padding-top: 0.25rem !important;
   }
 
   &__icon {
@@ -203,6 +205,7 @@ export default Vue.extend({
     svg {
       width: 1rem;
       height: 1rem;
+      fill: $white;
     }
   }
 
@@ -239,7 +242,7 @@ export default Vue.extend({
       border-bottom: 1px solid rgba(white, 0.1);
 
       h2 {
-        margin: 0;
+        margin: 0 !important; // DB: Overridden in VS Code.
       }
     }
   }
