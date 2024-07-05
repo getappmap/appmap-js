@@ -39,6 +39,7 @@ export default function buildPrompts(
   process: NaviePromptSuggestion[];
   remote: NaviePromptSuggestion[];
   test: NaviePromptSuggestion[];
+  codeBlock: NaviePromptSuggestion[];
 } {
   const prettyEditorName = editor === 'vscode' ? 'Visual Studio Code' : 'JetBrains';
   return {
@@ -185,6 +186,38 @@ export default function buildPrompts(
           webFramework,
           testFramework,
           'What is the benefit of recording tests and how does additional AppMap data help Navie understand my application?'
+        ),
+      },
+    ],
+    codeBlock: [
+      {
+        label: 'How do I record a code block?',
+        prompt: buildPrompt(
+          false,
+          false,
+          webFramework,
+          testFramework,
+          'How do I record a code block?'
+        ),
+      },
+      {
+        label: 'What is a code block recording?',
+        prompt: buildPrompt(
+          false,
+          false,
+          webFramework,
+          testFramework,
+          'What is a code block recording?'
+        ),
+      },
+      {
+        label: 'When would I use a code block recording?',
+        prompt: buildPrompt(
+          false,
+          false,
+          webFramework,
+          testFramework,
+          'When would I need to use a code block recording to record parts of my application?'
         ),
       },
     ],
