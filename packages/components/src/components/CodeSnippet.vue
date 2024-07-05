@@ -104,6 +104,7 @@ export default {
 
   &__line {
     min-height: 1rem;
+    padding-top: 0.33rem;
   }
 
   &__input {
@@ -112,8 +113,9 @@ export default {
     color: $base07;
     padding: 0.75rem 1.25rem;
     margin: 0;
-    border: none;
-    border-radius: 0;
+    border: 1px solid rgba(white, 0.2);
+    border-right: none;
+    border-radius: $border-radius 0 0 $border-radius;
     background: transparent;
     outline: none;
     appearance: none;
