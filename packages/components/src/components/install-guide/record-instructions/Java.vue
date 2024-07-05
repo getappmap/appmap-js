@@ -1,5 +1,6 @@
 <template>
   <section>
+    <h3>Getting started</h3>
     <p>
       Use the "Run with AppMap" debug configuration to launch your application or run your tests
       through Microsoft's Test Runner for Java extension.
@@ -12,127 +13,156 @@
     <div class="vscode-screenshot">
       <img src="../../../assets/vscode-java.gif" />
     </div>
-    <h2>Choose the best recording method for this project</h2>
-    <template v-if="testFramework">
-      <section class="recording-method">
-        <h3>
-          <i class="header-icon"><TestsIcon /></i>
-          Tests recording
-          <span class="recommended-badge">recommended</span>
-        </h3>
-        <p>
-          When you run your {{ testFramework.name }} tests with the AppMap
-          <code class="inline">javaagent</code> JVM argument, an AppMap will be created for each
-          test.
-        </p>
-        <p>
-          This will automatically be configured for you by running your tests via the "Testing"
-          button available in the sidebar or by pressing F1 and running the
-          <code class="inline">Test: Run All Tests</code> command.
-        </p>
-        <p>
-          For more information, visit
-          <a
-            href="https://appmap.io/docs/reference/vscode.html#create-appmaps-from-junit-test-runs"
-            target="_blank"
-          >
-            AppMap docs - VSCode Tests recording
-          </a>
-        </p>
-      </section>
-    </template>
-    <template v-else>
-      <VTestsPrompt framework="JUnit or TestNG" />
-    </template>
-    <template v-if="webFramework">
-      <section class="recording-method">
-        <h3>
-          <i class="header-icon"><RemoteRecordingIcon /></i>
-          Remote recording
-        </h3>
-        <p>
-          When your application uses {{ this.webFramework.name }}, and you run your application with
-          the AppMap <code class="inline">javaagent</code> JVM argument, remote recording is
-          enabled. To make a remote recording, run your application using the "Run with AppMap"
-          debug configuration with AppMap. Then use the "Record" button to start recording. Interact
-          with your application, through its user interface and/or by making API requests using a
-          tool such as Postman. When you are done, click the "Record" button again to save the
-          recording and view the AppMap.
-        </p>
-        <p>
-          For more information, visit
-          <a
-            href="https://appmap.io/docs/reference/vscode.html#running-a-java-application-with-appmap"
-            target="_blank"
-            >AppMap docs - VSCode Remote recording</a
-          >
-        </p>
-      </section>
-    </template>
-    <template v-else>
-      <div class="recording-method recording-method--disabled">
-        <h3>
-          <i class="header-icon header-icon--disabled"><RemoteRecordingIcon /></i>
-          Remote recording
-        </h3>
-        <p>
-          Did you know? When you run a Spring app, you can make AppMaps of all the HTTP requests
-          served by your app. Spring wasn't detected in this project, though.
-        </p>
-      </div>
-    </template>
-    <section class="recording-method">
-      <h3>
-        <i class="header-icon"><ProcessIcon /></i>Process recording
-      </h3>
-      <p>
-        AppMap can record an entire Java process from start to finish. To use process recording,
-        modify <code class="inline">.vscode/launch.json</code> to include
-        <code class="inline">-Dappmap.recording.auto=true</code> in
-        <code class="inline">vmArgs</code>. After running this configuration, an AppMap will be
-        saved once your application exits.
-      </p>
-      <p>
-        Visit
-        <a
-          href="https://appmap.io/docs/reference/appmap-java.html#process-recording"
-          target="_blank"
-        >
-          AppMap Docs - Java Process recording
-        </a>
-        for more information.
-      </p>
-    </section>
-    <section class="recording-method">
-      <h3>
-        <i class="header-icon"><PlayIcon /></i>
-        Code Block recording
-      </h3>
-      <p>
-        You can use the AppMap Java library directly to record a specific span of code. With this
-        method, you can control exactly what code is recorded, and where the recording is saved. To
-        use code block recording, add an AppMap code snippet to the section of code you want to
-        record, then run your application using the Debug Configuration with AppMap.
-      </p>
-      <p>
-        Visit
-        <a
-          href="https://appmap.io/docs/reference/appmap-java.html#code-block-recording"
-          target="_blank"
-        >
-          AppMap Docs - Java Code Block recording
-        </a>
-        for more information.
-      </p>
-    </section>
+    <h3>Recording methods</h3>
+    <p>The following recording methods are available to Java applications.</p>
+    <v-recording-method-grid>
+      <v-recording-method
+        title="HTTP request recording"
+        documentation-url="https://appmap.io/docs/reference/appmap-java.html#requests-recording"
+        :supported="!!webFramework"
+        :default-behavior="true"
+        :prompt-suggestions="promptSuggestions.httpRequest"
+      >
+        <template #icon>
+          <RequestsIcon />
+        </template>
+        <template #supported>
+          <p>
+            {{ webFramework.name }} will automatically begin recording upon receiving an inbound
+            HTTP request. The recording will span the entire lifetime of the request.
+          </p>
+        </template>
+        <template #unsupported>
+          <p>
+            In Spring applications, AppMap will automatically record the execution flow of your
+            application as it serves inbound HTTP requests.
+          </p>
+        </template>
+      </v-recording-method>
+      <v-recording-method
+        title="Remote recording"
+        title-lowercase="remote recording"
+        documentation-url="https://appmap.io/docs/reference/appmap-java.html#remote-recording"
+        :supported="!!webFramework"
+        :default-behavior="false"
+        :prompt-suggestions="promptSuggestions.remote"
+      >
+        <template #icon>
+          <RemoteRecordingIcon />
+        </template>
+        <template #supported>
+          <p>
+            Web services running {{ webFramework.name }} can toggle recordings on and off remotely
+            via an HTTP API. This is useful in cases where you need control over the lifetime of the
+            recording.
+          </p>
+          <p>
+            Use the "Record" button in the IDE to start recording. Interact with your application,
+            through its user interface and/or by making API requests using a tool such as Postman.
+            When you are done, click the "Record" button again to save the recording and view the
+            AppMap diagrams.
+          </p>
+        </template>
+        <template #unsupported>
+          <p>
+            In Spring applications, recording can optionally be toggled on and off via an HTTP API.
+            This is useful in cases where control is needed over the lifetime of a recording.
+          </p>
+        </template>
+      </v-recording-method>
+      <v-recording-method
+        title="Test recording"
+        title-lowercase="test recording"
+        documentation-url="https://appmap.io/docs/reference/appmap-java.html#tests-recording"
+        :supported="!!testFramework"
+        :default-behavior="true"
+        :prompt-suggestions="promptSuggestions.test"
+      >
+        <template #icon>
+          <TestsIcon
+            :style="{ width: '1.5rem', height: '1.5rem', transform: 'translateY(0.1rem)' }"
+          />
+        </template>
+        <template #supported>
+          <p>
+            When running {{ testFramework.name }} tests, AppMap will automatically start and stop
+            recording for each test case. With adequate test coverage, this method can quickly
+            record a broad range of your application's behavior.
+          </p>
+          <p>
+            This will automatically be configured for you by running your tests via the "Testing"
+            button available in the sidebar or by pressing F1 and running the
+            <code class="inline">Test: Run All Tests</code> command.
+          </p>
+        </template>
+        <template #unsupported>
+          <p>
+            Testing frameworks such as JUnit or TestNG will automatically start and stop recordings
+            for each test case. With adequate test coverage, this method can quickly record a broad
+            range of the application's behavior.
+          </p>
+        </template>
+      </v-recording-method>
+      <v-recording-method
+        title="Code block recording"
+        title-lowercase="code block recording"
+        documentation-url="https://appmap.io/docs/reference/appmap-java.html#code-block-recording"
+        :supported="true"
+        :default-behavior="false"
+        :prompt-suggestions="promptSuggestions.codeBlock"
+      >
+        <template #icon>
+          <CodeBlockIcon />
+        </template>
+        <template #supported>
+          <p>
+            Use the <code class="inline">com.appland.appmap.record.Recording</code> class to record
+            specific spans of code.
+          </p>
+          <p>
+            Note that this method still requires your application be run with the AppMap Java agent
+            for recording to be enabled.
+          </p>
+          <p>Visit the documentation for examples.</p>
+        </template>
+      </v-recording-method>
+      <v-recording-method
+        title="Process recording"
+        title-lowercase="process recording"
+        documentation-url="https://appmap.io/docs/reference/appmap-java.html#process-recording"
+        :supported="true"
+        :default-behavior="false"
+        :prompt-suggestions="promptSuggestions.process"
+      >
+        <template #icon>
+          <ProcessIcon :style="{ width: '1.25rem', height: '1.25rem' }" />
+        </template>
+        <template #supported>
+          <p>
+            AppMap can record the entire process lifetime from start to finish. To enable this
+            behavior, set the Java system property
+            <code class="inline">appmap.recording.auto=true</code>.
+          </p>
+          <p>
+            For example, you can modify <code class="inline">.vscode/launch.json</code> to include
+            <code class="inline">-Dappmap.recording.auto=true</code> in
+            <code class="inline">vmArgs</code>. When running this configuration, an AppMap recording
+            will be saved after your application exits.
+          </p>
+        </template>
+      </v-recording-method>
+    </v-recording-method-grid>
   </section>
 </template>
 <script>
-import TestsIcon from '@/assets/tests-icon.svg';
+import RequestsIcon from '@/assets/request-arrows-icon.svg';
 import RemoteRecordingIcon from '@/assets/remote-recording-icon.svg';
-import ProcessIcon from '@/assets/process-icon.svg';
-import PlayIcon from '@/assets/play-icon.svg';
-import VTestsPrompt from './TestsPrompt.vue';
+import CodeBlockIcon from '@/assets/code-block-icon.svg';
+import TestsIcon from '@/assets/record-test.svg';
+import ProcessIcon from '@/assets/record-process.svg';
+import VRecordingMethod from './RecordingMethod.vue';
+import VRecordingMethodGrid from './RecordingMethodGrid.vue';
+import buildPrompts from '@/lib/buildPrompts';
 
 export default {
   name: 'JavaRecordInstructions',
@@ -140,14 +170,28 @@ export default {
   props: {
     webFramework: Object,
     testFramework: Object,
+    editor: String,
   },
 
   components: {
-    VTestsPrompt,
-    PlayIcon,
     ProcessIcon,
     RemoteRecordingIcon,
+    RequestsIcon,
+    CodeBlockIcon,
     TestsIcon,
+    VRecordingMethod,
+    VRecordingMethodGrid,
+  },
+
+  data() {
+    return {
+      promptSuggestions: buildPrompts(
+        'Java',
+        this.editor,
+        this.webFramework?.name,
+        this.testFramework?.name
+      ),
+    };
   },
 };
 </script>
