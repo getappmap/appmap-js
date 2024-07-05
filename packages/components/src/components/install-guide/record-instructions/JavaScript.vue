@@ -33,8 +33,9 @@
         </template>
         <template #unsupported>
           <p>
-            Express-based web frameworks, such as NestJS or Next.js, you can make AppMaps of all the
-            HTTP requests served by your app. These weren't detected in this project, though.
+            In Express-based web frameworks such as NestJS or Next.js, AppMap will automatically
+            record the execution flow of your application as it serves inbound HTTP requests.
+            Express wasn't located in this project.
           </p>
           <p>
             Note that most projects serving HTTP using the <code class="inline">http</code> Node
@@ -63,14 +64,14 @@
             Use the "Record" button in the IDE to start recording. Interact with your application,
             through its user interface and/or by making API requests using a tool such as Postman.
             When you are done, click the "Record" button again to save the recording and view the
-            AppMap.
+            AppMap diagrams.
           </p>
         </template>
         <template #unsupported>
           <p>
-            In Express-based web frameworks, such as NestJS or Next.js, recording can be toggled on
-            and off via an HTTP API. This is useful in cases where you need control over the
-            lifetime of the recording.
+            In Express-based web frameworks such as NestJS or Next.js, recording can optionally be
+            toggled on and off via an HTTP API. This is useful in cases where control is needed over
+            the lifetime of a recording.
           </p>
           <p>
             Note that most projects serving HTTP using the <code class="inline">http</code> Node
