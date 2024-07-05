@@ -147,6 +147,7 @@ import ProcessIcon from '@/assets/record-process.svg';
 import VRecordingMethod from './RecordingMethod.vue';
 import VRecordingMethodGrid from './RecordingMethodGrid.vue';
 import buildPrompts from '@/lib/buildPrompts';
+import typewrite from '@/components/mixins/typewriter';
 
 export default Vue.extend({
   components: {
@@ -157,6 +158,8 @@ export default Vue.extend({
     VRecordingMethod,
     VRecordingMethodGrid,
   },
+
+  mixins: [typewrite],
 
   props: {
     webFramework: Object,
@@ -184,41 +187,15 @@ export default Vue.extend({
   },
 
   mounted() {
-    const startCommands = ['<start command>', 'npm start', 'yarn dev', 'node server.js'];
+    if (!this.$refs.startCommand) return;
+    if (!(this.$refs.startCommand instanceof HTMLElement)) return;
 
-    async function typewriter(el: HTMLElement, text: string) {
-      return new Promise<void>(async (resolve) => {
-        let textQueue = text;
-        while (textQueue.length) {
-          const char = textQueue[0];
-          el.innerText += char;
-          textQueue = textQueue.slice(1);
-          await new Promise((resolve) => setTimeout(resolve, 100 + (Math.random() * 100 - 50)));
-        }
-        resolve();
-      });
-    }
-
-    let currentIndex = 0;
-    const typeNextCommand = async () => {
-      if (!this.$refs.startCommand) return;
-      if (!(this.$refs.startCommand instanceof HTMLElement)) return;
-
-      const startCommand = startCommands[currentIndex];
-      this.$refs.startCommand.innerText = '';
-      await new Promise<void>((resolve) => {
-        setTimeout(() => {
-          if (!(this.$refs.startCommand instanceof HTMLElement)) return;
-          typewriter(this.$refs.startCommand, startCommand).then(resolve);
-        }, 1000);
-      });
-      currentIndex += 1;
-      currentIndex = currentIndex % startCommands.length;
-      await new Promise<void>((resolve) => setTimeout(resolve, Math.random() * 1000 + 1000));
-      typeNextCommand();
-    };
-
-    typeNextCommand();
+    this.typewrite(this.$refs.startCommand, [
+      '<start command>',
+      'npm start',
+      'yarn dev',
+      'node server.js',
+    ]);
   },
 });
 </script>
