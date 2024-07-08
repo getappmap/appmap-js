@@ -40,6 +40,15 @@ The following are the official AppMap documentation references for each supporte
 
 Languages that do not appear in this list are not supported by AppMap at this time.
 
+**Navie agent modes**
+
+Navie has several modes that you can activate by starting your question with a mode selector. The modes are:
+
+- @explain: Get an explanation of a concept or process. It's the most flexible mode.
+- @generate: Generate code.
+- @help: Get help with AppMap.
+- @plan: Create a code design and implementation plan from an issue description.
+
 **AppMap setup instructions**
 
 Setup instructions for making AppMap data are built into the AppMap code editor extension.
