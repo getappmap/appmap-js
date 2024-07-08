@@ -49,6 +49,8 @@ Choose exactly one from the following "Scopes":
 - **architecture**: The developer is asking about the high-level architecture of the project.
 - **feature**: The developer is asking for an explanation of how a specific feature of the project
   works.
+- **overview**: The developer is asking a high-level question about the structure, purpose,
+  functionality or intent of the project.
 
 ## Classification scores
 
@@ -60,8 +62,7 @@ Each classification category is assigned one of the following likelihoods:
 
 **Response**
 
-Respond with the likelihood of each question type. Question types with "low" likelihood may
-be omitted.
+Respond with a "Mode" and "Scope", and the likelihood of each one. 
 
 **Examples**
 
@@ -71,76 +72,44 @@ Some examples of questions and their classifications are:
 - question: Hi
   answer:
     greeting: high
-    help-with-appmap: low
-    architecture: low
-    feature: low
-    overview: medium
-    troubleshoot: low
-    explain: low
-    generate-code: low
-    generate-diagram: low
 
 - question: How do I record AppMap data of my Spring app?
   answer:
     help-with-appmap: high
-    architecture: low
-    feature: low
-    overview: low
-    troubleshoot: low
-    explain: low
-    generate-code: low
-    generate-diagram: low
+    architecture: medium
 
 - question: How do I reduce the amount of data in my AppMaps?
   answer:
     help-with-appmap: high
-    overview: low
-    troubleshoot: low
-    explain: low
-    generate-code: medium
-    generate-diagram: low
+    troubleshoot: medium
 
 - question: How does the project work?
   answer:
-    help-with-appmap: low
+    explain: high
     architecture: high
-    feature: low
-    overview: high
-    troubleshoot: low
-    explain: low
-    generate-code: low
-    generate-diagram: low
 
 - question: Generate a form and controller to update the user profile
   answer:
-    help-with-appmap: low
-    architecture: medium
-    feature: high
-    overview: low
-    explain: low
     generate-code: high
-    generate-diagram: low
+    feature: high
 
 - question: Why am I getting a 500 error?
   answer:
-    help-with-appmap: low
-    architecture: low
-    feature: low
-    overview: low
     troubleshoot: high
-    explain: medium
-    generate-code: low
-    generate-diagram: low
+    feature: medium
 
 - question: Generate a diagram of the user profile feature
   answer:
-    help-with-appmap: medium
-    architecture: high
+    generate-diagram: high
     feature: high
-    overview: low
-    troubleshoot: low
-    explain: low
-    generate-code: low
+
+- question: Class map of the user profile feature
+  answer:
+    generate-diagram: high
+    feature: high
+
+- question: Sequence diagram
+  answer:
     generate-diagram: high
     overview: high
 
@@ -201,13 +170,27 @@ export default class ClassificationService {
         const match = line.match(/([\w-]+)\s*:\s*(\w+)/);
         if (!match) return null;
 
-        // Sometimes the question is classified as "question" which is not a valid classification
-        if (match[1] === 'question') return null;
+        const [, name, weight] = match;
+        if (!name || !weight) return null;
+
+        if (
+          !Object.values(ContextV2.ContextLabelName).includes(name as ContextV2.ContextLabelName)
+        ) {
+          return null;
+        }
+
+        if (
+          !Object.values(ContextV2.ContextLabelWeight).includes(
+            weight as ContextV2.ContextLabelWeight
+          )
+        ) {
+          return null;
+        }
 
         return {
-          name: match[1],
-          weight: match[2],
-        };
+          name,
+          weight,
+        } as ContextV2.ContextLabel;
       })
       .filter((item) => item);
 

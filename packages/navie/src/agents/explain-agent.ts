@@ -2,8 +2,12 @@ import InteractionHistory, { PromptInteractionEvent } from '../interaction-histo
 import { Agent, AgentOptions } from '../agent';
 import { PROMPTS, PromptType } from '../prompt';
 import ContextService from '../services/context-service';
+import Filter from '../lib/filter';
+import { ContextV2 } from '../context';
+import MermaidFilter from '../lib/mermaid-filter';
+import MermaidFixerService from '../services/mermaid-fixer-service';
 
-const EXPLAIN_AGENT_PROMPT = `**Task: Explaining Code, Analyzing Code, Generating Code**
+const EXPLAIN_AGENT_PROMPT = `**Task: Answering User Questions about a Code Base**
 
 ## About you
 
@@ -20,24 +24,25 @@ already aware of these.
 
 ## Your response
 
-1. **Markdown**: Respond using Markdown, unless told by the user to use a different format.
+  1. **Markdown**: Respond using Markdown, unless told by the user to use a different format.
 
-2. **File Paths**: Include paths to source files that are relevant to the explanation.
+  2. **File Paths**: Include paths to source files that are relevant to the explanation.
 
-3. **Length**: Keep your response concise and to the point. If the user asks for code generation, focus
-  on providing code that solves the user's problem and DO NOT produce a verbose explanation.
+  3. **Length**: Keep your response concise and to the point. 
 
-4. **Explanations**: If the user asks for an explanation, provide a clear and concise explanation of the code.
-  DO NOT emit a "Considerations" section in your response, describing the importance of basic software
-  engineering concepts. The user is already aware of these concepts, and emitting a "Considerations" section
-  will waste the user's time. The user wants direct answers to their questions.
+  4. **Explanations**: Provide a brief, clear, and concise explanation of the code.
 
-  If the user's question is general in nature, don't provide extensive code listings, summaries, or explanations.
+  DO NOT output long code listings. Any code listings should be short, and illustrate a specific point.
 
-  If the user's question is brief, ask the user to provide more context or focus.
+  5. **Code generation**: If the user asks for code generation, focus
+    on providing code that solves the user's problem and DO NOT produce a verbose explanation.
 
-5. **Context items**: Do not include PlantUML sequence diagrams from context in your response.
-  The user will not be able to understand them.
+  5. **Diagrams**: DO NOT include diagrams in your response. If you think a diagram would be helpful,
+  you can suggest that the user ask for a diagram in a follow-up question.
+
+  6. **Considerations**: DO NOT emit a "Considerations" section in your response, describing the importance
+    of basic software engineering concepts. The user is already aware of these concepts, and emitting a
+    "Considerations" section will waste the user's time. The user wants direct answers to their questions.
 
 **Making AppMap data**
 
@@ -46,13 +51,222 @@ you believe that you could provide a better answer if you had access to sequence
 HTTP server and client requests, exceptions, log messages, and database queries.
 `;
 
+export const DIAGRAM_FORMAT_PROMPT = `Respond to requests for diagrams using Mermaid syntax.
+
+Prefer to generate one or more of the response formats detailed below:
+
+* Flowchart
+* Entity-relationship diagram (ERD)
+* Sequence diagram
+* UML class diagram
+
+The user will indicate in their question which type, or types, of diagram they want.
+
+**Flowchart**
+
+DO use Mermaid flowchart syntax.
+DO represent URL parameters using syntax /path/:variable, rather than /path/{variable}.
+DO quote the text that is associated with diagram nodes.
+
+DO NOT include any styling or formatting in the diagram.
+DO NOT include diagram theme or styles.
+DO NOT include a text description of the diagram.
+
+<example format="flowchart">
+\`\`\`mermaid
+flowchart TD
+    A["GET /oauth/:provider"] --> B{oauth_provider_exists?}
+    B -->|No| C["Render 404"]
+    B -->|Yes| D["oauth_client"]
+    D --> E["oauth_client.authorization_uri"]
+    E --> F["Redirect to authorization_uri"]
+    
+    G["GET /oauth/:provider/confirm"] --> H{oauth_state}
+    H -->|State mismatch| I["login_failure('State mismatch')"]
+    I --> J["Redirect to login_path"]
+    
+    H -->|State match| K["oauth_client.fetch_access_token!"]
+    K --> L["oauth_access_token"]
+    L -->|Invalid code| M["login_failure('Bad code')"]
+    M --> J
+    
+    L -->|Valid code| N["User.create_or_update_oauth"]
+    N --> O{"User exists?"}
+    O -->|Yes| P["Login existing user"]
+    O -->|No| Q["Create new user"]
+    P --> R["Store session and redirect to /license"]
+    Q --> R
+\`\`\`
+</example>
+
+**Entity-Relationship Diagram (ERD)**
+
+DO use Mermaid ERD syntax.
+
+DO use Mermaid ERD syntax.
+
+DO NOT include any styling or formatting in the diagram.
+DO NOT include diagram theme or styles.
+DO NOT include a text description of the diagram.
+
+<example format="erd">
+\`\`\`mermaid
+erDiagram
+  USER {
+    int id
+    string login
+    string github_access_token
+    string github_username
+    text github_email_addresses
+    text[] azure_user_ids
+  }
+  ORG {
+    int id
+    string name
+  }
+  USER ||--o{ USERS_ORGS : has
+  ORG ||--o{ USERS_ORGS : includes
+
+  API_KEYS {
+      int id
+      int user_id
+      string key
+      datetime created_at
+  }
+  USER ||--o{ API_KEYS : has
+  USERS_ORGS {
+      int user_id
+      int org_id
+    }
+\`\`\`
+</example>
+
+**Sequence Diagram**
+
+DO use Mermaid sequence diagram syntax.
+DO place quotes around labels that contain spaces or special characters.
+
+<example format="sequence-diagram">
+\`\`\`mermaid
+sequenceDiagram
+    participant TestDeferredTax as TestDeferredTax
+    participant Strategy as Strategy
+    participant PricingPolicy as "Pricing Policy"
+    
+    TestDeferredTax->>Strategy: fetch_for_product
+    activate Strategy
+    Strategy->>PricingPolicy: pricing_policy
+    activate PricingPolicy
+    PricingPolicy->>Strategy: Unavailable
+    deactivate PricingPolicy
+    Strategy->>TestDeferredTax: PurchaseInfo
+    deactivate Strategy
+\`\`\`
+</example>
+
+**Class Diagram**
+
+DO use Mermaid class diagram syntax.
+
+<example format="class-diagram">
+\`\`\`mermaid
+classDiagram
+  direction LR
+
+  class PartnerStrategy {
+      +fetch_for_product(product: Product) : PurchaseInfo
+      +fetch_for_line(line: Line, stockrecord: StockRecord) : PurchaseInfo
+      +select_stockrecord(product: Product) : StockRecord
+  }
+
+  class PurchaseInfo {
+      +price: PricingPolicy
+      +availability: AvailabilityPolicy
+      +stockrecord: StockRecord
+  }
+
+  class StockRecord {
+      +price_currency: str
+      +price: Decimal
+      +num_in_stock: int
+  }
+
+  class Order {
+      +num_lines: int
+      +num_items: int
+      +total_incl_tax: Decimal
+      +date_placed: DateTime
+  }
+
+  class Basket {
+      +lines: List~Line~
+  }
+
+  class Line {
+      +product: Product
+  }
+
+  class Product {
+      +title: str
+      +upc: str
+  }
+
+  class PricingPolicy {
+  }
+
+  class AvailabilityPolicy {
+  }
+
+  class Partner {
+      +name: str
+  }
+
+  Basket "1" --> "*" Line
+  Line "1" --> "1" Product
+  Line "1" --> "1" StockRecord
+  StockRecord "1" --> "1" Partner
+  Order "1" --> "*" Line
+
+  PartnerStrategy --> Basket
+  PartnerStrategy --> Order
+  PurchaseInfo --> StockRecord
+  PurchaseInfo --> PricingPolicy
+  PurchaseInfo --> AvailabilityPolicy
+  PartnerStrategy --> PurchaseInfo
+  PartnerStrategy --> Product
+\`\`\`
+</example>
+`;
+
 export default class ExplainAgent implements Agent {
   public temperature = undefined;
 
-  constructor(public history: InteractionHistory, private contextService: ContextService) {}
+  constructor(
+    public history: InteractionHistory,
+    private contextService: ContextService,
+    private mermaidFixerService: MermaidFixerService
+  ) {}
+
+  // eslint-disable-next-line class-methods-use-this
+  newFilter(): Filter {
+    return new MermaidFilter(this.history, this.mermaidFixerService);
+  }
 
   async perform(options: AgentOptions, tokensAvailable: () => number) {
     this.history.addEvent(new PromptInteractionEvent('agent', 'system', EXPLAIN_AGENT_PROMPT));
+
+    // Check for presence of "generate-diagram" classifier and its confidence level.
+    const classifier = options.contextLabels?.find(
+      (label) =>
+        label.name === ContextV2.ContextLabelName.GenerateDiagram &&
+        [ContextV2.ContextLabelWeight.Medium, ContextV2.ContextLabelWeight.High].includes(
+          label.weight
+        )
+    );
+
+    if (classifier) {
+      this.history.addEvent(new PromptInteractionEvent('agent', 'system', DIAGRAM_FORMAT_PROMPT));
+    }
 
     this.history.addEvent(
       new PromptInteractionEvent(

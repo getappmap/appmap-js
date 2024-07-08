@@ -1,5 +1,6 @@
 import { Agent, AgentOptions } from '../agent';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
+import Filter, { NopFilter } from '../lib/filter';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 import ContextService from '../services/context-service';
 
@@ -57,7 +58,8 @@ for that file or component.
 * DO provide a detailed description of the necessary changes.
 * DO suggest changes to existing, non-test code files.
 * DO NOT include a code snippet.
-* DO NOT generate changes in test code, test cases, or documentation.
+* DO NOT design changes to test cases.
+* DO NOT design changes to documentation.
 * DO NOT propose the creation of new files, unless it's absolutely necessary.
 * DO NOT output code blocks or fenced code. Output only a text description of the suggested
   changes, along with the file names.
@@ -66,6 +68,11 @@ export class PlanAgent implements Agent {
   public readonly temperature = undefined;
 
   constructor(public history: InteractionHistory, private contextService: ContextService) {}
+
+  // eslint-disable-next-line class-methods-use-this
+  newFilter(): Filter {
+    return new NopFilter();
+  }
 
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {
     this.history.addEvent(new PromptInteractionEvent('agent', 'system', GENERATE_AGENT_PROMPT));
