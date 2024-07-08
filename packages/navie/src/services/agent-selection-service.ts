@@ -13,6 +13,7 @@ import TechStackService from './tech-stack-service';
 import TestAgent from '../agents/test-agent';
 import { PlanAgent } from '../agents/plan-agent';
 import ContextService from './context-service';
+import { UserOptions } from '../lib/parse-options';
 
 type AgentModeResult = {
   agentMode: AgentMode;
@@ -46,7 +47,11 @@ export default class AgentSelectionService {
     private techStackService: TechStackService
   ) {}
 
-  selectAgent(question: string, classification: ContextV2.ContextLabel[]): AgentModeResult {
+  selectAgent(
+    question: string,
+    classification: ContextV2.ContextLabel[],
+    userOptions: UserOptions
+  ): AgentModeResult {
     let modifiedQuestion = question;
 
     const contextService = new ContextService(
@@ -102,11 +107,13 @@ export default class AgentSelectionService {
     };
 
     const classifierMode = (): AgentModeResult | undefined => {
-      const isHelp = classification.some(
-        (label) =>
-          label.name === ContextV2.ContextLabelName.HelpWithAppMap &&
-          label.weight === ContextV2.ContextLabelWeight.High
-      );
+      const isHelp =
+        userOptions.booleanValue('help', true) &&
+        classification.some(
+          (label) =>
+            label.name === ContextV2.ContextLabelName.HelpWithAppMap &&
+            label.weight === ContextV2.ContextLabelWeight.High
+        );
       if (isHelp) {
         this.history.log(`[mode-selection] Activating agent due to classifier: ${AgentMode.Help}`);
         return {

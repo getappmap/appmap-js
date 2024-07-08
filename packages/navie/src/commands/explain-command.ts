@@ -52,7 +52,8 @@ export default class ExplainCommand implements Command {
 
     const agentSelectionResult = this.agentSelectionService.selectAgent(
       baseQuestion,
-      contextLabels
+      contextLabels,
+      request.userOptions
     );
     const { question, agent: mode } = agentSelectionResult;
 
