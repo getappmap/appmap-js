@@ -24,8 +24,8 @@ describe('ClassificationService', () => {
 
   describe('when LLM responds', () => {
     const classification = `
-architecture: high
-- troubleshooting: low
+- architecture: high
+- troubleshoot: medium
 `;
 
     beforeEach(() => mockAIResponse(completionWithRetry, [classification]));
@@ -38,8 +38,8 @@ architecture: high
           weight: 'high',
         },
         {
-          name: 'troubleshooting',
-          weight: 'low',
+          name: 'troubleshoot',
+          weight: 'medium',
         },
       ]);
       expect(completionWithRetry).toHaveBeenCalledTimes(1);
@@ -52,7 +52,7 @@ architecture: high
           ?.metadata
       ).toEqual({
         type: 'classification',
-        classification: ['architecture=high', 'troubleshooting=low'],
+        classification: ['architecture=high', 'troubleshoot=medium'],
       });
     });
   });

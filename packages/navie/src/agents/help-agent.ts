@@ -7,6 +7,7 @@ import LookupContextService from '../services/lookup-context-service';
 import TechStackService from '../services/tech-stack-service';
 import { CHARACTERS_PER_TOKEN } from '../message';
 import transformSearchTerms from '../lib/transform-search-terms';
+import Filter, { NopFilter } from '../lib/filter';
 
 export const HELP_AGENT_PROMPT = `**Task: Providing Help with AppMap**
 
@@ -178,6 +179,11 @@ export default class HelpAgent implements Agent {
     private vectorTermsService: VectorTermsService,
     private techStackService: TechStackService
   ) {}
+
+  // eslint-disable-next-line class-methods-use-this
+  newFilter(): Filter {
+    return new NopFilter();
+  }
 
   // eslint-disable-next-line consistent-return
   async perform(

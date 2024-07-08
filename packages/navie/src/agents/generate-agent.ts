@@ -1,5 +1,6 @@
 import { Agent, AgentOptions } from '../agent';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
+import Filter, { NopFilter } from '../lib/filter';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 import ContextService from '../services/context-service';
 
@@ -38,6 +39,11 @@ export default class GenerateAgent implements Agent {
   public temperature = undefined;
 
   constructor(public history: InteractionHistory, private contextService: ContextService) {}
+
+  // eslint-disable-next-line class-methods-use-this
+  newFilter(): Filter {
+    return new NopFilter();
+  }
 
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {
     const agentPrompt = [GENERATE_AGENT_PROMPT];

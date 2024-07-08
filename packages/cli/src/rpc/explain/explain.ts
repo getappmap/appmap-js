@@ -22,6 +22,7 @@ import { getLLMConfiguration } from '../llmConfiguration';
 import detectAIEnvVar from '../../cmds/index/aiEnvVar';
 import reportFetchError from './navie/report-fetch-error';
 import { LRUCache } from 'lru-cache';
+import Context from 'applicationinsights/out/Library/Context';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
@@ -125,8 +126,16 @@ export class Explain extends EventEmitter {
 
     const keywords = [...vectorTerms];
     if (
-      labels.find((label) => label.name === 'architecture' && label.weight === 'high') ||
-      labels.find((label) => label.name === 'overview' && label.weight === 'high')
+      labels.find(
+        (label) =>
+          label.name === ContextV2.ContextLabelName.Architecture &&
+          label.weight === ContextV2.ContextLabelWeight.High
+      ) ||
+      labels.find(
+        (label) =>
+          label.name === ContextV2.ContextLabelName.Overview &&
+          label.weight === ContextV2.ContextLabelWeight.High
+      )
     ) {
       keywords.push('architecture');
       keywords.push('design');
@@ -244,7 +253,7 @@ async function explain(
   );
 
   const invokeContextFunction = async (data: any) => {
-    const type = data['type'];
+    const type = data.type;
     const fnName = [type, 'Context'].join('');
     warn(`Explain received context request: ${type}`);
     const fn: (args: any) => any = explain[fnName];
