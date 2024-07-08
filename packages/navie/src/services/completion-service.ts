@@ -13,7 +13,7 @@ export default interface CompletionService {
   readonly temperature: number | undefined;
 }
 
-interface Usage extends Required<TokenUsage> {
+export interface Usage extends Required<TokenUsage> {
   cost?: number;
 }
 

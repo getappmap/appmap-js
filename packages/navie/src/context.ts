@@ -79,6 +79,7 @@ export namespace ContextV2 {
 
   export enum ContextLabelName {
     HelpWithAppMap = 'help-with-appmap',
+    GenerateDiagram = 'generate-diagram',
     Architecture = 'architecture',
     Feature = 'feature',
     Overview = 'overview',

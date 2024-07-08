@@ -108,7 +108,8 @@ export default function navie(
       vectorTermsService,
       lookupContextService,
       applyContextService,
-      techStackService
+      techStackService,
+      completionService
     );
     const projectInfoService = new ProjectInfoService(interactionHistory, projectInfoProvider);
     const memoryService = new OpenAIMemoryService(options.modelName, options.temperature);

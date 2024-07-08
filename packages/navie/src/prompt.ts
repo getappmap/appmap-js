@@ -49,12 +49,6 @@ The user is asking about specific lines of code that they have selected in their
 
 This is the primary question that the user wants you to answer. Your response should be
 focused primarily on answering this question.
-
-When the user is asking you to create a diagram, describe the code functionality in Markdown as
-well as you can from the context you have. 
-
-Avoid recommending other diagram tools such as Lucidchart, Draw.io, PlantUML, or Mermaid,
-except as supplemental resources to AppMap.
 `,
     tagName: 'question',
   },

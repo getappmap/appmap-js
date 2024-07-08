@@ -2,8 +2,9 @@ import InteractionHistory, { PromptInteractionEvent } from '../interaction-histo
 import { Agent, AgentOptions } from '../agent';
 import { PROMPTS, PromptType } from '../prompt';
 import ContextService from '../services/context-service';
+import Filter, { NopFilter } from '../lib/filter';
 
-const EXPLAIN_AGENT_PROMPT = `**Task: Explaining Code, Analyzing Code, Generating Code**
+const EXPLAIN_AGENT_PROMPT = `**Task: Answering User Questions about a Code Base**
 
 ## About you
 
@@ -20,24 +21,25 @@ already aware of these.
 
 ## Your response
 
-1. **Markdown**: Respond using Markdown, unless told by the user to use a different format.
+  1. **Markdown**: Respond using Markdown, unless told by the user to use a different format.
 
-2. **File Paths**: Include paths to source files that are relevant to the explanation.
+  2. **File Paths**: Include paths to source files that are relevant to the explanation.
 
-3. **Length**: Keep your response concise and to the point. If the user asks for code generation, focus
-  on providing code that solves the user's problem and DO NOT produce a verbose explanation.
+  3. **Length**: Keep your response concise and to the point. 
 
-4. **Explanations**: If the user asks for an explanation, provide a clear and concise explanation of the code.
-  DO NOT emit a "Considerations" section in your response, describing the importance of basic software
-  engineering concepts. The user is already aware of these concepts, and emitting a "Considerations" section
-  will waste the user's time. The user wants direct answers to their questions.
+  4. **Explanations**: Provide a brief, clear, and concise explanation of the code.
 
-  If the user's question is general in nature, don't provide extensive code listings, summaries, or explanations.
+  DO NOT output long code listings. Any code listings should be short, and illustrate a specific point.
 
-  If the user's question is brief, ask the user to provide more context or focus.
+  5. **Code generation**: If the user asks for code generation, focus
+    on providing code that solves the user's problem and DO NOT produce a verbose explanation.
 
-5. **Context items**: Do not include PlantUML sequence diagrams from context in your response.
-  The user will not be able to understand them.
+  5. **Diagrams**: DO NOT include diagrams in your response. If you think a diagram would be helpful,
+  you can suggest that the user ask for a diagram in a follow-up question.
+
+  6. **Considerations**: DO NOT emit a "Considerations" section in your response, describing the importance
+    of basic software engineering concepts. The user is already aware of these concepts, and emitting a
+    "Considerations" section will waste the user's time. The user wants direct answers to their questions.
 
 **Making AppMap data**
 
@@ -50,6 +52,11 @@ export default class ExplainAgent implements Agent {
   public temperature = undefined;
 
   constructor(public history: InteractionHistory, private contextService: ContextService) {}
+
+  // eslint-disable-next-line class-methods-use-this
+  newFilter(): Filter {
+    return new NopFilter();
+  }
 
   async perform(options: AgentOptions, tokensAvailable: () => number) {
     this.history.addEvent(new PromptInteractionEvent('agent', 'system', EXPLAIN_AGENT_PROMPT));

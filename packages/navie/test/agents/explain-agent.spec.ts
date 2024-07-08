@@ -5,7 +5,6 @@ import VectorTermsService from '../../src/services/vector-terms-service';
 import LookupContextService from '../../src/services/lookup-context-service';
 import { AgentOptions } from '../../src/agent';
 import { SEARCH_CONTEXT, suggestsVectorTerms } from '../fixture';
-import { HelpResponse } from '../../src/help';
 import { CHARACTERS_PER_TOKEN } from '../../src/message';
 import { UserOptions } from '../../src/lib/parse-options';
 import ContextService from '../../src/services/context-service';

@@ -1,9 +1,11 @@
+import DiagramAgent from '../../src/agents/diagram-agent';
 import ExplainAgent from '../../src/agents/explain-agent';
 import HelpAgent from '../../src/agents/help-agent';
 import InteractionHistory, { AgentSelectionEvent } from '../../src/interaction-history';
 import { UserOptions } from '../../src/lib/parse-options';
 import AgentSelectionService from '../../src/services/agent-selection-service';
 import ApplyContextService from '../../src/services/apply-context-service';
+import CompletionService from '../../src/services/completion-service';
 import LookupContextService from '../../src/services/lookup-context-service';
 import TechStackService from '../../src/services/tech-stack-service';
 import VectorTermsService from '../../src/services/vector-terms-service';
@@ -14,6 +16,7 @@ describe('AgentSelectionService', () => {
   let lookupContextService: LookupContextService;
   let applyContextService: ApplyContextService;
   let techStackService: TechStackService;
+  let completionService: CompletionService;
   let genericQuestion = 'How does user management work?';
   let helpAgentQueston = '@help How to make a diagram?';
   const emptyUserOptions = new UserOptions(new Map());
@@ -24,7 +27,8 @@ describe('AgentSelectionService', () => {
       vectorTermsService,
       lookupContextService,
       applyContextService,
-      techStackService
+      techStackService,
+      completionService
     );
   }
 
@@ -34,6 +38,7 @@ describe('AgentSelectionService', () => {
     lookupContextService = {} as LookupContextService;
     applyContextService = {} as ApplyContextService;
     techStackService = {} as TechStackService;
+    completionService = {} as CompletionService;
   });
 
   const agentSelectionEvent = (): AgentSelectionEvent | undefined =>
@@ -101,6 +106,46 @@ describe('AgentSelectionService', () => {
         );
         expect(agent).toBeInstanceOf(ExplainAgent);
       });
+    });
+  });
+
+  describe('when the question is classified as generate-diagram', () => {
+    it('creates a Diagram agent', () => {
+      const { agent } = buildAgentSelectionService().selectAgent(
+        genericQuestion,
+        [
+          {
+            name: 'generate-diagram',
+            weight: 'high',
+          },
+        ],
+        emptyUserOptions
+      );
+      expect(agent).toBeInstanceOf(DiagramAgent);
+    });
+  });
+
+  describe('when the question is classified as explain', () => {
+    it('creates an Explain agent even if other classifiers are present', () => {
+      const { agent } = buildAgentSelectionService().selectAgent(
+        genericQuestion,
+        [
+          {
+            name: 'generate-diagram',
+            weight: 'high',
+          },
+          {
+            name: 'help-with-appmap',
+            weight: 'high',
+          },
+          {
+            name: 'explain',
+            weight: 'high',
+          },
+        ],
+        emptyUserOptions
+      );
+      expect(agent).toBeInstanceOf(ExplainAgent);
     });
   });
 });

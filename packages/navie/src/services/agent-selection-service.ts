@@ -14,6 +14,8 @@ import TestAgent from '../agents/test-agent';
 import { PlanAgent } from '../agents/plan-agent';
 import ContextService from './context-service';
 import { UserOptions } from '../lib/parse-options';
+import DiagramAgent from '../agents/diagram-agent';
+import CompletionService from './completion-service';
 
 type AgentModeResult = {
   agentMode: AgentMode;
@@ -33,6 +35,7 @@ behavior, re-ask your question and start with the option \`/nohelp\` or with a m
 const MODE_PREFIXES = {
   '@explain ': AgentMode.Explain,
   '@generate ': AgentMode.Generate,
+  '@diagram ': AgentMode.Diagram,
   '@help ': AgentMode.Help,
   '@test ': AgentMode.Test,
   '@plan ': AgentMode.Plan,
@@ -44,7 +47,8 @@ export default class AgentSelectionService {
     private vectorTermsService: VectorTermsService,
     private lookupContextService: LookupContextService,
     private applyContextService: ApplyContextService,
-    private techStackService: TechStackService
+    private techStackService: TechStackService,
+    private completionService: CompletionService
   ) {}
 
   selectAgent(
@@ -72,13 +76,17 @@ export default class AgentSelectionService {
 
     const planAgent = () => new PlanAgent(this.history, contextService);
 
+    const diagramAgent = () =>
+      new DiagramAgent(this.history, contextService, this.completionService);
+
     const generateAgent = () => new GenerateAgent(this.history, contextService);
 
     const explainAgent = () => new ExplainAgent(this.history, contextService);
 
-    const buildAgent = {
+    const buildAgent: { [key in AgentMode]: () => Agent } = {
       [AgentMode.Help]: helpAgent,
       [AgentMode.Generate]: generateAgent,
+      [AgentMode.Diagram]: diagramAgent,
       [AgentMode.Explain]: explainAgent,
       [AgentMode.Test]: testAgent,
       [AgentMode.Plan]: planAgent,
@@ -106,22 +114,47 @@ export default class AgentSelectionService {
       }
     };
 
+    const classifierSelections: {
+      name: ContextV2.ContextLabelName;
+      mode: AgentMode;
+      disableOption?: string;
+      message?: string;
+    }[] = [
+      {
+        name: ContextV2.ContextLabelName.Explain,
+        mode: AgentMode.Explain,
+      },
+      {
+        name: ContextV2.ContextLabelName.GenerateDiagram,
+        mode: AgentMode.Diagram,
+      },
+      {
+        name: ContextV2.ContextLabelName.HelpWithAppMap,
+        mode: AgentMode.Help,
+        disableOption: 'help',
+        message: HELP_AGENT_SELECTED_MESSAGE,
+      },
+    ];
+
     const classifierMode = (): AgentModeResult | undefined => {
-      const isHelp =
-        userOptions.booleanValue('help', true) &&
+      const classifierSelection = classifierSelections.find((selection) =>
         classification.some(
           (label) =>
-            label.name === ContextV2.ContextLabelName.HelpWithAppMap &&
-            label.weight === ContextV2.ContextLabelWeight.High
-        );
-      if (isHelp) {
-        this.history.log(`[mode-selection] Activating agent due to classifier: ${AgentMode.Help}`);
+            label.name === selection.name &&
+            label.weight === ContextV2.ContextLabelWeight.High &&
+            (!selection.disableOption || userOptions.booleanValue(selection.disableOption, true))
+        )
+      );
+      if (classifierSelection) {
+        const { mode } = classifierSelection;
+        this.history.log(`[mode-selection] Activating agent due to classifier: ${mode}`);
+        const agent = buildAgent[mode]();
         return {
-          agentMode: AgentMode.Help,
+          agentMode: mode,
           question,
-          agent: helpAgent(),
+          agent,
           selectedByClassifier: true,
-          selectionMessage: HELP_AGENT_SELECTED_MESSAGE,
+          selectionMessage: classifierSelection.message,
         };
       }
     };
