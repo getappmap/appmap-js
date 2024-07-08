@@ -49,11 +49,11 @@ describe('components/UserMessage.vue', () => {
     });
 
     it('should copy text correctly from code snippets', () => {
-      const codeElement = wrapper.get('[data-cy="code-snippet"] code');
+      const codeSnippetElement = wrapper.get('[data-cy="code-snippet-body"]');
       const expectedText = 'abc';
 
       // innerText is not supported in JSDOM, so we need to mock it
-      codeElement.element.innerText = expectedText;
+      codeSnippetElement.element.innerText = expectedText;
 
       wrapper.get('[data-cy="copy"]').trigger('click');
       return expect(navigator.clipboard.readText()).resolves.toBe(expectedText);
