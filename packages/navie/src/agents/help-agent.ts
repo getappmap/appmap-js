@@ -131,7 +131,7 @@ one of these approaches is not applicable to the user's environment.
 **Response**
 
 Your response should consist of short passages of descriptive text, emphasizing URLs to the documentation.
-For each documentatino URL, provide a brief description of why the link is relevant.
+For each documentation URL, provide a brief description of why the link is relevant.
 
 Do not emit code suggestions or code fences.
 
@@ -151,9 +151,9 @@ _Example_
 
 const MAKE_APPMAPS_PROMPT = `**Making AppMaps**
 
-If the user's question depends on having AppMaps, advise the user to make AppMaps for their project.
+If the user's question depends on having AppMap data, advise the user to record AppMaps for their project.
 
-Provide best practices for making AppMaps, taking into account the following considerations:
+Provide best practices for recording AppMap data, taking into account the following considerations:
 
 - **Language**: The programming language in use.
 - **Frameworks**: The user's application and testing frameworks.
@@ -175,8 +175,15 @@ export default class HelpAgent implements Agent {
     options: AgentOptions,
     tokensAvailable: () => number
   ): Promise<AgentResponse | void> {
-    const techStackTerms = await this.techStackService.detectTerms(options.aggregateQuestion);
+    const languages = [
+      ...new Set(
+        options.projectInfo.map((info) => info.appmapConfig?.language).filter(Boolean) as string[]
+      ),
+    ].sort();
 
+    const detectedTerms = await this.techStackService.detectTerms(options.aggregateQuestion);
+
+    const techStackTerms = [...languages, ...detectedTerms];
     if (techStackTerms.length === 0) {
       return {
         response: `What programming language and frameworks do you want help with?
