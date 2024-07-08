@@ -14,7 +14,20 @@ import TestAgent from '../agents/test-agent';
 import { PlanAgent } from '../agents/plan-agent';
 import ContextService from './context-service';
 
-type AgentModeResult = { agentMode: AgentMode; agent: Agent; question: string };
+type AgentModeResult = {
+  agentMode: AgentMode;
+  agent: Agent;
+  // The question text with agent selection prefix removed.
+  question: string;
+  // True if the agent was selected based on classifiers (context labels).
+  selectedByClassifier?: boolean;
+  // Indicate to the user why the agent was selected.
+  selectionMessage?: string;
+};
+
+const HELP_AGENT_SELECTED_MESSAGE = `It looks like you are asking for help using AppMap, so
+I'm activating \`@help\` mode and basing my answer primarily on AppMap documentation. To disable this
+behavior, re-ask your question and start with the option \`/nohelp\` or with a mode selector such as \`@explain\`.`;
 
 const MODE_PREFIXES = {
   '@explain ': AgentMode.Explain,
@@ -88,7 +101,7 @@ export default class AgentSelectionService {
       }
     };
 
-    const classifierMode = () => {
+    const classifierMode = (): AgentModeResult | undefined => {
       const isHelp = classification.some(
         (label) =>
           label.name === ContextV2.ContextLabelName.HelpWithAppMap &&
@@ -96,7 +109,13 @@ export default class AgentSelectionService {
       );
       if (isHelp) {
         this.history.log(`[mode-selection] Activating agent due to classifier: ${AgentMode.Help}`);
-        return { agentMode: AgentMode.Help, question, agent: helpAgent() };
+        return {
+          agentMode: AgentMode.Help,
+          question,
+          agent: helpAgent(),
+          selectedByClassifier: true,
+          selectionMessage: HELP_AGENT_SELECTED_MESSAGE,
+        };
       }
     };
 

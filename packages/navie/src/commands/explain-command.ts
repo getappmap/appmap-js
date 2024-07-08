@@ -50,10 +50,16 @@ export default class ExplainCommand implements Command {
         .join(', ')}`
     );
 
-    const { question, agent: mode } = this.agentSelectionService.selectAgent(
+    const agentSelectionResult = this.agentSelectionService.selectAgent(
       baseQuestion,
       contextLabels
     );
+    const { question, agent: mode } = agentSelectionResult;
+
+    if (agentSelectionResult.selectionMessage) {
+      yield agentSelectionResult.selectionMessage;
+      yield '\n\n';
+    }
 
     const tokensAvailable = (): number =>
       this.options.tokenLimit -
