@@ -87,6 +87,7 @@ import VButton from '@/components/Button.vue';
 import VToolStatus from '@/components/chat/ToolStatus.vue';
 import VCodeSelection from '@/components/chat/CodeSelection.vue';
 import VMarkdownCodeSnippet from '@/components/chat/MarkdownCodeSnippet.vue';
+import VMermaidDiagram from '@/components/chat/MermaidDiagram.vue';
 
 import { Marked, Renderer } from 'marked';
 import { markedHighlight } from 'marked-highlight';
@@ -100,6 +101,10 @@ import Vue from 'vue';
 const customRenderer = new Renderer();
 const originalRenderer = customRenderer.code.bind(customRenderer);
 customRenderer.code = (code: string, language: string, escaped: boolean, sourcePath: string) => {
+  if (language === 'mermaid') {
+    return `<v-mermaid-diagram>${code}</v-mermaid-diagram>`;
+  }
+
   const content = originalRenderer(code, language, escaped, sourcePath);
   return [
     '<v-markdown-code-snippet ',
@@ -182,7 +187,7 @@ export default {
       const dom = DOMPurify.sanitize(markdown, {
         USE_PROFILES: { html: true },
         RETURN_DOM: true,
-        ADD_TAGS: ['v-markdown-code-snippet'],
+        ADD_TAGS: ['v-markdown-code-snippet', 'v-mermaid-diagram'],
         ADD_ATTR: ['language'],
       });
 
@@ -213,7 +218,7 @@ export default {
       }
 
       return Vue.component('dynamic-markdown', {
-        components: { VMarkdownCodeSnippet },
+        components: { VMarkdownCodeSnippet, VMermaidDiagram },
         template: `<div>${dom.ownerDocument.body.innerHTML}</div>`,
       });
     },
@@ -289,6 +294,7 @@ export default {
   gap: 0.5rem 1rem;
   padding: 0 1rem;
   color: #ececec;
+  overflow: visible;
 
   &[data-actor='user'] .message-body span {
     white-space: preserve;
@@ -324,7 +330,7 @@ export default {
     grid-column: 2;
     grid-row: 2;
     max-width: 100%;
-    overflow: hidden;
+    overflow: visible;
 
     :last-child {
       margin-bottom: 0;
@@ -454,14 +460,14 @@ export default {
 }
 
 .message .message-body {
+  line-height: 1.6;
+
   .tools {
     padding: 0.5rem 0;
     line-height: normal;
   }
 
   span {
-    line-height: 1.3rem;
-
     hr {
       border: none;
       border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -497,7 +503,9 @@ export default {
     border-radius: 6px;
     background-color: rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 0.25em 0.25rem 0 0.25rem;
+    padding: 0.25rem;
+    padding-bottom: 0;
+    font-family: monospace;
     color: #e2e4e5;
   }
 

@@ -1,0 +1,28 @@
+<!-- https://github.com/ant-design/ant-design-icons/blob/master/LICENSE -->
+<!--
+MIT LICENSE
+
+Copyright (c) 2018-present Ant UED, https://xtech.antfin.com/
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<svg viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M38.5201 50.3496C38.5771 50.4224 38.65 50.4813 38.7331 50.5219C38.8162 50.5624 38.9075 50.5834 39 50.5834C39.0925 50.5834 39.1838 50.5624 39.2669 50.5219C39.35 50.4813 39.4229 50.4224 39.4799 50.3496L48.0111 39.5561C48.3234 39.16 48.0416 38.5734 47.5312 38.5734H41.8869V12.7969C41.8869 12.4617 41.6127 12.1875 41.2775 12.1875H36.7072C36.3721 12.1875 36.0979 12.4617 36.0979 12.7969V38.5658H30.4688C29.9584 38.5658 29.6766 39.1523 29.9889 39.5484L38.5201 50.3496ZM66.8789 47.6836H62.3086C61.9734 47.6836 61.6992 47.9578 61.6992 48.293V60.0234H16.3008V48.293C16.3008 47.9578 16.0266 47.6836 15.6914 47.6836H11.1211C10.7859 47.6836 10.5117 47.9578 10.5117 48.293V63.375C10.5117 64.7232 11.601 65.8125 12.9492 65.8125H65.0508C66.399 65.8125 67.4883 64.7232 67.4883 63.375V48.293C67.4883 47.9578 67.2141 47.6836 66.8789 47.6836Z"/>
+</svg>
