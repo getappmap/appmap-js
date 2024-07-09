@@ -98,7 +98,10 @@ export default class ExplainCommand implements Command {
       for (const e of await this.memoryService.predictSummary(chatHistory))
         this.interactionHistory.addEvent(e);
 
-      for (const e of getMostRecentMessages(chatHistory)) {
+      for (const e of getMostRecentMessages(
+        chatHistory,
+        request.userOptions.numberValue('history')
+      )) {
         this.interactionHistory.addEvent(e);
       }
     }
