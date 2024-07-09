@@ -1,3 +1,15 @@
+# [@appland/navie-v1.17.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.16.1...@appland/navie-v1.17.0) (2024-07-09)
+
+
+### Bug Fixes
+
+* Normalize context representations ([088ba5d](https://github.com/getappmap/appmap-js/commit/088ba5d55ace28a5a5d4c9caec42cda5270cd1bd))
+
+
+### Features
+
+* Include N previous chat messages during explain ([5f9ac70](https://github.com/getappmap/appmap-js/commit/5f9ac70e28863531a1221c23527c7b02eb2e267f))
+
 # [@appland/navie-v1.16.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.16.0...@appland/navie-v1.16.1) (2024-06-27)
 
 
