@@ -11,5 +11,7 @@ module.exports = {
   moduleNameMapper: {
     'd3-flame-graph': 'd3-flame-graph',
     '^d3-(.*)$': 'd3-$1/dist/d3-$1',
+    mermaid: '<rootDir>/tests/unit/support/mockMermaid.js',
   },
+  setupFilesAfterEnv: ['<rootDir>/tests/unit/support/polyfills.js', 'jest-extended/all'],
 };

@@ -219,4 +219,16 @@ describe('components/UserMessage.vue', () => {
       expect(wrapper.find('.copy-icon').exists()).toBe(true);
     });
   });
+
+  describe('mermaid', () => {
+    it('renders a diagram', async () => {
+      const wrapper = mount(VUserMessage, {
+        propsData: {
+          message: '```mermaid\ngraph TD\nA[Birthday] -->|Get money| B(Go shopping)\n```',
+        },
+      });
+
+      expect(wrapper.find('[data-cy="mermaid-diagram"]').exists()).toBe(true);
+    });
+  });
 });

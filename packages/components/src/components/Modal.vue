@@ -1,5 +1,5 @@
 <template>
-  <div class="modal">
+  <div class="modal" @scroll.prevent>
     <div class="modal__bg" @click="$emit('close')" />
     <div class="modal__content">
       <slot />
@@ -33,7 +33,7 @@ export default Vue.extend({
   &__bg {
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(0.25rem);
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
@@ -42,13 +42,18 @@ export default Vue.extend({
   }
 
   &__content {
+    display: flex;
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 0;
+    left: 0;
     z-index: 1001;
-    padding: 1rem;
-    border-radius: 4px;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+
+    & > * {
+      pointer-events: auto;
+    }
   }
 }
 </style>

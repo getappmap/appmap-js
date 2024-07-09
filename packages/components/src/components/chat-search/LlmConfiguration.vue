@@ -1,62 +1,64 @@
 <template>
   <div class="llm-configuration">
     <v-modal v-if="modalVisible" @close="hideModal" data-cy="llm-config-modal">
-      <div class="config-header">
-        <h1>LLM Configuration</h1>
-        <v-close-icon class="close-icon" @click="hideModal" />
-      </div>
-      <div class="config-options">
-        <div class="option" data-cy="llm-modal-option" data-option="default">
-          <div class="description">
-            <h1>Use the Navie backend</h1>
-            <p>Instantly get access to Navie without any additional configuration.</p>
-          </div>
-          <div class="action">
-            <v-button
-              size="medium"
-              @click.native="selectOption('default')"
-              :disabled="!isLocal"
-              data-cy="llm-select"
-            >
-              {{ isLocal ? 'Select' : 'Selected' }}
-            </v-button>
-          </div>
+      <div class="llm-configuration__content">
+        <div class="config-header">
+          <h1>LLM Configuration</h1>
+          <v-close-icon class="close-icon" @click="hideModal" />
         </div>
-        <div class="option">
-          <div class="description">
-            <h1>Use your own model</h1>
-            <p>
-              Configure Navie to use a specific LLM by adjusting the environment variables used by
-              the AppMap extension.
-            </p>
-            <p>Selecting this option will open the documentation in a new tab.</p>
-          </div>
-          <div class="action">
-            <a
-              href="https://appmap.io/docs/navie/bring-your-own-model.html"
-              target="_blank"
-              data-cy="llm-modal-option"
-              data-option="byom"
-            >
+        <div class="config-options">
+          <div class="option" data-cy="llm-modal-option" data-option="default">
+            <div class="description">
+              <h1>Use the Navie backend</h1>
+              <p>Instantly get access to Navie without any additional configuration.</p>
+            </div>
+            <div class="action">
               <v-button
                 size="medium"
-                @click.native="selectOption('own-model')"
+                @click.native="selectOption('default')"
+                :disabled="!isLocal"
                 data-cy="llm-select"
               >
+                {{ isLocal ? 'Select' : 'Selected' }}
+              </v-button>
+            </div>
+          </div>
+          <div class="option">
+            <div class="description">
+              <h1>Use your own model</h1>
+              <p>
+                Configure Navie to use a specific LLM by adjusting the environment variables used by
+                the AppMap extension.
+              </p>
+              <p>Selecting this option will open the documentation in a new tab.</p>
+            </div>
+            <div class="action">
+              <a
+                href="https://appmap.io/docs/navie/bring-your-own-model.html"
+                target="_blank"
+                data-cy="llm-modal-option"
+                data-option="byom"
+              >
+                <v-button
+                  size="medium"
+                  @click.native="selectOption('own-model')"
+                  data-cy="llm-select"
+                >
+                  Select
+                </v-button>
+              </a>
+            </div>
+          </div>
+          <div class="option" data-cy="llm-modal-option" data-option="byok">
+            <div class="description">
+              <h1>Use your own OpenAI API key</h1>
+              <p>Input your own OpenAI API key to use it with Navie.</p>
+            </div>
+            <div class="action">
+              <v-button size="medium" @click.native="selectOption('own-key')" data-cy="llm-select">
                 Select
               </v-button>
-            </a>
-          </div>
-        </div>
-        <div class="option" data-cy="llm-modal-option" data-option="byok">
-          <div class="description">
-            <h1>Use your own OpenAI API key</h1>
-            <p>Input your own OpenAI API key to use it with Navie.</p>
-          </div>
-          <div class="action">
-            <v-button size="medium" @click.native="selectOption('own-key')" data-cy="llm-select">
-              Select
-            </v-button>
+            </div>
           </div>
         </div>
       </div>
@@ -163,6 +165,13 @@ export default Vue.extend({
   align-items: center;
   border: 1px solid rgba(255, 255, 255, 0.1);
 
+  &__content {
+    display: flex;
+    flex-direction: column;
+    max-width: 32rem;
+    margin: auto;
+  }
+
   .button {
     padding: 0.5rem;
 
@@ -175,7 +184,7 @@ export default Vue.extend({
 
     .close-icon {
       position: absolute;
-      bottom: 0;
+      bottom: 1rem;
       right: 0;
       cursor: pointer;
       fill: #868789;
@@ -209,7 +218,6 @@ export default Vue.extend({
     padding: 1em;
     border-radius: $border-radius;
     border: 1px solid desaturate(lighten($bg, 15%), 10%);
-    max-width: 32rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
