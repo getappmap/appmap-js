@@ -245,12 +245,11 @@ export class ContextItemEvent extends InteractionEvent {
 
   updateState(state: InteractionState) {
     const content = [
-      `[${this.promptPrefix}]`,
-      [this.location, this.content].filter(Boolean).join(': '),
-    ]
-      .filter(Boolean)
-      .join(' ');
-    state.messages.push({ content, role: 'user' });
+      `<${this.promptPrefix}${this.location ? ` location="${this.location}"` : ''}>`,
+      this.content,
+      `</${this.promptPrefix}>`,
+    ].join('\n');
+    state.messages.push({ content, role: 'system' });
   }
 }
 
@@ -277,6 +276,11 @@ export class TechStackEvent extends InteractionEvent {
 
 export interface InteractionHistoryEvents {
   on(event: 'event', listener: (event: InteractionEvent) => void): void;
+}
+
+// Used for sorting events when building the state.
+function scoreEvent(event: InteractionEvent) {
+  return event.type === 'contextItem' ? 1 : 0;
 }
 
 export default class InteractionHistory extends EventEmitter implements InteractionHistoryEvents {
@@ -307,9 +311,21 @@ export default class InteractionHistory extends EventEmitter implements Interact
 
   buildState(): InteractionState {
     const state = new InteractionState();
-    for (const event of this.events) {
+    const instructions = this.events.filter((event) => event.type !== 'contextItem');
+    const contextItems = this.events.filter((event) => event.type === 'contextItem');
+
+    for (const event of instructions) {
       event.updateState(state);
     }
+
+    if (contextItems.length) {
+      state.messages.push({ content: '<context>', role: 'system' });
+      for (const event of contextItems) {
+        event.updateState(state);
+      }
+      state.messages.push({ content: '</context>', role: 'system' });
+    }
+
     return state;
   }
 }

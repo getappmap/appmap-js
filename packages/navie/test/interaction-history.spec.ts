@@ -54,7 +54,9 @@ describe('InteractionHistory', () => {
           );
           const state = interactionHistory.buildState();
           expect(state.messages).toEqual([
-            { content: '[sequence-diagram] diagram-1', role: 'user' },
+            { content: '<context>', role: 'system' },
+            { content: '<sequence-diagram>\ndiagram-1\n</sequence-diagram>', role: 'system' },
+            { content: '</context>', role: 'system' },
           ]);
         });
       });
@@ -66,7 +68,12 @@ describe('InteractionHistory', () => {
           );
           const state = interactionHistory.buildState();
           expect(state.messages).toEqual([
-            { content: '[code-snippet] file.py: code snippet content', role: 'user' },
+            { content: '<context>', role: 'system' },
+            {
+              content: '<code-snippet location="file.py">\ncode snippet content\n</code-snippet>',
+              role: 'system',
+            },
+            { content: '</context>', role: 'system' },
           ]);
         });
       });
@@ -76,7 +83,9 @@ describe('InteractionHistory', () => {
           interactionHistory.addEvent(new ContextItemEvent(PromptType.DataRequest, 'data request'));
           const state = interactionHistory.buildState();
           expect(state.messages).toEqual([
-            { content: '[data-request] data request', role: 'user' },
+            { content: '<context>', role: 'system' },
+            { content: '<data-request>\ndata request\n</data-request>', role: 'system' },
+            { content: '</context>', role: 'system' },
           ]);
         });
       });

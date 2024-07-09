@@ -10,6 +10,7 @@ export enum PromptType {
   DataRequest = 'dataRequest',
   HelpDoc = 'helpDoc',
   CodeEditor = 'codeEditor',
+  ConversationSummary = 'conversationSummary',
 }
 
 const PROMPT_NAMES: Record<PromptType, { singular: string; plural: string }> = {
@@ -24,6 +25,10 @@ const PROMPT_NAMES: Record<PromptType, { singular: string; plural: string }> = {
   [PromptType.DataRequest]: { singular: 'data request', plural: 'data requests' },
   [PromptType.HelpDoc]: { singular: 'help document', plural: 'help documents' },
   [PromptType.CodeEditor]: { singular: 'code editor', plural: 'code editors' },
+  [PromptType.ConversationSummary]: {
+    singular: 'conversation summary',
+    plural: 'conversation summary',
+  },
 };
 
 export type Prompt = {
@@ -148,18 +153,26 @@ You're provided with information about the user's code editor, in which you run 
 Do not mention installation or activation of the AppMap extension, because the user has already accomplished these steps.`,
     tagName: 'code-editor',
   },
+  [PromptType.ConversationSummary]: {
+    content: `**Conversation summary**
+
+You're provided with a summary of the entire conversation history.`,
+    tagName: 'conversation-summary',
+    multiple: false,
+  },
 };
 
 export function buildPromptDescriptor(promptType: PromptType): string {
   const prompt = PROMPTS[promptType];
   const content = [prompt.content];
+
   if (prompt.multiple) {
     content.push(
-      `Multiple ${PROMPT_NAMES[promptType].plural} of this type will be provided. Each one will be prefixed with "[${prompt.tagName}]"`
+      `Multiple ${PROMPT_NAMES[promptType].plural} of this type will be provided within the context. Each will be wrapped in a \`<${prompt.tagName}>\` tag.`
     );
   } else {
     content.push(
-      `The ${PROMPT_NAMES[promptType].singular} will be prefixed with "[${prompt.tagName}]"`
+      `The ${PROMPT_NAMES[promptType].singular} will be provided as context within a \`<${prompt.tagName}>\` tag.`
     );
   }
 

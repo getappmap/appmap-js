@@ -43,33 +43,65 @@ describe('ProjectInfoService', () => {
       expect(interactionHistory.events.map((event) => event.metadata)).toEqual([
         {
           name: 'appmapConfig',
-          role: 'user',
+          role: 'system',
           type: 'prompt',
+        },
+        {
+          promptType: PromptType.AppMapConfig,
+          type: 'contextItem',
         },
         {
           name: 'appmapStats',
-          role: 'user',
+          role: 'system',
           type: 'prompt',
         },
         {
+          promptType: PromptType.AppMapStats,
+          type: 'contextItem',
+        },
+        {
           name: 'codeEditor',
-          role: 'user',
+          role: 'system',
           type: 'prompt',
+        },
+        {
+          promptType: PromptType.CodeEditor,
+          type: 'contextItem',
         },
       ]);
 
       expect(interactionHistory.buildState().messages).toEqual([
         {
+          content: expect.stringContaining('**AppMap configuration**'),
+          role: 'system',
+        },
+        {
+          content: expect.stringContaining('**AppMap statistics**'),
+          role: 'system',
+        },
+        {
+          content: expect.stringContaining('**Code editor**'),
+          role: 'system',
+        },
+        {
+          content: '<context>',
+          role: 'system',
+        },
+        {
           content: expect.stringContaining('does not contain an AppMap config file'),
-          role: 'user',
+          role: 'system',
         },
         {
-          content: 'The project does not contain any AppMaps.',
-          role: 'user',
+          content: expect.stringContaining('The project does not contain any AppMaps.'),
+          role: 'system',
         },
         {
-          content: 'The code editor is not specified.',
-          role: 'user',
+          content: expect.stringContaining('The code editor is not specified.'),
+          role: 'system',
+        },
+        {
+          content: '</context>',
+          role: 'system',
         },
       ]);
     });
@@ -89,9 +121,9 @@ describe('ProjectInfoService', () => {
       projectInfoProviderFn.mockResolvedValueOnce(projectInfo);
       service.promptProjectInfo(false, await service.lookupProjectInfo());
       const messages = interactionHistory.buildState().messages;
-      expect(messages).toHaveLength(4);
+      expect(messages).toHaveLength(8);
       const instructionPrompt = messages[0];
-      const valuePrompt = messages[1];
+      const valuePrompt = messages[4];
       expect(instructionPrompt.content).toContain('**AppMap configuration**');
       expect(valuePrompt.content).toContain('<appmap-config>');
       expect(valuePrompt.content).toContain('name: appmap');
@@ -113,9 +145,9 @@ describe('ProjectInfoService', () => {
 
       const verifySmallStats = () => {
         const messages = interactionHistory.buildState().messages;
-        expect(messages).toHaveLength(4);
+        expect(messages).toHaveLength(8);
         const instructionPrompt = messages[1];
-        const valuePrompt = messages[2];
+        const valuePrompt = messages[5];
         expect(instructionPrompt.content).toContain('**AppMap statistics**');
         expect(valuePrompt.content).toContain('<appmap-stats>');
         expect(valuePrompt.content).toContain('numAppMaps: 1');
@@ -123,9 +155,9 @@ describe('ProjectInfoService', () => {
 
       const verifyLargeStats = () => {
         const messages = interactionHistory.buildState().messages;
-        expect(messages).toHaveLength(4);
+        expect(messages).toHaveLength(8);
         const instructionPrompt = messages[1];
-        const valuePrompt = messages[2];
+        const valuePrompt = messages[5];
         expect(instructionPrompt.content).toContain('**AppMap statistics**');
         expect(valuePrompt.content).toContain('<appmap-stats>');
         expect(valuePrompt.content).toContain('numAppMaps: 1');
@@ -189,9 +221,9 @@ describe('ProjectInfoService', () => {
       projectInfoProviderFn.mockResolvedValueOnce(projectInfo);
       service.promptProjectInfo(false, await service.lookupProjectInfo());
       const messages = interactionHistory.buildState().messages;
-      expect(messages).toHaveLength(4);
+      expect(messages).toHaveLength(8);
       const instructionPrompt = messages[2];
-      const valuePrompt = messages[3];
+      const valuePrompt = messages[6];
       expect(instructionPrompt.content).toContain('**Code editor**');
       expect(valuePrompt.content).toContain('<code-editor>');
       expect(valuePrompt.content).toContain('name: vscode');

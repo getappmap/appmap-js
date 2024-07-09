@@ -1,6 +1,6 @@
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
 import { Agent, AgentOptions } from '../agent';
-import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
+import { PROMPTS, PromptType } from '../prompt';
 import ContextService from '../services/context-service';
 
 const EXPLAIN_AGENT_PROMPT = `**Task: Explaining Code, Analyzing Code, Generating Code**
@@ -51,7 +51,7 @@ export default class ExplainAgent implements Agent {
       new PromptInteractionEvent(
         PromptType.Question,
         'system',
-        buildPromptDescriptor(PromptType.Question)
+        PROMPTS[PromptType.Question].content
       )
     );
 
@@ -59,12 +59,6 @@ export default class ExplainAgent implements Agent {
   }
 
   applyQuestionPrompt(question: string): void {
-    this.history.addEvent(
-      new PromptInteractionEvent(
-        PromptType.Question,
-        'user',
-        buildPromptValue(PromptType.Question, question)
-      )
-    );
+    this.history.addEvent(new PromptInteractionEvent(PromptType.Question, 'user', question));
   }
 }
