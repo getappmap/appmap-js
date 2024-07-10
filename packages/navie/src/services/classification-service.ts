@@ -6,7 +6,10 @@ import CompletionService from './completion-service';
 
 const SYSTEM_PROMPT = `**Question classifier**
 
-A software developer is asking a question about a project. Your task is to classify the question into one or more categories.
+A software developer is asking a question about a project. Your task is to classify their MOST RECENT
+question into one or more categories given the context of the conversation. Assume that the classification
+assignment will determine what kind of response the AI will provide.
+
 
 # About you**
 
@@ -38,6 +41,8 @@ Choose exactly one from the following "Modes":
   be one or more diagrams.
 - **help-with-appmap**: Help using the AppMap product. The response will be an explanation of how to
   use AppMap, along with links to documentation.
+- **chatting**: The developer is chatting with the AppMap AI. The response will be a conversation
+  with the AI.
 
 Choose exactly one from the following "Scopes":
 
@@ -112,6 +117,10 @@ Some examples of questions and their classifications are:
   answer:
     generate-diagram: high
     architecture: high
+
+- question: ok thanks
+  answer:
+    chatting: high
 \`\`\`
 
 `;
@@ -126,22 +135,22 @@ export default class ClassificationService {
     question: string,
     chatHistory?: ChatHistory
   ): Promise<ContextV2.ContextLabel[]> {
-    const allQuestions = [
-      ...(chatHistory || [])
-        .filter((message) => message.role === 'user')
-        .map((message) => message.content),
-      question,
-    ]
-      .filter(Boolean)
-      .join('\n\n');
+    let previousQuestions: Message[] = [];
+    if (chatHistory) {
+      const numPreviousMessages = 2;
+      const endIndex = chatHistory.length - 1;
+      const startIndex = endIndex - numPreviousMessages;
+      previousQuestions = chatHistory.slice(startIndex, endIndex).filter(Boolean);
+    }
 
     const messages: Message[] = [
       {
         content: SYSTEM_PROMPT,
         role: 'system',
       },
+      ...previousQuestions,
       {
-        content: allQuestions,
+        content: question,
         role: 'user',
       },
     ];
