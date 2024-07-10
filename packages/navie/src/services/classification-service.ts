@@ -6,7 +6,10 @@ import CompletionService from './completion-service';
 
 const SYSTEM_PROMPT = `**Question classifier**
 
-A software developer is asking a question about a project. Your task is to classify the question into one or more categories.
+A software developer is asking a question about a project. Your task is to classify their MOST RECENT
+question into one or more categories given the context of the conversation. Assume that the classification
+assignment will determine what kind of response the AI will provide.
+
 
 # About you**
 
@@ -21,18 +24,31 @@ The user is a software developer who is working on a project. They are asking a 
 
 ## Classification categories
 
-Your task is to assign a likelihood to each of the following categories:
+Your task is to assign a likelihood to question categories.
 
-- **greeting**: The developer is saying hello to the assistant.
-- **help-with-appmap**: Help using the AppMap product.
-- **architecture**: The developer is asking about the architecture of the project.
-- **feature**: The developer is asking for an explanation of how a specific feature of the project works.
-- **overview**: The developer is asking a high-level question about the structure, purpose,
-  functionality or intent of the project.
-- **troubleshoot**: The developer is asking for help troubleshooting an issue.
-- **explain**: The developer is asking for an explanation of a the code.
-- **generate-code**: The developer is asking to generate code for a specific task.
-- **generate-diagram**: The developer is asking for a diagram of their code.
+Choose exactly one from the following "Modes":
+
+- **greeting**: The developer is saying hello to the assistant. The response will also be a greeting.
+- **explain**: The developer is asking for an explanation of code behavior. The response will be
+  a combination of text, diagrams, and code.
+- **plan**: The developer is developing a plan to solve a code issue. The response will be
+  an analysis of the issue, along with a plan to solve it.
+- **troubleshoot**: The developer is asking for help troubleshooting an issue. The response will
+  be a combination of text, diagrams, and code.
+- **generate-code**: The developer is asking to generate code for a specific task. The response
+  will be code files and snippets.
+- **generate-diagram**: The developer is asking for a diagram of their code. The response will
+  be one or more diagrams.
+- **help-with-appmap**: Help using the AppMap product. The response will be an explanation of how to
+  use AppMap, along with links to documentation.
+- **chatting**: The developer is chatting with the AppMap AI. The response will be a conversation
+  with the AI.
+
+Choose exactly one from the following "Scopes":
+
+- **architecture**: The developer is asking about the high-level architecture of the project.
+- **feature**: The developer is asking for an explanation of how a specific feature of the project
+  works.
 
 ## Classification scores
 
@@ -126,6 +142,16 @@ Some examples of questions and their classifications are:
     explain: low
     generate-code: low
     generate-diagram: high
+    overview: high
+
+- question: ERD of users
+  answer:
+    generate-diagram: high
+    architecture: high
+
+- question: ok thanks
+  answer:
+    chatting: high
 \`\`\`
 
 `;
@@ -140,22 +166,22 @@ export default class ClassificationService {
     question: string,
     chatHistory?: ChatHistory
   ): Promise<ContextV2.ContextLabel[]> {
-    const allQuestions = [
-      ...(chatHistory || [])
-        .filter((message) => message.role === 'user')
-        .map((message) => message.content),
-      question,
-    ]
-      .filter(Boolean)
-      .join('\n\n');
+    let previousQuestions: Message[] = [];
+    if (chatHistory) {
+      const numPreviousMessages = 2;
+      const endIndex = chatHistory.length - 1;
+      const startIndex = endIndex - numPreviousMessages;
+      previousQuestions = chatHistory.slice(startIndex, endIndex).filter(Boolean);
+    }
 
     const messages: Message[] = [
       {
         content: SYSTEM_PROMPT,
         role: 'system',
       },
+      ...previousQuestions,
       {
-        content: allQuestions,
+        content: question,
         role: 'user',
       },
     ];
