@@ -59,7 +59,7 @@ describe('VsCodeExtension.vue', () => {
     wrapper.find('[data-cy="sidebar-hamburger-menu-icon').trigger('click');
     await Vue.nextTick();
 
-    wrapper.find('[data-cy="details-panel-ask-navie-button"]').trigger('click');
+    wrapper.find('[data-cy="ask-navie-button"]').trigger('click');
     expect(rootWrapper.emitted()['ask-navie-about-map']).toEqual([
       [appmapFsPath],
       [appmapFsPath],
