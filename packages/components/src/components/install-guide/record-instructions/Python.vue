@@ -212,7 +212,7 @@ export default {
     this.typewrite(this.$refs.startCommand, [
       '<start command>',
       'script.py',
-      'flask --app main.app',
+      'flask --debug --app main.app',
       'pytest',
       'manage.py runserver',
     ]);
