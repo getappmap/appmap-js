@@ -49,18 +49,18 @@ For a bug, explain the root cause of the bug, and how the logic should be change
 
 For a feature, describe the components of the new functionality, and the role of each one.
 
-* **Proposed Changes** This section suggests which files should be changed in order to solve the issue.
+* **Proposed Changes** This section suggests which files and components should be changed in order to
+solve the issue.
 
-Try to solve the problem with a minimal set of code changes.
+Each item in the \`Proposed Changes\` section should describe, in plain language, logic that implemented
+for that file or component.
 
-Each item in the \`Proposed Changes\` section SHOULD describe the function and logic that should be modified.
-
-DO provide a detailed description of the necessary changes.
-DO suggest changes to existing, non-test code files.
-DO NOT include a code snippet.
-DO NOT generate changes in test code, test cases, or documentation.
-DO NOT propose the creation of new files, unless it's absolutely necessary.
-DO NOT output code blocks or fenced code. Output only a text description of the suggested
+* DO provide a detailed description of the necessary changes.
+* DO suggest changes to existing, non-test code files.
+* DO NOT include a code snippet.
+* DO NOT generate changes in test code, test cases, or documentation.
+* DO NOT propose the creation of new files, unless it's absolutely necessary.
+* DO NOT output code blocks or fenced code. Output only a text description of the suggested
   changes, along with the file names.
 `;
 export class PlanAgent implements Agent {
