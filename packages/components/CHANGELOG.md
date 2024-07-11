@@ -1,3 +1,10 @@
+# [@appland/components-v4.27.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.26.0...@appland/components-v4.27.0) (2024-07-11)
+
+
+### Features
+
+* Render mermaid diagram blocks ([ef1d7d4](https://github.com/getappmap/appmap-js/commit/ef1d7d42a0f71ecc1b125d39fd2daebe79c429ae))
+
 # [@appland/components-v4.26.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.25.0...@appland/components-v4.26.0) (2024-06-28)
 
 
