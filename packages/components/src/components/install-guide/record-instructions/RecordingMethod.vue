@@ -33,16 +33,7 @@
       </a>
       <v-popper-menu position="top left" v-if="promptSuggestions" ref="promptSuggestionsMenu">
         <template #icon>
-          <div class="recording-method__ask-navie-wrapper">
-            <div
-              class="recording-method__ask-navie-button"
-              data-cy="recording-method-ask-navie-button"
-              @click="$emit('askNavieAboutMap')"
-            >
-              <v-compass-icon class="compass-icon" />
-              Ask Navie
-            </div>
-          </div>
+          <v-ask-navie-button />
         </template>
         <template #body>
           <div class="recording-method__ask-navie-button-list">
@@ -70,7 +61,7 @@
 import Vue from 'vue';
 import VExternalLinkIcon from '@/assets/external-link.svg';
 import VBadge from '@/components/Badge.vue';
-import VCompassIcon from '@/assets/compass-simpler.svg';
+import VAskNavieButton from '@/components/chat-search/AskNavieButton.vue';
 import VPopperMenu from '@/components/PopperMenu.vue';
 import VButton from '@/components/Button.vue';
 import type { NaviePromptSuggestion } from '@/lib/buildPrompts';
@@ -104,7 +95,7 @@ export default Vue.extend({
   },
   components: {
     VExternalLinkIcon,
-    VCompassIcon,
+    VAskNavieButton,
     VBadge,
     VPopperMenu,
     VButton,
@@ -235,26 +226,6 @@ export default Vue.extend({
     font-weight: bold;
   }
 
-  $glow-size: 0.2rem;
-  $glow-blur: 0.5rem;
-  $glow-alpha: 0.5;
-  @keyframes pan {
-    0%,
-    100% {
-      background-position: 0% 0%;
-      box-shadow: 0 0 $glow-blur $glow-size rgba(255, 7, 170, $glow-alpha);
-    }
-    25%,
-    75% {
-      background-position: 100% 100%;
-      box-shadow: 0 0 $glow-blur $glow-size rgba(156, 47, 186, $glow-alpha);
-    }
-    50% {
-      background-position: 100% 100%;
-      box-shadow: 0 0 $glow-blur $glow-size rgba(67, 98, 177, $glow-alpha);
-    }
-  }
-
   &__ask-navie-button-list {
     display: flex;
     flex-direction: column;
@@ -273,17 +244,6 @@ export default Vue.extend({
     }
   }
 
-  &__ask-navie-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: $navie-gradient;
-    border-radius: $border-radius;
-    padding: 2px;
-    animation: pan 5s linear infinite;
-    background-size: 300% 300%;
-  }
-
   &__disabled-explanation {
     background-color: rgba($darkyellow, 0.1);
     border: 1px solid rgba($darkyellow, 0.2);
@@ -297,48 +257,6 @@ export default Vue.extend({
     text-align: left;
     &:hover {
       background-color: rgba(white, 0.1);
-    }
-  }
-
-  &__ask-navie-button {
-    user-select: none;
-    padding: 0.25rem 0.5rem;
-    background: rgba(26, 40, 78, 0.75);
-    border-radius: calc(#{$border-radius} - 2px);
-    font-size: 0.9rem;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: fit-content;
-    color: $gray5;
-    transition: $transition;
-    .compass-icon {
-      width: 24px;
-      margin: -0.25rem 0.25rem -0.25rem 0;
-      path {
-        transition: $transition;
-        fill: $gray5;
-      }
-      circle {
-        transition: $transition;
-        stroke: $gray5;
-      }
-    }
-    &:hover {
-      cursor: pointer;
-      color: #fff;
-      transition: $transition;
-      background: rgba(255, 255, 255, 0.2);
-      .compass-icon {
-        path {
-          transition: $transition;
-          fill: #fff;
-        }
-        circle {
-          transition: $transition;
-          stroke: #fff;
-        }
-      }
     }
   }
 }

@@ -153,6 +153,7 @@
           >
             <button class="ask-navie" @click="askNavie" data-cy="ask-navie-control-button">
               <v-compass-icon />
+              <v-compass-icon class="ask-navie-glow" />
             </button>
           </v-popper>
           <v-popper
@@ -1841,30 +1842,22 @@ code {
         cursor: pointer;
       }
 
-      $glow-alpha: 1;
       $glow-size: 4px;
       @keyframes glow {
         0%,
         100% {
-          stroke: $gray4;
-          filter: drop-shadow(0 0 0 transparent);
+          opacity: 0;
         }
 
-        33% {
-          stroke: rgba(255, 7, 170, 1);
-          filter: drop-shadow(0 0 $glow-size rgba(255, 7, 170, $glow-alpha));
-        }
-
-        66% {
-          stroke: rgba(156, 47, 186, 1);
-          filter: drop-shadow(0 0 $glow-size rgba(156, 47, 186, $glow-alpha));
+        50% {
+          opacity: 0.75;
         }
       }
       .ask-navie {
+        position: relative;
         background-color: inherit;
         border: none;
         padding: 0;
-        animation: glow 5s infinite ease-in-out;
 
         &:hover {
           cursor: pointer;
@@ -1889,6 +1882,24 @@ code {
           circle {
             stroke: $gray4;
           }
+        }
+      }
+
+      .ask-navie-glow {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        animation: glow 5s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        pointer-events: none;
+        transform: translateZ(0);
+        will-change: opacity;
+
+        path {
+          fill: rgb(255, 7, 170) !important;
+        }
+        circle {
+          stroke: rgb(255, 7, 170) !important;
         }
       }
 
