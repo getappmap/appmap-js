@@ -1,3 +1,10 @@
+# [@appland/components-v4.27.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.27.0...@appland/components-v4.27.1) (2024-07-11)
+
+
+### Bug Fixes
+
+* Reduce the cost of painting Navie buttons ([7736716](https://github.com/getappmap/appmap-js/commit/773671600f2a332938c2e04df1dadadb523339da))
+
 # [@appland/components-v4.27.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.26.0...@appland/components-v4.27.0) (2024-07-11)
 
 
