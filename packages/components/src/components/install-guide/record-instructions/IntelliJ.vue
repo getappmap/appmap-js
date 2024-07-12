@@ -193,7 +193,7 @@ export default {
   data() {
     return {
       promptSuggestions: buildPrompts(
-        'Ruby',
+        'Java',
         this.editor,
         this.webFramework?.name,
         this.testFramework?.name

@@ -1,11 +1,12 @@
 const buildPrompt = (
+  language: string,
   webRelevant: boolean,
   testRelevant: boolean,
   webFramework?: string,
   testFramework?: string,
   ...promptSegments: string[]
 ) => {
-  const promptInfo = ["@help I'm using the AppMap agent for Node.js."];
+  const promptInfo = [`@help I'm using the AppMap agent for ${language}.`];
   if (webRelevant) {
     promptInfo.push(
       webFramework
@@ -47,6 +48,7 @@ export default function buildPrompts(
       {
         label: 'How do I record a HTTP request?',
         prompt: buildPrompt(
+          language,
           true,
           false,
           webFramework,
@@ -57,6 +59,7 @@ export default function buildPrompts(
       {
         label: 'What is HTTP request recording?',
         prompt: buildPrompt(
+          language,
           true,
           false,
           webFramework,
@@ -67,6 +70,7 @@ export default function buildPrompts(
       {
         label: 'What frameworks support HTTP request recording?',
         prompt: buildPrompt(
+          language,
           true,
           false,
           webFramework,
@@ -79,6 +83,7 @@ export default function buildPrompts(
       {
         label: 'How do I start a process recording?',
         prompt: buildPrompt(
+          language,
           false,
           false,
           webFramework,
@@ -89,6 +94,7 @@ export default function buildPrompts(
       {
         label: 'What is a process recording?',
         prompt: buildPrompt(
+          language,
           false,
           false,
           webFramework,
@@ -99,6 +105,7 @@ export default function buildPrompts(
       {
         label: 'When should I use process recording?',
         prompt: buildPrompt(
+          language,
           false,
           false,
           webFramework,
@@ -111,6 +118,7 @@ export default function buildPrompts(
       {
         label: 'How do I start a remote recording?',
         prompt: buildPrompt(
+          language,
           true,
           false,
           webFramework,
@@ -121,6 +129,7 @@ export default function buildPrompts(
       {
         label: 'How do I stop a remote recording?',
         prompt: buildPrompt(
+          language,
           true,
           false,
           webFramework,
@@ -131,6 +140,7 @@ export default function buildPrompts(
       {
         label: 'What is a remote recording?',
         prompt: buildPrompt(
+          language,
           true,
           false,
           webFramework,
@@ -141,6 +151,7 @@ export default function buildPrompts(
       {
         label: 'What frameworks support remote recording?',
         prompt: buildPrompt(
+          language,
           true,
           false,
           webFramework,
@@ -151,6 +162,7 @@ export default function buildPrompts(
       {
         label: 'When whould I need remote recording?',
         prompt: buildPrompt(
+          language,
           true,
           false,
           webFramework,
@@ -162,15 +174,30 @@ export default function buildPrompts(
     test: [
       {
         label: 'How do I record my tests?',
-        prompt: buildPrompt(false, true, webFramework, testFramework, 'How do I record my tests?'),
+        prompt: buildPrompt(
+          language,
+          false,
+          true,
+          webFramework,
+          testFramework,
+          'How do I record my tests?'
+        ),
       },
       {
         label: 'What is a test recording?',
-        prompt: buildPrompt(false, true, webFramework, testFramework, 'What is a test recording?'),
+        prompt: buildPrompt(
+          language,
+          false,
+          true,
+          webFramework,
+          testFramework,
+          'What is a test recording?'
+        ),
       },
       {
         label: 'What testing frameworks can I record with?',
         prompt: buildPrompt(
+          language,
           false,
           true,
           webFramework,
@@ -181,6 +208,7 @@ export default function buildPrompts(
       {
         label: 'Why should I record my tests?',
         prompt: buildPrompt(
+          language,
           false,
           true,
           webFramework,
@@ -193,6 +221,7 @@ export default function buildPrompts(
       {
         label: 'How do I record a code block?',
         prompt: buildPrompt(
+          language,
           false,
           false,
           webFramework,
@@ -203,6 +232,7 @@ export default function buildPrompts(
       {
         label: 'What is a code block recording?',
         prompt: buildPrompt(
+          language,
           false,
           false,
           webFramework,
@@ -213,6 +243,7 @@ export default function buildPrompts(
       {
         label: 'When would I use a code block recording?',
         prompt: buildPrompt(
+          language,
           false,
           false,
           webFramework,
