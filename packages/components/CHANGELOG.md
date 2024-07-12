@@ -1,3 +1,20 @@
+# [@appland/components-v4.28.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.27.1...@appland/components-v4.28.0) (2024-07-12)
+
+
+### Bug Fixes
+
+* Address some leaky styles in Visual Studio Code ([3f1b8ff](https://github.com/getappmap/appmap-js/commit/3f1b8ffb23fe5cc0d11ac4a94d4a4a15b91096f0))
+* Clean up language in JavaScript recording instructions ([807c192](https://github.com/getappmap/appmap-js/commit/807c192f6fbfad9d0686146e09b2d5b5879e5a3e))
+* Improve visibility of code snippets ([dbdda6c](https://github.com/getappmap/appmap-js/commit/dbdda6cbbb6ddd17097e6e89ea058dd6678dd8c0))
+* Show blinking cursor before first token is received ([c5cc602](https://github.com/getappmap/appmap-js/commit/c5cc6024a3b16656154ad5bedb5b01bd5bc3d77f))
+* The code block icon can now be properly scaled ([6fcfe57](https://github.com/getappmap/appmap-js/commit/6fcfe5706b01ffb018ae373a73aaf0e32a62ceb1))
+
+
+### Features
+
+* Show vendor when using the VSCode LM API ([cd3c8f5](https://github.com/getappmap/appmap-js/commit/cd3c8f5ec2c4e8819bfee487f7eb00ea6995f8b0))
+* Update Java, Python and Ruby instructions ([848d98f](https://github.com/getappmap/appmap-js/commit/848d98f26ba3acc02b6ad0553b683763fcf2c147))
+
 # [@appland/components-v4.27.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.27.0...@appland/components-v4.27.1) (2024-07-11)
 
 
