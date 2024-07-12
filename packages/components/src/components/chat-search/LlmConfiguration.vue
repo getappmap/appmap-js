@@ -63,7 +63,13 @@
         </div>
       </div>
     </v-modal>
-    <v-button kind="ghost" class="button" @click.native="showModal" data-cy="llm-config-button">
+    <v-button
+      v-if="!vsCodeLMVendor"
+      kind="ghost"
+      class="button"
+      @click.native="showModal"
+      data-cy="llm-config-button"
+    >
       <v-cog-solid class="icon" />
     </v-button>
     <span>
@@ -112,6 +118,14 @@ export default Vue.extend({
     isLocal() {
       return this.baseUrl !== undefined;
     },
+    vsCodeLMVendor(): string | undefined {
+      if (!this.baseUrl) return;
+      const { hostname, pathname } = new URL(this.baseUrl);
+      if (!['localhost', '127.0.0.1'].includes(hostname)) return;
+      const vscodeVendor = pathname?.match(/\/vscode\/([^/]+)/);
+      if (vscodeVendor && vscodeVendor[1]) return decodeURIComponent(vscodeVendor[1]);
+      return undefined;
+    },
     modelName(): string {
       return this.model ?? 'GPT-4o';
     },
@@ -119,6 +133,7 @@ export default Vue.extend({
       if (!this.baseUrl) return 'default';
 
       try {
+        if (this.vsCodeLMVendor) return `via ${this.vsCodeLMVendor}`;
         const { hostname } = new URL(this.baseUrl);
         if (hostname.match(/(openai.azure.com|api.microsoft.com)$/i) !== null) {
           return 'via Azure OpenAI';
