@@ -6,6 +6,10 @@ import longPackageData from './data/long-package.appmap.json';
 import savedFilters from './data/saved_filters.js';
 import navieContext from './data/navie_context.json';
 
+function wait(msec) {
+  return new Promise((resolve) => setTimeout(resolve, msec));
+}
+
 const code = `class UsersController < ApplicationController
   before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user,     only: :destroy
@@ -133,6 +137,15 @@ export const ChatSearchMockSearchPrepopulated = (args, { argTypes }) => ({
   },
 });
 
+export const ChatSearchMockSearchCopilot = (args, { argTypes }) => ({
+  props: Object.keys(argTypes),
+  components: { VChatSearch },
+  template: `<v-chat-search v-bind="$props" ref="chatSearch"></v-chat-search>`,
+  mounted() {
+    this.$refs.chatSearch.setAppMapStats(appmapStats);
+  },
+});
+
 export const ChatSearchMockSearchPrepopulatedEmptyResults = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VChatSearch },
@@ -242,34 +255,39 @@ const EmptyAppmapStats = {
   numAppMaps: 0,
 };
 
-function buildMockRpc(searchResponse, explanation, appmapStats, navieContext) {
+function buildMockRpc(
+  searchResponse,
+  explanation,
+  appmapStats,
+  navieContext,
+  baseUrl = 'http://localhost:3000/',
+  supportsStreaming = true
+) {
+  let explainStatus = { step: 'build-vector-terms', searchResponse };
+  const run = async function () {
+    explainStatus = { step: 'build-vector-terms', searchResponse };
+    await wait(500);
+    explainStatus.step = 'explain';
+    explainStatus.contextResponse = navieContext;
+    if (supportsStreaming) {
+      explainStatus.explanation = [];
+      for (const line of explanation) {
+        await wait(500);
+        explainStatus.explanation.push(`${line}\n`);
+      }
+    } else {
+      await wait(10000);
+      explainStatus.explanation = explanation.map((line) => `${line}\n`);
+    }
+    explainStatus.step = 'complete';
+  };
+
   return (method, params, callback) => {
     if (method === 'explain') {
-      statusIndex = 0;
       callback(null, null, { userMessageId, threadId });
+      run();
     } else if (method === 'explain.status') {
-      const responseIndex = statusIndex;
-      statusIndex += 1;
-      if (responseIndex === 0) callback(null, null, { step: 'build-vector-terms' });
-      else if (responseIndex === 1)
-        setTimeout(() => callback(null, null, { step: 'explain', searchResponse }), 500);
-      else if (responseIndex < explanation.length + 2)
-        setTimeout(() => {
-          requestIndex += 1;
-          callback(null, null, {
-            step: 'explain',
-            searchResponse,
-            explanation: explanation.slice(0, responseIndex - 2).map((line) => `${line}\n`),
-            contextResponse: navieContext,
-          });
-        }, 500);
-      else
-        callback(null, null, {
-          step: 'complete',
-          searchResponse,
-          explanation,
-          contextResponse: navieContext,
-        });
+      callback(null, null, explainStatus);
     } else if (method.split('.')[0] === 'appmap') {
       const appmapId = params.appmap;
       const data = DATA_BY_PATH[appmapId];
@@ -285,8 +303,8 @@ function buildMockRpc(searchResponse, explanation, appmapStats, navieContext) {
       }
     } else if (method === 'v2.configuration.get') {
       callback(null, null, {
-        baseUrl: 'http://localhost:3000',
-        model: 'Mixtral-8x7B-Instruct-v0.1',
+        baseUrl,
+        model: 'gpt-4-turbo',
       });
     }
   };
@@ -334,6 +352,19 @@ ChatSearchMockSearchPrepopulated.args = {
   question: 'How does password reset work?',
   appmapYmlPresent: true,
   mostRecentAppMaps,
+};
+
+ChatSearchMockSearchCopilot.args = {
+  appmapRpcFn: buildMockRpc(
+    NonEmptySearchResponse,
+    MOCK_EXPLANATION,
+    AppmapStats,
+    navieContext,
+    'http://localhost:3232/vscode/Copilot/',
+    false
+  ),
+  question: 'How does password reset work?',
+  appmapYmlPresent: true,
 };
 
 ChatSearchMockSearchPrepopulatedEmptyResults.args = {
