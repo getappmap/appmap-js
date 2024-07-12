@@ -391,6 +391,11 @@ export default {
               tool.title = 'Project analysis complete';
               tool.complete = true;
             }
+
+            // With some models there is a long delay before the first token is generated.
+            // Adding something (such as a zwnj) to the message makes sure a blinking cursor
+            // is shown while waiting.
+            systemMessage.append('‌');
           }
 
           if (tool && !tool.status) tool.status = this.getToolStatusMessage();
