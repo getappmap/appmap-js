@@ -1,3 +1,10 @@
+# [@appland/components-v4.28.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.28.0...@appland/components-v4.28.1) (2024-07-12)
+
+
+### Bug Fixes
+
+* Propagate user language to recording prompt ([55f9ea6](https://github.com/getappmap/appmap-js/commit/55f9ea6f676ba19ca803ea05dce227f5b16d251f))
+
 # [@appland/components-v4.28.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.27.1...@appland/components-v4.28.0) (2024-07-12)
 
 
