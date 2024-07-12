@@ -33,6 +33,7 @@ import FileChangeExtractorService from './services/file-change-extractor-service
 import FileUpdateService from './services/file-update-service';
 import parseOptions from './lib/parse-options';
 import ListFilesCommand from './commands/list-files-command';
+import MermaidFixerService from './services/mermaid-fixer-service';
 
 export type ChatHistory = Message[];
 
@@ -103,13 +104,15 @@ export default function navie(
 
     const applyContextService = new ApplyContextService(interactionHistory);
 
+    const mermaidFixerService = new MermaidFixerService(interactionHistory, completionService);
+
     const agentSelectionService = new AgentSelectionService(
       interactionHistory,
       vectorTermsService,
       lookupContextService,
       applyContextService,
       techStackService,
-      completionService
+      mermaidFixerService
     );
     const projectInfoService = new ProjectInfoService(interactionHistory, projectInfoProvider);
     const memoryService = new OpenAIMemoryService(options.modelName, options.temperature);

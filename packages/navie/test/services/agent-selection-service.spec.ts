@@ -1,12 +1,13 @@
-import DiagramAgent from '../../src/agents/diagram-agent';
 import ExplainAgent from '../../src/agents/explain-agent';
 import HelpAgent from '../../src/agents/help-agent';
+import { ContextV2 } from '../../src/context';
 import InteractionHistory, { AgentSelectionEvent } from '../../src/interaction-history';
 import { UserOptions } from '../../src/lib/parse-options';
 import AgentSelectionService from '../../src/services/agent-selection-service';
 import ApplyContextService from '../../src/services/apply-context-service';
 import CompletionService from '../../src/services/completion-service';
 import LookupContextService from '../../src/services/lookup-context-service';
+import MermaidFixerService from '../../src/services/mermaid-fixer-service';
 import TechStackService from '../../src/services/tech-stack-service';
 import VectorTermsService from '../../src/services/vector-terms-service';
 
@@ -16,7 +17,7 @@ describe('AgentSelectionService', () => {
   let lookupContextService: LookupContextService;
   let applyContextService: ApplyContextService;
   let techStackService: TechStackService;
-  let completionService: CompletionService;
+  let mermaidFixerService: MermaidFixerService;
   let genericQuestion = 'How does user management work?';
   let helpAgentQueston = '@help How to make a diagram?';
   const emptyUserOptions = new UserOptions(new Map());
@@ -28,7 +29,7 @@ describe('AgentSelectionService', () => {
       lookupContextService,
       applyContextService,
       techStackService,
-      completionService
+      mermaidFixerService
     );
   }
 
@@ -38,7 +39,7 @@ describe('AgentSelectionService', () => {
     lookupContextService = {} as LookupContextService;
     applyContextService = {} as ApplyContextService;
     techStackService = {} as TechStackService;
-    completionService = {} as CompletionService;
+    mermaidFixerService = {} as MermaidFixerService;
   });
 
   const agentSelectionEvent = (): AgentSelectionEvent | undefined =>
@@ -83,8 +84,8 @@ describe('AgentSelectionService', () => {
         genericQuestion,
         [
           {
-            name: 'help-with-appmap',
-            weight: 'high',
+            name: ContextV2.ContextLabelName.HelpWithAppMap,
+            weight: ContextV2.ContextLabelWeight.High,
           },
         ],
         emptyUserOptions
@@ -98,54 +99,14 @@ describe('AgentSelectionService', () => {
           genericQuestion,
           [
             {
-              name: 'help-with-appmap',
-              weight: 'high',
+              name: ContextV2.ContextLabelName.GenerateDiagram,
+              weight: ContextV2.ContextLabelWeight.High,
             },
           ],
           new UserOptions(new Map([['help', false]]))
         );
         expect(agent).toBeInstanceOf(ExplainAgent);
       });
-    });
-  });
-
-  describe('when the question is classified as generate-diagram', () => {
-    it('creates a Diagram agent', () => {
-      const { agent } = buildAgentSelectionService().selectAgent(
-        genericQuestion,
-        [
-          {
-            name: 'generate-diagram',
-            weight: 'high',
-          },
-        ],
-        emptyUserOptions
-      );
-      expect(agent).toBeInstanceOf(DiagramAgent);
-    });
-  });
-
-  describe('when the question is classified as explain', () => {
-    it('creates an Explain agent even if other classifiers are present', () => {
-      const { agent } = buildAgentSelectionService().selectAgent(
-        genericQuestion,
-        [
-          {
-            name: 'generate-diagram',
-            weight: 'high',
-          },
-          {
-            name: 'help-with-appmap',
-            weight: 'high',
-          },
-          {
-            name: 'explain',
-            weight: 'high',
-          },
-        ],
-        emptyUserOptions
-      );
-      expect(agent).toBeInstanceOf(ExplainAgent);
     });
   });
 });

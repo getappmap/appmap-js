@@ -14,8 +14,8 @@ import TestAgent from '../agents/test-agent';
 import { PlanAgent } from '../agents/plan-agent';
 import ContextService from './context-service';
 import { UserOptions } from '../lib/parse-options';
-import DiagramAgent from '../agents/diagram-agent';
 import CompletionService from './completion-service';
+import MermaidFixerService from './mermaid-fixer-service';
 
 type AgentModeResult = {
   agentMode: AgentMode;
@@ -35,7 +35,6 @@ behavior, re-ask your question and start with the option \`/nohelp\` or with a m
 const MODE_PREFIXES = {
   '@explain ': AgentMode.Explain,
   '@generate ': AgentMode.Generate,
-  '@diagram ': AgentMode.Diagram,
   '@help ': AgentMode.Help,
   '@test ': AgentMode.Test,
   '@plan ': AgentMode.Plan,
@@ -48,7 +47,7 @@ export default class AgentSelectionService {
     private lookupContextService: LookupContextService,
     private applyContextService: ApplyContextService,
     private techStackService: TechStackService,
-    private completionService: CompletionService
+    private mermaidFixerService: MermaidFixerService
   ) {}
 
   selectAgent(
@@ -76,17 +75,14 @@ export default class AgentSelectionService {
 
     const planAgent = () => new PlanAgent(this.history, contextService);
 
-    const diagramAgent = () =>
-      new DiagramAgent(this.history, contextService, this.completionService);
-
     const generateAgent = () => new GenerateAgent(this.history, contextService);
 
-    const explainAgent = () => new ExplainAgent(this.history, contextService);
+    const explainAgent = () =>
+      new ExplainAgent(this.history, contextService, this.mermaidFixerService);
 
     const buildAgent: { [key in AgentMode]: () => Agent } = {
       [AgentMode.Help]: helpAgent,
       [AgentMode.Generate]: generateAgent,
-      [AgentMode.Diagram]: diagramAgent,
       [AgentMode.Explain]: explainAgent,
       [AgentMode.Test]: testAgent,
       [AgentMode.Plan]: planAgent,
@@ -120,14 +116,6 @@ export default class AgentSelectionService {
       disableOption?: string;
       message?: string;
     }[] = [
-      {
-        name: ContextV2.ContextLabelName.Explain,
-        mode: AgentMode.Explain,
-      },
-      {
-        name: ContextV2.ContextLabelName.GenerateDiagram,
-        mode: AgentMode.Diagram,
-      },
       {
         name: ContextV2.ContextLabelName.HelpWithAppMap,
         mode: AgentMode.Help,

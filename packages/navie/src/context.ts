@@ -97,8 +97,8 @@ export namespace ContextV2 {
 
   // A label that describes the nature of the user's request.
   export type ContextLabel = {
-    name: ContextLabelName | string;
-    weight: ContextLabelWeight | string;
+    name: ContextLabelName;
+    weight: ContextLabelWeight;
   };
 
   export type ContextFilters = {

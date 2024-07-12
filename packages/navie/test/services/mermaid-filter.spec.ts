@@ -1,22 +1,22 @@
 import InteractionHistory from '../../src/interaction-history';
 import { Chunk } from '../../src/lib/filter';
 import MermaidFilter from '../../src/lib/mermaid-filter';
-import MermaidFixer from '../../src/lib/mermaid-fixer';
 import trimFences from '../../src/lib/trim-fences';
+import MermaidFixerService from '../../src/services/mermaid-fixer-service';
 
 describe('MermaidFilter', () => {
   let history: InteractionHistory;
   let repairDiagram: jest.Mock;
-  let mermaidFixer: MermaidFixer;
+  let mermaidFixerService: MermaidFixerService;
   let filter: MermaidFilter;
 
   beforeEach(() => {
     history = new InteractionHistory();
     repairDiagram = jest.fn();
-    mermaidFixer = {
+    mermaidFixerService = {
       repairDiagram,
-    } as unknown as MermaidFixer;
-    filter = new MermaidFilter(history, mermaidFixer);
+    } as unknown as MermaidFixerService;
+    filter = new MermaidFilter(history, mermaidFixerService);
   });
 
   const collectChunks = async (

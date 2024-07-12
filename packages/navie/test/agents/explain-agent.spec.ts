@@ -8,6 +8,9 @@ import { SEARCH_CONTEXT, suggestsVectorTerms } from '../fixture';
 import { CHARACTERS_PER_TOKEN } from '../../src/message';
 import { UserOptions } from '../../src/lib/parse-options';
 import ContextService from '../../src/services/context-service';
+import MermaidFixerService from '../../src/services/mermaid-fixer-service';
+import mermaid from 'mermaid';
+import { ContextV2 } from '../../src/context';
 
 describe('@explain agent', () => {
   let interactionHistory: InteractionHistory;
@@ -16,6 +19,7 @@ describe('@explain agent', () => {
   let applyContextService: ApplyContextService;
   let contextService: ContextService;
   let tokensAvailable: number;
+  let mermaidFixerService: MermaidFixerService;
 
   beforeEach(async () => {
     tokensAvailable = 1000;
@@ -30,6 +34,9 @@ describe('@explain agent', () => {
       addSystemPrompts: jest.fn(),
       applyContext: jest.fn(),
     } as unknown as ApplyContextService;
+    mermaidFixerService = {
+      repairDiagram: jest.fn(),
+    } as unknown as MermaidFixerService;
     contextService = new ContextService(
       vectorTermsService,
       lookupContextService,
@@ -40,7 +47,7 @@ describe('@explain agent', () => {
   afterEach(() => jest.restoreAllMocks());
 
   function buildAgent(): ExplainAgent {
-    return new ExplainAgent(interactionHistory, contextService);
+    return new ExplainAgent(interactionHistory, contextService, mermaidFixerService);
   }
 
   describe('#perform', () => {
@@ -127,6 +134,45 @@ describe('@explain agent', () => {
           exclude: ['\\.md'],
         }
       );
+    });
+
+    describe('when the question is classified as a generate-diagram', () => {
+      it('applies the diagram agent prompt', async () => {
+        const options = new AgentOptions(
+          'How does user management work?',
+          'How does user management work?',
+          new UserOptions(new Map()),
+          [],
+          [],
+          undefined,
+          [
+            {
+              name: ContextV2.ContextLabelName.GenerateDiagram,
+              weight: ContextV2.ContextLabelWeight.High,
+            },
+          ]
+        );
+
+        await buildAgent().perform(options, () => tokensAvailable);
+
+        expect(interactionHistory.events.map((event) => event.metadata)).toEqual([
+          {
+            type: 'prompt',
+            role: 'system',
+            name: 'agent',
+          },
+          {
+            type: 'prompt',
+            role: 'system',
+            name: 'agent',
+          },
+          {
+            type: 'prompt',
+            role: 'system',
+            name: 'question',
+          },
+        ]);
+      });
     });
   });
 });

@@ -1,13 +1,11 @@
 import { ContextV2 } from './context';
-import Filter, { Chunk } from './lib/filter';
+import Filter from './lib/filter';
 import { UserOptions } from './lib/parse-options';
 import { ProjectInfo } from './project-info';
-import CompletionService from './services/completion-service';
 
 export enum AgentMode {
   Explain = 'explain',
   Generate = 'generate',
-  Diagram = 'diagram',
   Help = 'help',
   Test = 'test',
   Plan = 'plan',

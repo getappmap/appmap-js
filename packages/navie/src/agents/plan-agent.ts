@@ -58,7 +58,8 @@ for that file or component.
 * DO provide a detailed description of the necessary changes.
 * DO suggest changes to existing, non-test code files.
 * DO NOT include a code snippet.
-* DO NOT generate changes in test code, test cases, or documentation.
+* DO NOT design changes to test cases.
+* DO NOT design changes to documentation.
 * DO NOT propose the creation of new files, unless it's absolutely necessary.
 * DO NOT output code blocks or fenced code. Output only a text description of the suggested
   changes, along with the file names.

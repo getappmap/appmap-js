@@ -4,8 +4,7 @@ import Filter, { Chunk } from './filter';
 import MermaidValidator from './mermaid-validator';
 
 import InteractionHistory from '../interaction-history';
-import MermaidFixer from './mermaid-fixer';
-import CompletionService from '../services/completion-service';
+import MermaidFixerService from '../services/mermaid-fixer-service';
 
 export default class MermaidFilter implements Filter {
   private diagram: string[] | undefined;
@@ -13,7 +12,7 @@ export default class MermaidFilter implements Filter {
 
   constructor(
     private readonly history: InteractionHistory,
-    private readonly mermaidFixer: MermaidFixer
+    private readonly mermaidFixer: MermaidFixerService
   ) {}
 
   get inDiagram() {

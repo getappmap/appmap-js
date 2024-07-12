@@ -170,13 +170,27 @@ export default class ClassificationService {
         const match = line.match(/([\w-]+)\s*:\s*(\w+)/);
         if (!match) return null;
 
-        // Sometimes the question is classified as "question" which is not a valid classification
-        if (match[1] === 'question') return null;
+        const [, name, weight] = match;
+        if (!name || !weight) return null;
+
+        if (
+          !Object.values(ContextV2.ContextLabelName).includes(name as ContextV2.ContextLabelName)
+        ) {
+          return null;
+        }
+
+        if (
+          !Object.values(ContextV2.ContextLabelWeight).includes(
+            weight as ContextV2.ContextLabelWeight
+          )
+        ) {
+          return null;
+        }
 
         return {
-          name: match[1],
-          weight: match[2],
-        };
+          name,
+          weight,
+        } as ContextV2.ContextLabel;
       })
       .filter((item) => item);
 
