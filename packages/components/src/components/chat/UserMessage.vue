@@ -34,7 +34,8 @@
           :status="tool.status"
         />
       </div>
-      <component :is="renderedMarkdown" />
+      <v-streaming-message-content :content="renderedMarkdown" :active="!complete" />
+      <!-- <component :is="renderedMarkdown" /> -->
     </div>
     <div class="buttons">
       <span
@@ -86,8 +87,7 @@ import VCheckIcon from '@/assets/success-checkmark.svg';
 import VButton from '@/components/Button.vue';
 import VToolStatus from '@/components/chat/ToolStatus.vue';
 import VCodeSelection from '@/components/chat/CodeSelection.vue';
-import VMarkdownCodeSnippet from '@/components/chat/MarkdownCodeSnippet.vue';
-import VMermaidDiagram from '@/components/chat/MermaidDiagram.vue';
+import VStreamingMessageContent from '@/components/chat-search/StreamingMessageContent.ts';
 
 import { Marked, Renderer } from 'marked';
 import { markedHighlight } from 'marked-highlight';
@@ -139,6 +139,7 @@ export default {
     VCodeSelection,
     VClipboardIcon,
     VCheckIcon,
+    VStreamingMessageContent,
   },
 
   props: {
@@ -184,42 +185,10 @@ export default {
     },
     renderedMarkdown() {
       const markdown = marked.parse(this.message.toString());
-      const dom = DOMPurify.sanitize(markdown, {
+      return DOMPurify.sanitize(markdown, {
         USE_PROFILES: { html: true },
-        RETURN_DOM: true,
         ADD_TAGS: ['v-markdown-code-snippet', 'v-mermaid-diagram'],
         ADD_ATTR: ['language'],
-      });
-
-      if (!this.complete) {
-        // This is pretty inefficient, but good luck doing this in CSS.
-        // It's possible, but I don't think it's worth the effort.
-        const i = dom.ownerDocument.createNodeIterator(dom, NodeFilter.SHOW_TEXT);
-        let node;
-        for (;;) {
-          const nextNode = i.nextNode();
-          if (!nextNode) {
-            const cursor = dom.ownerDocument.createElement('span');
-            cursor.classList.add('cursor');
-
-            let target = node?.parentElement;
-            if (!target && this.tools.every((t) => t.complete)) {
-              target = dom;
-            }
-
-            target?.appendChild(cursor);
-            break;
-          }
-
-          if (nextNode.textContent?.trim() !== '') {
-            node = nextNode;
-          }
-        }
-      }
-
-      return Vue.component('dynamic-markdown', {
-        components: { VMarkdownCodeSnippet, VMermaidDiagram },
-        template: `<div>${dom.ownerDocument.body.innerHTML}</div>`,
       });
     },
     hasClipboardAPI() {
@@ -441,6 +410,8 @@ export default {
     animation-duration: 530ms;
     animation-iteration-count: infinite;
     animation-direction: alternate;
+    color: white;
+    font-size: 1rem;
   }
 }
 
