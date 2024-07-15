@@ -2,10 +2,18 @@
   <div class="code-snippet" data-cy="code-snippet">
     <div class="code-snippet__header">
       <span class="code-snippet__language">{{ language }}</span>
+      {{ handle }}
       <span class="code-snippet__button-group">
         <span class="code-snippet__button" @click="copyToClipboard" data-cy="copy">
           <v-copy-icon />
           Copy
+        </span>
+        <span
+          :class="{ 'code-snippet__button': 1, 'code-snippet__button--pinned': pinned }"
+          @click="pinObject"
+          data-cy="pin"
+        >
+          <v-pin-icon />
         </span>
       </span>
     </div>
@@ -17,7 +25,10 @@
 
 <script lang="ts">
 import VCopyIcon from '@/assets/plain-clipboard.svg';
+import VPinIcon from '@/assets/pin.svg';
 import Vue from 'vue';
+
+let globalId = 0;
 
 export default Vue.extend({
   props: {
@@ -25,6 +36,7 @@ export default Vue.extend({
   },
   components: {
     VCopyIcon,
+    VPinIcon,
   },
   computed: {
     code(): string {
@@ -32,11 +44,26 @@ export default Vue.extend({
       return elm ? elm.innerText : '';
     },
   },
+  data() {
+    return {
+      pinned: false,
+      handle: globalId++,
+    };
+  },
   methods: {
     copyToClipboard() {
       if (!this.code) return;
 
       navigator.clipboard.writeText(this.code);
+    },
+    pinObject() {
+      this.pinned = !this.pinned;
+      this.$root.$emit('pin-object', {
+        handle: this.handle,
+        language: this.language,
+        content: this.code,
+        pinned: this.pinned,
+      });
     },
   },
 });
@@ -91,6 +118,7 @@ export default Vue.extend({
     color: #e2e4e5;
     cursor: pointer;
     transition: background-color 0.5s ease-in-out;
+    user-select: none;
 
     svg {
       height: 16px;
@@ -102,8 +130,22 @@ export default Vue.extend({
       }
     }
 
+    &--pinned {
+      background-color: rgba(white, 0.25);
+      svg {
+        transform: scale(1.1);
+        filter: drop-shadow(2px 2px 2px rgba(black, 0.75));
+        path {
+          fill: white;
+        }
+      }
+      &:hover {
+        background-color: rgba(white, 0.5) !important;
+      }
+    }
+
     &:hover {
-      background-color: rgba(255, 255, 255, 0.2);
+      background-color: rgba(white, 0.25);
     }
 
     &:active {
