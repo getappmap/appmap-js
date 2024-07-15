@@ -53,7 +53,7 @@ All the HTTP server requests, SQL queries, packages, classes, and functions that
 
 ## "Run with AppMap" for Java
 
-**NOTE:** This section only applies to Java applications.
+<div class="alert alert-info">This section only applies to Java applications.</div>
 
 Installing the AppMap VC Code plugin adds a default [Launch Configuration](https://code.visualstudio.com/docs/editor/debugging) which supports the integrated VS Code debugger. These can be used to run your Java application code with AppMap automatically configured, saving you from manually changing your Maven or Gradle settings. This is the recommended approach for all Java users using the VS Code editor.
 
