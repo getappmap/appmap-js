@@ -36,6 +36,7 @@
         class="no-match-instructions"
         :appmap-stats="appmapStats"
         :context-response="contextResponse"
+        :pinned-items="pinnedItems"
       />
     </div>
   </div>
@@ -50,6 +51,7 @@ import VLlmConfiguration from '@/components/chat-search/LlmConfiguration.vue';
 import AppMapRPC from '@/lib/AppMapRPC';
 import authenticatedClient from '@/components/mixins/authenticatedClient';
 import type { ITool, CodeSelection } from '@/components/chat/Chat.vue';
+import type { PinEvent } from '@/components/chat/PinEvent';
 
 import debounce from '@/lib/debounce';
 
@@ -135,6 +137,12 @@ export default {
       baseUrl: undefined,
       model: undefined,
       contextResponse: undefined,
+      pinnedItems: [],
+    };
+  },
+  provide() {
+    return {
+      pinnedItems: this.pinnedItems,
     };
   },
   watch: {
@@ -425,6 +433,7 @@ export default {
       this.contextResponse = undefined;
       this.ask?.removeAllListeners();
       this.searching = false;
+      this.pinnedItems = [];
       this.loadAppMapStats();
     },
     rpcClient(): AppMapRPC {
@@ -477,6 +486,14 @@ export default {
     }
     this.loadAppMapStats();
     this.loadNavieConfig();
+    this.$root.$on('pin', (pin: PinEvent) => {
+      const pinIndex = this.pinnedItems.findIndex((p) => p.handle === pin.handle);
+      if (pin.pinned && pinIndex === -1) {
+        this.pinnedItems.push(pin);
+      } else if (!pin.pinned && pinIndex !== -1) {
+        this.pinnedItems.splice(pinIndex, 1);
+      }
+    });
   },
 };
 </script>
@@ -552,7 +569,6 @@ $border-color: darken($gray4, 10%);
     max-height: 100vh;
     display: flex;
     flex-direction: column;
-    padding: 1rem;
     h2 {
       font-size: 1.2rem;
       margin-right: 1rem;
