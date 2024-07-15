@@ -36,6 +36,7 @@
         class="no-match-instructions"
         :appmap-stats="appmapStats"
         :context-response="contextResponse"
+        :pinned-items="pinnedItems"
       />
     </div>
   </div>
@@ -135,6 +136,7 @@ export default {
       baseUrl: undefined,
       model: undefined,
       contextResponse: undefined,
+      pinnedItems: [],
     };
   },
   watch: {
@@ -425,6 +427,7 @@ export default {
       this.contextResponse = undefined;
       this.ask?.removeAllListeners();
       this.searching = false;
+      this.pinnedItems = [];
       this.loadAppMapStats();
     },
     rpcClient(): AppMapRPC {
@@ -477,6 +480,15 @@ export default {
     }
     this.loadAppMapStats();
     this.loadNavieConfig();
+    this.$root.$on('pin-object', (pin) => {
+      console.log(pin);
+      const pinExists = this.pinnedItems.some((p) => p.handle === pin.handle);
+      if (pin.pinned && !pinExists) {
+        this.pinnedItems.push(pin);
+      } else if (!pin.pinned && pinExists) {
+        this.pinnedItems = this.pinnedItems.filter((p) => p.handle !== pin.handle);
+      }
+    });
   },
 };
 </script>

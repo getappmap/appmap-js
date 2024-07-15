@@ -35,6 +35,17 @@
               Open Instructions
             </v-button>
           </div>
+          <template v-if="pinnedItems && pinnedItems.length">
+            <h3>Pinned Items</h3>
+            <div v-for="pin in pinnedItems" :key="pin.handle">
+              <v-context-item
+                :contextItem="pin"
+                data-cy="context-item"
+                :pinned="true"
+                @click.native="unpinObject(pin.handle)"
+              />
+            </div>
+          </template>
           <div v-for="t in Object.keys(contextTypes)" :key="t">
             <div v-if="hasContext(t)">
               <h3>
@@ -76,6 +87,10 @@ export default {
       required: false,
     },
     contextResponse: {
+      type: Array,
+      required: false,
+    },
+    pinnedItems: {
       type: Array,
       required: false,
     },
