@@ -2,11 +2,9 @@ import InteractionHistory, { PromptInteractionEvent } from '../interaction-histo
 import { Agent, AgentOptions } from '../agent';
 import { PROMPTS, PromptType } from '../prompt';
 import ContextService from '../services/context-service';
-import Filter, { NopFilter } from '../lib/filter';
+import Filter from '../lib/filter';
 import { ContextV2 } from '../context';
 import MermaidFilter from '../lib/mermaid-filter';
-import MermaidFixer from '../lib/mermaid-fixer';
-import CompletionService from '../services/completion-service';
 import MermaidFixerService from '../services/mermaid-fixer-service';
 
 const EXPLAIN_AGENT_PROMPT = `**Task: Answering User Questions about a Code Base**
@@ -53,7 +51,7 @@ you believe that you could provide a better answer if you had access to sequence
 HTTP server and client requests, exceptions, log messages, and database queries.
 `;
 
-export const DIAGRAM_AGENT_PROMPT = `Respond to requests for diagrams using Mermaid syntax.
+export const DIAGRAM_FORMAT_PROMPT = `Respond to requests for diagrams using Mermaid syntax.
 
 Prefer to generate one or more of the response formats detailed below:
 
@@ -267,7 +265,7 @@ export default class ExplainAgent implements Agent {
     );
 
     if (classifier) {
-      this.history.addEvent(new PromptInteractionEvent('agent', 'system', DIAGRAM_AGENT_PROMPT));
+      this.history.addEvent(new PromptInteractionEvent('agent', 'system', DIAGRAM_FORMAT_PROMPT));
     }
 
     this.history.addEvent(

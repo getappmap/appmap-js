@@ -35,6 +35,7 @@ behavior, re-ask your question and start with the option \`/nohelp\` or with a m
 const MODE_PREFIXES = {
   '@explain ': AgentMode.Explain,
   '@generate ': AgentMode.Generate,
+  '@diagram ': AgentMode.Diagram,
   '@help ': AgentMode.Help,
   '@test ': AgentMode.Test,
   '@plan ': AgentMode.Plan,
@@ -77,12 +78,15 @@ export default class AgentSelectionService {
 
     const generateAgent = () => new GenerateAgent(this.history, contextService);
 
+    const diagramAgent = () => new DiagramAgent(this.history, contextService);
+
     const explainAgent = () =>
       new ExplainAgent(this.history, contextService, this.mermaidFixerService);
 
     const buildAgent: { [key in AgentMode]: () => Agent } = {
       [AgentMode.Help]: helpAgent,
       [AgentMode.Generate]: generateAgent,
+      [AgentMode.Diagram]: diagramAgent,
       [AgentMode.Explain]: explainAgent,
       [AgentMode.Test]: testAgent,
       [AgentMode.Plan]: planAgent,

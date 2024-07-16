@@ -6,6 +6,7 @@ import { ProjectInfo } from './project-info';
 export enum AgentMode {
   Explain = 'explain',
   Generate = 'generate',
+  Diagram = 'diagram',
   Help = 'help',
   Test = 'test',
   Plan = 'plan',
