@@ -1,3 +1,18 @@
+# [@appland/navie-v1.18.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.17.0...@appland/navie-v1.18.0) (2024-07-16)
+
+
+### Bug Fixes
+
+* [@help](https://github.com/help) mode considers configured languages ([bea7ca5](https://github.com/getappmap/appmap-js/commit/bea7ca5bee9b22a69eb0c19eb22ffd779d4fa1d4))
+* Tune up [@explain](https://github.com/explain) agent output ([10d131b](https://github.com/getappmap/appmap-js/commit/10d131b1b91aad5b33b4dfebf4b8427d4763b326))
+
+
+### Features
+
+* [@help](https://github.com/help) mode has built-in knowledge of Navie modes ([9796399](https://github.com/getappmap/appmap-js/commit/979639943b69b23bede1d84851d5f5ca92eb0b01))
+* /nohelp disables help mode ([ecfc3ea](https://github.com/getappmap/appmap-js/commit/ecfc3ea343671f7879a3f27feb159833f97c13ca))
+* Tell the user when an agent mode is auto-selected ([42ba342](https://github.com/getappmap/appmap-js/commit/42ba34275c600e701b4ebc9976004de2eb5e5a8f))
+
 # [@appland/navie-v1.17.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.16.1...@appland/navie-v1.17.0) (2024-07-09)
 
 
