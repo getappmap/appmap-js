@@ -37,7 +37,12 @@ pnpm-debug.log*
 
 release
 
+# Jupyter
+notebooks
+.env.notebook
+
 # AppMap
 tmp/appmap
 packages/*/tmp/
 *.appmap.json
+

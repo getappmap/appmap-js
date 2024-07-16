@@ -1,8 +1,7 @@
 import ExplainAgent from '../../src/agents/explain-agent';
 import HelpAgent from '../../src/agents/help-agent';
-import { HelpProvider } from '../../src/help';
 import InteractionHistory, { AgentSelectionEvent } from '../../src/interaction-history';
-import { AppMapConfig, AppMapStats } from '../../src/project-info';
+import { UserOptions } from '../../src/lib/parse-options';
 import AgentSelectionService from '../../src/services/agent-selection-service';
 import ApplyContextService from '../../src/services/apply-context-service';
 import LookupContextService from '../../src/services/lookup-context-service';
@@ -17,6 +16,7 @@ describe('AgentSelectionService', () => {
   let techStackService: TechStackService;
   let genericQuestion = 'How does user management work?';
   let helpAgentQueston = '@help How to make a diagram?';
+  const emptyUserOptions = new UserOptions(new Map());
 
   function buildAgentSelectionService() {
     return new AgentSelectionService(
@@ -40,7 +40,8 @@ describe('AgentSelectionService', () => {
     interactionHistory.events.find((event) => event instanceof AgentSelectionEvent) as any;
 
   describe('when the question specifies an agent', () => {
-    const invokeAgent = () => buildAgentSelectionService().selectAgent(helpAgentQueston, []);
+    const invokeAgent = () =>
+      buildAgentSelectionService().selectAgent(helpAgentQueston, [], emptyUserOptions);
 
     it('creates the specified agent', () => {
       const { agent } = invokeAgent();
@@ -61,7 +62,11 @@ describe('AgentSelectionService', () => {
 
   describe('by default', () => {
     it('creates an Explain agent', () => {
-      const { agent, question } = buildAgentSelectionService().selectAgent(genericQuestion, []);
+      const { agent, question } = buildAgentSelectionService().selectAgent(
+        genericQuestion,
+        [],
+        emptyUserOptions
+      );
       expect(agent).toBeInstanceOf(ExplainAgent);
       expect(question).toEqual(question);
     });
@@ -69,13 +74,33 @@ describe('AgentSelectionService', () => {
 
   describe('when the question is classified as help-with-appmap', () => {
     it('creates a Help agent', () => {
-      const { agent } = buildAgentSelectionService().selectAgent(genericQuestion, [
-        {
-          name: 'help-with-appmap',
-          weight: 'high',
-        },
-      ]);
+      const { agent } = buildAgentSelectionService().selectAgent(
+        genericQuestion,
+        [
+          {
+            name: 'help-with-appmap',
+            weight: 'high',
+          },
+        ],
+        emptyUserOptions
+      );
       expect(agent).toBeInstanceOf(HelpAgent);
+    });
+
+    describe('but /nohelp is specified', () => {
+      it('creates an Explain agent', () => {
+        const { agent } = buildAgentSelectionService().selectAgent(
+          genericQuestion,
+          [
+            {
+              name: 'help-with-appmap',
+              weight: 'high',
+            },
+          ],
+          new UserOptions(new Map([['help', false]]))
+        );
+        expect(agent).toBeInstanceOf(ExplainAgent);
+      });
     });
   });
 });
