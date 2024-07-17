@@ -1,3 +1,16 @@
+# [@appland/navie-v1.19.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.18.0...@appland/navie-v1.19.0) (2024-07-17)
+
+
+### Bug Fixes
+
+* Update prompt for [@plan](https://github.com/plan) agent ([3c9d259](https://github.com/getappmap/appmap-js/commit/3c9d259d370be381d69cd78a67db3f3cc98da09c))
+
+
+### Features
+
+* [@diagram](https://github.com/diagram) mode ([a569f7e](https://github.com/getappmap/appmap-js/commit/a569f7eb43da3d4cc17dd9717164be23fa3354c2))
+* Improve classification of the latest question ([978bd7d](https://github.com/getappmap/appmap-js/commit/978bd7dcf2dad3d2b9bcced037fed6cad7ecbadd))
+
 # [@appland/navie-v1.18.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.17.0...@appland/navie-v1.18.0) (2024-07-16)
 
 
