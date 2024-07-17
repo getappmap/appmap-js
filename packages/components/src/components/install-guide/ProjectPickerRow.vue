@@ -229,26 +229,7 @@
         </template>
       </template>
       <template v-else>
-        <template v-if="!languageSupported">
-          <p>
-            This project does not meet all the requirements to create AppMaps. AppMap currently
-            supports the following languages:
-          </p>
-          <ul class="support-list">
-            <li><strong>Ruby</strong></li>
-            <li><strong>Python</strong></li>
-            <li><strong>JavaScript</strong></li>
-            <li><strong>Java</strong></li>
-          </ul>
-        </template>
-        <template v-else>
-          <p class="mb20">
-            We weren't able to find a supported web or test framework within this project. Please
-            visit
-            <a :href="documentationUrl">our {{ language.name }} documentation</a> for more
-            information.
-          </p>
-        </template>
+        <v-unsupported-project />
       </template>
     </div>
   </v-accordion>
@@ -273,6 +254,7 @@ import VLoaderIcon from '@/assets/eva_loader-outline.svg';
 import VFailureIcon from '@/assets/exclamation-circle.svg';
 import VSuccessIcon from '@/assets/check.svg';
 import VFlashMessage from '@/components/FlashMessage.vue';
+import VUnsupportedProject from '@/components/install-guide/UnsupportedProject.vue';
 
 import StatusState from '@/components/mixins/statusState';
 
@@ -303,6 +285,7 @@ export default {
     VFailureIcon,
     VSuccessIcon,
     VFlashMessage,
+    VUnsupportedProject,
   },
   mixins: [StatusState],
   props: {

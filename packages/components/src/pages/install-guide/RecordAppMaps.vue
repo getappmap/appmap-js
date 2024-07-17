@@ -5,7 +5,7 @@
         <h1 data-cy="title">Record AppMaps</h1>
       </header>
       <main>
-        <article>
+        <article v-if="supported">
           <v-status
             next-step="Explore AppMaps"
             :status-states="statusStates"
@@ -77,8 +77,9 @@
             </p>
           </template>
         </article>
+        <v-unsupported-project v-if="!supported" />
       </main>
-      <v-navigation-buttons :first="first" :last="last" :complete="complete" />
+      <v-navigation-buttons v-if="supported" :first="first" :last="last" :complete="complete" />
     </section>
   </QuickstartLayout>
 </template>
@@ -94,8 +95,9 @@ import VRecordInstructions_JavaScript from '@/components/install-guide/record-in
 import Navigation from '@/components/mixins/navigation';
 import VStatus from '@/components/install-guide/Status.vue';
 import StatusState from '@/components/mixins/statusState.js';
+import VUnsupportedProject from '@/components/install-guide/UnsupportedProject.vue';
 
-import { isFeatureSupported } from '@/lib/project';
+import { isFeatureSupported, isProjectSupported } from '@/lib/project';
 import { DISABLE_PENDING_RECORD_STATE } from '@/lib/featureFlags';
 
 export default {
@@ -110,6 +112,7 @@ export default {
     VRecordInstructions_Java,
     VRecordInstructions_JavaScript,
     VStatus,
+    VUnsupportedProject,
   },
 
   mixins: [Navigation, StatusState],
@@ -191,6 +194,14 @@ export default {
     },
     testFrameworkSupported() {
       return isFeatureSupported(this.testFramework);
+    },
+    supported() {
+      return isProjectSupported({
+        name: this.projectName,
+        score: this.project?.score ?? 0,
+        webFramework: this.webFramework,
+        testFramework: this.testFramework,
+      });
     },
     automaticRecordingPrompts() {
       const prompts = [];
