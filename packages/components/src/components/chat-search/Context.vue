@@ -38,12 +38,14 @@
           <template v-if="pinnedItems && pinnedItems.length">
             <h3>Pinned Items</h3>
             <div v-for="pin in pinnedItems" :key="pin.handle">
-              <v-context-item
-                :contextItem="pin"
-                data-cy="context-item"
-                :pinned="true"
-                @click.native="unpinObject(pin.handle)"
-              />
+              <component
+                :is="getPinnedComponent(pin)"
+                :is-reference="true"
+                v-bind="pin"
+                @pin="unpin(pin.handle)"
+              >
+                {{ pin.content }}
+              </component>
             </div>
           </template>
           <div v-for="t in Object.keys(contextTypes)" :key="t">
@@ -71,7 +73,14 @@
 <script lang="ts">
 //@ts-nocheck
 import VContextItem from '@/components/chat-search/ContextItem.vue';
+import VMarkdownCodeSnippet from '@/components/chat/MarkdownCodeSnippet.vue';
+import VMermaidDiagram from '@/components/chat/MermaidDiagram.vue';
 import VButton from '@/components/Button.vue';
+
+const PinnedContextComponents = {
+  'code-snippet': VMarkdownCodeSnippet,
+  mermaid: VMermaidDiagram,
+};
 
 export default {
   name: 'v-context',
@@ -79,6 +88,8 @@ export default {
   components: {
     VContextItem,
     VButton,
+    VMarkdownCodeSnippet,
+    VMermaidDiagram,
   },
 
   props: {
@@ -124,6 +135,12 @@ export default {
     },
     openInstallInstructions() {
       this.$root.$emit('open-install-instructions');
+    },
+    getPinnedComponent({ type }: any): Vue.Component | undefined {
+      return PinnedContextComponents[type];
+    },
+    unpin(handle: number) {
+      this.$emit('pin', { handle, pinned: false });
     },
   },
 };

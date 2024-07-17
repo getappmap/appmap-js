@@ -51,6 +51,7 @@ import VLlmConfiguration from '@/components/chat-search/LlmConfiguration.vue';
 import AppMapRPC from '@/lib/AppMapRPC';
 import authenticatedClient from '@/components/mixins/authenticatedClient';
 import type { ITool, CodeSelection } from '@/components/chat/Chat.vue';
+import type { PinItem } from '@/components/chat/PinEvent';
 
 import debounce from '@/lib/debounce';
 
@@ -136,7 +137,7 @@ export default {
       baseUrl: undefined,
       model: undefined,
       contextResponse: undefined,
-      pinnedItems: [],
+      pinnedItems: [] as PinItem[],
     };
   },
   watch: {
@@ -480,8 +481,7 @@ export default {
     }
     this.loadAppMapStats();
     this.loadNavieConfig();
-    this.$root.$on('pin-object', (pin) => {
-      console.log(pin);
+    this.$root.$on('pin', (pin) => {
       const pinExists = this.pinnedItems.some((p) => p.handle === pin.handle);
       if (pin.pinned && !pinExists) {
         this.pinnedItems.push(pin);

@@ -26,9 +26,12 @@ export default class MermaidFilter implements Filter {
 
     this.buffer += chunk;
 
-    while (this.buffer.indexOf('\n') !== -1) {
-      const nextLine = this.buffer.slice(0, this.buffer.indexOf('\n'));
-      this.buffer = this.buffer.slice(this.buffer.indexOf('\n') + 1);
+    for (;;) {
+      const lineEndIndex = this.buffer.indexOf('\n');
+      if (lineEndIndex === -1) break;
+
+      const nextLine = this.buffer.slice(0, lineEndIndex + 1);
+      this.buffer = this.buffer.slice(lineEndIndex + 1);
       yield* this.processLine(nextLine);
     }
   }

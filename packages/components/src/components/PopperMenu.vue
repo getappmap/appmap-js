@@ -3,10 +3,8 @@
     <div @click="open = !open" data-cy="popper-button">
       <slot name="icon" />
     </div>
-    <div class="popper__body filter" v-if="open" ref="popperBody">
-      <div class="popper__content">
-        <slot name="body" />
-      </div>
+    <div class="popper__body" v-if="open" ref="popperBody">
+      <slot name="body" />
     </div>
   </div>
 </template>
@@ -101,9 +99,7 @@ export default {
     color: $gray5;
   }
 
-  $border-radius: 1rem;
-
-  &[data-full-screen-allowed='true'] .filter {
+  &[data-full-screen-allowed='true'] &__body {
     @media (max-width: 900px) {
       position: fixed;
       left: 0 !important;
@@ -122,23 +118,13 @@ export default {
   }
 
   &__body {
-    border-radius: 0.5rem;
     position: absolute;
     width: max-content;
     height: max-content;
     max-width: 70vw;
     max-height: 85vh;
-    margin-top: 1.5rem;
-    padding: 1rem;
     font-family: $appland-text-font-family;
-    color: $gray6;
-    background: $black;
     overflow: auto;
-    box-shadow: 0px 0px 20px 0px rgb(0 0 0 / 88%);
-
-    &.filter {
-      background-color: $gray2;
-    }
 
     .popper--v-top & {
       bottom: 100%;
@@ -147,7 +133,6 @@ export default {
 
     .popper--v-bottom & {
       top: 100%;
-      margin-top: 0.6rem;
     }
 
     .popper--h-left & {
@@ -158,9 +143,7 @@ export default {
       left: 0;
     }
     .narrow & {
-      left: unset !important;
-      right: unset !important;
-      transform: translateX(-50%);
+      transform: translateX(50%);
     }
 
     h2 {

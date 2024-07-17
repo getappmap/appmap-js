@@ -471,6 +471,12 @@ export default {
 .filters {
   width: 100%;
   font-size: 0.75rem;
+  padding: 0.25rem 1rem;
+  font-family: $appland-text-font-family;
+  color: $gray6;
+  background-color: $gray2;
+  min-height: 100%;
+  border-radius: $border-radius;
 
   .copied {
     color: $alert-success;
