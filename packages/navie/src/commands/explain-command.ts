@@ -15,6 +15,10 @@ import { ProjectInfo } from '../project-info';
 import Command, { CommandRequest } from '../command';
 import { ChatHistory } from '../navie';
 import getMostRecentMessages from '../lib/get-most-recent-messages';
+import Filter from '../lib/filter';
+
+const COLOR_GREEN = '\x1b[32m';
+const COLOR_RESET = '\x1b[0m';
 
 export type ExplainOptions = {
   tokenLimit: number;
@@ -44,10 +48,11 @@ export default class ExplainCommand implements Command {
       : [projectInfoResponse];
 
     const contextLabels = await contextLabelsFn;
+    warn(`${COLOR_GREEN}Question: ${baseQuestion}${COLOR_RESET}`);
     warn(
-      `Classification: ${contextLabels
+      `${COLOR_GREEN}Classification: ${contextLabels
         .map((label) => [label.name, label.weight].join('='))
-        .join(', ')}`
+        .join(', ')}${COLOR_RESET}`
     );
 
     const agentSelectionResult = this.agentSelectionService.selectAgent(
@@ -130,9 +135,13 @@ export default class ExplainCommand implements Command {
         mode.temperature ?? this.completionService.temperature ?? -1
       )
     );
+
+    const filter: Filter = mode.newFilter();
+
     const response = this.completionService.complete(messages, { temperature: mode.temperature });
     for await (const token of response) {
-      yield token;
+      for await (const chunk of filter.transform(token)) yield chunk.content;
     }
+    for await (const chunk of filter.end()) yield chunk.content;
   }
 }

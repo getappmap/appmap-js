@@ -21,6 +21,7 @@ import {
 } from '../fixture';
 import { CommandRequest } from '../../src/command';
 import { UserOptions } from '../../src/lib/parse-options';
+import { NopFilter } from '../../src/lib/filter';
 
 const CompletionEvent = { type: 'completion', model: 'mock', temperature: 0.5 };
 describe('ExplainCommand', () => {
@@ -84,6 +85,7 @@ describe('ExplainCommand', () => {
 
   function mockAgent(): Agent {
     return {
+      newFilter: () => new NopFilter(),
       perform: jest.fn().mockResolvedValue(undefined),
       applyQuestionPrompt: jest.fn(),
     } as unknown as Agent;
