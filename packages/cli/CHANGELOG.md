@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.152.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.151.0...@appland/appmap-v3.152.0) (2024-07-17)
+
+
+### Features
+
+* [@diagram](https://github.com/diagram) mode ([a569f7e](https://github.com/getappmap/appmap-js/commit/a569f7eb43da3d4cc17dd9717164be23fa3354c2))
+
 # [@appland/appmap-v3.151.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.150.1...@appland/appmap-v3.151.0) (2024-07-10)
 
 
