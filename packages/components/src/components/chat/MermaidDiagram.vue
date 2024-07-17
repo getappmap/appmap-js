@@ -1,68 +1,43 @@
 <template>
-  <div class="mermaid-diagram" data-cy="mermaid-diagram">
-    <div class="mermaid-diagram__container">
-      <div class="mermaid-diagram__buttons">
-        <v-popper
-          v-if="externalLink"
-          text="Open in Mermaid live editor"
-          placement="top"
-          text-align="left"
-          align="left"
-        >
-          <a class="button" data-cy="open-external" :href="externalLink" target="_blank">
-            <v-external-link-icon />
-          </a>
-        </v-popper>
-        <v-popper
-          text="Copy Mermaid definitions"
-          placement="top"
-          text-align="left"
-          align="left"
-          ref="copyPopper"
-        >
-          <span class="button" v-if="svg" data-cy="copy" @click="copy">
-            <v-copy-icon :style="{ transform: 'scale(1.15)' }" />
-          </span>
-        </v-popper>
-        <v-popper text="Save" placement="top" text-align="left" align="left">
-          <span class="button" v-if="svg" data-cy="download" @click="download">
-            <v-download-icon :style="{ transform: 'scale(1.4)' }" />
-          </span>
-        </v-popper>
-        <v-popper text="Expand" placement="top" text-align="left" align="left">
-          <span class="button" data-cy="expand" @click="showModal">
-            <v-full-screen-icon :style="{ transform: ' scale(1.3)' }" />
-          </span>
-        </v-popper>
+  <v-context-container
+    :title="title"
+    :menu-items="menuItems"
+    :handle="handle"
+    content-type="image"
+    @expand="showModal"
+    @pin="onPin"
+  >
+    <div class="mermaid-diagram" data-cy="mermaid-diagram">
+      <div class="mermaid-diagram__container">
+        <div v-html="svg" class="mermaid-diagram__svg" data-cy="graphic" />
       </div>
-      <div v-html="svg" class="mermaid-diagram__svg" data-cy="graphic" />
-    </div>
-    <v-modal v-if="modalVisible" @close="hideModal" data-cy="diagram-modal">
-      <div class="mermaid-diagram__modal">
-        <div class="mermaid-diagram__buttons">
-          <span class="button" data-cy="expand-close" @click="hideModal">
-            <v-close-icon />
-          </span>
+      <v-modal v-if="modalVisible" @close="hideModal" data-cy="diagram-modal">
+        <div class="mermaid-diagram__modal">
+          <div class="mermaid-diagram__buttons">
+            <span class="button" data-cy="expand-close" @click="hideModal">
+              <v-close-icon />
+            </span>
+          </div>
+          <div v-html="svg" class="mermaid-diagram__modal-svg" />
         </div>
-        <div v-html="svg" class="mermaid-diagram__modal-svg" />
-      </div>
-    </v-modal>
-  </div>
+      </v-modal>
+    </div>
+  </v-context-container>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import mermaid from 'mermaid';
 import VModal from '@/components/Modal.vue';
-import VFullScreenIcon from '@/assets/fullscreen.svg';
-import VDownloadIcon from '@/assets/download.svg';
-import VExternalLinkIcon from '@/assets/external-link.svg';
-import VCopyIcon from '@/assets/clipboard.svg';
 import VCloseIcon from '@/assets/x-icon.svg';
-import VPopper from '@/components/Popper.vue';
+import VContextContainer from '@/components/chat/ContextContainer.vue';
 import downloadSvg from '@/lib/downloadSvg';
+import ContextItemMixin from '@/components/mixins/contextItem';
 import pako from 'pako';
 import { fromUint8Array } from 'js-base64';
+
+import type ContextContainerMenuItem from './ContextContainerMenuItem';
+import type { PinEvent, PinMermaid } from './PinEvent';
 
 mermaid.initialize({
   startOnLoad: false,
@@ -76,18 +51,16 @@ mermaid.initialize({
     edgeLabelBackground: '#14161c',
   },
 });
+
 let diagramId = 0;
 
 export default Vue.extend({
   components: {
     VModal,
-    VFullScreenIcon,
-    VDownloadIcon,
-    VCopyIcon,
-    VPopper,
     VCloseIcon,
-    VExternalLinkIcon,
+    VContextContainer,
   },
+  mixins: [ContextItemMixin],
   watch: {
     definition: {
       handler: async function () {
@@ -105,12 +78,14 @@ export default Vue.extend({
   data() {
     return {
       id: `mermaid-${diagramId++}`,
-      definition: this.$slots.default?.[0]?.text,
       svg: undefined as string | undefined,
       modalVisible: false,
     };
   },
   computed: {
+    definition(): string {
+      return this.$slots.default?.[0].text ?? '';
+    },
     externalLink(): string | undefined {
       if (!this.definition) return;
 
@@ -122,6 +97,50 @@ export default Vue.extend({
       const compressed = pako.deflate(utf8Encoded, { level: 9 });
       const base64Encoded = fromUint8Array(compressed, true);
       return `https://mermaid.live/edit#pako:${base64Encoded}`;
+    },
+    menuItems(): ContextContainerMenuItem[] {
+      return [
+        {
+          label: 'Open in Mermaid Live Editor',
+          link: this.externalLink,
+        },
+        {
+          label: 'Copy Mermaid definition',
+          action: () => this.copy(),
+        },
+        {
+          label: 'Export as PNG',
+          action: () => this.download(),
+        },
+      ];
+    },
+    diagramType(): string | undefined {
+      if (!this.definition) return;
+      return this.definition.match(/\w+/)?.[0];
+    },
+    title(): string {
+      switch (this.diagramType) {
+        case 'flowchart':
+          return 'Flowchart';
+        case 'sequenceDiagram':
+          return 'Sequence diagram';
+        case 'classDiagram':
+          return 'Class diagram';
+        case 'stateDiagram':
+          return 'State diagram';
+        case 'erDiagram':
+          return 'Entity relationship diagram';
+        case 'stateDiagram-v2':
+          return 'State diagram';
+        case 'journey':
+          return 'User journey';
+        case 'C4Context':
+          return 'C4 diagram';
+        case 'mindmap':
+          return 'Mindmap';
+        default:
+          return 'Mermaid diagram';
+      }
     },
   },
   methods: {
@@ -142,7 +161,14 @@ export default Vue.extend({
       if (!this.svg || !this.definition) return;
 
       navigator.clipboard.writeText(this.definition);
-      (this.$refs.copyPopper as any).flash('Copied to clipboard!');
+    },
+    onPin({ pinned, handle }: PinEvent) {
+      const eventData: PinEvent & Partial<PinMermaid> = { pinned, handle };
+      if (pinned) {
+        eventData.type = 'mermaid';
+        eventData.content = this.definition;
+      }
+      this.$root.$emit('pin', eventData);
     },
   },
 });
@@ -167,14 +193,6 @@ export default Vue.extend({
     display: flex;
     width: 100%;
     place-content: center;
-  }
-
-  &__container {
-    overflow: visible;
-    background-color: rgba(black, 0.5);
-    border-radius: $border-radius;
-    border: 1px solid rgba(white, 0.15);
-    padding: 1rem;
   }
 
   &__modal {

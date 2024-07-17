@@ -125,6 +125,7 @@ export default Vue.extend({
     for (let i = 0; i < dom.body.childNodes.length; i++) {
       children.push(syncNode(h, dom.body.childNodes[i] as Element, this.$vnode.children?.[i]));
     }
+    console.log(this.content);
     return h('div', children);
   },
   methods: {
