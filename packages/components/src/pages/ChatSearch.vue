@@ -137,7 +137,7 @@ export default {
       baseUrl: undefined,
       model: undefined,
       contextResponse: undefined,
-      pinnedItems: [],
+      pinnedItems: [] as PinItem[],
     };
   },
   provide() {

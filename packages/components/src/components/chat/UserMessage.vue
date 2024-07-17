@@ -90,10 +90,7 @@ import VCodeSelection from '@/components/chat/CodeSelection.vue';
 import VStreamingMessageContent from '@/components/chat-search/StreamingMessageContent.ts';
 
 import { Marked, Renderer } from 'marked';
-import { markedHighlight } from 'marked-highlight';
 import DOMPurify from 'dompurify';
-import hljs from 'highlight.js';
-import Vue from 'vue';
 
 // Add a custom renderer to wrap code blocks in a container.
 // We can add a copy button and other things here.
@@ -110,22 +107,12 @@ customRenderer.code = (code: string, language: string, escaped: boolean, sourceP
     '<v-markdown-code-snippet ',
     language && `language="${language}"`,
     '>',
-    content,
+    code,
     '</v-markdown-code-snippet>',
   ].join('');
 };
 
-const marked = new Marked(
-  markedHighlight({
-    langPrefix: 'hljs language-',
-    highlight(code: string, lang: string) {
-      // TODO: This should move into VMarkdownCodeSnippet
-      const language = hljs.getLanguage(lang) ? lang : 'plaintext';
-      return hljs.highlight(code, { language }).value;
-    },
-  }),
-  { renderer: customRenderer }
-);
+const marked = new Marked({ renderer: customRenderer });
 
 export default {
   name: 'v-user-message',
@@ -436,9 +423,13 @@ export default {
   .tools {
     padding: 0.5rem 0;
     line-height: normal;
+
+    &:empty {
+      display: none;
+    }
   }
 
-  span {
+  div {
     hr {
       border: none;
       border-top: 1px solid rgba(255, 255, 255, 0.1);

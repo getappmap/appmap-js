@@ -70,6 +70,7 @@ export const ChatSearch = (args, { argTypes }) => ({
 ChatSearch.args = {
   mostRecentAppMaps,
   appmapYmlPresent: true,
+  appmapRpcPort: 3002,
 };
 
 export const ChatSearchWithCodeSelection = (args, { argTypes }) => ({
