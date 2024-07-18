@@ -18,6 +18,9 @@ import ContextItemMixin from '@/components/mixins/contextItem';
 
 import hljs from 'highlight.js';
 
+hljs.registerAliases(['rake', 'Gemfile'], { languageName: 'ruby' });
+hljs.registerAliases(['vue'], { languageName: 'xml' });
+
 import type { PinEvent, PinCodeSnippet } from './PinEvent';
 
 export default Vue.extend({
