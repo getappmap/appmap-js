@@ -2,38 +2,11 @@ import Vue from 'vue';
 import VMarkdownCodeSnippet from '@/components/chat/MarkdownCodeSnippet.vue';
 import VMermaidDiagram from '@/components/chat/MermaidDiagram.vue';
 
-function createElement(
-  h: Vue.CreateElement,
-  node: Node,
-  indexPath: number[],
-  index: Record<string, Vue.VNode>
-): Vue.VNode | undefined {
-  if (!(node instanceof Element)) return;
-  console.log(indexPath.join('.'), node);
-
-  const element = h(
-    node.tagName.toLowerCase(),
-    {
-      // attrs: node.attributes,
-    },
-    [...node.childNodes, node.textContent]
-      .map((child, i) => {
-        if (!child) return;
-        if (typeof child === 'string') return child;
-        return createElement(h, child, [...indexPath, i], index);
-      })
-      .filter(Boolean)
-  );
-  index[indexPath.join('.')] = element;
-
-  return element;
-}
-
-function findLastTextNode(node: Node): Node | undefined {
+function findCursorNode(node: Node): Node | undefined {
   const children = Array.from(node.childNodes);
   while (children.length) {
     const child = children.pop() as Node;
-    const textNode = findLastTextNode(child);
+    const textNode = findCursorNode(child);
     if (textNode) return textNode;
   }
 
@@ -47,13 +20,13 @@ function getAttributeRecord(attrs: NamedNodeMap): Record<string, string> {
   }, {} as Record<string, string>);
 }
 
-function syncNode(h: Vue.CreateElement, src: Element, dst?: Vue.VNode): Vue.VNode | undefined {
+function buildNode(h: Vue.CreateElement, src: Element): Vue.VNode | undefined {
   const children = [];
   for (let i = 0; i < src.childNodes.length; i++) {
     const srcChild = src.childNodes[i];
     let vnode;
     if (srcChild instanceof Element) {
-      vnode = syncNode(h, srcChild as Element, dst?.children?.[i]);
+      vnode = buildNode(h, srcChild as Element);
     } else if (srcChild instanceof Text) {
       vnode = srcChild.textContent;
     }
@@ -65,32 +38,38 @@ function syncNode(h: Vue.CreateElement, src: Element, dst?: Vue.VNode): Vue.VNod
     return;
   }
 
-  if (!dst) {
-    const tag = src.tagName.toLowerCase();
-    // HACK: Is there a better way to identify custom components?
-    if (tag.startsWith('v-')) {
-      const props = Object.values(src.attributes).reduce((memo, attr) => {
-        if (attr.name === 'class') return memo;
-        memo[attr.name] = attr.value;
-        return memo;
-      }, {} as Record<string, string>);
-      // HACK: Attributes are converted to props
-      // This isn't a big deal now, but worth keeping in mind as a potential issue
-      // in the future.
-      return h(tag, { props }, children);
-    }
+  const tag = src.tagName.toLowerCase();
+  // HACK: Is there a better way to identify custom components?
+  if (tag.startsWith('v-')) {
+    const props = Object.values(src.attributes).reduce((memo, attr) => {
+      if (attr.name === 'class') return memo;
+      memo[attr.name] = attr.value;
+      return memo;
+    }, {} as Record<string, string>);
+    // HACK: Attributes are converted to props
+    // This isn't a big deal now, but worth keeping in mind as a potential issue
+    // in the future.
     return h(
       tag,
-      {
-        class: src.className.length ? src.className : undefined,
-        attrs: getAttributeRecord(src.attributes),
-      },
-      children
+      { props },
+      children.map((c) => {
+        // HACK: Cursor is a special case given the way we're rendering code snippets.
+        // We write the source code directly into a slot to avoid the need to escape or
+        // encode the source text as a prop when rendering markdown. Thus, the cursor is
+        // rendered into it's own special slot.
+        const isCursor = typeof c === 'object' && c.data && c.data.class === 'cursor';
+        return isCursor ? h('span', { slot: 'cursor', class: 'cursor' }) : c;
+      })
     );
-    return;
   }
-
-  return dst;
+  return h(
+    tag,
+    {
+      class: src.className.length ? src.className : undefined,
+      attrs: getAttributeRecord(src.attributes),
+    },
+    children
+  );
 }
 
 export default Vue.extend({
@@ -113,27 +92,21 @@ export default Vue.extend({
     const dom = this.parser.parseFromString(this.content.trim(), 'text/html');
 
     if (this.active) {
-      const textNode = findLastTextNode(dom.body);
-      if (textNode) {
-        const cursor = dom.createElement('span');
-        cursor.classList.add('cursor');
-        textNode.parentElement?.appendChild(cursor);
-      }
+      const textNode = findCursorNode(dom.body);
+      const cursor = dom.createElement('span');
+      cursor.classList.add('cursor');
+      const targetElement = textNode?.parentElement ?? dom.body;
+      targetElement.appendChild(cursor);
     }
 
     const children = [];
     for (let i = 0; i < dom.body.childNodes.length; i++) {
-      children.push(syncNode(h, dom.body.childNodes[i] as Element, this.$vnode.children?.[i]));
+      const vnode = buildNode(h, dom.body.childNodes[i] as Element);
+      if (vnode) {
+        children.push(vnode);
+      }
     }
-    console.log(this.content);
+
     return h('div', children);
-  },
-  methods: {
-    updateElements(h: Vue.CreateElement): void {
-      const dom = this.parser.parseFromString(this.content, 'text/html');
-      Array.from(dom.body.children).forEach((child, i) => {
-        return createElement(h, child, [i], this.elementIndex);
-      });
-    },
   },
 });
