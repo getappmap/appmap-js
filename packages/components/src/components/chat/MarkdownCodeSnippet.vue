@@ -1,13 +1,15 @@
 <template>
   <v-context-container
-    :title="language"
+    :title="title || language"
     :handle="handle"
+    :location="location"
+    :directory="directory"
     content-type="text"
     class="code-snippet"
     @copy="copyToClipboard"
     @pin="onPin"
   >
-    <pre><code v-html="highlightedCode" /></pre>
+    <pre><code v-html="highlightedCode" /><slot name="cursor" /></pre>
   </v-context-container>
 </template>
 
@@ -26,26 +28,36 @@ import type { PinEvent, PinCodeSnippet } from './PinEvent';
 export default Vue.extend({
   props: {
     language: String,
+    title: String,
+    location: String,
+    directory: String,
+    complete: {
+      type: Boolean,
+      default: true,
+    },
   },
   mixins: [ContextItemMixin],
   components: {
     VContextContainer,
   },
+  data() {
+    return {
+      code: this.$slots.default?.[0].text ?? '',
+    };
+  },
   computed: {
-    code(): string {
-      return this.$slots.default?.[0].text ?? '';
-    },
     highlightedCode(): string {
-      return hljs.highlight(this.language ?? 'plaintext', this.code).value;
+      let language = hljs.getLanguage(this.language) ? this.language : 'plaintext';
+      return hljs.highlight(language, this.code).value;
     },
   },
   methods: {
-    copyToClipboard() {
+    copyToClipboard(): void {
       if (!this.code) return;
 
       navigator.clipboard.writeText(this.code);
     },
-    onPin({ pinned, handle }: { pinned: boolean; handle: number }) {
+    onPin({ pinned, handle }: { pinned: boolean; handle: number }): void {
       const eventData: PinEvent & Partial<PinCodeSnippet> = { pinned, handle };
       if (pinned) {
         eventData.type = 'code-snippet';
@@ -55,11 +67,21 @@ export default Vue.extend({
       this.$root.$emit('pin', eventData);
     },
   },
+  updated() {
+    // Slots are not reactive unless written directly to the DOM.
+    // Luckily for us, this method is called when the content within the slot changes.
+    this.code = this.$slots.default?.[0].text ?? '';
+  },
 });
 </script>
 
+<style lang="scss"></style>
+
 <style lang="scss" scoped>
+@import '~highlight.js/styles/base16/snazzy.css';
 .code-snippet::v-deep {
+  color: #e2e4e5;
+
   pre {
     margin: 0;
     border: 0;
@@ -70,6 +92,8 @@ export default Vue.extend({
 
   code {
     line-height: 1.6;
+    color: inherit;
+    background-color: inherit;
   }
 }
 </style>

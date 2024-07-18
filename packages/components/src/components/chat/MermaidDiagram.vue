@@ -79,13 +79,11 @@ export default Vue.extend({
     return {
       id: `mermaid-${diagramId++}`,
       svg: undefined as string | undefined,
+      definition: this.$slots.default?.[0].text ?? '',
       modalVisible: false,
     };
   },
   computed: {
-    definition(): string {
-      return this.$slots.default?.[0].text ?? '';
-    },
     externalLink(): string | undefined {
       if (!this.definition) return;
 
@@ -170,6 +168,11 @@ export default Vue.extend({
       }
       this.$root.$emit('pin', eventData);
     },
+  },
+  updated() {
+    // Slots are not reactive unless written directly to the DOM.
+    // Luckily for us, this method is called when the content within the slot changes.
+    this.definition = this.$slots.default?.[0].text ?? '';
   },
 });
 </script>

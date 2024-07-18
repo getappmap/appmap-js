@@ -96,18 +96,16 @@ import DOMPurify from 'dompurify';
 // We can add a copy button and other things here.
 // TODO: Can we do this in a more elegant way? E.g. with a Vue component?
 const customRenderer = new Renderer();
-const originalRenderer = customRenderer.code.bind(customRenderer);
-customRenderer.code = (code: string, language: string, escaped: boolean, sourcePath: string) => {
+customRenderer.code = (code: string, language: string) => {
   if (language === 'mermaid') {
     return `<v-mermaid-diagram>${code}</v-mermaid-diagram>`;
   }
 
-  const content = originalRenderer(code, language, escaped, sourcePath);
   return [
     '<v-markdown-code-snippet ',
     language && `language="${language}"`,
     '>',
-    code,
+    new Option(code).innerHTML,
     '</v-markdown-code-snippet>',
   ].join('');
 };
@@ -241,8 +239,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~highlight.js/styles/base16/snazzy.css';
-
 .message {
   display: grid;
   grid-template-columns: 38px 1fr;
