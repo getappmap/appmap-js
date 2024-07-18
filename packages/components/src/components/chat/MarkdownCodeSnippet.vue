@@ -5,6 +5,7 @@
     :location="location"
     :directory="directory"
     content-type="text"
+    data-cy="code-snippet"
     class="code-snippet"
     @copy="copyToClipboard"
     @pin="onPin"
@@ -31,10 +32,6 @@ export default Vue.extend({
     title: String,
     location: String,
     directory: String,
-    complete: {
-      type: Boolean,
-      default: true,
-    },
   },
   mixins: [ContextItemMixin],
   components: {

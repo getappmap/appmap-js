@@ -195,7 +195,7 @@
               </v-popper>
             </template>
             <template v-slot:body>
-              <div class="export-options">
+              <div class="export-options" data-cy="export-dropdown">
                 <div class="export-options__header">Export as...</div>
                 <div class="export-options__body">
                   <v-export-json :app-map="filteredAppMap" :view-state="viewState" ref="exportJSON">
@@ -1657,6 +1657,11 @@ code {
   }
 
   .export-options {
+    padding: 0.5rem 1rem;
+    background-color: $gray2;
+    border-radius: $border-radius;
+    border: 1px solid $gray3;
+
     &__header {
       padding-bottom: 0.2rem;
       margin-bottom: 0.7rem;

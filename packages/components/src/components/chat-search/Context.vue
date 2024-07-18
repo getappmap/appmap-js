@@ -57,7 +57,6 @@
                 :key="index"
                 :contextItem="contextItem"
                 class="context__pinned-item"
-                data-cy="context-item"
               />
             </div>
           </div>

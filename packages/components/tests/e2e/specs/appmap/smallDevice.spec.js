@@ -19,7 +19,7 @@ context('AppMap sidebar', () => {
   it('displays a full screen filters modal', () => {
     cy.get('[data-cy="filters-button"]').click();
     cy.get('[data-cy="filters-menu"]').should('be.visible');
-    cy.get('.popper__body.filter').invoke('outerHeight').should('be.equal', height);
+    cy.get('[data-cy="filters-menu"]').invoke('outerHeight').should('be.equal', height);
     cy.get('[data-cy="filters-close"]').click();
     cy.get('[data-cy="filters-menu"]').should('not.exist');
   });

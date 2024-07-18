@@ -10,6 +10,7 @@
         'context-container__header': 1,
         'context-container__header--collapsable': isCollapsable,
       }"
+      data-cy="context-header"
       @click="onClickHeader"
     >
       <span class="context-container__title">{{ title }}</span>
@@ -48,6 +49,7 @@
           }"
           @click.stop="onPin"
           data-cy="pin"
+          :data-pinned="pinned"
           v-if="!isFile"
         >
           <v-pin-icon />
@@ -64,7 +66,7 @@
             </span>
           </template>
           <template #body>
-            <div class="context-container__menu">
+            <div class="context-container__menu" data-cy="context-menu-items">
               <div
                 v-for="item in menuItems"
                 :key="item.label"
@@ -72,6 +74,7 @@
                   'context-container__menu-item': 1,
                   'context-container__menu-item--link': !!item.link,
                 }"
+                data-cy="context-menu-item"
                 @click="performAction(item.action)"
               >
                 <template v-if="item.link">
@@ -141,7 +144,11 @@ export default Vue.extend({
       required: false,
     },
   },
-  inject: ['pinnedItems'],
+  inject: {
+    pinnedItems: {
+      default: () => [],
+    },
+  },
   data() {
     const isReference = typeof this.handle === 'number';
     const isFile = !!this.location || !!this.directory;
