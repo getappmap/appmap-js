@@ -2,21 +2,34 @@
   <div
     :class="{ 'context-container': 1, 'context-container--collapsed': collapsed }"
     data-cy="context-container"
+    :data-handle="valueHandle"
+    :data-reference="isReference"
   >
     <div
       :class="{
         'context-container__header': 1,
-        'context-container__header--collapsable': isReference,
+        'context-container__header--collapsable': isCollapsable,
       }"
       @click="onClickHeader"
     >
       <span class="context-container__title">{{ title }}</span>
-      <span class="context-container__button-group" v-if="!isReference">
+      <span class="context-container__button-group">
+        <span
+          class="context-container__button"
+          data-cy="jump-to"
+          @click.stop="onJumpTo"
+          v-if="isReference"
+        >
+          <v-jump-to-icon />
+        </span>
+        <span class="context-container__button" data-cy="open" @click.stop="onOpen" v-if="isFile">
+          <v-jump-to-icon />
+        </span>
         <span
           class="context-container__button"
           data-cy="expand"
           @click.stop="$emit('expand')"
-          v-if="contentType === 'image'"
+          v-if="contentType === 'image' && !collapsed"
         >
           <v-expand-icon />
         </span>
@@ -24,7 +37,7 @@
           class="context-container__button"
           data-cy="copy"
           @click.stop="$emit('copy')"
-          v-if="contentType === 'text'"
+          v-if="contentType === 'text' && !collapsed"
         >
           <v-copy-icon />
         </span>
@@ -35,12 +48,18 @@
           }"
           @click.stop="onPin"
           data-cy="pin"
+          v-if="!isFile"
         >
           <v-pin-icon />
         </span>
-        <v-popper-menu position="bottom left" :allow-fullscreen="false" ref="popperMenu">
+        <v-popper-menu
+          position="bottom left"
+          :allow-fullscreen="false"
+          ref="popperMenu"
+          v-if="menuItems.length && !isReference"
+        >
           <template #icon>
-            <span class="context-container__button" data-cy="context-menu" v-if="menuItems.length">
+            <span class="context-container__button" data-cy="context-menu">
               <v-hamburger-menu-icon />
             </span>
           </template>
@@ -83,7 +102,9 @@ import VPinIcon from '@/assets/pin.svg';
 import VHamburgerMenuIcon from '@/assets/hamburger.svg';
 import VExpandIcon from '@/assets/fullscreen.svg';
 import VPopperMenu from '@/components/PopperMenu.vue';
+import VJumpToIcon from '@/assets/open.svg';
 import type ContextContainerMenuItem from './ContextContainerMenuItem';
+import type { PinEvent } from './PinEvent';
 
 let GlobalId = 0;
 
@@ -94,6 +115,7 @@ export default Vue.extend({
     VCopyIcon,
     VExpandIcon,
     VPopperMenu,
+    VJumpToIcon,
   },
   props: {
     title: String,
@@ -110,15 +132,36 @@ export default Vue.extend({
       type: Number as () => number | undefined,
       required: false,
     },
+    location: {
+      type: String,
+      required: false,
+    },
+    directory: {
+      type: String,
+      required: false,
+    },
   },
+  inject: ['pinnedItems'],
   data() {
     const isReference = typeof this.handle === 'number';
+    const isFile = !!this.location || !!this.directory;
     return {
       isReference,
-      pinned: false,
-      collapsed: isReference,
+      collapsed: isReference || isFile,
       valueHandle: this.handle ?? GlobalId++,
     };
+  },
+  computed: {
+    pinned(): boolean {
+      const { pinnedItems }: { pinnedItems: PinEvent[] } = this as any;
+      return pinnedItems ? pinnedItems.some(({ handle }) => handle === this.valueHandle) : false;
+    },
+    isFile(): boolean {
+      return !!this.location || !!this.directory;
+    },
+    isCollapsable(): boolean {
+      return this.isReference || this.isFile;
+    },
   },
   methods: {
     onPin() {
@@ -137,8 +180,16 @@ export default Vue.extend({
       this.closeMenu();
     },
     onClickHeader() {
-      if (!this.isReference) return;
+      if (!this.isCollapsable) return;
       this.collapsed = !this.collapsed;
+    },
+    onJumpTo() {
+      if (!this.isReference) return;
+      this.$root.$emit('jump-to', this.valueHandle);
+    },
+    onOpen() {
+      if (!this.isFile) return;
+      this.$root.$emit('open-location', this.location, this.directory);
     },
   },
 });
