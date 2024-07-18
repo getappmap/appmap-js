@@ -70,7 +70,6 @@
 import Vue from 'vue';
 import VUserMessage from '@/components/chat/UserMessage.vue';
 import VChatInput from '@/components/chat/ChatInput.vue';
-import VModeInstructionCard from '@/components/chat/ModeInstructionCard.vue';
 import VAppMapNavieLogo from '@/assets/appmap-full-logo.svg';
 import VButton from '@/components/Button.vue';
 import { AI } from '@appland/client';

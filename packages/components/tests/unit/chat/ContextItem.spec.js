@@ -15,8 +15,8 @@ describe('ContextItem', () => {
     });
     expect(wrapper.find('[data-cy="context-item-content"]').exists()).toBe(false);
   });
-  it('renders content for other types', () => {
-    const content = 'printf("Hello, world!\n");';
+  it('renders content for other types', async () => {
+    const content = 'printf("Hello, world!\\n");';
     const contextItem = {
       type: 'code-snippet',
       location: 'app/user.c:10',
@@ -27,7 +27,8 @@ describe('ContextItem', () => {
         contextItem,
       },
     });
-    expect(wrapper.find('[data-cy="context-item-content"]').text()).toContain(content);
+    await wrapper.find('[data-cy="context-header"]').trigger('click');
+    expect(wrapper.text()).toContain(content);
   });
   it('emits an event when the user clicks to open the location', () => {
     const location = 'app/models/user.rb:10';
@@ -44,7 +45,7 @@ describe('ContextItem', () => {
       },
     });
 
-    wrapper.find('[data-cy="context-item-header"]').trigger('click');
+    wrapper.find('[data-cy="context-item"] [data-cy="open"]').trigger('click');
 
     const rootWrapper = createWrapper(wrapper.vm.$root);
     const events = rootWrapper.emitted('open-location');

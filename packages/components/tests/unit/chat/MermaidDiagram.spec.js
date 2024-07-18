@@ -38,7 +38,8 @@ describe('components/MermaidDiagram.vue', () => {
   });
 
   it('copies the diagram definition', async () => {
-    const copyButton = wrapper.find('[data-cy="copy"]');
+    await wrapper.find('[data-cy="context-menu"]').trigger('click');
+    const copyButton = wrapper.find('[data-cy="context-menu-item"]:nth-child(2)');
     expect(copyButton.exists()).toBe(true);
 
     await copyButton.trigger('click');
@@ -60,7 +61,9 @@ describe('components/MermaidDiagram.vue', () => {
 
   it('downloads the diagram', async () => {
     const downloadSvgMock = jest.spyOn(downloadSvg, 'default').mockResolvedValue();
-    const downloadButton = wrapper.find('[data-cy="download"]');
+    await wrapper.find('[data-cy="context-menu"]').trigger('click');
+
+    const downloadButton = wrapper.find('[data-cy="context-menu-item"]:nth-child(3)');
     await downloadButton.trigger('click');
 
     expect(downloadSvgMock).toHaveBeenCalledWith(
@@ -70,7 +73,8 @@ describe('components/MermaidDiagram.vue', () => {
   });
 
   it('links to the Mermaid live editor', async () => {
-    const externalLink = wrapper.find('a[data-cy="open-external"]');
+    await wrapper.find('[data-cy="context-menu"]').trigger('click');
+    const externalLink = wrapper.find('[data-cy="context-menu-items"] a');
     expect(externalLink.attributes('href')).toEqual(
       'https://mermaid.live/edit#pako:eNqrVkrOT0lVslJKL0osyFAIcYnJUwACx2inzKKSjJTEylgFXV27GvfUEoXc_LzUyhoFJw33fIXijPyCgsy8dM2YPCUdpdzUotzEzBQlq-raWgAvVBru'
     );

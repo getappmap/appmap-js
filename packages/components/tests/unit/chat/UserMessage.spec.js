@@ -3,18 +3,18 @@ import { mount } from '@vue/test-utils';
 
 const snippets = {
   tsCode: `Here's some code:
-  \`\`\`ts
-  const marked = new Marked(
-    markedHighlight({
-      langPrefix: 'hljs language-',
-      highlight(code: string, lang: string) {
-        const language = hljs.getLanguage(lang) ? lang : 'plaintext';
-        return hljs.highlight(code, { language }).value;
-      },
-    }),
-    { renderer: customRenderer }
-  );
-  \`\`\`
+\`\`\`ts
+const marked = new Marked(
+  markedHighlight({
+    langPrefix: 'hljs language-',
+    highlight(code: string, lang: string) {
+      const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+      return hljs.highlight(code, { language }).value;
+    },
+  }),
+  { renderer: customRenderer }
+);
+\`\`\`
 `,
   htmlTag: '`<!DOCTYPE html>`',
   xss: '<script>alert("hello world!")</script>',
@@ -49,14 +49,19 @@ describe('components/UserMessage.vue', () => {
     });
 
     it('should copy text correctly from code snippets', () => {
-      const codeSnippetElement = wrapper.get('[data-cy="code-snippet-body"]');
-      const expectedText = 'abc';
-
-      // innerText is not supported in JSDOM, so we need to mock it
-      codeSnippetElement.element.innerText = expectedText;
+      const codeSnippetElement = wrapper.get('[data-cy="code-snippet"]');
 
       wrapper.get('[data-cy="copy"]').trigger('click');
-      return expect(navigator.clipboard.readText()).resolves.toBe(expectedText);
+      return expect(navigator.clipboard.readText()).resolves.toBe(`const marked = new Marked(
+  markedHighlight({
+    langPrefix: 'hljs language-',
+    highlight(code: string, lang: string) {
+      const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+      return hljs.highlight(code, { language }).value;
+    },
+  }),
+  { renderer: customRenderer }
+);`);
     });
   });
 

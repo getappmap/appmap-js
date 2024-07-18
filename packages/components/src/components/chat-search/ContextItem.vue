@@ -1,5 +1,5 @@
 <template>
-  <div class="context__body__table-row">
+  <div class="context__body__table-row" data-cy="context-item">
     <template v-if="isCodeSnippet">
       <v-markdown-code-snippet
         :language="language"

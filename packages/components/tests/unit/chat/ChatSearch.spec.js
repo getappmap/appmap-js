@@ -676,4 +676,19 @@ describe('pages/ChatSearch.vue', () => {
       expect(chatInput.vm.input).toBe('Hello world again');
     });
   });
+
+  it('correctly handles pinned items', async () => {
+    const wrapper = mount(VChatSearch, {
+      propsData: { appmapRpcFn: jest.fn() },
+    });
+    const systemMessage = wrapper.vm.$refs.vchat.addSystemMessage();
+    systemMessage.content = `\`\`\`ruby\nputs "Hello world!"\n\`\`\``;
+    await wrapper.vm.$nextTick();
+
+    await wrapper.find('[data-cy="pin"]').trigger('click');
+    await wrapper.setData({ contextResponse: [] });
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find('[data-handle][data-reference]').exists()).toBe(true);
+  });
 });

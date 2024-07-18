@@ -17,8 +17,12 @@ context('Export', () => {
 
     it('shows JSON and SVG options', () => {
       cy.get('[data-cy="export-button"] [data-cy="popper-button"]').click();
-      cy.get('.popper__content').contains('JSON').should('exist');
-      cy.get('.popper__content').contains('SVG').should('exist');
+      cy.get('[data-cy="export-button"] [data-cy="export-dropdown"]')
+        .contains('JSON')
+        .should('exist');
+      cy.get('[data-cy="export-button"] [data-cy="export-dropdown"]')
+        .contains('SVG')
+        .should('exist');
     });
   });
 });
