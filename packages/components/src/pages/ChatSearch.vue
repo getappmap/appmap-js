@@ -510,6 +510,11 @@ export default {
         this.pinnedItems.splice(pinIndex, 1);
       }
     });
+    this.$root.$on('jump-to', (handle: number) => {
+      document
+        .querySelector(`[data-handle="${handle}"]:not([data-reference])`)
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
   },
 };
 </script>

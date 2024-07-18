@@ -13,55 +13,52 @@
       </div>
     </template>
     <template v-else>
-      <div>
+      <div class="context__body">
         <h2>Context</h2>
-        <div class="context__body">
-          <div
-            v-if="numAppMaps === 0"
-            class="context__body__no-appmaps"
-            data-cy="create-appmap-data"
+        <div v-if="numAppMaps === 0" class="context__body__no-appmaps" data-cy="create-appmap-data">
+          <p>
+            You don't have any AppMap data. Adding AppMap data to Navie's context improves Navie's
+            code suggestions and answers.
+          </p>
+          <v-button
+            data-cy="create-appmap-data-btn"
+            class="create-appmap-data"
+            size="small"
+            kind="ghost"
+            @click.native="openInstallInstructions"
           >
-            <p>
-              You don't have any AppMap data. Adding AppMap data to Navie's context improves Navie's
-              code suggestions and answers.
-            </p>
-            <v-button
-              data-cy="create-appmap-data-btn"
-              class="create-appmap-data"
-              size="small"
-              kind="ghost"
-              @click.native="openInstallInstructions"
+            Open Instructions
+          </v-button>
+        </div>
+        <template v-if="pinnedItems && pinnedItems.length">
+          <h3>Pinned Items</h3>
+          <div class="context__body__table">
+            <component
+              v-for="pin in pinnedItems"
+              :is="getPinnedComponent(pin)"
+              :is-reference="true"
+              :key="pin.handle"
+              v-bind="pin"
+              class="context__pinned-item"
+              @pin="unpin(pin.handle)"
+              >{{ pin.content }}</component
             >
-              Open Instructions
-            </v-button>
           </div>
-          <template v-if="pinnedItems && pinnedItems.length">
-            <h3>Pinned Items</h3>
-            <div v-for="pin in pinnedItems" :key="pin.handle">
-              <component
-                :is="getPinnedComponent(pin)"
-                :is-reference="true"
-                v-bind="pin"
-                @pin="unpin(pin.handle)"
-              >
-                {{ pin.content }}
-              </component>
-            </div>
-          </template>
-          <div v-for="t in Object.keys(contextTypes)" :key="t">
-            <div v-if="hasContext(t)">
-              <h3>
-                {{ contextTypes[t] }}
-                <span class="context__count">{{ contextItemCount(t) }}</span>
-              </h3>
-              <div class="context__body__table">
-                <v-context-item
-                  v-for="(contextItem, index) in contextItems(t)"
-                  :key="index"
-                  :contextItem="contextItem"
-                  data-cy="context-item"
-                />
-              </div>
+        </template>
+        <div v-for="t in Object.keys(contextTypes)" :key="t">
+          <div v-if="hasContext(t)">
+            <h3>
+              {{ contextTypes[t] }}
+              <span class="context__count">{{ contextItemCount(t) }}</span>
+            </h3>
+            <div class="context__body__table">
+              <v-context-item
+                v-for="(contextItem, index) in contextItems(t)"
+                :key="index"
+                :contextItem="contextItem"
+                class="context__pinned-item"
+                data-cy="context-item"
+              />
             </div>
           </div>
         </div>
@@ -153,6 +150,16 @@ export default {
   width: 100%;
   min-height: 100%;
 
+  &__pinned-item {
+    box-shadow: none;
+    margin: 0;
+    &::v-deep {
+      .context-container {
+        margin: 0;
+      }
+    }
+  }
+
   &__count {
     font-size: 0.8rem;
     font-weight: 400;
@@ -178,6 +185,8 @@ export default {
   }
 
   &__body {
+    padding: 1rem;
+
     &__no-appmaps {
       padding: 0 1rem;
       margin-bottom: 2.5rem;
@@ -186,16 +195,8 @@ export default {
     &__table {
       display: flex;
       flex-direction: column;
-      padding: 0.25rem 0.5rem;
-      margin-bottom: 2.5rem;
-
-      & > * {
-        border-bottom: 1px solid $gray2;
-      }
-
-      & > *:last-child {
-        border-bottom: none;
-      }
+      gap: 0.5rem;
+      margin-bottom: 1rem;
     }
   }
 
