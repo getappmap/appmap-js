@@ -14489,9 +14489,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"appmap-node@npm:^2.21.1":
-  version: 2.21.1
-  resolution: "appmap-node@npm:2.21.1"
+"appmap-node@npm:^2.23.0":
+  version: 2.23.0
+  resolution: "appmap-node@npm:2.23.0"
   dependencies:
     "@types/stack-utils": ^2.0.3
     acorn-walk: ^8.2.0
@@ -14504,7 +14504,7 @@ __metadata:
     yaml: ^2.3.4
   bin:
     appmap-node: bin/appmap-node.js
-  checksum: 5cff9337977352cbcd6fdadb34a59fb8c9e9c617bf068805a93b8f63408a04c7a63a75ce8b62c431fe44d099c4b85ec864c7de65b1bee27fea14de0cbebe0f83
+  checksum: 4c3ebb8048b7c4bfdca2ef30ca79b1dc70a55a559fd835d9b106ef183f88bb3b966ca44434fd6ad115874f75413fa3a8876de2aaba8adaff1607f5c0f6fd2156
   languageName: node
   linkType: hard
 
@@ -36941,7 +36941,7 @@ resolve@1.1.7:
     "@tsconfig/recommended": ^1.0.3
     "@types/jest": ^29.5.2
     "@types/node": ^17.0.2
-    appmap-node: ^2.21.1
+    appmap-node: ^2.23.0
     eslint: ^7.25.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-prettier: ^3.4.0
