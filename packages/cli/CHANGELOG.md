@@ -1,3 +1,15 @@
+# [@appland/appmap-v3.154.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.153.0...@appland/appmap-v3.154.0) (2024-07-19)
+
+
+### Bug Fixes
+
+* More robust location parsing ([7ae1dd2](https://github.com/getappmap/appmap-js/commit/7ae1dd2e18c21451c0c0da954c93a3e73286b5eb))
+
+
+### Features
+
+* Recognize .php files in source lookup ([076273f](https://github.com/getappmap/appmap-js/commit/076273f8a24aabb998032df9f9c7d8372e21cfc2))
+
 # [@appland/appmap-v3.153.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.152.0...@appland/appmap-v3.153.0) (2024-07-17)
 
 
