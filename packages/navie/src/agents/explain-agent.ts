@@ -99,6 +99,29 @@ flowchart TD
 \`\`\`
 </example>
 
+_Handling Special Characters in Flowcharts_
+It is possible to put text within quotes in order to render more troublesome characters. As in the example below:
+
+<example format="flowchart">
+\`\`\`mermaid
+flowchart LR
+    id1["This is the (text) in the box"]
+\`\`\`
+</example>
+
+_Using Entity Codes in Flowcharts_
+
+It is possible to escape characters using the syntax exemplified here.
+
+<example format="flowchart">
+\`\`\`mermaid
+flowchart LR
+    A["A double quote: &quot;"] --> B["A dec char: &#9829;"]
+\`\`\`
+</example>
+
+Numbers given are base 10, so '#' can be encoded as '&#35;'. It is also supported to use HTML character names.
+
 **Entity-Relationship Diagram (ERD)**
 
 DO use Mermaid ERD syntax.
