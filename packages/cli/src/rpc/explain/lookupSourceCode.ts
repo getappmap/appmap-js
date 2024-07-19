@@ -7,15 +7,17 @@ import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { exists, verbose } from '../../utils';
 import { promisify } from 'util';
 
-export const LANGUAGE_BY_FILE_EXTENSION: Record<string, 'js' | 'java' | 'ruby' | 'python'> = {
-  '.js': 'js',
-  '.ts': 'js',
-  '.jsx': 'js',
-  '.tsx': 'js',
-  '.java': 'java',
-  '.py': 'python',
-  '.rb': 'ruby',
-};
+export const LANGUAGE_BY_FILE_EXTENSION: Record<string, 'js' | 'java' | 'ruby' | 'python' | 'php'> =
+  {
+    '.js': 'js',
+    '.ts': 'js',
+    '.jsx': 'js',
+    '.tsx': 'js',
+    '.java': 'java',
+    '.py': 'python',
+    '.rb': 'ruby',
+    '.php': 'php',
+  };
 
 // TODO: Look up different types of files
 const scannedExtensions = new Set<string>();
