@@ -6,6 +6,7 @@ import { glob } from 'glob';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { exists, verbose } from '../../utils';
 import { promisify } from 'util';
+import parseLocation from './parseLocation';
 
 export const LANGUAGE_BY_FILE_EXTENSION: Record<string, 'js' | 'java' | 'ruby' | 'python' | 'php'> =
   {
@@ -29,8 +30,12 @@ export default async function lookupSourceCode(
   directory: string,
   location: string
 ): Promise<string[] | undefined> {
+  const parsedLocation = parseLocation(location);
+  if (!parsedLocation) return;
+
+  const [requestedFileName, lineNo] = parsedLocation;
+
   if (verbose()) warn(chalk.gray(`Looking up source code for ${location}`));
-  const [requestedFileName, lineNoStr] = location.split(':');
 
   const extension = requestedFileName.slice(requestedFileName.lastIndexOf('.'));
 
@@ -72,9 +77,8 @@ export default async function lookupSourceCode(
   }
 
   const fileContent = await readFile(fileName, 'utf-8');
-  if (!lineNoStr) return [fileContent];
+  if (!lineNo) return [fileContent];
 
-  let lineNo = parseInt(lineNoStr, 10);
   if (lineNo <= 0) return [fileContent];
 
   const fileExtension = fileName.slice(fileName.lastIndexOf('.'));
