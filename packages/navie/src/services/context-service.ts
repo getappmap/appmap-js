@@ -1,3 +1,4 @@
+import { warn } from 'console';
 import { AgentOptions } from '../agent';
 import transformSearchTerms from '../lib/transform-search-terms';
 import ApplyContextService from './apply-context-service';
@@ -29,11 +30,17 @@ export default class ContextService {
       }
 
       const tokenCount = tokensAvailable();
-      const context = await this.lookupContextService.lookupContext(
+      let context = await this.lookupContextService.lookupContext(
         searchTerms,
         tokenCount,
         options.buildContextFilters()
       );
+
+      if (!Array.isArray(context)) {
+        warn(`[context-service] Warning: context is not an array: ${JSON.stringify(context)}`);
+        context = [];
+      }
+
       LookupContextService.applyContext(context, [], this.applyContextService, tokenCount);
     }
   }
