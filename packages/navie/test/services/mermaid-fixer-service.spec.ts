@@ -1,9 +1,9 @@
 import InteractionHistory from '../../src/interaction-history';
-import MermaidFixer from '../../src/lib/mermaid-fixer';
-import CompletionService, { Completion, Usage } from '../../src/services/completion-service';
+import CompletionService from '../../src/services/completion-service';
+import MermaidFixerService from '../../src/services/mermaid-fixer-service';
 
-describe('MermaidFixer', () => {
-  let mermaidFixer: MermaidFixer;
+describe('MermaidFixerService', () => {
+  let mermaidFixer: MermaidFixerService;
   let history: InteractionHistory;
   let completion: CompletionService;
   let complete: jest.Mock;
@@ -14,7 +14,7 @@ describe('MermaidFixer', () => {
     completion = {
       complete,
     } as unknown as CompletionService;
-    mermaidFixer = new MermaidFixer(history, completion);
+    mermaidFixer = new MermaidFixerService(history, completion);
   });
 
   it('should repair a diagram', async () => {
