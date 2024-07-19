@@ -1,3 +1,16 @@
+# [@appland/navie-v1.20.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.19.0...@appland/navie-v1.20.0) (2024-07-19)
+
+
+### Bug Fixes
+
+* More robust location parsing ([7ae1dd2](https://github.com/getappmap/appmap-js/commit/7ae1dd2e18c21451c0c0da954c93a3e73286b5eb))
+* Remove unused file mermaid-fixer.ts ([c2f6920](https://github.com/getappmap/appmap-js/commit/c2f69209f7230f6b2cdf12293203ce13b71e705b))
+
+
+### Features
+
+* Add prompting for special characters in flowcharts ([fd4192f](https://github.com/getappmap/appmap-js/commit/fd4192fdd1a16b7b64186ca79cbdc586e7ae6c07))
+
 # [@appland/navie-v1.19.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.18.0...@appland/navie-v1.19.0) (2024-07-17)
 
 
