@@ -23,3 +23,4 @@ packages:
     exclude:
       - node_modules
       - .yarn
+language: javascript
