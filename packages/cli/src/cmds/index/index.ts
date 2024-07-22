@@ -23,6 +23,7 @@ import { appmapStatsV1, appmapStatsV2 } from '../../rpc/appmap/stats';
 import LocalNavie from '../../rpc/explain/navie/navie-local';
 import RemoteNavie from '../../rpc/explain/navie/navie-remote';
 import { InteractionEvent } from '@appland/navie/dist/interaction-history';
+import { update } from '../../rpc/file/update';
 
 const AI_KEY_ENV_VARS = ['OPENAI_API_KEY', 'AZURE_OPENAI_API_KEY'];
 
@@ -152,6 +153,7 @@ export const handler = async (argv) => {
         sequenceDiagram(),
         explainHandler(navieProvider, argv.codeEditor),
         explainStatusHandler(),
+        update(navieProvider),
       ];
       const rpcServer = new RPCServer(port, rpcMethods);
       rpcServer.start();
