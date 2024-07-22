@@ -1,3 +1,21 @@
+# [@appland/components-v4.29.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.28.1...@appland/components-v4.29.0) (2024-07-22)
+
+
+### Bug Fixes
+
+* Add syntax highlighting for additional languages ([53a12c4](https://github.com/getappmap/appmap-js/commit/53a12c4a50a34e37a8a92bf7632a78994ab13167))
+* Drop the zwnj ([642d44d](https://github.com/getappmap/appmap-js/commit/642d44da621db08ee5b398db6555fd9c7a1f511d))
+* Streaming messages no longer cause full re-renders ([90ad330](https://github.com/getappmap/appmap-js/commit/90ad330347df45b5f77dfb59b7405474512ec3d4))
+
+
+### Features
+
+* Code snippets and diagrams can be pinned into context ([4218d1e](https://github.com/getappmap/appmap-js/commit/4218d1eaaeb1bcefe8516bcb7d65b321db293a14))
+* Context items now share a common visual style ([b119682](https://github.com/getappmap/appmap-js/commit/b1196823f49a95ffd8f785e2e157d978b5f6581a))
+* Generated artifacts now share a common visual style ([a76bb9e](https://github.com/getappmap/appmap-js/commit/a76bb9e9d04e6dc3f8bb3e24d0216d5c672fd6f6))
+* Improve reactivity of partial context items ([a30b481](https://github.com/getappmap/appmap-js/commit/a30b481ebd8efa97a5aff9439cefe7c7a4a2c2eb))
+* Propagate pinned items as code selections ([35651cc](https://github.com/getappmap/appmap-js/commit/35651cc21e969593770aa1359bc67d7ab8834cbc))
+
 # [@appland/components-v4.28.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.28.0...@appland/components-v4.28.1) (2024-07-12)
 
 
