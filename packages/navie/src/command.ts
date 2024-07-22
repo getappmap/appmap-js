@@ -7,7 +7,6 @@ export enum CommandMode {
   Context = 'context',
   VectorTerms = 'vector-terms',
   TechStack = 'tech-stack',
-  Apply = 'apply',
   ListFiles = 'list-files',
 }
 

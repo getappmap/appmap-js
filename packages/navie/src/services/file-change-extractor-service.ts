@@ -2,11 +2,11 @@ import XML from 'fast-xml-parser';
 
 import InteractionHistory from '../interaction-history';
 import CompletionService from './completion-service';
-import { FileUpdate } from './file-update-service';
 import { ChatHistory, ClientRequest } from '../navie';
 import Message from '../message';
 import Oracle from '../lib/oracle';
 import parseJSON from '../lib/parse-json';
+import { FileUpdate } from '../file-update';
 
 const LIST_PROMPT = `**File Name List Extractor**
 
@@ -61,6 +61,8 @@ export default class FileChangeExtractorService {
     return parseJSON(fileList) as string[];
   }
 
+  // Extract <change> tags from the messages. Sort into reverse order, so that the most
+  // recently emitted tags are primary.
   extractFile(
     clientRequest: ClientRequest,
     chatHistory: ChatHistory | undefined,
@@ -72,8 +74,6 @@ export default class FileChangeExtractorService {
       return undefined;
     }
 
-    // Extract <change> tags from the messages. Sort into reverse order, so that the most
-    // recently emitted tags are primary.
     const content = FileChangeExtractorService.collectContent(messages);
     const changes = FileChangeExtractorService.extractChanges(content).reverse();
 
