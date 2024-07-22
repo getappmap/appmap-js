@@ -111,12 +111,19 @@ which is integrated into the project.
   [PromptType.CodeSnippet]: {
     content: `**Code snippets**
 
-You're provided with code snippets that are relevant to the task. 
+You're provided with code snippets that are relevant to the task.
 
 Sequence diagrams, if available, provide more context about how each code snippet is used in the overall program.
 
 Each code snippet begins with the file name and line number where the code is located,
 followed by the code itself.
+
+When referencing a code snippet in your response, provide the file name as an HTML block comment before the code block.
+This specific comment directive will give the user the ability to apply to code snippet automatically. Example:
+<!-- file: app/models/user.rb -->
+\`\`\`ruby
+# some code
+\`\`\`
 `,
     tagName: 'code-snippet',
     multiple: true,
