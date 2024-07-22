@@ -278,11 +278,6 @@ export interface InteractionHistoryEvents {
   on(event: 'event', listener: (event: InteractionEvent) => void): void;
 }
 
-// Used for sorting events when building the state.
-function scoreEvent(event: InteractionEvent) {
-  return event.type === 'contextItem' ? 1 : 0;
-}
-
 export default class InteractionHistory extends EventEmitter implements InteractionHistoryEvents {
   public readonly events: InteractionEvent[] = [];
 
