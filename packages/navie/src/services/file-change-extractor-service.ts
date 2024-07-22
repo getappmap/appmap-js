@@ -7,6 +7,7 @@ import Message from '../message';
 import Oracle from '../lib/oracle';
 import parseJSON from '../lib/parse-json';
 import { FileUpdate } from '../file-update';
+import { Update } from './compute-update-service';
 
 const LIST_PROMPT = `**File Name List Extractor**
 
@@ -87,10 +88,10 @@ export default class FileChangeExtractorService {
     this.history.log(
       `[file-change-extractor] ${fileChanges.length} suggested changes found for ${fileName}`
     );
-    return fileChanges;
+    return fileChanges.map((u) => ({ original: u.original, modified: u.modified, file: fileName }));
   }
 
-  static extractChanges(content: string): FileUpdate[] {
+  static extractChanges(content: string): (Update & { file?: string })[] {
     // Search for <change> tags
     const changeRegex = /<change>([\s\S]*?)<\/change>/gi;
     let match: RegExpExecArray | null;
@@ -108,7 +109,7 @@ export default class FileChangeExtractorService {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const jObj = parser.parse(change);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      if (jObj && jObj.file && jObj.original && jObj.modified) {
+      if (jObj && jObj.original && jObj.modified) {
         const update = jObj as FileUpdate;
         update.original = trimChange(update.original);
         update.modified = trimChange(update.modified);
