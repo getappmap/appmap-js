@@ -1,5 +1,3 @@
-import assert from 'assert';
-
 import { SearchRpc } from '@appland/rpc';
 import { RpcHandler } from '../rpc';
 import AppMapIndex, { SearchResponse } from '../../fulltext/AppMapIndex';

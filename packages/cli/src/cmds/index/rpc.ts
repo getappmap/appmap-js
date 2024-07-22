@@ -23,6 +23,7 @@ import {
   setConfigurationV2,
 } from '../../rpc/configuration';
 import detectCodeEditor from '../../lib/detectCodeEditor';
+import { update } from '../../rpc/file/update';
 
 export const command = 'rpc';
 export const describe = 'Run AppMap JSON-RPC server';
@@ -71,6 +72,7 @@ export const handler = async (argv: HandlerArguments) => {
     sequenceDiagram(),
     explainHandler(navie, codeEditor),
     explainStatusHandler(),
+    update(navie),
     setConfigurationV1(),
     getConfigurationV1(),
     setConfigurationV2(),
