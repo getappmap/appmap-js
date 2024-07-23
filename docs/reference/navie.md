@@ -14,10 +14,15 @@ step: 3
   - [`@plan`](#plan)
   - [`@generate`](#generate)
   - [`@test`](#test)
+  - [`@plan`](#plan)
+  - [`@generate`](#generate)
+  - [`@test`](#test)
   - [`@explain`](#explain)
+  - [`@diagram`](#diagram)
   - [`@diagram`](#diagram)
   - [`@help`](#help)
 - [Bring Your Own Model Examples](#bring-your-own-model-examples)
+  - [GitHub Copilot Language Model](#github-copilot-language-model)
   - [OpenAI](#openai)
   - [Azure OpenAI](#azure-openai)
   - [AnyScale Endpoints](#anyscale-endpoints)
@@ -43,6 +48,9 @@ You can ask free-form questions, or start your question with one of these comman
 - [`@plan`](#plan)
 - [`@generate`](#generate)
 - [`@test`](#test)
+- [`@plan`](#plan)
+- [`@generate`](#generate)
+- [`@test`](#test)
 - [`@explain`](#explain)
 - [`@help`](#help)
 
@@ -56,9 +64,9 @@ plan.
 
 #### Examples <!-- omit in toc -->
 
-- @plan create a plan to improve the performance of my slow product listing page.
-- @plan create a plan to implement a cache key for my user posting on my social media application.
-- @plan design a plan to migrate the /users/setting API endpoint from SQL to MongoDB.
+- @plan improve the performance of my slow product listing page.
+- @plan implement a cache key for my user posting on my social media application.
+- @plan migrate the /users/setting API endpoint from SQL to MongoDB.
 
 ### `@generate`
 
@@ -136,6 +144,64 @@ advanced AppMap topics.
 - @help how can i export my AppMap data to atlassian confluence?
 
 ## Bring Your Own Model Examples
+
+### GitHub Copilot Language Model
+
+Starting with VS Code `1.91` and greater, and with an active GitHub Copilot subscription, you can
+use Navie with the Copilot Language Model as a supported backend model. This allows you to leverage
+the powerful runtime powered Navie AI Architect with your existing Copilot subscription. This is the
+recommended option for users in corporate environments where Copilot is the only approved and
+supported language model.
+
+#### Requirements <!-- omit in toc -->
+
+The following items are required to use the GitHub Copilot Language Model with Navie:
+
+- VS Code Version `1.91` or greater
+- AppMap Extension version `v0.123.0` or greater
+- GitHub Copilot VS Code extension must be installed
+- Signed into an active paid or trial GitHub Copilot subscription
+
+#### Setup <!-- omit in toc -->
+
+Open the VS Code Settings, and search for `navie vscode`
+
+<img class="video-screenshot" src="/assets/img/product/navie-copilot-1.webp"/>
+
+Click the box to use the `VS Code language model...`
+
+After clicking the box to enable the VS Code LM, you'll be instructed to reload your VS Code to
+enable these changes.
+
+<img class="video-screenshot" src="/assets/img/product/navie-copilot-2.webp"/>
+
+After VS Code finishes reloading, open the AppMap extension.
+
+Select `New Navie Chat`, and confirm the model listed is `(via copilot)`
+
+<img class="video-screenshot" src="/assets/img/product/navie-copilot-3.webp"/>
+
+You'll need to allow the AppMap extension access to the Copilot Language Models. After asking your
+first question to Navie, click `Allow` to the popup to allow the necessary access.
+
+<img class="video-screenshot" src="/assets/img/product/navie-copilot-4.webp"/>
+
+#### Troubleshooting <!-- omit in toc -->
+
+If you attempt to enable the Copilot language models without the Copilot Extension installed, you'll
+see the following error in your code editor.
+
+<img class="video-screenshot" src="/assets/img/product/navie-copilot-5.webp"/>
+
+Click `Install Copilot` to complete the installation for language model support.
+
+If you have the Copilot extension installed, but have not signed in, you'll see the following
+notice.
+
+<img class="video-screenshot" src="/assets/img/product/navie-copilot-6.webp"/>
+
+Click the `Sign in to GitHub` and login with an account that has a valid paid or trial GitHub
+Copilot subscription.
 
 ### OpenAI
 
