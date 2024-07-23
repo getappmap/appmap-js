@@ -14,11 +14,7 @@ step: 3
   - [`@plan`](#plan)
   - [`@generate`](#generate)
   - [`@test`](#test)
-  - [`@plan`](#plan)
-  - [`@generate`](#generate)
-  - [`@test`](#test)
   - [`@explain`](#explain)
-  - [`@diagram`](#diagram)
   - [`@diagram`](#diagram)
   - [`@help`](#help)
 - [Bring Your Own Model Examples](#bring-your-own-model-examples)
@@ -48,56 +44,8 @@ You can ask free-form questions, or start your question with one of these comman
 - [`@plan`](#plan)
 - [`@generate`](#generate)
 - [`@test`](#test)
-- [`@plan`](#plan)
-- [`@generate`](#generate)
-- [`@test`](#test)
 - [`@explain`](#explain)
 - [`@help`](#help)
-
-### `@plan`
-
-The `@plan` command prefix within Navie focuses the AI response on building a detailed
-implementation plan for the relevant query. This will focus Navie on only understanding the problem
-and the application to generate a step-by-step plan. This will generally not respond with code
-implementation details, consider using the `@generate` command which can implement code based on the
-plan.
-
-#### Examples <!-- omit in toc -->
-
-- @plan improve the performance of my slow product listing page.
-- @plan implement a cache key for my user posting on my social media application.
-- @plan migrate the /users/setting API endpoint from SQL to MongoDB.
-
-### `@generate`
-
-The `@generate` prefix will focus the Navie AI response to optimize for new code creation. This is
-useful when you want the Navie AI to respond with code implementations across your entire code base.
-This will reduce the amount of code explanation and generally the AI will respond only with the
-specific files and functions that need to be changed in order to implement a specific plan.
-
-#### Examples <!-- omit in toc -->
-
-- @generate Using the django-simple-captcha library add the necessary code for an offline captcha to
-  my new user registration page.
-- @generate Update the function for the physical flow export to include data type via
-  physical_spec_data_type and physical_specification tables without changing the existing
-  functionality.
-- @generate Design and implement a cache key for user posts and show me how to implement it within
-  this code base
-
-### `@test`
-
-The `@test` command prefix will focus the Navie AI response to optimize for test case creation, such
-as unit testing or integration testing. This prefix will understand how your tests are currently
-written and provide updated tests based on features or code that is provided. You can use this
-command along with the `@generate` command to create tests cases for newly generated code.
-
-#### Examples <!-- omit in toc -->
-
-- @test create integration test cases for the user setting page that is migrated to mongodb.
-- @test create unit and integration tests that fully support the updated cache key functionality.
-- @test provide detailed test cases examples for testing the updated user billing settings
-  dashboard.
 
 ### `@explain`
 
@@ -243,7 +191,7 @@ recommend using Mixtral models with Navie.
 ### Fireworks AI
 
 You can use [Fireworks AI](https://fireworks.ai/) and their serverless or on-demand models as a
-compatable backend for AppMap Navie AI.
+compatible backend for AppMap Navie AI.
 
 After creating an account on Fireworks AI you can configure your Navie environment settings:
 
