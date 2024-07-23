@@ -10,10 +10,17 @@ redirect_from: [/docs/setup-appmap-in-your-code-editor/navie-ai-quickstart]
 
 # AppMap Navie AI Quickstart
 
+- [Choose your AI Provider (Optional)](#choose-your-ai-provider-optional)
 - [Open AppMap Navie AI](#open-appmap-navie-ai)
 - [Ask Navie about your App](#ask-navie-about-your-app)
 - [Improve Navie AI Responses with AppMap Data](#improve-navie-ai-responses-with-appmap-data)
 - [Next Steps](#next-steps)
+
+## Choose your AI Provider (Optional)
+
+By default, Navie uses an AppMap proxy of the latest OpenAI supported AI models. If you would like to customize your own model, you can leverage a variety of other AI model providers such as [Azure OpenAI](https://appmap.io/docs/reference/navie#azure-openai), [Fireworks.ai](https://appmap.io/docs/reference/navie#fireworks-ai), [LM Studio](https://appmap.io/docs/reference/navie#lm-studio), and more.  
+
+If you have an active GitHub Copilot subscription, you can use Navie with the [Copilot Lanauage Model](/docs/reference/navie#github-copilot-language-model) as a supported backend. Refer to the Navie Copilot documentation for instructions on how to enable.
 
 ## Open AppMap Navie AI
 

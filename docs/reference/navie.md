@@ -10,13 +10,18 @@ step: 3
 
 # AppMap Navie AI
 - [Advanced Navie Commands](#advanced-navie-commands)
-  - [`@explain`](#explain)
-  - [`@help`](#help)
+  - [`@plan`](#plan)
   - [`@generate`](#generate)
+  - [`@test`](#test)
+  - [`@explain`](#explain)
+  - [`@diagram`](#diagram)
+  - [`@help`](#help)
 - [Bring Your Own Model Examples](#bring-your-own-model-examples)
+  - [GitHub Copilot Language Model](#github-copilot-language-model)
   - [OpenAI](#openai)
   - [Azure OpenAI](#azure-openai)
   - [AnyScale Endpoints](#anyscale-endpoints)
+  - [Fireworks AI](#fireworks-ai)
   - [Ollama](#ollama)
   - [LM Studio](#lm-studio)
 - [OpenAI Key Management in VS Code](#openai-key-management-in-vs-code)
@@ -35,9 +40,42 @@ step: 3
 
 You can ask free-form questions, or start your question with one of these commands:
 
+- [`@plan`](#plan)
+- [`@generate`](#generate)
+- [`@test`](#test)
 - [`@explain`](#explain)
 - [`@help`](#help)
-- [`@generate`](#generate)
+
+
+### `@plan`
+
+The `@plan` command prefix within Navie focuses the AI response on building a detailed implementation plan for the relevant query.  This will focus Navie on only understanding the problem and the application to generate a step-by-step plan. This will generally not respond with code implementation details, consider using the `@generate` command which can implement code based on the plan.
+
+#### Examples <!-- omit in toc -->
+
+- @plan improve the performance of my slow product listing page.  
+- @plan implement a cache key for my user posting on my social media application.  
+- @plan migrate the /users/setting API endpoint from SQL to MongoDB.  
+
+### `@generate`
+
+The `@generate` prefix will focus the Navie AI response to optimize for new code creation.  This is useful when you want the Navie AI to respond with code implementations across your entire code base. This will reduce the amount of code explanation and generally the AI will respond only with the specific files and functions that need to be changed in order to implement a specific plan.
+
+#### Examples <!-- omit in toc -->
+
+- @generate Using the django-simple-captcha library add the necessary code for an offline captcha to my new user registration page.
+- @generate Update the function for the physical flow export to include data type via physical_spec_data_type and physical_specification tables without changing the existing functionality.
+- @generate Design and implement a cache key for user posts and show me how to implement it within this code base
+
+### `@test`
+
+The `@test` command prefix will focus the Navie AI response to optimize for test case creation, such as unit testing or integration testing.  This prefix will understand how your tests are currently written and provide updated tests based on features or code that is provided.  You can use this command along with the `@generate` command to create tests cases for newly generated code.
+
+#### Examples <!-- omit in toc -->
+
+- @test create integration test cases for the user setting page that is migrated to mongodb.  
+- @test create unit and integration tests that fully support the updated cache key functionality.  
+- @test provide detailed test cases examples for testing the updated user billing settings dashboard.  
 
 ### `@explain`
 
@@ -49,6 +87,16 @@ The `@explain` command prefix within Navie serves as a default option focused on
 - @explain how is the export request for physical flows handled, and what are the tables involved?
 - @explain how does the products listing page works and how can I improve the performance?
 
+### `@diagram`
+
+The `@diagram` command prefix within Navie focuses the AI response to generate Mermaid compatable diagrams.  [Mermaid](https://mermaid.js.org/) is an open source diagramming and charting utility with wide support across tools such as GitHub, Atlassian, and more.  Use the `@diagram` command, and Navie will create and render a Mermaid compatable diagram within the Navie chat window.  You can open this diagram in the [Mermaid Live Editor](https://mermaid.live), copy the Mermaid Definitions to your clipboard, save to disk, or expand a full window view.  Save the Mermaid diagram into any supported tool such as GitHub Issues, Atlassian Confluence, and more. 
+
+#### Examples <!-- omit in toc -->
+
+- @diagram how my user authentication works for the /admin API endpoint.
+- @diagram the plan to implement a caching layer into my SQL database access.
+- @diagram the relationship between the physical_flow, physical_specification, physical_spec_data_type data types.
+
 ### `@help`
 
 Navie will help you setup AppMap, including generating AppMap recordings and diagrams.  This prefix will focus the Navie AI response to be more specific towards help with using AppMap products and features.  This will leverage the [AppMap documentation](https://appmap.io/docs) as part of the context related to your question and provide guidance for using AppMap features or diving into advanced AppMap topics. 
@@ -59,18 +107,56 @@ Navie will help you setup AppMap, including generating AppMap recordings and dia
 - @help how can I reduce the size of my large AppMap Data recordings?
 - @help how can i export my AppMap data to atlassian confluence? 
 
-
-### `@generate`
-
-The `@generate` prefix will focus the Navie AI response to optimize for new code creation.  This is useful when you want the Navie AI to respond with code implementations across your entire code base. This is useful for both creation of new code as well as creation of test cases. 
-
-#### Examples <!-- omit in toc -->
-
-- @generate Using the django-simple-captcha library add the necessary code for an offline captcha to my new user registration page.
-- @generate Update the function for the physical flow export to include data type via physical_spec_data_type and physical_specification tables without changing the existing functionality.
-- @generate Design and implement a cache key for user posts and show me how to implement it within this code base
-
 ## Bring Your Own Model Examples
+
+### GitHub Copilot Language Model
+
+Starting with VS Code `1.91` and greater, and with an active GitHub Copilot subscription, you can use Navie with the Copilot Language Model as a supported backend model.  This allows you to leverage the powerful runtime powered Navie AI Architect  with your existing Copilot subscription.  This is the recommended option for users in corporate environments where Copilot is the only approved and supported language model. 
+
+#### Requirements <!-- omit in toc -->
+
+The following items are required to use the GitHub Copilot Language Model with Navie:
+
+- VS Code Version `1.91` or greater
+- AppMap Extension version `v0.123.0` or greater
+- GitHub Copilot VS Code extension must be installed
+- Signed into an active paid or trial GitHub Copilot subscription
+
+#### Setup <!-- omit in toc -->
+
+Open the VS Code Settings, and search for `navie vscode`
+
+<img class="video-screenshot" src="/assets/img/product/navie-copilot-1.webp"/> 
+
+Click the box to use the `VS Code language model...`
+
+After clicking the box to enable the VS Code LM, you'll be instructed to reload your VS Code to enable these changes.
+
+<img class="video-screenshot" src="/assets/img/product/navie-copilot-2.webp"/> 
+
+After VS Code finishes reloading, open the AppMap extension.  
+
+Select `New Navie Chat`, and confirm the model listed is `(via copilot)`
+
+<img class="video-screenshot" src="/assets/img/product/navie-copilot-3.webp"/> 
+
+You'll need to allow the AppMap extension access to the Copilot Language Models.  After asking your first question to Navie, click `Allow` to the popup to allow the necessary access. 
+
+<img class="video-screenshot" src="/assets/img/product/navie-copilot-4.webp"/> 
+
+#### Troubleshooting <!-- omit in toc -->
+
+If you attempt to enable the Copilot language models without the Copilot Extension installed, you'll see the following error in your code editor. 
+
+<img class="video-screenshot" src="/assets/img/product/navie-copilot-5.webp"/> 
+
+Click `Install Copilot` to complete the installation for language model support.
+
+If you have the Copilot extension installed, but have not signed in, you'll see the following notice.
+
+<img class="video-screenshot" src="/assets/img/product/navie-copilot-6.webp"/> 
+
+Click the `Sign in to GitHub` and login with an account that has a valid paid or trial GitHub Copilot subscription.
 
 ### OpenAI
 
@@ -105,6 +191,21 @@ setting:
 
 Consult [AnyScale documentation](https://docs.endpoints.anyscale.com/) for model
 names. Note we recommend using Mixtral models with Navie.
+
+### Fireworks AI
+
+You can use [Fireworks AI](https://fireworks.ai/) and their serverless or on-demand 
+models as a compatible backend for AppMap Navie AI.
+
+After creating an account on Fireworks AI you can configure your Navie environment
+settings:
+
+| `OPENAI_API_KEY` | `WBYq2mKlK8I16ha21k233k2EwzGAJy3e0CLmtNZadJ6byfpu7c` |
+| `OPENAI_BASE_URL` | `https://api.fireworks.ai/inference/v1` |
+| `APPMAP_NAVIE_MODEL` | `accounts/fireworks/models/mixtral-8x22b-instruct` |
+
+Consult the [Fireworks AI documentation](https://fireworks.ai/models) for a full list of 
+the available models they currently support. 
 
 ### Ollama
 
@@ -151,6 +252,8 @@ Continue to configure your local environment with the following environment vari
 | `APPMAP_NAVIE_MODEL` | `Meta-Llama-3-8B-Instruct-imatrix` |
 
 **Note:** Even though it's running locally a dummy placeholder API key is still required.
+
+{% include vimeo.html id='969002308' %}
 
 ## OpenAI Key Management in VS Code
 

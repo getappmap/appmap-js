@@ -12,72 +12,18 @@ redirect_from: [/docs/navie/bring-your-own-llm, /docs/navie/bring-your-own-key]
 # Bring Your Own LLM Model
 
 By default, when asking a question to Navie, your code editor will interact with the AppMap hosted proxy for OpenAI.  If you have a requirement to bring your own key or otherwise use your own OpenAI account you can specify your own OpenAI key; this will cause Navie to connect to OpenAI directly, without AppMap proxy acting as an intermediate.
-- [Navie AI Recommended Models](#navie-ai-recommended-models)
+
+You can also use any OpenAI API compatible LLM model either running locally or via a 3rd party provider.  Finally, for VS Code users with an active GitHub Copilot subscription, you can leverage the Copilot Language Models as a supported Navie backend.  Refer to the [Navie docs for more examples](/docs/reference/navie#bring-your-own-model-examples) of using alternative language models. 
 - [Bring Your Own OpenAI API Key (BYOK)](#bring-your-own-openai-api-key-byok)
-  - [Configuring Your OpenAI Key](#configuring-your-openai-key)
-    - [Modify which OpenAI Model to use](#modify-which-openai-model-to-use)
-  - [Reset Navie AI to use Default Navie Backend](#reset-navie-ai-to-use-default-navie-backend)
 - [Bring Your Own Model (BYOM)](#bring-your-own-model-byom)
-  - [Configuration](#configuration)
-  - [Configuring in JetBrains](#configuring-in-jetbrains)
-  - [Configuring in VS Code](#configuring-in-vs-code)
+- [Using GitHub Copilot Language Models](#using-github-copilot-language-models)
 - [Examples](#examples)
-
-## Navie AI Recommended Models
-
-<p class="alert alert-danger">
-AppMap Navie AI recommends avoiding models that do not support chat mode.
-</p>
-
-<table class="table table-striped table-bordered black-white-table">
-  <tr>
-    <tr>
-      <th class="large-header">Navie AI Backend LLM</th>
-      <th class="large-header">Ease of Setup</th>
-      <th class="large-header">Quality of Responses</th>
-  </tr>
-  <tr>
-    <tr>
-      <td>AppMap OpenAI Proxy (default)</td>
-      <td>⭐⭐⭐⭐⭐</td>
-      <td>⭐⭐⭐⭐⭐</td>
-  </tr>
-  <tr>
-    <tr>
-      <td>Self Managed OpenAI API Key</td>
-      <td>⭐⭐⭐⭐</td>
-      <td>⭐⭐⭐⭐⭐</td>
-  </tr>
-      <tr>
-      <td>Azure Hosted OpenAI</td>
-      <td>⭐⭐⭐</td>
-      <td>⭐⭐⭐⭐⭐</td>
-  </tr>
-  </tr>
-      <tr>
-      <td>Anyscale Hosted Mixtral-8x7B</td>
-      <td>⭐⭐⭐</td>
-      <td>⭐⭐⭐</td>
-  </tr>
-  </tr>
-      <tr>
-      <td>Locally Hosted Mixtral-8x7B-Instruct-v0.1</td>
-      <td>⭐⭐</td>
-      <td>⭐⭐⭐</td>
-  </tr>
-  </tr>
-      <tr>
-      <td>Codellama/Codeqwen</td>
-      <td>❌ Not Supported</td>
-      <td>❌ Not Supported</td>
-  </tr>
-</table>
 
 ## Bring Your Own OpenAI API Key (BYOK)
 
 Navie AI uses the AppMap hosted proxy with an AppMap managed OpenAI API key. If you have requirements to use your existing OpenAI API key, you can configure that within AppMap. This will ensure all Navie requests will be interacting with your own OpenAI account. 
 
-### Configuring Your OpenAI Key
+### Configuring Your OpenAI Key <!-- omit in toc -->
 
 In your code editor, open the Navie Chat window. If the model displays `(default)`, this means that Navie is configured to use the AppMap hosted OpenAI proxy.  Click on the gear icon in the top of the Navie Chat window to change the model. 
 
@@ -101,7 +47,7 @@ After your code editor reloads, you can confirm your requests are being routed t
 
 ![OpenAI location](/assets/img/product/navie-byok-openai-3.webp)
 
-#### Modify which OpenAI Model to use
+#### Modify which OpenAI Model to use <!-- omit in toc -->
 
 AppMap generally uses the latest OpenAI models as the default, but if you want to use an alternative model like `gpt-3.5` or a preview model like `gpt-4-vision-preview` you can modify the `APPMAP_NAVIE_MODEL` environment variable after configuring your own OpenAI API key to use other OpenAI models.  
 
@@ -109,7 +55,7 @@ After setting your `APPMAP_NAVIE_MODEL` with your chosen model reload/restart yo
 
 ![JetBrains OpenAI key modal](/assets/img/product/custom-model.webp)
 
-### Reset Navie AI to use Default Navie Backend
+### Reset Navie AI to use Default Navie Backend <!-- omit in toc -->
 
 At any time, you can unset your OpenAI API Key and revert usage back to using the AppMap hosted OpenAI proxy.  Select the gear icon in the Navie Chat window and select `Use Navie Backend` in the modal. 
 
@@ -118,15 +64,13 @@ At any time, you can unset your OpenAI API Key and revert usage back to using th
 ## Bring Your Own Model (BYOM)
 
 <p class="alert alert-info">
-<b>This feature is in early access.</b> We currently recommend GPT4-Turbo from OpenAI via OpenAI or Microsoft Azure, and Mixtral-8x7B-Instruct-v0.1.  Refer to the <a href="/docs/navie/bring-your-own-model.html#navie-ai-recommended-models">AppMap Recommended Models documentation</a> for more info
+  <b>This feature is in early access.</b>
+  We recommend choosing a model that is trained on a large corpus of both human-written natural language and code.
 </p>
 
-Another option is to use a different LLM entirely; you can use any OpenAI-compatible model 
-running either locally or remotely. When configured like this, as in the BYOK case,
-Navie won't contact the AppMap hosted proxy and your conversations will stay private
-between you and the model.
+Navie currently supports any OpenAI-compatible model running locally or remotely. When configured like this, as in the BYOK case, Navie won't contact the AppMap hosted proxy and your conversations will stay private between you and the model provider.
 
-### Configuration
+### Configuration <!-- omit in toc -->
 
 In order to configure Navie for your own LLM, certain environment variables need to be set for AppMap services.
 
@@ -148,7 +92,7 @@ For Azure OpenAI, you need to [create a deployment](https://learn.microsoft.com/
 [Configuring in JetBrains](#configuring-byom-in-jetbrains)  
 [Configuring in VS Code](#configuring-byom-in-vs-code)
 
-### Configuring in JetBrains
+### Configuring in JetBrains <!-- omit in toc -->
 
 In JetBrains, go to settings.
 
@@ -171,7 +115,7 @@ After reloading you can confirm the model is configured correctly in the Navie C
 
 <img class="video-screenshot" src="/assets/img/product/navie-confirm-ui-jetbrains.webp"/>
 
-### Configuring in VS Code
+### Configuring in VS Code <!-- omit in toc -->
 
 #### Editing AppMap services environment <!-- omit in toc -->
 
@@ -192,6 +136,31 @@ Reload your VS Code for the changes to take effect.
 After reloading you can confirm the model is configured correctly in the Navie Chat window.
 
 <img class="video-screenshot" src="/assets/img/product/navie-confirm-ui-vscode.webp"/>
+
+## Using GitHub Copilot Language Models
+
+Starting with VS Code `1.91` and greater, and with an active GitHub Copilot subscription, you can use Navie with the Copilot Language Model as a supported LLM backend.  This allows you to leverage the powerful runtime powered Navie AI Architect with your existing Copilot subscription.  This is the recommended option for users in corporate environments where Copilot is the only approved and supported language model. 
+
+### Requirements <!-- omit in toc -->
+
+The following items are required to use the GitHub Copilot Language Model with Navie:
+
+- VS Code Version `1.91` or greater
+- AppMap Extension version `v0.123.0` or greater
+- GitHub Copilot VS Code extension must be installed
+- Signed into an active paid or trial GitHub Copilot subscription
+
+#### Setup <!-- omit in toc -->
+
+Open the VS Code Settings, and search for `navie vscode`
+
+<img class="video-screenshot" src="/assets/img/product/navie-copilot-1.webp"/> 
+
+Click the box to use the `VS Code language model...`
+
+After clicking the box to enable the VS Code LM, you'll be instructed to reload your VS Code to enable these changes.
+
+For more details about using the GitHub Copilot Language Model as a supported Navie backend, refer to the [Navie reference guide](/docs/reference/navie.html#github-copilot-language-model)
 
 ## Examples
 

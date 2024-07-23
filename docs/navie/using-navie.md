@@ -12,6 +12,7 @@ redirect_from: [/docs/guides/navie-best-practices]
 
 - [User Interface](#user-interface)
 - [Basic Layout](#basic-layout)
+- [Navie Advanced Commands](#navie-advanced-commands)
 - [Navie Best Practices](#navie-best-practices)
   - [Create AppMap Data](#create-appmap-data)
   - [Ask Navie](#ask-navie)
@@ -45,14 +46,24 @@ The Navie user interface consists of 5 key areas.
  section.  
 </ol>
 
+## Navie Advanced Commands
+
+Navie supports a variety of `@` prefixed commands you can use at the beginning of any question you ask. For example, you can use the `@plan` command to focus the Navie AI response to build a detailed architecture plan for a new feature. You can use the `@generate` command to create code to implement a Navie AI created plan.  Navie supports a growing list of advanced commands which focus the AI responses towards completing the specific task requested. 
+
+For more detailed documentation about the available Navie prefix commands available, refer to the [Navie Reference Documentation for Advanced Commands](https://appmap.io/docs/reference/navie.html#advanced-navie-commands).
+
 ## Navie Best Practices
 
 To generate the highest quality responses from Navie, we recommend the following approach. 
 
-- [Create AppMap Data](#create-appmap-data)
-- [Ask Navie](#ask-navie)
-- [Write Code](#write-code)
-- [Repeat](#repeat)
+- [User Interface](#user-interface)
+- [Basic Layout](#basic-layout)
+- [Navie Advanced Commands](#navie-advanced-commands)
+- [Navie Best Practices](#navie-best-practices)
+  - [Create AppMap Data](#create-appmap-data)
+  - [Ask Navie](#ask-navie)
+  - [Implement Generated Code](#implement-generated-code)
+  - [Repeat](#repeat)
 
 ### Create AppMap Data
 

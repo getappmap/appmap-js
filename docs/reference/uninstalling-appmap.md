@@ -11,15 +11,16 @@ step: 19
 # Uninstalling AppMap
 AppMap consists of several components, each of which may require a different uninstall approach depending on what changes were made to your applications during installation.
 
-- [Uninstalling AppMap](#uninstalling-appmap)
-  - [Uninstalling AppMap IDE Plugins](#uninstalling-appmap-ide-plugins)
-    - [Uninstalling the AppMap VS Code Extension](#uninstalling-the-appmap-vs-code-extension)
-    - [Uninstalling the AppMap JetBrains Plugin](#uninstalling-the-appmap-jetbrains-plugin)
-  - [Removing AppMap libraries from your application](#removing-appmap-libraries-from-your-application)
-    - [Ruby](#ruby)
-    - [Java](#java)
-    - [Python](#python)
-  - [Removing AppMap-generated files from your project](#removing-appmap-generated-files-from-your-project)
+- [Uninstalling AppMap IDE Plugins](#uninstalling-appmap-ide-plugins)
+  - [Uninstalling the AppMap VS Code Extension](#uninstalling-the-appmap-vs-code-extension)
+  - [Uninstalling the AppMap JetBrains Plugin](#uninstalling-the-appmap-jetbrains-plugin)
+- [Removing AppMap libraries from your application](#removing-appmap-libraries-from-your-application)
+  - [Ruby](#ruby)
+  - [Java](#java)
+  - [Python](#python)
+  - [Node.js](#nodejs)
+- [Removing AppMap-generated files from your project](#removing-appmap-generated-files-from-your-project)
+- [Removing Temporary AppMap Local Working Directories](#removing-temporary-appmap-local-working-directories)
 
 ## Uninstalling AppMap IDE Plugins
 
@@ -51,7 +52,7 @@ Please note that even after uninstalling the IDE plugin, your project may still 
 ## Removing AppMap libraries from your application
 Removing AppMap from your application typically involves removing the AppMap library from your project's dependencies. Language-specific instructions on how to do this are below.
 
-### Ruby
+### Ruby 
 Use the `bundle` command to remove the AppMap library from your project:
 
 {: .example-code}
@@ -117,3 +118,12 @@ Finally, remove any generated AppMap files from your project:
 ```console
 $ rm -r tmp/appmap
 ```
+
+## Removing Temporary AppMap Local Working Directories
+
+When installing the AppMap Extension for VS Code or JetBrains, AppMap will create a `$HOME/.appmap` folder 
+to store downloaded CLI binaries, jar files, local Navie chat history, and any other data necessary for 
+AppMap to operate.
+
+After you uninstall the AppMap extension for your code editor, you can safely delete the `$HOME/.appmap` directory 
+and all the data within. 

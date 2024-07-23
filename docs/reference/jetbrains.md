@@ -39,7 +39,7 @@ AppMap tool window actions:
 
 ## "Start with AppMap" for Java
 
-**NOTE:** This section only applies to Java applications.
+<div class="alert alert-info">This section only applies to Java applications.</div>
 
 Installing the AppMap JetBrains plugin adds custom buttons and menu options to the JetBrains editor interface. These can be used to run your Java application code with AppMap automatically configured, saving you from manually changing your Maven or Gradle settings. This is the recommended approach for all Java users using JetBrains editors like IntelliJ.
 
@@ -50,6 +50,23 @@ For example, if you right click on your main class file you'll see a new menu it
 You can also use this custom button to run a specific test or group of tests with the `Start with AppMap` option. Similar to above, right click on a single test or a group of tests and use the custom button under "More Run/Debug" to `Start with AppMap`.
 
 <img class="intellij-screenshot" src="/assets/img/jetbrains-run-test-with-appmap.webp"/>
+
+### "Start with AppMap" button
+
+Use the "Start with AppMap" button to start your run configurations with AppMap enabled.
+
+For JetBrains versions ***2024.1 and earlier*** the "Start with AppMap" button is in the main toolbar. 
+
+<img class="intellij-screenshot" src="/assets/img/appmap-icon-in-main-toolbar.png"/>
+
+For JetBrains versions ***2024.2 and later*** the "Start with AppMap" button is located in a dropdown menu, accessible by clicking on the vertical dots.
+
+<img class="intellij-screenshot" src="/assets/img/jetbrains-new-ui-dot-menu.png"/>
+
+
+### Demo video: Recording AppMap Data from a Java application
+
+
 
 {% include vimeo.html id='916087828' %}
 

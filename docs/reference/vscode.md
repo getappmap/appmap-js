@@ -18,6 +18,7 @@ step: 1
 - ["Run with AppMap" for Java](#run-with-appmap-for-java)
 - [Extension actions](#extension-actions)
 - [Remote recording](#remote-recording)
+- [Integration with GitHub Codespaces](#integration-with-github-codespaces)
 - [Generate OpenAPI Definitions](#generate-openapi-definitions)
 - [GitHub repository](#github-repository)
 
@@ -52,7 +53,7 @@ All the HTTP server requests, SQL queries, packages, classes, and functions that
 
 ## "Run with AppMap" for Java
 
-**NOTE:** This section only applies to Java applications.
+<div class="alert alert-info">This section only applies to Java applications.</div>
 
 Installing the AppMap VC Code plugin adds a default [Launch Configuration](https://code.visualstudio.com/docs/editor/debugging) which supports the integrated VS Code debugger. These can be used to run your Java application code with AppMap automatically configured, saving you from manually changing your Maven or Gradle settings. This is the recommended approach for all Java users using the VS Code editor.
 
@@ -109,6 +110,14 @@ For more details about remote recording, see:
 
 * [Recording methods > Remote recording](../recording-methods#remote-recording)
 * [Remote recording API](../reference/remote-recording-api)
+
+## Integration with GitHub Codespaces
+
+AppMap for VS Code supports GitHub Codespaces or other remote development environments.  Currently AppMap only supports GitHub Codespaces natively in the VS Code Editor and not in the GitHub Web Based editor.
+
+Learn more about AppMap in GitHub Codespaces:
+
+{% include vimeo.html id='967812459' %}
 
 ## Generate OpenAPI Definitions
 
