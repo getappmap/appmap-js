@@ -24,6 +24,7 @@ import {
 } from '../../rpc/configuration';
 import detectCodeEditor from '../../lib/detectCodeEditor';
 import { update } from '../../rpc/file/update';
+import { INavieProvider } from '../../rpc/explain/navie/inavie';
 
 export const command = 'rpc';
 export const describe = 'Run AppMap JSON-RPC server';
@@ -45,24 +46,8 @@ type HandlerArguments = yargs.ArgumentsCamelCase<
   GetArgv<ReturnType<typeof builder>> & { verbose?: boolean }
 >;
 
-export const handler = async (argv: HandlerArguments) => {
-  verbose(argv.verbose);
-
-  const navie = buildNavieProvider(argv);
-  let codeEditor: string | undefined = argv.codeEditor;
-  if (!codeEditor) {
-    codeEditor = detectCodeEditor();
-    if (codeEditor) warn(`Detected code editor: ${codeEditor}`);
-  }
-
-  loadConfiguration(false);
-  await configureRpcDirectories(argv.directory);
-
-  // WIP: Help the @apply command to resolve paths
-  if (argv.directory.length === 1) process.chdir(argv.directory[0]);
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const rpcMethods: RpcHandler<any, any>[] = [
+export function rpcMethods(navie: INavieProvider, codeEditor?: string): RpcHandler<any, any>[] {
+  return [
     search(),
     appmapStatsV1(),
     appmapStatsV2(),
@@ -78,6 +63,21 @@ export const handler = async (argv: HandlerArguments) => {
     setConfigurationV2(),
     getConfigurationV2(),
   ];
-  const rpcServer = new RPCServer(argv.port, rpcMethods);
+}
+
+export const handler = async (argv: HandlerArguments) => {
+  verbose(argv.verbose);
+
+  const navie = buildNavieProvider(argv);
+  let codeEditor: string | undefined = argv.codeEditor;
+  if (!codeEditor) {
+    codeEditor = detectCodeEditor();
+    if (codeEditor) warn(`Detected code editor: ${codeEditor}`);
+  }
+
+  loadConfiguration(false);
+  await configureRpcDirectories(argv.directory);
+
+  const rpcServer = new RPCServer(argv.port, rpcMethods(navie, codeEditor));
   rpcServer.start();
 };
