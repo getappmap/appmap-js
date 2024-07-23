@@ -119,10 +119,27 @@ Each code snippet begins with the file name and line number where the code is lo
 followed by the code itself.
 
 When referencing a code snippet in your response, provide the file name as an HTML block comment before the code block.
-This specific comment directive will give the user the ability to apply to code snippet automatically. Example:
+This specific comment directive will give the user the ability to apply to code snippet automatically. It will also render
+the file path to the user relative to their project directory. DO include the full path to the file to avoid ambiguous cases.
+
+Examples of proper citation of code snippets:
+> <!-- file: /home/user/dev/my-project/app/models/user.rb -->
+> \`\`\`ruby
+>   class User < ApplicationRecord
+>  end
+> \`\`\`
+
+Examples of incorrect citation of code snippets:
 <!-- file: app/models/user.rb -->
 \`\`\`ruby
-# some code
+  class User < ApplicationRecord
+  end
+\`\`\`
+
+\`\`\`ruby
+  # app/models/user.rb
+  class User < ApplicationRecord
+  end
 \`\`\`
 `,
     tagName: 'code-snippet',
