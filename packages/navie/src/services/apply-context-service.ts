@@ -61,11 +61,13 @@ export default class ApplyContextService {
         default:
       }
       if (promptType) {
+        const isFile = ContextV2.isFileContextItem(item);
         this.interactionHistory.addEvent(
           new ContextItemEvent(
             promptType,
             item.content,
-            ContextV2.isFileContextItem(item) ? item.location : undefined
+            isFile ? item.location : undefined,
+            isFile ? item.directory : undefined
           )
         );
       } else {
