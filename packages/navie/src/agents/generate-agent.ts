@@ -1,8 +1,15 @@
 import { Agent, AgentOptions } from '../agent';
-import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
+import { ContextV2 } from '../context';
+import InteractionHistory, {
+  ContextItemEvent,
+  PromptInteractionEvent,
+} from '../interaction-history';
 import Filter, { NopFilter } from '../lib/filter';
+import Message from '../message';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 import ContextService from '../services/context-service';
+import FileChangeExtractorService from '../services/file-change-extractor-service';
+import LookupContextService from '../services/lookup-context-service';
 
 export const GENERATE_AGENT_PROMPT = `**Task: Generation of Code and Test Cases**
 
@@ -38,7 +45,18 @@ shell commands, or other workarounds. Your solution must be suitable for use as 
 export default class GenerateAgent implements Agent {
   public temperature = undefined;
 
-  constructor(public history: InteractionHistory, private contextService: ContextService) {}
+  // TODO:
+  // Skip AppMap statistics and Project Context
+  // Skip Code Editor prompt?
+  // Remove "and Test Cases" - leave this for the @test command
+  // Incorporate this same logic into the @test command
+
+  constructor(
+    public readonly history: InteractionHistory,
+    private readonly contextService: ContextService,
+    private readonly fileChangeExtractorService: FileChangeExtractorService,
+    private readonly lookupContextService: LookupContextService
+  ) {}
 
   // eslint-disable-next-line class-methods-use-this
   newFilter(): Filter {
@@ -63,6 +81,26 @@ export default class GenerateAgent implements Agent {
     );
 
     await this.contextService.perform(options, tokensAvailable);
+
+    // Locate named file in the history and retrieve their full contents.
+    // Code generation doesn't work well if it's only presented with snippets.
+    const fileNames = await this.fileChangeExtractorService.listFiles(options, options.chatHistory);
+    if (fileNames && fileNames.length > 0) {
+      // By requesting no vectors terms and no characters, we should get named files only.
+      let context = await this.lookupContextService.lookupContext([], 0, {
+        locations: fileNames,
+      });
+      // Guard against weirdness.
+      if (!Array.isArray(context)) context = [];
+
+      for (const item of context) {
+        const contextItem = new ContextItemEvent(PromptType.CodeSnippet, item.content);
+        if (ContextV2.isFileContextItem(item)) {
+          contextItem.location = item.location;
+        }
+        this.history.addEvent(contextItem);
+      }
+    }
   }
 
   applyQuestionPrompt(question: string): void {

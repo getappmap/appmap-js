@@ -1,6 +1,7 @@
 import { ContextV2 } from './context';
 import Filter from './lib/filter';
 import { UserOptions } from './lib/parse-options';
+import { ChatHistory } from './navie';
 import { ProjectInfo } from './project-info';
 
 export enum AgentMode {
@@ -17,7 +18,7 @@ export class AgentOptions {
     public question: string,
     public aggregateQuestion: string,
     public userOptions: UserOptions,
-    public chatHistory: string[],
+    public chatHistory: ChatHistory,
     public projectInfo: ProjectInfo[],
     public codeSelection?: string,
     public contextLabels?: ContextV2.ContextLabel[]

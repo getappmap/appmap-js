@@ -19,7 +19,7 @@ export default class LookupContextService {
     tokenCount: number,
     filters: ContextV2.ContextFilters = {}
   ): Promise<ContextV2.ContextResponse> {
-    if (keywords.length === 0) {
+    if (keywords.length === 0 && !filters.locations) {
       warn('WARNING: No keywords provided');
       return [];
     }

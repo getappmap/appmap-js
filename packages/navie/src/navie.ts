@@ -99,6 +99,11 @@ export default function navie(
     helpProvider
   );
 
+  const fileChangeExtractorService = new FileChangeExtractorService(
+    interactionHistory,
+    completionService
+  );
+
   const buildExplainCommand = () => {
     const codeSelectionService = new CodeSelectionService(interactionHistory);
 
@@ -110,6 +115,7 @@ export default function navie(
       interactionHistory,
       vectorTermsService,
       lookupContextService,
+      fileChangeExtractorService,
       applyContextService,
       techStackService,
       mermaidFixerService
@@ -129,15 +135,13 @@ export default function navie(
     );
   };
 
-  const fileChangeExtractor = new FileChangeExtractorService(interactionHistory, completionService);
-
   const buildClassifyCommand = () => new ClassifyCommand(classificationService);
 
   const buildVectorTermsCommand = () => new VectorTermsCommand(vectorTermsService);
 
   const buildTechStackCommand = () => new TechStackCommand(techStackService);
 
-  const buildListFileCommand = () => new ListFilesCommand(fileChangeExtractor);
+  const buildListFileCommand = () => new ListFilesCommand(fileChangeExtractorService);
 
   const computeUpdateService = new ComputeUpdateService(interactionHistory, completionService);
 
