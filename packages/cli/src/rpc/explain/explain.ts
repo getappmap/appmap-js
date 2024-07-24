@@ -219,7 +219,7 @@ const codeSelections = new LRUCache<string, string>({
   sizeCalculation: (value) => value.length,
 });
 
-async function explain(
+export async function explain(
   navieProvider: INavieProvider,
   question: string,
   codeSelection: string | undefined,
@@ -318,6 +318,12 @@ async function explain(
   });
 }
 
+export function explainStatus(userMessageId: string): ExplainRpc.ExplainStatusResponse {
+  const searchStatus = searchStatusByUserMessageId.get(userMessageId);
+  if (!searchStatus) throw new RpcError(404, `No search request with id ${userMessageId}`);
+  return searchStatus;
+}
+
 const explainHandler: (
   navieProvider: INavieProvider,
   codeEditor: string | undefined
@@ -346,11 +352,8 @@ const explainStatusHandler: () => RpcHandler<
 > = () => {
   return {
     name: ExplainRpc.ExplainStatusFunctionName,
-    handler: async (options: ExplainRpc.ExplainStatusOptions) => {
-      const searchStatus = searchStatusByUserMessageId.get(options.userMessageId);
-      if (!searchStatus)
-        throw new RpcError(404, `No search request with id ${options.userMessageId}`);
-      return searchStatus;
+    handler: (options: ExplainRpc.ExplainStatusOptions) => {
+      return explainStatus(options.userMessageId);
     },
   };
 };

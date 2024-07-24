@@ -1,6 +1,5 @@
-<change>
-    <file change-number-for-this-file="1">original.txt</file>
-    <original line-count="20" no-ellipsis="true"><![CDATA[
+file: original.txt
+original: |-
             if segment.is_type("select_statement"):
                 # A buffer for all table expressions in join conditions
                 from_expression_elements = []
@@ -23,8 +22,7 @@
                 from_expression_element = from_expression_element.get_child(
                     "table_expression"
                 )
-    ]]></original>
-    <modified no-ellipsis="true"><![CDATA[
+modified: |-
             if segment.is_type("select_statement"):
                 # A buffer for all table expressions in join conditions
                 from_expression_elements = []
@@ -52,5 +50,3 @@
                 from_expression_element = from_expression_element.get_child(
                     "table_expression"
                 )
-    ]]></modified>
-</change>

@@ -28,12 +28,12 @@ import VectorTermsCommand from './commands/vector-terms-command';
 import TechStackService from './services/tech-stack-service';
 import TechStackCommand from './commands/tech-stack-command';
 import ContextCommand from './commands/context-command';
-import ApplyCommand from './commands/apply-command';
 import FileChangeExtractorService from './services/file-change-extractor-service';
-import FileUpdateService from './services/file-update-service';
 import parseOptions from './lib/parse-options';
 import ListFilesCommand from './commands/list-files-command';
 import MermaidFixerService from './services/mermaid-fixer-service';
+import UpdateCommand from './commands/update-command';
+import ComputeUpdateService from './services/compute-update-service';
 
 export type ChatHistory = Message[];
 
@@ -131,8 +131,6 @@ export default function navie(
 
   const fileChangeExtractor = new FileChangeExtractorService(interactionHistory, completionService);
 
-  const fileUpdateService = new FileUpdateService(interactionHistory);
-
   const buildClassifyCommand = () => new ClassifyCommand(classificationService);
 
   const buildVectorTermsCommand = () => new VectorTermsCommand(vectorTermsService);
@@ -141,19 +139,21 @@ export default function navie(
 
   const buildListFileCommand = () => new ListFilesCommand(fileChangeExtractor);
 
+  const computeUpdateService = new ComputeUpdateService(interactionHistory, completionService);
+
+  const buildUpdateCommand = () => new UpdateCommand(interactionHistory, computeUpdateService);
+
   const buildContextCommand = () =>
     new ContextCommand(options, vectorTermsService, lookupContextService);
-
-  const buildApplyCommand = () => new ApplyCommand(fileChangeExtractor, fileUpdateService);
 
   const commandBuilders: Record<CommandMode, () => Command> = {
     [CommandMode.Explain]: buildExplainCommand,
     [CommandMode.Classify]: buildClassifyCommand,
     [CommandMode.ListFiles]: buildListFileCommand,
+    [CommandMode.Update]: buildUpdateCommand,
     [CommandMode.VectorTerms]: buildVectorTermsCommand,
     [CommandMode.TechStack]: buildTechStackCommand,
     [CommandMode.Context]: buildContextCommand,
-    [CommandMode.Apply]: buildApplyCommand,
   };
 
   let { question } = clientRequest;
