@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.155.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.154.0...@appland/appmap-v3.155.0) (2024-07-24)
+
+
+### Features
+
+* Add RPC file.update ([d197a87](https://github.com/getappmap/appmap-js/commit/d197a877a9d10d4be4e235eab359d441d4bf702b))
+* Add rpc-client command ([1d96d67](https://github.com/getappmap/appmap-js/commit/1d96d676ca99a7472e2d2b47745591f49e11b41b))
+
 # [@appland/appmap-v3.154.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.153.0...@appland/appmap-v3.154.0) (2024-07-19)
 
 
