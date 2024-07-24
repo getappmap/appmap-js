@@ -12,6 +12,7 @@ import { Git, GitState } from '../telemetry';
 import listGitProjectFiles from './listGitProjectFIles';
 import querySymbols from './querySymbols';
 import { fileNameMatchesFilterPatterns } from './fileNameMatchesFilterPatterns';
+import Location from '../rpc/explain/location';
 
 export type FileIndexMatch = {
   directory: string;
@@ -59,6 +60,7 @@ export class FileIndex {
     directories: string[],
     excludePatterns: RegExp[] | undefined,
     includePatterns: RegExp[] | undefined,
+    locations: Location[] | undefined,
     batchSize = 100
   ) {
     for (const directory of directories) {
@@ -161,12 +163,13 @@ export async function buildFileIndex(
   directories: string[],
   indexFileName: string,
   excludePatterns?: RegExp[],
-  includePatterns?: RegExp[]
+  includePatterns?: RegExp[],
+  locations?: Location[]
 ): Promise<FileIndex> {
   assert(!existsSync(indexFileName), `Index file ${indexFileName} already exists`);
   const database = new sqlite3(indexFileName);
   const fileIndex = new FileIndex(database);
-  await fileIndex.indexDirectories(directories, excludePatterns, includePatterns);
+  await fileIndex.indexDirectories(directories, excludePatterns, includePatterns, locations);
   console.log(`Wrote file index to ${indexFileName}`);
   return fileIndex;
 }

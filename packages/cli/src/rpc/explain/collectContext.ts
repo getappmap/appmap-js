@@ -1,4 +1,9 @@
+import { readFile } from 'fs/promises';
+import { log } from 'console';
+import { isAbsolute, join } from 'path';
+import { ContextV2, applyContext } from '@appland/navie';
 import { SearchRpc } from '@appland/rpc';
+
 import AppMapIndex, {
   SearchResponse as AppMapSearchResponse,
   SearchOptions as AppMapSearchOptions,
@@ -10,12 +15,11 @@ import FindEvents, {
 } from '../../fulltext/FindEvents';
 import { DEFAULT_MAX_DIAGRAMS, DEFAULT_MAX_FILES } from '../search/search';
 import buildContext from './buildContext';
-import { log, warn } from 'console';
-import { isAbsolute, join } from 'path';
-import { ContextV2, applyContext } from '@appland/navie';
 import { FileIndexMatch, buildFileIndex } from '../../fulltext/FileIndex';
 import withIndex from '../../fulltext/withIndex';
 import { SourceIndexMatch, buildSourceIndex } from '../../fulltext/SourceIndex';
+import Location from './location';
+import { exists } from '../../utils';
 
 export function textSearchResultToRpcSearchResult(
   eventResult: EventSearchResult
@@ -122,8 +126,7 @@ export class SourceCollector {
   }
 }
 
-export class ContextCollector {
-  public appmaps: string[] | undefined;
+class SearchContextCollector {
   public excludePatterns: RegExp[] | undefined;
   public includePatterns: RegExp[] | undefined;
   public includeTypes: ContextV2.ContextItemType[] | undefined;
@@ -133,23 +136,17 @@ export class ContextCollector {
   constructor(
     private appmapDirectories: string[],
     private sourceDirectories: string[],
+    private appmaps: string[] | undefined,
     private vectorTerms: string[],
     private charLimit: number
   ) {
-    this.query = vectorTerms.join(' ');
+    this.query = this.vectorTerms.join(' ');
   }
 
   async collectContext(): Promise<{
     searchResponse: SearchRpc.SearchResponse;
     context: ContextV2.ContextResponse;
   }> {
-    if (this.vectorTerms.length === 0 || this.vectorTerms.every((term) => term.trim() === '')) {
-      warn('No vector terms received. Context search will be skipped.');
-      return { searchResponse: { results: [], numResults: 0 }, context: [] };
-    }
-
-    const query = this.vectorTerms.join(' ');
-
     let appmapSearchResponse: AppMapSearchResponse;
     if (this.appmaps) {
       const results = this.appmaps
@@ -180,7 +177,11 @@ export class ContextCollector {
       const searchOptions: AppMapSearchOptions = {
         maxResults: DEFAULT_MAX_DIAGRAMS,
       };
-      appmapSearchResponse = await AppMapIndex.search(this.appmapDirectories, query, searchOptions);
+      appmapSearchResponse = await AppMapIndex.search(
+        this.appmapDirectories,
+        this.query,
+        searchOptions
+      );
     }
 
     const fileSearchResponse = await withIndex(
@@ -251,6 +252,120 @@ export class ContextCollector {
   }
 }
 
+class LocationContextCollector {
+  constructor(private sourceDirectories: string[], private locations: Location[]) {}
+
+  async collectContext(): Promise<{
+    searchResponse: SearchRpc.SearchResponse;
+    context: ContextV2.ContextResponse;
+  }> {
+    const result: { searchResponse: SearchRpc.SearchResponse; context: ContextV2.ContextResponse } =
+      { searchResponse: { results: [], numResults: 0 }, context: [] };
+
+    const candidateLocations = new Array<{ location: Location; directory?: string }>();
+    for (const location of this.locations) {
+      const { path } = location;
+      if (isAbsolute(path)) {
+        const directory = this.sourceDirectories.find((dir) => path.startsWith(dir));
+        candidateLocations.push({ location, directory });
+      } else {
+        for (const sourceDirectory of this.sourceDirectories) {
+          candidateLocations.push({ location, directory: sourceDirectory });
+        }
+      }
+    }
+
+    const resolvedLocations = new Array<{ location: Location; directory?: string }>();
+    for (const { location, directory } of candidateLocations) {
+      const path = directory ? join(directory, location.path) : location.path;
+      if (!(await exists(path))) {
+        continue;
+      }
+
+      resolvedLocations.push({ location, directory });
+    }
+
+    for (const resolvedLocation of resolvedLocations) {
+      const { location, directory } = resolvedLocation;
+      const { path } = location;
+      const contents = await readFile(path, 'utf8');
+      const snippet = location.snippet(contents);
+      result.context.push({
+        type: ContextV2.ContextItemType.CodeSnippet,
+        content: snippet,
+        location: location.toString(),
+        directory,
+      });
+    }
+
+    return result;
+  }
+}
+
+export class ContextCollector {
+  public appmaps: string[] | undefined;
+  public excludePatterns: RegExp[] | undefined;
+  public includePatterns: RegExp[] | undefined;
+  public includeTypes: ContextV2.ContextItemType[] | undefined;
+  public locations: Location[] | undefined;
+
+  query: string;
+
+  constructor(
+    private appmapDirectories: string[],
+    private sourceDirectories: string[],
+    private vectorTerms: string[],
+    private charLimit: number
+  ) {
+    this.query = vectorTerms.join(' ');
+  }
+
+  async collectContext(): Promise<{
+    searchResponse: SearchRpc.SearchResponse;
+    context: ContextV2.ContextResponse;
+  }> {
+    const result: { searchResponse: SearchRpc.SearchResponse; context: ContextV2.ContextResponse } =
+      { searchResponse: { results: [], numResults: 0 }, context: [] };
+    const mergeSearchResults = (searchResult: {
+      searchResponse: SearchRpc.SearchResponse;
+      context: ContextV2.ContextResponse;
+    }) => {
+      result.searchResponse.results = result.searchResponse.results.concat(
+        searchResult.searchResponse.results
+      );
+      result.searchResponse.numResults += searchResult.searchResponse.numResults;
+      result.context = result.context.concat(searchResult.context);
+    };
+
+    if (this.locations && this.locations.length > 0) {
+      const locationContextCollector = new LocationContextCollector(
+        this.sourceDirectories,
+        this.locations
+      );
+      const locationResult = await locationContextCollector.collectContext();
+      mergeSearchResults(locationResult);
+    }
+
+    if (this.vectorTerms.length > 0 && this.charLimit > 0) {
+      const searchContextCollector = new SearchContextCollector(
+        this.appmapDirectories,
+        this.sourceDirectories,
+        this.appmaps,
+        this.vectorTerms,
+        this.charLimit
+      );
+      if (this.includePatterns) searchContextCollector.includePatterns = this.includePatterns;
+      if (this.excludePatterns) searchContextCollector.excludePatterns = this.excludePatterns;
+      if (this.includeTypes) searchContextCollector.includeTypes = this.includeTypes;
+
+      const searchResult = await searchContextCollector.collectContext();
+      mergeSearchResults(searchResult);
+    }
+
+    return result;
+  }
+}
+
 export default async function collectContext(
   appmapDirectories: string[],
   sourceDirectories: string[],
@@ -275,6 +390,10 @@ export default async function collectContext(
   if (filters?.include)
     contextCollector.includePatterns = filters.include.map((pattern) => new RegExp(pattern));
   if (filters?.itemTypes) contextCollector.includeTypes = filters.itemTypes.map((type) => type);
+  if (filters?.locations)
+    contextCollector.locations = filters.locations
+      .map((location) => Location.parse(location))
+      .filter(Boolean) as Location[];
 
   return await contextCollector.collectContext();
 }

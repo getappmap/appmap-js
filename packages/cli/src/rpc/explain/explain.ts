@@ -120,7 +120,7 @@ export class Explain extends EventEmitter {
       warn(chalk.bold(`Warning: Token limit not set, defaulting to ${DEFAULT_TOKEN_LIMIT}`));
       tokenCount = DEFAULT_TOKEN_LIMIT;
     }
-    if (!vectorTerms || vectorTerms.length === 0) {
+    if ((!vectorTerms || vectorTerms.length === 0) && !data.locations) {
       warn(chalk.bold(`Warning: No keywords provided, context result may be unpredictable`));
     }
 
