@@ -1,3 +1,16 @@
+# [@appland/navie-v1.21.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.20.0...@appland/navie-v1.21.0) (2024-07-24)
+
+
+### Bug Fixes
+
+* Remove file-update-service and [@apply](https://github.com/apply) command ([b21dce7](https://github.com/getappmap/appmap-js/commit/b21dce74ee19e77cd7f00a063c31a07e72a893f5))
+* Remove unused FilePatchService ([bcd1a87](https://github.com/getappmap/appmap-js/commit/bcd1a87b01115721bb705358746128e23df7e1ba))
+
+
+### Features
+
+* [@update](https://github.com/update) command ([3e791d6](https://github.com/getappmap/appmap-js/commit/3e791d686e956b5b12fa269338fff460a8c025d6))
+
 # [@appland/navie-v1.20.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.19.0...@appland/navie-v1.20.0) (2024-07-19)
 
 
