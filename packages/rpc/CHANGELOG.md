@@ -1,3 +1,10 @@
+# [@appland/rpc-v1.11.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.10.0...@appland/rpc-v1.11.0) (2024-07-24)
+
+
+### Features
+
+* Add RPC file.update ([d197a87](https://github.com/getappmap/appmap-js/commit/d197a877a9d10d4be4e235eab359d441d4bf702b))
+
 # [@appland/rpc-v1.10.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.9.0...@appland/rpc-v1.10.0) (2024-06-18)
 
 
