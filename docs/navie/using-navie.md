@@ -42,15 +42,14 @@ The Navie user interface consists of 5 key areas.
   This panel will display the currently configured LLM model in use with Navie.  The LLM details are displayed in the following format: <code>Model: &lt;Model Name&gt; (&lt;location&gt;)</code>.  When using the default Navie backend, the location will be listed as <code>default</code>. When using your own OpenAI API key the location will be listed as <code>via OpenAI</code>.  When using <a href="/docs/navie/bring-your-own-model.html#configuration">Navie Bring Your Own Model</a>
 , the location will be the value of the <code>OPENAI_BASE_URL</code> environment variable, for example <code>via localhost</code> when using <a href="/docs/navie/bring-your-own-model.html#ollama">Ollama</a> or <a href="/docs/navie/bring-your-own-model.html#lm-studio">LM Studio</a>. 
   <b><li>Navie Chat Window</li></b>
-  This is your primary location for interacting with Navie.  Here you can ask Navie questions about how your application works, ask Navie to generate code or test cases, and you can even have Navie create a pull request based on your changes. For more advanced usage of Navie refer to the <a href="#advanced-navie-commands">Advanced Navie Commands</a>
- section.  
+  This is your primary location for interacting with Navie.  Here you can ask Navie questions about how your application works, ask Navie to generate code or test cases, and you can even have Navie create a pull request based on your changes. To learn more about specific Navie commands refer to the <a href="#navie-commands">Navie Commands</a>  section.  
 </ol>
 
-## Navie Advanced Commands
+## Navie Commands
 
 Navie supports a variety of `@` prefixed commands you can use at the beginning of any question you ask. For example, you can use the `@plan` command to focus the Navie AI response to build a detailed architecture plan for a new feature. You can use the `@generate` command to create code to implement a Navie AI created plan.  Navie supports a growing list of advanced commands which focus the AI responses towards completing the specific task requested. 
 
-For more detailed documentation about the available Navie prefix commands available, refer to the [Navie Reference Documentation for Advanced Commands](https://appmap.io/docs/reference/navie.html#advanced-navie-commands).
+For more detailed documentation about the available Navie prefix commands available, refer to the [Navie Commands Documentation](https://appmap.io/docs/reference/navie.html#navie-commands).
 
 ## Navie Best Practices
 
