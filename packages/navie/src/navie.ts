@@ -32,6 +32,8 @@ import FileChangeExtractorService from './services/file-change-extractor-service
 import parseOptions from './lib/parse-options';
 import ListFilesCommand from './commands/list-files-command';
 import MermaidFixerService from './services/mermaid-fixer-service';
+import UpdateCommand from './commands/update-command';
+import ComputeUpdateService from './services/compute-update-service';
 
 export type ChatHistory = Message[];
 
@@ -137,6 +139,10 @@ export default function navie(
 
   const buildListFileCommand = () => new ListFilesCommand(fileChangeExtractor);
 
+  const computeUpdateService = new ComputeUpdateService(interactionHistory, completionService);
+
+  const buildUpdateCommand = () => new UpdateCommand(interactionHistory, computeUpdateService);
+
   const buildContextCommand = () =>
     new ContextCommand(options, vectorTermsService, lookupContextService);
 
@@ -144,6 +150,7 @@ export default function navie(
     [CommandMode.Explain]: buildExplainCommand,
     [CommandMode.Classify]: buildClassifyCommand,
     [CommandMode.ListFiles]: buildListFileCommand,
+    [CommandMode.Update]: buildUpdateCommand,
     [CommandMode.VectorTerms]: buildVectorTermsCommand,
     [CommandMode.TechStack]: buildTechStackCommand,
     [CommandMode.Context]: buildContextCommand,
