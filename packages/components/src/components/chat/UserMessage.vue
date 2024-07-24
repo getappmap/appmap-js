@@ -320,7 +320,7 @@ export default {
     grid-column: 2;
     grid-row: 2;
     max-width: 100%;
-    overflow: visible;
+    overflow: hidden;
 
     :last-child {
       margin-bottom: 0;
