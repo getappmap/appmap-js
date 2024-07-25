@@ -1,4 +1,3 @@
-import chalk from 'chalk';
 import EventEmitter from 'events';
 import { warn } from 'console';
 import { basename } from 'path';
@@ -22,7 +21,6 @@ import { getLLMConfiguration } from '../llmConfiguration';
 import detectAIEnvVar from '../../cmds/index/aiEnvVar';
 import reportFetchError from './navie/report-fetch-error';
 import { LRUCache } from 'lru-cache';
-import Context from 'applicationinsights/out/Library/Context';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
@@ -116,37 +114,30 @@ export class Explain extends EventEmitter {
     if (data.labels) this.status.labels = data.labels;
     const labels = data.labels ?? [];
 
-    if (!tokenCount) {
-      warn(chalk.bold(`Warning: Token limit not set, defaulting to ${DEFAULT_TOKEN_LIMIT}`));
-      tokenCount = DEFAULT_TOKEN_LIMIT;
-    }
-    if (!vectorTerms || vectorTerms.length === 0) {
-      warn(chalk.bold(`Warning: No keywords provided, context result may be unpredictable`));
-    }
-
-    const keywords = [...vectorTerms];
-    if (
-      labels.find(
-        (label) =>
-          label.name === ContextV2.ContextLabelName.Architecture &&
-          label.weight === ContextV2.ContextLabelWeight.High
-      ) ||
-      labels.find(
-        (label) =>
-          label.name === ContextV2.ContextLabelName.Overview &&
-          label.weight === ContextV2.ContextLabelWeight.High
-      )
-    ) {
-      keywords.push('architecture');
-      keywords.push('design');
-      keywords.push('readme');
-      keywords.push('about');
-      keywords.push('overview');
-      for (const dir of this.projectDirectories) {
-        keywords.push(basename(dir));
+    const keywords = vectorTerms || [];
+    if (keywords.length > 0) {
+      if (
+        labels.find(
+          (label) =>
+            label.name === ContextV2.ContextLabelName.Architecture &&
+            label.weight === ContextV2.ContextLabelWeight.High
+        ) ||
+        labels.find(
+          (label) =>
+            label.name === ContextV2.ContextLabelName.Overview &&
+            label.weight === ContextV2.ContextLabelWeight.High
+        )
+      ) {
+        keywords.push('architecture');
+        keywords.push('design');
+        keywords.push('readme');
+        keywords.push('about');
+        keywords.push('overview');
+        for (const dir of this.projectDirectories) {
+          keywords.push(basename(dir));
+        }
       }
     }
-    // TODO: For 'troubleshoot', include log information
 
     this.status.step = ExplainRpc.Step.SEARCH_APPMAPS;
 
