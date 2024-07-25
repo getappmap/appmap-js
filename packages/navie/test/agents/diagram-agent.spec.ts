@@ -31,7 +31,7 @@ describe('@diagram agent', () => {
     tokensAvailable = 1000;
     interactionHistory = new InteractionHistory();
     contextService = {
-      perform: jest.fn(),
+      searchContext: jest.fn(),
     } as unknown as ContextService;
     mermaidFixerService = {
       repairDiagram: jest.fn(),
@@ -65,7 +65,7 @@ describe('@diagram agent', () => {
     );
 
     // Verify that the context service's perform method is called with the expected options
-    expect(contextService.perform).toHaveBeenCalledWith(
+    expect(contextService.searchContext).toHaveBeenCalledWith(
       initialQuestionOptions,
       expect.any(Function)
     );

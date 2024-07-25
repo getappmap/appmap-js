@@ -50,7 +50,7 @@ describe('ContextService', () => {
       []
     );
 
-    await contextService.perform(options, () => tokensAvailable);
+    await contextService.searchContext(options, () => tokensAvailable);
 
     expect(lookupContextService.lookupContext).toHaveBeenCalledWith(
       ['user', 'management'],
@@ -75,7 +75,7 @@ describe('ContextService', () => {
       []
     );
 
-    await contextService.perform(options, () => tokensAvailable, ['test']);
+    await contextService.searchContext(options, () => tokensAvailable, ['test']);
 
     expect(lookupContextService.lookupContext).toHaveBeenCalledWith(
       ['user', 'management', 'test'],

@@ -77,7 +77,7 @@ export default class TestAgent implements Agent {
       )
     );
 
-    await this.contextService.perform(options, tokensAvailable, ['test', 'spec']);
+    await this.contextService.searchContext(options, tokensAvailable, ['test', 'spec']);
   }
 
   applyQuestionPrompt(question: string): void {

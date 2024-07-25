@@ -12,7 +12,7 @@ export default class ContextService {
     private applyContextService: ApplyContextService
   ) {}
 
-  async perform(
+  async searchContext(
     options: AgentOptions,
     tokensAvailable: () => number,
     additionalTerms: string[] = []
