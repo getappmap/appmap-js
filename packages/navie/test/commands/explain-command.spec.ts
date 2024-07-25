@@ -223,7 +223,16 @@ describe('ExplainCommand', () => {
       expect(agent.perform).toHaveBeenCalledWith(
         {
           aggregateQuestion: [userMessage1, userMessage2].join('\n\n'),
-          chatHistory: [userMessage1, assistantMessage1],
+          chatHistory: [
+            {
+              content: userMessage1,
+              role: 'user',
+            },
+            {
+              content: assistantMessage1,
+              role: 'assistant',
+            },
+          ],
           codeSelection: undefined,
           userOptions: new UserOptions(new Map()),
           contextLabels: [],
