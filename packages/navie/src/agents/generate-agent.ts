@@ -53,8 +53,7 @@ export default class GenerateAgent implements Agent {
   constructor(
     public readonly history: InteractionHistory,
     private readonly contextService: ContextService,
-    private readonly fileChangeExtractorService: FileChangeExtractorService,
-    private readonly lookupContextService: LookupContextService
+    private readonly fileChangeExtractorService: FileChangeExtractorService
   ) {}
 
   // eslint-disable-next-line class-methods-use-this
@@ -79,27 +78,12 @@ export default class GenerateAgent implements Agent {
       )
     );
 
-    await this.contextService.perform(options, tokensAvailable);
-
     // Locate named file in the history and retrieve their full contents.
     // Code generation doesn't work well if it's only presented with snippets.
     const fileNames = await this.fileChangeExtractorService.listFiles(options, options.chatHistory);
-    if (fileNames && fileNames.length > 0) {
-      // By requesting no vectors terms and no characters, we should get named files only.
-      let context = await this.lookupContextService.lookupContext([], 0, {
-        locations: fileNames,
-      });
-      // Guard against weirdness.
-      if (!Array.isArray(context)) context = [];
+    if (fileNames && fileNames.length > 0) await this.contextService.locationContext(fileNames);
 
-      for (const item of context) {
-        const contextItem = new ContextItemEvent(PromptType.CodeSnippet, item.content);
-        if (ContextV2.isFileContextItem(item)) {
-          contextItem.location = item.location;
-        }
-        this.history.addEvent(contextItem);
-      }
-    }
+    await this.contextService.searchContext(options, tokensAvailable);
   }
 
   applyQuestionPrompt(question: string): void {

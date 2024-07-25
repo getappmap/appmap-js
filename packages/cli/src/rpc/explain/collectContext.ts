@@ -1,5 +1,5 @@
 import { readFile } from 'fs/promises';
-import { log } from 'console';
+import { dir, log, warn } from 'console';
 import { isAbsolute, join } from 'path';
 import { ContextV2, applyContext } from '@appland/navie';
 import { SearchRpc } from '@appland/rpc';
@@ -19,7 +19,7 @@ import { FileIndexMatch, buildFileIndex } from '../../fulltext/FileIndex';
 import withIndex from '../../fulltext/withIndex';
 import { SourceIndexMatch, buildSourceIndex } from '../../fulltext/SourceIndex';
 import Location from './location';
-import { exists } from '../../utils';
+import { exists, isFile } from '../../utils';
 
 export function textSearchResultToRpcSearchResult(
   eventResult: EventSearchResult
@@ -206,9 +206,9 @@ class SearchContextCollector {
     };
     let charCount = 0;
     let maxEventsPerDiagram = 5;
-    log(`Requested char limit: ${this.charLimit}`);
+    log(`[search-context] Requested char limit: ${this.charLimit}`);
     for (;;) {
-      log(`Collecting context with ${maxEventsPerDiagram} events per diagram.`);
+      log(`[search-context] Collecting context with ${maxEventsPerDiagram} events per diagram.`);
 
       contextCandidate = await eventsCollector.collectEvents(
         maxEventsPerDiagram,
@@ -232,14 +232,14 @@ class SearchContextCollector {
       const appliedContextSize = appliedContext.reduce((acc, item) => acc + item.content.length, 0);
       contextCandidate.context = appliedContext;
       contextCandidate.contextSize = appliedContextSize;
-      log(`Collected an estimated ${appliedContextSize} characters.`);
+      log(`[search-context] Collected an estimated ${appliedContextSize} characters.`);
 
       if (appliedContextSize === charCount || appliedContextSize > this.charLimit) {
         break;
       }
       charCount = appliedContextSize;
       maxEventsPerDiagram = Math.ceil(maxEventsPerDiagram * 1.5);
-      log(`Increasing max events per diagram to ${maxEventsPerDiagram}.`);
+      log(`[search-context] Increasing max events per diagram to ${maxEventsPerDiagram}.`);
     }
 
     return {
@@ -275,20 +275,25 @@ class LocationContextCollector {
       }
     }
 
-    const resolvedLocations = new Array<{ location: Location; directory?: string }>();
     for (const { location, directory } of candidateLocations) {
-      const path = directory ? join(directory, location.path) : location.path;
+      const pathTokens = [directory, location.path].filter(Boolean) as string[];
+      const path = join(...pathTokens);
       if (!(await exists(path))) {
         continue;
       }
+      if (!(await isFile(path))) {
+        warn(`[location-context] Skipping non-file location: ${path}`);
+        continue;
+      }
 
-      resolvedLocations.push({ location, directory });
-    }
+      let contents: string | undefined;
+      try {
+        contents = await readFile(path, 'utf8');
+      } catch (e) {
+        warn(`[location-context] Failed to read file: ${path}`);
+        continue;
+      }
 
-    for (const resolvedLocation of resolvedLocations) {
-      const { location, directory } = resolvedLocation;
-      const { path } = location;
-      const contents = await readFile(path, 'utf8');
       const snippet = location.snippet(contents);
       result.context.push({
         type: ContextV2.ContextItemType.CodeSnippet,

@@ -51,7 +51,7 @@ export default class DiagramAgent implements Agent {
       )
     );
 
-    await this.contextService.perform(options, tokensAvailable);
+    await this.contextService.searchContext(options, tokensAvailable);
 
     return { response: 'Rendering diagram...\n', abort: false };
   }

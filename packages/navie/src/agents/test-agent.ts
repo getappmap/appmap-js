@@ -3,6 +3,7 @@ import InteractionHistory, { PromptInteractionEvent } from '../interaction-histo
 import Filter, { NopFilter } from '../lib/filter';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 import ContextService from '../services/context-service';
+import FileChangeExtractorService from '../services/file-change-extractor-service';
 import { GENERATE_AGENT_FORMAT } from './generate-agent';
 
 export const TEST_AGENT_PROMPT = `**Task: Generation of Test Cases**
@@ -38,7 +39,11 @@ shell commands, or other workarounds.
 export default class TestAgent implements Agent {
   public temperature = undefined;
 
-  constructor(public history: InteractionHistory, private contextService: ContextService) {}
+  constructor(
+    public readonly history: InteractionHistory,
+    private readonly contextService: ContextService,
+    private readonly fileChangeExtractorService: FileChangeExtractorService
+  ) {}
 
   // eslint-disable-next-line class-methods-use-this
   newFilter(): Filter {
@@ -52,7 +57,7 @@ export default class TestAgent implements Agent {
       agentPrompt.push(GENERATE_AGENT_FORMAT);
     }
 
-    this.history.addEvent(new PromptInteractionEvent('agent', 'system', agentPrompt.join('\n\n'));
+    this.history.addEvent(new PromptInteractionEvent('agent', 'system', agentPrompt.join('\n\n')));
 
     this.history.addEvent(
       new PromptInteractionEvent(
@@ -62,7 +67,12 @@ export default class TestAgent implements Agent {
       )
     );
 
-    await this.contextService.perform(options, tokensAvailable, ['test', 'spec']);
+    // Locate named file in the history and retrieve their full contents.
+    // Code generation doesn't work well if it's only presented with snippets.
+    const fileNames = await this.fileChangeExtractorService.listFiles(options, options.chatHistory);
+    if (fileNames && fileNames.length > 0) await this.contextService.locationContext(fileNames);
+
+    await this.contextService.searchContext(options, tokensAvailable, ['test', 'spec']);
   }
 
   applyQuestionPrompt(question: string): void {
