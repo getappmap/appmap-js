@@ -4,7 +4,7 @@ import Filter, { NopFilter } from '../lib/filter';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 import ContextService from '../services/context-service';
 
-export const GENERATE_AGENT_PROMPT = `**Task: Generation of Code and Test Cases**
+export const GENERATE_AGENT_PROMPT = `**Task: Generation of Code**
 
 **About you**
 
