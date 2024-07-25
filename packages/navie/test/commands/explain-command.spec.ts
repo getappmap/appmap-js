@@ -177,6 +177,15 @@ describe('ExplainCommand', () => {
       expect(completionService.complete).toHaveBeenCalledWith([], { temperature: undefined });
     });
 
+    describe('when the agent specifies 0 temperature', () => {
+      it('applies the agent temperature', async () => {
+        agent.temperature = 0;
+
+        await explain();
+        expect(completionService.complete).toHaveBeenCalledWith([], { temperature: 0 });
+      });
+    });
+
     it('returns a response', async () => {
       const tokens = await explain();
       expect(tokens).toEqual([

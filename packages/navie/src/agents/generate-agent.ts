@@ -36,7 +36,7 @@ shell commands, or other workarounds. Your solution must be suitable for use as 
 `;
 
 export default class GenerateAgent implements Agent {
-  public temperature = undefined;
+  public temperature = 0;
 
   constructor(public history: InteractionHistory, private contextService: ContextService) {}
 

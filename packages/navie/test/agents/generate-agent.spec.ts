@@ -1,4 +1,4 @@
-import InteractionHistory, { isPromptEvent } from '../../src/interaction-history';
+import InteractionHistory from '../../src/interaction-history';
 import ApplyContextService from '../../src/services/apply-context-service';
 import VectorTermsService from '../../src/services/vector-terms-service';
 import LookupContextService from '../../src/services/lookup-context-service';

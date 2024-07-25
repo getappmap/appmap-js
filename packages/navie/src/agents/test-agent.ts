@@ -57,7 +57,7 @@ def test_add_one():
 
 `;
 export default class TestAgent implements Agent {
-  public temperature = undefined;
+  public temperature = 0;
 
   constructor(public history: InteractionHistory, private contextService: ContextService) {}
 
