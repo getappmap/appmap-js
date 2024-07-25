@@ -37,13 +37,16 @@ shell commands, or other workarounds.
 * DO NOT rely on testing exit status codes. Test expression values and expected output directly.
 `;
 export default class TestAgent implements Agent {
-  public temperature = undefined;
-
   constructor(
     public readonly history: InteractionHistory,
     private readonly contextService: ContextService,
     private readonly fileChangeExtractorService: FileChangeExtractorService
   ) {}
+
+  // eslint-disable-next-line class-methods-use-this
+  get temperature(): number {
+    return 0;
+  }
 
   // eslint-disable-next-line class-methods-use-this
   newFilter(): Filter {

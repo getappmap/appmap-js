@@ -42,19 +42,20 @@ shell commands, or other workarounds. Your solution must be suitable for use as 
 `;
 
 export default class GenerateAgent implements Agent {
-  public temperature = undefined;
-
   // TODO:
   // Skip AppMap statistics and Project Context
   // Skip Code Editor prompt?
-  // Remove "and Test Cases" - leave this for the @test command
-  // Incorporate this same logic into the @test command
 
   constructor(
     public readonly history: InteractionHistory,
     private readonly contextService: ContextService,
     private readonly fileChangeExtractorService: FileChangeExtractorService
   ) {}
+
+  // eslint-disable-next-line class-methods-use-this
+  get temperature(): number {
+    return 0;
+  }
 
   // eslint-disable-next-line class-methods-use-this
   newFilter(): Filter {
