@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.155.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.155.0...@appland/appmap-v3.155.1) (2024-07-25)
+
+
+### Bug Fixes
+
+* conditionally create sql_warnings.txt ([737f59f](https://github.com/getappmap/appmap-js/commit/737f59f323b3c9300bc6985cb179fa7264c8f7fd))
+
 # [@appland/appmap-v3.155.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.154.0...@appland/appmap-v3.155.0) (2024-07-24)
 
 
