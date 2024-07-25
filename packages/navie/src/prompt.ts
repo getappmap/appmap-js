@@ -122,25 +122,37 @@ When referencing a code snippet in your response, provide the file name as an HT
 This specific comment directive will give the user the ability to apply to code snippet automatically. It will also render
 the file path to the user relative to their project directory. DO include the full path to the file to avoid ambiguous cases.
 
-Examples of proper citation of code snippets:
+### Examples of proper citation of code snippets
+
+ALWAYS place the comment directive immediately before the code block with the full file path. 
 > <!-- file: /home/user/dev/my-project/app/models/user.rb -->
 > \`\`\`ruby
 >   class User < ApplicationRecord
->  end
+>   end
 > \`\`\`
 
-Examples of incorrect citation of code snippets:
-<!-- file: app/models/user.rb -->
-\`\`\`ruby
-  class User < ApplicationRecord
-  end
-\`\`\`
+### Examples of incorrect citation of code snippets
+NEVER truncate the file path as shown below.
+> <!-- file: app/models/user.rb -->
+> \`\`\`ruby
+>   class User < ApplicationRecord
+>   end
+> \`\`\`
 
-\`\`\`ruby
-  # app/models/user.rb
-  class User < ApplicationRecord
-  end
-\`\`\`
+NEVER insert the file path within a comment of the code block as shown below.
+> \`\`\`ruby
+>   # app/models/user.rb
+>   class User < ApplicationRecord
+>   end
+> \`\`\`
+
+NEVER place the comment directive inside the code block as shown below.
+> \`\`\`ruby
+>   <!-- file: app/models/user.rb -->
+>   class User < ApplicationRecord
+>   end
+> \`\`\`
+
 `,
     tagName: 'code-snippet',
     multiple: true,
