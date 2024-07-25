@@ -6,6 +6,7 @@
         :title="contextItem.location"
         :location="contextItem.location"
         :directory="contextItem.directory"
+        :is-pinnable="false"
         >{{ contextItem.content }}</v-markdown-code-snippet
       >
     </template>

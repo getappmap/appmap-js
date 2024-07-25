@@ -76,6 +76,48 @@ describe('InteractionHistory', () => {
             { content: '</context>', role: 'system' },
           ]);
         });
+        it('uses absolute paths if directory is set', () => {
+          const interactionHistory = new InteractionHistory();
+          interactionHistory.addEvent(
+            new ContextItemEvent(
+              PromptType.CodeSnippet,
+              'code snippet content',
+              'file.py',
+              '/home/user/dev/my-project'
+            )
+          );
+          const state = interactionHistory.buildState();
+          expect(state.messages).toEqual([
+            { content: '<context>', role: 'system' },
+            {
+              content:
+                '<code-snippet location="/home/user/dev/my-project/file.py">\ncode snippet content\n</code-snippet>',
+              role: 'system',
+            },
+            { content: '</context>', role: 'system' },
+          ]);
+        });
+        it('properly joins Windows paths', () => {
+          const interactionHistory = new InteractionHistory();
+          interactionHistory.addEvent(
+            new ContextItemEvent(
+              PromptType.CodeSnippet,
+              'code snippet content',
+              'file.py',
+              'C:\\Users\\user\\dev\\my-project'
+            )
+          );
+          const state = interactionHistory.buildState();
+          expect(state.messages).toEqual([
+            { content: '<context>', role: 'system' },
+            {
+              content:
+                '<code-snippet location="C:\\Users\\user\\dev\\my-project\\file.py">\ncode snippet content\n</code-snippet>',
+              role: 'system',
+            },
+            { content: '</context>', role: 'system' },
+          ]);
+        });
       });
       describe('data request', () => {
         it('adds a message to the state', () => {
