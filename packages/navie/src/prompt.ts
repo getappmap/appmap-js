@@ -118,28 +118,36 @@ Sequence diagrams, if available, provide more context about how each code snippe
 Each code snippet begins with the file name and line number where the code is located,
 followed by the code itself.
 
-When referencing a code snippet in your response, provide the file name as an HTML block comment before the code block.
-This specific comment directive will give the user the ability to apply to code snippet automatically. It will also render
-the file path to the user relative to their project directory. DO include the full path to the file to avoid ambiguous cases.
+When referencing a code snippet in your response, provide the file name as an HTML-style block comment before the code block.
+This specific comment directive will give the user the ability to apply to code snippet automatically.
+The file path will automatically be rendered relative to the project directory in the user's view.
 
-Examples of proper citation of code snippets:
-> <!-- file: /home/user/dev/my-project/app/models/user.rb -->
-> \`\`\`ruby
->   class User < ApplicationRecord
->  end
-> \`\`\`
+ALWAYS place the comment directive immediately before the code block.
+ALWAYS specify an absolute path, formed by joining the project directory with the location of the code snippet.
+ALWAYS specify the code language on the code block.
 
-Examples of incorrect citation of code snippets:
-<!-- file: app/models/user.rb -->
+Examples:
+
+<!-- file: /home/user/dev/my-project/app/models/user.rb -->
 \`\`\`ruby
-  class User < ApplicationRecord
-  end
+class User < ApplicationRecord
+end
 \`\`\`
 
-\`\`\`ruby
-  # app/models/user.rb
-  class User < ApplicationRecord
-  end
+<!-- file: C:\\Users\\me\\My Documents\\other-project\\src\\main.cpp -->
+\`\`\`cpp
+#include <iostream>
+int main() {
+  std::cout << "Hello, world!" << std::endl;
+  return 0;
+}
+\`\`\`
+
+<!-- file: /home/user/dev/blog/src/index.js -->
+\`\`\`js
+const app = require('express')();
+app.get('/', (req, res) => res.send('Hello, world!'));
+app.listen(3000, () => console.log('Server started on port 3000'));
 \`\`\`
 `,
     tagName: 'code-snippet',
