@@ -25,6 +25,7 @@ step: 5
 - [Web framework support](#web-framework-support)
   - [Django](#django)
   - [Flask](#flask)
+    - [Flask middleware](#flask-middleware)
   - [FastAPI](#fastapi)
     - [uvicorn](#uvicorn)
     - [Other ASGI servers](#other-asgi-servers)
@@ -360,7 +361,28 @@ to your application's `settings.py`.
 
 ### Flask
 
-When `flask` is invoked with the `--debug` switch, debugging is enabled, as well as AppMap integration.
+When `flask run` is invoked with the `--debug` switch, debugging is enabled, as well as AppMap
+integration.
+
+#### Flask middleware
+
+If you start your Flask application with a frontend other than `flask`, or use a different
+web server to host it, you'll need to update your application to install the Flask middleware.
+
+For example:
+```
+import appmap
+from flask import Flask
+
+app = Flask(__name__)
+
+appmap.flask.AppmapFlask(app).init_app()
+
+
+@app.route("/")
+def hello_world():
+    return "Hello, World!"
+```
 
 ### FastAPI
 The FastAPI integration supports both request recording and remote recording. Request
