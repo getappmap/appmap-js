@@ -60,6 +60,7 @@ export default class AgentSelectionService {
     let modifiedQuestion = question;
 
     const contextService = new ContextService(
+      this.history,
       this.vectorTermsService,
       this.lookupContextService,
       this.applyContextService

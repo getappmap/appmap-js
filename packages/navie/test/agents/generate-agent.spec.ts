@@ -29,6 +29,7 @@ describe('@generate agent', () => {
       applyContext: jest.fn(),
     } as unknown as ApplyContextService;
     contextService = new ContextService(
+      interactionHistory,
       vectorTermsService,
       lookupContextService,
       applyContextService
