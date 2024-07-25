@@ -246,15 +246,13 @@ export class ContextItemEvent extends InteractionEvent {
   }
 
   updateState(state: InteractionState) {
-    const pathSegments = [this.directory, this.location].filter(Boolean) as string[];
-    const isPosix =
-      this.directory?.includes(path.posix.sep) || this.location?.includes(path.posix.sep);
-    // Consider that the client is not necessarily running on the same machine running this code.
-    // In that case, the path convention may be different.
-    const join = (...args: string[]) =>
-      isPosix ? path.posix.join(...args) : path.win32.join(...args);
     const content = [
-      [`<${this.promptPrefix}`, pathSegments.length && ` location="${join(...pathSegments)}"`, '>']
+      [
+        `<${this.promptPrefix}`,
+        this.location && ` location="${this.location}"`,
+        this.directory && ` project-directory="${this.directory}"`,
+        '>',
+      ]
         .filter(Boolean)
         .join(''),
       this.content,
