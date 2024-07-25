@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.87.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.87.0...@appland/scanner-v1.87.1) (2024-07-25)
+
+
+### Bug Fixes
+
+* conditionally create sql_warnings.txt ([737f59f](https://github.com/getappmap/appmap-js/commit/737f59f323b3c9300bc6985cb179fa7264c8f7fd))
+
 # [@appland/scanner-v1.87.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.86.0...@appland/scanner-v1.87.0) (2024-04-30)
 
 
