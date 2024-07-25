@@ -3,6 +3,8 @@ import InteractionHistory, { PromptInteractionEvent } from '../interaction-histo
 import Filter, { NopFilter } from '../lib/filter';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 import ContextService from '../services/context-service';
+import FileChangeExtractorService from '../services/file-change-extractor-service';
+import FileContentFetcher from '../services/file-content-fetcher';
 
 export const TEST_AGENT_PROMPT = `**Task: Generation a Test Case**
 
@@ -46,7 +48,11 @@ shell commands, or other workarounds.
 export default class TestAgent implements Agent {
   public temperature = 0;
 
-  constructor(public history: InteractionHistory, private contextService: ContextService) {}
+  constructor(
+    public history: InteractionHistory,
+    private contextService: ContextService,
+    private fileChangeExtractorService: FileChangeExtractorService
+  ) {}
 
   // eslint-disable-next-line class-methods-use-this
   newFilter(): Filter {
@@ -69,6 +75,12 @@ export default class TestAgent implements Agent {
         buildPromptDescriptor(PromptType.IssueDescription)
       )
     );
+
+    const contentFetcher = new FileContentFetcher(
+      this.fileChangeExtractorService,
+      this.contextService
+    );
+    await contentFetcher.applyFileContext(options, options.chatHistory);
 
     await this.contextService.searchContext(options, tokensAvailable, ['test', 'spec']);
   }

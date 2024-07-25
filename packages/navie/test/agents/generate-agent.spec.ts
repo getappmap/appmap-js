@@ -7,12 +7,14 @@ import { suggestsVectorTerms } from '../fixture';
 import GenerateAgent from '../../src/agents/generate-agent';
 import { UserOptions } from '../../src/lib/parse-options';
 import ContextService from '../../src/services/context-service';
+import FileChangeExtractorService from '../../src/services/file-change-extractor-service';
 
 describe('@generate agent', () => {
   let interactionHistory: InteractionHistory;
   let vectorTermsService: VectorTermsService;
   let lookupContextService: LookupContextService;
   let applyContextService: ApplyContextService;
+  let fileChangeExtractorService: FileChangeExtractorService;
   let contextService: ContextService;
   let tokensAvailable: number;
 
@@ -28,6 +30,9 @@ describe('@generate agent', () => {
       addSystemPrompts: jest.fn(),
       applyContext: jest.fn(),
     } as unknown as ApplyContextService;
+    fileChangeExtractorService = {
+      listFiles: jest.fn(),
+    } as unknown as FileChangeExtractorService;
     contextService = new ContextService(
       interactionHistory,
       vectorTermsService,
@@ -39,7 +44,7 @@ describe('@generate agent', () => {
   afterEach(() => jest.restoreAllMocks());
 
   function buildAgent(): GenerateAgent {
-    return new GenerateAgent(interactionHistory, contextService);
+    return new GenerateAgent(interactionHistory, contextService, fileChangeExtractorService);
   }
 
   describe('#perform', () => {

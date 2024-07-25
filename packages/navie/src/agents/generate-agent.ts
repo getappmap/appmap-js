@@ -3,6 +3,8 @@ import InteractionHistory, { PromptInteractionEvent } from '../interaction-histo
 import Filter, { NopFilter } from '../lib/filter';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 import ContextService from '../services/context-service';
+import FileChangeExtractorService from '../services/file-change-extractor-service';
+import FileContentFetcher from '../services/file-content-fetcher';
 
 export const GENERATE_AGENT_PROMPT = `**Task: Generation of Code**
 
@@ -38,7 +40,11 @@ shell commands, or other workarounds. Your solution must be suitable for use as 
 export default class GenerateAgent implements Agent {
   public temperature = 0;
 
-  constructor(public history: InteractionHistory, private contextService: ContextService) {}
+  constructor(
+    public history: InteractionHistory,
+    private contextService: ContextService,
+    private fileChangeExtractorService: FileChangeExtractorService
+  ) {}
 
   // eslint-disable-next-line class-methods-use-this
   newFilter(): Filter {
@@ -61,6 +67,12 @@ export default class GenerateAgent implements Agent {
         buildPromptDescriptor(PromptType.IssueDescription)
       )
     );
+
+    const contentFetcher = new FileContentFetcher(
+      this.fileChangeExtractorService,
+      this.contextService
+    );
+    await contentFetcher.applyFileContext(options, options.chatHistory);
 
     await this.contextService.searchContext(options, tokensAvailable);
   }
