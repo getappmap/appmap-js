@@ -5,13 +5,12 @@ import InteractionHistory, {
   PromptInteractionEvent,
 } from '../interaction-history';
 import Filter, { NopFilter } from '../lib/filter';
-import Message from '../message';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 import ContextService from '../services/context-service';
 import FileChangeExtractorService from '../services/file-change-extractor-service';
 import LookupContextService from '../services/lookup-context-service';
 
-export const GENERATE_AGENT_PROMPT = `**Task: Generation of Code and Test Cases**
+export const GENERATE_AGENT_PROMPT = `**Task: Generation of Code**
 
 **About you**
 

@@ -3,8 +3,9 @@ import InteractionHistory, { PromptInteractionEvent } from '../interaction-histo
 import Filter, { NopFilter } from '../lib/filter';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 import ContextService from '../services/context-service';
+import { GENERATE_AGENT_FORMAT } from './generate-agent';
 
-export const TEST_AGENT_PROMPT = `**Task: Generation a Test Case**
+export const TEST_AGENT_PROMPT = `**Task: Generation of Test Cases**
 
 **About you**
 
@@ -20,14 +21,7 @@ in software development.
 
 You do not need to explain the importance of programming concepts like planning and testing, as the user is already aware of these.
 
-**Response format**
-
-Your solution must be provided as test code that implements the desired functionality within the project.
-
-To generate the test case, you should analyze the existing test case code in the project. You will be provided
-with code snippets of other, related test cases.
-
-DOs and DO NOTs:
+**DOs and DO NOTs**
 
 * DO begin the code snippet with a comment containing the path to the test case file.
 * DO extend an existing test case with new code, rather than creating a new test case.
@@ -40,21 +34,6 @@ shell commands, or other workarounds.
 * DO NOT invoke the project code through wrappers such as CLI, unless the test case is specifically related to
   CLI argument parsing. Prefer direction invocation of project functions, when possible.
 * DO NOT rely on testing exit status codes. Test expression values and expected output directly.
-
-**Example**
-
-Input: Describe a test case that verifies that the function add_one(x) returns x + 1.
-
-Output:
-\`\`\`python
-# test_math.py
-
-def test_add_one():
-  assert add_one(1) == 2
-  assert add_one(2) == 3
-  assert add_one(3) == 4
-\`\`\`
-
 `;
 export default class TestAgent implements Agent {
   public temperature = undefined;
@@ -67,7 +46,13 @@ export default class TestAgent implements Agent {
   }
 
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {
-    this.history.addEvent(new PromptInteractionEvent('agent', 'system', TEST_AGENT_PROMPT));
+    const agentPrompt = [TEST_AGENT_PROMPT];
+    // With the /noformat option, the user will explain the desired output format in their message.
+    if (options.userOptions.isEnabled('format', true)) {
+      agentPrompt.push(GENERATE_AGENT_FORMAT);
+    }
+
+    this.history.addEvent(new PromptInteractionEvent('agent', 'system', agentPrompt.join('\n\n'));
 
     this.history.addEvent(
       new PromptInteractionEvent(
