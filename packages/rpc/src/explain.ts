@@ -3,6 +3,7 @@ import { SearchRpc } from './search';
 export namespace ExplainRpc {
   export const ExplainFunctionName = 'explain';
   export const ExplainStatusFunctionName = 'explain.status';
+  export const ExplainCommandsFunctionName = 'explain.commands';
 
   export enum Step {
     NEW = 'new',
@@ -59,5 +60,18 @@ export namespace ExplainRpc {
     searchResponse?: SearchRpc.SearchResponse;
     contextResponse?: ContextItem[];
     explanation?: string[];
+  };
+
+  export type Command = {
+    name: string;
+    description: string;
+    referenceUrl?: string;
+    demoUrls?: string[];
+  };
+
+  export type ExplainCommandsOptions = {};
+
+  export type ExplainCommandsResponse = {
+    commands: Command[];
   };
 }
