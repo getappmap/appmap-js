@@ -100,10 +100,11 @@ customRenderer.code = (code: string, language: string, escaped: boolean, sourceP
     return `<v-mermaid-diagram>${code}</v-mermaid-diagram>`;
   }
 
+  // The location is URI encoded to avoid issues with special characters.
   return [
     '<v-markdown-code-snippet',
-    language && ` language="${language}"`,
-    sourcePath && ` location="${sourcePath}"`,
+    language && ` language="${language.trim()}"`,
+    sourcePath && ` location="${encodeURIComponent(sourcePath.trim())}"`,
     '>',
     new Option(code).innerHTML,
     '</v-markdown-code-snippet>',
@@ -119,11 +120,11 @@ const marked = new Marked({
       name: 'file-annotation',
       level: 'block',
       start(src: string) {
-        const index = src.search(/^\s*?<!--\s+?file:/);
+        const index = src.search(/^\s*?<!--\s*?file:/m);
         return index > -1 ? index : false;
       },
       tokenizer(src: string) {
-        const fileCommentMatch = /^\s*?<!--\s+?file:\s+?(.+)\s+?-->/.exec(src);
+        const fileCommentMatch = /^\s*?<!--\s*?file:\s*?(.+)\s*?-->/m.exec(src);
         if (!fileCommentMatch) return false;
 
         const codeMatch = /\s*?```(.*)\n([\s\S]+?)```/.exec(

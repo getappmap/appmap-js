@@ -2,7 +2,7 @@
   <v-context-container
     :title="header"
     :handle="handle"
-    :location="location"
+    :location="decodedLocation"
     :directory="directory"
     :is-pinnable="isPinnable"
     content-type="text"
@@ -81,14 +81,20 @@ export default Vue.extend({
     // project directory, we'll just return the full path, what ever it may be.
     shortPath(): string | undefined {
       const { projectDirectories } = this as unknown as Injected;
-      const projectDirectory = projectDirectories.find((dir) => this.location?.startsWith(dir));
-      if (!projectDirectory) return this.location;
+      const projectDirectory = projectDirectories.find((dir) =>
+        this.decodedLocation?.startsWith(dir)
+      );
+      if (!projectDirectory) return this.decodedLocation;
 
       // The substring removes the leading slash.
       // E.g., given the project directory `/home/user/dev/my-project` and the
       // location `/home/user/dev/my-project/app/models/user.rb`, the result of
       // the replace would be `/app/models/user.rb`.
-      return this.location?.replace(projectDirectory, '').substring(1);
+      return this.decodedLocation?.replace(projectDirectory, '').substring(1);
+    },
+    decodedLocation(): string | undefined {
+      // The location may be URI encoded to avoid issues with special characters.
+      return this.location ? decodeURIComponent(this.location) : undefined;
     },
   },
   methods: {
@@ -108,13 +114,14 @@ export default Vue.extend({
     },
     async onApply(resultCallback: (result: 'success' | 'failure') => void): Promise<void> {
       if (this.pendingApply) return;
+      if (!this.decodedLocation) return;
 
-      this.$root.$emit('apply', this.location, this.code);
+      this.$root.$emit('apply', this.decodedLocation, this.code);
 
       const { rpcClient } = this as unknown as Injected;
       this.pendingApply = true;
       try {
-        await rpcClient.update(this.location, this.code);
+        await rpcClient.update(this.decodedLocation, this.code);
         resultCallback('success');
       } catch (e) {
         resultCallback('failure');

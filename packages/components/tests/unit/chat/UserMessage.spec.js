@@ -236,4 +236,30 @@ describe('components/UserMessage.vue', () => {
       expect(wrapper.find('[data-cy="mermaid-diagram"]').exists()).toBe(true);
     });
   });
+
+  describe('code snippets', () => {
+    it('renders code snippets with Windows paths', async () => {
+      const path = 'C:\\Users\\me\\My Documents\\other-project\\src\\main.cpp';
+      const wrapper = mount(VUserMessage, {
+        propsData: {
+          message: `\n<!-- file: ${path} -->\n\`\`\`cpp\n\n\`\`\``,
+        },
+      });
+
+      const title = wrapper.find('[data-cy="code-snippet"] [data-cy="context-title"]');
+      expect(title.text()).toEqual(path);
+    });
+
+    it('renders code snippets with Unix paths', async () => {
+      const path = '/home/user/dev/blog/src/index.js';
+      const wrapper = mount(VUserMessage, {
+        propsData: {
+          message: `<!-- file: ${path} -->\n\`\`\`js\n\n\`\`\``,
+        },
+      });
+
+      const title = wrapper.find('[data-cy="code-snippet"] [data-cy="context-title"]');
+      expect(title.text()).toEqual(path);
+    });
+  });
 });
