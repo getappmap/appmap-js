@@ -25,21 +25,29 @@ Here's an update to the \`index\` action that includes pagination:
 
 <!-- file: app/controllers/users_controller.rb -->
 \`\`\`ruby
-class UsersController < ApplicationController
-  before_action :correct_user,   only: [:edit, :update]
-  before_action :admin_user,     only: :destroy
-  
-  def index
-    @users = User.where(activated: true).paginate(page: params[:page])
-  end
-  
-  def show
-    @user = User.find(params[:id])
-    redirect_to root_url and return unless @user.activated?
-  end
+def hello_world
+  puts "Hello, world!"
 end
 \`\`\`
-  `,
+
+\`\`\`html
+<!--
+here's
+my 
+comment!
+-->
+\`\`\`
+
+\`\`\`ruby
+<!-- file: app/controllers/users_controller.rb -->
+def hello_world
+  puts "I'm different!"
+end
+\`\`\`
+
+\`\`\`plaintext
+<!-- file: app/controllers/users_controller.rb -->
+This is a partial snippet!`,
   complete: true,
 };
 

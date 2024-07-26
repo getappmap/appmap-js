@@ -261,5 +261,49 @@ describe('components/UserMessage.vue', () => {
       const title = wrapper.find('[data-cy="code-snippet"] [data-cy="context-title"]');
       expect(title.text()).toEqual(path);
     });
+
+    it('renders code snippet paths with a preceding file directive', async () => {
+      const path = '/home/user/dev/blog/src/index.js';
+      const sourceText = '{\n}';
+      const wrapper = mount(VUserMessage, {
+        propsData: {
+          message: `<!-- file: ${path} -->\n\`\`\`js\n${sourceText}\n\`\`\``,
+        },
+      });
+
+      const title = wrapper.find('[data-cy="code-snippet"] [data-cy="context-title"]');
+      const codeSnippet = wrapper.find('[data-cy="code-snippet"] [data-cy="content"]');
+      expect(title.text()).toEqual(path);
+      expect(codeSnippet.text()).toEqual(sourceText);
+    });
+
+    it('renders code snippet paths with an inner file directive', async () => {
+      const path = '/home/user/dev/blog/src/index.js';
+      const sourceText = '{\n}';
+      const wrapper = mount(VUserMessage, {
+        propsData: {
+          message: `\`\`\`js\n<!-- file: ${path} -->\n${sourceText}\n\`\`\``,
+        },
+      });
+
+      const title = wrapper.find('[data-cy="code-snippet"] [data-cy="context-title"]');
+      const codeSnippet = wrapper.find('[data-cy="code-snippet"] [data-cy="content"]');
+      expect(title.text()).toEqual(path);
+      expect(codeSnippet.text()).toEqual(sourceText);
+    });
+
+    it('removes the file directive from the code snippet while streaming', async () => {
+      const sourceText = '{\n}';
+      const wrapper = mount(VUserMessage, {
+        propsData: {
+          message: `\`\`\`js\n<!-- file: /home/user/dev/blog/src/index.js -->\n${sourceText}`,
+        },
+      });
+
+      const title = wrapper.find('[data-cy="code-snippet"] [data-cy="context-title"]');
+      const codeSnippet = wrapper.find('[data-cy="code-snippet"] [data-cy="content"]');
+      expect(title.text()).toEqual('js');
+      expect(codeSnippet.text()).toEqual(sourceText);
+    });
   });
 });

@@ -120,24 +120,46 @@ const marked = new Marked({
       name: 'file-annotation',
       level: 'block',
       start(src: string) {
-        const index = src.search(/^\s*?<!--\s*?file:/m);
+        const index = src.search(/^\s*?(?:`{3,}[^\s]*?\s+)?<!--\s*?/);
         return index > -1 ? index : false;
       },
       tokenizer(src: string) {
-        const fileCommentMatch = /^\s*?<!--\s*?file:\s*?(.+)\s*?-->/m.exec(src);
+        // First, consider cases where the file directive is the first line of the code block
+        let codeBlockMatch = /^\s*?`{3,}(.*?)\n([\s\S]+?)`{3,}/.exec(src);
+        if (codeBlockMatch) {
+          let [, language, content] = codeBlockMatch;
+          const fileCommentMatch = /^\s*?<!--\s*?file:\s*?(.+)\s*?-->.*?\n/.exec(content);
+          if (!fileCommentMatch) return false;
+
+          const [, sourcePath] = fileCommentMatch;
+          content =
+            content.slice(0, fileCommentMatch.index) +
+            content.slice(fileCommentMatch.index + fileCommentMatch[0].length);
+          return {
+            type: 'file-annotation',
+            raw: codeBlockMatch[0],
+            text: src,
+            sourcePath,
+            language: language.trim(),
+            content,
+          };
+        }
+
+        // Otherwise, the file directive should immediately precede the code block
+        const fileCommentMatch = /^\s*?<!--\s*?file:\s*?(.+)\s*?-->/.exec(src);
         if (!fileCommentMatch) return false;
 
-        const codeMatch = /\s*?```(.*)\n([\s\S]+?)```/.exec(
+        codeBlockMatch = /\s*?```(.*?)\n([\s\S]+?)```/.exec(
           src.slice(fileCommentMatch.index + fileCommentMatch[0].length)
         );
-        if (!codeMatch) return false;
+        if (!codeBlockMatch) return false;
 
         const [, sourcePath] = fileCommentMatch;
-        const [, language, content] = codeMatch;
+        const [, language, content] = codeBlockMatch;
 
         return {
           type: 'file-annotation',
-          raw: fileCommentMatch[0] + codeMatch[0],
+          raw: fileCommentMatch[0] + codeBlockMatch[0],
           text: src,
           sourcePath,
           language: language.trim(),

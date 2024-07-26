@@ -12,7 +12,7 @@
     @pin="onPin"
     @apply="onApply"
   >
-    <pre><code v-html="highlightedCode" /><slot name="cursor" /></pre>
+    <pre><code data-cy="content" v-html="highlightedCode" /><slot name="cursor" /></pre>
   </v-context-container>
 </template>
 
@@ -33,6 +33,8 @@ interface Injected {
   rpcClient: AppMapRPC;
   projectDirectories: string[];
 }
+
+const stripFileDirective = (code: string): string => code.replace(/^\s*?<!--\s*?file:.*?\n/, '');
 
 export default Vue.extend({
   props: {
@@ -65,7 +67,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      code: this.$slots.default?.[0].text ?? '',
+      code: stripFileDirective(this.$slots.default?.[0].text ?? ''),
       pendingApply: false,
     };
   },
@@ -135,7 +137,7 @@ export default Vue.extend({
   updated() {
     // Slots are not reactive unless written directly to the DOM.
     // Luckily for us, this method is called when the content within the slot changes.
-    this.code = this.$slots.default?.[0].text ?? '';
+    this.code = stripFileDirective(this.$slots.default?.[0].text ?? '');
   },
 });
 </script>
