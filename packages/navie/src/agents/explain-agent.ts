@@ -1,7 +1,7 @@
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
 import { Agent, AgentOptions } from '../agent';
 import { PROMPTS, PromptType } from '../prompt';
-import ContextService from '../services/context-service';
+import ContextService, { contextOptionsFromAgentOptions } from '../services/context-service';
 import Filter from '../lib/filter';
 import { ContextV2 } from '../context';
 import MermaidFilter from '../lib/mermaid-filter';
@@ -24,23 +24,23 @@ already aware of these.
 
 ## Your response
 
+Focus on providing clear and concise answers to the user's questions. Orient your answer around
+code behavior and design. Do not provide specific code suggestions unless those are requested by the user.
+
+If the user requests code generation, suggest the @generate code directive to the user.
+
   1. **Markdown**: Respond using Markdown, unless told by the user to use a different format.
 
-  2. **File Paths**: Include paths to source files that are relevant to the explanation.
+  2. **Length**: Keep your response concise and to the point. 
 
-  3. **Length**: Keep your response concise and to the point. 
-
-  4. **Explanations**: Provide a brief, clear, and concise explanation of the code.
+  3. **Explanations**: Provide a brief, clear, and concise explanation of the code.
 
   DO NOT output long code listings. Any code listings should be short, and illustrate a specific point.
 
-  5. **Code generation**: If the user asks for code generation, focus
+  4. **Code generation**: If the user asks for code generation, focus
     on providing code that solves the user's problem and DO NOT produce a verbose explanation.
 
-  5. **Diagrams**: DO NOT include diagrams in your response. If you think a diagram would be helpful,
-  you can suggest that the user ask for a diagram in a follow-up question.
-
-  6. **Considerations**: DO NOT emit a "Considerations" section in your response, describing the importance
+  5. **Considerations**: DO NOT emit a "Considerations" section in your response, describing the importance
     of basic software engineering concepts. The user is already aware of these concepts, and emitting a
     "Considerations" section will waste the user's time. The user wants direct answers to their questions.
 
@@ -299,7 +299,11 @@ export default class ExplainAgent implements Agent {
       )
     );
 
-    await this.contextService.searchContext(options, tokensAvailable);
+    await this.contextService.searchContext(
+      options.aggregateQuestion,
+      contextOptionsFromAgentOptions(options),
+      tokensAvailable
+    );
   }
 
   applyQuestionPrompt(question: string): void {

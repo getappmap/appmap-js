@@ -2,7 +2,7 @@ import { Agent, AgentOptions } from '../agent';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
 import Filter, { NopFilter } from '../lib/filter';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
-import ContextService from '../services/context-service';
+import ContextService, { contextOptionsFromAgentOptions } from '../services/context-service';
 import FileChangeExtractorService from '../services/file-change-extractor-service';
 import { GENERATE_AGENT_FORMAT } from './generate-agent';
 
@@ -75,7 +75,12 @@ export default class TestAgent implements Agent {
     const fileNames = await this.fileChangeExtractorService.listFiles(options, options.chatHistory);
     if (fileNames && fileNames.length > 0) await this.contextService.locationContext(fileNames);
 
-    await this.contextService.searchContext(options, tokensAvailable, ['test', 'spec']);
+    await this.contextService.searchContext(
+      options.aggregateQuestion,
+      contextOptionsFromAgentOptions(options),
+      tokensAvailable,
+      ['test', 'spec']
+    );
   }
 
   applyQuestionPrompt(question: string): void {

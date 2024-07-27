@@ -6,7 +6,7 @@ import InteractionHistory, {
 } from '../interaction-history';
 import Filter, { NopFilter } from '../lib/filter';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
-import ContextService from '../services/context-service';
+import ContextService, { contextOptionsFromAgentOptions } from '../services/context-service';
 import FileChangeExtractorService from '../services/file-change-extractor-service';
 import LookupContextService from '../services/lookup-context-service';
 
@@ -84,7 +84,11 @@ export default class GenerateAgent implements Agent {
     const fileNames = await this.fileChangeExtractorService.listFiles(options, options.chatHistory);
     if (fileNames && fileNames.length > 0) await this.contextService.locationContext(fileNames);
 
-    await this.contextService.searchContext(options, tokensAvailable);
+    await this.contextService.searchContext(
+      options.aggregateQuestion,
+      contextOptionsFromAgentOptions(options),
+      tokensAvailable
+    );
   }
 
   applyQuestionPrompt(question: string): void {

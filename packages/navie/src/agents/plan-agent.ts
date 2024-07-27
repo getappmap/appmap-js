@@ -2,11 +2,10 @@ import { Agent, AgentOptions } from '../agent';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
 import Filter, { NopFilter } from '../lib/filter';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
-import ContextService from '../services/context-service';
-import { GENERATE_AGENT_FORMAT } from './generate-agent';
+import ContextService, { contextOptionsFromAgentOptions } from '../services/context-service';
 
 // Elements of this prompt are based on https://community.atlassian.com/t5/Jira-Software-articles/How-to-write-a-useful-Jira-ticket/ba-p/2147004
-export const GENERATE_AGENT_PROMPT = `**Task: Specification of Software Issues**
+export const PLAN_AGENT_PROMPT = `**Task: Specification of Software Issues**
 
 **About you**
 
@@ -14,6 +13,8 @@ Your name is Navie. You are an AI softwrare architect created and maintained by 
 
 Your job is to read a problem statement provided by the user, investigate the code base, and respond with
 a fully specified plan that describes to a developer how to solve the problem.
+
+DO NOT GENERATE CODE.
 
 **About the user**
 
@@ -25,9 +26,7 @@ You do not need to explain the importance of programming concepts like planning 
 
 export const PLAN_AGENT_FORMAT = `**Response Format**
 
-Solve the problem as if you were a contributor to the project, responding to an end-user bug report.
-
-Do not consider changing any code snippets that appear to be downstream of the problem.
+Analyze the problem as if you were a contributor to the project, responding to an end-user bug report.
 
 Your response should include the following elements:
 
@@ -41,11 +40,8 @@ Your response should include the following elements:
 
 * **Analysis** In this section describe your reasoning about how best to solve the issue.
 
-Describe the logic changes that are necessary to resolve the issue.
-
-Without referring to specific files, explain how the code should be modified to solve the issue.
-
-Discuss in detail what are the causes, effects and what the defect or requirement is.
+Describe the logic changes that are necessary to resolve the issue. Do not refer to specific
+files or classes in this section.
 
 For a bug, explain the root cause of the bug, and how the logic should be changed to fix it.
 
@@ -54,12 +50,17 @@ For a feature, describe the components of the new functionality, and the role of
 * **Proposed Changes** This section suggests which files and components should be changed in order to
 solve the issue.
 
+With reference to files and / or modules, explain how the code should be modified to solve the issue.
+
+DO NOT generate code.
+
 Each item in the \`Proposed Changes\` section should describe, in plain language, logic that implemented
 for that file or component.
 
 * DO provide a detailed description of the necessary changes.
 * DO suggest changes to existing, non-test code files.
 * DO NOT include a code snippet.
+* DO NOT GENERATE CODE.
 * DO NOT design changes to test cases.
 * DO NOT design changes to documentation.
 * DO NOT propose the creation of new files, unless it's absolutely necessary.
@@ -77,10 +78,10 @@ export class PlanAgent implements Agent {
   }
 
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {
-    const agentPrompt = [GENERATE_AGENT_PROMPT];
+    const agentPrompt = [PLAN_AGENT_PROMPT];
     // With the /noformat option, the user will explain the desired output format in their message.
     if (options.userOptions.isEnabled('format', true)) {
-      agentPrompt.push(GENERATE_AGENT_FORMAT);
+      agentPrompt.push(PLAN_AGENT_FORMAT);
     }
 
     this.history.addEvent(new PromptInteractionEvent('agent', 'system', agentPrompt.join('\n\n')));
@@ -93,15 +94,21 @@ export class PlanAgent implements Agent {
       )
     );
 
-    await this.contextService.searchContext(options, tokensAvailable);
+    await this.contextService.searchContext(
+      options.aggregateQuestion,
+      contextOptionsFromAgentOptions(options),
+      tokensAvailable
+    );
   }
 
   applyQuestionPrompt(question: string): void {
+    const prompt = [question, 'Do not generate code.'].join('\n\n');
+
     this.history.addEvent(
       new PromptInteractionEvent(
         PromptType.ProblemStatement,
         'user',
-        buildPromptValue(PromptType.ProblemStatement, question)
+        buildPromptValue(PromptType.ProblemStatement, prompt)
       )
     );
   }

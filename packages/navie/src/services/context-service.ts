@@ -8,6 +8,20 @@ import { ContextV2 } from '../context';
 import InteractionHistory, { ContextItemEvent } from '../interaction-history';
 import { PromptType } from '../prompt';
 
+export type ContextOptions = {
+  contextEnabled: boolean;
+  termsEnabled: boolean;
+  filters: ContextV2.ContextFilters;
+};
+
+export function contextOptionsFromAgentOptions(options: AgentOptions): ContextOptions {
+  return {
+    contextEnabled: options.userOptions.isEnabled('context', true),
+    termsEnabled: options.userOptions.isEnabled('terms', true),
+    filters: options.buildContextFilters(),
+  };
+}
+
 export default class ContextService {
   constructor(
     public history: InteractionHistory,
@@ -17,26 +31,25 @@ export default class ContextService {
   ) {}
 
   async searchContext(
-    options: AgentOptions,
+    question: string,
+    options: ContextOptions,
     tokensAvailable: () => number,
     additionalTerms?: string[],
     locations?: string[]
   ): Promise<void> {
-    const lookupContext = options.userOptions.isEnabled('context', true);
-    const transformTerms = options.userOptions.isEnabled('terms', true);
-    if (lookupContext) {
+    if (options.contextEnabled) {
       this.history.log('[context-service] Searching for context');
 
       const searchTerms = await transformSearchTerms(
-        transformTerms,
-        options.aggregateQuestion,
+        options.termsEnabled,
+        question,
         this.vectorTermsService
       );
       if (additionalTerms) {
         searchTerms.push(...additionalTerms);
       }
 
-      const filters = options.buildContextFilters();
+      const filters = { ...options.filters };
       if (locations) filters.locations = locations;
 
       const tokenCount = tokensAvailable();

@@ -131,14 +131,17 @@ export default class ExplainCommand implements Command {
 
     this.interactionHistory.addEvent(
       new CompletionEvent(
-        this.completionService.modelName,
+        mode.model ?? this.completionService.modelName,
         mode.temperature ?? this.completionService.temperature ?? -1
       )
     );
 
     const filter: Filter = mode.newFilter();
 
-    const response = this.completionService.complete(messages, { temperature: mode.temperature });
+    const response = this.completionService.complete(messages, {
+      temperature: mode.temperature,
+      model: mode.model,
+    });
     for await (const token of response) {
       for await (const chunk of filter.transform(token)) yield chunk.content;
     }

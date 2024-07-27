@@ -4,7 +4,7 @@ import InteractionHistory, { PromptInteractionEvent } from '../interaction-histo
 import Filter from '../lib/filter';
 import MermaidFilter from '../lib/mermaid-filter';
 import { PROMPTS, PromptType } from '../prompt';
-import ContextService from '../services/context-service';
+import ContextService, { contextOptionsFromAgentOptions } from '../services/context-service';
 import MermaidFixerService from '../services/mermaid-fixer-service';
 import { DIAGRAM_FORMAT_PROMPT } from './explain-agent';
 
@@ -51,7 +51,11 @@ export default class DiagramAgent implements Agent {
       )
     );
 
-    await this.contextService.searchContext(options, tokensAvailable);
+    await this.contextService.searchContext(
+      options.aggregateQuestion,
+      contextOptionsFromAgentOptions(options),
+      tokensAvailable
+    );
 
     return { response: 'Rendering diagram...\n', abort: false };
   }

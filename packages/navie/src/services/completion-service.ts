@@ -8,7 +8,10 @@ import type { ChatCompletionMessageParam } from 'openai/resources';
 import Message, { CHARACTERS_PER_TOKEN } from '../message';
 
 export default interface CompletionService {
-  complete: (messages: Message[], options?: { temperature: number | undefined }) => Completion;
+  complete: (
+    messages: Message[],
+    options?: { temperature: number | undefined; model: string | undefined }
+  ) => Completion;
   readonly modelName: string;
   readonly temperature: number | undefined;
 }
@@ -43,6 +46,10 @@ const COST_PER_M_TOKEN: Record<string, { input: number; output: number }> = {
   'gpt-4o-2024-05-13': {
     input: 5,
     output: 5,
+  },
+  'gpt-4o-mini': {
+    input: 0.15,
+    output: 0.6,
   },
   'gpt-3.5-turbo-0125': {
     input: 0.5,
@@ -169,13 +176,19 @@ export class OpenAICompletionService implements CompletionService {
   }
   openAI: ChatOpenAI;
 
-  async *complete(messages: Message[], options?: { temperature?: number }): Completion {
+  async *complete(
+    messages: Message[],
+    options?: { temperature?: number; model?: }
+  ): Completion {
     const promptTokensPromise = this.countTokens(messages);
+    const model = options?.model || this.openAI.modelName;
+    const temperature = options?.temperature ?? this.openAI.temperature;
+
     const response = await this.openAI.completionWithRetry({
       messages: mergeSystemMessages(messages),
-      model: this.openAI.modelName,
+      model,
       stream: true,
-      temperature: options?.temperature,
+      temperature,
     });
 
     let tokenCount = 0;
@@ -184,7 +197,7 @@ export class OpenAICompletionService implements CompletionService {
       if (content) yield content;
       tokenCount += 1;
     }
-    const usage = tokenUsage(await promptTokensPromise, tokenCount, this.modelName);
+    const usage = tokenUsage(await promptTokensPromise, tokenCount, model);
     warn(usage.toString());
     return usage;
   }
