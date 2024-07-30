@@ -24,6 +24,7 @@
           :base-url="baseUrl"
           :model="model"
         />
+        <v-proxy-settings v-if="hasProxySettings" :proxy-settings="proxySettings" />
       </v-chat>
     </div>
     <div
@@ -48,12 +49,27 @@ import VChat from '@/components/chat/Chat.vue';
 import VContextStatus from '@/components/chat-search/ContextStatus.vue';
 import VContext from '@/components/chat-search/Context.vue';
 import VLlmConfiguration from '@/components/chat-search/LlmConfiguration.vue';
+import VProxySettings from '@/components/chat-search/ProxySettings.vue';
 import AppMapRPC from '@/lib/AppMapRPC';
 import authenticatedClient from '@/components/mixins/authenticatedClient';
 import type { ITool, CodeSelection } from '@/components/chat/Chat.vue';
 import type { PinEvent } from '@/components/chat/PinEvent';
 
 import debounce from '@/lib/debounce';
+
+// type ProxySettings = {
+//   http_proxy: string | undefined;
+//   https_proxy: string | undefined;
+//   vscode: {
+//     'http.proxy': string | undefined;
+//     'https.proxy': string | undefined;
+//   };
+//   env: {
+//     http_proxy: string | undefined;
+//     https_proxy: string | undefined;
+//     no_proxy: string | undefined;
+//   };
+// };
 
 export default {
   name: 'v-chat-search',
@@ -62,6 +78,7 @@ export default {
     VContext,
     VContextStatus,
     VLlmConfiguration,
+    VProxySettings,
   },
   mixins: [authenticatedClient],
   props: {
@@ -88,6 +105,10 @@ export default {
     },
     targetAppmapFsPath: {
       type: String,
+    },
+    proxySettings: {
+      type: Object,
+      default: () => ({}),
     },
     appmapYmlPresent: Boolean,
     mostRecentAppMaps: Array,
@@ -243,6 +264,9 @@ export default {
       return new AppMapRPC(
         this.appmapRpcFn ? { request: this.appmapRpcFn } : this.appmapRpcPort || 30101
       );
+    },
+    hasProxySettings() {
+      return this.proxySettings?.http_proxy || this.proxySettings?.https_proxy;
     },
   },
   methods: {
