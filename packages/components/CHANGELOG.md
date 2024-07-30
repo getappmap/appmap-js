@@ -1,3 +1,15 @@
+# [@appland/components-v4.30.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.29.0...@appland/components-v4.30.0) (2024-07-30)
+
+
+### Bug Fixes
+
+* Messages should no longer opt to scroll horizontally ([54544f6](https://github.com/getappmap/appmap-js/commit/54544f624a985c599e3d2f11b732cf098334a596))
+
+
+### Features
+
+* Add an 'apply' button to relevant code snippets ([ee2c48f](https://github.com/getappmap/appmap-js/commit/ee2c48f68359a7b053ccf21cec7266123ee75ff2))
+
 # [@appland/components-v4.29.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.28.1...@appland/components-v4.29.0) (2024-07-22)
 
 
