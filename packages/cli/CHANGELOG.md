@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.156.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.155.1...@appland/appmap-v3.156.0) (2024-07-30)
+
+
+### Features
+
+* Obtain contents of named file locations ([e3d593d](https://github.com/getappmap/appmap-js/commit/e3d593d0c36402cbad65674fe6d99ba075296320))
+* Utility to handle Location context requests ([6537ab3](https://github.com/getappmap/appmap-js/commit/6537ab3a6f6cf35438e71cfde2e349a2381f5249))
+
 # [@appland/appmap-v3.155.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.155.0...@appland/appmap-v3.155.1) (2024-07-25)
 
 
