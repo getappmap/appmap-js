@@ -5,9 +5,12 @@ import VectorTermsService from '../../src/services/vector-terms-service';
 import LookupContextService from '../../src/services/lookup-context-service';
 import ApplyContextService from '../../src/services/apply-context-service';
 import { UserOptions } from '../../src/lib/parse-options';
+import InteractionHistory from '../../src/interaction-history';
 import { SEARCH_CONTEXT } from '../fixture';
+import { ContextV2 } from '../../src/context';
 
 describe('ContextService', () => {
+  let history: InteractionHistory;
   let vectorTermsService: VectorTermsService;
   let lookupContextService: LookupContextService;
   let applyContextService: ApplyContextService;
@@ -15,9 +18,9 @@ describe('ContextService', () => {
 
   const question = 'How does user management work?';
   const tokensAvailable = 1000;
-  const context = SEARCH_CONTEXT;
 
   beforeEach(() => {
+    history = new InteractionHistory();
     vectorTermsService = {
       suggestTerms: jest.fn(),
     } as unknown as VectorTermsService;
@@ -31,56 +34,120 @@ describe('ContextService', () => {
     } as unknown as ApplyContextService;
 
     contextService = new ContextService(
+      history,
       vectorTermsService,
       lookupContextService,
       applyContextService
     );
   });
 
-  it('propagates context filters from user options', async () => {
-    vectorTermsService.suggestTerms = jest.fn().mockResolvedValue(['user', 'management']);
-    lookupContextService.lookupContext = jest.fn().mockResolvedValue(context);
-    lookupContextService.lookupHelp = jest.fn();
+  describe('searchContext', () => {
+    const searchContext = SEARCH_CONTEXT;
 
-    const options = new AgentOptions(
-      question,
-      question,
-      new UserOptions(new Map(Object.entries({ include: 'test', exclude: '\\.md' }))),
-      [],
-      []
-    );
+    it('propagates context filters from user options', async () => {
+      vectorTermsService.suggestTerms = jest.fn().mockResolvedValue(['user', 'management']);
+      lookupContextService.lookupContext = jest.fn().mockResolvedValue(searchContext);
+      lookupContextService.lookupHelp = jest.fn();
 
-    await contextService.perform(options, () => tokensAvailable);
+      const options = new AgentOptions(
+        question,
+        question,
+        new UserOptions(new Map(Object.entries({ include: 'test', exclude: '\\.md' }))),
+        [],
+        []
+      );
 
-    expect(lookupContextService.lookupContext).toHaveBeenCalledWith(
-      ['user', 'management'],
-      tokensAvailable,
-      {
-        include: ['test'],
-        exclude: ['\\.md'],
-      }
-    );
+      await contextService.searchContext(options, () => tokensAvailable);
+
+      expect(lookupContextService.lookupContext).toHaveBeenCalledWith(
+        ['user', 'management'],
+        tokensAvailable,
+        {
+          include: ['test'],
+          exclude: ['\\.md'],
+        }
+      );
+    });
+
+    it('applies optional vector terms', async () => {
+      vectorTermsService.suggestTerms = jest.fn().mockResolvedValue(['user', 'management']);
+      lookupContextService.lookupContext = jest.fn().mockResolvedValue(searchContext);
+      lookupContextService.lookupHelp = jest.fn();
+
+      const options = new AgentOptions(
+        question,
+        question,
+        new UserOptions(new Map(Object.entries({}))),
+        [],
+        []
+      );
+
+      await contextService.searchContext(options, () => tokensAvailable, ['test']);
+
+      expect(lookupContextService.lookupContext).toHaveBeenCalledWith(
+        ['user', 'management', 'test'],
+        tokensAvailable,
+        {}
+      );
+    });
+
+    describe('when the context response is malformed', () => {
+      it('treats the response as empty', async () => {
+        vectorTermsService.suggestTerms = jest.fn().mockResolvedValue(['user', 'management']);
+        lookupContextService.lookupContext = jest.fn().mockResolvedValue({
+          name: 'what?',
+        });
+        lookupContextService.lookupHelp = jest.fn();
+
+        const options = new AgentOptions(
+          question,
+          question,
+          new UserOptions(new Map(Object.entries({}))),
+          [],
+          []
+        );
+
+        await contextService.searchContext(options, () => tokensAvailable);
+
+        expect(applyContextService.applyContext).toHaveBeenCalledWith([], [], 3000);
+      });
+    });
   });
 
-  it('applies optional vector terms', async () => {
-    vectorTermsService.suggestTerms = jest.fn().mockResolvedValue(['user', 'management']);
-    lookupContextService.lookupContext = jest.fn().mockResolvedValue(context);
-    lookupContextService.lookupHelp = jest.fn();
+  describe('locationContext', () => {
+    const locationContext: ContextV2.ContextResponse = [
+      {
+        type: ContextV2.ContextItemType.CodeSnippet,
+        location: 'file1',
+        content: 'the file 1',
+      },
+      {
+        type: ContextV2.ContextItemType.CodeSnippet,
+        location: 'file2',
+        content: 'the file 2',
+      },
+    ];
 
-    const options = new AgentOptions(
-      question,
-      question,
-      new UserOptions(new Map(Object.entries({}))),
-      [],
-      []
-    );
+    it('retrieves context for files', async () => {
+      lookupContextService.lookupContext = jest.fn().mockResolvedValue(locationContext);
 
-    await contextService.perform(options, () => tokensAvailable, ['test']);
+      await contextService.locationContext(['file1', 'file2']);
 
-    expect(lookupContextService.lookupContext).toHaveBeenCalledWith(
-      ['user', 'management', 'test'],
-      tokensAvailable,
-      {}
-    );
+      expect(lookupContextService.lookupContext).toHaveBeenCalledWith([], 0, {
+        locations: ['file1', 'file2'],
+      });
+      expect(history.events.map((event) => event.metadata)).toEqual([
+        {
+          location: 'file1',
+          promptType: 'codeSnippets',
+          type: 'contextItem',
+        },
+        {
+          location: 'file2',
+          promptType: 'codeSnippets',
+          type: 'contextItem',
+        },
+      ]);
+    });
   });
 });

@@ -86,7 +86,7 @@ export default class ExplainCommand implements Command {
       question,
       aggregateQuestion,
       request.userOptions,
-      chatHistory?.map((message) => message.content) || [],
+      chatHistory || [],
       projectInfo,
       codeSelection,
       contextLabels

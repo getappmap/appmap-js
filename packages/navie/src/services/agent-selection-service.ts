@@ -14,9 +14,9 @@ import TestAgent from '../agents/test-agent';
 import { PlanAgent } from '../agents/plan-agent';
 import ContextService from './context-service';
 import { UserOptions } from '../lib/parse-options';
-import CompletionService from './completion-service';
 import MermaidFixerService from './mermaid-fixer-service';
 import DiagramAgent from '../agents/diagram-agent';
+import FileChangeExtractorService from './file-change-extractor-service';
 
 type AgentModeResult = {
   agentMode: AgentMode;
@@ -47,6 +47,7 @@ export default class AgentSelectionService {
     private history: InteractionHistory,
     private vectorTermsService: VectorTermsService,
     private lookupContextService: LookupContextService,
+    private fileChangeExtractorService: FileChangeExtractorService,
     private applyContextService: ApplyContextService,
     private techStackService: TechStackService,
     private mermaidFixerService: MermaidFixerService
@@ -60,6 +61,7 @@ export default class AgentSelectionService {
     let modifiedQuestion = question;
 
     const contextService = new ContextService(
+      this.history,
       this.vectorTermsService,
       this.lookupContextService,
       this.applyContextService
@@ -73,11 +75,13 @@ export default class AgentSelectionService {
         this.techStackService
       );
 
-    const testAgent = () => new TestAgent(this.history, contextService);
+    const testAgent = () =>
+      new TestAgent(this.history, contextService, this.fileChangeExtractorService);
 
     const planAgent = () => new PlanAgent(this.history, contextService);
 
-    const generateAgent = () => new GenerateAgent(this.history, contextService);
+    const generateAgent = () =>
+      new GenerateAgent(this.history, contextService, this.fileChangeExtractorService);
 
     const diagramAgent = () =>
       new DiagramAgent(this.history, contextService, this.mermaidFixerService);

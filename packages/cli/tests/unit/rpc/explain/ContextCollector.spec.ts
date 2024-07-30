@@ -1,131 +1,99 @@
-import { SearchRpc } from '@appland/rpc';
-import { ContextCollector, EventCollector } from '../../../../src/rpc/explain/collectContext';
-import AppMapIndex from '../../../../src/fulltext/AppMapIndex';
-import * as withIndex from '../../../../src/fulltext/withIndex';
+import { ContextCollector } from '../../../../src/rpc/explain/collectContext';
+import * as SearchContextCollector from '../../../../src/rpc/explain/SearchContextCollector';
+import * as LocationContextCollector from '../../../../src/rpc/explain/LocationContextCollector';
 import * as navie from '@appland/navie';
+import Location from '../../../../src/rpc/explain/location';
 
-jest.mock('../../../../src/fulltext/AppMapIndex');
 jest.mock('@appland/navie');
+jest.mock('../../../../src/fulltext/AppMapIndex');
+jest.mock('../../../../src/rpc/explain/SearchContextCollector');
+jest.mock('../../../../src/rpc/explain/LocationContextCollector');
 
 describe('ContextCollector', () => {
-  const vectorTerms = ['login', 'user'];
   const charLimit = 5000;
-  let contextCollector: ContextCollector;
 
   beforeEach(() => {
     jest.mocked(navie.applyContext).mockImplementation((context) => context);
   });
   afterEach(() => jest.restoreAllMocks());
 
-  describe('collectContext', () => {
-    describe('appmaps', () => {
-      beforeEach(() => {
-        contextCollector = new ContextCollector(['a', 'b'], [], vectorTerms, charLimit);
-      });
-
-      it('returns context for specified appmaps', async () => {
-        const mockAppmaps = ['appmap1', 'appmap2'];
-        contextCollector.appmaps = mockAppmaps;
-
-        const mockContext: navie.ContextV2.ContextResponse = [
-          {
-            type: navie.ContextV2.ContextItemType.SequenceDiagram,
-            content: 'diagram1',
-          },
-          {
-            type: navie.ContextV2.ContextItemType.SequenceDiagram,
-            content: 'diagram2',
-          },
-        ];
-
-        AppMapIndex.search = jest.fn().mockRejectedValue(new Error('Unexpected call to search'));
-
-        EventCollector.prototype.collectEvents = jest.fn().mockResolvedValue({
-          results: [],
-          context: mockContext,
-          contextSize: 4545,
-        });
-
-        const collectedContext = await contextCollector.collectContext();
-
-        expect(collectedContext.searchResponse.numResults).toBe(mockAppmaps.length);
-        expect(collectedContext.context).toEqual(mockContext);
-      });
-
-      it('handles search across all appmaps', async () => {
-        const mockSearchResponse: SearchRpc.SearchResponse = {
-          numResults: 10,
-          results: [
-            {
-              appmap: 'appmap1',
-              directory: 'a',
-              score: 1,
-              events: [{ fqid: 'function:1', score: 1, eventIds: [1, 2] }],
-            },
-            {
-              appmap: 'appmap2',
-              directory: 'a',
-              score: 1,
-              events: [{ fqid: 'function:2', score: 1, eventIds: [3, 4] }],
-            },
-            {
-              appmap: 'appmap3',
-              directory: 'b',
-              score: 1,
-              events: [{ fqid: 'function:3', score: 1, eventIds: [5, 6] }],
-            },
-          ],
-        };
-
-        AppMapIndex.search = jest.fn().mockResolvedValue(mockSearchResponse);
-
-        const mockContext: navie.ContextV2.ContextResponse = [
-          {
-            type: navie.ContextV2.ContextItemType.SequenceDiagram,
-            content: 'diagram1',
-          },
-        ];
-
-        EventCollector.prototype.collectEvents = jest.fn().mockResolvedValue({
-          results: [],
-          context: mockContext,
-          contextSize: 3000,
-        });
-
-        const collectedContext = await contextCollector.collectContext();
-
-        expect(AppMapIndex.search).toHaveBeenCalledWith(['a', 'b'], vectorTerms.join(' '), {
-          maxResults: expect.any(Number),
-        });
-        expect(collectedContext.searchResponse.numResults).toBe(10);
-        expect(collectedContext.context).toEqual(mockContext);
-      });
-    });
-
+  describe('vector term search', () => {
     describe('with empty vector terms', () => {
       it('returns an empty context', async () => {
-        const indexSearch = jest.spyOn(withIndex, 'default');
-        const emptyVectorTerms = [[], [''], [' ']];
+        const emptyVectorTerms = ['', '  '];
 
-        for (const vectorTerms of emptyVectorTerms) {
-          const contextCollector = new ContextCollector(
-            ['example'],
-            ['src'],
-            vectorTerms,
-            charLimit
-          );
-          const result = await contextCollector.collectContext();
-          expect(result).toStrictEqual({
-            searchResponse: {
-              results: [],
-              numResults: 0,
-            },
-            context: [],
-          });
-        }
+        const contextCollector = new ContextCollector(
+          ['example'],
+          ['src'],
+          emptyVectorTerms,
+          charLimit
+        );
+        const result = await contextCollector.collectContext();
+        expect(result).toStrictEqual({
+          searchResponse: {
+            results: [],
+            numResults: 0,
+          },
+          context: [],
+        });
 
-        expect(indexSearch).not.toHaveBeenCalled();
+        expect(SearchContextCollector.default).not.toHaveBeenCalled();
+        expect(LocationContextCollector.default).not.toHaveBeenCalled();
       });
+    });
+  });
+
+  describe('with non-empty vector terms', () => {
+    it('invokes SearchContextCollector', async () => {
+      const vectorTerms = ['login', 'user'];
+      const contextCollector = new ContextCollector(['example'], ['src'], vectorTerms, charLimit);
+
+      const searchConstructorSpy = jest.spyOn(SearchContextCollector, 'default');
+      searchConstructorSpy.mockImplementation(
+        () =>
+          ({
+            collectContext: jest.fn().mockResolvedValue({
+              searchResponse: {
+                results: [],
+                numResults: 0,
+              },
+              context: [],
+            }),
+          } as unknown as SearchContextCollector.default)
+      );
+
+      await contextCollector.collectContext();
+      expect(searchConstructorSpy).toHaveBeenCalledWith(
+        ['example'],
+        ['src'],
+        undefined,
+        vectorTerms,
+        charLimit
+      );
+    });
+  });
+  describe('with locations specified', () => {
+    it('invokes LocationContextCollector', async () => {
+      const locations = ['file1.py'];
+      const contextCollector = new ContextCollector(['example'], ['src'], [], 0);
+      contextCollector.locations = locations.map((l) => Location.parse(l)) as Location[];
+
+      const locationConstructorSpy = jest.spyOn(LocationContextCollector, 'default');
+      locationConstructorSpy.mockImplementation(
+        () =>
+          ({
+            collectContext: jest.fn().mockResolvedValue({
+              searchResponse: {
+                results: [],
+                numResults: 0,
+              },
+              context: [],
+            }),
+          } as unknown as LocationContextCollector.default)
+      );
+
+      await contextCollector.collectContext();
+      expect(locationConstructorSpy).toHaveBeenCalledWith(['src'], contextCollector.locations);
     });
   });
 });

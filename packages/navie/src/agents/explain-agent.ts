@@ -299,7 +299,7 @@ export default class ExplainAgent implements Agent {
       )
     );
 
-    await this.contextService.perform(options, tokensAvailable);
+    await this.contextService.searchContext(options, tokensAvailable);
   }
 
   applyQuestionPrompt(question: string): void {

@@ -38,6 +38,7 @@ describe('@explain agent', () => {
       repairDiagram: jest.fn(),
     } as unknown as MermaidFixerService;
     contextService = new ContextService(
+      interactionHistory,
       vectorTermsService,
       lookupContextService,
       applyContextService

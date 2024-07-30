@@ -5,7 +5,7 @@ import InteractionHistory, { AgentSelectionEvent } from '../../src/interaction-h
 import { UserOptions } from '../../src/lib/parse-options';
 import AgentSelectionService from '../../src/services/agent-selection-service';
 import ApplyContextService from '../../src/services/apply-context-service';
-import CompletionService from '../../src/services/completion-service';
+import FileChangeExtractorService from '../../src/services/file-change-extractor-service';
 import LookupContextService from '../../src/services/lookup-context-service';
 import MermaidFixerService from '../../src/services/mermaid-fixer-service';
 import TechStackService from '../../src/services/tech-stack-service';
@@ -16,6 +16,7 @@ describe('AgentSelectionService', () => {
   let vectorTermsService: VectorTermsService;
   let lookupContextService: LookupContextService;
   let applyContextService: ApplyContextService;
+  let fileChangeExtractorService: FileChangeExtractorService;
   let techStackService: TechStackService;
   let mermaidFixerService: MermaidFixerService;
   let genericQuestion = 'How does user management work?';
@@ -27,6 +28,7 @@ describe('AgentSelectionService', () => {
       interactionHistory,
       vectorTermsService,
       lookupContextService,
+      fileChangeExtractorService,
       applyContextService,
       techStackService,
       mermaidFixerService
@@ -37,6 +39,7 @@ describe('AgentSelectionService', () => {
     interactionHistory = new InteractionHistory();
     vectorTermsService = {} as VectorTermsService;
     lookupContextService = {} as LookupContextService;
+    fileChangeExtractorService = {} as FileChangeExtractorService;
     applyContextService = {} as ApplyContextService;
     techStackService = {} as TechStackService;
     mermaidFixerService = {} as MermaidFixerService;

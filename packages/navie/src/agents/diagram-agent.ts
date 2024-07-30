@@ -35,7 +35,11 @@ export default class DiagramAgent implements Agent {
   }
 
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<AgentResponse> {
-    const agentPrompt = [DIAGRAM_AGENT_PROMPT, DIAGRAM_FORMAT_PROMPT];
+    const agentPrompt = [DIAGRAM_AGENT_PROMPT];
+    // With the /noformat option, the user will explain the desired output format in their message.
+    if (options.userOptions.isEnabled('format', true)) {
+      agentPrompt.push(DIAGRAM_FORMAT_PROMPT);
+    }
     this.history.addEvent(new PromptInteractionEvent('agent', 'system', agentPrompt.join('\n\n')));
 
     this.history.addEvent(
@@ -46,7 +50,7 @@ export default class DiagramAgent implements Agent {
       )
     );
 
-    await this.contextService.perform(options, tokensAvailable);
+    await this.contextService.searchContext(options, tokensAvailable);
 
     return { response: 'Rendering diagram...\n', abort: false };
   }

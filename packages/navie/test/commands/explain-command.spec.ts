@@ -177,6 +177,15 @@ describe('ExplainCommand', () => {
       expect(completionService.complete).toHaveBeenCalledWith([], { temperature: undefined });
     });
 
+    describe('when the agent specifies 0 temperature', () => {
+      it('applies the agent temperature', async () => {
+        agent.temperature = 0;
+
+        await explain();
+        expect(completionService.complete).toHaveBeenCalledWith([], { temperature: 0 });
+      });
+    });
+
     it('returns a response', async () => {
       const tokens = await explain();
       expect(tokens).toEqual([
@@ -214,7 +223,16 @@ describe('ExplainCommand', () => {
       expect(agent.perform).toHaveBeenCalledWith(
         {
           aggregateQuestion: [userMessage1, userMessage2].join('\n\n'),
-          chatHistory: [userMessage1, assistantMessage1],
+          chatHistory: [
+            {
+              content: userMessage1,
+              role: 'user',
+            },
+            {
+              content: assistantMessage1,
+              role: 'assistant',
+            },
+          ],
           codeSelection: undefined,
           userOptions: new UserOptions(new Map()),
           contextLabels: [],

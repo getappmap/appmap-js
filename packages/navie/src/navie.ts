@@ -99,6 +99,11 @@ export default function navie(
     helpProvider
   );
 
+  const fileChangeExtractorService = new FileChangeExtractorService(
+    interactionHistory,
+    completionService
+  );
+
   const buildExplainCommand = () => {
     const codeSelectionService = new CodeSelectionService(interactionHistory);
 
@@ -110,6 +115,7 @@ export default function navie(
       interactionHistory,
       vectorTermsService,
       lookupContextService,
+      fileChangeExtractorService,
       applyContextService,
       techStackService,
       mermaidFixerService

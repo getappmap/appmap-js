@@ -5,7 +5,7 @@ import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 import ContextService from '../services/context-service';
 
 // Elements of this prompt are based on https://community.atlassian.com/t5/Jira-Software-articles/How-to-write-a-useful-Jira-ticket/ba-p/2147004
-export const GENERATE_AGENT_PROMPT = `**Task: Specification of Software Issues**
+export const PLAN_AGENT_PROMPT = `**Task: Specification of Software Issues**
 
 **About you**
 
@@ -20,8 +20,9 @@ The user is an experienced software developer who will review the plan and imple
 according to the plan that you provide. You can expect the user to be proficient in software development.
 
 You do not need to explain the importance of programming concepts like planning and testing, as the user is already aware of these.
+`;
 
-**About your response**
+export const PLAN_AGENT_FORMAT = `**About your response**
 
 Solve the problem as if you were a contributor to the project, responding to an end-user bug report.
 
@@ -75,7 +76,13 @@ export class PlanAgent implements Agent {
   }
 
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {
-    this.history.addEvent(new PromptInteractionEvent('agent', 'system', GENERATE_AGENT_PROMPT));
+    const agentPrompt = [PLAN_AGENT_PROMPT];
+    // With the /noformat option, the user will explain the desired output format in their message.
+    if (options.userOptions.isEnabled('format', true)) {
+      agentPrompt.push(PLAN_AGENT_FORMAT);
+    }
+
+    this.history.addEvent(new PromptInteractionEvent('agent', 'system', agentPrompt.join('\n\n')));
 
     this.history.addEvent(
       new PromptInteractionEvent(
@@ -85,7 +92,7 @@ export class PlanAgent implements Agent {
       )
     );
 
-    await this.contextService.perform(options, tokensAvailable);
+    await this.contextService.searchContext(options, tokensAvailable);
   }
 
   applyQuestionPrompt(question: string): void {

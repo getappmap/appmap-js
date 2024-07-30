@@ -1,14 +1,13 @@
-import {
-  EventCollector,
-  textSearchResultToRpcSearchResult,
-} from '../../../../src/rpc/explain/collectContext';
+import { SearchRpc } from '@appland/rpc';
+import { join } from 'path';
+
+import { textSearchResultToRpcSearchResult } from '../../../../src/rpc/explain/collectContext';
 import buildContext from '../../../../src/rpc/explain/buildContext';
 import { SearchResponse as AppMapSearchResponse } from '../../../../src/fulltext/AppMapIndex';
 import FindEvents, {
   SearchResponse as EventSearchResponse,
 } from '../../../../src/fulltext/FindEvents';
-import { SearchRpc } from '@appland/rpc';
-import { join } from 'path';
+import EventCollector from '../../../../src/rpc/explain/EventCollector';
 
 jest.mock('../../../../src/fulltext/FindEvents');
 jest.mock('../../../../src/rpc/explain/buildContext');
