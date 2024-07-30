@@ -1,3 +1,13 @@
+# [@appland/navie-v1.23.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.22.0...@appland/navie-v1.23.0) (2024-07-30)
+
+
+### Features
+
+* Fetch and apply named file content ([b86214e](https://github.com/getappmap/appmap-js/commit/b86214e6ea0060c1cba99cb529abd4f04c03b5b8))
+* Lookup location context ([bfa2351](https://github.com/getappmap/appmap-js/commit/bfa2351fbaec1ed181fb0b785a5bfddfb6d84f16))
+* Specify agent prompt and format in a consistent way ([ba4049c](https://github.com/getappmap/appmap-js/commit/ba4049c65767553ae833c333430786edfc684e48))
+* Use temperature=0 for generating code ([f4e820c](https://github.com/getappmap/appmap-js/commit/f4e820cb0cd7a0913abdac9d4b75435d40a353e8))
+
 # [@appland/navie-v1.22.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.21.0...@appland/navie-v1.22.0) (2024-07-30)
 
 
