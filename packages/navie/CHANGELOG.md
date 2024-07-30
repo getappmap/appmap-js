@@ -1,3 +1,11 @@
+# [@appland/navie-v1.22.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.21.0...@appland/navie-v1.22.0) (2024-07-30)
+
+
+### Features
+
+* Instruct the LLM how to reference files in code blocks ([da94520](https://github.com/getappmap/appmap-js/commit/da945204bf41958604caab2c866dec9de1e539aa))
+* Navie cites context items with absolute paths ([90fe9d4](https://github.com/getappmap/appmap-js/commit/90fe9d4c24b46983bb051dc4d5609a8ee61945e3))
+
 # [@appland/navie-v1.21.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.20.0...@appland/navie-v1.21.0) (2024-07-24)
 
 
