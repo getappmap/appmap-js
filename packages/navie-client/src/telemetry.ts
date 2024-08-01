@@ -1,0 +1,1 @@
+/home/db/dev/applandinc/appmap-js/packages/telemetry/telemetry.ts

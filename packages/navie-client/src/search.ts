@@ -1,0 +1,3 @@
+export const DEFAULT_MAX_DIAGRAMS = 10;
+export const DEFAULT_MAX_EVENTS_PER_DIAGRAM = 100;
+export const DEFAULT_MAX_FILES = 10;
