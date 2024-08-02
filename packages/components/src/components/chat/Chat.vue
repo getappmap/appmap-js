@@ -6,11 +6,12 @@
         <div id="header-navie-logo">Navie</div>
       </div>
       <v-button
+        v-if="openNewChat"
         data-cy="new-chat-btn"
         class="clear"
         size="small"
         kind="ghost"
-        @click.native="clear"
+        @click.native="openNewChat"
       >
         New chat
       </v-button>
@@ -151,6 +152,9 @@ export default {
     VButton,
   },
   props: {
+    openNewChat: {
+      type: Function,
+    },
     // Initial question to ask
     question: {
       type: String,
@@ -287,12 +291,6 @@ export default {
     onAck(_messageId: string, threadId: string) {
       this.setAuthorized(true);
       this.threadId = threadId;
-    },
-    clear() {
-      this.threadId = undefined;
-      this.messages.splice(0);
-      this.autoScrollTop = 0;
-      this.$emit('clear');
     },
     scrollToBottom() {
       // Allow one tick to progress to allow any DOM changes to be applied

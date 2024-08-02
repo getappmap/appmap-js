@@ -104,47 +104,38 @@ describe('components/Chat.vue', () => {
     });
   });
 
-  describe('Clear ("New Chat")', () => {
-    const newThreadId = 'new-thread-id';
-    let wrapper;
+  describe('new chat button', () => {
+    it('activates openNewChat when clicked', async () => {
+      expect.assertions(2);
 
-    beforeEach(async () => {
-      wrapper = mount(VChat, {
-        propsData: {
-          sendMessage: (_message) => {
-            wrapper.vm.onAck('the-user-message-id', threadId);
-          },
-        },
-      });
+      const openNewChat = jest.fn();
+      const wrapper = mount(VChat, { propsData: { openNewChat } });
 
-      wrapper.vm.onSend('Hello from the user');
-      wrapper.vm.addToken('Hello from the system', threadId, messageId);
+      // doesn't show when no messages
+      expect(wrapper.find('[data-cy="new-chat-btn"]').exists()).toBe(false);
+
+      await sendUserMessage(wrapper);
+
+      wrapper.find('[data-cy="new-chat-btn"]').trigger('click');
+      expect(openNewChat).toBeCalled();
+    });
+
+    it('is not shown when openNewChat not set', async () => {
+      expect.assertions(2);
+
+      const wrapper = mount(VChat);
+      expect(wrapper.find('[data-cy="new-chat-btn"]').exists()).toBe(false);
+
+      // doesn't show even when a message shows
+      await sendUserMessage(wrapper);
+      expect(wrapper.find('[data-cy="new-chat-btn"]').exists()).toBe(false);
+    });
+
+    async function sendUserMessage(wrapper) {
+      wrapper.vm.onAck('the-user-message-id', threadId);
+      wrapper.vm.addUserMessage('Hello from the user');
       await wrapper.vm.$nextTick();
-
-      expect(wrapper.find('[data-actor="user"] [data-cy="message-text"]').exists()).toBe(true);
-      expect(wrapper.find('[data-actor="system"] [data-cy="message-text"]').exists()).toBe(true);
-
-      wrapper.vm.clear();
-      await wrapper.vm.$nextTick();
-    });
-
-    it('removes the DOM elements', async () => {
-      expect(wrapper.find('[data-actor="user"] [data-cy="message-text"]').exists()).toBe(false);
-      expect(wrapper.find('[data-actor="system"] [data-cy="message-text"]').exists()).toBe(false);
-    });
-
-    it('clears the thread id', async () => {
-      expect(wrapper.vm.threadId).toBeUndefined();
-    });
-
-    it('ignores subsequent messages on the old thread-id', async () => {
-      wrapper.vm.onAck('new-user-message-id', newThreadId);
-      wrapper.vm.addToken('Hello from the system', threadId, messageId);
-      await wrapper.vm.$nextTick();
-
-      expect(wrapper.find('[data-actor="user"] [data-cy="message-text"]').exists()).toBe(false);
-      expect(wrapper.find('[data-actor="system"] [data-cy="message-text"]').exists()).toBe(false);
-    });
+    }
   });
 
   describe('setAuthorized', () => {
@@ -259,7 +250,6 @@ describe('components/Chat.vue', () => {
     const stopButtonHidingEvents = [
       { name: 'an error', action: (wrapper) => wrapper.vm.onError(new Error('Test Error')) },
       { name: 'onStop called', action: (wrapper) => wrapper.vm.onStop() },
-      { name: 'clear (New Chat) called', action: (wrapper) => wrapper.vm.clear() },
     ];
     stopButtonHidingEvents.forEach((event) => {
       it('hidden after ' + event.name, async () => {

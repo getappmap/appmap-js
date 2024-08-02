@@ -9,9 +9,9 @@
       <v-chat
         class="chat-search-chat"
         ref="vchat"
+        :open-new-chat="openNewChat"
         :send-message="sendMessage"
         :status-label="searchStatusLabel"
-        @clear="clear"
         :question="question"
         @isChatting="setIsChatting"
         :input-placeholder="inputPlaceholder"
@@ -65,6 +65,9 @@ export default {
   },
   mixins: [authenticatedClient],
   props: {
+    openNewChat: {
+      type: Function,
+    },
     question: {
       type: String,
     },
@@ -443,19 +446,6 @@ export default {
     },
     setAppMapStats(stats) {
       this.appmapStats = stats;
-    },
-    clear() {
-      this.searching = false;
-      this.searchStatus = undefined;
-      this.searchResponse = undefined;
-      this.selectedSearchResultId = undefined;
-      this.searchId = 0;
-      this.searchStatusLabel = undefined;
-      this.contextResponse = undefined;
-      this.ask?.removeAllListeners();
-      this.searching = false;
-      this.pinnedItems = [];
-      this.loadAppMapStats();
     },
     startResizing(event) {
       document.body.style.userSelect = 'none';
