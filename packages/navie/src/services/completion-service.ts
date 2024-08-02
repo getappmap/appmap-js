@@ -44,6 +44,10 @@ const COST_PER_M_TOKEN: Record<string, { input: number; output: number }> = {
     input: 5,
     output: 5,
   },
+  'gpt-4o-mini': {
+    input: 0.15,
+    output: 0.6,
+  },
   'gpt-3.5-turbo-0125': {
     input: 0.5,
     output: 0.5,
