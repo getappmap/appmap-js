@@ -71,6 +71,9 @@ ChatSearch.args = {
   mostRecentAppMaps,
   appmapYmlPresent: true,
   appmapRpcPort: 3002,
+  openNewChat() {
+    alert('open new chat');
+  },
 };
 
 export const ChatSearchWithCodeSelection = (args, { argTypes }) => ({
