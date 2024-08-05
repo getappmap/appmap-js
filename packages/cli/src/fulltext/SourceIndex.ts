@@ -65,6 +65,7 @@ export class SourceIndex {
     const query = `SELECT directory, file_name, from_line, to_line, snippet, (rank * -1) score FROM code_snippets WHERE code_snippets MATCH ? ORDER BY rank LIMIT ?`;
 
     const searchExpr = queryKeywords(keywords).join(' OR ');
+    if (verbose()) console.log(`[SourceIndex] Searching for ${searchExpr}`);
     const rows = this.database.prepare(query).all(searchExpr, limit);
     rows.forEach((row: any) => {
       if (verbose()) console.log(`[SourceIndex] Found row ${row.file_name}`);

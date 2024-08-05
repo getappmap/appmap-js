@@ -9,6 +9,7 @@ const STOP_WORDS = new Set([
   'at',
   'be',
   'by',
+  'code',
   'for',
   'from',
   'has',

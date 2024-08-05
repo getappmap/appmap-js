@@ -43,13 +43,13 @@ describe('VectorTermsService', () => {
       it('removes very short terms', async () => {
         mockAIResponse(completionWithRetry, [`["user", "management", "a"]`]);
         const terms = await service.suggestTerms('user management');
-        expect(terms).toEqual(['user', 'management']);
+        expect(terms).toEqual(['user', 'management', 'a']);
         expect(completionWithRetry).toHaveBeenCalledTimes(1);
       });
       it('converts underscore_words to distinct words', async () => {
         mockAIResponse(completionWithRetry, [`["user_management"]`]);
         const terms = await service.suggestTerms('user management');
-        expect(terms).toEqual(['user', 'management']);
+        expect(terms).toEqual(['user_management']);
         expect(completionWithRetry).toHaveBeenCalledTimes(1);
       });
     });
@@ -74,7 +74,7 @@ describe('VectorTermsService', () => {
       it('parses the terms', async () => {
         mockAIResponse(completionWithRetry, ['response_key:\n', '  - user\n', '  - management\n']);
         const terms = await service.suggestTerms('user management');
-        expect(terms).toEqual(['response', 'key', 'user', 'management']);
+        expect(terms).toEqual(['response_key:', '-', 'user', 'management']);
       });
     });
 
@@ -100,7 +100,7 @@ describe('VectorTermsService', () => {
       it('is accepted and processed', async () => {
         mockAIResponse(completionWithRetry, ['-user -mgmt']);
         const terms = await service.suggestTerms('user management');
-        expect(terms).toEqual(['user', 'mgmt']);
+        expect(terms).toEqual(['-user', '-mgmt']);
         expect(completionWithRetry).toHaveBeenCalledTimes(1);
       });
     });

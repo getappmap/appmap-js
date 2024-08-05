@@ -5,6 +5,8 @@ import { SearchResult as EventSearchResult } from '../../fulltext/FindEvents';
 import Location from './location';
 import SearchContextCollector from './SearchContextCollector';
 import LocationContextCollector from './LocationContextCollector';
+import queryKeywords from '../../fulltext/queryKeywords';
+import { warn } from 'console';
 
 export function textSearchResultToRpcSearchResult(
   eventResult: EventSearchResult
@@ -91,17 +93,19 @@ export default async function collectContext(
   appmapDirectories: string[],
   sourceDirectories: string[],
   appmaps: string[] | undefined,
-  vectorTerms: string[],
+  searchTerms: string[],
   charLimit: number,
   filters: ContextV2.ContextFilters
 ): Promise<{
   searchResponse: SearchRpc.SearchResponse;
   context: ContextV2.ContextResponse;
 }> {
+  const keywords = searchTerms.map((term) => queryKeywords(term)).flat();
+  warn(`[collectContext] keywords: ${keywords.join(' ')}`);
   const contextCollector = new ContextCollector(
     appmapDirectories,
     sourceDirectories,
-    vectorTerms,
+    keywords,
     charLimit
   );
   if (appmaps) contextCollector.appmaps = appmaps;
