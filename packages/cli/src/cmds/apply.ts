@@ -1,7 +1,7 @@
 import yargs from 'yargs';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { exists } from '../utils';
-import { mkdir, writeFile } from 'fs/promises';
+import { mkdir, readFile, writeFile } from 'fs/promises';
 import { dirname } from 'path';
 import applyFileUpdate from '../rpc/file/applyFileUpdate';
 
@@ -21,12 +21,13 @@ export function builder<T>(args: yargs.Argv<T>) {
       alias: 'd',
     })
     .option('search', {
-      describe: 'Search string. Required unless the file does not exist.',
+      describe:
+        'File containing the search string. Required unless the target file does not exist.',
       type: 'string',
       alias: 's',
     })
     .option('replace', {
-      describe: 'Replace string.',
+      describe: 'File containing the replace string.',
       type: 'string',
       alias: 'r',
       demandOption: true,
@@ -40,17 +41,25 @@ type HandlerArguments = yargs.ArgumentsCamelCase<
 export async function handler(argv: HandlerArguments) {
   handleWorkingDirectory(argv.directory);
 
-  const { filename, search, replace } = argv;
+  const { filename, search: searchFile, replace: replaceFile } = argv;
+
+  if (!(await exists(replaceFile)))
+    throw new Error(`-r/--replace file ${replaceFile} does not exist`);
+
+  const replaceText = await readFile(replaceFile, 'utf-8');
 
   const filedir = dirname(filename);
   await mkdir(filedir, { recursive: true });
   if (!(await exists(filename))) {
-    await writeFile(filename, replace, 'utf-8');
+    await writeFile(filename, replaceText, 'utf-8');
   } else {
-    if (!search) {
-      throw new Error('Search string is required for existing files');
-    }
+    if (!searchFile) throw new Error('-s/--search argument is required for existing files');
 
-    await applyFileUpdate(filename, search, replace);
+    if (!(await exists(searchFile)))
+      throw new Error(`-s/--search file ${searchFile} does not exist`);
+
+    const searchText = await readFile(searchFile, 'utf-8');
+
+    await applyFileUpdate(filename, searchText, replaceText);
   }
 }
