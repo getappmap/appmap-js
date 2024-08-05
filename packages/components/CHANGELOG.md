@@ -1,3 +1,10 @@
+# [@appland/components-v4.30.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.30.0...@appland/components-v4.30.1) (2024-08-05)
+
+
+### Bug Fixes
+
+* "New chat" button doesn't destructively clear the chat anymore ([8e5361d](https://github.com/getappmap/appmap-js/commit/8e5361d8d8629655eecd148eec9e5e79e360d97c))
+
 # [@appland/components-v4.30.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.29.0...@appland/components-v4.30.0) (2024-07-30)
 
 
