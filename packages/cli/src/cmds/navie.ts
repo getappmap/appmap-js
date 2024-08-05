@@ -18,8 +18,10 @@ import LocalNavie from '../rpc/explain/navie/navie-local';
 import RemoteNavie from '../rpc/explain/navie/navie-remote';
 import detectAIEnvVar, { AI_KEY_ENV_VARS } from './index/aiEnvVar';
 import detectCodeEditor from '../lib/detectCodeEditor';
+import { verbose } from '../utils';
 
 interface ExplainArgs {
+  verbose: boolean;
   aiOption?: string[];
   agentMode?: Agents;
   navieProvider?: string;
@@ -34,6 +36,11 @@ interface NavieCommonCmdArgs extends ExplainArgs {
 
 export function commonNavieArgsBuilder<T>(args: yargs.Argv<T>): yargs.Argv<T & NavieCommonCmdArgs> {
   return args
+    .option('verbose', {
+      describe: 'Verbose output',
+      boolean: true,
+      default: false,
+    })
     .option('directory', {
       describe: 'program working directory',
       type: 'string',
@@ -195,6 +202,7 @@ type HandlerArguments = yargs.ArgumentsCamelCase<
 >;
 
 export async function handler(argv: HandlerArguments) {
+  verbose(argv.verbose);
   await configureRpcDirectories(argv.directory);
 
   const output = openOutput(argv.output);
