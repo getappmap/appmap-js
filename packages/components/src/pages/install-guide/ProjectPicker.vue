@@ -1,7 +1,7 @@
 <template>
   <QuickstartLayout>
     <section class="project-picker">
-      <header>
+      <header class="content content--header">
         <h1 data-cy="title">Add AppMap to your project</h1>
       </header>
       <main>
@@ -17,34 +17,24 @@
           </div>
         </article>
         <article v-if="projects.length === 1">
-          <v-project-picker-table
+          <!-- TODO -->
+        </article>
+        <article class="project-list" v-else>
+          <v-project-configuration
             :projects="projects"
             :editor="editor"
             :java-agent-status="javaAgentStatus"
-            :status-states="statusStates"
-            @select-project="selectProject($event)"
-            ref="projectTable"
-          />
-        </article>
-        <article class="project-list" v-if="projects.length > 1">
-          <p data-cy="multiple-projects-text">
-            You have multiple projects in this workspace. We’ve outlined the projects that are ready
-            to start making AppMaps. <br />Select a project to continue.
-          </p>
-          <h3 class="">Projects</h3>
-          <div class="table-wrap">
-            <v-project-picker-table
-              :projects="projects"
-              @select-project="selectProject($event)"
-              :editor="editor"
-              :java-agent-status="javaAgentStatus"
-              :status-states="statusStates"
-              ref="projectTable"
-            />
-          </div>
+            description="Install the recording agent"
+          >
+            <p>
+              In order to record AppMap data from your Python project, you will first need to
+              install the `appmap` package. Use the command below to install the dependency using
+              your preferred package manager.
+            </p>
+          </v-project-configuration>
         </article>
       </main>
-      <p>
+      <p class="content content--footer">
         By downloading and using AppMap you agree to the
         <a href="https://appmap.io/community/terms-and-conditions">Terms and Conditions</a>.
       </p>
@@ -54,17 +44,17 @@
 
 <script>
 import QuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
-import VProjectPickerTable from '@/components/install-guide/ProjectPickerTable.vue';
 import Navigation from '@/components/mixins/navigation';
 import StatusState from '@/components/mixins/statusState.js';
 import EmptyIcon from '@/assets/patch-question.svg';
+import VProjectConfiguration from '@/components/install-guide/ProjectConfiguration.vue';
 
 export default {
   name: 'ProjectPicker',
 
   components: {
     QuickstartLayout,
-    VProjectPickerTable,
+    VProjectConfiguration,
     EmptyIcon,
   },
 
@@ -159,6 +149,18 @@ p {
     .empty-icon {
       padding: 0 2rem;
     }
+  }
+}
+.content {
+  padding: 2em;
+
+  &--header {
+    padding-bottom: 0;
+  }
+
+  &--footer {
+    padding-top: 0;
+    padding-bottom: 1rem;
   }
 }
 .good {
