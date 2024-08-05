@@ -62,7 +62,7 @@
     <v-accordion
       :class="{
         'project-configuration': 1,
-        'project-configuration--open': openSection === 'content',
+        'project-configuration--open ': openSection === 'content',
       }"
       :open="openSection === 'content'"
       @toggle="onClickSection('content')"
@@ -142,6 +142,7 @@ export default Vue.extend({
     onSelectRuntime(runtime: string) {
       this.selectedRuntime = runtime;
       this.openSection = 'content';
+      this.$emit('select-runtime', runtime);
     },
   },
 });

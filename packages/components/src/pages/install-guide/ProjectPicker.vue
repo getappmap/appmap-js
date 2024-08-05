@@ -24,6 +24,7 @@
             :projects="projects"
             :editor="editor"
             :java-agent-status="javaAgentStatus"
+            @select-runtime="onSelectRuntime"
             description="Install the recording agent"
           >
             <p>
@@ -31,6 +32,7 @@
               install the `appmap` package. Use the command below to install the dependency using
               your preferred package manager.
             </p>
+            <v-command-picker :commands="commands" />
           </v-project-configuration>
         </article>
       </main>
@@ -48,7 +50,15 @@ import Navigation from '@/components/mixins/navigation';
 import StatusState from '@/components/mixins/statusState.js';
 import EmptyIcon from '@/assets/patch-question.svg';
 import VProjectConfiguration from '@/components/install-guide/ProjectConfiguration.vue';
+import VCommandPicker from '@/components/install-guide/CommandPicker.vue';
 
+const Commands = {
+  python: [
+    { name: 'pip', command: 'pip install --require-virtualenv appmap' },
+    { name: 'pipenv', command: 'pipenv install --dev appmap' },
+    { name: 'poetry', command: 'poetry add --dev appmap' },
+  ],
+};
 export default {
   name: 'ProjectPicker',
 
@@ -56,6 +66,7 @@ export default {
     QuickstartLayout,
     VProjectConfiguration,
     EmptyIcon,
+    VCommandPicker,
   },
 
   mixins: [Navigation, StatusState],
@@ -72,10 +83,22 @@ export default {
     javaAgentStatus: Number,
   },
 
+  data() {
+    return {
+      selectedRuntime: undefined,
+    };
+  },
+
   mounted() {
     if (this.projects.length === 1) {
       this.$refs.projectTable.selectProject(this.projects[0]?.path);
     }
+  },
+
+  computed: {
+    commands() {
+      return Commands[this.selectedRuntime?.toLowerCase()];
+    },
   },
 
   methods: {
@@ -88,6 +111,10 @@ export default {
       this.$nextTick(() => {
         this.$root.$emit('select-project', project);
       });
+    },
+    onSelectRuntime(runtime) {
+      console.log(runtime);
+      this.selectedRuntime = runtime;
     },
   },
 };
