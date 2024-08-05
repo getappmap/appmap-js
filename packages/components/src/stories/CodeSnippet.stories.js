@@ -24,3 +24,24 @@ export const CodeSnippet = (args, { argTypes }) => ({
       <v-code-snippet v-bind="$props">$ npx @appland/appmap install-agent ruby</v-code-snippet>
     </div>`,
 });
+
+export const MultiLineCodeSnippet = (args, { argTypes }) => ({
+  props: Object.keys(argTypes),
+  components: { VCodeSnippet },
+  template: `<div>
+      <v-code-snippet language="rust" v-bind="$props" clipboard-text="use bevy::prelude::*;
+
+fn main() {
+    App::new()
+      .add_plugins(DefaultPlugins)
+      .add_systems(Update, hello_world_system)
+      .run();
+}
+
+// This system will be run every frame
+fn hello_world_system() {
+    println!(&quot;Hello, world!&quot;);
+}
+" />
+</div>`,
+});

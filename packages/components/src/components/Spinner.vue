@@ -12,7 +12,8 @@ export default {
 
 <style lang="scss" scoped>
 .spinner {
-  display: inline-block;
+  display: flex;
+  place-self: center;
   line-height: 0;
   animation: spin 4s linear infinite;
 

@@ -1,0 +1,34 @@
+<!-- teenyicons -->
+<!--
+MIT License
+
+Copyright (c) 2020, Anja van Staden
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<svg width="64" height="65" viewBox="0 0 64 65" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_2_20)">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M35.4444 0.5H35.2341L35.0853 0.648771L17.9523 17.7818L17.8167 17.7713L17.8046 17.9295L17.4295 18.3046L17.2713 18.3167L17.2818 18.4523L0.148771 35.5853L0 35.7341V35.9444V63.9921V64.5H0.507937H63.4921H64V63.9921V1.00794V0.5H63.4921H35.4444ZM18.3305 18.8402L18.3402 18.8305L43.0504 20.7313L20.2313 43.5504L18.3305 18.8402ZM19.2242 44.5575L1.01587 36.3343V62.7658L19.2242 44.5575ZM1.7342 63.4841L20.2139 45.0044L61.1333 63.4841H1.7342ZM20.9818 44.2365L43.7365 21.4818L62.4758 62.9758L20.9818 44.2365ZM44.5044 20.7139L62.9841 61.6333V2.2342L44.5044 20.7139ZM62.2658 1.51587H35.8343L44.0575 19.7242L62.2658 1.51587ZM19.2863 17.8844L42.9334 19.7034L35.0106 2.1601L19.2863 17.8844ZM17.3844 19.7863L1.6601 35.5106L19.2034 43.4334L17.3844 19.7863Z" fill="#C7CACF"/>
+</g>
+<defs>
+<clipPath id="clip0_2_20">
+<rect width="64" height="64" fill="white" transform="translate(0 0.5)"/>
+</clipPath>
+</defs>
+</svg>

@@ -1,19 +1,21 @@
 <template>
   <section>
-    <h3>Getting started</h3>
     <p>
       To record your application with AppMap, run your application using the
       <code class="inline">appmap-node</code> command.
     </p>
-    <pre><code>$ npx appmap-node <span ref="startCommand">&lt;start-command&gt;</span></code></pre>
+    <v-code-snippet clipboard-text="npx appmap-node <start-command>" :show-copy="false" />
 
-    <h3>Recording methods</h3>
-    <p>The following recording methods are available to Node.js applications.</p>
+    <h3>Choose an option</h3>
+    <p>
+      Depending on your application, you may choose one of the following options for recording
+      AppMap traces.
+    </p>
     <v-recording-method-grid>
       <v-recording-method
-        title="HTTP request recording"
+        title="Record HTTP requests"
         documentation-url="https://appmap.io/docs/reference/appmap-node.html#request-recording"
-        :supported="!!webFramework"
+        :supported="true"
         :default-behavior="true"
         :prompt-suggestions="promptSuggestions.httpRequest"
       >
@@ -22,13 +24,18 @@
         </template>
         <template #supported>
           <p>
-            Web services running {{ webFramework.name }} will automatically begin recording upon
-            receiving an inbound HTTP request. The recording will span the entire lifetime of the
-            request.
+            Web services will automatically begin recording upon receiving an inbound HTTP request.
+            The recording will span the entire lifetime of the request.
           </p>
+          <hr />
           <p>
-            Your web service must be started using the
-            <code class="inline">appmap-node</code> command as described above.
+            To begin, run your web service with the
+            <code class="inline">appmap-node</code> command.
+          </p>
+          <p>Next, issue an HTTP request to your web service.</p>
+          <p>
+            An AppMap trace will be written to the <code class="inline">tmp/appmap</code> directory
+            by default.
           </p>
         </template>
         <template #unsupported>
@@ -45,10 +52,10 @@
         </template>
       </v-recording-method>
       <v-recording-method
-        title="Remote recording"
+        title="Record a web service"
         title-lowercase="remote recording"
         documentation-url="https://appmap.io/docs/reference/appmap-node.html#remote-recording"
-        :supported="!!webFramework"
+        :supported="true"
         :prompt-suggestions="promptSuggestions.remote"
       >
         <template #icon>
@@ -56,15 +63,24 @@
         </template>
         <template #supported>
           <p>
-            Web services running {{ webFramework.name }} can toggle recordings on and off remotely
-            via an HTTP API. This is useful in cases where you need control over the lifetime of the
-            recording.
+            Web services can toggle recordings on and off remotely via an HTTP API. This is useful
+            in cases where you need control over the lifetime of the recording.
+          </p>
+          <hr />
+          <p>
+            To begin, run your web service with the
+            <code class="inline">appmap-node</code> command.
           </p>
           <p>
-            Use the "Record" button in the IDE to start recording. Interact with your application,
-            through its user interface and/or by making API requests using a tool such as Postman.
-            When you are done, click the "Record" button again to save the recording and view the
-            AppMap diagrams.
+            Next, hover your mouse over the "AppMap data" section within the AppMap extension
+            sidebar panel. Click the "Record" button to start recording.
+          </p>
+          <p>A prompt will appear requesting the URL of your web service.</p>
+          <p>Once submitted, begin interacting with your application.</p>
+          <p>When you are done, click the "Record" button again to name andsave the recording.</p>
+          <p>
+            An AppMap trace of the entire session will be written to the
+            <code class="inline">tmp/appmap</code> directory by default.
           </p>
         </template>
         <template #unsupported>
@@ -81,10 +97,10 @@
         </template>
       </v-recording-method>
       <v-recording-method
-        title="Test recording"
+        title="Record test cases"
         title-lowercase="test recording"
         documentation-url="https://appmap.io/docs/reference/appmap-node.html#tests-recording"
-        :supported="!!testFramework"
+        :supported="true"
         :default-behavior="true"
         :prompt-suggestions="promptSuggestions.test"
       >
@@ -95,13 +111,18 @@
         </template>
         <template #supported>
           <p>
-            When running {{ testFramework.name }} tests, AppMap will automatically start and stop
-            recording for each test case. With adequate test coverage, this method can quickly
-            record a broad range of your application's behavior.
+            When running tests, AppMap will automatically start and stop recording for each test
+            case. With adequate test coverage, this method can quickly record a broad range of your
+            application's behavior.
+          </p>
+          <hr />
+          <p>
+            To begin, run your test cases with the
+            <code class="inline">appmap-node</code> command.
           </p>
           <p>
-            Your test run command must include the
-            <code class="inline">appmap-node</code> command as described above.
+            As each case test completes, an AppMap trace file will be saved with a name reflecting
+            the description of the test case.
           </p>
         </template>
         <template #unsupported>
@@ -113,7 +134,7 @@
         </template>
       </v-recording-method>
       <v-recording-method
-        title="Process recording"
+        title="Record a process"
         title-lowercase="process recording"
         documentation-url="https://appmap.io/docs/reference/appmap-node.html#process-recording"
         :supported="true"
@@ -125,13 +146,21 @@
         </template>
         <template #supported>
           <p>
-            After launching an application, AppMap will automatically begin recording the entire
-            process lifetime. This behavior is disabled once another method of recording is
-            triggered.
+            AppMap can record a trace which spans the entire lifetime of a process. This option is
+            particularly useful for short-lived processes such as a CLI or simple script.
+          </p>
+          <hr />
+          <p>
+            To begin, run your application with the <code class="inline">appmap-node</code> command.
           </p>
           <p>
-            Your application must be started using the
-            <code class="inline">appmap-node</code> command as described above.
+            Upon exiting, a full trace of your application's execution will be written to the
+            <code class="inline">tmp/appmap</code> directory by default.
+          </p>
+          <p>
+            Note that his behavior will be automatically disabled once another method of recording
+            is detected, such as the execution of a test case or the processing of an inbound HTTP
+            request.
           </p>
         </template>
       </v-recording-method>
@@ -148,7 +177,7 @@ import ProcessIcon from '@/assets/record-process.svg';
 import VRecordingMethod from './RecordingMethod.vue';
 import VRecordingMethodGrid from './RecordingMethodGrid.vue';
 import buildPrompts from '@/lib/buildPrompts';
-import typewrite from '@/components/mixins/typewriter';
+import VCodeSnippet from '@/components/CodeSnippet.vue';
 
 export default Vue.extend({
   components: {
@@ -158,9 +187,8 @@ export default Vue.extend({
     ProcessIcon,
     VRecordingMethod,
     VRecordingMethodGrid,
+    VCodeSnippet,
   },
-
-  mixins: [typewrite],
 
   props: {
     webFramework: Object,
@@ -179,24 +207,6 @@ export default Vue.extend({
         this.testFramework?.name
       ),
     };
-  },
-
-  computed: {
-    codeSnippetType(): string {
-      return this.complete ? 'ghost' : 'primary';
-    },
-  },
-
-  mounted() {
-    if (!this.$refs.startCommand) return;
-    if (!(this.$refs.startCommand instanceof HTMLElement)) return;
-
-    this.typewrite(this.$refs.startCommand, [
-      '<start command>',
-      'npm start',
-      'yarn dev',
-      'node server.js',
-    ]);
   },
 });
 </script>
