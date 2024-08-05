@@ -22,7 +22,7 @@ describe('CodeSnippet.vue', () => {
       mocks: { navigator },
     });
 
-    const btn = wrapper.get('button');
+    const btn = wrapper.get('[data-cy="code-snippet-button"]');
     btn.element.disabled = false;
     btn.trigger('click');
 

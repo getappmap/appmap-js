@@ -1,8 +1,8 @@
 <template>
   <QuickstartLayout>
     <section class="project-picker">
-      <header>
-        <h1 data-cy="title">Add AppMap to your project</h1>
+      <header class="content content--header">
+        <h1 data-cy="title">Recording AppMap data</h1>
       </header>
       <main>
         <article class="empty-state" data-cy="empty-state-article" v-if="projects.length === 0">
@@ -16,35 +16,20 @@
             </div>
           </div>
         </article>
-        <article v-if="projects.length === 1">
-          <v-project-picker-table
+        <article class="project-list" v-else>
+          <v-project-configuration
+            ref="projectConfiguration"
             :projects="projects"
             :editor="editor"
-            :java-agent-status="javaAgentStatus"
-            :status-states="statusStates"
-            @select-project="selectProject($event)"
-            ref="projectTable"
-          />
-        </article>
-        <article class="project-list" v-if="projects.length > 1">
-          <p data-cy="multiple-projects-text">
-            You have multiple projects in this workspace. We’ve outlined the projects that are ready
-            to start making AppMaps. <br />Select a project to continue.
-          </p>
-          <h3 class="">Projects</h3>
-          <div class="table-wrap">
-            <v-project-picker-table
-              :projects="projects"
-              @select-project="selectProject($event)"
-              :editor="editor"
-              :java-agent-status="javaAgentStatus"
-              :status-states="statusStates"
-              ref="projectTable"
-            />
-          </div>
+            @select-project="onSelectProject"
+            @select-language="onSelectLanguage"
+            description="Configure your project"
+          >
+            <div class="install-instructions"></div>
+          </v-project-configuration>
         </article>
       </main>
-      <p>
+      <p class="content content--footer">
         By downloading and using AppMap you agree to the
         <a href="https://appmap.io/community/terms-and-conditions">Terms and Conditions</a>.
       </p>
@@ -54,21 +39,17 @@
 
 <script>
 import QuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
-import VProjectPickerTable from '@/components/install-guide/ProjectPickerTable.vue';
-import Navigation from '@/components/mixins/navigation';
-import StatusState from '@/components/mixins/statusState.js';
 import EmptyIcon from '@/assets/patch-question.svg';
+import VProjectConfiguration from '@/components/install-guide/ProjectConfiguration.vue';
 
 export default {
   name: 'ProjectPicker',
 
   components: {
     QuickstartLayout,
-    VProjectPickerTable,
+    VProjectConfiguration,
     EmptyIcon,
   },
-
-  mixins: [Navigation, StatusState],
 
   props: {
     projects: {
@@ -79,25 +60,27 @@ export default {
       type: String,
       validator: (value) => ['vscode', 'jetbrains'].indexOf(value) !== -1,
     },
-    javaAgentStatus: Number,
   },
 
-  mounted() {
-    if (this.projects.length === 1) {
-      this.$refs.projectTable.selectProject(this.projects[0]?.path);
-    }
+  data() {
+    return {
+      selectedLanguage: undefined,
+    };
+  },
+
+  computed: {
+    projectConfiguration() {
+      return this.$refs.projectConfiguration;
+    },
   },
 
   methods: {
-    goToRecordAppmaps(event) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      this.$root.$emit('transition', 'RECORD_APPMAPS');
+    onSelectProject(project) {
+      this.selectedProject = this.projects.find((p) => p.path === project.path);
+      this.$root.$emit('select-project', project);
     },
-    selectProject(project) {
-      this.$nextTick(() => {
-        this.$root.$emit('select-project', project);
-      });
+    onSelectLanguage(language) {
+      this.selectedLanguage = language.toLowerCase();
     },
   },
 };
@@ -125,6 +108,10 @@ h2 {
       margin-bottom: 1.75rem;
     }
   }
+  .subtitle {
+    color: $gray4;
+    font-size: 1.25rem;
+  }
 }
 
 .table-wrap {
@@ -150,6 +137,7 @@ p {
 .empty-state {
   border-radius: $border-radius;
   border: 1px dashed darken($gray4, 10);
+  margin: 2rem;
   padding: 3rem;
   .card {
     display: flex;
@@ -161,6 +149,18 @@ p {
     }
   }
 }
+.content {
+  padding: 2em;
+
+  &--header {
+    padding-bottom: 0;
+  }
+
+  &--footer {
+    padding-top: 0;
+    padding-bottom: 1rem;
+  }
+}
 .good {
   color: $alert-success;
 }
@@ -169,5 +169,29 @@ p {
 }
 .bad {
   color: $bad-status;
+}
+.install-instructions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  .next-button {
+    margin-left: auto;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  .code-snippet {
+    margin-top: 0.25rem;
+    margin-bottom: 0;
+    width: 100%;
+  }
+
+  section {
+    margin-bottom: 1.75rem;
+    width: 100%;
+  }
 }
 </style>

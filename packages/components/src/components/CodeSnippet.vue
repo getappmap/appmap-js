@@ -1,6 +1,6 @@
 <template>
   <div class="code-snippet" data-cy="code-snippet">
-    <span
+    <div
       type="text"
       class="input code-snippet__input"
       role="textbox"
@@ -8,36 +8,39 @@
       @click="onInputFocus"
       @copy="onCopy"
     >
-      <div v-for="(text, index) in textLines" :key="index" class="code-snippet__line">
-        {{ text }}
-      </div>
-    </span>
-    <v-popper placement="top" ref="popper">
-      <v-button
-        class="code-snippet__btn"
-        type="button"
-        :kind="kind"
-        data-cy="code-snippet-button"
-        @click.native="copyToClipboard"
-        :disabled="!hasClipboardAPI"
-      >
-        <ClipboardIcon class="code-snippet__btn-icon" />
-      </v-button>
-    </v-popper>
+      <pre class="code-snippet__line" v-html="highlightedCode" v-if="highlightedCode" />
+      <template v-else>
+        <div v-for="(text, index) in textLines" :key="index" class="code-snippet__line">
+          {{ text }}
+        </div>
+      </template>
+    </div>
+    <div class="code-snippet__copy-gutter" v-if="showCopy">
+      <v-popper class="code-snippet__popper" placement="left" ref="popper" text="Copy to clipboard">
+        <div
+          class="code-snippet__button"
+          data-cy="code-snippet-button"
+          @click="copyToClipboard"
+          :disabled="!hasClipboardAPI"
+        >
+          <ClipboardIcon class="code-snippet__btn-icon" />
+        </div>
+      </v-popper>
+    </div>
   </div>
 </template>
 
 <script>
-import ClipboardIcon from '@/assets/clipboard.svg';
+import ClipboardIcon from '@/assets/copy-icon.svg';
 import VPopper from './Popper.vue';
-import VButton from '@/components/Button.vue';
+
+import hljs from 'highlight.js';
 
 export default {
   name: 'VCodeSnippet',
   components: {
     ClipboardIcon,
     VPopper,
-    VButton,
   },
   props: {
     clipboardText: {
@@ -50,11 +53,13 @@ export default {
       required: false,
       default: 'Copied to clipboard!',
     },
-    kind: {
+    language: {
       type: String,
       required: false,
-      default: 'primary',
-      validator: (value) => ['primary', 'secondary', 'ghost'].includes(value),
+    },
+    showCopy: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
@@ -69,6 +74,10 @@ export default {
     },
     textLines() {
       return this.transformedText.split(/\n/g);
+    },
+    highlightedCode() {
+      if (!this.language || !hljs.getLanguage(this.language)) return undefined;
+      return hljs.highlight(this.language, this.transformedText).value;
     },
   },
   methods: {
@@ -93,54 +102,100 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '~highlight.js/styles/base16/snazzy.css';
 .code-snippet {
   margin: 1rem 0;
   border-radius: $border-radius;
-  display: flex;
+  position: relative;
   align-items: stretch;
   color: white;
-  background-color: $black;
+  background-color: rgba(black, 0.75);
   max-width: 100%;
+  border: 1px solid rgba(white, 0.2);
+  display: flex;
+
+  pre {
+    margin: 0;
+    margin-right: 1rem;
+    width: fit-content;
+  }
 
   &__line {
     min-height: 1rem;
-    padding-top: 0.33rem;
+    line-height: 1.4;
+  }
+
+  &__copy-gutter {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding: 0.5rem 1rem;
+  }
+
+  &__popper {
+    height: fit-content;
+    position: sticky !important;
+    top: 0.5rem;
+
+    &::v-deep {
+      .popper__text {
+        background-color: #040404;
+        border-color: rgba(white, 0.2);
+        margin-right: 0;
+        padding: 0.25rem 0.5rem;
+
+        &:before {
+          display: none;
+        }
+      }
+    }
   }
 
   &__input {
     flex: 1;
     font-family: monospace;
     color: $base07;
-    padding: 0.75rem 1.25rem;
     margin: 0;
-    border: 1px solid rgba(white, 0.2);
     border-right: none;
     border-radius: $border-radius 0 0 $border-radius;
     background: transparent;
     outline: none;
     appearance: none;
     font-size: 0.9rem;
+    overflow-x: auto;
+    scrollbar-color: rgba(white, 0.2) transparent;
+    scrollbar-width: thin;
+    padding: 0.5rem 1rem;
+    padding-top: 1rem;
   }
 
-  &__btn {
-    height: 100%;
-    padding: 0 1rem;
-    margin: 0;
-    border-radius: 0 6px 6px 0;
-    opacity: 1;
-    outline: none;
-    appearance: none;
+  &__button {
     cursor: pointer;
     transition: $transition;
+    overflow: visible;
+    background-color: rgba(black, 0.8);
+    padding: 0.33rem;
+    height: fit-content;
+    border-radius: $border-radius;
+    display: flex;
+
+    &:hover {
+      svg {
+        fill: white;
+        transform: scale(1.1);
+        transform-origin: center;
+      }
+    }
+
+    svg {
+      width: 18px;
+      fill: rgba(white, 0.5);
+    }
 
     &[disabled] {
       opacity: 0.5;
       pointer-events: none;
-    }
-
-    &-icon {
-      width: 1.1rem;
-      fill: $white;
     }
   }
 }

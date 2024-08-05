@@ -1,25 +1,21 @@
 <template>
   <section>
-    <h3>Getting started</h3>
     <p>
-      Use the "Run with AppMap" debug configuration to launch your application or run your tests
-      through Microsoft's Test Runner for Java extension.
-    </p>
-    <p>
-      This ensures that your Java code runs with the JVM option
+      Ensure that your application runs with the JVM option
       <code class="inline">-javaagent:~/.appmap/lib/java/appmap.jar</code>. This option is required
-      to enable AppMap recording.
+      to record AppMap trace data.
     </p>
-    <div class="vscode-screenshot">
-      <img src="../../../assets/vscode-java.gif" />
-    </div>
-    <h3>Recording methods</h3>
-    <p>The following recording methods are available to Java applications.</p>
+
+    <h3>Choose an option</h3>
+    <p>
+      Depending on your application, you may choose one of the following options for recording
+      AppMap traces.
+    </p>
     <v-recording-method-grid>
       <v-recording-method
-        title="HTTP request recording"
+        title="Record HTTP requests"
         documentation-url="https://appmap.io/docs/reference/appmap-java.html#requests-recording"
-        :supported="!!webFramework"
+        :supported="true"
         :default-behavior="true"
         :prompt-suggestions="promptSuggestions.httpRequest"
       >
@@ -28,8 +24,15 @@
         </template>
         <template #supported>
           <p>
-            {{ webFramework.name }} will automatically begin recording upon receiving an inbound
-            HTTP request. The recording will span the entire lifetime of the request.
+            Web services will automatically begin recording upon receiving an inbound HTTP request.
+            The recording will span the entire lifetime of the request.
+          </p>
+          <hr />
+          <p>To begin, run your web service with the AppMap agent.</p>
+          <p>Next, issue an HTTP request to your web service.</p>
+          <p>
+            An AppMap trace will be written to the <code class="inline">tmp/appmap</code> directory
+            by default.
           </p>
         </template>
         <template #unsupported>
@@ -40,10 +43,10 @@
         </template>
       </v-recording-method>
       <v-recording-method
-        title="Remote recording"
+        title="Record a web service"
         title-lowercase="remote recording"
         documentation-url="https://appmap.io/docs/reference/appmap-java.html#remote-recording"
-        :supported="!!webFramework"
+        :supported="true"
         :default-behavior="false"
         :prompt-suggestions="promptSuggestions.remote"
       >
@@ -52,15 +55,21 @@
         </template>
         <template #supported>
           <p>
-            Web services running {{ webFramework.name }} can toggle recordings on and off remotely
-            via an HTTP API. This is useful in cases where you need control over the lifetime of the
-            recording.
+            Web services can toggle recordings on and off remotely via an HTTP API. This is useful
+            in cases where you need control over the lifetime of the recording.
           </p>
+          <hr />
+          <p>To begin, run your web service with the AppMap agent.</p>
           <p>
-            Use the "Record" button in the IDE to start recording. Interact with your application,
-            through its user interface and/or by making API requests using a tool such as Postman.
-            When you are done, click the "Record" button again to save the recording and view the
-            AppMap diagrams.
+            Next, hover your mouse over the "AppMap data" section within the AppMap extension
+            sidebar panel. Click the "Record" button to start recording.
+          </p>
+          <p>A prompt will appear requesting the URL of your web service.</p>
+          <p>Once submitted, begin interacting with your application.</p>
+          <p>When you are done, click the "Record" button again to name and save the recording.</p>
+          <p>
+            An AppMap trace of the entire session will be written to the
+            <code class="inline">tmp/appmap</code> directory by default.
           </p>
         </template>
         <template #unsupported>
@@ -71,10 +80,10 @@
         </template>
       </v-recording-method>
       <v-recording-method
-        title="Test recording"
+        title="Record test cases"
         title-lowercase="test recording"
         documentation-url="https://appmap.io/docs/reference/appmap-java.html#tests-recording"
-        :supported="!!testFramework"
+        :supported="true"
         :default-behavior="true"
         :prompt-suggestions="promptSuggestions.test"
       >
@@ -85,14 +94,15 @@
         </template>
         <template #supported>
           <p>
-            When running {{ testFramework.name }} tests, AppMap will automatically start and stop
-            recording for each test case. With adequate test coverage, this method can quickly
-            record a broad range of your application's behavior.
+            When running tests, AppMap will automatically start and stop recording for each test
+            case. With adequate test coverage, this method can quickly record a broad range of your
+            application's behavior.
           </p>
+          <hr />
+          <p>To begin, run your test cases with the AppMap agent loaded into the JVM.</p>
           <p>
-            This will automatically be configured for you by running your tests via the "Testing"
-            button available in the sidebar or by pressing F1 and running the
-            <code class="inline">Test: Run All Tests</code> command.
+            As each case test completes, an AppMap trace file will be saved with a name reflecting
+            the description of the test case.
           </p>
         </template>
         <template #unsupported>
@@ -104,7 +114,7 @@
         </template>
       </v-recording-method>
       <v-recording-method
-        title="Code block recording"
+        title="Record a code block"
         title-lowercase="code block recording"
         documentation-url="https://appmap.io/docs/reference/appmap-java.html#code-block-recording"
         :supported="true"
@@ -123,11 +133,20 @@
             Note that this method still requires your application be run with the AppMap Java agent
             for recording to be enabled.
           </p>
-          <p>Visit the documentation for examples.</p>
+          <p>
+            Visit the
+            <a
+              href="https://appmap.io/docs/reference/appmap-java.html#code-block-recording"
+              target="_blank"
+            >
+              documentation
+            </a>
+            for examples.
+          </p>
         </template>
       </v-recording-method>
       <v-recording-method
-        title="Process recording"
+        title="Record a process"
         title-lowercase="process recording"
         documentation-url="https://appmap.io/docs/reference/appmap-java.html#process-recording"
         :supported="true"
@@ -149,6 +168,16 @@
             <code class="inline">vmArgs</code>. When running this configuration, an AppMap recording
             will be saved after your application exits.
           </p>
+          <hr />
+          <p>
+            To begin, run your application with the AppMap agent and the
+            <code class="inline">-Dappmap.recording.auto=true</code> system property.
+          </p>
+          <p>Trace data will be collected until your application exits.</p>
+          <p>
+            Once your application exits, an AppMap trace will be written to the
+            <code class="inline">tmp/appmap</code> directory by default.
+          </p>
         </template>
       </v-recording-method>
     </v-recording-method-grid>
@@ -168,8 +197,6 @@ export default {
   name: 'JavaRecordInstructions',
 
   props: {
-    webFramework: Object,
-    testFramework: Object,
     editor: String,
   },
 
@@ -185,6 +212,8 @@ export default {
 
   data() {
     return {
+      webFramework: undefined,
+      testFramework: undefined,
       promptSuggestions: buildPrompts(
         'Java',
         this.editor,
@@ -192,6 +221,15 @@ export default {
         this.testFramework?.name
       ),
     };
+  },
+
+  methods: {
+    onSelectWebFramework(webFramework) {
+      this.webFramework = webFramework === 'Other' ? undefined : webFramework;
+    },
+    onSelectTestFramework(testFramework) {
+      this.testFramework = testFramework === 'Other' ? undefined : testFramework;
+    },
   },
 };
 </script>

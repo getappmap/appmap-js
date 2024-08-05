@@ -54,7 +54,7 @@ export default {
       const { top } = this.$refs.popperBody.getBoundingClientRect();
       if (top < 0) {
         const padding = 16;
-        window.scrollBy({ top: top - padding, behavior: 'smooth' });
+        document.scrollingElement?.scrollBy({ top: top - padding, behavior: 'smooth' });
       }
     },
   },

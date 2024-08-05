@@ -66,27 +66,9 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 // TODO: Please scope me!
 //       I shouldn't be modifying the global styles!
-
-html,
-body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-::selection,
-::-moz-selection,
-::-webkit-selection {
-  background-color: $brightblue;
-  color: $white;
-}
 
 .qs {
   $highlighted-code: #d7ba7d;
@@ -101,65 +83,72 @@ body {
   color: $white;
   background-color: $black;
 
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    margin-top: 1.25em;
-  }
-
-  p {
-    line-height: 1.75;
-  }
-
-  .mb10 {
-    margin-bottom: 10px;
-  }
-
-  .mb20 {
-    margin-bottom: 20px;
-  }
-
-  a {
-    color: $powderblue;
-    text-decoration: none;
-    transition: $transition;
-
-    &:hover {
-      color: #fff;
+  &::v-deep {
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin-top: 1.25em;
     }
-  }
 
-  code {
-    margin: 20px 0;
-    display: block;
-    border: 1px solid #454545;
-    border-radius: 8px;
-    max-width: 80%;
-    padding: 12px 20px;
-    color: $highlighted-code;
+    p {
+      line-height: 1.75;
+    }
 
-    &.inline {
-      display: inline-block;
-      padding: 0 5px 0 5px;
-      margin: 0;
-      line-height: 1;
-      padding: 0.25rem;
-      padding-bottom: 0;
-      border: none;
-      color: $base07;
-      background-color: rgba(0, 0, 0, 0.25);
+    .mb10 {
+      margin-bottom: 10px;
+    }
 
-      em {
-        color: $highlighted-code;
-        font-style: inherit;
+    .mb20 {
+      margin-bottom: 20px;
+    }
+
+    a {
+      color: $powderblue;
+      text-decoration: none;
+      transition: $transition;
+
+      code.inline {
+        color: $powderblue;
+        &:hover {
+          color: #fff;
+        }
+      }
+
+      &:hover {
+        color: #fff;
       }
     }
-  }
 
-  ul {
-    padding-left: 10px;
+    code {
+      margin: 20px 0;
+      display: block;
+      border: 1px solid #454545;
+      border-radius: 8px;
+      color: $highlighted-code;
+
+      &.inline {
+        display: inline-block;
+        padding: 0 5px 0 5px;
+        margin: 0;
+        line-height: 1;
+        padding: 0.25rem;
+        padding-bottom: 0;
+        border: none;
+        color: $base07;
+        background-color: rgba(0, 0, 0, 0.25);
+
+        em {
+          color: $highlighted-code;
+          font-style: inherit;
+        }
+      }
+    }
+
+    ul {
+      padding-left: 10px;
+    }
   }
 }
 
@@ -174,8 +163,7 @@ body {
   filter: $shadow-tile;
   border-radius: 8px;
   margin: 1em auto;
-  padding: 2em;
-  overflow-x: hidden;
+  overflow-x: visible;
 }
 
 .qs-help {

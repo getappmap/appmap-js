@@ -10,13 +10,6 @@
         </span>
         <h2 class="recording-method__title">{{ title }}</h2>
       </div>
-      <v-badge v-if="supported && defaultBehavior" class="recording-method__badge">
-        Enabled by default
-      </v-badge>
-      <v-badge v-else-if="supported && !defaultBehavior" class="recording-method__badge">
-        manual toggle
-      </v-badge>
-      <v-badge v-else-if="!supported" class="recording-method__badge"> unsupported </v-badge>
     </div>
     <div class="recording-method__content">
       <slot v-if="supported" name="supported" />
@@ -33,7 +26,13 @@
       </a>
       <v-popper-menu position="top left" v-if="promptSuggestions" ref="promptSuggestionsMenu">
         <template #icon>
-          <v-ask-navie-button />
+          <v-button
+            class="recording-method__ask-navie-button"
+            label="Ask Navie"
+            kind="ghost"
+            size="small"
+            @click.prevent
+          />
         </template>
         <template #body>
           <div class="recording-method__ask-navie-button-list">
@@ -60,8 +59,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import VExternalLinkIcon from '@/assets/external-link.svg';
-import VBadge from '@/components/Badge.vue';
-import VAskNavieButton from '@/components/chat-search/AskNavieButton.vue';
 import VPopperMenu from '@/components/PopperMenu.vue';
 import VButton from '@/components/Button.vue';
 import type { NaviePromptSuggestion } from '@/lib/buildPrompts';
@@ -95,8 +92,6 @@ export default Vue.extend({
   },
   components: {
     VExternalLinkIcon,
-    VAskNavieButton,
-    VBadge,
     VPopperMenu,
     VButton,
   },
@@ -175,19 +170,17 @@ export default Vue.extend({
 
   &__content {
     padding: 0.25rem 1rem;
+
+    hr {
+      border: none;
+      border-top: 1px solid rgba(white, 0.1);
+      border-bottom: 1px solid rgba(black, 0.1);
+    }
   }
 
   &__badge-block {
     display: contents;
     margin-right: auto;
-  }
-
-  &__badge {
-    // DB: Marked important because these styles are getting overwritten in VS Code.
-    // It's not clear why.
-    background-color: rgba($blue, 0.2) !important;
-    padding: 0.125rem 0.5rem !important;
-    padding-top: 0.25rem !important;
   }
 
   &__icon {
