@@ -1,6 +1,6 @@
 import { dirname, join } from 'path';
 import { Metadata } from '@appland/models';
-import { readFile, rename, rm, stat, writeFile } from 'fs/promises';
+import { readFile } from 'fs/promises';
 
 import { exists, processNamedFiles, verbose } from '../utils';
 import { splitCamelized } from '../lib/splitCamelized';
