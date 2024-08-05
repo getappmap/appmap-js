@@ -9,13 +9,14 @@ step: 3
 ---
 
 # AppMap Navie AI
-- [Advanced Navie Commands](#advanced-navie-commands)
+- [Navie Commands](#navie-commands)
   - [`@plan`](#plan)
   - [`@generate`](#generate)
   - [`@test`](#test)
   - [`@explain`](#explain)
   - [`@diagram`](#diagram)
   - [`@help`](#help)
+  - [Navie Commands Demo](#navie-commands-demo)
 - [Bring Your Own Model Examples](#bring-your-own-model-examples)
   - [GitHub Copilot Language Model](#github-copilot-language-model)
   - [OpenAI](#openai)
@@ -36,7 +37,7 @@ step: 3
   - [In JetBrains](#in-jetbrains)
 - [GitHub Repository](#github-repository)
 
-## Advanced Navie Commands
+## Navie Commands
 
 You can ask free-form questions, or start your question with one of these commands:
 
@@ -44,6 +45,7 @@ You can ask free-form questions, or start your question with one of these comman
 - [`@generate`](#generate)
 - [`@test`](#test)
 - [`@explain`](#explain)
+- [`@diagram`](#diagram)
 - [`@help`](#help)
 
 
@@ -57,6 +59,10 @@ The `@plan` command prefix within Navie focuses the AI response on building a de
 - @plan implement a cache key for my user posting on my social media application.  
 - @plan migrate the /users/setting API endpoint from SQL to MongoDB.  
 
+#### `@plan` Video Demo <!-- omit in toc -->
+
+{% include vimeo.html id='985121150' %}
+
 ### `@generate`
 
 The `@generate` prefix will focus the Navie AI response to optimize for new code creation.  This is useful when you want the Navie AI to respond with code implementations across your entire code base. This will reduce the amount of code explanation and generally the AI will respond only with the specific files and functions that need to be changed in order to implement a specific plan.
@@ -66,6 +72,10 @@ The `@generate` prefix will focus the Navie AI response to optimize for new code
 - @generate Using the django-simple-captcha library add the necessary code for an offline captcha to my new user registration page.
 - @generate Update the function for the physical flow export to include data type via physical_spec_data_type and physical_specification tables without changing the existing functionality.
 - @generate Design and implement a cache key for user posts and show me how to implement it within this code base
+
+####`@generate` Video Demo <!-- omit in toc -->
+
+{% include vimeo.html id='985121150' %}
 
 ### `@test`
 
@@ -91,11 +101,42 @@ The `@explain` command prefix within Navie serves as a default option focused on
 
 The `@diagram` command prefix within Navie focuses the AI response to generate Mermaid compatable diagrams.  [Mermaid](https://mermaid.js.org/) is an open source diagramming and charting utility with wide support across tools such as GitHub, Atlassian, and more.  Use the `@diagram` command, and Navie will create and render a Mermaid compatable diagram within the Navie chat window.  You can open this diagram in the [Mermaid Live Editor](https://mermaid.live), copy the Mermaid Definitions to your clipboard, save to disk, or expand a full window view.  Save the Mermaid diagram into any supported tool such as GitHub Issues, Atlassian Confluence, and more. 
 
-#### Examples <!-- omit in toc -->
+#### Example Questions <!-- omit in toc -->
 
-- @diagram how my user authentication works for the /admin API endpoint.
-- @diagram the plan to implement a caching layer into my SQL database access.
-- @diagram the relationship between the physical_flow, physical_specification, physical_spec_data_type data types.
+```
+@diagram the functional steps involved when a new user registers for the service.
+```
+  
+<img class="video-screenshot" src="/assets/img/product/sequence-diagram-navie.webp"/> 
+ 
+```
+@diagram the entity relationships between products and other important data objects.
+```
+
+<img class="video-screenshot" src="/assets/img/product/entity-relationship-navie.webp"/> 
+
+```
+@diagram using a flow chart how product sales tax is calculated.
+```
+
+<img class="video-screenshot" src="/assets/img/product/flow-chart-navie.webp"/> 
+
+```
+@diagram create a detailed class map of the users, stores, products and other associated classes used
+```
+
+<img class="video-screenshot" src="/assets/img/product/class-map-navie.webp"/> 
+
+#### Example Diagram Projects <!-- omit in toc -->
+
+Below are a series of open source projects you can use to try out the `@diagram` feature using 
+prebuilt AppMap data in a sample project. Simply clone one of the following projects, open 
+into your code editor with the AppMap extension installed, and ask Navie to generate diagrams.
+
+- [Sample Python Project](https://github.com/land-of-apps/python-diagram-example/blob/master/README.md)
+- [Sample Ruby Project](https://github.com/land-of-apps/rails-diagram-example/blob/main/README.md)
+- [Sample Node (MERN) Project](https://github.com/land-of-apps/mern-diagram-example/blob/master/README.md)
+- [Sample Jave Spring Project](https://github.com/land-of-apps/waltz/blob/demo/diagram-examples/demo/diagram-demo.md)
 
 ### `@help`
 
@@ -158,6 +199,10 @@ If you have the Copilot extension installed, but have not signed in, you'll see 
 
 Click the `Sign in to GitHub` and login with an account that has a valid paid or trial GitHub Copilot subscription.
 
+#### Video Demo
+
+{% include vimeo.html id='992238965' %}
+
 ### OpenAI
 
 **Note:** We recommend configuring your OpenAI key using the code editor extension. Follow the [Bring Your Own Key](/docs/navie/bring-your-own-model.html#configuring-your-openai-key) docs for instructions.  
@@ -192,6 +237,14 @@ setting:
 Consult [AnyScale documentation](https://docs.endpoints.anyscale.com/) for model
 names. Note we recommend using Mixtral models with Navie.
 
+#### Anyscale Demo with VS Code
+
+{% include vimeo.html id='970914908' %}
+
+#### Anyscale Demo with JetBrains
+
+{% include vimeo.html id='970914884' %}
+
 ### Fireworks AI
 
 You can use [Fireworks AI](https://fireworks.ai/) and their serverless or on-demand 
@@ -206,6 +259,10 @@ settings:
 
 Consult the [Fireworks AI documentation](https://fireworks.ai/models) for a full list of 
 the available models they currently support. 
+
+#### Video Demo
+
+{% include vimeo.html id='992941358' %}
 
 ### Ollama
 

@@ -162,6 +162,10 @@ After clicking the box to enable the VS Code LM, you'll be instructed to reload 
 
 For more details about using the GitHub Copilot Language Model as a supported Navie backend, refer to the [Navie reference guide](/docs/reference/navie.html#github-copilot-language-model)
 
+#### Video Demo
+
+{% include vimeo.html id='992238965' %}
+
 ## Examples
 
 Refer to the [Navie Reference Guide](/docs/reference/navie) for detailed examples of using Navie with your own LLM backend.
