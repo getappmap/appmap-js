@@ -40,7 +40,7 @@ reference: true
         <li class="name">Labels</li>
         <li class="value">
           {% for label in analysis_rule.labels %}
-            <a href="./analysis-rules.html#{{ label }}">{{ label }}</a>
+            <a href="./analysis-labels.html#{{ label }}">{{ label }}</a>
             <br/>
           {% endfor %}
         </li>
