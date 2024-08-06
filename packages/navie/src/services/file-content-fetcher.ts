@@ -1,4 +1,3 @@
-import { ContextV2 } from '../context';
 import { ClientRequest, ChatHistory } from '../navie';
 import ContextService from './context-service';
 import FileChangeExtractorService from './file-change-extractor-service';
