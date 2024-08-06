@@ -59,7 +59,7 @@ export default class FileChangeExtractorService {
       this.history.log('[file-change-extractor] Failed to list files');
       return undefined;
     }
-    return parseJSON(fileList) as string[];
+    return parseJSON(fileList, true) as string[];
   }
 
   // Extract <change> tags from the messages. Sort into reverse order, so that the most
