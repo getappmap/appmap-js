@@ -20,10 +20,14 @@ describe('listGitProjectFiles', () => {
     jest.mocked(childProcess.exec).mockImplementation((cmd: string, _options, callback) => {
       const cb = callback as (_: unknown, __: unknown) => void;
       if (cmd.includes('ls-files')) {
-        cb(null, { stdout: 'file1.js\nfile2.png' });
+        cb(null, { stdout: 'file1.js' });
       } else if (cmd.includes('status --porcelain')) {
         cb(null, {
-          stdout: '?? newFile.ts\nM modifiedFile.js',
+          stdout: `
+?? newFile.ts
+M  stagedFile.js
+ M unstagedFile.js
+`,
         });
       } else {
         cb(null, { stdout: '' });
@@ -34,11 +38,13 @@ describe('listGitProjectFiles', () => {
     jest.mocked(utilsModule.isFile).mockResolvedValue(true);
   });
 
-  it('includes non-binary git-managed files and filters out unmanaged files', async () => {
+  it('includes git-managed files, including modified files, as well as untracked', async () => {
     const files = await listGitProjectFiles(mockDirectory);
 
+    expect(files.length).toBe(4);
     expect(files).toContain('file1.js');
     expect(files).toContain('newFile.ts');
-    expect(files).toContain('modifiedFile.js');
+    expect(files).toContain('stagedFile.js');
+    expect(files).toContain('unstagedFile.js');
   });
 });

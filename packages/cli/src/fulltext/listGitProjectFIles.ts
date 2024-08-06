@@ -38,8 +38,9 @@ export default async function listGitProjectFiles(directory: string): Promise<st
       return stdout
         .split('\n')
         .map((line) => {
-          const [, fileName] = line.split(' ');
-          return fileName;
+          // git status --porcelain output starts with 3 characters: staged status, unstaged status,
+          // and a space.
+          return line.slice(3);
         })
         .filter(Boolean);
     } catch (e) {
