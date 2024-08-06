@@ -38,8 +38,6 @@ The links should be formatted as Markdown links, like this:
 export default class SearchAgent implements Agent {
   public temperature = 0;
 
-  public model = 'gpt-4o-mini';
-
   constructor(public history: InteractionHistory, private contextService: ContextService) {}
 
   // eslint-disable-next-line class-methods-use-this

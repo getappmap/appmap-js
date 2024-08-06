@@ -77,7 +77,6 @@ describe('queryKeywords', () => {
       'http',
       'response',
       'httpresponse',
-      'code',
       'responsecode',
     ]);
   });
