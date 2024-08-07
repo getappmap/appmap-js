@@ -155,7 +155,9 @@
     "scripts": [
       "built/cmds/record/state/record_*.js",
       "node_modules/openai/_shims/auto/runtime-node.js",
-      "../../node_modules/openai/_shims/auto/runtime-node.js"
+      "../../node_modules/openai/_shims/auto/runtime-node.js",
+      "../../node_modules/@anthropic-ai/sdk/_shims/auto/runtime-node.js",
+      "../../node_modules/@langchain/openai/node_modules/openai/_shims/auto/runtime-node.js"
     ],
     "assets": [
       "package.json",

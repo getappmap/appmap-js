@@ -6,7 +6,7 @@ import { ChatOpenAI } from '@langchain/openai';
 import VectorTermsService from '../../src/services/vector-terms-service';
 import InteractionHistory from '../../src/interaction-history';
 import { mockAIResponse } from '../fixture';
-import { OpenAICompletionService } from '../../src/services/completion-service';
+import OpenAICompletionService from '../../src/services/openai-completion-service';
 
 jest.mock('@langchain/openai');
 const completionWithRetry = jest.mocked(ChatOpenAI.prototype.completionWithRetry);
