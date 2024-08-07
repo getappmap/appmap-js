@@ -1,5 +1,4 @@
-import { Agent } from 'openai/_shims';
-import { AgentOptions, AgentResponse } from '../agent';
+import { Agent, AgentOptions, AgentResponse } from '../agent';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
 import Filter from '../lib/filter';
 import MermaidFilter from '../lib/mermaid-filter';
