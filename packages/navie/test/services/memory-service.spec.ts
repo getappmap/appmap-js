@@ -1,13 +1,15 @@
+import { ChatOpenAI } from '@langchain/openai';
+
 import { PromptInteractionEvent, ContextItemEvent } from '../../src/interaction-history';
 import type Message from '../../src/message';
-import MemoryService, { OpenAIMemoryService } from '../../src/services/memory-service';
+import MemoryService, { LangchainMemoryService } from '../../src/services/memory-service';
 import { ConversationSummaryMemory } from 'langchain/memory';
 import { PromptType } from '../../src/prompt';
 
 jest.mock('@langchain/openai');
 jest.mock('langchain/memory');
 
-describe('OpenAIMemoryService', () => {
+describe('LangchainMemoryService', () => {
   describe('predictSummary', () => {
     let memoryService: MemoryService;
     const messages: Message[] = [
@@ -17,7 +19,7 @@ describe('OpenAIMemoryService', () => {
     ];
 
     beforeEach(() => {
-      memoryService = new OpenAIMemoryService('gpt-3.5-turbo', 0.5);
+      memoryService = new LangchainMemoryService(new ChatOpenAI());
     });
 
     it('should add the conversation summary to the context', async () => {
