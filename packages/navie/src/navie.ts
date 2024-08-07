@@ -2,9 +2,8 @@ import assert from 'assert';
 import EventEmitter from 'events';
 import { warn } from 'node:console';
 
-import { OpenAIMemoryService } from './services/memory-service';
+import { LangchainMemoryService, NaiveMemoryService } from './services/memory-service';
 import VectorTermsService from './services/vector-terms-service';
-import { OpenAICompletionService } from './services/completion-service';
 import InteractionHistory, {
   AgentSelectionEvent,
   ClassificationEvent,
@@ -34,6 +33,7 @@ import ListFilesCommand from './commands/list-files-command';
 import MermaidFixerService from './services/mermaid-fixer-service';
 import UpdateCommand from './commands/update-command';
 import ComputeUpdateService from './services/compute-update-service';
+import createCompletionService from './services/completion-service-factory';
 
 export type ChatHistory = Message[];
 
@@ -80,7 +80,8 @@ export default function navie(
     warn(`Using response tokens ${options.responseTokens}`);
 
   const interactionHistory = new InteractionHistory();
-  const completionService = new OpenAICompletionService(options.modelName, options.temperature);
+
+  const completionService = createCompletionService(options);
 
   const classificationService = new ClassificationService(interactionHistory, completionService);
 
@@ -121,7 +122,9 @@ export default function navie(
       mermaidFixerService
     );
     const projectInfoService = new ProjectInfoService(interactionHistory, projectInfoProvider);
-    const memoryService = new OpenAIMemoryService(options.modelName, options.temperature);
+    const memoryService = completionService.model
+      ? new LangchainMemoryService(completionService.model)
+      : NaiveMemoryService;
 
     return new ExplainCommand(
       options,

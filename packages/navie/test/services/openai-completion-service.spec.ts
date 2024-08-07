@@ -1,11 +1,11 @@
 import * as OpenAI from '@langchain/openai';
 
 import InteractionHistory from '../../src/interaction-history';
-import { OpenAICompletionService } from '../../src/services/completion-service';
+import OpenAICompletionService from '../../src/services/openai-completion-service';
 
 jest.mock('@langchain/openai');
 
-describe('CompletionService', () => {
+describe('OpenAICompletionService', () => {
   let interactionHistory: InteractionHistory;
   let service: OpenAICompletionService;
   const modelName = 'the-model-name';

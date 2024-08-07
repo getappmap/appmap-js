@@ -3,7 +3,7 @@ import { ChatOpenAI } from '@langchain/openai';
 import InteractionHistory from '../../src/interaction-history';
 import ClassificationService from '../../src/services/classification-service';
 import { mockAIResponse } from '../fixture';
-import { OpenAICompletionService } from '../../src/services/completion-service';
+import OpenAICompletionService from '../../src/services/openai-completion-service';
 import ComputeUpdateService from '../../src/services/compute-update-service';
 
 jest.mock('@langchain/openai');
