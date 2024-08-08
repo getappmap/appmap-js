@@ -1,3 +1,22 @@
+# [@appland/navie-v1.24.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.23.0...@appland/navie-v1.24.0) (2024-08-08)
+
+
+### Bug Fixes
+
+* Fix prompts ([2728e11](https://github.com/getappmap/appmap-js/commit/2728e11c219bfb9af04957e5ad7bbe3b6054de0b))
+* Suppress parseJSON warning ([aaf6e6d](https://github.com/getappmap/appmap-js/commit/aaf6e6d1e4c919249177da609436a7adf7ab39d7))
+
+
+### Features
+
+* [@search](https://github.com/search) command ([6566b89](https://github.com/getappmap/appmap-js/commit/6566b898debb2fbb59db65a3656360d12991138f))
+* /listfiles option to disable content fetching ([900b9ec](https://github.com/getappmap/appmap-js/commit/900b9ec3a2190f6b3a32fa3f3e79842bb57f8f92))
+* /projectinfo option ([0b79611](https://github.com/getappmap/appmap-js/commit/0b79611305054c6bdd049a6d87c44a0bc6757eaf))
+* Add cost info for gpt-4o-mini ([0f09d5b](https://github.com/getappmap/appmap-js/commit/0f09d5b77239392849f1a63186bfc74ff45427eb))
+* Handle search term normalization on the backend ([93add59](https://github.com/getappmap/appmap-js/commit/93add598a9930af268a33ed19b9f68b2a93cc290))
+* Prompt update ([a679712](https://github.com/getappmap/appmap-js/commit/a67971253313a864499675fd977b346bd9e67096))
+* Prompt updates to make file detection more reliable ([1eabdcb](https://github.com/getappmap/appmap-js/commit/1eabdcb58fdc7783b7a77f2d52eae1c9dd0f5c16))
+
 # [@appland/navie-v1.23.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.22.0...@appland/navie-v1.23.0) (2024-07-30)
 
 
