@@ -1,3 +1,21 @@
+# [@appland/appmap-v3.157.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.156.0...@appland/appmap-v3.157.0) (2024-08-08)
+
+
+### Bug Fixes
+
+* Add missing verbose option ([cb92f5b](https://github.com/getappmap/appmap-js/commit/cb92f5b1ba4496ad38ef447c13f83ac45101c5ea))
+* Ignore more binary-ish files ([e6dc60d](https://github.com/getappmap/appmap-js/commit/e6dc60dfa0a7cbfeccea65831b984f39fedfd086))
+
+
+### Features
+
+* apply command arguments are file names ([cf0e129](https://github.com/getappmap/appmap-js/commit/cf0e129d6ed13797708bb844fd7d8217676c3510))
+* cli 'apply' command ([aeb3c02](https://github.com/getappmap/appmap-js/commit/aeb3c0251568a153c0c7825b956cec7fee8b4237))
+* Emit pairs of camelized and delimeted words into the index ([2b300be](https://github.com/getappmap/appmap-js/commit/2b300be929ec539222caa5f52c1334194d316b29))
+* Handle search term normalization on the backend ([93add59](https://github.com/getappmap/appmap-js/commit/93add598a9930af268a33ed19b9f68b2a93cc290))
+* Prompt updates to make file detection more reliable ([1eabdcb](https://github.com/getappmap/appmap-js/commit/1eabdcb58fdc7783b7a77f2d52eae1c9dd0f5c16))
+* rpc-client command input can be a file ([ddc41d6](https://github.com/getappmap/appmap-js/commit/ddc41d6d0b9d458af48d6c8bbb6c365d0ef596a1))
+
 # [@appland/appmap-v3.156.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.155.1...@appland/appmap-v3.156.0) (2024-07-30)
 
 
