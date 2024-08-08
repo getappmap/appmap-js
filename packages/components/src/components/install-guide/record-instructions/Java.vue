@@ -1,9 +1,10 @@
 <template>
   <section>
-    <h3>Getting started</h3>
     <p>
       Use the "Run with AppMap" debug configuration to launch your application or run your tests
-      through Microsoft's Test Runner for Java extension.
+      through Microsoft's
+      <a href="vscode:extension/vscjava.vscode-java-test" target="_blank"> Test Runner for Java </a>
+      extension.
     </p>
     <p>
       This ensures that your Java code runs with the JVM option
@@ -19,7 +20,7 @@
       <v-recording-method
         title="HTTP request recording"
         documentation-url="https://appmap.io/docs/reference/appmap-java.html#requests-recording"
-        :supported="!!webFramework"
+        :supported="true"
         :default-behavior="true"
         :prompt-suggestions="promptSuggestions.httpRequest"
       >
@@ -28,8 +29,8 @@
         </template>
         <template #supported>
           <p>
-            {{ webFramework.name }} will automatically begin recording upon receiving an inbound
-            HTTP request. The recording will span the entire lifetime of the request.
+            Web services will automatically begin recording upon receiving an inbound HTTP request.
+            The recording will span the entire lifetime of the request.
           </p>
         </template>
         <template #unsupported>
@@ -43,7 +44,7 @@
         title="Remote recording"
         title-lowercase="remote recording"
         documentation-url="https://appmap.io/docs/reference/appmap-java.html#remote-recording"
-        :supported="!!webFramework"
+        :supported="true"
         :default-behavior="false"
         :prompt-suggestions="promptSuggestions.remote"
       >
@@ -52,9 +53,8 @@
         </template>
         <template #supported>
           <p>
-            Web services running {{ webFramework.name }} can toggle recordings on and off remotely
-            via an HTTP API. This is useful in cases where you need control over the lifetime of the
-            recording.
+            Web services can toggle recordings on and off remotely via an HTTP API. This is useful
+            in cases where you need control over the lifetime of the recording.
           </p>
           <p>
             Use the "Record" button in the IDE to start recording. Interact with your application,
@@ -74,7 +74,7 @@
         title="Test recording"
         title-lowercase="test recording"
         documentation-url="https://appmap.io/docs/reference/appmap-java.html#tests-recording"
-        :supported="!!testFramework"
+        :supported="true"
         :default-behavior="true"
         :prompt-suggestions="promptSuggestions.test"
       >
@@ -85,9 +85,9 @@
         </template>
         <template #supported>
           <p>
-            When running {{ testFramework.name }} tests, AppMap will automatically start and stop
-            recording for each test case. With adequate test coverage, this method can quickly
-            record a broad range of your application's behavior.
+            When running tests, AppMap will automatically start and stop recording for each test
+            case. With adequate test coverage, this method can quickly record a broad range of your
+            application's behavior.
           </p>
           <p>
             This will automatically be configured for you by running your tests via the "Testing"
@@ -123,7 +123,16 @@
             Note that this method still requires your application be run with the AppMap Java agent
             for recording to be enabled.
           </p>
-          <p>Visit the documentation for examples.</p>
+          <p>
+            Visit the
+            <a
+              href="https://appmap.io/docs/reference/appmap-java.html#code-block-recording"
+              target="_blank"
+            >
+              documentation
+            </a>
+            for examples.
+          </p>
         </template>
       </v-recording-method>
       <v-recording-method
@@ -162,14 +171,13 @@ import TestsIcon from '@/assets/record-test.svg';
 import ProcessIcon from '@/assets/record-process.svg';
 import VRecordingMethod from './RecordingMethod.vue';
 import VRecordingMethodGrid from './RecordingMethodGrid.vue';
+import VTechStack from '@/components/install-guide/record-instructions/TechStack.vue';
 import buildPrompts from '@/lib/buildPrompts';
 
 export default {
   name: 'JavaRecordInstructions',
 
   props: {
-    webFramework: Object,
-    testFramework: Object,
     editor: String,
   },
 
@@ -181,10 +189,13 @@ export default {
     TestsIcon,
     VRecordingMethod,
     VRecordingMethodGrid,
+    VTechStack,
   },
 
   data() {
     return {
+      webFramework: undefined,
+      testFramework: undefined,
       promptSuggestions: buildPrompts(
         'Java',
         this.editor,
@@ -192,6 +203,15 @@ export default {
         this.testFramework?.name
       ),
     };
+  },
+
+  methods: {
+    onSelectWebFramework(webFramework) {
+      this.webFramework = webFramework === 'Other' ? undefined : webFramework;
+    },
+    onSelectTestFramework(testFramework) {
+      this.testFramework = testFramework === 'Other' ? undefined : testFramework;
+    },
   },
 };
 </script>

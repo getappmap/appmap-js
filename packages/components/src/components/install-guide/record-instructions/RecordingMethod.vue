@@ -10,15 +10,11 @@
         </span>
         <h2 class="recording-method__title">{{ title }}</h2>
       </div>
+    </div>
+    <div class="recording-method__content">
       <v-badge v-if="supported && defaultBehavior" class="recording-method__badge">
         Enabled by default
       </v-badge>
-      <v-badge v-else-if="supported && !defaultBehavior" class="recording-method__badge">
-        manual toggle
-      </v-badge>
-      <v-badge v-else-if="!supported" class="recording-method__badge"> unsupported </v-badge>
-    </div>
-    <div class="recording-method__content">
       <slot v-if="supported" name="supported" />
       <template v-else>
         <div class="recording-method__disabled-explanation">
@@ -185,9 +181,11 @@ export default Vue.extend({
   &__badge {
     // DB: Marked important because these styles are getting overwritten in VS Code.
     // It's not clear why.
+    display: inline-block;
     background-color: rgba($blue, 0.2) !important;
-    padding: 0.125rem 0.5rem !important;
+    padding: 0.15rem 0.5rem !important;
     padding-top: 0.25rem !important;
+    margin-top: 1rem;
   }
 
   &__icon {

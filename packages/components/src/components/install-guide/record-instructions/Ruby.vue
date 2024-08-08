@@ -1,6 +1,5 @@
 <template>
   <section>
-    <h3>Getting started</h3>
     <p>
       When you run your Ruby code with the <code class="inline">appmap</code> gem in your bundle,
       AppMap will be enabled for recording. By default, the <code class="inline">appmap</code> gem
@@ -17,7 +16,7 @@
       <v-recording-method
         title="HTTP request recording"
         documentation-url="https://appmap.io/docs/reference/appmap-ruby.html#requests-recording"
-        :supported="!!webFramework"
+        :supported="true"
         :default-behavior="true"
         :prompt-suggestions="promptSuggestions.httpRequest"
       >
@@ -26,8 +25,8 @@
         </template>
         <template #supported>
           <p>
-            {{ webFramework.name }} will automatically begin recording upon receiving an inbound
-            HTTP request. The recording will span the entire lifetime of the request.
+            Rails applications will automatically begin recording upon receiving an inbound HTTP
+            request. The recording will span the entire lifetime of the request.
           </p>
           <p>Start your Rails with the following command.</p>
           <v-code-snippet
@@ -46,7 +45,7 @@
         title="Remote recording"
         title-lowercase="remote recording"
         documentation-url="https://appmap.io/docs/reference/appmap-ruby.html#remote-recording"
-        :supported="!!webFramework"
+        :supported="true"
         :default-behavior="false"
         :prompt-suggestions="promptSuggestions.remote"
       >
@@ -55,9 +54,8 @@
         </template>
         <template #supported>
           <p>
-            Web services running {{ webFramework.name }} can toggle recordings on and off remotely
-            via an HTTP API. This is useful in cases where you need control over the lifetime of the
-            recording.
+            Web services running Rails can toggle recordings on and off remotely via an HTTP API.
+            This is useful in cases where you need control over the lifetime of the recording.
           </p>
           <p>
             Use the "Record" button in the IDE to start recording. Interact with your application,
@@ -77,7 +75,7 @@
         title="Test recording"
         title-lowercase="test recording"
         documentation-url="https://appmap.io/docs/reference/appmap-ruby.html#tests-recording"
-        :supported="!!testFramework"
+        :supported="true"
         :default-behavior="true"
         :prompt-suggestions="promptSuggestions.test"
       >
@@ -88,20 +86,9 @@
         </template>
         <template #supported>
           <p>
-            When running {{ testFramework.name }} tests, AppMap will automatically start and stop
-            recording for each test case. With adequate test coverage, this method can quickly
-            record a broad range of your application's behavior.
-            <template v-if="testFramework.name.toLowerCase() == 'minitest'">
-              <p>Run Minitest tests with the following command.</p>
-              <v-code-snippet
-                clipboard-text="DISABLE_SPRING=true rails test"
-                :kind="codeSnippetType"
-              />
-            </template>
-            <template v-if="testFramework.name.toLowerCase() == 'rspec'">
-              <p>Run Rspec tests with the following command.</p>
-              <v-code-snippet clipboard-text="DISABLE_SPRING=true rspec" :kind="codeSnippetType" />
-            </template>
+            When running tests, AppMap will automatically start and stop recording for each test
+            case. With adequate test coverage, this method can quickly record a broad range of your
+            application's behavior.
           </p>
         </template>
         <template #unsupported>
@@ -125,10 +112,19 @@
         </template>
         <template #supported>
           <p>
-            Wrap sections of your code in <code class="inline">AppMap.record</code> blocks to record
-            specific spans of execution.
+            By wrapping sections of your code in <code class="inline">AppMap.record</code> blocks,
+            you can record specific spans of execution.
           </p>
-          <p>Visit the documentation for examples.</p>
+          <p>
+            Visit the
+            <a
+              href="https://appmap.io/docs/reference/appmap-ruby.html#code-block-recording"
+              target="_blank"
+            >
+              documentation
+            </a>
+            for examples.
+          </p>
         </template>
       </v-recording-method>
     </v-recording-method-grid>

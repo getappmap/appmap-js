@@ -1,6 +1,5 @@
 <template>
   <section>
-    <h3>Getting started</h3>
     <p>
       Use the <component :is="runConfigIcon" class="run-config-icon" /> "Start with AppMap" option
       from the "Run" menu to start your run configurations with AppMap enabled.
@@ -10,14 +9,14 @@
       <code class="inline">-javaagent:~/.appmap/lib/java/appmap.jar</code>. This option is required
       to enable AppMap recording.
     </p>
-    <div id="IntelliJ-screenshot"><img src="../../../assets/run-with-appmap-menu-item.png" /></div>
+    <div class="screenshot"><img src="../../../assets/run-with-appmap-menu-item.png" /></div>
     <h3>Recording methods</h3>
     <p>The following recording methods are available to Java applications.</p>
     <v-recording-method-grid>
       <v-recording-method
         title="HTTP request recording"
         documentation-url="https://appmap.io/docs/reference/appmap-java.html#requests-recording"
-        :supported="!!webFramework"
+        :supported="true"
         :default-behavior="true"
         :prompt-suggestions="promptSuggestions.httpRequest"
       >
@@ -26,7 +25,7 @@
         </template>
         <template #supported>
           <p>
-            {{ webFramework.name }} will automatically begin recording upon receiving an inbound
+            Web services will automatically begin recording upon receiving an inbound HTTP request.
             HTTP request. The recording will span the entire lifetime of the request.
           </p>
         </template>
@@ -41,7 +40,7 @@
         title="Remote recording"
         title-lowercase="remote recording"
         documentation-url="https://appmap.io/docs/reference/appmap-java.html#remote-recording"
-        :supported="!!webFramework"
+        :supported="true"
         :default-behavior="false"
         :prompt-suggestions="promptSuggestions.remote"
       >
@@ -50,9 +49,8 @@
         </template>
         <template #supported>
           <p>
-            Web services running {{ webFramework.name }} can toggle recordings on and off remotely
-            via an HTTP API. This is useful in cases where you need control over the lifetime of the
-            recording.
+            Web services can toggle recordings on and off remotely via an HTTP API. This is useful
+            in cases where you need control over the lifetime of the recording.
           </p>
           <p>
             Use the "Record" button in the IDE to start recording. Interact with your application,
@@ -72,7 +70,7 @@
         title="Test recording"
         title-lowercase="test recording"
         documentation-url="https://appmap.io/docs/reference/appmap-java.html#tests-recording"
-        :supported="!!testFramework"
+        :supported="true"
         :default-behavior="true"
         :prompt-suggestions="promptSuggestions.test"
       >
@@ -83,9 +81,9 @@
         </template>
         <template #supported>
           <p>
-            When running {{ testFramework.name }} tests, AppMap will automatically start and stop
-            recording for each test case. With adequate test coverage, this method can quickly
-            record a broad range of your application's behavior.
+            When running tests, AppMap will automatically start and stop recording for each test
+            case. With adequate test coverage, this method can quickly record a broad range of your
+            application's behavior.
           </p>
           <p>
             A subset of tests can be run by right-clicking on any test class or package, and choose
@@ -120,7 +118,16 @@
             Note that this method still requires your application be run with the AppMap Java agent
             for recording to be enabled.
           </p>
-          <p>Visit the documentation for examples.</p>
+          <p>
+            Visit the
+            <a
+              href="https://appmap.io/docs/reference/appmap-java.html#code-block-recording"
+              target="_blank"
+            >
+              documentation
+            </a>
+            for examples.
+          </p>
         </template>
       </v-recording-method>
       <v-recording-method
@@ -213,5 +220,17 @@ export default {
 .run-config-icon {
   width: 22px;
   transform: translateY(25%);
+}
+.screenshot {
+  text-align: center;
+  max-width: 100%;
+  padding: 1rem;
+  border-radius: 10px;
+  background-color: #343e5a;
+  & > img {
+    /* add drop shadow */
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
+    max-width: 100%;
+  }
 }
 </style>

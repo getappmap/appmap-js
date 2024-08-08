@@ -1,0 +1,27 @@
+<!-- teenyicons -->
+<!--
+MIT License
+
+Copyright (c) 2020, Anja van Staden
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<svg width="64" height="65" viewBox="0 0 64 65" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M49.0667 26.1V25.3875C49.0667 22.2472 46.5195 19.7 43.3792 19.7H38.4C36.7026 19.7 35.0747 20.3743 33.8745 21.5745C32.6743 22.7747 32 24.4026 32 26.1C32 27.7974 32.6743 29.4252 33.8745 30.6255C35.0747 31.8257 36.7026 32.5 38.4 32.5H42.6667C44.364 32.5 45.9919 33.1743 47.1921 34.3745C48.3924 35.5747 49.0667 37.2026 49.0667 38.9C49.0667 40.5974 48.3924 42.2252 47.1921 43.4255C45.9919 44.6257 44.364 45.3 42.6667 45.3H38.4C36.7026 45.3 35.0747 44.6257 33.8745 43.4255C32.6743 42.2252 32 40.5974 32 38.9M23.4667 17.5667V40.0264C23.4666 41.6114 23.0251 43.1651 22.1916 44.5133C21.3581 45.8615 20.1656 46.951 18.7477 47.6595L14.9333 49.5667M6.39999 45.3V19.7L32 4.76666L57.6 19.7V45.3L32 60.2333L6.39999 45.3Z" stroke="#C7CACF"/>
+</svg>

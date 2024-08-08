@@ -1,6 +1,5 @@
 <template>
   <section>
-    <h3>Getting started</h3>
     <p>
       To record your Python application with AppMap, run your application using the
       <code class="inline">appmap-python</code> command.
@@ -12,7 +11,7 @@
       <v-recording-method
         title="HTTP request recording"
         documentation-url="https://appmap.io/docs/reference/appmap-python.html#request-recording"
-        :supported="!!webFramework"
+        :supported="true"
         :default-behavior="true"
         :prompt-suggestions="promptSuggestions.httpRequest"
       >
@@ -21,20 +20,9 @@
         </template>
         <template #supported>
           <p>
-            {{ webFramework.name }} will automatically begin recording upon receiving an inbound
-            HTTP request. The recording will span the entire lifetime of the request.
+            Web services will automatically begin recording upon receiving an inbound HTTP request.
+            The recording will span the entire lifetime of the request.
           </p>
-          <template v-if="webFramework.name.toLowerCase() == 'flask'">
-            <p>Start your Flask server with the following command.</p>
-            <v-code-snippet clipboard-text="appmap-python flask run" :kind="codeSnippetType" />
-          </template>
-          <template v-if="webFramework.name.toLowerCase() == 'django'">
-            <p>Start your Django server with the following command.</p>
-            <v-code-snippet
-              clipboard-text="appmap-python manage.py runserver"
-              :kind="codeSnippetType"
-            />
-          </template>
         </template>
         <template #unsupported>
           <p>
@@ -47,7 +35,7 @@
         title="Remote recording"
         title-lowercase="remote recording"
         documentation-url="https://appmap.io/docs/reference/appmap-python.html#remote-recording"
-        :supported="!!webFramework"
+        :supported="true"
         :default-behavior="false"
         :prompt-suggestions="promptSuggestions.remote"
       >
@@ -56,9 +44,8 @@
         </template>
         <template #supported>
           <p>
-            Web services running {{ webFramework.name }} can toggle recordings on and off remotely
-            via an HTTP API. This is useful in cases where you need control over the lifetime of the
-            recording.
+            Web services can toggle recordings on and off remotely via an HTTP API. This is useful
+            in cases where you need control over the lifetime of the recording.
           </p>
           <p>
             Use the "Record" button in the IDE to start recording. Interact with your application,
@@ -79,7 +66,7 @@
         title="Test recording"
         title-lowercase="test recording"
         documentation-url="https://appmap.io/docs/reference/appmap-python.html#test-recording"
-        :supported="!!testFramework"
+        :supported="true"
         :default-behavior="true"
         :prompt-suggestions="promptSuggestions.test"
       >
@@ -90,13 +77,9 @@
         </template>
         <template #supported>
           <p>
-            When running {{ testFramework.name }} tests, AppMap will automatically start and stop
-            recording for each test case. With adequate test coverage, this method can quickly
-            record a broad range of your application's behavior.
-            <template v-if="testFramework.name.toLowerCase() == 'pytest'">
-              <p>Run your pytest tests with the following command.</p>
-              <v-code-snippet clipboard-text="appmap-python pytest" :kind="codeSnippetType" />
-            </template>
+            When running tests, AppMap will automatically start and stop recording for each test
+            case. With adequate test coverage, this method can quickly record a broad range of your
+            application's behavior.
           </p>
         </template>
         <template #unsupported>
@@ -124,7 +107,16 @@
             Wrap sections of your code in <code class="inline">appmap.record</code> blocks to record
             specific spans of execution.
           </p>
-          <p>Visit the documentation for examples.</p>
+          <p>
+            Visit the
+            <a
+              href="https://appmap.io/docs/reference/appmap-python.html#code-block-recording"
+              target="_blank"
+            >
+              documentation
+            </a>
+            for examples.
+          </p>
         </template>
       </v-recording-method>
       <v-recording-method

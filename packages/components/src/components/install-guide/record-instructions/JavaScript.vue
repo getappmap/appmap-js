@@ -1,11 +1,10 @@
 <template>
   <section>
-    <h3>Getting started</h3>
     <p>
       To record your application with AppMap, run your application using the
       <code class="inline">appmap-node</code> command.
     </p>
-    <pre><code>$ npx appmap-node <span ref="startCommand">&lt;start-command&gt;</span></code></pre>
+    <pre><code>$ {{startCommand}} <span ref="startCommand">&lt;start-command&gt;</span></code></pre>
 
     <h3>Recording methods</h3>
     <p>The following recording methods are available to Node.js applications.</p>
@@ -13,7 +12,7 @@
       <v-recording-method
         title="HTTP request recording"
         documentation-url="https://appmap.io/docs/reference/appmap-node.html#request-recording"
-        :supported="!!webFramework"
+        :supported="true"
         :default-behavior="true"
         :prompt-suggestions="promptSuggestions.httpRequest"
       >
@@ -22,9 +21,8 @@
         </template>
         <template #supported>
           <p>
-            Web services running {{ webFramework.name }} will automatically begin recording upon
-            receiving an inbound HTTP request. The recording will span the entire lifetime of the
-            request.
+            Web services will automatically begin recording upon receiving an inbound HTTP request.
+            The recording will span the entire lifetime of the request.
           </p>
           <p>
             Your web service must be started using the
@@ -48,7 +46,7 @@
         title="Remote recording"
         title-lowercase="remote recording"
         documentation-url="https://appmap.io/docs/reference/appmap-node.html#remote-recording"
-        :supported="!!webFramework"
+        :supported="true"
         :prompt-suggestions="promptSuggestions.remote"
       >
         <template #icon>
@@ -56,9 +54,8 @@
         </template>
         <template #supported>
           <p>
-            Web services running {{ webFramework.name }} can toggle recordings on and off remotely
-            via an HTTP API. This is useful in cases where you need control over the lifetime of the
-            recording.
+            Web services can toggle recordings on and off remotely via an HTTP API. This is useful
+            in cases where you need control over the lifetime of the recording.
           </p>
           <p>
             Use the "Record" button in the IDE to start recording. Interact with your application,
@@ -84,7 +81,7 @@
         title="Test recording"
         title-lowercase="test recording"
         documentation-url="https://appmap.io/docs/reference/appmap-node.html#tests-recording"
-        :supported="!!testFramework"
+        :supported="true"
         :default-behavior="true"
         :prompt-suggestions="promptSuggestions.test"
       >
@@ -95,9 +92,9 @@
         </template>
         <template #supported>
           <p>
-            When running {{ testFramework.name }} tests, AppMap will automatically start and stop
-            recording for each test case. With adequate test coverage, this method can quickly
-            record a broad range of your application's behavior.
+            When running tests, AppMap will automatically start and stop recording for each test
+            case. With adequate test coverage, this method can quickly record a broad range of your
+            application's behavior.
           </p>
           <p>
             Your test run command must include the
@@ -168,6 +165,10 @@ export default Vue.extend({
     theme: String,
     complete: Boolean,
     editor: String,
+    packageManager: {
+      type: String,
+      default: 'npx',
+    },
   },
 
   data() {
@@ -185,18 +186,39 @@ export default Vue.extend({
     codeSnippetType(): string {
       return this.complete ? 'ghost' : 'primary';
     },
+    startCommand(): string {
+      switch (this.packageManager) {
+        case 'yarn':
+          return 'yarn appmap-node';
+        case 'npm':
+          return 'npm exec appmap-node';
+        case 'pnpm':
+          return 'pnpm appmap-node';
+        default:
+          return 'npx appmap-node';
+      }
+    },
+    sampleCommands(): string[] {
+      const commands = ['<start command>'];
+      switch (this.packageManager) {
+        case 'yarn':
+          commands.push('yarn dev', 'yarn test');
+        case 'npm':
+          commands.push('npm start', 'npm test');
+        case 'pnpm':
+          commands.push('pnpm dev', 'pnpm test');
+        default:
+          commands.push('index.js', 'npm start', 'npm test');
+      }
+      return commands;
+    },
   },
 
   mounted() {
     if (!this.$refs.startCommand) return;
     if (!(this.$refs.startCommand instanceof HTMLElement)) return;
 
-    this.typewrite(this.$refs.startCommand, [
-      '<start command>',
-      'npm start',
-      'yarn dev',
-      'node server.js',
-    ]);
+    this.typewrite(this.$refs.startCommand, this.sampleCommands);
   },
 });
 </script>

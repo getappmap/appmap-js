@@ -8,9 +8,12 @@
       @click="onInputFocus"
       @copy="onCopy"
     >
-      <div v-for="(text, index) in textLines" :key="index" class="code-snippet__line">
-        {{ text }}
-      </div>
+      <pre class="code-snippet__line" v-html="highlightedCode" v-if="highlightedCode" />
+      <template v-else>
+        <div v-for="(text, index) in textLines" :key="index" class="code-snippet__line">
+          {{ text }}
+        </div>
+      </template>
     </span>
     <v-popper placement="top" ref="popper">
       <v-button
@@ -28,9 +31,11 @@
 </template>
 
 <script>
-import ClipboardIcon from '@/assets/clipboard.svg';
+import ClipboardIcon from '@/assets/copy-icon.svg';
 import VPopper from './Popper.vue';
 import VButton from '@/components/Button.vue';
+
+import hljs from 'highlight.js';
 
 export default {
   name: 'VCodeSnippet',
@@ -56,6 +61,10 @@ export default {
       default: 'primary',
       validator: (value) => ['primary', 'secondary', 'ghost'].includes(value),
     },
+    language: {
+      type: String,
+      required: false,
+    },
   },
   data() {
     return {
@@ -69,6 +78,10 @@ export default {
     },
     textLines() {
       return this.transformedText.split(/\n/g);
+    },
+    highlightedCode() {
+      if (!this.language || !hljs.getLanguage(this.language)) return undefined;
+      return hljs.highlight(this.language, this.transformedText).value;
     },
   },
   methods: {
@@ -93,6 +106,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '~highlight.js/styles/base16/snazzy.css';
 .code-snippet {
   margin: 1rem 0;
   border-radius: $border-radius;
@@ -102,9 +116,16 @@ export default {
   background-color: $black;
   max-width: 100%;
 
+  pre {
+    margin: 0;
+  }
+
   &__line {
     min-height: 1rem;
-    padding-top: 0.33rem;
+    line-height: 1.4;
+    &:first-of-type {
+      padding-top: 0.4rem;
+    }
   }
 
   &__input {
