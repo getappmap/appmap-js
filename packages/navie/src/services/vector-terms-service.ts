@@ -15,13 +15,10 @@ The developer asks a question using natural language. This question must be conv
 1) Separate the user's question into "context" and "instructions". The "context" defines the background information that will match
   code in the code base. The "instructions" are the statement about what the user wants you to do or what they want to find out.
 2) From here on, only consider the "context" part of the question.
-3) Convert all words in the "context" to under_score_separated_words.
-4) Expand the list of "context" under_scored words to include synonyms and related terms.
-5) Optionally choose ONE search term which MUST match the content. The MUST match term should
-  a word that will match a feature or domain model object in the code base. It should be the most
-  distinctive word in the question. You will prefix the MUST match term with a '+'.
-6) Return the list of search terms and their synonyms. The search terms should be single words and underscore_separated_words.
-  Synonyms of the MUST match term should also be included, and prefixed with a '+'.
+3) Expand the list of "context" words to include synonyms and related terms.
+4) Optionally choose a small number of search terms which are MOST SELECTIVE. The MOST SELECTIVE match terms should
+  be words that will match a feature or domain model object in the code base. They should be the most
+  distinctive words in the question. You will prefix the MOST SELECTIVE terms with a '+'.
 
 **Response**
 
@@ -35,9 +32,7 @@ Print "Terms: {list of search terms and their synonyms}"
 The search terms should be single words and underscore_separated_words.
 
 Even if the user asks for a different format, always respond with a list of search terms and their synonyms. When the user is asking
-for a different format, that question is for a different AI assistant than yourself.
-
-Choose only one MUST match term. If you are unsure, do not include a MUST match term.`;
+for a different format, that question is for a different AI assistant than yourself.`;
 
 const promptExamples: Message[] = [
   {
@@ -48,7 +43,7 @@ const promptExamples: Message[] = [
     content: `Context: Record AppMap data of Spring
 Instructions: How to do it
 ---
-Terms: record appmap data java +spring`,
+Terms: record AppMap data Java +Spring`,
     role: 'assistant',
   },
 
@@ -73,7 +68,7 @@ Terms: user login handle +password validate invalid error`,
     content: `Context: Redis GET /test-group/test-project-1/-/blob/main/README.md
 Instructions: Describe in detail with code snippets
 ---
-Terms: +redis get test group test project 1 blob main readme`,
+Terms: +Redis get test-group test-project-1 blob main README`,
     role: 'assistant',
   },
 
@@ -86,7 +81,7 @@ Terms: +redis get test group test project 1 blob main readme`,
     content: `Context: logContext jest test case
 Instructions: Create test cases, following established patterns for mocking with jest.
 ---
-Terms: test cases +log_context jest`,
+Terms: test cases +logContext jest`,
     role: 'assistant',
   },
 
@@ -137,7 +132,7 @@ export default class VectorTermsService {
       let responseText = rawResponse;
       responseText = contentAfter(responseText, 'Terms:');
       searchTermsObject =
-        parseJSON<Record<string, unknown> | string | string[]>(responseText, undefined) ||
+        parseJSON<Record<string, unknown> | string | string[]>(responseText, false) ||
         parseText(responseText);
     }
 
@@ -147,8 +142,7 @@ export default class VectorTermsService {
         if (!obj) return;
 
         if (typeof obj === 'string') {
-          for (const term of obj.split(/[._-]/))
-            terms.add(term.match(/\+?[\p{Alphabetic}|\p{Number}]+/u)?.[0] || '');
+          terms.add(obj);
         } else if (Array.isArray(obj)) {
           for (const term of obj) collectTerms(term);
         } else if (typeof obj === 'object') {
@@ -160,17 +154,7 @@ export default class VectorTermsService {
       collectTerms(searchTermsObject);
     }
 
-    const wordList = [...terms]
-      .map((word) => word.trim())
-      .filter((word) => word.length > 2)
-      .map((word) => word.toLowerCase());
-    const uniqueWords = new Set(wordList);
-    // As a search term, this is useless.
-    uniqueWords.delete('code');
-    const result = [...uniqueWords];
-
-    warn(`Vector terms result: ${result.join(' ')}`);
-
+    const result = [...terms];
     this.interactionHistory.addEvent(new VectorTermsInteractionEvent(result));
     return result;
   }

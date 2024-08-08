@@ -42,10 +42,13 @@ export default class ExplainCommand implements Command {
 
     const contextLabelsFn = this.classifierService.classifyQuestion(baseQuestion, chatHistory);
 
-    const projectInfoResponse = await this.projectInfoService.lookupProjectInfo();
-    const projectInfo: ProjectInfo[] = Array.isArray(projectInfoResponse)
-      ? projectInfoResponse
-      : [projectInfoResponse];
+    let projectInfo: ProjectInfo[] = [];
+    if (request.userOptions.isEnabled('projectinfo', true)) {
+      const projectInfoResponse = await this.projectInfoService.lookupProjectInfo();
+      projectInfo = Array.isArray(projectInfoResponse)
+        ? projectInfoResponse
+        : [projectInfoResponse];
+    }
 
     const contextLabels = await contextLabelsFn;
     warn(`${COLOR_GREEN}Question: ${baseQuestion}${COLOR_RESET}`);
@@ -96,7 +99,10 @@ export default class ExplainCommand implements Command {
       ?.filter((label) => label.weight === 'high')
       .some((label) => label.name === 'architecture' || label.name === 'overview');
 
-    this.projectInfoService.promptProjectInfo(isArchitecture, projectInfo);
+    if (request.userOptions.isEnabled('projectinfo', true)) {
+      this.projectInfoService.promptProjectInfo(isArchitecture, projectInfo);
+    }
+
     const agentResponse = await mode.perform(agentOptions, tokensAvailable);
     if (agentResponse) {
       yield agentResponse.response;

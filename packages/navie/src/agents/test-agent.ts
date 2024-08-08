@@ -76,11 +76,13 @@ export default class TestAgent implements Agent {
       )
     );
 
-    const contentFetcher = new FileContentFetcher(
-      this.fileChangeExtractorService,
-      this.contextService
-    );
-    await contentFetcher.applyFileContext(options, options.chatHistory);
+    if (options.userOptions.booleanValue('listfiles', true)) {
+      const contentFetcher = new FileContentFetcher(
+        this.fileChangeExtractorService,
+        this.contextService
+      );
+      await contentFetcher.applyFileContext(options, options.chatHistory);
+    }
 
     await this.contextService.searchContext(options, tokensAvailable, ['test', 'spec']);
   }

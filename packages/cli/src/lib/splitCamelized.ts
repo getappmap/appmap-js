@@ -3,6 +3,9 @@ import { log } from 'console';
 export const LOG_CAMELIZED_TO_RAW = process.env.APPMAP_LOG_CAMELIZED_TO_RAW === 'true';
 export const CAMELIZED_TO_RAW = new Map<string, string>();
 
+/**
+ * Split a camelized word into a new word that is separated by a given separator.
+ */
 // Derived from https://raw.githubusercontent.com/sindresorhus/decamelize/main/index.js
 // MIT License
 // Copyright (c) Sindre Sorhus sindresorhus@gmail.com (https://sindresorhus.com)
@@ -12,7 +15,7 @@ export const CAMELIZED_TO_RAW = new Map<string, string>();
 export function splitCamelized(
   text: string,
   { separator = ' ', preserveConsecutiveUppercase = true } = {}
-) {
+): string {
   const handlePreserveConsecutiveUppercase = (decamelized: string, separator: string): string => {
     // Lowercase all single uppercase characters. As we
     // want to preserve uppercase sequences, we cannot

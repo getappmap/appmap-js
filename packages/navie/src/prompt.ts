@@ -63,7 +63,7 @@ focused primarily on solving this issue via code generation.
   [PromptType.ProblemStatement]: {
     content: `**The problem statement**
 This is a description of the problem that the user wants you to help them with. Your response should be
-focused ond describing the problem fully as a software Issue, aka Ticket.
+focused on describing the problem fully as a software Issue, aka Ticket.
 `,
     tagName: 'problem-statement',
   },

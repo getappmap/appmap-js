@@ -6,11 +6,12 @@ import { ProjectInfo } from './project-info';
 
 export enum AgentMode {
   Explain = 'explain',
-  Generate = 'generate',
+  Search = 'search',
   Diagram = 'diagram',
-  Help = 'help',
-  Test = 'test',
   Plan = 'plan',
+  Generate = 'generate',
+  Test = 'test',
+  Help = 'help',
 }
 
 export class AgentOptions {

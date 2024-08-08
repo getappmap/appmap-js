@@ -18,14 +18,16 @@ You should list the names of all the files that have suggested changes in the fi
 
 Your response should be a JSON list of file names.
 
-**Example input**
+**Example
 
-Content:
-\`\`\`python
-# add_one.py
-def add_one(x):
-  return x + 1
-\`\`\`
+<input>
+**Proposed changes:**
+
+* \`add_one.py\` implement to add 1.
+
+#### Modified Components:
+
+1. **File: app/controllers/user_controller.rb**
 
 \`\`\`\`python
 # subtract_one.py
@@ -33,11 +35,19 @@ def subtract_one(x):
   return x - 1
 \`\`\`
 
-Example output:
+1. **Modify \`Compiler.group_by()\` Method:**
+    - In the file \`db/parser.py\`, locate the \`group_by()\` method, which is responsible for constructing the GROUP BY clause. 
+
+</input>
+
+<output>
 [
   "add_one.py",
-  "subtract_one.py"
+  "app/controllers/user_controller.rb",
+  "subtract_one.py",
+  "db/parser.py"
 ]
+</output>
 `;
 
 export default class FileChangeExtractorService {
@@ -59,7 +69,7 @@ export default class FileChangeExtractorService {
       this.history.log('[file-change-extractor] Failed to list files');
       return undefined;
     }
-    return parseJSON(fileList) as string[];
+    return parseJSON(fileList, true) as string[];
   }
 
   // Extract <change> tags from the messages. Sort into reverse order, so that the most

@@ -32,6 +32,7 @@ function getMatches(source: string, regex: RegExp): string[] {
   for (const match of matches) {
     const { groups } = match;
     const symbol = groups?.symbol1 ?? groups?.symbol2 ?? groups?.symbol3;
+
     if (symbol) results.push(symbol);
   }
 

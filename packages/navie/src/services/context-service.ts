@@ -22,13 +22,13 @@ export default class ContextService {
     additionalTerms: string[] = [],
     locations?: string[]
   ): Promise<void> {
-    const lookupContext = options.userOptions.isEnabled('context', true);
-    const transformTerms = options.userOptions.isEnabled('terms', true);
-    if (lookupContext) {
+    const contextEnabled = options.userOptions.isEnabled('context', true);
+    const termsEnabled = options.userOptions.isEnabled('terms', true);
+    if (contextEnabled) {
       this.history.log('[context-service] Searching for context');
 
       const searchTerms = await transformSearchTerms(
-        transformTerms,
+        termsEnabled,
         options.aggregateQuestion,
         this.vectorTermsService
       );
@@ -36,7 +36,7 @@ export default class ContextService {
         searchTerms.push(...additionalTerms);
       }
 
-      const filters = options.buildContextFilters();
+      const filters = { ...options.buildContextFilters() };
       if (locations) filters.locations = locations;
 
       const tokenCount = tokensAvailable();

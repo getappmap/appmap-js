@@ -17,6 +17,7 @@ import { UserOptions } from '../lib/parse-options';
 import MermaidFixerService from './mermaid-fixer-service';
 import DiagramAgent from '../agents/diagram-agent';
 import FileChangeExtractorService from './file-change-extractor-service';
+import SearchAgent from '../agents/search-agent';
 
 type AgentModeResult = {
   agentMode: AgentMode;
@@ -35,11 +36,12 @@ behavior, re-ask your question and start with the option \`/nohelp\` or with a m
 
 const MODE_PREFIXES = {
   '@explain ': AgentMode.Explain,
-  '@generate ': AgentMode.Generate,
+  '@search ': AgentMode.Search,
   '@diagram ': AgentMode.Diagram,
-  '@help ': AgentMode.Help,
-  '@test ': AgentMode.Test,
   '@plan ': AgentMode.Plan,
+  '@generate ': AgentMode.Generate,
+  '@test ': AgentMode.Test,
+  '@help ': AgentMode.Help,
 };
 
 export default class AgentSelectionService {
@@ -89,13 +91,16 @@ export default class AgentSelectionService {
     const explainAgent = () =>
       new ExplainAgent(this.history, contextService, this.mermaidFixerService);
 
+    const searchAgent = () => new SearchAgent(this.history, contextService);
+
     const buildAgent: { [key in AgentMode]: () => Agent } = {
-      [AgentMode.Help]: helpAgent,
-      [AgentMode.Generate]: generateAgent,
-      [AgentMode.Diagram]: diagramAgent,
       [AgentMode.Explain]: explainAgent,
-      [AgentMode.Test]: testAgent,
+      [AgentMode.Search]: searchAgent,
+      [AgentMode.Diagram]: diagramAgent,
       [AgentMode.Plan]: planAgent,
+      [AgentMode.Generate]: generateAgent,
+      [AgentMode.Test]: testAgent,
+      [AgentMode.Help]: helpAgent,
     };
 
     const questionPrefixMode = () => {

@@ -10,16 +10,16 @@
           "eventIds": [28],
           "fqid": "function:app/controllers/API::APIKeysController#destroy",
           "location": "app/controllers/api/api_keys_controller.rb:15",
-          "score": 6.039
+          "score": 5.941
         },
         {
           "elapsed": 0.16964100000000001,
           "eventIds": [7, 39],
           "fqid": "route:DELETE /api/api_keys",
-          "score": 2.879
+          "score": 3.295
         }
       ],
-      "score": 1.34
+      "score": 1.319
     },
     {
       "appmap": "$cwd/tests/unit/fixtures/ruby/user_page_scenario",
@@ -30,16 +30,16 @@
           "eventIds": [58],
           "fqid": "function:app/controllers/OrganizationsController#new",
           "location": "app/controllers/organizations_controller.rb:11",
-          "score": 5.143
+          "score": 4.996
         },
         {
           "elapsed": 0.082122,
           "eventIds": [33],
           "fqid": "route:GET /organizations/new",
-          "score": 0.949
+          "score": 0.807
         }
       ],
-      "score": 0.832
+      "score": 0.835
     }
   ]
 }
