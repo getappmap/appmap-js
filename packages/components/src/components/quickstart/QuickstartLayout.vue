@@ -119,8 +119,6 @@ export default {
       display: block;
       border: 1px solid #454545;
       border-radius: 8px;
-      max-width: 80%;
-      padding: 12px 20px;
       color: $highlighted-code;
 
       &.inline {
@@ -158,7 +156,7 @@ export default {
   filter: $shadow-tile;
   border-radius: 8px;
   margin: 1em auto;
-  overflow-x: hidden;
+  overflow-x: visible;
 }
 
 .qs-help {

@@ -1,7 +1,7 @@
 <template>
-  <v-tab-content>
+  <v-tab-content @select-tab="onSelectTab">
     <template v-for="(command, index) in commands" v-slot:[command.name]>
-      <v-code-snippet :key="index" :clipboard-text="command.command" />
+      <v-code-snippet :key="index" language="shell" :clipboard-text="command.command" />
     </template>
   </v-tab-content>
 </template>
@@ -31,6 +31,11 @@ export default Vue.extend({
     return {
       selectedTab: 0,
     };
+  },
+  methods: {
+    onSelectTab(tabName: string, tabIndex: number) {
+      this.$emit('select-tab', tabName, tabIndex);
+    },
   },
 });
 </script>

@@ -26,26 +26,30 @@ export default Vue.extend({
   data() {
     return {
       selectedTab: 0,
+      justUpdated: false,
+      tabNames: Object.keys(this.$slots),
     };
-  },
-  computed: {
-    tabNames() {
-      return Object.keys(this.$slots);
-    },
   },
   methods: {
     onSelectTab(tabIndex: number) {
       this.selectedTab = tabIndex;
+      this.$emit('select-tab', this.tabNames[tabIndex], tabIndex);
     },
   },
-  updated() {
-    (this as any)._computedWatchers.tabNames.run(); // eslint-disable-line no-underscore-dangle
+  async updated() {
+    if (this.justUpdated) return;
+
+    this.$set(this, 'tabNames', Object.keys(this.$slots));
+    this.justUpdated = true;
+
+    await this.$nextTick();
+    this.justUpdated = false;
   },
 });
 </script>
 
 <style scoped lang="scss">
-$bg-primary: rgba(white, 0.5);
+$bg-primary: rgba(#e3e5e8, 0.9);
 $bg-secondary: rgba(white, 0.25);
 $fg-primary: rgba(black, 0.75);
 $fg-secondary: rgba(white, 0.75);
@@ -54,18 +58,29 @@ $fg-secondary: rgba(white, 0.75);
   display: flex;
   flex-direction: column;
   height: 100%;
+  width: 100%;
 
   &__tabs {
     display: flex;
     flex-direction: row;
-    border-bottom: 3px solid rgba(white, 0.1);
+    border-bottom: 3px solid $bg-primary;
+    border-radius: 2px;
   }
 
   &__tab {
     padding: 0.5rem 1rem;
     cursor: pointer;
+    font-weight: bold;
+    user-select: none;
     color: $gray4;
     border-radius: $border-radius $border-radius 0 0;
+    border: 1px solid $bg-secondary;
+    border-bottom: none;
+    transition: $transition;
+
+    &:not(:first-child) {
+      border-left: none;
+    }
 
     &:hover {
       color: $gray5;
@@ -74,14 +89,14 @@ $fg-secondary: rgba(white, 0.75);
 
     &--selected {
       color: $fg-primary;
-      font-weight: bold;
       background-color: $bg-primary;
     }
   }
 
   &__content {
     flex: 1;
-    overflow: auto;
+    overflow: visible;
+    padding: 0.25rem 1rem;
   }
 }
 </style>

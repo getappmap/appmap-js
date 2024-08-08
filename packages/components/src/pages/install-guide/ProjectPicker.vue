@@ -2,7 +2,8 @@
   <QuickstartLayout>
     <section class="project-picker">
       <header class="content content--header">
-        <h1 data-cy="title">Add AppMap to your project</h1>
+        <h1 data-cy="title">Recording AppMap data</h1>
+        <h1 class="subtitle">Prepare a recording agent</h1>
       </header>
       <main>
         <article class="empty-state" data-cy="empty-state-article" v-if="projects.length === 0">
@@ -16,23 +17,17 @@
             </div>
           </div>
         </article>
-        <article v-if="projects.length === 1">
-          <!-- TODO -->
-        </article>
         <article class="project-list" v-else>
           <v-project-configuration
+            ref="projectConfiguration"
             :projects="projects"
             :editor="editor"
             :java-agent-status="javaAgentStatus"
-            @select-runtime="onSelectRuntime"
-            description="Install the recording agent"
+            @select-project="onSelectProject"
+            @select-language="onSelectLanguage"
+            description="Configure your project"
           >
-            <p>
-              In order to record AppMap data from your Python project, you will first need to
-              install the `appmap` package. Use the command below to install the dependency using
-              your preferred package manager.
-            </p>
-            <v-command-picker :commands="commands" />
+            <div class="install-instructions"></div>
           </v-project-configuration>
         </article>
       </main>
@@ -51,14 +46,10 @@ import StatusState from '@/components/mixins/statusState.js';
 import EmptyIcon from '@/assets/patch-question.svg';
 import VProjectConfiguration from '@/components/install-guide/ProjectConfiguration.vue';
 import VCommandPicker from '@/components/install-guide/CommandPicker.vue';
+import VButton from '@/components/Button.vue';
+import VCodeSnippet from '@/components/CodeSnippet.vue';
+import VJavaStatus from '@/components/install-guide/JavaStatus.vue';
 
-const Commands = {
-  python: [
-    { name: 'pip', command: 'pip install --require-virtualenv appmap' },
-    { name: 'pipenv', command: 'pipenv install --dev appmap' },
-    { name: 'poetry', command: 'poetry add --dev appmap' },
-  ],
-};
 export default {
   name: 'ProjectPicker',
 
@@ -67,6 +58,9 @@ export default {
     VProjectConfiguration,
     EmptyIcon,
     VCommandPicker,
+    VButton,
+    VCodeSnippet,
+    VJavaStatus,
   },
 
   mixins: [Navigation, StatusState],
@@ -85,19 +79,13 @@ export default {
 
   data() {
     return {
-      selectedRuntime: undefined,
+      selectedLanguage: undefined,
     };
-  },
-
-  mounted() {
-    if (this.projects.length === 1) {
-      this.$refs.projectTable.selectProject(this.projects[0]?.path);
-    }
   },
 
   computed: {
     commands() {
-      return Commands[this.selectedRuntime?.toLowerCase()];
+      return Commands[this.selectedLanguage?.toLowerCase()];
     },
   },
 
@@ -107,14 +95,12 @@ export default {
       event.stopImmediatePropagation();
       this.$root.$emit('transition', 'RECORD_APPMAPS');
     },
-    selectProject(project) {
-      this.$nextTick(() => {
-        this.$root.$emit('select-project', project);
-      });
+    onSelectProject(project) {
+      this.selectedProject = this.projects.find((p) => p.path === project.path);
+      this.$root.$emit('select-project', project);
     },
-    onSelectRuntime(runtime) {
-      console.log(runtime);
-      this.selectedRuntime = runtime;
+    onSelectLanguage(language) {
+      this.selectedLanguage = language.toLowerCase();
     },
   },
 };
@@ -142,6 +128,10 @@ h2 {
       margin-bottom: 1.75rem;
     }
   }
+  .subtitle {
+    color: $gray4;
+    font-size: 1.25rem;
+  }
 }
 
 .table-wrap {
@@ -167,6 +157,7 @@ p {
 .empty-state {
   border-radius: $border-radius;
   border: 1px dashed darken($gray4, 10);
+  margin: 2rem;
   padding: 3rem;
   .card {
     display: flex;
@@ -198,5 +189,29 @@ p {
 }
 .bad {
   color: $bad-status;
+}
+.install-instructions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  .next-button {
+    margin-left: auto;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  .code-snippet {
+    margin-top: 0.25rem;
+    margin-bottom: 0;
+    width: 100%;
+  }
+
+  section {
+    margin-bottom: 1.75rem;
+    width: 100%;
+  }
 }
 </style>
