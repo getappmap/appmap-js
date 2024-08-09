@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.157.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.157.0...@appland/appmap-v3.157.1) (2024-08-09)
+
+
+### Bug Fixes
+
+* parse git status output correctly ([ebe468f](https://github.com/getappmap/appmap-js/commit/ebe468f88bc868a062b5819dc07a4e6a183303b2))
+
 # [@appland/appmap-v3.157.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.156.0...@appland/appmap-v3.157.0) (2024-08-08)
 
 
