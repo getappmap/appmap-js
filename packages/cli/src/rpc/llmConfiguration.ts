@@ -1,3 +1,5 @@
+import { SELECTED_BACKEND } from '@appland/navie';
+
 const azureVariables = [
   'AZURE_OPENAI_API_KEY',
   'AZURE_OPENAI_API_DEPLOYMENT_NAME',
@@ -12,7 +14,7 @@ type LLMConfiguration = {
   model?: string;
 };
 
-export function getLLMConfiguration(): LLMConfiguration {
+function openAIBaseURL(): string | undefined {
   let baseUrl = process.env.OPENAI_BASE_URL;
 
   // Check if the user has configured Azure OpenAI
@@ -42,6 +44,12 @@ export function getLLMConfiguration(): LLMConfiguration {
   if (!baseUrl && process.env.OPENAI_API_KEY) {
     baseUrl = 'https://api.openai.com';
   }
+  return baseUrl;
+}
+
+export function getLLMConfiguration(): LLMConfiguration {
+  const baseUrl =
+    SELECTED_BACKEND === 'anthropic' ? 'https://api.anthropic.com/v1/' : openAIBaseURL();
 
   return {
     baseUrl,
