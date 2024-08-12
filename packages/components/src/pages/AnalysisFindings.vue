@@ -234,15 +234,21 @@ export default {
 
 <style lang="scss" scoped>
 .analysis-findings {
+  padding: 2rem;
+
   .header-wrap {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    h4.subhead {
+      margin-top: 0;
+    }
     .header-controls {
       display: flex;
       flex-direction: row;
       gap: 1rem;
       align-items: flex-start;
+
       .btn {
         border: 1px solid $white;
         border-radius: 0.5rem;
@@ -353,7 +359,7 @@ export default {
       list-style-type: none;
       li {
         padding: 0.25rem 1rem;
-        width: 100%;
+
         transition: $transition;
         &:hover {
           background-color: darken($gray2, 05);
@@ -371,13 +377,12 @@ export default {
     .item {
       display: flex;
       flex-direction: row;
+      justify-content: space-between;
+      cursor: pointer;
       li {
         border-bottom: 0;
         &:first-of-type {
           border-top: 0;
-        }
-        &:hover {
-          cursor: pointer;
         }
       }
       &.header {
