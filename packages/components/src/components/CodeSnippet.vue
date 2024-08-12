@@ -157,6 +157,7 @@ export default {
     font-family: monospace;
     color: $base07;
     margin: 0;
+    margin-right: 2.5rem;
     border-right: none;
     border-radius: $border-radius 0 0 $border-radius;
     background: transparent;

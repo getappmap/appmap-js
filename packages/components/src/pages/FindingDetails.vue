@@ -192,7 +192,7 @@ export default {
   color: $white;
 }
 .analysis-findings.full-width {
-  margin: 0 -1.75rem;
+  padding-bottom: 2rem;
   h3 {
     display: flex;
     align-items: center;
@@ -231,10 +231,14 @@ h6 {
 }
 
 .finding-details {
+  padding: 2rem;
   .header-wrap {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    h4.subhead {
+      margin-top: 0;
+    }
     header {
       display: flex;
       flex-direction: column;
@@ -344,7 +348,6 @@ h6 {
       li {
         border-bottom: 1px solid $gray2;
         border-radius: 0;
-        width: 100%;
         word-break: break-word;
         &:last-of-type {
           border-bottom: 0;
