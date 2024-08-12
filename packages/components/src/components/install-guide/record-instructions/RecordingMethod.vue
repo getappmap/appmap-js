@@ -39,16 +39,18 @@
             <div class="recording-method__ask-navie-button-list__header">
               <h2>Select an option</h2>
             </div>
-            <v-button
-              kind="ghost"
-              size="small"
-              class="recording-method__prompt-suggestion"
-              v-for="(p, i) in promptSuggestions"
-              :key="i"
-              @click.native="onPromptSuggestionClick(p)"
-            >
-              {{ p.label }}
-            </v-button>
+            <div class="recording-method__ask-navie-button-list__body">
+              <v-button
+                kind="ghost"
+                size="small"
+                class="recording-method__prompt-suggestion"
+                v-for="(p, i) in promptSuggestions"
+                :key="i"
+                @click.native="onPromptSuggestionClick(p)"
+              >
+                {{ p.label }}
+              </v-button>
+            </div>
           </div>
         </template>
       </v-popper-menu>
@@ -178,6 +180,17 @@ export default Vue.extend({
     }
   }
 
+  &__ask-navie-button {
+    color: #c6c6c6;
+    border-color: #c6c6c6;
+
+    &:hover {
+      color: black;
+      border-color: black;
+      background-color: #c6c6c6;
+    }
+  }
+
   &__badge-block {
     display: contents;
     margin-right: auto;
@@ -226,17 +239,28 @@ export default Vue.extend({
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    margin-top: -1rem;
+    overflow: hidden;
+    background-color: #141924;
+    border-radius: 1rem;
+    border: 1px solid #2d3546;
 
     &__header {
+      display: flex;
       background-color: rgba(black, 0.25);
-      margin: 0 -1rem 0 -1rem;
-      padding: 0.25rem 1rem;
       border-bottom: 1px solid rgba(white, 0.1);
+      padding: 0.25rem 1rem;
 
       h2 {
         margin: 0 !important; // DB: Overridden in VS Code.
       }
+    }
+
+    &__body {
+      display: flex;
+      flex-direction: column;
+      padding: 0.25rem 1rem;
+      padding-bottom: 1rem;
+      gap: 0.25rem;
     }
   }
 
@@ -251,8 +275,13 @@ export default Vue.extend({
 
   &__prompt-suggestion {
     text-align: left;
+    color: #c6c6c6;
+    border-color: #c6c6c6;
+
     &:hover {
-      background-color: rgba(white, 0.1);
+      color: black;
+      border-color: black;
+      background-color: #c6c6c6;
     }
   }
 }
