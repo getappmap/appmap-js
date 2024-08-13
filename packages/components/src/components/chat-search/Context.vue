@@ -15,21 +15,6 @@
     <template v-else>
       <div class="context__body">
         <h2>Context</h2>
-        <div v-if="numAppMaps === 0" class="context__body__no-appmaps" data-cy="create-appmap-data">
-          <p>
-            You don't have any AppMap data. Adding AppMap data to Navie's context improves Navie's
-            code suggestions and answers.
-          </p>
-          <v-button
-            data-cy="create-appmap-data-btn"
-            class="create-appmap-data"
-            size="small"
-            kind="ghost"
-            @click.native="openInstallInstructions"
-          >
-            Open Instructions
-          </v-button>
-        </div>
         <template v-if="pinnedItems && pinnedItems.length">
           <h3>Pinned Items</h3>
           <div class="context__body__table">

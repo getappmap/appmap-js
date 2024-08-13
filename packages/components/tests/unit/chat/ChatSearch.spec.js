@@ -29,44 +29,13 @@ describe('pages/ChatSearch.vue', () => {
   const threadId = 'the-thread-id';
   const userMessageId = 'the-user-message-id';
 
-  const appmapStatsHasAppMaps = () => [
-    [
-      null,
-      null,
-      [
-        {
-          name: 'project',
-          packages: ['a', 'b', 'c'],
-          classes: ['d', 'e', 'f'],
-          routes: ['g', 'h', 'i'],
-          tables: ['j', 'k', 'l'],
-          numAppMaps: 100,
-        },
-      ],
-    ],
-  ];
-
-  const appmapStatsNoAppMaps = () => [
-    [
-      null,
-      null,
-      [
-        {
-          numAppMaps: 0,
-        },
-      ],
-    ],
-  ];
-
   const noConfig = () => [[null, null, { projectDirectories: [] }]];
-
   const emptySearchResponse = {
     results: [],
   };
 
-  const buildComponent = (appmapStatsFnc, searchResponse, contextResponse, hasMetadata) => {
+  const buildComponent = (searchResponse, contextResponse, hasMetadata) => {
     const messagesCalled = {
-      'v2.appmap.stats': appmapStatsFnc(),
       'v2.configuration.get': noConfig(),
       explain: [[null, null, { userMessageId, threadId }]],
       'explain.status': [
@@ -126,7 +95,6 @@ describe('pages/ChatSearch.vue', () => {
 
   it('can be resized', async () => {
     const wrapper = chatSearchWrapper({
-      'v2.appmap.stats': appmapStatsHasAppMaps(),
       'v2.configuration.get': noConfig(),
     });
 
@@ -148,94 +116,7 @@ describe('pages/ChatSearch.vue', () => {
     expect(newWidth).toBe(initialWidth + resizeBy);
   });
 
-  describe('when no AppMaps are available', () => {
-    const navieContextwithoutAppMaps = navieContext.filter((item) => item.type === 'code-snippet');
-
-    const performSearch = async () => {
-      const { messagesCalled, wrapper } = buildComponent(
-        appmapStatsNoAppMaps,
-        emptySearchResponse,
-        navieContextwithoutAppMaps
-      );
-
-      await wrapper.vm.sendMessage('How do I reset my password?');
-      await wrapper.vm.$nextTick();
-
-      return { messagesCalled, wrapper };
-    };
-
-    it('renders a message to help users create AppMap data', async () => {
-      const { wrapper } = await performSearch();
-
-      expect(wrapper.find('[data-cy="create-appmap-data"]').text()).toContain(
-        "You don't have any AppMap data"
-      );
-      const createDataBtn = wrapper.find('[data-cy="create-appmap-data-btn"]');
-      expect(createDataBtn.exists());
-
-      await createDataBtn.trigger('click');
-      const rootWrapper = createWrapper(wrapper.vm.$root);
-      expect(rootWrapper.emitted()['open-install-instructions']).toEqual([[]]);
-    });
-
-    it('shows a warning that no AppMaps are available', async () => {
-      const wrapper = chatSearchWrapper({
-        'v2.appmap.stats': appmapStatsNoAppMaps(),
-        'v2.configuration.get': noConfig(),
-      });
-      await wrapper.vm.$nextTick();
-      wrapper.find('[data-cy="status-bar-header"]').trigger('click');
-      expect(wrapper.find('[data-cy="status-no-data"]').exists()).toBe(true);
-    });
-
-    it('emits an event when the user clicks the "Create some" button', async () => {
-      const wrapper = chatSearchWrapper({
-        'v2.appmap.stats': appmapStatsNoAppMaps(),
-        'v2.configuration.get': noConfig(),
-      });
-      await wrapper.vm.$nextTick();
-
-      const createSomeButton = wrapper.find('[data-cy="record-guide"]');
-      expect(createSomeButton.exists()).toBe(true);
-
-      await createSomeButton.trigger('click');
-      const rootWrapper = createWrapper(wrapper.vm.$root);
-      expect(rootWrapper.emitted()['open-record-instructions']).toEqual([[]]);
-    });
-
-    it("shows Navie's context", async () => {
-      const wrapper = chatSearchWrapper({
-        'v2.appmap.stats': appmapStatsNoAppMaps(),
-        'v2.configuration.get': noConfig(),
-      });
-      await wrapper.vm.$nextTick();
-
-      wrapper.find('[data-cy="status-bar-header"]').trigger('click');
-      expect(wrapper.findAll('[data-cy="fail-icon"]').length).toBe(3);
-    });
-  });
-
   describe('when AppMaps are available', () => {
-    it('shows instructions', async () => {
-      const wrapper = chatSearchWrapper({
-        'v2.appmap.stats': appmapStatsHasAppMaps(),
-        'v2.configuration.get': noConfig(),
-      });
-      await wrapper.vm.$nextTick();
-      expect(wrapper.find('.instructions [data-cy="no-appmaps"]').exists()).toBe(false);
-    });
-
-    it("shows Navie's context", async () => {
-      const wrapper = chatSearchWrapper({
-        'v2.appmap.stats': appmapStatsHasAppMaps(),
-        'v2.configuration.get': noConfig(),
-      });
-      await wrapper.vm.$nextTick();
-
-      wrapper.find('[data-cy="status-bar-header"]').trigger('click');
-      expect(wrapper.findAll('[data-cy="success-icon"]').length).toBe(3);
-    });
-
     describe('and there are matching AppMaps', () => {
       const searchResponse = {
         results: [
@@ -248,12 +129,7 @@ describe('pages/ChatSearch.vue', () => {
       };
 
       const performSearch = async () => {
-        const { messagesCalled, wrapper } = buildComponent(
-          appmapStatsHasAppMaps,
-          searchResponse,
-          navieContext,
-          true
-        );
+        const { messagesCalled, wrapper } = buildComponent(searchResponse, navieContext, true);
 
         await wrapper.vm.sendMessage('How do I reset my password?');
         await wrapper.vm.$nextTick();
@@ -299,7 +175,7 @@ describe('pages/ChatSearch.vue', () => {
         const status = '[data-cy="tool-status"] [data-cy="status"]';
         const wrapper = chatSearchWrapper({
           'appmap.metadata': [[null, null, {}]],
-          'v2.appmap.stats': appmapStatsHasAppMaps(),
+
           'v2.configuration.get': noConfig(),
           explain: [[null, null, { userMessageId, threadId }]],
           'explain.status': [
@@ -332,10 +208,7 @@ describe('pages/ChatSearch.vue', () => {
 
     describe('but no context is found', () => {
       const performSearch = async () => {
-        const { messagesCalled, wrapper } = buildComponent(
-          appmapStatsHasAppMaps,
-          emptySearchResponse
-        );
+        const { messagesCalled, wrapper } = buildComponent(emptySearchResponse);
 
         await wrapper.vm.sendMessage('How do I reset my password?');
         await wrapper.vm.$nextTick();
@@ -387,74 +260,9 @@ describe('pages/ChatSearch.vue', () => {
     });
   });
 
-  describe('reactiveness', () => {
-    it('does not display stats until they are available', async () => {
-      jest.useFakeTimers();
-
-      const delay = 1000;
-      const wrapper = mount(VChatSearch, {
-        propsData: {
-          appmapRpcFn: (method, __, callback) => {
-            if (method === 'v2.appmap.stats') {
-              const [args] = appmapStatsHasAppMaps();
-              setTimeout(() => callback(...args), delay);
-            }
-          },
-        },
-      });
-
-      await wrapper.vm.$nextTick();
-      expect(wrapper.find('[data-cy="status-bar"]').exists()).toBe(false);
-
-      jest.advanceTimersByTime(delay + 1);
-      await wrapper.vm.$nextTick();
-      expect(wrapper.find('[data-cy="status-bar"]').exists()).toBe(true);
-    });
-
-    it('reloads stats as most recent AppMaps are updated', async () => {
-      jest.useFakeTimers();
-
-      const [first] = appmapStatsNoAppMaps();
-      const [second] = appmapStatsHasAppMaps();
-      const wrapper = chatSearchWrapper({
-        'v2.appmap.stats': [first, second],
-        'v2.configuration.get': noConfig(),
-        propsData: {
-          appmapYmlPresent: true,
-        },
-      });
-
-      await wrapper.vm.$nextTick();
-
-      expect(wrapper.find('[data-cy="status-no-data"]').exists()).toBe(true);
-
-      wrapper.setProps({
-        mostRecentAppMaps: [
-          {
-            name: 'appmap1',
-            path: 'path1',
-            createdAt: new Date(2020, 0, 1).toUTCString(),
-            recordingMethod: 'tests',
-          },
-        ],
-      });
-
-      await wrapper.vm.$nextTick();
-
-      // The stats request should have been debounced - it'll still say no data
-      expect(wrapper.find('[data-cy="status-no-data"]').exists()).toBe(true);
-
-      jest.advanceTimersByTime(1100);
-      await wrapper.vm.$nextTick();
-
-      expect(wrapper.find('[data-cy="status-no-data"]').exists()).toBe(false);
-    });
-  });
-
   describe('llm configuration', () => {
     it('does not render until the configuration is available', async () => {
       const wrapper = chatSearchWrapper({
-        'v2.appmap.stats': appmapStatsHasAppMaps(),
         'v2.configuration.get': noConfig(),
       });
 
@@ -467,7 +275,6 @@ describe('pages/ChatSearch.vue', () => {
 
     it('renders a local configuration', async () => {
       const wrapper = chatSearchWrapper({
-        'v2.appmap.stats': appmapStatsHasAppMaps(),
         'v2.configuration.get': [
           [
             null,
@@ -487,7 +294,6 @@ describe('pages/ChatSearch.vue', () => {
 
     it('renders the default configuration', async () => {
       const wrapper = chatSearchWrapper({
-        'v2.appmap.stats': appmapStatsHasAppMaps(),
         'v2.configuration.get': [[null, null, { projectDirectories: [] }]],
       });
 
@@ -501,7 +307,6 @@ describe('pages/ChatSearch.vue', () => {
 
     it('renders an azure configuration', async () => {
       const wrapper = chatSearchWrapper({
-        'v2.appmap.stats': appmapStatsHasAppMaps(),
         'v2.configuration.get': [
           [
             null,
@@ -525,7 +330,6 @@ describe('pages/ChatSearch.vue', () => {
 
     it('renders an OpenAI configuration', async () => {
       const wrapper = chatSearchWrapper({
-        'v2.appmap.stats': appmapStatsHasAppMaps(),
         'v2.configuration.get': [
           [
             null,
@@ -551,7 +355,6 @@ describe('pages/ChatSearch.vue', () => {
   describe('error handling', () => {
     async function simulateError(err, error) {
       const wrapper = chatSearchWrapper({
-        'v2.appmap.stats': appmapStatsHasAppMaps(),
         'v2.configuration.get': noConfig(),
         explain: [[err, error]],
       });

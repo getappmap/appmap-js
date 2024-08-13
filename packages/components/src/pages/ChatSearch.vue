@@ -17,7 +17,6 @@
         :input-placeholder="inputPlaceholder"
         @stop="onStop"
       >
-        <v-context-status v-if="showStatus" :appmap-stats="appmapStats" />
         <v-llm-configuration
           data-cy="llm-config"
           v-if="!disableLlmConfig && configLoaded && !isChatting"
@@ -45,7 +44,6 @@
 <script lang="ts">
 //@ts-nocheck
 import VChat from '@/components/chat/Chat.vue';
-import VContextStatus from '@/components/chat-search/ContextStatus.vue';
 import VContext from '@/components/chat-search/Context.vue';
 import VLlmConfiguration from '@/components/chat-search/LlmConfiguration.vue';
 import AppMapRPC from '@/lib/AppMapRPC';
@@ -60,7 +58,6 @@ export default {
   components: {
     VChat,
     VContext,
-    VContextStatus,
     VLlmConfiguration,
   },
   mixins: [authenticatedClient],
@@ -93,7 +90,6 @@ export default {
       type: String,
     },
     appmapYmlPresent: Boolean,
-    mostRecentAppMaps: Array,
     disableLlmConfig: {
       type: Boolean,
       default: false,
@@ -151,9 +147,6 @@ export default {
     };
   },
   watch: {
-    mostRecentAppMaps() {
-      this.loadAppMapStats();
-    },
     searchResponse: async function (newVal) {
       if (!newVal) {
         this.selectedSearchResultId = undefined;
@@ -496,7 +489,6 @@ export default {
       this.includeAppMap(this.targetAppmapFsPath);
       await this.$refs.vappmap.loadData(this.targetAppmap);
     }
-    this.loadAppMapStats();
     this.loadNavieConfig();
     this.$root.$on('pin', (pin: PinEvent) => {
       const pinIndex = this.pinnedItems.findIndex((p) => p.handle === pin.handle);
