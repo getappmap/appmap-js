@@ -11,3 +11,4 @@ export * from './appmap';
 export * from './explain';
 export * from './configuration';
 export * from './file';
+export * from './navie';
