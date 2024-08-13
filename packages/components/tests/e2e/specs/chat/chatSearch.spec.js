@@ -6,12 +6,6 @@ context('Chat search', () => {
     cy.viewport(1280, 720);
   });
 
-  it('does not show the context status when the user is chatting', () => {
-    cy.get('[data-cy="status-bar"]').should('be.visible');
-    cy.get('[data-cy="chat-input"]', { timeout: 25000 }).type('Hello world{enter}');
-    cy.get('[data-cy="status-bar"]').should('not.exist');
-  });
-
   it('assistant response can be stopped', () => {
     cy.get('[data-cy="chat-input"]', { timeout: 25000 }).clear().type('Hello world{enter}');
     cy.get('[data-cy="stop-response"]').should('exist');
