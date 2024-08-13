@@ -1,3 +1,10 @@
+# [@appland/components-v4.31.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.30.1...@appland/components-v4.31.0) (2024-08-13)
+
+
+### Features
+
+* Update installation instructions ([4d24cb4](https://github.com/getappmap/appmap-js/commit/4d24cb4d55018fe5a42cc5a9b15b8ee5d6ad06d4))
+
 # [@appland/components-v4.30.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.30.0...@appland/components-v4.30.1) (2024-08-05)
 
 
