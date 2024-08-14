@@ -11,7 +11,7 @@ redirect_from: [/docs/reference/appmap-agent-js]
 
 # AppMap Agent for Node.js
 
-**Note**: this agent is currently in early access. It replaces [appmap-agent-js](/docs/reference/appmap-agent-js) which is no longer in active development. [Let us know](https://github.com/getappmap/appmap-node/issues)
+**Note**: This agent replaces [appmap-agent-js](/docs/reference/appmap-agent-js) which is no longer in active development. [Let us know](https://github.com/getappmap/appmap-node/issues)
 if your project is unable to create AppMap Data with `appmap-node`.
 
 - [About](#about)
@@ -63,6 +63,20 @@ to the launch command. This allows it to work with any Node.js command, includin
 
 AppMap Data is saved to the directory `tmp/appmap` by default, and each AppMap file ends in `.appmap.json`.
 
+**NOTE**: If you are modifying `NODE_OPTIONS` as part of the command you use to execute your tests or run your application, ensure you run `appmap-node` after modifying `NODE_OPTIONS`.  If you run `appmap-node` and later modify the environment variable you may not have AppMap data created for your project. For more information, refer to this [GitHub Issue](https://github.com/getappmap/appmap-node/issues/148#issuecomment-2090092787)
+
+For example:
+
+**Before**
+```
+cross-env NODE_PATH=./src NODE_ENV=test NODE_OPTIONS='--max-old-space-size=2048' jest --config .jestrc.json
+```
+
+**After**
+```
+ cross-env NODE_PATH=./src NODE_ENV=test NODE_OPTIONS='--max-old-space-size=2048' appmap-node jest --config .jestrc.json
+```
+
 ## Configuration
 
 When you run your program, the agent reads configuration settings from `appmap.yml`. If not found, a default config file will be created. This is typically appropriate for most projects but you're welcome to review and adjust it.
@@ -80,7 +94,7 @@ packages:
 ```
 {: .example-code}
 
-- **name** Provides the project name (autodetected from *package.json*).
+- **name** Provides the project name (auto-detected from *package.json*).
 - **appmap_dir** Directory to place the AppMap Data in. Defaults to `tmp/appmap`.
 - **packages** A list of paths which should be instrumented.
 
@@ -158,15 +172,27 @@ request, and will be stored in `tmp/appmap/requests`.
 In the absence of tests or HTTP requests, AppMap can record an entire
 Node.js application's execution from start to finish. 
 
-Run the `appmap-node` command and give it an argument for starting your application, and it will record the entire
-application's behavior by default.
+By default, AppMap will create a process recording of your application. This recording will 
+be abandoned (cancelled and the process recording not created) if there are other recordings during 
+the run (such as Request, Remote, or Test recording).  Set the `APPMAP_RECORDER_PROCESS_ALWAYS` environment variable 
+to `true` and AppMap will continue process recording even if other recordings are encountered.
+
+For example: 
+
+```
+APPMAP_RECORDER_PROCESS_ALWAYS=true npx appmap-node <add your Node.js application launch command here>
+```
+{: .example-code}
+
+Otherwise, you can run the `appmap-node` command with the commands and arguments for starting your application, and it will record the entire application's behavior by default.
 
 ```
 npx appmap-node <add your Node.js application launch command here>
 ```
 {: .example-code}
 
-Then interact with your app using its UI or API, and AppMap Diagrams will be generated automatically. 
+Then interact with your app using its UI or API, and AppMap Diagrams will be generated automatically. And when your 
+process finishes or your application exits a process recording will be created in your code editor. 
 
 ## Viewing AppMap Diagrams
 
